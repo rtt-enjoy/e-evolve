@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.env
+.env.*
+*.env
+.venv/
+venv/
+env/
+.evolution_backups/
+.DS_Store
+Thumbs.db
+*.egg-info/
+dist/
+build/

@@ -1,0 +1,20 @@
+{
+  "_note": "E-Evolve strategy config. The bot may evolve these values over time.",
+  "articles": {
+    "per_cycle": 1,
+    "min_words": 600
+  },
+  "crypto": {
+    "risk_per_trade_pct": 0.02,
+    "min_usdt_balance": 10.0,
+    "symbols": ["BTCUSDT", "ETHUSDT"]
+  },
+  "nft": {
+    "per_cycle": 1,
+    "chain": "ethereum"
+  },
+  "twitter": {
+    "min_tweets": 5,
+    "max_tweets": 7
+  }
+}

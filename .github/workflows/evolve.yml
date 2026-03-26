@@ -1,0 +1,75 @@
+name: evolve
+
+on:
+  schedule:
+    - cron: '17 * * * *'   # Every hour at :17 — avoids congested :00 window
+  workflow_dispatch:        # Allow manual trigger for testing
+
+permissions:
+  contents: write           # Bot must commit evolved code and state files
+
+jobs:
+  pulse:
+    name: Hourly Pulse
+    runs-on: ubuntu-latest
+    timeout-minutes: 55     # Hard cap — must finish before next scheduled run
+
+    env:
+      # ── LLM keys (add at least one) ─────────────────────────────────────
+      GROQ_API_KEY:             ${{ secrets.GROQ_API_KEY }}
+      ANTHROPIC_API_KEY:        ${{ secrets.ANTHROPIC_API_KEY }}
+
+      # ── Earning module secrets (all optional) ────────────────────────────
+      DEV_TO_API_KEY:           ${{ secrets.DEV_TO_API_KEY }}
+      MEDIUM_INTEGRATION_TOKEN: ${{ secrets.MEDIUM_INTEGRATION_TOKEN }}
+      TWITTER_API_KEY:          ${{ secrets.TWITTER_API_KEY }}
+      TWITTER_API_SECRET:       ${{ secrets.TWITTER_API_SECRET }}
+      TWITTER_ACCESS_TOKEN:     ${{ secrets.TWITTER_ACCESS_TOKEN }}
+      TWITTER_ACCESS_SECRET:    ${{ secrets.TWITTER_ACCESS_SECRET }}
+      BINANCE_API_KEY:          ${{ secrets.BINANCE_API_KEY }}
+      BINANCE_SECRET_KEY:       ${{ secrets.BINANCE_SECRET_KEY }}
+      ETH_PRIVATE_KEY:          ${{ secrets.ETH_PRIVATE_KEY }}
+      ETH_WALLET_ADDRESS:       ${{ secrets.ETH_WALLET_ADDRESS }}
+      NFT_CONTRACT_ADDRESS:     ${{ secrets.NFT_CONTRACT_ADDRESS }}
+      NFT_STORAGE_TOKEN:        ${{ secrets.NFT_STORAGE_TOKEN }}
+
+      # ── GitHub meta ──────────────────────────────────────────────────────
+      GITHUB_REPO: ${{ github.repository }}
+      GH_TOKEN:    ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "E-Evolve Bot"
+          git config user.email "evolve-bot@users.noreply.github.com"
+
+      - name: Pull latest changes (prevent push conflicts)
+        run: git pull --rebase origin main || true
+
+      - name: Run hourly pulse
+        run: python -m bot.main
+        env:
+          PYTHONUNBUFFERED: "1"
+
+      - name: Push all bot commits
+        run: |
+          git push origin HEAD:main || (
+            echo "Push failed — rebasing and retrying..." &&
+            git pull --rebase origin main &&
+            git push origin HEAD:main
+          ) || echo "Push failed after retry. Changes will be pushed next cycle."

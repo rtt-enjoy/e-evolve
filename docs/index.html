@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta http-equiv="refresh" content="3600"/>
+<title>E-Evolve Dashboard</title>
+<style>
+:root{--bg:#0d1117;--sf:#161b22;--br:#30363d;--tx:#c9d1d9;--mu:#8b949e;
+      --ac:#58a6ff;--gn:#3fb950;--rd:#f85149;--pu:#bc8cff;
+      --f:'Segoe UI',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:var(--f);padding:20px}
+a{color:var(--ac)}
+h2{font-size:.82rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:12px}
+header{display:flex;align-items:flex-start;gap:14px;border-bottom:1px solid var(--br);padding-bottom:18px;margin-bottom:22px}
+.logo{font-size:2.2rem;line-height:1}
+h1{font-size:1.4rem;margin-bottom:6px}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:.73rem;font-weight:700;margin-right:4px}
+.pa{background:rgba(88,166,255,.15);border:1px solid var(--ac);color:var(--ac)}
+.pp{background:rgba(188,140,255,.15);border:1px solid var(--pu);color:var(--pu)}
+.mu{color:var(--mu);font-size:.8rem;margin-top:5px}
+.b{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.76rem;margin:2px}
+.g{background:rgba(63,185,80,.15);border:1px solid var(--gn);color:var(--gn)}
+.r{background:rgba(248,81,73,.1);border:1px solid var(--rd);color:var(--rd)}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:26px}
+.st{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:16px}
+.st .v{font-size:1.8rem;font-weight:700;color:var(--gn)}
+.st .l{color:var(--mu);font-size:.78rem;margin-top:2px}
+.sec{margin-bottom:26px}
+.pan{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:16px}
+.sc{display:flex;gap:12px;padding:12px;border:1px solid var(--br);border-radius:7px;margin-bottom:8px}
+.rank{font-size:1.4rem;flex-shrink:0;line-height:1}
+.sc p{color:var(--mu);font-size:.86rem;margin-top:3px}
+.spill{background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.3);border-radius:4px;padding:3px 8px;margin-top:6px;font-size:.8rem;display:inline-block}
+.est{color:var(--gn);font-size:.8rem;margin-top:4px}
+ul.ev{padding-left:16px;color:var(--mu);font-size:.86rem}
+ul.ev li{margin-bottom:4px}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--br)}
+th{color:var(--mu);font-weight:500}
+.ic{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid var(--br);border-radius:6px;margin:3px;font-size:.8rem}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--rd);flex-shrink:0}
+.ebox{background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.3);border-radius:7px;padding:12px;margin-top:14px}
+.ebox h3{color:var(--rd)}
+.ebox li{color:var(--mu);font-size:.83rem;margin-top:3px}
+.muted{color:var(--mu)}
+footer{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;padding-top:14px;border-top:1px solid var(--br)}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🤖</div>
+  <div>
+    <h1>E-Evolve <span class="pill pa">v1.1.0</span><span class="pill pp">groq-mock</span></h1>
+    <div style="margin-top:5px"><span class="b r">no active modules — add a secret</span></div>
+    <div class="mu">Last cycle: 2026-03-25 07:14 UTC &nbsp;·&nbsp; Total cycles: 3</div>
+  </div>
+</header>
+
+<div class="sg">
+  <div class="st"><div class="v">$0.17</div><div class="l">Total earned</div></div>
+  <div class="st"><div class="v">$0.17</div><div class="l">This week</div></div>
+  <div class="st"><div class="v">3</div><div class="l">Cycles run</div></div>
+  <div class="st"><div class="v">0</div><div class="l">Active modules</div></div>
+</div>
+
+<div class="sec">
+  <h2>🧠 Smart Growth Suggestions</h2>
+  <div class="pan"><div class="sc"><span class="rank">🥇</span><div><strong>Add DEV_TO_API_KEY</strong><p>Publish articles</p><div class="spill">Add secret: <code>DEV_TO_API_KEY</code></div><div class="est">~$5/week estimated</div></div></div></div>
+</div>
+
+<div class="sec">
+  <h2>⚡ Last Evolution</h2>
+  <div class="pan">
+    <p style="margin-bottom:9px"><strong>Full cycle simulation test</strong></p>
+    <ul class="ev"><li>No file changes this cycle</li></ul>
+  </div>
+</div>
+
+<div class="sec">
+  <h2>💰 Last Cycle Actions</h2>
+  <div class="pan">
+    <table><thead><tr><th></th><th>Platform</th><th>Detail</th></tr></thead><tbody><tr><td>✅</td><td>dev.to</td><td><a href="https://dev.to/x" target="_blank">Article</a></td></tr><tr><td>✅</td><td>binance</td><td>BUY BTCUSDT $50.00</td></tr><tr><td>❌</td><td>medium</td><td>auth failed</td></tr></tbody></table>
+  </div>
+</div>
+
+<div class="sec">
+  <h2>🔒 Inactive Modules (add secrets to unlock)</h2>
+  <div class="pan"><div class="ic"><span class="dot"></span>llm_groq</div><div class="ic"><span class="dot"></span>llm_anthropic</div><div class="ic"><span class="dot"></span>articles_devto</div><div class="ic"><span class="dot"></span>articles_medium</div><div class="ic"><span class="dot"></span>twitter</div><div class="ic"><span class="dot"></span>crypto_binance</div><div class="ic"><span class="dot"></span>nft_ethereum</div></div>
+</div>
+
+
+
+<footer>
+  E-Evolve · hourly via GitHub Actions ·
+  <a href="status.json">status.json</a> · <a href="earnings-log.md">earnings log</a>
+</footer>
+</body>
+</html>

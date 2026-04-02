@@ -1,7 +1,7 @@
 {
   "version": "1.1.0",
-  "last_run": "2026-04-02T22:01:52.413915+00:00",
-  "total_runs": 65,
+  "last_run": "2026-04-02T23:53:44.522720+00:00",
+  "total_runs": 66,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -29,7 +29,7 @@
     "summary": "Evolution skipped: Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 413 - {'error': {'message': 'Request too lar",
     "changes_applied": [],
     "suggestions": [],
-    "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 413 - {'error': {'message': 'Request too large for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 24366, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 413 - {'error': {'message': 'Request too large for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 24365, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
   },
   "last_earning": {
     "actions": [
@@ -38,7 +38,7 @@
         "title": "",
         "url": "",
         "success": false,
-        "error": "HTTP 422: {\"error\":\"Tag \\\"github actions\\\" contains non-alphanumeric or prohibited unicode characters and Tag \\\"cloud computing\\\" contains non-alphanumeric or p",
+        "error": "HTTP 422: {\"error\":\"Tag \\\"python automation\\\" contains non-alphanumeric or prohibited unicode characters, Tag \\\"passive income\\\" contains non-alphanumeric or pr",
         "estimated_usd": 0.0
       }
     ],
@@ -53,5 +53,5 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 25
+  "last_cycle_seconds": 26
 }

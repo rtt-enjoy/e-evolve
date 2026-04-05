@@ -1,7 +1,7 @@
 {
   "version": "1.1.0",
-  "last_run": "2026-04-04T23:50:17.817560+00:00",
-  "total_runs": 84,
+  "last_run": "2026-04-05T05:58:33.019830+00:00",
+  "total_runs": 85,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -15,12 +15,12 @@
   ],
   "llm_provider": "groq",
   "earnings": {
-    "total_usd": 0.57,
-    "this_week_usd": 0.15,
-    "last_cycle_usd": 0.0,
+    "total_usd": 0.62,
+    "this_week_usd": 0.2,
+    "last_cycle_usd": 0.05,
     "week_started": "2026-03-30",
     "breakdown": {
-      "dev.to": 0.45,
+      "dev.to": 0.5,
       "binance": 0.12
     }
   },
@@ -32,8 +32,17 @@
     "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 413 - {'error': {'message': 'Request too large for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Requested 24281, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
   },
   "last_earning": {
-    "actions": [],
-    "total_usd": 0.0
+    "actions": [
+      {
+        "platform": "dev.to",
+        "title": "Self-Improving Python Scripts with LLMs: My Journey",
+        "url": "https://dev.to/rtt_enjoy_321ecb2d475c379/self-improving-python-scripts-with-llms-my-journey-2nmb",
+        "success": true,
+        "error": null,
+        "estimated_usd": 0.05
+      }
+    ],
+    "total_usd": 0.05
   },
   "suggestions": [
     {

@@ -1,7 +1,7 @@
 {
   "version": "1.1.0",
-  "last_run": "2026-04-10T06:09:00.598713+00:00",
-  "total_runs": 129,
+  "last_run": "2026-04-10T08:00:20.701262+00:00",
+  "total_runs": 130,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -38,7 +38,7 @@
         "title": "",
         "url": "",
         "success": false,
-        "error": "HTTP 422: {\"error\":\"Tag \\\"github actions\\\" contains non-alphanumeric or prohibited unicode characters and Tag \\\"cloud computing\\\" contains non-alphanumeric or p",
+        "error": "HTTP 422: {\"error\":\"Tag \\\"python automation\\\" contains non-alphanumeric or prohibited unicode characters, Tag \\\"passive income\\\" contains non-alphanumeric or pr",
         "estimated_usd": 0.0
       }
     ],
@@ -53,5 +53,5 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 30
+  "last_cycle_seconds": 45
 }

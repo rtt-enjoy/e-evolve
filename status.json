@@ -1,7 +1,7 @@
 {
   "version": "1.1.0",
-  "last_run": "2026-04-11T11:46:21.729416+00:00",
-  "total_runs": 151,
+  "last_run": "2026-04-11T13:31:31.567210+00:00",
+  "total_runs": 152,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -29,7 +29,7 @@
     "summary": "Evolution skipped: Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 429 - {'error': {'message': 'Rate limit reac",
     "changes_applied": [],
     "suggestions": [],
-    "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 89833, Requested 24391. Please try again in 3h24m49.536s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 92413, Requested 24366. Please try again in 4h1m37.055999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
   },
   "last_earning": {
     "actions": [
@@ -38,7 +38,7 @@
         "title": "",
         "url": "",
         "success": false,
-        "error": "HTTP 422: {\"error\":\"Tag \\\"dev.to\\\" contains non-alphanumeric or prohibited unicode characters\",\"status\":422}",
+        "error": "HTTP 422: {\"error\":\"Tag \\\"python automation\\\" contains non-alphanumeric or prohibited unicode characters, Tag \\\"passive income\\\" contains non-alphanumeric or pr",
         "estimated_usd": 0.0
       }
     ],
@@ -53,5 +53,5 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 34
+  "last_cycle_seconds": 29
 }

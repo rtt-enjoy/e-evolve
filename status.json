@@ -1,7 +1,7 @@
 {
   "version": "1.1.0",
-  "last_run": "2026-04-20T17:19:33.085950+00:00",
-  "total_runs": 290,
+  "last_run": "2026-04-20T19:35:00.654811+00:00",
+  "total_runs": 291,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -29,19 +29,10 @@
     "summary": "Evolution skipped: Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 429 - {'error': {'message': 'Rate limit reac",
     "changes_applied": [],
     "suggestions": [],
-    "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 81516, Requested 24292. Please try again in 1h23m38.112s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 85127, Requested 24377. Please try again in 2h16m51.456s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "dev.to",
-        "title": "",
-        "url": "",
-        "success": false,
-        "error": "HTTP 422: {\"error\":\"Tag \\\"python automation\\\" contains non-alphanumeric or prohibited unicode characters, Tag \\\"passive income\\\" contains non-alphanumeric or pr",
-        "estimated_usd": 0.0
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -53,5 +44,5 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 33
+  "last_cycle_seconds": 34
 }

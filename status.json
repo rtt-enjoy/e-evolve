@@ -1,7 +1,7 @@
 {
   "version": "1.1.0",
-  "last_run": "2026-04-24T14:08:44.049861+00:00",
-  "total_runs": 341,
+  "last_run": "2026-04-24T15:38:22.197318+00:00",
+  "total_runs": 342,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -17,7 +17,7 @@
   "earnings": {
     "total_usd": 2.37,
     "this_week_usd": 0.35,
-    "last_cycle_usd": 0.05,
+    "last_cycle_usd": 0.0,
     "week_started": "2026-04-20",
     "breakdown": {
       "dev.to": 2.25,
@@ -29,20 +29,11 @@
     "summary": "Evolution skipped: Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 429 - {'error': {'message': 'Rate limit reac",
     "changes_applied": [],
     "suggestions": [],
-    "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 78904, Requested 24281. Please try again in 45m51.84s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 76765, Requested 24387. Please try again in 16m35.328s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "dev.to",
-        "title": "Self-Improving Python Scripts with LLMs: My Journey",
-        "url": "https://dev.to/rtt_enjoy_321ecb2d475c379/self-improving-python-scripts-with-llms-my-journey-16f2",
-        "success": true,
-        "error": null,
-        "estimated_usd": 0.05
-      }
-    ],
-    "total_usd": 0.05
+    "actions": [],
+    "total_usd": 0.0
   },
   "suggestions": [
     {
@@ -53,5 +44,5 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 28
+  "last_cycle_seconds": 33
 }

@@ -9,30 +9,21 @@ Bot state: v1.1.0 · cycle #418 · $2.77 total · active: `llm_groq`, `articles_
 ### 1. dev.to tag sanitization — FIXED
 **Fix applied:** [bot/earning/articles.py:118](bot/earning/articles.py) — tags lowercased and spaces → hyphens before POST.
 
-### 2. Evolution prompt too large for Groq — BREAKING
-**Error:** `413 Request too large — Requested 24376 tokens, Limit 12000 TPM`  
-**Cause:** `_read_codebase()` sends full source (~1900 lines) + status JSON to Groq. Exceeds free-tier TPM.  
-**Fix options (pick one):**
-- A. Reduce `MAX_READ_BYTES` from 20k → 8k and skip `config/*.json` from snapshot
-- B. Send only changed/relevant files (diff-based selection)
-- C. Summarize codebase structure instead of full source  
-**File:** [bot/evolution.py](bot/evolution.py) — `_read_codebase()` line 109, `MAX_READ_BYTES` line 30  
-**Impact:** Evolution has never succeeded in recent cycles. Bot cannot self-improve.
+### 2. Evolution prompt too large for Groq — FIXED
+**Fix applied:** [bot/evolution.py](bot/evolution.py) — per-provider `_MAX_READ_BYTES`: Groq=4k, Anthropic=60k. Groq also skips `config/*.json`. Snapshot budget tracked cumulatively; stops adding files once limit reached.
 
 ---
 
 ## High Priority Improvements
 
-### 3. Tag sanitizer as shared util
-Once bug #1 fixed, extract tag cleaning to `bot/utils.py` so Medium module reuses it.
+### 3. Tag sanitizer as shared util — FIXED
+**Fix applied:** [bot/utils.py](bot/utils.py) — `sanitize_tags()` extracted. [bot/earning/articles.py](bot/earning/articles.py) uses it for both dev.to and Medium.
 
-### 4. Groq model fallback for large prompts
-`bot/llm.py` has fallback chain but all Groq models share same org TPM limit.  
-Add token pre-estimate before sending — if > 8k tokens, truncate prompt not fail.
+### 4. Groq model fallback for large prompts — FIXED
+**Fix applied:** [bot/llm.py](bot/llm.py) — `_truncate_for_groq()` pre-estimates token budget before send; truncates prompt if over `_GROQ_MAX_PROMPT_TOKENS` (8k).
 
-### 5. Evolution skips on repeated 413 — waste cycles
-Currently retries 3× then records error. Should detect 413 and reduce payload before retry.  
-**File:** [bot/llm.py](bot/llm.py) — retry loop
+### 5. Evolution skips on repeated 413 — waste cycles — FIXED
+**Fix applied:** [bot/llm.py](bot/llm.py) — retry loop detects `413` in exception string, truncates prompt 40% and retries immediately instead of raising.
 
 ---
 

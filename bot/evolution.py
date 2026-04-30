@@ -27,7 +27,13 @@ log = logging.getLogger(__name__)
 ALLOWED_PREFIXES  = ("bot/", "docs/", "config/", "requirements.txt", "version.txt")
 FORBIDDEN_PREFIXES = (".github/", ".git/")
 MAX_CHANGES       = 3
-MAX_READ_BYTES    = 20_000   # truncate large files before sending to LLM
+# Per-provider codebase snapshot limits.
+# Groq free tier: 12k TPM total — status JSON ~1k, system prompt ~0.6k, response 6k → 4k left for codebase.
+# Anthropic: large context window, no TPM issue.
+_MAX_READ_BYTES = {
+    "groq":      4_000,
+    "anthropic": 60_000,
+}
 
 _SYSTEM = """\
 You are the autonomous evolution engine of E-Evolve, a self-improving GitHub Actions bot.
@@ -73,8 +79,10 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
     Run evolution. Returns:
       { version_bumped_to, summary, changes_applied, suggestions, error }
     """
-    log.info("Reading codebase for evolution...")
-    codebase = _read_codebase()
+    provider = getattr(llm, "provider", "groq")
+    max_bytes = _MAX_READ_BYTES.get(provider, _MAX_READ_BYTES["groq"])
+    log.info("Reading codebase for evolution (provider=%s, max_bytes=%d)...", provider, max_bytes)
+    codebase = _read_codebase(max_bytes, include_config=(provider != "groq"))
 
     prompt = (
         f"Current status:\n{json.dumps(status, indent=2, default=str)}\n\n"
@@ -106,10 +114,14 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
 
 # ── File reading ─────────────────────────────────────────────────────────────
 
-def _read_codebase() -> str:
+def _read_codebase(max_bytes: int, include_config: bool = True) -> str:
+    patterns = ["bot/**/*.py", "requirements.txt"]
+    if include_config:
+        patterns.insert(1, "config/*.json")
+
     parts: list[str] = []
-    patterns = ["bot/**/*.py", "config/*.json", "requirements.txt"]
     seen: set[str] = set()
+    total = 0
     for pat in patterns:
         for path in sorted(Path(".").glob(pat)):
             key = str(path)
@@ -118,9 +130,14 @@ def _read_codebase() -> str:
             seen.add(key)
             try:
                 raw = path.read_text(encoding="utf-8", errors="replace")
-                if len(raw) > MAX_READ_BYTES:
-                    raw = raw[:MAX_READ_BYTES] + "\n... [truncated]"
+                remaining = max_bytes - total
+                if remaining <= 0:
+                    log.info("Codebase snapshot full at %d bytes — skipping %s", max_bytes, key)
+                    break
+                if len(raw) > remaining:
+                    raw = raw[:remaining] + "\n... [truncated]"
                 parts.append(f"=== {key} ===\n{raw}")
+                total += len(raw)
             except Exception as exc:
                 parts.append(f"=== {key} === [unreadable: {exc}]")
     return "\n\n".join(parts) or "(no source files found)"

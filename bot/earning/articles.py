@@ -14,6 +14,8 @@ from typing import Any, Optional
 
 import requests
 
+from bot.utils import sanitize_tags
+
 log = logging.getLogger(__name__)
 
 _SYSTEM = """\
@@ -115,7 +117,7 @@ def _post_devto(article: dict, api_key: str) -> Result:
                     "title":         article["title"],
                     "body_markdown": article["body_markdown"],
                     "published":     True,
-                    "tags":          [t.lower().replace(" ", "-") for t in article.get("tags", [])[:4]],
+                    "tags":          sanitize_tags(article.get("tags", []), max_tags=4),
                     "description":   article.get("description", ""),
                 }},
                 timeout=30,
@@ -156,7 +158,7 @@ def _post_medium(article: dict, token: str) -> Result:
                 "contentFormat": "markdown",
                 "content":       f"# {article['title']}\n\n{article['body_markdown']}",
                 "publishStatus": "public",
-                "tags":          article.get("tags", [])[:5],
+                "tags":          sanitize_tags(article.get("tags", []), max_tags=5),
             },
             timeout=30,
         )

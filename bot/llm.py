@@ -19,6 +19,11 @@ from typing import Any
 
 log = logging.getLogger(__name__)
 
+# Groq free tier: ~8k token limit per request (combined prompt + system + response)
+_GROQ_MAX_PROMPT_TOKENS = 8_000
+# Rough chars-per-token estimate (English prose + code); conservative side
+_CHARS_PER_TOKEN = 3.5
+
 # Model lists — first entry is preferred; fallback if API rejects it
 _GROQ_MODELS = [
     "llama-3.3-70b-versatile",
@@ -62,6 +67,9 @@ class LLMClient:
         temperature: float = 0.7,
     ) -> LLMResponse:
         """Send a prompt, return LLMResponse. Retries up to 3× on transient errors."""
+        if self.provider == "groq":
+            prompt = self._truncate_for_groq(prompt, system, max_tokens)
+
         last_exc: Exception | None = None
         for attempt in range(1, 4):
             try:
@@ -70,6 +78,12 @@ class LLMClient:
                 return self._call_groq(prompt, system, max_tokens, temperature)
             except Exception as exc:
                 last_exc = exc
+                exc_str = str(exc)
+                # 413 = payload too large — truncate prompt further and retry
+                if "413" in exc_str and self.provider == "groq" and attempt < 3:
+                    prompt = prompt[: int(len(prompt) * 0.6)]
+                    log.warning("LLM 413 on attempt %d — truncated prompt to %d chars", attempt, len(prompt))
+                    continue
                 log.warning("LLM attempt %d/3 failed: %s", attempt, exc)
                 if attempt < 3:
                     time.sleep(2 ** attempt)   # 2 s, 4 s
@@ -107,6 +121,21 @@ class LLMClient:
         raise ValueError(f"Could not get valid JSON from LLM: {last_exc}") from last_exc
 
     # ── Groq ───────────────────────────────────────────────────────────────
+
+    def _truncate_for_groq(self, prompt: str, system: str, max_tokens: int) -> str:
+        """Pre-truncate prompt so combined token estimate fits Groq limit."""
+        system_tokens = len(system) / _CHARS_PER_TOKEN
+        response_budget = max_tokens
+        available_chars = int(
+            (_GROQ_MAX_PROMPT_TOKENS - system_tokens - response_budget) * _CHARS_PER_TOKEN
+        )
+        if len(prompt) > available_chars > 0:
+            log.info(
+                "Groq prompt pre-truncated from %d to %d chars (token budget)",
+                len(prompt), available_chars,
+            )
+            return prompt[:available_chars] + "\n... [truncated for token limit]"
+        return prompt
 
     def _call_groq(
         self, prompt: str, system: str, max_tokens: int, temperature: float

@@ -167,7 +167,7 @@ def _render(s: dict[str, Any]) -> str:
 
     # action table
     rows = ""
-    for a in actions[-12:]:
+    for a in actions[-20:]:
         ok   = a.get("success", False)
         plat = a.get("platform", "?")
         ic   = "✅" if ok else "❌"
@@ -293,7 +293,8 @@ footer{{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;paddi
   <div class="pan">
     {"<p class='muted'>No actions yet — add a secret to activate an earning module.</p>"
      if not rows else
-     f"<table><thead><tr><th></th><th>Platform</th><th>Detail</th></tr></thead><tbody>{rows}</tbody></table>"}
+     f'<table><thead><tr><th></th><th>Platform</th><th>Detail</th></tr></thead><tbody>{rows}</tbody></table>'
+     f'<p class="muted" style="font-size:.78rem;margin-top:8px">Showing last {min(len(actions),20)} of {len(actions)} · <a href="earnings-log.md">full log</a></p>'}
   </div>
 </div>
 

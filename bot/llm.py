@@ -81,7 +81,9 @@ class LLMClient:
                 exc_str = str(exc)
                 # 413 = payload too large — truncate prompt further and retry
                 if "413" in exc_str and self.provider == "groq" and attempt < 3:
-                    prompt = prompt[: int(len(prompt) * 0.6)]
+                    cutoff = int(len(prompt) * 0.6)
+                    nl = prompt.rfind("\n", 0, cutoff)
+                    prompt = prompt[: nl if nl > 0 else cutoff]
                     log.warning("LLM 413 on attempt %d — truncated prompt to %d chars", attempt, len(prompt))
                     continue
                 log.warning("LLM attempt %d/3 failed: %s", attempt, exc)

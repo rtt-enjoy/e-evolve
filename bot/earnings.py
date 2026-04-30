@@ -46,7 +46,7 @@ def update(status: dict[str, Any], actions: list[dict]) -> dict[str, Any]:
         if not a.get("success"):
             continue
         platform = a.get("platform", "unknown")
-        amount   = float(a.get("estimated_usd", 0)) + float(a.get("pnl_usd", 0))
+        amount   = float(a.get("estimated_usd") or 0) + float(a.get("pnl_usd") or 0)
         cycle   += amount
         breakdown[platform] = round(breakdown.get(platform, 0.0) + amount, 6)
 

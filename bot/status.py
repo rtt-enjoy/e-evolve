@@ -83,6 +83,7 @@ def _defaults() -> dict[str, Any]:
             "last_cycle_usd":  0.0,
             "week_started":    None,
             "breakdown":       {},
+            "history":         [],
         },
         "last_evolution": {
             "summary":         "No evolution yet.",

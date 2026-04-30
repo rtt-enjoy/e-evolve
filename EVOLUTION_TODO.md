@@ -29,13 +29,13 @@ Bot state: v1.1.0 · cycle #418 · $2.77 total · active: `llm_groq`, `articles_
 
 ## Feature Gaps (inactive modules)
 
-| Module | Needs | Est. weekly |
-|--------|-------|-------------|
-| `llm_anthropic` | `ANTHROPIC_API_KEY` secret in GH repo | Unlocks better evolution |
-| `articles_medium` | `MEDIUM_INTEGRATION_TOKEN` | +$0.02/article |
-| `twitter` | 4 Twitter secrets | $1–5/week |
-| `crypto_binance` | `BINANCE_API_KEY` + `BINANCE_SECRET_KEY` | $0.12 earned already |
-| `nft_ethereum` | `ETH_PRIVATE_KEY` + `ETH_WALLET_ADDRESS` | speculative |
+| Module | Needs | Est. weekly | Status |
+|--------|-------|-------------|--------|
+| `llm_anthropic` | `ANTHROPIC_API_KEY` secret in GH repo | Unlocks better evolution | Logic implemented — add key when available |
+| `articles_medium` | `MEDIUM_INTEGRATION_TOKEN` | +$0.02/article | Logic implemented — add key to activate |
+| `twitter` | 4 Twitter secrets | $1–5/week | — |
+| `crypto_binance` | `BINANCE_API_KEY` + `BINANCE_SECRET_KEY` | $0.12 earned already | — |
+| `nft_ethereum` | `ETH_PRIVATE_KEY` + `ETH_WALLET_ADDRESS` | speculative | — |
 
 **Highest ROI unlock:** Add `ANTHROPIC_API_KEY` → evolution uses Claude → larger context → fixes itself.
 
@@ -43,10 +43,10 @@ Bot state: v1.1.0 · cycle #418 · $2.77 total · active: `llm_groq`, `articles_
 
 ## Low Priority / Polish
 
-- Dashboard `docs/index.html` shows stale last-cycle earnings ($0.00) — display cumulative trend
-- `status.json` suggestions block still shows "Add DEV_TO_API_KEY" even though it's active
-- Weekly earnings reset logic in `bot/earnings.py` — verify week boundary math is correct
-- Article topics list has 8 entries, cycles every 8 runs — diversify or randomize
+- Dashboard `docs/index.html` shows stale last-cycle earnings ($0.00) — display cumulative trend — **FIXED**: sparkline tile added, `earnings.history` tracks last 10 cycles
+- `status.json` suggestions block still shows "Add DEV_TO_API_KEY" even though it's active — **FIXED**: `main.py` filters suggestions against active feature secrets
+- Weekly earnings reset logic in `bot/earnings.py` — verify week boundary math is correct — **FIXED**: now compares current Monday vs `week_started`; handles skipped weeks
+- Article topics list has 8 entries, cycles every 8 runs — diversify or randomize — **FIXED**: expanded to 24 topics, MD5-hash-based selection removes sequential cycling
 
 ---
 

@@ -75,6 +75,15 @@ def write_html(status: dict[str, Any]) -> None:
 
 # ── HTML renderer ─────────────────────────────────────────────────────────────
 
+def _sparkline(history: list) -> str:
+    """Render a Unicode block sparkline from a list of floats."""
+    bars = " ▁▂▃▄▅▆▇█"
+    if not history:
+        return ""
+    mx = max(history) or 1
+    return "".join(bars[min(8, int(v / mx * 8))] for v in history)
+
+
 def _render(s: dict[str, Any]) -> str:
     version  = s.get("version", "1.0.0")
     last_run = _fmt(s.get("last_run"))
@@ -141,6 +150,10 @@ def _render(s: dict[str, Any]) -> str:
         items = "".join(f"<li>{e[:120]}</li>" for e in errors[-5:])
         err_html = f'<div class="ebox"><h3>⚠️ Recent Errors</h3><ul>{items}</ul></div>'
 
+    history   = earn.get("history", [])
+    spark     = _sparkline(history)
+    spark_tip = " · ".join(f"${v:.4f}" for v in history) if history else "no data"
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -169,6 +182,7 @@ h1{{font-size:1.4rem;margin-bottom:6px}}
 .sg{{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:26px}}
 .st{{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:16px}}
 .st .v{{font-size:1.8rem;font-weight:700;color:var(--gn)}}
+.st .v.spark{{font-size:1.2rem;font-family:monospace;letter-spacing:2px;cursor:default}}
 .st .l{{color:var(--mu);font-size:.78rem;margin-top:2px}}
 .sec{{margin-bottom:26px}}
 .pan{{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:16px}}
@@ -206,6 +220,7 @@ footer{{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;paddi
   <div class="st"><div class="v">${earn.get("this_week_usd",0):.2f}</div><div class="l">This week</div></div>
   <div class="st"><div class="v">{n_runs}</div><div class="l">Cycles run</div></div>
   <div class="st"><div class="v">{len(active)}</div><div class="l">Active modules</div></div>
+  {"" if not spark else f'<div class="st"><div class="v spark" title="{spark_tip}">{spark}</div><div class="l">Last {len(history)} cycles</div></div>'}
 </div>
 
 <div class="sec">

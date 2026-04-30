@@ -44,6 +44,22 @@ _TOPICS = [
     "How to make Python scripts improve themselves using LLMs",
     "Web3 automation with Python: from zero to daily NFT mints",
     "My bot posted 100 dev.to articles — here's what happened",
+    "Rate limiting your GitHub Actions bot: lessons from 418 cycles",
+    "Prompt engineering for code generation: what actually works",
+    "Building a personal finance tracker that runs for free on GitHub",
+    "How I use Groq's free API tier to power an autonomous agent",
+    "Python dataclasses vs dicts: when each wins",
+    "Structuring LLM outputs as JSON: parsing strategies that don't break",
+    "Cron jobs on GitHub Actions: gotchas and best practices",
+    "From idea to deployed bot in 30 minutes with Python and GitHub Actions",
+    "Writing dev.to articles programmatically: the API guide nobody wrote",
+    "How to version a bot that modifies its own source code",
+    "Exponential backoff in Python: the right way to retry API calls",
+    "Building observable bots: logging strategies for autonomous systems",
+    "Why I store my bot's state in a JSON file instead of a database",
+    "Testing Python code that calls external APIs without mocking everything",
+    "AST-based code safety checks: letting LLMs edit your repo safely",
+    "The economics of running a dev content bot: real numbers after 400 cycles",
 ]
 
 
@@ -87,8 +103,10 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 # ── Generation ────────────────────────────────────────────────────────────────
 
 def _generate(llm: Any, status: dict) -> Optional[dict]:
+    import hashlib
     n     = status.get("total_runs", 1)
-    topic = _TOPICS[n % len(_TOPICS)]
+    idx   = int(hashlib.md5(str(n).encode()).hexdigest(), 16) % len(_TOPICS)
+    topic = _TOPICS[idx]
     try:
         art = llm.complete_json(
             f'Write a developer article about: "{topic}"\n'

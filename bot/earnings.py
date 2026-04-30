@@ -5,7 +5,7 @@ Accumulates earnings, resets weekly counter on Monday UTC.
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 log = logging.getLogger(__name__)
@@ -25,17 +25,18 @@ def update(status: dict[str, Any], actions: list[dict]) -> dict[str, Any]:
         "breakdown":      {},
     })
 
-    today   = datetime.now(timezone.utc).date().isoformat()
-    started = e.get("week_started") or today
+    today   = datetime.now(timezone.utc).date()
+    current_week_monday = (today - timedelta(days=today.weekday())).isoformat()
+    started = e.get("week_started") or current_week_monday
 
-    # Monday reset (isoweekday 1 = Monday)
-    if datetime.now(timezone.utc).isoweekday() == 1 and started < today:
-        log.info("Monday reset: this_week_usd was $%.4f", e.get("this_week_usd", 0))
+    # Reset whenever we've rolled into a new week (handles skipped weeks too)
+    if started < current_week_monday:
+        log.info("Week reset: this_week_usd was $%.4f (week started %s)", e.get("this_week_usd", 0), started)
         e["this_week_usd"] = 0.0
-        e["week_started"]  = today
+        e["week_started"]  = current_week_monday
 
     if not e.get("week_started"):
-        e["week_started"] = today
+        e["week_started"] = current_week_monday
 
     # Tally
     cycle: float = 0.0
@@ -52,6 +53,12 @@ def update(status: dict[str, Any], actions: list[dict]) -> dict[str, Any]:
     e["total_usd"]      = round(e.get("total_usd",      0.0) + cycle, 6)
     e["this_week_usd"]  = round(e.get("this_week_usd",  0.0) + cycle, 6)
     e["last_cycle_usd"] = round(cycle, 6)
+
+    # Rolling history of last 10 cycle earnings for trend display
+    history: list = e.setdefault("history", [])
+    history.append(round(cycle, 6))
+    if len(history) > 10:
+        history[:] = history[-10:]
 
     log.info("Earnings — cycle: +$%.4f | week: $%.4f | total: $%.4f",
              cycle, e["this_week_usd"], e["total_usd"])

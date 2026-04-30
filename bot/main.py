@@ -95,7 +95,14 @@ def main() -> int:
     if evo.get("version_bumped_to"):
         status["version"] = evo["version_bumped_to"]
     if evo.get("suggestions"):
-        status["suggestions"] = evo["suggestions"]
+        active_secrets = {
+            s for f in status.get("active_features", [])
+            for s in _st.FEATURE_MAP.get(f, [])
+        }
+        status["suggestions"] = [
+            sg for sg in evo["suggestions"]
+            if not sg.get("secret_needed") or sg["secret_needed"] not in active_secrets
+        ]
 
     if evo.get("changes_applied"):
         changed_files = [c["file"] for c in evo["changes_applied"]]

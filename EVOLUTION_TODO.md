@@ -6,47 +6,64 @@ Bot state: v1.1.0 · cycle #418 · $2.77 total · active: `llm_groq`, `articles_
 
 ## Bugs (break current earning)
 
-### 1. dev.to tag sanitization — FIXED
-**Fix applied:** [bot/earning/articles.py:118](bot/earning/articles.py) — tags lowercased and spaces → hyphens before POST.
-
-### 2. Evolution prompt too large for Groq — FIXED
-**Fix applied:** [bot/evolution.py](bot/evolution.py) — per-provider `_MAX_READ_BYTES`: Groq=4k, Anthropic=60k. Groq also skips `config/*.json`. Snapshot budget tracked cumulatively; stops adding files once limit reached.
+_(none open)_
 
 ---
 
-## High Priority Improvements
+## High Priority — Logic
 
-### 3. Tag sanitizer as shared util — FIXED
-**Fix applied:** [bot/utils.py](bot/utils.py) — `sanitize_tags()` extracted. [bot/earning/articles.py](bot/earning/articles.py) uses it for both dev.to and Medium.
+### 1. Evolution error truncated to 120 chars
+`bot/evolution.py:228` truncates LLM failure message before saving to status. `bot/dashboard.py:87–99` only shows what's saved — user can't tell if failure was token limit, bad JSON, or API error.
+**Fix:** Save full error string (or first 500 chars) + error type tag (`413|json|api`) to status.json.
 
-### 4. Groq model fallback for large prompts — FIXED
-**Fix applied:** [bot/llm.py](bot/llm.py) — `_truncate_for_groq()` pre-estimates token budget before send; truncates prompt if over `_GROQ_MAX_PROMPT_TOKENS` (8k).
+### 2. Codebase snapshot silently truncated → LLM edits unseen code
+`bot/evolution.py:135–138` stops adding files once budget is exceeded but doesn't tell LLM which files were omitted. LLM can propose changes to files it never read.
+**Fix:** Append a `# OMITTED FILES: [list]` comment to the snapshot so LLM knows what it can't touch.
 
-### 5. Evolution skips on repeated 413 — waste cycles — FIXED
-**Fix applied:** [bot/llm.py](bot/llm.py) — retry loop detects `413` in exception string, truncates prompt 40% and retries immediately instead of raising.
+### 3. Medium posting has no retry; dev.to ignores rate-limit headers
+`bot/earning/articles.py:164` — Medium: zero retries on transient failures.
+`bot/earning/articles.py:155–159` — dev.to: retries after flat 3s, ignores `X-RateLimit-Reset` header on 429.
+**Fix:** Add 2-retry loop to Medium. On dev.to 429, parse `Retry-After` header and sleep that duration.
+
+### 4. Article generation failure reason not captured
+`bot/earning/articles.py:111–123` catches all exceptions as one message. Dashboard shows "Generation failed" with no signal whether it's LLM timeout, quota, or JSON parse error.
+**Fix:** Distinguish exception types; save `error_type` field (`llm_timeout|llm_json|llm_quota|unknown`) in action dict.
+
+### 5. Status file corruption wipes all historical earnings
+`bot/status.py:38–39` — corrupt JSON triggers reset to clean defaults, losing total earnings, version, suggestions.
+**Fix:** On parse failure, write corrupt file to `status.json.corrupt`, then load defaults. Never silently discard.
+
+### 6. Git commit fails silently, cycle state lost
+`bot/git_utils.py:41–52` — commit failure is caught and logged but caller doesn't know. Cycle runs, earnings logged, but nothing persists.
+**Fix:** Return structured result; in `bot/main.py` Phase 5 log a visible `[GIT FAIL]` warning to errors list so dashboard shows it.
 
 ---
 
-## Feature Gaps (inactive modules)
+## High Priority — UI
 
-| Module | Needs | Est. weekly | Status |
-|--------|-------|-------------|--------|
-| `llm_anthropic` | `ANTHROPIC_API_KEY` secret in GH repo | Unlocks better evolution | Logic implemented — add key when available |
-| `articles_medium` | `MEDIUM_INTEGRATION_TOKEN` | +$0.02/article | Logic implemented — add key to activate |
-| `twitter` | 4 Twitter secrets | $1–5/week | — |
-| `crypto_binance` | `BINANCE_API_KEY` + `BINANCE_SECRET_KEY` | $0.12 earned already | — |
-| `nft_ethereum` | `ETH_PRIVATE_KEY` + `ETH_WALLET_ADDRESS` | speculative | — |
+### 7. Evolution LLM failures show truncated unreadable error
+`docs/index.html:76` (rendered from dashboard) — shows `'error': {'message': 'Request too lar...` cut off.
+**Fix:** In `bot/dashboard.py`, extract `error.message` from nested dict before truncating; show clean one-liner + error type badge.
 
-**Highest ROI unlock:** Add `ANTHROPIC_API_KEY` → evolution uses Claude → larger context → fixes itself.
+### 8. Failed article actions render as empty links
+`docs/index.html:84` — failed article actions have empty `title` and `url`, producing blank clickable `<a>` tags.
+**Fix:** In `bot/dashboard.py` action table, render failures as `<span class="error">platform — {error}</span>` instead of a link.
+
+### 9. Earnings sparkline too small for trend detection
+`bot/dashboard.py:153–155` — history capped at 10 cycles (~10 hours). Visual trend meaningless at that scale.
+**Fix:** Expand history to 48 entries (2 days). Keep only non-zero cycles to avoid flat line during downtime.
+
+### 10. No distinct alert when evolution is skipped vs LLM failed
+Dashboard shows same "Last Evolution" block whether evolution was skipped by command, hit token limit, or crashed. No visual distinction.
+**Fix:** Add `evolution_status` field to status.json (`ok|skipped|llm_error|apply_error`). Dashboard renders badge: green/grey/red/yellow.
 
 ---
 
-## Low Priority / Polish
+## Low Priority
 
-- Dashboard `docs/index.html` shows stale last-cycle earnings ($0.00) — display cumulative trend — **FIXED**: sparkline tile added, `earnings.history` tracks last 10 cycles
-- `status.json` suggestions block still shows "Add DEV_TO_API_KEY" even though it's active — **FIXED**: `main.py` filters suggestions against active feature secrets
-- Weekly earnings reset logic in `bot/earnings.py` — verify week boundary math is correct — **FIXED**: now compares current Monday vs `week_started`; handles skipped weeks
-- Article topics list has 8 entries, cycles every 8 runs — diversify or randomize — **FIXED**: expanded to 24 topics, MD5-hash-based selection removes sequential cycling
+- `bot/earnings.py:49` — `pnl_usd` field assumed float; missing field crashes tally. Add `float(action.get('pnl_usd') or 0)`.
+- `bot/llm.py:83–86` — 413 truncation cuts to 60% of bytes mid-function. Consider truncating at last newline to avoid broken code context.
+- Dashboard action table shows only last 12 entries — older failures invisible. Consider paginating or linking to `earnings-log.md`.
 
 ---
 

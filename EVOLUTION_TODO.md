@@ -6,12 +6,8 @@ Bot state: v1.1.0 · cycle #418 · $2.77 total · active: `llm_groq`, `articles_
 
 ## Bugs (break current earning)
 
-### 1. dev.to tag sanitization — BREAKING
-**Error:** `HTTP 422: Tag "python automation" contains non-alphanumeric or prohibited unicode characters`  
-**Cause:** LLM returns tags with spaces (e.g. `"python automation"`). dev.to requires slug-style tags.  
-**Fix:** Strip/replace spaces with hyphens in `_post_devto()` before POST, and lowercase all tags.  
-**File:** [bot/earning/articles.py](bot/earning/articles.py) — `_post_devto()` around line 113  
-**Impact:** Every article cycle fails silently. Zero earnings until fixed.
+### 1. dev.to tag sanitization — FIXED
+**Fix applied:** [bot/earning/articles.py:118](bot/earning/articles.py) — tags lowercased and spaces → hyphens before POST.
 
 ### 2. Evolution prompt too large for Groq — BREAKING
 **Error:** `413 Request too large — Requested 24376 tokens, Limit 12000 TPM`  

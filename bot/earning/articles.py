@@ -115,7 +115,7 @@ def _post_devto(article: dict, api_key: str) -> Result:
                     "title":         article["title"],
                     "body_markdown": article["body_markdown"],
                     "published":     True,
-                    "tags":          article.get("tags", [])[:4],
+                    "tags":          [t.lower().replace(" ", "-") for t in article.get("tags", [])[:4]],
                     "description":   article.get("description", ""),
                 }},
                 timeout=30,

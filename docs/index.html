@@ -26,6 +26,7 @@ h1{font-size:1.4rem;margin-bottom:6px}
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:26px}
 .st{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:16px}
 .st .v{font-size:1.8rem;font-weight:700;color:var(--gn)}
+.st .v.spark{font-size:1.2rem;font-family:monospace;letter-spacing:2px;cursor:default}
 .st .l{color:var(--mu);font-size:.78rem;margin-top:2px}
 .sec{margin-bottom:26px}
 .pan{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:16px}
@@ -54,15 +55,16 @@ footer{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;paddin
   <div>
     <h1>E-Evolve <span class="pill pa">v1.1.0</span><span class="pill pp">groq</span></h1>
     <div style="margin-top:5px"><span class="b g">llm_groq</span><span class="b g">articles_devto</span></div>
-    <div class="mu">Last cycle: 2026-04-30 04:05 UTC &nbsp;·&nbsp; Total cycles: 418</div>
+    <div class="mu">Last cycle: 2026-04-30 06:42 UTC &nbsp;·&nbsp; Total cycles: 419</div>
   </div>
 </header>
 
 <div class="sg">
   <div class="st"><div class="v">$2.77</div><div class="l">Total earned</div></div>
   <div class="st"><div class="v">$0.20</div><div class="l">This week</div></div>
-  <div class="st"><div class="v">418</div><div class="l">Cycles run</div></div>
+  <div class="st"><div class="v">419</div><div class="l">Cycles run</div></div>
   <div class="st"><div class="v">2</div><div class="l">Active modules</div></div>
+  <div class="st"><div class="v spark" title="$0.0000"> </div><div class="l">Last 1 cycles</div></div>
 </div>
 
 <div class="sec">
@@ -73,7 +75,7 @@ footer{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;paddin
 <div class="sec">
   <h2>⚡ Last Evolution</h2>
   <div class="pan">
-    <p style="margin-bottom:9px"><strong>Evolution skipped: Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 413 - {'error': {'message': 'Request too lar</strong></p>
+    <p style="margin-bottom:9px"><strong>Evolution skipped: Could not get valid JSON from LLM: No valid JSON object found in LLM response. First 200 chars: '{\n  "version": "1.2.0"</strong></p>
     <ul class="ev"><li>No file changes this cycle</li></ul>
   </div>
 </div>

@@ -38,7 +38,12 @@ def load() -> dict[str, Any]:
             data = json.loads(STATUS_FILE.read_text(encoding="utf-8"))
             return _fill_defaults(data)
         except Exception as exc:
-            log.warning("status.json unreadable (%s) — using defaults", exc)
+            corrupt_path = STATUS_FILE.with_suffix(".json.corrupt")
+            try:
+                STATUS_FILE.replace(corrupt_path)
+                log.warning("status.json corrupt (%s) — saved to %s, using defaults", exc, corrupt_path)
+            except Exception as mv_exc:
+                log.warning("status.json corrupt (%s) — could not save backup (%s), using defaults", exc, mv_exc)
     return _defaults()
 
 

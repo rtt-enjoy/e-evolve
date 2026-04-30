@@ -13,18 +13,18 @@ from typing import Optional
 log = logging.getLogger(__name__)
 
 
-def commit(message: str, paths: Optional[list[str]] = None) -> bool:
+def commit(message: str, paths: Optional[list[str]] = None) -> dict:
     """
     Stage and commit.
     - If `paths` given: only stages files that exist on disk.
     - If `paths` is None: stages everything (git add -A) except backups dir.
-    Returns True if a commit was created, False if nothing changed.
+    Returns dict with keys: success (bool), committed (bool), error (str|None).
     """
     try:
         if paths is not None:
             existing = [p for p in paths if Path(p).exists()]
             if not existing:
-                return False
+                return {"success": True, "committed": False, "error": None}
             for p in existing:
                 _run("add", "--", p)
         else:
@@ -36,19 +36,19 @@ def commit(message: str, paths: Optional[list[str]] = None) -> bool:
         r = _run("diff", "--cached", "--quiet", check=False)
         if r.returncode == 0:
             log.debug("Nothing to commit for: %s", message[:60])
-            return False
+            return {"success": True, "committed": False, "error": None}
 
         _run("commit", "-m", message,
              "--author", "E-Evolve Bot <evolve-bot@users.noreply.github.com>")
 
         sha = _run("rev-parse", "--short", "HEAD", capture=True)
         log.info("Committed [%s]: %s", sha, message[:80])
-        return True
+        return {"success": True, "committed": True, "error": None}
 
     except subprocess.CalledProcessError as exc:
-        log.error("git failed: cmd=%s stdout=%s stderr=%s",
-                  exc.cmd, exc.stdout, exc.stderr)
-        return False
+        err = f"cmd={exc.cmd} stdout={exc.stdout!r} stderr={exc.stderr!r}"
+        log.error("git failed: %s", err)
+        return {"success": False, "committed": False, "error": err}
 
 
 def short_sha() -> str:

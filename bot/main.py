@@ -106,10 +106,14 @@ def main() -> int:
 
     if evo.get("changes_applied"):
         changed_files = [c["file"] for c in evo["changes_applied"]]
-        _git.commit(
+        git_result = _git.commit(
             f"🧬 evolve v{status['version']}: {evo['summary'][:80]}",
             paths=changed_files + ["version.txt"],
         )
+        if not git_result["success"]:
+            msg = f"[GIT FAIL] evolution commit: {git_result['error']}"
+            log.error(msg)
+            errors.append(msg)
 
     # ── 4. Earn ───────────────────────────────────────────────────────────────
     _hr("Phase 4 — Earning")
@@ -173,11 +177,13 @@ def main() -> int:
     except Exception as exc:
         log.error("Dashboard write failed: %s", exc)
 
-    _git.commit(
+    git_result = _git.commit(
         f"📊 cycle #{status['total_runs']} +${cycle_usd:.4f} {elapsed}s",
         paths=["status.json", "earnings-log.md",
                "docs/index.html", "command.txt", "version.txt"],
     )
+    if not git_result["success"]:
+        log.error("[GIT FAIL] state commit: %s", git_result["error"])
 
     _hr(f"Done | v{status['version']} | {llm.provider} | "
         f"+${cycle_usd:.4f} | {elapsed}s | {len(errors)} err")

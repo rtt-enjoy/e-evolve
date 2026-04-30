@@ -70,6 +70,7 @@ class Result:
     url: str = ""
     success: bool = False
     error: Optional[str] = None
+    error_type: Optional[str] = None
     estimated_usd: float = 0.0
 
 
@@ -102,6 +103,17 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 
 # ── Generation ────────────────────────────────────────────────────────────────
 
+def _classify_gen_error(exc: Exception) -> str:
+    s = str(exc).lower()
+    if "timeout" in s or "timed out" in s:
+        return "llm_timeout"
+    if "json" in s or "parse" in s or "decode" in s or "assertionerror" in type(exc).__name__.lower():
+        return "llm_json"
+    if "quota" in s or "rate" in s or "429" in s or "limit" in s:
+        return "llm_quota"
+    return "unknown"
+
+
 def _generate(llm: Any, status: dict) -> Optional[dict]:
     import hashlib
     n     = status.get("total_runs", 1)
@@ -119,7 +131,8 @@ def _generate(llm: Any, status: dict) -> Optional[dict]:
         log.info("[articles] Generated: %s", art["title"][:70])
         return art
     except Exception as exc:
-        log.error("[articles] Generation failed: %s", exc)
+        error_type = _classify_gen_error(exc)
+        log.error("[articles] Generation failed [%s]: %s", error_type, exc)
         return None
 
 
@@ -140,8 +153,12 @@ def _post_devto(article: dict, api_key: str) -> Result:
                 }},
                 timeout=30,
             )
+            if resp.status_code == 429:
+                retry_after = int(resp.headers.get("Retry-After", 60))
+                log.warning("[articles] dev.to rate limited — sleeping %ds", retry_after)
+                time.sleep(retry_after)
+                continue
             if resp.status_code in (400, 401, 403, 422):
-                # These won't change on retry
                 return Result(platform="dev.to",
                               error=f"HTTP {resp.status_code}: {resp.text[:150]}")
             resp.raise_for_status()
@@ -163,26 +180,34 @@ def _post_devto(article: dict, api_key: str) -> Result:
 
 def _post_medium(article: dict, token: str) -> Result:
     auth = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
-    try:
-        me  = requests.get("https://api.medium.com/v1/me", headers=auth, timeout=15)
-        me.raise_for_status()
-        uid = me.json()["data"]["id"]
+    last_exc: Optional[Exception] = None
+    for attempt in range(3):
+        try:
+            me  = requests.get("https://api.medium.com/v1/me", headers=auth, timeout=15)
+            me.raise_for_status()
+            uid = me.json()["data"]["id"]
 
-        resp = requests.post(
-            f"https://api.medium.com/v1/users/{uid}/posts",
-            headers=auth,
-            json={
-                "title":         article["title"],
-                "contentFormat": "markdown",
-                "content":       f"# {article['title']}\n\n{article['body_markdown']}",
-                "publishStatus": "public",
-                "tags":          sanitize_tags(article.get("tags", []), max_tags=5),
-            },
-            timeout=30,
-        )
-        resp.raise_for_status()
-        url = resp.json()["data"].get("url", "https://medium.com")
-        return Result(platform="medium", title=article["title"],
-                      url=url, success=True, estimated_usd=0.02)
-    except Exception as exc:
-        return Result(platform="medium", error=str(exc)[:200])
+            resp = requests.post(
+                f"https://api.medium.com/v1/users/{uid}/posts",
+                headers=auth,
+                json={
+                    "title":         article["title"],
+                    "contentFormat": "markdown",
+                    "content":       f"# {article['title']}\n\n{article['body_markdown']}",
+                    "publishStatus": "public",
+                    "tags":          sanitize_tags(article.get("tags", []), max_tags=5),
+                },
+                timeout=30,
+            )
+            if resp.status_code in (400, 401, 403):
+                return Result(platform="medium",
+                              error=f"HTTP {resp.status_code}: {resp.text[:150]}")
+            resp.raise_for_status()
+            url = resp.json()["data"].get("url", "https://medium.com")
+            return Result(platform="medium", title=article["title"],
+                          url=url, success=True, estimated_usd=0.02)
+        except Exception as exc:
+            last_exc = exc
+            if attempt < 2:
+                time.sleep(5 * (attempt + 1))
+    return Result(platform="medium", error=str(last_exc)[:200] if last_exc else "max retries exceeded")

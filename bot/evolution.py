@@ -121,6 +121,7 @@ def _read_codebase(max_bytes: int, include_config: bool = True) -> str:
 
     parts: list[str] = []
     seen: set[str] = set()
+    omitted: list[str] = []
     total = 0
     for pat in patterns:
         for path in sorted(Path(".").glob(pat)):
@@ -133,13 +134,16 @@ def _read_codebase(max_bytes: int, include_config: bool = True) -> str:
                 remaining = max_bytes - total
                 if remaining <= 0:
                     log.info("Codebase snapshot full at %d bytes — skipping %s", max_bytes, key)
-                    break
+                    omitted.append(key)
+                    continue
                 if len(raw) > remaining:
                     raw = raw[:remaining] + "\n... [truncated]"
                 parts.append(f"=== {key} ===\n{raw}")
                 total += len(raw)
             except Exception as exc:
                 parts.append(f"=== {key} === [unreadable: {exc}]")
+    if omitted:
+        parts.append(f"# OMITTED FILES (budget exceeded — do not propose changes to these): {omitted}")
     return "\n\n".join(parts) or "(no source files found)"
 
 
@@ -222,11 +226,22 @@ def _resolve_version(proposed: Any, current: str) -> str:
         return "1.0.1"
 
 
+def _classify_error(error: str) -> str:
+    s = error.lower()
+    if "413" in s or "too large" in s or "request entity" in s:
+        return "413"
+    if "json" in s or "parse" in s or "decode" in s:
+        return "json"
+    return "api"
+
+
 def _error_result(error: str, current_version: str) -> dict[str, Any]:
+    error_type = _classify_error(error)
     return {
         "version_bumped_to": current_version,
-        "summary":           f"Evolution skipped: {error[:120]}",
+        "summary":           f"Evolution skipped [{error_type}]: {error[:500]}",
         "changes_applied":   [],
         "suggestions":       [],
-        "error":             error,
+        "error":             error[:500],
+        "error_type":        error_type,
     }

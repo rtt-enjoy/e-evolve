@@ -18,21 +18,19 @@ _(all resolved 2026-04-30)_
 
 ## High Priority — UI
 
-### 7. Evolution LLM failures show truncated unreadable error
-`docs/index.html:76` (rendered from dashboard) — shows `'error': {'message': 'Request too lar...` cut off.
-**Fix:** In `bot/dashboard.py`, extract `error.message` from nested dict before truncating; show clean one-liner + error type badge.
+_(all resolved 2026-04-30)_
 
-### 8. Failed article actions render as empty links
-`docs/index.html:84` — failed article actions have empty `title` and `url`, producing blank clickable `<a>` tags.
-**Fix:** In `bot/dashboard.py` action table, render failures as `<span class="error">platform — {error}</span>` instead of a link.
+### 7. Evolution LLM failures show truncated unreadable error ✅
+Fixed in `bot/dashboard.py`: regex-extracts `message` from nested error dict; renders `<strong>Error Type:</strong> clean message` in a red callout block below the evolution summary.
 
-### 9. Earnings sparkline too small for trend detection
-`bot/dashboard.py:153–155` — history capped at 10 cycles (~10 hours). Visual trend meaningless at that scale.
-**Fix:** Expand history to 48 entries (2 days). Keep only non-zero cycles to avoid flat line during downtime.
+### 8. Failed article actions render as empty links ✅
+Fixed in `bot/dashboard.py` action table: failures render as `<span class="err">platform — error</span>` instead of `<a>` with empty href/title.
 
-### 10. No distinct alert when evolution is skipped vs LLM failed
-Dashboard shows same "Last Evolution" block whether evolution was skipped by command, hit token limit, or crashed. No visual distinction.
-**Fix:** Add `evolution_status` field to status.json (`ok|skipped|llm_error|apply_error`). Dashboard renders badge: green/grey/red/yellow.
+### 9. Earnings sparkline too small for trend detection ✅
+Fixed in `bot/earnings.py`: history expanded to 48 entries; only non-zero cycles appended (avoids flat line during downtime). Sparkline label updated to "Last N earning cycles".
+
+### 10. No distinct alert when evolution is skipped vs LLM failed ✅
+Fixed in `bot/dashboard.py`: derives `evo_status` (`ok|skipped|llm_error|apply_error`) from `last_evolution` fields at render time. Badge injected inline after summary text: green/grey/red/yellow.
 
 ---
 

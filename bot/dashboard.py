@@ -117,6 +117,48 @@ def _render(s: dict[str, Any]) -> str:
             f'<p>{sg.get("description","")}</p>{s_blk}{e_blk}</div></div>'
         )
 
+    # evolution status badge (#10)
+    evo_err      = evo.get("error")
+    evo_err_type = evo.get("error_type", "")
+    evo_summary  = evo.get("summary", "—")
+    if not evo_err and evo.get("changes_applied"):
+        evo_status = "ok"
+    elif not evo_err and "skipped by owner" in evo_summary.lower():
+        evo_status = "skipped"
+    elif evo_err and evo_err_type in ("413", "json", "api"):
+        evo_status = "llm_error"
+    elif evo_err:
+        evo_status = "apply_error"
+    else:
+        evo_status = "ok"
+
+    _evo_badge_style = {
+        "ok":          ("var(--gn)", "rgba(63,185,80,.15)",  "rgba(63,185,80,.4)"),
+        "skipped":     ("var(--mu)", "rgba(139,148,158,.1)", "rgba(139,148,158,.3)"),
+        "llm_error":   ("var(--rd)", "rgba(248,81,73,.1)",   "rgba(248,81,73,.35)"),
+        "apply_error": ("#e3b341",   "rgba(227,179,65,.1)",  "rgba(227,179,65,.35)"),
+    }
+    _bc, _bg, _border = _evo_badge_style.get(evo_status, _evo_badge_style["ok"])
+    evo_badge = (
+        f'<span style="display:inline-block;padding:1px 8px;border-radius:20px;'
+        f'font-size:.73rem;font-weight:700;color:{_bc};background:{_bg};'
+        f'border:1px solid {_border};margin-left:8px">{evo_status}</span>'
+    )
+
+    # clean LLM error message (#7)
+    if evo_err:
+        import re as _re
+        _msg_match = _re.search(r"'message':\s*'([^']{1,200})'", evo_err)
+        clean_err  = _msg_match.group(1) if _msg_match else evo_err[:200]
+        _type_label = {"413": "413 Too Large", "json": "JSON Parse Error", "api": "API Error"}.get(evo_err_type, "Error")
+        evo_err_html = (
+            f'<div style="margin-top:8px;padding:6px 10px;background:rgba(248,81,73,.08);'
+            f'border:1px solid rgba(248,81,73,.25);border-radius:5px;font-size:.8rem;color:var(--rd)">'
+            f'<strong>{_type_label}:</strong> {clean_err}</div>'
+        )
+    else:
+        evo_err_html = ""
+
     # evo changes
     evo_items = "".join(
         f"<li><code>{c.get('file','')}</code> — {c.get('reason','')[:80]}</li>"
@@ -129,14 +171,22 @@ def _render(s: dict[str, Any]) -> str:
         ok   = a.get("success", False)
         plat = a.get("platform", "?")
         ic   = "✅" if ok else "❌"
+        err  = (a.get("error") or "")[:80]
         if "title" in a:
-            detail = f'<a href="{a.get("url","#")}" target="_blank">{a["title"][:50]}</a>'
+            title = (a.get("title") or "").strip()
+            url   = (a.get("url") or "").strip()
+            if ok and title and url:
+                detail = f'<a href="{url}" target="_blank">{title[:50]}</a>'
+            else:
+                detail = f'<span class="err">{plat} — {err or "unknown error"}</span>'
         elif "side" in a:
             detail = f'{a.get("side")} {a.get("symbol","")} ${a.get("value_usd",0):.2f}'
         elif "thread_length" in a:
-            detail = f'<a href="{a.get("url","#")}" target="_blank">{a.get("topic","thread")[:50]}</a>'
+            url   = (a.get("url") or "").strip()
+            topic = (a.get("topic") or "thread")[:50]
+            detail = f'<a href="{url}" target="_blank">{topic}</a>' if url else f'<span class="err">{topic} — {err}</span>'
         else:
-            detail = (a.get("metadata_uri") or a.get("error") or "")[:50]
+            detail = (a.get("metadata_uri") or err or "")[:50]
         rows += f"<tr><td>{ic}</td><td>{plat}</td><td>{detail}</td></tr>"
 
     # inactive list
@@ -202,6 +252,7 @@ th{{color:var(--mu);font-weight:500}}
 .ebox h3{{color:var(--rd)}}
 .ebox li{{color:var(--mu);font-size:.83rem;margin-top:3px}}
 .muted{{color:var(--mu)}}
+.err{{color:var(--rd);font-size:.83rem}}
 footer{{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;padding-top:14px;border-top:1px solid var(--br)}}
 </style>
 </head>
@@ -220,7 +271,7 @@ footer{{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;paddi
   <div class="st"><div class="v">${earn.get("this_week_usd",0):.2f}</div><div class="l">This week</div></div>
   <div class="st"><div class="v">{n_runs}</div><div class="l">Cycles run</div></div>
   <div class="st"><div class="v">{len(active)}</div><div class="l">Active modules</div></div>
-  {"" if not spark else f'<div class="st"><div class="v spark" title="{spark_tip}">{spark}</div><div class="l">Last {len(history)} cycles</div></div>'}
+  {"" if not spark else f'<div class="st"><div class="v spark" title="{spark_tip}">{spark}</div><div class="l">Last {len(history)} earning cycles</div></div>'}
 </div>
 
 <div class="sec">
@@ -231,8 +282,9 @@ footer{{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;paddi
 <div class="sec">
   <h2>⚡ Last Evolution</h2>
   <div class="pan">
-    <p style="margin-bottom:9px"><strong>{evo.get("summary","—")}</strong></p>
+    <p style="margin-bottom:9px"><strong>{evo_summary}</strong>{evo_badge}</p>
     <ul class="ev">{evo_items}</ul>
+    {evo_err_html}
   </div>
 </div>
 

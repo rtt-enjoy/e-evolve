@@ -54,11 +54,12 @@ def update(status: dict[str, Any], actions: list[dict]) -> dict[str, Any]:
     e["this_week_usd"]  = round(e.get("this_week_usd",  0.0) + cycle, 6)
     e["last_cycle_usd"] = round(cycle, 6)
 
-    # Rolling history of last 10 cycle earnings for trend display
+    # Rolling history of last 48 non-zero cycles for trend display (2-day window)
     history: list = e.setdefault("history", [])
-    history.append(round(cycle, 6))
-    if len(history) > 10:
-        history[:] = history[-10:]
+    if cycle > 0:
+        history.append(round(cycle, 6))
+    if len(history) > 48:
+        history[:] = history[-48:]
 
     log.info("Earnings — cycle: +$%.4f | week: $%.4f | total: $%.4f",
              cycle, e["this_week_usd"], e["total_usd"])

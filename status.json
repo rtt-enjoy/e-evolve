@@ -1,7 +1,7 @@
 {
   "version": "1.1.0",
-  "last_run": "2026-04-30T09:27:08.846795+00:00",
-  "total_runs": 420,
+  "last_run": "2026-04-30T11:53:54.797964+00:00",
+  "total_runs": 421,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -29,10 +29,10 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.1.0",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM: No valid JSON object found in LLM response. First 200 chars: '{\\n  \"version\": \"1.2.0\",\\n  \"summary\": \"Added DEV_TO_API_KEY handling and improved error logging\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Add DEV_TO_API_KEY\",\\n      \"description\": \"Publish articles\",\\n'",
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97736, Requested 7859. Please try again in 1h20m34.08s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
     "changes_applied": [],
     "suggestions": [],
-    "error": "Could not get valid JSON from LLM: No valid JSON object found in LLM response. First 200 chars: '{\\n  \"version\": \"1.2.0\",\\n  \"summary\": \"Added DEV_TO_API_KEY handling and improved error logging\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Add DEV_TO_API_KEY\",\\n      \"description\": \"Publish articles\",\\n'",
+    "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97736, Requested 7859. Please try again in 1h20m34.08s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
     "error_type": "json"
   },
   "last_earning": {

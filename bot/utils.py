@@ -7,12 +7,12 @@ import re
 
 
 def sanitize_tags(tags: list[str], max_tags: int = 4) -> list[str]:
-    """Lowercase, replace spaces with hyphens, strip non-alphanumeric, deduplicate."""
+    """Lowercase, strip to alphanumeric only (dev.to rejects hyphens in tags), deduplicate."""
     seen: set[str] = set()
     result: list[str] = []
     for tag in tags[:max_tags * 2]:
-        clean = re.sub(r"[^a-z0-9\-]", "", tag.lower().replace(" ", "-"))
-        clean = re.sub(r"-+", "-", clean).strip("-")
+        clean = re.sub(r"[^a-z0-9]", "", tag.lower().replace(" ", "").replace("-", ""))
+        clean = clean[:20]
         if clean and clean not in seen:
             seen.add(clean)
             result.append(clean)

@@ -141,10 +141,10 @@ def _pin(meta: dict) -> str:
 def _mint(token_uri: str, name: str) -> Result:
     contract_addr = os.getenv("NFT_CONTRACT_ADDRESS", "").strip()
     if not contract_addr:
-        log.info("[nft] NFT_CONTRACT_ADDRESS not set — log-only mode (no on-chain tx). "
-                 "Deploy an ERC-721 contract and add NFT_CONTRACT_ADDRESS to mint on-chain.")
-        return Result(platform="ethereum_logonly",
-                      metadata_uri=token_uri, success=True)
+        log.warning("[nft] NFT_CONTRACT_ADDRESS not set — cannot mint. "
+                    "Deploy an ERC-721 contract and add NFT_CONTRACT_ADDRESS to enable minting.")
+        return Result(platform="ethereum_logonly", metadata_uri=token_uri,
+                      success=False, error="NFT_CONTRACT_ADDRESS not configured")
 
     try:
         from web3 import Web3  # lazy

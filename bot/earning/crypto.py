@@ -7,16 +7,25 @@ Risk: RISK_PCT of free USDT per trade (default 2 %).
 """
 from __future__ import annotations
 
+import json
 import logging
 import os
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Optional
 
 log = logging.getLogger(__name__)
 
-RISK_PCT       = 0.02    # 2 % of available USDT per trade
-MIN_USDT       = 10.0    # don't trade below this balance
-SYMBOLS        = ["BTCUSDT", "ETHUSDT"]
+def _load_strategy() -> dict:
+    try:
+        return json.loads(Path("config/strategy.json").read_text())
+    except Exception:
+        return {}
+
+_strategy  = _load_strategy().get("crypto", {})
+RISK_PCT   = float(_strategy.get("risk_per_trade_pct", 0.02))
+MIN_USDT   = float(_strategy.get("min_usdt_balance", 10.0))
+SYMBOLS    = list(_strategy.get("symbols", ["BTCUSDT", "ETHUSDT"]))
 
 
 @dataclass
@@ -127,20 +136,19 @@ def _signal(closes: list[float]) -> str:
     if len(closes) < 26:
         return "HOLD"
 
-    def ema(data: list[float], period: int) -> float:
-        k, v = 2 / (period + 1), data[0]
+    def ema_series(data: list[float], period: int) -> list[float]:
+        k = 2 / (period + 1)
+        out = [data[0]]
         for x in data[1:]:
-            v = x * k + v * (1 - k)
-        return v
+            out.append(x * k + out[-1] * (1 - k))
+        return out
 
-    fast_now  = ema(closes[-6:],   6)
-    slow_now  = ema(closes[-24:], 24)
-    fast_prev = ema(closes[-7:-1], 6)
-    slow_prev = ema(closes[-25:-1], 24)
+    fast = ema_series(closes, 6)
+    slow = ema_series(closes, 24)
 
-    if fast_prev <= slow_prev and fast_now > slow_now:
+    if fast[-2] <= slow[-2] and fast[-1] > slow[-1]:
         return "BUY"
-    if fast_prev >= slow_prev and fast_now < slow_now:
+    if fast[-2] >= slow[-2] and fast[-1] < slow[-1]:
         return "SELL"
     return "HOLD"
 

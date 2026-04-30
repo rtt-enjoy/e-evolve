@@ -6,9 +6,19 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any
 
 log = logging.getLogger(__name__)
+
+_LOG_FILE = Path("earnings-log.md")
+
+
+def _append_weekly_history(week_started: str, total_usd: float, breakdown: dict) -> None:
+    bd_str = ", ".join(f"{k}: ${v:.4f}" for k, v in breakdown.items()) if breakdown else "none"
+    line = f"\n## Week {week_started} — ${total_usd:.4f} ({bd_str})\n"
+    with _LOG_FILE.open("a", encoding="utf-8") as f:
+        f.write(line)
 
 
 def update(status: dict[str, Any], actions: list[dict]) -> dict[str, Any]:
@@ -31,7 +41,9 @@ def update(status: dict[str, Any], actions: list[dict]) -> dict[str, Any]:
 
     # Reset whenever we've rolled into a new week (handles skipped weeks too)
     if started < current_week_monday:
-        log.info("Week reset: this_week_usd was $%.4f (week started %s)", e.get("this_week_usd", 0), started)
+        prev_amount = e.get("this_week_usd", 0)
+        log.info("Week reset: this_week_usd was $%.4f (week started %s)", prev_amount, started)
+        _append_weekly_history(started, prev_amount, e.get("breakdown", {}))
         e["this_week_usd"] = 0.0
         e["week_started"]  = current_week_monday
 

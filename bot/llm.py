@@ -149,12 +149,23 @@ class LLMClient:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
         t0  = time.monotonic()
-        rsp = client.chat.completions.create(
-            model=self.model,
-            messages=messages,
-            max_tokens=max_tokens,
-            temperature=temperature,
-        )
+        try:
+            rsp = client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                max_tokens=max_tokens,
+                temperature=temperature,
+            )
+        except Exception as exc:
+            exc_str = str(exc)
+            if "model_not_found" in exc_str or "model not found" in exc_str.lower():
+                current_idx = _GROQ_MODELS.index(self.model) if self.model in _GROQ_MODELS else -1
+                if current_idx < len(_GROQ_MODELS) - 1:
+                    self.model = _GROQ_MODELS[current_idx + 1]
+                    log.warning("Groq model deprecated: %s — advancing to %s", _GROQ_MODELS[current_idx], self.model)
+                    raise  # outer retry loop will use new self.model
+                log.error("Groq model deprecated and no fallback remains: %s", self.model)
+            raise
         return LLMResponse(
             text      = rsp.choices[0].message.content or "",
             provider  = "groq",
@@ -223,11 +234,13 @@ def parse_json(text: str) -> dict[str, Any]:
     except json.JSONDecodeError:
         pass
 
-    # Strategy 2: find the outermost { ... } block
-    m = re.search(r'\{[\s\S]*\}', text)
-    if m:
+    # Strategy 2: find first complete JSON object via raw_decode (handles multi-object responses)
+    start = text.find("{")
+    if start != -1:
+        decoder = json.JSONDecoder()
         try:
-            return json.loads(m.group())
+            obj, _ = decoder.raw_decode(text, start)
+            return obj
         except json.JSONDecodeError:
             pass
 

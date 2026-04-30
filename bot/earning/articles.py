@@ -6,34 +6,43 @@ Activates with: DEV_TO_API_KEY  and/or  MEDIUM_INTEGRATION_TOKEN
 """
 from __future__ import annotations
 
+import json
 import logging
 import os
 import time
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Optional
 
 import requests
 
 from bot.utils import sanitize_tags
 
+def _load_strategy() -> dict:
+    try:
+        return json.loads(Path("config/strategy.json").read_text())
+    except Exception:
+        return {}
+
+_strategy  = _load_strategy().get("articles", {})
+_MIN_WORDS = int(_strategy.get("min_words", 600))
+
 log = logging.getLogger(__name__)
 
-_SYSTEM = """\
-You are a skilled technical writer producing articles for software developers.
-Write genuinely useful, experience-based content — not generic listicles.
-
-Respond with ONLY a single JSON object.
-
-Schema:
-{
-  "title": "Compelling, specific article title",
-  "tags": ["tag1", "tag2", "tag3"],
-  "description": "SEO meta description, under 155 characters",
-  "body_markdown": "Full article in Markdown. At least 600 words. Include code examples."
-}
-
-Topics: Python automation, GitHub Actions, AI/LLM agents, passive income via code,
-self-improving bots, Web3 Python. Write in first-person, experience-based style."""
+_SYSTEM = (
+    "You are a skilled technical writer producing articles for software developers.\n"
+    "Write genuinely useful, experience-based content — not generic listicles.\n\n"
+    "Respond with ONLY a single JSON object.\n\n"
+    "Schema:\n"
+    '{\n'
+    '  "title": "Compelling, specific article title",\n'
+    '  "tags": ["tag1", "tag2", "tag3"],\n'
+    '  "description": "SEO meta description, under 155 characters",\n'
+    f'  "body_markdown": "Full article in Markdown. At least {_MIN_WORDS} words. Include code examples."\n'
+    '}\n\n'
+    "Topics: Python automation, GitHub Actions, AI/LLM agents, passive income via code,\n"
+    "self-improving bots, Web3 Python. Write in first-person, experience-based style."
+)
 
 _TOPICS = [
     "How I built a self-improving bot that earns money while I sleep",
@@ -170,7 +179,7 @@ def _post_devto(article: dict, api_key: str) -> Result:
                           error=f"HTTP {exc.response.status_code}: {exc.response.text[:100]}")
         except Exception as exc:
             if attempt < 2:
-                time.sleep(3)
+                time.sleep(5 * (attempt + 1))
             else:
                 return Result(platform="dev.to", error=str(exc)[:200])
     return Result(platform="dev.to", error="max retries exceeded")

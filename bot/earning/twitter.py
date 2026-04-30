@@ -7,42 +7,46 @@ Activates with: TWITTER_API_KEY  TWITTER_API_SECRET
 """
 from __future__ import annotations
 
+import json
 import logging
 import os
 import time
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Optional
 
 log = logging.getLogger(__name__)
+
+def _load_strategy() -> dict:
+    try:
+        return json.loads(Path("config/strategy.json").read_text())
+    except Exception:
+        return {}
+
+_strategy   = _load_strategy().get("twitter", {})
+_MIN_TWEETS = int(_strategy.get("min_tweets", 5))
+_MAX_TWEETS = int(_strategy.get("max_tweets", 7))
 
 _REQUIRED = [
     "TWITTER_API_KEY", "TWITTER_API_SECRET",
     "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_SECRET",
 ]
 
-_SYSTEM = """\
-You are a developer influencer writing high-value Twitter/X threads.
-Teach something genuinely useful in a concise, engaging way.
-
-Respond with ONLY a single JSON object.
-
-Schema:
-{
-  "topic": "one-line description",
-  "tweets": [
-    "Tweet 1 text (hook — bold claim or number, max 265 chars)",
-    "Tweet 2...",
-    ...
-  ]
-}
-
-Rules:
-- 5 to 7 tweets total
-- Tweet 1: compelling hook
-- Last tweet: clear CTA (follow / share / reply)
-- Max 2 hashtags in the whole thread
-- Each tweet under 265 characters
-- Topics: Python, AI/LLMs, GitHub Actions, automation, passive income via code"""
+_SYSTEM = (
+    "You are a developer influencer writing high-value Twitter/X threads.\n"
+    "Teach something genuinely useful in a concise, engaging way.\n\n"
+    "Respond with ONLY a single JSON object.\n\n"
+    'Schema:\n{\n  "topic": "one-line description",\n  "tweets": [\n'
+    '    "Tweet 1 text (hook — bold claim or number, max 265 chars)",\n'
+    '    "Tweet 2...",\n    ...\n  ]\n}\n\n'
+    "Rules:\n"
+    f"- {_MIN_TWEETS} to {_MAX_TWEETS} tweets total\n"
+    "- Tweet 1: compelling hook\n"
+    "- Last tweet: clear CTA (follow / share / reply)\n"
+    "- Max 2 hashtags in the whole thread\n"
+    "- Each tweet under 265 characters\n"
+    "- Topics: Python, AI/LLMs, GitHub Actions, automation, passive income via code"
+)
 
 _TOPICS = [
     "I built a bot that writes articles while I sleep — full setup",
@@ -95,9 +99,9 @@ def _generate(llm: Any, status: dict) -> Optional[dict]:
             max_tokens=1200,
         )
         tweets = data.get("tweets", [])
-        if len(tweets) < 3:
+        if len(tweets) < _MIN_TWEETS:
             raise ValueError(f"Too few tweets: {len(tweets)}")
-        data["tweets"] = [t[:268] for t in tweets[:7]]
+        data["tweets"] = [t[:268] for t in tweets[:_MAX_TWEETS]]
         return data
     except Exception as exc:
         log.error("[twitter] Thread generation failed: %s", exc)

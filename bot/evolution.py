@@ -211,6 +211,10 @@ def _backup(filepath: str) -> None:
     bdir.mkdir(exist_ok=True)
     ts   = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     shutil.copy2(src, bdir / f"{src.name}.{ts}.bak")
+    # Prune: keep only newest 20 backups
+    baks = sorted(bdir.glob("*.bak"), key=lambda p: p.stat().st_mtime)
+    for old in baks[:-20]:
+        old.unlink()
 
 
 def _resolve_version(proposed: Any, current: str) -> str:

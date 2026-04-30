@@ -104,7 +104,10 @@ def _from_github_issues() -> list[str]:
     """Read open issues labelled 'bot-command', close each after reading."""
     token = os.getenv("GH_TOKEN", "") or os.getenv("GITHUB_TOKEN", "")
     repo  = os.getenv("GITHUB_REPO", "").strip()
-    if not token or not repo:
+    if not token:
+        return []
+    if not repo:
+        log.warning("[commands] GH_TOKEN present but GITHUB_REPO not set — GitHub Issues source disabled")
         return []
 
     headers = {

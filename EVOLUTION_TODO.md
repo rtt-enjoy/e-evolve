@@ -12,19 +12,19 @@ _(none open)_
 
 ## High Priority — Logic
 
-_(all resolved 2026-04-30)_
+_(none open)_
 
 ---
 
 ## High Priority — UI
 
-_(all resolved 2026-04-30)_
+_(none open)_
 
 ---
 
 ## Low Priority
 
-_(all resolved 2026-04-30)_
+_(none open)_
 
 ---
 

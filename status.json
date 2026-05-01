@@ -1,7 +1,7 @@
 {
   "version": "1.1.1",
-  "last_run": "2026-05-01T09:58:21.224506+00:00",
-  "total_runs": 433,
+  "last_run": "2026-05-01T11:33:30.047343+00:00",
+  "total_runs": 434,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -27,10 +27,10 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.1.1",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM: LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98204, Requested 3313. Please try again in 21m50.687999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM: LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99984, Requested 7905. Please try again in 1h53m36.096s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
     "changes_applied": [],
     "suggestions": [],
-    "error": "Could not get valid JSON from LLM: LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98204, Requested 3313. Please try again in 21m50.687999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "error": "Could not get valid JSON from LLM: LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99984, Requested 7905. Please try again in 1h53m36.096s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
     "error_type": "json"
   },
   "last_earning": {

@@ -6,221 +6,87 @@
 <meta http-equiv="refresh" content="3600"/>
 <title>E-Evolve Dashboard</title>
 <style>
-:root {
-  --bg: #0d1117; --sf: #161b22; --br: #30363d;
-  --tx: #c9d1d9; --mu: #8b949e;
-  --ac: #58a6ff; --gn: #3fb950; --rd: #f85149;
-  --pu: #bc8cff; --yw: #e3b341;
-  --f: 'Segoe UI', system-ui, sans-serif;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg); color: var(--tx); font-family: var(--f);
-  padding: 20px; max-width: 960px; margin: 0 auto;
-}
-a { color: var(--ac); }
-h2 {
-  font-size: .82rem; text-transform: uppercase;
-  letter-spacing: .07em; color: var(--mu); margin-bottom: 12px;
-}
-
-/* ── Header ── */
-header {
-  display: flex; align-items: flex-start; gap: 14px;
-  border-bottom: 1px solid var(--br); padding-bottom: 18px; margin-bottom: 22px;
-}
-.logo { font-size: 2.2rem; line-height: 1; }
-h1 { font-size: 1.4rem; margin-bottom: 6px; }
-.pill-version {
-  display: inline-block; padding: 2px 9px; border-radius: 20px;
-  font-size: .73rem; font-weight: 700; margin-right: 4px;
-  background: rgba(88,166,255,.15); border: 1px solid var(--ac); color: var(--ac);
-}
-.pill-provider {
-  display: inline-block; padding: 2px 9px; border-radius: 20px;
-  font-size: .73rem; font-weight: 700; margin-right: 4px;
-  background: rgba(188,140,255,.15); border: 1px solid var(--pu); color: var(--pu);
-}
-.age-pill {
-  display: inline-block; padding: 1px 7px; border-radius: 10px;
-  font-size: .72rem; font-weight: 600; margin-left: 6px;
-}
-
-/* ── Feature badges ── */
-.badge {
-  display: inline-block; padding: 2px 8px; border-radius: 20px;
-  font-size: .76rem; margin: 2px;
-}
-.badge-green { background: rgba(63,185,80,.15); border: 1px solid var(--gn); color: var(--gn); }
-.badge-red   { background: rgba(248,81,73,.1);  border: 1px solid var(--rd); color: var(--rd); }
-
-/* ── KPI stat cards ── */
-.stat-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px; margin-bottom: 26px;
-}
-.stat-card {
-  background: var(--sf); border: 1px solid var(--br);
-  border-radius: 9px; padding: 16px;
-}
-.stat-value {
-  font-size: 1.8rem; font-weight: 700; color: var(--gn);
-}
-.stat-value.sparkline {
-  font-size: 1.2rem; font-family: monospace;
-  letter-spacing: 2px; cursor: default;
-}
-.stat-value.stat-neutral { color: var(--tx); }
-.stat-label { color: var(--mu); font-size: .78rem; margin-top: 2px; }
-.stat-sub   { font-size: .75rem; color: var(--mu); margin-top: 4px; }
-
-/* ── Section / panel wrappers ── */
-.section { margin-bottom: 26px; }
-.panel {
-  background: var(--sf); border: 1px solid var(--br);
-  border-radius: 9px; padding: 16px;
-}
-
-/* ── Earnings projection ── */
-.proj {
-  margin-top: 12px; padding: 12px;
-  background: rgba(63,185,80,.06); border: 1px solid rgba(63,185,80,.2);
-  border-radius: 7px;
-}
-.proj-row {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: .85rem; margin-bottom: 6px;
-}
-.prog-bar {
-  height: 6px; background: var(--br);
-  border-radius: 3px; overflow: hidden; margin-top: 2px;
-}
-.prog-fill { height: 100%; border-radius: 3px; transition: width .3s; }
-
-/* ── Earnings breakdown bars ── */
-.breakdown { margin-top: 10px; }
-.breakdown-row {
-  display: flex; align-items: center;
-  gap: 8px; margin-bottom: 6px; font-size: .83rem;
-}
-.breakdown-label  { width: 80px; color: var(--mu); flex-shrink: 0; }
-.breakdown-bar-track {
-  flex: 1; height: 8px; background: var(--br);
-  border-radius: 4px; overflow: hidden;
-}
-.breakdown-bar    { height: 100%; background: var(--gn); border-radius: 4px; }
-.breakdown-amount { width: 70px; text-align: right; color: var(--gn); }
-
-/* ── Growth suggestions ── */
-.suggestion-card {
-  display: flex; gap: 12px; padding: 12px;
-  border: 1px solid var(--br); border-radius: 7px; margin-bottom: 8px;
-}
-.suggestion-rank { font-size: 1.4rem; flex-shrink: 0; line-height: 1; }
-.suggestion-card p { color: var(--mu); font-size: .86rem; margin-top: 3px; }
-.secret-needed {
-  background: rgba(88,166,255,.1); border: 1px solid rgba(88,166,255,.3);
-  border-radius: 4px; padding: 3px 8px; margin-top: 6px;
-  font-size: .8rem; display: inline-block;
-}
-.est-earnings { color: var(--gn); font-size: .8rem; margin-top: 4px; }
-.how-to-steps {
-  padding-left: 18px; margin-top: 8px;
-  color: var(--mu); font-size: .82rem;
-}
-.how-to-steps li { margin-bottom: 3px; }
-.free-badge {
-  display: inline-block; padding: 1px 7px; border-radius: 10px;
-  font-size: .72rem; font-weight: 700; color: var(--gn);
-  background: rgba(63,185,80,.12); border: 1px solid rgba(63,185,80,.35);
-  margin-left: 6px;
-}
-
-/* ── Evolution panel ── */
-.evo-list { padding-left: 16px; color: var(--mu); font-size: .86rem; }
-.evo-list li { margin-bottom: 4px; }
-.evo-error-box {
-  margin-top: 8px; padding: 6px 10px;
-  background: rgba(248,81,73,.08); border: 1px solid rgba(248,81,73,.25);
-  border-radius: 5px; font-size: .8rem; color: var(--rd);
-}
-
-/* ── Inactive modules ── */
-.inactive-tag {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 4px 10px; border: 1px solid var(--br);
-  border-radius: 6px; margin: 3px; font-size: .8rem;
-}
-.inactive-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--rd); flex-shrink: 0;
-}
-
-/* ── Action table ── */
-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
-th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--br); }
-th { color: var(--mu); font-weight: 500; }
-
-/* ── Top-level error box ── */
-.error-box {
-  background: rgba(248,81,73,.08); border: 1px solid rgba(248,81,73,.3);
-  border-radius: 7px; padding: 12px; margin-top: 14px;
-}
-.error-box h3 { color: var(--rd); }
-.error-box li { color: var(--mu); font-size: .83rem; margin-top: 3px; }
-
-/* ── Utilities ── */
-.muted { color: var(--mu); }
-.err   { color: var(--rd); font-size: .83rem; }
-
-/* ── Two-column layout ── */
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
-
-/* ── Footer ── */
-footer {
-  text-align: center; color: var(--mu); font-size: .76rem;
-  margin-top: 32px; padding-top: 14px; border-top: 1px solid var(--br);
-}
-
+:root{--bg:#0d1117;--sf:#161b22;--br:#30363d;--tx:#c9d1d9;--mu:#8b949e;
+      --ac:#58a6ff;--gn:#3fb950;--rd:#f85149;--pu:#bc8cff;--yw:#e3b341;
+      --f:'Segoe UI',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:var(--f);padding:20px;max-width:960px;margin:0 auto}
+a{color:var(--ac)}
+h2{font-size:.82rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:12px}
+header{display:flex;align-items:flex-start;gap:14px;border-bottom:1px solid var(--br);padding-bottom:18px;margin-bottom:22px}
+.logo{font-size:2.2rem;line-height:1}
+h1{font-size:1.4rem;margin-bottom:6px}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:.73rem;font-weight:700;margin-right:4px}
+.pa{background:rgba(88,166,255,.15);border:1px solid var(--ac);color:var(--ac)}
+.pp{background:rgba(188,140,255,.15);border:1px solid var(--pu);color:var(--pu)}
+.mu{color:var(--mu);font-size:.8rem;margin-top:5px}
+.b{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.76rem;margin:2px}
+.g{background:rgba(63,185,80,.15);border:1px solid var(--gn);color:var(--gn)}
+.r{background:rgba(248,81,73,.1);border:1px solid var(--rd);color:var(--rd)}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:26px}
+.st{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:16px}
+.st .v{font-size:1.8rem;font-weight:700;color:var(--gn)}
+.st .v.spark{font-size:1.2rem;font-family:monospace;letter-spacing:2px;cursor:default}
+.st .v.neutral{color:var(--tx)}
+.st .l{color:var(--mu);font-size:.78rem;margin-top:2px}
+.st .sub{font-size:.75rem;color:var(--mu);margin-top:4px}
+.sec{margin-bottom:26px}
+.pan{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:16px}
+.sc{display:flex;gap:12px;padding:12px;border:1px solid var(--br);border-radius:7px;margin-bottom:8px}
+.rank{font-size:1.4rem;flex-shrink:0;line-height:1}
+.sc p{color:var(--mu);font-size:.86rem;margin-top:3px}
+.spill{background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.3);border-radius:4px;padding:3px 8px;margin-top:6px;font-size:.8rem;display:inline-block}
+.est{color:var(--gn);font-size:.8rem;margin-top:4px}
+ol.how-to{padding-left:18px;margin-top:8px;color:var(--mu);font-size:.82rem}
+ol.how-to li{margin-bottom:3px}
+ul.ev{padding-left:16px;color:var(--mu);font-size:.86rem}
+ul.ev li{margin-bottom:4px}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--br)}
+th{color:var(--mu);font-weight:500}
+.ic{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid var(--br);border-radius:6px;margin:3px;font-size:.8rem}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--rd);flex-shrink:0}
+.ebox{background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.3);border-radius:7px;padding:12px;margin-top:14px}
+.ebox h3{color:var(--rd)}
+.ebox li{color:var(--mu);font-size:.83rem;margin-top:3px}
+.muted{color:var(--mu)}
+.err{color:var(--rd);font-size:.83rem}
+footer{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;padding-top:14px;border-top:1px solid var(--br)}
+.proj{margin-top:12px;padding:12px;background:rgba(63,185,80,.06);border:1px solid rgba(63,185,80,.2);border-radius:7px}
+.proj-row{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;margin-bottom:6px}
+.prog-bar{height:6px;background:var(--br);border-radius:3px;overflow:hidden;margin-top:2px}
+.prog-fill{height:100%;border-radius:3px;transition:width .3s}
+.bd{margin-top:10px}
+.bd-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:.83rem}
+.bd-lbl{width:80px;color:var(--mu);flex-shrink:0}
+.bd-bar-wrap{flex:1;height:8px;background:var(--br);border-radius:4px;overflow:hidden}
+.bd-bar{height:100%;background:var(--gn);border-radius:4px}
+.bd-amt{width:70px;text-align:right;color:var(--gn)}
+.age-pill{display:inline-block;padding:1px 7px;border-radius:10px;font-size:.72rem;font-weight:600;margin-left:6px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.two-col{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header>
   <div class="logo">🤖</div>
   <div>
-    <h1>E-Evolve
-      <span class="pill-version">1.1.1</span>
-      <span class="pill-provider">groq</span>
-    </h1>
-    <div style="margin-top:5px"><span class="badge badge-green">llm_groq</span><span class="badge badge-green">articles_devto</span></div>
-    <div class="muted" style="font-size:.8rem;margin-top:5px">
-      Last cycle: 2026-05-01 04:18 UTC
-      <span class="age-pill" style="background:rgba(0,0,0,.3);color:var(--rd);border:1px solid var(--rd)">6h ago</span>
-      &nbsp;·&nbsp; Total cycles: 432
-      &nbsp;·&nbsp; Cycle time: 53s
+    <h1>E-Evolve <span class="pill pa">v1.1.1</span><span class="pill pp">groq</span></h1>
+    <div style="margin-top:5px"><span class="b g">llm_groq</span><span class="b g">articles_devto</span></div>
+    <div class="mu">
+      Last cycle: 2026-05-01 09:58 UTC
+      <span class="age-pill" style="background:rgba(0,0,0,.3);color:var(--gn);border:1px solid var(--gn)">0m ago</span>
+      &nbsp;·&nbsp; Total cycles: 433
+      &nbsp;·&nbsp; Cycle time: 39s
     </div>
   </div>
 </header>
-<div class="stat-grid">
-  <div class="stat-card">
-    <div class="stat-value">$2.77</div>
-    <div class="stat-label">Total earned</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-value">$0.20</div>
-    <div class="stat-label">This week</div>
-    <div class="stat-sub">last cycle: $0.0000</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-value stat-neutral">432</div>
-    <div class="stat-label">Cycles run</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-value stat-neutral">2</div>
-    <div class="stat-label">Active modules</div>
-    <div class="stat-sub">5 inactive</div>
-  </div>
+
+<div class="sg">
+  <div class="st"><div class="v">$2.77</div><div class="l">Total earned</div></div>
+  <div class="st"><div class="v">$0.20</div><div class="l">This week</div><div class="sub">last cycle: $0.0000</div></div>
+  <div class="st"><div class="v neutral">433</div><div class="l">Cycles run</div></div>
+  <div class="st"><div class="v neutral">2</div><div class="l">Active modules</div><div class="sub">5 inactive</div></div>
   
 </div>
 <div class="section">
@@ -232,15 +98,21 @@ footer {
 </div>
 <div class="section">
   <h2>🧠 Smart Growth Suggestions</h2>
-  <div class="panel"><div class="suggestion-card"><span class="suggestion-rank">🥇</span><div><strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong><span class="free-badge">Free to start</span><p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p><div class="secret-needed">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div></div></div></div>
+  <div class="pan"><div class="sc"><span class="rank">🥇</span><div><strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong><span style="display:inline-block;padding:1px 7px;border-radius:10px;font-size:.72rem;font-weight:700;color:#3fb950;background:rgba(63,185,80,.12);border:1px solid rgba(63,185,80,.35);margin-left:6px">Free to start</span><p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p><div class="spill">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div></div></div></div>
 </div>
 <div class="two-col">
-<div class="section">
-  <h2>⚡ Last Evolution</h2>
-  <div class="panel">
-    <p style="margin-bottom:9px"><strong>Evolution skipped [json]: Could not get valid JSON from LLM: No valid JSON object found in LLM response. First 200 chars: '{\n  "version": "1.2.0",\n  "summary": "Implement command system improvements and add logging for earnings",\n  "suggestions": [\n    {\n      "title": "Add GROQ_API_KEY for free LLM fallback",\n      "desc'</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--rd);background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.35);margin-left:8px">llm_error</span></p>
-    <ul class="evo-list"><li>No file changes this cycle</li></ul>
-    <div class="evo-error-box"><strong>JSON Parse Error:</strong> Could not get valid JSON from LLM: No valid JSON object found in LLM response. First 200 chars: '{\n  "version": "1.2.0",\n  "summary": "Implement command system improvements and add logging for earni</div>
+  <div class="sec">
+    <h2>⚡ Last Evolution</h2>
+    <div class="pan">
+      <p style="margin-bottom:9px"><strong>Evolution skipped [json]: Could not get valid JSON from LLM: LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 98204, Requested 3313. Please try again in 21m50.687999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--rd);background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.35);margin-left:8px">llm_error</span></p>
+      <ul class="ev"><li>No file changes this cycle</li></ul>
+      <div style="margin-top:8px;padding:6px 10px;background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.25);border-radius:5px;font-size:.8rem;color:var(--rd)"><strong>JSON Parse Error:</strong> Could not get valid JSON from LLM: LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttv</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>🔒 Inactive Modules</h2>
+    <div class="pan"><div class="ic"><span class="dot"></span>llm_anthropic</div><div class="ic"><span class="dot"></span>articles_medium</div><div class="ic"><span class="dot"></span>twitter</div><div class="ic"><span class="dot"></span>crypto_binance</div><div class="ic"><span class="dot"></span>nft_ethereum</div></div>
   </div>
 </div>
 <div class="section">

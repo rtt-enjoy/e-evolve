@@ -24,7 +24,7 @@ _(none open)_
 
 ## Low Priority
 
-_(none open)_
+- **Add `DEV_TO_API_KEY` secret** — unlocks `articles_devto` module, est. +$5/week. Set secret in GitHub repo settings.
 
 ---
 

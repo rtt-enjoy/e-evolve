@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import json; s=json.load\\(open\\('status.json'\\)\\); print\\(json.dumps\\(s.get\\('suggestions',[]\\), indent=2\\)\\); print\\('---'\\); print\\(json.dumps\\(s.get\\('last_evolution',{}\\).get\\('suggestions',[]\\), indent=2\\)\\)\")"
+    ]
+  }
+}

@@ -52,7 +52,9 @@ Required JSON schema:
       "title": "short title",
       "description": "what it unlocks or earns",
       "secret_needed": "SECRET_NAME or null",
-      "estimated_weekly_usd": 0
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": ["Step 1: go to ...", "Step 2: copy the key", "Step 3: add as GitHub secret"]
     }
   ],
   "changes": [
@@ -71,7 +73,7 @@ Rules:
 4. Python files must be syntactically valid
 5. At most 3 changes per response
 6. If nothing to change, return "changes": []
-7. Always return at least 3 ranked suggestions
+7. Always return at least 3 ranked suggestions; set free_tier=true when the suggestion costs nothing to start (free API tier exists); populate how_to with 2-4 concrete numbered steps the owner must follow to activate it
 8. Bump patch for fixes, minor for new features, major for rewrites"""
 
 

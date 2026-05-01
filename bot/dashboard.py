@@ -165,19 +165,37 @@ def _render(s: dict[str, Any]) -> str:
     badges = "".join(f'<span class="b g">{f}</span>' for f in active) \
           or '<span class="b r">no active modules — add a secret</span>'
 
+    _FREE_TIER_SECRETS = {
+        "GROQ_API_KEY", "DEV_TO_API_KEY", "MEDIUM_INTEGRATION_TOKEN",
+        "TWITTER_API_KEY", "TWITTER_API_SECRET", "TWITTER_ACCESS_TOKEN",
+        "TWITTER_ACCESS_SECRET",
+    }
+
     # suggestions
     sug_html = ""
     icons = ["🥇","🥈","🥉","4️⃣","5️⃣"]
     for i, sg in enumerate(suggs[:5]):
         sec   = sg.get("secret_needed")
         est   = sg.get("estimated_weekly_usd", 0)
+        is_free = sg.get("free_tier", sec in _FREE_TIER_SECRETS if sec else False)
+        free_badge = (
+            '<span style="display:inline-block;padding:1px 7px;border-radius:10px;'
+            'font-size:.72rem;font-weight:700;color:#3fb950;background:rgba(63,185,80,.12);'
+            'border:1px solid rgba(63,185,80,.35);margin-left:6px">Free to start</span>'
+        ) if is_free else ""
         s_blk = f'<div class="spill">Add secret: <code>{sec}</code></div>' if sec else ""
         e_blk = f'<div class="est">~${est:.0f}/week estimated</div>' if est else ""
+        how_to = sg.get("how_to", [])
+        if how_to:
+            steps = "".join(f"<li>{step}</li>" for step in how_to)
+            how_blk = f'<ol class="how-to">{steps}</ol>'
+        else:
+            how_blk = ""
         sug_html += (
             f'<div class="sc">'
             f'<span class="rank">{icons[i] if i < len(icons) else "•"}</span>'
-            f'<div><strong>{sg.get("title","")}</strong>'
-            f'<p>{sg.get("description","")}</p>{s_blk}{e_blk}</div></div>'
+            f'<div><strong>{sg.get("title","")}</strong>{free_badge}'
+            f'<p>{sg.get("description","")}</p>{s_blk}{e_blk}{how_blk}</div></div>'
         )
 
     # evolution status badge (#10)
@@ -306,6 +324,8 @@ h1{{font-size:1.4rem;margin-bottom:6px}}
 .sc p{{color:var(--mu);font-size:.86rem;margin-top:3px}}
 .spill{{background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.3);border-radius:4px;padding:3px 8px;margin-top:6px;font-size:.8rem;display:inline-block}}
 .est{{color:var(--gn);font-size:.8rem;margin-top:4px}}
+ol.how-to{{padding-left:18px;margin-top:8px;color:var(--mu);font-size:.82rem}}
+ol.how-to li{{margin-bottom:3px}}
 ul.ev{{padding-left:16px;color:var(--mu);font-size:.86rem}}
 ul.ev li{{margin-bottom:4px}}
 table{{width:100%;border-collapse:collapse;font-size:.86rem}}

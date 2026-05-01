@@ -1,7 +1,7 @@
 {
   "version": "1.1.0",
-  "last_run": "2026-05-01T01:29:06.474269+00:00",
-  "total_runs": 429,
+  "last_run": "2026-05-01T01:34:22.276339+00:00",
+  "total_runs": 430,
   "active_features": [
     "llm_anthropic"
   ],
@@ -29,10 +29,10 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.1.0",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM: LLM failed after 3 attempts: No module named 'anthropic'",
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CaazPxzNduiVEzRbeGoZe'}",
     "changes_applied": [],
     "suggestions": [],
-    "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: No module named 'anthropic'",
+    "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CaazPxzNduiVEzRbeGoZe'}",
     "error_type": "json"
   },
   "last_earning": {
@@ -41,5 +41,5 @@
   },
   "suggestions": [],
   "errors": [],
-  "last_cycle_seconds": 20
+  "last_cycle_seconds": 62
 }

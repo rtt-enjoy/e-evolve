@@ -54,31 +54,31 @@ footer{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;paddin
 <header>
   <div class="logo">🤖</div>
   <div>
-    <h1>E-Evolve <span class="pill pa">v1.1.0</span><span class="pill pp">anthropic</span></h1>
+    <h1>E-Evolve <span class="pill pa">v1.1.1</span><span class="pill pp">claude-cli</span></h1>
     <div style="margin-top:5px"><span class="b g">llm_anthropic</span></div>
-    <div class="mu">Last cycle: 2026-05-01 01:34 UTC &nbsp;·&nbsp; Total cycles: 430</div>
+    <div class="mu">Last cycle: 2026-05-01 02:01 UTC &nbsp;·&nbsp; Total cycles: 431</div>
   </div>
 </header>
 
 <div class="sg">
   <div class="st"><div class="v">$2.77</div><div class="l">Total earned</div></div>
   <div class="st"><div class="v">$0.20</div><div class="l">This week</div></div>
-  <div class="st"><div class="v">430</div><div class="l">Cycles run</div></div>
+  <div class="st"><div class="v">431</div><div class="l">Cycles run</div></div>
   <div class="st"><div class="v">1</div><div class="l">Active modules</div></div>
   <div class="st"><div class="v spark" title="$0.0000"> </div><div class="l">Last 1 earning cycles</div></div>
 </div>
 
 <div class="sec">
   <h2>🧠 Smart Growth Suggestions</h2>
-  <div class="pan"><p class='muted'>Suggestions appear after the first evolution cycle.</p></div>
+  <div class="pan"><div class="sc"><span class="rank">🥇</span><div><strong>Add GROQ_API_KEY for free LLM fallback</strong><p>Free Groq tier enables evolution to continue even when claude-cli or Anthropic API fails; eliminates single point of failure</p><div class="spill">Add secret: <code>GROQ_API_KEY</code></div></div></div><div class="sc"><span class="rank">🥈</span><div><strong>Re-activate dev.to publishing</strong><p>dev.to was responsible for $2.65 of $2.77 total earnings â€” highest ROI module, just needs secret restored</p><div class="spill">Add secret: <code>DEV_TO_API_KEY</code></div><div class="est">~$1/week estimated</div></div></div><div class="sc"><span class="rank">🥉</span><div><strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong><p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p><div class="spill">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div></div></div></div>
 </div>
 
 <div class="sec">
   <h2>⚡ Last Evolution</h2>
   <div class="pan">
-    <p style="margin-bottom:9px"><strong>Evolution skipped [json]: Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CaazPxzNduiVEzRbeGoZe'}</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--rd);background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.35);margin-left:8px">llm_error</span></p>
-    <ul class="ev"><li>No file changes this cycle</li></ul>
-    <div style="margin-top:8px;padding:6px 10px;background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.25);border-radius:5px;font-size:.8rem;color:var(--rd)"><strong>JSON Parse Error:</strong> invalid x-api-key</div>
+    <p style="margin-bottom:9px"><strong>Add cross-provider LLM fallback and fast-fail on auth errors to prevent evolution stalls</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--gn);background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);margin-left:8px">ok</span></p>
+    <ul class="ev"><li><code>bot/llm.py</code> — Evolution has been failing every cycle because claude-cli hits Anthropic API wit</li></ul>
+    
   </div>
 </div>
 

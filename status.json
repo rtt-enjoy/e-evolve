@@ -1,7 +1,7 @@
 {
-  "version": "1.1.0",
-  "last_run": "2026-05-01T01:34:22.276339+00:00",
-  "total_runs": 430,
+  "version": "1.1.1",
+  "last_run": "2026-05-01T02:01:11.974390+00:00",
+  "total_runs": 431,
   "active_features": [
     "llm_anthropic"
   ],
@@ -13,7 +13,7 @@
     "crypto_binance",
     "nft_ethereum"
   ],
-  "llm_provider": "anthropic",
+  "llm_provider": "claude-cli",
   "earnings": {
     "total_usd": 2.77,
     "this_week_usd": 0.2,
@@ -28,18 +28,60 @@
     ]
   },
   "last_evolution": {
-    "version_bumped_to": "1.1.0",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CaazPxzNduiVEzRbeGoZe'}",
-    "changes_applied": [],
-    "suggestions": [],
-    "error": "Could not get valid JSON from LLM: LLM failed after 3 attempts: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CaazPxzNduiVEzRbeGoZe'}",
-    "error_type": "json"
+    "version_bumped_to": "1.1.1",
+    "summary": "Add cross-provider LLM fallback and fast-fail on auth errors to prevent evolution stalls",
+    "changes_applied": [
+      {
+        "file": "bot/llm.py",
+        "reason": "Evolution has been failing every cycle because claude-cli hits Anthropic API with invalid key and retries 3x on same provider with no fallback. Fix: fast-fail on 401 auth errors, add cross-provider fallback chain (claude-cli -> anthropic -> groq)."
+      }
+    ],
+    "suggestions": [
+      {
+        "title": "Add GROQ_API_KEY for free LLM fallback",
+        "description": "Free Groq tier enables evolution to continue even when claude-cli or Anthropic API fails; eliminates single point of failure",
+        "secret_needed": "GROQ_API_KEY",
+        "estimated_weekly_usd": 0
+      },
+      {
+        "title": "Re-activate dev.to publishing",
+        "description": "dev.to was responsible for $2.65 of $2.77 total earnings \u00e2\u20ac\u201d highest ROI module, just needs secret restored",
+        "secret_needed": "DEV_TO_API_KEY",
+        "estimated_weekly_usd": 1
+      },
+      {
+        "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
+        "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
+        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+        "estimated_weekly_usd": 0
+      }
+    ],
+    "error": null
   },
   "last_earning": {
     "actions": [],
     "total_usd": 0.0
   },
-  "suggestions": [],
+  "suggestions": [
+    {
+      "title": "Add GROQ_API_KEY for free LLM fallback",
+      "description": "Free Groq tier enables evolution to continue even when claude-cli or Anthropic API fails; eliminates single point of failure",
+      "secret_needed": "GROQ_API_KEY",
+      "estimated_weekly_usd": 0
+    },
+    {
+      "title": "Re-activate dev.to publishing",
+      "description": "dev.to was responsible for $2.65 of $2.77 total earnings \u00e2\u20ac\u201d highest ROI module, just needs secret restored",
+      "secret_needed": "DEV_TO_API_KEY",
+      "estimated_weekly_usd": 1
+    },
+    {
+      "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
+      "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
+      "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+      "estimated_weekly_usd": 0
+    }
+  ],
   "errors": [],
-  "last_cycle_seconds": 62
+  "last_cycle_seconds": 85
 }

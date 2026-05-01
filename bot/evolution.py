@@ -31,8 +31,9 @@ MAX_CHANGES       = 3
 # Groq free tier: 12k TPM total — status JSON ~1k, system prompt ~0.6k, response 6k → 4k left for codebase.
 # Anthropic: large context window, no TPM issue.
 _MAX_READ_BYTES = {
-    "groq":      4_000,
-    "anthropic": 60_000,
+    "groq":       4_000,
+    "anthropic":  60_000,
+    "claude-cli": 60_000,
 }
 
 _SYSTEM = """\
@@ -82,7 +83,7 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
     provider = getattr(llm, "provider", "groq")
     max_bytes = _MAX_READ_BYTES.get(provider, _MAX_READ_BYTES["groq"])
     log.info("Reading codebase for evolution (provider=%s, max_bytes=%d)...", provider, max_bytes)
-    codebase = _read_codebase(max_bytes, include_config=(provider != "groq"))
+    codebase = _read_codebase(max_bytes, include_config=(provider not in ("groq",)))
 
     prompt = (
         f"Current status:\n{json.dumps(status, indent=2, default=str)}\n\n"

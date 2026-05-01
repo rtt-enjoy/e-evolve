@@ -102,7 +102,10 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
     applied  = _apply_changes(plan.get("changes", []))
     version  = _resolve_version(plan.get("version"), status.get("version", "1.0.0"))
 
-    Path("version.txt").write_text(version + "\n", encoding="utf-8")
+    if applied:
+        Path("version.txt").write_text(version + "\n", encoding="utf-8")
+    else:
+        version = status.get("version", "1.0.0")
 
     return {
         "version_bumped_to": version,

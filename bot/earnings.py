@@ -68,6 +68,8 @@ def update(status: dict[str, Any], actions: list[dict]) -> dict[str, Any]:
 
     # Rolling history of last 48 non-zero cycles for trend display (2-day window)
     history: list = e.setdefault("history", [])
+    # Purge any stale zeros left by earlier bugs or cold starts
+    history[:] = [v for v in history if v > 0]
     if cycle > 0:
         history.append(round(cycle, 6))
     if len(history) > 48:

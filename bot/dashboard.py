@@ -263,7 +263,7 @@ def _render(s: dict[str, Any]) -> str:
         items = "".join(f"<li>{e[:120]}</li>" for e in errors[-5:])
         err_html = f'<div class="ebox"><h3>⚠️ Recent Errors</h3><ul>{items}</ul></div>'
 
-    history   = earn.get("history", [])
+    history   = [v for v in earn.get("history", []) if v > 0]
     spark     = _sparkline(history)
     spark_tip = " · ".join(f"${v:.4f}" for v in history) if history else "no data"
 

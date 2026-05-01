@@ -23,9 +23,7 @@
       "dev.to": 2.65,
       "binance": 0.12
     },
-    "history": [
-      0.0
-    ]
+    "history": []
   },
   "last_evolution": {
     "version_bumped_to": "1.1.1",
@@ -45,7 +43,7 @@
       },
       {
         "title": "Re-activate dev.to publishing",
-        "description": "dev.to was responsible for $2.65 of $2.77 total earnings \u00e2\u20ac\u201d highest ROI module, just needs secret restored",
+        "description": "dev.to was responsible for $2.65 of $2.77 total earnings -- highest ROI module, just needs secret restored",
         "secret_needed": "DEV_TO_API_KEY",
         "estimated_weekly_usd": 1
       },
@@ -71,7 +69,7 @@
     },
     {
       "title": "Re-activate dev.to publishing",
-      "description": "dev.to was responsible for $2.65 of $2.77 total earnings \u00e2\u20ac\u201d highest ROI module, just needs secret restored",
+      "description": "dev.to was responsible for $2.65 of $2.77 total earnings -- highest ROI module, just needs secret restored",
       "secret_needed": "DEV_TO_API_KEY",
       "estimated_weekly_usd": 1
     },

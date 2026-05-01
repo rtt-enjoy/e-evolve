@@ -44,9 +44,9 @@ class LLMClient:
         self.provider       = self._pick_provider()
         self.model          = self._pick_model()
         self.info           = {"provider": self.provider, "model": self.model}
-        log.info("LLM ready â€” provider=%s model=%s", self.provider, self.model)
+        log.info("LLM ready -- provider=%s model=%s", self.provider, self.model)
 
-    # â”€â”€ Public API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # -- Public API ------------------------------------------------------------
 
     def complete(
         self,
@@ -60,8 +60,9 @@ class LLMClient:
         last_exc: Exception | None = None
 
         for provider in providers_to_try:
-            p_prompt = self._truncate_for_groq(prompt, system, max_tokens) if provider == "groq" else prompt
-            p_model  = self._model_for_provider(provider)
+            p_prompt  = self._truncate_for_groq(prompt, system, max_tokens) if provider == "groq" else prompt
+            p_model   = self._model_for_provider(provider)
+            exhausted = False
 
             for attempt in range(1, 4):
                 try:
@@ -72,38 +73,39 @@ class LLMClient:
                     return self._call_groq(p_prompt, system, max_tokens, temperature, p_model)
                 except Exception as exc:
                     last_exc = exc
-                    exc_str = str(exc)
+                    exc_str  = str(exc)
 
                     # Auth errors: no point retrying same provider
                     if any(code in exc_str for code in ("401", "authentication_error", "invalid x-api-key", "invalid_api_key")):
-                        log.warning("LLM auth error on provider=%s â€” skipping to fallback: %s", provider, exc)
+                        log.warning("LLM auth error on provider=%s -- skipping to fallback: %s", provider, exc)
+                        exhausted = True
                         break
 
                     # 413: truncate and retry
                     if "413" in exc_str and provider == "groq" and attempt < 3:
-                        cutoff = int(len(p_prompt) * 0.6)
-                        nl = p_prompt.rfind("\n", 0, cutoff)
+                        cutoff   = int(len(p_prompt) * 0.6)
+                        nl       = p_prompt.rfind("\n", 0, cutoff)
                         p_prompt = p_prompt[: nl if nl > 0 else cutoff]
-                        log.warning("LLM 413 attempt %d â€” truncated to %d chars", attempt, len(p_prompt))
+                        log.warning("LLM 413 attempt %d -- truncated to %d chars", attempt, len(p_prompt))
                         continue
 
-                    # Model deprecated: advance to next
+                    # Model deprecated: advance to next in chain
                     if "model_not_found" in exc_str or "model not found" in exc_str.lower():
                         if provider == "groq" and p_model in _GROQ_MODELS:
                             idx = _GROQ_MODELS.index(p_model)
                             if idx < len(_GROQ_MODELS) - 1:
                                 p_model = _GROQ_MODELS[idx + 1]
-                                log.warning("Groq model deprecated â€” advancing to %s", p_model)
+                                log.warning("Groq model deprecated -- advancing to %s", p_model)
                                 continue
 
                     log.warning("LLM attempt %d/3 provider=%s failed: %s", attempt, provider, exc)
                     if attempt < 3:
                         time.sleep(2 ** attempt)
-            else:
-                # Exhausted retries for this provider
-                if providers_to_try.index(provider) < len(providers_to_try) - 1:
-                    log.warning("LLM provider=%s exhausted â€” trying fallback", provider)
-                continue
+                    else:
+                        exhausted = True
+
+            if exhausted and providers_to_try.index(provider) < len(providers_to_try) - 1:
+                log.warning("LLM provider=%s exhausted -- trying fallback", provider)
 
         raise RuntimeError(f"LLM failed on all providers: {last_exc}") from last_exc
 
@@ -138,12 +140,12 @@ class LLMClient:
                     time.sleep(1)
         raise ValueError(f"Could not get valid JSON from LLM: {last_exc}") from last_exc
 
-    # â”€â”€ Groq â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # -- Groq ------------------------------------------------------------------
 
     def _truncate_for_groq(self, prompt: str, system: str, max_tokens: int) -> str:
-        system_tokens = len(system) / _CHARS_PER_TOKEN
-        response_budget = max_tokens
-        available_chars = int(
+        system_tokens    = len(system) / _CHARS_PER_TOKEN
+        response_budget  = max_tokens
+        available_chars  = int(
             (_GROQ_MAX_PROMPT_TOKENS - system_tokens - response_budget) * _CHARS_PER_TOKEN
         )
         if len(prompt) > available_chars > 0:
@@ -158,12 +160,12 @@ class LLMClient:
         self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
     ) -> LLMResponse:
         from groq import Groq  # lazy import
-        client = Groq(api_key=self._groq_key)
+        client   = Groq(api_key=self._groq_key)
         messages: list[dict] = []
         if system:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
-        t0 = time.monotonic()
+        t0  = time.monotonic()
         rsp = client.chat.completions.create(
             model=model,
             messages=messages,
@@ -177,7 +179,7 @@ class LLMClient:
             latency_s = round(time.monotonic() - t0, 2),
         )
 
-    # â”€â”€ Anthropic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # -- Anthropic -------------------------------------------------------------
 
     def _call_anthropic(
         self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
@@ -201,7 +203,7 @@ class LLMClient:
             latency_s = round(time.monotonic() - t0, 2),
         )
 
-    # â”€â”€ Claude CLI (Pro subscription, no API key) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # -- Claude CLI (Pro subscription, no API key) -----------------------------
 
     def _call_claude_cli(
         self, prompt: str, system: str, max_tokens: int
@@ -224,13 +226,13 @@ class LLMClient:
         if not text:
             raise RuntimeError("claude CLI returned empty response")
         return LLMResponse(
-            text=text,
-            provider="claude-cli",
-            model=self.model,
-            latency_s=round(time.monotonic() - t0, 2),
+            text      = text,
+            provider  = "claude-cli",
+            model     = self.model,
+            latency_s = round(time.monotonic() - t0, 2),
         )
 
-    # â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # -- Helpers ---------------------------------------------------------------
 
     def _pick_provider(self) -> str:
         if os.getenv("CLAUDE_CLI_MODE", "").strip() == "1":
@@ -242,7 +244,7 @@ class LLMClient:
         raise RuntimeError(
             "No LLM API key found.\n"
             "Add GROQ_API_KEY (free: console.groq.com) or ANTHROPIC_API_KEY\n"
-            "to GitHub â†’ Settings â†’ Secrets and variables â†’ Actions.\n"
+            "to GitHub -> Settings -> Secrets and variables -> Actions.\n"
             "For local dev with Claude Pro: set CLAUDE_CLI_MODE=1 in .env"
         )
 
@@ -274,7 +276,7 @@ class LLMClient:
         return chain
 
 
-# â”€â”€ JSON parser (module-level so tests can import directly) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# -- JSON parser (module-level so tests can import directly) ------------------
 
 def parse_json(text: str) -> dict[str, Any]:
     """

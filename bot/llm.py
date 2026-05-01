@@ -1,35 +1,24 @@
-"""
-LLM Client
-Abstracts Groq (free/fast) and Anthropic (Claude, higher quality).
-Auto-selects based on which API key is present.
-Priority: Anthropic if ANTHROPIC_API_KEY is set, else Groq.
-
-All external imports are lazy so the module loads even when
-groq/anthropic are not yet installed.
-"""
 from __future__ import annotations
 
 import json
 import logging
 import os
 import re
+import subprocess
 import time
 from dataclasses import dataclass
 from typing import Any
 
 log = logging.getLogger(__name__)
 
-# Groq free tier: ~8k token limit per request (combined prompt + system + response)
 _GROQ_MAX_PROMPT_TOKENS = 8_000
-# Rough chars-per-token estimate (English prose + code); conservative side
 _CHARS_PER_TOKEN = 3.5
 
-# Model lists — first entry is preferred; fallback if API rejects it
 _GROQ_MODELS = [
     "llama-3.3-70b-versatile",
     "llama-3.1-70b-versatile",
     "llama3-70b-8192",
-    "llama3-8b-8192",        # smallest fallback
+    "llama3-8b-8192",
 ]
 _ANTHROPIC_MODELS = [
     "claude-sonnet-4-6",
@@ -55,9 +44,9 @@ class LLMClient:
         self.provider       = self._pick_provider()
         self.model          = self._pick_model()
         self.info           = {"provider": self.provider, "model": self.model}
-        log.info("LLM ready — provider=%s model=%s", self.provider, self.model)
+        log.info("LLM ready â€” provider=%s model=%s", self.provider, self.model)
 
-    # ── Public API ─────────────────────────────────────────────────────────
+    # â”€â”€ Public API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     def complete(
         self,
@@ -66,30 +55,57 @@ class LLMClient:
         max_tokens: int = 4096,
         temperature: float = 0.7,
     ) -> LLMResponse:
-        """Send a prompt, return LLMResponse. Retries up to 3× on transient errors."""
-        if self.provider == "groq":
-            prompt = self._truncate_for_groq(prompt, system, max_tokens)
-
+        """Send a prompt, return LLMResponse. Retries 3x then falls back to next provider."""
+        providers_to_try = self._provider_chain()
         last_exc: Exception | None = None
-        for attempt in range(1, 4):
-            try:
-                if self.provider == "anthropic":
-                    return self._call_anthropic(prompt, system, max_tokens, temperature)
-                return self._call_groq(prompt, system, max_tokens, temperature)
-            except Exception as exc:
-                last_exc = exc
-                exc_str = str(exc)
-                # 413 = payload too large — truncate prompt further and retry
-                if "413" in exc_str and self.provider == "groq" and attempt < 3:
-                    cutoff = int(len(prompt) * 0.6)
-                    nl = prompt.rfind("\n", 0, cutoff)
-                    prompt = prompt[: nl if nl > 0 else cutoff]
-                    log.warning("LLM 413 on attempt %d — truncated prompt to %d chars", attempt, len(prompt))
-                    continue
-                log.warning("LLM attempt %d/3 failed: %s", attempt, exc)
-                if attempt < 3:
-                    time.sleep(2 ** attempt)   # 2 s, 4 s
-        raise RuntimeError(f"LLM failed after 3 attempts: {last_exc}") from last_exc
+
+        for provider in providers_to_try:
+            p_prompt = self._truncate_for_groq(prompt, system, max_tokens) if provider == "groq" else prompt
+            p_model  = self._model_for_provider(provider)
+
+            for attempt in range(1, 4):
+                try:
+                    if provider == "anthropic":
+                        return self._call_anthropic(p_prompt, system, max_tokens, temperature, p_model)
+                    if provider == "claude-cli":
+                        return self._call_claude_cli(p_prompt, system, max_tokens)
+                    return self._call_groq(p_prompt, system, max_tokens, temperature, p_model)
+                except Exception as exc:
+                    last_exc = exc
+                    exc_str = str(exc)
+
+                    # Auth errors: no point retrying same provider
+                    if any(code in exc_str for code in ("401", "authentication_error", "invalid x-api-key", "invalid_api_key")):
+                        log.warning("LLM auth error on provider=%s â€” skipping to fallback: %s", provider, exc)
+                        break
+
+                    # 413: truncate and retry
+                    if "413" in exc_str and provider == "groq" and attempt < 3:
+                        cutoff = int(len(p_prompt) * 0.6)
+                        nl = p_prompt.rfind("\n", 0, cutoff)
+                        p_prompt = p_prompt[: nl if nl > 0 else cutoff]
+                        log.warning("LLM 413 attempt %d â€” truncated to %d chars", attempt, len(p_prompt))
+                        continue
+
+                    # Model deprecated: advance to next
+                    if "model_not_found" in exc_str or "model not found" in exc_str.lower():
+                        if provider == "groq" and p_model in _GROQ_MODELS:
+                            idx = _GROQ_MODELS.index(p_model)
+                            if idx < len(_GROQ_MODELS) - 1:
+                                p_model = _GROQ_MODELS[idx + 1]
+                                log.warning("Groq model deprecated â€” advancing to %s", p_model)
+                                continue
+
+                    log.warning("LLM attempt %d/3 provider=%s failed: %s", attempt, provider, exc)
+                    if attempt < 3:
+                        time.sleep(2 ** attempt)
+            else:
+                # Exhausted retries for this provider
+                if providers_to_try.index(provider) < len(providers_to_try) - 1:
+                    log.warning("LLM provider=%s exhausted â€” trying fallback", provider)
+                continue
+
+        raise RuntimeError(f"LLM failed on all providers: {last_exc}") from last_exc
 
     def complete_json(
         self,
@@ -122,10 +138,9 @@ class LLMClient:
                     time.sleep(1)
         raise ValueError(f"Could not get valid JSON from LLM: {last_exc}") from last_exc
 
-    # ── Groq ───────────────────────────────────────────────────────────────
+    # â”€â”€ Groq â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     def _truncate_for_groq(self, prompt: str, system: str, max_tokens: int) -> str:
-        """Pre-truncate prompt so combined token estimate fits Groq limit."""
         system_tokens = len(system) / _CHARS_PER_TOKEN
         response_budget = max_tokens
         available_chars = int(
@@ -140,7 +155,7 @@ class LLMClient:
         return prompt
 
     def _call_groq(
-        self, prompt: str, system: str, max_tokens: int, temperature: float
+        self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
     ) -> LLMResponse:
         from groq import Groq  # lazy import
         client = Groq(api_key=self._groq_key)
@@ -148,40 +163,29 @@ class LLMClient:
         if system:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
-        t0  = time.monotonic()
-        try:
-            rsp = client.chat.completions.create(
-                model=self.model,
-                messages=messages,
-                max_tokens=max_tokens,
-                temperature=temperature,
-            )
-        except Exception as exc:
-            exc_str = str(exc)
-            if "model_not_found" in exc_str or "model not found" in exc_str.lower():
-                current_idx = _GROQ_MODELS.index(self.model) if self.model in _GROQ_MODELS else -1
-                if current_idx < len(_GROQ_MODELS) - 1:
-                    self.model = _GROQ_MODELS[current_idx + 1]
-                    log.warning("Groq model deprecated: %s — advancing to %s", _GROQ_MODELS[current_idx], self.model)
-                    raise  # outer retry loop will use new self.model
-                log.error("Groq model deprecated and no fallback remains: %s", self.model)
-            raise
+        t0 = time.monotonic()
+        rsp = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            max_tokens=max_tokens,
+            temperature=temperature,
+        )
         return LLMResponse(
             text      = rsp.choices[0].message.content or "",
             provider  = "groq",
-            model     = self.model,
+            model     = model,
             latency_s = round(time.monotonic() - t0, 2),
         )
 
-    # ── Anthropic ──────────────────────────────────────────────────────────
+    # â”€â”€ Anthropic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     def _call_anthropic(
-        self, prompt: str, system: str, max_tokens: int, temperature: float
+        self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
     ) -> LLMResponse:
         import anthropic  # lazy import
         client = anthropic.Anthropic(api_key=self._anthropic_key)
         kwargs: dict[str, Any] = {
-            "model":       self.model,
+            "model":       model,
             "max_tokens":  max_tokens,
             "temperature": temperature,
             "messages":    [{"role": "user", "content": prompt}],
@@ -193,13 +197,44 @@ class LLMClient:
         return LLMResponse(
             text      = msg.content[0].text if msg.content else "",
             provider  = "anthropic",
-            model     = self.model,
+            model     = model,
             latency_s = round(time.monotonic() - t0, 2),
         )
 
-    # ── Helpers ────────────────────────────────────────────────────────────
+    # â”€â”€ Claude CLI (Pro subscription, no API key) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+    def _call_claude_cli(
+        self, prompt: str, system: str, max_tokens: int
+    ) -> LLMResponse:
+        full_prompt = f"{system}\n\n{prompt}" if system else prompt
+        t0 = time.monotonic()
+        result = subprocess.run(
+            ["claude", "-p", full_prompt],
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        if result.returncode != 0:
+            stderr = result.stderr[:400]
+            # Surface auth errors explicitly so fast-fail triggers
+            if "401" in stderr or "authentication" in stderr.lower() or "api key" in stderr.lower():
+                raise RuntimeError(f"401 authentication_error from claude CLI: {stderr}")
+            raise RuntimeError(f"claude CLI exited {result.returncode}: {stderr}")
+        text = result.stdout.strip()
+        if not text:
+            raise RuntimeError("claude CLI returned empty response")
+        return LLMResponse(
+            text=text,
+            provider="claude-cli",
+            model=self.model,
+            latency_s=round(time.monotonic() - t0, 2),
+        )
+
+    # â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     def _pick_provider(self) -> str:
+        if os.getenv("CLAUDE_CLI_MODE", "").strip() == "1":
+            return "claude-cli"
         if self._anthropic_key:
             return "anthropic"
         if self._groq_key:
@@ -207,14 +242,39 @@ class LLMClient:
         raise RuntimeError(
             "No LLM API key found.\n"
             "Add GROQ_API_KEY (free: console.groq.com) or ANTHROPIC_API_KEY\n"
-            "to GitHub → Settings → Secrets and variables → Actions."
+            "to GitHub â†’ Settings â†’ Secrets and variables â†’ Actions.\n"
+            "For local dev with Claude Pro: set CLAUDE_CLI_MODE=1 in .env"
         )
 
     def _pick_model(self) -> str:
-        return _ANTHROPIC_MODELS[0] if self.provider == "anthropic" else _GROQ_MODELS[0]
+        if self.provider == "anthropic":
+            return _ANTHROPIC_MODELS[0]
+        if self.provider == "claude-cli":
+            return "claude-sonnet-4-6"
+        return _GROQ_MODELS[0]
+
+    def _model_for_provider(self, provider: str) -> str:
+        if provider == "anthropic":
+            return _ANTHROPIC_MODELS[0]
+        if provider == "claude-cli":
+            return "claude-sonnet-4-6"
+        return _GROQ_MODELS[0]
+
+    def _provider_chain(self) -> list[str]:
+        """Ordered list of providers to attempt, starting with the primary."""
+        chain = [self.provider]
+        if self.provider == "claude-cli":
+            if self._anthropic_key:
+                chain.append("anthropic")
+            if self._groq_key:
+                chain.append("groq")
+        elif self.provider == "anthropic":
+            if self._groq_key:
+                chain.append("groq")
+        return chain
 
 
-# ── JSON parser (module-level so tests can import directly) ─────────────────
+# â”€â”€ JSON parser (module-level so tests can import directly) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def parse_json(text: str) -> dict[str, Any]:
     """
@@ -223,18 +283,15 @@ def parse_json(text: str) -> dict[str, Any]:
     Raises ValueError if no valid JSON object found.
     """
     text = text.strip()
-    # Remove markdown code fences
     text = re.sub(r'^```(?:json)?\s*\n?', '', text, flags=re.MULTILINE)
     text = re.sub(r'\n?```\s*$',          '', text, flags=re.MULTILINE)
     text = text.strip()
 
-    # Strategy 1: the whole string is JSON
     try:
         return json.loads(text)
     except json.JSONDecodeError:
         pass
 
-    # Strategy 2: find first complete JSON object via raw_decode (handles multi-object responses)
     start = text.find("{")
     if start != -1:
         decoder = json.JSONDecoder()

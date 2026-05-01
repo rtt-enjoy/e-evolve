@@ -7,10 +7,10 @@
 <title>E-Evolve Dashboard</title>
 <style>
 :root{--bg:#0d1117;--sf:#161b22;--br:#30363d;--tx:#c9d1d9;--mu:#8b949e;
-      --ac:#58a6ff;--gn:#3fb950;--rd:#f85149;--pu:#bc8cff;
+      --ac:#58a6ff;--gn:#3fb950;--rd:#f85149;--pu:#bc8cff;--yw:#e3b341;
       --f:'Segoe UI',system-ui,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--tx);font-family:var(--f);padding:20px}
+body{background:var(--bg);color:var(--tx);font-family:var(--f);padding:20px;max-width:960px;margin:0 auto}
 a{color:var(--ac)}
 h2{font-size:.82rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:12px}
 header{display:flex;align-items:flex-start;gap:14px;border-bottom:1px solid var(--br);padding-bottom:18px;margin-bottom:22px}
@@ -23,11 +23,13 @@ h1{font-size:1.4rem;margin-bottom:6px}
 .b{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.76rem;margin:2px}
 .g{background:rgba(63,185,80,.15);border:1px solid var(--gn);color:var(--gn)}
 .r{background:rgba(248,81,73,.1);border:1px solid var(--rd);color:var(--rd)}
-.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:26px}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:26px}
 .st{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:16px}
 .st .v{font-size:1.8rem;font-weight:700;color:var(--gn)}
 .st .v.spark{font-size:1.2rem;font-family:monospace;letter-spacing:2px;cursor:default}
+.st .v.neutral{color:var(--tx)}
 .st .l{color:var(--mu);font-size:.78rem;margin-top:2px}
+.st .sub{font-size:.75rem;color:var(--mu);margin-top:4px}
 .sec{margin-bottom:26px}
 .pan{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:16px}
 .sc{display:flex;gap:12px;padding:12px;border:1px solid var(--br);border-radius:7px;margin-bottom:8px}
@@ -48,37 +50,70 @@ th{color:var(--mu);font-weight:500}
 .muted{color:var(--mu)}
 .err{color:var(--rd);font-size:.83rem}
 footer{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;padding-top:14px;border-top:1px solid var(--br)}
+.proj{margin-top:12px;padding:12px;background:rgba(63,185,80,.06);border:1px solid rgba(63,185,80,.2);border-radius:7px}
+.proj-row{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;margin-bottom:6px}
+.prog-bar{height:6px;background:var(--br);border-radius:3px;overflow:hidden;margin-top:2px}
+.prog-fill{height:100%;border-radius:3px;transition:width .3s}
+.bd{margin-top:10px}
+.bd-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:.83rem}
+.bd-lbl{width:80px;color:var(--mu);flex-shrink:0}
+.bd-bar-wrap{flex:1;height:8px;background:var(--br);border-radius:4px;overflow:hidden}
+.bd-bar{height:100%;background:var(--gn);border-radius:4px}
+.bd-amt{width:70px;text-align:right;color:var(--gn)}
+.age-pill{display:inline-block;padding:1px 7px;border-radius:10px;font-size:.72rem;font-weight:600;margin-left:6px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.two-col{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header>
   <div class="logo">🤖</div>
   <div>
-    <h1>E-Evolve <span class="pill pa">v1.1.1</span><span class="pill pp">claude-cli</span></h1>
-    <div style="margin-top:5px"><span class="b g">llm_anthropic</span></div>
-    <div class="mu">Last cycle: 2026-05-01 02:01 UTC &nbsp;·&nbsp; Total cycles: 431</div>
+    <h1>E-Evolve <span class="pill pa">v1.1.1</span><span class="pill pp">groq</span></h1>
+    <div style="margin-top:5px"><span class="b g">llm_groq</span><span class="b g">articles_devto</span></div>
+    <div class="mu">
+      Last cycle: 2026-05-01 04:18 UTC
+      <span class="age-pill" style="background:rgba(0,0,0,.3);color:var(--gn);border:1px solid var(--gn)">0m ago</span>
+      &nbsp;·&nbsp; Total cycles: 432
+      &nbsp;·&nbsp; Cycle time: 53s
+    </div>
   </div>
 </header>
 
 <div class="sg">
   <div class="st"><div class="v">$2.77</div><div class="l">Total earned</div></div>
-  <div class="st"><div class="v">$0.20</div><div class="l">This week</div></div>
-  <div class="st"><div class="v">431</div><div class="l">Cycles run</div></div>
-  <div class="st"><div class="v">1</div><div class="l">Active modules</div></div>
-  <div class="st"><div class="v spark" title="$0.0000"> </div><div class="l">Last 1 earning cycles</div></div>
+  <div class="st"><div class="v">$0.20</div><div class="l">This week</div><div class="sub">last cycle: $0.0000</div></div>
+  <div class="st"><div class="v neutral">432</div><div class="l">Cycles run</div></div>
+  <div class="st"><div class="v neutral">2</div><div class="l">Active modules</div><div class="sub">5 inactive</div></div>
+  
+</div>
+
+<div class="sec">
+  <h2>📈 Earnings Analysis</h2>
+  <div class="pan">
+    
+    <div class="bd"><div class="bd-row"><span class="bd-lbl">dev.to</span><div class="bd-bar-wrap"><div class="bd-bar" style="width:95%"></div></div><span class="bd-amt">$2.6500</span></div><div class="bd-row"><span class="bd-lbl">binance</span><div class="bd-bar-wrap"><div class="bd-bar" style="width:4%"></div></div><span class="bd-amt">$0.1200</span></div></div>
+  </div>
 </div>
 
 <div class="sec">
   <h2>🧠 Smart Growth Suggestions</h2>
-  <div class="pan"><div class="sc"><span class="rank">🥇</span><div><strong>Add GROQ_API_KEY for free LLM fallback</strong><p>Free Groq tier enables evolution to continue even when claude-cli or Anthropic API fails; eliminates single point of failure</p><div class="spill">Add secret: <code>GROQ_API_KEY</code></div></div></div><div class="sc"><span class="rank">🥈</span><div><strong>Re-activate dev.to publishing</strong><p>dev.to was responsible for $2.65 of $2.77 total earnings â€” highest ROI module, just needs secret restored</p><div class="spill">Add secret: <code>DEV_TO_API_KEY</code></div><div class="est">~$1/week estimated</div></div></div><div class="sc"><span class="rank">🥉</span><div><strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong><p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p><div class="spill">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div></div></div></div>
+  <div class="pan"><div class="sc"><span class="rank">🥇</span><div><strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong><p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p><div class="spill">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div></div></div></div>
 </div>
 
-<div class="sec">
-  <h2>⚡ Last Evolution</h2>
-  <div class="pan">
-    <p style="margin-bottom:9px"><strong>Add cross-provider LLM fallback and fast-fail on auth errors to prevent evolution stalls</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--gn);background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);margin-left:8px">ok</span></p>
-    <ul class="ev"><li><code>bot/llm.py</code> — Evolution has been failing every cycle because claude-cli hits Anthropic API wit</li></ul>
-    
+<div class="two-col">
+  <div class="sec">
+    <h2>⚡ Last Evolution</h2>
+    <div class="pan">
+      <p style="margin-bottom:9px"><strong>Evolution skipped [json]: Could not get valid JSON from LLM: No valid JSON object found in LLM response. First 200 chars: '{\n  "version": "1.2.0",\n  "summary": "Implement command system improvements and add logging for earnings",\n  "suggestions": [\n    {\n      "title": "Add GROQ_API_KEY for free LLM fallback",\n      "desc'</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--rd);background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.35);margin-left:8px">llm_error</span></p>
+      <ul class="ev"><li>No file changes this cycle</li></ul>
+      <div style="margin-top:8px;padding:6px 10px;background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.25);border-radius:5px;font-size:.8rem;color:var(--rd)"><strong>JSON Parse Error:</strong> Could not get valid JSON from LLM: No valid JSON object found in LLM response. First 200 chars: '{\n  "version": "1.2.0",\n  "summary": "Implement command system improvements and add logging for earni</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>🔒 Inactive Modules</h2>
+    <div class="pan"><div class="ic"><span class="dot"></span>llm_anthropic</div><div class="ic"><span class="dot"></span>articles_medium</div><div class="ic"><span class="dot"></span>twitter</div><div class="ic"><span class="dot"></span>crypto_binance</div><div class="ic"><span class="dot"></span>nft_ethereum</div></div>
   </div>
 </div>
 
@@ -87,11 +122,6 @@ footer{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;paddin
   <div class="pan">
     <p class='muted'>No actions yet — add a secret to activate an earning module.</p>
   </div>
-</div>
-
-<div class="sec">
-  <h2>🔒 Inactive Modules (add secrets to unlock)</h2>
-  <div class="pan"><div class="ic"><span class="dot"></span>llm_groq</div><div class="ic"><span class="dot"></span>articles_devto</div><div class="ic"><span class="dot"></span>articles_medium</div><div class="ic"><span class="dot"></span>twitter</div><div class="ic"><span class="dot"></span>crypto_binance</div><div class="ic"><span class="dot"></span>nft_ethereum</div></div>
 </div>
 
 

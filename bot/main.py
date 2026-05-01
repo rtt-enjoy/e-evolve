@@ -94,13 +94,18 @@ def main() -> int:
     status["last_evolution"] = evo
     if evo.get("version_bumped_to"):
         status["version"] = evo["version_bumped_to"]
+    active_secrets = {
+        s for f in status.get("active_features", [])
+        for s in _st.FEATURE_MAP.get(f, [])
+    }
     if evo.get("suggestions"):
-        active_secrets = {
-            s for f in status.get("active_features", [])
-            for s in _st.FEATURE_MAP.get(f, [])
-        }
         status["suggestions"] = [
             sg for sg in evo["suggestions"]
+            if not sg.get("secret_needed") or sg["secret_needed"] not in active_secrets
+        ]
+    else:
+        status["suggestions"] = [
+            sg for sg in status.get("suggestions", [])
             if not sg.get("secret_needed") or sg["secret_needed"] not in active_secrets
         ]
 

@@ -39,14 +39,7 @@
     "actions": [],
     "total_usd": 0.0
   },
-  "suggestions": [
-    {
-      "title": "Add DEV_TO_API_KEY",
-      "description": "Publish articles",
-      "secret_needed": "DEV_TO_API_KEY",
-      "estimated_weekly_usd": 5
-    }
-  ],
+  "suggestions": [],
   "errors": [],
   "last_cycle_seconds": 38
 }

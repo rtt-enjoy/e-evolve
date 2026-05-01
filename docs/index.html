@@ -190,15 +190,15 @@ footer {
   <div class="logo">🤖</div>
   <div>
     <h1>E-Evolve
-      <span class="pill-version">1.1.1</span>
+      <span class="pill-version">1.2.0</span>
       <span class="pill-provider">groq</span>
     </h1>
     <div style="margin-top:5px"><span class="badge badge-green">llm_groq</span><span class="badge badge-green">articles_devto</span></div>
     <div class="muted" style="font-size:.8rem;margin-top:5px">
-      Last cycle: 2026-05-01 16:14 UTC
+      Last cycle: 2026-05-01 17:16 UTC
       <span class="age-pill" style="background:rgba(0,0,0,.3);color:var(--gn);border:1px solid var(--gn)">0m ago</span>
-      &nbsp;·&nbsp; Total cycles: 437
-      &nbsp;·&nbsp; Cycle time: 42s
+      &nbsp;·&nbsp; Total cycles: 438
+      &nbsp;·&nbsp; Cycle time: 24s
     </div>
   </div>
 </header>
@@ -213,7 +213,7 @@ footer {
     <div class="stat-sub">last cycle: $0.0000</div>
   </div>
   <div class="stat-card">
-    <div class="stat-value stat-neutral">437</div>
+    <div class="stat-value stat-neutral">438</div>
     <div class="stat-label">Cycles run</div>
   </div>
   <div class="stat-card">
@@ -232,15 +232,15 @@ footer {
 </div>
 <div class="section">
   <h2>🧠 Smart Growth Suggestions</h2>
-  <div class="panel"><div class="suggestion-card"><span class="suggestion-rank">🥇</span><div><strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong><span class="free-badge">Free to start</span><p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p><div class="secret-needed">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div></div></div></div>
+  <div class="panel"><div class="suggestion-card"><span class="suggestion-rank">🥇</span><div><strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong><span class="free-badge">Free to start</span><p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p><div class="secret-needed">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div><ol class="how-to-steps"><li>Step 1: Go to Medium Partner Program and create an account</li><li>Step 2: Generate an integration token in the Medium settings</li><li>Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN</li></ol></div></div><div class="suggestion-card"><span class="suggestion-rank">🥈</span><div><strong>Upgrade to Groq Dev Tier for increased LLM usage</strong><p>Increase the daily token limit for LLM usage</p><div class="est-earnings">~$20/week estimated</div><ol class="how-to-steps"><li>Step 1: Go to the Groq console and navigate to the billing settings</li><li>Step 2: Upgrade to the Dev Tier plan</li><li>Step 3: Verify the increased token limit in the Groq console</li></ol></div></div><div class="suggestion-card"><span class="suggestion-rank">🥉</span><div><strong>Add TWITTER_API_KEY for Twitter integration</strong><span class="free-badge">Free to start</span><p>Enable Twitter posting and increase reach</p><div class="secret-needed">Add secret: <code>TWITTER_API_KEY</code></div><ol class="how-to-steps"><li>Step 1: Go to the Twitter Developer Dashboard and create an app</li><li>Step 2: Generate an API key and secret in the Twitter settings</li><li>Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET</li></ol></div></div></div>
 </div>
 <div class="two-col">
 <div class="section">
   <h2>⚡ Last Evolution</h2>
   <div class="panel">
-    <p style="margin-bottom:9px"><strong>Evolution skipped [json]: Could not get valid JSON from LLM: LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 95560, Requested 7903. Please try again in 49m52.032s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--rd);background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.35);margin-left:8px">llm_error</span></p>
-    <ul class="evo-list"><li>No file changes this cycle</li></ul>
-    <div class="evo-error-box"><strong>JSON Parse Error:</strong> Could not get valid JSON from LLM: LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttv</div>
+    <p style="margin-bottom:9px"><strong>Added support for Medium integration and improved error handling</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--gn);background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);margin-left:8px">ok</span></p>
+    <ul class="evo-list"><li><code>bot/articles.py</code> — Added support for Medium integration</li><li><code>bot/errors.py</code> — Improved error handling</li><li><code>config/medium_config.json</code> — Added Medium configuration file</li></ul>
+    
   </div>
 </div>
 <div class="section">

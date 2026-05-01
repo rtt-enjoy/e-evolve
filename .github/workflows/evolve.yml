@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '17 * * * *'   # Every hour at :17 — avoids congested :00 window
   workflow_dispatch:        # Allow manual trigger for testing
+  push:
+    paths:
+      - 'command.txt'       # Commit command.txt after adding a secret to trigger immediately
 
 permissions:
   contents: write           # Bot must commit evolved code and state files

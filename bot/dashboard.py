@@ -84,6 +84,63 @@ def _sparkline(history: list) -> str:
     return "".join(bars[min(8, int(v / mx * 8))] for v in history)
 
 
+def _last_run_age(last_run_iso: Any) -> tuple[str, str]:
+    """Returns (age_label, css_color) based on how stale the last run is."""
+    if not last_run_iso:
+        return ("never", "var(--rd)")
+    try:
+        from datetime import datetime, timezone
+        dt = datetime.fromisoformat(str(last_run_iso).replace("Z", "+00:00"))
+        age_s = (datetime.now(timezone.utc) - dt).total_seconds()
+        if age_s < 4500:   # < 75min — healthy
+            return (f"{int(age_s//60)}m ago", "var(--gn)")
+        if age_s < 10800:  # < 3h — stale
+            return (f"{int(age_s//3600)}h {int((age_s%3600)//60)}m ago", "#e3b341")
+        return (f"{int(age_s//3600)}h ago", "var(--rd)")
+    except Exception:
+        return (str(last_run_iso), "var(--mu)")
+
+
+def _earnings_projection(earn: dict) -> str:
+    """Weekly earnings projection based on rolling history."""
+    history = earn.get("history", [])
+    if len(history) < 2:
+        return ""
+    avg = sum(history) / len(history)
+    cycles_per_week = 168  # 24*7
+    projected = round(avg * cycles_per_week, 2)
+    this_week = earn.get("this_week_usd", 0)
+    goal = 10.0
+    pct = min(100, int(this_week / goal * 100)) if goal else 0
+    bar_color = "var(--gn)" if pct >= 50 else ("#e3b341" if pct >= 20 else "var(--rd)")
+    return (
+        f'<div class="proj">'
+        f'<div class="proj-row"><span>Weekly projection (avg {avg:.4f}/cycle × 168):</span>'
+        f'<strong style="color:var(--gn)">${projected:.2f}/week</strong></div>'
+        f'<div class="proj-row"><span>Progress to $10/week goal:</span>'
+        f'<span style="color:{bar_color}">{pct}%</span></div>'
+        f'<div class="prog-bar"><div class="prog-fill" style="width:{pct}%;background:{bar_color}"></div></div>'
+        f'</div>'
+    )
+
+
+def _breakdown_bars(breakdown: dict) -> str:
+    if not breakdown:
+        return ""
+    total = sum(breakdown.values()) or 1
+    rows = ""
+    for plat, amt in sorted(breakdown.items(), key=lambda x: -x[1]):
+        pct = int(amt / total * 100)
+        rows += (
+            f'<div class="bd-row">'
+            f'<span class="bd-lbl">{plat}</span>'
+            f'<div class="bd-bar-wrap"><div class="bd-bar" style="width:{pct}%"></div></div>'
+            f'<span class="bd-amt">${amt:.4f}</span>'
+            f'</div>'
+        )
+    return f'<div class="bd">{rows}</div>'
+
+
 def _render(s: dict[str, Any]) -> str:
     version  = s.get("version", "1.0.0")
     last_run = _fmt(s.get("last_run"))
@@ -97,6 +154,12 @@ def _render(s: dict[str, Any]) -> str:
     last_ea  = s.get("last_earning", {})
     actions  = last_ea.get("actions", [])
     errors   = s.get("errors", [])
+
+    age_label, age_color = _last_run_age(s.get("last_run"))
+    proj_html    = _earnings_projection(earn)
+    breakdown_html = _breakdown_bars(earn.get("breakdown", {}))
+    cycle_secs   = s.get("last_cycle_seconds")
+    cycle_str    = f"{cycle_secs}s" if cycle_secs else "—"
 
     # badges
     badges = "".join(f'<span class="b g">{f}</span>' for f in active) \
@@ -213,10 +276,10 @@ def _render(s: dict[str, Any]) -> str:
 <title>E-Evolve Dashboard</title>
 <style>
 :root{{--bg:#0d1117;--sf:#161b22;--br:#30363d;--tx:#c9d1d9;--mu:#8b949e;
-      --ac:#58a6ff;--gn:#3fb950;--rd:#f85149;--pu:#bc8cff;
+      --ac:#58a6ff;--gn:#3fb950;--rd:#f85149;--pu:#bc8cff;--yw:#e3b341;
       --f:'Segoe UI',system-ui,sans-serif}}
 *{{box-sizing:border-box;margin:0;padding:0}}
-body{{background:var(--bg);color:var(--tx);font-family:var(--f);padding:20px}}
+body{{background:var(--bg);color:var(--tx);font-family:var(--f);padding:20px;max-width:960px;margin:0 auto}}
 a{{color:var(--ac)}}
 h2{{font-size:.82rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:12px}}
 header{{display:flex;align-items:flex-start;gap:14px;border-bottom:1px solid var(--br);padding-bottom:18px;margin-bottom:22px}}
@@ -229,11 +292,13 @@ h1{{font-size:1.4rem;margin-bottom:6px}}
 .b{{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.76rem;margin:2px}}
 .g{{background:rgba(63,185,80,.15);border:1px solid var(--gn);color:var(--gn)}}
 .r{{background:rgba(248,81,73,.1);border:1px solid var(--rd);color:var(--rd)}}
-.sg{{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:26px}}
+.sg{{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:26px}}
 .st{{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:16px}}
 .st .v{{font-size:1.8rem;font-weight:700;color:var(--gn)}}
 .st .v.spark{{font-size:1.2rem;font-family:monospace;letter-spacing:2px;cursor:default}}
+.st .v.neutral{{color:var(--tx)}}
 .st .l{{color:var(--mu);font-size:.78rem;margin-top:2px}}
+.st .sub{{font-size:.75rem;color:var(--mu);margin-top:4px}}
 .sec{{margin-bottom:26px}}
 .pan{{background:var(--sf);border:1px solid var(--br);border-radius:9px;padding:16px}}
 .sc{{display:flex;gap:12px;padding:12px;border:1px solid var(--br);border-radius:7px;margin-bottom:8px}}
@@ -254,6 +319,19 @@ th{{color:var(--mu);font-weight:500}}
 .muted{{color:var(--mu)}}
 .err{{color:var(--rd);font-size:.83rem}}
 footer{{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;padding-top:14px;border-top:1px solid var(--br)}}
+.proj{{margin-top:12px;padding:12px;background:rgba(63,185,80,.06);border:1px solid rgba(63,185,80,.2);border-radius:7px}}
+.proj-row{{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;margin-bottom:6px}}
+.prog-bar{{height:6px;background:var(--br);border-radius:3px;overflow:hidden;margin-top:2px}}
+.prog-fill{{height:100%;border-radius:3px;transition:width .3s}}
+.bd{{margin-top:10px}}
+.bd-row{{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:.83rem}}
+.bd-lbl{{width:80px;color:var(--mu);flex-shrink:0}}
+.bd-bar-wrap{{flex:1;height:8px;background:var(--br);border-radius:4px;overflow:hidden}}
+.bd-bar{{height:100%;background:var(--gn);border-radius:4px}}
+.bd-amt{{width:70px;text-align:right;color:var(--gn)}}
+.age-pill{{display:inline-block;padding:1px 7px;border-radius:10px;font-size:.72rem;font-weight:600;margin-left:6px}}
+.two-col{{display:grid;grid-template-columns:1fr 1fr;gap:16px}}
+@media(max-width:600px){{.two-col{{grid-template-columns:1fr}}}}
 </style>
 </head>
 <body>
@@ -262,29 +340,49 @@ footer{{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;paddi
   <div>
     <h1>E-Evolve <span class="pill pa">v{version}</span><span class="pill pp">{provider}</span></h1>
     <div style="margin-top:5px">{badges}</div>
-    <div class="mu">Last cycle: {last_run} &nbsp;·&nbsp; Total cycles: {n_runs}</div>
+    <div class="mu">
+      Last cycle: {last_run}
+      <span class="age-pill" style="background:rgba(0,0,0,.3);color:{age_color};border:1px solid {age_color}">{age_label}</span>
+      &nbsp;·&nbsp; Total cycles: {n_runs}
+      &nbsp;·&nbsp; Cycle time: {cycle_str}
+    </div>
   </div>
 </header>
 
 <div class="sg">
   <div class="st"><div class="v">${earn.get("total_usd",0):.2f}</div><div class="l">Total earned</div></div>
-  <div class="st"><div class="v">${earn.get("this_week_usd",0):.2f}</div><div class="l">This week</div></div>
-  <div class="st"><div class="v">{n_runs}</div><div class="l">Cycles run</div></div>
-  <div class="st"><div class="v">{len(active)}</div><div class="l">Active modules</div></div>
+  <div class="st"><div class="v">${earn.get("this_week_usd",0):.2f}</div><div class="l">This week</div><div class="sub">last cycle: ${earn.get("last_cycle_usd",0):.4f}</div></div>
+  <div class="st"><div class="v neutral">{n_runs}</div><div class="l">Cycles run</div></div>
+  <div class="st"><div class="v neutral">{len(active)}</div><div class="l">Active modules</div><div class="sub">{len(inactive)} inactive</div></div>
   {"" if not spark else f'<div class="st"><div class="v spark" title="{spark_tip}">{spark}</div><div class="l">Last {len(history)} earning cycles</div></div>'}
 </div>
+
+{"" if not proj_html and not breakdown_html else f'''<div class="sec">
+  <h2>📈 Earnings Analysis</h2>
+  <div class="pan">
+    {proj_html}
+    {breakdown_html}
+  </div>
+</div>'''}
 
 <div class="sec">
   <h2>🧠 Smart Growth Suggestions</h2>
   <div class="pan">{"<p class='muted'>Suggestions appear after the first evolution cycle.</p>" if not sug_html else sug_html}</div>
 </div>
 
-<div class="sec">
-  <h2>⚡ Last Evolution</h2>
-  <div class="pan">
-    <p style="margin-bottom:9px"><strong>{evo_summary}</strong>{evo_badge}</p>
-    <ul class="ev">{evo_items}</ul>
-    {evo_err_html}
+<div class="two-col">
+  <div class="sec">
+    <h2>⚡ Last Evolution</h2>
+    <div class="pan">
+      <p style="margin-bottom:9px"><strong>{evo_summary}</strong>{evo_badge}</p>
+      <ul class="ev">{evo_items}</ul>
+      {evo_err_html}
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>🔒 Inactive Modules</h2>
+    <div class="pan">{inact_html}</div>
   </div>
 </div>
 
@@ -296,11 +394,6 @@ footer{{text-align:center;color:var(--mu);font-size:.76rem;margin-top:32px;paddi
      f'<table><thead><tr><th></th><th>Platform</th><th>Detail</th></tr></thead><tbody>{rows}</tbody></table>'
      f'<p class="muted" style="font-size:.78rem;margin-top:8px">Showing last {min(len(actions),20)} of {len(actions)} · <a href="earnings-log.md">full log</a></p>'}
   </div>
-</div>
-
-<div class="sec">
-  <h2>🔒 Inactive Modules (add secrets to unlock)</h2>
-  <div class="pan">{inact_html}</div>
 </div>
 
 {err_html}

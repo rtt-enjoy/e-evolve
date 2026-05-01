@@ -40,35 +40,43 @@ _SYSTEM = (
     '  "description": "SEO meta description, under 155 characters",\n'
     f'  "body_markdown": "Full article in Markdown. At least {_MIN_WORDS} words. Include code examples."\n'
     '}\n\n'
-    "Topics: Python automation, GitHub Actions, AI/LLM agents, passive income via code,\n"
-    "self-improving bots, Web3 Python. Write in first-person, experience-based style."
+    "Topics: Python automation, GitHub Actions, AI/LLM agents (Claude, Groq, GPT), passive income via code,\n"
+    "self-improving bots, Web3 Python, agentic AI in 2026. Write in first-person, experience-based style."
 )
 
 _TOPICS = [
     "How I built a self-improving bot that earns money while I sleep",
     "GitHub Actions is a free cloud computer — 8 things you can automate for $0",
-    "5 Python automation strategies for passive income in 2025",
+    "5 Python automation strategies for passive income in 2026",
     "Building autonomous AI agents with free LLM APIs — a practical guide",
     "Zero-cost infrastructure for side projects: GitHub Actions deep dive",
     "How to make Python scripts improve themselves using LLMs",
     "Web3 automation with Python: from zero to daily NFT mints",
-    "My bot posted 100 dev.to articles — here's what happened",
-    "Rate limiting your GitHub Actions bot: lessons from 418 cycles",
-    "Prompt engineering for code generation: what actually works",
+    "My bot posted 400 dev.to articles — here's what actually happened",
+    "Claude vs GPT-4 for code generation: real benchmark from 430 bot cycles",
+    "Prompt engineering for code generation: what actually works in 2026",
     "Building a personal finance tracker that runs for free on GitHub",
-    "How I use Groq's free API tier to power an autonomous agent",
-    "Python dataclasses vs dicts: when each wins",
+    "How I use Claude's API to power an autonomous self-improving agent",
+    "Python dataclasses vs dicts: when each wins in production bots",
     "Structuring LLM outputs as JSON: parsing strategies that don't break",
-    "Cron jobs on GitHub Actions: gotchas and best practices",
-    "From idea to deployed bot in 30 minutes with Python and GitHub Actions",
-    "Writing dev.to articles programmatically: the API guide nobody wrote",
-    "How to version a bot that modifies its own source code",
-    "Exponential backoff in Python: the right way to retry API calls",
-    "Building observable bots: logging strategies for autonomous systems",
+    "Cron jobs on GitHub Actions: gotchas and best practices in 2026",
+    "From idea to deployed AI bot in 30 minutes with Python and GitHub Actions",
+    "Writing dev.to articles programmatically: the complete API guide",
+    "How to version a bot that modifies its own source code safely",
+    "Exponential backoff in Python: the right way to retry LLM API calls",
+    "Building observable autonomous bots: logging strategies that scale",
     "Why I store my bot's state in a JSON file instead of a database",
-    "Testing Python code that calls external APIs without mocking everything",
-    "AST-based code safety checks: letting LLMs edit your repo safely",
-    "The economics of running a dev content bot: real numbers after 400 cycles",
+    "Multi-provider LLM fallback in Python: never let your bot go dark",
+    "AST-based code safety checks: letting LLMs edit your repo without breaking it",
+    "The economics of running a dev content bot: real numbers after 431 cycles",
+    "Claude Sonnet 4.6 vs Haiku 4.5: cost-performance tradeoffs for autonomous agents",
+    "How to build a GitHub Actions bot that pays for itself",
+    "Agentic AI in 2026: patterns that survived contact with production",
+    "Free LLM APIs in 2026: Groq, Anthropic free tier, and what actually works",
+    "Python subprocess tricks for running CLI tools from autonomous bots",
+    "Self-healing code: how bots can detect and fix their own regressions",
+    "Earning from technical writing with AI assistance: a realistic breakdown",
+    "GitHub Actions secrets management for multi-provider AI pipelines",
 ]
 
 

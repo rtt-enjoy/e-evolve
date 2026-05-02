@@ -464,6 +464,100 @@ def _section_actions(actions: list) -> str:
 </div>"""
 
 
+_ORDER_PRESETS: list[tuple[str, str]] = [
+    ("force articles 3",       "Post 3 articles this cycle"),
+    ("force trade aggressive",  "Raise trade risk to 5%"),
+    ("skip evolution",          "Skip Phase 3 this cycle"),
+    ("post thread",             "Force a Twitter thread"),
+    ("reset earnings",          "Zero this_week_usd"),
+    ("status report",           "Dump full status to workflow log"),
+    ("force mint 1",            "Mint 1 NFT this cycle"),
+    ("force trade conservative","Lower trade risk to 1%"),
+]
+
+_ORDERS_JS = """\
+<script>
+(function() {
+  var _cmds = [];
+  window.addOrder = function(cmd) {
+    if (!_cmds.includes(cmd)) _cmds.push(cmd);
+    _sync();
+  };
+  window.addCustomOrder = function() {
+    var el = document.getElementById('customOrder');
+    var val = el.value.trim();
+    if (val && !_cmds.includes(val)) { _cmds.push(val); _sync(); }
+    el.value = ''; el.focus();
+  };
+  window.clearCommands = function() {
+    _cmds = [];
+    document.getElementById('commandOutput').value = '# no commands';
+  };
+  window.copyCommands = function() {
+    var ta = document.getElementById('commandOutput');
+    navigator.clipboard.writeText(ta.value).then(function() {
+      var t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(function() { t.classList.remove('show'); }, 2000);
+    }).catch(function() { ta.select(); document.execCommand('copy'); });
+  };
+  window.downloadCommands = function() {
+    var content = document.getElementById('commandOutput').value;
+    var blob = new Blob([content], { type: 'text/plain' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'command.txt'; a.click();
+  };
+  function _sync() {
+    document.getElementById('commandOutput').value =
+      _cmds.length ? _cmds.join('\\n') : '# no commands';
+  }
+  document.getElementById('commandOutput').addEventListener('input', function() {
+    _cmds = this.value.split('\\n').map(function(l){return l.trim();}).filter(Boolean);
+  });
+})();
+</script>
+<div class="copy-toast" id="toast">Copied to clipboard!</div>"""
+
+
+def _section_orders() -> str:
+    btns = "".join(
+        f'<button class="order-btn" onclick="addOrder(\'{cmd}\')">'
+        f'<span class="ob-label">{cmd}</span>'
+        f'<span class="ob-desc">{desc}</span>'
+        f'</button>'
+        for cmd, desc in _ORDER_PRESETS
+    )
+    return f"""<div class="section">
+  <h2>📋 Owner Orders</h2>
+  <div class="panel">
+    <p class="muted" style="font-size:.82rem;margin-bottom:12px">
+      Queue commands for the next evolution cycle. Click a preset or type a custom order.
+    </p>
+    <div class="orders-grid">{btns}</div>
+    <div class="order-custom-row">
+      <input type="text" id="customOrder" class="order-input"
+             placeholder="Custom order (e.g. force articles 5)"
+             onkeydown="if(event.key==='Enter'){{addCustomOrder()}}" />
+      <button class="btn btn-secondary" onclick="addCustomOrder()">Add</button>
+    </div>
+    <textarea id="commandOutput" class="order-textarea"
+              placeholder="# no commands&#10;(click presets or add custom orders above)"></textarea>
+    <div class="order-actions">
+      <button class="btn btn-primary" onclick="copyCommands()">📋 Copy command.txt</button>
+      <button class="btn btn-secondary" onclick="downloadCommands()">⬇ Download</button>
+      <button class="btn btn-danger" onclick="clearCommands()">✕ Clear</button>
+    </div>
+    <div class="order-hint">
+      <strong>How to apply:</strong>
+      Copy the text above, commit it to <code>command.txt</code> in your repo root.
+      The next cycle (~1h) executes and clears it automatically.<br>
+      CLI: <code>echo "your command" &gt; command.txt &amp;&amp; git add command.txt &amp;&amp; git commit -m "cmd" &amp;&amp; git push</code>
+    </div>
+  </div>
+</div>"""
+
+
 def _section_errors(errors: list) -> str:
     if not errors:
         return ""
@@ -660,6 +754,67 @@ th { color: var(--mu); font-weight: 500; }
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
 
+/* ── Owner Orders panel ── */
+.orders-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
+}
+@media (max-width: 600px) { .orders-grid { grid-template-columns: 1fr; } }
+.order-btn {
+  background: var(--sf); border: 1px solid var(--br); color: var(--tx);
+  border-radius: 6px; padding: 8px 12px; font-size: .82rem;
+  cursor: pointer; text-align: left; transition: border-color .15s, background .15s;
+  font-family: var(--f);
+}
+.order-btn:hover { border-color: var(--ac); background: rgba(88,166,255,.06); }
+.order-btn .ob-label { font-weight: 600; color: var(--ac); display: block; margin-bottom: 2px; }
+.order-btn .ob-desc  { color: var(--mu); font-size: .77rem; }
+.order-custom-row {
+  display: flex; gap: 8px; align-items: flex-start; margin-bottom: 12px;
+}
+.order-input {
+  flex: 1; background: var(--bg); border: 1px solid var(--br); color: var(--tx);
+  border-radius: 6px; padding: 8px 10px; font-size: .84rem; font-family: var(--f);
+  min-height: 38px;
+}
+.order-input:focus { outline: none; border-color: var(--ac); }
+.order-textarea {
+  width: 100%; background: var(--bg); border: 1px solid var(--br); color: var(--tx);
+  border-radius: 6px; padding: 10px 12px; font-size: .84rem;
+  font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+  resize: vertical; min-height: 80px; margin-bottom: 10px;
+}
+.order-textarea:focus { outline: none; border-color: var(--ac); }
+.order-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 14px; border-radius: 6px; font-size: .82rem; font-weight: 600;
+  cursor: pointer; border: 1px solid transparent; font-family: var(--f);
+  transition: opacity .15s;
+}
+.btn:hover { opacity: .85; }
+.btn-primary   { background: var(--ac); color: #0d1117; border-color: var(--ac); }
+.btn-secondary { background: transparent; border-color: var(--br); color: var(--tx); }
+.btn-danger    { background: rgba(248,81,73,.15); border-color: var(--rd); color: var(--rd); }
+.order-hint {
+  font-size: .77rem; color: var(--mu); margin-top: 10px; line-height: 1.5;
+  padding: 8px 10px; background: rgba(88,166,255,.05);
+  border: 1px solid rgba(88,166,255,.15); border-radius: 5px;
+}
+.order-hint code {
+  background: rgba(110,118,129,.15); padding: 1px 5px; border-radius: 3px;
+  font-size: .78em; font-family: monospace;
+}
+.copy-toast {
+  display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--gn); color: #0d1117; padding: 8px 18px; border-radius: 20px;
+  font-size: .82rem; font-weight: 700; z-index: 999;
+}
+.copy-toast.show { display: block; animation: fadeup .3s ease; }
+@keyframes fadeup {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
 /* ── Footer ── */
 footer {
   text-align: center; color: var(--mu); font-size: .76rem;
@@ -698,12 +853,14 @@ def _render(s: dict[str, Any]) -> str:
         _section_stats(earn, n_runs, active, inactive, history, spark, spark_tip),
         _section_earnings(earn),
         _section_suggestions(suggs),
+        _section_orders(),
         '<div class="two-col">',
         _section_evolution(evo),
         _section_inactive(inactive),
         "</div>",
         _section_actions(actions),
         _section_errors(errors),
+        _ORDERS_JS,
     ])
 
     return f"""<!DOCTYPE html>

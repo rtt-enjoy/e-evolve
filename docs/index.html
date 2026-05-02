@@ -7,174 +7,164 @@
 <title>E-Evolve Dashboard</title>
 <style>
 :root {
-  --bg:  #0d1117; --sf:  #161b22; --sf2: #1c2330; --br:  #30363d; --br2: #21262d;
-  --tx:  #e6edf3; --mu:  #8b949e; --mu2: #6e7681;
-  --ac:  #58a6ff; --ac2: #1f6feb;
-  --gn:  #3fb950; --gn2: #238636;
-  --rd:  #f85149; --rd2: #da3633;
-  --pu:  #bc8cff; --pu2: #8957e5;
-  --yw:  #e3b341; --or:  #f0883e;
-  --f:   'Segoe UI', system-ui, -apple-system, sans-serif;
-  --mono:'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
-  --r3:  3px; --r6:  6px; --r9:  9px; --r12: 12px;
-  --shadow: 0 1px 3px rgba(0,0,0,.4);
+  --bg: #0d1117; --sf: #161b22; --br: #30363d;
+  --tx: #c9d1d9; --mu: #8b949e;
+  --ac: #58a6ff; --gn: #3fb950; --rd: #f85149;
+  --pu: #bc8cff; --yw: #e3b341;
+  --f: 'Segoe UI', system-ui, sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
 body {
   background: var(--bg); color: var(--tx); font-family: var(--f);
-  padding: 24px 20px; max-width: 1040px; margin: 0 auto;
-  font-size: 14px; line-height: 1.5;
+  padding: 20px; max-width: 960px; margin: 0 auto;
 }
-a { color: var(--ac); text-decoration: none; }
-a:hover { text-decoration: underline; }
-code {
-  font-family: var(--mono); font-size: .85em;
-  background: rgba(110,118,129,.1); border: 1px solid var(--br);
-  border-radius: var(--r3); padding: 1px 5px;
-}
+a { color: var(--ac); }
 h2 {
-  font-size: .75rem; text-transform: uppercase;
-  letter-spacing: .09em; color: var(--mu); margin-bottom: 14px;
-  display: flex; align-items: center; gap: 6px;
-}
-h2::after {
-  content: ''; flex: 1; height: 1px; background: var(--br2);
+  font-size: .82rem; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--mu); margin-bottom: 12px;
 }
 
 /* ── Header ── */
 header {
-  display: flex; align-items: flex-start; gap: 16px;
-  border-bottom: 1px solid var(--br); padding-bottom: 20px; margin-bottom: 28px;
+  display: flex; align-items: flex-start; gap: 14px;
+  border-bottom: 1px solid var(--br); padding-bottom: 18px; margin-bottom: 22px;
 }
-.logo {
-  font-size: 2.4rem; line-height: 1;
-  background: linear-gradient(135deg, var(--ac), var(--pu));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
+.logo { font-size: 2.2rem; line-height: 1; }
+h1 { font-size: 1.4rem; margin-bottom: 6px; }
+.pill-version {
+  display: inline-block; padding: 2px 9px; border-radius: 20px;
+  font-size: .73rem; font-weight: 700; margin-right: 4px;
+  background: rgba(88,166,255,.15); border: 1px solid var(--ac); color: var(--ac);
 }
-h1 { font-size: 1.45rem; font-weight: 700; letter-spacing: -.01em; }
-.header-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
-.pill {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 2px 10px; border-radius: 20px;
-  font-size: .72rem; font-weight: 600;
+.pill-provider {
+  display: inline-block; padding: 2px 9px; border-radius: 20px;
+  font-size: .73rem; font-weight: 700; margin-right: 4px;
+  background: rgba(188,140,255,.15); border: 1px solid var(--pu); color: var(--pu);
 }
-.pill-version { background: rgba(88,166,255,.12); border: 1px solid rgba(88,166,255,.4); color: var(--ac); }
-.pill-provider { background: rgba(188,140,255,.12); border: 1px solid rgba(188,140,255,.4); color: var(--pu); }
-.pill-green   { background: rgba(63,185,80,.12);  border: 1px solid rgba(63,185,80,.4);  color: var(--gn); }
-.pill-yellow  { background: rgba(227,179,65,.12);  border: 1px solid rgba(227,179,65,.4);  color: var(--yw); }
-.header-time {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
-  margin-top: 10px; font-size: .78rem; color: var(--mu);
+.pill-provider-groq {
+  display: inline-block; padding: 2px 9px; border-radius: 20px;
+  font-size: .73rem; font-weight: 700; margin-right: 4px;
+  background: rgba(249,115,22,.15); border: 1px solid #f97316; color: #f97316;
 }
-.header-time .sep { color: var(--br); }
+.pill-provider-gemini {
+  display: inline-block; padding: 2px 9px; border-radius: 20px;
+  font-size: .73rem; font-weight: 700; margin-right: 4px;
+  background: rgba(66,133,244,.15); border: 1px solid #4285f4; color: #4285f4;
+}
+.pill-provider-openrouter {
+  display: inline-block; padding: 2px 9px; border-radius: 20px;
+  font-size: .73rem; font-weight: 700; margin-right: 4px;
+  background: rgba(16,185,129,.15); border: 1px solid #10b981; color: #10b981;
+}
+.age-pill {
+  display: inline-block; padding: 1px 7px; border-radius: 10px;
+  font-size: .72rem; font-weight: 600; margin-left: 6px;
+}
 
-/* ── KPI grid ── */
+/* ── Feature badges ── */
+.badge {
+  display: inline-block; padding: 2px 8px; border-radius: 20px;
+  font-size: .76rem; margin: 2px;
+}
+.badge-green { background: rgba(63,185,80,.15); border: 1px solid var(--gn); color: var(--gn); }
+.badge-red   { background: rgba(248,81,73,.1);  border: 1px solid var(--rd); color: var(--rd); }
+
+/* ── KPI stat cards ── */
 .stat-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px; margin-bottom: 28px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px; margin-bottom: 26px;
 }
 .stat-card {
   background: var(--sf); border: 1px solid var(--br);
-  border-radius: var(--r9); padding: 18px 16px;
-  position: relative; overflow: hidden;
-  transition: border-color .15s, box-shadow .15s;
+  border-radius: 9px; padding: 16px;
 }
-.stat-card:hover { border-color: var(--br2); box-shadow: 0 0 0 1px var(--ac2); }
-.stat-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+.stat-value {
+  font-size: 1.8rem; font-weight: 700; color: var(--gn);
 }
-.stat-card.earn::before  { background: linear-gradient(90deg, var(--gn), var(--ac)); }
-.stat-card.week::before  { background: linear-gradient(90deg, var(--yw), var(--or)); }
-.stat-card.cycle::before { background: linear-gradient(90deg, var(--ac), var(--pu)); }
-.stat-card.mods::before  { background: linear-gradient(90deg, var(--pu), var(--rd)); }
-.stat-value { font-size: 1.9rem; font-weight: 800; letter-spacing: -.02em; color: var(--gn); }
-.stat-value.neutral { color: var(--tx); }
-.stat-value.accent  { color: var(--ac); }
-.stat-value.purple  { color: var(--pu); }
-.stat-label { color: var(--mu); font-size: .76rem; margin-top: 3px; }
-.stat-sub   { font-size: .73rem; color: var(--mu2); margin-top: 5px; }
+.stat-value.sparkline {
+  font-size: 1.2rem; font-family: monospace;
+  letter-spacing: 2px; cursor: default;
+}
+.stat-value.stat-neutral { color: var(--tx); }
+.stat-label { color: var(--mu); font-size: .78rem; margin-top: 2px; }
+.stat-sub   { font-size: .75rem; color: var(--mu); margin-top: 4px; }
 
-/* ── Section / panel ── */
-.section { margin-bottom: 28px; }
+/* ── Section / panel wrappers ── */
+.section { margin-bottom: 26px; }
 .panel {
   background: var(--sf); border: 1px solid var(--br);
-  border-radius: var(--r9); padding: 18px; box-shadow: var(--shadow);
+  border-radius: 9px; padding: 16px;
 }
 
-/* ── Earnings breakdown ── */
-.breakdown { margin-top: 6px; }
+/* ── Earnings projection ── */
+.proj {
+  margin-top: 12px; padding: 12px;
+  background: rgba(63,185,80,.06); border: 1px solid rgba(63,185,80,.2);
+  border-radius: 7px;
+}
+.proj-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: .85rem; margin-bottom: 6px;
+}
+.prog-bar {
+  height: 6px; background: var(--br);
+  border-radius: 3px; overflow: hidden; margin-top: 2px;
+}
+.prog-fill { height: 100%; border-radius: 3px; }
+
+/* ── Earnings breakdown bars ── */
+.breakdown { margin-top: 10px; }
 .breakdown-row {
   display: flex; align-items: center;
-  gap: 10px; margin-bottom: 8px; font-size: .84rem;
+  gap: 8px; margin-bottom: 6px; font-size: .83rem;
 }
-.breakdown-label  { width: 90px; color: var(--mu); flex-shrink: 0; }
-.breakdown-track  {
-  flex: 1; height: 7px; background: var(--br2);
+.breakdown-label  { width: 80px; color: var(--mu); flex-shrink: 0; }
+.breakdown-bar-track {
+  flex: 1; height: 8px; background: var(--br);
   border-radius: 4px; overflow: hidden;
 }
-.breakdown-fill   { height: 100%; border-radius: 4px; background: var(--gn); }
-.breakdown-amount { width: 72px; text-align: right; color: var(--gn); font-variant-numeric: tabular-nums; }
+.breakdown-bar    { height: 100%; background: var(--gn); border-radius: 4px; }
+.breakdown-amount { width: 70px; text-align: right; color: var(--gn); }
 
 /* ── Growth suggestions ── */
 .suggestion-card {
-  display: flex; gap: 14px; padding: 14px;
-  border: 1px solid var(--br); border-radius: var(--r6);
-  margin-bottom: 10px; transition: border-color .15s;
+  display: flex; gap: 12px; padding: 12px;
+  border: 1px solid var(--br); border-radius: 7px; margin-bottom: 8px;
 }
-.suggestion-card:hover { border-color: var(--ac2); }
-.suggestion-rank { font-size: 1.5rem; flex-shrink: 0; line-height: 1; margin-top: 1px; }
-.suggestion-title { font-size: .92rem; font-weight: 600; }
-.suggestion-desc  { color: var(--mu); font-size: .84rem; margin-top: 4px; }
+.suggestion-rank { font-size: 1.4rem; flex-shrink: 0; line-height: 1; }
+.suggestion-card p { color: var(--mu); font-size: .86rem; margin-top: 3px; }
 .secret-needed {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(88,166,255,.08); border: 1px solid rgba(88,166,255,.25);
-  border-radius: var(--r3); padding: 4px 10px; margin-top: 8px;
-  font-size: .79rem; color: var(--ac);
+  background: rgba(88,166,255,.1); border: 1px solid rgba(88,166,255,.3);
+  border-radius: 4px; padding: 3px 8px; margin-top: 6px;
+  font-size: .8rem; display: inline-block;
 }
-.est-earnings { color: var(--gn); font-size: .79rem; margin-top: 5px; font-weight: 600; }
-.how-to {
-  margin-top: 10px; padding: 10px 12px;
-  background: rgba(22,27,34,.6); border: 1px solid var(--br2);
-  border-radius: var(--r6);
+.est-earnings { color: var(--gn); font-size: .8rem; margin-top: 4px; }
+.how-to-steps {
+  padding-left: 18px; margin-top: 8px;
+  color: var(--mu); font-size: .82rem;
 }
-.how-to-title { font-size: .74rem; text-transform: uppercase; letter-spacing: .07em; color: var(--mu2); margin-bottom: 6px; }
-.how-to ol { padding-left: 20px; }
-.how-to li  { font-size: .82rem; color: var(--mu); margin-bottom: 4px; line-height: 1.45; }
-.how-to li code { font-size: .8em; }
-.how-to .note {
-  margin-top: 8px; padding: 6px 10px;
-  background: rgba(227,179,65,.06); border-left: 2px solid var(--yw);
-  border-radius: 0 var(--r3) var(--r3) 0;
-  font-size: .79rem; color: var(--mu);
-}
+.how-to-steps li { margin-bottom: 3px; }
 .free-badge {
-  display: inline-flex; align-items: center;
-  padding: 1px 8px; border-radius: 20px;
-  font-size: .7rem; font-weight: 700; color: var(--gn);
-  background: rgba(63,185,80,.1); border: 1px solid rgba(63,185,80,.3);
-  margin-left: 7px; vertical-align: middle;
+  display: inline-block; padding: 1px 7px; border-radius: 10px;
+  font-size: .72rem; font-weight: 700; color: var(--gn);
+  background: rgba(63,185,80,.12); border: 1px solid rgba(63,185,80,.35);
+  margin-left: 6px;
 }
 
 /* ── Evolution panel ── */
-.evo-list { padding-left: 18px; color: var(--mu); font-size: .85rem; }
-.evo-list li { margin-bottom: 5px; line-height: 1.45; }
-.evo-status-ok {
-  display: inline-flex; align-items: center;
-  padding: 1px 9px; border-radius: 20px; font-size: .72rem; font-weight: 700;
-  color: var(--gn); background: rgba(63,185,80,.12); border: 1px solid rgba(63,185,80,.35);
-  margin-left: 8px; vertical-align: middle;
+.evo-list { padding-left: 16px; color: var(--mu); font-size: .86rem; }
+.evo-list li { margin-bottom: 4px; }
+.evo-error-box {
+  margin-top: 8px; padding: 6px 10px;
+  background: rgba(248,81,73,.08); border: 1px solid rgba(248,81,73,.25);
+  border-radius: 5px; font-size: .8rem; color: var(--rd);
 }
 
 /* ── Inactive modules ── */
-.modules-grid { display: flex; flex-wrap: wrap; gap: 6px; }
 .inactive-tag {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 5px 11px; border: 1px solid var(--br);
-  border-radius: var(--r6); font-size: .79rem; color: var(--mu);
-  background: var(--sf2);
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border: 1px solid var(--br);
+  border-radius: 6px; margin: 3px; font-size: .8rem;
 }
 .inactive-dot {
   width: 6px; height: 6px; border-radius: 50%;
@@ -182,87 +172,136 @@ h1 { font-size: 1.45rem; font-weight: 700; letter-spacing: -.01em; }
 }
 
 /* ── Action table ── */
-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
-thead th { color: var(--mu2); font-weight: 500; font-size: .77rem; text-transform: uppercase; letter-spacing: .05em; }
-th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--br2); }
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: rgba(255,255,255,.02); }
+table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--br); }
+th { color: var(--mu); font-weight: 500; }
 
-/* ── Error boxes ── */
+/* ── Top-level error box ── */
 .error-box {
-  background: rgba(248,81,73,.06); border: 1px solid rgba(248,81,73,.25);
-  border-radius: var(--r9); padding: 14px; margin-top: 14px;
+  background: rgba(248,81,73,.08); border: 1px solid rgba(248,81,73,.3);
+  border-radius: 7px; padding: 12px; margin-top: 14px;
 }
-.error-box h3 { color: var(--rd); font-size: .88rem; }
-.error-box li { color: var(--mu); font-size: .82rem; margin-top: 4px; padding-left: 4px; }
+.error-box h3 { color: var(--rd); }
+.error-box li { color: var(--mu); font-size: .83rem; margin-top: 3px; }
 
 /* ── Utilities ── */
-.muted  { color: var(--mu); }
-.green  { color: var(--gn); }
-.red    { color: var(--rd); }
-.accent { color: var(--ac); }
+.muted { color: var(--mu); }
+.err   { color: var(--rd); font-size: .83rem; }
 
 /* ── Two-column layout ── */
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ── Owner Orders panel ── */
+.orders-panel { position: relative; }
+.orders-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
+}
+@media (max-width: 600px) { .orders-grid { grid-template-columns: 1fr; } }
+.order-btn {
+  background: var(--sf); border: 1px solid var(--br); color: var(--tx);
+  border-radius: 6px; padding: 8px 12px; font-size: .82rem;
+  cursor: pointer; text-align: left; transition: border-color .15s, background .15s;
+  font-family: var(--f);
+}
+.order-btn:hover { border-color: var(--ac); background: rgba(88,166,255,.06); }
+.order-btn .ob-label { font-weight: 600; color: var(--ac); display: block; margin-bottom: 2px; }
+.order-btn .ob-desc  { color: var(--mu); font-size: .77rem; }
+.order-custom-row {
+  display: flex; gap: 8px; align-items: flex-start; margin-bottom: 12px;
+}
+.order-input {
+  flex: 1; background: var(--bg); border: 1px solid var(--br); color: var(--tx);
+  border-radius: 6px; padding: 8px 10px; font-size: .84rem; font-family: var(--f);
+  resize: vertical; min-height: 38px;
+}
+.order-input:focus { outline: none; border-color: var(--ac); }
+.order-textarea {
+  width: 100%; background: var(--bg); border: 1px solid var(--br); color: var(--tx);
+  border-radius: 6px; padding: 10px 12px; font-size: .84rem;
+  font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+  resize: vertical; min-height: 80px; margin-bottom: 10px;
+}
+.order-textarea:focus { outline: none; border-color: var(--ac); }
+.order-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 14px; border-radius: 6px; font-size: .82rem; font-weight: 600;
+  cursor: pointer; border: 1px solid transparent; font-family: var(--f);
+  transition: opacity .15s;
+}
+.btn:hover { opacity: .85; }
+.btn-primary { background: var(--ac); color: #0d1117; border-color: var(--ac); }
+.btn-secondary { background: transparent; border-color: var(--br); color: var(--tx); }
+.btn-danger { background: rgba(248,81,73,.15); border-color: var(--rd); color: var(--rd); }
+.order-hint {
+  font-size: .77rem; color: var(--mu); margin-top: 10px; line-height: 1.5;
+  padding: 8px 10px; background: rgba(88,166,255,.05);
+  border: 1px solid rgba(88,166,255,.15); border-radius: 5px;
+}
+.order-hint code {
+  background: rgba(110,118,129,.15); padding: 1px 5px; border-radius: 3px;
+  font-size: .78em; font-family: monospace;
+}
+.copy-toast {
+  display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--gn); color: #0d1117; padding: 8px 18px; border-radius: 20px;
+  font-size: .82rem; font-weight: 700; z-index: 999;
+}
+.copy-toast.show { display: block; animation: fadeup .3s ease; }
+@keyframes fadeup {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
 
 /* ── Footer ── */
 footer {
-  text-align: center; color: var(--mu2); font-size: .74rem;
-  margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--br2);
+  text-align: center; color: var(--mu); font-size: .76rem;
+  margin-top: 32px; padding-top: 14px; border-top: 1px solid var(--br);
 }
-footer a { color: var(--mu); }
-footer a:hover { color: var(--ac); }
-
-/* ── Scrollbar ── */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--br); border-radius: 3px; }
 </style>
 </head>
 <body>
 
+<!-- Header -->
 <header>
   <div class="logo">🤖</div>
   <div>
     <h1>E-Evolve
-      <span class="pill pill-version">v1.3.0</span>
-      <span class="pill pill-provider">groq</span>
+      <span class="pill-version">v1.3.0</span>
+      <span class="pill-provider-groq">groq</span>
     </h1>
-    <div class="header-meta">
-      <span class="pill pill-green">llm_groq</span>
-      <span class="pill pill-green">articles_devto</span>
+    <div style="margin-top:5px">
+      <span class="badge badge-green">llm_groq</span>
+      <span class="badge badge-green">articles_devto</span>
     </div>
-    <div class="header-time">
-      <span>Last cycle: 2026-05-01 19:41 UTC</span>
-      <span class="sep">·</span>
-      <span class="pill pill-green" style="padding:1px 8px">0m ago</span>
-      <span class="sep">·</span>
-      <span>440 total cycles</span>
-      <span class="sep">·</span>
-      <span>25s cycle time</span>
+    <div class="muted" style="font-size:.8rem;margin-top:5px">
+      Last cycle: 2026-05-01 19:41 UTC
+      <span class="age-pill" style="background:rgba(0,0,0,.3);color:var(--gn);border:1px solid var(--gn)">recent</span>
+      &nbsp;·&nbsp; Total cycles: 440
+      &nbsp;·&nbsp; Cycle time: 25s
     </div>
   </div>
 </header>
 
 <!-- KPI Cards -->
 <div class="stat-grid">
-  <div class="stat-card earn">
+  <div class="stat-card">
     <div class="stat-value">$2.77</div>
     <div class="stat-label">Total earned</div>
   </div>
-  <div class="stat-card week">
+  <div class="stat-card">
     <div class="stat-value" style="color:var(--yw)">$0.20</div>
     <div class="stat-label">This week</div>
     <div class="stat-sub">last cycle: $0.0000</div>
   </div>
-  <div class="stat-card cycle">
-    <div class="stat-value neutral">440</div>
+  <div class="stat-card">
+    <div class="stat-value stat-neutral">440</div>
     <div class="stat-label">Cycles run</div>
     <div class="stat-sub">since deploy</div>
   </div>
-  <div class="stat-card mods">
-    <div class="stat-value purple">2</div>
+  <div class="stat-card">
+    <div class="stat-value stat-neutral" style="color:var(--pu)">2</div>
     <div class="stat-label">Active modules</div>
     <div class="stat-sub">5 inactive</div>
   </div>
@@ -275,12 +314,12 @@ footer a:hover { color: var(--ac); }
     <div class="breakdown">
       <div class="breakdown-row">
         <span class="breakdown-label">dev.to</span>
-        <div class="breakdown-track"><div class="breakdown-fill" style="width:95%"></div></div>
+        <div class="breakdown-bar-track"><div class="breakdown-bar" style="width:95%"></div></div>
         <span class="breakdown-amount">$2.6500</span>
       </div>
       <div class="breakdown-row">
         <span class="breakdown-label">binance</span>
-        <div class="breakdown-track"><div class="breakdown-fill" style="width:4%;background:var(--ac)"></div></div>
+        <div class="breakdown-bar-track"><div class="breakdown-bar" style="width:5%;background:var(--ac)"></div></div>
         <span class="breakdown-amount" style="color:var(--ac)">$0.1200</span>
       </div>
     </div>
@@ -289,109 +328,135 @@ footer a:hover { color: var(--ac); }
 
 <!-- Growth Suggestions -->
 <div class="section">
-  <h2>🧠 Growth Suggestions</h2>
+  <h2>🧠 Smart Growth Suggestions</h2>
   <div class="panel">
 
-    <!-- 1: Medium -->
     <div class="suggestion-card">
       <span class="suggestion-rank">🥇</span>
-      <div style="min-width:0">
-        <div class="suggestion-title">Add Medium for dual publishing
-          <span class="free-badge">Free</span>
-        </div>
-        <div class="suggestion-desc">Publish same articles to Medium + dev.to — doubles reach, zero extra LLM cost.</div>
-        <div class="secret-needed">Secret needed: <code>MEDIUM_INTEGRATION_TOKEN</code></div>
-        <div class="how-to">
-          <div class="how-to-title">How to set up</div>
-          <ol>
-            <li>Sign into <strong>medium.com</strong> → Settings → Security and apps → Integration tokens</li>
-            <li>Click <strong>Generate integration token</strong>, copy it</li>
-            <li>In your GitHub repo → Settings → Secrets and variables → Actions → <strong>New repository secret</strong></li>
-            <li>Name: <code>MEDIUM_INTEGRATION_TOKEN</code> · Value: paste your token</li>
-          </ol>
-        </div>
+      <div>
+        <strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong>
+        <span class="free-badge">Free to start</span>
+        <p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p>
+        <div class="secret-needed">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div>
+        <ol class="how-to-steps">
+          <li>Go to Medium Partner Program and create an account</li>
+          <li>Generate an integration token in the Medium settings</li>
+          <li>Add the token as a GitHub secret named <code>MEDIUM_INTEGRATION_TOKEN</code></li>
+        </ol>
       </div>
     </div>
 
-    <!-- 2: OpenRouter -->
     <div class="suggestion-card">
       <span class="suggestion-rank">🥈</span>
-      <div style="min-width:0">
-        <div class="suggestion-title">Add OpenRouter for free-tier LLM fallback
-          <span class="free-badge">Free</span>
-        </div>
-        <div class="suggestion-desc">OpenRouter exposes Gemini 2.0 Flash, Llama 3.3, Mistral 7B — all free. Reduces Groq quota pressure.</div>
-        <div class="secret-needed">Secret needed: <code>OPENROUTER_API_KEY</code></div>
-        <div class="how-to">
-          <div class="how-to-title">How to set up</div>
-          <ol>
-            <li>Go to <strong>openrouter.ai</strong> → sign up (free, no credit card needed for free-tier models)</li>
-            <li>Dashboard → API Keys → <strong>Create Key</strong>, copy it</li>
-            <li>GitHub repo → Settings → Secrets → Actions → <strong>New repository secret</strong></li>
-            <li>Name: <code>OPENROUTER_API_KEY</code> · Value: paste your key</li>
-          </ol>
-          <div class="note">Free models: <code>google/gemini-2.0-flash-exp:free</code>, <code>meta-llama/llama-3.3-70b-instruct:free</code>, <code>mistralai/mistral-7b-instruct:free</code></div>
-        </div>
+      <div>
+        <strong>Upgrade to Groq Dev Tier for increased LLM usage</strong>
+        <p>Increase the daily token limit for LLM usage</p>
+        <div class="est-earnings">~$20/week estimated</div>
+        <ol class="how-to-steps">
+          <li>Go to the Groq console and navigate to the billing settings</li>
+          <li>Upgrade to the Dev Tier plan</li>
+          <li>Verify the increased token limit in the Groq console</li>
+        </ol>
       </div>
     </div>
 
-    <!-- 3: Gemini -->
     <div class="suggestion-card">
       <span class="suggestion-rank">🥉</span>
-      <div style="min-width:0">
-        <div class="suggestion-title">Add Gemini API key for direct Google AI access
-          <span class="free-badge">Free tier</span>
-        </div>
-        <div class="suggestion-desc">Gemini 2.0 Flash has a generous free tier (1 500 req/day). Adds a fast, capable LLM option before Groq.</div>
-        <div class="secret-needed">Secret needed: <code>GEMINI_API_KEY</code></div>
-        <div class="how-to">
-          <div class="how-to-title">How to set up</div>
-          <ol>
-            <li>Go to <strong>aistudio.google.com</strong> → sign in with a Google account</li>
-            <li>Click <strong>Get API key</strong> → Create API key (select a Google Cloud project or create one)</li>
-            <li>Copy the key</li>
-            <li>GitHub repo → Settings → Secrets → Actions → <strong>New repository secret</strong></li>
-            <li>Name: <code>GEMINI_API_KEY</code> · Value: paste your key</li>
-          </ol>
-          <div class="note">Free tier: 1 500 requests/day on <code>gemini-2.0-flash</code>, 15 req/min. No billing required.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4: Twitter -->
-    <div class="suggestion-card">
-      <span class="suggestion-rank">4️⃣</span>
-      <div style="min-width:0">
-        <div class="suggestion-title">Add Twitter / X API for thread posting</div>
-        <div class="suggestion-desc">Auto-post tweet threads linked to published articles to drive traffic.</div>
-        <div class="secret-needed">Secrets needed: <code>TWITTER_API_KEY</code> · <code>TWITTER_API_SECRET</code> · <code>TWITTER_ACCESS_TOKEN</code> · <code>TWITTER_ACCESS_SECRET</code></div>
-        <div class="how-to">
-          <div class="how-to-title">How to set up</div>
-          <ol>
-            <li>Go to <strong>developer.twitter.com</strong> → sign in → Create a new app (Free tier works)</li>
-            <li>Under <em>Keys and tokens</em>: generate <strong>API Key &amp; Secret</strong> and <strong>Access Token &amp; Secret</strong></li>
-            <li>Add all four values as separate GitHub secrets: <code>TWITTER_API_KEY</code>, <code>TWITTER_API_SECRET</code>, <code>TWITTER_ACCESS_TOKEN</code>, <code>TWITTER_ACCESS_SECRET</code></li>
-          </ol>
-          <div class="note">X Free tier allows 1 500 tweet writes/month. Sufficient for 1 thread per article cycle.</div>
-        </div>
+      <div>
+        <strong>Add TWITTER_API_KEY for Twitter integration</strong>
+        <span class="free-badge">Free to start</span>
+        <p>Enable Twitter posting and increase reach</p>
+        <div class="secret-needed">Add secret: <code>TWITTER_API_KEY</code></div>
+        <ol class="how-to-steps">
+          <li>Go to the Twitter Developer Dashboard and create an app</li>
+          <li>Generate an API key and secret in the Twitter settings</li>
+          <li>Add the API key and secret as GitHub secrets named <code>TWITTER_API_KEY</code> and <code>TWITTER_API_SECRET</code></li>
+        </ol>
       </div>
     </div>
 
   </div>
 </div>
 
-<!-- Two-column: Evolution + Inactive modules -->
+<!-- Owner Orders -->
+<div class="section">
+  <h2>📋 Owner Orders</h2>
+  <div class="panel orders-panel">
+    <p class="muted" style="font-size:.82rem;margin-bottom:12px">
+      Queue commands for the next evolution cycle. Click a preset or type a custom order below.
+    </p>
+    <div class="orders-grid">
+      <button class="order-btn" onclick="addOrder('force articles 3')">
+        <span class="ob-label">force articles 3</span>
+        <span class="ob-desc">Post 3 articles this cycle</span>
+      </button>
+      <button class="order-btn" onclick="addOrder('force trade aggressive')">
+        <span class="ob-label">force trade aggressive</span>
+        <span class="ob-desc">Raise trade risk to 5%</span>
+      </button>
+      <button class="order-btn" onclick="addOrder('skip evolution')">
+        <span class="ob-label">skip evolution</span>
+        <span class="ob-desc">Skip Phase 3 this cycle</span>
+      </button>
+      <button class="order-btn" onclick="addOrder('post thread')">
+        <span class="ob-label">post thread</span>
+        <span class="ob-desc">Force a Twitter thread</span>
+      </button>
+      <button class="order-btn" onclick="addOrder('reset earnings')">
+        <span class="ob-label">reset earnings</span>
+        <span class="ob-desc">Zero this_week_usd</span>
+      </button>
+      <button class="order-btn" onclick="addOrder('status report')">
+        <span class="ob-label">status report</span>
+        <span class="ob-desc">Dump full status to workflow log</span>
+      </button>
+      <button class="order-btn" onclick="addOrder('force mint 1')">
+        <span class="ob-label">force mint 1</span>
+        <span class="ob-desc">Mint 1 NFT this cycle</span>
+      </button>
+      <button class="order-btn" onclick="addOrder('force trade conservative')">
+        <span class="ob-label">force trade conservative</span>
+        <span class="ob-desc">Lower trade risk to 1%</span>
+      </button>
+    </div>
+
+    <div class="order-custom-row">
+      <input type="text" id="customOrder" class="order-input"
+             placeholder="Custom order (e.g. force articles 5)"
+             onkeydown="if(event.key==='Enter'){addCustomOrder()}" />
+      <button class="btn btn-secondary" onclick="addCustomOrder()">Add</button>
+    </div>
+
+    <textarea id="commandOutput" class="order-textarea"
+              placeholder="# no commands&#10;(click presets or add custom orders above)"></textarea>
+
+    <div class="order-actions">
+      <button class="btn btn-primary" onclick="copyCommands()">📋 Copy command.txt</button>
+      <button class="btn btn-secondary" onclick="downloadCommands()">⬇ Download</button>
+      <button class="btn btn-danger" onclick="clearCommands()">✕ Clear</button>
+    </div>
+
+    <div class="order-hint">
+      <strong>How to apply:</strong>
+      Copy the text above, then commit it to <code>command.txt</code> in your repo root.
+      The next cycle (within ~1h) will execute the commands and clear the file automatically.<br>
+      Or push via CLI: <code>echo "your command" > command.txt &amp;&amp; git add command.txt &amp;&amp; git commit -m "cmd" &amp;&amp; git push</code>
+    </div>
+  </div>
+</div>
+
+<!-- Two-column: Evolution + Inactive -->
 <div class="two-col">
   <div class="section">
     <h2>⚡ Last Evolution</h2>
     <div class="panel">
-      <p style="margin-bottom:10px;font-size:.9rem">
+      <p style="margin-bottom:9px">
         <strong>Added Medium integration and Twitter posting features</strong>
-        <span class="evo-status-ok">ok</span>
+        <span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--gn);background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);margin-left:8px">ok</span>
       </p>
       <ul class="evo-list">
         <li><code>bot/articles.py</code> — Implement Medium posting logic</li>
-        <li><code>bot/commands.py</code> — Implement command logic for minting, skipping evolution, resetting earnings</li>
+        <li><code>bot/commands.py</code> — Implement command logic for minting, skipping evolution, resetting earnings, posting threads, and status reports</li>
         <li><code>bot/twitter.py</code> — Implement Twitter posting logic</li>
       </ul>
     </div>
@@ -400,10 +465,8 @@ footer a:hover { color: var(--ac); }
   <div class="section">
     <h2>🔒 Inactive Modules</h2>
     <div class="panel">
-      <div class="modules-grid">
+      <div>
         <div class="inactive-tag"><span class="inactive-dot"></span>llm_anthropic</div>
-        <div class="inactive-tag"><span class="inactive-dot"></span>llm_gemini</div>
-        <div class="inactive-tag"><span class="inactive-dot"></span>llm_openrouter</div>
         <div class="inactive-tag"><span class="inactive-dot"></span>articles_medium</div>
         <div class="inactive-tag"><span class="inactive-dot"></span>twitter</div>
         <div class="inactive-tag"><span class="inactive-dot"></span>crypto_binance</div>
@@ -417,14 +480,70 @@ footer a:hover { color: var(--ac); }
 <div class="section">
   <h2>💰 Last Cycle Actions</h2>
   <div class="panel">
-    <p class="muted" style="font-size:.85rem">No actions yet — add a secret to activate an earning module.</p>
+    <p class="muted">No actions yet — add a secret to activate an earning module.</p>
   </div>
 </div>
 
 <footer>
   E-Evolve · hourly via GitHub Actions ·
-  <a href="status.json">status.json</a> ·
-  <a href="earnings-log.md">earnings log</a>
+  <a href="status.json">status.json</a> · <a href="earnings-log.md">earnings log</a>
 </footer>
+
+<div class="copy-toast" id="toast">Copied to clipboard!</div>
+
+<script>
+(function() {
+  var _cmds = [];
+
+  window.addOrder = function(cmd) {
+    if (!_cmds.includes(cmd)) _cmds.push(cmd);
+    _sync();
+  };
+
+  window.addCustomOrder = function() {
+    var el = document.getElementById('customOrder');
+    var val = el.value.trim();
+    if (val && !_cmds.includes(val)) { _cmds.push(val); _sync(); }
+    el.value = '';
+    el.focus();
+  };
+
+  window.clearCommands = function() {
+    _cmds = [];
+    document.getElementById('commandOutput').value = '# no commands';
+  };
+
+  window.copyCommands = function() {
+    var ta = document.getElementById('commandOutput');
+    navigator.clipboard.writeText(ta.value).then(function() {
+      var t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(function() { t.classList.remove('show'); }, 2000);
+    }).catch(function() {
+      ta.select();
+      document.execCommand('copy');
+    });
+  };
+
+  window.downloadCommands = function() {
+    var content = document.getElementById('commandOutput').value;
+    var blob = new Blob([content], { type: 'text/plain' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'command.txt';
+    a.click();
+  };
+
+  function _sync() {
+    document.getElementById('commandOutput').value =
+      _cmds.length ? _cmds.join('\n') : '# no commands';
+  }
+
+  // Allow direct editing of textarea too
+  document.getElementById('commandOutput').addEventListener('input', function() {
+    _cmds = this.value.split('\n').map(function(l){return l.trim();}).filter(Boolean);
+  });
+})();
+</script>
 </body>
 </html>

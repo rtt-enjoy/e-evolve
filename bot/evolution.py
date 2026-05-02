@@ -9,6 +9,11 @@ Hard safety rules (cannot be overridden by LLM output):
   • Python files are syntax-checked before writing
   • Max 3 file changes per cycle
   • Original files are backed up before overwriting
+
+Post-apply verification (Phase 3.5):
+  • Each changed .py file is import-checked in a subprocess
+  • On failure: LLM asked to fix (up to MAX_FIX_RETRIES attempts)
+  • If still failing: backup restored, file removed from applied list
 """
 from __future__ import annotations
 
@@ -17,6 +22,8 @@ import json
 import logging
 import re
 import shutil
+import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -27,6 +34,7 @@ log = logging.getLogger(__name__)
 ALLOWED_PREFIXES  = ("bot/", "docs/", "config/", "requirements.txt", "version.txt")
 FORBIDDEN_PREFIXES = (".github/", ".git/")
 MAX_CHANGES       = 3
+MAX_FIX_RETRIES   = 2
 # Per-provider codebase snapshot limits.
 # Groq free tier: 12k TPM total — status JSON ~1k, system prompt ~0.6k, response 6k → 4k left for codebase.
 # Anthropic: large context window, no TPM issue.
@@ -102,6 +110,7 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
         return _error_result(str(exc), status.get("version", "1.0.0"))
 
     applied  = _apply_changes(plan.get("changes", []))
+    applied  = _verify_and_fix(applied, llm, status)
     version  = _resolve_version(plan.get("version"), status.get("version", "1.0.0"))
 
     if applied:
@@ -184,6 +193,164 @@ def _apply_changes(changes: list) -> list[dict]:
         applied.append({"file": filepath, "reason": reason})
 
     return applied
+
+
+# ── Verification & LLM fix ───────────────────────────────────────────────────
+
+_FIX_SYSTEM = """\
+You are a Python code repair agent for E-Evolve, a self-improving GitHub Actions bot.
+A file you previously generated has an import/runtime error. Fix it.
+
+Respond with ONLY a single JSON object — no markdown, no prose.
+
+Schema:
+{
+  "content": "COMPLETE fixed file content — not a diff or snippet",
+  "reason": "one-sentence description of what was wrong"
+}
+
+Rules:
+1. Output the ENTIRE file, not just the changed lines
+2. The fix must be syntactically valid Python
+3. Do not remove existing functionality — only fix the error
+4. Respect the config schema shown in the prompt"""
+
+
+def _import_check(filepath: str) -> str | None:
+    """
+    Run `python -c "import <module>"` for bot/ .py files,
+    or `python -m py_compile <file>` for others.
+    Returns error string on failure, None on success.
+    """
+    path = Path(filepath)
+    if not path.exists() or not filepath.endswith(".py"):
+        return None
+
+    if filepath.startswith("bot/") or filepath.startswith("bot\\"):
+        # Convert path to module name: bot/earning/articles.py -> bot.earning.articles
+        module = filepath.replace("\\", "/")
+        if module.endswith(".py"):
+            module = module[:-3]
+        module = module.replace("/", ".")
+
+        result = subprocess.run(
+            [sys.executable, "-c", f"import {module}"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    else:
+        result = subprocess.run(
+            [sys.executable, "-m", "py_compile", filepath],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+
+    if result.returncode != 0:
+        err = (result.stderr or result.stdout or "unknown error").strip()
+        return err[:800]
+    return None
+
+
+def _load_strategy_config() -> str:
+    try:
+        return Path("config/strategy.json").read_text(encoding="utf-8")
+    except Exception:
+        return "{}"
+
+
+def _verify_and_fix(applied: list[dict], llm: Any, status: dict) -> list[dict]:
+    """
+    For each applied .py change, import-check it.
+    On error: ask LLM to fix (up to MAX_FIX_RETRIES).
+    On repeated failure: restore backup and drop from applied list.
+    Returns the final list of successfully verified changes.
+    """
+    if not applied:
+        return applied
+
+    strategy_cfg = _load_strategy_config()
+    verified: list[dict] = []
+
+    for change in applied:
+        filepath = change["file"]
+        if not filepath.endswith(".py"):
+            verified.append(change)
+            continue
+
+        error = _import_check(filepath)
+        if error is None:
+            log.info("Verification passed: %s", filepath)
+            verified.append(change)
+            continue
+
+        log.warning("Verification FAILED for %s: %s", filepath, error[:120])
+
+        fixed = False
+        for attempt in range(1, MAX_FIX_RETRIES + 1):
+            log.info("Fix attempt %d/%d for %s", attempt, MAX_FIX_RETRIES, filepath)
+            try:
+                current_content = Path(filepath).read_text(encoding="utf-8", errors="replace")
+            except Exception:
+                current_content = "(unreadable)"
+
+            fix_prompt = (
+                f"File: {filepath}\n\n"
+                f"Error:\n{error}\n\n"
+                f"Current (broken) content:\n{current_content}\n\n"
+                f"Strategy config (for context):\n{strategy_cfg}\n\n"
+                f"Bot status summary: version={status.get('version')}, "
+                f"active_features={status.get('active_features', [])}\n\n"
+                "Fix the file. JSON only."
+            )
+            try:
+                fix_plan = llm.complete_json(fix_prompt, system=_FIX_SYSTEM, max_tokens=4000)
+                fixed_content = str(fix_plan.get("content", "")).strip()
+                fix_reason    = str(fix_plan.get("reason", ""))
+            except Exception as exc:
+                log.warning("Fix LLM call failed attempt %d: %s", attempt, exc)
+                continue
+
+            if not fixed_content or not _is_valid_python(fixed_content):
+                log.warning("Fix attempt %d produced invalid Python for %s", attempt, filepath)
+                continue
+
+            _backup(filepath)
+            Path(filepath).write_text(fixed_content, encoding="utf-8")
+            log.info("Applied fix attempt %d to %s: %s", attempt, filepath, fix_reason[:60])
+
+            error = _import_check(filepath)
+            if error is None:
+                log.info("Verification passed after fix attempt %d: %s", attempt, filepath)
+                change = {**change, "reason": f"{change.get('reason', '')} [fix: {fix_reason}]"}
+                fixed = True
+                break
+            log.warning("Still failing after fix attempt %d: %s — %s", attempt, filepath, error[:80])
+
+        if fixed:
+            verified.append(change)
+        else:
+            log.error(
+                "Could not fix %s after %d attempts — restoring backup",
+                filepath, MAX_FIX_RETRIES,
+            )
+            _restore_backup(filepath)
+
+    return verified
+
+
+def _restore_backup(filepath: str) -> None:
+    """Restore the most recent backup for filepath."""
+    bdir = Path(".evolution_backups")
+    src  = Path(filepath)
+    pattern = f"{src.name}.*.bak"
+    baks = sorted(bdir.glob(pattern), key=lambda p: p.stat().st_mtime, reverse=True)
+    if not baks:
+        log.warning("No backup found for %s — leaving broken file in place", filepath)
+        return
+    shutil.copy2(baks[0], src)
+    log.info("Restored %s from %s", filepath, baks[0].name)
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────

@@ -18,8 +18,10 @@ VERSION_FILE = Path("version.txt")
 
 # feature name → ALL secrets that must be non-empty to activate it
 FEATURE_MAP: dict[str, list[str]] = {
-    "llm_groq":        ["GROQ_API_KEY"],
     "llm_anthropic":   ["ANTHROPIC_API_KEY"],
+    "llm_gemini":      ["GEMINI_API_KEY"],
+    "llm_openrouter":  ["OPENROUTER_API_KEY"],
+    "llm_groq":        ["GROQ_API_KEY"],
     "articles_devto":  ["DEV_TO_API_KEY"],
     "articles_medium": ["MEDIUM_INTEGRATION_TOKEN"],
     "twitter":         ["TWITTER_API_KEY", "TWITTER_API_SECRET",

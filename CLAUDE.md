@@ -70,8 +70,10 @@ Features activate automatically when their secrets are present in env.
 
 | Feature | Required Secrets |
 |---------|-----------------|
-| `llm_groq` | `GROQ_API_KEY` |
 | `llm_anthropic` | `ANTHROPIC_API_KEY` |
+| `llm_gemini` | `GEMINI_API_KEY` |
+| `llm_openrouter` | `OPENROUTER_API_KEY` |
+| `llm_groq` | `GROQ_API_KEY` |
 | `articles_devto` | `DEV_TO_API_KEY` |
 | `articles_medium` | `MEDIUM_INTEGRATION_TOKEN` |
 | `twitter` | `TWITTER_API_KEY`, `TWITTER_API_SECRET`, `TWITTER_ACCESS_TOKEN`, `TWITTER_ACCESS_SECRET` |

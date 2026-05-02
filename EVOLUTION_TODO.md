@@ -19,8 +19,14 @@ _(none open)_
 - **Add `MEDIUM_INTEGRATION_TOKEN`** — dual-publish same articles to Medium at zero extra LLM cost.
   Estimated: ~$0.02/article extra.
 
-- **Add `GROQ_API_KEY`** — free fallback LLM, eliminates single point of failure.
-  Free tier at console.groq.com.
+- **Add `GEMINI_API_KEY`** — free-tier Gemini 2.0 Flash, second-priority LLM fallback.
+  Get at aistudio.google.com/app/apikey.
+
+- **Add `OPENROUTER_API_KEY`** — third-priority fallback, free-tier models (Gemini Flash, Llama 3.3 70B).
+  Get at openrouter.ai/keys.
+
+- **Add `GROQ_API_KEY`** — fourth-priority fallback, free tier.
+  Get at console.groq.com.
 
 ---
 

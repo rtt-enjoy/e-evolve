@@ -25,6 +25,18 @@ _ANTHROPIC_MODELS = [
     "claude-3-5-sonnet-20241022",
     "claude-3-haiku-20240307",
 ]
+_GEMINI_MODELS = [
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
+    "gemini-1.5-pro",
+]
+# OpenRouter: strong free-tier models first, paid fallback
+_OPENROUTER_MODELS = [
+    "google/gemini-2.0-flash-exp:free",
+    "meta-llama/llama-3.3-70b-instruct:free",
+    "mistralai/mistral-7b-instruct:free",
+    "openai/gpt-4o-mini",
+]
 
 
 @dataclass
@@ -39,11 +51,13 @@ class LLMClient:
     """Unified LLM client. Raises RuntimeError at init if no key is available."""
 
     def __init__(self) -> None:
-        self._groq_key      = os.getenv("GROQ_API_KEY", "").strip()
-        self._anthropic_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
-        self.provider       = self._pick_provider()
-        self.model          = self._pick_model()
-        self.info           = {"provider": self.provider, "model": self.model}
+        self._anthropic_key  = os.getenv("ANTHROPIC_API_KEY",  "").strip()
+        self._gemini_key     = os.getenv("GEMINI_API_KEY",     "").strip()
+        self._openrouter_key = os.getenv("OPENROUTER_API_KEY", "").strip()
+        self._groq_key       = os.getenv("GROQ_API_KEY",       "").strip()
+        self.provider        = self._pick_provider()
+        self.model           = self._pick_model()
+        self.info            = {"provider": self.provider, "model": self.model}
         log.info("LLM ready -- provider=%s model=%s", self.provider, self.model)
 
     # -- Public API ------------------------------------------------------------
@@ -68,6 +82,10 @@ class LLMClient:
                 try:
                     if provider == "anthropic":
                         return self._call_anthropic(p_prompt, system, max_tokens, temperature, p_model)
+                    if provider == "gemini":
+                        return self._call_gemini(p_prompt, system, max_tokens, temperature, p_model)
+                    if provider == "openrouter":
+                        return self._call_openrouter(p_prompt, system, max_tokens, temperature, p_model)
                     if provider == "claude-cli":
                         return self._call_claude_cli(p_prompt, system, max_tokens)
                     return self._call_groq(p_prompt, system, max_tokens, temperature, p_model)
@@ -76,12 +94,12 @@ class LLMClient:
                     exc_str  = str(exc)
 
                     # Auth errors: no point retrying same provider
-                    if any(code in exc_str for code in ("401", "authentication_error", "invalid x-api-key", "invalid_api_key")):
+                    if any(code in exc_str for code in ("401", "403", "authentication_error", "invalid x-api-key", "invalid_api_key", "API_KEY_INVALID")):
                         log.warning("LLM auth error on provider=%s -- skipping to fallback: %s", provider, exc)
                         exhausted = True
                         break
 
-                    # 413: truncate and retry
+                    # 413: truncate and retry (Groq only)
                     if "413" in exc_str and provider == "groq" and attempt < 3:
                         cutoff   = int(len(p_prompt) * 0.6)
                         nl       = p_prompt.rfind("\n", 0, cutoff)
@@ -91,11 +109,12 @@ class LLMClient:
 
                     # Model deprecated: advance to next in chain
                     if "model_not_found" in exc_str or "model not found" in exc_str.lower():
-                        if provider == "groq" and p_model in _GROQ_MODELS:
-                            idx = _GROQ_MODELS.index(p_model)
-                            if idx < len(_GROQ_MODELS) - 1:
-                                p_model = _GROQ_MODELS[idx + 1]
-                                log.warning("Groq model deprecated -- advancing to %s", p_model)
+                        model_list = _model_list_for(provider)
+                        if p_model in model_list:
+                            idx = model_list.index(p_model)
+                            if idx < len(model_list) - 1:
+                                p_model = model_list[idx + 1]
+                                log.warning("%s model deprecated -- advancing to %s", provider, p_model)
                                 continue
 
                     log.warning("LLM attempt %d/3 provider=%s failed: %s", attempt, provider, exc)
@@ -203,6 +222,72 @@ class LLMClient:
             latency_s = round(time.monotonic() - t0, 2),
         )
 
+    # -- Gemini ----------------------------------------------------------------
+
+    def _call_gemini(
+        self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
+    ) -> LLMResponse:
+        import google.generativeai as genai  # lazy import
+        genai.configure(api_key=self._gemini_key)
+        gen_config = genai.GenerationConfig(
+            max_output_tokens=max_tokens,
+            temperature=temperature,
+        )
+        # system_instruction supported on gemini-1.5+ and gemini-2.0+
+        kwargs: dict[str, Any] = {"generation_config": gen_config}
+        if system:
+            kwargs["system_instruction"] = system
+        t0     = time.monotonic()
+        client = genai.GenerativeModel(model, **kwargs)
+        rsp    = client.generate_content(prompt)
+        return LLMResponse(
+            text      = rsp.text or "",
+            provider  = "gemini",
+            model     = model,
+            latency_s = round(time.monotonic() - t0, 2),
+        )
+
+    # -- OpenRouter ------------------------------------------------------------
+
+    def _call_openrouter(
+        self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
+    ) -> LLMResponse:
+        import requests  # already in requirements
+        messages: list[dict] = []
+        if system:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
+        t0  = time.monotonic()
+        rsp = requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization":  f"Bearer {self._openrouter_key}",
+                "HTTP-Referer":   "https://github.com/rtt-enjoy/e-evolve",
+                "X-Title":        "e-evolve",
+                "Content-Type":   "application/json",
+            },
+            json={
+                "model":       model,
+                "messages":    messages,
+                "max_tokens":  max_tokens,
+                "temperature": temperature,
+            },
+            timeout=90,
+        )
+        if rsp.status_code in (401, 403):
+            raise RuntimeError(f"401 authentication_error from openrouter: {rsp.text[:200]}")
+        rsp.raise_for_status()
+        data = rsp.json()
+        if "error" in data:
+            raise RuntimeError(f"OpenRouter error: {data['error']}")
+        text = data["choices"][0]["message"]["content"] or ""
+        return LLMResponse(
+            text      = text,
+            provider  = "openrouter",
+            model     = model,
+            latency_s = round(time.monotonic() - t0, 2),
+        )
+
     # -- Claude CLI (Pro subscription, no API key) -----------------------------
 
     def _call_claude_cli(
@@ -218,7 +303,6 @@ class LLMClient:
         )
         if result.returncode != 0:
             stderr = result.stderr[:400]
-            # Surface auth errors explicitly so fast-fail triggers
             if "401" in stderr or "authentication" in stderr.lower() or "api key" in stderr.lower():
                 raise RuntimeError(f"401 authentication_error from claude CLI: {stderr}")
             raise RuntimeError(f"claude CLI exited {result.returncode}: {stderr}")
@@ -239,41 +323,57 @@ class LLMClient:
             return "claude-cli"
         if self._anthropic_key:
             return "anthropic"
+        if self._gemini_key:
+            return "gemini"
+        if self._openrouter_key:
+            return "openrouter"
         if self._groq_key:
             return "groq"
         raise RuntimeError(
             "No LLM API key found.\n"
-            "Add GROQ_API_KEY (free: console.groq.com) or ANTHROPIC_API_KEY\n"
+            "Add one of: ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY\n"
             "to GitHub -> Settings -> Secrets and variables -> Actions.\n"
             "For local dev with Claude Pro: set CLAUDE_CLI_MODE=1 in .env"
         )
 
     def _pick_model(self) -> str:
-        if self.provider == "anthropic":
-            return _ANTHROPIC_MODELS[0]
-        if self.provider == "claude-cli":
-            return "claude-sonnet-4-6"
-        return _GROQ_MODELS[0]
+        return self._model_for_provider(self.provider)
 
     def _model_for_provider(self, provider: str) -> str:
         if provider == "anthropic":
             return _ANTHROPIC_MODELS[0]
+        if provider == "gemini":
+            return _GEMINI_MODELS[0]
+        if provider == "openrouter":
+            return _OPENROUTER_MODELS[0]
         if provider == "claude-cli":
             return "claude-sonnet-4-6"
         return _GROQ_MODELS[0]
 
     def _provider_chain(self) -> list[str]:
-        """Ordered list of providers to attempt, starting with the primary."""
-        chain = [self.provider]
-        if self.provider == "claude-cli":
-            if self._anthropic_key:
-                chain.append("anthropic")
-            if self._groq_key:
-                chain.append("groq")
-        elif self.provider == "anthropic":
-            if self._groq_key:
-                chain.append("groq")
-        return chain
+        """Ordered fallback chain starting from primary provider."""
+        all_providers = [
+            ("claude-cli",   os.getenv("CLAUDE_CLI_MODE", "").strip() == "1"),
+            ("anthropic",    bool(self._anthropic_key)),
+            ("gemini",       bool(self._gemini_key)),
+            ("openrouter",   bool(self._openrouter_key)),
+            ("groq",         bool(self._groq_key)),
+        ]
+        available = [p for p, has_key in all_providers if has_key]
+        # Ensure primary is first
+        if self.provider in available:
+            available.remove(self.provider)
+            available.insert(0, self.provider)
+        return available
+
+
+def _model_list_for(provider: str) -> list[str]:
+    return {
+        "groq":        _GROQ_MODELS,
+        "anthropic":   _ANTHROPIC_MODELS,
+        "gemini":      _GEMINI_MODELS,
+        "openrouter":  _OPENROUTER_MODELS,
+    }.get(provider, [])
 
 
 # -- JSON parser (module-level so tests can import directly) ------------------

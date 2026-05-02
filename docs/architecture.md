@@ -77,6 +77,20 @@ LLM proposes changes[]
     ↓ dest.write_text(): writes new content
 ```
 
+## Dashboard Live Updates
+
+`docs/index.html` (GitHub Pages) polls `status.json` every 60 seconds via `fetch()`.
+No server required — the browser fetches the JSON directly from the same Pages origin.
+
+Dynamic elements updated without page reload:
+- Header: version pill, provider pills, feature badges, last-cycle time, age pill
+- KPI cards: total earned, this-week earnings, cycle count, active module count
+- Footer: live indicator dot flashes green on each successful fetch
+
+The page has no `meta http-equiv="refresh"` — the JS polling replaces it.
+Fields that require a full re-render (suggestions, evolution log, action table) are still
+regenerated server-side each cycle when `dashboard.write_html()` runs in Phase 5.
+
 ## Commit Strategy
 
 Two commits per cycle (when applicable):

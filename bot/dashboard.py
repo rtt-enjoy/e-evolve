@@ -219,15 +219,15 @@ def _section_header(version: str, provider: str, active: list, last_run: str,
   <div class="logo">🤖</div>
   <div>
     <h1>E-Evolve
-      <span class="pill-version">{version}</span>
-      {provider_html}
+      <span class="pill-version" id="hdr-version">{version}</span>
+      <span id="hdr-providers">{provider_html}</span>
     </h1>
-    <div style="margin-top:5px">{badges}</div>
+    <div style="margin-top:5px" id="hdr-badges">{badges}</div>
     <div class="muted" style="font-size:.8rem;margin-top:5px">
-      Last cycle: {last_run}
-      <span class="age-pill" style="background:rgba(0,0,0,.3);color:{age_color};border:1px solid {age_color}">{age_label}</span>
-      &nbsp;·&nbsp; Total cycles: {n_runs}
-      &nbsp;·&nbsp; Cycle time: {cycle_str}
+      Last cycle: <span id="hdr-last-run">{last_run}</span>
+      <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:{age_color};border:1px solid {age_color}">{age_label}</span>
+      &nbsp;·&nbsp; Total cycles: <span id="hdr-total-runs">{n_runs}</span>
+      &nbsp;·&nbsp; Cycle time: <span id="hdr-cycle-time">{cycle_str}</span>
     </div>
   </div>
 </header>"""
@@ -244,22 +244,22 @@ def _section_stats(earn: dict, n_runs: int, active: list, inactive: list,
 
     return f"""<div class="stat-grid">
   <div class="stat-card">
-    <div class="stat-value">${earn.get("total_usd", 0):.2f}</div>
+    <div class="stat-value" id="stat-total">${earn.get("total_usd", 0):.2f}</div>
     <div class="stat-label">Total earned</div>
   </div>
   <div class="stat-card">
-    <div class="stat-value">${earn.get("this_week_usd", 0):.2f}</div>
+    <div class="stat-value" id="stat-week" style="color:var(--yw)">${earn.get("this_week_usd", 0):.2f}</div>
     <div class="stat-label">This week</div>
-    <div class="stat-sub">last cycle: ${earn.get("last_cycle_usd", 0):.4f}</div>
+    <div class="stat-sub" id="stat-last-cycle">last cycle: ${earn.get("last_cycle_usd", 0):.4f}</div>
   </div>
   <div class="stat-card">
-    <div class="stat-value stat-neutral">{n_runs}</div>
+    <div class="stat-value stat-neutral" id="stat-runs">{n_runs}</div>
     <div class="stat-label">Cycles run</div>
   </div>
   <div class="stat-card">
-    <div class="stat-value stat-neutral">{len(active)}</div>
+    <div class="stat-value stat-neutral" id="stat-active" style="color:var(--pu)">{len(active)}</div>
     <div class="stat-label">Active modules</div>
-    <div class="stat-sub">{len(inactive)} inactive</div>
+    <div class="stat-sub" id="stat-inactive">{len(inactive)} inactive</div>
   </div>
   {spark_card}
 </div>"""
@@ -518,6 +518,132 @@ _ORDERS_JS = """\
 })();
 </script>
 <div class="copy-toast" id="toast">Copied to clipboard!</div>"""
+
+_LIVE_JS = """\
+<script>
+(function() {
+  var POLL_MS = 60000;
+  var PROVIDERS = {
+    gemini:     'pill-provider-gemini',
+    groq:       'pill-provider-groq',
+    openrouter: 'pill-provider-openrouter',
+    anthropic:  'pill-provider',
+    'claude-cli': 'pill-provider'
+  };
+  var ROLE_ICONS = { think: '🧠', fast: '⚡', experiment: '🧪' };
+
+  function fmt(iso) {
+    if (!iso) return 'never';
+    try {
+      var d = new Date(iso);
+      return d.getUTCFullYear() + '-' +
+        String(d.getUTCMonth()+1).padStart(2,'0') + '-' +
+        String(d.getUTCDate()).padStart(2,'0') + ' ' +
+        String(d.getUTCHours()).padStart(2,'0') + ':' +
+        String(d.getUTCMinutes()).padStart(2,'0') + ' UTC';
+    } catch(e) { return iso; }
+  }
+
+  function age(iso) {
+    if (!iso) return ['never', 'var(--rd)'];
+    var secs = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (secs < 4500) return [Math.floor(secs/60) + 'm ago', 'var(--gn)'];
+    if (secs < 10800) return [Math.floor(secs/3600) + 'h ' + Math.floor((secs%3600)/60) + 'm ago', '#e3b341'];
+    return [Math.floor(secs/3600) + 'h ago', 'var(--rd)'];
+  }
+
+  function providerPills(provider, roles) {
+    if (roles && Object.keys(roles).length) {
+      return ['think','fast','experiment'].filter(function(r){ return roles[r]; }).map(function(r) {
+        var p = roles[r];
+        var cls = PROVIDERS[p] || 'pill-provider';
+        return '<span class="' + cls + '" title="' + r + '">' + (ROLE_ICONS[r]||'') + ' ' + p + '</span>';
+      }).join('');
+    }
+    var cls = PROVIDERS[provider] || 'pill-provider';
+    return '<span class="' + cls + '">' + provider + '</span>';
+  }
+
+  function setText(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+  function setHTML(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = val;
+  }
+
+  function applyStatus(s) {
+    var earn = s.earnings || {};
+    var active = s.active_features || [];
+    var inactive = s.inactive_features || [];
+
+    // Header
+    setText('hdr-version', s.version || '');
+    setHTML('hdr-providers', providerPills(s.llm_provider || '', s.llm_roles || {}));
+    var badges = active.map(function(f){
+      return '<span class="badge badge-green">' + f + '</span>';
+    }).join('') || '<span class="badge badge-red">no active modules — add a secret</span>';
+    setHTML('hdr-badges', badges);
+    setText('hdr-last-run', fmt(s.last_run));
+    setText('hdr-total-runs', s.total_runs || 0);
+    setText('hdr-cycle-time', s.last_cycle_seconds ? s.last_cycle_seconds + 's' : '—');
+
+    var agePair = age(s.last_run);
+    var ageEl = document.getElementById('hdr-age');
+    if (ageEl) {
+      ageEl.textContent = agePair[0];
+      ageEl.style.color = agePair[1];
+      ageEl.style.borderColor = agePair[1];
+    }
+
+    // Stats
+    setText('stat-total', '$' + (earn.total_usd || 0).toFixed(2));
+    setText('stat-week', '$' + (earn.this_week_usd || 0).toFixed(2));
+    setText('stat-last-cycle', 'last cycle: $' + (earn.last_cycle_usd || 0).toFixed(4));
+    setText('stat-runs', s.total_runs || 0);
+    setText('stat-active', active.length);
+    setText('stat-inactive', inactive.length + ' inactive');
+
+    // Live indicator
+    var dot = document.getElementById('live-dot');
+    if (dot) {
+      dot.style.background = 'var(--gn)';
+      setTimeout(function(){ dot.style.background = 'var(--br)'; }, 1200);
+    }
+    var ts = document.getElementById('live-ts');
+    if (ts) ts.textContent = fmt(new Date().toISOString());
+  }
+
+  function poll() {
+    fetch('status.json?_=' + Date.now())
+      .then(function(r){ return r.json(); })
+      .then(applyStatus)
+      .catch(function(){});
+  }
+
+  // Tick age pill every minute even without new data
+  function tickAge() {
+    var lastRunEl = document.getElementById('hdr-last-run');
+    if (!lastRunEl) return;
+    var txt = lastRunEl.textContent;
+    if (!txt || txt === 'never') return;
+    // parse back to ISO
+    var iso = txt.replace(' UTC', ':00Z').replace(' ', 'T');
+    var agePair = age(iso);
+    var ageEl = document.getElementById('hdr-age');
+    if (ageEl) {
+      ageEl.textContent = agePair[0];
+      ageEl.style.color = agePair[1];
+      ageEl.style.borderColor = agePair[1];
+    }
+  }
+
+  poll();
+  setInterval(poll, POLL_MS);
+  setInterval(tickAge, 60000);
+})();
+</script>"""
 
 
 def _section_orders() -> str:
@@ -820,6 +946,17 @@ footer {
   text-align: center; color: var(--mu); font-size: .76rem;
   margin-top: 32px; padding-top: 14px; border-top: 1px solid var(--br);
 }
+
+/* ── Live indicator ── */
+.live-indicator {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: .74rem; color: var(--mu);
+}
+#live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--br); transition: background .4s;
+  flex-shrink: 0;
+}
 """
 
 
@@ -861,6 +998,7 @@ def _render(s: dict[str, Any]) -> str:
         _section_actions(actions),
         _section_errors(errors),
         _ORDERS_JS,
+        _LIVE_JS,
     ])
 
     return f"""<!DOCTYPE html>
@@ -868,7 +1006,6 @@ def _render(s: dict[str, Any]) -> str:
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta http-equiv="refresh" content="3600"/>
 <title>E-Evolve Dashboard</title>
 <style>
 {_CSS}
@@ -879,6 +1016,11 @@ def _render(s: dict[str, Any]) -> str:
 <footer>
   E-Evolve · hourly via GitHub Actions ·
   <a href="status.json">status.json</a> · <a href="earnings-log.md">earnings log</a>
+  &nbsp;·&nbsp;
+  <span class="live-indicator">
+    <span id="live-dot"></span>
+    live · updated <span id="live-ts">—</span>
+  </span>
 </footer>
 </body>
 </html>"""

@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta http-equiv="refresh" content="3600"/>
 <title>E-Evolve Dashboard</title>
 <style>
 :root {
@@ -41,15 +40,15 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
   font-size: .73rem; font-weight: 700; margin-right: 4px;
   background: rgba(188,140,255,.15); border: 1px solid var(--pu); color: var(--pu);
 }
-.pill-provider-groq {
-  display: inline-block; padding: 2px 9px; border-radius: 20px;
-  font-size: .73rem; font-weight: 700; margin-right: 4px;
-  background: rgba(249,115,22,.15); border: 1px solid #f97316; color: #f97316;
-}
 .pill-provider-gemini {
   display: inline-block; padding: 2px 9px; border-radius: 20px;
   font-size: .73rem; font-weight: 700; margin-right: 4px;
   background: rgba(66,133,244,.15); border: 1px solid #4285f4; color: #4285f4;
+}
+.pill-provider-groq {
+  display: inline-block; padding: 2px 9px; border-radius: 20px;
+  font-size: .73rem; font-weight: 700; margin-right: 4px;
+  background: rgba(249,115,22,.15); border: 1px solid #f97316; color: #f97316;
 }
 .pill-provider-openrouter {
   display: inline-block; padding: 2px 9px; border-radius: 20px;
@@ -110,7 +109,7 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
   height: 6px; background: var(--br);
   border-radius: 3px; overflow: hidden; margin-top: 2px;
 }
-.prog-fill { height: 100%; border-radius: 3px; }
+.prog-fill { height: 100%; border-radius: 3px; transition: width .3s; }
 
 /* ── Earnings breakdown bars ── */
 .breakdown { margin-top: 10px; }
@@ -193,7 +192,6 @@ th { color: var(--mu); font-weight: 500; }
 @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
 
 /* ── Owner Orders panel ── */
-.orders-panel { position: relative; }
 .orders-grid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
 }
@@ -213,7 +211,7 @@ th { color: var(--mu); font-weight: 500; }
 .order-input {
   flex: 1; background: var(--bg); border: 1px solid var(--br); color: var(--tx);
   border-radius: 6px; padding: 8px 10px; font-size: .84rem; font-family: var(--f);
-  resize: vertical; min-height: 38px;
+  min-height: 38px;
 }
 .order-input:focus { outline: none; border-color: var(--ac); }
 .order-textarea {
@@ -231,9 +229,9 @@ th { color: var(--mu); font-weight: 500; }
   transition: opacity .15s;
 }
 .btn:hover { opacity: .85; }
-.btn-primary { background: var(--ac); color: #0d1117; border-color: var(--ac); }
+.btn-primary   { background: var(--ac); color: #0d1117; border-color: var(--ac); }
 .btn-secondary { background: transparent; border-color: var(--br); color: var(--tx); }
-.btn-danger { background: rgba(248,81,73,.15); border-color: var(--rd); color: var(--rd); }
+.btn-danger    { background: rgba(248,81,73,.15); border-color: var(--rd); color: var(--rd); }
 .order-hint {
   font-size: .77rem; color: var(--mu); margin-top: 10px; line-height: 1.5;
   padding: 8px 10px; background: rgba(88,166,255,.05);
@@ -259,291 +257,290 @@ footer {
   text-align: center; color: var(--mu); font-size: .76rem;
   margin-top: 32px; padding-top: 14px; border-top: 1px solid var(--br);
 }
+
+/* ── Live indicator ── */
+.live-indicator {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: .74rem; color: var(--mu);
+}
+#live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--br); transition: background .4s;
+  flex-shrink: 0;
+}
+
 </style>
 </head>
 <body>
-
-<!-- Header -->
 <header>
   <div class="logo">🤖</div>
   <div>
     <h1>E-Evolve
-      <span class="pill-version">v1.3.0</span>
-      <span class="pill-provider-groq">groq</span>
+      <span class="pill-version" id="hdr-version">1.3.0</span>
+      <span id="hdr-providers"><span class="pill-provider-groq">groq</span></span>
     </h1>
-    <div style="margin-top:5px">
-      <span class="badge badge-green">llm_groq</span>
-      <span class="badge badge-green">articles_devto</span>
-    </div>
+    <div style="margin-top:5px" id="hdr-badges"><span class="badge badge-green">llm_groq</span><span class="badge badge-green">articles_devto</span></div>
     <div class="muted" style="font-size:.8rem;margin-top:5px">
-      Last cycle: 2026-05-01 19:41 UTC
-      <span class="age-pill" style="background:rgba(0,0,0,.3);color:var(--gn);border:1px solid var(--gn)">recent</span>
-      &nbsp;·&nbsp; Total cycles: 440
-      &nbsp;·&nbsp; Cycle time: 25s
+      Last cycle: <span id="hdr-last-run">2026-05-01 19:41 UTC</span>
+      <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--rd);border:1px solid var(--rd)">17h ago</span>
+      &nbsp;·&nbsp; Total cycles: <span id="hdr-total-runs">440</span>
+      &nbsp;·&nbsp; Cycle time: <span id="hdr-cycle-time">25s</span>
     </div>
   </div>
 </header>
-
-<!-- KPI Cards -->
 <div class="stat-grid">
   <div class="stat-card">
-    <div class="stat-value">$2.77</div>
+    <div class="stat-value" id="stat-total">$2.77</div>
     <div class="stat-label">Total earned</div>
   </div>
   <div class="stat-card">
-    <div class="stat-value" style="color:var(--yw)">$0.20</div>
+    <div class="stat-value" id="stat-week" style="color:var(--yw)">$0.20</div>
     <div class="stat-label">This week</div>
-    <div class="stat-sub">last cycle: $0.0000</div>
+    <div class="stat-sub" id="stat-last-cycle">last cycle: $0.0000</div>
   </div>
   <div class="stat-card">
-    <div class="stat-value stat-neutral">440</div>
+    <div class="stat-value stat-neutral" id="stat-runs">440</div>
     <div class="stat-label">Cycles run</div>
-    <div class="stat-sub">since deploy</div>
   </div>
   <div class="stat-card">
-    <div class="stat-value stat-neutral" style="color:var(--pu)">2</div>
+    <div class="stat-value stat-neutral" id="stat-active" style="color:var(--pu)">2</div>
     <div class="stat-label">Active modules</div>
-    <div class="stat-sub">5 inactive</div>
+    <div class="stat-sub" id="stat-inactive">5 inactive</div>
   </div>
+  
 </div>
-
-<!-- Earnings Analysis -->
 <div class="section">
   <h2>📈 Earnings Analysis</h2>
   <div class="panel">
-    <div class="breakdown">
-      <div class="breakdown-row">
-        <span class="breakdown-label">dev.to</span>
-        <div class="breakdown-bar-track"><div class="breakdown-bar" style="width:95%"></div></div>
-        <span class="breakdown-amount">$2.6500</span>
-      </div>
-      <div class="breakdown-row">
-        <span class="breakdown-label">binance</span>
-        <div class="breakdown-bar-track"><div class="breakdown-bar" style="width:5%;background:var(--ac)"></div></div>
-        <span class="breakdown-amount" style="color:var(--ac)">$0.1200</span>
-      </div>
-    </div>
+    
+    <div class="breakdown"><div class="breakdown-row"><span class="breakdown-label">dev.to</span><div class="breakdown-bar-track"><div class="breakdown-bar" style="width:95%"></div></div><span class="breakdown-amount">$2.6500</span></div><div class="breakdown-row"><span class="breakdown-label">binance</span><div class="breakdown-bar-track"><div class="breakdown-bar" style="width:4%"></div></div><span class="breakdown-amount">$0.1200</span></div></div>
   </div>
 </div>
-
-<!-- Growth Suggestions -->
 <div class="section">
   <h2>🧠 Smart Growth Suggestions</h2>
-  <div class="panel">
-
-    <div class="suggestion-card">
-      <span class="suggestion-rank">🥇</span>
-      <div>
-        <strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong>
-        <span class="free-badge">Free to start</span>
-        <p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p>
-        <div class="secret-needed">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div>
-        <ol class="how-to-steps">
-          <li>Go to Medium Partner Program and create an account</li>
-          <li>Generate an integration token in the Medium settings</li>
-          <li>Add the token as a GitHub secret named <code>MEDIUM_INTEGRATION_TOKEN</code></li>
-        </ol>
-      </div>
-    </div>
-
-    <div class="suggestion-card">
-      <span class="suggestion-rank">🥈</span>
-      <div>
-        <strong>Upgrade to Groq Dev Tier for increased LLM usage</strong>
-        <p>Increase the daily token limit for LLM usage</p>
-        <div class="est-earnings">~$20/week estimated</div>
-        <ol class="how-to-steps">
-          <li>Go to the Groq console and navigate to the billing settings</li>
-          <li>Upgrade to the Dev Tier plan</li>
-          <li>Verify the increased token limit in the Groq console</li>
-        </ol>
-      </div>
-    </div>
-
-    <div class="suggestion-card">
-      <span class="suggestion-rank">🥉</span>
-      <div>
-        <strong>Add TWITTER_API_KEY for Twitter integration</strong>
-        <span class="free-badge">Free to start</span>
-        <p>Enable Twitter posting and increase reach</p>
-        <div class="secret-needed">Add secret: <code>TWITTER_API_KEY</code></div>
-        <ol class="how-to-steps">
-          <li>Go to the Twitter Developer Dashboard and create an app</li>
-          <li>Generate an API key and secret in the Twitter settings</li>
-          <li>Add the API key and secret as GitHub secrets named <code>TWITTER_API_KEY</code> and <code>TWITTER_API_SECRET</code></li>
-        </ol>
-      </div>
-    </div>
-
-  </div>
+  <div class="panel"><div class="suggestion-card"><span class="suggestion-rank">🥇</span><div><strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong><span class="free-badge">Free to start</span><p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p><div class="secret-needed">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div><ol class="how-to-steps"><li>Step 1: Go to Medium Partner Program and create an account</li><li>Step 2: Generate an integration token in the Medium settings</li><li>Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN</li></ol></div></div><div class="suggestion-card"><span class="suggestion-rank">🥈</span><div><strong>Upgrade to Groq Dev Tier for increased LLM usage</strong><p>Increase the daily token limit for LLM usage</p><div class="est-earnings">~$20/week estimated</div><ol class="how-to-steps"><li>Step 1: Go to the Groq console and navigate to the billing settings</li><li>Step 2: Upgrade to the Dev Tier plan</li><li>Step 3: Verify the increased token limit in the Groq console</li></ol></div></div><div class="suggestion-card"><span class="suggestion-rank">🥉</span><div><strong>Add TWITTER_API_KEY for Twitter integration</strong><span class="free-badge">Free to start</span><p>Enable Twitter posting and increase reach</p><div class="secret-needed">Add secret: <code>TWITTER_API_KEY</code></div><ol class="how-to-steps"><li>Step 1: Go to the Twitter Developer Dashboard and create an app</li><li>Step 2: Generate an API key and secret in the Twitter settings</li><li>Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET</li></ol></div></div></div>
 </div>
-
-<!-- Owner Orders -->
 <div class="section">
   <h2>📋 Owner Orders</h2>
-  <div class="panel orders-panel">
+  <div class="panel">
     <p class="muted" style="font-size:.82rem;margin-bottom:12px">
-      Queue commands for the next evolution cycle. Click a preset or type a custom order below.
+      Queue commands for the next evolution cycle. Click a preset or type a custom order.
     </p>
-    <div class="orders-grid">
-      <button class="order-btn" onclick="addOrder('force articles 3')">
-        <span class="ob-label">force articles 3</span>
-        <span class="ob-desc">Post 3 articles this cycle</span>
-      </button>
-      <button class="order-btn" onclick="addOrder('force trade aggressive')">
-        <span class="ob-label">force trade aggressive</span>
-        <span class="ob-desc">Raise trade risk to 5%</span>
-      </button>
-      <button class="order-btn" onclick="addOrder('skip evolution')">
-        <span class="ob-label">skip evolution</span>
-        <span class="ob-desc">Skip Phase 3 this cycle</span>
-      </button>
-      <button class="order-btn" onclick="addOrder('post thread')">
-        <span class="ob-label">post thread</span>
-        <span class="ob-desc">Force a Twitter thread</span>
-      </button>
-      <button class="order-btn" onclick="addOrder('reset earnings')">
-        <span class="ob-label">reset earnings</span>
-        <span class="ob-desc">Zero this_week_usd</span>
-      </button>
-      <button class="order-btn" onclick="addOrder('status report')">
-        <span class="ob-label">status report</span>
-        <span class="ob-desc">Dump full status to workflow log</span>
-      </button>
-      <button class="order-btn" onclick="addOrder('force mint 1')">
-        <span class="ob-label">force mint 1</span>
-        <span class="ob-desc">Mint 1 NFT this cycle</span>
-      </button>
-      <button class="order-btn" onclick="addOrder('force trade conservative')">
-        <span class="ob-label">force trade conservative</span>
-        <span class="ob-desc">Lower trade risk to 1%</span>
-      </button>
-    </div>
-
+    <div class="orders-grid"><button class="order-btn" onclick="addOrder('force articles 3')"><span class="ob-label">force articles 3</span><span class="ob-desc">Post 3 articles this cycle</span></button><button class="order-btn" onclick="addOrder('force trade aggressive')"><span class="ob-label">force trade aggressive</span><span class="ob-desc">Raise trade risk to 5%</span></button><button class="order-btn" onclick="addOrder('skip evolution')"><span class="ob-label">skip evolution</span><span class="ob-desc">Skip Phase 3 this cycle</span></button><button class="order-btn" onclick="addOrder('post thread')"><span class="ob-label">post thread</span><span class="ob-desc">Force a Twitter thread</span></button><button class="order-btn" onclick="addOrder('reset earnings')"><span class="ob-label">reset earnings</span><span class="ob-desc">Zero this_week_usd</span></button><button class="order-btn" onclick="addOrder('status report')"><span class="ob-label">status report</span><span class="ob-desc">Dump full status to workflow log</span></button><button class="order-btn" onclick="addOrder('force mint 1')"><span class="ob-label">force mint 1</span><span class="ob-desc">Mint 1 NFT this cycle</span></button><button class="order-btn" onclick="addOrder('force trade conservative')"><span class="ob-label">force trade conservative</span><span class="ob-desc">Lower trade risk to 1%</span></button></div>
     <div class="order-custom-row">
       <input type="text" id="customOrder" class="order-input"
              placeholder="Custom order (e.g. force articles 5)"
              onkeydown="if(event.key==='Enter'){addCustomOrder()}" />
       <button class="btn btn-secondary" onclick="addCustomOrder()">Add</button>
     </div>
-
     <textarea id="commandOutput" class="order-textarea"
               placeholder="# no commands&#10;(click presets or add custom orders above)"></textarea>
-
     <div class="order-actions">
       <button class="btn btn-primary" onclick="copyCommands()">📋 Copy command.txt</button>
       <button class="btn btn-secondary" onclick="downloadCommands()">⬇ Download</button>
       <button class="btn btn-danger" onclick="clearCommands()">✕ Clear</button>
     </div>
-
     <div class="order-hint">
       <strong>How to apply:</strong>
-      Copy the text above, then commit it to <code>command.txt</code> in your repo root.
-      The next cycle (within ~1h) will execute the commands and clear the file automatically.<br>
-      Or push via CLI: <code>echo "your command" > command.txt &amp;&amp; git add command.txt &amp;&amp; git commit -m "cmd" &amp;&amp; git push</code>
+      Copy the text above, commit it to <code>command.txt</code> in your repo root.
+      The next cycle (~1h) executes and clears it automatically.<br>
+      CLI: <code>echo "your command" &gt; command.txt &amp;&amp; git add command.txt &amp;&amp; git commit -m "cmd" &amp;&amp; git push</code>
     </div>
   </div>
 </div>
-
-<!-- Two-column: Evolution + Inactive -->
 <div class="two-col">
-  <div class="section">
-    <h2>⚡ Last Evolution</h2>
-    <div class="panel">
-      <p style="margin-bottom:9px">
-        <strong>Added Medium integration and Twitter posting features</strong>
-        <span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--gn);background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);margin-left:8px">ok</span>
-      </p>
-      <ul class="evo-list">
-        <li><code>bot/articles.py</code> — Implement Medium posting logic</li>
-        <li><code>bot/commands.py</code> — Implement command logic for minting, skipping evolution, resetting earnings, posting threads, and status reports</li>
-        <li><code>bot/twitter.py</code> — Implement Twitter posting logic</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>🔒 Inactive Modules</h2>
-    <div class="panel">
-      <div>
-        <div class="inactive-tag"><span class="inactive-dot"></span>llm_anthropic</div>
-        <div class="inactive-tag"><span class="inactive-dot"></span>articles_medium</div>
-        <div class="inactive-tag"><span class="inactive-dot"></span>twitter</div>
-        <div class="inactive-tag"><span class="inactive-dot"></span>crypto_binance</div>
-        <div class="inactive-tag"><span class="inactive-dot"></span>nft_ethereum</div>
-      </div>
-    </div>
+<div class="section">
+  <h2>⚡ Last Evolution</h2>
+  <div class="panel">
+    <p style="margin-bottom:9px"><strong>Added Medium integration and Twitter posting features</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--gn);background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);margin-left:8px">ok</span></p>
+    <ul class="evo-list"><li><code>bot/articles.py</code> — Implement Medium posting logic</li><li><code>bot/commands.py</code> — Implement command logic for minting, skipping evolution, resetting earnings, pos</li><li><code>bot/twitter.py</code> — Implement Twitter posting logic</li></ul>
+    
   </div>
 </div>
-
-<!-- Last Cycle Actions -->
+<div class="section">
+  <h2>🔒 Inactive Modules</h2>
+  <div class="panel"><div class="inactive-tag"><span class="inactive-dot"></span>llm_anthropic</div><div class="inactive-tag"><span class="inactive-dot"></span>articles_medium</div><div class="inactive-tag"><span class="inactive-dot"></span>twitter</div><div class="inactive-tag"><span class="inactive-dot"></span>crypto_binance</div><div class="inactive-tag"><span class="inactive-dot"></span>nft_ethereum</div></div>
+</div>
+</div>
 <div class="section">
   <h2>💰 Last Cycle Actions</h2>
-  <div class="panel">
-    <p class="muted">No actions yet — add a secret to activate an earning module.</p>
-  </div>
+  <div class="panel"><p class="muted">No actions yet — add a secret to activate an earning module.</p></div>
 </div>
-
-<footer>
-  E-Evolve · hourly via GitHub Actions ·
-  <a href="status.json">status.json</a> · <a href="earnings-log.md">earnings log</a>
-</footer>
-
-<div class="copy-toast" id="toast">Copied to clipboard!</div>
 
 <script>
 (function() {
   var _cmds = [];
-
   window.addOrder = function(cmd) {
     if (!_cmds.includes(cmd)) _cmds.push(cmd);
     _sync();
   };
-
   window.addCustomOrder = function() {
     var el = document.getElementById('customOrder');
     var val = el.value.trim();
     if (val && !_cmds.includes(val)) { _cmds.push(val); _sync(); }
-    el.value = '';
-    el.focus();
+    el.value = ''; el.focus();
   };
-
   window.clearCommands = function() {
     _cmds = [];
     document.getElementById('commandOutput').value = '# no commands';
   };
-
   window.copyCommands = function() {
     var ta = document.getElementById('commandOutput');
     navigator.clipboard.writeText(ta.value).then(function() {
       var t = document.getElementById('toast');
       t.classList.add('show');
       setTimeout(function() { t.classList.remove('show'); }, 2000);
-    }).catch(function() {
-      ta.select();
-      document.execCommand('copy');
-    });
+    }).catch(function() { ta.select(); document.execCommand('copy'); });
   };
-
   window.downloadCommands = function() {
     var content = document.getElementById('commandOutput').value;
     var blob = new Blob([content], { type: 'text/plain' });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'command.txt';
-    a.click();
+    a.download = 'command.txt'; a.click();
   };
-
   function _sync() {
     document.getElementById('commandOutput').value =
       _cmds.length ? _cmds.join('\n') : '# no commands';
   }
-
-  // Allow direct editing of textarea too
   document.getElementById('commandOutput').addEventListener('input', function() {
     _cmds = this.value.split('\n').map(function(l){return l.trim();}).filter(Boolean);
   });
 })();
 </script>
+<div class="copy-toast" id="toast">Copied to clipboard!</div>
+<script>
+(function() {
+  var POLL_MS = 60000;
+  var PROVIDERS = {
+    gemini:     'pill-provider-gemini',
+    groq:       'pill-provider-groq',
+    openrouter: 'pill-provider-openrouter',
+    anthropic:  'pill-provider',
+    'claude-cli': 'pill-provider'
+  };
+  var ROLE_ICONS = { think: '🧠', fast: '⚡', experiment: '🧪' };
+
+  function fmt(iso) {
+    if (!iso) return 'never';
+    try {
+      var d = new Date(iso);
+      return d.getUTCFullYear() + '-' +
+        String(d.getUTCMonth()+1).padStart(2,'0') + '-' +
+        String(d.getUTCDate()).padStart(2,'0') + ' ' +
+        String(d.getUTCHours()).padStart(2,'0') + ':' +
+        String(d.getUTCMinutes()).padStart(2,'0') + ' UTC';
+    } catch(e) { return iso; }
+  }
+
+  function age(iso) {
+    if (!iso) return ['never', 'var(--rd)'];
+    var secs = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (secs < 4500) return [Math.floor(secs/60) + 'm ago', 'var(--gn)'];
+    if (secs < 10800) return [Math.floor(secs/3600) + 'h ' + Math.floor((secs%3600)/60) + 'm ago', '#e3b341'];
+    return [Math.floor(secs/3600) + 'h ago', 'var(--rd)'];
+  }
+
+  function providerPills(provider, roles) {
+    if (roles && Object.keys(roles).length) {
+      return ['think','fast','experiment'].filter(function(r){ return roles[r]; }).map(function(r) {
+        var p = roles[r];
+        var cls = PROVIDERS[p] || 'pill-provider';
+        return '<span class="' + cls + '" title="' + r + '">' + (ROLE_ICONS[r]||'') + ' ' + p + '</span>';
+      }).join('');
+    }
+    var cls = PROVIDERS[provider] || 'pill-provider';
+    return '<span class="' + cls + '">' + provider + '</span>';
+  }
+
+  function setText(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+  function setHTML(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = val;
+  }
+
+  function applyStatus(s) {
+    var earn = s.earnings || {};
+    var active = s.active_features || [];
+    var inactive = s.inactive_features || [];
+
+    // Header
+    setText('hdr-version', s.version || '');
+    setHTML('hdr-providers', providerPills(s.llm_provider || '', s.llm_roles || {}));
+    var badges = active.map(function(f){
+      return '<span class="badge badge-green">' + f + '</span>';
+    }).join('') || '<span class="badge badge-red">no active modules — add a secret</span>';
+    setHTML('hdr-badges', badges);
+    setText('hdr-last-run', fmt(s.last_run));
+    setText('hdr-total-runs', s.total_runs || 0);
+    setText('hdr-cycle-time', s.last_cycle_seconds ? s.last_cycle_seconds + 's' : '—');
+
+    var agePair = age(s.last_run);
+    var ageEl = document.getElementById('hdr-age');
+    if (ageEl) {
+      ageEl.textContent = agePair[0];
+      ageEl.style.color = agePair[1];
+      ageEl.style.borderColor = agePair[1];
+    }
+
+    // Stats
+    setText('stat-total', '$' + (earn.total_usd || 0).toFixed(2));
+    setText('stat-week', '$' + (earn.this_week_usd || 0).toFixed(2));
+    setText('stat-last-cycle', 'last cycle: $' + (earn.last_cycle_usd || 0).toFixed(4));
+    setText('stat-runs', s.total_runs || 0);
+    setText('stat-active', active.length);
+    setText('stat-inactive', inactive.length + ' inactive');
+
+    // Live indicator
+    var dot = document.getElementById('live-dot');
+    if (dot) {
+      dot.style.background = 'var(--gn)';
+      setTimeout(function(){ dot.style.background = 'var(--br)'; }, 1200);
+    }
+    var ts = document.getElementById('live-ts');
+    if (ts) ts.textContent = fmt(new Date().toISOString());
+  }
+
+  function poll() {
+    fetch('status.json?_=' + Date.now())
+      .then(function(r){ return r.json(); })
+      .then(applyStatus)
+      .catch(function(){});
+  }
+
+  // Tick age pill every minute even without new data
+  function tickAge() {
+    var lastRunEl = document.getElementById('hdr-last-run');
+    if (!lastRunEl) return;
+    var txt = lastRunEl.textContent;
+    if (!txt || txt === 'never') return;
+    // parse back to ISO
+    var iso = txt.replace(' UTC', ':00Z').replace(' ', 'T');
+    var agePair = age(iso);
+    var ageEl = document.getElementById('hdr-age');
+    if (ageEl) {
+      ageEl.textContent = agePair[0];
+      ageEl.style.color = agePair[1];
+      ageEl.style.borderColor = agePair[1];
+    }
+  }
+
+  poll();
+  setInterval(poll, POLL_MS);
+  setInterval(tickAge, 60000);
+})();
+</script>
+<footer>
+  E-Evolve · hourly via GitHub Actions ·
+  <a href="status.json">status.json</a> · <a href="earnings-log.md">earnings log</a>
+  &nbsp;·&nbsp;
+  <span class="live-indicator">
+    <span id="live-dot"></span>
+    live · updated <span id="live-ts">—</span>
+  </span>
+</footer>
 </body>
 </html>

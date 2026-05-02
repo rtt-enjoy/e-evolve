@@ -30,8 +30,8 @@ _MIN_WORDS = int(_strategy.get("min_words", 600))
 log = logging.getLogger(__name__)
 
 _SYSTEM = (
-    "You are a senior software engineer and AI practitioner writing for an audience of professional developers"
-    " and AI engineers. Your readers ship production systems daily — they are impatient with fluff,"
+    "You are a senior software engineer and AI practitioner writing for an audience of professional developers."
+    " Your readers ship production systems daily — they are impatient with fluff,"
     " respect hard-won experience, and will stop reading the moment you waste their time.\n\n"
     "VOICE AND TONE:\n"
     "- Write as a practitioner talking to peers — direct, confident, occasionally dry.\n"
@@ -39,7 +39,9 @@ _SYSTEM = (
     "- No motivational language ('unlock the power of...', 'revolutionise your workflow').\n"
     "- No hedging ('you might want to consider...') — state opinions clearly.\n"
     "- Prefer precise nouns over adjectives: 'a 400ms p99 latency' beats 'slow response times'.\n"
-    "- Contractions are fine. Jargon is fine when accurate; define it once if rare.\n\n"
+    "- Contractions are fine. Jargon is fine when accurate; define it once if rare.\n"
+    "- Vary article style: tutorial (step-by-step), opinion/hot-take, post-mortem/failure story,"
+    " comparison (A vs B), reference/cheatsheet, or explainer. Match style to topic.\n\n"
     "Respond with ONLY a single JSON object.\n\n"
     "Schema:\n"
     '{\n'
@@ -52,7 +54,8 @@ _SYSTEM = (
     "1. Open with a 2-3 sentence hook: a concrete situation, surprising number, or sharp observation."
     " No heading. No 'In this article...'.\n"
     "2. Use ## (H2) for 4-6 major sections. Use ### (H3) for sub-points when the section warrants it.\n"
-    "3. Every code example in a fenced block with language tag (```python, ```bash, ```yaml, ```json, etc.).\n"
+    "3. Every code example in a fenced block with language tag (```python, ```bash, ```yaml, ```json,"
+    " ```typescript, ```sql, ```dockerfile, etc.).\n"
     "4. At least 3 code examples. Each must be >6 lines, production-realistic, copy-pasteable."
     " Add a single-line comment explaining the non-obvious parts — not every line.\n"
     "5. Bullet lists only for true parallel items (3+). Prose flows as paragraphs, not fragmented bullets.\n"
@@ -62,44 +65,66 @@ _SYSTEM = (
     "9. Banned phrases: 'In this article', 'In conclusion', 'As you can see', 'It's worth noting',"
     " 'leverage', 'seamless', 'game-changer', 'cutting-edge', 'deep dive', 'robust solution'.\n"
     "10. Do NOT wrap the entire body in a code fence. Plain markdown only.\n\n"
-    "Topics: Python automation, GitHub Actions, AI/LLM agents (Claude, Groq), agentic AI architecture,"
-    " self-improving bots, LLM prompt engineering, Web3 Python, production AI systems in 2026."
+    "Topic domains: Python, JavaScript/TypeScript, systems programming, AI/ML engineering,"
+    " DevOps/infrastructure, databases, security, web development, open-source tooling,"
+    " software architecture, career/engineering culture. Pick whichever domain fits the topic."
     " Ground every article in real implementation detail — not theory."
 )
 
 _TOPICS = [
+    # AI / LLM Engineering
     "How I built a self-improving bot that earns money while I sleep",
-    "GitHub Actions is a free cloud computer — 8 things you can automate for $0",
-    "5 Python automation strategies for passive income in 2026",
     "Building autonomous AI agents with free LLM APIs — a practical guide",
-    "Zero-cost infrastructure for side projects: GitHub Actions deep dive",
-    "How to make Python scripts improve themselves using LLMs",
-    "Web3 automation with Python: from zero to daily NFT mints",
-    "My bot posted 400 dev.to articles — here's what actually happened",
-    "Claude vs GPT-4 for code generation: real benchmark from 430 bot cycles",
+    "Multi-provider LLM fallback in Python: never let your bot go dark",
     "Prompt engineering for code generation: what actually works in 2026",
-    "Building a personal finance tracker that runs for free on GitHub",
-    "How I use Claude's API to power an autonomous self-improving agent",
-    "Python dataclasses vs dicts: when each wins in production bots",
     "Structuring LLM outputs as JSON: parsing strategies that don't break",
-    "Cron jobs on GitHub Actions: gotchas and best practices in 2026",
-    "From idea to deployed AI bot in 30 minutes with Python and GitHub Actions",
-    "Writing dev.to articles programmatically: the complete API guide",
-    "How to version a bot that modifies its own source code safely",
-    "Exponential backoff in Python: the right way to retry LLM API calls",
+    "Claude Sonnet 4.6 vs Haiku 4.5: cost-performance tradeoffs for autonomous agents",
+    "Agentic AI in 2026: patterns that survived contact with production",
+    "Free LLM APIs in 2026: Groq, Anthropic, Gemini, OpenRouter compared",
+    "RAG without a vector database: BM25 + reranking in pure Python",
+    "Fine-tuning vs prompting: when each approach actually wins",
+    "LLM evals that don't lie: building an honest benchmark for your use case",
+    "Context window management for long-running AI agents",
+    # Python
+    "Python dataclasses vs dicts vs Pydantic: when each wins in production",
+    "Exponential backoff in Python: the right way to retry API calls",
     "Building observable autonomous bots: logging strategies that scale",
     "Why I store my bot's state in a JSON file instead of a database",
-    "Multi-provider LLM fallback in Python: never let your bot go dark",
     "AST-based code safety checks: letting LLMs edit your repo without breaking it",
-    "The economics of running a dev content bot: real numbers after 431 cycles",
-    "Claude Sonnet 4.6 vs Haiku 4.5: cost-performance tradeoffs for autonomous agents",
-    "How to build a GitHub Actions bot that pays for itself",
-    "Agentic AI in 2026: patterns that survived contact with production",
-    "Free LLM APIs in 2026: Groq, Anthropic free tier, and what actually works",
-    "Python subprocess tricks for running CLI tools from autonomous bots",
+    "Python subprocess tricks for running CLI tools from autonomous agents",
     "Self-healing code: how bots can detect and fix their own regressions",
-    "Earning from technical writing with AI assistance: a realistic breakdown",
+    "Python typing in 2026: what's actually useful vs ceremony",
+    "Async Python for I/O-heavy bots: avoiding the footguns",
+    "Writing Python packages that are easy to test without mocks",
+    # GitHub Actions / DevOps
+    "GitHub Actions is a free cloud computer — 8 things you can automate for $0",
+    "Cron jobs on GitHub Actions: gotchas and best practices in 2026",
+    "How to version a bot that modifies its own source code safely",
     "GitHub Actions secrets management for multi-provider AI pipelines",
+    "Docker layer caching that actually works in CI in 2026",
+    "Deploying a Python service to a $5 VPS with zero downtime",
+    "Monitoring a side project for free: uptime, alerts, logs",
+    # Web / TypeScript / JavaScript
+    "Building a real-time dashboard with plain WebSockets — no framework needed",
+    "TypeScript strict mode in 2026: the settings that matter",
+    "Next.js App Router vs Pages Router: a year in production, honest verdict",
+    "Server-sent events vs WebSockets: when each is the right call",
+    "Writing a REST API in pure Node.js — no Express, no bloat",
+    # Databases / Storage
+    "SQLite in production: the surprising cases where it's the right call",
+    "PostgreSQL indexing mistakes I made and how I fixed them",
+    "Redis as a job queue: simple patterns that actually hold up",
+    "Choosing between S3, R2, and Backblaze for a side project in 2026",
+    # Security
+    "Secrets management for solo developers: what actually matters",
+    "OWASP Top 10 for Python APIs: the ones that bite you first",
+    "JWT vs session cookies: the decision nobody makes consciously enough",
+    # Software Architecture / Career
+    "The 5-file architecture: keeping side projects alive for years",
+    "When to use a monorepo — and when it's just overhead",
+    "Writing technical articles with AI assistance: a realistic breakdown",
+    "How I use GitHub Actions as a personal cron platform for $0",
+    "The economics of running a dev content bot: real numbers after 440 cycles",
 ]
 
 

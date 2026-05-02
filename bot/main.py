@@ -54,6 +54,12 @@ def main() -> int:
     status = _st.load()
     status = _st.snapshot(status)
     status["llm_provider"] = llm.provider
+    # Populate per-role provider map for dashboard display
+    from bot.llm import ROLE_PROVIDER
+    status["llm_roles"] = {
+        role: p for role, p in ROLE_PROVIDER.items()
+        if getattr(llm, f"_{p}_key", "")
+    }
 
     # ── 2. Commands ───────────────────────────────────────────────────────────
     _hr("Phase 2 — Commands")

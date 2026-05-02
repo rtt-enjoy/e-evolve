@@ -26,9 +26,11 @@ _ANTHROPIC_MODELS = [
     "claude-3-haiku-20240307",
 ]
 _GEMINI_MODELS = [
+    "gemini-2.5-pro-preview-05-06",
+    "gemini-2.0-flash-thinking-exp",
     "gemini-2.0-flash",
-    "gemini-1.5-flash",
     "gemini-1.5-pro",
+    "gemini-1.5-flash",
 ]
 # OpenRouter: strong free-tier models first, paid fallback
 _OPENROUTER_MODELS = [
@@ -37,6 +39,14 @@ _OPENROUTER_MODELS = [
     "mistralai/mistral-7b-instruct:free",
     "openai/gpt-4o-mini",
 ]
+
+# Role → preferred provider mapping.
+# Callers use complete_for_role() to get role-appropriate routing.
+ROLE_PROVIDER: dict[str, str] = {
+    "think":      "gemini",      # hard reasoning, long context
+    "fast":       "groq",        # low-latency, short tasks
+    "experiment": "openrouter",  # try varied models / free tier
+}
 
 
 @dataclass
@@ -128,6 +138,36 @@ class LLMClient:
 
         raise RuntimeError(f"LLM failed on all providers: {last_exc}") from last_exc
 
+    def complete_for_role(
+        self,
+        role: str,
+        prompt: str,
+        system: str = "",
+        max_tokens: int = 4096,
+        temperature: float = 0.7,
+    ) -> LLMResponse:
+        """Route to role-appropriate provider (think→gemini, fast→groq, experiment→openrouter).
+        Falls back to complete() with default provider if role provider unavailable."""
+        preferred = ROLE_PROVIDER.get(role)
+        if preferred:
+            key_map = {
+                "gemini":     self._gemini_key,
+                "groq":       self._groq_key,
+                "openrouter": self._openrouter_key,
+                "anthropic":  self._anthropic_key,
+            }
+            if key_map.get(preferred):
+                log.info("Role=%s → provider=%s", role, preferred)
+                old_provider = self.provider
+                self.provider = preferred
+                try:
+                    return self.complete(prompt, system=system, max_tokens=max_tokens,
+                                        temperature=temperature)
+                finally:
+                    self.provider = old_provider
+        return self.complete(prompt, system=system, max_tokens=max_tokens,
+                             temperature=temperature)
+
     def complete_json(
         self,
         prompt: str,
@@ -158,6 +198,34 @@ class LLMClient:
                 if attempt < 3:
                     time.sleep(1)
         raise ValueError(f"Could not get valid JSON from LLM: {last_exc}") from last_exc
+
+    def complete_json_for_role(
+        self,
+        role: str,
+        prompt: str,
+        system: str = "",
+        max_tokens: int = 4096,
+    ) -> dict[str, Any]:
+        """Like complete_json() but routes to role-appropriate provider."""
+        json_system = (
+            (system + "\n\n" if system else "")
+            + "IMPORTANT: Respond with ONLY a single valid JSON object. "
+            "No markdown, no code fences, no explanation before or after."
+        )
+        last_exc: Exception | None = None
+        for attempt in range(1, 4):
+            try:
+                resp = self.complete_for_role(
+                    role, prompt, system=json_system,
+                    max_tokens=max_tokens, temperature=0.2,
+                )
+                return parse_json(resp.text)
+            except (ValueError, RuntimeError) as exc:
+                last_exc = exc
+                log.warning("JSON[role=%s] attempt %d/3 failed: %s", role, attempt, exc)
+                if attempt < 3:
+                    time.sleep(1)
+        raise ValueError(f"Could not get valid JSON from LLM (role={role}): {last_exc}") from last_exc
 
     # -- Groq ------------------------------------------------------------------
 
@@ -323,6 +391,7 @@ class LLMClient:
             return "claude-cli"
         if self._anthropic_key:
             return "anthropic"
+        # Gemini preferred for default (hard thinking role)
         if self._gemini_key:
             return "gemini"
         if self._openrouter_key:

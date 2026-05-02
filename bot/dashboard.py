@@ -178,18 +178,49 @@ def _evo_status(evo: dict) -> str:
 
 # ── Section renderers ──────────────────────────────────────────────────────────
 
+_PROVIDER_PILL_CLASS: dict[str, str] = {
+    "gemini":     "pill-provider-gemini",
+    "groq":       "pill-provider-groq",
+    "openrouter": "pill-provider-openrouter",
+    "anthropic":  "pill-provider",
+    "claude-cli": "pill-provider",
+}
+
+_PROVIDER_ROLE_LABELS: list[tuple[str, str]] = [
+    ("think",      "🧠"),
+    ("fast",       "⚡"),
+    ("experiment", "🧪"),
+]
+
+
+def _provider_pills(provider: str, llm_roles: dict) -> str:
+    """Render provider pills. If role info available show per-role pills, else single pill."""
+    if llm_roles:
+        pills = []
+        for role, icon in _PROVIDER_ROLE_LABELS:
+            p = llm_roles.get(role)
+            if p:
+                cls = _PROVIDER_PILL_CLASS.get(p, "pill-provider")
+                pills.append(f'<span class="{cls}" title="{role}">{icon} {p}</span>')
+        return "".join(pills) if pills else f'<span class="pill-provider">{provider}</span>'
+    cls = _PROVIDER_PILL_CLASS.get(provider, "pill-provider")
+    return f'<span class="{cls}">{provider}</span>'
+
+
 def _section_header(version: str, provider: str, active: list, last_run: str,
-                    age_label: str, age_color: str, n_runs: int, cycle_str: str) -> str:
+                    age_label: str, age_color: str, n_runs: int, cycle_str: str,
+                    llm_roles: dict | None = None) -> str:
     badges = (
         "".join(f'<span class="badge badge-green">{f}</span>' for f in active)
         or '<span class="badge badge-red">no active modules — add a secret</span>'
     )
+    provider_html = _provider_pills(provider, llm_roles or {})
     return f"""<header>
   <div class="logo">🤖</div>
   <div>
     <h1>E-Evolve
       <span class="pill-version">{version}</span>
-      <span class="pill-provider">{provider}</span>
+      {provider_html}
     </h1>
     <div style="margin-top:5px">{badges}</div>
     <div class="muted" style="font-size:.8rem;margin-top:5px">
@@ -478,6 +509,21 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
   font-size: .73rem; font-weight: 700; margin-right: 4px;
   background: rgba(188,140,255,.15); border: 1px solid var(--pu); color: var(--pu);
 }
+.pill-provider-gemini {
+  display: inline-block; padding: 2px 9px; border-radius: 20px;
+  font-size: .73rem; font-weight: 700; margin-right: 4px;
+  background: rgba(66,133,244,.15); border: 1px solid #4285f4; color: #4285f4;
+}
+.pill-provider-groq {
+  display: inline-block; padding: 2px 9px; border-radius: 20px;
+  font-size: .73rem; font-weight: 700; margin-right: 4px;
+  background: rgba(249,115,22,.15); border: 1px solid #f97316; color: #f97316;
+}
+.pill-provider-openrouter {
+  display: inline-block; padding: 2px 9px; border-radius: 20px;
+  font-size: .73rem; font-weight: 700; margin-right: 4px;
+  background: rgba(16,185,129,.15); border: 1px solid #10b981; color: #10b981;
+}
 .age-pill {
   display: inline-block; padding: 1px 7px; border-radius: 10px;
   font-size: .72rem; font-weight: 600; margin-left: 6px;
@@ -625,16 +671,17 @@ footer {
 # ── Main renderer ──────────────────────────────────────────────────────────────
 
 def _render(s: dict[str, Any]) -> str:
-    version  = s.get("version", "1.0.0")
-    provider = s.get("llm_provider", "unknown")
-    active   = s.get("active_features", [])
-    inactive = s.get("inactive_features", [])
-    earn     = s.get("earnings", {})
-    suggs    = s.get("suggestions", [])
-    evo      = s.get("last_evolution", {})
-    actions  = s.get("last_earning", {}).get("actions", [])
-    errors   = s.get("errors", [])
-    n_runs   = s.get("total_runs", 0)
+    version   = s.get("version", "1.0.0")
+    provider  = s.get("llm_provider", "unknown")
+    llm_roles = s.get("llm_roles", {})
+    active    = s.get("active_features", [])
+    inactive  = s.get("inactive_features", [])
+    earn      = s.get("earnings", {})
+    suggs     = s.get("suggestions", [])
+    evo       = s.get("last_evolution", {})
+    actions   = s.get("last_earning", {}).get("actions", [])
+    errors    = s.get("errors", [])
+    n_runs    = s.get("total_runs", 0)
 
     last_run            = _fmt(s.get("last_run"))
     age_label, age_color = _last_run_age(s.get("last_run"))
@@ -647,7 +694,7 @@ def _render(s: dict[str, Any]) -> str:
 
     body = "\n".join([
         _section_header(version, provider, active, last_run,
-                        age_label, age_color, n_runs, cycle_str),
+                        age_label, age_color, n_runs, cycle_str, llm_roles),
         _section_stats(earn, n_runs, active, inactive, history, spark, spark_tip),
         _section_earnings(earn),
         _section_suggestions(suggs),

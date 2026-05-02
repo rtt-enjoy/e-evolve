@@ -84,6 +84,7 @@ def _defaults() -> dict[str, Any]:
         "active_features":   [],
         "inactive_features": list(FEATURE_MAP.keys()),
         "llm_provider":      "unknown",
+        "llm_roles":         {},
         "earnings": {
             "total_usd":       0.0,
             "this_week_usd":   0.0,

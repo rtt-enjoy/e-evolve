@@ -37,11 +37,14 @@ MAX_CHANGES       = 3
 MAX_FIX_RETRIES   = 2
 # Per-provider codebase snapshot limits.
 # Groq free tier: 12k TPM total — status JSON ~1k, system prompt ~0.6k, response 6k → 4k left for codebase.
-# Anthropic: large context window, no TPM issue.
+# Gemini/Anthropic: large context, no TPM issue.
+# OpenRouter varies by model — 30k is safe across free-tier models.
 _MAX_READ_BYTES = {
     "groq":       4_000,
     "anthropic":  60_000,
     "claude-cli": 60_000,
+    "gemini":     80_000,
+    "openrouter": 30_000,
 }
 
 _SYSTEM = """\
@@ -90,10 +93,17 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
     Run evolution. Returns:
       { version_bumped_to, summary, changes_applied, suggestions, error }
     """
-    provider = getattr(llm, "provider", "groq")
-    max_bytes = _MAX_READ_BYTES.get(provider, _MAX_READ_BYTES["groq"])
-    log.info("Reading codebase for evolution (provider=%s, max_bytes=%d)...", provider, max_bytes)
-    codebase = _read_codebase(max_bytes, include_config=(provider not in ("groq",)))
+    from bot.llm import ROLE_PROVIDER
+    think_provider = ROLE_PROVIDER.get("think", "gemini")
+    # Use think-role provider capacity if that key is available, else fallback to default
+    key_attr = f"_{think_provider}_key" if think_provider != "claude-cli" else None
+    if key_attr and getattr(llm, key_attr, ""):
+        evo_provider = think_provider
+    else:
+        evo_provider = getattr(llm, "provider", "groq")
+    max_bytes = _MAX_READ_BYTES.get(evo_provider, _MAX_READ_BYTES["groq"])
+    log.info("Evolution provider=%s (think role), max_bytes=%d", evo_provider, max_bytes)
+    codebase = _read_codebase(max_bytes, include_config=(evo_provider not in ("groq",)))
 
     prompt = (
         f"Current status:\n{json.dumps(status, indent=2, default=str)}\n\n"
@@ -104,7 +114,7 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
     )
 
     try:
-        plan = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
+        plan = llm.complete_json_for_role("think", prompt, system=_SYSTEM, max_tokens=6000)
     except Exception as exc:
         log.error("Evolution LLM call failed: %s", exc)
         return _error_result(str(exc), status.get("version", "1.0.0"))
@@ -305,7 +315,7 @@ def _verify_and_fix(applied: list[dict], llm: Any, status: dict) -> list[dict]:
                 "Fix the file. JSON only."
             )
             try:
-                fix_plan = llm.complete_json(fix_prompt, system=_FIX_SYSTEM, max_tokens=4000)
+                fix_plan = llm.complete_json_for_role("think", fix_prompt, system=_FIX_SYSTEM, max_tokens=4000)
                 fixed_content = str(fix_plan.get("content", "")).strip()
                 fix_reason    = str(fix_plan.get("reason", ""))
             except Exception as exc:

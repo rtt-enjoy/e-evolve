@@ -109,6 +109,12 @@ class LLMClient:
                         exhausted = True
                         break
 
+                    # Rate limit / quota exhausted: skip provider immediately
+                    if any(code in exc_str for code in ("429", "rate_limit_exceeded", "RESOURCE_EXHAUSTED", "quota_exceeded", "RateLimitError", "insufficient_quota", "Too Many Requests")):
+                        log.warning("LLM rate limit on provider=%s -- skipping to fallback: %s", provider, exc)
+                        exhausted = True
+                        break
+
                     # 413: truncate and retry (Groq only)
                     if "413" in exc_str and provider == "groq" and attempt < 3:
                         cutoff   = int(len(p_prompt) * 0.6)
@@ -344,6 +350,8 @@ class LLMClient:
         )
         if rsp.status_code in (401, 403):
             raise RuntimeError(f"401 authentication_error from openrouter: {rsp.text[:200]}")
+        if rsp.status_code == 429:
+            raise RuntimeError(f"429 rate_limit_exceeded from openrouter: {rsp.text[:200]}")
         rsp.raise_for_status()
         data = rsp.json()
         if "error" in data:

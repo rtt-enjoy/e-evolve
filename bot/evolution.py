@@ -105,8 +105,16 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
     log.info("Evolution provider=%s (think role), max_bytes=%d", evo_provider, max_bytes)
     codebase = _read_codebase(max_bytes, include_config=(evo_provider not in ("groq",)))
 
+    # Trim bulky runtime-only fields before sending to LLM to save tokens.
+    status_slim = {k: v for k, v in status.items()
+                   if k not in ("last_earning",)}
+    if "earnings" in status_slim:
+        e = dict(status_slim["earnings"])
+        e.pop("history", None)
+        status_slim["earnings"] = e
+
     prompt = (
-        f"Current status:\n{json.dumps(status, indent=2, default=str)}\n\n"
+        f"Current status:\n{json.dumps(status_slim, indent=2, default=str)}\n\n"
         f"Active features: {status.get('active_features', [])}\n"
         f"Inactive (need secrets): {status.get('inactive_features', [])}\n\n"
         f"Codebase:\n{codebase}\n\n"

@@ -56,6 +56,7 @@ _FREE_TIER_SECRETS = frozenset({
 # Evolution badge config: status → (text-color, bg-color, border-color)
 _EVO_BADGE_STYLES: dict[str, tuple[str, str, str]] = {
     "ok":          ("var(--gn)", "rgba(63,185,80,.15)",  "rgba(63,185,80,.4)"),
+    "idle":        ("var(--ac)", "rgba(88,166,255,.1)",  "rgba(88,166,255,.3)"),
     "skipped":     ("var(--mu)", "rgba(139,148,158,.1)", "rgba(139,148,158,.3)"),
     "llm_error":   ("var(--rd)", "rgba(248,81,73,.1)",   "rgba(248,81,73,.35)"),
     "apply_error": ("#e3b341",   "rgba(227,179,65,.1)",  "rgba(227,179,65,.35)"),
@@ -161,7 +162,7 @@ def _last_run_age(last_run_iso: Any) -> tuple[str, str]:
 
 
 def _evo_status(evo: dict) -> str:
-    """Classify evolution result into one of: ok | skipped | llm_error | apply_error."""
+    """Classify evolution result into one of: ok | idle | skipped | llm_error | apply_error."""
     err      = evo.get("error")
     err_type = evo.get("error_type", "")
     summary  = evo.get("summary", "")
@@ -173,7 +174,7 @@ def _evo_status(evo: dict) -> str:
         return "llm_error"
     if err:
         return "apply_error"
-    return "ok"
+    return "idle"
 
 
 # ── Section renderers ──────────────────────────────────────────────────────────

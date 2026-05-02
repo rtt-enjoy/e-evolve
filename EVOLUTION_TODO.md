@@ -12,10 +12,6 @@ _(none open)_
 
 ## High Priority — Earning
 
-- **Re-activate `articles_devto`** — was responsible for $2.65 of $2.77 total (96% of earnings).
-  Add `DEV_TO_API_KEY` secret → GitHub → Settings → Secrets and variables → Actions.
-  Estimated: ~$1/week when active.
-
 - **Add `MEDIUM_INTEGRATION_TOKEN`** — dual-publish same articles to Medium at zero extra LLM cost.
   Estimated: ~$0.02/article extra.
 
@@ -52,3 +48,11 @@ _(none open)_
   Gemini → hard thinking (evolution), Groq → fast replies, OpenRouter → experiment.
   Dashboard shows per-role provider pills with distinct colors.
   `llm_roles` persisted in status.json.
+
+- **Re-activate `articles_devto`** — active as of v1.3.0 (cycle #440). `DEV_TO_API_KEY` secret present.
+
+- **Earnings breakdown resets on week rollover** — fixed 2026-05-02. Previously accumulated all-time.
+
+- **Evolution dashboard showed `ok` for no-change cycles** — fixed 2026-05-02. Now shows `idle` (blue).
+
+- **Evolution LLM prompt included earnings history + last_earning** — fixed 2026-05-02. Stripped before send.

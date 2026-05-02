@@ -46,6 +46,7 @@ def update(status: dict[str, Any], actions: list[dict]) -> dict[str, Any]:
         _append_weekly_history(started, prev_amount, e.get("breakdown", {}))
         e["this_week_usd"] = 0.0
         e["week_started"]  = current_week_monday
+        e["breakdown"]     = {}
 
     if not e.get("week_started"):
         e["week_started"] = current_week_monday

@@ -27,6 +27,7 @@ FEATURE_MAP: dict[str, list[str]] = {
     "twitter":         ["TWITTER_API_KEY", "TWITTER_API_SECRET",
                         "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_SECRET"],
     "crypto_binance":  ["BINANCE_API_KEY", "BINANCE_SECRET_KEY"],
+    "crypto_payout":   ["BINANCE_API_KEY", "BINANCE_SECRET_KEY", "BINANCE_WITHDRAW_ADDRESS"],
     "nft_ethereum":    ["ETH_PRIVATE_KEY", "ETH_WALLET_ADDRESS"],
 }
 
@@ -148,10 +149,12 @@ def _defaults() -> dict[str, Any]:
             "actions":   [],
             "total_usd": 0.0,
         },
-        "suggestions":    [],
-        "errors":         [],
-        "usdt_wallet":    "",
-        "usdt_balance":   0.0,
+        "suggestions":           [],
+        "errors":                [],
+        "usdt_wallet":           "",
+        "usdt_balance":          0.0,
+        "last_payout_total_usd": 0.0,
+        "last_payout_tx":        None,
     }
 
 

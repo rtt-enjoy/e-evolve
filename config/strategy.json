@@ -16,5 +16,11 @@
   "twitter": {
     "min_tweets": 5,
     "max_tweets": 7
+  },
+  "payout": {
+    "min_payout_usd": 20.0,
+    "coin": "USDT",
+    "network": "TRX",
+    "fee_buffer_usd": 2.0
   }
 }

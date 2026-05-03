@@ -152,6 +152,10 @@ def main() -> int:
             log.info("Trade risk overridden to %.0f%%", ov["trade_risk_pct"] * 100)
         actions += _module("crypto", llm, status, errors)
 
+    # Crypto auto-payout (runs after trading so earnings are current)
+    if "crypto_payout" in active:
+        actions += _module("payout", llm, status, errors)
+
     # NFT minting
     if "nft_ethereum" in active:
         for _ in range(ov.get("force_mint", 1)):

@@ -18,6 +18,7 @@ import sys
 import traceback
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 # ── Logging setup ─────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -222,10 +223,6 @@ def _module(name: str, llm: Any, status: dict, errors: list) -> list[dict]:
 def _hr(text: str) -> None:
     bar = "─" * max(0, 60 - len(text))
     log.info("─── %s %s", text, bar)
-
-
-# Needed for type hint in _module
-from typing import Any
 
 
 if __name__ == "__main__":

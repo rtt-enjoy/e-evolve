@@ -51,23 +51,100 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
             overrides["trade_risk_pct"] = 0.05
 
         elif m := re.match(r"force mint (\d+)$", cmd):
-            # Implement minting logic
-            pass
+            overrides["force_mint"] = max(1, int(m.group(1)))
 
         elif cmd == "skip evolution":
-            # Implement skip evolution logic
-            pass
+            overrides["skip_evolution"] = True
 
         elif cmd == "reset earnings":
-            # Implement reset earnings logic
-            pass
+            overrides["reset_earnings"] = True
 
         elif cmd == "post thread":
-            # Implement post thread logic
-            pass
+            overrides["force_twitter"] = True
 
         elif cmd == "status report":
-            # Implement status report logic
-            pass
+            log.info("STATUS REPORT:\n%s", json.dumps(status, indent=2, default=str))
 
-    return {**status, '_overrides': overrides}
+        else:
+            log.warning("Unknown command ignored: %r", raw)
+
+    # Apply reset earnings immediately so it persists to status.json
+    if overrides.get("reset_earnings"):
+        if "earnings" in status:
+            status["earnings"]["this_week_usd"] = 0.0
+            status["earnings"]["week_started"] = None
+        log.info("Earnings reset: this_week_usd zeroed")
+
+    return {**status, "_overrides": overrides}
+
+
+# ── File source ───────────────────────────────────────────────────────────────
+
+def _from_file() -> list[str]:
+    """Read commands from command.txt, then clear the file."""
+    if not COMMAND_FILE.exists():
+        return []
+    try:
+        text = COMMAND_FILE.read_text(encoding="utf-8").strip()
+    except Exception as exc:
+        log.warning("Could not read %s: %s", COMMAND_FILE, exc)
+        return []
+
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip() and not ln.strip().startswith("#")]
+    if not lines:
+        return []
+
+    # Clear the file so commands don't repeat next cycle
+    try:
+        COMMAND_FILE.write_text("", encoding="utf-8")
+    except Exception as exc:
+        log.warning("Could not clear %s: %s", COMMAND_FILE, exc)
+
+    return lines
+
+
+# ── GitHub Issues source ──────────────────────────────────────────────────────
+
+def _from_github_issues() -> list[str]:
+    """Read open issues labelled 'bot-command', close them, return their titles as commands."""
+    token = os.getenv("GH_TOKEN", "").strip()
+    repo  = os.getenv("GITHUB_REPO", "").strip()
+    if not token or not repo:
+        return []
+
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    url = f"https://api.github.com/repos/{repo}/issues"
+    params = {"labels": "bot-command", "state": "open", "per_page": 10}
+
+    try:
+        resp = requests.get(url, headers=headers, params=params, timeout=15)
+        resp.raise_for_status()
+        issues = resp.json()
+    except Exception as exc:
+        log.warning("GitHub Issues fetch failed: %s", exc)
+        return []
+
+    cmds: list[str] = []
+    for issue in issues:
+        title = (issue.get("title") or "").strip()
+        number = issue.get("number")
+        if not title or not number:
+            continue
+        cmds.append(title)
+        # Close the issue so it doesn't repeat
+        try:
+            requests.patch(
+                f"{url}/{number}",
+                headers=headers,
+                json={"state": "closed"},
+                timeout=15,
+            )
+            log.info("Closed issue #%d after reading command: %r", number, title)
+        except Exception as exc:
+            log.warning("Could not close issue #%d: %s", number, exc)
+
+    return cmds

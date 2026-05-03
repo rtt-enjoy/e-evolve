@@ -229,7 +229,7 @@ def _post_devto(article: dict, api_key: str) -> Result:
             resp.raise_for_status()
             url = resp.json().get("url", "https://dev.to")
             return Result(platform="dev.to", title=article["title"],
-                          url=url, success=True, estimated_usd=0.05)
+                          url=url, success=True, estimated_usd=0.0)
         except requests.HTTPError as exc:
             return Result(platform="dev.to",
                           error=f"HTTP {exc.response.status_code}: {exc.response.text[:100]}")
@@ -270,7 +270,7 @@ def _post_medium(article: dict, token: str) -> Result:
             resp.raise_for_status()
             url = resp.json()["data"].get("url", "https://medium.com")
             return Result(platform="medium", title=article["title"],
-                          url=url, success=True, estimated_usd=0.02)
+                          url=url, success=True, estimated_usd=0.0)
         except Exception as exc:
             last_exc = exc
             if attempt < 2:

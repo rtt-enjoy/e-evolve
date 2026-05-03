@@ -324,15 +324,15 @@ footer {
   <div class="logo">🤖</div>
   <div>
     <h1>E-Evolve
-      <span class="pill-version" id="hdr-version">1.3.0</span>
-      <span id="hdr-providers"><span class="pill-provider-groq">groq</span></span>
+      <span class="pill-version" id="hdr-version">1.4.0</span>
+      <span id="hdr-providers"><span class="pill-provider-groq" title="fast">⚡ groq</span></span>
     </h1>
     <div style="margin-top:5px" id="hdr-badges"><span class="badge badge-green">llm_groq</span><span class="badge badge-green">articles_devto</span></div>
     <div class="muted" style="font-size:.8rem;margin-top:5px">
-      Last cycle: <span id="hdr-last-run">2026-05-01 19:41 UTC</span>
-      <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--rd);border:1px solid var(--rd)">31h ago</span>
-      &nbsp;·&nbsp; Total cycles: <span id="hdr-total-runs">440</span>
-      &nbsp;·&nbsp; Cycle time: <span id="hdr-cycle-time">25s</span>
+      Last cycle: <span id="hdr-last-run">2026-05-03 04:12 UTC</span>
+      <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--gn);border:1px solid var(--gn)">0m ago</span>
+      &nbsp;·&nbsp; Total cycles: <span id="hdr-total-runs">441</span>
+      &nbsp;·&nbsp; Cycle time: <span id="hdr-cycle-time">48s</span>
     </div>
   </div>
 </header>
@@ -347,13 +347,13 @@ footer {
     <div class="stat-sub" id="stat-last-cycle">last cycle: $0.0000</div>
   </div>
   <div class="stat-card">
-    <div class="stat-value stat-neutral" id="stat-runs">440</div>
+    <div class="stat-value stat-neutral" id="stat-runs">441</div>
     <div class="stat-label">Cycles run</div>
   </div>
   <div class="stat-card">
     <div class="stat-value stat-neutral" id="stat-active" style="color:var(--pu)">2</div>
     <div class="stat-label">Active modules</div>
-    <div class="stat-sub" id="stat-inactive">5 inactive</div>
+    <div class="stat-sub" id="stat-inactive">8 inactive</div>
   </div>
   
   
@@ -381,6 +381,22 @@ footer {
   <div class="activate-note">Free tier: $5 credit. Enables smarter evolution.</div>
 </div><div class="activate-card">
   <div class="activate-header">
+    <strong>Google Gemini</strong><span class="free-badge">Free</span>
+    <a class="activate-link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">Get API key →</a>
+  </div>
+  <div class="activate-secrets"><code class="secret-code">GEMINI_API_KEY</code></div>
+  <ol class="activate-steps"><li>Go to aistudio.google.com → sign in with Google</li><li>Click <em>Get API key</em> → Create API key</li><li>GitHub → Settings → Secrets → <code>GEMINI_API_KEY</code></li></ol>
+  <div class="activate-note">Completely free tier, no credit card needed.</div>
+</div><div class="activate-card">
+  <div class="activate-header">
+    <strong>OpenRouter</strong><span class="free-badge">Free</span>
+    <a class="activate-link" href="https://openrouter.ai/keys" target="_blank" rel="noopener">Get API key →</a>
+  </div>
+  <div class="activate-secrets"><code class="secret-code">OPENROUTER_API_KEY</code></div>
+  <ol class="activate-steps"><li>openrouter.ai → Sign up (email/GitHub, no KYC)</li><li>Keys → Create Key</li><li>GitHub → Secrets → <code>OPENROUTER_API_KEY</code></li></ol>
+  <div class="activate-note">Many free models available (Mistral, Llama, etc.).</div>
+</div><div class="activate-card">
+  <div class="activate-header">
     <strong>Medium</strong><span class="free-badge">Free</span>
     <a class="activate-link" href="https://medium.com/me/settings/security" target="_blank" rel="noopener">Get API key →</a>
   </div>
@@ -403,7 +419,7 @@ footer {
   <div class="activate-secrets"><code class="secret-code">BINANCE_API_KEY</code><code class="secret-code">BINANCE_SECRET_KEY</code></div>
   <ol class="activate-steps"><li>kucoin.com → Sign up (email only, no ID required for basic tier)</li><li>Account → API Management → Create API</li><li>GitHub → Secrets → <code>BINANCE_API_KEY</code> + <code>BINANCE_SECRET_KEY</code> (bot reads these names)</li></ol>
   <div class="activate-note">KuCoin unverified: up to ~$1k/day withdrawal. Deposit USDT to start.</div>
-</div><div class="activate-card">
+</div><div class="inactive-tag"><span class="inactive-dot"></span>crypto_payout</div><div class="activate-card">
   <div class="activate-header">
     <strong>NFT Minting (Ethereum)</strong><span class="paid-badge">Needs funds</span>
     <a class="activate-link" href="https://metamask.io/" target="_blank" rel="noopener">Get API key →</a>
@@ -444,8 +460,8 @@ footer {
 <div class="section">
   <h2>⚡ Last Evolution</h2>
   <div class="panel">
-    <p style="margin-bottom:9px"><strong>Added Medium integration and Twitter posting features</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--gn);background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);margin-left:8px">ok</span></p>
-    <ul class="evo-list"><li><code>bot/articles.py</code> — Implement Medium posting logic</li><li><code>bot/commands.py</code> — Implement command logic for minting, skipping evolution, resetting earnings, pos</li><li><code>bot/twitter.py</code> — Implement Twitter posting logic</li></ul>
+    <p style="margin-bottom:9px"><strong>Added support for Medium integration and Twitter posting features, and improved error handling</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--gn);background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);margin-left:8px">ok</span></p>
+    <ul class="evo-list"><li><code>bot/articles.py</code> — Implement dual publishing logic for Medium and dev.to</li><li><code>bot/commands.py</code> — Implement command logic for dual publishing and Twitter integration</li><li><code>config/medium_config.py</code> — Add Medium integration token configuration</li></ul>
     
   </div>
 </div>

@@ -947,6 +947,18 @@ footer {
   text-align: center; color: var(--mu); font-size: .76rem;
   margin-top: 32px; padding-top: 14px; border-top: 1px solid var(--br);
 }
+.wallet-row { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; }
+.wallet-row code {
+  font-family: monospace; font-size: .75rem;
+  background: rgba(110,118,129,.15); padding: 1px 6px; border-radius: 3px;
+  word-break: break-all;
+}
+.btn-copy-addr {
+  background: transparent; border: 1px solid var(--br); color: var(--mu);
+  border-radius: 4px; padding: 1px 5px; font-size: .72rem;
+  cursor: pointer; line-height: 1.4;
+}
+.btn-copy-addr:hover { border-color: var(--ac); color: var(--ac); }
 
 /* ── Live indicator ── */
 .live-indicator {
@@ -1002,6 +1014,14 @@ def _render(s: dict[str, Any]) -> str:
         _LIVE_JS,
     ])
 
+    wallet      = s.get("usdt_wallet", "")
+    wallet_html = (
+        f'<br><span class="wallet-row">💰 USDT (TRC-20/ERC-20): '
+        f'<code id="usdt-addr">{wallet}</code>'
+        f'<button class="btn-copy-addr" onclick="navigator.clipboard.writeText(\'{wallet}\')"'
+        f' title="Copy address">⧉</button></span>'
+    ) if wallet else ""
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1022,6 +1042,7 @@ def _render(s: dict[str, Any]) -> str:
     <span id="live-dot"></span>
     live · updated <span id="live-ts">—</span>
   </span>
+  {wallet_html}
 </footer>
 </body>
 </html>"""

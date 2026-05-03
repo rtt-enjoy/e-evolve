@@ -61,6 +61,9 @@ def snapshot(status: dict[str, Any]) -> dict[str, Any]:
     status["total_runs"]        = int(status.get("total_runs", 0)) + 1
     status["active_features"]   = active
     status["inactive_features"] = inactive
+    usdt_wallet = os.getenv("USDT_WALLET_ADDRESS", "").strip()
+    if usdt_wallet:
+        status["usdt_wallet"] = usdt_wallet
 
     log.info("Cycle #%d | v%s | active=%s",
              status["total_runs"], version, active)

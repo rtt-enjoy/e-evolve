@@ -235,13 +235,28 @@ def _section_header(version: str, provider: str, active: list, last_run: str,
 
 
 def _section_stats(earn: dict, n_runs: int, active: list, inactive: list,
-                   history: list, spark: str, spark_tip: str) -> str:
+                   history: list, spark: str, spark_tip: str, s: dict = None) -> str:
+    s = s or {}
     spark_card = (
         f'<div class="stat-card">'
         f'<div class="stat-value sparkline" title="{spark_tip}">{spark}</div>'
         f'<div class="stat-label">Last {len(history)} earning cycles</div>'
         f'</div>'
     ) if spark else ""
+
+    usdt_bal   = float(s.get("usdt_balance", 0.0))
+    usdt_recv  = s.get("usdt_received")
+    recv_badge = (
+        f'<div class="stat-sub" id="stat-usdt-recv" style="color:var(--gn)">+{usdt_recv:.6f} received</div>'
+    ) if usdt_recv else '<div class="stat-sub" id="stat-usdt-recv"></div>'
+
+    usdt_card = (
+        f'<div class="stat-card">'
+        f'<div class="stat-value" id="stat-usdt-bal" style="color:var(--gn)">{usdt_bal:.2f} USDT</div>'
+        f'<div class="stat-label">Wallet balance</div>'
+        f'{recv_badge}'
+        f'</div>'
+    ) if s.get("usdt_wallet") else ""
 
     return f"""<div class="stat-grid">
   <div class="stat-card">
@@ -262,6 +277,7 @@ def _section_stats(earn: dict, n_runs: int, active: list, inactive: list,
     <div class="stat-label">Active modules</div>
     <div class="stat-sub" id="stat-inactive">{len(inactive)} inactive</div>
   </div>
+  {usdt_card}
   {spark_card}
 </div>"""
 
@@ -605,6 +621,26 @@ _LIVE_JS = """\
     setText('stat-runs', s.total_runs || 0);
     setText('stat-active', active.length);
     setText('stat-inactive', inactive.length + ' inactive');
+
+    // USDT wallet balance (real-time from status.json)
+    if (s.usdt_wallet) {
+      var addrEl = document.getElementById('usdt-addr');
+      if (addrEl) addrEl.textContent = s.usdt_wallet;
+      var copyBtn = document.querySelector('.btn-copy-addr');
+      if (copyBtn) copyBtn.setAttribute('onclick', "navigator.clipboard.writeText('" + s.usdt_wallet + "')");
+    }
+    if (s.usdt_balance !== undefined) {
+      setText('stat-usdt-bal', parseFloat(s.usdt_balance).toFixed(2) + ' USDT');
+    }
+    var recvEl = document.getElementById('stat-usdt-recv');
+    if (recvEl) {
+      if (s.usdt_received) {
+        recvEl.textContent = '+' + parseFloat(s.usdt_received).toFixed(6) + ' received';
+        recvEl.style.color = 'var(--gn)';
+      } else {
+        recvEl.textContent = '';
+      }
+    }
 
     // Live indicator
     var dot = document.getElementById('live-dot');
@@ -1000,7 +1036,7 @@ def _render(s: dict[str, Any]) -> str:
     body = "\n".join([
         _section_header(version, provider, active, last_run,
                         age_label, age_color, n_runs, cycle_str, llm_roles),
-        _section_stats(earn, n_runs, active, inactive, history, spark, spark_tip),
+        _section_stats(earn, n_runs, active, inactive, history, spark, spark_tip, s),
         _section_earnings(earn),
         _section_suggestions(suggs),
         _section_orders(),

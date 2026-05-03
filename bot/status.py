@@ -64,6 +64,16 @@ def snapshot(status: dict[str, Any]) -> dict[str, Any]:
     usdt_wallet = os.getenv("USDT_WALLET_ADDRESS", "").strip()
     if usdt_wallet:
         status["usdt_wallet"] = usdt_wallet
+        prev_balance = float(status.get("usdt_balance", 0.0))
+        new_balance  = _fetch_usdt_balance(usdt_wallet)
+        if new_balance is not None:
+            status["usdt_balance"] = new_balance
+            if new_balance > prev_balance:
+                status["usdt_received"] = round(new_balance - prev_balance, 6)
+                status["usdt_received_at"] = datetime.now(timezone.utc).isoformat()
+            else:
+                status.pop("usdt_received", None)
+                status.pop("usdt_received_at", None)
 
     log.info("Cycle #%d | v%s | active=%s",
              status["total_runs"], version, active)
@@ -78,6 +88,38 @@ def save(status: dict[str, Any]) -> None:
 
 
 # ── Internals ───────────────────────────────────────────────────────────────
+
+def _fetch_usdt_balance(address: str) -> float | None:
+    """Query on-chain USDT balance. TRC-20 if address starts with T, else ERC-20."""
+    import urllib.request
+    import urllib.error
+    try:
+        if address.startswith("T"):
+            # TRC-20 USDT via Tronscan public API (no key needed)
+            url = f"https://apilist.tronscanapi.com/api/account/tokens?address={address}&token=TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+            with urllib.request.urlopen(url, timeout=10) as r:
+                data = json.loads(r.read())
+            for tok in data.get("data", []):
+                if tok.get("tokenId") == "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t":
+                    return float(tok.get("quantity", 0)) / 1e6
+            return 0.0
+        elif address.startswith("0x"):
+            # ERC-20 USDT via Etherscan (ETHERSCAN_API_KEY optional, free tier works without)
+            contract  = "0xdac17f958d2ee523a2206206994597c13d831ec7"
+            etherscan_key = os.getenv("ETHERSCAN_API_KEY", "YourApiKeyToken").strip()
+            url = (f"https://api.etherscan.io/api?module=account&action=tokenbalance"
+                   f"&contractaddress={contract}&address={address}&tag=latest&apikey={etherscan_key}")
+            with urllib.request.urlopen(url, timeout=10) as r:
+                data = json.loads(r.read())
+            if data.get("status") == "1":
+                return float(data["result"]) / 1e6
+            return 0.0
+        else:
+            return None
+    except Exception as exc:
+        log.debug("USDT balance fetch failed: %s", exc)
+        return None
+
 
 def _defaults() -> dict[str, Any]:
     return {
@@ -106,8 +148,10 @@ def _defaults() -> dict[str, Any]:
             "actions":   [],
             "total_usd": 0.0,
         },
-        "suggestions": [],
-        "errors":      [],
+        "suggestions":    [],
+        "errors":         [],
+        "usdt_wallet":    "",
+        "usdt_balance":   0.0,
     }
 
 

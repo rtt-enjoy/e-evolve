@@ -252,11 +252,59 @@ th { color: var(--mu); font-weight: 500; }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
+/* ── Activate Modules panel ── */
+.activate-card {
+  border: 1px solid var(--br); border-radius: 7px;
+  padding: 12px 14px; margin-bottom: 10px;
+}
+.activate-card:last-child { margin-bottom: 0; }
+.activate-header {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px;
+}
+.activate-link {
+  margin-left: auto; font-size: .78rem; color: var(--ac);
+  white-space: nowrap;
+}
+.activate-secrets { margin-bottom: 6px; }
+.secret-code {
+  display: inline-block; background: rgba(110,118,129,.15);
+  border: 1px solid var(--br); border-radius: 4px;
+  padding: 1px 6px; font-size: .75rem; font-family: monospace;
+  margin-right: 4px; margin-bottom: 2px; color: var(--ac);
+}
+.activate-steps {
+  padding-left: 18px; color: var(--mu); font-size: .82rem; margin-bottom: 4px;
+}
+.activate-steps li { margin-bottom: 3px; }
+.activate-note {
+  font-size: .78rem; color: var(--mu); margin-top: 5px;
+  padding: 4px 8px; background: rgba(88,166,255,.05);
+  border-left: 2px solid rgba(88,166,255,.3); border-radius: 2px;
+}
+.paid-badge {
+  display: inline-block; padding: 1px 7px; border-radius: 10px;
+  font-size: .72rem; font-weight: 700; color: var(--yw);
+  background: rgba(227,179,65,.12); border: 1px solid rgba(227,179,65,.35);
+  margin-left: 6px;
+}
+
 /* ── Footer ── */
 footer {
   text-align: center; color: var(--mu); font-size: .76rem;
   margin-top: 32px; padding-top: 14px; border-top: 1px solid var(--br);
 }
+.wallet-row { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; }
+.wallet-row code {
+  font-family: monospace; font-size: .75rem;
+  background: rgba(110,118,129,.15); padding: 1px 6px; border-radius: 3px;
+  word-break: break-all;
+}
+.btn-copy-addr {
+  background: transparent; border: 1px solid var(--br); color: var(--mu);
+  border-radius: 4px; padding: 1px 5px; font-size: .72rem;
+  cursor: pointer; line-height: 1.4;
+}
+.btn-copy-addr:hover { border-color: var(--ac); color: var(--ac); }
 
 /* ── Live indicator ── */
 .live-indicator {
@@ -282,7 +330,7 @@ footer {
     <div style="margin-top:5px" id="hdr-badges"><span class="badge badge-green">llm_groq</span><span class="badge badge-green">articles_devto</span></div>
     <div class="muted" style="font-size:.8rem;margin-top:5px">
       Last cycle: <span id="hdr-last-run">2026-05-01 19:41 UTC</span>
-      <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--rd);border:1px solid var(--rd)">17h ago</span>
+      <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--rd);border:1px solid var(--rd)">31h ago</span>
       &nbsp;·&nbsp; Total cycles: <span id="hdr-total-runs">440</span>
       &nbsp;·&nbsp; Cycle time: <span id="hdr-cycle-time">25s</span>
     </div>
@@ -308,6 +356,7 @@ footer {
     <div class="stat-sub" id="stat-inactive">5 inactive</div>
   </div>
   
+  
 </div>
 <div class="section">
   <h2>📈 Earnings Analysis</h2>
@@ -319,6 +368,50 @@ footer {
 <div class="section">
   <h2>🧠 Smart Growth Suggestions</h2>
   <div class="panel"><div class="suggestion-card"><span class="suggestion-rank">🥇</span><div><strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong><span class="free-badge">Free to start</span><p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p><div class="secret-needed">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div><ol class="how-to-steps"><li>Step 1: Go to Medium Partner Program and create an account</li><li>Step 2: Generate an integration token in the Medium settings</li><li>Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN</li></ol></div></div><div class="suggestion-card"><span class="suggestion-rank">🥈</span><div><strong>Upgrade to Groq Dev Tier for increased LLM usage</strong><p>Increase the daily token limit for LLM usage</p><div class="est-earnings">~$20/week estimated</div><ol class="how-to-steps"><li>Step 1: Go to the Groq console and navigate to the billing settings</li><li>Step 2: Upgrade to the Dev Tier plan</li><li>Step 3: Verify the increased token limit in the Groq console</li></ol></div></div><div class="suggestion-card"><span class="suggestion-rank">🥉</span><div><strong>Add TWITTER_API_KEY for Twitter integration</strong><span class="free-badge">Free to start</span><p>Enable Twitter posting and increase reach</p><div class="secret-needed">Add secret: <code>TWITTER_API_KEY</code></div><ol class="how-to-steps"><li>Step 1: Go to the Twitter Developer Dashboard and create an app</li><li>Step 2: Generate an API key and secret in the Twitter settings</li><li>Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET</li></ol></div></div></div>
+</div>
+<div class="section">
+  <h2>🔓 Activate Modules</h2>
+  <div class="panel"><div class="activate-card">
+  <div class="activate-header">
+    <strong>Anthropic (Claude)</strong><span class="free-badge">Free</span>
+    <a class="activate-link" href="https://console.anthropic.com/" target="_blank" rel="noopener">Get API key →</a>
+  </div>
+  <div class="activate-secrets"><code class="secret-code">ANTHROPIC_API_KEY</code></div>
+  <ol class="activate-steps"><li>Go to console.anthropic.com → sign up (email only, no KYC)</li><li>API Keys → Create Key → copy it</li><li>GitHub repo → Settings → Secrets → New secret: <code>ANTHROPIC_API_KEY</code></li></ol>
+  <div class="activate-note">Free tier: $5 credit. Enables smarter evolution.</div>
+</div><div class="activate-card">
+  <div class="activate-header">
+    <strong>Medium</strong><span class="free-badge">Free</span>
+    <a class="activate-link" href="https://medium.com/me/settings/security" target="_blank" rel="noopener">Get API key →</a>
+  </div>
+  <div class="activate-secrets"><code class="secret-code">MEDIUM_INTEGRATION_TOKEN</code></div>
+  <ol class="activate-steps"><li>medium.com → sign in → Settings → Security</li><li>Integration tokens → Get integration token</li><li>GitHub → Secrets → <code>MEDIUM_INTEGRATION_TOKEN</code></li></ol>
+  <div class="activate-note">Free. Doubles article reach alongside dev.to.</div>
+</div><div class="activate-card">
+  <div class="activate-header">
+    <strong>Twitter / X</strong><span class="free-badge">Free</span>
+    <a class="activate-link" href="https://developer.twitter.com/en/portal/dashboard" target="_blank" rel="noopener">Get API key →</a>
+  </div>
+  <div class="activate-secrets"><code class="secret-code">TWITTER_API_KEY</code><code class="secret-code">TWITTER_API_SECRET</code><code class="secret-code">TWITTER_ACCESS_TOKEN</code><code class="secret-code">TWITTER_ACCESS_SECRET</code></div>
+  <ol class="activate-steps"><li>developer.twitter.com → sign in → Create project + app</li><li>Keys and Tokens → generate all 4 keys</li><li>GitHub → Secrets → add all 4: <code>TWITTER_API_KEY</code>, <code>TWITTER_API_SECRET</code>, <code>TWITTER_ACCESS_TOKEN</code>, <code>TWITTER_ACCESS_SECRET</code></li></ol>
+  <div class="activate-note">Free tier allows ~1500 tweets/month.</div>
+</div><div class="activate-card">
+  <div class="activate-header">
+    <strong>Crypto Trading (KuCoin — no KYC)</strong><span class="paid-badge">Needs funds</span>
+    <a class="activate-link" href="https://www.kucoin.com/" target="_blank" rel="noopener">Get API key →</a>
+  </div>
+  <div class="activate-secrets"><code class="secret-code">BINANCE_API_KEY</code><code class="secret-code">BINANCE_SECRET_KEY</code></div>
+  <ol class="activate-steps"><li>kucoin.com → Sign up (email only, no ID required for basic tier)</li><li>Account → API Management → Create API</li><li>GitHub → Secrets → <code>BINANCE_API_KEY</code> + <code>BINANCE_SECRET_KEY</code> (bot reads these names)</li></ol>
+  <div class="activate-note">KuCoin unverified: up to ~$1k/day withdrawal. Deposit USDT to start.</div>
+</div><div class="activate-card">
+  <div class="activate-header">
+    <strong>NFT Minting (Ethereum)</strong><span class="paid-badge">Needs funds</span>
+    <a class="activate-link" href="https://metamask.io/" target="_blank" rel="noopener">Get API key →</a>
+  </div>
+  <div class="activate-secrets"><code class="secret-code">ETH_PRIVATE_KEY</code><code class="secret-code">ETH_WALLET_ADDRESS</code></div>
+  <ol class="activate-steps"><li>Install MetaMask → create wallet → copy private key + address</li><li>Get free RPC: alchemy.com → sign up (email only) → create app → copy HTTP URL (optional, uses public RPC by default)</li><li>GitHub → Secrets → <code>ETH_PRIVATE_KEY</code> + <code>ETH_WALLET_ADDRESS</code></li></ol>
+  <div class="activate-note">Needs ETH for gas fees (~$1–5/mint on mainnet). Use testnet first.</div>
+</div></div>
 </div>
 <div class="section">
   <h2>📋 Owner Orders</h2>
@@ -348,7 +441,6 @@ footer {
     </div>
   </div>
 </div>
-<div class="two-col">
 <div class="section">
   <h2>⚡ Last Evolution</h2>
   <div class="panel">
@@ -356,11 +448,6 @@ footer {
     <ul class="evo-list"><li><code>bot/articles.py</code> — Implement Medium posting logic</li><li><code>bot/commands.py</code> — Implement command logic for minting, skipping evolution, resetting earnings, pos</li><li><code>bot/twitter.py</code> — Implement Twitter posting logic</li></ul>
     
   </div>
-</div>
-<div class="section">
-  <h2>🔒 Inactive Modules</h2>
-  <div class="panel"><div class="inactive-tag"><span class="inactive-dot"></span>llm_anthropic</div><div class="inactive-tag"><span class="inactive-dot"></span>articles_medium</div><div class="inactive-tag"><span class="inactive-dot"></span>twitter</div><div class="inactive-tag"><span class="inactive-dot"></span>crypto_binance</div><div class="inactive-tag"><span class="inactive-dot"></span>nft_ethereum</div></div>
-</div>
 </div>
 <div class="section">
   <h2>💰 Last Cycle Actions</h2>
@@ -494,6 +581,26 @@ footer {
     setText('stat-active', active.length);
     setText('stat-inactive', inactive.length + ' inactive');
 
+    // USDT wallet balance (real-time from status.json)
+    if (s.usdt_wallet) {
+      var addrEl = document.getElementById('usdt-addr');
+      if (addrEl) addrEl.textContent = s.usdt_wallet;
+      var copyBtn = document.querySelector('.btn-copy-addr');
+      if (copyBtn) copyBtn.setAttribute('onclick', "navigator.clipboard.writeText('" + s.usdt_wallet + "')");
+    }
+    if (s.usdt_balance !== undefined) {
+      setText('stat-usdt-bal', parseFloat(s.usdt_balance).toFixed(2) + ' USDT');
+    }
+    var recvEl = document.getElementById('stat-usdt-recv');
+    if (recvEl) {
+      if (s.usdt_received) {
+        recvEl.textContent = '+' + parseFloat(s.usdt_received).toFixed(6) + ' received';
+        recvEl.style.color = 'var(--gn)';
+      } else {
+        recvEl.textContent = '';
+      }
+    }
+
     // Live indicator
     var dot = document.getElementById('live-dot');
     if (dot) {
@@ -541,6 +648,7 @@ footer {
     <span id="live-dot"></span>
     live · updated <span id="live-ts">—</span>
   </span>
+  
 </footer>
 </body>
 </html>

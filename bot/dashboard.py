@@ -415,17 +415,128 @@ def _section_evolution(evo: dict) -> str:
 </div>"""
 
 
+_MODULE_SETUP: dict[str, dict] = {
+    "llm_anthropic": {
+        "label": "Anthropic (Claude)",
+        "secrets": ["ANTHROPIC_API_KEY"],
+        "free": True,
+        "signup_url": "https://console.anthropic.com/",
+        "steps": [
+            "Go to console.anthropic.com → sign up (email only, no KYC)",
+            "API Keys → Create Key → copy it",
+            "GitHub repo → Settings → Secrets → New secret: <code>ANTHROPIC_API_KEY</code>",
+        ],
+        "note": "Free tier: $5 credit. Enables smarter evolution.",
+    },
+    "llm_gemini": {
+        "label": "Google Gemini",
+        "secrets": ["GEMINI_API_KEY"],
+        "free": True,
+        "signup_url": "https://aistudio.google.com/app/apikey",
+        "steps": [
+            "Go to aistudio.google.com → sign in with Google",
+            "Click <em>Get API key</em> → Create API key",
+            "GitHub → Settings → Secrets → <code>GEMINI_API_KEY</code>",
+        ],
+        "note": "Completely free tier, no credit card needed.",
+    },
+    "llm_openrouter": {
+        "label": "OpenRouter",
+        "secrets": ["OPENROUTER_API_KEY"],
+        "free": True,
+        "signup_url": "https://openrouter.ai/keys",
+        "steps": [
+            "openrouter.ai → Sign up (email/GitHub, no KYC)",
+            "Keys → Create Key",
+            "GitHub → Secrets → <code>OPENROUTER_API_KEY</code>",
+        ],
+        "note": "Many free models available (Mistral, Llama, etc.).",
+    },
+    "articles_medium": {
+        "label": "Medium",
+        "secrets": ["MEDIUM_INTEGRATION_TOKEN"],
+        "free": True,
+        "signup_url": "https://medium.com/me/settings/security",
+        "steps": [
+            "medium.com → sign in → Settings → Security",
+            "Integration tokens → Get integration token",
+            "GitHub → Secrets → <code>MEDIUM_INTEGRATION_TOKEN</code>",
+        ],
+        "note": "Free. Doubles article reach alongside dev.to.",
+    },
+    "twitter": {
+        "label": "Twitter / X",
+        "secrets": ["TWITTER_API_KEY", "TWITTER_API_SECRET", "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_SECRET"],
+        "free": True,
+        "signup_url": "https://developer.twitter.com/en/portal/dashboard",
+        "steps": [
+            "developer.twitter.com → sign in → Create project + app",
+            "Keys and Tokens → generate all 4 keys",
+            "GitHub → Secrets → add all 4: <code>TWITTER_API_KEY</code>, <code>TWITTER_API_SECRET</code>, <code>TWITTER_ACCESS_TOKEN</code>, <code>TWITTER_ACCESS_SECRET</code>",
+        ],
+        "note": "Free tier allows ~1500 tweets/month.",
+    },
+    "crypto_binance": {
+        "label": "Crypto Trading (KuCoin — no KYC)",
+        "secrets": ["BINANCE_API_KEY", "BINANCE_SECRET_KEY"],
+        "free": False,
+        "signup_url": "https://www.kucoin.com/",
+        "steps": [
+            "kucoin.com → Sign up (email only, no ID required for basic tier)",
+            "Account → API Management → Create API",
+            "GitHub → Secrets → <code>BINANCE_API_KEY</code> + <code>BINANCE_SECRET_KEY</code> (bot reads these names)",
+        ],
+        "note": "KuCoin unverified: up to ~$1k/day withdrawal. Deposit USDT to start.",
+    },
+    "nft_ethereum": {
+        "label": "NFT Minting (Ethereum)",
+        "secrets": ["ETH_PRIVATE_KEY", "ETH_WALLET_ADDRESS"],
+        "free": False,
+        "signup_url": "https://metamask.io/",
+        "steps": [
+            "Install MetaMask → create wallet → copy private key + address",
+            "Get free RPC: alchemy.com → sign up (email only) → create app → copy HTTP URL (optional, uses public RPC by default)",
+            "GitHub → Secrets → <code>ETH_PRIVATE_KEY</code> + <code>ETH_WALLET_ADDRESS</code>",
+        ],
+        "note": "Needs ETH for gas fees (~$1–5/mint on mainnet). Use testnet first.",
+    },
+}
+
+
 def _section_inactive(inactive: list) -> str:
-    content = (
-        "".join(
-            f'<div class="inactive-tag"><span class="inactive-dot"></span>{f}</div>'
-            for f in inactive[:8]
+    if not inactive:
+        return f"""<div class="section">
+  <h2>🔓 Activate Modules</h2>
+  <div class="panel"><p class="muted">All features active 🎉</p></div>
+</div>"""
+
+    cards = ""
+    for feat in inactive:
+        cfg = _MODULE_SETUP.get(feat)
+        if not cfg:
+            cards += f'<div class="inactive-tag"><span class="inactive-dot"></span>{feat}</div>'
+            continue
+        free_badge = (
+            '<span class="free-badge">Free</span>'
+            if cfg["free"]
+            else '<span class="paid-badge">Needs funds</span>'
         )
-        or "<p class='muted'>All features active 🎉</p>"
-    )
+        secrets_html = "".join(f'<code class="secret-code">{s}</code>' for s in cfg["secrets"])
+        steps_html   = "".join(f"<li>{step}</li>" for step in cfg["steps"])
+        note_html    = f'<div class="activate-note">{cfg["note"]}</div>' if cfg.get("note") else ""
+        cards += f"""<div class="activate-card">
+  <div class="activate-header">
+    <strong>{cfg["label"]}</strong>{free_badge}
+    <a class="activate-link" href="{cfg["signup_url"]}" target="_blank" rel="noopener">Get API key →</a>
+  </div>
+  <div class="activate-secrets">{secrets_html}</div>
+  <ol class="activate-steps">{steps_html}</ol>
+  {note_html}
+</div>"""
+
     return f"""<div class="section">
-  <h2>🔒 Inactive Modules</h2>
-  <div class="panel">{content}</div>
+  <h2>🔓 Activate Modules</h2>
+  <div class="panel">{cards}</div>
 </div>"""
 
 
@@ -978,6 +1089,42 @@ th { color: var(--mu); font-weight: 500; }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
+/* ── Activate Modules panel ── */
+.activate-card {
+  border: 1px solid var(--br); border-radius: 7px;
+  padding: 12px 14px; margin-bottom: 10px;
+}
+.activate-card:last-child { margin-bottom: 0; }
+.activate-header {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px;
+}
+.activate-link {
+  margin-left: auto; font-size: .78rem; color: var(--ac);
+  white-space: nowrap;
+}
+.activate-secrets { margin-bottom: 6px; }
+.secret-code {
+  display: inline-block; background: rgba(110,118,129,.15);
+  border: 1px solid var(--br); border-radius: 4px;
+  padding: 1px 6px; font-size: .75rem; font-family: monospace;
+  margin-right: 4px; margin-bottom: 2px; color: var(--ac);
+}
+.activate-steps {
+  padding-left: 18px; color: var(--mu); font-size: .82rem; margin-bottom: 4px;
+}
+.activate-steps li { margin-bottom: 3px; }
+.activate-note {
+  font-size: .78rem; color: var(--mu); margin-top: 5px;
+  padding: 4px 8px; background: rgba(88,166,255,.05);
+  border-left: 2px solid rgba(88,166,255,.3); border-radius: 2px;
+}
+.paid-badge {
+  display: inline-block; padding: 1px 7px; border-radius: 10px;
+  font-size: .72rem; font-weight: 700; color: var(--yw);
+  background: rgba(227,179,65,.12); border: 1px solid rgba(227,179,65,.35);
+  margin-left: 6px;
+}
+
 /* ── Footer ── */
 footer {
   text-align: center; color: var(--mu); font-size: .76rem;
@@ -1039,11 +1186,9 @@ def _render(s: dict[str, Any]) -> str:
         _section_stats(earn, n_runs, active, inactive, history, spark, spark_tip, s),
         _section_earnings(earn),
         _section_suggestions(suggs),
-        _section_orders(),
-        '<div class="two-col">',
-        _section_evolution(evo),
         _section_inactive(inactive),
-        "</div>",
+        _section_orders(),
+        _section_evolution(evo),
         _section_actions(actions),
         _section_errors(errors),
         _ORDERS_JS,

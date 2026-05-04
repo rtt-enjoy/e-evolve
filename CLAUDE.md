@@ -192,3 +192,19 @@ python -m bot.main
 - Never widen evolution safety boundaries without explicit owner decision
 - Never add speculative features (new earning modules, retry logic for impossible edge cases)
 - Never mock external APIs in earning modules — failures surface as action errors, not crashes
+
+---
+
+## Bug Fixing Workflow
+
+- Use `EVOLUTION_TODO.md` as the execution contract: resolve items in priority order, then update the file itself.
+- Before fixing any bug, state the root cause hypothesis and which file/line. Do not edit until the diagnosis is stated.
+- After multi-file changes, run `python -m py_compile bot/*.py bot/earning/*.py` and verify no import errors before declaring done.
+- Never declare a fix complete without running one local cycle (`python -m bot.main`) or confirming the specific assertion that was failing now passes.
+
+---
+
+## Dashboard (docs/index.html)
+
+- CSS variables are defined in the `:root` block at the top of the file. Never hardcode hex values — use `var(--ac)`, `var(--gn)`, `var(--rd)`, etc.
+- `dashboard.py` regenerates `docs/index.html` each cycle from `status.json`. Changes to the HTML template must be made in `bot/dashboard.py`, not in `docs/index.html` directly (they will be overwritten).

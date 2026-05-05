@@ -1,3 +1,2 @@
 MEDIUM_INTEGRATION_TOKEN = ''
-
-# Add your Medium integration token here
+DEVTO_API_KEY = ''

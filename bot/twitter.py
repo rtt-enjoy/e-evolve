@@ -1,11 +1,13 @@
 import requests
 
-def post_to_twitter(api_key, api_secret, tweet):
-    url = 'https://api.twitter.com/2/tweets'
-    headers = {'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}
-    data = {'text': tweet}
-    response = requests.post(url, headers=headers, json=data)
-    if response.status_code == 201:
-        print('Tweet posted successfully')
-    else:
-        print('Error posting tweet')
+class Twitter:
+    def __init__(self, api_key, api_secret):
+        self.api_key = api_key
+        self.api_secret = api_secret
+
+    def post(self, content):
+        # Twitter posting logic
+        headers = {'Authorization': f'Bearer {self.api_key}', 'Content-Type': 'application/json'}
+        data = {'text': content}
+        response = requests.post('https://api.twitter.com/2/tweets', headers=headers, json=data)
+        return response.json()

@@ -324,15 +324,15 @@ footer {
   <div class="logo">🤖</div>
   <div>
     <h1>E-Evolve
-      <span class="pill-version" id="hdr-version">1.5.0</span>
+      <span class="pill-version" id="hdr-version">1.6.0</span>
       <span id="hdr-providers"><span class="pill-provider-groq" title="fast">⚡ groq</span></span>
     </h1>
     <div style="margin-top:5px" id="hdr-badges"><span class="badge badge-green">llm_groq</span><span class="badge badge-green">articles_devto</span></div>
     <div class="muted" style="font-size:.8rem;margin-top:5px">
-      Last cycle: <span id="hdr-last-run">2026-05-04 04:10 UTC</span>
+      Last cycle: <span id="hdr-last-run">2026-05-05 09:21 UTC</span>
       <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--gn);border:1px solid var(--gn)">0m ago</span>
-      &nbsp;·&nbsp; Total cycles: <span id="hdr-total-runs">442</span>
-      &nbsp;·&nbsp; Cycle time: <span id="hdr-cycle-time">47s</span>
+      &nbsp;·&nbsp; Total cycles: <span id="hdr-total-runs">443</span>
+      &nbsp;·&nbsp; Cycle time: <span id="hdr-cycle-time">51s</span>
     </div>
   </div>
 </header>
@@ -347,7 +347,7 @@ footer {
     <div class="stat-sub" id="stat-last-cycle">last cycle: $0.0000</div>
   </div>
   <div class="stat-card">
-    <div class="stat-value stat-neutral" id="stat-runs">442</div>
+    <div class="stat-value stat-neutral" id="stat-runs">443</div>
     <div class="stat-label">Cycles run</div>
   </div>
   <div class="stat-card">
@@ -361,7 +361,7 @@ footer {
 
 <div class="section">
   <h2>🧠 Smart Growth Suggestions</h2>
-  <div class="panel"><div class="suggestion-card"><span class="suggestion-rank">🥇</span><div><strong>Add TWITTER_API_KEY for Twitter integration</strong><span class="free-badge">Free to start</span><p>Enable Twitter posting and increase reach</p><div class="secret-needed">Add secret: <code>TWITTER_API_KEY</code></div><ol class="how-to-steps"><li>Step 1: Go to the Twitter Developer Dashboard and create an app</li><li>Step 2: Generate an API key and secret in the Twitter settings</li><li>Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET</li></ol></div></div><div class="suggestion-card"><span class="suggestion-rank">🥈</span><div><strong>Upgrade to Groq Dev Tier for increased LLM usage</strong><p>Increase the daily token limit for LLM usage</p><div class="est-earnings">~$20/week estimated</div><ol class="how-to-steps"><li>Step 1: Go to the Groq console and navigate to the billing settings</li><li>Step 2: Upgrade to the Dev Tier plan</li><li>Step 3: Verify the increased token limit in the Groq console</li></ol></div></div><div class="suggestion-card"><span class="suggestion-rank">🥉</span><div><strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong><span class="free-badge">Free to start</span><p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p><div class="secret-needed">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div><ol class="how-to-steps"><li>Step 1: Go to Medium Partner Program and create an account</li><li>Step 2: Generate an integration token in the Medium settings</li><li>Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN</li></ol></div></div></div>
+  <div class="panel"><div class="suggestion-card"><span class="suggestion-rank">🥇</span><div><strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong><span class="free-badge">Free to start</span><p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p><div class="secret-needed">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div><ol class="how-to-steps"><li>Step 1: Go to Medium Partner Program and create an account</li><li>Step 2: Generate an integration token in the Medium settings</li><li>Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN</li></ol></div></div><div class="suggestion-card"><span class="suggestion-rank">🥈</span><div><strong>Upgrade to Groq Dev Tier for increased LLM usage</strong><p>Increase the daily token limit for LLM usage</p><div class="est-earnings">~$20/week estimated</div><ol class="how-to-steps"><li>Step 1: Go to the Groq console and navigate to the billing settings</li><li>Step 2: Upgrade to the Dev Tier plan</li><li>Step 3: Verify the increased token limit in the Groq console</li></ol></div></div><div class="suggestion-card"><span class="suggestion-rank">🥉</span><div><strong>Add TWITTER_API_KEY for Twitter integration</strong><span class="free-badge">Free to start</span><p>Enable Twitter posting and increase reach</p><div class="secret-needed">Add secret: <code>TWITTER_API_KEY</code></div><ol class="how-to-steps"><li>Step 1: Go to the Twitter Developer Dashboard and create an app</li><li>Step 2: Generate an API key and secret in the Twitter settings</li><li>Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET</li></ol></div></div></div>
 </div>
 <div class="section">
   <h2>🔓 Activate Modules</h2>
@@ -454,8 +454,8 @@ footer {
 <div class="section">
   <h2>⚡ Last Evolution</h2>
   <div class="panel">
-    <p style="margin-bottom:9px"><strong>Added support for Twitter integration and improved error handling for Medium posting</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--gn);background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);margin-left:8px">ok</span></p>
-    <ul class="evo-list"><li><code>bot/articles.py</code> — Improved error handling for Medium posting and added dev.to posting logic</li><li><code>bot/commands.py</code> — Added Twitter posting logic</li><li><code>config/twitter_config.py</code> — Added Twitter API key and secret configuration</li></ul>
+    <p style="margin-bottom:9px"><strong>Added support for Medium integration and improved error handling for dev.to posting</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--gn);background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);margin-left:8px">ok</span></p>
+    <ul class="evo-list"><li><code>bot/articles.py</code> — Added Medium integration and improved error handling for dev.to posting</li><li><code>config/medium_config.py</code> — Added configuration for Medium integration token</li><li><code>docs/medium_integration.md</code> — Added documentation for Medium integration</li></ul>
     
   </div>
 </div>

@@ -1,7 +1,7 @@
 {
-  "version": "1.5.0",
-  "last_run": "2026-05-04T04:10:21.132722+00:00",
-  "total_runs": 442,
+  "version": "1.6.0",
+  "last_run": "2026-05-05T09:21:28.876999+00:00",
+  "total_runs": 443,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -26,33 +26,33 @@
     "history": []
   },
   "last_evolution": {
-    "version_bumped_to": "1.5.0",
-    "summary": "Added support for Twitter integration and improved error handling for Medium posting",
+    "version_bumped_to": "1.6.0",
+    "summary": "Added support for Medium integration and improved error handling for dev.to posting",
     "changes_applied": [
       {
         "file": "bot/articles.py",
-        "reason": "Improved error handling for Medium posting and added dev.to posting logic"
+        "reason": "Added Medium integration and improved error handling for dev.to posting"
       },
       {
-        "file": "bot/commands.py",
-        "reason": "Added Twitter posting logic"
+        "file": "config/medium_config.py",
+        "reason": "Added configuration for Medium integration token"
       },
       {
-        "file": "config/twitter_config.py",
-        "reason": "Added Twitter API key and secret configuration"
+        "file": "docs/medium_integration.md",
+        "reason": "Added documentation for Medium integration"
       }
     ],
     "suggestions": [
       {
-        "title": "Add TWITTER_API_KEY for Twitter integration",
-        "description": "Enable Twitter posting and increase reach",
-        "secret_needed": "TWITTER_API_KEY",
+        "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
+        "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
+        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Go to the Twitter Developer Dashboard and create an app",
-          "Step 2: Generate an API key and secret in the Twitter settings",
-          "Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET"
+          "Step 1: Go to Medium Partner Program and create an account",
+          "Step 2: Generate an integration token in the Medium settings",
+          "Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN"
         ]
       },
       {
@@ -68,15 +68,15 @@
         ]
       },
       {
-        "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
-        "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
-        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+        "title": "Add TWITTER_API_KEY for Twitter integration",
+        "description": "Enable Twitter posting and increase reach",
+        "secret_needed": "TWITTER_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Go to Medium Partner Program and create an account",
-          "Step 2: Generate an integration token in the Medium settings",
-          "Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN"
+          "Step 1: Go to the Twitter Developer Dashboard and create an app",
+          "Step 2: Generate an API key and secret in the Twitter settings",
+          "Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET"
         ]
       }
     ],
@@ -88,15 +88,15 @@
   },
   "suggestions": [
     {
-      "title": "Add TWITTER_API_KEY for Twitter integration",
-      "description": "Enable Twitter posting and increase reach",
-      "secret_needed": "TWITTER_API_KEY",
+      "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
+      "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
+      "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Go to the Twitter Developer Dashboard and create an app",
-        "Step 2: Generate an API key and secret in the Twitter settings",
-        "Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET"
+        "Step 1: Go to Medium Partner Program and create an account",
+        "Step 2: Generate an integration token in the Medium settings",
+        "Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN"
       ]
     },
     {
@@ -112,20 +112,20 @@
       ]
     },
     {
-      "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
-      "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
-      "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+      "title": "Add TWITTER_API_KEY for Twitter integration",
+      "description": "Enable Twitter posting and increase reach",
+      "secret_needed": "TWITTER_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Go to Medium Partner Program and create an account",
-        "Step 2: Generate an integration token in the Medium settings",
-        "Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN"
+        "Step 1: Go to the Twitter Developer Dashboard and create an app",
+        "Step 2: Generate an API key and secret in the Twitter settings",
+        "Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 47,
+  "last_cycle_seconds": 51,
   "llm_roles": {
     "fast": "groq"
   },

@@ -324,15 +324,15 @@ footer {
   <div class="logo">🤖</div>
   <div>
     <h1>E-Evolve
-      <span class="pill-version" id="hdr-version">1.9.0</span>
+      <span class="pill-version" id="hdr-version">1.10.0</span>
       <span id="hdr-providers"><span class="pill-provider-groq" title="fast">⚡ groq</span></span>
     </h1>
     <div style="margin-top:5px" id="hdr-badges"><span class="badge badge-green">llm_groq</span><span class="badge badge-green">articles_devto</span></div>
     <div class="muted" style="font-size:.8rem;margin-top:5px">
-      Last cycle: <span id="hdr-last-run">2026-05-05 16:56 UTC</span>
+      Last cycle: <span id="hdr-last-run">2026-05-05 18:47 UTC</span>
       <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--gn);border:1px solid var(--gn)">0m ago</span>
-      &nbsp;·&nbsp; Total cycles: <span id="hdr-total-runs">446</span>
-      &nbsp;·&nbsp; Cycle time: <span id="hdr-cycle-time">38s</span>
+      &nbsp;·&nbsp; Total cycles: <span id="hdr-total-runs">447</span>
+      &nbsp;·&nbsp; Cycle time: <span id="hdr-cycle-time">22s</span>
     </div>
   </div>
 </header>
@@ -347,7 +347,7 @@ footer {
     <div class="stat-sub" id="stat-last-cycle">last cycle: $0.0000</div>
   </div>
   <div class="stat-card">
-    <div class="stat-value stat-neutral" id="stat-runs">446</div>
+    <div class="stat-value stat-neutral" id="stat-runs">447</div>
     <div class="stat-label">Cycles run</div>
   </div>
   <div class="stat-card">
@@ -358,7 +358,13 @@ footer {
   
   
 </div>
-
+<div class="section">
+  <h2>📈 Earnings Analysis</h2>
+  <div class="panel">
+    
+    <div class="breakdown"><div class="breakdown-row"><span class="breakdown-label">dev.to</span><div class="breakdown-bar-track"><div class="breakdown-bar" style="width:0%"></div></div><span class="breakdown-amount">$0.0000</span></div></div>
+  </div>
+</div>
 <div class="section">
   <h2>🧠 Smart Growth Suggestions</h2>
   <div class="panel"><div class="suggestion-card"><span class="suggestion-rank">🥇</span><div><strong>Add MEDIUM_INTEGRATION_TOKEN for dual publishing</strong><span class="free-badge">Free to start</span><p>Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost</p><div class="secret-needed">Add secret: <code>MEDIUM_INTEGRATION_TOKEN</code></div><ol class="how-to-steps"><li>Step 1: Go to Medium Partner Program and create an account</li><li>Step 2: Generate an integration token in the Medium settings</li><li>Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN</li></ol></div></div><div class="suggestion-card"><span class="suggestion-rank">🥈</span><div><strong>Upgrade to Groq Dev Tier for increased LLM usage</strong><p>Increase the daily token limit for LLM usage</p><div class="est-earnings">~$20/week estimated</div><ol class="how-to-steps"><li>Step 1: Go to the Groq console and navigate to the billing settings</li><li>Step 2: Upgrade to the Dev Tier plan</li><li>Step 3: Verify the increased token limit in the Groq console</li></ol></div></div><div class="suggestion-card"><span class="suggestion-rank">🥉</span><div><strong>Add TWITTER_API_KEY for Twitter integration</strong><span class="free-badge">Free to start</span><p>Enable Twitter posting and increase reach</p><div class="secret-needed">Add secret: <code>TWITTER_API_KEY</code></div><ol class="how-to-steps"><li>Step 1: Go to the Twitter Developer Dashboard and create an app</li><li>Step 2: Generate an API key and secret in the Twitter settings</li><li>Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET</li></ol></div></div></div>
@@ -454,14 +460,22 @@ footer {
 <div class="section">
   <h2>⚡ Last Evolution</h2>
   <div class="panel">
-    <p style="margin-bottom:9px"><strong>Added support for Twitter integration and improved error handling</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--gn);background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);margin-left:8px">ok</span></p>
-    <ul class="evo-list"><li><code>bot/twitter.py</code> — Added Twitter integration</li><li><code>config/twitter_config.py</code> — Added configuration for Twitter integration</li><li><code>docs/twitter_integration.md</code> — Added documentation for Twitter integration</li></ul>
+    <p style="margin-bottom:9px"><strong>Added support for Medium integration and improved article posting logic</strong><span style="display:inline-block;padding:1px 8px;border-radius:20px;font-size:.73rem;font-weight:700;color:var(--gn);background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.4);margin-left:8px">ok</span></p>
+    <ul class="evo-list"><li><code>bot/articles.py</code> — Improved article posting logic for Medium integration</li><li><code>config/articles_config.py</code> — Added configuration for Medium integration</li><li><code>docs/medium_integration.md</code> — Added documentation for Medium integration</li></ul>
     
   </div>
 </div>
 <div class="section">
   <h2>💰 Last Cycle Actions</h2>
-  <div class="panel"><p class="muted">No actions yet — add a secret to activate an earning module.</p></div>
+  <div class="panel">
+    <table>
+      <thead><tr><th></th><th>Platform</th><th>Detail</th></tr></thead>
+      <tbody><tr><td>✅</td><td>dev.to</td><td><a href="https://dev.to/robust_true_try/storing-bot-state-in-json-files-718" target="_blank">Storing Bot State in JSON Files</a></td></tr></tbody>
+    </table>
+    <p class="muted" style="font-size:.78rem;margin-top:8px">
+      Showing last 1 of 1 · <a href="earnings-log.md">full log</a>
+    </p>
+  </div>
 </div>
 
 <script>

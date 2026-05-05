@@ -33,6 +33,11 @@ log = logging.getLogger(__name__)
 # Safety constants
 ALLOWED_PREFIXES  = ("bot/", "docs/", "config/", "requirements.txt", "version.txt")
 FORBIDDEN_PREFIXES = (".github/", ".git/")
+# Orchestrator files the LLM must never overwrite — too risky to allow auto-edit
+PROTECTED_FILES = {
+    "bot/main.py", "bot/commands.py", "bot/evolution.py",
+    "bot/status.py", "bot/llm.py", "bot/git_utils.py",
+}
 MAX_CHANGES       = 3
 MAX_FIX_RETRIES   = 2
 # Per-provider codebase snapshot limits.
@@ -84,6 +89,7 @@ Rules:
 4. Python files must be syntactically valid
 5. At most 3 changes per response
 6. If nothing to change, return "changes": []
+6a. NEVER propose changes to: bot/main.py, bot/commands.py, bot/evolution.py, bot/status.py, bot/llm.py, bot/git_utils.py — these are protected orchestrator files
 7. Always return at least 3 ranked suggestions; set free_tier=true when the suggestion costs nothing to start (free API tier exists); populate how_to with 2-4 concrete numbered steps the owner must follow to activate it
 8. Bump patch for fixes, minor for new features, major for rewrites"""
 
@@ -195,6 +201,9 @@ def _apply_changes(changes: list) -> list[dict]:
 
         if not filepath or not content:
             log.warning("Skipping malformed change (missing file or content)")
+            continue
+        if filepath in PROTECTED_FILES:
+            log.warning("Blocked write to protected orchestrator file: %s", filepath)
             continue
         if not _is_safe(filepath):
             log.warning("Blocked write to forbidden path: %s", filepath)

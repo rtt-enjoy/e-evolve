@@ -13,7 +13,7 @@ class Article:
         # Medium posting logic
         headers = {'Authorization': f'Bearer {integration_token}', 'Content-Type': 'application/json'}
         data = {'title': self.title, 'content': self.content}
-        resp = requests.post('https://api.medium.com/v1/users/self/posts', headers=headers, json=data)
+        resp = requests.post('https://api.medium.com/v1/users/me/posts', headers=headers, json=data)
         if resp.status_code == 201:
             print('Article posted to Medium successfully')
         else:

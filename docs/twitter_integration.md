@@ -1,7 +1,6 @@
 # Twitter Integration
 ## Overview
-The Twitter integration allows you to post updates to your Twitter account.
+This feature enables posting to Twitter.
 ## Setup
-1. Go to the Twitter Developer Dashboard and create an app.
-2. Generate an API key and secret in the Twitter settings.
-3. Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET.
+1. Create a Twitter Developer account and generate an API key and secret.
+2. Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET.

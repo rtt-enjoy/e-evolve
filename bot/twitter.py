@@ -5,7 +5,7 @@ class Twitter:
         self.api_key = api_key
         self.api_secret = api_secret
 
-    def post(self, content):
+    def post_tweet(self, content):
         # Twitter posting logic
         headers = {'Authorization': f'Bearer {self.api_key}', 'Content-Type': 'application/json'}
         data = {'text': content}

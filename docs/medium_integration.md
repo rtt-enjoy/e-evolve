@@ -1,8 +1,10 @@
 # Medium Integration
+
 ## Overview
-The E-Evolve bot now supports posting articles to Medium.
+The Medium integration allows you to post articles to Medium using the E-Evolve bot.
+
 ## Setup
-To enable Medium integration, follow these steps:
+To set up the Medium integration, follow these steps:
 1. Go to the Medium Partner Program and create an account.
 2. Generate an integration token in the Medium settings.
 3. Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN.

@@ -1,6 +1,6 @@
 # Twitter Integration
 ## Overview
-The Twitter integration allows you to post content to Twitter.
+The Twitter integration allows you to post updates to your Twitter account.
 ## Setup
 1. Go to the Twitter Developer Dashboard and create an app.
 2. Generate an API key and secret in the Twitter settings.

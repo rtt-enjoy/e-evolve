@@ -1,7 +1,7 @@
 {
-  "version": "1.20.0",
-  "last_run": "2026-05-06T16:55:19.716495+00:00",
-  "total_runs": 457,
+  "version": "1.21.0",
+  "last_run": "2026-05-06T19:00:37.687258+00:00",
+  "total_runs": 458,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -28,20 +28,20 @@
     "history": []
   },
   "last_evolution": {
-    "version_bumped_to": "1.20.0",
-    "summary": "Added Medium integration and improved article posting logic",
+    "version_bumped_to": "1.21.0",
+    "summary": "Added Twitter integration and improved article posting logic",
     "changes_applied": [
       {
-        "file": "bot/articles.py",
-        "reason": "Added Medium integration"
+        "file": "bot/twitter.py",
+        "reason": "Added Twitter integration"
       },
       {
-        "file": "config/medium_config.py",
-        "reason": "Added configuration for Medium integration"
+        "file": "config/twitter_config.py",
+        "reason": "Added configuration for Twitter integration"
       },
       {
-        "file": "docs/medium_integration.md",
-        "reason": "Added documentation for Medium integration"
+        "file": "docs/twitter_integration.md",
+        "reason": "Added documentation for Twitter integration"
       }
     ],
     "suggestions": [
@@ -127,7 +127,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 6,
+  "last_cycle_seconds": 5,
   "llm_roles": {
     "fast": "groq"
   },

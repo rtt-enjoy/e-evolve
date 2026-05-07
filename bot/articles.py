@@ -18,3 +18,7 @@ class Article:
             print('Article posted to Medium successfully')
         else:
             print('Error posting article to Medium')
+
+    def post_to_both(self, devto_token, medium_token):
+        self.post_to_devto()
+        self.post_to_medium(medium_token)

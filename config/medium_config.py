@@ -1,3 +1,4 @@
-MEDIUM_INTEGRATION_TOKEN = ''
+MEDIUM_INTEGRATION_TOKEN = None
 
-# Add your Medium integration token here
+def get_medium_token():
+    return MEDIUM_INTEGRATION_TOKEN

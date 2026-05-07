@@ -1,7 +1,7 @@
 {
-  "version": "1.21.0",
-  "last_run": "2026-05-07T00:06:14.796831+00:00",
-  "total_runs": 462,
+  "version": "1.22.0",
+  "last_run": "2026-05-07T04:06:23.422356+00:00",
+  "total_runs": 463,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -28,12 +28,61 @@
     "history": []
   },
   "last_evolution": {
-    "version_bumped_to": "1.21.0",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=think): LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 95864, Requested 7932. Please try again in 54m39.744s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
-    "changes_applied": [],
-    "suggestions": [],
-    "error": "Could not get valid JSON from LLM (role=think): LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 95864, Requested 7932. Please try again in 54m39.744s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
-    "error_type": "json"
+    "version_bumped_to": "1.22.0",
+    "summary": "Added MEDIUM_INTEGRATION_TOKEN for dual publishing and updated articles.py to handle Medium posting",
+    "changes_applied": [
+      {
+        "file": "bot/articles.py",
+        "reason": "Added post_to_both method to handle dual publishing"
+      },
+      {
+        "file": "config/medium_config.py",
+        "reason": "Added Medium config file to store integration token"
+      },
+      {
+        "file": "requirements.txt",
+        "reason": "Updated requirements.txt to include necessary libraries"
+      }
+    ],
+    "suggestions": [
+      {
+        "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
+        "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
+        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Go to Medium Partner Program and create an account",
+          "Step 2: Generate an integration token in the Medium settings",
+          "Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN"
+        ]
+      },
+      {
+        "title": "Upgrade to Groq Dev Tier for increased LLM usage",
+        "description": "Increase the daily token limit for LLM usage",
+        "secret_needed": null,
+        "estimated_weekly_usd": 20,
+        "free_tier": false,
+        "how_to": [
+          "Step 1: Go to the Groq console and navigate to the billing settings",
+          "Step 2: Upgrade to the Dev Tier plan",
+          "Step 3: Verify the increased token limit in the Groq console"
+        ]
+      },
+      {
+        "title": "Add TWITTER_API_KEY for Twitter integration",
+        "description": "Enable Twitter posting and increase reach",
+        "secret_needed": "TWITTER_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Go to the Twitter Developer Dashboard and create an app",
+          "Step 2: Generate an API key and secret in the Twitter settings",
+          "Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET"
+        ]
+      }
+    ],
+    "error": null
   },
   "last_earning": {
     "actions": [],
@@ -78,7 +127,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 6,
+  "last_cycle_seconds": 40,
   "llm_roles": {
     "fast": "groq"
   },

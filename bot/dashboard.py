@@ -59,7 +59,7 @@ _EVO_BADGE_STYLES: dict[str, tuple[str, str, str]] = {
     "idle":        ("var(--ac)", "rgba(88,166,255,.1)",  "rgba(88,166,255,.3)"),
     "skipped":     ("var(--mu)", "rgba(139,148,158,.1)", "rgba(139,148,158,.3)"),
     "llm_error":   ("var(--rd)", "rgba(248,81,73,.1)",   "rgba(248,81,73,.35)"),
-    "apply_error": ("#e3b341",   "rgba(227,179,65,.1)",  "rgba(227,179,65,.35)"),
+    "apply_error": ("var(--yw)", "rgba(227,179,65,.1)",  "rgba(227,179,65,.35)"),
 }
 
 
@@ -155,7 +155,7 @@ def _last_run_age(last_run_iso: Any) -> tuple[str, str]:
         if age_s < 4500:
             return (f"{int(age_s // 60)}m ago", "var(--gn)")
         if age_s < 10800:
-            return (f"{int(age_s // 3600)}h {int((age_s % 3600) // 60)}m ago", "#e3b341")
+            return (f"{int(age_s // 3600)}h {int((age_s % 3600) // 60)}m ago", "var(--yw)")
         return (f"{int(age_s // 3600)}h ago", "var(--rd)")
     except Exception:
         return (str(last_run_iso), "var(--mu)")
@@ -306,7 +306,7 @@ def _render_projection(earn: dict) -> str:
     this_week = earn.get("this_week_usd", 0)
     goal      = 10.0
     pct       = min(100, int(this_week / goal * 100)) if goal else 0
-    bar_color = "var(--gn)" if pct >= 50 else ("#e3b341" if pct >= 20 else "var(--rd)")
+    bar_color = "var(--gn)" if pct >= 50 else ("var(--yw)" if pct >= 20 else "var(--rd)")
     return (
         f'<div class="proj">'
         f'<div class="proj-row">'
@@ -320,6 +320,73 @@ def _render_projection(earn: dict) -> str:
         f'<div class="prog-bar"><div class="prog-fill" style="width:{pct}%;background:{bar_color}"></div></div>'
         f'</div>'
     )
+
+
+def _section_research_focus(s: dict[str, Any]) -> str:
+    """Rank the next practical revenue moves from current state."""
+    active   = set(s.get("active_features", []))
+    inactive = set(s.get("inactive_features", []))
+    earn     = s.get("earnings", {})
+    last     = float(earn.get("last_cycle_usd", 0) or 0)
+    week     = float(earn.get("this_week_usd", 0) or 0)
+
+    cards: list[dict[str, str]] = []
+    if "articles_devto" in active and "articles_medium" in inactive:
+        cards.append({
+            "rank": "1",
+            "title": "Dual-publish every article",
+            "metric": "High leverage",
+            "body": "Add Medium so the same generated article reaches a second audience with no extra LLM call.",
+            "action": "Add MEDIUM_INTEGRATION_TOKEN",
+        })
+    if "twitter" in inactive:
+        cards.append({
+            "rank": "2",
+            "title": "Turn articles into distribution",
+            "metric": "Reach gap",
+            "body": "Threads can recycle each article into short-form discovery, which is the missing top-of-funnel for content earnings.",
+            "action": "Add the four Twitter/X secrets",
+        })
+    if "llm_gemini" in inactive or "llm_openrouter" in inactive:
+        cards.append({
+            "rank": "3",
+            "title": "Improve research depth",
+            "metric": "Quality moat",
+            "body": "Activate a long-context thinking provider so evolution and article research rely less on the Groq short-context path.",
+            "action": "Add GEMINI_API_KEY or OPENROUTER_API_KEY",
+        })
+    if "crypto_binance" in inactive:
+        cards.append({
+            "rank": "4",
+            "title": "Add capital-backed earning",
+            "metric": "Needs funds",
+            "body": "Trading is the first module with direct compounding potential, but it should wait until API keys and risk limits are deliberate.",
+            "action": "Fund exchange account, then add Binance secrets",
+        })
+    if not cards:
+        trend = "positive" if last > 0 or week > 0 else "idle"
+        cards.append({
+            "rank": "1",
+            "title": "Tighten the active loop",
+            "metric": trend,
+            "body": "All listed modules are active. Watch conversion by platform and raise output only where the last-cycle signal is positive.",
+            "action": "Use Owner Orders for controlled experiments",
+        })
+
+    cards_html = "".join(
+        f'<div class="research-card">'
+        f'<span class="research-rank">{c["rank"]}</span>'
+        f'<div><div class="research-top"><strong>{c["title"]}</strong>'
+        f'<span>{c["metric"]}</span></div>'
+        f'<p>{c["body"]}</p>'
+        f'<code>{c["action"]}</code></div>'
+        f'</div>'
+        for c in cards[:4]
+    )
+    return f"""<div class="section">
+  <h2>Research & Revenue Focus</h2>
+  <div class="research-grid">{cards_html}</div>
+</div>"""
 
 
 def _render_breakdown(breakdown: dict) -> str:
@@ -676,7 +743,7 @@ _LIVE_JS = """\
     if (!iso) return ['never', 'var(--rd)'];
     var secs = (Date.now() - new Date(iso).getTime()) / 1000;
     if (secs < 4500) return [Math.floor(secs/60) + 'm ago', 'var(--gn)'];
-    if (secs < 10800) return [Math.floor(secs/3600) + 'h ' + Math.floor((secs%3600)/60) + 'm ago', '#e3b341'];
+    if (secs < 10800) return [Math.floor(secs/3600) + 'h ' + Math.floor((secs%3600)/60) + 'm ago', 'var(--yw)'];
     return [Math.floor(secs/3600) + 'h ago', 'var(--rd)'];
   }
 
@@ -847,6 +914,7 @@ _CSS = """\
   --tx: #c9d1d9; --mu: #8b949e;
   --ac: #58a6ff; --gn: #3fb950; --rd: #f85149;
   --pu: #bc8cff; --yw: #e3b341;
+  --gemini: #4285f4; --groq: #f97316; --openrouter: #10b981;
   --f: 'Segoe UI', system-ui, sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -880,17 +948,17 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
 .pill-provider-gemini {
   display: inline-block; padding: 2px 9px; border-radius: 20px;
   font-size: .73rem; font-weight: 700; margin-right: 4px;
-  background: rgba(66,133,244,.15); border: 1px solid #4285f4; color: #4285f4;
+  background: rgba(66,133,244,.15); border: 1px solid var(--gemini); color: var(--gemini);
 }
 .pill-provider-groq {
   display: inline-block; padding: 2px 9px; border-radius: 20px;
   font-size: .73rem; font-weight: 700; margin-right: 4px;
-  background: rgba(249,115,22,.15); border: 1px solid #f97316; color: #f97316;
+  background: rgba(249,115,22,.15); border: 1px solid var(--groq); color: var(--groq);
 }
 .pill-provider-openrouter {
   display: inline-block; padding: 2px 9px; border-radius: 20px;
   font-size: .73rem; font-weight: 700; margin-right: 4px;
-  background: rgba(16,185,129,.15); border: 1px solid #10b981; color: #10b981;
+  background: rgba(16,185,129,.15); border: 1px solid var(--openrouter); color: var(--openrouter);
 }
 .age-pill {
   display: inline-block; padding: 1px 7px; border-radius: 10px;
@@ -912,7 +980,7 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
 }
 .stat-card {
   background: var(--sf); border: 1px solid var(--br);
-  border-radius: 9px; padding: 16px;
+  border-radius: 8px; padding: 16px;
 }
 .stat-value {
   font-size: 1.8rem; font-weight: 700; color: var(--gn);
@@ -929,7 +997,7 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
 .section { margin-bottom: 26px; }
 .panel {
   background: var(--sf); border: 1px solid var(--br);
-  border-radius: 9px; padding: 16px;
+  border-radius: 8px; padding: 16px;
 }
 
 /* ── Earnings projection ── */
@@ -961,6 +1029,40 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
 }
 .breakdown-bar    { height: 100%; background: var(--gn); border-radius: 4px; }
 .breakdown-amount { width: 70px; text-align: right; color: var(--gn); }
+
+/* -- Research focus -- */
+.research-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+.research-card {
+  display: flex; gap: 11px; min-height: 150px;
+  background: var(--sf); border: 1px solid var(--br);
+  border-radius: 8px; padding: 13px;
+}
+.research-rank {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; flex: 0 0 26px;
+  border-radius: 50%; background: rgba(88,166,255,.12);
+  border: 1px solid rgba(88,166,255,.35); color: var(--ac);
+  font-size: .78rem; font-weight: 800;
+}
+.research-top {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 8px; margin-bottom: 5px;
+}
+.research-top span {
+  color: var(--yw); font-size: .72rem; font-weight: 700; white-space: nowrap;
+}
+.research-card p {
+  color: var(--mu); font-size: .82rem; line-height: 1.45; margin-bottom: 9px;
+}
+.research-card code {
+  display: inline-block; max-width: 100%;
+  background: rgba(110,118,129,.15); border: 1px solid var(--br);
+  border-radius: 4px; padding: 3px 6px; color: var(--ac);
+  font-size: .74rem; white-space: normal;
+}
 
 /* ── Growth suggestions ── */
 .suggestion-card {
@@ -1066,7 +1168,7 @@ th { color: var(--mu); font-weight: 500; }
   transition: opacity .15s;
 }
 .btn:hover { opacity: .85; }
-.btn-primary   { background: var(--ac); color: #0d1117; border-color: var(--ac); }
+.btn-primary   { background: var(--ac); color: var(--bg); border-color: var(--ac); }
 .btn-secondary { background: transparent; border-color: var(--br); color: var(--tx); }
 .btn-danger    { background: rgba(248,81,73,.15); border-color: var(--rd); color: var(--rd); }
 .order-hint {
@@ -1080,7 +1182,7 @@ th { color: var(--mu); font-weight: 500; }
 }
 .copy-toast {
   display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-  background: var(--gn); color: #0d1117; padding: 8px 18px; border-radius: 20px;
+  background: var(--gn); color: var(--bg); padding: 8px 18px; border-radius: 20px;
   font-size: .82rem; font-weight: 700; z-index: 999;
 }
 .copy-toast.show { display: block; animation: fadeup .3s ease; }
@@ -1185,6 +1287,7 @@ def _render(s: dict[str, Any]) -> str:
                         age_label, age_color, n_runs, cycle_str, llm_roles),
         _section_stats(earn, n_runs, active, inactive, history, spark, spark_tip, s),
         _section_earnings(earn),
+        _section_research_focus(s),
         _section_suggestions(suggs),
         _section_inactive(inactive),
         _section_orders(),

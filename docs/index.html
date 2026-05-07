@@ -10,6 +10,7 @@
   --tx: #c9d1d9; --mu: #8b949e;
   --ac: #58a6ff; --gn: #3fb950; --rd: #f85149;
   --pu: #bc8cff; --yw: #e3b341;
+  --gemini: #4285f4; --groq: #f97316; --openrouter: #10b981;
   --f: 'Segoe UI', system-ui, sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,17 +44,17 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
 .pill-provider-gemini {
   display: inline-block; padding: 2px 9px; border-radius: 20px;
   font-size: .73rem; font-weight: 700; margin-right: 4px;
-  background: rgba(66,133,244,.15); border: 1px solid #4285f4; color: #4285f4;
+  background: rgba(66,133,244,.15); border: 1px solid var(--gemini); color: var(--gemini);
 }
 .pill-provider-groq {
   display: inline-block; padding: 2px 9px; border-radius: 20px;
   font-size: .73rem; font-weight: 700; margin-right: 4px;
-  background: rgba(249,115,22,.15); border: 1px solid #f97316; color: #f97316;
+  background: rgba(249,115,22,.15); border: 1px solid var(--groq); color: var(--groq);
 }
 .pill-provider-openrouter {
   display: inline-block; padding: 2px 9px; border-radius: 20px;
   font-size: .73rem; font-weight: 700; margin-right: 4px;
-  background: rgba(16,185,129,.15); border: 1px solid #10b981; color: #10b981;
+  background: rgba(16,185,129,.15); border: 1px solid var(--openrouter); color: var(--openrouter);
 }
 .age-pill {
   display: inline-block; padding: 1px 7px; border-radius: 10px;
@@ -75,7 +76,7 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
 }
 .stat-card {
   background: var(--sf); border: 1px solid var(--br);
-  border-radius: 9px; padding: 16px;
+  border-radius: 8px; padding: 16px;
 }
 .stat-value {
   font-size: 1.8rem; font-weight: 700; color: var(--gn);
@@ -92,7 +93,7 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
 .section { margin-bottom: 26px; }
 .panel {
   background: var(--sf); border: 1px solid var(--br);
-  border-radius: 9px; padding: 16px;
+  border-radius: 8px; padding: 16px;
 }
 
 /* ── Earnings projection ── */
@@ -124,6 +125,40 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
 }
 .breakdown-bar    { height: 100%; background: var(--gn); border-radius: 4px; }
 .breakdown-amount { width: 70px; text-align: right; color: var(--gn); }
+
+/* -- Research focus -- */
+.research-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+.research-card {
+  display: flex; gap: 11px; min-height: 150px;
+  background: var(--sf); border: 1px solid var(--br);
+  border-radius: 8px; padding: 13px;
+}
+.research-rank {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; flex: 0 0 26px;
+  border-radius: 50%; background: rgba(88,166,255,.12);
+  border: 1px solid rgba(88,166,255,.35); color: var(--ac);
+  font-size: .78rem; font-weight: 800;
+}
+.research-top {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 8px; margin-bottom: 5px;
+}
+.research-top span {
+  color: var(--yw); font-size: .72rem; font-weight: 700; white-space: nowrap;
+}
+.research-card p {
+  color: var(--mu); font-size: .82rem; line-height: 1.45; margin-bottom: 9px;
+}
+.research-card code {
+  display: inline-block; max-width: 100%;
+  background: rgba(110,118,129,.15); border: 1px solid var(--br);
+  border-radius: 4px; padding: 3px 6px; color: var(--ac);
+  font-size: .74rem; white-space: normal;
+}
 
 /* ── Growth suggestions ── */
 .suggestion-card {
@@ -229,7 +264,7 @@ th { color: var(--mu); font-weight: 500; }
   transition: opacity .15s;
 }
 .btn:hover { opacity: .85; }
-.btn-primary   { background: var(--ac); color: #0d1117; border-color: var(--ac); }
+.btn-primary   { background: var(--ac); color: var(--bg); border-color: var(--ac); }
 .btn-secondary { background: transparent; border-color: var(--br); color: var(--tx); }
 .btn-danger    { background: rgba(248,81,73,.15); border-color: var(--rd); color: var(--rd); }
 .order-hint {
@@ -243,7 +278,7 @@ th { color: var(--mu); font-weight: 500; }
 }
 .copy-toast {
   display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-  background: var(--gn); color: #0d1117; padding: 8px 18px; border-radius: 20px;
+  background: var(--gn); color: var(--bg); padding: 8px 18px; border-radius: 20px;
   font-size: .82rem; font-weight: 700; z-index: 999;
 }
 .copy-toast.show { display: block; animation: fadeup .3s ease; }
@@ -324,13 +359,13 @@ footer {
   <div class="logo">🤖</div>
   <div>
     <h1>E-Evolve
-      <span class="pill-version" id="hdr-version">1.22.0</span>
+      <span class="pill-version" id="hdr-version">1.22.1</span>
       <span id="hdr-providers"><span class="pill-provider-groq" title="fast">⚡ groq</span></span>
     </h1>
     <div style="margin-top:5px" id="hdr-badges"><span class="badge badge-green">llm_groq</span><span class="badge badge-green">articles_devto</span></div>
     <div class="muted" style="font-size:.8rem;margin-top:5px">
       Last cycle: <span id="hdr-last-run">2026-05-07 04:06 UTC</span>
-      <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--gn);border:1px solid var(--gn)">0m ago</span>
+      <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--rd);border:1px solid var(--rd)">13h ago</span>
       &nbsp;·&nbsp; Total cycles: <span id="hdr-total-runs">463</span>
       &nbsp;·&nbsp; Cycle time: <span id="hdr-cycle-time">40s</span>
     </div>
@@ -364,6 +399,10 @@ footer {
     
     <div class="breakdown"><div class="breakdown-row"><span class="breakdown-label">dev.to</span><div class="breakdown-bar-track"><div class="breakdown-bar" style="width:0%"></div></div><span class="breakdown-amount">$0.0000</span></div></div>
   </div>
+</div>
+<div class="section">
+  <h2>Research & Revenue Focus</h2>
+  <div class="research-grid"><div class="research-card"><span class="research-rank">1</span><div><div class="research-top"><strong>Dual-publish every article</strong><span>High leverage</span></div><p>Add Medium so the same generated article reaches a second audience with no extra LLM call.</p><code>Add MEDIUM_INTEGRATION_TOKEN</code></div></div><div class="research-card"><span class="research-rank">2</span><div><div class="research-top"><strong>Turn articles into distribution</strong><span>Reach gap</span></div><p>Threads can recycle each article into short-form discovery, which is the missing top-of-funnel for content earnings.</p><code>Add the four Twitter/X secrets</code></div></div><div class="research-card"><span class="research-rank">3</span><div><div class="research-top"><strong>Improve research depth</strong><span>Quality moat</span></div><p>Activate a long-context thinking provider so evolution and article research rely less on the Groq short-context path.</p><code>Add GEMINI_API_KEY or OPENROUTER_API_KEY</code></div></div><div class="research-card"><span class="research-rank">4</span><div><div class="research-top"><strong>Add capital-backed earning</strong><span>Needs funds</span></div><p>Trading is the first module with direct compounding potential, but it should wait until API keys and risk limits are deliberate.</p><code>Fund exchange account, then add Binance secrets</code></div></div></div>
 </div>
 <div class="section">
   <h2>🧠 Smart Growth Suggestions</h2>
@@ -540,7 +579,7 @@ footer {
     if (!iso) return ['never', 'var(--rd)'];
     var secs = (Date.now() - new Date(iso).getTime()) / 1000;
     if (secs < 4500) return [Math.floor(secs/60) + 'm ago', 'var(--gn)'];
-    if (secs < 10800) return [Math.floor(secs/3600) + 'h ' + Math.floor((secs%3600)/60) + 'm ago', '#e3b341'];
+    if (secs < 10800) return [Math.floor(secs/3600) + 'h ' + Math.floor((secs%3600)/60) + 'm ago', 'var(--yw)'];
     return [Math.floor(secs/3600) + 'h ago', 'var(--rd)'];
   }
 

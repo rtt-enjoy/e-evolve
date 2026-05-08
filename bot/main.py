@@ -196,7 +196,10 @@ def main() -> int:
 
     git_result = _git.commit(
         f"📊 cycle #{status['total_runs']} +${cycle_usd:.4f} {elapsed}s",
-        paths=["status.json", "earnings-log.md", "docs/index.html", "command.txt"],
+        paths=[
+            "status.json", "earnings-log.md", "docs/index.html",
+            "docs/status.json", "docs/earnings-log.md", "command.txt",
+        ],
     )
     if not git_result["success"]:
         log.error("[GIT FAIL] state commit: %s", git_result["error"])

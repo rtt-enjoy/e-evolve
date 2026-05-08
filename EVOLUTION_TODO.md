@@ -37,6 +37,10 @@ _(none open)_
 
 ## Resolved
 
+- **Dashboard realtime sync used root-only state** - fixed 2026-05-08. `bot/dashboard.py` now publishes `docs/status.json` and `docs/earnings-log.md` alongside the generated dashboard, and the live UI reloads when a new cycle/version arrives so every panel stays synchronized.
+
+- **Article loop left normal earning throughput below the active cap** - fixed 2026-05-08. Raised `articles.per_cycle` to 3 and increased buyer-intent topic selection to 55% when a CTA is configured.
+
 - **Workflow dependency install listed stdlib modules** - fixed 2026-05-08. Replaced `json`, `pathlib`, and `logging` with the real packages required by the active LLM and earning modules.
 
 - **Article publishes had zero tracked value** - fixed 2026-05-08. Successful dev.to and Medium publishes now use configurable estimated value via `articles.estimated_usd_per_publish`.

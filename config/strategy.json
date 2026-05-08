@@ -1,11 +1,11 @@
 {
   "_note": "E-Evolve strategy config. The bot may evolve these values over time.",
   "articles": {
-    "per_cycle": 2,
+    "per_cycle": 3,
     "min_words": 600,
     "estimated_usd_per_publish": 0.02,
     "cta_label_default": "Support this project",
-    "buyer_intent_ratio": 0.35,
+    "buyer_intent_ratio": 0.55,
     "buyer_intent_topics": [
       "How to replace a paid cron service with GitHub Actions for $0",
       "Building an AI content pipeline that publishes without paid infrastructure",

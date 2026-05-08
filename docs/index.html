@@ -413,13 +413,13 @@ footer {
   <div class="logo">🤖</div>
   <div>
     <h1>E-Evolve
-      <span class="pill-version" id="hdr-version">1.23.0</span>
+      <span class="pill-version" id="hdr-version">1.24.0</span>
       <span id="hdr-providers"><span class="pill-provider-gemini" title="upgrade">Up gemini</span><span class="pill-provider-openrouter" title="research">Re openrouter</span><span class="pill-provider-groq" title="post">Po groq</span></span>
     </h1>
     <div style="margin-top:5px" id="hdr-badges"><span class="badge badge-green">llm_gemini</span><span class="badge badge-green">llm_openrouter</span><span class="badge badge-green">llm_groq</span><span class="badge badge-green">articles_devto</span><span class="badge badge-green">usdt_wallet</span></div>
     <div class="muted" style="font-size:.8rem;margin-top:5px">
       Last cycle: <span id="hdr-last-run">2026-05-07 04:06 UTC</span>
-      <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--rd);border:1px solid var(--rd)">26h ago</span>
+      <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--rd);border:1px solid var(--rd)">27h ago</span>
       &nbsp;·&nbsp; Total cycles: <span id="hdr-total-runs">463</span>
       &nbsp;·&nbsp; Cycle time: <span id="hdr-cycle-time">40s</span>
     </div>
@@ -467,7 +467,7 @@ footer {
 </div>
 <div class="section">
   <h2>Research & Revenue Focus</h2>
-  <div class="research-grid"><div class="research-card"><span class="research-rank">1</span><div><div class="research-top"><strong>Dual-publish every article</strong><span>High leverage</span></div><p>Add Medium so the same generated article reaches a second audience with no extra LLM call.</p><code>Add MEDIUM_INTEGRATION_TOKEN</code></div></div><div class="research-card"><span class="research-rank">2</span><div><div class="research-top"><strong>Wallet is ready</strong><span>Payout path</span></div><p>The USDT address is configured, so the dashboard can track incoming funds while payout automation waits for exchange keys.</p><code>Add BINANCE_API_KEY, BINANCE_SECRET_KEY, BINANCE_WITHDRAW_ADDRESS</code></div></div><div class="research-card"><span class="research-rank">3</span><div><div class="research-top"><strong>Turn articles into distribution</strong><span>Reach gap</span></div><p>Threads can recycle each article into short-form discovery, which is the missing top-of-funnel for content earnings.</p><code>Add TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET</code></div></div><div class="research-card"><span class="research-rank">5</span><div><div class="research-top"><strong>Add capital-backed earning</strong><span>Needs funds</span></div><p>Trading is the first module with direct compounding potential, but it should wait until API keys and risk limits are deliberate.</p><code>Fund exchange account, then add BINANCE_API_KEY, BINANCE_SECRET_KEY</code></div></div></div>
+  <div class="research-grid"><div class="research-card"><span class="research-rank">1</span><div><div class="research-top"><strong>Dual-publish every article</strong><span>$0 setup</span></div><p>Add Medium so the same generated article reaches a second audience with no extra LLM call.</p><code>Add MEDIUM_INTEGRATION_TOKEN</code></div></div><div class="research-card"><span class="research-rank">2</span><div><div class="research-top"><strong>Add a free article CTA</strong><span>No API key</span></div><p>Set EARN_CTA_URL to a sponsor, tip, newsletter, affiliate, or product link so every free article has a conversion path.</p><code>Add variable EARN_CTA_URL</code></div></div><div class="research-card"><span class="research-rank">3</span><div><div class="research-top"><strong>Wallet is ready</strong><span>Payout path</span></div><p>The USDT address is configured, so the dashboard can track incoming funds while payout automation waits for exchange keys.</p><code>Add BINANCE_API_KEY, BINANCE_SECRET_KEY, BINANCE_WITHDRAW_ADDRESS</code></div></div><div class="research-card"><span class="research-rank">4</span><div><div class="research-top"><strong>Turn articles into distribution</strong><span>Optional</span></div><p>Threads can recycle each article into short-form discovery, but only enable this if your X developer access is actually free.</p><code>Add TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET</code></div></div></div>
 </div>
 <div class="section">
   <h2>🧠 Smart Growth Suggestions</h2>
@@ -477,12 +477,12 @@ footer {
   <h2>🔓 Activate Modules</h2>
   <div class="panel"><div class="activate-card">
   <div class="activate-header">
-    <strong>Anthropic (Claude)</strong><span class="free-badge">Free</span>
+    <strong>Anthropic (Claude)</strong><span class="paid-badge">Needs funds</span>
     <a class="activate-link" href="https://console.anthropic.com/" target="_blank" rel="noopener">Get API key →</a>
   </div>
   <div class="activate-secrets"><code class="secret-code">ANTHROPIC_API_KEY</code></div>
   <ol class="activate-steps"><li>Go to console.anthropic.com → sign up (email only, no KYC)</li><li>API Keys → Create Key → copy it</li><li>GitHub repo → Settings → Secrets → New secret: <code>ANTHROPIC_API_KEY</code></li></ol>
-  <div class="activate-note">Free tier: $5 credit. Enables smarter evolution.</div>
+  <div class="activate-note">Paid API credit. Skip this while running the no-money setup.</div>
 </div><div class="activate-card">
   <div class="activate-header">
     <strong>Medium</strong><span class="free-badge">Free</span>
@@ -493,12 +493,12 @@ footer {
   <div class="activate-note">Free. Doubles article reach alongside dev.to.</div>
 </div><div class="activate-card">
   <div class="activate-header">
-    <strong>Twitter / X</strong><span class="free-badge">Free</span>
+    <strong>Twitter / X</strong><span class="paid-badge">Needs funds</span>
     <a class="activate-link" href="https://developer.twitter.com/en/portal/dashboard" target="_blank" rel="noopener">Get API key →</a>
   </div>
   <div class="activate-secrets"><code class="secret-code">TWITTER_API_KEY</code><code class="secret-code">TWITTER_API_SECRET</code><code class="secret-code">TWITTER_ACCESS_TOKEN</code><code class="secret-code">TWITTER_ACCESS_SECRET</code></div>
   <ol class="activate-steps"><li>developer.twitter.com → sign in → Create project + app</li><li>Keys and Tokens → generate all 4 keys</li><li>GitHub → Secrets → add all 4: <code>TWITTER_API_KEY</code>, <code>TWITTER_API_SECRET</code>, <code>TWITTER_ACCESS_TOKEN</code>, <code>TWITTER_ACCESS_SECRET</code></li></ol>
-  <div class="activate-note">Free tier allows ~1500 tweets/month.</div>
+  <div class="activate-note">Developer access can require paid or approved access. Treat as optional for the free path.</div>
 </div><div class="activate-card">
   <div class="activate-header">
     <strong>Crypto Trading (KuCoin — no KYC)</strong><span class="paid-badge">Needs funds</span>
@@ -603,6 +603,11 @@ footer {
 <script>
 (function() {
   var POLL_MS = 60000;
+  var runEl = document.getElementById('hdr-total-runs');
+  var versionEl = document.getElementById('hdr-version');
+  var initialRun = Number(runEl ? runEl.textContent : 0);
+  var initialVersion = versionEl ? versionEl.textContent : '';
+  var reloading = false;
   var PROVIDERS = {
     gemini:     'pill-provider-gemini',
     groq:       'pill-provider-groq',
@@ -658,6 +663,15 @@ footer {
     var earn = s.earnings || {};
     var active = s.active_features || [];
     var inactive = s.inactive_features || [];
+    var nextRun = Number(s.total_runs || 0);
+    var nextVersion = s.version || '';
+
+    if (!reloading && ((initialRun && nextRun && nextRun !== initialRun) ||
+        (initialVersion && nextVersion && nextVersion !== initialVersion))) {
+      reloading = true;
+      window.location.reload();
+      return;
+    }
 
     // Header
     setText('hdr-version', s.version || '');
@@ -718,9 +732,15 @@ footer {
 
   function poll() {
     fetch('status.json?_=' + Date.now())
-      .then(function(r){ return r.json(); })
+      .then(function(r){
+        if (!r.ok) throw new Error('status fetch failed');
+        return r.json();
+      })
       .then(applyStatus)
-      .catch(function(){});
+      .catch(function(){
+        var dot = document.getElementById('live-dot');
+        if (dot) dot.style.background = 'var(--rd)';
+      });
   }
 
   // Tick age pill every minute even without new data

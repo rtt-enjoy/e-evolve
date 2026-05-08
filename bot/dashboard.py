@@ -38,6 +38,7 @@ from __future__ import annotations
 
 import logging
 import html
+import json
 import os
 from datetime import datetime, timezone
 from pathlib import Path
@@ -47,6 +48,8 @@ log = logging.getLogger(__name__)
 
 _LOG_FILE  = Path("earnings-log.md")
 _HTML_FILE = Path("docs/index.html")
+_PUBLIC_STATUS_FILE = Path("docs/status.json")
+_PUBLIC_LOG_FILE = Path("docs/earnings-log.md")
 
 # Secrets that are free-tier (no payment required to obtain)
 _FREE_TIER_SECRETS = frozenset({
@@ -121,6 +124,16 @@ def write_log(actions: list[dict]) -> None:
 def write_html(status: dict[str, Any]) -> None:
     """Regenerate docs/index.html from current status dict."""
     _HTML_FILE.parent.mkdir(exist_ok=True)
+    _PUBLIC_STATUS_FILE.write_text(
+        json.dumps(
+            {k: v for k, v in status.items() if not k.startswith("_")},
+            indent=2,
+            default=str,
+        ),
+        encoding="utf-8",
+    )
+    if _LOG_FILE.exists():
+        _PUBLIC_LOG_FILE.write_text(_LOG_FILE.read_text(encoding="utf-8"), encoding="utf-8")
     _HTML_FILE.write_text(_render(status), encoding="utf-8")
     log.info("Dashboard written → docs/index.html")
 
@@ -900,6 +913,11 @@ _LIVE_JS = """\
 <script>
 (function() {
   var POLL_MS = 60000;
+  var runEl = document.getElementById('hdr-total-runs');
+  var versionEl = document.getElementById('hdr-version');
+  var initialRun = Number(runEl ? runEl.textContent : 0);
+  var initialVersion = versionEl ? versionEl.textContent : '';
+  var reloading = false;
   var PROVIDERS = {
     gemini:     'pill-provider-gemini',
     groq:       'pill-provider-groq',
@@ -955,6 +973,15 @@ _LIVE_JS = """\
     var earn = s.earnings || {};
     var active = s.active_features || [];
     var inactive = s.inactive_features || [];
+    var nextRun = Number(s.total_runs || 0);
+    var nextVersion = s.version || '';
+
+    if (!reloading && ((initialRun && nextRun && nextRun !== initialRun) ||
+        (initialVersion && nextVersion && nextVersion !== initialVersion))) {
+      reloading = true;
+      window.location.reload();
+      return;
+    }
 
     // Header
     setText('hdr-version', s.version || '');
@@ -1015,9 +1042,15 @@ _LIVE_JS = """\
 
   function poll() {
     fetch('status.json?_=' + Date.now())
-      .then(function(r){ return r.json(); })
+      .then(function(r){
+        if (!r.ok) throw new Error('status fetch failed');
+        return r.json();
+      })
       .then(applyStatus)
-      .catch(function(){});
+      .catch(function(){
+        var dot = document.getElementById('live-dot');
+        if (dot) dot.style.background = 'var(--rd)';
+      });
   }
 
   // Tick age pill every minute even without new data

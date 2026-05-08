@@ -3,6 +3,7 @@
   "articles": {
     "per_cycle": 2,
     "min_words": 600,
+    "estimated_usd_per_publish": 0.02,
     "cta_label_default": "Support this project",
     "buyer_intent_ratio": 0.35,
     "buyer_intent_topics": [

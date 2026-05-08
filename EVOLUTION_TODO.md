@@ -37,6 +37,10 @@ _(none open)_
 
 ## Resolved
 
+- **Workflow dependency install listed stdlib modules** - fixed 2026-05-08. Replaced `json`, `pathlib`, and `logging` with the real packages required by the active LLM and earning modules.
+
+- **Article publishes had zero tracked value** - fixed 2026-05-08. Successful dev.to and Medium publishes now use configurable estimated value via `articles.estimated_usd_per_publish`.
+
 - **Groq TPD rate limit blocks evolution** - fixed by adding `ANTHROPIC_API_KEY` secret.
 
 - **Dashboard lacks earnings analysis** - fixed 2026-05-01.

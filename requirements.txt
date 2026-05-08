@@ -1,4 +1,8 @@
 requests
-json
-pathlib
-logging
+python-dotenv
+groq
+anthropic
+google-generativeai
+tweepy
+python-binance
+web3

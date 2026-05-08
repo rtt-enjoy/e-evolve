@@ -26,6 +26,7 @@ def _load_strategy() -> dict:
 
 _strategy  = _load_strategy().get("articles", {})
 _MIN_WORDS = int(_strategy.get("min_words", 600))
+_ESTIMATED_USD_PER_PUBLISH = float(_strategy.get("estimated_usd_per_publish", 0.0))
 _CTA_LABEL_DEFAULT = str(_strategy.get("cta_label_default", "Support this project")).strip()
 _BUYER_INTENT_RATIO = float(_strategy.get("buyer_intent_ratio", 0.35))
 
@@ -218,6 +219,11 @@ def _with_free_cta(article: dict) -> dict:
     return updated
 
 
+def _estimated_usd() -> float:
+    """Assign conservative configured value for a successfully published article."""
+    return max(0.0, round(_ESTIMATED_USD_PER_PUBLISH, 6))
+
+
 # ── Generation ────────────────────────────────────────────────────────────────
 
 def _classify_gen_error(exc: Exception) -> str:
@@ -344,7 +350,7 @@ def _post_devto(article: dict, api_key: str) -> Result:
             resp.raise_for_status()
             url = resp.json().get("url", "https://dev.to")
             return Result(platform="dev.to", title=article["title"],
-                          url=url, success=True, estimated_usd=0.0)
+                          url=url, success=True, estimated_usd=_estimated_usd())
         except requests.HTTPError as exc:
             return Result(platform="dev.to",
                           error=f"HTTP {exc.response.status_code}: {exc.response.text[:100]}")
@@ -385,7 +391,7 @@ def _post_medium(article: dict, token: str) -> Result:
             resp.raise_for_status()
             url = resp.json()["data"].get("url", "https://medium.com")
             return Result(platform="medium", title=article["title"],
-                          url=url, success=True, estimated_usd=0.0)
+                          url=url, success=True, estimated_usd=_estimated_usd())
         except Exception as exc:
             last_exc = exc
             if attempt < 2:

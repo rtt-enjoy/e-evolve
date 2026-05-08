@@ -37,6 +37,8 @@ Keep it public for free GitHub Pages.
 | Secret | Source | Cost |
 |--------|--------|------|
 | `GROQ_API_KEY` | [console.groq.com](https://console.groq.com) | Free |
+| `GEMINI_API_KEY` | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier |
+| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys) | Free models available |
 | `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) | Paid (higher quality) |
 
 ### 3. Trigger the first run
@@ -48,6 +50,18 @@ Actions tab → **evolve** workflow → **Run workflow**
 Settings → Pages → Source: branch `main`, folder `/docs` → Save
 
 Dashboard live at `https://YOUR_USERNAME.github.io/e-evolve`
+
+### No-Money Self-Earn Setup
+
+Start with the free content loop:
+
+1. Add `GROQ_API_KEY`.
+2. Add `DEV_TO_API_KEY`.
+3. Add optional GitHub Actions variables, not secrets:
+   - `EARN_CTA_URL`: sponsor, tip, newsletter, affiliate, portfolio, or product link.
+   - `EARN_CTA_LABEL`: link text shown at the end of each article.
+
+Keep crypto and NFT modules disabled until you have funds you can afford to risk.
 
 ---
 

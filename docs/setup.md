@@ -13,9 +13,24 @@ Repo → Settings → Secrets and variables → Actions → **New repository sec
 | Secret | Source | Cost |
 |--------|--------|------|
 | `GROQ_API_KEY` | [console.groq.com](https://console.groq.com) | Free |
+| `GEMINI_API_KEY` | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier |
+| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys) | Free models available |
 | `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) | Paid (higher quality) |
 
-Only one is required. If both are present, Anthropic takes priority.
+Only one is required. If you have no budget, start with `GROQ_API_KEY` and add
+`DEV_TO_API_KEY` for the first earning module.
+
+### Free self-earn path
+
+Use this order when you cannot fund paid services:
+
+1. `GROQ_API_KEY` - free LLM generation.
+2. `DEV_TO_API_KEY` - free article publishing.
+3. Optional GitHub Actions variable `EARN_CTA_URL` - your sponsor, tip,
+   newsletter, affiliate, portfolio, or product link appended to each article.
+4. Optional variable `EARN_CTA_LABEL` - link text for that CTA.
+
+Leave crypto and NFT modules off until you have money you can afford to risk.
 
 ### 3. Trigger first run
 

@@ -2,7 +2,8 @@
   "_note": "E-Evolve strategy config. The bot may evolve these values over time.",
   "articles": {
     "per_cycle": 1,
-    "min_words": 600
+    "min_words": 600,
+    "cta_label_default": "Support this project"
   },
   "crypto": {
     "risk_per_trade_pct": 0.02,

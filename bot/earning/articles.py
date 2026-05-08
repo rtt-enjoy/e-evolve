@@ -26,6 +26,7 @@ def _load_strategy() -> dict:
 
 _strategy  = _load_strategy().get("articles", {})
 _MIN_WORDS = int(_strategy.get("min_words", 600))
+_CTA_LABEL_DEFAULT = str(_strategy.get("cta_label_default", "Support this project")).strip()
 
 log = logging.getLogger(__name__)
 
@@ -165,6 +166,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     article = _generate(llm, status)
     if not article:
         return []
+    article = _with_free_cta(article)
 
     results: list[Result] = []
     if devto_key:
@@ -179,6 +181,29 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
             log.warning("[articles] %s failed: %s", r.platform, r.error)
 
     return [vars(r) for r in results]
+
+
+def _with_free_cta(article: dict) -> dict:
+    """Append an optional no-cost monetization CTA to article content."""
+    url = os.getenv("EARN_CTA_URL", "").strip()
+    if not url:
+        return article
+    if not url.startswith(("https://", "http://")):
+        log.warning("[articles] Ignoring EARN_CTA_URL because it is not http(s)")
+        return article
+
+    label = os.getenv("EARN_CTA_LABEL", "").strip() or _CTA_LABEL_DEFAULT
+    label = label.replace("[", "").replace("]", "").strip()[:80] or _CTA_LABEL_DEFAULT
+    footer = (
+        "\n\n---\n\n"
+        f"If this was useful, [{label}]({url}). "
+        "This keeps the project running without paid infrastructure."
+    )
+    updated = dict(article)
+    body = str(updated.get("body_markdown", "")).rstrip()
+    if url not in body:
+        updated["body_markdown"] = body + footer
+    return updated
 
 
 # ── Generation ────────────────────────────────────────────────────────────────

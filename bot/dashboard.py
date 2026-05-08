@@ -371,13 +371,29 @@ def _section_research_focus(s: dict[str, Any]) -> str:
     week     = float(earn.get("this_week_usd", 0) or 0)
 
     cards: list[dict[str, str]] = []
-    if "articles_devto" in active and "MEDIUM_INTEGRATION_TOKEN" in missing:
+    if "articles_devto" not in active and "DEV_TO_API_KEY" in missing:
         cards.append({
             "rank": "1",
+            "title": "Start the free content loop",
+            "metric": "$0 setup",
+            "body": "Use Groq plus dev.to first. It costs nothing, runs on GitHub Actions, and avoids funded trading or gas fees.",
+            "action": "Add DEV_TO_API_KEY",
+        })
+    if "articles_devto" in active and "MEDIUM_INTEGRATION_TOKEN" in missing:
+        cards.append({
+            "rank": str(len(cards) + 1),
             "title": "Dual-publish every article",
-            "metric": "High leverage",
+            "metric": "$0 setup",
             "body": "Add Medium so the same generated article reaches a second audience with no extra LLM call.",
             "action": "Add MEDIUM_INTEGRATION_TOKEN",
+        })
+    if "articles_devto" in active:
+        cards.append({
+            "rank": str(len(cards) + 1),
+            "title": "Add a free article CTA",
+            "metric": "No API key",
+            "body": "Set EARN_CTA_URL to a sponsor, tip, newsletter, affiliate, or product link so every free article has a conversion path.",
+            "action": "Add variable EARN_CTA_URL",
         })
     payout_missing = [
         key for key in ("BINANCE_API_KEY", "BINANCE_SECRET_KEY", "BINANCE_WITHDRAW_ADDRESS")
@@ -385,7 +401,7 @@ def _section_research_focus(s: dict[str, Any]) -> str:
     ]
     if "usdt_wallet" in active and payout_missing:
         cards.append({
-            "rank": "2",
+            "rank": str(len(cards) + 1),
             "title": "Wallet is ready",
             "metric": "Payout path",
             "body": "The USDT address is configured, so the dashboard can track incoming funds while payout automation waits for exchange keys.",
@@ -397,10 +413,10 @@ def _section_research_focus(s: dict[str, Any]) -> str:
     ]
     if twitter_missing:
         cards.append({
-            "rank": "3",
+            "rank": str(len(cards) + 1),
             "title": "Turn articles into distribution",
-            "metric": "Reach gap",
-            "body": "Threads can recycle each article into short-form discovery, which is the missing top-of-funnel for content earnings.",
+            "metric": "Optional",
+            "body": "Threads can recycle each article into short-form discovery, but only enable this if your X developer access is actually free.",
             "action": "Add " + ", ".join(twitter_missing),
         })
     llm_missing = [
@@ -409,9 +425,9 @@ def _section_research_focus(s: dict[str, Any]) -> str:
     ]
     if llm_missing:
         cards.append({
-            "rank": "4",
+            "rank": str(len(cards) + 1),
             "title": "Improve research depth",
-            "metric": "Quality moat",
+            "metric": "$0 setup",
             "body": "Activate a long-context thinking provider so evolution and article research rely less on the Groq short-context path.",
             "action": "Add " + " or ".join(llm_missing),
         })
@@ -419,9 +435,9 @@ def _section_research_focus(s: dict[str, Any]) -> str:
         key for key in ("BINANCE_API_KEY", "BINANCE_SECRET_KEY")
         if key in missing
     ]
-    if trading_missing:
+    if trading_missing and ("articles_devto" in active or "articles_medium" in active):
         cards.append({
-            "rank": "5",
+            "rank": str(len(cards) + 1),
             "title": "Add capital-backed earning",
             "metric": "Needs funds",
             "body": "Trading is the first module with direct compounding potential, but it should wait until API keys and risk limits are deliberate.",
@@ -634,14 +650,14 @@ _MODULE_SETUP: dict[str, dict] = {
     "llm_anthropic": {
         "label": "Anthropic (Claude)",
         "secrets": ["ANTHROPIC_API_KEY"],
-        "free": True,
+        "free": False,
         "signup_url": "https://console.anthropic.com/",
         "steps": [
             "Go to console.anthropic.com → sign up (email only, no KYC)",
             "API Keys → Create Key → copy it",
             "GitHub repo → Settings → Secrets → New secret: <code>ANTHROPIC_API_KEY</code>",
         ],
-        "note": "Free tier: $5 credit. Enables smarter evolution.",
+        "note": "Paid API credit. Skip this while running the no-money setup.",
     },
     "llm_gemini": {
         "label": "Google Gemini",
@@ -682,14 +698,14 @@ _MODULE_SETUP: dict[str, dict] = {
     "twitter": {
         "label": "Twitter / X",
         "secrets": ["TWITTER_API_KEY", "TWITTER_API_SECRET", "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_SECRET"],
-        "free": True,
+        "free": False,
         "signup_url": "https://developer.twitter.com/en/portal/dashboard",
         "steps": [
             "developer.twitter.com → sign in → Create project + app",
             "Keys and Tokens → generate all 4 keys",
             "GitHub → Secrets → add all 4: <code>TWITTER_API_KEY</code>, <code>TWITTER_API_SECRET</code>, <code>TWITTER_ACCESS_TOKEN</code>, <code>TWITTER_ACCESS_SECRET</code>",
         ],
-        "note": "Free tier allows ~1500 tweets/month.",
+        "note": "Developer access can require paid or approved access. Treat as optional for the free path.",
     },
     "crypto_binance": {
         "label": "Crypto Trading (KuCoin — no KYC)",

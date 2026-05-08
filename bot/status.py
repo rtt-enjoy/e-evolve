@@ -31,6 +31,21 @@ FEATURE_MAP: dict[str, list[str]] = {
     "nft_ethereum":    ["ETH_PRIVATE_KEY", "ETH_WALLET_ADDRESS"],
 }
 
+LLM_ROLE_WORKFLOWS: dict[str, dict[str, str]] = {
+    "think": {
+        "provider": "gemini",
+        "purpose": "evolution planning and code repair",
+    },
+    "fast": {
+        "provider": "groq",
+        "purpose": "article and thread generation",
+    },
+    "experiment": {
+        "provider": "openrouter",
+        "purpose": "alternate model experiments",
+    },
+}
+
 
 # ── Public API ──────────────────────────────────────────────────────────────
 
@@ -62,6 +77,8 @@ def snapshot(status: dict[str, Any]) -> dict[str, Any]:
     status["total_runs"]        = int(status.get("total_runs", 0)) + 1
     status["active_features"]   = active
     status["inactive_features"] = inactive
+    status["secret_readiness"]  = _secret_readiness(active, inactive)
+    status["llm_workflows"]     = _llm_workflows(active)
     usdt_wallet = os.getenv("USDT_WALLET_ADDRESS", "").strip()
     if usdt_wallet:
         status["usdt_wallet"] = usdt_wallet
@@ -129,8 +146,10 @@ def _defaults() -> dict[str, Any]:
         "total_runs":        0,
         "active_features":   [],
         "inactive_features": list(FEATURE_MAP.keys()),
+        "secret_readiness":  {},
         "llm_provider":      "unknown",
         "llm_roles":         {},
+        "llm_workflows":     {},
         "earnings": {
             "total_usd":       0.0,
             "this_week_usd":   0.0,
@@ -168,3 +187,46 @@ def _fill_defaults(data: dict[str, Any]) -> dict[str, Any]:
             for sk, sv in v.items():
                 data[k].setdefault(sk, sv)
     return data
+
+
+def _secret_readiness(active: list[str], inactive: list[str], use_env: bool = True) -> dict[str, Any]:
+    """Persist safe present/missing secret names for dashboard diagnostics."""
+    active_set = set(active)
+    readiness: dict[str, Any] = {}
+    for feature, keys in FEATURE_MAP.items():
+        # In CI, env tells us directly. During local dashboard regeneration, the
+        # previous GitHub snapshot's active_features safely implies all keys for
+        # that feature existed without exposing their values.
+        present = [
+            k for k in keys
+            if (use_env and os.getenv(k, "").strip()) or feature in active_set
+        ]
+        missing = [k for k in keys if k not in present]
+        readiness[feature] = {
+            "active": feature in active,
+            "present": present,
+            "missing": missing,
+            "present_count": len(present),
+            "required_count": len(keys),
+        }
+    return readiness
+
+
+def _llm_workflows(active_features: list[str] | None = None) -> dict[str, Any]:
+    """Describe role routing and whether each role can run this cycle."""
+    active_set = set(active_features or [])
+    workflows: dict[str, Any] = {}
+    for role, cfg in LLM_ROLE_WORKFLOWS.items():
+        provider = cfg["provider"]
+        secret = {
+            "gemini": "GEMINI_API_KEY",
+            "groq": "GROQ_API_KEY",
+            "openrouter": "OPENROUTER_API_KEY",
+        }.get(provider)
+        feature = f"llm_{provider}"
+        workflows[role] = {
+            **cfg,
+            "active": bool((secret and os.getenv(secret, "").strip()) or feature in active_set),
+            "secret": secret,
+        }
+    return workflows

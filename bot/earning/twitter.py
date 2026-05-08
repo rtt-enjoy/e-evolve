@@ -92,12 +92,16 @@ def _generate(llm: Any, status: dict) -> Optional[dict]:
     n     = status.get("total_runs", 1)
     topic = _TOPICS[n % len(_TOPICS)]
     try:
-        data   = llm.complete_json(
+        prompt = (
             f'Write a Twitter/X thread about: "{topic}"\n'
-            f"Context: bot cycle #{n}. JSON only.",
-            system=_SYSTEM,
-            max_tokens=1200,
+            f"Context: bot cycle #{n}, active modules: {status.get('active_features', [])}.\n"
+            "Repurpose one concrete lesson from the current bot workflow; avoid vague AI hype.\n"
+            "JSON only."
         )
+        if hasattr(llm, "complete_json_for_role"):
+            data = llm.complete_json_for_role("fast", prompt, system=_SYSTEM, max_tokens=1200)
+        else:
+            data = llm.complete_json(prompt, system=_SYSTEM, max_tokens=1200)
         tweets = data.get("tweets", [])
         if len(tweets) < _MIN_TWEETS:
             raise ValueError(f"Too few tweets: {len(tweets)}")

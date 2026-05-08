@@ -37,6 +37,7 @@ CSS class naming (readable):
 from __future__ import annotations
 
 import logging
+import html
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -192,6 +193,12 @@ _PROVIDER_ROLE_LABELS: list[tuple[str, str]] = [
     ("fast",       "⚡"),
     ("experiment", "🧪"),
 ]
+
+_ROLE_LABELS: dict[str, str] = {
+    "think": "Evolution",
+    "fast": "Research/content",
+    "experiment": "Model experiments",
+}
 
 
 def _provider_pills(provider: str, llm_roles: dict) -> str:
@@ -386,6 +393,75 @@ def _section_research_focus(s: dict[str, Any]) -> str:
     return f"""<div class="section">
   <h2>Research & Revenue Focus</h2>
   <div class="research-grid">{cards_html}</div>
+</div>"""
+
+
+def _section_llm_workflows(s: dict[str, Any]) -> str:
+    """Show how model roles are routed this cycle."""
+    roles = s.get("llm_workflows", {}) or {}
+    active_roles = s.get("llm_roles", {}) or {}
+    if not roles and not active_roles:
+        return ""
+
+    cards = ""
+    for role in ("think", "fast", "experiment"):
+        cfg = roles.get(role, {})
+        provider = active_roles.get(role) or cfg.get("provider", "unknown")
+        purpose = cfg.get("purpose", "")
+        active = bool(active_roles.get(role) or cfg.get("active"))
+        missing = cfg.get("secret")
+        state_cls = "workflow-ready" if active else "workflow-missing"
+        state = "ready" if active else f"needs {missing}"
+        cards += (
+            f'<div class="workflow-card {state_cls}">'
+            f'<div class="workflow-top"><strong>{_ROLE_LABELS.get(role, role)}</strong>'
+            f'<span>{state}</span></div>'
+            f'<div class="workflow-provider">{provider}</div>'
+            f'<p>{purpose}</p>'
+            f'</div>'
+        )
+
+    return f"""<div class="section">
+  <h2>AI Model Workflow</h2>
+  <div class="workflow-grid">{cards}</div>
+</div>"""
+
+
+def _section_secret_readiness(s: dict[str, Any]) -> str:
+    """Safe secret audit: names only, never values."""
+    readiness = s.get("secret_readiness", {}) or {}
+    if not readiness:
+        return ""
+
+    priority = [
+        "llm_gemini", "llm_openrouter", "articles_medium",
+        "twitter", "crypto_binance", "crypto_payout", "nft_ethereum",
+    ]
+    rows = ""
+    for feature in priority:
+        info = readiness.get(feature)
+        if not info:
+            continue
+        present = int(info.get("present_count", 0))
+        required = int(info.get("required_count", 0)) or 1
+        pct = int(present / required * 100)
+        missing = ", ".join(info.get("missing", [])) or "none"
+        label = "active" if info.get("active") else f"{present}/{required}"
+        rows += (
+            f'<div class="secret-row">'
+            f'<div><strong>{html.escape(feature)}</strong><span>{html.escape(label)}</span></div>'
+            f'<div class="secret-meter"><div style="width:{pct}%"></div></div>'
+            f'<code>{html.escape(missing)}</code>'
+            f'</div>'
+        )
+    if not rows:
+        return ""
+    return f"""<div class="section">
+  <h2>Secret Readiness</h2>
+  <div class="panel">
+    <p class="muted secret-intro">Current GitHub Actions secret audit. Values are never stored or shown.</p>
+    {rows}
+  </div>
 </div>"""
 
 
@@ -661,6 +737,7 @@ def _section_actions(actions: list) -> str:
 
 _ORDER_PRESETS: list[tuple[str, str]] = [
     ("force articles 3",       "Post 3 articles this cycle"),
+    ("force articles 1",       "Run one research-backed article"),
     ("force trade aggressive",  "Raise trade risk to 5%"),
     ("skip evolution",          "Skip Phase 3 this cycle"),
     ("post thread",             "Force a Twitter thread"),
@@ -668,6 +745,7 @@ _ORDER_PRESETS: list[tuple[str, str]] = [
     ("status report",           "Dump full status to workflow log"),
     ("force mint 1",            "Mint 1 NFT this cycle"),
     ("force trade conservative","Lower trade risk to 1%"),
+    ("force articles 5",       "Stress-test content throughput"),
 ]
 
 _ORDERS_JS = """\
@@ -1064,6 +1142,30 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
   font-size: .74rem; white-space: normal;
 }
 
+/* -- AI workflow -- */
+.workflow-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.workflow-card {
+  background: var(--sf); border: 1px solid var(--br);
+  border-radius: 8px; padding: 13px; min-height: 126px;
+}
+.workflow-card.workflow-ready { border-color: rgba(63,185,80,.35); }
+.workflow-card.workflow-missing { border-color: rgba(227,179,65,.35); }
+.workflow-top {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 8px; margin-bottom: 7px;
+}
+.workflow-top span {
+  font-size: .72rem; font-weight: 700; color: var(--mu);
+  border: 1px solid var(--br); border-radius: 12px; padding: 1px 7px;
+}
+.workflow-ready .workflow-top span { color: var(--gn); border-color: rgba(63,185,80,.35); }
+.workflow-missing .workflow-top span { color: var(--yw); border-color: rgba(227,179,65,.35); }
+.workflow-provider { color: var(--ac); font-size: .9rem; font-weight: 700; margin-bottom: 6px; }
+.workflow-card p { color: var(--mu); font-size: .8rem; line-height: 1.4; }
+
 /* ── Growth suggestions ── */
 .suggestion-card {
   display: flex; gap: 12px; padding: 12px;
@@ -1227,6 +1329,32 @@ th { color: var(--mu); font-weight: 500; }
   margin-left: 6px;
 }
 
+/* -- Secret readiness -- */
+.secret-intro { font-size: .8rem; margin-bottom: 10px; }
+.secret-row {
+  display: grid; grid-template-columns: 160px 1fr minmax(120px, 260px);
+  gap: 10px; align-items: center; padding: 8px 0;
+  border-bottom: 1px solid rgba(48,54,61,.75);
+}
+.secret-row:last-child { border-bottom: 0; }
+.secret-row div:first-child {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+}
+.secret-row strong { font-size: .82rem; }
+.secret-row span { color: var(--mu); font-size: .76rem; }
+.secret-meter {
+  height: 7px; background: var(--br); border-radius: 4px; overflow: hidden;
+}
+.secret-meter div { height: 100%; background: var(--gn); border-radius: 4px; }
+.secret-row code {
+  color: var(--yw); background: rgba(110,118,129,.12);
+  border: 1px solid var(--br); border-radius: 4px;
+  padding: 2px 6px; font-size: .72rem; white-space: normal;
+}
+@media (max-width: 700px) {
+  .secret-row { grid-template-columns: 1fr; gap: 6px; }
+}
+
 /* ── Footer ── */
 footer {
   text-align: center; color: var(--mu); font-size: .76rem;
@@ -1287,6 +1415,8 @@ def _render(s: dict[str, Any]) -> str:
                         age_label, age_color, n_runs, cycle_str, llm_roles),
         _section_stats(earn, n_runs, active, inactive, history, spark, spark_tip, s),
         _section_earnings(earn),
+        _section_llm_workflows(s),
+        _section_secret_readiness(s),
         _section_research_focus(s),
         _section_suggestions(suggs),
         _section_inactive(inactive),

@@ -160,6 +160,30 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
   font-size: .74rem; white-space: normal;
 }
 
+/* -- AI workflow -- */
+.workflow-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.workflow-card {
+  background: var(--sf); border: 1px solid var(--br);
+  border-radius: 8px; padding: 13px; min-height: 126px;
+}
+.workflow-card.workflow-ready { border-color: rgba(63,185,80,.35); }
+.workflow-card.workflow-missing { border-color: rgba(227,179,65,.35); }
+.workflow-top {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 8px; margin-bottom: 7px;
+}
+.workflow-top span {
+  font-size: .72rem; font-weight: 700; color: var(--mu);
+  border: 1px solid var(--br); border-radius: 12px; padding: 1px 7px;
+}
+.workflow-ready .workflow-top span { color: var(--gn); border-color: rgba(63,185,80,.35); }
+.workflow-missing .workflow-top span { color: var(--yw); border-color: rgba(227,179,65,.35); }
+.workflow-provider { color: var(--ac); font-size: .9rem; font-weight: 700; margin-bottom: 6px; }
+.workflow-card p { color: var(--mu); font-size: .8rem; line-height: 1.4; }
+
 /* ── Growth suggestions ── */
 .suggestion-card {
   display: flex; gap: 12px; padding: 12px;
@@ -323,6 +347,32 @@ th { color: var(--mu); font-weight: 500; }
   margin-left: 6px;
 }
 
+/* -- Secret readiness -- */
+.secret-intro { font-size: .8rem; margin-bottom: 10px; }
+.secret-row {
+  display: grid; grid-template-columns: 160px 1fr minmax(120px, 260px);
+  gap: 10px; align-items: center; padding: 8px 0;
+  border-bottom: 1px solid rgba(48,54,61,.75);
+}
+.secret-row:last-child { border-bottom: 0; }
+.secret-row div:first-child {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+}
+.secret-row strong { font-size: .82rem; }
+.secret-row span { color: var(--mu); font-size: .76rem; }
+.secret-meter {
+  height: 7px; background: var(--br); border-radius: 4px; overflow: hidden;
+}
+.secret-meter div { height: 100%; background: var(--gn); border-radius: 4px; }
+.secret-row code {
+  color: var(--yw); background: rgba(110,118,129,.12);
+  border: 1px solid var(--br); border-radius: 4px;
+  padding: 2px 6px; font-size: .72rem; white-space: normal;
+}
+@media (max-width: 700px) {
+  .secret-row { grid-template-columns: 1fr; gap: 6px; }
+}
+
 /* ── Footer ── */
 footer {
   text-align: center; color: var(--mu); font-size: .76rem;
@@ -359,13 +409,13 @@ footer {
   <div class="logo">🤖</div>
   <div>
     <h1>E-Evolve
-      <span class="pill-version" id="hdr-version">1.22.1</span>
+      <span class="pill-version" id="hdr-version">1.23.0</span>
       <span id="hdr-providers"><span class="pill-provider-groq" title="fast">⚡ groq</span></span>
     </h1>
     <div style="margin-top:5px" id="hdr-badges"><span class="badge badge-green">llm_groq</span><span class="badge badge-green">articles_devto</span></div>
     <div class="muted" style="font-size:.8rem;margin-top:5px">
       Last cycle: <span id="hdr-last-run">2026-05-07 04:06 UTC</span>
-      <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--rd);border:1px solid var(--rd)">13h ago</span>
+      <span class="age-pill" id="hdr-age" style="background:rgba(0,0,0,.3);color:var(--rd);border:1px solid var(--rd)">20h ago</span>
       &nbsp;·&nbsp; Total cycles: <span id="hdr-total-runs">463</span>
       &nbsp;·&nbsp; Cycle time: <span id="hdr-cycle-time">40s</span>
     </div>
@@ -398,6 +448,17 @@ footer {
   <div class="panel">
     
     <div class="breakdown"><div class="breakdown-row"><span class="breakdown-label">dev.to</span><div class="breakdown-bar-track"><div class="breakdown-bar" style="width:0%"></div></div><span class="breakdown-amount">$0.0000</span></div></div>
+  </div>
+</div>
+<div class="section">
+  <h2>AI Model Workflow</h2>
+  <div class="workflow-grid"><div class="workflow-card workflow-missing"><div class="workflow-top"><strong>Evolution</strong><span>needs GEMINI_API_KEY</span></div><div class="workflow-provider">gemini</div><p>evolution planning and code repair</p></div><div class="workflow-card workflow-ready"><div class="workflow-top"><strong>Research/content</strong><span>ready</span></div><div class="workflow-provider">groq</div><p>article and thread generation</p></div><div class="workflow-card workflow-missing"><div class="workflow-top"><strong>Model experiments</strong><span>needs OPENROUTER_API_KEY</span></div><div class="workflow-provider">openrouter</div><p>alternate model experiments</p></div></div>
+</div>
+<div class="section">
+  <h2>Secret Readiness</h2>
+  <div class="panel">
+    <p class="muted secret-intro">Current GitHub Actions secret audit. Values are never stored or shown.</p>
+    <div class="secret-row"><div><strong>llm_gemini</strong><span>0/1</span></div><div class="secret-meter"><div style="width:0%"></div></div><code>GEMINI_API_KEY</code></div><div class="secret-row"><div><strong>llm_openrouter</strong><span>0/1</span></div><div class="secret-meter"><div style="width:0%"></div></div><code>OPENROUTER_API_KEY</code></div><div class="secret-row"><div><strong>articles_medium</strong><span>0/1</span></div><div class="secret-meter"><div style="width:0%"></div></div><code>MEDIUM_INTEGRATION_TOKEN</code></div><div class="secret-row"><div><strong>twitter</strong><span>0/4</span></div><div class="secret-meter"><div style="width:0%"></div></div><code>TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET</code></div><div class="secret-row"><div><strong>crypto_binance</strong><span>0/2</span></div><div class="secret-meter"><div style="width:0%"></div></div><code>BINANCE_API_KEY, BINANCE_SECRET_KEY</code></div><div class="secret-row"><div><strong>crypto_payout</strong><span>0/3</span></div><div class="secret-meter"><div style="width:0%"></div></div><code>BINANCE_API_KEY, BINANCE_SECRET_KEY, BINANCE_WITHDRAW_ADDRESS</code></div><div class="secret-row"><div><strong>nft_ethereum</strong><span>0/2</span></div><div class="secret-meter"><div style="width:0%"></div></div><code>ETH_PRIVATE_KEY, ETH_WALLET_ADDRESS</code></div>
   </div>
 </div>
 <div class="section">
@@ -474,7 +535,7 @@ footer {
     <p class="muted" style="font-size:.82rem;margin-bottom:12px">
       Queue commands for the next evolution cycle. Click a preset or type a custom order.
     </p>
-    <div class="orders-grid"><button class="order-btn" onclick="addOrder('force articles 3')"><span class="ob-label">force articles 3</span><span class="ob-desc">Post 3 articles this cycle</span></button><button class="order-btn" onclick="addOrder('force trade aggressive')"><span class="ob-label">force trade aggressive</span><span class="ob-desc">Raise trade risk to 5%</span></button><button class="order-btn" onclick="addOrder('skip evolution')"><span class="ob-label">skip evolution</span><span class="ob-desc">Skip Phase 3 this cycle</span></button><button class="order-btn" onclick="addOrder('post thread')"><span class="ob-label">post thread</span><span class="ob-desc">Force a Twitter thread</span></button><button class="order-btn" onclick="addOrder('reset earnings')"><span class="ob-label">reset earnings</span><span class="ob-desc">Zero this_week_usd</span></button><button class="order-btn" onclick="addOrder('status report')"><span class="ob-label">status report</span><span class="ob-desc">Dump full status to workflow log</span></button><button class="order-btn" onclick="addOrder('force mint 1')"><span class="ob-label">force mint 1</span><span class="ob-desc">Mint 1 NFT this cycle</span></button><button class="order-btn" onclick="addOrder('force trade conservative')"><span class="ob-label">force trade conservative</span><span class="ob-desc">Lower trade risk to 1%</span></button></div>
+    <div class="orders-grid"><button class="order-btn" onclick="addOrder('force articles 3')"><span class="ob-label">force articles 3</span><span class="ob-desc">Post 3 articles this cycle</span></button><button class="order-btn" onclick="addOrder('force articles 1')"><span class="ob-label">force articles 1</span><span class="ob-desc">Run one research-backed article</span></button><button class="order-btn" onclick="addOrder('force trade aggressive')"><span class="ob-label">force trade aggressive</span><span class="ob-desc">Raise trade risk to 5%</span></button><button class="order-btn" onclick="addOrder('skip evolution')"><span class="ob-label">skip evolution</span><span class="ob-desc">Skip Phase 3 this cycle</span></button><button class="order-btn" onclick="addOrder('post thread')"><span class="ob-label">post thread</span><span class="ob-desc">Force a Twitter thread</span></button><button class="order-btn" onclick="addOrder('reset earnings')"><span class="ob-label">reset earnings</span><span class="ob-desc">Zero this_week_usd</span></button><button class="order-btn" onclick="addOrder('status report')"><span class="ob-label">status report</span><span class="ob-desc">Dump full status to workflow log</span></button><button class="order-btn" onclick="addOrder('force mint 1')"><span class="ob-label">force mint 1</span><span class="ob-desc">Mint 1 NFT this cycle</span></button><button class="order-btn" onclick="addOrder('force trade conservative')"><span class="ob-label">force trade conservative</span><span class="ob-desc">Lower trade risk to 1%</span></button><button class="order-btn" onclick="addOrder('force articles 5')"><span class="ob-label">force articles 5</span><span class="ob-desc">Stress-test content throughput</span></button></div>
     <div class="order-custom-row">
       <input type="text" id="customOrder" class="order-input"
              placeholder="Custom order (e.g. force articles 5)"

@@ -1,5 +1,5 @@
 {
-  "version": "1.22.1",
+  "version": "1.23.0",
   "last_run": "2026-05-07T04:06:23.422356+00:00",
   "total_runs": 463,
   "active_features": [
@@ -134,5 +134,124 @@
   "usdt_wallet": "",
   "usdt_balance": 0.0,
   "last_payout_total_usd": 0.0,
-  "last_payout_tx": null
+  "last_payout_tx": null,
+  "secret_readiness": {
+    "llm_anthropic": {
+      "active": false,
+      "present": [],
+      "missing": [
+        "ANTHROPIC_API_KEY"
+      ],
+      "present_count": 0,
+      "required_count": 1
+    },
+    "llm_gemini": {
+      "active": false,
+      "present": [],
+      "missing": [
+        "GEMINI_API_KEY"
+      ],
+      "present_count": 0,
+      "required_count": 1
+    },
+    "llm_openrouter": {
+      "active": false,
+      "present": [],
+      "missing": [
+        "OPENROUTER_API_KEY"
+      ],
+      "present_count": 0,
+      "required_count": 1
+    },
+    "llm_groq": {
+      "active": true,
+      "present": [
+        "GROQ_API_KEY"
+      ],
+      "missing": [],
+      "present_count": 1,
+      "required_count": 1
+    },
+    "articles_devto": {
+      "active": true,
+      "present": [
+        "DEV_TO_API_KEY"
+      ],
+      "missing": [],
+      "present_count": 1,
+      "required_count": 1
+    },
+    "articles_medium": {
+      "active": false,
+      "present": [],
+      "missing": [
+        "MEDIUM_INTEGRATION_TOKEN"
+      ],
+      "present_count": 0,
+      "required_count": 1
+    },
+    "twitter": {
+      "active": false,
+      "present": [],
+      "missing": [
+        "TWITTER_API_KEY",
+        "TWITTER_API_SECRET",
+        "TWITTER_ACCESS_TOKEN",
+        "TWITTER_ACCESS_SECRET"
+      ],
+      "present_count": 0,
+      "required_count": 4
+    },
+    "crypto_binance": {
+      "active": false,
+      "present": [],
+      "missing": [
+        "BINANCE_API_KEY",
+        "BINANCE_SECRET_KEY"
+      ],
+      "present_count": 0,
+      "required_count": 2
+    },
+    "crypto_payout": {
+      "active": false,
+      "present": [],
+      "missing": [
+        "BINANCE_API_KEY",
+        "BINANCE_SECRET_KEY",
+        "BINANCE_WITHDRAW_ADDRESS"
+      ],
+      "present_count": 0,
+      "required_count": 3
+    },
+    "nft_ethereum": {
+      "active": false,
+      "present": [],
+      "missing": [
+        "ETH_PRIVATE_KEY",
+        "ETH_WALLET_ADDRESS"
+      ],
+      "present_count": 0,
+      "required_count": 2
+    }
+  },
+  "llm_workflows": {
+    "think": {
+      "provider": "gemini",
+      "purpose": "evolution planning and code repair",
+      "active": false,
+      "secret": "GEMINI_API_KEY"
+    },
+    "fast": {
+      "provider": "groq",
+      "purpose": "article and thread generation",
+      "active": true,
+      "secret": "GROQ_API_KEY"
+    },
+    "experiment": {
+      "provider": "openrouter",
+      "purpose": "alternate model experiments",
+      "active": false,
+      "secret": "OPENROUTER_API_KEY"
+    }
+  }
 }

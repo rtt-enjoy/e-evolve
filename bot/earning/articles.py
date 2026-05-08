@@ -127,6 +127,14 @@ _TOPICS = [
     "The economics of running a dev content bot: real numbers after 440 cycles",
 ]
 
+_RESEARCH_ANGLES = [
+    "Include one implementation tradeoff, one operational metric, and one failure mode.",
+    "Compare the boring production choice against the tempting shortcut.",
+    "Explain what changes when the same system runs unattended every hour.",
+    "Ground the article in GitHub Actions constraints: logs, secrets, retries, and state.",
+    "Show how to keep AI-generated code reviewable instead of magical.",
+]
+
 
 @dataclass
 class Result:
@@ -184,14 +192,18 @@ def _generate(llm: Any, status: dict) -> Optional[dict]:
     n     = status.get("total_runs", 1)
     idx   = int(hashlib.md5(str(n).encode()).hexdigest(), 16) % len(_TOPICS)
     topic = _TOPICS[idx]
+    angle = _RESEARCH_ANGLES[n % len(_RESEARCH_ANGLES)]
+    context = _research_context(status, topic, angle)
     try:
-        art = llm.complete_json(
+        prompt = (
             f'Write a developer article about: "{topic}"\n'
-            f"Context: bot cycle #{n}, active modules: {status.get('active_features',[])}.\n"
-            "JSON only.",
-            system=_SYSTEM,
-            max_tokens=4000,
+            f"{context}\n"
+            "JSON only."
         )
+        if hasattr(llm, "complete_json_for_role"):
+            art = llm.complete_json_for_role("fast", prompt, system=_SYSTEM, max_tokens=4000)
+        else:
+            art = llm.complete_json(prompt, system=_SYSTEM, max_tokens=4000)
         assert art.get("title") and art.get("body_markdown"), "missing title or body"
         log.info("[articles] Generated: %s", art["title"][:70])
         return art
@@ -199,6 +211,27 @@ def _generate(llm: Any, status: dict) -> Optional[dict]:
         error_type = _classify_gen_error(exc)
         log.error("[articles] Generation failed [%s]: %s", error_type, exc)
         return None
+
+
+def _research_context(status: dict, topic: str, angle: str) -> str:
+    """Build a compact research brief from local bot state for article generation."""
+    earn = status.get("earnings", {})
+    evo = status.get("last_evolution", {})
+    active = status.get("active_features", [])
+    inactive = status.get("inactive_features", [])
+    return (
+        f"Research brief:\n"
+        f"- Topic: {topic}\n"
+        f"- Required angle: {angle}\n"
+        f"- Bot cycle: #{status.get('total_runs', 1)}\n"
+        f"- Active modules: {active}\n"
+        f"- Inactive modules: {inactive[:6]}\n"
+        f"- Earnings: total=${float(earn.get('total_usd', 0) or 0):.2f}, "
+        f"week=${float(earn.get('this_week_usd', 0) or 0):.2f}, "
+        f"last_cycle=${float(earn.get('last_cycle_usd', 0) or 0):.4f}\n"
+        f"- Last evolution: {str(evo.get('summary', 'none'))[:180]}\n"
+        "Use these facts as constraints. Do not invent outside citations, prices, or benchmark dates."
+    )
 
 
 # ── dev.to ────────────────────────────────────────────────────────────────────

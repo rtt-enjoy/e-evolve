@@ -27,6 +27,7 @@ def _load_strategy() -> dict:
 _strategy  = _load_strategy().get("articles", {})
 _MIN_WORDS = int(_strategy.get("min_words", 600))
 _CTA_LABEL_DEFAULT = str(_strategy.get("cta_label_default", "Support this project")).strip()
+_BUYER_INTENT_RATIO = float(_strategy.get("buyer_intent_ratio", 0.35))
 
 log = logging.getLogger(__name__)
 
@@ -128,6 +129,17 @@ _TOPICS = [
     "The economics of running a dev content bot: real numbers after 440 cycles",
 ]
 
+_BUYER_INTENT_TOPICS = list(_strategy.get("buyer_intent_topics", [
+    "How to replace a paid cron service with GitHub Actions for $0",
+    "Building an AI content pipeline that publishes without paid infrastructure",
+    "Free LLM APIs for solo developers: when to use Groq, Gemini, or OpenRouter",
+    "How to build a sponsor-ready open-source dashboard in one afternoon",
+    "Turning technical articles into a free lead funnel without spamming readers",
+    "The no-budget stack I use for autonomous side projects",
+    "How to add a donation or sponsor CTA to developer content without sounding desperate",
+    "Building a small automation product before paying for hosting",
+]))
+
 _RESEARCH_ANGLES = [
     "Include one implementation tradeoff, one operational metric, and one failure mode.",
     "Compare the boring production choice against the tempting shortcut.",
@@ -220,12 +232,10 @@ def _classify_gen_error(exc: Exception) -> str:
 
 
 def _generate(llm: Any, status: dict) -> Optional[dict]:
-    import hashlib
     n     = status.get("total_runs", 1)
-    idx   = int(hashlib.md5(str(n).encode()).hexdigest(), 16) % len(_TOPICS)
-    topic = _TOPICS[idx]
+    topic, conversion_mode = _select_topic(n)
     angle = _RESEARCH_ANGLES[n % len(_RESEARCH_ANGLES)]
-    context = _research_context(llm, status, topic, angle)
+    context = _research_context(llm, status, topic, angle, conversion_mode)
     try:
         prompt = (
             f'Write a developer article about: "{topic}"\n'
@@ -245,16 +255,37 @@ def _generate(llm: Any, status: dict) -> Optional[dict]:
         return None
 
 
-def _research_context(llm: Any, status: dict, topic: str, angle: str) -> str:
+def _select_topic(run_number: int) -> tuple[str, bool]:
+    """Choose evergreen topics, occasionally favoring conversion intent when a CTA exists."""
+    import hashlib
+
+    has_cta = bool(os.getenv("EARN_CTA_URL", "").strip())
+    buyer_topics = [str(t).strip() for t in _BUYER_INTENT_TOPICS if str(t).strip()]
+    ratio = min(1.0, max(0.0, _BUYER_INTENT_RATIO))
+    bucket = int(hashlib.md5(f"buyer:{run_number}".encode()).hexdigest(), 16) % 100
+    use_buyer_topic = has_cta and buyer_topics and bucket < int(ratio * 100)
+    pool = buyer_topics if use_buyer_topic else _TOPICS
+    idx = int(hashlib.md5(str(run_number).encode()).hexdigest(), 16) % len(pool)
+    return pool[idx], use_buyer_topic
+
+
+def _research_context(llm: Any, status: dict, topic: str, angle: str, conversion_mode: bool = False) -> str:
     """Build a compact research brief from local bot state for article generation."""
     earn = status.get("earnings", {})
     evo = status.get("last_evolution", {})
     active = status.get("active_features", [])
     inactive = status.get("inactive_features", [])
+    conversion_note = (
+        "- Monetization context: a free article CTA is configured. Write for readers with a real implementation problem, "
+        "make the article useful without clicking anything, and let the footer CTA do the selling.\n"
+        if conversion_mode else
+        "- Monetization context: prioritize trust and usefulness over promotion.\n"
+    )
     local_brief = (
         f"Research brief:\n"
         f"- Topic: {topic}\n"
         f"- Required angle: {angle}\n"
+        f"{conversion_note}"
         f"- Bot cycle: #{status.get('total_runs', 1)}\n"
         f"- Active modules: {active}\n"
         f"- Inactive modules: {inactive[:6]}\n"

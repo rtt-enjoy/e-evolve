@@ -61,6 +61,10 @@ Start with the free content loop:
    - `EARN_CTA_URL`: sponsor, tip, newsletter, affiliate, portfolio, or product link.
    - `EARN_CTA_LABEL`: link text shown at the end of each article.
 
+When `EARN_CTA_URL` is set, the article loop periodically switches to buyer-intent topics from
+`config/strategy.json` so the content is still useful, but closer to people who might click,
+subscribe, sponsor, or buy.
+
 Keep crypto and NFT modules disabled until you have funds you can afford to risk.
 
 ---

@@ -38,6 +38,7 @@ from __future__ import annotations
 
 import logging
 import html
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -369,6 +370,7 @@ def _section_research_focus(s: dict[str, Any]) -> str:
     earn     = s.get("earnings", {})
     last     = float(earn.get("last_cycle_usd", 0) or 0)
     week     = float(earn.get("this_week_usd", 0) or 0)
+    has_cta  = bool(os.getenv("EARN_CTA_URL", "").strip())
 
     cards: list[dict[str, str]] = []
     if "articles_devto" not in active and "DEV_TO_API_KEY" in missing:
@@ -387,13 +389,21 @@ def _section_research_focus(s: dict[str, Any]) -> str:
             "body": "Add Medium so the same generated article reaches a second audience with no extra LLM call.",
             "action": "Add MEDIUM_INTEGRATION_TOKEN",
         })
-    if "articles_devto" in active:
+    if "articles_devto" in active and not has_cta:
         cards.append({
             "rank": str(len(cards) + 1),
             "title": "Add a free article CTA",
             "metric": "No API key",
             "body": "Set EARN_CTA_URL to a sponsor, tip, newsletter, affiliate, or product link so every free article has a conversion path.",
             "action": "Add variable EARN_CTA_URL",
+        })
+    if "articles_devto" in active and has_cta:
+        cards.append({
+            "rank": str(len(cards) + 1),
+            "title": "Write buyer-intent articles",
+            "metric": "Active",
+            "body": "The article loop now periodically chooses no-budget, tool-adoption, and implementation topics that match the configured CTA.",
+            "action": "Tune config.strategy articles.buyer_intent_ratio",
         })
     payout_missing = [
         key for key in ("BINANCE_API_KEY", "BINANCE_SECRET_KEY", "BINANCE_WITHDRAW_ADDRESS")

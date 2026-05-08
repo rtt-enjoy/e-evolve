@@ -24,8 +24,19 @@ Exceptions are caught by `main.py._module()` — a crashed module does not stop 
 
 **Config** (`config/strategy.json`):
 ```json
-{ "articles": { "per_cycle": 1, "min_words": 600 } }
+{
+  "articles": {
+    "per_cycle": 1,
+    "min_words": 600,
+    "cta_label_default": "Support this project",
+    "buyer_intent_ratio": 0.35
+  }
+}
 ```
+
+Set `EARN_CTA_URL` as a GitHub Actions variable to append a sponsor, tip,
+newsletter, affiliate, portfolio, or product link. When that variable is present,
+the module periodically chooses buyer-intent topics from `buyer_intent_topics`.
 
 **Override:** `force articles N` command posts N articles in one cycle.
 

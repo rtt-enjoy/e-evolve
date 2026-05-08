@@ -30,6 +30,10 @@ Use this order when you cannot fund paid services:
    newsletter, affiliate, portfolio, or product link appended to each article.
 4. Optional variable `EARN_CTA_LABEL` - link text for that CTA.
 
+With `EARN_CTA_URL` configured, the article module periodically selects buyer-intent
+topics from `config/strategy.json`. Tune `articles.buyer_intent_ratio` lower for more
+general audience growth or higher for more conversion-focused publishing.
+
 Leave crypto and NFT modules off until you have money you can afford to risk.
 
 ### 3. Trigger first run

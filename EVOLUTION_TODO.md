@@ -1,6 +1,6 @@
 # Evolution TODO
 
-Bot state: v1.22.1 - cycle #463 - $2.77 total - active: `llm_groq`, `articles_devto`
+Bot state: v1.23.0 - cycle #463 - $2.77 total - active: `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
 
 ---
 
@@ -59,3 +59,5 @@ _(none open)_
 - **Add `MEDIUM_INTEGRATION_TOKEN`** - fixed in v1.22.0. Dual-publishes the same generated article to Medium when the secret is present, with no extra article generation call.
 
 - **Dashboard frontend lacked a ranked revenue focus** - fixed in v1.22.1. Added a responsive Research & Revenue Focus section and moved provider/warning colors back through `:root` variables.
+
+- **Article volume strategy was ignored** - fixed 2026-05-08. The orchestrator now reads `articles.per_cycle` from `config/strategy.json` for normal cycles, while owner `force articles N` commands still override it.

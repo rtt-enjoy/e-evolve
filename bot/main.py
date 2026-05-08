@@ -13,6 +13,7 @@ Phases:
 from __future__ import annotations
 
 import importlib
+import json
 import logging
 import sys
 import traceback
@@ -134,7 +135,7 @@ def main() -> int:
 
     # Articles (dev.to / Medium)
     if any(f in active for f in ("articles_devto", "articles_medium")):
-        n = ov.get("force_articles", 1)
+        n = _article_count(ov)
         for i in range(n):
             if n > 1:
                 log.info("Article %d/%d", i + 1, n)
@@ -220,6 +221,19 @@ def _module(name: str, llm: Any, status: dict, errors: list) -> list[dict]:
         log.debug(traceback.format_exc())
         errors.append(msg)
         return [{"platform": name, "success": False, "error": str(exc)[:200]}]
+
+
+def _article_count(overrides: dict[str, Any]) -> int:
+    """Return article count for this cycle; owner commands override strategy."""
+    if "force_articles" in overrides:
+        return max(1, int(overrides["force_articles"]))
+    try:
+        cfg = json.loads(Path("config/strategy.json").read_text(encoding="utf-8"))
+        configured = int(cfg.get("articles", {}).get("per_cycle", 1))
+    except Exception as exc:
+        log.warning("Article strategy read failed; defaulting to 1: %s", exc)
+        configured = 1
+    return min(3, max(1, configured))
 
 
 # ── Formatting helpers ────────────────────────────────────────────────────────

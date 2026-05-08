@@ -3,15 +3,41 @@ import { createApp } from 'vue';
 const POLL_MS = 60000;
 
 const ORDER_PRESETS = [
-  ['force articles 2', 'Post today\'s two articles'],
-  ['force articles 1', 'Run one focused article'],
-  ['skip evolution', 'Skip code changes once'],
-  ['status report', 'Print full status to logs'],
-  ['post thread', 'Force a social thread'],
-  ['reset earnings', 'Reset weekly earnings'],
-  ['force trade conservative', 'Lower trade risk to 1%'],
-  ['force mint 1', 'Mint one NFT this cycle'],
+  ['force articles 2', 'Fill today\'s article quota'],
+  ['force articles 1', 'Publish one buyer-intent article'],
+  ['post thread', 'Distribute the latest article'],
+  ['status report', 'Audit setup and failures'],
+  ['skip evolution', 'Protect earning cycle once'],
+  ['force trade conservative', 'Only when Binance is funded'],
+  ['force mint 1', 'Only when wallet is funded'],
+  ['reset earnings', 'Start a fresh weekly view'],
 ];
+
+const REVENUE_STAGES = [
+  { key: 'model', label: 'Model', detail: 'Generate articles and upgrades', features: ['llm_groq', 'llm_gemini', 'llm_openrouter', 'llm_anthropic'] },
+  { key: 'publish', label: 'Publish', detail: 'Ship buyer-intent content', features: ['articles_devto', 'articles_medium'] },
+  { key: 'convert', label: 'Convert', detail: 'Send readers to a CTA or wallet', features: ['usdt_wallet'] },
+  { key: 'distribute', label: 'Distribute', detail: 'Turn posts into repeat reach', features: ['twitter'] },
+  { key: 'payout', label: 'Payout', detail: 'Move funds when thresholds hit', features: ['crypto_payout'] },
+];
+
+const SECRET_IMPACT = {
+  MEDIUM_INTEGRATION_TOKEN: 94,
+  EARN_CTA_URL: 90,
+  USDT_WALLET_ADDRESS: 86,
+  TWITTER_API_KEY: 72,
+  TWITTER_API_SECRET: 72,
+  TWITTER_ACCESS_TOKEN: 72,
+  TWITTER_ACCESS_SECRET: 72,
+  OPENROUTER_API_KEY: 64,
+  GEMINI_API_KEY: 62,
+  ANTHROPIC_API_KEY: 56,
+  BINANCE_WITHDRAW_ADDRESS: 48,
+  BINANCE_API_KEY: 42,
+  BINANCE_SECRET_KEY: 42,
+  ETH_PRIVATE_KEY: 24,
+  ETH_WALLET_ADDRESS: 24,
+};
 
 const MODULE_LABELS = {
   llm_anthropic: 'Anthropic',
@@ -66,6 +92,16 @@ function providerClass(provider) {
   return 'info';
 }
 
+function cycleState(lastRun) {
+  if (!lastRun) return { label: 'never run', cls: 'bad' };
+  const d = new Date(lastRun);
+  if (Number.isNaN(d.getTime())) return { label: 'unknown', cls: 'warn' };
+  const mins = Math.floor((Date.now() - d.getTime()) / 60000);
+  if (mins <= 75) return { label: 'healthy', cls: 'good' };
+  if (mins <= 180) return { label: 'late', cls: 'warn' };
+  return { label: 'stalled', cls: 'bad' };
+}
+
 createApp({
   data() {
     return {
@@ -77,6 +113,7 @@ createApp({
       commands: [],
       customCommand: '',
       copyLabel: 'Copy',
+      activeCommandGroup: 'earn',
     };
   },
 
@@ -89,6 +126,9 @@ createApp({
     },
     inactive() {
       return this.status.inactive_features || [];
+    },
+    cycleHealth() {
+      return cycleState(this.status.last_run);
     },
     workflows() {
       return Object.entries(this.status.llm_workflows || {}).map(([name, item]) => ({
@@ -129,6 +169,41 @@ createApp({
       }
 
       return cards.map((card, index) => ({ rank: index + 1, title: card[0], body: card[1], action: card[2] }));
+    },
+    opportunityItems() {
+      const missingSecrets = new Set(this.secrets.flatMap((item) => item.missing || []));
+      if (this.active.includes('articles_devto') && !this.status.usdt_wallet) missingSecrets.add('EARN_CTA_URL');
+      const rows = Array.from(missingSecrets).map((name) => ({
+        name,
+        impact: SECRET_IMPACT[name] || 35,
+        note: this.opportunityNote(name),
+      }));
+      return rows.sort((a, b) => b.impact - a.impact).slice(0, 5);
+    },
+    revenueStages() {
+      const active = new Set(this.active);
+      return REVENUE_STAGES.map((stage) => {
+        const readyCount = stage.features.filter((feature) => active.has(feature)).length;
+        const ready = readyCount > 0;
+        return {
+          ...stage,
+          ready,
+          readyCount,
+          total: stage.features.length,
+          cls: ready ? 'good' : 'warn',
+        };
+      });
+    },
+    commandGroups() {
+      return {
+        earn: this.ORDER_PRESETS.slice(0, 3),
+        protect: this.ORDER_PRESETS.slice(3, 5),
+        funded: this.ORDER_PRESETS.slice(5, 7),
+        admin: this.ORDER_PRESETS.slice(7),
+      };
+    },
+    activePresets() {
+      return this.commandGroups[this.activeCommandGroup] || this.commandGroups.earn;
     },
     suggestions() {
       return this.status.suggestions || [];
@@ -184,6 +259,20 @@ createApp({
       const avg = history.reduce((sum, n) => sum + n, 0) / history.length;
       return money(avg * 168);
     },
+    baselineProjection() {
+      const perPublish = 0.02;
+      const dailyLimit = Math.max(1, Number(this.articleDaily.limit || 2));
+      return money(perPublish * dailyLimit * 7);
+    },
+    nextBestAction() {
+      if (this.opportunityItems.length) {
+        return 'Add ' + this.opportunityItems[0].name;
+      }
+      if (this.articleDaily.published < this.articleDaily.limit) {
+        return 'Run force articles 1';
+      }
+      return 'Watch next cycle';
+    },
     weekGoalPercent() {
       return pct(this.earn.this_week_usd || 0, 10);
     },
@@ -197,6 +286,24 @@ createApp({
     providerClass,
     moduleLabel(name) {
       return MODULE_LABELS[name] || name;
+    },
+    opportunityNote(name) {
+      const notes = {
+        MEDIUM_INTEGRATION_TOKEN: 'Doubles article reach without another generation.',
+        EARN_CTA_URL: 'Gives each article a conversion path.',
+        USDT_WALLET_ADDRESS: 'Lets the dashboard show a payment destination.',
+        TWITTER_API_KEY: 'Starts distribution beyond publishing platforms.',
+        TWITTER_API_SECRET: 'Required with the X posting keys.',
+        TWITTER_ACCESS_TOKEN: 'Required with the X posting keys.',
+        TWITTER_ACCESS_SECRET: 'Required with the X posting keys.',
+        OPENROUTER_API_KEY: 'Adds cheap research and second opinions.',
+        GEMINI_API_KEY: 'Unblocks stronger upgrade planning.',
+        ANTHROPIC_API_KEY: 'Adds a premium evolution fallback.',
+        BINANCE_WITHDRAW_ADDRESS: 'Completes automated payout routing.',
+        BINANCE_API_KEY: 'Only useful when funded trading or payouts are intended.',
+        BINANCE_SECRET_KEY: 'Only useful when funded trading or payouts are intended.',
+      };
+      return notes[name] || 'Optional module setup.';
     },
     addCommand(cmd) {
       if (!this.commands.includes(cmd)) this.commands.push(cmd);
@@ -269,7 +376,7 @@ createApp({
         <section class="hero">
           <div class="hero-main">
             <p class="eyebrow">GitHub Actions automation</p>
-            <h2>{{ money(earn.total_usd) }} total earned across {{ compactNumber(status.total_runs) }} cycles</h2>
+            <h2>{{ money(earn.total_usd) }} earned, next move: {{ nextBestAction }}</h2>
             <p class="hero-copy">
               Current version {{ status.version || 'unknown' }} runs with {{ active.length }} active modules.
               Last cycle finished {{ ageLabel(status.last_run) }} in {{ status.last_cycle_seconds || 0 }} seconds.
@@ -282,6 +389,7 @@ createApp({
           <aside class="summary-panel">
             <div class="summary-row"><span>Last run</span><strong>{{ fmtDate(status.last_run) }}</strong></div>
             <div class="summary-row"><span>Provider</span><strong>{{ status.llm_provider || 'unknown' }}</strong></div>
+            <div class="summary-row"><span>Cycle health</span><strong><span class="tag" :class="cycleHealth.cls">{{ cycleHealth.label }}</span></strong></div>
             <div class="summary-row"><span>Article quota</span><strong>{{ articleDaily.published }}/{{ articleDaily.limit }} today</strong></div>
             <div class="summary-row"><span>This week</span><strong>{{ money(earn.this_week_usd) }}</strong></div>
             <div class="summary-row"><span>Projection</span><strong>{{ weeklyProjection }}/week</strong></div>
@@ -293,6 +401,36 @@ createApp({
           <article class="metric-card"><div class="metric-label">This week</div><div class="metric-value warn">{{ money(earn.this_week_usd) }}</div><div class="metric-note">Goal progress {{ weekGoalPercent }}%</div></article>
           <article class="metric-card"><div class="metric-label">Cycles</div><div class="metric-value">{{ compactNumber(status.total_runs) }}</div><div class="metric-note">Hourly runner history</div></article>
           <article class="metric-card"><div class="metric-label">Modules</div><div class="metric-value">{{ active.length }}/{{ active.length + inactive.length }}</div><div class="metric-note">{{ inactive.length }} waiting for setup</div></article>
+        </section>
+
+        <section class="cockpit">
+          <section class="panel">
+            <div class="panel-head"><div><h3>Revenue Pipeline</h3><p>Where the loop is ready, and where money can leak.</p></div><span class="tag" :class="cycleHealth.cls">{{ cycleHealth.label }}</span></div>
+            <div class="panel-body pipeline">
+              <article v-for="stage in revenueStages" :key="stage.key" class="pipeline-stage" :class="{ ready: stage.ready }">
+                <span class="stage-dot" :class="stage.cls"></span>
+                <div>
+                  <strong>{{ stage.label }}</strong>
+                  <p>{{ stage.detail }}</p>
+                </div>
+                <span class="tag" :class="stage.cls">{{ stage.readyCount }}/{{ stage.total }}</span>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><div><h3>Highest-Leverage Setup</h3><p>Ranked by likely earning impact for this bot.</p></div><span class="tag info">{{ baselineProjection }}/wk base</span></div>
+            <div class="panel-body opportunity-list">
+              <article v-for="item in opportunityItems" :key="item.name" class="opportunity-item">
+                <div class="opportunity-score"><strong>{{ item.impact }}</strong><span>impact</span></div>
+                <div>
+                  <strong>{{ item.name }}</strong>
+                  <p class="muted">{{ item.note }}</p>
+                </div>
+              </article>
+              <p v-if="!opportunityItems.length" class="empty">No obvious setup gaps. Keep publishing and watch conversion data.</p>
+            </div>
+          </section>
         </section>
 
         <div class="layout">
@@ -399,8 +537,14 @@ createApp({
             <section class="panel">
               <div class="panel-head"><div><h3>Owner Orders</h3><p>Build command.txt for the next cycle.</p></div></div>
               <div class="panel-body">
+                <div class="segmented">
+                  <button class="segment-btn" :class="{ active: activeCommandGroup === 'earn' }" @click="activeCommandGroup = 'earn'">Earn</button>
+                  <button class="segment-btn" :class="{ active: activeCommandGroup === 'protect' }" @click="activeCommandGroup = 'protect'">Protect</button>
+                  <button class="segment-btn" :class="{ active: activeCommandGroup === 'funded' }" @click="activeCommandGroup = 'funded'">Funded</button>
+                  <button class="segment-btn" :class="{ active: activeCommandGroup === 'admin' }" @click="activeCommandGroup = 'admin'">Admin</button>
+                </div>
                 <div class="preset-grid">
-                  <button v-for="preset in ORDER_PRESETS" :key="preset[0]" class="preset-btn" @click="addCommand(preset[0])">
+                  <button v-for="preset in activePresets" :key="preset[0]" class="preset-btn" @click="addCommand(preset[0])">
                     <strong>{{ preset[0] }}</strong><span>{{ preset[1] }}</span>
                   </button>
                 </div>

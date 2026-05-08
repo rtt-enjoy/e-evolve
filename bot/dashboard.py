@@ -178,6 +178,33 @@ def _evo_status(evo: dict) -> str:
     return "idle"
 
 
+def _missing_secrets_for(s: dict[str, Any], feature: str, fallback: list[str]) -> list[str]:
+    """Return only secrets still missing for a feature, using the safe status snapshot."""
+    readiness = s.get("secret_readiness", {}) or {}
+    info = readiness.get(feature)
+    if info is not None:
+        return list(info.get("missing", []))
+    if feature in set(s.get("active_features", [])):
+        return []
+    return list(fallback)
+
+
+def _missing_secret_names(s: dict[str, Any]) -> set[str]:
+    readiness = s.get("secret_readiness", {}) or {}
+    if not readiness:
+        missing: set[str] = set()
+        active = set(s.get("active_features", []))
+        for feature in s.get("inactive_features", []):
+            if feature in active:
+                continue
+            missing.update(_MODULE_SETUP.get(feature, {}).get("secrets", []))
+        return missing
+    missing: set[str] = set()
+    for info in readiness.values():
+        missing.update(info.get("missing", []))
+    return missing
+
+
 # ── Section renderers ──────────────────────────────────────────────────────────
 
 _PROVIDER_PILL_CLASS: dict[str, str] = {
@@ -192,12 +219,18 @@ _PROVIDER_ROLE_LABELS = [
     ("upgrade", "Up"),
     ("research", "Re"),
     ("post", "Po"),
+    ("think", "Th"),
+    ("fast", "Fa"),
+    ("experiment", "Ex"),
 ]
 
 _ROLE_LABELS = {
     "upgrade": "Upgrade",
     "research": "Research",
     "post": "Post",
+    "think": "Evolution",
+    "fast": "Research/content",
+    "experiment": "Model experiments",
 }
 
 
@@ -332,13 +365,13 @@ def _render_projection(earn: dict) -> str:
 def _section_research_focus(s: dict[str, Any]) -> str:
     """Rank the next practical revenue moves from current state."""
     active   = set(s.get("active_features", []))
-    inactive = set(s.get("inactive_features", []))
+    missing  = _missing_secret_names(s)
     earn     = s.get("earnings", {})
     last     = float(earn.get("last_cycle_usd", 0) or 0)
     week     = float(earn.get("this_week_usd", 0) or 0)
 
     cards: list[dict[str, str]] = []
-    if "articles_devto" in active and "articles_medium" in inactive:
+    if "articles_devto" in active and "MEDIUM_INTEGRATION_TOKEN" in missing:
         cards.append({
             "rank": "1",
             "title": "Dual-publish every article",
@@ -346,37 +379,53 @@ def _section_research_focus(s: dict[str, Any]) -> str:
             "body": "Add Medium so the same generated article reaches a second audience with no extra LLM call.",
             "action": "Add MEDIUM_INTEGRATION_TOKEN",
         })
-    if "usdt_wallet" in active and "crypto_payout" in inactive:
+    payout_missing = [
+        key for key in ("BINANCE_API_KEY", "BINANCE_SECRET_KEY", "BINANCE_WITHDRAW_ADDRESS")
+        if key in missing
+    ]
+    if "usdt_wallet" in active and payout_missing:
         cards.append({
             "rank": "2",
             "title": "Wallet is ready",
             "metric": "Payout path",
             "body": "The USDT address is configured, so the dashboard can track incoming funds while payout automation waits for exchange keys.",
-            "action": "Add Binance payout secrets when ready",
+            "action": "Add " + ", ".join(payout_missing),
         })
-    if "twitter" in inactive:
+    twitter_missing = [
+        key for key in ("TWITTER_API_KEY", "TWITTER_API_SECRET", "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_SECRET")
+        if key in missing
+    ]
+    if twitter_missing:
         cards.append({
             "rank": "3",
             "title": "Turn articles into distribution",
             "metric": "Reach gap",
             "body": "Threads can recycle each article into short-form discovery, which is the missing top-of-funnel for content earnings.",
-            "action": "Add the four Twitter/X secrets",
+            "action": "Add " + ", ".join(twitter_missing),
         })
-    if "llm_gemini" in inactive or "llm_openrouter" in inactive:
+    llm_missing = [
+        key for key in ("GEMINI_API_KEY", "OPENROUTER_API_KEY")
+        if key in missing
+    ]
+    if llm_missing:
         cards.append({
             "rank": "4",
             "title": "Improve research depth",
             "metric": "Quality moat",
             "body": "Activate a long-context thinking provider so evolution and article research rely less on the Groq short-context path.",
-            "action": "Add GEMINI_API_KEY or OPENROUTER_API_KEY",
+            "action": "Add " + " or ".join(llm_missing),
         })
-    if "crypto_binance" in inactive:
+    trading_missing = [
+        key for key in ("BINANCE_API_KEY", "BINANCE_SECRET_KEY")
+        if key in missing
+    ]
+    if trading_missing:
         cards.append({
             "rank": "5",
             "title": "Add capital-backed earning",
             "metric": "Needs funds",
             "body": "Trading is the first module with direct compounding potential, but it should wait until API keys and risk limits are deliberate.",
-            "action": "Fund exchange account, then add Binance secrets",
+            "action": "Fund exchange account, then add " + ", ".join(trading_missing),
         })
     if not cards:
         trend = "positive" if last > 0 or week > 0 else "idle"
@@ -411,8 +460,12 @@ def _section_llm_workflows(s: dict[str, Any]) -> str:
     if not roles and not active_roles:
         return ""
 
+    role_order = ("upgrade", "research", "post")
+    if not any(role in roles or role in active_roles for role in role_order):
+        role_order = ("think", "fast", "experiment")
+
     cards = ""
-    for role in ("upgrade", "research", "post"):
+    for role in role_order:
         cfg = roles.get(role, {})
         provider = active_roles.get(role) or cfg.get("provider", "unknown")
         model = cfg.get("model", "")
@@ -420,7 +473,7 @@ def _section_llm_workflows(s: dict[str, Any]) -> str:
         active = bool(active_roles.get(role) or cfg.get("active"))
         missing = cfg.get("secret")
         state_cls = "workflow-ready" if active else "workflow-missing"
-        state = "ready" if active else f"needs {missing}"
+        state = "ready" if active else f"needs {missing or 'setup'}"
         cards += (
             f'<div class="workflow-card {state_cls}">'
             f'<div class="workflow-top"><strong>{_ROLE_LABELS.get(role, role)}</strong>'
@@ -493,10 +546,15 @@ def _render_breakdown(breakdown: dict) -> str:
     return f'<div class="breakdown">{rows}</div>'
 
 
-def _section_suggestions(suggs: list) -> str:
+def _section_suggestions(suggs: list, s: dict[str, Any]) -> str:
     icons   = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"]
+    missing = _missing_secret_names(s)
     content = ""
-    for i, sg in enumerate(suggs[:5]):
+    visible = [
+        sg for sg in suggs
+        if not sg.get("secret_needed") or sg.get("secret_needed") in missing
+    ]
+    for i, sg in enumerate(visible[:5]):
         sec      = sg.get("secret_needed")
         est      = sg.get("estimated_weekly_usd", 0)
         is_free  = sg.get("free_tier", sec in _FREE_TIER_SECRETS if sec else False)
@@ -657,7 +715,7 @@ _MODULE_SETUP: dict[str, dict] = {
 }
 
 
-def _section_inactive(inactive: list) -> str:
+def _section_inactive(inactive: list, s: dict[str, Any]) -> str:
     if not inactive:
         return f"""<div class="section">
   <h2>🔓 Activate Modules</h2>
@@ -670,13 +728,19 @@ def _section_inactive(inactive: list) -> str:
         if not cfg:
             cards += f'<div class="inactive-tag"><span class="inactive-dot"></span>{feat}</div>'
             continue
+        missing = _missing_secrets_for(s, feat, cfg["secrets"])
+        if not missing:
+            continue
         free_badge = (
             '<span class="free-badge">Free</span>'
             if cfg["free"]
             else '<span class="paid-badge">Needs funds</span>'
         )
-        secrets_html = "".join(f'<code class="secret-code">{s}</code>' for s in cfg["secrets"])
-        steps_html   = "".join(f"<li>{step}</li>" for step in cfg["steps"])
+        secrets_html = "".join(f'<code class="secret-code">{secret}</code>' for secret in missing)
+        if missing == cfg["secrets"]:
+            steps_html = "".join(f"<li>{step}</li>" for step in cfg["steps"])
+        else:
+            steps_html = "<li>GitHub -> Settings -> Secrets -> add the remaining secrets shown above</li>"
         note_html    = f'<div class="activate-note">{cfg["note"]}</div>' if cfg.get("note") else ""
         cards += f"""<div class="activate-card">
   <div class="activate-header">
@@ -690,7 +754,7 @@ def _section_inactive(inactive: list) -> str:
 
     return f"""<div class="section">
   <h2>🔓 Activate Modules</h2>
-  <div class="panel">{cards}</div>
+  <div class="panel">{cards or '<p class="muted">No missing setup secrets.</p>'}</div>
 </div>"""
 
 
@@ -814,7 +878,7 @@ _LIVE_JS = """\
     anthropic:  'pill-provider',
     'claude-cli': 'pill-provider'
   };
-  var ROLE_ICONS = { upgrade: 'Up', research: 'Re', post: 'Po' };
+  var ROLE_ICONS = { upgrade: 'Up', research: 'Re', post: 'Po', think: 'Th', fast: 'Fa', experiment: 'Ex' };
 
   function fmt(iso) {
     if (!iso) return 'never';
@@ -838,7 +902,8 @@ _LIVE_JS = """\
 
   function providerPills(provider, roles) {
     if (roles && Object.keys(roles).length) {
-      return ['upgrade','research','post'].filter(function(r){ return roles[r]; }).map(function(r) {
+      var order = ['upgrade','research','post','think','fast','experiment'];
+      return order.filter(function(r){ return roles[r]; }).map(function(r) {
         var p = roles[r];
         var cls = PROVIDERS[p] || 'pill-provider';
         return '<span class="' + cls + '" title="' + r + '">' + (ROLE_ICONS[r]||'') + ' ' + p + '</span>';
@@ -1433,8 +1498,8 @@ def _render(s: dict[str, Any]) -> str:
         _section_llm_workflows(s),
         _section_secret_readiness(s),
         _section_research_focus(s),
-        _section_suggestions(suggs),
-        _section_inactive(inactive),
+        _section_suggestions(suggs, s),
+        _section_inactive(inactive, s),
         _section_orders(),
         _section_evolution(evo),
         _section_actions(actions),

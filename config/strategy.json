@@ -6,8 +6,30 @@
     "min_words": 600,
     "estimated_usd_per_publish": 0.02,
     "cta_label_default": "Support this project",
-    "buyer_intent_ratio": 0.7,
+    "buyer_intent_ratio": 0.85,
+    "current_market_signals": [
+      "AI automation tools remain a high-intent SaaS affiliate category because buyers compare recurring tools before subscribing.",
+      "Developer-focused digital products such as templates, checklists, prompt packs, and implementation playbooks have high margins and low fulfillment cost.",
+      "Newsletter and community funnels work better than one-off social posts when the content earns trust before asking for money.",
+      "Short-form and social-commerce ideas can be translated for developers as small demos, tool comparisons, and repeatable workflows.",
+      "Practical cost-saving content converts better than generic passive-income content for technical audiences."
+    ],
+    "monetization_angles": [
+      "Recommend a concrete build-vs-buy decision that naturally supports a SaaS affiliate or sponsor CTA.",
+      "Turn the article into a lead magnet for a small digital product such as a template, checklist, or playbook.",
+      "Show how to repurpose one implementation into a newsletter, thread, and productized service offer.",
+      "Compare three tools or stacks with transparent tradeoffs and a buyer-intent conclusion.",
+      "Explain a repeatable automation that saves money or time for a solo founder or small team."
+    ],
     "buyer_intent_topics": [
+      "The AI automation tools solo developers will actually pay for in 2026",
+      "How to turn a GitHub Actions bot into a SaaS affiliate funnel without spam",
+      "Building a tiny digital product from one useful developer automation",
+      "The developer newsletter funnel I would build before chasing ad revenue",
+      "AI tool comparisons that attract buyers instead of tourists",
+      "How to package a prompt workflow as a paid template developers can trust",
+      "Turning short-form automation demos into technical articles that convert",
+      "A practical content engine for AI tools, templates, and sponsor-ready posts",
       "How to replace a paid cron service with GitHub Actions for $0",
       "Building an AI content pipeline that publishes without paid infrastructure",
       "Free LLM APIs for solo developers: when to use Groq, Gemini, or OpenRouter",
@@ -33,7 +55,15 @@
   },
   "twitter": {
     "min_tweets": 5,
-    "max_tweets": 7
+    "max_tweets": 7,
+    "buyer_intent_topics": [
+      "AI automation tool comparisons that attract buyers",
+      "Turning one useful script into a tiny digital product",
+      "Newsletter funnels for technical builders",
+      "SaaS affiliate content that does not sound like spam",
+      "Short-form demos that become durable developer articles",
+      "Productized automation services for solo developers"
+    ]
   },
   "payout": {
     "min_payout_usd": 20.0,

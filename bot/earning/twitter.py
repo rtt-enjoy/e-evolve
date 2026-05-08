@@ -26,6 +26,11 @@ def _load_strategy() -> dict:
 _strategy   = _load_strategy().get("twitter", {})
 _MIN_TWEETS = int(_strategy.get("min_tweets", 5))
 _MAX_TWEETS = int(_strategy.get("max_tweets", 7))
+_BUYER_INTENT_TOPICS = [
+    str(item).strip()
+    for item in _strategy.get("buyer_intent_topics", [])
+    if str(item).strip()
+]
 
 _REQUIRED = [
     "TWITTER_API_KEY", "TWITTER_API_SECRET",
@@ -45,7 +50,10 @@ _SYSTEM = (
     "- Last tweet: clear CTA (follow / share / reply)\n"
     "- Max 2 hashtags in the whole thread\n"
     "- Each tweet under 265 characters\n"
-    "- Topics: Python, AI/LLMs, GitHub Actions, automation, passive income via code"
+    "- Topics: Python, AI/LLMs, GitHub Actions, automation, SaaS affiliate content,"
+    " digital products, newsletters, productized services, passive income via code\n"
+    "- Keep monetization practical: show a useful workflow first, then invite a reply,"
+    " follow, or CTA. No income guarantees."
 )
 
 _TOPICS = [
@@ -56,6 +64,12 @@ _TOPICS = [
     "The cheapest way to run an AI agent 24/7 in 2025",
     "Web3 Python: from zero to daily automated NFT mints",
     "Zero-server side projects — what's really possible on GitHub free tier",
+    "AI automation tool comparisons that attract buyers instead of tourists",
+    "How to turn one useful script into a tiny digital product",
+    "A developer newsletter funnel that starts with GitHub Actions",
+    "SaaS affiliate content for engineers who hate fake reviews",
+    "How short-form automation demos become durable technical articles",
+    "Productized automation services: from recurring bug to recurring revenue",
 ]
 
 
@@ -90,7 +104,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 
 def _generate(llm: Any, status: dict) -> Optional[dict]:
     n     = status.get("total_runs", 1)
-    topic = _TOPICS[n % len(_TOPICS)]
+    topic = _select_topic(int(n or 1))
     try:
         prompt = (
             f'Write a Twitter/X thread about: "{topic}"\n'
@@ -110,6 +124,18 @@ def _generate(llm: Any, status: dict) -> Optional[dict]:
     except Exception as exc:
         log.error("[twitter] Thread generation failed: %s", exc)
         return None
+
+
+def _select_topic(run_number: int) -> str:
+    """Favor buyer-intent topics when configured, with evergreen topics as fallback."""
+    import hashlib
+
+    if _BUYER_INTENT_TOPICS:
+        bucket = int(hashlib.md5(f"twitter:{run_number}".encode()).hexdigest(), 16) % 100
+        if bucket < 80:
+            idx = int(hashlib.md5(str(run_number).encode()).hexdigest(), 16) % len(_BUYER_INTENT_TOPICS)
+            return _BUYER_INTENT_TOPICS[idx]
+    return _TOPICS[run_number % len(_TOPICS)]
 
 
 def _post(tweets: list[str], topic: str) -> Result:

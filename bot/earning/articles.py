@@ -29,6 +29,16 @@ _MIN_WORDS = int(_strategy.get("min_words", 600))
 _ESTIMATED_USD_PER_PUBLISH = float(_strategy.get("estimated_usd_per_publish", 0.0))
 _CTA_LABEL_DEFAULT = str(_strategy.get("cta_label_default", "Support this project")).strip()
 _BUYER_INTENT_RATIO = float(_strategy.get("buyer_intent_ratio", 0.35))
+_CURRENT_MARKET_SIGNALS = [
+    str(item).strip()
+    for item in _strategy.get("current_market_signals", [])
+    if str(item).strip()
+]
+_MONETIZATION_ANGLES = [
+    str(item).strip()
+    for item in _strategy.get("monetization_angles", [])
+    if str(item).strip()
+]
 
 log = logging.getLogger(__name__)
 
@@ -68,6 +78,13 @@ _SYSTEM = (
     "9. Banned phrases: 'In this article', 'In conclusion', 'As you can see', 'It's worth noting',"
     " 'leverage', 'seamless', 'game-changer', 'cutting-edge', 'deep dive', 'robust solution'.\n"
     "10. Do NOT wrap the entire body in a code fence. Plain markdown only.\n\n"
+    "MONETIZATION PRIORITIES:\n"
+    "- Prefer topics that connect implementation detail to buyer intent: AI automation tools,"
+    " SaaS comparisons, digital product templates, newsletters, productized automation services,"
+    " and cost-saving workflows for solo builders or small teams.\n"
+    "- Never invent affiliate links, sponsor claims, revenue screenshots, or current market data."
+    " If a claim needs fresh proof and none is supplied, phrase it as a practical observation.\n"
+    "- Make the article independently useful. The reader should get value even if they never click a CTA.\n\n"
     "Topic domains: Python, JavaScript/TypeScript, systems programming, AI/ML engineering,"
     " DevOps/infrastructure, databases, security, web development, open-source tooling,"
     " software architecture, career/engineering culture. Pick whichever domain fits the topic."
@@ -88,6 +105,12 @@ _TOPICS = [
     "Fine-tuning vs prompting: when each approach actually wins",
     "LLM evals that don't lie: building an honest benchmark for your use case",
     "Context window management for long-running AI agents",
+    "A practical AI automation affiliate funnel for developers who hate marketing",
+    "How to compare AI SaaS tools without becoming a review farm",
+    "Turning an internal AI script into a paid template or checklist",
+    "Building a newsletter-first funnel for technical products",
+    "Productized automation services: the boring path from script to invoice",
+    "How to make short-form automation demos feed durable technical articles",
     # Python
     "Python dataclasses vs dicts vs Pydantic: when each wins in production",
     "Exponential backoff in Python: the right way to retry API calls",
@@ -291,10 +314,12 @@ def _research_context(llm: Any, status: dict, topic: str, angle: str, conversion
         if conversion_mode else
         "- Monetization context: prioritize trust and usefulness over promotion.\n"
     )
+    signal_note = _market_signal_note(topic)
     local_brief = (
         f"Research brief:\n"
         f"- Topic: {topic}\n"
         f"- Required angle: {angle}\n"
+        f"{signal_note}"
         f"{conversion_note}"
         f"- Bot cycle: #{status.get('total_runs', 1)}\n"
         f"- Active modules: {active}\n"
@@ -324,6 +349,26 @@ def _research_context(llm: Any, status: dict, topic: str, angle: str, conversion
     except Exception as exc:
         log.warning("[articles] Research role unavailable; using local brief: %s", exc)
         return local_brief
+
+
+def _market_signal_note(topic: str) -> str:
+    """Select configured market signals that should steer conversion-focused writing."""
+    import hashlib
+
+    lines: list[str] = []
+    if _CURRENT_MARKET_SIGNALS:
+        start = int(hashlib.md5(topic.encode()).hexdigest(), 16) % len(_CURRENT_MARKET_SIGNALS)
+        picked = [
+            _CURRENT_MARKET_SIGNALS[(start + offset) % len(_CURRENT_MARKET_SIGNALS)]
+            for offset in range(min(2, len(_CURRENT_MARKET_SIGNALS)))
+        ]
+        lines.append("- Current market signals: " + " | ".join(picked))
+    if _MONETIZATION_ANGLES:
+        idx = int(hashlib.md5(f"angle:{topic}".encode()).hexdigest(), 16) % len(_MONETIZATION_ANGLES)
+        lines.append(f"- Monetization angle: {_MONETIZATION_ANGLES[idx]}")
+    if not lines:
+        return ""
+    return "\n".join(lines) + "\n"
 
 
 # ── dev.to ────────────────────────────────────────────────────────────────────

@@ -1,23 +1,23 @@
 {
-  "version": "1.24.0",
-  "last_run": "2026-05-07T04:06:23.422356+00:00",
-  "total_runs": 463,
+  "version": "1.25.0",
+  "last_run": "2026-05-08T07:58:45.987895+00:00",
+  "total_runs": 464,
   "active_features": [
-    "llm_gemini",
-    "llm_openrouter",
     "llm_groq",
-    "articles_devto",
-    "usdt_wallet"
+    "articles_devto"
   ],
   "inactive_features": [
     "llm_anthropic",
+    "llm_gemini",
+    "llm_openrouter",
     "articles_medium",
+    "usdt_wallet",
     "twitter",
     "crypto_binance",
     "crypto_payout",
     "nft_ethereum"
   ],
-  "llm_provider": "gemini",
+  "llm_provider": "groq",
   "earnings": {
     "total_usd": 2.77,
     "this_week_usd": 0.0,
@@ -29,23 +29,35 @@
     "history": []
   },
   "last_evolution": {
-    "version_bumped_to": "1.22.0",
-    "summary": "Added MEDIUM_INTEGRATION_TOKEN for dual publishing and updated articles.py to handle Medium posting",
+    "version_bumped_to": "1.25.0",
+    "summary": "Added Twitter integration and updated requirements.txt to include necessary libraries",
     "changes_applied": [
       {
-        "file": "bot/articles.py",
-        "reason": "Added post_to_both method to handle dual publishing"
-      },
-      {
-        "file": "config/medium_config.py",
-        "reason": "Added Medium config file to store integration token"
+        "file": "bot/twitter.py",
+        "reason": "Added Twitter integration"
       },
       {
         "file": "requirements.txt",
         "reason": "Updated requirements.txt to include necessary libraries"
+      },
+      {
+        "file": "config/twitter_config.py",
+        "reason": "Added Twitter config file to store API keys and access tokens"
       }
     ],
     "suggestions": [
+      {
+        "title": "Add TWITTER_API_KEY for Twitter integration",
+        "description": "Enable Twitter posting and increase reach",
+        "secret_needed": "TWITTER_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Go to the Twitter Developer Dashboard and create an app",
+          "Step 2: Generate an API key and secret in the Twitter settings",
+          "Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET"
+        ]
+      },
       {
         "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
         "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
@@ -59,15 +71,15 @@
         ]
       },
       {
-        "title": "Add TWITTER_API_KEY for Twitter integration",
-        "description": "Enable Twitter posting and increase reach",
-        "secret_needed": "TWITTER_API_KEY",
+        "title": "Add USDT_WALLET_ADDRESS for USDT wallet integration",
+        "description": "Enable USDT wallet and increase earnings",
+        "secret_needed": "USDT_WALLET_ADDRESS",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Go to the Twitter Developer Dashboard and create an app",
-          "Step 2: Generate an API key and secret in the Twitter settings",
-          "Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET"
+          "Step 1: Create a USDT wallet and get the wallet address",
+          "Step 2: Add the wallet address as a GitHub secret named USDT_WALLET_ADDRESS",
+          "Step 3: Update the USDT wallet settings in the config file"
         ]
       }
     ],
@@ -78,6 +90,18 @@
     "total_usd": 0.0
   },
   "suggestions": [
+    {
+      "title": "Add TWITTER_API_KEY for Twitter integration",
+      "description": "Enable Twitter posting and increase reach",
+      "secret_needed": "TWITTER_API_KEY",
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Go to the Twitter Developer Dashboard and create an app",
+        "Step 2: Generate an API key and secret in the Twitter settings",
+        "Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET"
+      ]
+    },
     {
       "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
       "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
@@ -91,23 +115,21 @@
       ]
     },
     {
-      "title": "Add TWITTER_API_KEY for Twitter integration",
-      "description": "Enable Twitter posting and increase reach",
-      "secret_needed": "TWITTER_API_KEY",
+      "title": "Add USDT_WALLET_ADDRESS for USDT wallet integration",
+      "description": "Enable USDT wallet and increase earnings",
+      "secret_needed": "USDT_WALLET_ADDRESS",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Go to the Twitter Developer Dashboard and create an app",
-        "Step 2: Generate an API key and secret in the Twitter settings",
-        "Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET"
+        "Step 1: Create a USDT wallet and get the wallet address",
+        "Step 2: Add the wallet address as a GitHub secret named USDT_WALLET_ADDRESS",
+        "Step 3: Update the USDT wallet settings in the config file"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 40,
+  "last_cycle_seconds": 139,
   "llm_roles": {
-    "upgrade": "gemini",
-    "research": "openrouter",
     "post": "groq"
   },
   "usdt_wallet": "",
@@ -125,21 +147,21 @@
       "required_count": 1
     },
     "llm_gemini": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "GEMINI_API_KEY"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     },
     "llm_openrouter": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "OPENROUTER_API_KEY"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     },
     "llm_groq": {
@@ -170,12 +192,12 @@
       "required_count": 1
     },
     "usdt_wallet": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "USDT_WALLET_ADDRESS"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     },
     "twitter": {
@@ -227,14 +249,14 @@
       "provider": "gemini",
       "model": "gemini-2.5-pro-preview-05-06",
       "purpose": "codebase evolution, patch planning, and repair",
-      "active": true,
+      "active": false,
       "secret": "GEMINI_API_KEY"
     },
     "research": {
       "provider": "openrouter",
       "model": "google/gemini-2.0-flash-exp:free",
       "purpose": "article research briefs and second-opinion ideation",
-      "active": true,
+      "active": false,
       "secret": "OPENROUTER_API_KEY"
     },
     "post": {

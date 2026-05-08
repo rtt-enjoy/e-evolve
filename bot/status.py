@@ -24,6 +24,7 @@ FEATURE_MAP: dict[str, list[str]] = {
     "llm_groq":        ["GROQ_API_KEY"],
     "articles_devto":  ["DEV_TO_API_KEY"],
     "articles_medium": ["MEDIUM_INTEGRATION_TOKEN"],
+    "usdt_wallet":     ["USDT_WALLET_ADDRESS"],
     "twitter":         ["TWITTER_API_KEY", "TWITTER_API_SECRET",
                         "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_SECRET"],
     "crypto_binance":  ["BINANCE_API_KEY", "BINANCE_SECRET_KEY"],
@@ -32,17 +33,20 @@ FEATURE_MAP: dict[str, list[str]] = {
 }
 
 LLM_ROLE_WORKFLOWS: dict[str, dict[str, str]] = {
-    "think": {
+    "upgrade": {
         "provider": "gemini",
-        "purpose": "evolution planning and code repair",
+        "model": "gemini-2.5-pro-preview-05-06",
+        "purpose": "codebase evolution, patch planning, and repair",
     },
-    "fast": {
-        "provider": "groq",
-        "purpose": "article and thread generation",
-    },
-    "experiment": {
+    "research": {
         "provider": "openrouter",
-        "purpose": "alternate model experiments",
+        "model": "google/gemini-2.0-flash-exp:free",
+        "purpose": "article research briefs and second-opinion ideation",
+    },
+    "post": {
+        "provider": "groq",
+        "model": "llama-3.3-70b-versatile",
+        "purpose": "new article and social post generation",
     },
 }
 

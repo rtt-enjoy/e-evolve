@@ -43,9 +43,12 @@ _OPENROUTER_MODELS = [
 # Role → preferred provider mapping.
 # Callers use complete_for_role() to get role-appropriate routing.
 ROLE_PROVIDER: dict[str, str] = {
-    "think":      "gemini",      # hard reasoning, long context
-    "fast":       "groq",        # low-latency, short tasks
-    "experiment": "openrouter",  # try varied models / free tier
+    "upgrade":  "gemini",
+    "research": "openrouter",
+    "post":     "groq",
+    "think":      "gemini",
+    "fast":       "groq",
+    "experiment": "openrouter",
 }
 
 
@@ -152,7 +155,7 @@ class LLMClient:
         max_tokens: int = 4096,
         temperature: float = 0.7,
     ) -> LLMResponse:
-        """Route to role-appropriate provider (think→gemini, fast→groq, experiment→openrouter).
+        """Route to role-appropriate provider (upgrade→gemini, research→openrouter, post→groq).
         Falls back to complete() with default provider if role provider unavailable."""
         preferred = ROLE_PROVIDER.get(role)
         if preferred:

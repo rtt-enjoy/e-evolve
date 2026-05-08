@@ -188,16 +188,16 @@ _PROVIDER_PILL_CLASS: dict[str, str] = {
     "claude-cli": "pill-provider",
 }
 
-_PROVIDER_ROLE_LABELS: list[tuple[str, str]] = [
-    ("think",      "🧠"),
-    ("fast",       "⚡"),
-    ("experiment", "🧪"),
+_PROVIDER_ROLE_LABELS = [
+    ("upgrade", "Up"),
+    ("research", "Re"),
+    ("post", "Po"),
 ]
 
-_ROLE_LABELS: dict[str, str] = {
-    "think": "Evolution",
-    "fast": "Research/content",
-    "experiment": "Model experiments",
+_ROLE_LABELS = {
+    "upgrade": "Upgrade",
+    "research": "Research",
+    "post": "Post",
 }
 
 
@@ -346,9 +346,17 @@ def _section_research_focus(s: dict[str, Any]) -> str:
             "body": "Add Medium so the same generated article reaches a second audience with no extra LLM call.",
             "action": "Add MEDIUM_INTEGRATION_TOKEN",
         })
-    if "twitter" in inactive:
+    if "usdt_wallet" in active and "crypto_payout" in inactive:
         cards.append({
             "rank": "2",
+            "title": "Wallet is ready",
+            "metric": "Payout path",
+            "body": "The USDT address is configured, so the dashboard can track incoming funds while payout automation waits for exchange keys.",
+            "action": "Add Binance payout secrets when ready",
+        })
+    if "twitter" in inactive:
+        cards.append({
+            "rank": "3",
             "title": "Turn articles into distribution",
             "metric": "Reach gap",
             "body": "Threads can recycle each article into short-form discovery, which is the missing top-of-funnel for content earnings.",
@@ -356,7 +364,7 @@ def _section_research_focus(s: dict[str, Any]) -> str:
         })
     if "llm_gemini" in inactive or "llm_openrouter" in inactive:
         cards.append({
-            "rank": "3",
+            "rank": "4",
             "title": "Improve research depth",
             "metric": "Quality moat",
             "body": "Activate a long-context thinking provider so evolution and article research rely less on the Groq short-context path.",
@@ -364,7 +372,7 @@ def _section_research_focus(s: dict[str, Any]) -> str:
         })
     if "crypto_binance" in inactive:
         cards.append({
-            "rank": "4",
+            "rank": "5",
             "title": "Add capital-backed earning",
             "metric": "Needs funds",
             "body": "Trading is the first module with direct compounding potential, but it should wait until API keys and risk limits are deliberate.",
@@ -404,9 +412,10 @@ def _section_llm_workflows(s: dict[str, Any]) -> str:
         return ""
 
     cards = ""
-    for role in ("think", "fast", "experiment"):
+    for role in ("upgrade", "research", "post"):
         cfg = roles.get(role, {})
         provider = active_roles.get(role) or cfg.get("provider", "unknown")
+        model = cfg.get("model", "")
         purpose = cfg.get("purpose", "")
         active = bool(active_roles.get(role) or cfg.get("active"))
         missing = cfg.get("secret")
@@ -417,6 +426,7 @@ def _section_llm_workflows(s: dict[str, Any]) -> str:
             f'<div class="workflow-top"><strong>{_ROLE_LABELS.get(role, role)}</strong>'
             f'<span>{state}</span></div>'
             f'<div class="workflow-provider">{provider}</div>'
+            f'<div class="workflow-model">{html.escape(str(model))}</div>'
             f'<p>{purpose}</p>'
             f'</div>'
         )
@@ -434,7 +444,8 @@ def _section_secret_readiness(s: dict[str, Any]) -> str:
         return ""
 
     priority = [
-        "llm_gemini", "llm_openrouter", "articles_medium",
+        "llm_gemini", "llm_openrouter", "llm_groq",
+        "articles_devto", "articles_medium", "usdt_wallet",
         "twitter", "crypto_binance", "crypto_payout", "nft_ethereum",
     ]
     rows = ""
@@ -803,7 +814,7 @@ _LIVE_JS = """\
     anthropic:  'pill-provider',
     'claude-cli': 'pill-provider'
   };
-  var ROLE_ICONS = { think: '🧠', fast: '⚡', experiment: '🧪' };
+  var ROLE_ICONS = { upgrade: 'Up', research: 'Re', post: 'Po' };
 
   function fmt(iso) {
     if (!iso) return 'never';
@@ -827,7 +838,7 @@ _LIVE_JS = """\
 
   function providerPills(provider, roles) {
     if (roles && Object.keys(roles).length) {
-      return ['think','fast','experiment'].filter(function(r){ return roles[r]; }).map(function(r) {
+      return ['upgrade','research','post'].filter(function(r){ return roles[r]; }).map(function(r) {
         var p = roles[r];
         var cls = PROVIDERS[p] || 'pill-provider';
         return '<span class="' + cls + '" title="' + r + '">' + (ROLE_ICONS[r]||'') + ' ' + p + '</span>';
@@ -1164,6 +1175,10 @@ h1 { font-size: 1.4rem; margin-bottom: 6px; }
 .workflow-ready .workflow-top span { color: var(--gn); border-color: rgba(63,185,80,.35); }
 .workflow-missing .workflow-top span { color: var(--yw); border-color: rgba(227,179,65,.35); }
 .workflow-provider { color: var(--ac); font-size: .9rem; font-weight: 700; margin-bottom: 6px; }
+.workflow-model {
+  color: var(--tx); font-family: monospace; font-size: .72rem;
+  line-height: 1.35; word-break: break-word; margin-bottom: 6px;
+}
 .workflow-card p { color: var(--mu); font-size: .8rem; line-height: 1.4; }
 
 /* ── Growth suggestions ── */

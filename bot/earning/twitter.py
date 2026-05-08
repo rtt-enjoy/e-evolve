@@ -99,7 +99,7 @@ def _generate(llm: Any, status: dict) -> Optional[dict]:
             "JSON only."
         )
         if hasattr(llm, "complete_json_for_role"):
-            data = llm.complete_json_for_role("fast", prompt, system=_SYSTEM, max_tokens=1200)
+            data = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=1200)
         else:
             data = llm.complete_json(prompt, system=_SYSTEM, max_tokens=1200)
         tweets = data.get("tweets", [])

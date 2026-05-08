@@ -135,6 +135,13 @@ _RESEARCH_ANGLES = [
     "Show how to keep AI-generated code reviewable instead of magical.",
 ]
 
+_RESEARCH_SYSTEM = (
+    "You prepare compact research briefs for a technical writing bot. "
+    "Use only the supplied project facts and evergreen engineering knowledge. "
+    "Do not invent current events, prices, citations, or benchmark dates. "
+    "Respond with ONLY a single JSON object with keys: brief, angle, risks, examples."
+)
+
 
 @dataclass
 class Result:
@@ -193,7 +200,7 @@ def _generate(llm: Any, status: dict) -> Optional[dict]:
     idx   = int(hashlib.md5(str(n).encode()).hexdigest(), 16) % len(_TOPICS)
     topic = _TOPICS[idx]
     angle = _RESEARCH_ANGLES[n % len(_RESEARCH_ANGLES)]
-    context = _research_context(status, topic, angle)
+    context = _research_context(llm, status, topic, angle)
     try:
         prompt = (
             f'Write a developer article about: "{topic}"\n'
@@ -201,7 +208,7 @@ def _generate(llm: Any, status: dict) -> Optional[dict]:
             "JSON only."
         )
         if hasattr(llm, "complete_json_for_role"):
-            art = llm.complete_json_for_role("fast", prompt, system=_SYSTEM, max_tokens=4000)
+            art = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=4000)
         else:
             art = llm.complete_json(prompt, system=_SYSTEM, max_tokens=4000)
         assert art.get("title") and art.get("body_markdown"), "missing title or body"
@@ -213,13 +220,13 @@ def _generate(llm: Any, status: dict) -> Optional[dict]:
         return None
 
 
-def _research_context(status: dict, topic: str, angle: str) -> str:
+def _research_context(llm: Any, status: dict, topic: str, angle: str) -> str:
     """Build a compact research brief from local bot state for article generation."""
     earn = status.get("earnings", {})
     evo = status.get("last_evolution", {})
     active = status.get("active_features", [])
     inactive = status.get("inactive_features", [])
-    return (
+    local_brief = (
         f"Research brief:\n"
         f"- Topic: {topic}\n"
         f"- Required angle: {angle}\n"
@@ -232,6 +239,25 @@ def _research_context(status: dict, topic: str, angle: str) -> str:
         f"- Last evolution: {str(evo.get('summary', 'none'))[:180]}\n"
         "Use these facts as constraints. Do not invent outside citations, prices, or benchmark dates."
     )
+    if not hasattr(llm, "complete_json_for_role"):
+        return local_brief
+    try:
+        prompt = (
+            f"{local_brief}\n\n"
+            "Turn this into a concise writing brief. Include one strong thesis, "
+            "three concrete example ideas, and two accuracy risks to avoid."
+        )
+        brief = llm.complete_json_for_role("research", prompt, system=_RESEARCH_SYSTEM, max_tokens=900)
+        return (
+            f"{local_brief}\n\n"
+            f"Research model brief: {brief.get('brief', '')}\n"
+            f"Suggested angle: {brief.get('angle', '')}\n"
+            f"Example ideas: {brief.get('examples', [])}\n"
+            f"Accuracy risks: {brief.get('risks', [])}"
+        )
+    except Exception as exc:
+        log.warning("[articles] Research role unavailable; using local brief: %s", exc)
+        return local_brief
 
 
 # ── dev.to ────────────────────────────────────────────────────────────────────

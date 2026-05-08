@@ -100,15 +100,15 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
       { version_bumped_to, summary, changes_applied, suggestions, error }
     """
     from bot.llm import ROLE_PROVIDER
-    think_provider = ROLE_PROVIDER.get("think", "gemini")
-    # Use think-role provider capacity if that key is available, else fallback to default
-    key_attr = f"_{think_provider}_key" if think_provider != "claude-cli" else None
+    upgrade_provider = ROLE_PROVIDER.get("upgrade", ROLE_PROVIDER.get("think", "gemini"))
+    # Use upgrade-role provider capacity if that key is available, else fallback to default
+    key_attr = f"_{upgrade_provider}_key" if upgrade_provider != "claude-cli" else None
     if key_attr and getattr(llm, key_attr, ""):
-        evo_provider = think_provider
+        evo_provider = upgrade_provider
     else:
         evo_provider = getattr(llm, "provider", "groq")
     max_bytes = _MAX_READ_BYTES.get(evo_provider, _MAX_READ_BYTES["groq"])
-    log.info("Evolution provider=%s (think role), max_bytes=%d", evo_provider, max_bytes)
+    log.info("Evolution provider=%s (upgrade role), max_bytes=%d", evo_provider, max_bytes)
     codebase = _read_codebase(max_bytes, include_config=(evo_provider not in ("groq",)))
 
     # Trim bulky runtime-only fields before sending to LLM to save tokens.
@@ -128,7 +128,7 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
     )
 
     try:
-        plan = llm.complete_json_for_role("think", prompt, system=_SYSTEM, max_tokens=6000)
+        plan = llm.complete_json_for_role("upgrade", prompt, system=_SYSTEM, max_tokens=6000)
     except Exception as exc:
         log.error("Evolution LLM call failed: %s", exc)
         return _error_result(str(exc), status.get("version", "1.0.0"))
@@ -332,7 +332,7 @@ def _verify_and_fix(applied: list[dict], llm: Any, status: dict) -> list[dict]:
                 "Fix the file. JSON only."
             )
             try:
-                fix_plan = llm.complete_json_for_role("think", fix_prompt, system=_FIX_SYSTEM, max_tokens=4000)
+                fix_plan = llm.complete_json_for_role("upgrade", fix_prompt, system=_FIX_SYSTEM, max_tokens=4000)
                 fixed_content = str(fix_plan.get("content", "")).strip()
                 fix_reason    = str(fix_plan.get("reason", ""))
             except Exception as exc:

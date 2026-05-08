@@ -59,7 +59,7 @@ def main() -> int:
     from bot.llm import ROLE_PROVIDER
     status["llm_roles"] = {
         role: p for role, p in ROLE_PROVIDER.items()
-        if getattr(llm, f"_{p}_key", "")
+        if role in ("upgrade", "research", "post") and getattr(llm, f"_{p}_key", "")
     }
 
     # ── 2. Commands ───────────────────────────────────────────────────────────

@@ -509,13 +509,16 @@ def _section_secret_readiness(s: dict[str, Any]) -> str:
         present = int(info.get("present_count", 0))
         required = int(info.get("required_count", 0)) or 1
         pct = int(present / required * 100)
-        missing = ", ".join(info.get("missing", [])) or "none"
+        present_names = list(info.get("present", []))
+        missing_names = list(info.get("missing", []))
+        detail_names = present_names if present_names else missing_names
+        detail = ", ".join(detail_names) or "none"
         label = "active" if info.get("active") else f"{present}/{required}"
         rows += (
             f'<div class="secret-row">'
             f'<div><strong>{html.escape(feature)}</strong><span>{html.escape(label)}</span></div>'
             f'<div class="secret-meter"><div style="width:{pct}%"></div></div>'
-            f'<code>{html.escape(missing)}</code>'
+            f'<code>{html.escape(detail)}</code>'
             f'</div>'
         )
     if not rows:

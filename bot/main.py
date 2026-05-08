@@ -132,14 +132,19 @@ def main() -> int:
     _hr("Phase 4 — Earning")
     active  = status.get("active_features", [])
     actions: list[dict] = []
+    article_quota_reached = False
 
     # Articles (dev.to / Medium)
     if any(f in active for f in ("articles_devto", "articles_medium")):
-        n = _article_count(ov)
+        n = _article_count(status, ov)
+        article_quota_reached = n == 0
         for i in range(n):
             if n > 1:
                 log.info("Article %d/%d", i + 1, n)
-            actions += _module("articles", llm, status, errors)
+            article_actions = _module("articles", llm, status, errors)
+            actions += article_actions
+            if any(a.get("success") for a in article_actions):
+                _record_article_publish(status)
 
     # Twitter threads
     if "twitter" in active or ov.get("force_twitter"):
@@ -162,7 +167,7 @@ def main() -> int:
         for _ in range(ov.get("force_mint", 1)):
             actions += _module("nft", llm, status, errors)
 
-    if not actions:
+    if not actions and not article_quota_reached:
         log.warning(
             "No earning actions ran this cycle.\n"
             "Activate modules by adding secrets:\n"
@@ -226,17 +231,41 @@ def _module(name: str, llm: Any, status: dict, errors: list) -> list[dict]:
         return [{"platform": name, "success": False, "error": str(exc)[:200]}]
 
 
-def _article_count(overrides: dict[str, Any]) -> int:
-    """Return article count for this cycle; owner commands override strategy."""
+def _article_count(status: dict[str, Any], overrides: dict[str, Any]) -> int:
+    """Return article count for this cycle; owner commands override daily quota."""
     if "force_articles" in overrides:
         return max(1, int(overrides["force_articles"]))
     try:
         cfg = json.loads(Path("config/strategy.json").read_text(encoding="utf-8"))
-        configured = int(cfg.get("articles", {}).get("per_cycle", 1))
+        article_cfg = cfg.get("articles", {})
+        configured = int(article_cfg.get("per_cycle", 1))
+        daily_limit = int(article_cfg.get("daily_limit", configured))
     except Exception as exc:
         log.warning("Article strategy read failed; defaulting to 1: %s", exc)
         configured = 1
-    return min(3, max(1, configured))
+        daily_limit = 1
+
+    today = datetime.now(timezone.utc).date().isoformat()
+    daily = status.setdefault("article_daily", {"date": today, "published": 0})
+    if daily.get("date") != today:
+        daily.clear()
+        daily.update({"date": today, "published": 0})
+
+    remaining = max(0, daily_limit - int(daily.get("published", 0) or 0))
+    if remaining <= 0:
+        log.info("Article daily limit reached (%d/%d)", daily_limit, daily_limit)
+        return 0
+    return min(3, max(1, configured), remaining)
+
+
+def _record_article_publish(status: dict[str, Any]) -> None:
+    """Record one generated article that reached at least one publishing platform."""
+    today = datetime.now(timezone.utc).date().isoformat()
+    daily = status.setdefault("article_daily", {"date": today, "published": 0})
+    if daily.get("date") != today:
+        daily.clear()
+        daily.update({"date": today, "published": 0})
+    daily["published"] = int(daily.get("published", 0) or 0) + 1
 
 
 # ── Formatting helpers ────────────────────────────────────────────────────────

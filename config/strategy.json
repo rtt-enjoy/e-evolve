@@ -1,11 +1,12 @@
 {
   "_note": "E-Evolve strategy config. The bot may evolve these values over time.",
   "articles": {
-    "per_cycle": 3,
+    "per_cycle": 2,
+    "daily_limit": 2,
     "min_words": 600,
     "estimated_usd_per_publish": 0.02,
     "cta_label_default": "Support this project",
-    "buyer_intent_ratio": 0.55,
+    "buyer_intent_ratio": 0.7,
     "buyer_intent_topics": [
       "How to replace a paid cron service with GitHub Actions for $0",
       "Building an AI content pipeline that publishes without paid infrastructure",
@@ -14,7 +15,11 @@
       "Turning technical articles into a free lead funnel without spamming readers",
       "The no-budget stack I use for autonomous side projects",
       "How to add a donation or sponsor CTA to developer content without sounding desperate",
-      "Building a small automation product before paying for hosting"
+      "Building a small automation product before paying for hosting",
+      "The GitHub Actions content bot playbook for solo founders",
+      "How to turn dev.to posts into a low-cost product discovery loop",
+      "What to automate before you pay for SaaS tools",
+      "How to write technical content that attracts builders with buying intent"
     ]
   },
   "crypto": {

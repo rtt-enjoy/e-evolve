@@ -460,6 +460,67 @@ noscript {
   grid-template-columns: auto minmax(0, 1fr);
 }
 
+.active-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.active-module {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: rgba(23, 32, 44, .56);
+}
+
+.active-module p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: .76rem;
+}
+
+.module-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 99px;
+  background: var(--green);
+  box-shadow: 0 0 0 4px rgba(73, 209, 124, .12);
+}
+
+.module-dot.model {
+  background: var(--blue);
+  box-shadow: 0 0 0 4px rgba(106, 166, 255, .12);
+}
+
+.quota-card {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid rgba(106, 166, 255, .22);
+  border-radius: 8px;
+  background: rgba(106, 166, 255, .07);
+}
+
+.quota-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+
+.quota-top span {
+  color: var(--green);
+  font-weight: 800;
+}
+
+.quota-card p {
+  margin: 9px 0 0;
+  font-size: .78rem;
+}
+
 .preset-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -599,6 +660,7 @@ noscript {
   .metrics,
   .grid-2,
   .grid-3,
+  .active-grid,
   .preset-grid,
   .secret-item {
     grid-template-columns: 1fr;

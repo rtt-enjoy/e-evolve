@@ -176,7 +176,10 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     if not devto_key and not medium_tok:
         return []
 
-    article = _generate(llm, status)
+    sequence = int(status.get("_article_sequence", 0) or 0)
+    status["_article_sequence"] = sequence + 1
+
+    article = _generate(llm, status, sequence)
     if not article:
         return []
     article = _with_free_cta(article)
@@ -237,10 +240,11 @@ def _classify_gen_error(exc: Exception) -> str:
     return "unknown"
 
 
-def _generate(llm: Any, status: dict) -> Optional[dict]:
-    n     = status.get("total_runs", 1)
-    topic, conversion_mode = _select_topic(n)
-    angle = _RESEARCH_ANGLES[n % len(_RESEARCH_ANGLES)]
+def _generate(llm: Any, status: dict, sequence: int = 0) -> Optional[dict]:
+    n     = int(status.get("total_runs", 1) or 1)
+    topic_seed = (n * 10) + sequence
+    topic, conversion_mode = _select_topic(topic_seed)
+    angle = _RESEARCH_ANGLES[topic_seed % len(_RESEARCH_ANGLES)]
     context = _research_context(llm, status, topic, angle, conversion_mode)
     try:
         prompt = (

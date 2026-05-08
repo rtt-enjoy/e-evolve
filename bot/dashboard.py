@@ -2099,6 +2099,67 @@ noscript {
   grid-template-columns: auto minmax(0, 1fr);
 }
 
+.active-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.active-module {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: rgba(23, 32, 44, .56);
+}
+
+.active-module p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: .76rem;
+}
+
+.module-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 99px;
+  background: var(--green);
+  box-shadow: 0 0 0 4px rgba(73, 209, 124, .12);
+}
+
+.module-dot.model {
+  background: var(--blue);
+  box-shadow: 0 0 0 4px rgba(106, 166, 255, .12);
+}
+
+.quota-card {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid rgba(106, 166, 255, .22);
+  border-radius: 8px;
+  background: rgba(106, 166, 255, .07);
+}
+
+.quota-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+
+.quota-top span {
+  color: var(--green);
+  font-weight: 800;
+}
+
+.quota-card p {
+  margin: 9px 0 0;
+  font-size: .78rem;
+}
+
 .preset-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2238,6 +2299,7 @@ noscript {
   .metrics,
   .grid-2,
   .grid-3,
+  .active-grid,
   .preset-grid,
   .secret-item {
     grid-template-columns: 1fr;
@@ -2262,7 +2324,7 @@ import { createApp } from 'vue';
 const POLL_MS = 60000;
 
 const ORDER_PRESETS = [
-  ['force articles 3', 'Post three articles this cycle'],
+  ['force articles 2', 'Post today\\'s two articles'],
   ['force articles 1', 'Run one focused article'],
   ['skip evolution', 'Skip code changes once'],
   ['status report', 'Print full status to logs'],
@@ -2383,6 +2445,9 @@ createApp({
       if (!cards.length) {
         cards.push(['Keep the loop healthy', 'All obvious setup gaps are covered. Watch cycle age, errors, and article output.', 'status report']);
       }
+      if (active.has('articles_devto')) {
+        cards.unshift(['Protect article quality', 'The normal schedule is capped at two generated articles per UTC day, with separate topic seeds for each post.', 'articles.daily_limit = 2']);
+      }
 
       return cards.map((card, index) => ({ rank: index + 1, title: card[0], body: card[1], action: card[2] }));
     },
@@ -2391,6 +2456,28 @@ createApp({
     },
     actions() {
       return (this.status.last_earning && this.status.last_earning.actions) || [];
+    },
+    articleDaily() {
+      const daily = this.status.article_daily || {};
+      return {
+        date: daily.date || 'not started',
+        published: Number(daily.published || 0),
+        limit: 2,
+      };
+    },
+    articleProgress() {
+      return pct(this.articleDaily.published, this.articleDaily.limit);
+    },
+    activeModules() {
+      const freeNames = new Set(['llm_groq', 'llm_gemini', 'llm_openrouter', 'articles_devto', 'articles_medium', 'usdt_wallet']);
+      return this.secrets
+        .filter((item) => item.active)
+        .map((item) => ({
+          name: item.name,
+          label: item.label,
+          free: freeNames.has(item.name),
+          role: item.name.startsWith('llm_') ? 'model' : 'earning',
+        }));
     },
     evolution() {
       return this.status.last_evolution || {};
@@ -2516,6 +2603,7 @@ createApp({
           <aside class="summary-panel">
             <div class="summary-row"><span>Last run</span><strong>{{ fmtDate(status.last_run) }}</strong></div>
             <div class="summary-row"><span>Provider</span><strong>{{ status.llm_provider || 'unknown' }}</strong></div>
+            <div class="summary-row"><span>Article quota</span><strong>{{ articleDaily.published }}/{{ articleDaily.limit }} today</strong></div>
             <div class="summary-row"><span>This week</span><strong>{{ money(earn.this_week_usd) }}</strong></div>
             <div class="summary-row"><span>Projection</span><strong>{{ weeklyProjection }}/week</strong></div>
           </aside>
@@ -2530,6 +2618,28 @@ createApp({
 
         <div class="layout">
           <div class="stack">
+            <section class="panel">
+              <div class="panel-head"><div><h3>Active Earning Loop</h3><p>Free-first setup, current module health, and today's publishing pace.</p></div><span class="tag good">$0 infrastructure</span></div>
+              <div class="panel-body">
+                <div class="active-grid">
+                  <article v-for="mod in activeModules" :key="mod.name" class="active-module">
+                    <span class="module-dot" :class="mod.role"></span>
+                    <div>
+                      <strong>{{ mod.label }}</strong>
+                      <p>{{ mod.free ? 'Free/no-verification path' : 'Needs funded or approved access' }}</p>
+                    </div>
+                    <span class="tag" :class="mod.free ? 'good' : 'warn'">{{ mod.role }}</span>
+                  </article>
+                  <p v-if="!activeModules.length" class="empty">No active modules detected.</p>
+                </div>
+                <div class="quota-card">
+                  <div class="quota-top"><strong>Daily article target</strong><span>{{ articleDaily.published }}/{{ articleDaily.limit }}</span></div>
+                  <div class="bar"><div class="bar-fill" :style="{ width: articleProgress + '%' }"></div></div>
+                  <p class="muted">Normal cycles stop after two successful article generations per UTC day. Use owner orders only for deliberate experiments.</p>
+                </div>
+              </div>
+            </section>
+
             <section class="panel">
               <div class="panel-head"><div><h3>AI Model Workflow</h3><p>Role-based model routing currently detected by the bot.</p></div></div>
               <div class="panel-body grid-3">

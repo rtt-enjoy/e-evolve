@@ -172,6 +172,10 @@ def _defaults() -> dict[str, Any]:
             "actions":   [],
             "total_usd": 0.0,
         },
+        "article_daily": {
+            "date":      None,
+            "published": 0,
+        },
         "suggestions":           [],
         "errors":                [],
         "usdt_wallet":           "",

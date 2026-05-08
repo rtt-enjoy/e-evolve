@@ -1,8 +1,2 @@
-requests
-python-dotenv
-groq
-anthropic
-google-generativeai
 tweepy
-python-binance
-web3
+python-dotenv

@@ -1,13 +1,13 @@
-import requests
+import os
+import tweepy
 
-class Twitter:
-    def __init__(self, api_key, api_secret):
-        self.api_key = api_key
-        self.api_secret = api_secret
+twitter_api_key = os.environ.get('TWITTER_API_KEY')
+twitter_api_secret = os.environ.get('TWITTER_API_SECRET')
+twitter_access_token = os.environ.get('TWITTER_ACCESS_TOKEN')
+twitter_access_secret = os.environ.get('TWITTER_ACCESS_SECRET')
 
-    def post_tweet(self, content):
-        # Twitter posting logic
-        headers = {'Authorization': f'Bearer {self.api_key}', 'Content-Type': 'application/json'}
-        data = {'text': content}
-        resp = requests.post('https://api.twitter.com/2/tweets', headers=headers, json=data)
-        return resp.json()
+def post_to_twitter(text):
+    auth = tweepy.OAuthHandler(twitter_api_key, twitter_api_secret)
+    auth.set_access_token(twitter_access_token, twitter_access_secret)
+    api = tweepy.API(auth)
+    api.update_status(status=text)

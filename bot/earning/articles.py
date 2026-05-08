@@ -13,6 +13,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import requests
 
@@ -28,6 +29,7 @@ _strategy  = _load_strategy().get("articles", {})
 _MIN_WORDS = int(_strategy.get("min_words", 600))
 _ESTIMATED_USD_PER_PUBLISH = float(_strategy.get("estimated_usd_per_publish", 0.0))
 _CTA_LABEL_DEFAULT = str(_strategy.get("cta_label_default", "Support this project")).strip()
+_CTA_UTM_CAMPAIGN = str(_strategy.get("cta_utm_campaign", "e_evolve_content_loop")).strip()
 _BUYER_INTENT_RATIO = float(_strategy.get("buyer_intent_ratio", 0.35))
 _CURRENT_MARKET_SIGNALS = [
     str(item).strip()
@@ -205,13 +207,12 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     article = _generate(llm, status, sequence)
     if not article:
         return []
-    article = _with_free_cta(article)
 
     results: list[Result] = []
     if devto_key:
-        results.append(_post_devto(article, devto_key))
+        results.append(_post_devto(_with_free_cta(article, "devto"), devto_key))
     if medium_tok:
-        results.append(_post_medium(article, medium_tok))
+        results.append(_post_medium(_with_free_cta(article, "medium"), medium_tok))
 
     for r in results:
         if r.success:
@@ -222,8 +223,8 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     return [vars(r) for r in results]
 
 
-def _with_free_cta(article: dict) -> dict:
-    """Append an optional no-cost monetization CTA to article content."""
+def _with_free_cta(article: dict, platform: str = "article") -> dict:
+    """Append an optional tracked, no-cost monetization CTA to article content."""
     url = os.getenv("EARN_CTA_URL", "").strip()
     if not url:
         return article
@@ -233,16 +234,29 @@ def _with_free_cta(article: dict) -> dict:
 
     label = os.getenv("EARN_CTA_LABEL", "").strip() or _CTA_LABEL_DEFAULT
     label = label.replace("[", "").replace("]", "").strip()[:80] or _CTA_LABEL_DEFAULT
+    tracked_url = _tracked_cta_url(url, platform, "article")
     footer = (
         "\n\n---\n\n"
-        f"If this was useful, [{label}]({url}). "
+        f"If this was useful, [{label}]({tracked_url}). "
         "This keeps the project running without paid infrastructure."
     )
     updated = dict(article)
     body = str(updated.get("body_markdown", "")).rstrip()
-    if url not in body:
+    if url not in body and tracked_url not in body:
         updated["body_markdown"] = body + footer
     return updated
+
+
+def _tracked_cta_url(url: str, source: str, medium: str) -> str:
+    """Add stable UTM tags so the owner can see which channel converts."""
+    if not url.startswith(("https://", "http://")):
+        return url
+    parts = urlsplit(url)
+    query = dict(parse_qsl(parts.query, keep_blank_values=True))
+    query.setdefault("utm_source", source)
+    query.setdefault("utm_medium", medium)
+    query.setdefault("utm_campaign", _CTA_UTM_CAMPAIGN or "e_evolve_content_loop")
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
 
 
 def _estimated_usd() -> float:

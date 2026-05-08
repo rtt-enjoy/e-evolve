@@ -14,6 +14,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 log = logging.getLogger(__name__)
 
@@ -24,8 +25,10 @@ def _load_strategy() -> dict:
         return {}
 
 _strategy   = _load_strategy().get("twitter", {})
+_article_strategy = _load_strategy().get("articles", {})
 _MIN_TWEETS = int(_strategy.get("min_tweets", 5))
 _MAX_TWEETS = int(_strategy.get("max_tweets", 7))
+_CTA_UTM_CAMPAIGN = str(_article_strategy.get("cta_utm_campaign", "e_evolve_content_loop")).strip()
 _BUYER_INTENT_TOPICS = [
     str(item).strip()
     for item in _strategy.get("buyer_intent_topics", [])
@@ -47,13 +50,13 @@ _SYSTEM = (
     "Rules:\n"
     f"- {_MIN_TWEETS} to {_MAX_TWEETS} tweets total\n"
     "- Tweet 1: compelling hook\n"
-    "- Last tweet: clear CTA (follow / share / reply)\n"
+    "- Last tweet: clear CTA (follow / share / reply / configured link)\n"
     "- Max 2 hashtags in the whole thread\n"
     "- Each tweet under 265 characters\n"
     "- Topics: Python, AI/LLMs, GitHub Actions, automation, SaaS affiliate content,"
     " digital products, newsletters, productized services, passive income via code\n"
     "- Keep monetization practical: show a useful workflow first, then invite a reply,"
-    " follow, or CTA. No income guarantees."
+    " follow, or configured CTA. No income guarantees."
 )
 
 _TOPICS = [
@@ -92,6 +95,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     thread = _generate(llm, status)
     if not thread:
         return []
+    thread = _with_optional_cta(thread)
 
     result = _post(thread["tweets"], thread.get("topic", ""))
     if result.success:
@@ -106,10 +110,12 @@ def _generate(llm: Any, status: dict) -> Optional[dict]:
     n     = status.get("total_runs", 1)
     topic = _select_topic(int(n or 1))
     try:
+        cta_context = _cta_context()
         prompt = (
             f'Write a Twitter/X thread about: "{topic}"\n'
             f"Context: bot cycle #{n}, active modules: {status.get('active_features', [])}.\n"
             "Repurpose one concrete lesson from the current bot workflow; avoid vague AI hype.\n"
+            f"{cta_context}"
             "JSON only."
         )
         if hasattr(llm, "complete_json_for_role"):
@@ -136,6 +142,53 @@ def _select_topic(run_number: int) -> str:
             idx = int(hashlib.md5(str(run_number).encode()).hexdigest(), 16) % len(_BUYER_INTENT_TOPICS)
             return _BUYER_INTENT_TOPICS[idx]
     return _TOPICS[run_number % len(_TOPICS)]
+
+
+def _cta_context() -> str:
+    url = os.getenv("EARN_CTA_URL", "").strip()
+    if not url:
+        return "No monetization link is configured; use a reply/follow CTA only.\n"
+    label = os.getenv("EARN_CTA_LABEL", "").strip() or "the project link"
+    return (
+        f"A monetization CTA is configured: {label}. "
+        "Mention it naturally only if the thread taught something concrete.\n"
+    )
+
+
+def _with_optional_cta(thread: dict) -> dict:
+    """Attach the shared earning CTA to social distribution when it fits."""
+    url = os.getenv("EARN_CTA_URL", "").strip()
+    if not url or not url.startswith(("https://", "http://")):
+        return thread
+
+    tweets = [str(t).strip() for t in thread.get("tweets", []) if str(t).strip()]
+    if not tweets:
+        return thread
+
+    label = os.getenv("EARN_CTA_LABEL", "").strip() or "project link"
+    label = label.replace("[", "").replace("]", "").strip()[:48] or "project link"
+    tracked_url = _tracked_cta_url(url, "twitter", "social")
+    cta = f"{label}: {tracked_url}"
+    if tracked_url in "\n".join(tweets):
+        return thread
+
+    if len(tweets[-1]) + 2 + len(cta) <= 265:
+        tweets[-1] = f"{tweets[-1]}\n\n{cta}"
+    elif len(tweets) < _MAX_TWEETS:
+        tweets.append(cta[:265])
+
+    updated = dict(thread)
+    updated["tweets"] = tweets
+    return updated
+
+
+def _tracked_cta_url(url: str, source: str, medium: str) -> str:
+    parts = urlsplit(url)
+    query = dict(parse_qsl(parts.query, keep_blank_values=True))
+    query.setdefault("utm_source", source)
+    query.setdefault("utm_medium", medium)
+    query.setdefault("utm_campaign", _CTA_UTM_CAMPAIGN or "e_evolve_content_loop")
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
 
 
 def _post(tweets: list[str], topic: str) -> Result:

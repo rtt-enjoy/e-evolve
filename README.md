@@ -65,6 +65,9 @@ When `EARN_CTA_URL` is set, the article loop periodically switches to buyer-inte
 `config/strategy.json` so the content is still useful, but closer to people who might click,
 subscribe, sponsor, or buy.
 
+CTA links are tagged with `utm_source`, `utm_medium`, and the configured
+`articles.cta_utm_campaign` value so dev.to, Medium, and Twitter/X traffic can be compared later.
+
 Keep crypto and NFT modules disabled until you have funds you can afford to risk.
 
 ---

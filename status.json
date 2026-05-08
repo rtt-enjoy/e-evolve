@@ -1,7 +1,7 @@
 {
   "version": "1.25.0",
-  "last_run": "2026-05-08T07:58:45.987895+00:00",
-  "total_runs": 464,
+  "last_run": "2026-05-08T09:55:19.897580+00:00",
+  "total_runs": 465,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -30,60 +30,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.25.0",
-    "summary": "Added Twitter integration and updated requirements.txt to include necessary libraries",
-    "changes_applied": [
-      {
-        "file": "bot/twitter.py",
-        "reason": "Added Twitter integration"
-      },
-      {
-        "file": "requirements.txt",
-        "reason": "Updated requirements.txt to include necessary libraries"
-      },
-      {
-        "file": "config/twitter_config.py",
-        "reason": "Added Twitter config file to store API keys and access tokens"
-      }
-    ],
-    "suggestions": [
-      {
-        "title": "Add TWITTER_API_KEY for Twitter integration",
-        "description": "Enable Twitter posting and increase reach",
-        "secret_needed": "TWITTER_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Go to the Twitter Developer Dashboard and create an app",
-          "Step 2: Generate an API key and secret in the Twitter settings",
-          "Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET"
-        ]
-      },
-      {
-        "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
-        "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
-        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Go to Medium Partner Program and create an account",
-          "Step 2: Generate an integration token in the Medium settings",
-          "Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN"
-        ]
-      },
-      {
-        "title": "Add USDT_WALLET_ADDRESS for USDT wallet integration",
-        "description": "Enable USDT wallet and increase earnings",
-        "secret_needed": "USDT_WALLET_ADDRESS",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Create a USDT wallet and get the wallet address",
-          "Step 2: Add the wallet address as a GitHub secret named USDT_WALLET_ADDRESS",
-          "Step 3: Update the USDT wallet settings in the config file"
-        ]
-      }
-    ],
-    "error": null
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: No module named 'groq'",
+    "changes_applied": [],
+    "suggestions": [],
+    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: No module named 'groq'",
+    "error_type": "json"
   },
   "last_earning": {
     "actions": [],
@@ -128,7 +79,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 139,
+  "last_cycle_seconds": 141,
   "llm_roles": {
     "post": "groq"
   },

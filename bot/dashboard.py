@@ -48,6 +48,9 @@ log = logging.getLogger(__name__)
 
 _LOG_FILE  = Path("earnings-log.md")
 _HTML_FILE = Path("docs/index.html")
+_ASSET_DIR = Path("docs/assets")
+_CSS_FILE = _ASSET_DIR / "dashboard.css"
+_JS_FILE = _ASSET_DIR / "dashboard.js"
 _PUBLIC_STATUS_FILE = Path("docs/status.json")
 _PUBLIC_LOG_FILE = Path("docs/earnings-log.md")
 
@@ -124,6 +127,7 @@ def write_log(actions: list[dict]) -> None:
 def write_html(status: dict[str, Any]) -> None:
     """Regenerate docs/index.html from current status dict."""
     _HTML_FILE.parent.mkdir(exist_ok=True)
+    _ASSET_DIR.mkdir(parents=True, exist_ok=True)
     _PUBLIC_STATUS_FILE.write_text(
         json.dumps(
             {k: v for k, v in status.items() if not k.startswith("_")},
@@ -134,6 +138,8 @@ def write_html(status: dict[str, Any]) -> None:
     )
     if _LOG_FILE.exists():
         _PUBLIC_LOG_FILE.write_text(_LOG_FILE.read_text(encoding="utf-8"), encoding="utf-8")
+    _CSS_FILE.write_text(_APP_CSS, encoding="utf-8")
+    _JS_FILE.write_text(_APP_JS, encoding="utf-8")
     _HTML_FILE.write_text(_render(status), encoding="utf-8")
     log.info("Dashboard written → docs/index.html")
 
@@ -1602,3 +1608,1046 @@ def _render(s: dict[str, Any]) -> str:
 </footer>
 </body>
 </html>"""
+
+
+# Modern GitHub Pages dashboard app. This definition intentionally appears after
+# the legacy renderer so future calls use the structured static-app shell below.
+def _render(s: dict[str, Any]) -> str:
+    return """<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>E-Evolve Dashboard</title>
+  <link rel="stylesheet" href="assets/dashboard.css">
+  <script type="importmap">
+    {"imports":{"vue":"https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"}}
+  </script>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <div class="loading">Loading dashboard...</div>
+  </div>
+  <noscript>This dashboard needs JavaScript enabled.</noscript>
+  <script type="module" src="assets/dashboard.js"></script>
+</body>
+</html>
+"""
+
+
+_APP_CSS = """\
+:root {
+  --bg: #0b0f14;
+  --panel: #121923;
+  --panel-2: #17202c;
+  --line: #263343;
+  --line-soft: #1d2937;
+  --text: #e5edf7;
+  --muted: #93a4b8;
+  --soft: #c4d1df;
+  --blue: #6aa6ff;
+  --green: #49d17c;
+  --red: #ff6b6b;
+  --yellow: #f6c85f;
+  --cyan: #58d7d3;
+  --pink: #e49bff;
+  --shadow: 0 18px 60px rgba(0, 0, 0, .34);
+  --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.loading,
+noscript {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  color: var(--muted);
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  border-bottom: 1px solid rgba(38, 51, 67, .9);
+  background: rgba(11, 15, 20, .88);
+  backdrop-filter: blur(14px);
+}
+
+.topbar-inner,
+.page {
+  width: min(1200px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 68px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--cyan);
+  font-weight: 800;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.15;
+}
+
+.brand p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.live-chip,
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--soft);
+  font-size: .78rem;
+  white-space: nowrap;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  background: var(--green);
+  box-shadow: 0 0 0 4px rgba(73, 209, 124, .12);
+}
+
+.live-dot.error {
+  background: var(--red);
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, .14);
+}
+
+.page {
+  padding: 26px 0 34px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, .7fr);
+  gap: 18px;
+  align-items: stretch;
+  margin-bottom: 18px;
+}
+
+.hero-main,
+.panel,
+.metric-card,
+.card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.hero-main {
+  padding: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 9px;
+  color: var(--cyan);
+  font-size: .76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.hero h2 {
+  max-width: 720px;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 4.3rem);
+  line-height: .98;
+}
+
+.hero-copy {
+  max-width: 680px;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.summary-panel {
+  padding: 18px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.summary-row:last-child {
+  border-bottom: 0;
+}
+
+.summary-row span {
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+.summary-row strong {
+  color: var(--text);
+  text-align: right;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.metric-card {
+  padding: 17px;
+  min-height: 118px;
+}
+
+.metric-label {
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.metric-value {
+  margin-top: 10px;
+  color: var(--text);
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.metric-value.good {
+  color: var(--green);
+}
+
+.metric-value.warn {
+  color: var(--yellow);
+}
+
+.metric-note {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: .76rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 18px;
+  align-items: start;
+}
+
+.stack {
+  display: grid;
+  gap: 18px;
+}
+
+.panel {
+  overflow: hidden;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.panel-head h3 {
+  margin: 0;
+  font-size: .95rem;
+}
+
+.panel-head p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.panel-body {
+  padding: 18px;
+}
+
+.grid-2,
+.grid-3 {
+  display: grid;
+  gap: 12px;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card {
+  min-height: 126px;
+  padding: 15px;
+  box-shadow: none;
+}
+
+.card-top,
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card h4 {
+  margin: 0;
+  font-size: .9rem;
+}
+
+.card p,
+.muted {
+  color: var(--muted);
+}
+
+.card p {
+  margin: 10px 0 0;
+  font-size: .82rem;
+  line-height: 1.45;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 25px;
+  padding: 3px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--soft);
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.tag.good {
+  border-color: rgba(73, 209, 124, .35);
+  color: var(--green);
+}
+
+.tag.warn {
+  border-color: rgba(246, 200, 95, .35);
+  color: var(--yellow);
+}
+
+.tag.bad {
+  border-color: rgba(255, 107, 107, .35);
+  color: var(--red);
+}
+
+.tag.info {
+  border-color: rgba(106, 166, 255, .35);
+  color: var(--blue);
+}
+
+.bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #0d141d;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--green);
+}
+
+.secret-list,
+.action-list,
+.evo-list,
+.focus-list {
+  display: grid;
+  gap: 10px;
+}
+
+.secret-item,
+.action-item,
+.evo-item,
+.focus-item {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: rgba(23, 32, 44, .56);
+}
+
+.secret-item {
+  grid-template-columns: 150px minmax(0, 1fr) 130px;
+  align-items: center;
+}
+
+.secret-item code,
+.command-area,
+.cmd-input,
+.code-pill {
+  font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+}
+
+.secret-item code,
+.code-pill {
+  overflow-wrap: anywhere;
+  color: var(--yellow);
+  font-size: .75rem;
+}
+
+.focus-rank {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid rgba(106, 166, 255, .4);
+  border-radius: 999px;
+  color: var(--blue);
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+.focus-item {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.preset-btn,
+.small-btn,
+.icon-btn {
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+.preset-btn {
+  min-height: 64px;
+  padding: 10px;
+  text-align: left;
+}
+
+.preset-btn strong {
+  display: block;
+  font-size: .8rem;
+}
+
+.preset-btn span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: .72rem;
+}
+
+.preset-btn:hover,
+.small-btn:hover,
+.icon-btn:hover {
+  border-color: var(--blue);
+}
+
+.cmd-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.cmd-input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #0d141d;
+  color: var(--text);
+  padding: 9px 10px;
+}
+
+.command-area {
+  width: 100%;
+  min-height: 96px;
+  margin-top: 12px;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #0d141d;
+  color: var(--text);
+  padding: 11px;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.small-btn {
+  min-height: 35px;
+  padding: 7px 11px;
+  color: var(--soft);
+}
+
+.small-btn.primary {
+  border-color: rgba(106, 166, 255, .5);
+  color: var(--blue);
+}
+
+.small-btn.danger {
+  border-color: rgba(255, 107, 107, .4);
+  color: var(--red);
+}
+
+.empty {
+  padding: 18px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+@media (max-width: 980px) {
+  .hero,
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics,
+  .grid-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .topbar-inner,
+  .page {
+    width: min(100% - 20px, 1200px);
+  }
+
+  .topbar-inner {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 12px 0;
+  }
+
+  .top-actions,
+  .hero-meta,
+  .button-row {
+    width: 100%;
+  }
+
+  .metrics,
+  .grid-2,
+  .grid-3,
+  .preset-grid,
+  .secret-item {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-main,
+  .summary-panel,
+  .panel-body {
+    padding: 14px;
+  }
+
+  .hero h2 {
+    font-size: 2rem;
+  }
+}
+"""
+
+
+_APP_JS = """\
+import { createApp } from 'vue';
+
+const POLL_MS = 60000;
+
+const ORDER_PRESETS = [
+  ['force articles 3', 'Post three articles this cycle'],
+  ['force articles 1', 'Run one focused article'],
+  ['skip evolution', 'Skip code changes once'],
+  ['status report', 'Print full status to logs'],
+  ['post thread', 'Force a social thread'],
+  ['reset earnings', 'Reset weekly earnings'],
+  ['force trade conservative', 'Lower trade risk to 1%'],
+  ['force mint 1', 'Mint one NFT this cycle'],
+];
+
+const MODULE_LABELS = {
+  llm_anthropic: 'Anthropic',
+  llm_gemini: 'Gemini',
+  llm_openrouter: 'OpenRouter',
+  llm_groq: 'Groq',
+  articles_devto: 'dev.to articles',
+  articles_medium: 'Medium articles',
+  usdt_wallet: 'USDT wallet',
+  twitter: 'Twitter / X',
+  crypto_binance: 'Crypto trading',
+  crypto_payout: 'Payout automation',
+  nft_ethereum: 'NFT minting',
+};
+
+function money(value, digits = 2) {
+  const n = Number(value || 0);
+  return '$' + n.toFixed(digits);
+}
+
+function fmtDate(iso) {
+  if (!iso) return 'never';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return String(iso);
+  return d.toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+}
+
+function ageLabel(iso) {
+  if (!iso) return 'never';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return 'unknown';
+  const secs = Math.max(0, Math.floor((Date.now() - d.getTime()) / 1000));
+  if (secs < 90) return 'just now';
+  if (secs < 3600) return Math.floor(secs / 60) + 'm ago';
+  if (secs < 86400) return Math.floor(secs / 3600) + 'h ago';
+  return Math.floor(secs / 86400) + 'd ago';
+}
+
+function compactNumber(value) {
+  return new Intl.NumberFormat('en', { notation: 'compact' }).format(Number(value || 0));
+}
+
+function pct(done, total) {
+  if (!total) return 0;
+  return Math.max(0, Math.min(100, Math.round(Number(done || 0) / Number(total) * 100)));
+}
+
+function providerClass(provider) {
+  if (provider === 'gemini') return 'info';
+  if (provider === 'groq') return 'warn';
+  if (provider === 'openrouter') return 'good';
+  return 'info';
+}
+
+createApp({
+  data() {
+    return {
+      status: {},
+      loaded: false,
+      online: true,
+      lastPoll: null,
+      ORDER_PRESETS,
+      commands: [],
+      customCommand: '',
+      copyLabel: 'Copy',
+    };
+  },
+
+  computed: {
+    earn() {
+      return this.status.earnings || {};
+    },
+    active() {
+      return this.status.active_features || [];
+    },
+    inactive() {
+      return this.status.inactive_features || [];
+    },
+    workflows() {
+      return Object.entries(this.status.llm_workflows || {}).map(([name, item]) => ({
+        name,
+        ...item,
+      }));
+    },
+    secrets() {
+      return Object.entries(this.status.secret_readiness || {}).map(([name, item]) => ({
+        name,
+        label: MODULE_LABELS[name] || name,
+        percent: pct(item.present_count, item.required_count),
+        ...item,
+      }));
+    },
+    focusItems() {
+      const missing = new Set(this.secrets.flatMap((item) => item.missing || []));
+      const active = new Set(this.active);
+      const cards = [];
+
+      if (active.has('articles_devto') && missing.has('MEDIUM_INTEGRATION_TOKEN')) {
+        cards.push(['Dual-publish articles', 'Add Medium to reuse every dev.to article with no extra model call.', 'MEDIUM_INTEGRATION_TOKEN']);
+      }
+      if (active.has('articles_devto') && !this.status.usdt_wallet) {
+        cards.push(['Add a conversion target', 'Set a wallet, sponsor, tip, newsletter, or product CTA for every article.', 'USDT_WALLET_ADDRESS or EARN_CTA_URL']);
+      }
+      if (missing.has('TWITTER_API_KEY')) {
+        cards.push(['Turn articles into distribution', 'Activate the social module only when your X developer access is ready.', 'TWITTER_API_KEY']);
+      }
+      if (missing.has('BINANCE_WITHDRAW_ADDRESS') && active.has('usdt_wallet')) {
+        cards.push(['Finish payout automation', 'The wallet is known; add exchange withdrawal settings when you are ready.', 'BINANCE_WITHDRAW_ADDRESS']);
+      }
+      if (!cards.length) {
+        cards.push(['Keep the loop healthy', 'All obvious setup gaps are covered. Watch cycle age, errors, and article output.', 'status report']);
+      }
+
+      return cards.map((card, index) => ({ rank: index + 1, title: card[0], body: card[1], action: card[2] }));
+    },
+    suggestions() {
+      return this.status.suggestions || [];
+    },
+    actions() {
+      return (this.status.last_earning && this.status.last_earning.actions) || [];
+    },
+    evolution() {
+      return this.status.last_evolution || {};
+    },
+    breakdown() {
+      const entries = Object.entries(this.earn.breakdown || {});
+      const max = Math.max(...entries.map(([, value]) => Number(value || 0)), 1);
+      return entries.map(([name, value]) => ({
+        name,
+        value: Number(value || 0),
+        percent: Math.round(Number(value || 0) / max * 100),
+      }));
+    },
+    commandText: {
+      get() {
+        return this.commands.length ? this.commands.join('\\n') : '# no commands';
+      },
+      set(value) {
+        this.commands = value.split('\\n').map((line) => line.trim()).filter(Boolean).filter((line) => line !== '# no commands');
+      },
+    },
+    weeklyProjection() {
+      const history = (this.earn.history || []).map(Number).filter((n) => n > 0);
+      if (!history.length) return money(0);
+      const avg = history.reduce((sum, n) => sum + n, 0) / history.length;
+      return money(avg * 168);
+    },
+    weekGoalPercent() {
+      return pct(this.earn.this_week_usd || 0, 10);
+    },
+  },
+
+  methods: {
+    money,
+    fmtDate,
+    ageLabel,
+    compactNumber,
+    providerClass,
+    moduleLabel(name) {
+      return MODULE_LABELS[name] || name;
+    },
+    addCommand(cmd) {
+      if (!this.commands.includes(cmd)) this.commands.push(cmd);
+    },
+    addCustomCommand() {
+      const cmd = this.customCommand.trim();
+      if (cmd) this.addCommand(cmd);
+      this.customCommand = '';
+    },
+    clearCommands() {
+      this.commands = [];
+    },
+    async copyCommands() {
+      try {
+        await navigator.clipboard.writeText(this.commandText);
+        this.copyLabel = 'Copied';
+      } catch (err) {
+        this.copyLabel = 'Select text';
+      }
+      setTimeout(() => { this.copyLabel = 'Copy'; }, 1600);
+    },
+    downloadCommands() {
+      const blob = new Blob([this.commandText], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'command.txt';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    },
+    async loadStatus() {
+      try {
+        const response = await fetch('status.json?ts=' + Date.now(), { cache: 'no-store' });
+        if (!response.ok) throw new Error('status fetch failed');
+        this.status = await response.json();
+        this.loaded = true;
+        this.online = true;
+        this.lastPoll = new Date().toISOString();
+      } catch (err) {
+        this.online = false;
+        this.loaded = true;
+      }
+    },
+  },
+
+  mounted() {
+    this.loadStatus();
+    setInterval(this.loadStatus, POLL_MS);
+  },
+
+  template: `
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div class="brand">
+            <div class="brand-mark">EE</div>
+            <div>
+              <h1>E-Evolve</h1>
+              <p>Self-improving earning bot dashboard</p>
+            </div>
+          </div>
+          <div class="top-actions">
+            <span class="live-chip"><span class="live-dot" :class="{ error: !online }"></span>{{ online ? 'live' : 'offline' }}</span>
+            <a class="chip" href="status.json">status.json</a>
+            <a class="chip" href="earnings-log.md">earnings log</a>
+          </div>
+        </div>
+      </header>
+
+      <main class="page" v-if="loaded">
+        <section class="hero">
+          <div class="hero-main">
+            <p class="eyebrow">GitHub Actions automation</p>
+            <h2>{{ money(earn.total_usd) }} total earned across {{ compactNumber(status.total_runs) }} cycles</h2>
+            <p class="hero-copy">
+              Current version {{ status.version || 'unknown' }} runs with {{ active.length }} active modules.
+              Last cycle finished {{ ageLabel(status.last_run) }} in {{ status.last_cycle_seconds || 0 }} seconds.
+            </p>
+            <div class="hero-meta">
+              <span v-for="feature in active" :key="feature" class="tag good">{{ moduleLabel(feature) }}</span>
+              <span v-if="!active.length" class="tag bad">No active modules</span>
+            </div>
+          </div>
+          <aside class="summary-panel">
+            <div class="summary-row"><span>Last run</span><strong>{{ fmtDate(status.last_run) }}</strong></div>
+            <div class="summary-row"><span>Provider</span><strong>{{ status.llm_provider || 'unknown' }}</strong></div>
+            <div class="summary-row"><span>This week</span><strong>{{ money(earn.this_week_usd) }}</strong></div>
+            <div class="summary-row"><span>Projection</span><strong>{{ weeklyProjection }}/week</strong></div>
+          </aside>
+        </section>
+
+        <section class="metrics">
+          <article class="metric-card"><div class="metric-label">Total earned</div><div class="metric-value good">{{ money(earn.total_usd) }}</div><div class="metric-note">Lifetime estimate</div></article>
+          <article class="metric-card"><div class="metric-label">This week</div><div class="metric-value warn">{{ money(earn.this_week_usd) }}</div><div class="metric-note">Goal progress {{ weekGoalPercent }}%</div></article>
+          <article class="metric-card"><div class="metric-label">Cycles</div><div class="metric-value">{{ compactNumber(status.total_runs) }}</div><div class="metric-note">Hourly runner history</div></article>
+          <article class="metric-card"><div class="metric-label">Modules</div><div class="metric-value">{{ active.length }}/{{ active.length + inactive.length }}</div><div class="metric-note">{{ inactive.length }} waiting for setup</div></article>
+        </section>
+
+        <div class="layout">
+          <div class="stack">
+            <section class="panel">
+              <div class="panel-head"><div><h3>AI Model Workflow</h3><p>Role-based model routing currently detected by the bot.</p></div></div>
+              <div class="panel-body grid-3">
+                <article v-for="flow in workflows" :key="flow.name" class="card">
+                  <div class="card-top"><h4>{{ flow.name }}</h4><span class="tag" :class="flow.active ? 'good' : 'warn'">{{ flow.active ? 'ready' : 'missing' }}</span></div>
+                  <p><strong>{{ flow.provider }}</strong></p>
+                  <p class="code-pill">{{ flow.model }}</p>
+                  <p>{{ flow.purpose }}</p>
+                </article>
+                <p v-if="!workflows.length" class="empty">No workflow data yet.</p>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head"><div><h3>Revenue Focus</h3><p>Next practical moves based on active modules and missing secrets.</p></div></div>
+              <div class="panel-body focus-list">
+                <article v-for="item in focusItems" :key="item.title" class="focus-item">
+                  <span class="focus-rank">{{ item.rank }}</span>
+                  <div><div class="row"><strong>{{ item.title }}</strong><span class="tag info">{{ item.action }}</span></div><p class="muted">{{ item.body }}</p></div>
+                </article>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head"><div><h3>Earnings Analysis</h3><p>Breakdown and weekly goal progress.</p></div><span class="tag warn">{{ weekGoalPercent }}% of $10/wk</span></div>
+              <div class="panel-body">
+                <div class="bar"><div class="bar-fill" :style="{ width: weekGoalPercent + '%' }"></div></div>
+                <div class="secret-list" style="margin-top:14px">
+                  <div v-for="item in breakdown" :key="item.name" class="secret-item">
+                    <strong>{{ item.name }}</strong>
+                    <div class="bar"><div class="bar-fill" :style="{ width: item.percent + '%' }"></div></div>
+                    <span>{{ money(item.value, 4) }}</span>
+                  </div>
+                  <p v-if="!breakdown.length" class="empty">No earnings breakdown yet.</p>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head"><div><h3>Last Evolution</h3><p>The latest code evolution result.</p></div><span class="tag" :class="evolution.error ? 'bad' : 'good'">{{ evolution.error ? 'needs review' : 'ok' }}</span></div>
+              <div class="panel-body evo-list">
+                <div class="evo-item">
+                  <strong>{{ evolution.summary || 'No evolution summary yet.' }}</strong>
+                  <p v-if="evolution.error" class="muted">{{ evolution.error }}</p>
+                </div>
+                <div v-for="change in evolution.changes_applied || []" :key="change.file + change.reason" class="evo-item">
+                  <span class="code-pill">{{ change.file }}</span>
+                  <p class="muted">{{ change.reason }}</p>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head"><div><h3>Last Cycle Actions</h3><p>Actions emitted by earning modules during the last cycle.</p></div></div>
+              <div class="panel-body action-list">
+                <article v-for="action in actions" :key="JSON.stringify(action)" class="action-item">
+                  <div class="row"><strong>{{ action.platform || 'unknown' }}</strong><span class="tag" :class="action.success ? 'good' : 'bad'">{{ action.success ? 'success' : 'failed' }}</span></div>
+                  <p class="muted">{{ action.title || action.topic || action.symbol || action.error || 'Action recorded' }}</p>
+                </article>
+                <p v-if="!actions.length" class="empty">No actions recorded in the latest cycle.</p>
+              </div>
+            </section>
+          </div>
+
+          <aside class="stack">
+            <section class="panel">
+              <div class="panel-head"><div><h3>Secret Readiness</h3><p>Values are detected, never shown.</p></div></div>
+              <div class="panel-body secret-list">
+                <div v-for="secret in secrets" :key="secret.name" class="secret-item">
+                  <strong>{{ secret.label }}</strong>
+                  <div class="bar"><div class="bar-fill" :style="{ width: secret.percent + '%' }"></div></div>
+                  <span class="tag" :class="secret.active ? 'good' : 'warn'">{{ secret.present_count }}/{{ secret.required_count }}</span>
+                  <code v-if="secret.missing && secret.missing.length" style="grid-column:1 / -1">{{ secret.missing.join(', ') }}</code>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head"><div><h3>Owner Orders</h3><p>Build command.txt for the next cycle.</p></div></div>
+              <div class="panel-body">
+                <div class="preset-grid">
+                  <button v-for="preset in ORDER_PRESETS" :key="preset[0]" class="preset-btn" @click="addCommand(preset[0])">
+                    <strong>{{ preset[0] }}</strong><span>{{ preset[1] }}</span>
+                  </button>
+                </div>
+                <div class="cmd-row">
+                  <input class="cmd-input" v-model="customCommand" @keyup.enter="addCustomCommand" placeholder="Custom order">
+                  <button class="small-btn" @click="addCustomCommand">Add</button>
+                </div>
+                <textarea class="command-area" v-model="commandText"></textarea>
+                <div class="button-row">
+                  <button class="small-btn primary" @click="copyCommands">{{ copyLabel }}</button>
+                  <button class="small-btn" @click="downloadCommands">Download</button>
+                  <button class="small-btn danger" @click="clearCommands">Clear</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head"><div><h3>Growth Suggestions</h3><p>Bot-proposed setup ideas.</p></div></div>
+              <div class="panel-body action-list">
+                <article v-for="item in suggestions" :key="item.title" class="action-item">
+                  <div class="row"><strong>{{ item.title }}</strong><span class="tag" :class="item.free_tier ? 'good' : 'warn'">{{ item.free_tier ? 'free' : 'paid' }}</span></div>
+                  <p class="muted">{{ item.description }}</p>
+                  <span v-if="item.secret_needed" class="code-pill">{{ item.secret_needed }}</span>
+                </article>
+                <p v-if="!suggestions.length" class="empty">No suggestions yet.</p>
+              </div>
+            </section>
+          </aside>
+        </div>
+
+        <footer class="footer">
+          <span>Updated {{ lastPoll ? fmtDate(lastPoll) : 'not yet' }}</span>
+          <span>GitHub Pages static Vue dashboard</span>
+        </footer>
+      </main>
+    </div>
+  `,
+}).mount('#app');
+"""

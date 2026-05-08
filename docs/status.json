@@ -1,7 +1,7 @@
 {
   "version": "1.25.0",
-  "last_run": "2026-05-08T11:46:05.176895+00:00",
-  "total_runs": 466,
+  "last_run": "2026-05-08T14:17:21.180457+00:00",
+  "total_runs": 467,
   "active_features": [
     "llm_groq",
     "articles_devto"
@@ -79,7 +79,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 141,
+  "last_cycle_seconds": 102,
   "llm_roles": {
     "post": "groq"
   },
@@ -224,5 +224,9 @@
     "GROQ_API_KEY",
     "OPENROUTER_API_KEY",
     "USDT_WALLET_ADDRESS"
-  ]
+  ],
+  "article_daily": {
+    "date": "2026-05-08",
+    "published": 0
+  }
 }

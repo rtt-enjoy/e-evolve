@@ -2243,6 +2243,45 @@ noscript {
   font-size: .78rem;
 }
 
+.dispatch-card {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 12px;
+  border: 1px solid rgba(88, 215, 211, .28);
+  border-radius: 8px;
+  background: rgba(88, 215, 211, .06);
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.field-label {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.status-line {
+  min-height: 18px;
+  color: var(--muted);
+  font-size: .75rem;
+  line-height: 1.45;
+}
+
+.status-line.good {
+  color: var(--green);
+}
+
+.status-line.bad {
+  color: var(--red);
+}
+
 .preset-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2360,6 +2399,11 @@ noscript {
   color: var(--red);
 }
 
+.small-btn:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
 .empty {
   padding: 18px;
   color: var(--muted);
@@ -2410,6 +2454,7 @@ noscript {
   .metrics,
   .grid-2,
   .grid-3,
+  .field-grid,
   .active-grid,
   .preset-grid,
   .segmented,
@@ -2434,6 +2479,13 @@ _APP_JS = """\
 import { createApp } from 'vue';
 
 const POLL_MS = 60000;
+const WORKFLOW_FILE = 'evolve.yml';
+const DEFAULT_REF = 'main';
+const STORAGE_KEYS = {
+  repo: 'e-evolve.githubRepo',
+  token: 'e-evolve.githubToken',
+  ref: 'e-evolve.workflowRef',
+};
 
 const ORDER_PRESETS = [
   ['force articles 2', 'Fill today\\'s article quota'],
@@ -2535,6 +2587,14 @@ function cycleState(lastRun) {
   return { label: 'stalled', cls: 'bad' };
 }
 
+function inferGitHubRepo() {
+  const host = window.location.hostname;
+  if (!host.endsWith('.github.io')) return '';
+  const owner = host.slice(0, -'.github.io'.length);
+  const repo = window.location.pathname.split('/').filter(Boolean)[0];
+  return owner && repo ? owner + '/' + repo : '';
+}
+
 createApp({
   data() {
     return {
@@ -2547,6 +2607,11 @@ createApp({
       customCommand: '',
       copyLabel: 'Copy',
       activeCommandGroup: 'earn',
+      githubRepo: localStorage.getItem(STORAGE_KEYS.repo) || inferGitHubRepo(),
+      githubToken: localStorage.getItem(STORAGE_KEYS.token) || '',
+      workflowRef: localStorage.getItem(STORAGE_KEYS.ref) || DEFAULT_REF,
+      dispatchState: 'idle',
+      dispatchMessage: '',
     };
   },
 
@@ -2709,6 +2774,14 @@ createApp({
     weekGoalPercent() {
       return pct(this.earn.this_week_usd || 0, 10);
     },
+    canDispatchWorkflow() {
+      return Boolean(this.githubRepo.trim() && this.githubToken.trim() && this.workflowRef.trim() && this.dispatchState !== 'running');
+    },
+    dispatchStatusClass() {
+      if (this.dispatchState === 'success') return 'good';
+      if (this.dispatchState === 'error') return 'bad';
+      return '';
+    },
   },
 
   methods: {
@@ -2748,6 +2821,52 @@ createApp({
     },
     clearCommands() {
       this.commands = [];
+    },
+    rememberWorkflowSettings() {
+      const repo = this.githubRepo.trim();
+      const ref = this.workflowRef.trim() || DEFAULT_REF;
+      if (repo) localStorage.setItem(STORAGE_KEYS.repo, repo);
+      if (this.githubToken.trim()) localStorage.setItem(STORAGE_KEYS.token, this.githubToken.trim());
+      localStorage.setItem(STORAGE_KEYS.ref, ref);
+    },
+    async runWorkflow() {
+      const repo = this.githubRepo.trim();
+      const token = this.githubToken.trim();
+      const ref = this.workflowRef.trim() || DEFAULT_REF;
+      if (!repo || !token) {
+        this.dispatchState = 'error';
+        this.dispatchMessage = 'Add a repo and a GitHub token with Actions write access.';
+        return;
+      }
+      this.rememberWorkflowSettings();
+      this.dispatchState = 'running';
+      this.dispatchMessage = 'Ordering GitHub Actions to run evolve...';
+      try {
+        const response = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/${WORKFLOW_FILE}/dispatches`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/vnd.github+json',
+            Authorization: `Bearer ${token}`,
+            'X-GitHub-Api-Version': '2022-11-28',
+          },
+          body: JSON.stringify({ ref }),
+        });
+        if (response.status !== 204) {
+          let detail = '';
+          try {
+            const payload = await response.json();
+            detail = payload.message ? ': ' + payload.message : '';
+          } catch (err) {
+            detail = response.statusText ? ': ' + response.statusText : '';
+          }
+          throw new Error(`GitHub returned ${response.status}${detail}`);
+        }
+        this.dispatchState = 'success';
+        this.dispatchMessage = `evolve workflow queued on ${ref}.`;
+      } catch (err) {
+        this.dispatchState = 'error';
+        this.dispatchMessage = err.message || 'Workflow dispatch failed.';
+      }
     },
     async copyCommands() {
       try {
@@ -2970,6 +3089,25 @@ createApp({
             <section class="panel">
               <div class="panel-head"><div><h3>Owner Orders</h3><p>Build command.txt for the next cycle.</p></div></div>
               <div class="panel-body">
+                <div class="dispatch-card">
+                  <div class="row"><strong>Run evolve now</strong><span class="tag info">workflow_dispatch</span></div>
+                  <div class="field-grid">
+                    <label class="field-label">Repository
+                      <input class="cmd-input" v-model="githubRepo" placeholder="owner/repo" @change="rememberWorkflowSettings">
+                    </label>
+                    <label class="field-label">Ref
+                      <input class="cmd-input" v-model="workflowRef" placeholder="main" @change="rememberWorkflowSettings">
+                    </label>
+                  </div>
+                  <label class="field-label">GitHub token
+                    <input class="cmd-input" type="password" v-model="githubToken" placeholder="Fine-grained token with Actions write" @change="rememberWorkflowSettings">
+                  </label>
+                  <div class="button-row">
+                    <button class="small-btn primary" :disabled="!canDispatchWorkflow" @click="runWorkflow">{{ dispatchState === 'running' ? 'Ordering...' : 'Run evolve' }}</button>
+                    <a class="small-btn" :href="'https://github.com/' + githubRepo + '/actions/workflows/evolve.yml'" target="_blank" rel="noopener">Open Actions</a>
+                  </div>
+                  <p class="status-line" :class="dispatchStatusClass">{{ dispatchMessage || 'Token stays in this browser local storage, never in status.json.' }}</p>
+                </div>
                 <div class="segmented">
                   <button class="segment-btn" :class="{ active: activeCommandGroup === 'earn' }" @click="activeCommandGroup = 'earn'">Earn</button>
                   <button class="segment-btn" :class="{ active: activeCommandGroup === 'protect' }" @click="activeCommandGroup = 'protect'">Protect</button>

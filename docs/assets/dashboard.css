@@ -604,6 +604,45 @@ noscript {
   font-size: .78rem;
 }
 
+.dispatch-card {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 12px;
+  border: 1px solid rgba(88, 215, 211, .28);
+  border-radius: 8px;
+  background: rgba(88, 215, 211, .06);
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.field-label {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.status-line {
+  min-height: 18px;
+  color: var(--muted);
+  font-size: .75rem;
+  line-height: 1.45;
+}
+
+.status-line.good {
+  color: var(--green);
+}
+
+.status-line.bad {
+  color: var(--red);
+}
+
 .preset-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -721,6 +760,11 @@ noscript {
   color: var(--red);
 }
 
+.small-btn:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
 .empty {
   padding: 18px;
   color: var(--muted);
@@ -771,6 +815,7 @@ noscript {
   .metrics,
   .grid-2,
   .grid-3,
+  .field-grid,
   .active-grid,
   .preset-grid,
   .segmented,

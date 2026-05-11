@@ -21,6 +21,8 @@ jobs:
       # ── LLM keys (add at least one) ─────────────────────────────────────
       GROQ_API_KEY:             ${{ secrets.GROQ_API_KEY }}
       ANTHROPIC_API_KEY:        ${{ secrets.ANTHROPIC_API_KEY }}
+      GEMINI_API_KEY:           ${{ secrets.GEMINI_API_KEY }}
+      OPENROUTER_API_KEY:       ${{ secrets.OPENROUTER_API_KEY }}
 
       # ── Earning module secrets (all optional) ────────────────────────────
       DEV_TO_API_KEY:           ${{ secrets.DEV_TO_API_KEY }}
@@ -31,8 +33,11 @@ jobs:
       TWITTER_ACCESS_SECRET:    ${{ secrets.TWITTER_ACCESS_SECRET }}
       BINANCE_API_KEY:          ${{ secrets.BINANCE_API_KEY }}
       BINANCE_SECRET_KEY:       ${{ secrets.BINANCE_SECRET_KEY }}
+      BINANCE_WITHDRAW_ADDRESS: ${{ secrets.BINANCE_WITHDRAW_ADDRESS }}
+      USDT_WALLET_ADDRESS:      ${{ secrets.USDT_WALLET_ADDRESS }}
       ETH_PRIVATE_KEY:          ${{ secrets.ETH_PRIVATE_KEY }}
       ETH_WALLET_ADDRESS:       ${{ secrets.ETH_WALLET_ADDRESS }}
+      ETHERSCAN_API_KEY:        ${{ secrets.ETHERSCAN_API_KEY }}
       NFT_CONTRACT_ADDRESS:     ${{ secrets.NFT_CONTRACT_ADDRESS }}
       NFT_STORAGE_TOKEN:        ${{ secrets.NFT_STORAGE_TOKEN }}
 

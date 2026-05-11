@@ -1,2 +1,8 @@
+requests
 tweepy
 python-dotenv
+groq
+anthropic
+google-generativeai
+python-binance
+web3

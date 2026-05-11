@@ -191,7 +191,7 @@ def _evo_status(evo: dict) -> str:
         return "ok"
     if not err and "skipped by owner" in summary.lower():
         return "skipped"
-    if err and err_type in ("413", "json", "api"):
+    if err and err_type in ("413", "json", "api", "free_limit"):
         return "llm_error"
     if err:
         return "apply_error"
@@ -657,7 +657,10 @@ def _section_evolution(evo: dict) -> str:
         match      = _re.search(r"'message':\s*'([^']{1,200})'", evo_err)
         clean_msg  = match.group(1) if match else evo_err[:200]
         type_label = {
-            "413": "413 Too Large", "json": "JSON Parse Error", "api": "API Error"
+            "413": "413 Too Large",
+            "json": "JSON Parse Error",
+            "api": "API Error",
+            "free_limit": "Free-Tier Limit",
         }.get(evo.get("error_type", ""), "Error")
         err_html = (
             f'<div class="evo-error-box">'
@@ -2709,6 +2712,25 @@ createApp({
     actions() {
       return (this.status.last_earning && this.status.last_earning.actions) || [];
     },
+    evolutionStatus() {
+      const evo = this.evolution || {};
+      if (evo.error_type === 'free_limit') {
+        return { label: 'free limit', cls: 'warn' };
+      }
+      if (evo.error) {
+        return { label: 'needs review', cls: 'bad' };
+      }
+      return { label: 'ok', cls: 'good' };
+    },
+    evolutionErrorLabel() {
+      const labels = {
+        free_limit: 'Free-tier API limit reached',
+        '413': 'Prompt too large',
+        json: 'JSON parse error',
+        api: 'API error',
+      };
+      return labels[(this.evolution || {}).error_type] || 'Evolution error';
+    },
     articleDaily() {
       const daily = this.status.article_daily || {};
       return {
@@ -3048,11 +3070,11 @@ createApp({
             </section>
 
             <section class="panel">
-              <div class="panel-head"><div><h3>Last Evolution</h3><p>The latest code evolution result.</p></div><span class="tag" :class="evolution.error ? 'bad' : 'good'">{{ evolution.error ? 'needs review' : 'ok' }}</span></div>
+              <div class="panel-head"><div><h3>Last Evolution</h3><p>The latest code evolution result.</p></div><span class="tag" :class="evolutionStatus.cls">{{ evolutionStatus.label }}</span></div>
               <div class="panel-body evo-list">
                 <div class="evo-item">
                   <strong>{{ evolution.summary || 'No evolution summary yet.' }}</strong>
-                  <p v-if="evolution.error" class="muted">{{ evolution.error }}</p>
+                  <p v-if="evolution.error" class="muted"><strong>{{ evolutionErrorLabel }}:</strong> {{ evolution.error }}</p>
                 </div>
                 <div v-for="change in evolution.changes_applied || []" :key="change.file + change.reason" class="evo-item">
                   <span class="code-pill">{{ change.file }}</span>

@@ -432,6 +432,27 @@ def _resolve_version(proposed: Any, current: str) -> str:
 
 def _classify_error(error: str) -> str:
     s = error.lower()
+    free_limit_markers = (
+        "429",
+        "rate_limit",
+        "rate limit",
+        "ratelimit",
+        "resource_exhausted",
+        "quota",
+        "insufficient_quota",
+        "too many requests",
+        "free tier",
+        "free-tier",
+        "free limit",
+        "free-limit",
+        "daily limit",
+        "tokens per day",
+        "tpd",
+        "requests per day",
+        "rpd",
+    )
+    if any(marker in s for marker in free_limit_markers):
+        return "free_limit"
     if "413" in s or "too large" in s or "request entity" in s:
         return "413"
     if "json" in s or "parse" in s or "decode" in s:

@@ -1,8 +1,4 @@
-requests
-tweepy
-python-dotenv
-groq
-anthropic
-google-generativeai
-python-binance
-web3
+gemini-python==0.1.5
+openrouter-python==0.1.2
+groq-python==0.1.1
+devto-python==0.1.3

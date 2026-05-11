@@ -163,6 +163,28 @@ Tunable by owner or evolved by LLM:
 
 ## Commit Convention
 
+Prompt-driven repository changes must be committed and pushed before ending the
+prompt whenever verification succeeds and the worktree has changes.
+
+- Use Conventional Commit headers that satisfy commitlint defaults:
+  `<type>(<scope>): <subject>`.
+- Keep the header at 72 characters or less.
+- Use lower-case types from the default commitlint set: `build`, `chore`, `ci`,
+  `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`.
+- Keep the subject non-empty, lower-case where natural, and without a trailing
+  period.
+- If there are no file changes, do not create an empty commit.
+- After committing, push the current branch to `origin`.
+
+Examples for prompt-driven changes:
+
+```
+docs: document prompt commit workflow
+fix(earning): handle empty article topics
+```
+
+Bot-generated cycle commits keep their existing operational format:
+
 ```
 🧬 evolve vX.Y.Z: <summary>    ← evolution changes
 📊 cycle #N +$X.XXXX Xs         ← state update each cycle

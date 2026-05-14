@@ -1,13 +1,14 @@
 {
-  "version": "1.26.0",
-  "last_run": "2026-05-11T04:37:44.304013+00:00",
-  "total_runs": 506,
+  "version": "1.28.0",
+  "last_run": "2026-05-14T13:05:49.468644+00:00",
+  "total_runs": 507,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
     "llm_groq",
     "articles_devto",
-    "usdt_wallet"
+    "usdt_wallet",
+    "code_techs"
   ],
   "inactive_features": [
     "llm_anthropic",
@@ -23,17 +24,15 @@
     "this_week_usd": 0.0,
     "last_cycle_usd": 0.0,
     "week_started": "2026-05-11",
-    "breakdown": {},
+    "breakdown": {
+      "code_techs": 0.0
+    },
     "history": []
   },
   "last_evolution": {
-    "version_bumped_to": "1.26.0",
-    "summary": "Add missing Groq library and update LLM workflows",
+    "version_bumped_to": "1.28.0",
+    "summary": "Add missing error handling and update LLM workflows",
     "changes_applied": [
-      {
-        "file": "requirements.txt",
-        "reason": "Add missing Groq library"
-      },
       {
         "file": "config/llm_workflows.json",
         "reason": "Update LLM workflows"
@@ -41,6 +40,10 @@
       {
         "file": "version.txt",
         "reason": "Bump version"
+      },
+      {
+        "file": "docs/error_handling.md",
+        "reason": "Add error handling documentation"
       }
     ],
     "suggestions": [
@@ -84,7 +87,17 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech opportunity queue refreshed (8 leads)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -126,7 +139,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 115,
+  "last_cycle_seconds": 164,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -275,7 +288,122 @@
     "USDT_WALLET_ADDRESS"
   ],
   "article_daily": {
-    "date": "2026-05-11",
+    "date": "2026-05-14",
     "published": 0
+  },
+  "code_tech_earning": {
+    "enabled": true,
+    "last_refresh_at": "2026-05-14T13:08:27.528845+00:00",
+    "daily_target_usd": 10.0,
+    "refresh_hours": 24,
+    "opportunities": [
+      {
+        "title": "Renovate Dashboard \ud83e\udd16",
+        "url": "https://github.com/dettanym/prose/issues/8",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+      },
+      {
+        "title": "Site notification/announcements bar + deployment maintenance mode",
+        "url": "https://github.com/archestra-ai/archestra/issues/4463",
+        "source": "github",
+        "score": 99,
+        "estimated_value_usd": 75.0,
+        "reason": "visible or inferred value around $75.00; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch."
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/ah-ha-admin/refactored-memory/issues/49",
+        "source": "github",
+        "score": 98,
+        "estimated_value_usd": 0.0,
+        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+      },
+      {
+        "title": "Add docker-compose.yml for one-command local setup",
+        "url": "https://github.com/KonstantinMB/exploreyc/issues/6",
+        "source": "github",
+        "score": 98,
+        "estimated_value_usd": 0.0,
+        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+      },
+      {
+        "title": "Create custom page for \"Submit your business\"",
+        "url": "https://github.com/bitcoin-dot-org/Bitcoin.org/issues/1583",
+        "source": "github",
+        "score": 97,
+        "estimated_value_usd": 250.0,
+        "reason": "visible or inferred value around $250.00; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch."
+      },
+      {
+        "title": "Revamp the entire Firebase Functions flow with this architectural principle:",
+        "url": "https://github.com/kingyx3/hermes-vps/issues/499",
+        "source": "github",
+        "score": 92,
+        "estimated_value_usd": 0.0,
+        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/atlas-bi/Hub/issues/81",
+        "source": "github",
+        "score": 90,
+        "estimated_value_usd": 0.0,
+        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/kkkaoru/frontend-configs/issues/5",
+        "source": "github",
+        "score": 90,
+        "estimated_value_usd": 0.0,
+        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+      }
+    ],
+    "requirements": [
+      "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
+      "Prefer boring maintenance where the buyer already feels pain: failing CI, broken install paths, stale dependencies, or unusable examples.",
+      "Require a visible owner, maintainer, sponsor, bounty, issue activity, or obvious business value before spending deep effort.",
+      "Keep the first contribution small enough to review in one sitting, then convert repeated pain into a fixed-scope maintenance offer.",
+      "Do not count discovery, estimates, or speculative upside as earnings until money is received or manually reconciled."
+    ],
+    "focus": [
+      "failing CI with a small, reproducible fix",
+      "dependency migration or deprecation cleanup",
+      "documentation examples that no longer run",
+      "test flakiness with a clear failure signature",
+      "type hints, packaging metadata, and release automation",
+      "small compatibility fixes in niche developer tools",
+      "abandoned but still-installed packages with open compatibility issues",
+      "template repos and starter kits whose quickstarts fail on current runtimes",
+      "internal-tool shaped repos where businesses need maintenance more than novelty",
+      "release-note gaps after breaking API changes",
+      "low-glamour data import/export bugs in small SaaS integrations"
+    ],
+    "strategy_playbook": [
+      "Start from maintenance pain, not idea novelty: find places where a maintainer or small business already lost time.",
+      "Use proof as the sales asset: failing command, failing log line, fixed branch, and a short before/after note.",
+      "Favor repeatable chores that can become productized services: dependency upgrades, CI modernization, docs repair, packaging cleanup, and migration guides.",
+      "Look below the obvious bounty surface: stale issues with recent users, forks carrying private fixes, unanswered install failures, and docs comments that expose conversion leaks.",
+      "Bundle adjacent fixes only after trust exists; the first patch should make one painful thing obviously better.",
+      "Treat content as deal flow: every solved niche issue can become a short article, comparison, checklist, or service page aimed at the same pain."
+    ],
+    "avoid_patterns": [
+      "Large rewrites, vague feature requests, design taste debates, and architecture arguments without a failing proof.",
+      "Repos with no maintainer response, no recent users, no releases, and no business signal.",
+      "Crowded beginner issues where dozens of contributors compete for low-value visibility.",
+      "Unpaid speculative requests that need private context before value can be proven.",
+      "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
+    ]
   }
 }

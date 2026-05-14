@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-05-14T11:32:27.821340+00:00
+Refreshed: 2026-05-14T13:08:27.528845+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -44,43 +44,43 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. [Migrate from `httpx` to `httpxyz`](https://github.com/zauberzeug/nicegui/issues/6024)
+1. [Renovate Dashboard 🤖](https://github.com/dettanym/prose/issues/8)
    - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; CI/test work is concrete and easy for maintainers to accept
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-2. [Dependency Dashboard](https://github.com/reearth/reearth-classic/issues/78)
-   - Score: 96/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-3. [Dependency Dashboard](https://github.com/monots/monots/issues/67)
+2. [Site notification/announcements bar + deployment maintenance mode](https://github.com/archestra-ai/archestra/issues/4463)
+   - Score: 99/100
+   - Value signal: $75.00
+   - Why: visible or inferred value around $75.00; CI/test work is concrete and easy for maintainers to accept
+   - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
+3. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
+   - Score: 98/100
+   - Value signal: $0.00
+   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+4. [Add docker-compose.yml for one-command local setup](https://github.com/KonstantinMB/exploreyc/issues/6)
+   - Score: 98/100
+   - Value signal: $0.00
+   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+5. [Create custom page for "Submit your business"](https://github.com/bitcoin-dot-org/Bitcoin.org/issues/1583)
+   - Score: 97/100
+   - Value signal: $250.00
+   - Why: visible or inferred value around $250.00; CI/test work is concrete and easy for maintainers to accept
+   - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
+6. [Revamp the entire Firebase Functions flow with this architectural principle:](https://github.com/kingyx3/hermes-vps/issues/499)
+   - Score: 92/100
+   - Value signal: $0.00
+   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+7. [Dependency Dashboard](https://github.com/atlas-bi/Hub/issues/81)
    - Score: 90/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-4. [[Refactor] Remove all try/catch from the server replace with neverthow](https://github.com/Merit-Systems/echo/issues/581)
-   - Score: 85/100
-   - Value signal: $3000.00
-   - Why: visible or inferred value around $3000.00; CI/test work is concrete and easy for maintainers to accept
-   - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
-5. [Dependency Dashboard](https://github.com/zarguell/birdbinder/issues/4)
-   - Score: 84/100
+8. [Dependency Dashboard](https://github.com/kkkaoru/frontend-configs/issues/5)
+   - Score: 90/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-6. [Dependency Dashboard](https://github.com/finos/vuu/issues/281)
-   - Score: 84/100
-   - Value signal: $0.00
-   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-7. [Dependency Dashboard](https://github.com/mariosknl/FullStackEcommerce/issues/4)
-   - Score: 84/100
-   - Value signal: $0.00
-   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-8. [[ONBOARD: 2 RTC] Star + Review an Open PR](https://github.com/Scottcjn/rustchain-bounties/issues/2782)
-   - Score: 78/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; CI/test work is concrete and easy for maintainers to accept
-   - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.

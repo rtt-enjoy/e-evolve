@@ -1,7 +1,7 @@
 {
   "version": "1.31.0",
-  "last_run": "2026-05-14T20:03:09.703267+00:00",
-  "total_runs": 510,
+  "last_run": "2026-05-14T21:37:09.761724+00:00",
+  "total_runs": 511,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -31,60 +31,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.31.0",
-    "summary": "Add support for Medium integration and update error handling for inactive features",
-    "changes_applied": [
-      {
-        "file": "config/medium_integration.json",
-        "reason": "Add support for Medium integration"
-      },
-      {
-        "file": "docs/medium_integration.md",
-        "reason": "Add Medium integration documentation"
-      },
-      {
-        "file": "version.txt",
-        "reason": "Bump version"
-      }
-    ],
-    "suggestions": [
-      {
-        "title": "Add TWITTER_API_KEY for Twitter integration",
-        "description": "Enable Twitter posting and increase reach",
-        "secret_needed": "TWITTER_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Go to the Twitter Developer Dashboard and create an app",
-          "Step 2: Generate an API key and secret in the Twitter settings",
-          "Step 3: Add the API key and secret as GitHub secrets named TWITTER_API_KEY and TWITTER_API_SECRET"
-        ]
-      },
-      {
-        "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
-        "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
-        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Go to Medium Partner Program and create an account",
-          "Step 2: Generate an integration token in the Medium settings",
-          "Step 3: Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN"
-        ]
-      },
-      {
-        "title": "Add ANTHROPIC_API_KEY for Anthropic LLM integration",
-        "description": "Enable Anthropic LLM and increase LLM capabilities",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Go to the Anthropic website and create an account",
-          "Step 2: Generate an API key in the Anthropic settings",
-          "Step 3: Add the API key as a GitHub secret named ANTHROPIC_API_KEY"
-        ]
-      }
-    ],
-    "error": null
+    "summary": "Evolution skipped [free_limit]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 93577, Requested 7943. Please try again in 21m53.28s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "changes_applied": [],
+    "suggestions": [],
+    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 93577, Requested 7943. Please try again in 21m53.28s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "error_type": "free_limit"
   },
   "last_earning": {
     "actions": [],
@@ -129,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 173,
+  "last_cycle_seconds": 141,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

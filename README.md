@@ -20,7 +20,7 @@ Init LLM → Status Check → Owner Commands → LLM Evolution → Earning Actio
 | **Commands** | Read `command.txt` or GitHub Issues labelled `bot-command` |
 | **Evolution** | Send codebase + status to LLM; receive and apply code improvements |
 | **Earning** | Run active modules: articles, Twitter threads, crypto trading, NFT minting |
-| **Update** | Save `status.json`, regenerate `docs/index.html` dashboard, commit all |
+| **Update** | Save `status.json`, publish dashboard data files, commit all |
 
 ---
 
@@ -55,6 +55,10 @@ The dashboard contract is documented in
 [`docs/frontend-dashboard.md`](docs/frontend-dashboard.md). It defines the
 required workflow, evolution, error, suggestion, module, and secret-readiness
 signals that the frontend must keep visible.
+
+The dashboard UI is a static React/Vite/Tailwind app in `frontend/`. Python
+stays the backend data publisher and writes `docs/status.json` plus
+`docs/earnings-log.md` during each cycle.
 
 ### No-Money Self-Earn Setup
 
@@ -183,7 +187,7 @@ bot/
   commands.py                 ← Phase 2: owner command system
   evolution.py                ← Phase 3: self-improvement engine
   earnings.py                 ← cumulative earnings + weekly reset
-  dashboard.py                ← HTML dashboard + earnings log
+  dashboard.py                ← dashboard data publisher + earnings log
   git_utils.py                ← git commit helpers
   earning/
     articles.py               ← dev.to + Medium publishing
@@ -192,14 +196,30 @@ bot/
     nft.py                    ← Ethereum NFT minting
 config/
   strategy.json               ← tunable strategy parameters
+frontend/
+  src/                        ← React/Vite/Tailwind dashboard source
+  package.json                ← frontend build scripts
 docs/
-  index.html                  ← GitHub Pages dashboard (auto-updated)
+  index.html                  ← built GitHub Pages dashboard
+  assets/                     ← built frontend assets
   .nojekyll                   ← disables Jekyll processing
 status.json                   ← persisted state (auto-updated each cycle)
 earnings-log.md               ← human-readable earnings history
 version.txt                   ← current bot version (X.Y.Z)
 command.txt                   ← owner command input
 ```
+
+### Frontend Development
+
+```bash
+cd frontend
+npm install
+npm run dev
+npm run build
+```
+
+`npm run build` writes the static app to `docs/` without deleting the existing
+documentation files. The app reads `docs/status.json` in production.
 
 ---
 

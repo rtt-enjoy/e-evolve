@@ -1,4 +1,7 @@
 __pycache__/
+node_modules/
+*.tsbuildinfo
+frontend-preview-codex*.log
 *.pyc
 *.pyo
 .pytest_cache/

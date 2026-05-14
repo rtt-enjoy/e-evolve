@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #0b0f14;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+@layer components {
+  .panel {
+    @apply rounded-lg border border-line bg-panel p-5 shadow-panel;
+  }
+
+  .panel h2 {
+    @apply text-lg font-semibold;
+  }
+
+  .panel p {
+    @apply mt-1 text-sm leading-6 text-soft;
+  }
+
+  .metric-card {
+    @apply rounded-lg border border-line bg-panel p-5;
+  }
+
+  .metric-card span {
+    @apply mt-4 block text-sm text-soft;
+  }
+
+  .metric-card strong {
+    @apply mt-2 block text-2xl font-semibold;
+  }
+
+  .metric-card p {
+    @apply mt-1 text-sm text-soft;
+  }
+
+  .metric-icon {
+    @apply flex h-10 w-10 items-center justify-center rounded-md border border-line bg-panel2 text-accent;
+  }
+
+  .metric-icon svg {
+    @apply h-5 w-5;
+  }
+
+  .pill {
+    @apply inline-flex max-w-full items-center gap-1 rounded-md border px-2 py-1 text-xs font-semibold;
+  }
+
+  .pill.good {
+    @apply border-green/40 bg-green/10 text-green;
+  }
+
+  .pill.warn {
+    @apply border-yellow/40 bg-yellow/10 text-yellow;
+  }
+
+  .pill.bad {
+    @apply border-red/40 bg-red/10 text-red;
+  }
+
+  .pill.info {
+    @apply border-accent/40 bg-accent/10 text-accent;
+  }
+
+  .pill.neutral {
+    @apply border-line bg-panel2 text-soft;
+  }
+
+  .small-button,
+  .icon-button {
+    @apply inline-flex h-10 items-center justify-center rounded-md border border-line bg-panel2 px-3 text-sm font-semibold text-text transition hover:border-accent hover:text-accent;
+  }
+
+  .icon-button {
+    @apply w-10 px-0;
+  }
+
+  .phase-card {
+    @apply min-h-32 rounded-lg border border-line bg-panel2 p-4;
+  }
+
+  .phase-card svg {
+    @apply mb-3 text-accent;
+  }
+
+  .phase-card strong {
+    @apply block text-sm;
+  }
+
+  .phase-card p {
+    @apply line-clamp-3 text-xs;
+  }
+
+  .item-row {
+    @apply flex gap-3 rounded-lg border border-line bg-panel2 p-4;
+  }
+
+  .item-row strong {
+    @apply text-sm;
+  }
+
+  .item-row p {
+    @apply mt-1 text-sm text-soft;
+  }
+
+  .status-dot {
+    @apply mt-1 h-3 w-3 shrink-0 rounded-full bg-soft;
+  }
+
+  .status-dot.good {
+    @apply bg-green;
+  }
+
+  .status-dot.warn {
+    @apply bg-yellow;
+  }
+
+  .status-dot.bad {
+    @apply bg-red;
+  }
+
+  .code-card,
+  .secret-card,
+  .suggestion-card,
+  .action-card {
+    @apply rounded-lg border border-line bg-panel2 p-4;
+  }
+
+  .code-card code,
+  .secret-card code,
+  .suggestion-card code {
+    @apply mt-3 block overflow-x-auto rounded-md border border-line bg-ink px-2 py-1 text-xs text-cyan;
+  }
+
+  .action-card p,
+  .suggestion-card p,
+  .code-card p {
+    @apply mt-2 text-sm leading-6 text-soft;
+  }
+
+  .progress {
+    @apply h-2 overflow-hidden rounded-full bg-ink;
+  }
+
+  .progress span {
+    @apply block h-full rounded-full bg-accent;
+  }
+
+  .empty {
+    @apply rounded-lg border border-dashed border-line bg-panel2 p-4 text-sm text-soft;
+  }
+
+  .banner {
+    @apply flex items-center gap-2 rounded-lg border p-4 text-sm;
+  }
+
+  .banner.bad {
+    @apply border-red/40 bg-red/10 text-red;
+  }
+}

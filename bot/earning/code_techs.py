@@ -30,6 +30,13 @@ _DEFAULT_CONFIG = {
     "daily_target_usd": 10.0,
     "max_items": 8,
     "min_score": 55,
+    "requirements": [
+        "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
+        "Prefer boring maintenance where the buyer already feels pain.",
+        "Require a visible owner, maintainer, sponsor, bounty, issue activity, or obvious business value.",
+        "Keep the first contribution small enough to review in one sitting.",
+        "Do not count discovery or speculative upside as earnings.",
+    ],
     "github_searches": [
         "is:issue is:open bounty label:bounty",
         "is:issue is:open bounty language:Python",
@@ -37,6 +44,12 @@ _DEFAULT_CONFIG = {
         "is:issue is:open label:\"help wanted\" \"CI\"",
         "is:issue is:open label:\"good first issue\" \"migration\"",
         "is:issue is:open \"docs\" \"broken\" \"example\"",
+        "is:issue is:open \"quickstart\" \"fails\" language:Python",
+        "is:issue is:open \"pyproject\" \"deprecation\"",
+        "is:issue is:open \"Node 20\" \"migration\"",
+        "is:issue is:open \"GitHub Actions\" \"deprecated\" \"warning\"",
+        "is:issue is:open \"import error\" \"Python 3.12\"",
+        "is:issue is:open \"release notes\" \"breaking change\"",
     ],
     "underserved_focus": [
         "failing CI with a small, reproducible fix",
@@ -45,6 +58,26 @@ _DEFAULT_CONFIG = {
         "test flakiness with a clear failure signature",
         "type hints, packaging metadata, and release automation",
         "small compatibility fixes in niche developer tools",
+        "abandoned but still-installed packages with open compatibility issues",
+        "template repos and starter kits whose quickstarts fail on current runtimes",
+        "internal-tool shaped repos where businesses need maintenance more than novelty",
+        "release-note gaps after breaking API changes",
+        "low-glamour data import/export bugs in small SaaS integrations",
+    ],
+    "strategy_playbook": [
+        "Start from maintenance pain, not idea novelty.",
+        "Use proof as the sales asset: failing command, failing log line, fixed branch, and a short before/after note.",
+        "Favor repeatable chores that can become productized services.",
+        "Look below the obvious bounty surface: stale issues with recent users, forks carrying fixes, and unanswered install failures.",
+        "Bundle adjacent fixes only after trust exists.",
+        "Treat content as deal flow from solved niche issues.",
+    ],
+    "avoid_patterns": [
+        "Large rewrites, vague feature requests, design taste debates, and architecture arguments without a failing proof.",
+        "Repos with no maintainer response, no recent users, no releases, and no business signal.",
+        "Crowded beginner issues where many contributors compete for low-value visibility.",
+        "Unpaid speculative requests that need private context before value can be proven.",
+        "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk.",
     ],
 }
 
@@ -110,7 +143,10 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
         "daily_target_usd": float(cfg.get("daily_target_usd", 10.0) or 10.0),
         "refresh_hours": refresh_hours,
         "opportunities": [op.__dict__ for op in opportunities],
-        "focus": list(cfg.get("underserved_focus", [])),
+        "requirements": _clean_list(cfg.get("requirements", [])),
+        "focus": _clean_list(cfg.get("underserved_focus", [])),
+        "strategy_playbook": _clean_list(cfg.get("strategy_playbook", [])),
+        "avoid_patterns": _clean_list(cfg.get("avoid_patterns", [])),
     })
     _write_report(state)
 
@@ -216,6 +252,12 @@ def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_
     return ranked[:max_items]
 
 
+def _clean_list(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [str(item).strip() for item in value if str(item).strip()]
+
+
 def _score(text: str, labels: list[str], value: float) -> int:
     score = 30
     if value:
@@ -226,9 +268,15 @@ def _score(text: str, labels: list[str], value: float) -> int:
         score += 14
     if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
         score += 12
+    if any(word in text for word in ("python 3.12", "node 20", "pyproject", "deprecated", "warning")):
+        score += 10
     if any(word in text for word in ("docs", "readme", "example", "quickstart")):
         score += 10
-    if any(word in text for word in ("design", "logo", "marketing", "translation")):
+    if any(word in text for word in ("import error", "install", "setup", "starter", "template")):
+        score += 8
+    if any(word in text for word in ("release notes", "breaking change", "changelog")):
+        score += 6
+    if any(word in text for word in ("design", "logo", "marketing", "translation", "rewrite")):
         score -= 12
     if "good first issue" in " ".join(labels):
         score -= 4
@@ -253,8 +301,12 @@ def _reason(text: str, labels: list[str], value: float) -> str:
         parts.append("CI/test work is concrete and easy for maintainers to accept")
     if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
         parts.append("migration chores are neglected but urgent")
+    if any(word in text for word in ("python 3.12", "node 20", "pyproject", "deprecated", "warning")):
+        parts.append("runtime and toolchain drift creates urgent maintenance demand")
     if any(word in text for word in ("docs", "readme", "example", "quickstart")):
         parts.append("working docs convert into trust quickly")
+    if any(word in text for word in ("import error", "install", "setup", "starter", "template")):
+        parts.append("setup failures are high-friction and easy to prove")
     if not parts:
         parts.append("small code maintenance lead with low competition")
     return "; ".join(parts[:2])
@@ -265,6 +317,8 @@ def _next_step(text: str) -> str:
         return "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch."
     if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
         return "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+    if any(word in text for word in ("python 3.12", "node 20", "pyproject", "deprecated", "warning")):
+        return "Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary."
     if any(word in text for word in ("ci", "test", "flaky", "failing")):
         return "Open the latest failed job, capture the failure signature, and patch only the failing path."
     if any(word in text for word in ("docs", "readme", "example", "quickstart")):
@@ -290,10 +344,23 @@ def _write_report(state: dict[str, Any]) -> None:
         f"Refreshed: {state.get('last_refresh_at')}",
         f"Daily target: ${float(state.get('daily_target_usd', 10.0) or 10.0):.2f}",
         "",
-        "## Underserved Focus",
+        "## Requirements",
         "",
     ]
+    for item in state.get("requirements", []):
+        lines.append(f"- {item}")
+    lines.extend([
+        "",
+        "## Underserved Focus",
+        "",
+    ])
     for item in state.get("focus", []):
+        lines.append(f"- {item}")
+    lines.extend(["", "## Strategy Playbook", ""])
+    for item in state.get("strategy_playbook", []):
+        lines.append(f"- {item}")
+    lines.extend(["", "## Avoid", ""])
+    for item in state.get("avoid_patterns", []):
         lines.append(f"- {item}")
     lines.extend(["", "## Ranked Leads", ""])
     for index, op in enumerate(state.get("opportunities", []), start=1):

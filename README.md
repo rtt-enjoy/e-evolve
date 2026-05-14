@@ -84,6 +84,12 @@ money; confirmed earnings should still come from actual payouts or owner
 reconciliation. Disable it with `CODE_TECH_EARN_ENABLED=0` or tune it in
 `config/strategy.json` under `code_techs`.
 
+The strategy deliberately looks where most people do not: broken quickstarts in
+small SDKs, runtime drift after Python or Node releases, stale packaging
+metadata, ignored CI warnings, release-note gaps, and data import/export bugs in
+unflashy integrations. Each lead should have public proof, a bounded first fix,
+and some visible owner or payer signal before it deserves deep work.
+
 ---
 
 ## Earning Modules

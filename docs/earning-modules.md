@@ -12,6 +12,44 @@ Exceptions are caught by `main.py._module()` — a crashed module does not stop 
 
 ---
 
+## Code Techs (`bot/earning/code_techs.py`)
+
+**Activates when:** enabled in `config/strategy.json` or `CODE_TECH_EARN_ENABLED=1`
+
+**What it does:**
+1. Searches for overlooked code-maintenance opportunities, then falls back to a local playbook if search is unavailable.
+2. Ranks leads by payout signal, proof quality, and neglected maintenance pain.
+3. Writes `docs/code-tech-opportunities.md` with requirements, focus areas, strategy, avoid patterns, and ranked next steps.
+4. Returns an action dict with `platform`, `success`, `opportunity_count`, and `target_usd_per_day`.
+
+**Strategy:** favor boring work that most people skip but owners actually need:
+failing CI, stale dependencies, broken quickstarts, packaging drift, runtime
+compatibility, release-note gaps, and small integration bugs. Start with public
+proof, keep the first patch easy to review, then turn repeated pain into a
+fixed-scope maintenance offer.
+
+**Config** (`config/strategy.json`):
+```json
+{
+  "code_techs": {
+    "enabled": true,
+    "refresh_hours": 24,
+    "daily_target_usd": 10.0,
+    "max_items": 8,
+    "min_score": 55,
+    "requirements": [],
+    "underserved_focus": [],
+    "strategy_playbook": [],
+    "avoid_patterns": [],
+    "github_searches": []
+  }
+}
+```
+
+**Disable:** set `CODE_TECH_EARN_ENABLED=0`.
+
+---
+
 ## Articles (`bot/earning/articles.py`)
 
 **Activates when:** `DEV_TO_API_KEY` or `MEDIUM_INTEGRATION_TOKEN` present

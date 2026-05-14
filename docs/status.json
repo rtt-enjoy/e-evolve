@@ -1,7 +1,7 @@
 {
-  "version": "1.30.0",
-  "last_run": "2026-05-14T18:09:00.887369+00:00",
-  "total_runs": 509,
+  "version": "1.31.0",
+  "last_run": "2026-05-14T20:03:09.703267+00:00",
+  "total_runs": 510,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -30,20 +30,20 @@
     "history": []
   },
   "last_evolution": {
-    "version_bumped_to": "1.30.0",
-    "summary": "Add support for Anthropic LLM and update error handling for inactive features",
+    "version_bumped_to": "1.31.0",
+    "summary": "Add support for Medium integration and update error handling for inactive features",
     "changes_applied": [
       {
-        "file": "config/llm_providers.json",
-        "reason": "Add support for Anthropic LLM"
+        "file": "config/medium_integration.json",
+        "reason": "Add support for Medium integration"
+      },
+      {
+        "file": "docs/medium_integration.md",
+        "reason": "Add Medium integration documentation"
       },
       {
         "file": "version.txt",
         "reason": "Bump version"
-      },
-      {
-        "file": "docs/llm_providers.md",
-        "reason": "Update LLM providers documentation"
       }
     ],
     "suggestions": [
@@ -129,7 +129,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 137,
+  "last_cycle_seconds": 173,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

@@ -1,8 +1,8 @@
 import { Activity, AlertTriangle, ArrowUpRight, BarChart3, Bot, BriefcaseBusiness, CalendarDays, CheckCircle2, CircleDollarSign, ClipboardCheck, Clock3, Code2, ExternalLink, GitBranch, KeyRound, ListChecks, RefreshCw, ShieldCheck, Target, TerminalSquare, TrendingUp, WalletCards, XCircle } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { fetchStatus } from './api';
-import { ageLabel, clampPercent, evolutionTone, featureLabel, formatDate, money, scoreTone, shortText } from './lib';
-import type { Action, CodeTechOpportunity, Status, Suggestion } from './types';
+import { fetchStatus } from '../services/status';
+import { ageLabel, clampPercent, evolutionTone, featureLabel, formatDate, money, scoreTone, shortText } from '../utils/format';
+import type { Action, CodeTechOpportunity, Status, Suggestion } from '../types/status';
 
 const emptyStatus: Status = {
   active_features: [],

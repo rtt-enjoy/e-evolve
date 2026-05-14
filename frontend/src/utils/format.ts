@@ -1,4 +1,4 @@
-import type { Status } from './types';
+import type { Status } from '../types/status';
 
 export function money(value = 0, digits = 2): string {
   return new Intl.NumberFormat('en-US', {

@@ -1,4 +1,4 @@
-import type { Status } from './types';
+import type { Status } from '../types/status';
 
 export async function fetchStatus(): Promise<Status> {
   const response = await fetch(`status.json?ts=${Date.now()}`, { cache: 'no-store' });

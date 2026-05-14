@@ -53,4 +53,18 @@ export type Status = {
   suggestions?: Suggestion[];
   errors?: string[];
   last_cycle_seconds?: number;
+  usdt_balance?: number;
+  last_payout_total_usd?: number;
+  last_payout_tx?: string | null;
+  llm_workflows?: Record<string, {
+    provider?: string;
+    model?: string;
+    purpose?: string;
+    active?: boolean;
+    secret?: string;
+  }>;
+  article_daily?: {
+    date?: string;
+    published?: number;
+  };
 };

@@ -15,6 +15,7 @@ from __future__ import annotations
 import importlib
 import json
 import logging
+import os
 import sys
 import traceback
 from datetime import datetime, timezone
@@ -55,6 +56,13 @@ def main() -> int:
     import bot.status as _st
     status = _st.load()
     status = _st.snapshot(status)
+    if _code_techs_enabled():
+        if "code_techs" not in status.get("active_features", []):
+            status.setdefault("active_features", []).append("code_techs")
+        status["inactive_features"] = [
+            f for f in status.get("inactive_features", [])
+            if f != "code_techs"
+        ]
     status["llm_provider"] = llm.provider
     # Populate per-role provider map for dashboard display
     from bot.llm import ROLE_PROVIDER
@@ -167,6 +175,11 @@ def main() -> int:
         for _ in range(ov.get("force_mint", 1)):
             actions += _module("nft", llm, status, errors)
 
+    # Independent code-tech opportunity queue. This runs on its own cadence and
+    # does not depend on the existing content/social/trading workflows.
+    if _code_techs_enabled():
+        actions += _module("code_techs", llm, status, errors)
+
     if not actions and not article_quota_reached:
         log.warning(
             "No earning actions ran this cycle.\n"
@@ -204,6 +217,7 @@ def main() -> int:
         paths=[
             "status.json", "earnings-log.md", "docs/index.html",
             "docs/status.json", "docs/earnings-log.md", "command.txt",
+            "docs/code-tech-opportunities.md",
         ],
     )
     if not git_result["success"]:
@@ -266,6 +280,20 @@ def _record_article_publish(status: dict[str, Any]) -> None:
         daily.clear()
         daily.update({"date": today, "published": 0})
     daily["published"] = int(daily.get("published", 0) or 0) + 1
+
+
+def _code_techs_enabled() -> bool:
+    """Return whether the independent code-tech opportunity flow should run."""
+    raw = os.getenv("CODE_TECH_EARN_ENABLED", "").strip().lower()
+    if raw in {"0", "false", "no", "off"}:
+        return False
+    if raw in {"1", "true", "yes", "on"}:
+        return True
+    try:
+        cfg = json.loads(Path("config/strategy.json").read_text(encoding="utf-8"))
+        return bool(cfg.get("code_techs", {}).get("enabled", True))
+    except Exception:
+        return True
 
 
 # ── Formatting helpers ────────────────────────────────────────────────────────

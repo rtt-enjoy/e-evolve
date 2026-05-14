@@ -66,6 +66,29 @@
       "Productized automation services for solo developers"
     ]
   },
+  "code_techs": {
+    "enabled": true,
+    "refresh_hours": 24,
+    "daily_target_usd": 10.0,
+    "max_items": 8,
+    "min_score": 55,
+    "underserved_focus": [
+      "failing CI with a small, reproducible fix",
+      "dependency migration or deprecation cleanup",
+      "documentation examples that no longer run",
+      "test flakiness with a clear failure signature",
+      "type hints, packaging metadata, and release automation",
+      "small compatibility fixes in niche developer tools"
+    ],
+    "github_searches": [
+      "is:issue is:open bounty label:bounty",
+      "is:issue is:open bounty language:Python",
+      "is:issue is:open bounty language:TypeScript",
+      "is:issue is:open label:\"help wanted\" \"CI\"",
+      "is:issue is:open label:\"good first issue\" \"migration\"",
+      "is:issue is:open \"docs\" \"broken\" \"example\""
+    ]
+  },
   "payout": {
     "min_payout_usd": 20.0,
     "coin": "USDT",

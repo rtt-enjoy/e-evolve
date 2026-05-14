@@ -70,11 +70,30 @@ CTA links are tagged with `utm_source`, `utm_medium`, and the configured
 
 Keep crypto and NFT modules disabled until you have funds you can afford to risk.
 
+### Code-Tech Opportunity Flow
+
+The bot also runs an independent code-only earning flow by default. It does not
+depend on articles, social posting, crypto, or NFTs. Once per configured cadence,
+it searches for overlooked developer work such as small paid OSS issues, CI
+failures, dependency migrations, broken examples, flaky tests, and niche package
+maintenance. Results are written to `docs/code-tech-opportunities.md`.
+
+The target is practical pipeline creation, for example finding enough small
+code-maintenance work to pursue `$10/day`. Discovery is not counted as earned
+money; confirmed earnings should still come from actual payouts or owner
+reconciliation. Disable it with `CODE_TECH_EARN_ENABLED=0` or tune it in
+`config/strategy.json` under `code_techs`.
+
 ---
 
 ## Earning Modules
 
 All optional. Add the secret — the next cycle activates that module automatically.
+
+### Code Techs (independent)
+
+No secret required. Uses public GitHub issue search when available and falls
+back to a local playbook when the network is unavailable.
 
 ### Articles (dev.to + Medium)
 

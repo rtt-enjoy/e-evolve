@@ -5,6 +5,7 @@ export type Action = {
   topic?: string;
   symbol?: string;
   error?: string;
+  url?: string;
   estimated_usd?: number;
   value_usd?: number;
 };
@@ -14,7 +15,30 @@ export type Suggestion = {
   description?: string;
   secret_needed?: string;
   free_tier?: boolean;
+  estimated_weekly_usd?: number;
   how_to?: string[];
+};
+
+export type CodeTechOpportunity = {
+  title?: string;
+  url?: string;
+  source?: string;
+  score?: number;
+  estimated_value_usd?: number;
+  reason?: string;
+  next_step?: string;
+};
+
+export type CodeTechEarning = {
+  enabled?: boolean;
+  last_refresh_at?: string;
+  daily_target_usd?: number;
+  refresh_hours?: number;
+  opportunities?: CodeTechOpportunity[];
+  requirements?: string[];
+  focus?: string[];
+  strategy_playbook?: string[];
+  avoid_patterns?: string[];
 };
 
 export type Status = {
@@ -27,6 +51,7 @@ export type Status = {
   llm_roles?: Record<string, string>;
   configured_github_secrets?: string[];
   secret_readiness?: Record<string, {
+    active?: boolean;
     present_count?: number;
     required_count?: number;
     missing?: string[];
@@ -67,4 +92,5 @@ export type Status = {
     date?: string;
     published?: number;
   };
+  code_tech_earning?: CodeTechEarning;
 };

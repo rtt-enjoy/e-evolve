@@ -44,3 +44,19 @@ export function evolutionTone(status: Status): 'good' | 'warn' | 'bad' | 'info' 
   if ((evolution.summary || '').toLowerCase().includes('skipped')) return 'warn';
   return 'info';
 }
+
+export function clampPercent(value: number): number {
+  return Math.max(0, Math.min(100, Math.round(value)));
+}
+
+export function shortText(value = '', maxLength = 96): string {
+  if (value.length <= maxLength) return value;
+  return `${value.slice(0, maxLength - 1).trim()}...`;
+}
+
+export function scoreTone(score = 0): 'good' | 'warn' | 'bad' | 'info' {
+  if (score >= 85) return 'good';
+  if (score >= 60) return 'info';
+  if (score >= 35) return 'warn';
+  return 'bad';
+}

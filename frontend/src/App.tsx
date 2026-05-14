@@ -1,8 +1,8 @@
-import { Activity, AlertTriangle, ArrowUpRight, Bot, CheckCircle2, CircleDollarSign, Clock3, Code2, ExternalLink, GitBranch, KeyRound, RefreshCw, ShieldCheck, TerminalSquare, WalletCards, XCircle } from 'lucide-react';
+import { Activity, AlertTriangle, ArrowUpRight, BarChart3, Bot, BriefcaseBusiness, CalendarDays, CheckCircle2, CircleDollarSign, ClipboardCheck, Clock3, Code2, ExternalLink, GitBranch, KeyRound, ListChecks, RefreshCw, ShieldCheck, Target, TerminalSquare, TrendingUp, WalletCards, XCircle } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { fetchStatus } from './api';
-import { ageLabel, evolutionTone, featureLabel, formatDate, money } from './lib';
-import type { Action, Status, Suggestion } from './types';
+import { ageLabel, clampPercent, evolutionTone, featureLabel, formatDate, money, scoreTone, shortText } from './lib';
+import type { Action, CodeTechOpportunity, Status, Suggestion } from './types';
 
 const emptyStatus: Status = {
   active_features: [],
@@ -45,12 +45,17 @@ export function App() {
   const configuredSecrets = status.configured_github_secrets || [];
   const evolution = status.last_evolution || {};
   const workflows = Object.entries(status.llm_workflows || {});
-  const weekPercent = Math.min(100, Math.round(((earnings.this_week_usd || 0) / 10) * 100));
+  const dailyTarget = status.code_tech_earning?.daily_target_usd || 10;
+  const weekTarget = dailyTarget * 7;
+  const weekPercent = clampPercent(((earnings.this_week_usd || 0) / Math.max(1, weekTarget)) * 100);
 
   const issues = useMemo(() => buildIssues(status), [status]);
   const breakdown = Object.entries(earnings.breakdown || {}).sort((a, b) => b[1] - a[1]);
   const readiness = useMemo(() => buildReadiness(status), [status]);
   const health = useMemo(() => buildHealth(status, issues, readiness.percent), [status, issues, readiness.percent]);
+  const earningModules = useMemo(() => buildEarningModules(status), [status]);
+  const opportunities = status.code_tech_earning?.opportunities || [];
+  const opportunityStats = useMemo(() => buildOpportunityStats(opportunities), [opportunities]);
 
   return (
     <div className="min-h-screen bg-ink text-text">
@@ -83,7 +88,7 @@ export function App() {
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <Metric title="Total earnings" value={money(earnings.total_usd, 4)} detail={`${money(earnings.last_cycle_usd, 4)} last cycle`} icon={<CircleDollarSign />} />
-          <Metric title="This week" value={money(earnings.this_week_usd, 4)} detail={`${weekPercent}% of $10 target`} icon={<Activity />} />
+          <Metric title="This week" value={money(earnings.this_week_usd, 4)} detail={`${weekPercent}% of ${money(weekTarget, 0)} target`} icon={<Activity />} />
           <Metric title="Readiness" value={`${readiness.percent}%`} detail={`${readiness.ready}/${readiness.total} integrations ready`} icon={<KeyRound />} />
           <Metric title="Wallet" value={money(status.usdt_balance, 4)} detail={`${money(status.last_payout_total_usd, 4)} last payout`} icon={<WalletCards />} />
         </section>
@@ -124,17 +129,16 @@ export function App() {
               </div>
             </Panel>
 
-            <Panel title="Earnings Analysis" subtitle="Weekly progress and platform breakdown.">
-              <Progress value={weekPercent} label={`${weekPercent}% weekly target`} />
-              <div className="mt-5 space-y-3">
-                {breakdown.length ? breakdown.map(([name, value]) => (
-                  <div className="grid gap-3 sm:grid-cols-[140px_1fr_92px] sm:items-center" key={name}>
-                    <strong className="text-sm">{featureLabel(name)}</strong>
-                    <Progress value={Math.min(100, Math.round((value / Math.max(earnings.total_usd || 1, value)) * 100))} />
-                    <span className="text-sm text-soft">{money(value, 4)}</span>
-                  </div>
-                )) : <Empty text="No earnings breakdown yet." />}
-              </div>
+            <Panel title="Earning Command Center" subtitle="Targets, channels, opportunity pipeline, and repeatable execution templates.">
+              <EarningCommandCenter
+                status={status}
+                breakdown={breakdown}
+                earningModules={earningModules}
+                opportunities={opportunities}
+                opportunityStats={opportunityStats}
+                weekPercent={weekPercent}
+                weekTarget={weekTarget}
+              />
             </Panel>
 
             <Panel title="LLM Routing" subtitle="Provider roles used by evolution, research, and content generation.">
@@ -234,6 +238,171 @@ export function App() {
   );
 }
 
+function EarningCommandCenter({
+  status,
+  breakdown,
+  earningModules,
+  opportunities,
+  opportunityStats,
+  weekPercent,
+  weekTarget,
+}: {
+  status: Status;
+  breakdown: Array<[string, number]>;
+  earningModules: ReturnType<typeof buildEarningModules>;
+  opportunities: CodeTechOpportunity[];
+  opportunityStats: ReturnType<typeof buildOpportunityStats>;
+  weekPercent: number;
+  weekTarget: number;
+}) {
+  const codeTech = status.code_tech_earning || {};
+  const actions = status.last_earning?.actions || [];
+  const latestOpportunity = opportunities[0];
+
+  return (
+    <div className="space-y-5">
+      <div className="earning-hero">
+        <div>
+          <div className="mb-3 flex flex-wrap gap-2">
+            <Pill tone={codeTech.enabled ? 'good' : 'warn'} icon={<BriefcaseBusiness size={14} />}>{codeTech.enabled ? 'code tech enabled' : 'code tech idle'}</Pill>
+            <Pill tone="info" icon={<CalendarDays size={14} />}>refresh every {codeTech.refresh_hours || 24}h</Pill>
+          </div>
+          <h3>{money(status.earnings?.this_week_usd, 4)} this week</h3>
+          <p>{weekPercent}% of {money(weekTarget, 0)} weekly target. Last opportunity refresh {formatDate(codeTech.last_refresh_at)}.</p>
+        </div>
+        <div className="earning-progress">
+          <Progress value={weekPercent} />
+          <span>{money(status.earnings?.last_cycle_usd, 4)} last cycle</span>
+        </div>
+      </div>
+
+      <div className="earning-stat-grid">
+        <MiniStat icon={<Target />} label="Daily target" value={money(codeTech.daily_target_usd, 0)} />
+        <MiniStat icon={<ListChecks />} label="Opportunities" value={String(opportunityStats.total)} detail={`${opportunityStats.paidCount} with value`} />
+        <MiniStat icon={<TrendingUp />} label="Pipeline value" value={money(opportunityStats.estimatedValue, 0)} />
+        <MiniStat icon={<BarChart3 />} label="Top score" value={String(opportunityStats.topScore)} detail="fit score" />
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_260px]">
+        <div>
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h3 className="section-title">Opportunity Pipeline</h3>
+            {latestOpportunity?.url ? <a className="inline-link mt-0" href={latestOpportunity.url}>top lead <ArrowUpRight size={13} /></a> : null}
+          </div>
+          <div className="opportunity-list">
+            {opportunities.slice(0, 5).map((opportunity, index) => <OpportunityCard opportunity={opportunity} rank={index + 1} key={`${opportunity.url}-${index}`} />)}
+            {!opportunities.length ? <Empty text="No earning opportunities are available yet." /> : null}
+          </div>
+        </div>
+        <div>
+          <h3 className="section-title mb-3">Channel Matrix</h3>
+          <div className="earning-module-grid">
+            {earningModules.map((module) => (
+              <article className="earning-module-card" key={module.name}>
+                <div className="flex items-start justify-between gap-3">
+                  <strong>{module.name}</strong>
+                  <Pill tone={module.tone}>{module.label}</Pill>
+                </div>
+                <p>{module.detail}</p>
+                {module.value ? <span>{module.value}</span> : null}
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-3">
+        <TemplateList title="Proof Template" icon={<ClipboardCheck />} items={codeTech.requirements || []} />
+        <TemplateList title="Focus Areas" icon={<Target />} items={codeTech.focus || []} />
+        <TemplateList title="Avoid" icon={<AlertTriangle />} items={codeTech.avoid_patterns || []} />
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
+        <TemplateList title="Strategy Playbook" icon={<ListChecks />} items={codeTech.strategy_playbook || []} />
+        <div>
+          <h3 className="section-title mb-3">Revenue Mix</h3>
+          <div className="space-y-3">
+            {breakdown.length ? breakdown.map(([name, value]) => (
+              <div className="revenue-row" key={name}>
+                <div className="flex items-center justify-between gap-3">
+                  <strong>{featureLabel(name)}</strong>
+                  <span>{money(value, 4)}</span>
+                </div>
+                <Progress value={clampPercent((value / Math.max(status.earnings?.total_usd || 1, value)) * 100)} />
+              </div>
+            )) : <Empty text="No earnings breakdown yet." />}
+          </div>
+          <div className="mt-4">
+            <h3 className="section-title mb-3">Latest Actions</h3>
+            <div className="space-y-2">
+              {actions.slice(0, 3).map((action, index) => <CompactAction action={action} key={index} />)}
+              {!actions.length ? <Empty text="No earning actions recorded." /> : null}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MiniStat({ icon, label, value, detail }: { icon: React.ReactNode; label: string; value: string; detail?: string }) {
+  return (
+    <article className="mini-stat">
+      <div>{icon}</div>
+      <span>{label}</span>
+      <strong>{value}</strong>
+      {detail ? <p>{detail}</p> : null}
+    </article>
+  );
+}
+
+function OpportunityCard({ opportunity, rank }: { opportunity: CodeTechOpportunity; rank: number }) {
+  const score = opportunity.score || 0;
+  return (
+    <article className="opportunity-card">
+      <div className="opportunity-rank">{rank}</div>
+      <div className="min-w-0">
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <strong>{opportunity.title || 'Untitled opportunity'}</strong>
+          <Pill tone={scoreTone(score)}>{score} score</Pill>
+          <Pill tone="neutral">{opportunity.source || 'source'}</Pill>
+          {(opportunity.estimated_value_usd || 0) > 0 ? <Pill tone="good">{money(opportunity.estimated_value_usd, 0)}</Pill> : null}
+        </div>
+        <p>{shortText(opportunity.reason || 'No reason recorded.', 130)}</p>
+        {opportunity.next_step ? <span>{shortText(opportunity.next_step, 140)}</span> : null}
+      </div>
+      {opportunity.url ? <a className="icon-button" href={opportunity.url} aria-label="Open opportunity" title="Open opportunity"><ExternalLink size={16} /></a> : null}
+    </article>
+  );
+}
+
+function TemplateList({ title, icon, items }: { title: string; icon: React.ReactNode; items: string[] }) {
+  return (
+    <article className="template-list">
+      <div className="template-title">
+        {icon}
+        <h3>{title}</h3>
+      </div>
+      <ul>
+        {items.slice(0, 5).map((item) => <li key={item}>{item}</li>)}
+      </ul>
+      {!items.length ? <Empty text="No template entries recorded." /> : null}
+    </article>
+  );
+}
+
+function CompactAction({ action }: { action: Action }) {
+  const amount = typeof action.estimated_usd === 'number' ? action.estimated_usd : action.value_usd;
+  return (
+    <article className="compact-action">
+      <span className={`status-dot ${action.success === false ? 'bad' : 'good'}`} />
+      <strong>{action.platform || 'module'}</strong>
+      <p>{shortText(action.title || action.topic || action.symbol || action.error || 'Action recorded', 52)}</p>
+      {typeof amount === 'number' ? <em>{money(amount, 4)}</em> : null}
+    </article>
+  );
+}
+
 function buildIssues(status: Status) {
   const issues: Array<{ tone: 'good' | 'warn' | 'bad' | 'info'; label: string; title: string; detail: string }> = [];
   const fresh = ageLabel(status.last_run);
@@ -270,6 +439,80 @@ function buildReadiness(status: Status) {
     return (info.present_count || 0) >= required;
   }).length;
   return { ready, total: entries.length, percent: Math.round((ready / entries.length) * 100) };
+}
+
+function buildEarningModules(status: Status) {
+  const readiness = status.secret_readiness || {};
+  const actions = status.last_earning?.actions || [];
+  const modules = [
+    {
+      key: 'code_techs',
+      name: 'Code Techs',
+      active: Boolean(status.code_tech_earning?.enabled),
+      detail: `${status.code_tech_earning?.opportunities?.length || 0} opportunities tracked`,
+      value: `${money(status.code_tech_earning?.daily_target_usd, 0)} daily target`,
+    },
+    {
+      key: 'articles_devto',
+      name: 'Dev.to Articles',
+      active: Boolean(readiness.articles_devto?.active || status.active_features?.includes('articles_devto')),
+      detail: `${status.article_daily?.published ?? 0} published on ${status.article_daily?.date || 'latest day'}`,
+      value: moduleActionValue(actions, 'dev.to'),
+    },
+    {
+      key: 'articles_medium',
+      name: 'Medium',
+      active: Boolean(readiness.articles_medium?.active || status.active_features?.includes('articles_medium')),
+      detail: missingLabel(readiness.articles_medium?.missing),
+      value: moduleActionValue(actions, 'medium'),
+    },
+    {
+      key: 'twitter',
+      name: 'Twitter/X',
+      active: Boolean(readiness.twitter?.active || status.active_features?.includes('twitter')),
+      detail: missingLabel(readiness.twitter?.missing),
+      value: moduleActionValue(actions, 'twitter'),
+    },
+    {
+      key: 'crypto_binance',
+      name: 'Binance Trading',
+      active: Boolean(readiness.crypto_binance?.active || status.active_features?.includes('crypto_binance')),
+      detail: missingLabel(readiness.crypto_binance?.missing),
+      value: money(status.usdt_balance, 4),
+    },
+    {
+      key: 'nft_ethereum',
+      name: 'NFT Minting',
+      active: Boolean(readiness.nft_ethereum?.active || status.active_features?.includes('nft_ethereum')),
+      detail: missingLabel(readiness.nft_ethereum?.missing),
+      value: moduleActionValue(actions, 'nft'),
+    },
+  ];
+
+  return modules.map((module) => ({
+    ...module,
+    label: module.active ? 'ready' : 'setup',
+    tone: module.active ? 'good' as const : 'warn' as const,
+  }));
+}
+
+function buildOpportunityStats(opportunities: CodeTechOpportunity[]) {
+  return {
+    total: opportunities.length,
+    paidCount: opportunities.filter((opportunity) => (opportunity.estimated_value_usd || 0) > 0).length,
+    estimatedValue: opportunities.reduce((sum, opportunity) => sum + (opportunity.estimated_value_usd || 0), 0),
+    topScore: opportunities.reduce((top, opportunity) => Math.max(top, opportunity.score || 0), 0),
+  };
+}
+
+function missingLabel(missing?: string[]) {
+  if (!missing?.length) return 'All required secrets present';
+  return `${missing.length} secrets missing`;
+}
+
+function moduleActionValue(actions: Action[], platform: string) {
+  const count = actions.filter((action) => (action.platform || '').toLowerCase().includes(platform.toLowerCase())).length;
+  return count ? `${count} latest actions` : '';
 }
 
 function buildHealth(status: Status, issues: Array<{ tone: string }>, readinessPercent: number): { tone: 'good' | 'warn' | 'bad' | 'info'; label: string } {

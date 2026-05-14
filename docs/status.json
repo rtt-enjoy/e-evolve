@@ -1,7 +1,7 @@
 {
-  "version": "1.28.0",
-  "last_run": "2026-05-14T13:05:49.468644+00:00",
-  "total_runs": 507,
+  "version": "1.29.0",
+  "last_run": "2026-05-14T15:34:26.096355+00:00",
+  "total_runs": 508,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -30,12 +30,12 @@
     "history": []
   },
   "last_evolution": {
-    "version_bumped_to": "1.28.0",
-    "summary": "Add missing error handling and update LLM workflows",
+    "version_bumped_to": "1.29.0",
+    "summary": "Add error handling for inactive features and update LLM workflows",
     "changes_applied": [
       {
-        "file": "config/llm_workflows.json",
-        "reason": "Update LLM workflows"
+        "file": "config/error_handling.json",
+        "reason": "Add error handling for inactive features"
       },
       {
         "file": "version.txt",
@@ -43,7 +43,7 @@
       },
       {
         "file": "docs/error_handling.md",
-        "reason": "Add error handling documentation"
+        "reason": "Update error handling documentation"
       }
     ],
     "suggestions": [
@@ -87,17 +87,7 @@
     "error": null
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 8,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech opportunity queue refreshed (8 leads)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -139,7 +129,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 164,
+  "last_cycle_seconds": 105,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

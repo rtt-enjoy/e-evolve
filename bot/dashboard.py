@@ -1893,6 +1893,19 @@ noscript {
   margin-bottom: 18px;
 }
 
+.ops-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 18px;
+}
+
+.project-map,
+.problem-board {
+  margin-bottom: 18px;
+}
+
 .metric-card {
   padding: 17px;
   min-height: 118px;
@@ -2063,14 +2076,30 @@ noscript {
   gap: 10px;
 }
 
+.configured-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 10px;
+  border: 1px solid rgba(73, 209, 124, .24);
+  border-radius: 8px;
+  background: rgba(73, 209, 124, .06);
+}
+
 .pipeline,
-.opportunity-list {
+.opportunity-list,
+.phase-list,
+.pulse-list,
+.problem-list {
   display: grid;
   gap: 10px;
 }
 
 .pipeline-stage,
-.opportunity-item {
+.opportunity-item,
+.phase-item,
+.pulse-item,
+.problem-item {
   display: grid;
   align-items: center;
   gap: 12px;
@@ -2083,6 +2112,88 @@ noscript {
 
 .pipeline-stage {
   grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.phase-item {
+  grid-template-columns: 112px minmax(0, 1fr);
+}
+
+.pulse-item {
+  grid-template-columns: 76px minmax(0, 1fr) 54px;
+}
+
+.pulse-item time {
+  color: var(--muted);
+  font-size: .72rem;
+  text-align: right;
+}
+
+.problem-item {
+  grid-template-columns: 74px minmax(0, 1fr) minmax(180px, .34fr);
+}
+
+.problem-item code {
+  color: var(--yellow);
+  font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  font-size: .72rem;
+  overflow-wrap: anywhere;
+}
+
+.phase-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--soft);
+  font-size: .72rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.phase-index.good {
+  border-color: rgba(73, 209, 124, .34);
+  color: var(--green);
+}
+
+.phase-index.warn {
+  border-color: rgba(246, 200, 95, .34);
+  color: var(--yellow);
+}
+
+.phase-index.bad {
+  border-color: rgba(255, 107, 107, .34);
+  color: var(--red);
+}
+
+.phase-index.info {
+  border-color: rgba(106, 166, 255, .34);
+  color: var(--blue);
+}
+
+.logic-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.logic-node {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 9px;
+  min-height: 150px;
+  padding: 13px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: rgba(23, 32, 44, .56);
+}
+
+.logic-node p {
+  margin: 0;
+  font-size: .78rem;
+  line-height: 1.45;
 }
 
 .pipeline-stage.ready {
@@ -2206,6 +2317,31 @@ noscript {
   margin: 4px 0 0;
   color: var(--muted);
   font-size: .76rem;
+}
+
+.suggestion-stack {
+  display: grid;
+  gap: 9px;
+}
+
+.suggestion-mini {
+  padding: 10px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: rgba(11, 15, 20, .26);
+}
+
+.suggestion-mini p {
+  margin: 8px 0 0;
+  font-size: .78rem;
+}
+
+.suggestion-mini ol {
+  margin: 8px 0 0 18px;
+  padding: 0;
+  color: var(--muted);
+  font-size: .74rem;
+  line-height: 1.45;
 }
 
 .module-dot {
@@ -2426,12 +2562,14 @@ noscript {
 @media (max-width: 980px) {
   .hero,
   .layout,
-  .cockpit {
+  .cockpit,
+  .ops-grid {
     grid-template-columns: 1fr;
   }
 
   .metrics,
-  .grid-3 {
+  .grid-3,
+  .logic-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -2457,11 +2595,15 @@ noscript {
   .metrics,
   .grid-2,
   .grid-3,
+  .logic-grid,
   .field-grid,
   .active-grid,
   .preset-grid,
   .segmented,
-  .secret-item {
+  .secret-item,
+  .phase-item,
+  .pulse-item,
+  .problem-item {
     grid-template-columns: 1fr;
   }
 
@@ -2526,6 +2668,22 @@ const SECRET_IMPACT = {
   ETH_PRIVATE_KEY: 24,
   ETH_WALLET_ADDRESS: 24,
 };
+
+const PHASES = [
+  { key: 'status', label: 'Status', detail: 'Loads status.json, counts the cycle, and detects secrets.' },
+  { key: 'commands', label: 'Commands', detail: 'Applies owner orders from command.txt or labelled GitHub Issues.' },
+  { key: 'evolution', label: 'Evolution', detail: 'Plans and applies up to three safe code changes.' },
+  { key: 'earning', label: 'Earning', detail: 'Runs enabled earning modules and records actions.' },
+  { key: 'update', label: 'Update', detail: 'Saves status, dashboard, logs, and commits cycle state.' },
+];
+
+const LOGIC_NODES = [
+  { key: 'secrets', title: 'Secrets activate modules', body: 'GitHub Actions secrets are read as environment variables. Present secret groups become active_features.' },
+  { key: 'commands', title: 'Owner orders steer one cycle', body: 'Commands are parsed into runtime overrides and removed before status is persisted.' },
+  { key: 'evolution', title: 'Evolution changes source', body: 'The LLM receives status and code context, then returns complete file contents within safety limits.' },
+  { key: 'earnings', title: 'Earning modules emit actions', body: 'Each module returns success or failure records that feed earnings, errors, and dashboard diagnostics.' },
+  { key: 'dashboard', title: 'Dashboard mirrors status.json', body: 'GitHub Pages polls the public status snapshot and updates panels without a page reload.' },
+];
 
 const MODULE_LABELS = {
   llm_anthropic: 'Anthropic',
@@ -2615,6 +2773,8 @@ createApp({
       workflowRef: localStorage.getItem(STORAGE_KEYS.ref) || DEFAULT_REF,
       dispatchState: 'idle',
       dispatchMessage: '',
+      previousStatus: null,
+      changePulses: [],
     };
   },
 
@@ -2705,6 +2865,92 @@ createApp({
     },
     activePresets() {
       return this.commandGroups[this.activeCommandGroup] || this.commandGroups.earn;
+    },
+    phaseRows() {
+      return PHASES.map((phase) => this.phaseState(phase));
+    },
+    logicNodes() {
+      return LOGIC_NODES.map((node) => ({
+        ...node,
+        state: this.logicState(node.key),
+      }));
+    },
+    configuredSecrets() {
+      return (this.status.configured_github_secrets || [])
+        .slice()
+        .sort()
+        .map((name) => ({
+          name,
+          label: name.replace(/_API_KEY|_TOKEN|_SECRET|_ADDRESS/g, '').replace(/_/g, ' '),
+        }));
+    },
+    failedActions() {
+      return this.actions.filter((action) => action && action.success === false);
+    },
+    problemItems() {
+      const items = [];
+      if (this.cycleHealth.cls !== 'good') {
+        items.push({
+          key: 'cycle-age',
+          title: 'Workflow cycle is ' + this.cycleHealth.label,
+          detail: 'The last status update was ' + this.ageLabel(this.status.last_run) + '. Check GitHub Actions if this is unexpected.',
+          cls: this.cycleHealth.cls,
+          fix: 'Open Actions or run status report',
+        });
+      }
+      (this.status.errors || []).slice(-6).forEach((error, index) => {
+        items.push({
+          key: 'error-' + index + '-' + error,
+          title: 'Cycle error',
+          detail: String(error),
+          cls: 'bad',
+          fix: 'Read the failing phase and rerun after correcting setup',
+        });
+      });
+      if (this.evolution.error) {
+        items.push({
+          key: 'evolution-error',
+          title: this.evolutionErrorLabel,
+          detail: this.evolution.error,
+          cls: this.evolutionStatus.cls,
+          fix: this.evolution.error_type === 'free_limit' ? 'Wait for quota or add another LLM key' : 'Review last evolution output',
+        });
+      }
+      this.failedActions.slice(0, 5).forEach((action, index) => {
+        items.push({
+          key: 'failed-action-' + index,
+          title: (action.platform || 'module') + ' action failed',
+          detail: action.error || action.title || action.topic || 'The module returned a failed action.',
+          cls: 'bad',
+          fix: 'Check module secrets, quota, and external API access',
+        });
+      });
+      this.opportunityItems.slice(0, 3).forEach((item) => {
+        items.push({
+          key: 'setup-' + item.name,
+          title: 'Setup gap: ' + item.name,
+          detail: item.note,
+          cls: 'warn',
+          fix: 'Add the secret or decide to keep that module disabled',
+        });
+      });
+      if (!items.length) {
+        items.push({
+          key: 'healthy',
+          title: 'No current blockers detected',
+          detail: 'The last public status snapshot has no errors, failed actions, or high-priority missing setup.',
+          cls: 'good',
+          fix: 'Watch the next cycle',
+        });
+      }
+      return items;
+    },
+    evolutionSuggestions() {
+      const byTitle = new Map();
+      [...(this.evolution.suggestions || []), ...this.suggestions].forEach((item) => {
+        if (item && item.title && !byTitle.has(item.title)) byTitle.set(item.title, item);
+      });
+      return Array.from(byTitle.values()).slice(0, 6);
     },
     suggestions() {
       return this.status.suggestions || [];
@@ -2815,6 +3061,71 @@ createApp({
     moduleLabel(name) {
       return MODULE_LABELS[name] || name;
     },
+    phaseState(phase) {
+      if (phase.key === 'status') {
+        return { ...phase, cls: this.cycleHealth.cls, statusLabel: this.cycleHealth.label, meta: this.fmtDate(this.status.last_run) };
+      }
+      if (phase.key === 'commands') {
+        const hadCommands = Boolean((this.status.last_commands || []).length || (this.status.command_history || []).length);
+        return { ...phase, cls: hadCommands ? 'info' : 'good', statusLabel: hadCommands ? 'orders applied' : 'standing by', meta: hadCommands ? 'owner override detected' : 'no pending public orders' };
+      }
+      if (phase.key === 'evolution') {
+        return { ...phase, cls: this.evolutionStatus.cls, statusLabel: this.evolutionStatus.label, meta: this.evolution.summary || 'no summary yet' };
+      }
+      if (phase.key === 'earning') {
+        if (this.failedActions.length) return { ...phase, cls: 'bad', statusLabel: this.failedActions.length + ' failed', meta: this.failedActions[0].error || 'module failure' };
+        if (this.actions.length) return { ...phase, cls: 'good', statusLabel: this.actions.length + ' actions', meta: money(this.earn.last_cycle_usd || 0, 4) + ' last cycle' };
+        return { ...phase, cls: 'warn', statusLabel: 'no actions', meta: 'modules may be inactive, capped, or waiting for setup' };
+      }
+      return { ...phase, cls: (this.status.errors || []).length ? 'bad' : 'good', statusLabel: (this.status.errors || []).length ? 'saved with errors' : 'saved', meta: 'dashboard polls status.json every minute' };
+    },
+    logicState(key) {
+      if (key === 'secrets') return this.configuredSecrets.length ? 'good' : 'warn';
+      if (key === 'commands') return this.commands.length ? 'info' : 'good';
+      if (key === 'evolution') return this.evolutionStatus.cls;
+      if (key === 'earnings') return this.failedActions.length ? 'bad' : (this.actions.length ? 'good' : 'warn');
+      return this.online ? 'good' : 'bad';
+    },
+    summarizeStatusChanges(previous, next) {
+      const pulses = [];
+      if (!previous || !next) return pulses;
+      const prevSecrets = new Set(previous.configured_github_secrets || []);
+      const nextSecrets = new Set(next.configured_github_secrets || []);
+      Array.from(nextSecrets).filter((name) => !prevSecrets.has(name)).sort().forEach((name) => {
+        pulses.push({ kind: 'secret', cls: 'good', title: 'New secret detected', detail: name });
+      });
+      const prevEvo = previous.last_evolution || {};
+      const nextEvo = next.last_evolution || {};
+      const prevEvoKey = JSON.stringify([prevEvo.summary, prevEvo.version_bumped_to, prevEvo.error, prevEvo.changes_applied]);
+      const nextEvoKey = JSON.stringify([nextEvo.summary, nextEvo.version_bumped_to, nextEvo.error, nextEvo.changes_applied]);
+      if (prevEvoKey !== nextEvoKey) {
+        pulses.push({
+          kind: 'evolution',
+          cls: nextEvo.error ? 'bad' : 'info',
+          title: nextEvo.error ? 'Evolution needs review' : 'Evolution updated',
+          detail: nextEvo.summary || 'New evolution result received',
+        });
+      }
+      const prevErrors = (previous.errors || []).join('\\n');
+      const nextErrors = (next.errors || []).join('\\n');
+      if (prevErrors !== nextErrors) {
+        pulses.push({
+          kind: 'errors',
+          cls: (next.errors || []).length ? 'bad' : 'good',
+          title: (next.errors || []).length ? 'Errors changed' : 'Errors cleared',
+          detail: (next.errors || []).slice(-1)[0] || 'No errors in the latest snapshot',
+        });
+      }
+      if ((previous.total_runs || 0) !== (next.total_runs || 0)) {
+        pulses.push({
+          kind: 'cycle',
+          cls: 'info',
+          title: 'New cycle snapshot',
+          detail: 'Cycle #' + (next.total_runs || 0) + ' finished in ' + (next.last_cycle_seconds || 0) + 's',
+        });
+      }
+      return pulses;
+    },
     opportunityNote(name) {
       const notes = {
         MEDIUM_INTEGRATION_TOKEN: 'Doubles article reach without another generation.',
@@ -2911,7 +3222,15 @@ createApp({
       try {
         const response = await fetch('status.json?ts=' + Date.now(), { cache: 'no-store' });
         if (!response.ok) throw new Error('status fetch failed');
-        this.status = await response.json();
+        const nextStatus = await response.json();
+        const previous = this.loaded ? this.status : null;
+        const pulses = this.summarizeStatusChanges(previous, nextStatus);
+        if (pulses.length) {
+          const stamped = pulses.map((pulse) => ({ ...pulse, at: new Date().toISOString() }));
+          this.changePulses = [...stamped, ...this.changePulses].slice(0, 8);
+        }
+        this.previousStatus = previous;
+        this.status = nextStatus;
         this.loaded = true;
         this.online = true;
         this.lastPoll = new Date().toISOString();
@@ -2975,6 +3294,55 @@ createApp({
           <article class="metric-card"><div class="metric-label">This week</div><div class="metric-value warn">{{ money(earn.this_week_usd) }}</div><div class="metric-note">Goal progress {{ weekGoalPercent }}%</div></article>
           <article class="metric-card"><div class="metric-label">Cycles</div><div class="metric-value">{{ compactNumber(status.total_runs) }}</div><div class="metric-note">Hourly runner history</div></article>
           <article class="metric-card"><div class="metric-label">Modules</div><div class="metric-value">{{ active.length }}/{{ active.length + inactive.length }}</div><div class="metric-note">{{ inactive.length }} waiting for setup</div></article>
+        </section>
+
+        <section class="ops-grid">
+          <section class="panel">
+            <div class="panel-head"><div><h3>Workflow Status</h3><p>Current phase health from the latest public status snapshot.</p></div><span class="tag" :class="cycleHealth.cls">{{ ageLabel(status.last_run) }}</span></div>
+            <div class="panel-body phase-list">
+              <article v-for="phase in phaseRows" :key="phase.key" class="phase-item">
+                <span class="phase-index" :class="phase.cls">{{ phase.statusLabel }}</span>
+                <div>
+                  <strong>{{ phase.label }} · {{ phase.detail }}</strong>
+                  <p class="muted">{{ phase.meta }}</p>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><div><h3>Live Change Pulse</h3><p>New cycles, evolutions, errors, and secrets appear here after polling.</p></div><span class="tag info">60s poll</span></div>
+            <div class="panel-body pulse-list">
+              <article v-for="pulse in changePulses" :key="pulse.at + pulse.title + pulse.detail" class="pulse-item">
+                <span class="tag" :class="pulse.cls">{{ pulse.kind }}</span>
+                <div><strong>{{ pulse.title }}</strong><p class="muted">{{ pulse.detail }}</p></div>
+                <time>{{ ageLabel(pulse.at) }}</time>
+              </article>
+              <p v-if="!changePulses.length" class="empty">Waiting for the next status change.</p>
+            </div>
+          </section>
+        </section>
+
+        <section class="panel project-map">
+          <div class="panel-head"><div><h3>Project Logic Map</h3><p>How this repo turns secrets and owner orders into evolution, earning actions, and dashboard state.</p></div></div>
+          <div class="panel-body logic-grid">
+            <article v-for="node in logicNodes" :key="node.key" class="logic-node">
+              <span class="stage-dot" :class="node.state"></span>
+              <strong>{{ node.title }}</strong>
+              <p class="muted">{{ node.body }}</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel problem-board">
+          <div class="panel-head"><div><h3>Problems And Corrections</h3><p>Errors, failed actions, stale workflow signals, and the most useful setup suggestions.</p></div><span class="tag" :class="problemItems[0] ? problemItems[0].cls : 'good'">{{ problemItems.length }} items</span></div>
+          <div class="panel-body problem-list">
+            <article v-for="item in problemItems" :key="item.key" class="problem-item">
+              <span class="tag" :class="item.cls">{{ item.cls }}</span>
+              <div><strong>{{ item.title }}</strong><p class="muted">{{ item.detail }}</p></div>
+              <code>{{ item.fix }}</code>
+            </article>
+          </div>
         </section>
 
         <section class="cockpit">
@@ -3080,6 +3448,18 @@ createApp({
                   <span class="code-pill">{{ change.file }}</span>
                   <p class="muted">{{ change.reason }}</p>
                 </div>
+                <div v-if="evolutionSuggestions.length" class="evo-item">
+                  <strong>Evolution suggestions</strong>
+                  <div class="suggestion-stack">
+                    <article v-for="item in evolutionSuggestions" :key="item.title" class="suggestion-mini">
+                      <div class="row"><strong>{{ item.title }}</strong><span v-if="item.secret_needed" class="tag info">{{ item.secret_needed }}</span></div>
+                      <p class="muted">{{ item.description }}</p>
+                      <ol v-if="item.how_to && item.how_to.length">
+                        <li v-for="step in item.how_to" :key="step">{{ step }}</li>
+                      </ol>
+                    </article>
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -3099,6 +3479,9 @@ createApp({
             <section class="panel">
               <div class="panel-head"><div><h3>Secret Readiness</h3><p>Values are detected, never shown.</p></div></div>
               <div class="panel-body secret-list">
+                <div class="configured-strip" v-if="configuredSecrets.length">
+                  <span v-for="secret in configuredSecrets" :key="secret.name" class="tag good" :title="secret.name">{{ secret.label }}</span>
+                </div>
                 <div v-for="secret in secrets" :key="secret.name" class="secret-item">
                   <strong>{{ secret.label }}</strong>
                   <div class="bar"><div class="bar-fill" :style="{ width: secret.percent + '%' }"></div></div>

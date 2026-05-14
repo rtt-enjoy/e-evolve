@@ -83,6 +83,12 @@ LLM proposes changes[]
 No server required — the browser fetches the JSON directly from the same Pages origin.
 
 Dynamic elements updated without page reload:
+- Workflow Status: phase health for status, commands, evolution, earning, update
+- Live Change Pulse: new cycles, evolution updates, error changes, and newly
+  detected secret names compared with the previous poll
+- Problems And Corrections: stale workflow state, errors, failed actions,
+  evolution failures, and missing high-impact setup secrets
+- Secret Readiness: configured secret names plus per-feature readiness counts
 - Header: version pill, provider pills, feature badges, last-cycle time, age pill
 - KPI cards: total earned, this-week earnings, cycle count, active module count
 - Footer: live indicator dot flashes green on each successful fetch
@@ -90,6 +96,8 @@ Dynamic elements updated without page reload:
 The page has no `meta http-equiv="refresh"` — the JS polling replaces it.
 Fields that require a full re-render (suggestions, evolution log, action table) are still
 regenerated server-side each cycle when `dashboard.write_html()` runs in Phase 5.
+
+The frontend implementation contract lives in `docs/frontend-dashboard.md`.
 
 ## Commit Strategy
 

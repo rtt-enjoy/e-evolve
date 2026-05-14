@@ -51,6 +51,11 @@ Settings → Pages → Source: branch `main`, folder `/docs` → Save
 
 Dashboard live at `https://YOUR_USERNAME.github.io/e-evolve`
 
+The dashboard contract is documented in
+[`docs/frontend-dashboard.md`](docs/frontend-dashboard.md). It defines the
+required workflow, evolution, error, suggestion, module, and secret-readiness
+signals that the frontend must keep visible.
+
 ### No-Money Self-Earn Setup
 
 Start with the free content loop:

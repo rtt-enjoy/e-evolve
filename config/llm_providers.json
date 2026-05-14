@@ -1,0 +1,1 @@
+{'llm_providers': [{'name': 'gemini', 'api_key': 'GEMINI_API_KEY'}, {'name': 'openrouter', 'api_key': 'OPENROUTER_API_KEY'}, {'name': 'groq', 'api_key': 'GROQ_API_KEY'}, {'name': 'anthropic', 'api_key': 'ANTHROPIC_API_KEY'}]}

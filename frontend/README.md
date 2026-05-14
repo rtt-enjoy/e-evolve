@@ -14,15 +14,21 @@ minute.
 ## Local Development
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 ## Build For GitHub Pages
 
 ```bash
-npm run build
+pnpm build
 ```
 
 Vite writes the static app to `../docs` without deleting existing documentation
 files.
+
+## CI Deployment
+
+Frontend changes are built and deployed by `.github/workflows/frontend.yml`.
+The workflow uses pnpm, uploads the generated `docs/` directory as a GitHub
+Pages artifact, and deploys it through GitHub Pages Actions.

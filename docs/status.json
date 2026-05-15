@@ -1,7 +1,7 @@
 {
   "version": "1.31.0",
-  "last_run": "2026-05-15T17:00:59.292802+00:00",
-  "total_runs": 519,
+  "last_run": "2026-05-15T18:55:30.257795+00:00",
+  "total_runs": 520,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -35,10 +35,10 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.31.0",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '</think> {\\n  \"version\": \"1.32.0\",\\n  \"summary\": \"Patch bump to 1.31.1, add RSS feed generator for discovery\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Add MEDIUM_INTEGRATION_TOKEN for dual publishing\",'",
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"version\": \"1.31.1\",\\n  \"summary\": \"Fix evolution JSON parsing, add RSS feed generator for discovery, improve code-techs opportunity scoring\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Add MEDIUM_IN'",
     "changes_applied": [],
     "suggestions": [],
-    "error": "Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '</think> {\\n  \"version\": \"1.32.0\",\\n  \"summary\": \"Patch bump to 1.31.1, add RSS feed generator for discovery\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Add MEDIUM_INTEGRATION_TOKEN for dual publishing\",'",
+    "error": "Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"version\": \"1.31.1\",\\n  \"summary\": \"Fix evolution JSON parsing, add RSS feed generator for discovery, improve code-techs opportunity scoring\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Add MEDIUM_IN'",
     "error_type": "json"
   },
   "last_earning": {
@@ -84,7 +84,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 133,
+  "last_cycle_seconds": 114,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

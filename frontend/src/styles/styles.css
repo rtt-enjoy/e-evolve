@@ -421,6 +421,30 @@ textarea {
     @apply flex flex-wrap gap-2;
   }
 
+  .completed-lead-list {
+    @apply space-y-3;
+  }
+
+  .completed-lead-card {
+    @apply rounded-lg border border-green/30 bg-panel2 p-4;
+  }
+
+  .completed-lead-card strong {
+    @apply mt-3 block text-sm;
+  }
+
+  .completed-lead-card p {
+    @apply mt-2 text-sm leading-6 text-soft;
+  }
+
+  .completed-lead-card ul {
+    @apply mt-3 space-y-2;
+  }
+
+  .completed-lead-card li {
+    @apply border-l border-green/40 pl-3 text-xs leading-5 text-soft;
+  }
+
   .banner {
     @apply flex items-center gap-2 rounded-lg border p-4 text-sm;
   }

@@ -44,43 +44,44 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. [Renovate Dashboard 🤖](https://github.com/dettanym/prose/issues/8)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-2. [Site notification/announcements bar + deployment maintenance mode](https://github.com/archestra-ai/archestra/issues/4463)
+1. [Site notification/announcements bar + deployment maintenance mode](https://github.com/archestra-ai/archestra/issues/4463)
    - Score: 99/100
    - Value signal: $75.00
    - Why: visible or inferred value around $75.00; CI/test work is concrete and easy for maintainers to accept
    - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
-3. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
+2. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
    - Score: 98/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-4. [Add docker-compose.yml for one-command local setup](https://github.com/KonstantinMB/exploreyc/issues/6)
+3. [Add docker-compose.yml for one-command local setup](https://github.com/KonstantinMB/exploreyc/issues/6)
    - Score: 98/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-5. [Create custom page for "Submit your business"](https://github.com/bitcoin-dot-org/Bitcoin.org/issues/1583)
+4. [Create custom page for "Submit your business"](https://github.com/bitcoin-dot-org/Bitcoin.org/issues/1583)
    - Score: 97/100
    - Value signal: $250.00
    - Why: visible or inferred value around $250.00; CI/test work is concrete and easy for maintainers to accept
    - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
-6. [Revamp the entire Firebase Functions flow with this architectural principle:](https://github.com/kingyx3/hermes-vps/issues/499)
+5. [Revamp the entire Firebase Functions flow with this architectural principle:](https://github.com/kingyx3/hermes-vps/issues/499)
    - Score: 92/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-7. [Dependency Dashboard](https://github.com/atlas-bi/Hub/issues/81)
+6. [Dependency Dashboard](https://github.com/atlas-bi/Hub/issues/81)
    - Score: 90/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-8. [Dependency Dashboard](https://github.com/kkkaoru/frontend-configs/issues/5)
+7. [Dependency Dashboard](https://github.com/kkkaoru/frontend-configs/issues/5)
    - Score: 90/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+
+## Completed Leads
+
+- [Renovate Dashboard](https://github.com/dettanym/prose/issues/8)
+  - Done: triaged the live Renovate dashboard and removed it from the active suggestions page.
+  - Proof: config migration is available; branch update failure is present; pin-dependencies is errored; @tsconfig/node20 should move to @tsconfig/node22; Helm lookup failures affect kubernetes-dashboard, app-template, and ghcr.io/onedr0p/jellyfin paths.

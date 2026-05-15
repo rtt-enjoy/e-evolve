@@ -7,6 +7,29 @@ import { inferRepoFromLocation, readyCommands, uniqueMissingSecrets, type Automa
 import { money } from '../../utils/format';
 import type { Status } from '../../types/status';
 
+const completedLeads = [
+  {
+    title: 'Renovate Dashboard',
+    url: 'https://github.com/dettanym/prose/issues/8',
+    result: 'Triaged the live Renovate dashboard and removed it from the active suggestion queue.',
+    proof: [
+      'Config migration PR is available from the dashboard checkbox.',
+      'Repository problem is an update failure; pin-dependencies is the errored branch.',
+      '@tsconfig/node20 has a replacement path to @tsconfig/node22.',
+      'Lookup failures affect kubernetes-dashboard, app-template, and ghcr.io/onedr0p/jellyfin Helm paths.',
+    ],
+  },
+  {
+    title: 'Submit your business',
+    url: 'https://github.com/bitcoin-dot-org/Bitcoin.org/issues/1583',
+    result: 'Built the Bitcoin business submission page and removed that lead from active suggestions.',
+    proof: [
+      'Directory choices are available for physical venues, online stores, and Lightning-friendly businesses.',
+      'Submission checklist and suggested listing copy are available from the dashboard.',
+    ],
+  },
+];
+
 export function SuggestionPage({
   status,
   suggestions,
@@ -103,6 +126,24 @@ export function SuggestionPage({
         </div>
 
         <aside className="suggestion-side">
+          <Panel title="Completed Code-Tech Leads" subtitle="Finished leads stay visible here without crowding the active queue.">
+            <div className="completed-lead-list">
+              {completedLeads.map((lead) => (
+                <article className="completed-lead-card" key={lead.title}>
+                  <div>
+                    <Pill tone="good" icon={<CheckCircle2 size={14} />}>done</Pill>
+                    <strong>{lead.title}</strong>
+                    <p>{lead.result}</p>
+                  </div>
+                  <ul>
+                    {lead.proof.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                  <a className="inline-link" href={lead.url}>view source issue</a>
+                </article>
+              ))}
+            </div>
+          </Panel>
+
           <Panel title="How It Runs" subtitle="The page prepares the request; GitHub Actions performs the work.">
             <div className="automation-steps">
               <WorkflowStep icon={<KeyRound />} title="Complete prerequisites" text="Add required credentials as GitHub Actions secrets." />

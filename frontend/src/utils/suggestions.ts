@@ -18,6 +18,7 @@ export type AutomationSuggestion = Suggestion & {
 };
 
 const COMPLETED_CODE_TECH_LEADS = new Set([
+  'renovate dashboard 🤖',
   'create custom page for "submit your business"',
 ]);
 

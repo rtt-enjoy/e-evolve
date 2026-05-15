@@ -78,6 +78,7 @@ export type Status = {
   suggestions?: Suggestion[];
   errors?: string[];
   last_cycle_seconds?: number;
+  github_repo?: string;
   usdt_balance?: number;
   last_payout_total_usd?: number;
   last_payout_tx?: string | null;

@@ -10,6 +10,7 @@ Supported commands (case-insensitive, one per line):
   skip evolution           — skip evolution phase
   reset earnings           — zero this_week_usd
   post thread              — force a Twitter thread even if not scheduled
+  improve suggestion TEXT  — ask evolution to implement or refine a suggestion
   status report            — dump full status dict to workflow log
 """
 from __future__ import annotations
@@ -67,6 +68,10 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
 
         elif cmd == "post thread":
             overrides["force_twitter"] = True
+
+        elif m := re.match(r"improve suggestion(?:\s+(.+))?$", cmd):
+            target = (m.group(1) or "").strip()
+            overrides["improve_suggestion"] = target or "highest priority"
 
         elif cmd == "status report":
             log.info("STATUS REPORT:\n%s", json.dumps(status, indent=2, default=str))

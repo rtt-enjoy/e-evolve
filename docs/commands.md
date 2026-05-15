@@ -19,6 +19,7 @@ Commands are case-insensitive, one per line. Comment lines (starting with `#`) a
 | `skip evolution` | Skip Phase 3 (LLM evolution) this cycle |
 | `reset earnings` | Zero `this_week_usd` counter |
 | `post thread` | Force a Twitter thread even if not otherwise scheduled |
+| `improve suggestion TEXT` | Ask the evolution agent to prioritize a dashboard suggestion |
 | `status report` | Dump full `status` dict to workflow log |
 
 ---

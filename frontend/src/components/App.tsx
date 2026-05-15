@@ -1,4 +1,4 @@
-import { Activity, AlertTriangle, ArrowUpRight, BarChart3, Bot, BriefcaseBusiness, CalendarDays, CheckCircle2, CircleDollarSign, ClipboardCheck, Clock3, Code2, ExternalLink, GitBranch, KeyRound, ListChecks, RefreshCw, ShieldCheck, Target, TerminalSquare, TrendingUp, WalletCards, XCircle } from 'lucide-react';
+import { Activity, AlertTriangle, ArrowUpRight, BarChart3, Bot, BriefcaseBusiness, CalendarDays, Check, CheckCircle2, CircleDollarSign, ClipboardCheck, Clock3, Code2, Copy, ExternalLink, GitBranch, KeyRound, ListChecks, PlayCircle, RefreshCw, ShieldCheck, Sparkles, Target, TerminalSquare, TrendingUp, WalletCards, WandSparkles, XCircle } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { fetchStatus } from '../services/status';
 import { ageLabel, clampPercent, evolutionTone, featureLabel, formatDate, money, scoreTone, shortText } from '../utils/format';
@@ -18,6 +18,7 @@ export function App() {
   const [status, setStatus] = useState<Status>(emptyStatus);
   const [lastPoll, setLastPoll] = useState<Date | null>(null);
   const [loadError, setLoadError] = useState('');
+  const [view, setView] = useState<'dashboard' | 'suggestions'>(() => window.location.hash === '#suggestions' ? 'suggestions' : 'dashboard');
 
   async function load() {
     try {
@@ -56,6 +57,13 @@ export function App() {
   const earningModules = useMemo(() => buildEarningModules(status), [status]);
   const opportunities = status.code_tech_earning?.opportunities || [];
   const opportunityStats = useMemo(() => buildOpportunityStats(opportunities), [opportunities]);
+  const automationSuggestions = useMemo(() => buildAutomationSuggestions(status), [status]);
+  const suggestionStats = useMemo(() => buildSuggestionStats(automationSuggestions), [automationSuggestions]);
+
+  function changeView(nextView: 'dashboard' | 'suggestions') {
+    setView(nextView);
+    window.history.replaceState(null, '', nextView === 'suggestions' ? '#suggestions' : window.location.pathname);
+  }
 
   return (
     <div className="min-h-screen bg-ink text-text">
@@ -74,6 +82,14 @@ export function App() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
+            <div className="view-switch" aria-label="Dashboard view">
+              <button className={view === 'dashboard' ? 'active' : ''} onClick={() => changeView('dashboard')} type="button">
+                <BarChart3 size={15} /> dashboard
+              </button>
+              <button className={view === 'suggestions' ? 'active' : ''} onClick={() => changeView('suggestions')} type="button">
+                <Sparkles size={15} /> suggestions
+              </button>
+            </div>
             <button className="icon-button" onClick={load} aria-label="Refresh status" title="Refresh status">
               <RefreshCw size={18} />
             </button>
@@ -86,6 +102,14 @@ export function App() {
       <main className="mx-auto max-w-7xl px-5 py-6">
         {loadError ? <Banner tone="bad" text={`Dashboard data load failed: ${loadError}`} /> : null}
 
+        {view === 'suggestions' ? (
+          <SuggestionPage
+            status={status}
+            suggestions={automationSuggestions}
+            stats={suggestionStats}
+          />
+        ) : (
+          <>
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <Metric title="Total earnings" value={money(earnings.total_usd, 4)} detail={`${money(earnings.last_cycle_usd, 4)} last cycle`} icon={<CircleDollarSign />} />
           <Metric title="This week" value={money(earnings.this_week_usd, 4)} detail={`${weekPercent}% of ${money(weekTarget, 0)} target`} icon={<Activity />} />
@@ -228,6 +252,8 @@ export function App() {
             </Panel>
           </aside>
         </div>
+          </>
+        )}
 
         <footer className="mt-8 flex flex-col gap-2 border-t border-line py-5 text-sm text-soft md:flex-row md:items-center md:justify-between">
           <span>Last run {formatDate(status.last_run)}</span>
@@ -235,6 +261,182 @@ export function App() {
         </footer>
       </main>
     </div>
+  );
+}
+
+type AutomationSuggestion = Suggestion & {
+  id: string;
+  requiredSecrets: string[];
+  missingSecrets: string[];
+  readinessPercent: number;
+  ready: boolean;
+  command: string;
+  automationPlan: string[];
+};
+
+function SuggestionPage({
+  status,
+  suggestions,
+  stats,
+}: {
+  status: Status;
+  suggestions: AutomationSuggestion[];
+  stats: ReturnType<typeof buildSuggestionStats>;
+}) {
+  const top = suggestions[0];
+
+  return (
+    <div className="suggestion-page">
+      <section className="suggestion-hero">
+        <div>
+          <div className="mb-4 flex flex-wrap gap-2">
+            <Pill tone="info" icon={<WandSparkles size={14} />}>ai workflow ready</Pill>
+            <Pill tone={stats.readyCount ? 'good' : 'warn'} icon={<KeyRound size={14} />}>{stats.readyCount}/{stats.total} ready</Pill>
+            <Pill tone="good" icon={<CircleDollarSign size={14} />}>{money(stats.weeklyUsd, 0)} weekly upside</Pill>
+          </div>
+          <h2>Suggestions To Earn More</h2>
+          <p>
+            Each card is an earning improvement the AI agent can refine and implement through the existing GitHub workflow.
+            Add the required keys, then launch the improvement request for the next evolution cycle.
+          </p>
+        </div>
+        <div className="suggestion-hero-panel">
+          <span>Best next move</span>
+          <strong>{top?.title || 'No suggestion selected'}</strong>
+          <p>{top?.ready ? 'Ready for AI implementation.' : 'Waiting on setup before automation can finish.'}</p>
+        </div>
+      </section>
+
+      <section className="suggestion-stat-grid">
+        <MiniStat icon={<Sparkles />} label="Suggestions" value={String(stats.total)} detail="ranked by bot output" />
+        <MiniStat icon={<CheckCircle2 />} label="Ready now" value={String(stats.readyCount)} detail="all secrets present" />
+        <MiniStat icon={<KeyRound />} label="Missing keys" value={String(stats.missingSecrets)} detail="shown per card" />
+        <MiniStat icon={<TrendingUp />} label="Weekly upside" value={money(stats.weeklyUsd, 0)} detail="estimated by bot" />
+      </section>
+
+      <div className="suggestion-layout">
+        <div className="space-y-4">
+          {suggestions.map((suggestion, index) => (
+            <AutomationSuggestionCard
+              key={suggestion.id}
+              rank={index + 1}
+              repo={status.github_repo || inferRepoFromLocation()}
+              suggestion={suggestion}
+            />
+          ))}
+          {!suggestions.length ? <Empty text="No earning suggestions are available yet. Run an evolution cycle to generate new ideas." /> : null}
+        </div>
+
+        <aside className="suggestion-side">
+          <Panel title="How It Runs" subtitle="The page prepares the request; GitHub Actions performs the work.">
+            <div className="automation-steps">
+              <WorkflowStep icon={<KeyRound />} title="Complete prerequisites" text="Add the listed API keys or tokens as GitHub Actions secrets." />
+              <WorkflowStep icon={<Sparkles />} title="Improve suggestion" text="Open the prefilled bot-command issue or add the command to command.txt." />
+              <WorkflowStep icon={<PlayCircle />} title="Workflow executes" text="The hourly cycle passes the request to the evolution agent and commits safe changes." />
+              <WorkflowStep icon={<Check />} title="Suggestion is done" text="The next dashboard refresh shows changed files, updated suggestions, and readiness." />
+            </div>
+          </Panel>
+
+          <Panel title="Required Setup" subtitle="Secrets still needed across the current suggestion list.">
+            <div className="setup-list">
+              {uniqueMissingSecrets(suggestions).map((secret) => <code key={secret}>{secret}</code>)}
+              {!uniqueMissingSecrets(suggestions).length ? <Empty text="No missing secrets for the listed suggestions." /> : null}
+            </div>
+          </Panel>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+function AutomationSuggestionCard({
+  suggestion,
+  rank,
+  repo,
+}: {
+  suggestion: AutomationSuggestion;
+  rank: number;
+  repo?: string;
+}) {
+  const [copied, setCopied] = useState(false);
+  const issueUrl = repo ? buildIssueUrl(repo, suggestion) : '';
+
+  async function copyCommand() {
+    try {
+      await navigator.clipboard.writeText(suggestion.command);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  return (
+    <article className={`automation-card ${suggestion.ready ? 'ready' : 'blocked'}`}>
+      <div className="automation-rank">{rank}</div>
+      <div className="min-w-0">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <strong>{suggestion.title || 'Untitled suggestion'}</strong>
+          <Pill tone={suggestion.ready ? 'good' : 'warn'}>{suggestion.ready ? 'ready' : 'setup needed'}</Pill>
+          <Pill tone={suggestion.free_tier ? 'good' : 'neutral'}>{suggestion.free_tier ? 'free tier' : 'paid'}</Pill>
+          <Pill tone="info">{money(suggestion.estimated_weekly_usd, 0)} / week</Pill>
+        </div>
+        <p>{suggestion.description || 'No description recorded.'}</p>
+
+        <div className="automation-grid">
+          <div>
+            <h3 className="section-title">AI Will Do</h3>
+            <ul className="check-list">
+              {suggestion.automationPlan.map((item) => <li key={item}>{item}</li>)}
+            </ul>
+          </div>
+          <div>
+            <h3 className="section-title">Required To Complete</h3>
+            <div className="secret-chip-list">
+              {suggestion.requiredSecrets.map((secret) => (
+                <code className={suggestion.missingSecrets.includes(secret) ? 'missing' : 'ready'} key={secret}>{secret}</code>
+              ))}
+              {!suggestion.requiredSecrets.length ? <span>No extra API keys required</span> : null}
+            </div>
+            <Progress value={suggestion.readinessPercent} label={`${suggestion.readinessPercent}% prerequisites ready`} />
+          </div>
+        </div>
+
+        {(suggestion.how_to || []).length ? (
+          <div className="howto-box">
+            {(suggestion.how_to || []).slice(0, 4).map((step) => <p key={step}>{step}</p>)}
+          </div>
+        ) : null}
+
+        <div className="command-box">
+          <code>{suggestion.command}</code>
+          <button className="icon-button" type="button" onClick={copyCommand} aria-label="Copy command" title="Copy command">
+            {copied ? <Check size={16} /> : <Copy size={16} />}
+          </button>
+        </div>
+      </div>
+      <div className="automation-actions">
+        {issueUrl ? (
+          <a className="small-button" href={issueUrl}>
+            <PlayCircle size={15} /> improve
+          </a>
+        ) : (
+          <a className="small-button" href="setup.md">
+            <ExternalLink size={15} /> setup
+          </a>
+        )}
+      </div>
+    </article>
+  );
+}
+
+function WorkflowStep({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
+  return (
+    <article className="workflow-step">
+      <div>{icon}</div>
+      <strong>{title}</strong>
+      <p>{text}</p>
+    </article>
   );
 }
 
@@ -503,6 +705,106 @@ function buildOpportunityStats(opportunities: CodeTechOpportunity[]) {
     estimatedValue: opportunities.reduce((sum, opportunity) => sum + (opportunity.estimated_value_usd || 0), 0),
     topScore: opportunities.reduce((top, opportunity) => Math.max(top, opportunity.score || 0), 0),
   };
+}
+
+function buildAutomationSuggestions(status: Status): AutomationSuggestion[] {
+  const source = [...(status.suggestions || [])];
+  const existingSecrets = new Set(source.flatMap((suggestion) => parseSecrets(suggestion.secret_needed)));
+
+  for (const [feature, info] of Object.entries(status.secret_readiness || {})) {
+    const missing = info.missing || [];
+    if (!missing.length || missing.every((secret) => existingSecrets.has(secret))) continue;
+    source.push({
+      title: `Activate ${featureLabel(feature)}`,
+      description: `Let the AI workflow use ${featureLabel(feature).toLowerCase()} automatically once the missing setup is complete.`,
+      secret_needed: missing.join(', '),
+      estimated_weekly_usd: 0,
+      free_tier: true,
+      how_to: missing.map((secret) => `Add ${secret} as a GitHub Actions secret`),
+    });
+  }
+
+  return source.slice(0, 12).map((suggestion, index) => {
+    const requiredSecrets = parseSecrets(suggestion.secret_needed);
+    const missingSecrets = requiredSecrets.filter((secret) => !hasConfiguredSecret(status, secret));
+    const readinessPercent = requiredSecrets.length
+      ? Math.round(((requiredSecrets.length - missingSecrets.length) / requiredSecrets.length) * 100)
+      : 100;
+    const title = suggestion.title || `Suggestion ${index + 1}`;
+    return {
+      ...suggestion,
+      title,
+      id: `${title}-${index}`,
+      requiredSecrets,
+      missingSecrets,
+      readinessPercent,
+      ready: readinessPercent === 100,
+      command: `improve suggestion ${title}`,
+      automationPlan: buildAutomationPlan(suggestion),
+    };
+  });
+}
+
+function buildSuggestionStats(suggestions: AutomationSuggestion[]) {
+  return {
+    total: suggestions.length,
+    readyCount: suggestions.filter((suggestion) => suggestion.ready).length,
+    missingSecrets: uniqueMissingSecrets(suggestions).length,
+    weeklyUsd: suggestions.reduce((sum, suggestion) => sum + (suggestion.estimated_weekly_usd || 0), 0),
+  };
+}
+
+function buildAutomationPlan(suggestion: Suggestion) {
+  const title = (suggestion.title || '').toLowerCase();
+  if (title.includes('twitter') || title.includes('x')) {
+    return ['Generate earning-focused thread ideas', 'Post through the configured Twitter module', 'Record the action and estimated value'];
+  }
+  if (title.includes('medium') || title.includes('article')) {
+    return ['Repurpose article output for the new channel', 'Publish with the configured integration', 'Track duplicated reach without extra LLM spend'];
+  }
+  if (title.includes('llm') || title.includes('anthropic') || title.includes('groq') || title.includes('gemini')) {
+    return ['Route the right task to the best model', 'Use fallback capacity when a free tier is limited', 'Keep evolution running with fewer skipped cycles'];
+  }
+  if (title.includes('crypto') || title.includes('binance')) {
+    return ['Read configured balances and strategy limits', 'Run bounded trade analysis automatically', 'Log every action for dashboard review'];
+  }
+  return ['Turn the suggestion into a bounded code change', 'Run verification in the GitHub workflow', 'Commit the completed improvement automatically'];
+}
+
+function parseSecrets(value?: string | null) {
+  if (!value) return [];
+  return value
+    .split(/[,/+\s]+/)
+    .map((part) => part.trim())
+    .filter((part) => /^[A-Z0-9_]{4,}$/.test(part));
+}
+
+function hasConfiguredSecret(status: Status, secret: string) {
+  if ((status.configured_github_secrets || []).includes(secret)) return true;
+  return Object.values(status.secret_readiness || {}).some((info) => (info.present || []).includes(secret));
+}
+
+function uniqueMissingSecrets(suggestions: AutomationSuggestion[]) {
+  return Array.from(new Set(suggestions.flatMap((suggestion) => suggestion.missingSecrets))).sort();
+}
+
+function buildIssueUrl(repo: string, suggestion: AutomationSuggestion) {
+  const title = suggestion.command;
+  const body = [
+    suggestion.command,
+    '',
+    `Suggestion: ${suggestion.title}`,
+    `Expected result: ${suggestion.description || 'Improve this earning suggestion through the AI workflow.'}`,
+    suggestion.requiredSecrets.length ? `Required secrets: ${suggestion.requiredSecrets.join(', ')}` : 'Required secrets: none',
+  ].join('\n');
+  return `https://github.com/${repo}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}&labels=bot-command`;
+}
+
+function inferRepoFromLocation() {
+  const host = window.location.hostname;
+  const path = window.location.pathname.split('/').filter(Boolean)[0];
+  if (!host.endsWith('.github.io') || !path) return '';
+  return `${host.replace('.github.io', '')}/${path}`;
 }
 
 function missingLabel(missing?: string[]) {

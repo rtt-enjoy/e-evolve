@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -82,6 +83,9 @@ def write_html(status: dict[str, Any]) -> None:
     """Publish safe dashboard data files consumed by the React frontend."""
     _HTML_FILE.parent.mkdir(parents=True, exist_ok=True)
     public_status = {k: v for k, v in status.items() if not k.startswith("_")}
+    github_repo = os.getenv("GITHUB_REPO", "").strip()
+    if github_repo:
+        public_status["github_repo"] = github_repo
     _PUBLIC_STATUS_FILE.write_text(
         json.dumps(public_status, indent=2, default=str),
         encoding="utf-8",

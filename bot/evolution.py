@@ -119,10 +119,20 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
         e.pop("history", None)
         status_slim["earnings"] = e
 
+    focus = ""
+    improve_target = status.get("_overrides", {}).get("improve_suggestion")
+    if improve_target:
+        focus = (
+            f"\nOwner requested: improve suggestion '{improve_target}'. "
+            "Prioritize changes that make that suggestion actionable, automated, "
+            "or easier to complete in the GitHub workflow.\n"
+        )
+
     prompt = (
         f"Current status:\n{json.dumps(status_slim, indent=2, default=str)}\n\n"
         f"Active features: {status.get('active_features', [])}\n"
         f"Inactive (need secrets): {status.get('inactive_features', [])}\n\n"
+        f"{focus}"
         f"Codebase:\n{codebase}\n\n"
         "Propose improvements. JSON only."
     )

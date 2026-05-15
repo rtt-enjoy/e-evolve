@@ -1,7 +1,7 @@
 {
   "version": "1.31.0",
-  "last_run": "2026-05-15T00:10:28.692846+00:00",
-  "total_runs": 513,
+  "last_run": "2026-05-15T01:21:51.498733+00:00",
+  "total_runs": 514,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -30,12 +30,48 @@
     "history": []
   },
   "last_evolution": {
-    "version_bumped_to": "1.31.0",
-    "summary": "Evolution skipped [free_limit]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 95998, Requested 8051. Please try again in 58m18.336s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "summary": "Skipped by owner command",
     "changes_applied": [],
-    "suggestions": [],
-    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01km0cd7esftx8prttvj4xz025` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 95998, Requested 8051. Please try again in 58m18.336s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
-    "error_type": "free_limit"
+    "suggestions": [
+      {
+        "title": "Add TWITTER_API_KEY for Twitter integration",
+        "description": "Enable Twitter posting and increase reach",
+        "secret_needed": "TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Go to the Twitter Developer Dashboard and create an app",
+          "Step 2: Generate an API key and secret in the Twitter settings",
+          "Step 3: Add TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, and TWITTER_ACCESS_SECRET as GitHub Actions secrets"
+        ]
+      },
+      {
+        "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
+        "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
+        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Go to Medium Partner Program and create an account",
+          "Step 2: Generate an integration token in the Medium settings",
+          "Step 3: Add MEDIUM_INTEGRATION_TOKEN as a GitHub Actions secret"
+        ]
+      },
+      {
+        "title": "Add ANTHROPIC_API_KEY for Anthropic LLM integration",
+        "description": "Enable Anthropic LLM and increase LLM capabilities",
+        "secret_needed": "ANTHROPIC_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Go to the Anthropic website and create an account",
+          "Step 2: Generate an API key in the Anthropic settings",
+          "Step 3: Add ANTHROPIC_API_KEY as a GitHub Actions secret"
+        ]
+      }
+    ],
+    "version_bumped_to": "1.31.0",
+    "error": null
   },
   "last_earning": {
     "actions": [],
@@ -80,7 +116,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 165,
+  "last_cycle_seconds": 55,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -338,5 +374,6 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ]
-  }
+  },
+  "github_repo": "rtt-enjoy/e-evolve"
 }

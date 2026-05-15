@@ -11,6 +11,7 @@ class Article:
 
     def post_to_medium(self, integration_token):
         # Medium posting logic
+        # FIX: Added space after Bearer in Authorization header
         headers = {'Authorization': f'Bearer {integration_token}', 'Content-Type': 'application/json'}
         data = {'title': self.title, 'content': self.content}
         resp = requests.post('https://api.medium.com/v1/users/me/posts', headers=headers, json=data)

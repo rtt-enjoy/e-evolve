@@ -5,6 +5,9 @@ This module does not publish, trade, mint, or claim revenue. It periodically
 builds a queue of code-only opportunities that can plausibly lead to small
 daily income: paid OSS issues, maintainer chores, migration work, CI fixes, and
 micro-service ideas. Confirmed revenue remains tracked elsewhere.
+
+Now includes automatic pursuit: comments on issues to express interest and
+track leads for follow-up.
 """
 from __future__ import annotations
 
@@ -30,6 +33,8 @@ _DEFAULT_CONFIG = {
     "daily_target_usd": 10.0,
     "max_items": 8,
     "min_score": 55,
+    "auto_pursue": True,  # NEW: automatically comment on high-value leads
+    "pursue_score_threshold": 75,  # Only pursue leads with score >= 75
     "requirements": [
         "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
         "Prefer boring maintenance where the buyer already feels pain.",
@@ -115,6 +120,7 @@ class Opportunity:
     estimated_value_usd: float
     reason: str
     next_step: str
+    pursued: bool = False  # NEW: track if we've engaged with this lead
 
 
 def run(llm: Any, status: dict[str, Any]) -> list[dict]:
@@ -136,6 +142,16 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     min_score = max(0, int(cfg.get("min_score", 55) or 55))
     raw = _fetch_github_leads(cfg) or list(_LOCAL_LEADS)
     opportunities = _rank(raw, cfg, max_items=max_items, min_score=min_score)
+    
+    # Auto-pursue high-value leads
+    pursued_count = 0
+    if cfg.get("auto_pursue", True):
+        pursue_threshold = max(50, int(cfg.get("pursue_score_threshold", 75) or 75))
+        for opp in opportunities:
+            if opp.score >= pursue_threshold and not opp.pursued and opp.url:
+                if _pursue_lead(opp, cfg):
+                    opp.pursued = True
+                    pursued_count += 1
 
     state.update({
         "enabled": True,
@@ -150,16 +166,78 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     })
     _write_report(state)
 
-    log.info("[code_techs] refreshed %d code-tech opportunities", len(opportunities))
+    log.info("[code_techs] refreshed %d code-tech opportunities, pursued %d", len(opportunities), pursued_count)
     return [{
         "platform": "code_techs",
         "success": True,
         "opportunity_count": len(opportunities),
+        "pursued_count": pursued_count,
         "estimated_usd": 0.0,
         "target_usd_per_day": state["daily_target_usd"],
-        "title": f"Code-tech opportunity queue refreshed ({len(opportunities)} leads)",
+        "title": f"Code-tech opportunity queue refreshed ({len(opportunities)} leads, {pursued_count} pursued)",
         "url": str(_REPORT_FILE),
     }]
+
+
+def _pursue_lead(opportunity: Opportunity, cfg: dict) -> bool:
+    """Comment on a high-value GitHub issue to express interest and track the lead."""
+    token = os.getenv("GH_TOKEN", "").strip() or os.getenv("GITHUB_TOKEN", "").strip()
+    if not token or not opportunity.url:
+        return False
+    
+    # Extract owner/repo/issue from URL
+    # Format: https://github.com/owner/repo/issues/123
+    try:
+        parts = opportunity.url.replace("https://github.com/", "").split("/")
+        if len(parts) < 4:
+            return False
+        owner, repo, _, issue_num = parts[0], parts[1], parts[2], parts[3]
+    except Exception as exc:
+        log.warning("[code_techs] Could not parse issue URL %s: %s", opportunity.url, exc)
+        return False
+    
+    # Build a helpful comment
+    comment_body = _build_pursuit_comment(opportunity)
+    
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    
+    try:
+        resp = requests.post(
+            f"https://api.github.com/repos/{owner}/{repo}/issues/{issue_num}/comments",
+            headers=headers,
+            json={"body": comment_body},
+            timeout=15,
+        )
+        if resp.status_code == 201:
+            log.info("[code_techs] Pursued lead: %s", opportunity.title[:50])
+            return True
+        elif resp.status_code == 403:
+            log.warning("[code_techs] Rate limited or forbidden pursuing %s", opportunity.url)
+        else:
+            log.debug("[code_techs] Could not comment: %s", resp.status_code)
+    except Exception as exc:
+        log.warning("[code_techs] Error pursuing lead: %s", exc)
+    
+    return False
+
+
+def _build_pursuit_comment(opportunity: Opportunity) -> str:
+    """Build a helpful, non-spammy comment to express interest in a lead."""
+    # Keep it short and helpful, not salesy
+    templates = [
+        "Hi! I'm interested in helping with this. Do you have a preferred way to receive patches? I can start with a small reproducer if helpful.",
+        "I'd like to work on this. Could you point me to the relevant files or tests?",
+        "Happy to help here. What's the best way to submit a fix — PR directly or do you prefer discussion first?",
+        "I can take this on. Should I open a draft PR with the initial fix, or discuss the approach first?",
+    ]
+    
+    # Select based on opportunity score for variety
+    idx = opportunity.score % len(templates)
+    return templates[idx]
 
 
 def _config() -> dict[str, Any]:
@@ -384,7 +462,8 @@ def _write_report(state: dict[str, Any]) -> None:
     for index, op in enumerate(state.get("opportunities", []), start=1):
         title = op.get("title", "untitled")
         url = op.get("url", "")
-        heading = f"{index}. [{title}]({url})" if url else f"{index}. {title}"
+        pursued_tag = " [PURSUED]" if op.get("pursued") else ""
+        heading = f"{index}. [{title}]({url}){pursued_tag}" if url else f"{index}. {title}{pursued_tag}"
         lines.extend([
             heading,
             f"   - Score: {op.get('score', 0)}/100",

@@ -1,7 +1,7 @@
 {
   "version": "1.31.0",
-  "last_run": "2026-05-15T14:36:11.326847+00:00",
-  "total_runs": 518,
+  "last_run": "2026-05-15T17:00:59.292802+00:00",
+  "total_runs": 519,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -35,23 +35,14 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.31.0",
-    "summary": "No summary provided",
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '</think> {\\n  \"version\": \"1.32.0\",\\n  \"summary\": \"Patch bump to 1.31.1, add RSS feed generator for discovery\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Add MEDIUM_INTEGRATION_TOKEN for dual publishing\",'",
     "changes_applied": [],
     "suggestions": [],
-    "error": null
+    "error": "Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '</think> {\\n  \"version\": \"1.32.0\",\\n  \"summary\": \"Patch bump to 1.31.1, add RSS feed generator for discovery\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Add MEDIUM_INTEGRATION_TOKEN for dual publishing\",'",
+    "error_type": "json"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 8,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech opportunity queue refreshed (8 leads)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -93,7 +84,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 17,
+  "last_cycle_seconds": 133,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

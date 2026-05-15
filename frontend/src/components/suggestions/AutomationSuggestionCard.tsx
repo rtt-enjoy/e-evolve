@@ -32,6 +32,7 @@ export function AutomationSuggestionCard({
       <div className="min-w-0">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <strong>{suggestion.title || 'Untitled suggestion'}</strong>
+          <Pill tone={suggestion.source === 'code_tech' ? 'good' : 'neutral'}>{suggestion.sourceLabel}</Pill>
           <Pill tone={suggestion.ready ? 'good' : 'warn'}>{suggestion.ready ? 'ready' : 'setup needed'}</Pill>
           <Pill tone={suggestion.free_tier ? 'good' : 'neutral'}>{suggestion.free_tier ? 'free tier' : 'paid'}</Pill>
           <Pill tone="info">{money(suggestion.estimated_weekly_usd, 0)} / week</Pill>
@@ -54,6 +55,7 @@ export function AutomationSuggestionCard({
               {!suggestion.requiredSecrets.length ? <span>No extra secrets required</span> : null}
             </div>
             <Progress value={suggestion.readinessPercent} label={`${suggestion.readinessPercent}% prerequisites ready`} />
+            <p className="mt-3 text-cyan">{suggestion.blockerText}</p>
           </div>
         </div>
 
@@ -71,6 +73,11 @@ export function AutomationSuggestionCard({
         </div>
       </div>
       <div className="automation-actions">
+        {suggestion.opportunityUrl ? (
+          <a className="icon-button" href={suggestion.opportunityUrl} aria-label="Open opportunity" title="Open opportunity">
+            <ExternalLink size={16} />
+          </a>
+        ) : null}
         {issueUrl ? (
           <a className="small-button" href={issueUrl}>
             <PlayCircle size={15} /> improve

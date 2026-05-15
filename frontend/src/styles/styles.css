@@ -291,6 +291,30 @@ textarea {
     @apply space-y-6;
   }
 
+  .launchpad {
+    @apply grid gap-4 rounded-lg border border-green/30 bg-panel p-5 shadow-panel lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center;
+  }
+
+  .launchpad span {
+    @apply block text-xs font-semibold uppercase tracking-normal text-green;
+  }
+
+  .launchpad strong {
+    @apply mt-2 block text-lg font-semibold;
+  }
+
+  .launchpad p {
+    @apply mt-2 text-sm leading-6 text-soft;
+  }
+
+  .command-stack {
+    @apply grid grid-cols-[minmax(0,1fr)_40px] gap-3 rounded-lg border border-line bg-ink p-3;
+  }
+
+  .command-stack code {
+    @apply max-h-24 min-w-0 overflow-auto whitespace-pre-wrap py-2 text-xs leading-5 text-cyan;
+  }
+
   .automation-card {
     @apply grid gap-4 rounded-lg border border-line bg-panel p-5 shadow-panel md:grid-cols-[42px_minmax(0,1fr)_auto];
   }
@@ -366,7 +390,7 @@ textarea {
   }
 
   .automation-actions {
-    @apply flex items-start justify-end;
+    @apply flex flex-wrap items-start justify-end gap-2;
   }
 
   .automation-steps {

@@ -1,8 +1,9 @@
-import { Check, CheckCircle2, CircleDollarSign, KeyRound, PlayCircle, Sparkles, TrendingUp, WandSparkles } from 'lucide-react';
+import { Check, CheckCircle2, CircleDollarSign, Copy, KeyRound, PlayCircle, Sparkles, TrendingUp, WandSparkles } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { useMemo, useState } from 'react';
 import { AutomationSuggestionCard } from './AutomationSuggestionCard';
 import { Empty, MiniStat, Panel, Pill } from '../common';
-import { inferRepoFromLocation, uniqueMissingSecrets, type AutomationSuggestion, type buildSuggestionStats } from '../../utils/suggestions';
+import { inferRepoFromLocation, readyCommands, uniqueMissingSecrets, type AutomationSuggestion, type buildSuggestionStats } from '../../utils/suggestions';
 import { money } from '../../utils/format';
 import type { Status } from '../../types/status';
 
@@ -18,6 +19,21 @@ export function SuggestionPage({
   const top = suggestions[0];
   const repo = status.github_repo || inferRepoFromLocation();
   const missingSecrets = uniqueMissingSecrets(suggestions);
+  const ready = suggestions.filter((suggestion) => suggestion.ready);
+  const blocked = suggestions.filter((suggestion) => !suggestion.ready);
+  const commandBatch = useMemo(() => readyCommands(suggestions).join('\n'), [suggestions]);
+  const [copiedBatch, setCopiedBatch] = useState(false);
+
+  async function copyBatch() {
+    if (!commandBatch) return;
+    try {
+      await navigator.clipboard.writeText(commandBatch);
+      setCopiedBatch(true);
+      window.setTimeout(() => setCopiedBatch(false), 1600);
+    } catch {
+      setCopiedBatch(false);
+    }
+  }
 
   return (
     <div className="suggestion-page">
@@ -37,7 +53,7 @@ export function SuggestionPage({
         <div className="suggestion-hero-panel">
           <span>Best next move</span>
           <strong>{top?.title || 'No suggestion selected'}</strong>
-          <p>{top?.ready ? 'Ready for AI implementation.' : 'Waiting on setup before automation can finish.'}</p>
+          <p>{top?.nextAction || 'Run an evolution cycle to refresh the queue.'}</p>
         </div>
       </section>
 
@@ -50,10 +66,35 @@ export function SuggestionPage({
 
       <div className="suggestion-layout">
         <div className="space-y-4">
-          {suggestions.map((suggestion, index) => (
+          {ready.length ? (
+            <section className="launchpad">
+              <div>
+                <span>Ready automation</span>
+                <strong>{ready.length} item{ready.length === 1 ? '' : 's'} can run without new secrets</strong>
+                <p>Queue these commands through a bot-command issue or command.txt for the next evolution cycle.</p>
+              </div>
+              <div className="command-stack">
+                <code>{commandBatch || 'No ready commands'}</code>
+                <button className="icon-button" type="button" onClick={copyBatch} aria-label="Copy ready commands" title="Copy ready commands">
+                  {copiedBatch ? <Check size={16} /> : <Copy size={16} />}
+                </button>
+              </div>
+            </section>
+          ) : null}
+
+          {ready.map((suggestion, index) => (
             <AutomationSuggestionCard
               key={suggestion.id}
               rank={index + 1}
+              repo={repo}
+              suggestion={suggestion}
+            />
+          ))}
+          {blocked.length ? <h3 className="section-title pt-2">Waiting On Setup</h3> : null}
+          {blocked.map((suggestion, index) => (
+            <AutomationSuggestionCard
+              key={suggestion.id}
+              rank={ready.length + index + 1}
               repo={repo}
               suggestion={suggestion}
             />

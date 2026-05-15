@@ -78,7 +78,7 @@ export function App() {
                 <BarChart3 size={15} /> dashboard
               </button>
               <button className={view === 'suggestions' ? 'active' : ''} onClick={() => changeView('suggestions')} type="button">
-                <Sparkles size={15} /> suggestions
+                <Sparkles size={15} /> suggestions {suggestionStats.readyCount}/{suggestionStats.total}
               </button>
             </div>
             <button className="icon-button" onClick={load} aria-label="Refresh status" title="Refresh status">

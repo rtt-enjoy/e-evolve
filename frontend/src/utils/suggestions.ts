@@ -1,52 +1,79 @@
-import { featureLabel } from './format';
-import type { Status, Suggestion } from '../types/status';
+import { featureLabel, money, shortText } from './format';
+import type { CodeTechOpportunity, Status, Suggestion } from '../types/status';
 
 export type AutomationSuggestion = Suggestion & {
   id: string;
+  source: 'suggestion' | 'evolution' | 'code_tech';
+  sourceLabel: string;
   requiredSecrets: string[];
   missingSecrets: string[];
   readinessPercent: number;
   ready: boolean;
   command: string;
   automationPlan: string[];
+  nextAction: string;
+  blockerText: string;
+  priorityScore: number;
+  opportunityUrl?: string;
 };
 
 export function buildAutomationSuggestions(status: Status): AutomationSuggestion[] {
-  const source = [...(status.suggestions || [])];
-  const existingSecrets = new Set(source.flatMap((suggestion) => parseSecrets(suggestion.secret_needed)));
+  const source: Array<{ suggestion: Suggestion; source: AutomationSuggestion['source'] }> = [
+    ...(status.suggestions || []).map((suggestion) => ({ suggestion, source: 'suggestion' as const })),
+    ...((status.last_evolution?.suggestions || []) as Suggestion[]).map((suggestion) => ({ suggestion, source: 'evolution' as const })),
+  ];
+  const existingSecrets = new Set(source.flatMap((entry) => parseSecrets(entry.suggestion.secret_needed)));
 
   for (const [feature, info] of Object.entries(status.secret_readiness || {})) {
     const missing = info.missing || [];
     if (!missing.length || missing.every((secret) => existingSecrets.has(secret))) continue;
     source.push({
-      title: `Activate ${featureLabel(feature)}`,
-      description: `Let the AI workflow use ${featureLabel(feature).toLowerCase()} automatically once the missing setup is complete.`,
-      secret_needed: missing.join(', '),
-      estimated_weekly_usd: 0,
-      free_tier: true,
-      how_to: missing.map((secret) => `Add ${secret} as a GitHub Actions secret`),
+      source: 'suggestion',
+      suggestion: {
+        title: `Activate ${featureLabel(feature)}`,
+        description: `Let the AI workflow use ${featureLabel(feature).toLowerCase()} automatically once the missing setup is complete.`,
+        secret_needed: missing.join(', '),
+        estimated_weekly_usd: 0,
+        free_tier: true,
+        how_to: missing.map((secret) => `Add ${secret} as a GitHub Actions secret`),
+      },
     });
   }
 
-  return source.slice(0, 12).map((suggestion, index) => {
+  for (const opportunity of (status.code_tech_earning?.opportunities || []).slice(0, 5)) {
+    source.push({
+      source: 'code_tech',
+      suggestion: codeTechSuggestion(opportunity, status.code_tech_earning?.daily_target_usd || 10),
+    });
+  }
+
+  return dedupeSuggestions(source).map(({ suggestion, source: suggestionSource }, index) => {
     const requiredSecrets = parseSecrets(suggestion.secret_needed);
     const missingSecrets = requiredSecrets.filter((secret) => !hasConfiguredSecret(status, secret));
     const readinessPercent = requiredSecrets.length
       ? Math.round(((requiredSecrets.length - missingSecrets.length) / requiredSecrets.length) * 100)
       : 100;
     const title = suggestion.title || `Suggestion ${index + 1}`;
+    const sourceLabel = sourceLabelFor(suggestionSource);
+    const priorityScore = priorityFor(suggestion, readinessPercent, suggestionSource);
     return {
       ...suggestion,
       title,
-      id: `${title}-${index}`,
+      id: `${suggestionSource}-${title}-${index}`,
+      source: suggestionSource,
+      sourceLabel,
       requiredSecrets,
       missingSecrets,
       readinessPercent,
       ready: readinessPercent === 100,
       command: `improve suggestion ${title}`,
       automationPlan: buildAutomationPlan(suggestion),
+      nextAction: buildNextAction(suggestion, missingSecrets),
+      blockerText: missingSecrets.length ? `${missingSecrets.length} missing credential${missingSecrets.length === 1 ? '' : 's'}` : 'ready for next evolution cycle',
+      priorityScore,
+      opportunityUrl: suggestionSource === 'code_tech' ? suggestion.how_to?.find((step) => step.startsWith('Open '))?.replace(/^Open /, '') : undefined,
     };
-  });
+  }).sort((a, b) => b.priorityScore - a.priorityScore).slice(0, 12);
 }
 
 export function buildSuggestionStats(suggestions: AutomationSuggestion[]) {
@@ -60,6 +87,13 @@ export function buildSuggestionStats(suggestions: AutomationSuggestion[]) {
 
 export function uniqueMissingSecrets(suggestions: AutomationSuggestion[]) {
   return Array.from(new Set(suggestions.flatMap((suggestion) => suggestion.missingSecrets))).sort();
+}
+
+export function readyCommands(suggestions: AutomationSuggestion[], limit = 3) {
+  return suggestions
+    .filter((suggestion) => suggestion.ready)
+    .slice(0, limit)
+    .map((suggestion) => suggestion.command);
 }
 
 export function buildIssueUrl(repo: string, suggestion: AutomationSuggestion) {
@@ -83,6 +117,9 @@ export function inferRepoFromLocation() {
 
 function buildAutomationPlan(suggestion: Suggestion) {
   const title = (suggestion.title || '').toLowerCase();
+  if (title.includes('code-tech') || title.includes('code tech')) {
+    return ['Reproduce the lead from public proof', 'Prepare the smallest credible patch or offer', 'Turn the result into tracked earning pipeline work'];
+  }
   if (title.includes('twitter') || title.includes('x')) {
     return ['Generate earning-focused thread ideas', 'Post through the configured Twitter module', 'Record the action and estimated value'];
   }
@@ -96,6 +133,58 @@ function buildAutomationPlan(suggestion: Suggestion) {
     return ['Read configured balances and strategy limits', 'Run bounded trade analysis automatically', 'Log every action for dashboard review'];
   }
   return ['Turn the suggestion into a bounded code change', 'Run verification in the GitHub workflow', 'Commit the completed improvement automatically'];
+}
+
+function buildNextAction(suggestion: Suggestion, missingSecrets: string[]) {
+  if (missingSecrets.length) {
+    return `Add ${missingSecrets[0]}${missingSecrets.length > 1 ? ` and ${missingSecrets.length - 1} more` : ''}`;
+  }
+  const next = (suggestion.how_to || []).find((step) => !step.toLowerCase().startsWith('open '));
+  return next || 'Launch the improve suggestion command';
+}
+
+function codeTechSuggestion(opportunity: CodeTechOpportunity, dailyTarget: number): Suggestion {
+  const title = opportunity.title || 'Untitled code-tech lead';
+  const value = opportunity.estimated_value_usd || dailyTarget;
+  return {
+    title: `Code-tech lead: ${title}`,
+    description: [
+      shortText(opportunity.reason || 'No-secret maintenance lead from the active code-tech queue.', 130),
+      opportunity.next_step ? `Next: ${shortText(opportunity.next_step, 120)}` : '',
+    ].filter(Boolean).join(' '),
+    secret_needed: '',
+    estimated_weekly_usd: Math.max(0, value),
+    free_tier: true,
+    how_to: [
+      opportunity.url ? `Open ${opportunity.url}` : '',
+      opportunity.next_step || 'Reproduce the issue and prepare one focused patch.',
+      `Use value signal ${money(opportunity.estimated_value_usd || 0, 0)} and score ${opportunity.score || 0}/100 to decide effort.`,
+    ].filter(Boolean),
+  };
+}
+
+function dedupeSuggestions(entries: Array<{ suggestion: Suggestion; source: AutomationSuggestion['source'] }>) {
+  const seen = new Set<string>();
+  const out: Array<{ suggestion: Suggestion; source: AutomationSuggestion['source'] }> = [];
+  for (const entry of entries) {
+    const key = `${(entry.suggestion.title || '').toLowerCase()}:${entry.suggestion.secret_needed || ''}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(entry);
+  }
+  return out;
+}
+
+function priorityFor(suggestion: Suggestion, readinessPercent: number, source: AutomationSuggestion['source']) {
+  const value = suggestion.estimated_weekly_usd || 0;
+  const sourceBoost = source === 'code_tech' ? 40 : source === 'evolution' ? 15 : 0;
+  return sourceBoost + readinessPercent + Math.min(40, value);
+}
+
+function sourceLabelFor(source: AutomationSuggestion['source']) {
+  if (source === 'code_tech') return 'ready lead';
+  if (source === 'evolution') return 'last evolution';
+  return 'bot suggestion';
 }
 
 function parseSecrets(value?: string | null) {

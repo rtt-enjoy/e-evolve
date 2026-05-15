@@ -13,7 +13,6 @@ export type Action = {
 export type Suggestion = {
   title?: string;
   description?: string;
-  secret_needed?: string;
   free_tier?: boolean;
   estimated_weekly_usd?: number;
   how_to?: string[];
@@ -49,13 +48,10 @@ export type Status = {
   inactive_features?: string[];
   llm_provider?: string;
   llm_roles?: Record<string, string>;
-  configured_github_secrets?: string[];
   secret_readiness?: Record<string, {
     active?: boolean;
     present_count?: number;
     required_count?: number;
-    missing?: string[];
-    present?: string[];
   }>;
   earnings?: {
     total_usd?: number;
@@ -87,7 +83,6 @@ export type Status = {
     model?: string;
     purpose?: string;
     active?: boolean;
-    secret?: string;
   }>;
   article_daily?: {
     date?: string;

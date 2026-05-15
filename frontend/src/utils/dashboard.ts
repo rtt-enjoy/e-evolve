@@ -40,7 +40,7 @@ export function buildReadiness(status: Status) {
     return { ready: 0, total: 0, percent: 0 };
   }
   const ready = entries.filter((info) => {
-    const required = info.required_count || Math.max(1, (info.present || []).length + (info.missing || []).length);
+    const required = info.required_count || Math.max(1, info.present_count || 0);
     return (info.present_count || 0) >= required;
   }).length;
   return { ready, total: entries.length, percent: Math.round((ready / entries.length) * 100) };
@@ -68,28 +68,28 @@ export function buildEarningModules(status: Status) {
       key: 'articles_medium',
       name: 'Medium',
       active: Boolean(readiness.articles_medium?.active || status.active_features?.includes('articles_medium')),
-      detail: missingLabel(readiness.articles_medium?.missing),
+      detail: readinessLabel(readiness.articles_medium),
       value: moduleActionValue(actions, 'medium'),
     },
     {
       key: 'twitter',
       name: 'Twitter/X',
       active: Boolean(readiness.twitter?.active || status.active_features?.includes('twitter')),
-      detail: missingLabel(readiness.twitter?.missing),
+      detail: readinessLabel(readiness.twitter),
       value: moduleActionValue(actions, 'twitter'),
     },
     {
       key: 'crypto_binance',
       name: 'Binance Trading',
       active: Boolean(readiness.crypto_binance?.active || status.active_features?.includes('crypto_binance')),
-      detail: missingLabel(readiness.crypto_binance?.missing),
+      detail: readinessLabel(readiness.crypto_binance),
       value: money(status.usdt_balance, 4),
     },
     {
       key: 'nft_ethereum',
       name: 'NFT Minting',
       active: Boolean(readiness.nft_ethereum?.active || status.active_features?.includes('nft_ethereum')),
-      detail: missingLabel(readiness.nft_ethereum?.missing),
+      detail: readinessLabel(readiness.nft_ethereum),
       value: moduleActionValue(actions, 'nft'),
     },
   ];
@@ -118,9 +118,12 @@ export function buildHealth(status: Status, issues: Array<{ tone: string }>, rea
   return { tone: 'good', label: 'operational' };
 }
 
-function missingLabel(missing?: string[]) {
-  if (!missing?.length) return 'All required secrets present';
-  return `${missing.length} secrets missing`;
+function readinessLabel(info?: { active?: boolean; present_count?: number; required_count?: number }) {
+  const required = info?.required_count || 0;
+  const present = info?.present_count || 0;
+  if (!required) return 'No setup data';
+  if (present >= required) return 'All required credentials present';
+  return `${Math.max(0, required - present)} credentials missing`;
 }
 
 function moduleActionValue(actions: Action[], platform: string) {

@@ -12,7 +12,6 @@ export function DashboardPage({ status }: { status: Status }) {
   const active = status.active_features || [];
   const inactive = status.inactive_features || [];
   const errors = status.errors || [];
-  const configuredSecrets = status.configured_github_secrets || [];
   const evolution = status.last_evolution || {};
   const workflows = Object.entries(status.llm_workflows || {});
   const dailyTarget = status.code_tech_earning?.daily_target_usd || 10;
@@ -124,7 +123,7 @@ export function DashboardPage({ status }: { status: Status }) {
         </div>
 
         <aside className="space-y-6">
-          <Panel title="Secret Readiness" subtitle="Names and readiness only, never values.">
+          <Panel title="Credential Readiness" subtitle="Counts only; secret names and values stay out of tracked files.">
             <div className="mb-4">
               <div className="mb-2 flex items-end justify-between gap-4">
                 <strong className="text-3xl font-semibold">{readiness.percent}%</strong>
@@ -132,12 +131,9 @@ export function DashboardPage({ status }: { status: Status }) {
               </div>
               <Progress value={readiness.percent} />
             </div>
-            <div className="mb-4 flex flex-wrap gap-2">
-              {configuredSecrets.slice(0, 12).map((secret) => <Pill tone="good" key={secret}>{secret}</Pill>)}
-            </div>
             <div className="space-y-3">
               {Object.entries(status.secret_readiness || {}).map(([name, info]) => {
-                const required = info.required_count || Math.max(1, (info.present || []).length + (info.missing || []).length);
+                const required = info.required_count || Math.max(1, info.present_count || 0);
                 const percent = Math.round(((info.present_count || 0) / required) * 100);
                 return (
                   <div className="secret-card" key={name}>
@@ -146,7 +142,6 @@ export function DashboardPage({ status }: { status: Status }) {
                       <Pill tone={percent === 100 ? 'good' : 'warn'}>{info.present_count || 0}/{required}</Pill>
                     </div>
                     <Progress value={percent} />
-                    {(info.missing || []).length ? <code>{(info.missing || []).join(', ')}</code> : null}
                   </div>
                 );
               })}
@@ -191,7 +186,6 @@ function SuggestionCard({ suggestion }: { suggestion: NonNullable<Status['sugges
         <Pill tone={suggestion.free_tier ? 'good' : 'warn'}>{suggestion.free_tier ? 'free' : 'paid'}</Pill>
       </div>
       <p>{suggestion.description}</p>
-      {suggestion.secret_needed ? <code>{suggestion.secret_needed}</code> : null}
       {(suggestion.how_to || []).length ? (
         <a className="inline-link" href="setup.md">
           setup notes <ArrowUpRight size={13} />

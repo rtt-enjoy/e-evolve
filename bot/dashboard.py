@@ -82,7 +82,8 @@ def write_log(actions: list[dict]) -> None:
 def write_html(status: dict[str, Any]) -> None:
     """Publish safe dashboard data files consumed by the React frontend."""
     _HTML_FILE.parent.mkdir(parents=True, exist_ok=True)
-    public_status = {k: v for k, v in status.items() if not k.startswith("_")}
+    from bot.status import sanitize_for_git
+    public_status = sanitize_for_git(status)
     github_repo = os.getenv("GITHUB_REPO", "").strip()
     if github_repo:
         public_status["github_repo"] = github_repo

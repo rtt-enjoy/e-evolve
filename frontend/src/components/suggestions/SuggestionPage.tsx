@@ -31,7 +31,7 @@ export function SuggestionPage({
           <h2>Suggestions To Earn More</h2>
           <p>
             Each card is an earning improvement the AI agent can refine and implement through the existing GitHub workflow.
-            Add the required keys, then launch the improvement request for the next evolution cycle.
+            Complete the required setup, then launch the improvement request for the next evolution cycle.
           </p>
         </div>
         <div className="suggestion-hero-panel">
@@ -43,8 +43,8 @@ export function SuggestionPage({
 
       <section className="suggestion-stat-grid">
         <MiniStat icon={<Sparkles />} label="Suggestions" value={String(stats.total)} detail="ranked by bot output" />
-        <MiniStat icon={<CheckCircle2 />} label="Ready now" value={String(stats.readyCount)} detail="all secrets present" />
-        <MiniStat icon={<KeyRound />} label="Missing keys" value={String(stats.missingSecrets)} detail="shown per card" />
+        <MiniStat icon={<CheckCircle2 />} label="Ready now" value={String(stats.readyCount)} detail="setup complete" />
+        <MiniStat icon={<KeyRound />} label="Setup gaps" value={String(stats.missingSecrets)} detail="names redacted" />
         <MiniStat icon={<TrendingUp />} label="Weekly upside" value={money(stats.weeklyUsd, 0)} detail="estimated by bot" />
       </section>
 
@@ -64,17 +64,17 @@ export function SuggestionPage({
         <aside className="suggestion-side">
           <Panel title="How It Runs" subtitle="The page prepares the request; GitHub Actions performs the work.">
             <div className="automation-steps">
-              <WorkflowStep icon={<KeyRound />} title="Complete prerequisites" text="Add the listed API keys or tokens as GitHub Actions secrets." />
+              <WorkflowStep icon={<KeyRound />} title="Complete prerequisites" text="Add required credentials as GitHub Actions secrets." />
               <WorkflowStep icon={<Sparkles />} title="Improve suggestion" text="Open the prefilled bot-command issue or add the command to command.txt." />
               <WorkflowStep icon={<PlayCircle />} title="Workflow executes" text="The hourly cycle passes the request to the evolution agent and commits safe changes." />
               <WorkflowStep icon={<Check />} title="Suggestion is done" text="The next dashboard refresh shows changed files, updated suggestions, and readiness." />
             </div>
           </Panel>
 
-          <Panel title="Required Setup" subtitle="Secrets still needed across the current suggestion list.">
+          <Panel title="Required Setup" subtitle="Credential names are redacted from public status data.">
             <div className="setup-list">
               {missingSecrets.map((secret) => <code key={secret}>{secret}</code>)}
-              {!missingSecrets.length ? <Empty text="No missing secrets for the listed suggestions." /> : null}
+              {!missingSecrets.length ? <Empty text="No named credentials are exposed for the listed suggestions." /> : null}
             </div>
           </Panel>
         </aside>

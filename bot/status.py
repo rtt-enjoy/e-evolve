@@ -83,6 +83,7 @@ def snapshot(status: dict[str, Any]) -> dict[str, Any]:
     status["inactive_features"] = inactive
     status["secret_readiness"]  = _secret_readiness(active, inactive)
     status["llm_workflows"]     = _llm_workflows(active)
+    status.pop("configured_github_secrets", None)
     usdt_wallet = os.getenv("USDT_WALLET_ADDRESS", "").strip()
     if usdt_wallet:
         status["usdt_wallet"] = usdt_wallet
@@ -103,10 +104,43 @@ def snapshot(status: dict[str, Any]) -> dict[str, Any]:
 
 
 def save(status: dict[str, Any]) -> None:
-    """Persist to status.json, stripping all runtime-only keys (prefix _)."""
-    clean = {k: v for k, v in status.items() if not k.startswith("_")}
+    """Persist to status.json without runtime fields or secret diagnostics."""
+    clean = sanitize_for_git(status)
     STATUS_FILE.write_text(json.dumps(clean, indent=2, default=str), encoding="utf-8")
     log.debug("status.json saved")
+
+
+def sanitize_for_git(status: dict[str, Any]) -> dict[str, Any]:
+    """Return a copy safe for tracked JSON files and public dashboard data."""
+    secret_names = _secret_names()
+    secret_values = _secret_values()
+    clean = _redact_secrets(status, secret_names, secret_values)
+    if not isinstance(clean, dict):
+        return {}
+
+    for key in ("configured_github_secrets", "usdt_wallet"):
+        clean.pop(key, None)
+
+    if isinstance(clean.get("secret_readiness"), dict):
+        clean["secret_readiness"] = {
+            feature: {
+                "active": bool(info.get("active")),
+                "present_count": int(info.get("present_count", 0) or 0),
+                "required_count": int(info.get("required_count", 0) or 0),
+            }
+            for feature, info in clean["secret_readiness"].items()
+            if isinstance(info, dict)
+        }
+
+    if isinstance(clean.get("llm_workflows"), dict):
+        clean["llm_workflows"] = {
+            role: {k: v for k, v in workflow.items() if k != "secret"}
+            for role, workflow in clean["llm_workflows"].items()
+            if isinstance(workflow, dict)
+        }
+
+    clean["suggestions"] = _sanitize_suggestions(clean.get("suggestions", []))
+    return {k: v for k, v in clean.items() if not k.startswith("_")}
 
 
 # ── Internals ───────────────────────────────────────────────────────────────
@@ -195,6 +229,82 @@ def _fill_defaults(data: dict[str, Any]) -> dict[str, Any]:
             for sk, sv in v.items():
                 data[k].setdefault(sk, sv)
     return data
+
+
+def _secret_values() -> list[str]:
+    """Collect live secret values that must never be persisted."""
+    secret_names = _secret_names()
+    secret_names.update({
+        "ETHERSCAN_API_KEY",
+        "GH_TOKEN",
+        "GITHUB_TOKEN",
+        "NFT_STORAGE_TOKEN",
+    })
+    return [
+        value
+        for name in secret_names
+        if len(value := os.getenv(name, "").strip()) >= 8
+    ]
+
+
+def _secret_names() -> set[str]:
+    names = {
+        name
+        for keys in FEATURE_MAP.values()
+        for name in keys
+        if any(marker in name for marker in ("KEY", "SECRET", "TOKEN", "PRIVATE", "WALLET"))
+    }
+    names.update({
+        "ETHERSCAN_API_KEY",
+        "GH_TOKEN",
+        "GITHUB_TOKEN",
+        "NFT_STORAGE_TOKEN",
+    })
+    return names
+
+
+def _redact_secrets(value: Any, secret_names: set[str], secret_values: list[str]) -> Any:
+    if isinstance(value, dict):
+        return {
+            k: _redact_secrets(v, secret_names, secret_values)
+            for k, v in value.items()
+            if not str(k).startswith("_")
+        }
+    if isinstance(value, list):
+        return [_redact_secrets(item, secret_names, secret_values) for item in value]
+    if isinstance(value, str):
+        redacted = value
+        for secret_name in secret_names:
+            redacted = redacted.replace(secret_name, "[credential]")
+        for secret in secret_values:
+            redacted = redacted.replace(secret, "[redacted]")
+        return redacted
+    return value
+
+
+def _sanitize_suggestions(suggestions: Any) -> list[Any]:
+    if not isinstance(suggestions, list):
+        return []
+    clean: list[Any] = []
+    for suggestion in suggestions:
+        if not isinstance(suggestion, dict):
+            clean.append(suggestion)
+            continue
+        item = dict(suggestion)
+        item.pop("secret_needed", None)
+        if isinstance(item.get("how_to"), list):
+            item["how_to"] = [
+                _generic_setup_step(str(step))
+                for step in item["how_to"]
+            ]
+        clean.append(item)
+    return clean
+
+
+def _generic_setup_step(step: str) -> str:
+    if any(marker in step for marker in ("API_KEY", "SECRET", "TOKEN", "PRIVATE")):
+        return "Add the required credential as a GitHub Actions secret."
+    return step
 
 
 def _secret_readiness(active: list[str], inactive: list[str], use_env: bool = True) -> dict[str, Any]:

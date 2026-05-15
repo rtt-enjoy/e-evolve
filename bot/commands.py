@@ -74,7 +74,8 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
             overrides["improve_suggestion"] = target or "highest priority"
 
         elif cmd == "status report":
-            log.info("STATUS REPORT:\n%s", json.dumps(status, indent=2, default=str))
+            from bot.status import sanitize_for_git
+            log.info("STATUS REPORT:\n%s", json.dumps(sanitize_for_git(status), indent=2, default=str))
 
         else:
             log.warning("Unknown command (ignored): %r", raw)

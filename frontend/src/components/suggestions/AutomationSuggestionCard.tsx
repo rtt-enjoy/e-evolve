@@ -51,7 +51,7 @@ export function AutomationSuggestionCard({
               {suggestion.requiredSecrets.map((secret) => (
                 <code className={suggestion.missingSecrets.includes(secret) ? 'missing' : 'ready'} key={secret}>{secret}</code>
               ))}
-              {!suggestion.requiredSecrets.length ? <span>No extra API keys required</span> : null}
+              {!suggestion.requiredSecrets.length ? <span>Credential names redacted</span> : null}
             </div>
             <Progress value={suggestion.readinessPercent} label={`${suggestion.readinessPercent}% prerequisites ready`} />
           </div>

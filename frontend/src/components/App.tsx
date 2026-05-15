@@ -1,7 +1,8 @@
-import { BarChart3, Bot, Clock3, ExternalLink, GitBranch, RefreshCw, ShieldCheck, Sparkles, TerminalSquare } from 'lucide-react';
+import { BarChart3, Bot, Building2, Clock3, ExternalLink, GitBranch, RefreshCw, ShieldCheck, Sparkles, TerminalSquare } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { DashboardPage } from './dashboard/DashboardPage';
 import { SuggestionPage } from './suggestions/SuggestionPage';
+import { SubmitBusinessPage } from './SubmitBusinessPage';
 import { Banner, Pill } from './common';
 import { fetchStatus } from '../services/status';
 import { buildHealth, buildIssues, buildReadiness } from '../utils/dashboard';
@@ -9,7 +10,7 @@ import { buildAutomationSuggestions, buildSuggestionStats } from '../utils/sugge
 import { ageLabel, formatDate } from '../utils/format';
 import type { Status } from '../types/status';
 
-type View = 'dashboard' | 'suggestions';
+type View = 'dashboard' | 'suggestions' | 'submit-business';
 
 const emptyStatus: Status = {
   active_features: [],
@@ -25,7 +26,11 @@ export function App() {
   const [status, setStatus] = useState<Status>(emptyStatus);
   const [lastPoll, setLastPoll] = useState<Date | null>(null);
   const [loadError, setLoadError] = useState('');
-  const [view, setView] = useState<View>(() => window.location.hash === '#suggestions' ? 'suggestions' : 'dashboard');
+  const [view, setView] = useState<View>(() => {
+    if (window.location.hash === '#suggestions') return 'suggestions';
+    if (window.location.hash === '#submit-business') return 'submit-business';
+    return 'dashboard';
+  });
 
   async function load() {
     try {
@@ -53,7 +58,8 @@ export function App() {
 
   function changeView(nextView: View) {
     setView(nextView);
-    window.history.replaceState(null, '', nextView === 'suggestions' ? '#suggestions' : window.location.pathname);
+    const hash = nextView === 'suggestions' ? '#suggestions' : nextView === 'submit-business' ? '#submit-business' : window.location.pathname;
+    window.history.replaceState(null, '', hash);
   }
 
   return (
@@ -80,6 +86,9 @@ export function App() {
               <button className={view === 'suggestions' ? 'active' : ''} onClick={() => changeView('suggestions')} type="button">
                 <Sparkles size={15} /> suggestions {suggestionStats.readyCount}/{suggestionStats.total}
               </button>
+              <button className={view === 'submit-business' ? 'active' : ''} onClick={() => changeView('submit-business')} type="button">
+                <Building2 size={15} /> submit business
+              </button>
             </div>
             <button className="icon-button" onClick={load} aria-label="Refresh status" title="Refresh status">
               <RefreshCw size={18} />
@@ -95,6 +104,8 @@ export function App() {
 
         {view === 'suggestions' ? (
           <SuggestionPage status={status} suggestions={suggestions} stats={suggestionStats} />
+        ) : view === 'submit-business' ? (
+          <SubmitBusinessPage />
         ) : (
           <DashboardPage status={status} />
         )}

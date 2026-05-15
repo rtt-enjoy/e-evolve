@@ -90,7 +90,7 @@ textarea {
   }
 
   .view-switch {
-    @apply inline-grid grid-cols-2 overflow-hidden rounded-lg border border-line bg-panel2 p-1;
+    @apply inline-grid grid-cols-1 overflow-hidden rounded-lg border border-line bg-panel2 p-1 sm:grid-cols-3;
   }
 
   .view-switch button {
@@ -576,5 +576,89 @@ textarea {
 
   .compact-action em {
     @apply text-xs not-italic tabular-nums text-cyan;
+  }
+
+  .submit-business-page {
+    @apply space-y-6;
+  }
+
+  .submit-business-hero {
+    @apply grid gap-5 rounded-lg border border-line bg-panel p-6 shadow-panel lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end;
+  }
+
+  .submit-business-hero h2 {
+    @apply text-3xl font-semibold md:text-5xl;
+  }
+
+  .submit-business-hero p {
+    @apply mt-3 max-w-3xl text-sm leading-6 text-soft;
+  }
+
+  .submit-business-proof {
+    @apply rounded-lg border border-line bg-panel2 p-5;
+  }
+
+  .submit-business-proof span {
+    @apply block text-xs font-semibold uppercase tracking-normal text-soft;
+  }
+
+  .submit-business-proof strong {
+    @apply mt-3 block text-xl font-semibold leading-7;
+  }
+
+  .submit-business-proof a {
+    @apply mt-4 inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-cyan;
+  }
+
+  .submit-directory-grid {
+    @apply grid gap-4 md:grid-cols-3;
+  }
+
+  .submit-directory-card {
+    @apply rounded-lg border border-line bg-panel2 p-5;
+  }
+
+  .submit-directory-icon {
+    @apply mb-4 flex h-10 w-10 items-center justify-center rounded-md border border-line bg-ink text-accent;
+  }
+
+  .submit-directory-icon svg {
+    @apply h-5 w-5;
+  }
+
+  .submit-directory-card span {
+    @apply block text-xs font-semibold uppercase tracking-normal text-soft;
+  }
+
+  .submit-directory-card strong {
+    @apply mt-2 block text-lg font-semibold;
+  }
+
+  .submit-directory-card p {
+    @apply min-h-24 text-sm leading-6 text-soft;
+  }
+
+  .submit-business-layout {
+    @apply grid gap-6 lg:grid-cols-[minmax(0,1fr)_420px];
+  }
+
+  .submit-checklist {
+    @apply space-y-3;
+  }
+
+  .submit-checklist li {
+    @apply rounded-lg border border-line bg-panel2 p-4 text-sm leading-6 text-soft;
+  }
+
+  .listing-template {
+    @apply rounded-lg border border-line bg-panel2 p-4;
+  }
+
+  .listing-template span {
+    @apply mt-4 block text-xs font-semibold uppercase tracking-normal text-cyan first:mt-0;
+  }
+
+  .listing-template p {
+    @apply mt-2 text-sm leading-6 text-soft;
   }
 }

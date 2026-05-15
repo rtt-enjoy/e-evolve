@@ -17,6 +17,10 @@ export type AutomationSuggestion = Suggestion & {
   opportunityUrl?: string;
 };
 
+const COMPLETED_CODE_TECH_LEADS = new Set([
+  'create custom page for "submit your business"',
+]);
+
 export function buildAutomationSuggestions(status: Status): AutomationSuggestion[] {
   const source: Array<{ suggestion: Suggestion; source: AutomationSuggestion['source'] }> = [
     ...(status.suggestions || []).map((suggestion) => ({ suggestion, source: 'suggestion' as const })),
@@ -40,7 +44,7 @@ export function buildAutomationSuggestions(status: Status): AutomationSuggestion
     });
   }
 
-  for (const opportunity of (status.code_tech_earning?.opportunities || []).slice(0, 5)) {
+  for (const opportunity of (status.code_tech_earning?.opportunities || []).filter((lead) => !isCompletedCodeTechLead(lead)).slice(0, 5)) {
     source.push({
       source: 'code_tech',
       suggestion: codeTechSuggestion(opportunity, status.code_tech_earning?.daily_target_usd || 10),
@@ -113,6 +117,10 @@ export function inferRepoFromLocation() {
   const path = window.location.pathname.split('/').filter(Boolean)[0];
   if (!host.endsWith('.github.io') || !path) return '';
   return `${host.replace('.github.io', '')}/${path}`;
+}
+
+function isCompletedCodeTechLead(opportunity: CodeTechOpportunity) {
+  return COMPLETED_CODE_TECH_LEADS.has((opportunity.title || '').trim().toLowerCase());
 }
 
 function buildAutomationPlan(suggestion: Suggestion) {

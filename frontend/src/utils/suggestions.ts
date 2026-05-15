@@ -146,19 +146,41 @@ function buildNextAction(suggestion: Suggestion, missingSecrets: string[]) {
 function codeTechSuggestion(opportunity: CodeTechOpportunity, dailyTarget: number): Suggestion {
   const title = opportunity.title || 'Untitled code-tech lead';
   const value = opportunity.estimated_value_usd || dailyTarget;
+  const specialized = specializeCodeTechLead(opportunity);
   return {
     title: `Code-tech lead: ${title}`,
-    description: [
+    description: specialized?.description || [
       shortText(opportunity.reason || 'No-secret maintenance lead from the active code-tech queue.', 130),
       opportunity.next_step ? `Next: ${shortText(opportunity.next_step, 120)}` : '',
     ].filter(Boolean).join(' '),
     secret_needed: '',
     estimated_weekly_usd: Math.max(0, value),
     free_tier: true,
-    how_to: [
+    how_to: specialized?.howTo || [
       opportunity.url ? `Open ${opportunity.url}` : '',
       opportunity.next_step || 'Reproduce the issue and prepare one focused patch.',
       `Use value signal ${money(opportunity.estimated_value_usd || 0, 0)} and score ${opportunity.score || 0}/100 to decide effort.`,
+    ].filter(Boolean),
+  };
+}
+
+function specializeCodeTechLead(opportunity: CodeTechOpportunity) {
+  const title = (opportunity.title || '').toLowerCase();
+  const isAnnouncementMaintenanceLead = title.includes('notification')
+    && title.includes('announcements')
+    && title.includes('maintenance mode');
+  if (!isAnnouncementMaintenanceLead) return null;
+
+  return {
+    description: [
+      'Bounty lead for two scoped admin features: a markdown site announcement with expiry/RBAC and env-driven deployment maintenance mode.',
+      'Deliverable needs docs plus short demo evidence.',
+    ].join(' '),
+    howTo: [
+      opportunity.url ? `Open ${opportunity.url}` : '',
+      'Verify the bounty is still open, then map existing admin settings, RBAC, env, and deployment docs before coding.',
+      'Implement one active announcement with markdown links, expiration handling, read permission defaults, and top-of-site placement.',
+      'Add maintenance-mode env handling with a user-facing message, document the env var, and capture a short demo for the PR.',
     ].filter(Boolean),
   };
 }

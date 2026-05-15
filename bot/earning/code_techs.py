@@ -264,9 +264,11 @@ def _score(text: str, labels: list[str], value: float) -> int:
         score += min(35, int(value / 5))
     if any(word in text for word in ("bounty", "paid", "reward", "fixed-price", "service", "offer")):
         score += 18
-    if any(word in text for word in ("ci", "test", "flaky", "failing")):
+    if _has_any(text, ("ci", "test", "flaky", "failing")):
         score += 14
     if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
+        score += 12
+    if _is_announcement_maintenance_lead(text):
         score += 12
     if any(word in text for word in ("python 3.12", "node 20", "pyproject", "deprecated", "warning")):
         score += 10
@@ -297,7 +299,9 @@ def _reason(text: str, labels: list[str], value: float) -> str:
     parts: list[str] = []
     if value:
         parts.append(f"visible or inferred value around ${value:.2f}")
-    if any(word in text for word in ("ci", "test", "flaky", "failing")):
+    if _is_announcement_maintenance_lead(text):
+        parts.append("scoped admin feature with RBAC, expiry, env config, docs, and demo proof")
+    if _has_any(text, ("ci", "test", "flaky", "failing")):
         parts.append("CI/test work is concrete and easy for maintainers to accept")
     if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
         parts.append("migration chores are neglected but urgent")
@@ -313,6 +317,8 @@ def _reason(text: str, labels: list[str], value: float) -> str:
 
 
 def _next_step(text: str) -> str:
+    if _is_announcement_maintenance_lead(text):
+        return "Verify bounty status, inspect existing admin/RBAC/env docs, then patch the announcement and maintenance-mode paths with demo proof."
     if "bounty" in text:
         return "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch."
     if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
@@ -324,6 +330,18 @@ def _next_step(text: str) -> str:
     if any(word in text for word in ("docs", "readme", "example", "quickstart")):
         return "Run the documented example from a clean checkout and submit the corrected command or snippet."
     return "Reproduce locally, write a short maintainer note, and keep the first patch under one focused change."
+
+
+def _has_any(text: str, terms: tuple[str, ...]) -> bool:
+    return any(re.search(rf"\b{re.escape(term)}\b", text) for term in terms)
+
+
+def _is_announcement_maintenance_lead(text: str) -> bool:
+    return (
+        "notification" in text
+        and "announcements" in text
+        and "maintenance mode" in text
+    )
 
 
 def _parse_dt(value: Any) -> datetime | None:

@@ -11,6 +11,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from bot import github_secrets
+
 log = logging.getLogger(__name__)
 
 STATUS_FILE  = Path("status.json")
@@ -35,12 +37,12 @@ FEATURE_MAP: dict[str, list[str]] = {
 LLM_ROLE_WORKFLOWS: dict[str, dict[str, str]] = {
     "upgrade": {
         "provider": "gemini",
-        "model": "gemini-2.5-pro-preview-05-06",
+        "model": "gemini-2.5-pro",
         "purpose": "codebase evolution, patch planning, and repair",
     },
     "research": {
         "provider": "openrouter",
-        "model": "google/gemini-2.0-flash-exp:free",
+        "model": "openrouter/free",
         "purpose": "article research briefs and second-opinion ideation",
     },
     "post": {
@@ -75,14 +77,16 @@ def snapshot(status: dict[str, Any]) -> dict[str, Any]:
                 if all(os.getenv(k, "").strip() for k in keys)]
     inactive = [f for f in FEATURE_MAP if f not in active]
     version  = VERSION_FILE.read_text().strip() if VERSION_FILE.exists() else "1.0.0"
+    configured_secrets = _configured_secret_names()
 
     status["version"]           = version
     status["last_run"]          = datetime.now(timezone.utc).isoformat()
     status["total_runs"]        = int(status.get("total_runs", 0)) + 1
     status["active_features"]   = active
     status["inactive_features"] = inactive
-    status["secret_readiness"]  = _secret_readiness(active, inactive)
-    status["llm_workflows"]     = _llm_workflows(active)
+    status["configured_github_secrets"] = sorted(configured_secrets)
+    status["secret_readiness"]  = _secret_readiness(active, inactive, configured_secrets)
+    status["llm_workflows"]     = _llm_workflows(active, configured_secrets)
     usdt_wallet = os.getenv("USDT_WALLET_ADDRESS", "").strip()
     if usdt_wallet:
         prev_balance = float(status.get("usdt_balance", 0.0))
@@ -160,6 +164,7 @@ def _defaults() -> dict[str, Any]:
         "total_runs":        0,
         "active_features":   [],
         "inactive_features": list(FEATURE_MAP.keys()),
+        "configured_github_secrets": [],
         "secret_readiness":  {},
         "llm_provider":      "unknown",
         "llm_roles":         {},
@@ -239,6 +244,17 @@ def _secret_names() -> set[str]:
     return names
 
 
+def _configured_secret_names() -> set[str]:
+    """Configured names only; never reads or persists secret values."""
+    names = github_secrets.configured_secret_names()
+    names.update(
+        name
+        for name in _secret_names()
+        if os.getenv(name, "").strip()
+    )
+    return names
+
+
 def _redact_secret_values(value: Any, secret_values: list[str]) -> Any:
     if isinstance(value, dict):
         return {
@@ -256,17 +272,24 @@ def _redact_secret_values(value: Any, secret_values: list[str]) -> Any:
     return value
 
 
-def _secret_readiness(active: list[str], inactive: list[str], use_env: bool = True) -> dict[str, Any]:
+def _secret_readiness(
+    active: list[str],
+    inactive: list[str],
+    configured_secrets: set[str] | None = None,
+    use_env: bool = True,
+) -> dict[str, Any]:
     """Persist safe present/missing secret names for dashboard diagnostics."""
     active_set = set(active)
+    configured = configured_secrets or set()
     readiness: dict[str, Any] = {}
     for feature, keys in FEATURE_MAP.items():
         # In CI, env tells us directly. During local dashboard regeneration, the
         # previous GitHub snapshot's active_features safely implies all keys for
-        # that feature existed without exposing their values.
+        # that feature existed without exposing their values. Local runs can also
+        # use GitHub's online secret names for readiness without reading values.
         present = [
             k for k in keys
-            if (use_env and os.getenv(k, "").strip()) or feature in active_set
+            if (use_env and os.getenv(k, "").strip()) or k in configured or feature in active_set
         ]
         missing = [k for k in keys if k not in present]
         readiness[feature] = {
@@ -279,9 +302,13 @@ def _secret_readiness(active: list[str], inactive: list[str], use_env: bool = Tr
     return readiness
 
 
-def _llm_workflows(active_features: list[str] | None = None) -> dict[str, Any]:
+def _llm_workflows(
+    active_features: list[str] | None = None,
+    configured_secrets: set[str] | None = None,
+) -> dict[str, Any]:
     """Describe role routing and whether each role can run this cycle."""
     active_set = set(active_features or [])
+    configured = configured_secrets or set()
     workflows: dict[str, Any] = {}
     for role, cfg in LLM_ROLE_WORKFLOWS.items():
         provider = cfg["provider"]
@@ -293,7 +320,10 @@ def _llm_workflows(active_features: list[str] | None = None) -> dict[str, Any]:
         feature = f"llm_{provider}"
         workflows[role] = {
             **cfg,
-            "active": bool((secret and os.getenv(secret, "").strip()) or feature in active_set),
+            "active": bool(
+                (secret and (os.getenv(secret, "").strip() or secret in configured))
+                or feature in active_set
+            ),
             "secret": secret,
         }
     return workflows

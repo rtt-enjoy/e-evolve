@@ -26,15 +26,13 @@ _ANTHROPIC_MODELS = [
     "claude-3-haiku-20240307",
 ]
 _GEMINI_MODELS = [
-    "gemini-2.5-pro-preview-05-06",
-    "gemini-2.0-flash-thinking-exp",
-    "gemini-2.0-flash",
-    "gemini-1.5-pro",
-    "gemini-1.5-flash",
+    "gemini-2.5-pro",
+    "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
 ]
 # OpenRouter: strong free-tier models first, paid fallback
 _OPENROUTER_MODELS = [
-    "google/gemini-2.0-flash-exp:free",
+    "openrouter/free",
     "meta-llama/llama-3.3-70b-instruct:free",
     "mistralai/mistral-7b-instruct:free",
     "openai/gpt-4o-mini",

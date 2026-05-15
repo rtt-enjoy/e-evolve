@@ -115,6 +115,19 @@ python -m bot.main
 
 `python-dotenv` loads `.env` automatically when running locally. CI ignores it (uses GitHub Secrets).
 
+GitHub does not allow secret values to be downloaded after they are saved. For
+local diagnostics, set `GH_TOKEN` or `GITHUB_TOKEN` with repo metadata access and
+run:
+
+```bash
+python -m bot.github_secrets
+```
+
+That prints configured GitHub Actions secret names only, never values. Local
+cycles still need real values in `.env` before modules can call external APIs,
+but the dashboard readiness check will use the online names when a token is
+available.
+
 ---
 
 ## Verifying It Works

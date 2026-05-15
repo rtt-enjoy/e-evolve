@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-05-14T13:08:27.528845+00:00
+Refreshed: 2026-05-15T14:36:22.955760+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -44,44 +44,43 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. [Site notification/announcements bar + deployment maintenance mode](https://github.com/archestra-ai/archestra/issues/4463)
-   - Score: 99/100
-   - Value signal: $75.00
-   - Why: visible or inferred value around $75.00; CI/test work is concrete and easy for maintainers to accept
+1. [🔐 AWS S3 Security Remediation & Civil ID Upload Fix — IAM Key Rotation, Bucket Hardening & Backend Patches](https://github.com/BAWES-Universe/studenthub/issues/55)
+   - Score: 100/100
+   - Value signal: $600.00
+   - Why: visible or inferred value around $600.00; CI/test work is concrete and easy for maintainers to accept
    - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
-2. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
-   - Score: 98/100
+2. [[chore] Migração de dbt-core para dbt Fusion](https://github.com/basedosdados/pipelines/issues/1541)
+   - Score: 100/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-3. [Add docker-compose.yml for one-command local setup](https://github.com/KonstantinMB/exploreyc/issues/6)
-   - Score: 98/100
+3. [Dependency Dashboard](https://github.com/arnolicious/jelly-clipper/issues/17)
+   - Score: 100/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-4. [Create custom page for "Submit your business"](https://github.com/bitcoin-dot-org/Bitcoin.org/issues/1583)
-   - Score: 97/100
-   - Value signal: $250.00
-   - Why: visible or inferred value around $250.00; CI/test work is concrete and easy for maintainers to accept
-   - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
-5. [Revamp the entire Firebase Functions flow with this architectural principle:](https://github.com/kingyx3/hermes-vps/issues/499)
-   - Score: 92/100
+4. [Dependency Dashboard](https://github.com/padok-team/yatas-aws/issues/4)
+   - Score: 94/100
    - Value signal: $0.00
-   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
+   - Why: migration chores are neglected but urgent; runtime and toolchain drift creates urgent maintenance demand
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-6. [Dependency Dashboard](https://github.com/atlas-bi/Hub/issues/81)
+5. [Producer experience: close the gap from "I built a plugin" to "every assistant can install it"](https://github.com/microsoft/apm/issues/1348)
    - Score: 90/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-7. [Dependency Dashboard](https://github.com/kkkaoru/frontend-configs/issues/5)
+6. [QA Test Plan `26.5.0`](https://github.com/conda/conda/issues/16016)
    - Score: 90/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-
-## Completed Leads
-
-- [Renovate Dashboard](https://github.com/dettanym/prose/issues/8)
-  - Done: triaged the live Renovate dashboard and removed it from the active suggestions page.
-  - Proof: config migration is available; branch update failure is present; pin-dependencies is errored; @tsconfig/node20 should move to @tsconfig/node22; Helm lookup failures affect kubernetes-dashboard, app-template, and ghcr.io/onedr0p/jellyfin paths.
+7. [Dependency Dashboard](https://github.com/ndsrf/wedding/issues/59)
+   - Score: 90/100
+   - Value signal: $0.00
+   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+8. [[ FastAPI ] Add rate limiting and key rotation support to API key authentication](https://github.com/UnsafeLabs/Bounty-Hunters/issues/768)
+   - Score: 89/100
+   - Value signal: $350.00
+   - Why: visible or inferred value around $350.00; runtime and toolchain drift creates urgent maintenance demand
+   - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.

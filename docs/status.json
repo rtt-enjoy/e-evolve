@@ -1,7 +1,7 @@
 {
   "version": "1.31.0",
-  "last_run": "2026-05-15T11:30:17.923739+00:00",
-  "total_runs": 517,
+  "last_run": "2026-05-15T14:36:11.326847+00:00",
+  "total_runs": 518,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -35,14 +35,23 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.31.0",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"version\": \"1.31.1\",\\n  \"summary\": \"Add Medium integration and improve article publishing strategy\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Add MEDIUM_INTEGRATION_TOKEN for dual publishing\",\\n    '",
+    "summary": "No summary provided",
     "changes_applied": [],
     "suggestions": [],
-    "error": "Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"version\": \"1.31.1\",\\n  \"summary\": \"Add Medium integration and improve article publishing strategy\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Add MEDIUM_INTEGRATION_TOKEN for dual publishing\",\\n    '",
-    "error_type": "json"
+    "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech opportunity queue refreshed (8 leads)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -84,7 +93,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 282,
+  "last_cycle_seconds": 17,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -230,13 +239,22 @@
   },
   "code_tech_earning": {
     "enabled": true,
-    "last_refresh_at": "2026-05-14T13:08:27.528845+00:00",
+    "last_refresh_at": "2026-05-15T14:36:22.955760+00:00",
     "daily_target_usd": 10.0,
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "Renovate Dashboard \ud83e\udd16",
-        "url": "https://github.com/dettanym/prose/issues/8",
+        "title": "\ud83d\udd10 AWS S3 Security Remediation & Civil ID Upload Fix \u2014 IAM Key Rotation, Bucket Hardening & Backend Patches",
+        "url": "https://github.com/BAWES-Universe/studenthub/issues/55",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 600.0,
+        "reason": "visible or inferred value around $600.00; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch."
+      },
+      {
+        "title": "[chore] Migra\u00e7\u00e3o de dbt-core para dbt Fusion",
+        "url": "https://github.com/basedosdados/pipelines/issues/1541",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -244,53 +262,35 @@
         "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
       },
       {
-        "title": "Site notification/announcements bar + deployment maintenance mode",
-        "url": "https://github.com/archestra-ai/archestra/issues/4463",
-        "source": "github",
-        "score": 99,
-        "estimated_value_usd": 75.0,
-        "reason": "visible or inferred value around $75.00; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch."
-      },
-      {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/ah-ha-admin/refactored-memory/issues/49",
+        "url": "https://github.com/arnolicious/jelly-clipper/issues/17",
         "source": "github",
-        "score": 98,
-        "estimated_value_usd": 0.0,
-        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
-      },
-      {
-        "title": "Add docker-compose.yml for one-command local setup",
-        "url": "https://github.com/KonstantinMB/exploreyc/issues/6",
-        "source": "github",
-        "score": 98,
-        "estimated_value_usd": 0.0,
-        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
-      },
-      {
-        "title": "Create custom page for \"Submit your business\"",
-        "url": "https://github.com/bitcoin-dot-org/Bitcoin.org/issues/1583",
-        "source": "github",
-        "score": 97,
-        "estimated_value_usd": 250.0,
-        "reason": "visible or inferred value around $250.00; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch."
-      },
-      {
-        "title": "Revamp the entire Firebase Functions flow with this architectural principle:",
-        "url": "https://github.com/kingyx3/hermes-vps/issues/499",
-        "source": "github",
-        "score": 92,
+        "score": 100,
         "estimated_value_usd": 0.0,
         "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
         "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/atlas-bi/Hub/issues/81",
+        "url": "https://github.com/padok-team/yatas-aws/issues/4",
+        "source": "github",
+        "score": 94,
+        "estimated_value_usd": 0.0,
+        "reason": "migration chores are neglected but urgent; runtime and toolchain drift creates urgent maintenance demand",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+      },
+      {
+        "title": "Producer experience: close the gap from \"I built a plugin\" to \"every assistant can install it\"",
+        "url": "https://github.com/microsoft/apm/issues/1348",
+        "source": "github",
+        "score": 90,
+        "estimated_value_usd": 0.0,
+        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+      },
+      {
+        "title": "QA Test Plan `26.5.0`",
+        "url": "https://github.com/conda/conda/issues/16016",
         "source": "github",
         "score": 90,
         "estimated_value_usd": 0.0,
@@ -299,12 +299,21 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/kkkaoru/frontend-configs/issues/5",
+        "url": "https://github.com/ndsrf/wedding/issues/59",
         "source": "github",
         "score": 90,
         "estimated_value_usd": 0.0,
         "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
         "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+      },
+      {
+        "title": "[ FastAPI ] Add rate limiting and key rotation support to API key authentication",
+        "url": "https://github.com/UnsafeLabs/Bounty-Hunters/issues/768",
+        "source": "github",
+        "score": 89,
+        "estimated_value_usd": 350.0,
+        "reason": "visible or inferred value around $350.00; runtime and toolchain drift creates urgent maintenance demand",
+        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch."
       }
     ],
     "requirements": [

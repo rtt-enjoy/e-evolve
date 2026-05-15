@@ -12,8 +12,9 @@ you are updating generated output for the current commit. Durable dashboard UI
 changes belong in `frontend/src/`. Durable dashboard data contract changes
 belong in `bot/dashboard.py` and the status-producing backend modules.
 
-The dashboard must represent safe status only. Secret values and secret names
-are never rendered from tracked status files; readiness is shown as counts.
+The dashboard must represent safe status only. Secret names such as
+`TWITTER_API_KEY` may be rendered so setup remains actionable, but actual secret
+values must never be written to tracked status files, built assets, or logs.
 
 ## Required Frontend Signals
 
@@ -26,7 +27,7 @@ The first screen should answer these questions clearly:
 - What changed in the latest evolution, and did it produce errors?
 - What actions ran in the latest earning cycle, and which failed?
 - What errors, suggestions, and setup gaps should the owner act on next?
-- Which integrations are active, inactive, or missing required credential count?
+- Which integrations are active, inactive, or missing required secret names?
 
 ## Dashboard Panels
 
@@ -37,8 +38,8 @@ The first screen should answer these questions clearly:
 - **Problems And Corrections**: ranked operational issues combining stale
   workflow state, errors, failed actions, evolution failures, and missing
   high-impact setup secrets.
-- **Credential Readiness**: per-feature readiness counts only. It must never
-  expose secret names or values.
+- **Secret Readiness**: per-feature readiness by secret name. It must never
+  expose secret values.
 - **Last Evolution**: latest summary, changed files, error label, and ranked
   suggestions including activation steps when present.
 

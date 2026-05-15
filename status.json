@@ -43,36 +43,39 @@
   },
   "suggestions": [
     {
-      "title": "Add [credential] for Twitter integration",
+      "title": "Add TWITTER_API_KEY for Twitter integration",
       "description": "Enable Twitter posting and increase reach",
+      "secret_needed": "TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "Step 1: Go to the Twitter Developer Dashboard and create an app",
         "Step 2: Generate an API key and secret in the Twitter settings",
-        "Add the required credential as a GitHub Actions secret."
+        "Step 3: Add TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, and TWITTER_ACCESS_SECRET as GitHub Actions secrets"
       ]
     },
     {
-      "title": "Add [credential] for dual publishing",
+      "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
       "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
+      "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "Step 1: Go to Medium Partner Program and create an account",
         "Step 2: Generate an integration token in the Medium settings",
-        "Add the required credential as a GitHub Actions secret."
+        "Step 3: Add MEDIUM_INTEGRATION_TOKEN as a GitHub Actions secret"
       ]
     },
     {
-      "title": "Add [credential] for Anthropic LLM integration",
+      "title": "Add ANTHROPIC_API_KEY for Anthropic LLM integration",
       "description": "Enable Anthropic LLM and increase LLM capabilities",
+      "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "Step 1: Go to the Anthropic website and create an account",
         "Step 2: Generate an API key in the Anthropic settings",
-        "Add the required credential as a GitHub Actions secret."
+        "Step 3: Add ANTHROPIC_API_KEY as a GitHub Actions secret"
       ]
     }
   ],
@@ -89,56 +92,107 @@
   "secret_readiness": {
     "llm_anthropic": {
       "active": false,
+      "present": [],
+      "missing": [
+        "ANTHROPIC_API_KEY"
+      ],
       "present_count": 0,
       "required_count": 1
     },
     "llm_gemini": {
       "active": true,
+      "present": [
+        "GEMINI_API_KEY"
+      ],
+      "missing": [],
       "present_count": 1,
       "required_count": 1
     },
     "llm_openrouter": {
       "active": true,
+      "present": [
+        "OPENROUTER_API_KEY"
+      ],
+      "missing": [],
       "present_count": 1,
       "required_count": 1
     },
     "llm_groq": {
       "active": true,
+      "present": [
+        "GROQ_API_KEY"
+      ],
+      "missing": [],
       "present_count": 1,
       "required_count": 1
     },
     "articles_devto": {
       "active": true,
+      "present": [
+        "DEV_TO_API_KEY"
+      ],
+      "missing": [],
       "present_count": 1,
       "required_count": 1
     },
     "articles_medium": {
       "active": false,
+      "present": [],
+      "missing": [
+        "MEDIUM_INTEGRATION_TOKEN"
+      ],
       "present_count": 0,
       "required_count": 1
     },
     "usdt_wallet": {
       "active": true,
+      "present": [
+        "USDT_WALLET_ADDRESS"
+      ],
+      "missing": [],
       "present_count": 1,
       "required_count": 1
     },
     "twitter": {
       "active": false,
+      "present": [],
+      "missing": [
+        "TWITTER_API_KEY",
+        "TWITTER_API_SECRET",
+        "TWITTER_ACCESS_TOKEN",
+        "TWITTER_ACCESS_SECRET"
+      ],
       "present_count": 0,
       "required_count": 4
     },
     "crypto_binance": {
       "active": false,
+      "present": [],
+      "missing": [
+        "BINANCE_API_KEY",
+        "BINANCE_SECRET_KEY"
+      ],
       "present_count": 0,
       "required_count": 2
     },
     "crypto_payout": {
       "active": false,
+      "present": [],
+      "missing": [
+        "BINANCE_API_KEY",
+        "BINANCE_SECRET_KEY",
+        "BINANCE_WITHDRAW_ADDRESS"
+      ],
       "present_count": 0,
       "required_count": 3
     },
     "nft_ethereum": {
       "active": false,
+      "present": [],
+      "missing": [
+        "ETH_PRIVATE_KEY",
+        "ETH_WALLET_ADDRESS"
+      ],
       "present_count": 0,
       "required_count": 2
     }
@@ -148,19 +202,22 @@
       "provider": "gemini",
       "model": "gemini-2.5-pro-preview-05-06",
       "purpose": "codebase evolution, patch planning, and repair",
-      "active": true
+      "active": true,
+      "secret": "GEMINI_API_KEY"
     },
     "research": {
       "provider": "openrouter",
       "model": "google/gemini-2.0-flash-exp:free",
       "purpose": "article research briefs and second-opinion ideation",
-      "active": true
+      "active": true,
+      "secret": "OPENROUTER_API_KEY"
     },
     "post": {
       "provider": "groq",
       "model": "llama-3.3-70b-versatile",
       "purpose": "new article and social post generation",
-      "active": true
+      "active": true,
+      "secret": "GROQ_API_KEY"
     }
   },
   "article_daily": {

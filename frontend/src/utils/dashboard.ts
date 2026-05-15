@@ -118,11 +118,12 @@ export function buildHealth(status: Status, issues: Array<{ tone: string }>, rea
   return { tone: 'good', label: 'operational' };
 }
 
-function readinessLabel(info?: { active?: boolean; present_count?: number; required_count?: number }) {
+function readinessLabel(info?: { active?: boolean; present_count?: number; required_count?: number; missing?: string[] }) {
   const required = info?.required_count || 0;
   const present = info?.present_count || 0;
   if (!required) return 'No setup data';
   if (present >= required) return 'All required credentials present';
+  if (info?.missing?.length) return `${info.missing.length} missing: ${info.missing.join(', ')}`;
   return `${Math.max(0, required - present)} credentials missing`;
 }
 

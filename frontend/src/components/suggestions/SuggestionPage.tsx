@@ -44,7 +44,7 @@ export function SuggestionPage({
       <section className="suggestion-stat-grid">
         <MiniStat icon={<Sparkles />} label="Suggestions" value={String(stats.total)} detail="ranked by bot output" />
         <MiniStat icon={<CheckCircle2 />} label="Ready now" value={String(stats.readyCount)} detail="setup complete" />
-        <MiniStat icon={<KeyRound />} label="Setup gaps" value={String(stats.missingSecrets)} detail="names redacted" />
+        <MiniStat icon={<KeyRound />} label="Setup gaps" value={String(stats.missingSecrets)} detail="named secrets" />
         <MiniStat icon={<TrendingUp />} label="Weekly upside" value={money(stats.weeklyUsd, 0)} detail="estimated by bot" />
       </section>
 
@@ -71,10 +71,10 @@ export function SuggestionPage({
             </div>
           </Panel>
 
-          <Panel title="Required Setup" subtitle="Credential names are redacted from public status data.">
+          <Panel title="Required Setup" subtitle="Secret names are shown so setup is actionable; values are never stored here.">
             <div className="setup-list">
               {missingSecrets.map((secret) => <code key={secret}>{secret}</code>)}
-              {!missingSecrets.length ? <Empty text="No named credentials are exposed for the listed suggestions." /> : null}
+              {!missingSecrets.length ? <Empty text="No missing credentials for the listed suggestions." /> : null}
             </div>
           </Panel>
         </aside>

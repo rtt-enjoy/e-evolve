@@ -230,6 +230,49 @@ def main() -> int:
 
 # ── Module runner ─────────────────────────────────────────────────────────────
 
+def safe_main() -> int:
+    """Run the pulse without letting an unexpected crash fail the scheduler."""
+    try:
+        code = main()
+        if code != 0:
+            _record_crash(RuntimeError(f"pulse exited with code {code}"))
+        return 0
+    except Exception as exc:
+        log.critical("Unhandled pulse crash: %s", exc)
+        log.debug(traceback.format_exc())
+        try:
+            _record_crash(exc)
+        except Exception as record_exc:
+            log.error("Crash recording failed: %s", record_exc)
+        return 0
+
+
+def _record_crash(exc: Exception) -> None:
+    """Persist a short crash note so the dashboard shows why the cycle degraded."""
+    import bot.status as _st
+    import bot.dashboard as _dash
+    import bot.git_utils as _git
+
+    status = _st.load()
+    status["last_run"] = datetime.now(timezone.utc).isoformat()
+    status["errors"] = (
+        [f"Unhandled pulse crash: {exc}"] + list(status.get("errors", []))
+    )[:20]
+    status["last_evolution"] = {
+        "summary": f"Pulse crash before completion: {str(exc)[:300]}",
+        "changes_applied": [],
+        "suggestions": status.get("suggestions", []),
+        "version_bumped_to": status.get("version"),
+        "error": str(exc)[:500],
+    }
+    _st.save(status)
+    _dash.write_html(status)
+    _git.commit(
+        "fix(pulse): record unhandled crash state",
+        paths=["status.json", "docs/status.json", "docs/index.html"],
+    )
+
+
 def _module(name: str, llm: Any, status: dict, errors: list) -> list[dict]:
     """Run one earning module with full exception isolation."""
     log.info("▶ %s", name)
@@ -304,4 +347,4 @@ def _hr(text: str) -> None:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(safe_main())

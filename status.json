@@ -1,7 +1,7 @@
 {
   "version": "1.31.0",
-  "last_run": "2026-05-15T18:55:30.257795+00:00",
-  "total_runs": 520,
+  "last_run": "2026-05-15T20:35:09.374323+00:00",
+  "total_runs": 521,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -35,11 +35,10 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.31.0",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"version\": \"1.31.1\",\\n  \"summary\": \"Fix evolution JSON parsing, add RSS feed generator for discovery, improve code-techs opportunity scoring\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Add MEDIUM_IN'",
+    "summary": "No summary provided",
     "changes_applied": [],
     "suggestions": [],
-    "error": "Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"version\": \"1.31.1\",\\n  \"summary\": \"Fix evolution JSON parsing, add RSS feed generator for discovery, improve code-techs opportunity scoring\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Add MEDIUM_IN'",
-    "error_type": "json"
+    "error": null
   },
   "last_earning": {
     "actions": [],
@@ -84,7 +83,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 114,
+  "last_cycle_seconds": 14,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

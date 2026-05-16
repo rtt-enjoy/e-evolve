@@ -125,7 +125,14 @@
   "payout": {
     "min_payout_usd": 20.0,
     "coin": "USDT",
-    "network": "TRX",
-    "fee_buffer_usd": 2.0
+    "network": "BSC",
+    "fee_buffer_usd": 1.5,
+    "wallet": "exodus",
+    "address_secret": "BINANCE_WITHDRAW_ADDRESS",
+    "notes": [
+      "Default payout target is USDT on BNB Smart Chain because Exodus supports BNB Smart Chain and Binance fees are usually lower than Ethereum mainnet.",
+      "Set BINANCE_WITHDRAW_ADDRESS to the matching Exodus receive address for the configured network and whitelist that exact address/network pair in Binance.",
+      "Keep ETH_WALLET_ADDRESS for the existing Ethereum NFT module; it can use the same Exodus account only when funded with a dedicated low-risk wallet."
+    ]
   }
 }

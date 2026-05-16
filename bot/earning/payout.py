@@ -32,8 +32,14 @@ def _load_strategy() -> dict:
 _strategy = _load_strategy().get("payout", {})
 MIN_PAYOUT_USD   = float(_strategy.get("min_payout_usd", 20.0))
 COIN             = str(_strategy.get("coin", "USDT"))
-NETWORK          = str(_strategy.get("network", "TRX"))   # TRX = cheap fees (~1 USDT)
-FEE_BUFFER_USD   = float(_strategy.get("fee_buffer_usd", 2.0))  # keep buffer for fees
+NETWORK          = str(_strategy.get("network", "BSC")).upper()
+FEE_BUFFER_USD   = float(_strategy.get("fee_buffer_usd", 1.5))  # keep buffer for fees
+
+_NETWORK_ADDRESS_HINTS = {
+    "BSC": ("BNB Smart Chain", "0x"),
+    "ETH": ("Ethereum", "0x"),
+    "TRX": ("Tron", "T"),
+}
 
 
 @dataclass
@@ -75,6 +81,10 @@ def run(llm: Any = None, status: dict[str, Any] = None) -> list[dict]:
 
 def _maybe_withdraw(api_key: str, api_secret: str,
                     dest_addr: str, status: dict) -> PayoutResult:
+    address_error = _validate_destination(dest_addr)
+    if address_error:
+        return PayoutResult(error=address_error)
+
     try:
         from binance.client import Client
     except ImportError:
@@ -153,3 +163,22 @@ def _bal(account: dict, asset: str) -> float:
         if b["asset"] == asset:
             return float(b["free"])
     return 0.0
+
+
+def _validate_destination(dest_addr: str) -> Optional[str]:
+    """Catch common Exodus/Binance network mismatches before withdrawal."""
+    hint = _NETWORK_ADDRESS_HINTS.get(NETWORK)
+    if not hint:
+        known = ", ".join(sorted(_NETWORK_ADDRESS_HINTS))
+        return f"Unsupported Exodus payout network {NETWORK!r}; use one of: {known}"
+
+    network_name, prefix = hint
+    if not dest_addr.startswith(prefix):
+        return (f"{network_name} payout network expects an Exodus address "
+                f"starting with {prefix!r}, got {dest_addr[:6]!r}")
+
+    if prefix == "0x" and len(dest_addr) != 42:
+        return (f"{network_name} payout address should be a 42-character "
+                "0x address from Exodus")
+
+    return None

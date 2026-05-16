@@ -76,10 +76,18 @@ All four required:
 
 | Secret | Notes |
 |--------|-------|
-| `BINANCE_API_KEY` | Enable Spot trading only — **disable withdrawals** |
+| `BINANCE_API_KEY` | Enable Spot trading only unless you intentionally enable auto-payout |
 | `BINANCE_SECRET_KEY` | " |
+| `BINANCE_WITHDRAW_ADDRESS` | Optional Exodus receive address for auto-payout |
 
 > **Warning:** Start with a small balance. LLM-driven trading is not guaranteed to be profitable.
+
+For Exodus payouts, the default strategy withdraws `USDT` on `BSC` to match an
+Exodus BNB Smart Chain receive address. In Exodus, copy the receive address for
+the same network configured in `config/strategy.json`, then whitelist that exact
+address and network in Binance before enabling API withdrawals. The payout guard
+also accepts `ETH` addresses that start with `0x` and `TRX` addresses that start
+with `T`, but the configured network and Exodus receive network must match.
 
 ### NFT (Ethereum)
 

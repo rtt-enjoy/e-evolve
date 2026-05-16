@@ -878,3 +878,8 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-05-15 14:36 UTC
 
 - [ok] **code_techs**: [Code-tech opportunity queue refreshed (8 leads)](docs/code-tech-opportunities.md) (est. $0.00)
+
+### 2026-05-16 00:15 UTC
+
+- [ok] **dev.to**: [When Your Content Bot Hits an LLM Quota, Ship the Fallback](https://dev.to/robust_true_try/when-your-content-bot-hits-an-llm-quota-ship-the-fallback-771) (est. $0.02)
+- [fail] **dev.to**:  (est. $0.00)

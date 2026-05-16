@@ -1,20 +1,10 @@
-"""
-Independent earning module: code-tech opportunity scanner.
-
-This module does not publish, trade, mint, or claim revenue. It periodically
-builds a queue of code-only opportunities that can plausibly lead to small
-daily income: paid OSS issues, maintainer chores, migration work, CI fixes, and
-micro-service ideas. Confirmed revenue remains tracked elsewhere.
-
-Now includes automatic pursuit: comments on issues to express interest and
-track leads for follow-up.
-"""
 from __future__ import annotations
 
 import json
 import logging
 import os
 import re
+import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -33,14 +23,14 @@ _DEFAULT_CONFIG = {
     "daily_target_usd": 10.0,
     "max_items": 8,
     "min_score": 55,
-    "auto_pursue": True,  # NEW: automatically comment on high-value leads
-    "pursue_score_threshold": 75,  # Only pursue leads with score >= 75
+    "auto_pursue": True,
+    "pursue_score_threshold": 75,
     "requirements": [
         "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
         "Prefer boring maintenance where the buyer already feels pain.",
         "Require a visible owner, maintainer, sponsor, bounty, issue activity, or obvious business value.",
         "Keep the first contribution small enough to review in one sitting.",
-        "Do not count discovery or speculative upside as earnings.",
+        "Do not count discovery or speculative upside as earnings."
     ],
     "github_searches": [
         "is:issue is:open bounty label:bounty",
@@ -54,7 +44,7 @@ _DEFAULT_CONFIG = {
         "is:issue is:open \"Node 20\" \"migration\"",
         "is:issue is:open \"GitHub Actions\" \"deprecated\" \"warning\"",
         "is:issue is:open \"import error\" \"Python 3.12\"",
-        "is:issue is:open \"release notes\" \"breaking change\"",
+        "is:issue is:open \"release notes\" \"breaking change\""
     ],
     "underserved_focus": [
         "failing CI with a small, reproducible fix",
@@ -67,23 +57,23 @@ _DEFAULT_CONFIG = {
         "template repos and starter kits whose quickstarts fail on current runtimes",
         "internal-tool shaped repos where businesses need maintenance more than novelty",
         "release-note gaps after breaking API changes",
-        "low-glamour data import/export bugs in small SaaS integrations",
+        "low-glamour data import/export bugs in small SaaS integrations"
     ],
     "strategy_playbook": [
         "Start from maintenance pain, not idea novelty.",
-        "Use proof as the sales asset: failing command, failing log line, fixed branch, and a short before/after note.",
+        "Use proof as the sales asset: failing command, failing log line, short before/after note.",
         "Favor repeatable chores that can become productized services.",
-        "Look below the obvious bounty surface: stale issues with recent users, forks carrying fixes, and unanswered install failures.",
+        "Look below the obvious bounty surface: stale issues with recent users, forks with fixes, unanswered install failures.",
         "Bundle adjacent fixes only after trust exists.",
-        "Treat content as deal flow from solved niche issues.",
+        "Treat content as deal flow from solved niche issues."
     ],
     "avoid_patterns": [
         "Large rewrites, vague feature requests, design taste debates, and architecture arguments without a failing proof.",
         "Repos with no maintainer response, no recent users, no releases, and no business signal.",
         "Crowded beginner issues where many contributors compete for low-value visibility.",
         "Unpaid speculative requests that need private context before value can be proven.",
-        "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk.",
-    ],
+        "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
+    ]
 }
 
 _LOCAL_LEADS = [
@@ -92,24 +82,28 @@ _LOCAL_LEADS = [
         "url": "",
         "source": "local-playbook",
         "body": "Offer a fixed-price patch for pyproject.toml, ruff, mypy, pytest, and GitHub Actions drift.",
-        "labels": ["migration", "packaging", "ci"],
+        "labels": ["migration", "packaging", "ci"]
     },
     {
         "title": "Broken README examples in niche SDK repos",
         "url": "",
         "source": "local-playbook",
         "body": "Find repos where the documented quickstart fails, then submit a runnable example and offer maintenance.",
-        "labels": ["docs", "examples", "sdk"],
+        "labels": ["docs", "examples", "sdk"]
     },
     {
         "title": "Flaky test triage for tiny open-source maintainers",
         "url": "",
         "source": "local-playbook",
         "body": "Target intermittent CI failures with logs, seed control, network timeouts, and time-based assertions.",
-        "labels": ["tests", "ci", "flaky"],
-    },
+        "labels": ["tests", "ci", "flaky"]
+    }
 ]
 
+# In‑memory request counter for GitHub API throttling
+_GITHUB_REQ_COUNT = 0
+_GITHUB_WINDOW_START = time.time()
+_GITHUB_MAX_PER_MIN = 10
 
 @dataclass
 class Opportunity:
@@ -120,11 +114,10 @@ class Opportunity:
     estimated_value_usd: float
     reason: str
     next_step: str
-    pursued: bool = False  # NEW: track if we've engaged with this lead
-
+    pursued: bool = False
+    archived_at: str | None = None
 
 def run(llm: Any, status: dict[str, Any]) -> list[dict]:
-    """Refresh the code-tech opportunity queue when the cadence is due."""
     cfg = _config()
     state = status.setdefault("code_tech_earning", {})
     if not _enabled(cfg):
@@ -142,13 +135,13 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     min_score = max(0, int(cfg.get("min_score", 55) or 55))
     raw = _fetch_github_leads(cfg) or list(_LOCAL_LEADS)
     opportunities = _rank(raw, cfg, max_items=max_items, min_score=min_score)
-    
-    # Auto-pursue high-value leads
+
+    # Auto‑pursue high‑value leads
     pursued_count = 0
     if cfg.get("auto_pursue", True):
-        pursue_threshold = max(50, int(cfg.get("pursue_score_threshold", 75) or 75))
+        threshold = max(50, int(cfg.get("pursue_score_threshold", 75) or 75))
         for opp in opportunities:
-            if opp.score >= pursue_threshold and not opp.pursued and opp.url:
+            if opp.score >= threshold and not opp.pursued and opp.url:
                 if _pursue_lead(opp, cfg):
                     opp.pursued = True
                     pursued_count += 1
@@ -162,11 +155,11 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
         "requirements": _clean_list(cfg.get("requirements", [])),
         "focus": _clean_list(cfg.get("underserved_focus", [])),
         "strategy_playbook": _clean_list(cfg.get("strategy_playbook", [])),
-        "avoid_patterns": _clean_list(cfg.get("avoid_patterns", [])),
+        "avoid_patterns": _clean_list(cfg.get("avoid_patterns", []))
     })
     _write_report(state)
 
-    log.info("[code_techs] refreshed %d code-tech opportunities, pursued %d", len(opportunities), pursued_count)
+    log.info("[code_techs] refreshed %d opportunities, pursued %d", len(opportunities), pursued_count)
     return [{
         "platform": "code_techs",
         "success": True,
@@ -174,43 +167,34 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
         "pursued_count": pursued_count,
         "estimated_usd": 0.0,
         "target_usd_per_day": state["daily_target_usd"],
-        "title": f"Code-tech opportunity queue refreshed ({len(opportunities)} leads, {pursued_count} pursued)",
-        "url": str(_REPORT_FILE),
+        "title": f"Code-tech queue refreshed ({len(opportunities)} leads, {pursued_count} pursued)",
+        "url": str(_REPORT_FILE)
     }]
 
-
 def _pursue_lead(opportunity: Opportunity, cfg: dict) -> bool:
-    """Comment on a high-value GitHub issue to express interest and track the lead."""
     token = os.getenv("GH_TOKEN", "").strip() or os.getenv("GITHUB_TOKEN", "").strip()
     if not token or not opportunity.url:
         return False
-    
-    # Extract owner/repo/issue from URL
-    # Format: https://github.com/owner/repo/issues/123
     try:
         parts = opportunity.url.replace("https://github.com/", "").split("/")
         if len(parts) < 4:
             return False
         owner, repo, _, issue_num = parts[0], parts[1], parts[2], parts[3]
     except Exception as exc:
-        log.warning("[code_techs] Could not parse issue URL %s: %s", opportunity.url, exc)
+        log.warning("[code_techs] URL parse failed %s: %s", opportunity.url, exc)
         return False
-    
-    # Build a helpful comment
     comment_body = _build_pursuit_comment(opportunity)
-    
     headers = {
         "Authorization": f"Bearer {token}",
         "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
+        "X-GitHub-Api-Version": "2022-11-28"
     }
-    
     try:
         resp = requests.post(
             f"https://api.github.com/repos/{owner}/{repo}/issues/{issue_num}/comments",
             headers=headers,
             json={"body": comment_body},
-            timeout=15,
+            timeout=15
         )
         if resp.status_code == 201:
             log.info("[code_techs] Pursued lead: %s", opportunity.title[:50])
@@ -218,27 +202,19 @@ def _pursue_lead(opportunity: Opportunity, cfg: dict) -> bool:
         elif resp.status_code == 403:
             log.warning("[code_techs] Rate limited or forbidden pursuing %s", opportunity.url)
         else:
-            log.debug("[code_techs] Could not comment: %s", resp.status_code)
+            log.debug("[code_techs] Comment failed %s", resp.status_code)
     except Exception as exc:
-        log.warning("[code_techs] Error pursuing lead: %s", exc)
-    
+        log.warning("[code_techs] Pursue error: %s", exc)
     return False
 
-
 def _build_pursuit_comment(opportunity: Opportunity) -> str:
-    """Build a helpful, non-spammy comment to express interest in a lead."""
-    # Keep it short and helpful, not salesy
     templates = [
         "Hi! I'm interested in helping with this. Do you have a preferred way to receive patches? I can start with a small reproducer if helpful.",
         "I'd like to work on this. Could you point me to the relevant files or tests?",
-        "Happy to help here. What's the best way to submit a fix — PR directly or do you prefer discussion first?",
-        "I can take this on. Should I open a draft PR with the initial fix, or discuss the approach first?",
+        "Happy to help here. What's the best way to submit a fix — PR directly or discuss first?",
+        "I can take this on. Should I open a draft PR with the initial fix, or discuss the approach first?"
     ]
-    
-    # Select based on opportunity score for variety
-    idx = opportunity.score % len(templates)
-    return templates[idx]
-
+    return templates[opportunity.score % len(templates)]
 
 def _config() -> dict[str, Any]:
     try:
@@ -249,7 +225,6 @@ def _config() -> dict[str, Any]:
     cfg.update(strategy.get("code_techs", {}) or {})
     return cfg
 
-
 def _enabled(cfg: dict[str, Any]) -> bool:
     raw = os.getenv("CODE_TECH_EARN_ENABLED", "").strip().lower()
     if raw in {"0", "false", "no", "off"}:
@@ -258,24 +233,36 @@ def _enabled(cfg: dict[str, Any]) -> bool:
         return True
     return bool(cfg.get("enabled", True))
 
-
 def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
+    global _GITHUB_REQ_COUNT, _GITHUB_WINDOW_START
     leads: list[dict[str, Any]] = []
     token = os.getenv("GITHUB_TOKEN", "").strip()
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "e-evolve-code-techs",
+        "User-Agent": "e-evolve-code-techs"
     }
     if token:
         headers["Authorization"] = f"Bearer {token}"
 
     for query in cfg.get("github_searches", []):
+        # Simple rate‑limit handling
+        now = time.time()
+        if now - _GITHUB_WINDOW_START >= 60:
+            _GITHUB_WINDOW_START = now
+            _GITHUB_REQ_COUNT = 0
+        if _GITHUB_REQ_COUNT >= _GITHUB_MAX_PER_MIN:
+            sleep_sec = 60 - (now - _GITHUB_WINDOW_START) + 1
+            log.info("[code_techs] GitHub rate limit reached, sleeping %ds", int(sleep_sec))
+            time.sleep(sleep_sec)
+            _GITHUB_WINDOW_START = time.time()
+            _GITHUB_REQ_COUNT = 0
+        _GITHUB_REQ_COUNT += 1
         try:
             resp = requests.get(
                 "https://api.github.com/search/issues",
                 params={"q": str(query), "sort": "updated", "order": "desc", "per_page": 8},
                 headers=headers,
-                timeout=20,
+                timeout=20
             )
             if resp.status_code in (403, 422):
                 log.warning("[code_techs] GitHub search skipped (%s): %s", resp.status_code, query)
@@ -287,12 +274,11 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
                     "url": item.get("html_url", ""),
                     "source": "github",
                     "body": item.get("body", "") or "",
-                    "labels": [label.get("name", "") for label in item.get("labels", [])],
+                    "labels": [label.get("name", "") for label in item.get("labels", [])]
                 })
         except Exception as exc:
             log.warning("[code_techs] GitHub search failed for %r: %s", query, exc)
     return _dedupe(leads)
-
 
 def _dedupe(leads: list[dict[str, Any]]) -> list[dict[str, Any]]:
     seen: set[str] = set()
@@ -305,10 +291,18 @@ def _dedupe(leads: list[dict[str, Any]]) -> list[dict[str, Any]]:
         out.append(lead)
     return out
 
-
 def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_score: int) -> list[Opportunity]:
     ranked: list[Opportunity] = []
+    now = datetime.now(timezone.utc)
     for lead in leads:
+        # Skip archived leads older than 30 days
+        if lead.get("archived_at"):
+            try:
+                arch_dt = datetime.fromisoformat(lead["archived_at"]).replace(tzinfo=timezone.utc)
+                if now - arch_dt > timedelta(days=30):
+                    continue
+            except Exception:
+                pass
         title = str(lead.get("title", "")).strip()
         body = str(lead.get("body", "")).strip()
         labels = [str(x).lower() for x in lead.get("labels", [])]
@@ -325,16 +319,16 @@ def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_
             estimated_value_usd=value,
             reason=_reason(text, labels, value),
             next_step=_next_step(text),
+            pursued=False,
+            archived_at=None
         ))
     ranked.sort(key=lambda op: (op.score, op.estimated_value_usd), reverse=True)
     return ranked[:max_items]
-
 
 def _clean_list(value: Any) -> list[str]:
     if not isinstance(value, list):
         return []
     return [str(item).strip() for item in value if str(item).strip()]
-
 
 def _score(text: str, labels: list[str], value: float) -> int:
     score = 30
@@ -362,8 +356,7 @@ def _score(text: str, labels: list[str], value: float) -> int:
         score -= 4
     return max(0, min(100, score))
 
-
-def _extract_value(text: str, cfg: dict[str, Any]) -> float:
+def _extract_value(text: str, cfg: dict) -> float:
     amounts = [float(m.group(1).replace(",", "")) for m in re.finditer(r"\$(\d[\d,]*(?:\.\d+)?)", text)]
     if amounts:
         return round(max(amounts), 2)
@@ -371,7 +364,6 @@ def _extract_value(text: str, cfg: dict[str, Any]) -> float:
     if any(word in text for word in ("bounty", "paid", "reward", "fixed-price")):
         return target
     return 0.0
-
 
 def _reason(text: str, labels: list[str], value: float) -> str:
     parts: list[str] = []
@@ -388,19 +380,18 @@ def _reason(text: str, labels: list[str], value: float) -> str:
     if any(word in text for word in ("docs", "readme", "example", "quickstart")):
         parts.append("working docs convert into trust quickly")
     if any(word in text for word in ("import error", "install", "setup", "starter", "template")):
-        parts.append("setup failures are high-friction and easy to prove")
+        parts.append("setup failures are high‑friction and easy to prove")
     if not parts:
         parts.append("small code maintenance lead with low competition")
     return "; ".join(parts[:2])
 
-
 def _next_step(text: str) -> str:
     if _is_announcement_maintenance_lead(text):
-        return "Verify bounty status, inspect existing admin/RBAC/env docs, then patch the announcement and maintenance-mode paths with demo proof."
+        return "Verify bounty status, inspect existing admin/RBAC/env docs, then patch the announcement and maintenance‑mode paths with demo proof."
     if "bounty" in text:
         return "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch."
     if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
-        return "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+        return "Find one outdated dependency path, reproduce the breakage, and propose a fixed‑price cleanup."
     if any(word in text for word in ("python 3.12", "node 20", "pyproject", "deprecated", "warning")):
         return "Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary."
     if any(word in text for word in ("ci", "test", "flaky", "failing")):
@@ -409,18 +400,11 @@ def _next_step(text: str) -> str:
         return "Run the documented example from a clean checkout and submit the corrected command or snippet."
     return "Reproduce locally, write a short maintainer note, and keep the first patch under one focused change."
 
-
 def _has_any(text: str, terms: tuple[str, ...]) -> bool:
     return any(re.search(rf"\b{re.escape(term)}\b", text) for term in terms)
 
-
 def _is_announcement_maintenance_lead(text: str) -> bool:
-    return (
-        "notification" in text
-        and "announcements" in text
-        and "maintenance mode" in text
-    )
-
+    return "notification" in text and "announcements" in text and "maintenance mode" in text
 
 def _parse_dt(value: Any) -> datetime | None:
     if not value:
@@ -431,34 +415,21 @@ def _parse_dt(value: Any) -> datetime | None:
     except Exception:
         return None
 
-
 def _write_report(state: dict[str, Any]) -> None:
     _REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    lines = [
-        "# Code-Tech Earning Queue",
-        "",
-        f"Refreshed: {state.get('last_refresh_at')}",
-        f"Daily target: ${float(state.get('daily_target_usd', 10.0) or 10.0):.2f}",
-        "",
-        "## Requirements",
-        "",
-    ]
+    lines = ["# Code-Tech Earning Queue", "", f"Refreshed: {state.get('last_refresh_at')}", f"Daily target: ${float(state.get('daily_target_usd', 10.0) or 10.0):.2f}", "", "## Requirements", ""]
     for item in state.get("requirements", []):
         lines.append(f"- {item}")
-    lines.extend([
-        "",
-        "## Underserved Focus",
-        "",
-    ])
+    lines.extend(["", "## Underserved Focus", ""]) 
     for item in state.get("focus", []):
         lines.append(f"- {item}")
-    lines.extend(["", "## Strategy Playbook", ""])
+    lines.extend(["", "## Strategy Playbook", ""]) 
     for item in state.get("strategy_playbook", []):
         lines.append(f"- {item}")
-    lines.extend(["", "## Avoid", ""])
+    lines.extend(["", "## Avoid", ""]) 
     for item in state.get("avoid_patterns", []):
         lines.append(f"- {item}")
-    lines.extend(["", "## Ranked Leads", ""])
+    lines.extend(["", "## Ranked Leads", ""]) 
     for index, op in enumerate(state.get("opportunities", []), start=1):
         title = op.get("title", "untitled")
         url = op.get("url", "")

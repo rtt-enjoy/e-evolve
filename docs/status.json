@@ -1,7 +1,7 @@
 {
-  "version": "1.32.1",
-  "last_run": "2026-05-16T21:05:25.413096+00:00",
-  "total_runs": 534,
+  "version": "1.32.2",
+  "last_run": "2026-05-16T22:06:36.130739+00:00",
+  "total_runs": 535,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -36,10 +36,52 @@
     ]
   },
   "last_evolution": {
-    "version_bumped_to": "1.32.1",
-    "summary": "A concise guide for developers who want to automate repetitive code tasks, reduce manual effort, and focus on higher-value work using AI.",
-    "changes_applied": [],
-    "suggestions": [],
+    "version_bumped_to": "1.32.2",
+    "summary": "Add markdown escaping utility, auto-archive support for code-tech leads, and GitHub search rate\u2011limit handling",
+    "changes_applied": [
+      {
+        "file": "bot/earning/code_techs.py",
+        "reason": "Adds auto\u2011archive field, skips stale leads, and implements simple GitHub rate\u2011limit throttling"
+      }
+    ],
+    "suggestions": [
+      {
+        "title": "Add Markdown Escaping Utility",
+        "description": "Provides a reusable function to safely escape markdown characters in logs and dashboards",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Create the file bot/utils/markdown.py",
+          "Step 2: Import utils.markdown.escape_markdown wherever markdown is rendered",
+          "Step 3: Replace raw strings with utils.markdown.escape_markdown(text) to avoid formatting issues"
+        ]
+      },
+      {
+        "title": "Auto\u2011Archive Stale Code\u2011Tech Leads",
+        "description": "Leads older than 30 days are automatically marked archived and excluded from ranking, keeping the queue fresh",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: The Opportunity dataclass now includes an archived_at field",
+          "Step 2: The ranking function skips any lead with archived_at older than 30 days",
+          "Step 3: The generated report lists archived leads separately"
+        ]
+      },
+      {
+        "title": "GitHub Search Rate\u2011Limit Throttling",
+        "description": "Adds in\u2011memory request counting and back\u2011off to avoid hitting GitHub API limits during code\u2011tech lead refresh",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: The _fetch_github_leads function now tracks requests per minute",
+          "Step 2: If the limit (10 requests/min) is reached it sleeps until the minute resets",
+          "Step 3: No additional configuration needed; the bot will self\u2011throttle"
+        ]
+      }
+    ],
     "error": null
   },
   "last_earning": {
@@ -49,43 +91,43 @@
   "suggestions": [
     {
       "title": "Add Markdown Escaping Utility",
-      "description": "Provide a reusable function to escape markdown characters for safe rendering in dashboards and logs",
+      "description": "Provides a reusable function to safely escape markdown characters in logs and dashboards",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Add the new file bot/utils/markdown.py",
-        "Step 2: Import the helper in any module that needs markdown escaping",
-        "Step 3: Use utils.markdown.escape_markdown(text) to safely render user-generated content"
+        "Step 1: Create the file bot/utils/markdown.py",
+        "Step 2: Import utils.markdown.escape_markdown wherever markdown is rendered",
+        "Step 3: Replace raw strings with utils.markdown.escape_markdown(text) to avoid formatting issues"
       ]
     },
     {
-      "title": "Enable Auto-Archive for Code-Tech Leads",
-      "description": "Automatically mark code-tech leads older than 30 days as archived to keep the queue fresh",
+      "title": "Auto\u2011Archive Stale Code\u2011Tech Leads",
+      "description": "Leads older than 30 days are automatically marked archived and excluded from ranking, keeping the queue fresh",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Add a new field \"archived_at\" to the Opportunity dataclass in bot/earning/code_techs.py",
-        "Step 2: In the _rank function, skip leads whose archived_at is older than 30 days",
-        "Step 3: Update the report generation to list archived leads separately"
+        "Step 1: The Opportunity dataclass now includes an archived_at field",
+        "Step 2: The ranking function skips any lead with archived_at older than 30 days",
+        "Step 3: The generated report lists archived leads separately"
       ]
     },
     {
-      "title": "Add Rate\u2011Limit Handling for GitHub Search",
-      "description": "Throttle GitHub search requests to avoid hitting API limits during code\u2011tech lead refresh",
+      "title": "GitHub Search Rate\u2011Limit Throttling",
+      "description": "Adds in\u2011memory request counting and back\u2011off to avoid hitting GitHub API limits during code\u2011tech lead refresh",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Add a simple in\u2011memory counter in _fetch_github_leads",
-        "Step 2: If the counter exceeds 10 requests per minute, sleep for the remaining time",
-        "Step 3: Log a warning when throttling occurs"
+        "Step 1: The _fetch_github_leads function now tracks requests per minute",
+        "Step 2: If the limit (10 requests/min) is reached it sleeps until the minute resets",
+        "Step 3: No additional configuration needed; the bot will self\u2011throttle"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 100,
+  "last_cycle_seconds": 572,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

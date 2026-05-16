@@ -1,7 +1,7 @@
 {
   "version": "1.32.1",
-  "last_run": "2026-05-16T14:01:47.368729+00:00",
-  "total_runs": 529,
+  "last_run": "2026-05-16T15:16:59.098035+00:00",
+  "total_runs": 530,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -36,95 +36,104 @@
     ]
   },
   "last_evolution": {
-    "summary": "Pulse crash before completion: 'str' object has no attribute 'get'",
+    "version_bumped_to": "1.32.1",
+    "summary": "Add markdown helper module and suggest new auto-archive feature for code-tech leads",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Enable Twitter API v2 for higher rate limits",
-        "description": "Switch to Twitter API v2 to increase tweet throughput and reduce failures",
-        "secret_needed": "TWITTER_API_KEY_V2",
+        "title": "Add Markdown Escaping Utility",
+        "description": "Provide a reusable function to escape markdown characters for safe rendering in dashboards and logs",
+        "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Create a new app in Twitter Developer Portal and enable v2 access",
-          "Step 2: Generate a Bearer Token and store it as TWITTER_API_KEY_V2",
-          "Step 3: Update the bot to use the new token when posting threads"
+          "Step 1: Add the new file bot/utils/markdown.py",
+          "Step 2: Import the helper in any module that needs markdown escaping",
+          "Step 3: Use utils.markdown.escape_markdown(text) to safely render user\u2011generated content"
         ]
       },
       {
-        "title": "Add Medium integration for dual publishing",
-        "description": "Publish articles to Medium alongside dev.to to double reach",
-        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+        "title": "Enable Auto\u2011Archive for Code\u2011Tech Leads",
+        "description": "Automatically mark code\u2011tech leads older than 30 days as archived to keep the queue fresh",
+        "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Generate a Medium integration token from your account settings",
-          "Step 2: Add MEDIUM_INTEGRATION_TOKEN as a GitHub Actions secret",
-          "Step 3: Enable the feature in config/strategy.json by setting \"articles_medium\":true"
+          "Step 1: Add a new field \"archived_at\" to Opportunity dataclass",
+          "Step 2: In _rank, skip leads with archived_at older than 30 days",
+          "Step 3: Update the report to show archived leads separately"
         ]
       },
       {
-        "title": "Activate Binance crypto payouts",
-        "description": "Enable automatic USDT withdrawals to an external wallet",
-        "secret_needed": "BINANCE_WITHDRAW_ADDRESS",
+        "title": "Add Rate\u2011Limit Handling for GitHub Search",
+        "description": "Throttle GitHub search requests to avoid hitting API limits during code\u2011tech lead refresh",
+        "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Add BINANCE_WITHDRAW_ADDRESS as a GitHub Actions secret",
-          "Step 2: Ensure the address is whitelisted in Binance Wallet \u2192 Withdraw \u2192 Address Book",
-          "Step 3: Enable the feature in config/strategy.json by setting \"crypto_payout\":true"
+          "Step 1: Add a simple in\u2011memory counter in _fetch_github_leads",
+          "Step 2: If counter exceeds 10 per minute, sleep for remaining time",
+          "Step 3: Log a warning when throttling occurs"
         ]
       }
     ],
-    "version_bumped_to": "1.32.1",
-    "error": "'str' object has no attribute 'get'"
+    "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech opportunity queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Enable Twitter API v2 for higher rate limits",
-      "description": "Switch to Twitter API v2 to increase tweet throughput and reduce failures",
-      "secret_needed": "TWITTER_API_KEY_V2",
+      "title": "Add Markdown Escaping Utility",
+      "description": "Provide a reusable function to escape markdown characters for safe rendering in dashboards and logs",
+      "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Create a new app in Twitter Developer Portal and enable v2 access",
-        "Step 2: Generate a Bearer Token and store it as TWITTER_API_KEY_V2",
-        "Step 3: Update the bot to use the new token when posting threads"
+        "Step 1: Add the new file bot/utils/markdown.py",
+        "Step 2: Import the helper in any module that needs markdown escaping",
+        "Step 3: Use utils.markdown.escape_markdown(text) to safely render user\u2011generated content"
       ]
     },
     {
-      "title": "Add Medium integration for dual publishing",
-      "description": "Publish articles to Medium alongside dev.to to double reach",
-      "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+      "title": "Enable Auto\u2011Archive for Code\u2011Tech Leads",
+      "description": "Automatically mark code\u2011tech leads older than 30 days as archived to keep the queue fresh",
+      "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Generate a Medium integration token from your account settings",
-        "Step 2: Add MEDIUM_INTEGRATION_TOKEN as a GitHub Actions secret",
-        "Step 3: Enable the feature in config/strategy.json by setting \"articles_medium\":true"
+        "Step 1: Add a new field \"archived_at\" to Opportunity dataclass",
+        "Step 2: In _rank, skip leads with archived_at older than 30 days",
+        "Step 3: Update the report to show archived leads separately"
       ]
     },
     {
-      "title": "Activate Binance crypto payouts",
-      "description": "Enable automatic USDT withdrawals to an external wallet",
-      "secret_needed": "BINANCE_WITHDRAW_ADDRESS",
+      "title": "Add Rate\u2011Limit Handling for GitHub Search",
+      "description": "Throttle GitHub search requests to avoid hitting API limits during code\u2011tech lead refresh",
+      "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Add BINANCE_WITHDRAW_ADDRESS as a GitHub Actions secret",
-        "Step 2: Ensure the address is whitelisted in Binance Wallet \u2192 Withdraw \u2192 Address Book",
-        "Step 3: Enable the feature in config/strategy.json by setting \"crypto_payout\":true"
+        "Step 1: Add a simple in\u2011memory counter in _fetch_github_leads",
+        "Step 2: If counter exceeds 10 per minute, sleep for remaining time",
+        "Step 3: Log a warning when throttling occurs"
       ]
     }
   ],
-  "errors": [
-    "Unhandled pulse crash: 'str' object has no attribute 'get'"
-  ],
-  "last_cycle_seconds": 32,
+  "errors": [],
+  "last_cycle_seconds": 107,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -270,81 +279,89 @@
   },
   "code_tech_earning": {
     "enabled": true,
-    "last_refresh_at": "2026-05-15T14:36:22.955760+00:00",
+    "last_refresh_at": "2026-05-16T15:18:40.007395+00:00",
     "daily_target_usd": 10.0,
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "\ud83d\udd10 AWS S3 Security Remediation & Civil ID Upload Fix \u2014 IAM Key Rotation, Bucket Hardening & Backend Patches",
-        "url": "https://github.com/BAWES-Universe/studenthub/issues/55",
+        "title": "[ Solidity ] Fix VestingWallet doesn't support token change or migration",
+        "url": "https://github.com/ClankerNation/OpenAgents/issues/128",
         "source": "github",
         "score": 100,
-        "estimated_value_usd": 600.0,
-        "reason": "visible or inferred value around $600.00; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch."
+        "estimated_value_usd": 400.0,
+        "reason": "visible or inferred value around $400.00; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
+        "pursued": false
       },
       {
-        "title": "[chore] Migra\u00e7\u00e3o de dbt-core para dbt Fusion",
-        "url": "https://github.com/basedosdados/pipelines/issues/1541",
+        "title": "[ Solidity ] Fix VestingWallet doesn't support token change or migration \u2014 mainnet prep",
+        "url": "https://github.com/ClankerNation/OpenAgents/issues/170",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 300.0,
+        "reason": "visible or inferred value around $300.00; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
+        "pursued": false
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/grafana/grafana-iot-twinmaker-app/issues/563",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
         "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/arnolicious/jelly-clipper/issues/17",
+        "url": "https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41",
         "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/padok-team/yatas-aws/issues/4",
-        "source": "github",
-        "score": 94,
+        "score": 88,
         "estimated_value_usd": 0.0,
         "reason": "migration chores are neglected but urgent; runtime and toolchain drift creates urgent maintenance demand",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false
       },
       {
-        "title": "Producer experience: close the gap from \"I built a plugin\" to \"every assistant can install it\"",
-        "url": "https://github.com/microsoft/apm/issues/1348",
+        "title": "[BOUNTY $100] HOOK: Pre-tool-use hook that blocks destructive bash commands",
+        "url": "https://github.com/claude-builders-bounty/claude-builders-bounty/issues/3",
         "source": "github",
-        "score": 90,
+        "score": 86,
+        "estimated_value_usd": 100.0,
+        "reason": "visible or inferred value around $100.00; working docs convert into trust quickly",
+        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
+        "pursued": false
+      },
+      {
+        "title": "[BOUNTY] Red Team UTXO Implementation \u2014 Find Bugs, Earn RTC (50-200 RTC)",
+        "url": "https://github.com/Scottcjn/rustchain-bounties/issues/2819",
+        "source": "github",
+        "score": 84,
+        "estimated_value_usd": 0.1,
+        "reason": "visible or inferred value around $0.10; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
+        "pursued": false
+      },
+      {
+        "title": "[ONBOARD: 3 RTC] Star + Test the Miner and Post Your Hardware Report",
+        "url": "https://github.com/Scottcjn/rustchain-bounties/issues/2784",
+        "source": "github",
+        "score": 80,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
+        "pursued": false
+      },
+      {
+        "title": "\ud83e\ude7a Caretaker self-heal: Unknown caretaker failure: Process completed with exit code 127.",
+        "url": "https://github.com/ianlintner/python_dsa/issues/70",
+        "source": "github",
+        "score": 80,
         "estimated_value_usd": 0.0,
         "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
-      },
-      {
-        "title": "QA Test Plan `26.5.0`",
-        "url": "https://github.com/conda/conda/issues/16016",
-        "source": "github",
-        "score": 90,
-        "estimated_value_usd": 0.0,
-        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/ndsrf/wedding/issues/59",
-        "source": "github",
-        "score": 90,
-        "estimated_value_usd": 0.0,
-        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
-      },
-      {
-        "title": "[ FastAPI ] Add rate limiting and key rotation support to API key authentication",
-        "url": "https://github.com/UnsafeLabs/Bounty-Hunters/issues/768",
-        "source": "github",
-        "score": 89,
-        "estimated_value_usd": 350.0,
-        "reason": "visible or inferred value around $350.00; runtime and toolchain drift creates urgent maintenance demand",
-        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch."
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false
       }
     ],
     "requirements": [

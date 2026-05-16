@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-05-15T14:36:22.955760+00:00
+Refreshed: 2026-05-16T15:18:40.007395+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -44,43 +44,43 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. [🔐 AWS S3 Security Remediation & Civil ID Upload Fix — IAM Key Rotation, Bucket Hardening & Backend Patches](https://github.com/BAWES-Universe/studenthub/issues/55)
+1. [[ Solidity ] Fix VestingWallet doesn't support token change or migration](https://github.com/ClankerNation/OpenAgents/issues/128)
    - Score: 100/100
-   - Value signal: $600.00
-   - Why: visible or inferred value around $600.00; CI/test work is concrete and easy for maintainers to accept
+   - Value signal: $400.00
+   - Why: visible or inferred value around $400.00; CI/test work is concrete and easy for maintainers to accept
    - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
-2. [[chore] Migração de dbt-core para dbt Fusion](https://github.com/basedosdados/pipelines/issues/1541)
+2. [[ Solidity ] Fix VestingWallet doesn't support token change or migration — mainnet prep](https://github.com/ClankerNation/OpenAgents/issues/170)
+   - Score: 100/100
+   - Value signal: $300.00
+   - Why: visible or inferred value around $300.00; CI/test work is concrete and easy for maintainers to accept
+   - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
+3. [Dependency Dashboard](https://github.com/grafana/grafana-iot-twinmaker-app/issues/563)
    - Score: 100/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-3. [Dependency Dashboard](https://github.com/arnolicious/jelly-clipper/issues/17)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-4. [Dependency Dashboard](https://github.com/padok-team/yatas-aws/issues/4)
-   - Score: 94/100
+4. [Dependency Dashboard](https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41)
+   - Score: 88/100
    - Value signal: $0.00
    - Why: migration chores are neglected but urgent; runtime and toolchain drift creates urgent maintenance demand
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-5. [Producer experience: close the gap from "I built a plugin" to "every assistant can install it"](https://github.com/microsoft/apm/issues/1348)
-   - Score: 90/100
-   - Value signal: $0.00
-   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-6. [QA Test Plan `26.5.0`](https://github.com/conda/conda/issues/16016)
-   - Score: 90/100
-   - Value signal: $0.00
-   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-7. [Dependency Dashboard](https://github.com/ndsrf/wedding/issues/59)
-   - Score: 90/100
-   - Value signal: $0.00
-   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-8. [[ FastAPI ] Add rate limiting and key rotation support to API key authentication](https://github.com/UnsafeLabs/Bounty-Hunters/issues/768)
-   - Score: 89/100
-   - Value signal: $350.00
-   - Why: visible or inferred value around $350.00; runtime and toolchain drift creates urgent maintenance demand
+5. [[BOUNTY $100] HOOK: Pre-tool-use hook that blocks destructive bash commands](https://github.com/claude-builders-bounty/claude-builders-bounty/issues/3)
+   - Score: 86/100
+   - Value signal: $100.00
+   - Why: visible or inferred value around $100.00; working docs convert into trust quickly
    - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
+6. [[BOUNTY] Red Team UTXO Implementation — Find Bugs, Earn RTC (50-200 RTC)](https://github.com/Scottcjn/rustchain-bounties/issues/2819)
+   - Score: 84/100
+   - Value signal: $0.10
+   - Why: visible or inferred value around $0.10; CI/test work is concrete and easy for maintainers to accept
+   - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
+7. [[ONBOARD: 3 RTC] Star + Test the Miner and Post Your Hardware Report](https://github.com/Scottcjn/rustchain-bounties/issues/2784)
+   - Score: 80/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; CI/test work is concrete and easy for maintainers to accept
+   - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
+8. [🩺 Caretaker self-heal: Unknown caretaker failure: Process completed with exit code 127.](https://github.com/ianlintner/python_dsa/issues/70)
+   - Score: 80/100
+   - Value signal: $0.00
+   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.

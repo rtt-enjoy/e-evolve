@@ -1,7 +1,7 @@
 {
   "version": "1.32.1",
-  "last_run": "2026-05-16T19:37:18.287589+00:00",
-  "total_runs": 533,
+  "last_run": "2026-05-16T21:05:25.413096+00:00",
+  "total_runs": 534,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -36,48 +36,11 @@
     ]
   },
   "last_evolution": {
-    "summary": "Pulse crash before completion: 'str' object has no attribute 'get'",
-    "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Add Markdown Escaping Utility",
-        "description": "Provide a reusable function to escape markdown characters for safe rendering in dashboards and logs",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Add the new file bot/utils/markdown.py",
-          "Step 2: Import the helper in any module that needs markdown escaping",
-          "Step 3: Use utils.markdown.escape_markdown(text) to safely render user-generated content"
-        ]
-      },
-      {
-        "title": "Enable Auto-Archive for Code-Tech Leads",
-        "description": "Automatically mark code-tech leads older than 30 days as archived to keep the queue fresh",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Add a new field \"archived_at\" to the Opportunity dataclass in bot/earning/code_techs.py",
-          "Step 2: In the _rank function, skip leads whose archived_at is older than 30 days",
-          "Step 3: Update the report generation to list archived leads separately"
-        ]
-      },
-      {
-        "title": "Add Rate\u2011Limit Handling for GitHub Search",
-        "description": "Throttle GitHub search requests to avoid hitting API limits during code\u2011tech lead refresh",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Add a simple in\u2011memory counter in _fetch_github_leads",
-          "Step 2: If the counter exceeds 10 requests per minute, sleep for the remaining time",
-          "Step 3: Log a warning when throttling occurs"
-        ]
-      }
-    ],
     "version_bumped_to": "1.32.1",
-    "error": "'str' object has no attribute 'get'"
+    "summary": "A concise guide for developers who want to automate repetitive code tasks, reduce manual effort, and focus on higher-value work using AI.",
+    "changes_applied": [],
+    "suggestions": [],
+    "error": null
   },
   "last_earning": {
     "actions": [],
@@ -121,10 +84,8 @@
       ]
     }
   ],
-  "errors": [
-    "Unhandled pulse crash: 'str' object has no attribute 'get'"
-  ],
-  "last_cycle_seconds": 155,
+  "errors": [],
+  "last_cycle_seconds": 100,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

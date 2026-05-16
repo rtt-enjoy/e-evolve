@@ -1,7 +1,7 @@
 {
   "version": "1.32.1",
-  "last_run": "2026-05-16T06:35:54.400045+00:00",
-  "total_runs": 526,
+  "last_run": "2026-05-16T09:01:28.015478+00:00",
+  "total_runs": 527,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -37,9 +37,46 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.32.1",
-    "summary": "The bot should focus on delivering clear, actionable developer content that drives engagement and monetization. Prioritize concise, high-impact threads with strong CTAs, leverage existing automation tools, and ensure all infrastructure (API keys, secrets) is securely managed. Use structured reporting and maintain a consistent publishing cadence to build trust and audience retention.",
+    "summary": "Fix incomplete Twitter module and add missing secret suggestions",
     "changes_applied": [],
-    "suggestions": [],
+    "suggestions": [
+      {
+        "title": "Add ANTHROPIC_API_KEY for LLM fallback",
+        "description": "Enable Anthropic as backup LLM provider to prevent single-point-of-failure",
+        "secret_needed": "ANTHROPIC_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Go to console.anthropic.com and create an account",
+          "Step 2: Generate an API key in the API Keys section",
+          "Step 3: Add ANTHROPIC_API_KEY as a GitHub Actions secret"
+        ]
+      },
+      {
+        "title": "Add MEDIUM_INTEGRATION_TOKEN for dual publishing",
+        "description": "Publish same articles to Medium + dev.to; doubles article reach with zero extra LLM cost",
+        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Go to Medium Partner Program (medium.com/me/settings) and generate an integration token",
+          "Step 2: Copy the integration token",
+          "Step 3: Add MEDIUM_INTEGRATION_TOKEN as a GitHub Actions secret"
+        ]
+      },
+      {
+        "title": "Add TWITTER_API_* for Twitter threads",
+        "description": "Enable Twitter posting to build audience and drive traffic to articles",
+        "secret_needed": "TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Go to developer.twitter.com and create a project with Read+Write permissions",
+          "Step 2: Generate API Key, API Secret, Access Token, and Access Token Secret",
+          "Step 3: Add all four as GitHub Actions secrets"
+        ]
+      }
+    ],
     "error": null
   },
   "last_earning": {
@@ -85,7 +122,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 75,
+  "last_cycle_seconds": 154,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

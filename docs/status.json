@@ -1,7 +1,7 @@
 {
-  "version": "1.32.2",
-  "last_run": "2026-05-16T22:06:36.130739+00:00",
-  "total_runs": 535,
+  "version": "1.32.3",
+  "last_run": "2026-05-16T23:09:37.064921+00:00",
+  "total_runs": 536,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -36,49 +36,49 @@
     ]
   },
   "last_evolution": {
-    "version_bumped_to": "1.32.2",
-    "summary": "Add markdown escaping utility, auto-archive support for code-tech leads, and GitHub search rate\u2011limit handling",
+    "version_bumped_to": "1.32.3",
+    "summary": "Add error handling for API failures and improve article generation fallback",
     "changes_applied": [
       {
-        "file": "bot/earning/code_techs.py",
-        "reason": "Adds auto\u2011archive field, skips stale leads, and implements simple GitHub rate\u2011limit throttling"
+        "file": "bot/earning/articles.py",
+        "reason": "Enhances the fallback article generation to include more context and better structure when LLM generation fails"
       }
     ],
     "suggestions": [
       {
-        "title": "Add Markdown Escaping Utility",
-        "description": "Provides a reusable function to safely escape markdown characters in logs and dashboards",
+        "title": "Add API Error Handling Utility",
+        "description": "Provides a centralized way to handle API failures with retries and exponential backoff",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Create the file bot/utils/markdown.py",
-          "Step 2: Import utils.markdown.escape_markdown wherever markdown is rendered",
-          "Step 3: Replace raw strings with utils.markdown.escape_markdown(text) to avoid formatting issues"
+          "Step 1: Create the file bot/utils/api_handler.py",
+          "Step 2: Import and use the APIHandler class in any module making external API calls",
+          "Step 3: Configure retry count and backoff parameters in the strategy.json file"
         ]
       },
       {
-        "title": "Auto\u2011Archive Stale Code\u2011Tech Leads",
-        "description": "Leads older than 30 days are automatically marked archived and excluded from ranking, keeping the queue fresh",
+        "title": "Improve Article Generation Fallback",
+        "description": "Enhances the fallback article generation to include more context and better structure when LLM generation fails",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: The Opportunity dataclass now includes an archived_at field",
-          "Step 2: The ranking function skips any lead with archived_at older than 30 days",
-          "Step 3: The generated report lists archived leads separately"
+          "Step 1: Update the _fallback_article function in bot/earning/articles.py",
+          "Step 2: Add more detailed error context to the fallback content",
+          "Step 3: Include a section on how to reproduce the original error"
         ]
       },
       {
-        "title": "GitHub Search Rate\u2011Limit Throttling",
-        "description": "Adds in\u2011memory request counting and back\u2011off to avoid hitting GitHub API limits during code\u2011tech lead refresh",
+        "title": "Add Rate Limit Monitoring",
+        "description": "Tracks API usage across different services and provides warnings when approaching rate limits",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: The _fetch_github_leads function now tracks requests per minute",
-          "Step 2: If the limit (10 requests/min) is reached it sleeps until the minute resets",
-          "Step 3: No additional configuration needed; the bot will self\u2011throttle"
+          "Step 1: Create the file bot/utils/rate_limiter.py",
+          "Step 2: Add rate limit tracking to all API calls",
+          "Step 3: Configure rate limit thresholds in strategy.json"
         ]
       }
     ],
@@ -90,44 +90,44 @@
   },
   "suggestions": [
     {
-      "title": "Add Markdown Escaping Utility",
-      "description": "Provides a reusable function to safely escape markdown characters in logs and dashboards",
+      "title": "Add API Error Handling Utility",
+      "description": "Provides a centralized way to handle API failures with retries and exponential backoff",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Create the file bot/utils/markdown.py",
-        "Step 2: Import utils.markdown.escape_markdown wherever markdown is rendered",
-        "Step 3: Replace raw strings with utils.markdown.escape_markdown(text) to avoid formatting issues"
+        "Step 1: Create the file bot/utils/api_handler.py",
+        "Step 2: Import and use the APIHandler class in any module making external API calls",
+        "Step 3: Configure retry count and backoff parameters in the strategy.json file"
       ]
     },
     {
-      "title": "Auto\u2011Archive Stale Code\u2011Tech Leads",
-      "description": "Leads older than 30 days are automatically marked archived and excluded from ranking, keeping the queue fresh",
+      "title": "Improve Article Generation Fallback",
+      "description": "Enhances the fallback article generation to include more context and better structure when LLM generation fails",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: The Opportunity dataclass now includes an archived_at field",
-        "Step 2: The ranking function skips any lead with archived_at older than 30 days",
-        "Step 3: The generated report lists archived leads separately"
+        "Step 1: Update the _fallback_article function in bot/earning/articles.py",
+        "Step 2: Add more detailed error context to the fallback content",
+        "Step 3: Include a section on how to reproduce the original error"
       ]
     },
     {
-      "title": "GitHub Search Rate\u2011Limit Throttling",
-      "description": "Adds in\u2011memory request counting and back\u2011off to avoid hitting GitHub API limits during code\u2011tech lead refresh",
+      "title": "Add Rate Limit Monitoring",
+      "description": "Tracks API usage across different services and provides warnings when approaching rate limits",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: The _fetch_github_leads function now tracks requests per minute",
-        "Step 2: If the limit (10 requests/min) is reached it sleeps until the minute resets",
-        "Step 3: No additional configuration needed; the bot will self\u2011throttle"
+        "Step 1: Create the file bot/utils/rate_limiter.py",
+        "Step 2: Add rate limit tracking to all API calls",
+        "Step 3: Configure rate limit thresholds in strategy.json"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 572,
+  "last_cycle_seconds": 636,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

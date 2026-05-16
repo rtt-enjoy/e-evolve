@@ -17,18 +17,31 @@ Repo → Settings → Secrets and variables → Actions → **New repository sec
 | `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys) | Free models available |
 | `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) | Paid (higher quality) |
 
-Only one is required. If you have no budget, start with `GROQ_API_KEY` and add
-`DEV_TO_API_KEY` for the first earning module.
+Only one is required. If you have no budget or cannot use premium LLM features,
+start with `GROQ_API_KEY` or `GEMINI_API_KEY` and add `DEV_TO_API_KEY` for the
+first earning module.
 
-### Free self-earn path
+### No-ID free self-earn path
 
-Use this order when you cannot fund paid services:
+Use this order when you cannot use Binance identity verification, phone-gated
+social APIs, Claude premium features, paid LLM accounts, or funded wallets:
 
-1. `GROQ_API_KEY` - free LLM generation.
-2. `DEV_TO_API_KEY` - free article publishing.
-3. Optional GitHub Actions variable `EARN_CTA_URL` - your sponsor, tip,
+1. Code-tech leads - enabled by default and no external secret required.
+2. `GROQ_API_KEY` or `GEMINI_API_KEY` - free LLM generation within rate limits.
+3. Optional `OPENROUTER_API_KEY` - only for free models if the first two are not enough.
+4. `DEV_TO_API_KEY` - free article publishing.
+5. Optional GitHub Actions variable `EARN_CTA_URL` - your sponsor, tip,
    newsletter, affiliate, portfolio, or product link appended to each article.
-4. Optional variable `EARN_CTA_LABEL` - link text for that CTA.
+6. Optional variable `EARN_CTA_LABEL` - link text for that CTA.
+
+Avoid these until you explicitly choose the tradeoff:
+
+1. Binance trading or payout - exchange identity verification and funded balance.
+2. Claude/Anthropic premium path - paid access.
+3. Twitter/X API posting - can require phone-gated or paid developer access.
+4. Ethereum NFT minting - wallet funding, contracts, and gas.
+
+More detail: [`docs/no-id-free-path.md`](no-id-free-path.md).
 
 With `EARN_CTA_URL` configured, the article module periodically selects buyer-intent
 topics from `config/strategy.json`. Tune `articles.buyer_intent_ratio` lower for more

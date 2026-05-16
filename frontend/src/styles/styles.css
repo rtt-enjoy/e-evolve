@@ -397,6 +397,10 @@ textarea {
     @apply space-y-3;
   }
 
+  .path-list {
+    @apply space-y-3;
+  }
+
   .workflow-step {
     @apply grid grid-cols-[34px_minmax(0,1fr)] gap-x-3 rounded-lg border border-line bg-panel2 p-4;
   }

@@ -12,6 +12,11 @@ Exceptions are caught by `main.py._module()` — a crashed module does not stop 
 
 ---
 
+For the no-ID/free path, prefer Code Techs plus Articles on dev.to. Avoid
+Binance, Twitter/X, and NFT modules unless you explicitly accept identity,
+phone, paid access, or wallet-funding requirements. See
+[`no-id-free-path.md`](no-id-free-path.md).
+
 ## Code Techs (`bot/earning/code_techs.py`)
 
 **Activates when:** enabled in `config/strategy.json` or `CODE_TECH_EARN_ENABLED=1`

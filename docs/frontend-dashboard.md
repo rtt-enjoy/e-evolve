@@ -42,6 +42,10 @@ The first screen should answer these questions clearly:
   expose secret values.
 - **Last Evolution**: latest summary, changed files, error label, and ranked
   suggestions including activation steps when present.
+- **No-ID Free Path**: suggestion views should prefer code-tech, dev.to, and
+  free LLM work, while filtering recommendations that require Binance KYC,
+  Claude/Anthropic paid access, phone-gated Twitter/X APIs, funded wallets, or
+  paid-only services.
 
 ## Implementation Notes
 

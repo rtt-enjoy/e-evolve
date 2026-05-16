@@ -4,6 +4,7 @@ import { EarningCommandCenter } from './EarningCommandCenter';
 import { Empty, Metric, Panel, Phase, Pill, Progress, StatusCell } from '../common';
 import { buildEarningModules, buildIssues, buildOpportunityStats, buildReadiness } from '../../utils/dashboard';
 import { clampPercent, evolutionTone, featureLabel, formatDate, money } from '../../utils/format';
+import { isAvoidedSuggestion } from '../../utils/suggestions';
 import type { Status } from '../../types/status';
 
 export function DashboardPage({ status }: { status: Status }) {
@@ -24,6 +25,7 @@ export function DashboardPage({ status }: { status: Status }) {
   const earningModules = buildEarningModules(status);
   const opportunities = status.code_tech_earning?.opportunities || [];
   const opportunityStats = buildOpportunityStats(opportunities);
+  const visibleSuggestions = (status.suggestions || []).filter((suggestion) => !isAvoidedSuggestion(suggestion));
 
   return (
     <>
@@ -163,8 +165,8 @@ export function DashboardPage({ status }: { status: Status }) {
 
           <Panel title="Growth Suggestions" subtitle="Bot-proposed setup ideas.">
             <div className="space-y-3">
-              {(status.suggestions || []).slice(0, 5).map((suggestion) => <SuggestionCard suggestion={suggestion} key={suggestion.title} />)}
-              {!(status.suggestions || []).length ? <Empty text="No suggestions yet." /> : null}
+              {visibleSuggestions.slice(0, 5).map((suggestion) => <SuggestionCard suggestion={suggestion} key={suggestion.title} />)}
+              {!visibleSuggestions.length ? <Empty text="No no-ID/free suggestions yet. Check the Suggestions tab for code-tech leads." /> : null}
             </div>
           </Panel>
         </aside>

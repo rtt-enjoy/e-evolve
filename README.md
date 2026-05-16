@@ -60,13 +60,15 @@ The dashboard UI is a static React/Vite/Tailwind app in `frontend/`. Python
 stays the backend data publisher and writes `docs/status.json` plus
 `docs/earnings-log.md` during each cycle.
 
-### No-Money Self-Earn Setup
+### No-ID Free Self-Earn Setup
 
-Start with the free content loop:
+Start here when you cannot use Binance identity verification, Claude premium
+features, phone-gated social APIs, paid services, or funded wallets:
 
-1. Add `GROQ_API_KEY`.
-2. Add `DEV_TO_API_KEY`.
-3. Add optional GitHub Actions variables, not secrets:
+1. Use the default code-tech opportunity flow. It needs no external secret.
+2. Add `GROQ_API_KEY` or `GEMINI_API_KEY`.
+3. Add `DEV_TO_API_KEY` for publishing.
+4. Add optional GitHub Actions variables, not secrets:
    - `EARN_CTA_URL`: sponsor, tip, newsletter, affiliate, portfolio, or product link.
    - `EARN_CTA_LABEL`: link text shown at the end of each article.
 
@@ -77,7 +79,10 @@ subscribe, sponsor, or buy.
 CTA links are tagged with `utm_source`, `utm_medium`, and the configured
 `articles.cta_utm_campaign` value so dev.to, Medium, and Twitter/X traffic can be compared later.
 
-Keep crypto and NFT modules disabled until you have funds you can afford to risk.
+Avoid Binance trading/payout, Claude/Anthropic premium access, Twitter/X API
+posting, and Ethereum NFT minting unless you explicitly accept the verification,
+payment, phone, or wallet-funding tradeoff. Details live in
+[`docs/no-id-free-path.md`](docs/no-id-free-path.md).
 
 ### Code-Tech Opportunity Flow
 

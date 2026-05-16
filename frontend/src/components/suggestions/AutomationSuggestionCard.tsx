@@ -1,4 +1,4 @@
-import { Check, Copy, ExternalLink, PlayCircle } from 'lucide-react';
+import { Check, Copy, ExternalLink, PlayCircle, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import { Pill, Progress } from '../common';
 import { buildIssueUrl, type AutomationSuggestion } from '../../utils/suggestions';
@@ -35,6 +35,7 @@ export function AutomationSuggestionCard({
           <Pill tone={suggestion.source === 'code_tech' ? 'good' : 'neutral'}>{suggestion.sourceLabel}</Pill>
           <Pill tone={suggestion.ready ? 'good' : 'warn'}>{suggestion.ready ? 'ready' : 'setup needed'}</Pill>
           <Pill tone={suggestion.free_tier ? 'good' : 'neutral'}>{suggestion.free_tier ? 'free tier' : 'paid'}</Pill>
+          {suggestion.noIdPath ? <Pill tone="good" icon={<ShieldCheck size={14} />}>no id path</Pill> : null}
           <Pill tone="info">{money(suggestion.estimated_weekly_usd, 0)} / week</Pill>
         </div>
         <p>{suggestion.description || 'No description recorded.'}</p>

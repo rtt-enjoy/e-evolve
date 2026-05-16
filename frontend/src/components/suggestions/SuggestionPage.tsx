@@ -1,4 +1,4 @@
-import { Check, CheckCircle2, CircleDollarSign, Copy, KeyRound, PlayCircle, Sparkles, TrendingUp, WandSparkles } from 'lucide-react';
+import { Ban, Check, CheckCircle2, CircleDollarSign, Copy, KeyRound, PlayCircle, ShieldCheck, Sparkles, TrendingUp, WandSparkles } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import { AutomationSuggestionCard } from './AutomationSuggestionCard';
@@ -65,12 +65,13 @@ export function SuggestionPage({
           <div className="mb-4 flex flex-wrap gap-2">
             <Pill tone="info" icon={<WandSparkles size={14} />}>ai workflow ready</Pill>
             <Pill tone={stats.readyCount ? 'good' : 'warn'} icon={<KeyRound size={14} />}>{stats.readyCount}/{stats.total} ready</Pill>
+            <Pill tone="good" icon={<ShieldCheck size={14} />}>no id first</Pill>
             <Pill tone="good" icon={<CircleDollarSign size={14} />}>{money(stats.weeklyUsd, 0)} weekly upside</Pill>
           </div>
           <h2>Suggestions To Earn More</h2>
           <p>
-            Each card is an earning improvement the AI agent can refine and implement through the existing GitHub workflow.
-            Complete the required setup, then launch the improvement request for the next evolution cycle.
+            Each card avoids exchange identity checks, phone-gated social APIs, paid LLM subscriptions, and funded wallets.
+            Complete the lightweight setup, then launch the improvement request for the next evolution cycle.
           </p>
         </div>
         <div className="suggestion-hero-panel">
@@ -126,6 +127,14 @@ export function SuggestionPage({
         </div>
 
         <aside className="suggestion-side">
+          <Panel title="No-ID Free Path" subtitle="Best fit when Binance, Claude premium, phone checks, and paid services are off the table.">
+            <div className="path-list">
+              <WorkflowStep icon={<ShieldCheck />} title="Use first" text="Code-tech leads, dev.to articles, GitHub Pages, and Groq/Gemini/OpenRouter free LLM capacity." />
+              <WorkflowStep icon={<KeyRound />} title="Add only light secrets" text="Start with GROQ_API_KEY or GEMINI_API_KEY, then DEV_TO_API_KEY when you want publishing." />
+              <WorkflowStep icon={<Ban />} title="Avoid for now" text="Binance trading, Claude/Anthropic paid access, Twitter/X API posting, Ethereum NFTs, and withdrawal flows." />
+            </div>
+          </Panel>
+
           <Panel title="Completed Code-Tech Leads" subtitle="Finished leads stay visible here without crowding the active queue.">
             <div className="completed-lead-list">
               {completedLeads.map((lead) => (

@@ -75,29 +75,32 @@ export function buildEarningModules(status: Status) {
       key: 'twitter',
       name: 'Twitter/X',
       active: Boolean(readiness.twitter?.active || status.active_features?.includes('twitter')),
-      detail: readinessLabel(readiness.twitter),
+      detail: 'Avoid by default: API setup can require phone or paid access',
       value: moduleActionValue(actions, 'twitter'),
+      avoid: true,
     },
     {
       key: 'crypto_binance',
       name: 'Binance Trading',
       active: Boolean(readiness.crypto_binance?.active || status.active_features?.includes('crypto_binance')),
-      detail: readinessLabel(readiness.crypto_binance),
+      detail: 'Avoid by default: exchange identity verification and funded balance required',
       value: money(status.usdt_balance, 4),
+      avoid: true,
     },
     {
       key: 'nft_ethereum',
       name: 'NFT Minting',
       active: Boolean(readiness.nft_ethereum?.active || status.active_features?.includes('nft_ethereum')),
-      detail: readinessLabel(readiness.nft_ethereum),
+      detail: 'Avoid by default: wallet funding and chain costs required',
       value: moduleActionValue(actions, 'nft'),
+      avoid: true,
     },
   ];
 
   return modules.map((module) => ({
     ...module,
-    label: module.active ? 'ready' : 'setup',
-    tone: module.active ? 'good' as const : 'warn' as const,
+    label: module.avoid && !module.active ? 'avoid' : module.active ? 'ready' : 'setup',
+    tone: module.avoid && !module.active ? 'bad' as const : module.active ? 'good' as const : 'warn' as const,
   }));
 }
 

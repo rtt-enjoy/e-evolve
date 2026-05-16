@@ -15,11 +15,22 @@ export type AutomationSuggestion = Suggestion & {
   blockerText: string;
   priorityScore: number;
   opportunityUrl?: string;
+  noIdPath: boolean;
 };
 
 const COMPLETED_CODE_TECH_LEADS = new Set([
   'renovate dashboard 🤖',
   'create custom page for "submit your business"',
+]);
+
+const AVOIDED_SECRET_PREFIXES = ['ANTHROPIC', 'BINANCE', 'TWITTER', 'ETH_', 'NFT_'];
+
+const AVOIDED_FEATURES = new Set([
+  'llm_anthropic',
+  'twitter',
+  'crypto_binance',
+  'crypto_payout',
+  'nft_ethereum',
 ]);
 
 export function buildAutomationSuggestions(status: Status): AutomationSuggestion[] {
@@ -30,6 +41,7 @@ export function buildAutomationSuggestions(status: Status): AutomationSuggestion
   const existingSecrets = new Set(source.flatMap((entry) => parseSecrets(entry.suggestion.secret_needed)));
 
   for (const [feature, info] of Object.entries(status.secret_readiness || {})) {
+    if (AVOIDED_FEATURES.has(feature)) continue;
     const missing = info.missing || [];
     if (!missing.length || missing.every((secret) => existingSecrets.has(secret))) continue;
     source.push({
@@ -52,7 +64,7 @@ export function buildAutomationSuggestions(status: Status): AutomationSuggestion
     });
   }
 
-  return dedupeSuggestions(source).map(({ suggestion, source: suggestionSource }, index) => {
+  return dedupeSuggestions(source.filter((entry) => !isAvoidedSuggestion(entry.suggestion))).map(({ suggestion, source: suggestionSource }, index) => {
     const requiredSecrets = parseSecrets(suggestion.secret_needed);
     const missingSecrets = requiredSecrets.filter((secret) => !hasConfiguredSecret(status, secret));
     const readinessPercent = requiredSecrets.length
@@ -77,6 +89,7 @@ export function buildAutomationSuggestions(status: Status): AutomationSuggestion
       blockerText: missingSecrets.length ? `${missingSecrets.length} missing credential${missingSecrets.length === 1 ? '' : 's'}` : 'ready for next evolution cycle',
       priorityScore,
       opportunityUrl: suggestionSource === 'code_tech' ? suggestion.how_to?.find((step) => step.startsWith('Open '))?.replace(/^Open /, '') : undefined,
+      noIdPath: isNoIdSuggestion(suggestion),
     };
   }).sort((a, b) => b.priorityScore - a.priorityScore).slice(0, 12);
 }
@@ -209,7 +222,8 @@ function dedupeSuggestions(entries: Array<{ suggestion: Suggestion; source: Auto
 function priorityFor(suggestion: Suggestion, readinessPercent: number, source: AutomationSuggestion['source']) {
   const value = suggestion.estimated_weekly_usd || 0;
   const sourceBoost = source === 'code_tech' ? 40 : source === 'evolution' ? 15 : 0;
-  return sourceBoost + readinessPercent + Math.min(40, value);
+  const noIdBoost = isNoIdSuggestion(suggestion) ? 25 : 0;
+  return sourceBoost + noIdBoost + readinessPercent + Math.min(40, value);
 }
 
 function sourceLabelFor(source: AutomationSuggestion['source']) {
@@ -229,4 +243,29 @@ function parseSecrets(value?: string | null) {
 function hasConfiguredSecret(status: Status, secret: string) {
   if ((status.configured_github_secrets || []).includes(secret)) return true;
   return Object.values(status.secret_readiness || {}).some((info) => (info.present || []).includes(secret));
+}
+
+export function isAvoidedSuggestion(suggestion: Suggestion) {
+  const title = (suggestion.title || '').toLowerCase();
+  const description = (suggestion.description || '').toLowerCase();
+  const secrets = parseSecrets(suggestion.secret_needed);
+  if (suggestion.free_tier === false) return true;
+  if (secrets.some((secret) => AVOIDED_SECRET_PREFIXES.some((prefix) => secret.startsWith(prefix)))) return true;
+  return [title, description].some((text) => (
+    text.includes('binance')
+    || text.includes('anthropic')
+    || text.includes('claude')
+    || text.includes('twitter')
+    || text.includes('crypto')
+    || text.includes('nft')
+    || text.includes('ethereum')
+    || text.includes('premium')
+    || text.includes('phone verification')
+    || text.includes('identity verification')
+    || text.includes('kyc')
+  ));
+}
+
+function isNoIdSuggestion(suggestion: Suggestion) {
+  return suggestion.free_tier !== false && !isAvoidedSuggestion(suggestion);
 }

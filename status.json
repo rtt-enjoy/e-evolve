@@ -1,6 +1,6 @@
 {
   "version": "1.32.1",
-  "last_run": "2026-05-16T12:07:29.598430+00:00",
+  "last_run": "2026-05-16T14:01:47.368729+00:00",
   "total_runs": 529,
   "active_features": [
     "llm_gemini",
@@ -36,8 +36,7 @@
     ]
   },
   "last_evolution": {
-    "version_bumped_to": "1.32.1",
-    "summary": "Add new features and improve reliability",
+    "summary": "Pulse crash before completion: 'str' object has no attribute 'get'",
     "changes_applied": [],
     "suggestions": [
       {
@@ -77,7 +76,8 @@
         ]
       }
     ],
-    "error": null
+    "version_bumped_to": "1.32.1",
+    "error": "'str' object has no attribute 'get'"
   },
   "last_earning": {
     "actions": [],
@@ -121,7 +121,9 @@
       ]
     }
   ],
-  "errors": [],
+  "errors": [
+    "Unhandled pulse crash: 'str' object has no attribute 'get'"
+  ],
   "last_cycle_seconds": 32,
   "llm_roles": {
     "upgrade": "gemini",

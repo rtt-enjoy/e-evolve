@@ -1,7 +1,7 @@
 {
-  "version": "1.32.3",
-  "last_run": "2026-05-17T04:32:59.741434+00:00",
-  "total_runs": 538,
+  "version": "1.32.4",
+  "last_run": "2026-05-17T07:44:48.104004+00:00",
+  "total_runs": 539,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -36,9 +36,14 @@
     ]
   },
   "last_evolution": {
-    "version_bumped_to": "1.32.3",
-    "summary": "Add missing article runner, central API error handling, and rate limit monitoring utilities",
-    "changes_applied": [],
+    "version_bumped_to": "1.32.4",
+    "summary": "Fix missing run function in articles module and add API error handling utility",
+    "changes_applied": [
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "Add missing run() function to articles module to fix the error 'module bot.earning.articles has no attribute run' - this is critical for the earning module to work"
+      }
+    ],
     "suggestions": [
       {
         "title": "Add API Error Handling Utility",
@@ -59,7 +64,7 @@
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: The run function is now auto\u2011imported via bot/earning/__init__.py",
+          "Step 1: The run function is now auto-imported via bot/earning/__init__.py",
           "Step 2: Ensure DEV_TO_API_KEY secret is present (already active)",
           "Step 3: No further action required"
         ]
@@ -82,14 +87,16 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "articles",
+        "platform": "dev.to",
         "success": false,
-        "error": "module 'bot.earning.articles' has no attribute 'run'"
+        "error": "422 Client Error: Unprocessable Entity for url: https://dev.to/api/articles",
+        "estimated_usd": 0.0
       },
       {
-        "platform": "articles",
+        "platform": "dev.to",
         "success": false,
-        "error": "module 'bot.earning.articles' has no attribute 'run'"
+        "error": "422 Client Error: Unprocessable Entity for url: https://dev.to/api/articles",
+        "estimated_usd": 0.0
       }
     ],
     "total_usd": 0.0
@@ -114,7 +121,7 @@
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: The run function is now auto\u2011imported via bot/earning/__init__.py",
+        "Step 1: The run function is now auto-imported via bot/earning/__init__.py",
         "Step 2: Ensure DEV_TO_API_KEY secret is present (already active)",
         "Step 3: No further action required"
       ]
@@ -132,11 +139,8 @@
       ]
     }
   ],
-  "errors": [
-    "articles: module 'bot.earning.articles' has no attribute 'run'",
-    "articles: module 'bot.earning.articles' has no attribute 'run'"
-  ],
-  "last_cycle_seconds": 464,
+  "errors": [],
+  "last_cycle_seconds": 868,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

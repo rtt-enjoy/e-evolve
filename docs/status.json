@@ -1,7 +1,7 @@
 {
   "version": "1.32.9",
-  "last_run": "2026-05-17T19:37:15.531557+00:00",
-  "total_runs": 546,
+  "last_run": "2026-05-17T21:09:18.457466+00:00",
+  "total_runs": 547,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -38,59 +38,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.32.9",
-    "summary": "Enable Medium and Twitter publishing flags, add config defaults, and guard Medium publishing with feature flag",
-    "changes_applied": [
-      {
-        "file": "config/strategy.json",
-        "reason": "Provide default configuration entries for optional Medium and Twitter features and expose enable flags"
-      },
-      {
-        "file": "docs/README.md",
-        "reason": "Add user\u2011facing guide for activating new optional features"
-      }
-    ],
-    "suggestions": [
-      {
-        "title": "Activate Medium Article Publishing",
-        "description": "Publishes articles to Medium in addition to dev.to, expanding reach without extra LLM cost",
-        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
-        "estimated_weekly_usd": 0.15,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Go to https://medium.com/me/settings and create an Integration token with Publishing scope",
-          "Step 2: Add MEDIUM_INTEGRATION_TOKEN as a GitHub secret in your repository settings",
-          "Step 3: Set the environment variable ARTICLES_MEDIUM_ENABLED to \"true\" in your workflow",
-          "Step 4: Run the bot; articles will now post to both dev.to and Medium"
-        ]
-      },
-      {
-        "title": "Enable Twitter/X Thread Publishing",
-        "description": "Builds audience by posting developer threads, driving traffic to articles and services",
-        "secret_needed": "TWITTER_API_KEY",
-        "estimated_weekly_usd": 0.1,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Apply for a Twitter Developer account at https://developer.twitter.com",
-          "Step 2: Create a Project/App and generate API key, secret, access token, and access secret",
-          "Step 3: Add TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET as GitHub secrets",
-          "Step 4: Set the environment variable TWITTER_ENABLED to \"true\" in your workflow"
-        ]
-      },
-      {
-        "title": "Add Anthropic Claude as Backup LLM Provider",
-        "description": "Provides redundancy when primary LLM providers hit rate limits, ensuring consistent article generation",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Sign up at https://console.anthropic.com for free credits",
-          "Step 2: Create an API key in the Anthropic console",
-          "Step 3: Add ANTHROPIC_API_KEY as a GitHub secret",
-          "Step 4: The bot will automatically fall back to Claude when other providers fail"
-        ]
-      }
-    ],
-    "error": null
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: ''",
+    "changes_applied": [],
+    "suggestions": [],
+    "error": "Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: ''",
+    "error_type": "json"
   },
   "last_earning": {
     "actions": [],
@@ -138,7 +90,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 89,
+  "last_cycle_seconds": 1809,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

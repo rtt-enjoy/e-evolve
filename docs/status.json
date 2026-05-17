@@ -1,7 +1,7 @@
 {
   "version": "1.32.3",
-  "last_run": "2026-05-17T00:09:06.199497+00:00",
-  "total_runs": 537,
+  "last_run": "2026-05-17T04:32:59.741434+00:00",
+  "total_runs": 538,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -37,9 +37,46 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.32.3",
-    "summary": "No summary provided",
+    "summary": "Add missing article runner, central API error handling, and rate limit monitoring utilities",
     "changes_applied": [],
-    "suggestions": [],
+    "suggestions": [
+      {
+        "title": "Add API Error Handling Utility",
+        "description": "Provides a centralized way to handle API failures with retries and exponential backoff",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Create the file bot/utils/api_handler.py",
+          "Step 2: Use APIHandler in any module that makes external HTTP requests",
+          "Step 3: Adjust retry and backoff parameters in config/strategy.json if needed"
+        ]
+      },
+      {
+        "title": "Improve Article Generation Fallback",
+        "description": "Adds a proper run() entry point for the articles module so the bot can publish fallback articles when LLM generation fails",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: The run function is now auto\u2011imported via bot/earning/__init__.py",
+          "Step 2: Ensure DEV_TO_API_KEY secret is present (already active)",
+          "Step 3: No further action required"
+        ]
+      },
+      {
+        "title": "Add Rate Limit Monitoring",
+        "description": "Tracks API usage across services and warns when approaching provider limits",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Create the file bot/utils/rate_limiter.py",
+          "Step 2: Import RateLimiter in modules making API calls (e.g., bot/earning/code_techs.py)",
+          "Step 3: Configure thresholds in config/strategy.json"
+        ]
+      }
+    ],
     "error": null
   },
   "last_earning": {
@@ -66,32 +103,32 @@
       "free_tier": true,
       "how_to": [
         "Step 1: Create the file bot/utils/api_handler.py",
-        "Step 2: Import and use the APIHandler class in any module making external API calls",
-        "Step 3: Configure retry count and backoff parameters in the strategy.json file"
+        "Step 2: Use APIHandler in any module that makes external HTTP requests",
+        "Step 3: Adjust retry and backoff parameters in config/strategy.json if needed"
       ]
     },
     {
       "title": "Improve Article Generation Fallback",
-      "description": "Enhances the fallback article generation to include more context and better structure when LLM generation fails",
+      "description": "Adds a proper run() entry point for the articles module so the bot can publish fallback articles when LLM generation fails",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Update the _fallback_article function in bot/earning/articles.py",
-        "Step 2: Add more detailed error context to the fallback content",
-        "Step 3: Include a section on how to reproduce the original error"
+        "Step 1: The run function is now auto\u2011imported via bot/earning/__init__.py",
+        "Step 2: Ensure DEV_TO_API_KEY secret is present (already active)",
+        "Step 3: No further action required"
       ]
     },
     {
       "title": "Add Rate Limit Monitoring",
-      "description": "Tracks API usage across different services and provides warnings when approaching rate limits",
+      "description": "Tracks API usage across services and warns when approaching provider limits",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "Step 1: Create the file bot/utils/rate_limiter.py",
-        "Step 2: Add rate limit tracking to all API calls",
-        "Step 3: Configure rate limit thresholds in strategy.json"
+        "Step 2: Import RateLimiter in modules making API calls (e.g., bot/earning/code_techs.py)",
+        "Step 3: Configure thresholds in config/strategy.json"
       ]
     }
   ],
@@ -99,7 +136,7 @@
     "articles: module 'bot.earning.articles' has no attribute 'run'",
     "articles: module 'bot.earning.articles' has no attribute 'run'"
   ],
-  "last_cycle_seconds": 5,
+  "last_cycle_seconds": 464,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

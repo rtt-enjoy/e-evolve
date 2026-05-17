@@ -1,70 +1,7 @@
 {
-  "_note": "E-Evolve strategy config. The bot may evolve these values over time.",
   "articles": {
-    "per_cycle": 2,
-    "daily_limit": 2,
-    "min_words": 600,
-    "estimated_usd_per_publish": 0.02,
-    "cta_label_default": "Support this project",
-    "cta_utm_campaign": "e_evolve_content_loop",
-    "buyer_intent_ratio": 0.85,
-    "current_market_signals": [
-      "AI automation tools remain a high-intent SaaS affiliate category because buyers compare recurring tools before subscribing.",
-      "Developer-focused digital products such as templates, checklists, prompt packs, and implementation playbooks have high margins and low fulfillment cost.",
-      "Newsletter and community funnels work better than one-off social posts when the content earns trust before asking for money.",
-      "Short-form and social-commerce ideas can be translated for developers as small demos, tool comparisons, and repeatable workflows.",
-      "Practical cost-saving content converts better than generic passive-income content for technical audiences."
-    ],
-    "monetization_angles": [
-      "Recommend a concrete build-vs-buy decision that naturally supports a SaaS affiliate or sponsor CTA.",
-      "Turn the article into a lead magnet for a small digital product such as a template, checklist, or playbook.",
-      "Show how to repurpose one implementation into a newsletter, thread, and productized service offer.",
-      "Compare three tools or stacks with transparent tradeoffs and a buyer-intent conclusion.",
-      "Explain a repeatable automation that saves money or time for a solo founder or small team."
-    ],
-    "buyer_intent_topics": [
-      "The AI automation tools solo developers will actually pay for in 2026",
-      "How to turn a GitHub Actions bot into a SaaS affiliate funnel without spam",
-      "Building a tiny digital product from one useful developer automation",
-      "The developer newsletter funnel I would build before chasing ad revenue",
-      "AI tool comparisons that attract buyers instead of tourists",
-      "How to package a prompt workflow as a paid template developers can trust",
-      "Turning short-form automation demos into technical articles that convert",
-      "A practical content engine for AI tools, templates, and sponsor-ready posts",
-      "How to replace a paid cron service with GitHub Actions for $0",
-      "Building an AI content pipeline that publishes without paid infrastructure",
-      "Free LLM APIs for solo developers: when to use Groq, Gemini, or OpenRouter",
-      "How to build a sponsor-ready open-source dashboard in one afternoon",
-      "Turning technical articles into a free lead funnel without spamming readers",
-      "The no-budget stack I use for autonomous side projects",
-      "How to add a donation or sponsor CTA to developer content without sounding desperate",
-      "Building a small automation product before paying for hosting",
-      "The GitHub Actions content bot playbook for solo founders",
-      "How to turn dev.to posts into a low-cost product discovery loop",
-      "What to automate before you pay for SaaS tools",
-      "How to write technical content that attracts builders with buying intent"
-    ]
-  },
-  "crypto": {
-    "risk_per_trade_pct": 0.02,
-    "min_usdt_balance": 10.0,
-    "symbols": ["BTCUSDT", "ETHUSDT"]
-  },
-  "nft": {
-    "per_cycle": 1,
-    "chain": "ethereum"
-  },
-  "twitter": {
-    "min_tweets": 5,
-    "max_tweets": 7,
-    "buyer_intent_topics": [
-      "AI automation tool comparisons that attract buyers",
-      "Turning one useful script into a tiny digital product",
-      "Newsletter funnels for technical builders",
-      "SaaS affiliate content that does not sound like spam",
-      "Short-form demos that become durable developer articles",
-      "Productized automation services for solo developers"
-    ]
+    "max_articles_per_cycle": 1,
+    "min_interval_hours": 6
   },
   "code_techs": {
     "enabled": true,
@@ -72,67 +9,20 @@
     "daily_target_usd": 10.0,
     "max_items": 8,
     "min_score": 55,
-    "requirements": [
-      "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
-      "Prefer boring maintenance where the buyer already feels pain: failing CI, broken install paths, stale dependencies, or unusable examples.",
-      "Require a visible owner, maintainer, sponsor, bounty, issue activity, or obvious business value before spending deep effort.",
-      "Keep the first contribution small enough to review in one sitting, then convert repeated pain into a fixed-scope maintenance offer.",
-      "Do not count discovery, estimates, or speculative upside as earnings until money is received or manually reconciled."
-    ],
-    "underserved_focus": [
-      "failing CI with a small, reproducible fix",
-      "dependency migration or deprecation cleanup",
-      "documentation examples that no longer run",
-      "test flakiness with a clear failure signature",
-      "type hints, packaging metadata, and release automation",
-      "small compatibility fixes in niche developer tools",
-      "abandoned but still-installed packages with open compatibility issues",
-      "template repos and starter kits whose quickstarts fail on current runtimes",
-      "internal-tool shaped repos where businesses need maintenance more than novelty",
-      "release-note gaps after breaking API changes",
-      "low-glamour data import/export bugs in small SaaS integrations"
-    ],
-    "strategy_playbook": [
-      "Start from maintenance pain, not idea novelty: find places where a maintainer or small business already lost time.",
-      "Use proof as the sales asset: failing command, failing log line, fixed branch, and a short before/after note.",
-      "Favor repeatable chores that can become productized services: dependency upgrades, CI modernization, docs repair, packaging cleanup, and migration guides.",
-      "Look below the obvious bounty surface: stale issues with recent users, forks carrying private fixes, unanswered install failures, and docs comments that expose conversion leaks.",
-      "Bundle adjacent fixes only after trust exists; the first patch should make one painful thing obviously better.",
-      "Treat content as deal flow: every solved niche issue can become a short article, comparison, checklist, or service page aimed at the same pain."
-    ],
-    "avoid_patterns": [
-      "Large rewrites, vague feature requests, design taste debates, and architecture arguments without a failing proof.",
-      "Repos with no maintainer response, no recent users, no releases, and no business signal.",
-      "Crowded beginner issues where dozens of contributors compete for low-value visibility.",
-      "Unpaid speculative requests that need private context before value can be proven.",
-      "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
-    ],
-    "github_searches": [
-      "is:issue is:open bounty label:bounty",
-      "is:issue is:open bounty language:Python",
-      "is:issue is:open bounty language:TypeScript",
-      "is:issue is:open label:\"help wanted\" \"CI\"",
-      "is:issue is:open label:\"good first issue\" \"migration\"",
-      "is:issue is:open \"docs\" \"broken\" \"example\"",
-      "is:issue is:open \"quickstart\" \"fails\" language:Python",
-      "is:issue is:open \"pyproject\" \"deprecation\"",
-      "is:issue is:open \"Node 20\" \"migration\"",
-      "is:issue is:open \"GitHub Actions\" \"deprecated\" \"warning\"",
-      "is:issue is:open \"import error\" \"Python 3.12\"",
-      "is:issue is:open \"release notes\" \"breaking change\""
-    ]
+    "auto_pursue": true,
+    "pursue_score_threshold": 75
   },
-  "payout": {
-    "min_payout_usd": 20.0,
-    "coin": "USDT",
-    "network": "BSC",
-    "fee_buffer_usd": 1.5,
-    "wallet": "exodus",
-    "address_secret": "BINANCE_WITHDRAW_ADDRESS",
-    "notes": [
-      "Default payout target is USDT on BNB Smart Chain because Exodus supports BNB Smart Chain and Binance fees are usually lower than Ethereum mainnet.",
-      "Set BINANCE_WITHDRAW_ADDRESS to the matching Exodus receive address for the configured network and whitelist that exact address/network pair in Binance.",
-      "Keep ETH_WALLET_ADDRESS for the existing Ethereum NFT module; it can use the same Exodus account only when funded with a dedicated low-risk wallet."
-    ]
+  "twitter": {
+    "min_tweets": 5,
+    "max_tweets": 7,
+    "buyer_intent_topics": []
+  },
+  "features": {
+    "articles_medium": {
+      "enabled": false
+    },
+    "twitter": {
+      "enabled": false
+    }
   }
 }

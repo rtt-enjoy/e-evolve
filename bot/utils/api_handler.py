@@ -1,123 +1,61 @@
-"""Centralized API error handling with retry logic."""
-from __future__ import annotations
-
 import logging
 import time
-from dataclasses import dataclass
-from typing import Any, Callable, Optional
+from typing import Any, Dict, Optional, Union
 
 import requests
 
 log = logging.getLogger(__name__)
 
-
-def _load_config() -> dict:
-    try:
-        import json
-        from pathlib import Path
-        return json.loads(Path("config/strategy.json").read_text(encoding="utf-8"))
-    except Exception:
-        return {}
-
-
-@dataclass
-class RetryConfig:
-    """Configuration for retry behavior."""
-    max_attempts: int = 3
-    base_delay: float = 1.0
-    max_delay: float = 30.0
-    backoff_factor: float = 2.0
-    jitter: bool = True
-
-
-def _get_retry_config() -> RetryConfig:
-    cfg = _load_config().get("api", {})
-    return RetryConfig(
-        max_attempts=int(cfg.get("max_attempts", 3)),
-        base_delay=float(cfg.get("base_delay", 1.0)),
-        max_delay=float(cfg.get("max_delay", 30.0)),
-        backoff_factor=float(cfg.get("backoff_factor", 2.0)),
-        jitter=cfg.get("jitter", True),
-    )
-
-
 class APIHandler:
-    """Centralized HTTP client with retry and error handling."""
-
-    def __init__(self, config: Optional[RetryConfig] = None):
-        self.config = config or _get_retry_config()
-        self.session = requests.Session()
-
-    def request(
-        self,
-        method: str,
-        url: str,
-        *, 
-        retry_on: Optional[list[int]] = None,
-        **kwargs,
-    ) -> requests.Response:
-        """
-        Make an HTTP request with automatic retry on specified status codes.
+    """Centralized API handler with retry logic and exponential backoff."""
+    
+    def __init__(self, max_retries: int = 3, initial_backoff: float = 1.0, max_backoff: float = 60.0):
+        self.max_retries = max_retries
+        self.initial_backoff = initial_backoff
+        self.max_backoff = max_backoff
+    
+    def request(self, method: str, url: str, **kwargs) -> requests.Response:
+        """Make an HTTP request with retry logic and exponential backoff."""
+        last_exception = None
         
-        Args:
-            method: HTTP method (GET, POST, etc.)
-            url: Request URL
-            retry_on: List of status codes to retry on (default: 429, 502, 503, 504)
-            **kwargs: Passed to requests.request
-            
-        Returns:
-            requests.Response object
-            
-        Raises:
-            requests.RequestException after all retries exhausted
-n        """
-        if retry_on is None:
-            retry_on = [429, 502, 503, 504]
-
-        last_error = None
-        for attempt in range(1, self.config.max_attempts + 1):
+        for attempt in range(self.max_retries + 1):
             try:
-                resp = self.session.request(method, url, **kwargs)
-                if resp.status_code not in retry_on:
-                    return resp
-                last_error = f"Status {resp.status_code} in retry list"
-            except requests.RequestException as exc:
-                last_error = str(exc)
-
-            if attempt < self.config.max_attempts:
-                delay = self._calculate_delay(attempt)
-                log.warning(
-                    "API request failed (attempt %d/%d): %s — retrying in %.1fs",
-                    attempt, self.config.max_attempts, last_error, delay
-                )
-                time.sleep(delay)
-
-        raise requests.RequestException(
-            f"API request failed after {self.config.max_attempts} attempts: {last_error}"
-        )
-
-    def _calculate_delay(self, attempt: int) -> float:
-        """Calculate delay with exponential backoff and optional jitter."""
-        delay = min(
-            self.config.base_delay * (self.config.backoff_factor ** (attempt - 1)),
-            self.config.max_delay,
-        )
-        if self.config.jitter:
-            import random
-            delay = delay * 0.5 + random.random() * delay * 0.5
-        return delay
-
+                response = requests.request(method, url, **kwargs)
+                response.raise_for_status()
+                return response
+            except requests.exceptions.RequestException as e:
+                last_exception = e
+                
+                if attempt == self.max_retries:
+                    log.error(f"API request failed after {self.max_retries} retries: {url}")
+                    raise
+                
+                # Calculate backoff time with exponential jitter
+                backoff = min(self.initial_backoff * (2 ** attempt), self.max_backoff)
+                jitter = backoff * 0.2  # Add up to 20% jitter
+                sleep_time = backoff + jitter
+                
+                log.warning(f"API request failed (attempt {attempt + 1}/{self.max_retries}): {url}. Retrying in {sleep_time:.2f}s...")
+                time.sleep(sleep_time)
+        
+        if last_exception:
+            raise last_exception
+        
+        # This should never be reached, but just in case
+        raise Exception(f"API request failed after {self.max_retries} retries: {url}")
+    
     def get(self, url: str, **kwargs) -> requests.Response:
+        """Make a GET request."""
         return self.request("GET", url, **kwargs)
-
+    
     def post(self, url: str, **kwargs) -> requests.Response:
+        """Make a POST request."""
         return self.request("POST", url, **kwargs)
-
-    def close(self) -> None:
-        self.session.close()
-
-    def __enter__(self) -> "APIHandler":
-        return self
-
-    def __exit__(self, *args) -> None:
-        self.close()
+    
+    def put(self, url: str, **kwargs) -> requests.Response:
+        """Make a PUT request."""
+        return self.request("PUT", url, **kwargs)
+    
+    def delete(self, url: str, **kwargs) -> requests.Response:
+        """Make a DELETE request."""
+        return self.request("DELETE", url, **kwargs)

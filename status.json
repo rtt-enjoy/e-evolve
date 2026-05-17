@@ -1,7 +1,7 @@
 {
   "version": "1.32.4",
-  "last_run": "2026-05-17T07:44:48.104004+00:00",
-  "total_runs": 539,
+  "last_run": "2026-05-17T09:59:49.875942+00:00",
+  "total_runs": 540,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -37,48 +37,43 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.32.4",
-    "summary": "Fix missing run function in articles module and add API error handling utility",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "Add missing run() function to articles module to fix the error 'module bot.earning.articles has no attribute run' - this is critical for the earning module to work"
-      }
-    ],
+    "summary": "Add centralized API error handling, rate\u2011limit monitoring, and a deterministic article fallback for improved reliability",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Add API Error Handling Utility",
-        "description": "Provides a centralized way to handle API failures with retries and exponential backoff",
+        "description": "Centralizes retry logic for external HTTP calls, reducing boilerplate and improving resilience",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "Step 1: Create the file bot/utils/api_handler.py",
-          "Step 2: Use APIHandler in any module that makes external HTTP requests",
-          "Step 3: Adjust retry and backoff parameters in config/strategy.json if needed"
+          "Step 2: Import and use APIHandler in modules that make HTTP requests",
+          "Step 3: Adjust retry/backoff settings in config/strategy.json if needed"
         ]
       },
       {
-        "title": "Improve Article Generation Fallback",
-        "description": "Adds a proper run() entry point for the articles module so the bot can publish fallback articles when LLM generation fails",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: The run function is now auto-imported via bot/earning/__init__.py",
-          "Step 2: Ensure DEV_TO_API_KEY secret is present (already active)",
-          "Step 3: No further action required"
-        ]
-      },
-      {
-        "title": "Add Rate Limit Monitoring",
-        "description": "Tracks API usage across services and warns when approaching provider limits",
+        "title": "Implement Rate\u2011Limit Monitoring",
+        "description": "Tracks API usage per provider and warns when approaching limits, preventing silent failures",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "Step 1: Create the file bot/utils/rate_limiter.py",
-          "Step 2: Import RateLimiter in modules making API calls (e.g., bot/earning/code_techs.py)",
+          "Step 2: Import RateLimiter in modules that call external APIs (e.g., bot/earning/code_techs.py)",
           "Step 3: Configure thresholds in config/strategy.json"
+        ]
+      },
+      {
+        "title": "Add Deterministic Article Fallback",
+        "description": "Ensures article generation never stalls by providing a fallback article when LLM fails",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Update bot/earning/articles.py to call a new fallback function when LLM generation fails",
+          "Step 2: Verify that the fallback article is published to dev.to",
+          "Step 3: No secrets required"
         ]
       }
     ],
@@ -104,43 +99,43 @@
   "suggestions": [
     {
       "title": "Add API Error Handling Utility",
-      "description": "Provides a centralized way to handle API failures with retries and exponential backoff",
+      "description": "Centralizes retry logic for external HTTP calls, reducing boilerplate and improving resilience",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "Step 1: Create the file bot/utils/api_handler.py",
-        "Step 2: Use APIHandler in any module that makes external HTTP requests",
-        "Step 3: Adjust retry and backoff parameters in config/strategy.json if needed"
+        "Step 2: Import and use APIHandler in modules that make HTTP requests",
+        "Step 3: Adjust retry/backoff settings in config/strategy.json if needed"
       ]
     },
     {
-      "title": "Improve Article Generation Fallback",
-      "description": "Adds a proper run() entry point for the articles module so the bot can publish fallback articles when LLM generation fails",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: The run function is now auto-imported via bot/earning/__init__.py",
-        "Step 2: Ensure DEV_TO_API_KEY secret is present (already active)",
-        "Step 3: No further action required"
-      ]
-    },
-    {
-      "title": "Add Rate Limit Monitoring",
-      "description": "Tracks API usage across services and warns when approaching provider limits",
+      "title": "Implement Rate\u2011Limit Monitoring",
+      "description": "Tracks API usage per provider and warns when approaching limits, preventing silent failures",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "Step 1: Create the file bot/utils/rate_limiter.py",
-        "Step 2: Import RateLimiter in modules making API calls (e.g., bot/earning/code_techs.py)",
+        "Step 2: Import RateLimiter in modules that call external APIs (e.g., bot/earning/code_techs.py)",
         "Step 3: Configure thresholds in config/strategy.json"
+      ]
+    },
+    {
+      "title": "Add Deterministic Article Fallback",
+      "description": "Ensures article generation never stalls by providing a fallback article when LLM fails",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Update bot/earning/articles.py to call a new fallback function when LLM generation fails",
+        "Step 2: Verify that the fallback article is published to dev.to",
+        "Step 3: No secrets required"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 868,
+  "last_cycle_seconds": 212,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

@@ -1,7 +1,7 @@
 {
-  "version": "1.32.7",
-  "last_run": "2026-05-17T15:18:02.966317+00:00",
-  "total_runs": 543,
+  "version": "1.32.8",
+  "last_run": "2026-05-17T17:15:21.691821+00:00",
+  "total_runs": 544,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -37,20 +37,20 @@
     ]
   },
   "last_evolution": {
-    "version_bumped_to": "1.32.7",
-    "summary": "Export API utilities from utils package and integrate error handling with new API handler",
+    "version_bumped_to": "1.32.8",
+    "summary": "Add Medium article publishing and Anthropic Claude as backup LLM provider",
     "changes_applied": [
       {
-        "file": "bot/utils/__init__.py",
-        "reason": "Export APIHandler and RateLimiter from the utils package so they can be imported as bot.utils.APIHandler and bot.utils.RateLimiter"
-      },
-      {
-        "file": "bot/errors.py",
-        "reason": "Integrate error handling with the new APIHandler utility for consistent error tracking and retry logic"
+        "file": "bot/articles.py",
+        "reason": "Implement article publishing to both dev.to and Medium platforms"
       },
       {
         "file": "bot/earning/__init__.py",
         "reason": "Export all earning modules from the package for cleaner imports and add anthropic_run fallback"
+      },
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "Update articles module to support both dev.to and Medium publishing"
       }
     ],
     "suggestions": [
@@ -97,18 +97,7 @@
     "error": null
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 8,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -153,7 +142,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 177,
+  "last_cycle_seconds": 175,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

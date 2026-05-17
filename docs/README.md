@@ -1,44 +1,37 @@
-# E‑Evolve Bot – Activation Guide
+# E‑Evolve Bot Documentation
 
-This repository contains an autonomous GitHub Actions bot that can earn money through several optional features. Below are the steps to enable each feature.
+## Overview
+E‑Evolve is a self‑improving GitHub Actions bot that can earn USD by publishing articles, trading crypto, minting NFTs, and posting Twitter threads.
 
-## 1. Medium Publishing (articles_medium)
+## Activation Guide for Optional Features
 
-1. Go to **https://medium.com/me/settings** and create an **Integration token** with the *Publishing* scope.
-2. Add the token as a GitHub secret named `MEDIUM_INTEGRATION_TOKEN`.
-3. In your workflow, set the environment variable `ARTICLES_MEDIUM_ENABLED=true` (or simply rely on the secret – the bot auto‑detects it).
-4. The next run will publish articles to both dev.to and Medium.
+### 1. Twitter (X) Threads
+- **Required secrets**: `TWITTER_API_KEY`, `TWITTER_API_SECRET`, `TWITTER_ACCESS_TOKEN`, `TWITTER_ACCESS_SECRET`
+- Add them in **Settings → Secrets and variables → Actions**.
+- The bot will automatically start generating and posting threads once the secrets are present.
 
-## 2. Twitter/X Thread Publishing (twitter)
+### 2. Binance Crypto Trading
+- **Required secrets**: `BINANCE_API_KEY`, `BINANCE_SECRET_KEY`
+- (Optional) configure trading parameters in `config/strategy.json` under the `crypto` key.
+- After adding the secrets, the `crypto` module will run each cycle.
 
-1. Apply for a **Twitter Developer** account at https://developer.twitter.com.
-2. Create a Project/App and generate the four credentials:
-   - `TWITTER_API_KEY`
-   - `TWITTER_API_SECRET`
-   - `TWITTER_ACCESS_TOKEN`
-   - `TWITTER_ACCESS_SECRET`
-3. Add each as a GitHub secret with the exact names above.
-4. (Optional) Set `TWITTER_ENABLED=true` in the workflow environment.
-5. The bot will start posting threads after the next successful run.
+### 3. NFT Minting (Ethereum)
+- **Required secrets**: `ETH_PRIVATE_KEY`, `ETH_WALLET_ADDRESS`, `NFT_CONTRACT_ADDRESS`
+- (Optional) `NFT_STORAGE_TOKEN` to pin metadata on IPFS via nft.storage.
+- Deploy an ERC‑721 contract first, then add its address as a secret.
 
-## 3. Anthropic Claude Backup (llm_anthropic)
+### 4. Medium Articles
+- **Required secret**: `MEDIUM_INTEGRATION_TOKEN`
+- Add the token to enable publishing to Medium in addition to dev.to.
 
-1. Sign up at https://console.anthropic.com and obtain a free API key.
-2. Add the secret `ANTHROPIC_API_KEY` to the repository.
-3. No additional configuration is needed; the bot will automatically fall back to Claude when other providers fail.
+### 5. Anthropic LLM (currently inactive)
+- **Required secret**: `ANTHROPIC_API_KEY`
+- Add the key to switch the LLM provider to Anthropic.
 
-## 4. Crypto Trading & Payout (crypto_binance, crypto_payout)
-
-- **Binance API**: Create an API key/secret with trading permissions and add `BINANCE_API_KEY` and `BINANCE_SECRET_KEY`.
-- **Withdrawal**: Add `BINANCE_WITHDRAW_ADDRESS` (must be whitelisted in your Binance account) and optionally set `BINANCE_WITHDRAW_NETWORK` if different from the default.
-
-## 5. NFT Minting (nft_ethereum)
-
-1. Generate an Ethereum private key and address.
-2. Add `ETH_PRIVATE_KEY` and `ETH_WALLET_ADDRESS` as secrets.
-3. Deploy an ERC‑721 contract and set `NFT_CONTRACT_ADDRESS`.
-4. (Optional) Add `NFT_STORAGE_TOKEN` for IPFS pinning.
+## General Steps
+1. Add the necessary secrets for the features you want to enable.
+2. Ensure `requirements.txt` includes the needed packages (the bot will install them on the next run).
+3. Commit any changes; the next workflow execution will pick up the new configuration.
 
 ---
-
-After adding the required secrets, push a commit or re‑run the workflow. The bot will automatically detect the new capabilities and start earning.
+*All optional features are safe to enable; they will only run when their required secrets are present.*

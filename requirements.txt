@@ -1,6 +1,8 @@
 requests>=2.32.0
-python-binance>=1.0.20
+python-binance>=1.0.19
 web3>=6.12.0
 tweepy>=4.14.0
-# Optional packages for optional features
-# pip install -r requirements.txt to install all
+# Added dependencies for optional earning modules
+# - twitter (tweepy)
+# - binance trading (python-binance)
+# - NFT minting (web3)

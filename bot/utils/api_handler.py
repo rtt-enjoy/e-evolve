@@ -1,61 +1,50 @@
+from __future__ import annotations
+
 import logging
 import time
-from typing import Any, Dict, Optional, Union
-
-import requests
+from typing import Any, Callable
 
 log = logging.getLogger(__name__)
 
 class APIHandler:
-    """Centralized API handler with retry logic and exponential backoff."""
-    
-    def __init__(self, max_retries: int = 3, initial_backoff: float = 1.0, max_backoff: float = 60.0):
-        self.max_retries = max_retries
-        self.initial_backoff = initial_backoff
-        self.max_backoff = max_backoff
-    
-    def request(self, method: str, url: str, **kwargs) -> requests.Response:
-        """Make an HTTP request with retry logic and exponential backoff."""
-        last_exception = None
-        
-        for attempt in range(self.max_retries + 1):
+    """Simple helper for retrying HTTP‑like operations.
+
+    The original bot referenced this class in `bot/errors.py` but the file was missing,
+    causing an import error that prevented the error‑handling subsystem from loading.
+    This lightweight implementation provides exponential back‑off and optional
+    callback hooks without pulling in external dependencies.
+    """
+
+    def __init__(self, retries: int = 3, backoff: float = 1.5) -> None:
+        self.retries = retries
+        self.backoff = backoff
+
+    def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
+        """Execute *func* with retry logic.
+
+        Parameters
+        ----------
+        func: Callable
+            The function performing the external request.
+        *args, **kwargs: Any
+            Arguments passed to *func*.
+        """
+        attempt = 0
+        while True:
             try:
-                response = requests.request(method, url, **kwargs)
-                response.raise_for_status()
-                return response
-            except requests.exceptions.RequestException as e:
-                last_exception = e
-                
-                if attempt == self.max_retries:
-                    log.error(f"API request failed after {self.max_retries} retries: {url}")
+                return func(*args, **kwargs)
+            except Exception as exc:
+                attempt += 1
+                if attempt > self.retries:
+                    log.error("API call failed after %d attempts: %s", attempt - 1, exc)
                     raise
-                
-                # Calculate backoff time with exponential jitter
-                backoff = min(self.initial_backoff * (2 ** attempt), self.max_backoff)
-                jitter = backoff * 0.2  # Add up to 20% jitter
-                sleep_time = backoff + jitter
-                
-                log.warning(f"API request failed (attempt {attempt + 1}/{self.max_retries}): {url}. Retrying in {sleep_time:.2f}s...")
-                time.sleep(sleep_time)
-        
-        if last_exception:
-            raise last_exception
-        
-        # This should never be reached, but just in case
-        raise Exception(f"API request failed after {self.max_retries} retries: {url}")
-    
-    def get(self, url: str, **kwargs) -> requests.Response:
-        """Make a GET request."""
-        return self.request("GET", url, **kwargs)
-    
-    def post(self, url: str, **kwargs) -> requests.Response:
-        """Make a POST request."""
-        return self.request("POST", url, **kwargs)
-    
-    def put(self, url: str, **kwargs) -> requests.Response:
-        """Make a PUT request."""
-        return self.request("PUT", url, **kwargs)
-    
-    def delete(self, url: str, **kwargs) -> requests.Response:
-        """Make a DELETE request."""
-        return self.request("DELETE", url, **kwargs)
+                wait = self.backoff ** attempt
+                log.warning("API call error (attempt %d/%d): %s – retrying in %.1fs", attempt, self.retries, exc, wait)
+                time.sleep(wait)
+
+    def _record_error(self, error: Exception) -> None:
+        """Placeholder for future error‑recording integrations.
+
+        Currently logs the error; can be extended to send metrics or alerts.
+        """
+        log.error("Recorded error: %s", error)

@@ -1,7 +1,7 @@
 {
-  "version": "1.32.10",
-  "last_run": "2026-05-17T22:09:11.103257+00:00",
-  "total_runs": 548,
+  "version": "1.32.11",
+  "last_run": "2026-05-17T23:11:27.541861+00:00",
+  "total_runs": 549,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -37,58 +37,58 @@
     ]
   },
   "last_evolution": {
-    "version_bumped_to": "1.32.10",
-    "summary": "Add missing dependencies, documentation, and utility for safe env access",
+    "version_bumped_to": "1.32.11",
+    "summary": "Add missing dependencies, provide activation guide, and implement APIHandler stub",
     "changes_applied": [
       {
         "file": "requirements.txt",
-        "reason": "Modules import these libraries; missing them causes runtime failures."
+        "reason": "Modules import these libraries; missing them causes runtime failures for optional features."
       },
       {
         "file": "docs/README.md",
-        "reason": "Owners need clear instructions to enable high\u2011value optional features."
+        "reason": "Provides clear, step\u2011by\u2011step instructions for owners to enable high\u2011value optional features."
       },
       {
-        "file": "bot/utils/__init__.py",
-        "reason": "Provides a reusable, testable way to access environment variables safely."
+        "file": "bot/utils/api_handler.py",
+        "reason": "Fixes import error in bot/errors.py by providing the missing APIHandler class."
       }
     ],
     "suggestions": [
       {
-        "title": "Add required Python packages to requirements.txt",
-        "description": "Ensures all earning modules can import needed libraries (binance, web3, tweepy, requests) without runtime errors",
-        "secret_needed": null,
+        "title": "Enable Twitter earnings",
+        "description": "Activates the Twitter module to generate and post X threads, adding potential earnings",
+        "secret_needed": "TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Open the repository settings and locate the 'requirements.txt' file.",
-          "2. Verify the listed packages match the new content.",
-          "3. Commit the change; the next workflow run will install the dependencies automatically."
+          "1. In the repository Settings, add the four Twitter secrets listed above.",
+          "2. Ensure the \"twitter\" feature is listed in active_features (it will auto\u2011activate when secrets are present).",
+          "3. Commit the next run; the bot will start generating and posting threads."
         ]
       },
       {
-        "title": "Create README with activation guide for optional features",
-        "description": "Provides clear steps for owners to enable Medium, Twitter, and Anthropic integrations, boosting earnings potential",
-        "secret_needed": null,
+        "title": "Enable Binance crypto trading",
+        "description": "Turns on the crypto module for automated spot trading, unlocking higher USD returns",
+        "secret_needed": "BINANCE_API_KEY, BINANCE_SECRET_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Open the 'docs/README.md' file added by this PR.",
-          "2. Review the sections for each optional feature and follow the listed steps.",
-          "3. Add the required secrets to the repository's GitHub Secrets.",
-          "4. Re\u2011run the bot to see new earnings streams."
+          "1. Add BINANCE_API_KEY and BINANCE_SECRET_KEY as GitHub repository secrets.",
+          "2. Optionally configure \"crypto\" settings in config/strategy.json (risk_per_trade_pct, symbols, etc.).",
+          "3. Run the workflow; the bot will begin evaluating and executing trades."
         ]
       },
       {
-        "title": "Add safe environment variable loader utility",
-        "description": "Centralizes env access with clear error handling, reducing duplicated code across modules",
-        "secret_needed": null,
+        "title": "Enable NFT minting",
+        "description": "Activates the NFT module to mint AI\u2011generated NFTs each cycle, creating a new revenue stream",
+        "secret_needed": "ETH_PRIVATE_KEY, ETH_WALLET_ADDRESS, NFT_CONTRACT_ADDRESS",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. The new file 'bot/utils/__init__.py' is added automatically.",
-          "2. Existing modules can import `bot.utils` and call `get_env('VAR_NAME')`.",
-          "3. No further action required; the utility is ready for use."
+          "1. Deploy an ERC\u2011721 contract on Ethereum and note its address.",
+          "2. Add ETH_PRIVATE_KEY, ETH_WALLET_ADDRESS, and NFT_CONTRACT_ADDRESS as repository secrets.",
+          "3. (Optional) Add NFT_STORAGE_TOKEN to pin metadata on IPFS.",
+          "4. Commit and let the bot run; it will mint one NFT per cycle."
         ]
       }
     ],
@@ -100,45 +100,45 @@
   },
   "suggestions": [
     {
-      "title": "Add required Python packages to requirements.txt",
-      "description": "Ensures all earning modules can import needed libraries (binance, web3, tweepy, requests) without runtime errors",
-      "secret_needed": null,
+      "title": "Enable Twitter earnings",
+      "description": "Activates the Twitter module to generate and post X threads, adding potential earnings",
+      "secret_needed": "TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Open the repository settings and locate the 'requirements.txt' file.",
-        "2. Verify the listed packages match the new content.",
-        "3. Commit the change; the next workflow run will install the dependencies automatically."
+        "1. In the repository Settings, add the four Twitter secrets listed above.",
+        "2. Ensure the \"twitter\" feature is listed in active_features (it will auto\u2011activate when secrets are present).",
+        "3. Commit the next run; the bot will start generating and posting threads."
       ]
     },
     {
-      "title": "Create README with activation guide for optional features",
-      "description": "Provides clear steps for owners to enable Medium, Twitter, and Anthropic integrations, boosting earnings potential",
-      "secret_needed": null,
+      "title": "Enable Binance crypto trading",
+      "description": "Turns on the crypto module for automated spot trading, unlocking higher USD returns",
+      "secret_needed": "BINANCE_API_KEY, BINANCE_SECRET_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Open the 'docs/README.md' file added by this PR.",
-        "2. Review the sections for each optional feature and follow the listed steps.",
-        "3. Add the required secrets to the repository's GitHub Secrets.",
-        "4. Re\u2011run the bot to see new earnings streams."
+        "1. Add BINANCE_API_KEY and BINANCE_SECRET_KEY as GitHub repository secrets.",
+        "2. Optionally configure \"crypto\" settings in config/strategy.json (risk_per_trade_pct, symbols, etc.).",
+        "3. Run the workflow; the bot will begin evaluating and executing trades."
       ]
     },
     {
-      "title": "Add safe environment variable loader utility",
-      "description": "Centralizes env access with clear error handling, reducing duplicated code across modules",
-      "secret_needed": null,
+      "title": "Enable NFT minting",
+      "description": "Activates the NFT module to mint AI\u2011generated NFTs each cycle, creating a new revenue stream",
+      "secret_needed": "ETH_PRIVATE_KEY, ETH_WALLET_ADDRESS, NFT_CONTRACT_ADDRESS",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. The new file 'bot/utils/__init__.py' is added automatically.",
-        "2. Existing modules can import `bot.utils` and call `get_env('VAR_NAME')`.",
-        "3. No further action required; the utility is ready for use."
+        "1. Deploy an ERC\u2011721 contract on Ethereum and note its address.",
+        "2. Add ETH_PRIVATE_KEY, ETH_WALLET_ADDRESS, and NFT_CONTRACT_ADDRESS as repository secrets.",
+        "3. (Optional) Add NFT_STORAGE_TOKEN to pin metadata on IPFS.",
+        "4. Commit and let the bot run; it will mint one NFT per cycle."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 84,
+  "last_cycle_seconds": 108,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

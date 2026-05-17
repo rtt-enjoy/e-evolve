@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-05-16T15:18:40.007395+00:00
+Refreshed: 2026-05-17T15:19:56.911459+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -44,43 +44,43 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. [[ Solidity ] Fix VestingWallet doesn't support token change or migration](https://github.com/ClankerNation/OpenAgents/issues/128)
+1. [[ Bounty $5k ] [ Solidity ] Fix AMMPool swap doesn't emit indexed events for off-chain indexing — v2 upgrade](https://github.com/ClankerNation/OpenAgents/issues/165)
    - Score: 100/100
-   - Value signal: $400.00
-   - Why: visible or inferred value around $400.00; CI/test work is concrete and easy for maintainers to accept
+   - Value signal: $5700.00
+   - Why: visible or inferred value around $5700.00; CI/test work is concrete and easy for maintainers to accept
    - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
-2. [[ Solidity ] Fix VestingWallet doesn't support token change or migration — mainnet prep](https://github.com/ClankerNation/OpenAgents/issues/170)
+2. [[ Bounty $3k ] [ Solidity ] Fix VestingWallet doesn't support token change or migration — mainnet prep](https://github.com/ClankerNation/OpenAgents/issues/170)
    - Score: 100/100
-   - Value signal: $300.00
-   - Why: visible or inferred value around $300.00; CI/test work is concrete and easy for maintainers to accept
+   - Value signal: $3300.00
+   - Why: visible or inferred value around $3300.00; CI/test work is concrete and easy for maintainers to accept
    - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
-3. [Dependency Dashboard](https://github.com/grafana/grafana-iot-twinmaker-app/issues/563)
+3. [Benchmark APIs with p50, p95, p99 latency, RPS, error rate and TTFB](https://github.com/SecureBananaLabs/bug-bounty/issues/30)
    - Score: 100/100
+   - Value signal: $750.00
+   - Why: visible or inferred value around $750.00; CI/test work is concrete and easy for maintainers to accept
+   - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
+4. [[RFC][epic] Out-of-process sidecar worker mode for crash-isolated DCC actions](https://github.com/loonghao/dcc-mcp-core/issues/998)
+   - Score: 98/100
    - Value signal: $0.00
    - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-4. [Dependency Dashboard](https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41)
-   - Score: 88/100
-   - Value signal: $0.00
-   - Why: migration chores are neglected but urgent; runtime and toolchain drift creates urgent maintenance demand
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-5. [[BOUNTY $100] HOOK: Pre-tool-use hook that blocks destructive bash commands](https://github.com/claude-builders-bounty/claude-builders-bounty/issues/3)
-   - Score: 86/100
-   - Value signal: $100.00
-   - Why: visible or inferred value around $100.00; working docs convert into trust quickly
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed‑price cleanup.
+5. [[BOUNTY $150] AGENT: Claude Code sub-agent that reviews a PR and posts a structured comment](https://github.com/claude-builders-bounty/claude-builders-bounty/issues/4)
+   - Score: 96/100
+   - Value signal: $150.00
+   - Why: visible or inferred value around $150.00; working docs convert into trust quickly
    - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
-6. [[BOUNTY] Red Team UTXO Implementation — Find Bugs, Earn RTC (50-200 RTC)](https://github.com/Scottcjn/rustchain-bounties/issues/2819)
-   - Score: 84/100
-   - Value signal: $0.10
-   - Why: visible or inferred value around $0.10; CI/test work is concrete and easy for maintainers to accept
+6. [[ Bounty $9k ] [ Solidity ] Fix reentrancy in StakingRewards withdraw and claimRewards — P0 bug](https://github.com/ClankerNation/OpenAgents/issues/86)
+   - Score: 93/100
+   - Value signal: $9000.00
+   - Why: visible or inferred value around $9000.00; CI/test work is concrete and easy for maintainers to accept
    - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
-7. [[ONBOARD: 3 RTC] Star + Test the Miner and Post Your Hardware Report](https://github.com/Scottcjn/rustchain-bounties/issues/2784)
-   - Score: 80/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; CI/test work is concrete and easy for maintainers to accept
+7. [[ Bounty $2k ] [ API ] Fix ratelimit.py doesn't differentiate authenticated vs anonymous limits — backwards compat](https://github.com/ClankerNation/OpenAgents/issues/200)
+   - Score: 93/100
+   - Value signal: $2200.00
+   - Why: visible or inferred value around $2200.00; CI/test work is concrete and easy for maintainers to accept
    - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.
-8. [🩺 Caretaker self-heal: Unknown caretaker failure: Process completed with exit code 127.](https://github.com/ianlintner/python_dsa/issues/70)
-   - Score: 80/100
-   - Value signal: $0.00
-   - Why: CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+8. [[ Bounty $1k ] [ Solidity ] Fix cross-chain replay attack in TokenBridge signature verification — v2 implementation](https://github.com/ClankerNation/OpenAgents/issues/55)
+   - Score: 93/100
+   - Value signal: $1350.00
+   - Why: visible or inferred value around $1350.00; CI/test work is concrete and easy for maintainers to accept
+   - Next: Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.

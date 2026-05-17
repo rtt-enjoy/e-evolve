@@ -1,7 +1,7 @@
 {
-  "version": "1.32.6",
-  "last_run": "2026-05-17T13:57:52.780060+00:00",
-  "total_runs": 542,
+  "version": "1.32.7",
+  "last_run": "2026-05-17T15:18:02.966317+00:00",
+  "total_runs": 543,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -37,106 +37,123 @@
     ]
   },
   "last_evolution": {
-    "version_bumped_to": "1.32.6",
-    "summary": "Add API error handling utility, rate limiter, and deterministic article fallback",
+    "version_bumped_to": "1.32.7",
+    "summary": "Export API utilities from utils package and integrate error handling with new API handler",
     "changes_applied": [
       {
         "file": "bot/utils/__init__.py",
-        "reason": "Create utils package with exports for API handler and rate limiter"
+        "reason": "Export APIHandler and RateLimiter from the utils package so they can be imported as bot.utils.APIHandler and bot.utils.RateLimiter"
       },
       {
-        "file": "bot/utils/api_handler.py",
-        "reason": "Create centralized API handler with retry logic for all HTTP calls"
+        "file": "bot/errors.py",
+        "reason": "Integrate error handling with the new APIHandler utility for consistent error tracking and retry logic"
       },
       {
-        "file": "bot/utils/rate_limiter.py",
-        "reason": "Create rate limiter to track API usage and warn when approaching limits"
+        "file": "bot/earning/__init__.py",
+        "reason": "Export all earning modules from the package for cleaner imports and add anthropic_run fallback"
       }
     ],
     "suggestions": [
       {
-        "title": "Add API Error Handling Utility",
-        "description": "Centralizes retry logic with exponential backoff for external HTTP calls, reducing boilerplate and improving resilience",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
+        "title": "Activate Medium Article Publishing",
+        "description": "Publishes articles to Medium in addition to dev.to, doubling content reach with no extra LLM cost",
+        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+        "estimated_weekly_usd": 0.15,
         "free_tier": true,
         "how_to": [
-          "Step 1: Create the file bot/utils/api_handler.py",
-          "Step 2: Import APIHandler in modules that make HTTP requests (articles.py, code_techs.py, etc.)",
-          "Step 3: Configure retry/backoff settings in config/strategy.json if needed"
+          "Step 1: Go to https://medium.com/me/settings and find 'Integration tokens'",
+          "Step 2: Create a new token with 'Publishing' scope",
+          "Step 3: Add MEDIUM_INTEGRATION_TOKEN as a GitHub secret in your repository settings",
+          "Step 4: Articles will now publish to both dev.to and Medium automatically"
         ]
       },
       {
-        "title": "Implement Rate-Limit Monitoring",
-        "description": "Tracks API usage per provider and warns when approaching limits, preventing silent failures",
-        "secret_needed": null,
+        "title": "Add Anthropic Claude as Backup LLM Provider",
+        "description": "Provides redundancy when primary LLM providers hit rate limits, ensuring consistent article generation",
+        "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Create the file bot/utils/rate_limiter.py",
-          "Step 2: Import RateLimiter in modules that call external APIs",
-          "Step 3: Configure thresholds in config/strategy.json"
+          "Step 1: Sign up at https://console.anthropic.com for free credits",
+          "Step 2: Create an API key in the Anthropic console",
+          "Step 3: Add ANTHROPIC_API_KEY as a GitHub secret",
+          "Step 4: The bot will automatically use Claude as a fallback provider"
         ]
       },
       {
-        "title": "Activate Deterministic Article Fallback",
-        "description": "Ensures article generation never stalls by providing a fallback article when LLM fails",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
+        "title": "Enable Twitter/X Thread Publishing",
+        "description": "Builds audience by posting developer threads, driving traffic to articles and services",
+        "secret_needed": "TWITTER_API_KEY",
+        "estimated_weekly_usd": 0.1,
         "free_tier": true,
         "how_to": [
-          "Step 1: Verify bot/earning/articles.py has _fallback_article function",
-          "Step 2: Test by temporarily removing LLM keys to trigger fallback",
-          "Step 3: Check that fallback article is published to dev.to"
+          "Step 1: Apply for a Twitter Developer account at https://developer.twitter.com",
+          "Step 2: Create a Project and App, then generate API keys and access tokens",
+          "Step 3: Add TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET as GitHub secrets",
+          "Step 4: The bot will post educational threads about automation and AI"
         ]
       }
     ],
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add API Error Handling Utility",
-      "description": "Centralizes retry logic with exponential backoff for external HTTP calls, reducing boilerplate and improving resilience",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
+      "title": "Activate Medium Article Publishing",
+      "description": "Publishes articles to Medium in addition to dev.to, doubling content reach with no extra LLM cost",
+      "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+      "estimated_weekly_usd": 0.15,
       "free_tier": true,
       "how_to": [
-        "Step 1: Create the file bot/utils/api_handler.py",
-        "Step 2: Import APIHandler in modules that make HTTP requests (articles.py, code_techs.py, etc.)",
-        "Step 3: Configure retry/backoff settings in config/strategy.json if needed"
+        "Step 1: Go to https://medium.com/me/settings and find 'Integration tokens'",
+        "Step 2: Create a new token with 'Publishing' scope",
+        "Step 3: Add MEDIUM_INTEGRATION_TOKEN as a GitHub secret in your repository settings",
+        "Step 4: Articles will now publish to both dev.to and Medium automatically"
       ]
     },
     {
-      "title": "Implement Rate-Limit Monitoring",
-      "description": "Tracks API usage per provider and warns when approaching limits, preventing silent failures",
-      "secret_needed": null,
+      "title": "Add Anthropic Claude as Backup LLM Provider",
+      "description": "Provides redundancy when primary LLM providers hit rate limits, ensuring consistent article generation",
+      "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Create the file bot/utils/rate_limiter.py",
-        "Step 2: Import RateLimiter in modules that call external APIs",
-        "Step 3: Configure thresholds in config/strategy.json"
+        "Step 1: Sign up at https://console.anthropic.com for free credits",
+        "Step 2: Create an API key in the Anthropic console",
+        "Step 3: Add ANTHROPIC_API_KEY as a GitHub secret",
+        "Step 4: The bot will automatically use Claude as a fallback provider"
       ]
     },
     {
-      "title": "Activate Deterministic Article Fallback",
-      "description": "Ensures article generation never stalls by providing a fallback article when LLM fails",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
+      "title": "Enable Twitter/X Thread Publishing",
+      "description": "Builds audience by posting developer threads, driving traffic to articles and services",
+      "secret_needed": "TWITTER_API_KEY",
+      "estimated_weekly_usd": 0.1,
       "free_tier": true,
       "how_to": [
-        "Step 1: Verify bot/earning/articles.py has _fallback_article function",
-        "Step 2: Test by temporarily removing LLM keys to trigger fallback",
-        "Step 3: Check that fallback article is published to dev.to"
+        "Step 1: Apply for a Twitter Developer account at https://developer.twitter.com",
+        "Step 2: Create a Project and App, then generate API keys and access tokens",
+        "Step 3: Add TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET as GitHub secrets",
+        "Step 4: The bot will post educational threads about automation and AI"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 74,
+  "last_cycle_seconds": 177,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -282,89 +299,97 @@
   },
   "code_tech_earning": {
     "enabled": true,
-    "last_refresh_at": "2026-05-16T15:18:40.007395+00:00",
+    "last_refresh_at": "2026-05-17T15:19:56.911459+00:00",
     "daily_target_usd": 10.0,
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "[ Solidity ] Fix VestingWallet doesn't support token change or migration",
-        "url": "https://github.com/ClankerNation/OpenAgents/issues/128",
+        "title": "[ Bounty $5k ] [ Solidity ] Fix AMMPool swap doesn't emit indexed events for off-chain indexing \u2014 v2 upgrade",
+        "url": "https://github.com/ClankerNation/OpenAgents/issues/165",
         "source": "github",
         "score": 100,
-        "estimated_value_usd": 400.0,
-        "reason": "visible or inferred value around $400.00; CI/test work is concrete and easy for maintainers to accept",
+        "estimated_value_usd": 5700.0,
+        "reason": "visible or inferred value around $5700.00; CI/test work is concrete and easy for maintainers to accept",
         "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
-        "pursued": false
+        "pursued": false,
+        "archived_at": null
       },
       {
-        "title": "[ Solidity ] Fix VestingWallet doesn't support token change or migration \u2014 mainnet prep",
+        "title": "[ Bounty $3k ] [ Solidity ] Fix VestingWallet doesn't support token change or migration \u2014 mainnet prep",
         "url": "https://github.com/ClankerNation/OpenAgents/issues/170",
         "source": "github",
         "score": 100,
-        "estimated_value_usd": 300.0,
-        "reason": "visible or inferred value around $300.00; CI/test work is concrete and easy for maintainers to accept",
+        "estimated_value_usd": 3300.0,
+        "reason": "visible or inferred value around $3300.00; CI/test work is concrete and easy for maintainers to accept",
         "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
-        "pursued": false
+        "pursued": false,
+        "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/grafana/grafana-iot-twinmaker-app/issues/563",
+        "title": "Benchmark APIs with p50, p95, p99 latency, RPS, error rate and TTFB",
+        "url": "https://github.com/SecureBananaLabs/bug-bounty/issues/30",
         "source": "github",
         "score": 100,
+        "estimated_value_usd": 750.0,
+        "reason": "visible or inferred value around $750.00; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "[RFC][epic] Out-of-process sidecar worker mode for crash-isolated DCC actions",
+        "url": "https://github.com/loonghao/dcc-mcp-core/issues/998",
+        "source": "github",
+        "score": 98,
         "estimated_value_usd": 0.0,
         "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed\u2011price cleanup.",
+        "pursued": false,
+        "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41",
+        "title": "[BOUNTY $150] AGENT: Claude Code sub-agent that reviews a PR and posts a structured comment",
+        "url": "https://github.com/claude-builders-bounty/claude-builders-bounty/issues/4",
         "source": "github",
-        "score": 88,
-        "estimated_value_usd": 0.0,
-        "reason": "migration chores are neglected but urgent; runtime and toolchain drift creates urgent maintenance demand",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false
-      },
-      {
-        "title": "[BOUNTY $100] HOOK: Pre-tool-use hook that blocks destructive bash commands",
-        "url": "https://github.com/claude-builders-bounty/claude-builders-bounty/issues/3",
-        "source": "github",
-        "score": 86,
-        "estimated_value_usd": 100.0,
-        "reason": "visible or inferred value around $100.00; working docs convert into trust quickly",
+        "score": 96,
+        "estimated_value_usd": 150.0,
+        "reason": "visible or inferred value around $150.00; working docs convert into trust quickly",
         "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
-        "pursued": false
+        "pursued": false,
+        "archived_at": null
       },
       {
-        "title": "[BOUNTY] Red Team UTXO Implementation \u2014 Find Bugs, Earn RTC (50-200 RTC)",
-        "url": "https://github.com/Scottcjn/rustchain-bounties/issues/2819",
+        "title": "[ Bounty $9k ] [ Solidity ] Fix reentrancy in StakingRewards withdraw and claimRewards \u2014 P0 bug",
+        "url": "https://github.com/ClankerNation/OpenAgents/issues/86",
         "source": "github",
-        "score": 84,
-        "estimated_value_usd": 0.1,
-        "reason": "visible or inferred value around $0.10; CI/test work is concrete and easy for maintainers to accept",
+        "score": 93,
+        "estimated_value_usd": 9000.0,
+        "reason": "visible or inferred value around $9000.00; CI/test work is concrete and easy for maintainers to accept",
         "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
-        "pursued": false
+        "pursued": false,
+        "archived_at": null
       },
       {
-        "title": "[ONBOARD: 3 RTC] Star + Test the Miner and Post Your Hardware Report",
-        "url": "https://github.com/Scottcjn/rustchain-bounties/issues/2784",
+        "title": "[ Bounty $2k ] [ API ] Fix ratelimit.py doesn't differentiate authenticated vs anonymous limits \u2014 backwards compat",
+        "url": "https://github.com/ClankerNation/OpenAgents/issues/200",
         "source": "github",
-        "score": 80,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; CI/test work is concrete and easy for maintainers to accept",
+        "score": 93,
+        "estimated_value_usd": 2200.0,
+        "reason": "visible or inferred value around $2200.00; CI/test work is concrete and easy for maintainers to accept",
         "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
-        "pursued": false
+        "pursued": false,
+        "archived_at": null
       },
       {
-        "title": "\ud83e\ude7a Caretaker self-heal: Unknown caretaker failure: Process completed with exit code 127.",
-        "url": "https://github.com/ianlintner/python_dsa/issues/70",
+        "title": "[ Bounty $1k ] [ Solidity ] Fix cross-chain replay attack in TokenBridge signature verification \u2014 v2 implementation",
+        "url": "https://github.com/ClankerNation/OpenAgents/issues/55",
         "source": "github",
-        "score": 80,
-        "estimated_value_usd": 0.0,
-        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false
+        "score": 93,
+        "estimated_value_usd": 1350.0,
+        "reason": "visible or inferred value around $1350.00; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
+        "pursued": false,
+        "archived_at": null
       }
     ],
     "requirements": [

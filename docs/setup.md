@@ -29,6 +29,8 @@ Use the same variable names in both places:
 `.env` is ignored by git and should never be committed. `.env.example` is the
 committed template and must contain names only, not real secret values.
 
+The full environment key reference is in [`docs/environment.md`](environment.md).
+
 ### No-ID free self-earn path
 
 Use this order when you cannot use Binance identity verification, phone-gated

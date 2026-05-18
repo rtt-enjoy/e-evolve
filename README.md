@@ -45,6 +45,8 @@ Keep it public for free GitHub Pages.
 
 For local runs, copy `.env.example` to `.env` and fill the same variable names.
 `.env` stays ignored by git; GitHub Actions uses repository secrets online.
+See [`docs/environment.md`](docs/environment.md) for the complete environment
+key reference.
 
 ### 3. Trigger the first run
 

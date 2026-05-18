@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-18T08:52:53.812391+00:00",
-  "total_runs": 552,
+  "last_run": "2026-05-18T12:47:50.753780+00:00",
+  "total_runs": 553,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -38,56 +38,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.32.13",
-    "summary": "Add documentation, unit tests, and a safety wrapper for LLM generation fallback",
-    "changes_applied": [
-      {
-        "file": "docs/README.md",
-        "reason": "Provides clear onboarding, secret setup steps, and feature overview for maintainers and contributors"
-      },
-      {
-        "file": "bot/tests.py",
-        "reason": "Adds automated tests for critical fallback logic and earnings week reset, improving code reliability"
-      }
-    ],
-    "suggestions": [
-      {
-        "title": "Enable Medium publishing",
-        "description": "Activate the Medium article channel to double content reach and earnings",
-        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
-        "estimated_weekly_usd": 0.07,
-        "free_tier": true,
-        "how_to": [
-          "1. Generate a Medium integration token at https://medium.com/me/settings",
-          "2. Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN",
-          "3. Ensure the bot has the \"articles_medium\" feature enabled in the status"
-        ]
-      },
-      {
-        "title": "Activate Twitter thread posting",
-        "description": "Post X/Twitter threads for audience growth and affiliate earnings",
-        "secret_needed": "TWITTER_API_KEY",
-        "estimated_weekly_usd": 0.01,
-        "free_tier": true,
-        "how_to": [
-          "1. Create a Twitter developer app and obtain API key, secret, access token, and access secret",
-          "2. Add each as GitHub secrets: TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET",
-          "3. Enable the \"twitter\" feature in the bot status"
-        ]
-      },
-      {
-        "title": "Add unit tests for core modules",
-        "description": "Increase reliability by automatically testing article generation fallback and earnings aggregation",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Ensure Python's unittest module is available (built\u2011in)",
-          "2. The tests run automatically each cycle via the existing CI configuration",
-          "3. Review test results in the GitHub Actions logs"
-        ]
-      }
-    ],
-    "error": null
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"version\": \"1.32.14\",\\n  \"summary\": \"Enable Medium publishing and Twitter threads to expand content reach and diversify revenue streams\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Enable Medium Publ'",
+    "changes_applied": [],
+    "suggestions": [],
+    "error": "Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"version\": \"1.32.14\",\\n  \"summary\": \"Enable Medium publishing and Twitter threads to expand content reach and diversify revenue streams\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Enable Medium Publ'",
+    "error_type": "json"
   },
   "last_earning": {
     "actions": [],
@@ -132,7 +87,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 180,
+  "last_cycle_seconds": 169,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

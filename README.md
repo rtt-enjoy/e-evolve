@@ -43,6 +43,9 @@ Keep it public for free GitHub Pages.
 | `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys) | Free models available |
 | `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) | Paid (higher quality) |
 
+For local runs, copy `.env.example` to `.env` and fill the same variable names.
+`.env` stays ignored by git; GitHub Actions uses repository secrets online.
+
 ### 3. Trigger the first run
 
 Actions tab → **evolve** workflow → **Run workflow**

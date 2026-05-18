@@ -21,6 +21,14 @@ Only one is required. If you have no budget or cannot use premium LLM features,
 start with `GROQ_API_KEY` or `GEMINI_API_KEY`. API keys are used for RAG,
 research, market analysis, suggestions, and draft-only text.
 
+Use the same variable names in both places:
+
+- Local development: copy `.env.example` to `.env`, then fill in private values.
+- GitHub Actions: add repository secrets with matching names, such as `GROQ_API_KEY`.
+
+`.env` is ignored by git and should never be committed. `.env.example` is the
+committed template and must contain names only, not real secret values.
+
 ### No-ID free self-earn path
 
 Use this order when you cannot use Binance identity verification, phone-gated
@@ -121,17 +129,16 @@ cd e-evolve
 pip install -r requirements.txt
 
 # 3. Create .env with your keys
-cat > .env << 'EOF'
-GROQ_API_KEY=your_key_here
-# ANTHROPIC_API_KEY=optional
-# DEV_TO_API_KEY=optional
-EOF
+cp .env.example .env
+# Edit .env and set at least one of GROQ_API_KEY, GEMINI_API_KEY,
+# OPENROUTER_API_KEY, or ANTHROPIC_API_KEY.
 
 # 4. Run one cycle
 python -m bot.main
 ```
 
-`python-dotenv` loads `.env` automatically when running locally. CI ignores it (uses GitHub Secrets).
+`python-dotenv` loads `.env` automatically when running locally. CI does not use
+`.env`; the workflow reads GitHub Actions repository secrets with the same names.
 
 GitHub does not allow secret values to be downloaded after they are saved. For
 local diagnostics, set `GH_TOKEN` or `GITHUB_TOKEN` with repo metadata access and

@@ -55,7 +55,7 @@ export function buildEarningModules(status: Status) {
       name: 'Code Techs',
       active: Boolean(status.code_tech_earning?.enabled),
       detail: `${status.code_tech_earning?.opportunities?.length || 0} opportunities tracked`,
-      value: `${money(status.code_tech_earning?.daily_target_usd, 0)} daily target`,
+      value: `${Math.round(status.code_tech_earning?.daily_target_usd || 0)} usd daily target`,
     },
     {
       key: 'articles_devto',

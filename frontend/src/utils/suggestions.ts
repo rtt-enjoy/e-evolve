@@ -1,4 +1,4 @@
-import { featureLabel, money, shortText } from './format';
+import { featureLabel, shortText } from './format';
 import type { CodeTechOpportunity, Status, Suggestion } from '../types/status';
 
 export type AutomationSuggestion = Suggestion & {
@@ -181,7 +181,7 @@ function codeTechSuggestion(opportunity: CodeTechOpportunity, dailyTarget: numbe
     how_to: specialized?.howTo || [
       opportunity.url ? `Open ${opportunity.url}` : '',
       opportunity.next_step || 'Reproduce the issue and prepare one focused patch.',
-      `Use value signal ${money(opportunity.estimated_value_usd || 0, 0)} and score ${opportunity.score || 0}/100 to decide effort.`,
+      `Use value signal and score ${opportunity.score || 0}/100 to decide effort.`,
     ].filter(Boolean),
   };
 }

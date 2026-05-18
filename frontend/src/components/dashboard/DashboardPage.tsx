@@ -1,4 +1,4 @@
-import { Activity, ArrowUpRight, CircleDollarSign, Code2, ExternalLink, KeyRound, WalletCards } from 'lucide-react';
+import { Activity, ArrowUpRight, Code2, ExternalLink, KeyRound, Send, WalletCards } from 'lucide-react';
 import { ActionCard } from './cards';
 import { EarningCommandCenter } from './EarningCommandCenter';
 import { Empty, Metric, Panel, Phase, Pill, Progress, StatusCell } from '../common';
@@ -26,14 +26,15 @@ export function DashboardPage({ status }: { status: Status }) {
   const opportunities = status.code_tech_earning?.opportunities || [];
   const opportunityStats = buildOpportunityStats(opportunities);
   const visibleSuggestions = (status.suggestions || []).filter((suggestion) => !isAvoidedSuggestion(suggestion));
+  const lastWalletSend = [...actions].reverse().find((action) => action.success !== false && typeof action.withdrawn_usd === 'number');
 
   return (
     <>
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Metric title="Total earnings" value={money(earnings.total_usd, 4)} detail={`${money(earnings.last_cycle_usd, 4)} last cycle`} icon={<CircleDollarSign />} />
-        <Metric title="This week" value={money(earnings.this_week_usd, 4)} detail={`${weekPercent}% of ${money(weekTarget, 0)} target`} icon={<Activity />} />
+        <Metric title="Wallet money" value={money(status.usdt_balance, 4)} detail="settled USDT wallet balance" icon={<WalletCards />} />
+        <Metric title="Sent to wallet" value={money(lastWalletSend?.withdrawn_usd, 4)} detail={status.last_payout_tx ? `tx ${status.last_payout_tx}` : 'no payout tx recorded'} icon={<Send />} />
         <Metric title="Readiness" value={`${readiness.percent}%`} detail={`${readiness.ready}/${readiness.total} integrations ready`} icon={<KeyRound />} />
-        <Metric title="Wallet" value={money(status.usdt_balance, 4)} detail={`${money(status.last_payout_total_usd, 4)} last payout`} icon={<WalletCards />} />
+        <Metric title="Earning cycle" value={`${weekPercent}%`} detail="estimated cycle values hidden" icon={<Activity />} />
       </section>
 
       <section className="control-strip mt-4">

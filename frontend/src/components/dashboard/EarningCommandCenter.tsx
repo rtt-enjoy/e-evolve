@@ -33,19 +33,19 @@ export function EarningCommandCenter({
             <Pill tone={codeTech.enabled ? 'good' : 'warn'} icon={<BriefcaseBusiness size={14} />}>{codeTech.enabled ? 'code tech enabled' : 'code tech idle'}</Pill>
             <Pill tone="info" icon={<CalendarDays size={14} />}>refresh every {codeTech.refresh_hours || 24}h</Pill>
           </div>
-          <h3>{money(status.earnings?.this_week_usd, 4)} this week</h3>
-          <p>{weekPercent}% of {money(weekTarget, 0)} weekly target. Last opportunity refresh {formatDate(codeTech.last_refresh_at)}.</p>
+          <h3>{money(status.usdt_balance, 4)} wallet money</h3>
+          <p>{weekPercent}% of the weekly target. Last opportunity refresh {formatDate(codeTech.last_refresh_at)}.</p>
         </div>
         <div className="earning-progress">
           <Progress value={weekPercent} />
-          <span>{money(status.earnings?.last_cycle_usd, 4)} last cycle</span>
+          <span>only settled USDT is shown as money</span>
         </div>
       </div>
 
       <div className="earning-stat-grid">
-        <MiniStat icon={<Target />} label="Daily target" value={money(codeTech.daily_target_usd, 0)} />
-        <MiniStat icon={<ListChecks />} label="Opportunities" value={String(opportunityStats.total)} detail={`${opportunityStats.paidCount} with value`} />
-        <MiniStat icon={<TrendingUp />} label="Pipeline value" value={money(opportunityStats.estimatedValue, 0)} />
+        <MiniStat icon={<Target />} label="Daily target" value={String(Math.round(codeTech.daily_target_usd || 0))} detail="usd target" />
+        <MiniStat icon={<ListChecks />} label="Opportunities" value={String(opportunityStats.total)} detail={`${opportunityStats.paidCount} value signals`} />
+        <MiniStat icon={<TrendingUp />} label="Value signals" value={String(opportunityStats.paidCount)} />
         <MiniStat icon={<BarChart3 />} label="Top score" value={String(opportunityStats.topScore)} detail="fit score" />
       </div>
 
@@ -86,13 +86,13 @@ export function EarningCommandCenter({
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
         <TemplateList title="Strategy Playbook" icon={<ListChecks />} items={codeTech.strategy_playbook || []} />
         <div>
-          <h3 className="section-title mb-3">Revenue Mix</h3>
+          <h3 className="section-title mb-3">Estimated Mix</h3>
           <div className="space-y-3">
             {breakdown.length ? breakdown.map(([name, value]) => (
               <div className="revenue-row" key={name}>
                 <div className="flex items-center justify-between gap-3">
                   <strong>{featureLabel(name)}</strong>
-                  <span>{money(value, 4)}</span>
+                  <span>{value.toFixed(4)} est</span>
                 </div>
                 <Progress value={clampPercent((value / Math.max(status.earnings?.total_usd || 1, value)) * 100)} />
               </div>
@@ -121,7 +121,6 @@ function OpportunityCard({ opportunity, rank }: { opportunity: CodeTechOpportuni
           <strong>{opportunity.title || 'Untitled opportunity'}</strong>
           <Pill tone={scoreTone(score)}>{score} score</Pill>
           <Pill tone="neutral">{opportunity.source || 'source'}</Pill>
-          {(opportunity.estimated_value_usd || 0) > 0 ? <Pill tone="good">{money(opportunity.estimated_value_usd, 0)}</Pill> : null}
         </div>
         <p>{shortText(opportunity.reason || 'No reason recorded.', 130)}</p>
         {opportunity.next_step ? <span>{shortText(opportunity.next_step, 140)}</span> : null}
@@ -147,7 +146,7 @@ function TemplateList({ title, icon, items }: { title: string; icon: React.React
 }
 
 function CompactAction({ action }: { action: Action }) {
-  const amount = typeof action.estimated_usd === 'number' ? action.estimated_usd : action.value_usd;
+  const amount = typeof action.withdrawn_usd === 'number' ? action.withdrawn_usd : undefined;
   return (
     <article className="compact-action">
       <span className={`status-dot ${action.success === false ? 'bad' : 'good'}`} />

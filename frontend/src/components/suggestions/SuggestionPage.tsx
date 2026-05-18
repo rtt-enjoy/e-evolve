@@ -1,10 +1,9 @@
-import { Ban, Check, CheckCircle2, CircleDollarSign, Copy, KeyRound, PlayCircle, ShieldCheck, Sparkles, TrendingUp, WandSparkles } from 'lucide-react';
+import { Ban, Check, CheckCircle2, Copy, KeyRound, PlayCircle, ShieldCheck, Sparkles, TrendingUp, WandSparkles } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import { AutomationSuggestionCard } from './AutomationSuggestionCard';
 import { Empty, MiniStat, Panel, Pill } from '../common';
 import { inferRepoFromLocation, readyCommands, uniqueMissingSecrets, type AutomationSuggestion, type buildSuggestionStats } from '../../utils/suggestions';
-import { money } from '../../utils/format';
 import type { Status } from '../../types/status';
 
 const completedLeads = [
@@ -66,7 +65,7 @@ export function SuggestionPage({
             <Pill tone="info" icon={<WandSparkles size={14} />}>ai workflow ready</Pill>
             <Pill tone={stats.readyCount ? 'good' : 'warn'} icon={<KeyRound size={14} />}>{stats.readyCount}/{stats.total} ready</Pill>
             <Pill tone="good" icon={<ShieldCheck size={14} />}>no id first</Pill>
-            <Pill tone="good" icon={<CircleDollarSign size={14} />}>{money(stats.weeklyUsd, 0)} weekly upside</Pill>
+            <Pill tone="info" icon={<TrendingUp size={14} />}>{stats.total} tracked ideas</Pill>
           </div>
           <h2>Suggestions To Earn More</h2>
           <p>
@@ -85,7 +84,7 @@ export function SuggestionPage({
         <MiniStat icon={<Sparkles />} label="Suggestions" value={String(stats.total)} detail="ranked by bot output" />
         <MiniStat icon={<CheckCircle2 />} label="Ready now" value={String(stats.readyCount)} detail="setup complete" />
         <MiniStat icon={<KeyRound />} label="Setup gaps" value={String(stats.missingSecrets)} detail="named secrets" />
-        <MiniStat icon={<TrendingUp />} label="Weekly upside" value={money(stats.weeklyUsd, 0)} detail="estimated by bot" />
+        <MiniStat icon={<TrendingUp />} label="Upside ideas" value={String(stats.total)} detail="estimated values hidden" />
       </section>
 
       <div className="suggestion-layout">

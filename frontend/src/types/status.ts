@@ -8,6 +8,8 @@ export type Action = {
   url?: string;
   estimated_usd?: number;
   value_usd?: number;
+  withdrawn_usd?: number;
+  tx_id?: string | null;
 };
 
 export type Suggestion = {

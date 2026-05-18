@@ -1,37 +1,42 @@
 # E‑Evolve Bot Documentation
 
 ## Overview
-E‑Evolve is a self‑improving GitHub Actions bot that can earn USD by publishing articles, trading crypto, minting NFTs, and posting Twitter threads.
+E‑Evolve is an autonomous GitHub Actions bot that continuously improves itself, publishes technical content, trades crypto, mints NFTs, and pursues low‑effort maintenance gigs.
 
-## Activation Guide for Optional Features
+## Quick Start
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-org/e-evolve.git && cd e-evolve
+   ```
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Configure secrets** – add the required API keys as GitHub repository secrets (see the *Suggestions* section for a full list).
+4. **Enable features** – edit `config/strategy.json` or use the `force` commands to toggle modules.
+5. **Run locally** (optional) to verify:
+   ```bash
+   python -m bot.main
+   ```
 
-### 1. Twitter (X) Threads
-- **Required secrets**: `TWITTER_API_KEY`, `TWITTER_API_SECRET`, `TWITTER_ACCESS_TOKEN`, `TWITTER_ACCESS_SECRET`
-- Add them in **Settings → Secrets and variables → Actions**.
-- The bot will automatically start generating and posting threads once the secrets are present.
+## Features
+- **Article publishing** – dev.to (always) and Medium (optional).
+- **Twitter/X threads** – generate and post developer‑focused threads.
+- **Crypto trading** – spot trading on Binance with risk limits.
+- **NFT minting** – optional IPFS‑pinned NFTs on Ethereum.
+- **Code‑tech earnings** – discover and auto‑pursue small open‑source maintenance gigs.
+- **Auto‑payout** – withdraw USDT profits from Binance.
 
-### 2. Binance Crypto Trading
-- **Required secrets**: `BINANCE_API_KEY`, `BINANCE_SECRET_KEY`
-- (Optional) configure trading parameters in `config/strategy.json` under the `crypto` key.
-- After adding the secrets, the `crypto` module will run each cycle.
+## Adding New Secrets
+For any new feature, create a secret in the repository settings:
+1. Go to *Settings → Secrets → Actions*.
+2. Click **New repository secret**.
+3. Name it exactly as listed in the suggestion (e.g., `MEDIUM_INTEGRATION_TOKEN`).
+4. Paste the value and save.
 
-### 3. NFT Minting (Ethereum)
-- **Required secrets**: `ETH_PRIVATE_KEY`, `ETH_WALLET_ADDRESS`, `NFT_CONTRACT_ADDRESS`
-- (Optional) `NFT_STORAGE_TOKEN` to pin metadata on IPFS via nft.storage.
-- Deploy an ERC‑721 contract first, then add its address as a secret.
+## Development
+- Run `pytest` to execute the bundled unit tests.
+- The bot logs detailed information to `earnings-log.md` and publishes a public dashboard under `docs/`.
 
-### 4. Medium Articles
-- **Required secret**: `MEDIUM_INTEGRATION_TOKEN`
-- Add the token to enable publishing to Medium in addition to dev.to.
-
-### 5. Anthropic LLM (currently inactive)
-- **Required secret**: `ANTHROPIC_API_KEY`
-- Add the key to switch the LLM provider to Anthropic.
-
-## General Steps
-1. Add the necessary secrets for the features you want to enable.
-2. Ensure `requirements.txt` includes the needed packages (the bot will install them on the next run).
-3. Commit any changes; the next workflow execution will pick up the new configuration.
-
----
-*All optional features are safe to enable; they will only run when their required secrets are present.*
+## License
+MIT © 2026 E‑Evolve contributors

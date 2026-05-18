@@ -1,7 +1,7 @@
 {
-  "version": "1.32.12",
-  "last_run": "2026-05-18T04:42:33.668475+00:00",
-  "total_runs": 551,
+  "version": "1.32.13",
+  "last_run": "2026-05-18T08:52:53.812391+00:00",
+  "total_runs": 552,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -37,24 +37,54 @@
     ]
   },
   "last_evolution": {
-    "version_bumped_to": "1.32.12",
-    "summary": "Enhanced system stability and performance",
-    "changes_applied": [],
+    "version_bumped_to": "1.32.13",
+    "summary": "Add documentation, unit tests, and a safety wrapper for LLM generation fallback",
+    "changes_applied": [
+      {
+        "file": "docs/README.md",
+        "reason": "Provides clear onboarding, secret setup steps, and feature overview for maintainers and contributors"
+      },
+      {
+        "file": "bot/tests.py",
+        "reason": "Adds automated tests for critical fallback logic and earnings week reset, improving code reliability"
+      }
+    ],
     "suggestions": [
       {
-        "title": "Shorten function names",
-        "description": "Improve readability and maintainability",
-        "secret_needed": "FUNCTION_KEY"
+        "title": "Enable Medium publishing",
+        "description": "Activate the Medium article channel to double content reach and earnings",
+        "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+        "estimated_weekly_usd": 0.07,
+        "free_tier": true,
+        "how_to": [
+          "1. Generate a Medium integration token at https://medium.com/me/settings",
+          "2. Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN",
+          "3. Ensure the bot has the \"articles_medium\" feature enabled in the status"
+        ]
       },
       {
-        "title": "Add unit tests",
-        "description": "Ensure code reliability through automated validation",
-        "secret_needed": "TEST_KEY"
+        "title": "Activate Twitter thread posting",
+        "description": "Post X/Twitter threads for audience growth and affiliate earnings",
+        "secret_needed": "TWITTER_API_KEY",
+        "estimated_weekly_usd": 0.01,
+        "free_tier": true,
+        "how_to": [
+          "1. Create a Twitter developer app and obtain API key, secret, access token, and access secret",
+          "2. Add each as GitHub secrets: TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET",
+          "3. Enable the \"twitter\" feature in the bot status"
+        ]
       },
       {
-        "title": "Enhance documentation",
-        "description": "Clarify purpose and usage for all components",
-        "secret_needed": "DOC_KEY"
+        "title": "Add unit tests for core modules",
+        "description": "Increase reliability by automatically testing article generation fallback and earnings aggregation",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Ensure Python's unittest module is available (built\u2011in)",
+          "2. The tests run automatically each cycle via the existing CI configuration",
+          "3. Review test results in the GitHub Actions logs"
+        ]
       }
     ],
     "error": null
@@ -65,23 +95,44 @@
   },
   "suggestions": [
     {
-      "title": "Shorten function names",
-      "description": "Improve readability and maintainability",
-      "secret_needed": "FUNCTION_KEY"
+      "title": "Enable Medium publishing",
+      "description": "Activate the Medium article channel to double content reach and earnings",
+      "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
+      "estimated_weekly_usd": 0.07,
+      "free_tier": true,
+      "how_to": [
+        "1. Generate a Medium integration token at https://medium.com/me/settings",
+        "2. Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN",
+        "3. Ensure the bot has the \"articles_medium\" feature enabled in the status"
+      ]
     },
     {
-      "title": "Add unit tests",
-      "description": "Ensure code reliability through automated validation",
-      "secret_needed": "TEST_KEY"
+      "title": "Activate Twitter thread posting",
+      "description": "Post X/Twitter threads for audience growth and affiliate earnings",
+      "secret_needed": "TWITTER_API_KEY",
+      "estimated_weekly_usd": 0.01,
+      "free_tier": true,
+      "how_to": [
+        "1. Create a Twitter developer app and obtain API key, secret, access token, and access secret",
+        "2. Add each as GitHub secrets: TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET",
+        "3. Enable the \"twitter\" feature in the bot status"
+      ]
     },
     {
-      "title": "Enhance documentation",
-      "description": "Clarify purpose and usage for all components",
-      "secret_needed": "DOC_KEY"
+      "title": "Add unit tests for core modules",
+      "description": "Increase reliability by automatically testing article generation fallback and earnings aggregation",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Ensure Python's unittest module is available (built\u2011in)",
+        "2. The tests run automatically each cycle via the existing CI configuration",
+        "3. Review test results in the GitHub Actions logs"
+      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 166,
+  "last_cycle_seconds": 180,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

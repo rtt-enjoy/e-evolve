@@ -33,12 +33,12 @@ export function EarningCommandCenter({
             <Pill tone={codeTech.enabled ? 'good' : 'warn'} icon={<BriefcaseBusiness size={14} />}>{codeTech.enabled ? 'code tech enabled' : 'code tech idle'}</Pill>
             <Pill tone="info" icon={<CalendarDays size={14} />}>refresh every {codeTech.refresh_hours || 24}h</Pill>
           </div>
-          <h3>{money(status.usdt_balance, 4)} wallet money</h3>
+          <h3>{opportunityStats.total} research leads</h3>
           <p>{weekPercent}% of the weekly target. Last opportunity refresh {formatDate(codeTech.last_refresh_at)}.</p>
         </div>
         <div className="earning-progress">
           <Progress value={weekPercent} />
-          <span>only settled USDT is shown as money</span>
+          <span>suggestions only; external actions are blocked</span>
         </div>
       </div>
 
@@ -57,11 +57,11 @@ export function EarningCommandCenter({
           </div>
           <div className="opportunity-list">
             {opportunities.slice(0, 5).map((opportunity, index) => <OpportunityCard opportunity={opportunity} rank={index + 1} key={`${opportunity.url}-${index}`} />)}
-            {!opportunities.length ? <Empty text="No earning opportunities are available yet." /> : null}
+            {!opportunities.length ? <Empty text="No research opportunities are available yet." /> : null}
           </div>
         </div>
         <div>
-          <h3 className="section-title mb-3">Channel Matrix</h3>
+          <h3 className="section-title mb-3">Research Matrix</h3>
           <div className="earning-module-grid">
             {earningModules.map((module) => (
               <article className="earning-module-card" key={module.name}>
@@ -96,13 +96,13 @@ export function EarningCommandCenter({
                 </div>
                 <Progress value={clampPercent((value / Math.max(status.earnings?.total_usd || 1, value)) * 100)} />
               </div>
-            )) : <Empty text="No earnings breakdown yet." />}
+            )) : <Empty text="No suggestion value breakdown yet." />}
           </div>
           <div className="mt-4">
-            <h3 className="section-title mb-3">Latest Actions</h3>
+            <h3 className="section-title mb-3">Latest Research Actions</h3>
             <div className="space-y-2">
               {actions.slice(0, 3).map((action, index) => <CompactAction action={action} key={index} />)}
-              {!actions.length ? <Empty text="No earning actions recorded." /> : null}
+              {!actions.length ? <Empty text="No research actions recorded." /> : null}
             </div>
           </div>
         </div>

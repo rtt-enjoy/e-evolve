@@ -23,7 +23,7 @@ _DEFAULT_CONFIG = {
     "daily_target_usd": 10.0,
     "max_items": 8,
     "min_score": 55,
-    "auto_pursue": True,
+    "auto_pursue": False,
     "pursue_score_threshold": 75,
     "requirements": [
         "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
@@ -153,15 +153,9 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     raw = _fetch_github_leads(cfg) or list(_LOCAL_LEADS)
     opportunities = _rank(raw, cfg, max_items=max_items, min_score=min_score)
 
-    # Auto‑pursue high‑value leads
     pursued_count = 0
-    if cfg.get("auto_pursue", True):
-        threshold = max(50, int(cfg.get("pursue_score_threshold", 75) or 75))
-        for opp in opportunities:
-            if opp.score >= threshold and not opp.pursued and opp.url:
-                if _pursue_lead(opp, cfg):
-                    opp.pursued = True
-                    pursued_count += 1
+    if cfg.get("auto_pursue"):
+        log.warning("[code_techs] auto_pursue ignored: research-only policy forbids posting comments")
 
     state.update({
         "enabled": True,
@@ -189,49 +183,9 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     }]
 
 def _pursue_lead(opportunity: Opportunity, cfg: dict) -> bool:
-    token = os.getenv("GH_TOKEN", "").strip() or os.getenv("GITHUB_TOKEN", "").strip()
-    if not token or not opportunity.url:
-        return False
-    try:
-        parts = opportunity.url.replace("https://github.com/", "").split("/")
-        if len(parts) < 4:
-            return False
-        owner, repo, _, issue_num = parts[0], parts[1], parts[2], parts[3]
-    except Exception as exc:
-        log.warning("[code_techs] URL parse failed %s: %s", opportunity.url, exc)
-        return False
-    comment_body = _build_pursuit_comment(opportunity)
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28"
-    }
-    try:
-        resp = requests.post(
-            f"https://api.github.com/repos/{owner}/{repo}/issues/{issue_num}/comments",
-            headers=headers,
-            json={"body": comment_body},
-            timeout=15
-        )
-        if resp.status_code == 201:
-            log.info("[code_techs] Pursued lead: %s", opportunity.title[:50])
-            return True
-        elif resp.status_code == 403:
-            log.warning("[code_techs] Rate limited or forbidden pursuing %s", opportunity.url)
-        else:
-            log.debug("[code_techs] Comment failed %s", resp.status_code)
-    except Exception as exc:
-        log.warning("[code_techs] Pursue error: %s", exc)
+    log.warning("[code_techs] pursue request ignored: research-only policy forbids posting comments")
     return False
 
-def _build_pursuit_comment(opportunity: Opportunity) -> str:
-    templates = [
-        "Hi! I'm interested in helping with this. Do you have a preferred way to receive patches? I can start with a small reproducer if helpful.",
-        "I'd like to work on this. Could you point me to the relevant files or tests?",
-        "Happy to help here. What's the best way to submit a fix — PR directly or discuss first?",
-        "I can take this on. Should I open a draft PR with the initial fix, or discuss the approach first?"
-    ]
-    return templates[opportunity.score % len(templates)]
 
 def _config() -> dict[str, Any]:
     try:

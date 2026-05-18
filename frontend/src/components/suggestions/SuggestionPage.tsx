@@ -126,11 +126,11 @@ export function SuggestionPage({
         </div>
 
         <aside className="suggestion-side">
-          <Panel title="No-ID Free Path" subtitle="Best fit when Binance, Claude premium, phone checks, and paid services are off the table.">
+          <Panel title="Research-Only Path" subtitle="Best fit when action APIs, paid services, and funded accounts are off the table.">
             <div className="path-list">
-              <WorkflowStep icon={<ShieldCheck />} title="Use first" text="Code-tech leads, dev.to articles, GitHub Pages, and Groq/Gemini/OpenRouter free LLM capacity." />
-              <WorkflowStep icon={<KeyRound />} title="Add only light secrets" text="Start with GROQ_API_KEY or GEMINI_API_KEY, then DEV_TO_API_KEY when you want publishing." />
-              <WorkflowStep icon={<Ban />} title="Avoid for now" text="Binance trading, Claude/Anthropic paid access, Twitter/X API posting, Ethereum NFTs, and withdrawal flows." />
+              <WorkflowStep icon={<ShieldCheck />} title="Use first" text="Code-tech leads, GitHub Pages, and Groq/Gemini/OpenRouter free LLM capacity." />
+              <WorkflowStep icon={<KeyRound />} title="Add only light secrets" text="Start with GROQ_API_KEY or GEMINI_API_KEY for RAG, research, and suggestions." />
+              <WorkflowStep icon={<Ban />} title="Blocked actions" text="Publishing, posting, trading, minting, external comments, and withdrawal flows stay disabled." />
             </div>
           </Panel>
 

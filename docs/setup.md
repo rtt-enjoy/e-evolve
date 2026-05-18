@@ -18,8 +18,8 @@ Repo → Settings → Secrets and variables → Actions → **New repository sec
 | `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) | Paid (higher quality) |
 
 Only one is required. If you have no budget or cannot use premium LLM features,
-start with `GROQ_API_KEY` or `GEMINI_API_KEY` and add `DEV_TO_API_KEY` for the
-first earning module.
+start with `GROQ_API_KEY` or `GEMINI_API_KEY`. API keys are used for RAG,
+research, market analysis, suggestions, and draft-only text.
 
 ### No-ID free self-earn path
 
@@ -28,26 +28,19 @@ social APIs, Claude premium features, paid LLM accounts, or funded wallets:
 
 1. Code-tech leads - enabled by default and no external secret required.
 2. `GROQ_API_KEY` or `GEMINI_API_KEY` - free LLM generation within rate limits.
-3. Optional `OPENROUTER_API_KEY` - only for free models if the first two are not enough.
-4. `DEV_TO_API_KEY` - free article publishing.
-5. Optional GitHub Actions variable `EARN_CTA_URL` - your sponsor, tip,
-   newsletter, affiliate, portfolio, or product link appended to each article.
-6. Optional variable `EARN_CTA_LABEL` - link text for that CTA.
+3. Optional `OPENROUTER_API_KEY` - free-model research fallback.
 
-Avoid these until you explicitly choose the tradeoff:
+These keys no longer activate runtime actions:
 
-1. Binance trading or payout - exchange identity verification and funded balance.
-2. Claude/Anthropic premium path - paid access.
-3. Twitter/X API posting - can require phone-gated or paid developer access.
-4. Ethereum NFT minting - wallet funding, contracts, and gas.
+1. dev.to or Medium publishing keys.
+2. Twitter/X posting keys.
+3. Binance trading or payout keys.
+4. Ethereum NFT minting keys.
+
+If present, those keys are setup context only. The bot must not publish, post,
+trade, withdraw, mint, or comment on external issues.
 
 More detail: [`docs/no-id-free-path.md`](no-id-free-path.md).
-
-With `EARN_CTA_URL` configured, the article module periodically selects buyer-intent
-topics from `config/strategy.json`. Tune `articles.buyer_intent_ratio` lower for more
-general audience growth or higher for more conversion-focused publishing.
-
-Leave crypto and NFT modules off until you have money you can afford to risk.
 
 ### 3. Trigger first run
 
@@ -63,7 +56,11 @@ Dashboard: `https://YOUR_USERNAME.github.io/e-evolve`
 
 ---
 
-## Earning Module Setup
+## Research Setup
+
+No publishing, posting, trading, payout, or minting key is required. Keep runtime setup focused on LLM keys and the default code-tech research queue.
+
+Legacy action-module notes below are intentionally not activation instructions.
 
 ### Articles
 

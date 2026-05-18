@@ -1,1 +1,20 @@
-{'inactive_features': {'llm_anthropic': {'error_message': 'Anthropic LLM is not active'}, 'articles_medium': {'error_message': 'Medium integration is not active'}, 'twitter': {'error_message': 'Twitter integration is not active'}, 'crypto_binance': {'error_message': 'Binance integration is not active'}, 'crypto_payout': {'error_message': 'Crypto payout is not active'}, 'nft_ethereum': {'error_message': 'Ethereum NFT integration is not active'}}}
+{
+  "inactive_features": {
+    "llm_anthropic": {
+      "error_message": "Anthropic LLM is not active"
+    },
+    "llm_gemini": {
+      "error_message": "Gemini LLM is not active"
+    },
+    "llm_openrouter": {
+      "error_message": "OpenRouter research LLM is not active"
+    },
+    "llm_groq": {
+      "error_message": "Groq draft LLM is not active"
+    }
+  },
+  "policy": {
+    "mode": "research_suggestions_only",
+    "blocked_actions": ["publishing", "posting", "trading", "minting", "payouts"]
+  }
+}

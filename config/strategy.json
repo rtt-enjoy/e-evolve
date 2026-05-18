@@ -9,20 +9,11 @@
     "daily_target_usd": 10.0,
     "max_items": 8,
     "min_score": 55,
-    "auto_pursue": true,
+    "auto_pursue": false,
     "pursue_score_threshold": 75
   },
-  "twitter": {
-    "min_tweets": 5,
-    "max_tweets": 7,
-    "buyer_intent_topics": []
-  },
-  "features": {
-    "articles_medium": {
-      "enabled": false
-    },
-    "twitter": {
-      "enabled": false
-    }
+  "research_policy": {
+    "mode": "research_suggestions_only",
+    "blocked_actions": ["publishing", "posting", "trading", "minting", "payouts"]
   }
 }

@@ -18,37 +18,35 @@ log = logging.getLogger(__name__)
 STATUS_FILE  = Path("status.json")
 VERSION_FILE = Path("version.txt")
 
-# feature name → ALL secrets that must be non-empty to activate it
+# feature name -> ALL secrets that must be non-empty to activate it.
+#
+# Runtime policy: secrets only activate LLM, research, and read-only status
+# features. Publishing, posting, trading, minting, and payout keys are
+# intentionally not feature activators, so their presence cannot trigger
+# external side effects.
 FEATURE_MAP: dict[str, list[str]] = {
     "llm_anthropic":   ["ANTHROPIC_API_KEY"],
     "llm_gemini":      ["GEMINI_API_KEY"],
     "llm_openrouter":  ["OPENROUTER_API_KEY"],
     "llm_groq":        ["GROQ_API_KEY"],
-    "articles_devto":  ["DEV_TO_API_KEY"],
-    "articles_medium": ["MEDIUM_INTEGRATION_TOKEN"],
     "usdt_wallet":     ["USDT_WALLET_ADDRESS"],
-    "twitter":         ["TWITTER_API_KEY", "TWITTER_API_SECRET",
-                        "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_SECRET"],
-    "crypto_binance":  ["BINANCE_API_KEY", "BINANCE_SECRET_KEY"],
-    "crypto_payout":   ["BINANCE_API_KEY", "BINANCE_SECRET_KEY", "BINANCE_WITHDRAW_ADDRESS"],
-    "nft_ethereum":    ["ETH_PRIVATE_KEY", "ETH_WALLET_ADDRESS"],
 }
 
 LLM_ROLE_WORKFLOWS: dict[str, dict[str, str]] = {
     "upgrade": {
         "provider": "gemini",
         "model": "gemini-2.5-pro",
-        "purpose": "codebase evolution, patch planning, and repair",
+        "purpose": "research-only repair suggestions for Codex-owned code changes",
     },
     "research": {
         "provider": "openrouter",
         "model": "openrouter/free",
-        "purpose": "article research briefs and second-opinion ideation",
+        "purpose": "RAG, market research, and earning-suggestion briefs",
     },
     "post": {
         "provider": "groq",
         "model": "llama-3.3-70b-versatile",
-        "purpose": "new article and social post generation",
+        "purpose": "draft-only suggestion text; no publishing or posting",
     },
 }
 

@@ -13,12 +13,12 @@ Commands are case-insensitive, one per line. Comment lines (starting with `#`) a
 
 | Command | Effect |
 |---------|--------|
-| `force articles N` | Post N articles this cycle (overrides `per_cycle` config) |
-| `force trade aggressive` | Raise trade risk to 5% for this cycle |
-| `force mint N` | Mint N NFTs this cycle |
+| `force articles N` | Ignored; publishing is disabled |
+| `force trade aggressive` | Ignored; trading is disabled |
+| `force mint N` | Ignored; minting is disabled |
 | `skip evolution` | Skip Phase 3 (LLM evolution) this cycle |
 | `reset earnings` | Zero `this_week_usd` counter |
-| `post thread` | Force a Twitter thread even if not otherwise scheduled |
+| `post thread` | Ignored; posting is disabled |
 | `improve suggestion TEXT` | Ask the evolution agent to prioritize a dashboard suggestion |
 | `status report` | Dump full `status` dict to workflow log |
 

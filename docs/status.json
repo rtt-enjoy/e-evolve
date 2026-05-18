@@ -6,17 +6,11 @@
     "llm_gemini",
     "llm_openrouter",
     "llm_groq",
-    "articles_devto",
     "usdt_wallet",
     "code_techs"
   ],
   "inactive_features": [
-    "llm_anthropic",
-    "articles_medium",
-    "twitter",
-    "crypto_binance",
-    "crypto_payout",
-    "nft_ethereum"
+    "llm_anthropic"
   ],
   "llm_provider": "gemini",
   "earnings": {
@@ -38,10 +32,10 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.32.13",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"version\": \"1.32.14\",\\n  \"summary\": \"Enable Medium publishing and Twitter threads to expand content reach and diversify revenue streams\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Enable Medium Publ'",
+    "summary": "Skipped: code evolution is handled in Codex; API keys are research/suggestions only",
     "changes_applied": [],
     "suggestions": [],
-    "error": "Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"version\": \"1.32.14\",\\n  \"summary\": \"Enable Medium publishing and Twitter threads to expand content reach and diversify revenue streams\",\\n  \"suggestions\": [\\n    {\\n      \"title\": \"Enable Medium Publ'",
+    "error": null,
     "error_type": "json"
   },
   "last_earning": {
@@ -49,30 +43,6 @@
     "total_usd": 0.0
   },
   "suggestions": [
-    {
-      "title": "Enable Medium publishing",
-      "description": "Activate the Medium article channel to double content reach and earnings",
-      "secret_needed": "MEDIUM_INTEGRATION_TOKEN",
-      "estimated_weekly_usd": 0.07,
-      "free_tier": true,
-      "how_to": [
-        "1. Generate a Medium integration token at https://medium.com/me/settings",
-        "2. Add the token as a GitHub secret named MEDIUM_INTEGRATION_TOKEN",
-        "3. Ensure the bot has the \"articles_medium\" feature enabled in the status"
-      ]
-    },
-    {
-      "title": "Activate Twitter thread posting",
-      "description": "Post X/Twitter threads for audience growth and affiliate earnings",
-      "secret_needed": "TWITTER_API_KEY",
-      "estimated_weekly_usd": 0.01,
-      "free_tier": true,
-      "how_to": [
-        "1. Create a Twitter developer app and obtain API key, secret, access token, and access secret",
-        "2. Add each as GitHub secrets: TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET",
-        "3. Enable the \"twitter\" feature in the bot status"
-      ]
-    },
     {
       "title": "Add unit tests for core modules",
       "description": "Increase reliability by automatically testing article generation fallback and earnings aggregation",
@@ -133,24 +103,6 @@
       "present_count": 1,
       "required_count": 1
     },
-    "articles_devto": {
-      "active": true,
-      "present": [
-        "DEV_TO_API_KEY"
-      ],
-      "missing": [],
-      "present_count": 1,
-      "required_count": 1
-    },
-    "articles_medium": {
-      "active": false,
-      "present": [],
-      "missing": [
-        "MEDIUM_INTEGRATION_TOKEN"
-      ],
-      "present_count": 0,
-      "required_count": 1
-    },
     "usdt_wallet": {
       "active": true,
       "present": [
@@ -159,56 +111,13 @@
       "missing": [],
       "present_count": 1,
       "required_count": 1
-    },
-    "twitter": {
-      "active": false,
-      "present": [],
-      "missing": [
-        "TWITTER_API_KEY",
-        "TWITTER_API_SECRET",
-        "TWITTER_ACCESS_TOKEN",
-        "TWITTER_ACCESS_SECRET"
-      ],
-      "present_count": 0,
-      "required_count": 4
-    },
-    "crypto_binance": {
-      "active": false,
-      "present": [],
-      "missing": [
-        "BINANCE_API_KEY",
-        "BINANCE_SECRET_KEY"
-      ],
-      "present_count": 0,
-      "required_count": 2
-    },
-    "crypto_payout": {
-      "active": false,
-      "present": [],
-      "missing": [
-        "BINANCE_API_KEY",
-        "BINANCE_SECRET_KEY",
-        "BINANCE_WITHDRAW_ADDRESS"
-      ],
-      "present_count": 0,
-      "required_count": 3
-    },
-    "nft_ethereum": {
-      "active": false,
-      "present": [],
-      "missing": [
-        "ETH_PRIVATE_KEY",
-        "ETH_WALLET_ADDRESS"
-      ],
-      "present_count": 0,
-      "required_count": 2
     }
   },
   "llm_workflows": {
     "upgrade": {
       "provider": "gemini",
       "model": "gemini-2.5-pro",
-      "purpose": "codebase evolution, patch planning, and repair",
+      "purpose": "research-only repair suggestions for Codex-owned code changes",
       "active": true,
       "secret": "GEMINI_API_KEY"
     },
@@ -330,12 +239,31 @@
     "last_refresh_at": "2026-05-18T03:34:09.630940+00:00"
   },
   "configured_github_secrets": [
-    "DEV_TO_API_KEY",
     "GEMINI_API_KEY",
     "GH_TOKEN",
     "GROQ_API_KEY",
     "OPENROUTER_API_KEY",
     "USDT_WALLET_ADDRESS"
   ],
-  "github_repo": "rtt-enjoy/e-evolve"
+  "github_repo": "rtt-enjoy/e-evolve",
+  "operation_mode": "research_suggestions_only",
+  "external_action_policy": {
+    "mode": "research_suggestions_only",
+    "allowed": [
+      "RAG",
+      "research",
+      "market analysis",
+      "suggestions",
+      "drafts"
+    ],
+    "blocked": [
+      "code updates",
+      "publishing",
+      "posting",
+      "trading",
+      "minting",
+      "payouts",
+      "external issue comments"
+    ]
+  }
 }

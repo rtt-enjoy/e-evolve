@@ -86,7 +86,7 @@ export function buildAutomationSuggestions(status: Status): AutomationSuggestion
       command: `improve suggestion ${title}`,
       automationPlan: buildAutomationPlan(suggestion),
       nextAction: buildNextAction(suggestion, missingSecrets),
-      blockerText: missingSecrets.length ? `${missingSecrets.length} missing credential${missingSecrets.length === 1 ? '' : 's'}` : 'ready for next evolution cycle',
+      blockerText: missingSecrets.length ? `${missingSecrets.length} missing credential${missingSecrets.length === 1 ? '' : 's'}` : 'ready for Codex review',
       priorityScore,
       opportunityUrl: suggestionSource === 'code_tech' ? suggestion.how_to?.find((step) => step.startsWith('Open '))?.replace(/^Open /, '') : undefined,
       noIdPath: isNoIdSuggestion(suggestion),
@@ -143,18 +143,18 @@ function buildAutomationPlan(suggestion: Suggestion) {
     return ['Reproduce the lead from public proof', 'Prepare the smallest credible patch or offer', 'Turn the result into tracked earning pipeline work'];
   }
   if (title.includes('twitter') || title.includes('x')) {
-    return ['Generate earning-focused thread ideas', 'Post through the configured Twitter module', 'Record the action and estimated value'];
+    return ['Generate draft-only thread ideas', 'Keep posting disabled by policy', 'Record the suggestion for owner review'];
   }
   if (title.includes('medium') || title.includes('article')) {
-    return ['Repurpose article output for the new channel', 'Publish with the configured integration', 'Track duplicated reach without extra LLM spend'];
+    return ['Research article angles and evidence', 'Keep publishing disabled by policy', 'Record draft suggestions for owner review'];
   }
   if (title.includes('llm') || title.includes('anthropic') || title.includes('groq') || title.includes('gemini')) {
     return ['Route the right task to the best model', 'Use fallback capacity when a free tier is limited', 'Keep evolution running with fewer skipped cycles'];
   }
   if (title.includes('crypto') || title.includes('binance')) {
-    return ['Read configured balances and strategy limits', 'Run bounded trade analysis automatically', 'Log every action for dashboard review'];
+    return ['Research market context only', 'Keep trading and payouts disabled by policy', 'Log suggestions for dashboard review'];
   }
-  return ['Turn the suggestion into a bounded code change', 'Run verification in the GitHub workflow', 'Commit the completed improvement automatically'];
+  return ['Turn the suggestion into a bounded Codex task', 'Run verification before shipping', 'Keep automatic code evolution disabled'];
 }
 
 function buildNextAction(suggestion: Suggestion, missingSecrets: string[]) {

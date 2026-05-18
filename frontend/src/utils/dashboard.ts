@@ -1,5 +1,5 @@
-import { ageLabel, money } from './format';
-import type { Action, CodeTechOpportunity, Status } from '../types/status';
+import { ageLabel } from './format';
+import type { CodeTechOpportunity, Status } from '../types/status';
 
 export type Issue = {
   tone: 'good' | 'warn' | 'bad' | 'info';
@@ -47,60 +47,27 @@ export function buildReadiness(status: Status) {
 }
 
 export function buildEarningModules(status: Status) {
-  const readiness = status.secret_readiness || {};
-  const actions = status.last_earning?.actions || [];
   const modules = [
     {
       key: 'code_techs',
-      name: 'Code Techs',
+      name: 'Code-Tech Research',
       active: Boolean(status.code_tech_earning?.enabled),
-      detail: `${status.code_tech_earning?.opportunities?.length || 0} opportunities tracked`,
+      detail: `${status.code_tech_earning?.opportunities?.length || 0} ranked suggestions tracked`,
       value: `${Math.round(status.code_tech_earning?.daily_target_usd || 0)} usd daily target`,
     },
     {
-      key: 'articles_devto',
-      name: 'Dev.to Articles',
-      active: Boolean(readiness.articles_devto?.active || status.active_features?.includes('articles_devto')),
-      detail: `${status.article_daily?.published ?? 0} published on ${status.article_daily?.date || 'latest day'}`,
-      value: moduleActionValue(actions, 'dev.to'),
-    },
-    {
-      key: 'articles_medium',
-      name: 'Medium',
-      active: Boolean(readiness.articles_medium?.active || status.active_features?.includes('articles_medium')),
-      detail: readinessLabel(readiness.articles_medium),
-      value: moduleActionValue(actions, 'medium'),
-    },
-    {
-      key: 'twitter',
-      name: 'Twitter/X',
-      active: Boolean(readiness.twitter?.active || status.active_features?.includes('twitter')),
-      detail: 'Avoid by default: API setup can require phone or paid access',
-      value: moduleActionValue(actions, 'twitter'),
-      avoid: true,
-    },
-    {
-      key: 'crypto_binance',
-      name: 'Binance Trading',
-      active: Boolean(readiness.crypto_binance?.active || status.active_features?.includes('crypto_binance')),
-      detail: 'Avoid by default: exchange identity verification and funded balance required',
-      value: money(status.usdt_balance, 4),
-      avoid: true,
-    },
-    {
-      key: 'nft_ethereum',
-      name: 'NFT Minting',
-      active: Boolean(readiness.nft_ethereum?.active || status.active_features?.includes('nft_ethereum')),
-      detail: 'Avoid by default: wallet funding and chain costs required',
-      value: moduleActionValue(actions, 'nft'),
-      avoid: true,
+      key: 'research_policy',
+      name: 'Action API Guard',
+      active: status.operation_mode === 'research_suggestions_only',
+      detail: 'Keys are limited to RAG, research, market analysis, suggestions, and drafts',
+      value: 'no publish/post/trade/mint/payout',
     },
   ];
 
   return modules.map((module) => ({
     ...module,
-    label: module.avoid && !module.active ? 'avoid' : module.active ? 'ready' : 'setup',
-    tone: module.avoid && !module.active ? 'bad' as const : module.active ? 'good' as const : 'warn' as const,
+    label: module.active ? 'ready' : 'setup',
+    tone: module.active ? 'good' as const : 'warn' as const,
   }));
 }
 
@@ -119,18 +86,4 @@ export function buildHealth(status: Status, issues: Array<{ tone: string }>, rea
   if (readinessPercent < 60) return { tone: 'warn', label: 'setup incomplete' };
   if ((status.last_earning?.actions || []).some((action) => action.success === false)) return { tone: 'warn', label: 'module warning' };
   return { tone: 'good', label: 'operational' };
-}
-
-function readinessLabel(info?: { active?: boolean; present_count?: number; required_count?: number; missing?: string[] }) {
-  const required = info?.required_count || 0;
-  const present = info?.present_count || 0;
-  if (!required) return 'No setup data';
-  if (present >= required) return 'All required credentials present';
-  if (info?.missing?.length) return `${info.missing.length} missing: ${info.missing.join(', ')}`;
-  return `${Math.max(0, required - present)} credentials missing`;
-}
-
-function moduleActionValue(actions: Action[], platform: string) {
-  const count = actions.filter((action) => (action.platform || '').toLowerCase().includes(platform.toLowerCase())).length;
-  return count ? `${count} latest actions` : '';
 }

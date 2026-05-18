@@ -1,9 +1,9 @@
-import { Activity, ArrowUpRight, Code2, ExternalLink, KeyRound, Send, WalletCards } from 'lucide-react';
+import { Activity, ArrowUpRight, Code2, ExternalLink, KeyRound, SearchCheck, ShieldCheck } from 'lucide-react';
 import { ActionCard } from './cards';
 import { EarningCommandCenter } from './EarningCommandCenter';
 import { Empty, Metric, Panel, Phase, Pill, Progress, StatusCell } from '../common';
 import { buildEarningModules, buildIssues, buildOpportunityStats, buildReadiness } from '../../utils/dashboard';
-import { clampPercent, evolutionTone, featureLabel, formatDate, money } from '../../utils/format';
+import { clampPercent, evolutionTone, featureLabel, formatDate } from '../../utils/format';
 import { isAvoidedSuggestion } from '../../utils/suggestions';
 import type { Status } from '../../types/status';
 
@@ -26,22 +26,21 @@ export function DashboardPage({ status }: { status: Status }) {
   const opportunities = status.code_tech_earning?.opportunities || [];
   const opportunityStats = buildOpportunityStats(opportunities);
   const visibleSuggestions = (status.suggestions || []).filter((suggestion) => !isAvoidedSuggestion(suggestion));
-  const lastWalletSend = [...actions].reverse().find((action) => action.success !== false && typeof action.withdrawn_usd === 'number');
 
   return (
     <>
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Metric title="Wallet money" value={money(status.usdt_balance, 4)} detail="settled USDT wallet balance" icon={<WalletCards />} />
-        <Metric title="Sent to wallet" value={money(lastWalletSend?.withdrawn_usd, 4)} detail={status.last_payout_tx ? `tx ${status.last_payout_tx}` : 'no payout tx recorded'} icon={<Send />} />
+        <Metric title="Research leads" value={String(opportunityStats.total)} detail={`${opportunityStats.paidCount} with value signals`} icon={<SearchCheck />} />
+        <Metric title="Action guard" value={status.operation_mode === 'research_suggestions_only' ? 'on' : 'check'} detail="publish/post/trade/mint/payout blocked" icon={<ShieldCheck />} />
         <Metric title="Readiness" value={`${readiness.percent}%`} detail={`${readiness.ready}/${readiness.total} integrations ready`} icon={<KeyRound />} />
-        <Metric title="Earning cycle" value={`${weekPercent}%`} detail="estimated cycle values hidden" icon={<Activity />} />
+        <Metric title="Research cycle" value={`${weekPercent}%`} detail="suggestion value only" icon={<Activity />} />
       </section>
 
       <section className="control-strip mt-4">
         <StatusCell label="Runs" value={String(status.total_runs || 0)} detail={`${status.last_cycle_seconds || 0}s last cycle`} />
         <StatusCell label="Modules" value={`${active.length} active`} detail={`${inactive.length} inactive`} />
         <StatusCell label="LLM Roles" value={String(Object.keys(status.llm_roles || {}).length || workflows.length)} detail={workflows.length ? 'workflow routing enabled' : 'single provider'} />
-        <StatusCell label="Article Day" value={String(status.article_daily?.published ?? 0)} detail={status.article_daily?.date || 'no daily record'} />
+        <StatusCell label="Mode" value={status.operation_mode === 'research_suggestions_only' ? 'research' : 'unknown'} detail="suggestions only" />
       </section>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_400px]">
@@ -51,7 +50,7 @@ export function DashboardPage({ status }: { status: Status }) {
               <Phase name="Status" ok={Boolean(status.last_run)} detail={formatDate(status.last_run)} />
               <Phase name="Commands" ok detail="command.txt ready" />
               <Phase name="Evolution" ok={!evolution.error} detail={evolution.summary || 'idle'} tone={evolutionTone(status)} />
-              <Phase name="Earning" ok={actions.every((action) => action.success !== false)} detail={`${actions.length} actions`} />
+              <Phase name="Research" ok={actions.every((action) => action.success !== false)} detail={`${actions.length} actions`} />
               <Phase name="Update" ok={!errors.length} detail={errors.length ? `${errors.length} errors` : 'saved'} />
             </div>
           </Panel>
@@ -73,7 +72,7 @@ export function DashboardPage({ status }: { status: Status }) {
             </div>
           </Panel>
 
-          <Panel title="Earning Command Center" subtitle="Targets, channels, opportunity pipeline, and repeatable execution templates.">
+          <Panel title="Research Command Center" subtitle="Targets, research queues, opportunity pipeline, and repeatable suggestion templates.">
             <EarningCommandCenter
               status={status}
               breakdown={breakdown}
@@ -85,7 +84,7 @@ export function DashboardPage({ status }: { status: Status }) {
             />
           </Panel>
 
-          <Panel title="LLM Routing" subtitle="Provider roles used by evolution, research, and content generation.">
+          <Panel title="LLM Routing" subtitle="Provider roles used for RAG, research, suggestions, and drafts.">
             <div className="grid gap-3 md:grid-cols-3">
               {workflows.length ? workflows.map(([role, workflow]) => (
                 <article className="route-card" key={role}>
@@ -100,7 +99,7 @@ export function DashboardPage({ status }: { status: Status }) {
             </div>
           </Panel>
 
-          <Panel title="Last Evolution" subtitle="Latest code evolution result and suggestions.">
+          <Panel title="Last Evolution" subtitle="Automatic code changes are skipped; Codex owns implementation.">
             <div className="space-y-3">
               <article className="item-row">
                 <Code2 className="mt-1 shrink-0 text-accent" size={18} />
@@ -115,11 +114,11 @@ export function DashboardPage({ status }: { status: Status }) {
                   <p>{change.reason || 'Changed by evolution.'}</p>
                 </article>
               ))}
-              {!(evolution.changes_applied || []).length ? <Empty text="No files changed in the latest evolution." /> : null}
+              {!(evolution.changes_applied || []).length ? <Empty text="No files changed; automatic evolution is disabled." /> : null}
             </div>
           </Panel>
 
-          <Panel title="Last Cycle Actions" subtitle="Earning module actions emitted by the latest cycle.">
+          <Panel title="Last Cycle Actions" subtitle="Research actions emitted by the latest cycle.">
             <div className="grid gap-3 md:grid-cols-2">
               {actions.length ? actions.map((action, index) => <ActionCard action={action} key={index} />) : <Empty text="No actions recorded in the latest cycle." />}
             </div>

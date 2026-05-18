@@ -1,4 +1,4 @@
-# Earning Modules
+# Research Modules
 
 Each module lives in `bot/earning/`. All follow the same contract:
 
@@ -12,10 +12,10 @@ Exceptions are caught by `main.py._module()` — a crashed module does not stop 
 
 ---
 
-For the no-ID/free path, prefer Code Techs plus Articles on dev.to. Avoid
-Binance, Twitter/X, and NFT modules unless you explicitly accept identity,
-phone, paid access, or wallet-funding requirements. See
-[`no-id-free-path.md`](no-id-free-path.md).
+Current runtime policy is research/suggestions only. Code Techs can search and
+rank opportunities, but the orchestrator does not activate article publishing,
+social posting, crypto trading, payouts, NFT minting, or external comments from
+secrets.
 
 ## Code Techs (`bot/earning/code_techs.py`)
 
@@ -26,6 +26,7 @@ phone, paid access, or wallet-funding requirements. See
 2. Ranks leads by payout signal, proof quality, and neglected maintenance pain.
 3. Writes `docs/code-tech-opportunities.md` with requirements, focus areas, strategy, avoid patterns, and ranked next steps.
 4. Returns an action dict with `platform`, `success`, `opportunity_count`, and `target_usd_per_day`.
+5. Never posts comments or pursues leads automatically.
 
 **Strategy:** favor boring work that most people skip but owners actually need:
 failing CI, stale dependencies, broken quickstarts, packaging drift, runtime
@@ -57,6 +58,8 @@ fixed-scope maintenance offer.
 
 ## Articles (`bot/earning/articles.py`)
 
+Legacy reference only. The orchestrator no longer calls this module from API-key activation.
+
 **Activates when:** `DEV_TO_API_KEY` or `MEDIUM_INTEGRATION_TOKEN` present
 
 **What it does:**
@@ -87,6 +90,8 @@ the module periodically chooses buyer-intent topics from `buyer_intent_topics`.
 
 ## Twitter Threads (`bot/earning/twitter.py`)
 
+Legacy reference only. The orchestrator no longer calls this module from API-key activation.
+
 **Activates when:** all 4 `TWITTER_*` keys present
 
 **What it does:**
@@ -103,6 +108,8 @@ the module periodically chooses buyer-intent topics from `buyer_intent_topics`.
 ---
 
 ## Crypto Trading (`bot/earning/crypto.py`)
+
+Legacy reference only. The orchestrator no longer calls this module from API-key activation.
 
 **Activates when:** `BINANCE_API_KEY` + `BINANCE_SECRET_KEY` present
 
@@ -124,6 +131,8 @@ the module periodically chooses buyer-intent topics from `buyer_intent_topics`.
 ---
 
 ## NFT Minting (`bot/earning/nft.py`)
+
+Legacy reference only. The orchestrator no longer calls this module from API-key activation.
 
 **Activates when:** `ETH_PRIVATE_KEY` + `ETH_WALLET_ADDRESS` present
 

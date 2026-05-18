@@ -50,6 +50,12 @@ export type Status = {
   active_features?: string[];
   inactive_features?: string[];
   llm_provider?: string;
+  operation_mode?: string;
+  external_action_policy?: {
+    mode?: string;
+    allowed?: string[];
+    blocked?: string[];
+  };
   llm_roles?: Record<string, string>;
   configured_github_secrets?: string[];
   secret_readiness?: Record<string, {

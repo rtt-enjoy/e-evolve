@@ -11,7 +11,9 @@
 
 ## Project Overview
 
-E-Evolve is a self-improving GitHub Actions bot that runs hourly, evolves its own codebase via LLM, and executes earning modules (articles, Twitter, crypto, NFT). Zero server cost — runs entirely on GitHub Actions free tier.
+E-Evolve is a GitHub Actions bot that runs hourly and refreshes RAG, market research, and earning suggestions. Code evolution and code updates are handled here in Codex. Zero server cost — runs entirely on GitHub Actions free tier.
+
+Current operating policy: API keys are for RAG, research, market analysis, suggestions, and draft-only text. The bot must not use keys to publish articles, post to social media, place trades, mint NFTs, withdraw funds, or comment on external issues.
 
 ---
 
@@ -22,15 +24,15 @@ bot/main.py          ← 5-phase orchestrator (entry point)
 bot/llm.py           ← LLM abstraction (Groq or Anthropic, auto-selected)
 bot/status.py        ← Phase 1: load/save status.json
 bot/commands.py      ← Phase 2: owner commands (command.txt or GitHub Issues)
-bot/evolution.py     ← Phase 3: LLM reads codebase, proposes changes, applies them
+bot/evolution.py     ← legacy evolution engine; not called by default
 bot/earnings.py      ← cumulative earnings tracker + weekly reset
 bot/dashboard.py     ← writes docs/index.html + earnings-log.md
 bot/git_utils.py     ← git commit helpers
 bot/earning/
-  articles.py        ← dev.to + Medium publishing
-  twitter.py         ← Twitter/X threads
-  crypto.py          ← Binance spot trading
-  nft.py             ← Ethereum NFT minting
+  articles.py        ← legacy publishing module; not called by default
+  twitter.py         ← legacy social module; not called by default
+  crypto.py          ← legacy trading module; not called by default
+  nft.py             ← legacy minting module; not called by default
 .github/workflows/evolve.yml  ← hourly scheduler (never evolved)
 config/strategy.json ← tunable strategy parameters
 status.json          ← persisted bot state (auto-updated each cycle)
@@ -46,8 +48,8 @@ command.txt          ← owner command input
 Phase 0: Init LLM (Anthropic > Groq, priority order)
 Phase 1: Status   — load status.json, detect active features from env secrets
 Phase 2: Commands — read command.txt + GitHub Issues labelled "bot-command"
-Phase 3: Evolution — send codebase to LLM, apply safe code changes, commit
-Phase 4: Earning  — run active modules: articles, twitter, crypto, nft
+Phase 3: Evolution — skipped; Codex owns code changes, API keys stay research-only
+Phase 4: Research — refresh suggestion-only research queues
 Phase 5: Update   — save status.json, write dashboard, commit
 ```
 
@@ -74,11 +76,8 @@ Features activate automatically when their secrets are present in env.
 | `llm_gemini` | `GEMINI_API_KEY` |
 | `llm_openrouter` | `OPENROUTER_API_KEY` |
 | `llm_groq` | `GROQ_API_KEY` |
-| `articles_devto` | `DEV_TO_API_KEY` |
-| `articles_medium` | `MEDIUM_INTEGRATION_TOKEN` |
-| `twitter` | `TWITTER_API_KEY`, `TWITTER_API_SECRET`, `TWITTER_ACCESS_TOKEN`, `TWITTER_ACCESS_SECRET` |
-| `crypto_binance` | `BINANCE_API_KEY`, `BINANCE_SECRET_KEY` |
-| `nft_ethereum` | `ETH_PRIVATE_KEY`, `ETH_WALLET_ADDRESS` |
+
+Publishing, posting, trading, minting, and payout secrets do not activate runtime actions. If such keys exist, they are treated as research context only.
 
 ---
 
@@ -98,12 +97,12 @@ Write to `command.txt`, commit. Next cycle executes and clears them.
 Also works via GitHub Issues with label `bot-command`.
 
 ```
-force articles N         # post N articles this cycle
-force trade aggressive   # raise trade risk to 5%
-force mint N             # mint N NFTs
+force articles N         # ignored: publishing is disabled
+force trade aggressive   # ignored: trading is disabled
+force mint N             # ignored: minting is disabled
 skip evolution           # skip Phase 3 this cycle
 reset earnings           # zero this_week_usd
-post thread              # force Twitter thread
+post thread              # ignored: posting is disabled
 status report            # dump full status to workflow log
 ```
 
@@ -139,7 +138,7 @@ Keys prefixed `_` are runtime-only and not persisted.
 
 ## Strategy Config (config/strategy.json)
 
-Tunable by owner or evolved by LLM:
+Tunable by owner or changed here in Codex:
 
 ```json
 {

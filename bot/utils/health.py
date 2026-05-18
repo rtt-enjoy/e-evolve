@@ -13,25 +13,12 @@ import os
 from typing import Dict, List
 
 # Mapping of feature name to the list of required secrets.
+# Only LLM/research/read-only features are activated by secrets. Keys for
+# publishing, posting, trading, minting, or payouts are intentionally excluded.
 _FEATURE_SECRETS: Dict[str, List[str]] = {
     "llm_gemini": ["GEMINI_API_KEY"],
     "llm_openrouter": ["OPENROUTER_API_KEY"],
     "llm_groq": ["GROQ_API_KEY"],
-    "articles_devto": ["DEV_TO_API_KEY"],
-    "articles_medium": ["MEDIUM_INTEGRATION_TOKEN"],
-    "twitter": [
-        "TWITTER_API_KEY",
-        "TWITTER_API_SECRET",
-        "TWITTER_ACCESS_TOKEN",
-        "TWITTER_ACCESS_SECRET",
-    ],
-    "crypto_binance": ["BINANCE_API_KEY", "BINANCE_SECRET_KEY"],
-    "crypto_payout": [
-        "BINANCE_API_KEY",
-        "BINANCE_SECRET_KEY",
-        "BINANCE_WITHDRAW_ADDRESS",
-    ],
-    "nft_ethereum": ["ETH_PRIVATE_KEY", "ETH_WALLET_ADDRESS"],
 }
 
 # List of modules that must be importable for the bot to function.

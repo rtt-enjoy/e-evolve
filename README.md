@@ -1,6 +1,8 @@
 # E-Evolve
 
-Autonomous, self-improving bot that earns money and evolves its own codebase — powered entirely by **GitHub Actions** at zero server cost.
+Autonomous bot that researches earning opportunities while code evolution happens here in Codex — powered entirely by **GitHub Actions** at zero server cost.
+
+Current mode: API keys are used for RAG, online research, market analysis, suggestions, and draft-only text. The bot does not publish articles, post social threads, trade crypto, mint NFTs, withdraw funds, or comment on external issues.
 
 [![evolve](https://github.com/YOUR_USERNAME/e-evolve/actions/workflows/evolve.yml/badge.svg)](https://github.com/YOUR_USERNAME/e-evolve/actions/workflows/evolve.yml)
 
@@ -11,15 +13,15 @@ Autonomous, self-improving bot that earns money and evolves its own codebase —
 Every hour at `:17`, one complete cycle runs:
 
 ```
-Init LLM → Status Check → Owner Commands → LLM Evolution → Earning Actions → State Update
+Init LLM → Status Check → Owner Commands → Codex-Owned Evolution Skip → Research Suggestions → State Update
 ```
 
 | Phase | What happens |
 |-------|-------------|
 | **Status** | Load `status.json`, detect active features from present secrets |
 | **Commands** | Read `command.txt` or GitHub Issues labelled `bot-command` |
-| **Evolution** | Send codebase + status to LLM; receive and apply code improvements |
-| **Earning** | Run active modules: articles, Twitter threads, crypto trading, NFT minting |
+| **Evolution** | Skip automatic code changes; Codex owns implementation |
+| **Research** | Refresh RAG/research queues and ranked earning suggestions only |
 | **Update** | Save `status.json`, publish dashboard data files, commit all |
 
 ---
@@ -66,27 +68,13 @@ Start here when you cannot use Binance identity verification, Claude premium
 features, phone-gated social APIs, paid services, or funded wallets:
 
 1. Use the default code-tech opportunity flow. It needs no external secret.
-2. Add `GROQ_API_KEY` or `GEMINI_API_KEY`.
-3. Add `DEV_TO_API_KEY` for publishing.
-4. Add optional GitHub Actions variables, not secrets:
-   - `EARN_CTA_URL`: sponsor, tip, newsletter, affiliate, portfolio, or product link.
-   - `EARN_CTA_LABEL`: link text shown at the end of each article.
-
-When `EARN_CTA_URL` is set, the article loop periodically switches to buyer-intent topics from
-`config/strategy.json` so the content is still useful, but closer to people who might click,
-subscribe, sponsor, or buy.
-
-CTA links are tagged with `utm_source`, `utm_medium`, and the configured
-`articles.cta_utm_campaign` value so dev.to, Medium, and Twitter/X traffic can be compared later.
-
-Avoid Binance trading/payout, Claude/Anthropic premium access, Twitter/X API
-posting, and Ethereum NFT minting unless you explicitly accept the verification,
-payment, phone, or wallet-funding tradeoff. Details live in
-[`docs/no-id-free-path.md`](docs/no-id-free-path.md).
+2. Add `GROQ_API_KEY` or `GEMINI_API_KEY` for RAG/research/suggestions.
+3. Optional: add `OPENROUTER_API_KEY` for free-model research fallback.
+4. Keep publishing, posting, trading, payout, and minting keys out of the runtime path. If those keys exist in the environment, the bot treats them as setup/suggestion context only and does not call external write APIs.
 
 ### Code-Tech Opportunity Flow
 
-The bot also runs an independent code-only earning flow by default. It does not
+The bot also runs an independent code-tech research flow by default. It does not
 depend on articles, social posting, crypto, or NFTs. Once per configured cadence,
 it searches for overlooked developer work an AI agent can handle automatically:
 CI failures, dependency migrations, broken examples, flaky tests, starter
@@ -95,7 +83,7 @@ are written to `docs/code-tech-opportunities.md`.
 
 The target is practical pipeline creation, for example finding enough small
 code-maintenance work to pursue `$10/day`. Discovery is not counted as earned
-money; confirmed earnings should still come from actual payouts or owner
+money; confirmed earnings should still come from owner-confirmed payouts or
 reconciliation. Disable it with `CODE_TECH_EARN_ENABLED=0` or tune it in
 `config/strategy.json` under `code_techs`.
 
@@ -107,54 +95,21 @@ proof and a bounded first fix before it deserves deep work.
 
 ---
 
-## Earning Modules
+## Research Modules
 
-All optional. Add the secret — the next cycle activates that module automatically.
+Only research/read-only modules run automatically. Legacy action modules remain in the tree for reference, but the orchestrator no longer activates publishing, posting, trading, payout, or minting from secrets.
 
 ### Code Techs (independent)
 
 No secret required. Uses public GitHub issue search when available and falls
-back to a local playbook when the network is unavailable.
-
-### Articles (dev.to + Medium)
-
-| Secret | Source |
-|--------|--------|
-| `DEV_TO_API_KEY` | dev.to → Settings → Extensions |
-| `MEDIUM_INTEGRATION_TOKEN` | medium.com/me/settings → Integration tokens |
-
-### Twitter / X Threads
-
-| Secret | Notes |
-|--------|-------|
-| `TWITTER_API_KEY` | Twitter Developer Portal — needs Read+Write permission |
-| `TWITTER_API_SECRET` | " |
-| `TWITTER_ACCESS_TOKEN` | " |
-| `TWITTER_ACCESS_SECRET` | " |
-
-### Crypto Trading (Binance)
-
-| Secret | Notes |
-|--------|-------|
-| `BINANCE_API_KEY` | Enable Spot trading only — disable withdrawals |
-| `BINANCE_SECRET_KEY` | " |
-
-> **Warning:** Automated trading involves financial risk. Start with a small balance.
-
-### NFT Minting (Ethereum)
-
-| Secret | Notes |
-|--------|-------|
-| `ETH_PRIVATE_KEY` | Use a dedicated wallet with minimal funds |
-| `ETH_WALLET_ADDRESS` | Corresponding public address |
-| `NFT_CONTRACT_ADDRESS` | Pre-deployed ERC-721 contract address |
-| `NFT_STORAGE_TOKEN` | [nft.storage](https://nft.storage) — free IPFS pinning |
+back to a local playbook when the network is unavailable. It writes ranked
+suggestions only and does not comment on external issues.
 
 ---
 
-## Self-Evolution
+## Code Evolution
 
-Each cycle the bot reads its own source and asks the LLM to improve it. Changes are committed automatically. The dashboard shows exactly what changed.
+Code evolution is handled here in Codex. The hourly bot records the skipped evolution phase and keeps API keys limited to RAG, research, market analysis, suggestions, and drafts.
 
 **Safety boundaries (hardcoded — cannot be evolved away):**
 - Writes only to: `bot/`, `docs/`, `config/`, `requirements.txt`, `version.txt`
@@ -171,12 +126,12 @@ Write commands in `command.txt` and commit. The next cycle executes and clears t
 Also works via GitHub Issues with label `bot-command`.
 
 ```
-force articles 3         # post 3 articles this cycle
-force trade aggressive   # raise trade risk to 5%
-force mint 2             # mint 2 NFTs
+force articles 3         # ignored: publishing is disabled
+force trade aggressive   # ignored: trading is disabled
+force mint 2             # ignored: minting is disabled
 skip evolution           # skip LLM evolution this cycle
 reset earnings           # zero the weekly counter
-post thread              # force a Twitter thread
+post thread              # ignored: posting is disabled
 status report            # dump full status to workflow log
 ```
 
@@ -196,10 +151,10 @@ bot/
   dashboard.py                ← dashboard data publisher + earnings log
   git_utils.py                ← git commit helpers
   earning/
-    articles.py               ← dev.to + Medium publishing
-    twitter.py                ← Twitter/X threads
-    crypto.py                 ← Binance spot trading
-    nft.py                    ← Ethereum NFT minting
+    articles.py               ← legacy publishing module; not called by default
+    twitter.py                ← legacy social module; not called by default
+    crypto.py                 ← legacy trading module; not called by default
+    nft.py                    ← legacy minting module; not called by default
 config/
   strategy.json               ← tunable strategy parameters
 frontend/

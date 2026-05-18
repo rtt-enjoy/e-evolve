@@ -1,42 +1,43 @@
-# E‑Evolve Bot Documentation
+# E-Evolve Bot Documentation
 
 ## Overview
-E‑Evolve is an autonomous GitHub Actions bot that continuously improves itself, publishes technical content, trades crypto, mints NFTs, and pursues low‑effort maintenance gigs.
+
+E-Evolve is a GitHub Actions bot for RAG, online research, market analysis, and
+earning suggestions. Code changes happen in Codex, not in the hourly bot.
+
+## Runtime Policy
+
+Allowed API-key use:
+
+- RAG and context retrieval
+- online research
+- market analysis
+- earning suggestions
+- draft-only text
+
+Blocked API-key use:
+
+- code updates
+- article publishing
+- social posting
+- crypto trading or payouts
+- NFT minting
+- external issue comments
 
 ## Quick Start
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-org/e-evolve.git && cd e-evolve
-   ```
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Configure secrets** – add the required API keys as GitHub repository secrets (see the *Suggestions* section for a full list).
-4. **Enable features** – edit `config/strategy.json` or use the `force` commands to toggle modules.
-5. **Run locally** (optional) to verify:
-   ```bash
-   python -m bot.main
-   ```
+
+1. Clone the repository.
+2. Install dependencies with `pip install -r requirements.txt`.
+3. Add one LLM key, such as `GROQ_API_KEY`, `GEMINI_API_KEY`, or `OPENROUTER_API_KEY`.
+4. Run `python -m bot.main` locally when LLM keys are available.
 
 ## Features
-- **Article publishing** – dev.to (always) and Medium (optional).
-- **Twitter/X threads** – generate and post developer‑focused threads.
-- **Crypto trading** – spot trading on Binance with risk limits.
-- **NFT minting** – optional IPFS‑pinned NFTs on Ethereum.
-- **Code‑tech earnings** – discover and auto‑pursue small open‑source maintenance gigs.
-- **Auto‑payout** – withdraw USDT profits from Binance.
 
-## Adding New Secrets
-For any new feature, create a secret in the repository settings:
-1. Go to *Settings → Secrets → Actions*.
-2. Click **New repository secret**.
-3. Name it exactly as listed in the suggestion (e.g., `MEDIUM_INTEGRATION_TOKEN`).
-4. Paste the value and save.
+- Code-tech research queue with ranked suggestions.
+- LLM routing for research and draft-only suggestion text.
+- Static dashboard published under `docs/`.
 
 ## Development
-- Run `pytest` to execute the bundled unit tests.
-- The bot logs detailed information to `earnings-log.md` and publishes a public dashboard under `docs/`.
 
-## License
-MIT © 2026 E‑Evolve contributors
+Run local verification before committing prompt-driven changes. The dashboard is
+built from `frontend/` into `docs/`.

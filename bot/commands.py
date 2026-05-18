@@ -4,12 +4,12 @@ Read commands from command.txt or GitHub Issues labelled "bot-command".
 Commands execute once, then are cleared automatically.
 
 Supported commands (case-insensitive, one per line):
-  force articles N         — post N articles this cycle
-  force trade aggressive   — raise trade risk to 5 %
-  force mint N             — mint N NFTs
+  force articles N         — ignored; publishing is disabled by policy
+  force trade aggressive   — ignored; trading is disabled by policy
+  force mint N             — ignored; minting is disabled by policy
   skip evolution           — skip evolution phase
   reset earnings           — zero this_week_usd
-  post thread              — force a Twitter thread even if not scheduled
+  post thread              — ignored; posting is disabled by policy
   improve suggestion TEXT  — ask evolution to implement or refine a suggestion
   status report            — dump full status dict to workflow log
 """
@@ -45,19 +45,23 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
     Returns the updated status dict.
     """
     overrides: dict[str, Any] = {}
+    blocked_action_commands: list[str] = []
 
     for raw in commands:
         cmd = raw.strip().lower()
         log.info("Applying command: %r", cmd)
 
         if m := re.match(r"force articles (\d+)$", cmd):
-            overrides["force_articles"] = max(1, int(m.group(1)))
+            blocked_action_commands.append(raw.strip())
+            log.warning("Ignoring %r: publishing is disabled by research-only policy", raw)
 
         elif cmd == "force trade aggressive":
-            overrides["trade_risk_pct"] = 0.05
+            blocked_action_commands.append(raw.strip())
+            log.warning("Ignoring %r: trading is disabled by research-only policy", raw)
 
         elif m := re.match(r"force mint (\d+)$", cmd):
-            overrides["force_mint"] = max(1, int(m.group(1)))
+            blocked_action_commands.append(raw.strip())
+            log.warning("Ignoring %r: minting is disabled by research-only policy", raw)
 
         elif cmd == "skip evolution":
             overrides["skip_evolution"] = True
@@ -67,7 +71,8 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
             log.info("Weekly earnings reset to $0")
 
         elif cmd == "post thread":
-            overrides["force_twitter"] = True
+            blocked_action_commands.append(raw.strip())
+            log.warning("Ignoring %r: posting is disabled by research-only policy", raw)
 
         elif m := re.match(r"improve suggestion(?:\s+(.+))?$", cmd):
             target = (m.group(1) or "").strip()
@@ -80,6 +85,8 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
         else:
             log.warning("Unknown command (ignored): %r", raw)
 
+    if blocked_action_commands:
+        overrides["blocked_action_commands"] = blocked_action_commands
     status["_overrides"] = overrides
     return status
 

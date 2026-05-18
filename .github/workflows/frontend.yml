@@ -1,6 +1,8 @@
 name: frontend
 
 on:
+  schedule:
+    - cron: '27 * * * *'
   workflow_dispatch:
   push:
     branches:

@@ -88,9 +88,10 @@ payment, phone, or wallet-funding tradeoff. Details live in
 
 The bot also runs an independent code-only earning flow by default. It does not
 depend on articles, social posting, crypto, or NFTs. Once per configured cadence,
-it searches for overlooked developer work such as small paid OSS issues, CI
-failures, dependency migrations, broken examples, flaky tests, and niche package
-maintenance. Results are written to `docs/code-tech-opportunities.md`.
+it searches for overlooked developer work an AI agent can handle automatically:
+CI failures, dependency migrations, broken examples, flaky tests, starter
+template repairs, deprecation cleanup, and niche package maintenance. Results
+are written to `docs/code-tech-opportunities.md`.
 
 The target is practical pipeline creation, for example finding enough small
 code-maintenance work to pursue `$10/day`. Discovery is not counted as earned
@@ -98,11 +99,11 @@ money; confirmed earnings should still come from actual payouts or owner
 reconciliation. Disable it with `CODE_TECH_EARN_ENABLED=0` or tune it in
 `config/strategy.json` under `code_techs`.
 
-The strategy deliberately looks where most people do not: broken quickstarts in
-small SDKs, runtime drift after Python or Node releases, stale packaging
-metadata, ignored CI warnings, release-note gaps, and data import/export bugs in
-unflashy integrations. Each lead should have public proof, a bounded first fix,
-and some visible owner or payer signal before it deserves deep work.
+The strategy deliberately looks where AI can do the boring part without private
+context: broken quickstarts in small SDKs, runtime drift after Python or Node
+releases, stale packaging metadata, ignored CI warnings, release-note gaps, and
+data import/export bugs in unflashy integrations. Each lead should have public
+proof and a bounded first fix before it deserves deep work.
 
 ---
 

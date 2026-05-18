@@ -195,12 +195,12 @@ function specializeCodeTechLead(opportunity: CodeTechOpportunity) {
 
   return {
     description: [
-      'Bounty lead for two scoped admin features: a markdown site announcement with expiry/RBAC and env-driven deployment maintenance mode.',
+      'Scoped automation lead for two admin features: a markdown site announcement with expiry/RBAC and env-driven deployment maintenance mode.',
       'Deliverable needs docs plus short demo evidence.',
     ].join(' '),
     howTo: [
       opportunity.url ? `Open ${opportunity.url}` : '',
-      'Verify the bounty is still open, then map existing admin settings, RBAC, env, and deployment docs before coding.',
+      'Map existing admin settings, RBAC, env, and deployment docs before coding.',
       'Implement one active announcement with markdown links, expiration handling, read permission defaults, and top-of-site placement.',
       'Add maintenance-mode env handling with a user-facing message, document the env var, and capture a short demo for the PR.',
     ].filter(Boolean),

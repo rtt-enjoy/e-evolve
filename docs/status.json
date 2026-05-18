@@ -286,105 +286,71 @@
   },
   "code_tech_earning": {
     "enabled": true,
-    "last_refresh_at": "2026-05-17T15:19:56.911459+00:00",
     "daily_target_usd": 10.0,
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "[ Bounty $5k ] [ Solidity ] Fix AMMPool swap doesn't emit indexed events for off-chain indexing \u2014 v2 upgrade",
-        "url": "https://github.com/ClankerNation/OpenAgents/issues/165",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 5700.0,
-        "reason": "visible or inferred value around $5700.00; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "[ Bounty $3k ] [ Solidity ] Fix VestingWallet doesn't support token change or migration \u2014 mainnet prep",
-        "url": "https://github.com/ClankerNation/OpenAgents/issues/170",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 3300.0,
-        "reason": "visible or inferred value around $3300.00; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Benchmark APIs with p50, p95, p99 latency, RPS, error rate and TTFB",
-        "url": "https://github.com/SecureBananaLabs/bug-bounty/issues/30",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 750.0,
-        "reason": "visible or inferred value around $750.00; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "[RFC][epic] Out-of-process sidecar worker mode for crash-isolated DCC actions",
-        "url": "https://github.com/loonghao/dcc-mcp-core/issues/998",
-        "source": "github",
-        "score": 98,
+        "title": "Starter template compatibility repair",
+        "url": "",
+        "source": "local-playbook",
+        "score": 94,
         "estimated_value_usd": 0.0,
-        "reason": "CI/test work is concrete and easy for maintainers to accept; migration chores are neglected but urgent",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed\u2011price cleanup.",
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "[BOUNTY $150] AGENT: Claude Code sub-agent that reviews a PR and posts a structured comment",
-        "url": "https://github.com/claude-builders-bounty/claude-builders-bounty/issues/4",
-        "source": "github",
-        "score": 96,
-        "estimated_value_usd": 150.0,
-        "reason": "visible or inferred value around $150.00; working docs convert into trust quickly",
-        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
+        "title": "Package migration cleanup for small Python projects",
+        "url": "",
+        "source": "local-playbook",
+        "score": 86,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "[ Bounty $9k ] [ Solidity ] Fix reentrancy in StakingRewards withdraw and claimRewards \u2014 P0 bug",
-        "url": "https://github.com/ClankerNation/OpenAgents/issues/86",
-        "source": "github",
-        "score": 93,
-        "estimated_value_usd": 9000.0,
-        "reason": "visible or inferred value around $9000.00; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
+        "title": "Deprecated GitHub Actions cleanup",
+        "url": "",
+        "source": "local-playbook",
+        "score": 86,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "[ Bounty $2k ] [ API ] Fix ratelimit.py doesn't differentiate authenticated vs anonymous limits \u2014 backwards compat",
-        "url": "https://github.com/ClankerNation/OpenAgents/issues/200",
-        "source": "github",
-        "score": 93,
-        "estimated_value_usd": 2200.0,
-        "reason": "visible or inferred value around $2200.00; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
+        "title": "Flaky test triage for tiny open-source maintainers",
+        "url": "",
+        "source": "local-playbook",
+        "score": 64,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "[ Bounty $1k ] [ Solidity ] Fix cross-chain replay attack in TokenBridge signature verification \u2014 v2 implementation",
-        "url": "https://github.com/ClankerNation/OpenAgents/issues/55",
-        "source": "github",
-        "score": 93,
-        "estimated_value_usd": 1350.0,
-        "reason": "visible or inferred value around $1350.00; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch.",
+        "title": "Broken README examples in niche SDK repos",
+        "url": "",
+        "source": "local-playbook",
+        "score": 60,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; working docs convert into trust quickly",
+        "next_step": "Run the documented example from a clean checkout and submit the corrected command or snippet.",
         "pursued": false,
         "archived_at": null
       }
     ],
     "requirements": [
       "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
-      "Prefer boring maintenance where the buyer already feels pain: failing CI, broken install paths, stale dependencies, or unusable examples.",
-      "Require a visible owner, maintainer, sponsor, bounty, issue activity, or obvious business value before spending deep effort.",
-      "Keep the first contribution small enough to review in one sitting, then convert repeated pain into a fixed-scope maintenance offer.",
-      "Do not count discovery, estimates, or speculative upside as earnings until money is received or manually reconciled."
+      "Prefer boring maintenance where the failure and expected fix are visible without private context.",
+      "Require a deterministic command, log, docs page, or issue thread that an AI agent can use as proof.",
+      "Keep the first contribution small enough for the bot to patch, test, and explain automatically.",
+      "Do not count discovery or speculative upside as earnings."
     ],
     "focus": [
       "failing CI with a small, reproducible fix",
@@ -400,20 +366,21 @@
       "low-glamour data import/export bugs in small SaaS integrations"
     ],
     "strategy_playbook": [
-      "Start from maintenance pain, not idea novelty: find places where a maintainer or small business already lost time.",
-      "Use proof as the sales asset: failing command, failing log line, fixed branch, and a short before/after note.",
-      "Favor repeatable chores that can become productized services: dependency upgrades, CI modernization, docs repair, packaging cleanup, and migration guides.",
-      "Look below the obvious bounty surface: stale issues with recent users, forks carrying private fixes, unanswered install failures, and docs comments that expose conversion leaks.",
-      "Bundle adjacent fixes only after trust exists; the first patch should make one painful thing obviously better.",
-      "Treat content as deal flow: every solved niche issue can become a short article, comparison, checklist, or service page aimed at the same pain."
+      "Start from maintenance pain, not idea novelty.",
+      "Use proof as the sales asset: failing command, failing log line, short before/after note.",
+      "Favor repeatable chores that can become productized services.",
+      "Look for AI-automatable chores: stale issues with logs, forks with small fixes, unanswered install failures.",
+      "Bundle adjacent fixes only after trust exists.",
+      "Treat content as deal flow from solved niche issues."
     ],
     "avoid_patterns": [
       "Large rewrites, vague feature requests, design taste debates, and architecture arguments without a failing proof.",
       "Repos with no maintainer response, no recent users, no releases, and no business signal.",
-      "Crowded beginner issues where dozens of contributors compete for low-value visibility.",
+      "Crowded prize or beginner issues where many contributors compete for low-value visibility.",
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
-    ]
+    ],
+    "last_refresh_at": "2026-05-18T03:34:09.632935+00:00"
   },
   "configured_github_secrets": [
     "DEV_TO_API_KEY",

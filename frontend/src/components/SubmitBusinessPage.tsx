@@ -51,7 +51,7 @@ export function SubmitBusinessPage() {
           <span>Original lead</span>
           <strong>Create custom page for "Submit your business"</strong>
           <a href="https://github.com/bitcoin-dot-org/Bitcoin.org/issues/1583">
-            <ExternalLink size={15} /> view bounty issue
+            <ExternalLink size={15} /> view source issue
           </a>
         </div>
       </section>

@@ -27,23 +27,26 @@ _DEFAULT_CONFIG = {
     "pursue_score_threshold": 75,
     "requirements": [
         "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
-        "Prefer boring maintenance where the buyer already feels pain.",
-        "Require a visible owner, maintainer, sponsor, bounty, issue activity, or obvious business value.",
-        "Keep the first contribution small enough to review in one sitting.",
+        "Prefer boring maintenance where the failure and expected fix are visible without private context.",
+        "Require a deterministic command, log, docs page, or issue thread that an AI agent can use as proof.",
+        "Keep the first contribution small enough for the bot to patch, test, and explain automatically.",
         "Do not count discovery or speculative upside as earnings."
     ],
     "github_searches": [
-        "is:issue is:open bounty label:bounty",
-        "is:issue is:open bounty language:Python",
-        "is:issue is:open bounty language:TypeScript",
         "is:issue is:open label:\"help wanted\" \"CI\"",
-        "is:issue is:open label:\"good first issue\" \"migration\"",
+        "is:issue is:open label:\"help wanted\" \"failing tests\"",
+        "is:issue is:open label:\"good first issue\" \"dependency update\"",
+        "is:issue is:open label:\"good first issue\" \"documentation\" \"example\"",
         "is:issue is:open \"docs\" \"broken\" \"example\"",
+        "is:issue is:open \"README\" \"does not work\" \"install\"",
         "is:issue is:open \"quickstart\" \"fails\" language:Python",
         "is:issue is:open \"pyproject\" \"deprecation\"",
+        "is:issue is:open \"ruff\" \"mypy\" \"pytest\"",
         "is:issue is:open \"Node 20\" \"migration\"",
+        "is:issue is:open \"Node 22\" \"migration\"",
         "is:issue is:open \"GitHub Actions\" \"deprecated\" \"warning\"",
         "is:issue is:open \"import error\" \"Python 3.12\"",
+        "is:issue is:open \"Python 3.13\" \"compatibility\"",
         "is:issue is:open \"release notes\" \"breaking change\""
     ],
     "underserved_focus": [
@@ -63,14 +66,14 @@ _DEFAULT_CONFIG = {
         "Start from maintenance pain, not idea novelty.",
         "Use proof as the sales asset: failing command, failing log line, short before/after note.",
         "Favor repeatable chores that can become productized services.",
-        "Look below the obvious bounty surface: stale issues with recent users, forks with fixes, unanswered install failures.",
+        "Look for AI-automatable chores: stale issues with logs, forks with small fixes, unanswered install failures.",
         "Bundle adjacent fixes only after trust exists.",
         "Treat content as deal flow from solved niche issues."
     ],
     "avoid_patterns": [
         "Large rewrites, vague feature requests, design taste debates, and architecture arguments without a failing proof.",
         "Repos with no maintainer response, no recent users, no releases, and no business signal.",
-        "Crowded beginner issues where many contributors compete for low-value visibility.",
+        "Crowded prize or beginner issues where many contributors compete for low-value visibility.",
         "Unpaid speculative requests that need private context before value can be proven.",
         "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ]
@@ -81,22 +84,36 @@ _LOCAL_LEADS = [
         "title": "Package migration cleanup for small Python projects",
         "url": "",
         "source": "local-playbook",
-        "body": "Offer a fixed-price patch for pyproject.toml, ruff, mypy, pytest, and GitHub Actions drift.",
+        "body": "Let the AI agent patch pyproject.toml, ruff, mypy, pytest, and GitHub Actions drift from public CI logs.",
         "labels": ["migration", "packaging", "ci"]
     },
     {
         "title": "Broken README examples in niche SDK repos",
         "url": "",
         "source": "local-playbook",
-        "body": "Find repos where the documented quickstart fails, then submit a runnable example and offer maintenance.",
+        "body": "Find repos where the documented quickstart fails, then have the AI agent submit a runnable example fix.",
         "labels": ["docs", "examples", "sdk"]
     },
     {
         "title": "Flaky test triage for tiny open-source maintainers",
         "url": "",
         "source": "local-playbook",
-        "body": "Target intermittent CI failures with logs, seed control, network timeouts, and time-based assertions.",
+        "body": "Target intermittent CI failures with logs, seed control, network timeouts, and time-based assertions the bot can reproduce.",
         "labels": ["tests", "ci", "flaky"]
+    },
+    {
+        "title": "Deprecated GitHub Actions cleanup",
+        "url": "",
+        "source": "local-playbook",
+        "body": "Patch action version warnings, Node runtime deprecations, cache key drift, and failing matrix jobs.",
+        "labels": ["github-actions", "deprecation", "ci"]
+    },
+    {
+        "title": "Starter template compatibility repair",
+        "url": "",
+        "source": "local-playbook",
+        "body": "Run a starter template from scratch, fix install/build/test failures, and document the exact working command.",
+        "labels": ["template", "quickstart", "compatibility"]
     }
 ]
 
@@ -334,8 +351,12 @@ def _score(text: str, labels: list[str], value: float) -> int:
     score = 30
     if value:
         score += min(35, int(value / 5))
-    if any(word in text for word in ("bounty", "paid", "reward", "fixed-price", "service", "offer")):
-        score += 18
+    if _is_ai_automatable(text):
+        score += 20
+    if any(word in text for word in ("bounty", "reward")):
+        score -= 18
+    if any(word in text for word in ("paid", "fixed-price", "service", "offer")):
+        score += 6
     if _has_any(text, ("ci", "test", "flaky", "failing")):
         score += 14
     if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
@@ -361,7 +382,7 @@ def _extract_value(text: str, cfg: dict) -> float:
     if amounts:
         return round(max(amounts), 2)
     target = float(cfg.get("daily_target_usd", 10.0) or 10.0)
-    if any(word in text for word in ("bounty", "paid", "reward", "fixed-price")):
+    if any(word in text for word in ("paid", "fixed-price", "service")):
         return target
     return 0.0
 
@@ -369,6 +390,8 @@ def _reason(text: str, labels: list[str], value: float) -> str:
     parts: list[str] = []
     if value:
         parts.append(f"visible or inferred value around ${value:.2f}")
+    if _is_ai_automatable(text):
+        parts.append("public proof makes this suitable for automated AI patching")
     if _is_announcement_maintenance_lead(text):
         parts.append("scoped admin feature with RBAC, expiry, env config, docs, and demo proof")
     if _has_any(text, ("ci", "test", "flaky", "failing")):
@@ -387,11 +410,11 @@ def _reason(text: str, labels: list[str], value: float) -> str:
 
 def _next_step(text: str) -> str:
     if _is_announcement_maintenance_lead(text):
-        return "Verify bounty status, inspect existing admin/RBAC/env docs, then patch the announcement and maintenance‑mode paths with demo proof."
+        return "Inspect existing admin/RBAC/env docs, then patch the announcement and maintenance-mode paths with demo proof."
     if "bounty" in text:
-        return "Verify bounty rules, reproduce the issue, then prepare the smallest passing patch."
+        return "Skip unless the issue also has public reproduction steps the AI agent can patch and verify automatically."
     if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
-        return "Find one outdated dependency path, reproduce the breakage, and propose a fixed‑price cleanup."
+        return "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
     if any(word in text for word in ("python 3.12", "node 20", "pyproject", "deprecated", "warning")):
         return "Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary."
     if any(word in text for word in ("ci", "test", "flaky", "failing")):
@@ -405,6 +428,27 @@ def _has_any(text: str, terms: tuple[str, ...]) -> bool:
 
 def _is_announcement_maintenance_lead(text: str) -> bool:
     return "notification" in text and "announcements" in text and "maintenance mode" in text
+
+def _is_ai_automatable(text: str) -> bool:
+    proof_terms = (
+        "ci",
+        "test",
+        "failing",
+        "error",
+        "log",
+        "quickstart",
+        "readme",
+        "docs",
+        "example",
+        "install",
+        "build",
+        "deprecation",
+        "migration",
+        "compatibility",
+        "warning",
+    )
+    private_context_terms = ("private", "credentials", "account", "manual review", "design", "brand")
+    return any(term in text for term in proof_terms) and not any(term in text for term in private_context_terms)
 
 def _parse_dt(value: Any) -> datetime | None:
     if not value:

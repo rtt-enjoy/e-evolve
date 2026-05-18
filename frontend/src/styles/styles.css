@@ -90,7 +90,11 @@ textarea {
   }
 
   .view-switch {
-    @apply inline-grid grid-cols-1 overflow-hidden rounded-lg border border-line bg-panel2 p-1 sm:grid-cols-3;
+    @apply inline-grid grid-cols-1 overflow-hidden rounded-lg border border-line bg-panel2 p-1;
+  }
+
+  .view-switch.with-offline {
+    @apply sm:grid-cols-3;
   }
 
   .view-switch button {
@@ -99,6 +103,22 @@ textarea {
 
   .view-switch button.active {
     @apply bg-accent text-ink;
+  }
+
+  .mode-strip {
+    @apply inline-flex h-10 items-center gap-1 rounded-lg border border-line bg-panel2 p-1 text-xs font-semibold text-soft;
+  }
+
+  .mode-strip span {
+    @apply inline-flex h-8 items-center rounded-md px-3;
+  }
+
+  .mode-strip span.active {
+    @apply bg-green text-ink;
+  }
+
+  .mode-strip.offline span.active {
+    @apply bg-accent;
   }
 
   .phase-card {

@@ -18,6 +18,9 @@ pnpm install
 pnpm dev
 ```
 
+Local dev shows the offline agent screens by default. Those screens are hidden
+from production builds unless `VITE_ENABLE_OFFLINE_AGENT_UI=1` is set.
+
 ## Build For GitHub Pages
 
 ```bash

@@ -1,16 +1,19 @@
 import { BarChart3, Bot, Building2, Clock3, ExternalLink, GitBranch, RefreshCw, ShieldCheck, Sparkles, TerminalSquare } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { DashboardPage } from './dashboard/DashboardPage';
-import { SuggestionPage } from './suggestions/SuggestionPage';
-import { SubmitBusinessPage } from './SubmitBusinessPage';
-import { Banner, Pill } from './common';
+import { Banner, Empty, Pill } from './common';
 import { fetchStatus } from '../services/status';
 import { buildHealth, buildIssues, buildReadiness } from '../utils/dashboard';
-import { buildAutomationSuggestions, buildSuggestionStats } from '../utils/suggestions';
 import { ageLabel, formatDate } from '../utils/format';
 import type { Status } from '../types/status';
 
 type View = 'dashboard' | 'suggestions' | 'submit-business';
+declare const __OFFLINE_AGENT_MODE__: boolean;
+
+const offlineAgentMode = __OFFLINE_AGENT_MODE__;
+const OfflineAgentView = offlineAgentMode
+  ? lazy(() => import('./OfflineAgentView').then((module) => ({ default: module.OfflineAgentView })))
+  : null;
 
 const emptyStatus: Status = {
   active_features: [],
@@ -27,8 +30,8 @@ export function App() {
   const [lastPoll, setLastPoll] = useState<Date | null>(null);
   const [loadError, setLoadError] = useState('');
   const [view, setView] = useState<View>(() => {
-    if (window.location.hash === '#suggestions') return 'suggestions';
-    if (window.location.hash === '#submit-business') return 'submit-business';
+    if (offlineAgentMode && window.location.hash === '#suggestions') return 'suggestions';
+    if (offlineAgentMode && window.location.hash === '#submit-business') return 'submit-business';
     return 'dashboard';
   });
 
@@ -53,10 +56,9 @@ export function App() {
   const issues = useMemo(() => buildIssues(status), [status]);
   const readiness = useMemo(() => buildReadiness(status), [status]);
   const health = useMemo(() => buildHealth(status, issues, readiness.percent), [status, issues, readiness.percent]);
-  const suggestions = useMemo(() => buildAutomationSuggestions(status), [status]);
-  const suggestionStats = useMemo(() => buildSuggestionStats(suggestions), [suggestions]);
 
   function changeView(nextView: View) {
+    if (!offlineAgentMode && nextView !== 'dashboard') return;
     setView(nextView);
     const hash = nextView === 'suggestions' ? '#suggestions' : nextView === 'submit-business' ? '#submit-business' : window.location.pathname;
     window.history.replaceState(null, '', hash);
@@ -75,20 +77,30 @@ export function App() {
             </div>
             <h1 className="text-3xl font-semibold tracking-normal md:text-5xl">E-Evolve Dashboard</h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-soft">
-              Live operations console for the hourly evolution cycle, earning modules, payout readiness, and owner action queue.
+              {offlineAgentMode
+                ? 'Local operations console with offline agent tools, earning research, and owner action queues.'
+                : 'Online status console for the hourly research cycle, readiness, and public run history.'}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <div className="view-switch" aria-label="Dashboard view">
+            <div className={`mode-strip ${offlineAgentMode ? 'offline' : ''}`} aria-label="Frontend mode">
+              <span className="active">online</span>
+              {offlineAgentMode ? <span>offline agents</span> : null}
+            </div>
+            <div className={`view-switch ${offlineAgentMode ? 'with-offline' : ''}`} aria-label="Dashboard view">
               <button className={view === 'dashboard' ? 'active' : ''} onClick={() => changeView('dashboard')} type="button">
                 <BarChart3 size={15} /> dashboard
               </button>
-              <button className={view === 'suggestions' ? 'active' : ''} onClick={() => changeView('suggestions')} type="button">
-                <Sparkles size={15} /> suggestions {suggestionStats.readyCount}/{suggestionStats.total}
-              </button>
-              <button className={view === 'submit-business' ? 'active' : ''} onClick={() => changeView('submit-business')} type="button">
-                <Building2 size={15} /> submit business
-              </button>
+              {offlineAgentMode ? (
+                <>
+                  <button className={view === 'suggestions' ? 'active' : ''} onClick={() => changeView('suggestions')} type="button">
+                    <Sparkles size={15} /> suggestions
+                  </button>
+                  <button className={view === 'submit-business' ? 'active' : ''} onClick={() => changeView('submit-business')} type="button">
+                    <Building2 size={15} /> submit business
+                  </button>
+                </>
+              ) : null}
             </div>
             <button className="icon-button" onClick={load} aria-label="Refresh status" title="Refresh status">
               <RefreshCw size={18} />
@@ -102,10 +114,10 @@ export function App() {
       <main className="mx-auto max-w-7xl px-5 py-6">
         {loadError ? <Banner tone="bad" text={`Dashboard data load failed: ${loadError}`} /> : null}
 
-        {view === 'suggestions' ? (
-          <SuggestionPage status={status} suggestions={suggestions} stats={suggestionStats} />
-        ) : view === 'submit-business' ? (
-          <SubmitBusinessPage />
+        {offlineAgentMode && OfflineAgentView && (view === 'suggestions' || view === 'submit-business') ? (
+          <Suspense fallback={<Empty text="Loading offline agent tools." />}>
+            <OfflineAgentView status={status} view={view} />
+          </Suspense>
         ) : (
           <DashboardPage status={status} />
         )}

@@ -287,8 +287,8 @@
         "source": "local-playbook",
         "score": 94,
         "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "reason": "clean-checkout install/build proof fits automated AI patching; template compatibility fixes are easy for maintainers to review",
+        "next_step": "Pick one starter repo with a failing quickstart, capture the install/build error, patch the dependency or command, and offer the cleanup at a fixed price.",
         "pursued": false,
         "archived_at": null
       },

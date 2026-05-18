@@ -390,6 +390,9 @@ def _reason(text: str, labels: list[str], value: float) -> str:
     parts: list[str] = []
     if value:
         parts.append(f"visible or inferred value around ${value:.2f}")
+    if _is_starter_template_lead(text):
+        parts.append("clean-checkout install/build proof fits automated AI patching")
+        parts.append("template compatibility fixes are easy for maintainers to review")
     if _is_ai_automatable(text):
         parts.append("public proof makes this suitable for automated AI patching")
     if _is_announcement_maintenance_lead(text):
@@ -411,6 +414,8 @@ def _reason(text: str, labels: list[str], value: float) -> str:
 def _next_step(text: str) -> str:
     if _is_announcement_maintenance_lead(text):
         return "Inspect existing admin/RBAC/env docs, then patch the announcement and maintenance-mode paths with demo proof."
+    if _is_starter_template_lead(text):
+        return "Pick one starter repo with a failing quickstart, capture the install/build error, patch the dependency or command, and offer the cleanup at a fixed price."
     if "bounty" in text:
         return "Skip unless the issue also has public reproduction steps the AI agent can patch and verify automatically."
     if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
@@ -428,6 +433,9 @@ def _has_any(text: str, terms: tuple[str, ...]) -> bool:
 
 def _is_announcement_maintenance_lead(text: str) -> bool:
     return "notification" in text and "announcements" in text and "maintenance mode" in text
+
+def _is_starter_template_lead(text: str) -> bool:
+    return "starter" in text and "template" in text and _has_any(text, ("quickstart", "install", "build"))
 
 def _is_ai_automatable(text: str) -> bool:
     proof_terms = (

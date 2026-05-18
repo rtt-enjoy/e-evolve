@@ -47,8 +47,8 @@ Daily target: $10.00
 1. Starter template compatibility repair
    - Score: 94/100
    - Value signal: $0.00
-   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+   - Why: clean-checkout install/build proof fits automated AI patching; template compatibility fixes are easy for maintainers to review
+   - Next: Pick one starter repo with a failing quickstart, capture the install/build error, patch the dependency or command, and offer the cleanup at a fixed price.
 2. Package migration cleanup for small Python projects
    - Score: 86/100
    - Value signal: $0.00

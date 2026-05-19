@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-18T23:31:46.582438+00:00",
-  "total_runs": 558,
+  "last_run": "2026-05-19T04:34:03.522928+00:00",
+  "total_runs": 559,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -19,7 +19,8 @@
     "last_cycle_usd": 0.0,
     "week_started": "2026-05-18",
     "breakdown": {
-      "dev.to": 0.08
+      "dev.to": 0.08,
+      "code_techs": 0.0
     },
     "history": [
       0.02,
@@ -51,7 +52,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 65,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -158,21 +170,32 @@
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "Starter template compatibility repair",
-        "url": "",
-        "source": "local-playbook",
-        "score": 94,
-        "estimated_value_usd": 0.0,
-        "reason": "clean-checkout install/build proof fits automated AI patching; template compatibility fixes are easy for maintainers to review",
-        "next_step": "Pick one starter repo with a failing quickstart, capture the install/build error, patch the dependency or command, and offer the cleanup at a fixed price.",
+        "title": "[tracking] SDK \u6cbb\u7406\uff1apublic SDK \u7eaa\u5f8b + consumer-compat CI\uff08\u7f18\u8d77\uff1abackend 502 incident\uff09",
+        "url": "https://github.com/acnlabs/ACN/issues/73",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Package migration cleanup for small Python projects",
-        "url": "",
-        "source": "local-playbook",
-        "score": 86,
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/rudolph-ito/chily-games/issues/298",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/CSSUoB/TeX-Bot-Py-V2/issues/437",
+        "source": "github",
+        "score": 100,
         "estimated_value_usd": 0.0,
         "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
         "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
@@ -180,10 +203,10 @@
         "archived_at": null
       },
       {
-        "title": "Deprecated GitHub Actions cleanup",
-        "url": "",
-        "source": "local-playbook",
-        "score": 86,
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/dsi-icl/optimise/issues/1364",
+        "source": "github",
+        "score": 100,
         "estimated_value_usd": 0.0,
         "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
         "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
@@ -191,24 +214,46 @@
         "archived_at": null
       },
       {
-        "title": "Flaky test triage for tiny open-source maintainers",
-        "url": "",
-        "source": "local-playbook",
-        "score": 64,
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/dvcol/trakt-extension/issues/2",
+        "source": "github",
+        "score": 100,
         "estimated_value_usd": 0.0,
         "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Broken README examples in niche SDK repos",
-        "url": "",
-        "source": "local-playbook",
-        "score": 60,
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/muratkeremozcan/redocly-ref-flat-openapi-spec/issues/1",
+        "source": "github",
+        "score": 100,
         "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; working docs convert into trust quickly",
-        "next_step": "Run the documented example from a clean checkout and submit the corrected command or snippet.",
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/AlexRogalskiy/github-action-screenshots/issues/1",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/aminya/setup-cpp/issues/352",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
         "pursued": false,
         "archived_at": null
       }
@@ -248,7 +293,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-05-18T03:34:09.630940+00:00"
+    "last_refresh_at": "2026-05-19T04:34:04.817349+00:00"
   },
   "configured_github_secrets": [
     "GEMINI_API_KEY",

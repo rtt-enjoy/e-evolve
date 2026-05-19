@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-05-18T03:34:09.632935+00:00
+Refreshed: 2026-05-19T04:34:04.817349+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -44,28 +44,43 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. Starter template compatibility repair
-   - Score: 94/100
-   - Value signal: $0.00
-   - Why: clean-checkout install/build proof fits automated AI patching; template compatibility fixes are easy for maintainers to review
-   - Next: Pick one starter repo with a failing quickstart, capture the install/build error, patch the dependency or command, and offer the cleanup at a fixed price.
-2. Package migration cleanup for small Python projects
-   - Score: 86/100
+1. [[tracking] SDK 治理：public SDK 纪律 + consumer-compat CI（缘起：backend 502 incident）](https://github.com/acnlabs/ACN/issues/73)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+2. [Dependency Dashboard](https://github.com/rudolph-ito/chily-games/issues/298)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+3. [Dependency Dashboard](https://github.com/CSSUoB/TeX-Bot-Py-V2/issues/437)
+   - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-3. Deprecated GitHub Actions cleanup
-   - Score: 86/100
+4. [Dependency Dashboard](https://github.com/dsi-icl/optimise/issues/1364)
+   - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-4. Flaky test triage for tiny open-source maintainers
-   - Score: 64/100
+5. [Dependency Dashboard](https://github.com/dvcol/trakt-extension/issues/2)
+   - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
-   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
-5. Broken README examples in niche SDK repos
-   - Score: 60/100
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+6. [Dependency Dashboard](https://github.com/muratkeremozcan/redocly-ref-flat-openapi-spec/issues/1)
+   - Score: 100/100
    - Value signal: $0.00
-   - Why: public proof makes this suitable for automated AI patching; working docs convert into trust quickly
-   - Next: Run the documented example from a clean checkout and submit the corrected command or snippet.
+   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+7. [Dependency Dashboard](https://github.com/AlexRogalskiy/github-action-screenshots/issues/1)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+8. [Dependency Dashboard](https://github.com/aminya/setup-cpp/issues/352)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.

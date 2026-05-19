@@ -2,6 +2,7 @@ __pycache__/
 node_modules/
 *.tsbuildinfo
 frontend-preview-codex*.log
+run-local*.log
 *.pyc
 *.pyo
 .pytest_cache/

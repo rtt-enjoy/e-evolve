@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-19T19:18:06.011808+00:00",
-  "total_runs": 563,
+  "last_run": "2026-05-19T21:46:41.451210+00:00",
+  "total_runs": 564,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -70,7 +70,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 4,
+  "last_cycle_seconds": 1,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",

@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-05-19T04:34:04.817349+00:00
+Refreshed: 2026-05-20T04:37:26.554517+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -44,42 +44,42 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. [[tracking] SDK 治理：public SDK 纪律 + consumer-compat CI（缘起：backend 502 incident）](https://github.com/acnlabs/ACN/issues/73)
+1. [Dependency Dashboard](https://github.com/padok-team/yatas-aws/issues/4)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-2. [Dependency Dashboard](https://github.com/rudolph-ito/chily-games/issues/298)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-3. [Dependency Dashboard](https://github.com/CSSUoB/TeX-Bot-Py-V2/issues/437)
+2. [LTS 2.555.3 release checklist](https://github.com/jenkins-infra/release/issues/902)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-4. [Dependency Dashboard](https://github.com/dsi-icl/optimise/issues/1364)
+3. [Set up continuous integration: run the pytest suite on every push and PR](https://github.com/UCO-OpResearch/lysis/issues/39)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-5. [Dependency Dashboard](https://github.com/dvcol/trakt-extension/issues/2)
+4. [Dependency Dashboard](https://github.com/pact-foundation/pact-python/issues/434)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-6. [Dependency Dashboard](https://github.com/muratkeremozcan/redocly-ref-flat-openapi-spec/issues/1)
+5. [Dependency Dashboard](https://github.com/GermanCoding/SyncTrayzor/issues/25)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-7. [Dependency Dashboard](https://github.com/AlexRogalskiy/github-action-screenshots/issues/1)
+6. [Dependency Dashboard](https://github.com/pimpmfl/ragemp-ts/issues/32)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-8. [Dependency Dashboard](https://github.com/aminya/setup-cpp/issues/352)
+7. [Dependency Dashboard](https://github.com/5app/memoize/issues/31)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+8. [Dependency Dashboard](https://github.com/akvorado/akvorado/issues/2255)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept

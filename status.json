@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-19T23:33:29.188697+00:00",
-  "total_runs": 565,
+  "last_run": "2026-05-20T04:37:25.365276+00:00",
+  "total_runs": 566,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -52,7 +52,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -70,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 65,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -159,8 +170,8 @@
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "[tracking] SDK \u6cbb\u7406\uff1apublic SDK \u7eaa\u5f8b + consumer-compat CI\uff08\u7f18\u8d77\uff1abackend 502 incident\uff09",
-        "url": "https://github.com/acnlabs/ACN/issues/73",
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/padok-team/yatas-aws/issues/4",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
@@ -170,19 +181,19 @@
         "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/rudolph-ito/chily-games/issues/298",
+        "title": "LTS 2.555.3 release checklist",
+        "url": "https://github.com/jenkins-infra/release/issues/902",
         "source": "github",
         "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
         "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/CSSUoB/TeX-Bot-Py-V2/issues/437",
+        "title": "Set up continuous integration: run the pytest suite on every push and PR",
+        "url": "https://github.com/UCO-OpResearch/lysis/issues/39",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -193,7 +204,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/dsi-icl/optimise/issues/1364",
+        "url": "https://github.com/pact-foundation/pact-python/issues/434",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -204,7 +215,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/dvcol/trakt-extension/issues/2",
+        "url": "https://github.com/GermanCoding/SyncTrayzor/issues/25",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -215,7 +226,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/muratkeremozcan/redocly-ref-flat-openapi-spec/issues/1",
+        "url": "https://github.com/pimpmfl/ragemp-ts/issues/32",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -226,7 +237,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/AlexRogalskiy/github-action-screenshots/issues/1",
+        "url": "https://github.com/5app/memoize/issues/31",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -237,7 +248,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/aminya/setup-cpp/issues/352",
+        "url": "https://github.com/akvorado/akvorado/issues/2255",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -282,7 +293,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-05-19T04:34:04.817349+00:00"
+    "last_refresh_at": "2026-05-20T04:37:26.554517+00:00"
   },
   "configured_github_secrets": [
     "GEMINI_API_KEY",

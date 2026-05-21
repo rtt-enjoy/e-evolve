@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-21T00:18:47.472989+00:00",
-  "total_runs": 573,
+  "last_run": "2026-05-21T05:19:47.704590+00:00",
+  "total_runs": 574,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -52,7 +52,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -70,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 2,
+  "last_cycle_seconds": 64,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -159,8 +170,8 @@
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/padok-team/yatas-aws/issues/4",
+        "title": "[1.28.1] Gateway API BackendTLSPolicy cross-namespace ConfigMap CAs intermittently fail SDS sync (invalid:// WARMING)",
+        "url": "https://github.com/istio/istio/issues/59021",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
@@ -170,19 +181,8 @@
         "archived_at": null
       },
       {
-        "title": "LTS 2.555.3 release checklist",
-        "url": "https://github.com/jenkins-infra/release/issues/902",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Set up continuous integration: run the pytest suite on every push and PR",
-        "url": "https://github.com/UCO-OpResearch/lysis/issues/39",
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/camptocamp/github-app-geo-project/issues/31",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -193,7 +193,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/pact-foundation/pact-python/issues/434",
+        "url": "https://github.com/X-oss-byte/Nextjs/issues/10",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -204,7 +204,40 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/GermanCoding/SyncTrayzor/issues/25",
+        "url": "https://github.com/abyssparanoia/application-boilerplate/issues/729",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "\ud83e\ude7a Caretaker self-heal: Config error in caretaker: Process completed with exit code 1.",
+        "url": "https://github.com/ianlintner/flashcards/issues/29",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "\ud83e\ude7a Caretaker self-heal: Unknown caretaker failure: Process completed with exit code 127.",
+        "url": "https://github.com/ianlintner/flashcards/issues/37",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "\ud83e\ude7a Caretaker self-heal: Unknown caretaker failure: Process completed with exit code 127.",
+        "url": "https://github.com/ianlintner/kubernetes-apply-vscode/issues/39",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -215,29 +248,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/pimpmfl/ragemp-ts/issues/32",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/5app/memoize/issues/31",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/akvorado/akvorado/issues/2255",
+        "url": "https://github.com/finsite/sentiment_data_poller/issues/1",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -282,7 +293,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-05-20T04:37:26.554517+00:00"
+    "last_refresh_at": "2026-05-21T05:19:48.701471+00:00"
   },
   "configured_github_secrets": [
     "GEMINI_API_KEY",

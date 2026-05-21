@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-05-20T04:37:26.554517+00:00
+Refreshed: 2026-05-21T05:19:48.701471+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -44,42 +44,42 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. [Dependency Dashboard](https://github.com/padok-team/yatas-aws/issues/4)
+1. [[1.28.1] Gateway API BackendTLSPolicy cross-namespace ConfigMap CAs intermittently fail SDS sync (invalid:// WARMING)](https://github.com/istio/istio/issues/59021)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-2. [LTS 2.555.3 release checklist](https://github.com/jenkins-infra/release/issues/902)
+2. [Dependency Dashboard](https://github.com/camptocamp/github-app-geo-project/issues/31)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-3. [Set up continuous integration: run the pytest suite on every push and PR](https://github.com/UCO-OpResearch/lysis/issues/39)
+3. [Dependency Dashboard](https://github.com/X-oss-byte/Nextjs/issues/10)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-4. [Dependency Dashboard](https://github.com/pact-foundation/pact-python/issues/434)
+4. [Dependency Dashboard](https://github.com/abyssparanoia/application-boilerplate/issues/729)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-5. [Dependency Dashboard](https://github.com/GermanCoding/SyncTrayzor/issues/25)
+5. [🩺 Caretaker self-heal: Config error in caretaker: Process completed with exit code 1.](https://github.com/ianlintner/flashcards/issues/29)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-6. [Dependency Dashboard](https://github.com/pimpmfl/ragemp-ts/issues/32)
+6. [🩺 Caretaker self-heal: Unknown caretaker failure: Process completed with exit code 127.](https://github.com/ianlintner/flashcards/issues/37)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-7. [Dependency Dashboard](https://github.com/5app/memoize/issues/31)
+7. [🩺 Caretaker self-heal: Unknown caretaker failure: Process completed with exit code 127.](https://github.com/ianlintner/kubernetes-apply-vscode/issues/39)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-8. [Dependency Dashboard](https://github.com/akvorado/akvorado/issues/2255)
+8. [Dependency Dashboard](https://github.com/finsite/sentiment_data_poller/issues/1)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept

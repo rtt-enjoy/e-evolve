@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-22T05:13:37.884114+00:00",
-  "total_runs": 582,
+  "last_run": "2026-05-22T08:32:43.700251+00:00",
+  "total_runs": 583,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -52,7 +52,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -70,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 64,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -159,8 +170,8 @@
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "[1.28.1] Gateway API BackendTLSPolicy cross-namespace ConfigMap CAs intermittently fail SDS sync (invalid:// WARMING)",
-        "url": "https://github.com/istio/istio/issues/59021",
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/uPortal-Project/uPortal/issues/1874",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
@@ -171,7 +182,29 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/camptocamp/github-app-geo-project/issues/31",
+        "url": "https://github.com/DaSchTour/dasch-ng/issues/20",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "feat!: remove all 0.1.0-rc deprecated APIs in 0.2.0",
+        "url": "https://github.com/kent8192/reinhardt-web/issues/4520",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/34j/jacobi-poly/issues/3",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -182,7 +215,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/X-oss-byte/Nextjs/issues/10",
+        "url": "https://github.com/ncontiero/dkcutter-django/issues/1280",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -193,40 +226,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/abyssparanoia/application-boilerplate/issues/729",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "\ud83e\ude7a Caretaker self-heal: Config error in caretaker: Process completed with exit code 1.",
-        "url": "https://github.com/ianlintner/flashcards/issues/29",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "\ud83e\ude7a Caretaker self-heal: Unknown caretaker failure: Process completed with exit code 127.",
-        "url": "https://github.com/ianlintner/flashcards/issues/37",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "\ud83e\ude7a Caretaker self-heal: Unknown caretaker failure: Process completed with exit code 127.",
-        "url": "https://github.com/ianlintner/kubernetes-apply-vscode/issues/39",
+        "url": "https://github.com/34j/array-api-negative-index/issues/3",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -237,7 +237,18 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/finsite/sentiment_data_poller/issues/1",
+        "url": "https://github.com/Allan-Nava/Go-DDD-Scaffold/issues/22",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/ntnyq/taro-define-config/issues/13",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -282,7 +293,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-05-21T05:19:48.701471+00:00"
+    "last_refresh_at": "2026-05-22T08:32:44.388922+00:00"
   },
   "configured_github_secrets": [
     "GEMINI_API_KEY",

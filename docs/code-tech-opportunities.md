@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-05-21T05:19:48.701471+00:00
+Refreshed: 2026-05-22T08:32:44.388922+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -44,42 +44,42 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. [[1.28.1] Gateway API BackendTLSPolicy cross-namespace ConfigMap CAs intermittently fail SDS sync (invalid:// WARMING)](https://github.com/istio/istio/issues/59021)
+1. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal/issues/1874)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-2. [Dependency Dashboard](https://github.com/camptocamp/github-app-geo-project/issues/31)
+2. [Dependency Dashboard](https://github.com/DaSchTour/dasch-ng/issues/20)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+3. [feat!: remove all 0.1.0-rc deprecated APIs in 0.2.0](https://github.com/kent8192/reinhardt-web/issues/4520)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+4. [Dependency Dashboard](https://github.com/34j/jacobi-poly/issues/3)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-3. [Dependency Dashboard](https://github.com/X-oss-byte/Nextjs/issues/10)
+5. [Dependency Dashboard](https://github.com/ncontiero/dkcutter-django/issues/1280)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-4. [Dependency Dashboard](https://github.com/abyssparanoia/application-boilerplate/issues/729)
+6. [Dependency Dashboard](https://github.com/34j/array-api-negative-index/issues/3)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-5. [🩺 Caretaker self-heal: Config error in caretaker: Process completed with exit code 1.](https://github.com/ianlintner/flashcards/issues/29)
+7. [Dependency Dashboard](https://github.com/Allan-Nava/Go-DDD-Scaffold/issues/22)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-6. [🩺 Caretaker self-heal: Unknown caretaker failure: Process completed with exit code 127.](https://github.com/ianlintner/flashcards/issues/37)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-7. [🩺 Caretaker self-heal: Unknown caretaker failure: Process completed with exit code 127.](https://github.com/ianlintner/kubernetes-apply-vscode/issues/39)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-8. [Dependency Dashboard](https://github.com/finsite/sentiment_data_poller/issues/1)
+8. [Dependency Dashboard](https://github.com/ntnyq/taro-define-config/issues/13)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept

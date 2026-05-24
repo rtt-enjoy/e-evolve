@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-24T08:00:44.111401+00:00",
-  "total_runs": 604,
+  "last_run": "2026-05-24T10:12:26.948905+00:00",
+  "total_runs": 605,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -52,7 +52,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -70,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 65,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -160,7 +171,40 @@
     "opportunities": [
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/34j/jordan-form/issues/5",
+        "url": "https://github.com/uPortal-Project/uPortal/issues/1874",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/it-at-m/mucgpt/issues/10",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/jgeraigery/coremltools/issues/4",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/atlas-bi/Hub/issues/81",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -171,7 +215,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/luiz21goncalves/calculate-taxes-api/issues/16",
+        "url": "https://github.com/WillBooster/build-ts/issues/1",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -182,7 +226,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/wppconnect-team/wppconnect-team.github.io/issues/41",
+        "url": "https://github.com/midnightntwrk/midnight-docs/issues/834",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -193,7 +237,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/wayofdev/next-starter-tpl/issues/27",
+        "url": "https://github.com/airporting/ebics-parser/issues/3",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -204,40 +248,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/bcgov/fin-tbs-btf/issues/22",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/gustavomorinaga/next-plate/issues/20",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/CTristan/pi-model-selector/issues/5",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/ryands17/optimise-tests/issues/3",
+        "url": "https://github.com/entur/enki/issues/658",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -282,7 +293,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-05-23T09:14:09.235690+00:00"
+    "last_refresh_at": "2026-05-24T10:12:28.197441+00:00"
   },
   "configured_github_secrets": [
     "GEMINI_API_KEY",

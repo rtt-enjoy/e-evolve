@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-24T23:15:44.921735+00:00",
-  "total_runs": 614,
+  "last_run": "2026-05-25T00:15:58.194362+00:00",
+  "total_runs": 615,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -15,13 +15,10 @@
   "llm_provider": "gemini",
   "earnings": {
     "total_usd": 3.01,
-    "this_week_usd": 0.08,
+    "this_week_usd": 0.0,
     "last_cycle_usd": 0.0,
-    "week_started": "2026-05-18",
-    "breakdown": {
-      "dev.to": 0.08,
-      "code_techs": 0.0
-    },
+    "week_started": "2026-05-25",
+    "breakdown": {},
     "history": [
       0.02,
       0.02,

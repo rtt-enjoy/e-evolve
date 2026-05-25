@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-05-24T10:12:28.197441+00:00
+Refreshed: 2026-05-25T12:45:00.620149+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -44,42 +44,42 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal/issues/1874)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-2. [Dependency Dashboard](https://github.com/it-at-m/mucgpt/issues/10)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-3. [Dependency Dashboard](https://github.com/jgeraigery/coremltools/issues/4)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-4. [Dependency Dashboard](https://github.com/atlas-bi/Hub/issues/81)
+1. [[Sparkth] Code Refactoring](https://github.com/edly-io/sparkth/issues/344)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-5. [Dependency Dashboard](https://github.com/WillBooster/build-ts/issues/1)
+2. [Dependency Dashboard](https://github.com/teo-garcia/fastapi-template-monolith/issues/3)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-6. [Dependency Dashboard](https://github.com/midnightntwrk/midnight-docs/issues/834)
+3. [Dependency Dashboard](https://github.com/openequella/react-kaltura-simpleuploader/issues/128)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-7. [Dependency Dashboard](https://github.com/airporting/ebics-parser/issues/3)
+4. [Dependency Dashboard](https://github.com/wattanx/nuxt-i18n-bridge/issues/4)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-8. [Dependency Dashboard](https://github.com/entur/enki/issues/658)
+5. [Dependency Dashboard](https://github.com/bucketeer-io/node-server-sdk/issues/158)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+6. [Dependency Dashboard](https://github.com/gmsgowtham/react-native-code-highlighter/issues/4)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+7. [Dependency Dashboard](https://github.com/JessieFrance/repository-tracker/issues/16)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+8. [Dependency Dashboard](https://github.com/danielkov/single-package/issues/194)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept

@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-25T09:07:03.833978+00:00",
-  "total_runs": 617,
+  "last_run": "2026-05-25T12:44:59.286135+00:00",
+  "total_runs": 618,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -18,7 +18,9 @@
     "this_week_usd": 0.0,
     "last_cycle_usd": 0.0,
     "week_started": "2026-05-25",
-    "breakdown": {},
+    "breakdown": {
+      "code_techs": 0.0
+    },
     "history": [
       0.02,
       0.02,
@@ -49,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -67,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 65,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -156,41 +169,8 @@
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/uPortal-Project/uPortal/issues/1874",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/it-at-m/mucgpt/issues/10",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/jgeraigery/coremltools/issues/4",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/atlas-bi/Hub/issues/81",
+        "title": "[Sparkth] Code Refactoring",
+        "url": "https://github.com/edly-io/sparkth/issues/344",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -201,7 +181,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/WillBooster/build-ts/issues/1",
+        "url": "https://github.com/teo-garcia/fastapi-template-monolith/issues/3",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -212,7 +192,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/midnightntwrk/midnight-docs/issues/834",
+        "url": "https://github.com/openequella/react-kaltura-simpleuploader/issues/128",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -223,7 +203,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/airporting/ebics-parser/issues/3",
+        "url": "https://github.com/wattanx/nuxt-i18n-bridge/issues/4",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -234,7 +214,40 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/entur/enki/issues/658",
+        "url": "https://github.com/bucketeer-io/node-server-sdk/issues/158",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/gmsgowtham/react-native-code-highlighter/issues/4",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/JessieFrance/repository-tracker/issues/16",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/danielkov/single-package/issues/194",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -279,7 +292,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-05-24T10:12:28.197441+00:00"
+    "last_refresh_at": "2026-05-25T12:45:00.620149+00:00"
   },
   "configured_github_secrets": [
     "GEMINI_API_KEY",

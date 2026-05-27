@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-05-26T16:52:34.542557+00:00
+Refreshed: 2026-05-27T19:33:42.516119+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -44,43 +44,43 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. [Dependency Dashboard](https://github.com/Adyen/adyen-android/issues/884)
+1. [Dependency Dashboard](https://github.com/ni/measurement-plugin-python/issues/475)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-2. [Dependency Dashboard](https://github.com/block/proto-fleet/issues/1)
+2. [Dependency Dashboard](https://github.com/fjanicki/nestjs-ddd/issues/5)
    - Score: 100/100
-   - Value signal: $0.00
-   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-3. [Dependency Dashboard](https://github.com/Altinn/app-lib-dotnet/issues/31)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-4. [Dependency Dashboard](https://github.com/finsite/stock-quant-factor/issues/1)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-5. [Dependency Dashboard](https://github.com/finsite/stock-tech-trend/issues/1)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-6. [v1.18 Endgame](https://github.com/dapr/dapr/issues/9856)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-7. [Dependency Dashboard](https://github.com/ni/nidaqmx-python/issues/689)
-   - Score: 96/100
-   - Value signal: $0.00
-   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-8. [Agent Relay: IAMGODIAM operating packet stabilization plan](https://github.com/IAMGODIAM/e5-agent-control-room/issues/2)
-   - Score: 92/100
    - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; CI/test work is concrete and easy for maintainers to accept
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+3. [Dependency Dashboard](https://github.com/X-oss-byte/Agama/issues/8)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+4. [Dependency Dashboard](https://github.com/Adyen/adyen-android/issues/884)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+5. [[Feat]: CLI discoverability, PATH docs, python -m skillware, and unified help](https://github.com/ARPAHLS/skillware/issues/135)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+6. [Dependency Dashboard](https://github.com/atlas-bi/Hub/issues/81)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+7. [Dependency Dashboard](https://github.com/ruancomelli/boiling-learning/issues/191)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+8. [Dependency Dashboard](https://github.com/esm-bundle/autopublish-template/issues/104)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.

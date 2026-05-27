@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-27T16:46:35.466961+00:00",
-  "total_runs": 633,
+  "last_run": "2026-05-27T19:33:41.403437+00:00",
+  "total_runs": 634,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -51,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 64,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -159,7 +170,7 @@
     "opportunities": [
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/Adyen/adyen-android/issues/884",
+        "url": "https://github.com/ni/measurement-plugin-python/issues/475",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
@@ -170,77 +181,77 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/block/proto-fleet/issues/1",
+        "url": "https://github.com/fjanicki/nestjs-ddd/issues/5",
         "source": "github",
         "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/Altinn/app-lib-dotnet/issues/31",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/finsite/stock-quant-factor/issues/1",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/finsite/stock-tech-trend/issues/1",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "v1.18 Endgame",
-        "url": "https://github.com/dapr/dapr/issues/9856",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/ni/nidaqmx-python/issues/689",
-        "source": "github",
-        "score": 96,
-        "estimated_value_usd": 0.0,
-        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Agent Relay: IAMGODIAM operating packet stabilization plan",
-        "url": "https://github.com/IAMGODIAM/e5-agent-control-room/issues/2",
-        "source": "github",
-        "score": 92,
         "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; CI/test work is concrete and easy for maintainers to accept",
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/X-oss-byte/Agama/issues/8",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/Adyen/adyen-android/issues/884",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "[Feat]: CLI discoverability, PATH docs, python -m skillware, and unified help",
+        "url": "https://github.com/ARPAHLS/skillware/issues/135",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/atlas-bi/Hub/issues/81",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/ruancomelli/boiling-learning/issues/191",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/esm-bundle/autopublish-template/issues/104",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
         "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
         "pursued": false,
         "archived_at": null
@@ -281,7 +292,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-05-26T16:52:34.542557+00:00"
+    "last_refresh_at": "2026-05-27T19:33:42.516119+00:00"
   },
   "configured_github_secrets": [
     "GEMINI_API_KEY",

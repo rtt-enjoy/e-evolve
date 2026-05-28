@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-28T17:02:37.399691+00:00",
-  "total_runs": 640,
+  "last_run": "2026-05-28T19:45:27.236753+00:00",
+  "total_runs": 641,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -51,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 66,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -159,7 +170,7 @@
     "opportunities": [
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/ni/measurement-plugin-python/issues/475",
+        "url": "https://github.com/nori-k/boilerplate/issues/1",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
@@ -169,19 +180,8 @@
         "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/fjanicki/nestjs-ddd/issues/5",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/X-oss-byte/Agama/issues/8",
+        "title": "\ud83d\udce6 Dependency Dashboard",
+        "url": "https://github.com/ohosvscode/arkTS/issues/43",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
@@ -202,8 +202,8 @@
         "archived_at": null
       },
       {
-        "title": "[Feat]: CLI discoverability, PATH docs, python -m skillware, and unified help",
-        "url": "https://github.com/ARPAHLS/skillware/issues/135",
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/jvllmr/fastapi-deferred-init/issues/1",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -214,7 +214,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/atlas-bi/Hub/issues/81",
+        "url": "https://github.com/blablatdinov/flake8-one-class/issues/1",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -225,7 +225,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/ruancomelli/boiling-learning/issues/191",
+        "url": "https://github.com/backstage/backstage/issues/22682",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -236,7 +236,18 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/esm-bundle/autopublish-template/issues/104",
+        "url": "https://github.com/dawlet-team/dawlet-poc/issues/692",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/Simon-He95/unplugin-v-bind/issues/3",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -281,7 +292,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-05-27T19:33:42.516119+00:00"
+    "last_refresh_at": "2026-05-28T19:45:28.527330+00:00"
   },
   "configured_github_secrets": [
     "GEMINI_API_KEY",

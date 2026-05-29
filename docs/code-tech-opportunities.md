@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-05-28T19:45:28.527330+00:00
+Refreshed: 2026-05-29T22:05:00.413134+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -44,42 +44,42 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. [Dependency Dashboard](https://github.com/nori-k/boilerplate/issues/1)
+1. [[Bug] Qwen3-TTS 0.6B TTS output is incorrect on Jetson unless Talker / CodePredictor / Code2Wav contracts are fixed](https://github.com/NVIDIA/TensorRT-Edge-LLM/issues/87)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-2. [📦 Dependency Dashboard](https://github.com/ohosvscode/arkTS/issues/43)
+2. [Dependency Dashboard](https://github.com/OpenPlainsInc/django-actinia/issues/20)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+3. [Dependency Dashboard](https://github.com/Opetushallitus/oppijanumerorekisteri/issues/369)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+4. [Epic: Documentation & User Guides](https://github.com/complytime-labs/complytime-core/issues/45)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-3. [Dependency Dashboard](https://github.com/Adyen/adyen-android/issues/884)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-4. [Dependency Dashboard](https://github.com/jvllmr/fastapi-deferred-init/issues/1)
+5. [Dependency Dashboard](https://github.com/finsite/stock-analysis-beta/issues/1)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-5. [Dependency Dashboard](https://github.com/blablatdinov/flake8-one-class/issues/1)
+6. [Dependency Dashboard](https://github.com/alixlahuec/zotero-roam/issues/42)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-6. [Dependency Dashboard](https://github.com/backstage/backstage/issues/22682)
+7. [Dependency Dashboard](https://github.com/adalinesimonian/node-adauth/issues/7)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-7. [Dependency Dashboard](https://github.com/dawlet-team/dawlet-poc/issues/692)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-8. [Dependency Dashboard](https://github.com/Simon-He95/unplugin-v-bind/issues/3)
+8. [Dependency Dashboard](https://github.com/Meemaw/react-micro-modal/issues/179)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept

@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-30T21:15:23.155506+00:00",
-  "total_runs": 659,
+  "last_run": "2026-05-30T22:15:28.050253+00:00",
+  "total_runs": 660,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -51,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 64,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -158,8 +169,19 @@
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "[Bug] Qwen3-TTS 0.6B TTS output is incorrect on Jetson unless Talker / CodePredictor / Code2Wav contracts are fixed",
-        "url": "https://github.com/NVIDIA/TensorRT-Edge-LLM/issues/87",
+        "title": "drivers: add a Databricks driver",
+        "url": "https://github.com/neilotoole/sq/issues/698",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 400.0,
+        "reason": "visible or inferred value around $400.00; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "refactor: restructure repository for AI-PMS production integration",
+        "url": "https://github.com/balacsegprec/aipms-rag-bootcamp/issues/22",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
@@ -170,7 +192,18 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/OpenPlainsInc/django-actinia/issues/20",
+        "url": "https://github.com/donmahallem/guenni/issues/631",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/bartsmykla/kuma/issues/573",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
@@ -181,29 +214,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/Opetushallitus/oppijanumerorekisteri/issues/369",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Epic: Documentation & User Guides",
-        "url": "https://github.com/complytime-labs/complytime-core/issues/45",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/finsite/stock-analysis-beta/issues/1",
+        "url": "https://github.com/billsioros/RoughGAN/issues/8",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -214,7 +225,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/alixlahuec/zotero-roam/issues/42",
+        "url": "https://github.com/blablatdinov/revive-code-bot/issues/22",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -225,7 +236,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/adalinesimonian/node-adauth/issues/7",
+        "url": "https://github.com/myOmikron/bnv-manager-v2/issues/58",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -236,7 +247,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/Meemaw/react-micro-modal/issues/179",
+        "url": "https://github.com/finsite/stock-tech-momentum/issues/1",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -281,7 +292,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-05-29T22:05:00.413134+00:00"
+    "last_refresh_at": "2026-05-30T22:15:28.682227+00:00"
   },
   "configured_github_secrets": [
     "GEMINI_API_KEY",

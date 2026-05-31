@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-05-31T22:14:37.996138+00:00",
-  "total_runs": 670,
+  "last_run": "2026-05-31T23:31:42.278834+00:00",
+  "total_runs": 671,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -51,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 64,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -158,19 +169,8 @@
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "drivers: add a Databricks driver",
-        "url": "https://github.com/neilotoole/sq/issues/698",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 400.0,
-        "reason": "visible or inferred value around $400.00; CI/test work is concrete and easy for maintainers to accept",
-        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "refactor: restructure repository for AI-PMS production integration",
-        "url": "https://github.com/balacsegprec/aipms-rag-bootcamp/issues/22",
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/hmcts/civil-citizen-ui/issues/1389",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
@@ -181,7 +181,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/donmahallem/guenni/issues/631",
+        "url": "https://github.com/hmcts/nfdiv-frontend/issues/3049",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
@@ -192,18 +192,18 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/bartsmykla/kuma/issues/573",
+        "url": "https://github.com/hmcts/cpp-context-sjp/issues/60",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/billsioros/RoughGAN/issues/8",
+        "title": "docs(init): /pipeline:init is hard to discover \u2014 absent from shipped release, not cross-referenced from doctor/docs",
+        "url": "https://github.com/rjskene/pipeline/issues/726",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -214,7 +214,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/blablatdinov/revive-code-bot/issues/22",
+        "url": "https://github.com/atlas-bi/Hub/issues/81",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -225,7 +225,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/myOmikron/bnv-manager-v2/issues/58",
+        "url": "https://github.com/williaby/PromptCraft/issues/289",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -236,7 +236,18 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/finsite/stock-tech-momentum/issues/1",
+        "url": "https://github.com/davidharrigan/home-ops/issues/656",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/finsite/stock-analysis-beta/issues/1",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -281,7 +292,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-05-30T22:15:28.682227+00:00"
+    "last_refresh_at": "2026-05-31T23:31:42.754071+00:00"
   },
   "configured_github_secrets": [
     "GEMINI_API_KEY",

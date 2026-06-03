@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-06-02T01:37:03.973105+00:00
+Refreshed: 2026-06-03T01:47:42.366195+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -44,17 +44,17 @@ Daily target: $10.00
 
 ## Ranked Leads
 
-1. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal/issues/1874)
+1. [Dependency Dashboard](https://github.com/GZTimeWalker/GZCTF/issues/466)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-2. [Dependency Dashboard](https://github.com/SchweizerischeBundesbahnen/strictdoc-service/issues/2)
+2. [Dependency Dashboard](https://github.com/angular/angular/issues/63112)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
-3. [Dependency Dashboard](https://github.com/Adyen/adyen-android/issues/884)
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+3. [[PRD] Epic: Auto-Update & Version Lifecycle](https://github.com/dsj1984/mandrel/issues/3491)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
@@ -64,22 +64,22 @@ Daily target: $10.00
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-5. [Phase 2 — Step 1: Create kicad-mcp repository and migrate product code](https://github.com/oaslananka/kicad-studio-kit/issues/286)
+5. [Dependency Dashboard](https://github.com/edgarrmondragon/citric/issues/283)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-6. [Dependency Dashboard](https://github.com/dex4er/js-sliding-window-rate-limiter/issues/58)
+6. [Dependency Dashboard](https://github.com/JamieTanna-Mend-testing/wrn-2075/issues/7)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-7. [Dependency Dashboard](https://github.com/spa5k/fastify-file-routes/issues/1)
+7. [Dependency Dashboard](https://github.com/groupultra/telegram-search/issues/46)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-8. [Dependency Dashboard](https://github.com/scratchfoundation/scratch-l10n/issues/194)
+8. [Dependency Dashboard](https://github.com/travi/commitlint-config-travi/issues/306)
    - Score: 100/100
    - Value signal: $0.00
    - Why: public proof makes this suitable for automated AI patching; CI/test work is concrete and easy for maintainers to accept

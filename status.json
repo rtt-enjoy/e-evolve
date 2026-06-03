@@ -1,7 +1,7 @@
 {
   "version": "1.32.13",
-  "last_run": "2026-06-02T23:09:07.460917+00:00",
-  "total_runs": 682,
+  "last_run": "2026-06-03T01:47:41.829126+00:00",
+  "total_runs": 683,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -51,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 64,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -159,7 +170,7 @@
     "opportunities": [
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/uPortal-Project/uPortal/issues/1874",
+        "url": "https://github.com/GZTimeWalker/GZCTF/issues/466",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
@@ -170,18 +181,18 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/SchweizerischeBundesbahnen/strictdoc-service/issues/2",
+        "url": "https://github.com/angular/angular/issues/63112",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/Adyen/adyen-android/issues/884",
+        "title": "[PRD] Epic: Auto-Update & Version Lifecycle",
+        "url": "https://github.com/dsj1984/mandrel/issues/3491",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
@@ -202,8 +213,8 @@
         "archived_at": null
       },
       {
-        "title": "Phase 2 \u2014 Step 1: Create kicad-mcp repository and migrate product code",
-        "url": "https://github.com/oaslananka/kicad-studio-kit/issues/286",
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/edgarrmondragon/citric/issues/283",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -214,7 +225,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/dex4er/js-sliding-window-rate-limiter/issues/58",
+        "url": "https://github.com/JamieTanna-Mend-testing/wrn-2075/issues/7",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -225,7 +236,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/spa5k/fastify-file-routes/issues/1",
+        "url": "https://github.com/groupultra/telegram-search/issues/46",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -236,7 +247,7 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/scratchfoundation/scratch-l10n/issues/194",
+        "url": "https://github.com/travi/commitlint-config-travi/issues/306",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
@@ -281,7 +292,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-06-02T01:37:03.973105+00:00"
+    "last_refresh_at": "2026-06-03T01:47:42.366195+00:00"
   },
   "configured_github_secrets": [
     "GEMINI_API_KEY",

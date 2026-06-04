@@ -10,7 +10,26 @@
     "max_items": 8,
     "min_score": 55,
     "auto_pursue": false,
-    "pursue_score_threshold": 75
+    "pursue_score_threshold": 75,
+    "community_searches": [
+      "looking for a simple tool to",
+      "anyone know a tool that can",
+      "need a script to automate",
+      "is there a free tool for",
+      "does anyone have a checklist",
+      "looking for a template for",
+      "small app that can export",
+      "need help fixing install error",
+      "quickstart fails",
+      "github actions deprecated warning"
+    ],
+    "outreach": {
+      "enabled": true,
+      "default_price_usd": 10.0,
+      "payment_label": "crypto",
+      "crypto_address_env": "USDT_WALLET_ADDRESS",
+      "fallback_payment_note": "Payment address is configured privately; add it manually before sending."
+    }
   },
   "research_policy": {
     "mode": "research_suggestions_only",

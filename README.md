@@ -86,6 +86,18 @@ CI failures, dependency migrations, broken examples, flaky tests, starter
 template repairs, deprecation cleanup, and niche package maintenance. Results
 are written to `docs/code-tech-opportunities.md`.
 
+The flow also checks free, read-only community search surfaces such as Hacker
+News Algolia for small requests like scripts, templates, checklists, and broken
+quickstarts. For each ranked lead it writes two owner-reviewed artifacts:
+
+- a Codex implementation prompt with the source URL, expected proof, and first
+  file/change guidance
+- a polite outreach draft with a fixed-price payment note, using the configured
+  public wallet address when present
+
+The bot never sends those drafts, comments on external issues, or requests
+payment automatically. The owner must review, edit, and send any outreach.
+
 The target is practical pipeline creation, for example finding enough small
 code-maintenance work to pursue `$10/day`. Discovery is not counted as earned
 money; confirmed earnings should still come from owner-confirmed payouts or
@@ -95,8 +107,9 @@ reconciliation. Disable it with `CODE_TECH_EARN_ENABLED=0` or tune it in
 The strategy deliberately looks where AI can do the boring part without private
 context: broken quickstarts in small SDKs, runtime drift after Python or Node
 releases, stale packaging metadata, ignored CI warnings, release-note gaps, and
-data import/export bugs in unflashy integrations. Each lead should have public
-proof and a bounded first fix before it deserves deep work.
+data import/export bugs in unflashy integrations. It also watches small public
+requests where a one-file asset can prove value quickly. Each lead should have
+public proof and a bounded first fix before it deserves deep work.
 
 ---
 
@@ -108,7 +121,10 @@ Only research/read-only modules run automatically. Legacy action modules remain 
 
 No secret required. Uses public GitHub issue search when available and falls
 back to a local playbook when the network is unavailable. It writes ranked
-suggestions only and does not comment on external issues.
+suggestions only and does not comment on external issues. Optional outreach
+drafts read the public payment address from the environment variable named by
+`config/strategy.json` under `code_techs.outreach.crypto_address_env`, which
+defaults to `USDT_WALLET_ADDRESS`.
 
 ---
 

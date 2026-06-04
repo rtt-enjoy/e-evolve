@@ -49,6 +49,18 @@ _DEFAULT_CONFIG = {
         "is:issue is:open \"Python 3.13\" \"compatibility\"",
         "is:issue is:open \"release notes\" \"breaking change\""
     ],
+    "community_searches": [
+        "looking for a simple tool to",
+        "anyone know a tool that can",
+        "need a script to automate",
+        "is there a free tool for",
+        "does anyone have a checklist",
+        "looking for a template for",
+        "small app that can export",
+        "need help fixing install error",
+        "quickstart fails",
+        "github actions deprecated warning"
+    ],
     "underserved_focus": [
         "failing CI with a small, reproducible fix",
         "dependency migration or deprecation cleanup",
@@ -76,7 +88,14 @@ _DEFAULT_CONFIG = {
         "Crowded prize or beginner issues where many contributors compete for low-value visibility.",
         "Unpaid speculative requests that need private context before value can be proven.",
         "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
-    ]
+    ],
+    "outreach": {
+        "enabled": True,
+        "default_price_usd": 10.0,
+        "payment_label": "crypto",
+        "crypto_address_env": "USDT_WALLET_ADDRESS",
+        "fallback_payment_note": "Payment address is configured privately; add it manually before sending."
+    }
 }
 
 _LOCAL_LEADS = [
@@ -131,6 +150,8 @@ class Opportunity:
     estimated_value_usd: float
     reason: str
     next_step: str
+    codex_prompt: str
+    outreach_draft: str
     pursued: bool = False
     archived_at: str | None = None
 
@@ -150,7 +171,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 
     max_items = max(1, int(cfg.get("max_items", 8) or 8))
     min_score = max(0, int(cfg.get("min_score", 55) or 55))
-    raw = _fetch_github_leads(cfg) or list(_LOCAL_LEADS)
+    raw = _fetch_online_leads(cfg) or list(_LOCAL_LEADS)
     opportunities = _rank(raw, cfg, max_items=max_items, min_score=min_score)
 
     pursued_count = 0
@@ -251,6 +272,51 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
             log.warning("[code_techs] GitHub search failed for %r: %s", query, exc)
     return _dedupe(leads)
 
+def _fetch_online_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
+    """Fetch public, read-only leads from free sources."""
+    leads = []
+    leads.extend(_fetch_github_leads(cfg))
+    leads.extend(_fetch_hn_leads(cfg))
+    return _dedupe(leads)
+
+def _fetch_hn_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
+    leads: list[dict[str, Any]] = []
+    headers = {"User-Agent": "e-evolve-code-techs"}
+    for query in cfg.get("community_searches", []):
+        try:
+            resp = requests.get(
+                "https://hn.algolia.com/api/v1/search_by_date",
+                params={
+                    "query": str(query),
+                    "tags": "story,comment",
+                    "hitsPerPage": 6,
+                },
+                headers=headers,
+                timeout=20,
+            )
+            if resp.status_code in (403, 429):
+                log.warning("[code_techs] HN search skipped (%s): %s", resp.status_code, query)
+                continue
+            resp.raise_for_status()
+            for item in resp.json().get("hits", []):
+                title = item.get("title") or item.get("story_title") or "Hacker News request"
+                body = item.get("comment_text") or item.get("story_text") or ""
+                object_id = item.get("objectID") or item.get("story_id")
+                story_id = item.get("story_id") or object_id
+                url = item.get("url") or (
+                    f"https://news.ycombinator.com/item?id={story_id}" if story_id else ""
+                )
+                leads.append({
+                    "title": title,
+                    "url": url,
+                    "source": "hacker-news",
+                    "body": _strip_html(str(body)),
+                    "labels": ["community-request", "free-api"],
+                })
+        except Exception as exc:
+            log.warning("[code_techs] HN search failed for %r: %s", query, exc)
+    return leads
+
 def _dedupe(leads: list[dict[str, Any]]) -> list[dict[str, Any]]:
     seen: set[str] = set()
     out: list[dict[str, Any]] = []
@@ -282,14 +348,19 @@ def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_
         score = _score(text, labels, value)
         if score < min_score and lead.get("source") != "local-playbook":
             continue
+        title_for_prompt = title[:140] or "untitled code-tech lead"
+        reason = _reason(text, labels, value)
+        next_step = _next_step(text)
         ranked.append(Opportunity(
-            title=title[:140] or "untitled code-tech lead",
+            title=title_for_prompt,
             url=str(lead.get("url", "")),
             source=str(lead.get("source", "unknown")),
             score=score,
             estimated_value_usd=value,
-            reason=_reason(text, labels, value),
-            next_step=_next_step(text),
+            reason=reason,
+            next_step=next_step,
+            codex_prompt=_codex_prompt(title_for_prompt, lead, reason, next_step),
+            outreach_draft=_outreach_draft(title_for_prompt, lead, value, cfg),
             pursued=False,
             archived_at=None
         ))
@@ -321,6 +392,10 @@ def _score(text: str, labels: list[str], value: float) -> int:
         score += 10
     if any(word in text for word in ("docs", "readme", "example", "quickstart")):
         score += 10
+    if any(word in text for word in ("checklist", "template", "script", "automate", "export", "convert")):
+        score += 10
+    if "community-request" in labels:
+        score += 8
     if any(word in text for word in ("import error", "install", "setup", "starter", "template")):
         score += 8
     if any(word in text for word in ("release notes", "breaking change", "changelog")):
@@ -338,6 +413,8 @@ def _extract_value(text: str, cfg: dict) -> float:
     target = float(cfg.get("daily_target_usd", 10.0) or 10.0)
     if any(word in text for word in ("paid", "fixed-price", "service")):
         return target
+    if any(word in text for word in ("need", "looking for", "does anyone have", "anyone know")):
+        return float(cfg.get("outreach", {}).get("default_price_usd", target) or target)
     return 0.0
 
 def _reason(text: str, labels: list[str], value: float) -> str:
@@ -408,9 +485,68 @@ def _is_ai_automatable(text: str) -> bool:
         "migration",
         "compatibility",
         "warning",
+        "checklist",
+        "template",
+        "script",
+        "automate",
+        "export",
+        "convert",
     )
     private_context_terms = ("private", "credentials", "account", "manual review", "design", "brand")
     return any(term in text for term in proof_terms) and not any(term in text for term in private_context_terms)
+
+def _codex_prompt(title: str, lead: dict[str, Any], reason: str, next_step: str) -> str:
+    url = str(lead.get("url", "")).strip()
+    body = str(lead.get("body", "")).strip()
+    excerpt = body[:900].replace("\n", " ")
+    return (
+        "Implement a small, verifiable solution for this public request.\n\n"
+        f"Lead: {title}\n"
+        f"Source: {lead.get('source', 'unknown')}\n"
+        f"URL: {url or 'no public URL'}\n"
+        f"Why this is suitable: {reason}\n"
+        f"First step: {next_step}\n\n"
+        "Constraints:\n"
+        "- Keep the first change narrowly scoped.\n"
+        "- Use free APIs or offline code paths when possible.\n"
+        "- Add or update a specific file that demonstrates the result.\n"
+        "- Include exact verification commands and output notes.\n"
+        "- Do not post externally or request payment automatically.\n\n"
+        f"Request excerpt: {excerpt or 'No excerpt available.'}"
+    )
+
+def _outreach_draft(title: str, lead: dict[str, Any], value: float, cfg: dict[str, Any]) -> str:
+    outreach_cfg = cfg.get("outreach", {}) or {}
+    if not outreach_cfg.get("enabled", True):
+        return ""
+    price = value or float(outreach_cfg.get("default_price_usd", 10.0) or 10.0)
+    payment_label = str(outreach_cfg.get("payment_label", "crypto")).strip() or "crypto"
+    payment_note = _payment_note(outreach_cfg)
+    url = str(lead.get("url", "")).strip()
+    return (
+        f"Hi, I found your request about \"{title}\" and can make a small working version.\n\n"
+        "I will keep it simple: one focused file/change, a short usage note, and proof that it runs. "
+        "If the result solves the request, the fixed price is "
+        f"${price:.2f} via {payment_label}.\n\n"
+        f"{payment_note}\n\n"
+        f"Reference: {url or 'add the original thread URL before sending'}"
+    )
+
+def _payment_note(outreach_cfg: dict[str, Any]) -> str:
+    env_name = str(outreach_cfg.get("crypto_address_env", "USDT_WALLET_ADDRESS")).strip()
+    address = os.getenv(env_name, "").strip() if env_name else ""
+    if address:
+        return f"Payment address ({env_name}): {address}"
+    return str(
+        outreach_cfg.get(
+            "fallback_payment_note",
+            "Payment address is configured privately; add it manually before sending.",
+        )
+    )
+
+def _strip_html(value: str) -> str:
+    value = re.sub(r"<[^>]+>", " ", value)
+    return re.sub(r"\s+", " ", value).strip()
 
 def _parse_dt(value: Any) -> datetime | None:
     if not value:
@@ -447,5 +583,13 @@ def _write_report(state: dict[str, Any]) -> None:
             f"   - Value signal: ${float(op.get('estimated_value_usd', 0) or 0):.2f}",
             f"   - Why: {op.get('reason', '')}",
             f"   - Next: {op.get('next_step', '')}",
+            "   - Codex request:",
+            _indent_block(str(op.get("codex_prompt", "")), "     "),
+            "   - Owner-reviewed outreach draft:",
+            _indent_block(str(op.get("outreach_draft", "")), "     "),
         ])
     _REPORT_FILE.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+def _indent_block(text: str, prefix: str) -> str:
+    cleaned = text.strip() or "(none)"
+    return "\n".join(f"{prefix}{line}" for line in cleaned.splitlines())

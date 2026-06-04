@@ -5,10 +5,12 @@ import logging
 import os
 import re
 import time
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote_plus
 
 import requests
 
@@ -61,6 +63,25 @@ _DEFAULT_CONFIG = {
         "quickstart fails",
         "github actions deprecated warning"
     ],
+    "reddit_subreddits": [
+        "smallbusiness",
+        "Entrepreneur",
+        "SaaS",
+        "learnpython",
+        "webdev",
+        "automation",
+        "excel",
+        "Notion"
+    ],
+    "reddit_searches": [
+        "looking for a tool",
+        "need a script",
+        "automate this",
+        "does anyone have a template",
+        "is there a free tool",
+        "quickstart fails"
+    ],
+    "max_reddit_requests": 24,
     "underserved_focus": [
         "failing CI with a small, reproducible fix",
         "dependency migration or deprecation cleanup",
@@ -277,6 +298,7 @@ def _fetch_online_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
     leads = []
     leads.extend(_fetch_github_leads(cfg))
     leads.extend(_fetch_hn_leads(cfg))
+    leads.extend(_fetch_reddit_leads(cfg))
     return _dedupe(leads)
 
 def _fetch_hn_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
@@ -315,6 +337,66 @@ def _fetch_hn_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
                 })
         except Exception as exc:
             log.warning("[code_techs] HN search failed for %r: %s", query, exc)
+    return leads
+
+def _fetch_reddit_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
+    leads: list[dict[str, Any]] = []
+    subreddits = _clean_list(cfg.get("reddit_subreddits", []))
+    queries = _clean_list(cfg.get("reddit_searches", [])) or _clean_list(cfg.get("community_searches", []))
+    max_requests = max(0, int(cfg.get("max_reddit_requests", 24) or 0))
+    if not subreddits or not queries or max_requests <= 0:
+        return leads
+
+    headers = {
+        "Accept": "application/atom+xml, application/rss+xml, text/xml;q=0.9",
+        "User-Agent": "e-evolve-code-techs/1.0 read-only lead research",
+    }
+    request_count = 0
+    for subreddit in subreddits:
+        for query in queries:
+            if request_count >= max_requests:
+                return leads
+            request_count += 1
+            url = (
+                f"https://www.reddit.com/r/{quote_plus(subreddit)}/search.rss"
+                f"?q={quote_plus(query)}&restrict_sr=1&sort=new"
+            )
+            try:
+                resp = requests.get(url, headers=headers, timeout=20)
+                if resp.status_code in (403, 429):
+                    log.warning("[code_techs] Reddit search skipped (%s): r/%s %s", resp.status_code, subreddit, query)
+                    continue
+                resp.raise_for_status()
+                leads.extend(_parse_reddit_rss(resp.text, subreddit))
+            except Exception as exc:
+                log.warning("[code_techs] Reddit search failed for r/%s %r: %s", subreddit, query, exc)
+    return leads
+
+def _parse_reddit_rss(feed_text: str, subreddit: str) -> list[dict[str, Any]]:
+    try:
+        root = ET.fromstring(feed_text)
+    except ET.ParseError:
+        return []
+
+    leads: list[dict[str, Any]] = []
+    for entry in root.findall(".//{*}entry"):
+        title = _xml_text(entry, "title")
+        body = _xml_text(entry, "content") or _xml_text(entry, "summary")
+        url = ""
+        for link in entry.findall("{*}link"):
+            href = str(link.attrib.get("href", "")).strip()
+            if href:
+                url = href
+                break
+        if not title:
+            continue
+        leads.append({
+            "title": title,
+            "url": url,
+            "source": f"reddit:r/{subreddit}",
+            "body": _strip_html(body),
+            "labels": ["reddit", "community-request", "free-rss"],
+        })
     return leads
 
 def _dedupe(leads: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -547,6 +629,12 @@ def _payment_note(outreach_cfg: dict[str, Any]) -> str:
 def _strip_html(value: str) -> str:
     value = re.sub(r"<[^>]+>", " ", value)
     return re.sub(r"\s+", " ", value).strip()
+
+def _xml_text(parent: ET.Element, tag: str) -> str:
+    element = parent.find(f"{{*}}{tag}")
+    if element is None or element.text is None:
+        return ""
+    return element.text.strip()
 
 def _parse_dt(value: Any) -> datetime | None:
     if not value:

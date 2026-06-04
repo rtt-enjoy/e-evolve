@@ -86,9 +86,12 @@ CI failures, dependency migrations, broken examples, flaky tests, starter
 template repairs, deprecation cleanup, and niche package maintenance. Results
 are written to `docs/code-tech-opportunities.md`.
 
-The flow also checks free, read-only community search surfaces such as Hacker
-News Algolia for small requests like scripts, templates, checklists, and broken
-quickstarts. For each ranked lead it writes two owner-reviewed artifacts:
+The flow also checks free, read-only community search surfaces such as Reddit
+subreddit RSS search and Hacker News Algolia for small requests like scripts,
+templates, checklists, and broken quickstarts. Reddit access is opportunistic:
+if public RSS search is blocked or rate-limited, the bot logs the skip and keeps
+the GitHub, HN, and local fallback queue moving. For each ranked lead it writes
+two owner-reviewed artifacts:
 
 - a Codex implementation prompt with the source URL, expected proof, and first
   file/change guidance
@@ -119,12 +122,13 @@ Only research/read-only modules run automatically. Legacy action modules remain 
 
 ### Code Techs (independent)
 
-No secret required. Uses public GitHub issue search when available and falls
-back to a local playbook when the network is unavailable. It writes ranked
-suggestions only and does not comment on external issues. Optional outreach
-drafts read the public payment address from the environment variable named by
-`config/strategy.json` under `code_techs.outreach.crypto_address_env`, which
-defaults to `USDT_WALLET_ADDRESS`.
+No secret required. Uses public GitHub issue search, Hacker News Algolia, and
+keyless Reddit subreddit RSS search when available, then falls back to a local
+playbook when the network is unavailable. It writes ranked suggestions only and
+does not comment on external issues. Optional outreach drafts read the public
+payment address from the environment variable named by `config/strategy.json`
+under `code_techs.outreach.crypto_address_env`, which defaults to
+`USDT_WALLET_ADDRESS`.
 
 ---
 

@@ -23,6 +23,25 @@
       "quickstart fails",
       "github actions deprecated warning"
     ],
+    "reddit_subreddits": [
+      "smallbusiness",
+      "Entrepreneur",
+      "SaaS",
+      "learnpython",
+      "webdev",
+      "automation",
+      "excel",
+      "Notion"
+    ],
+    "reddit_searches": [
+      "looking for a tool",
+      "need a script",
+      "automate this",
+      "does anyone have a template",
+      "is there a free tool",
+      "quickstart fails"
+    ],
+    "max_reddit_requests": 24,
     "outreach": {
       "enabled": true,
       "default_price_usd": 10.0,

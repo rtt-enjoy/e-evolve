@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 
 import bot.earnings as earnings_module
 from bot.earning.articles import _fallback_article, _publish_to_devto
-from bot.earning.code_techs import _outreach_draft, _rank
+from bot.earning.code_techs import _outreach_draft, _parse_reddit_rss, _rank
 from bot.earnings import update
 
 class TestArticleFallback(unittest.TestCase):
@@ -92,6 +92,23 @@ class TestCodeTechOpportunities(unittest.TestCase):
 
         self.assertIn("0xabc123", draft)
         self.assertIn("$15.00", draft)
+
+    def test_parse_reddit_rss_builds_community_lead(self):
+        feed = """<?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <entry>
+            <title>Need a script to automate invoices</title>
+            <link href="https://www.reddit.com/r/smallbusiness/comments/abc/request/" />
+            <content type="html">&lt;p&gt;Looking for a simple export tool.&lt;/p&gt;</content>
+          </entry>
+        </feed>"""
+
+        leads = _parse_reddit_rss(feed, "smallbusiness")
+
+        self.assertEqual(len(leads), 1)
+        self.assertEqual(leads[0]["source"], "reddit:r/smallbusiness")
+        self.assertIn("reddit", leads[0]["labels"])
+        self.assertIn("simple export tool", leads[0]["body"])
 
 if __name__ == "__main__":
     unittest.main()

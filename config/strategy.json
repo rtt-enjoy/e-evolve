@@ -11,7 +11,42 @@
     "min_score": 55,
     "auto_pursue": false,
     "pursue_score_threshold": 75,
+    "requirements": [
+      "Default to online research and the configured free/low-cost research LLM before local fallback.",
+      "Prefer leveraged remote-service work: productized services, retainers, async delivery, and AI-assisted systems.",
+      "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
+      "Require a deterministic command, log, docs page, or issue thread that an AI agent can use as proof.",
+      "Keep the first contribution small enough for the bot to patch, test, and explain automatically.",
+      "Do not count discovery or speculative upside as earnings."
+    ],
+    "reference_sources": [
+      {
+        "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
+        "url": "https://freedium-mirror.cfd/https://medium.com/@startup_Ideas/15-high-paying-remote-jobs-with-a-4-hour-work-week-and-how-people-actually-get-them-7e8d3562ff99",
+        "takeaway": "Use specialization, automation, productized services, retainers, async work, and AI-powered systems to detach income from hours."
+      }
+    ],
+    "remote_service_niches": [
+      "AI prompt and workflow consulting",
+      "no-code or low-code automation setup",
+      "AI customer-support knowledge base cleanup",
+      "analytics dashboard and reporting automation",
+      "SEO/content operations systems",
+      "CRM, spreadsheet, and data import/export automation",
+      "developer productivity and CI maintenance retainers",
+      "async technical documentation fixes",
+      "productized audit/checklist services",
+      "micro-SaaS setup, migration, and operations help"
+    ],
     "community_searches": [
+      "\"AI prompt consultant\" \"looking for\"",
+      "\"automation consultant\" \"need help\"",
+      "\"no-code automation\" \"looking for\"",
+      "\"AI workflow\" \"need help\"",
+      "\"customer support\" \"knowledge base\" \"cleanup\"",
+      "\"dashboard\" \"automate\" \"small business\"",
+      "\"CRM\" \"automate\" \"export\"",
+      "\"SEO\" \"content system\" \"automation\"",
       "looking for a simple tool to",
       "anyone know a tool that can",
       "need a script to automate",
@@ -34,6 +69,12 @@
       "Notion"
     ],
     "reddit_searches": [
+      "AI prompt consultant",
+      "automation consultant need help",
+      "no-code automation looking for",
+      "AI workflow need help",
+      "knowledge base cleanup",
+      "dashboard automate small business",
       "looking for a tool",
       "need a script",
       "automate this",

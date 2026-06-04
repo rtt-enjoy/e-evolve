@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 
 import bot.earnings as earnings_module
 from bot.earning.articles import _fallback_article, _publish_to_devto
-from bot.earning.code_techs import _outreach_draft, _parse_reddit_rss, _rank
+from bot.earning.code_techs import _online_ai_brief, _outreach_draft, _parse_reddit_rss, _rank, _reference_sources
 from bot.earnings import update
 
 class TestArticleFallback(unittest.TestCase):
@@ -109,6 +109,24 @@ class TestCodeTechOpportunities(unittest.TestCase):
         self.assertEqual(leads[0]["source"], "reddit:r/smallbusiness")
         self.assertIn("reddit", leads[0]["labels"])
         self.assertIn("simple export tool", leads[0]["body"])
+
+    def test_online_ai_brief_has_local_fallback_without_llm(self):
+        brief = _online_ai_brief(None, [], {"remote_service_niches": ["AI workflow consulting"]})
+
+        self.assertIn("No LLM client", brief["summary"])
+        self.assertTrue(brief["owner_actions"])
+
+    def test_reference_sources_keeps_article_takeaway(self):
+        refs = _reference_sources({
+            "reference_sources": [{
+                "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
+                "url": "https://example.com/article",
+                "takeaway": "Use leverage instead of hourly labor.",
+            }]
+        })
+
+        self.assertEqual(len(refs), 1)
+        self.assertIn("leverage", refs[0]["takeaway"])
 
 if __name__ == "__main__":
     unittest.main()

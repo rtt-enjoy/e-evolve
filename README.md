@@ -101,6 +101,14 @@ two owner-reviewed artifacts:
 The bot never sends those drafts, comments on external issues, or requests
 payment automatically. The owner must review, edit, and send any outreach.
 
+The flow now also tracks leverage-oriented remote service ideas inspired by
+the referenced "15 High-Paying Remote Jobs With a 4-Hour Work Week" article:
+AI prompt/workflow consulting, no-code automation, support knowledge-base
+cleanup, dashboard/reporting automation, CRM/data cleanup, async docs fixes,
+and productized audits. Fresh online leads are synthesized by the configured
+research LLM when available, with OpenRouter free models preferred for the
+research role.
+
 The target is practical pipeline creation, for example finding enough small
 code-maintenance work to pursue `$10/day`. Discovery is not counted as earned
 money; confirmed earnings should still come from owner-confirmed payouts or

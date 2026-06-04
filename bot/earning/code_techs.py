@@ -28,11 +28,32 @@ _DEFAULT_CONFIG = {
     "auto_pursue": False,
     "pursue_score_threshold": 75,
     "requirements": [
+        "Default to online research and the configured free/low-cost research LLM before local fallback.",
+        "Prefer leveraged remote-service work: productized services, retainers, async delivery, and AI-assisted systems.",
         "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
         "Prefer boring maintenance where the failure and expected fix are visible without private context.",
         "Require a deterministic command, log, docs page, or issue thread that an AI agent can use as proof.",
         "Keep the first contribution small enough for the bot to patch, test, and explain automatically.",
         "Do not count discovery or speculative upside as earnings."
+    ],
+    "reference_sources": [
+        {
+            "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
+            "url": "https://freedium-mirror.cfd/https://medium.com/@startup_Ideas/15-high-paying-remote-jobs-with-a-4-hour-work-week-and-how-people-actually-get-them-7e8d3562ff99",
+            "takeaway": "The viable path is not easy money; it is rare skill, specialization, automation, retainers, async work, and results-based delivery."
+        }
+    ],
+    "remote_service_niches": [
+        "AI prompt and workflow consulting",
+        "No-code or low-code automation setup",
+        "AI customer-support knowledge base cleanup",
+        "analytics dashboard and reporting automation",
+        "SEO/content operations systems",
+        "CRM, spreadsheet, and data import/export automation",
+        "developer productivity and CI maintenance retainers",
+        "async technical documentation fixes",
+        "productized audit/checklist services",
+        "micro-SaaS setup, migration, and operations help"
     ],
     "github_searches": [
         "is:issue is:open label:\"help wanted\" \"CI\"",
@@ -52,6 +73,14 @@ _DEFAULT_CONFIG = {
         "is:issue is:open \"release notes\" \"breaking change\""
     ],
     "community_searches": [
+        "\"AI prompt consultant\" \"looking for\"",
+        "\"automation consultant\" \"need help\"",
+        "\"no-code automation\" \"looking for\"",
+        "\"AI workflow\" \"need help\"",
+        "\"customer support\" \"knowledge base\" \"cleanup\"",
+        "\"dashboard\" \"automate\" \"small business\"",
+        "\"CRM\" \"automate\" \"export\"",
+        "\"SEO\" \"content system\" \"automation\"",
         "looking for a simple tool to",
         "anyone know a tool that can",
         "need a script to automate",
@@ -74,6 +103,12 @@ _DEFAULT_CONFIG = {
         "Notion"
     ],
     "reddit_searches": [
+        "AI prompt consultant",
+        "automation consultant need help",
+        "no-code automation looking for",
+        "AI workflow need help",
+        "knowledge base cleanup",
+        "dashboard automate small business",
         "looking for a tool",
         "need a script",
         "automate this",
@@ -83,6 +118,10 @@ _DEFAULT_CONFIG = {
     ],
     "max_reddit_requests": 24,
     "underserved_focus": [
+        "AI prompt/workflow consulting where public before-after examples prove value",
+        "productized automations that reduce repeated admin work for a small niche",
+        "retainer-friendly reporting, CRM, and support-ops cleanup",
+        "async deliverables that can be reviewed without meetings",
         "failing CI with a small, reproducible fix",
         "dependency migration or deprecation cleanup",
         "documentation examples that no longer run",
@@ -96,6 +135,8 @@ _DEFAULT_CONFIG = {
         "low-glamour data import/export bugs in small SaaS integrations"
     ],
     "strategy_playbook": [
+        "Use online sources first, then ask the research LLM to turn fresh demand signals into ranked owner actions.",
+        "Borrow the article's leverage principle: sell outcomes, systems, and repeatable assets instead of hours.",
         "Start from maintenance pain, not idea novelty.",
         "Use proof as the sales asset: failing command, failing log line, short before/after note.",
         "Favor repeatable chores that can become productized services.",
@@ -120,6 +161,20 @@ _DEFAULT_CONFIG = {
 }
 
 _LOCAL_LEADS = [
+    {
+        "title": "AI workflow audit for overloaded solo founders",
+        "url": "",
+        "source": "local-playbook",
+        "body": "Package a short audit that finds one repetitive inbox, CRM, or reporting workflow and returns a runnable automation plan plus prompt library.",
+        "labels": ["ai-workflow", "automation", "productized-service"]
+    },
+    {
+        "title": "Support knowledge base cleanup sprint",
+        "url": "",
+        "source": "local-playbook",
+        "body": "Use public help docs or exported FAQs to identify stale support answers, missing setup paths, and AI-ready snippets for a fixed-price cleanup.",
+        "labels": ["support-ops", "knowledge-base", "async"]
+    },
     {
         "title": "Package migration cleanup for small Python projects",
         "url": "",
@@ -206,6 +261,9 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
         "refresh_hours": refresh_hours,
         "opportunities": [op.__dict__ for op in opportunities],
         "requirements": _clean_list(cfg.get("requirements", [])),
+        "reference_sources": _reference_sources(cfg),
+        "remote_service_niches": _clean_list(cfg.get("remote_service_niches", [])),
+        "online_ai_brief": _online_ai_brief(llm, raw, cfg),
         "focus": _clean_list(cfg.get("underserved_focus", [])),
         "strategy_playbook": _clean_list(cfg.get("strategy_playbook", [])),
         "avoid_patterns": _clean_list(cfg.get("avoid_patterns", []))
@@ -454,6 +512,73 @@ def _clean_list(value: Any) -> list[str]:
         return []
     return [str(item).strip() for item in value if str(item).strip()]
 
+def _reference_sources(cfg: dict[str, Any]) -> list[dict[str, str]]:
+    out: list[dict[str, str]] = []
+    for item in cfg.get("reference_sources", []):
+        if not isinstance(item, dict):
+            continue
+        title = str(item.get("title", "")).strip()
+        if not title:
+            continue
+        out.append({
+            "title": title,
+            "url": str(item.get("url", "")).strip(),
+            "takeaway": str(item.get("takeaway", "")).strip(),
+        })
+    return out
+
+def _online_ai_brief(llm: Any, leads: list[dict[str, Any]], cfg: dict[str, Any]) -> dict[str, Any]:
+    """Use the configured research LLM to synthesize online lead signals."""
+    if llm is None:
+        return {
+            "summary": "No LLM client was available; queue used online searches plus local fallback heuristics.",
+            "owner_actions": [
+                "Review the ranked leads manually before doing local implementation work.",
+                "Add or refresh a free research LLM key to improve lead synthesis.",
+            ],
+        }
+
+    samples = []
+    for lead in leads[:12]:
+        samples.append({
+            "title": str(lead.get("title", ""))[:180],
+            "source": str(lead.get("source", ""))[:80],
+            "url": str(lead.get("url", ""))[:220],
+            "excerpt": str(lead.get("body", ""))[:500],
+            "labels": lead.get("labels", [])[:6] if isinstance(lead.get("labels"), list) else [],
+        })
+
+    prompt = {
+        "task": "Synthesize online demand signals into remote-service earning suggestions.",
+        "policy": "Research and draft suggestions only. Do not post, publish, trade, mint, request payment, or contact anyone.",
+        "reference_takeaways": _reference_sources(cfg),
+        "remote_service_niches": _clean_list(cfg.get("remote_service_niches", [])),
+        "lead_samples": samples,
+        "required_json_shape": {
+            "summary": "one concise paragraph",
+            "owner_actions": ["3-5 concrete next actions for the owner"],
+        },
+    }
+    try:
+        if hasattr(llm, "complete_json_for_role"):
+            data = llm.complete_json_for_role("research", json.dumps(prompt), max_tokens=900)
+        else:
+            data = llm.complete_json(json.dumps(prompt), max_tokens=900)
+    except Exception as exc:
+        log.warning("[code_techs] online AI brief failed: %s", exc)
+        return {
+            "summary": f"Online AI brief failed; used online search and local scoring only. Error: {str(exc)[:160]}",
+            "owner_actions": [
+                "Use the top ranked lead with the clearest public proof.",
+                "Keep local Codex implementation to one small deliverable.",
+            ],
+        }
+
+    return {
+        "summary": str(data.get("summary", "")).strip()[:900],
+        "owner_actions": _clean_list(data.get("owner_actions", []))[:5],
+    }
+
 def _score(text: str, labels: list[str], value: float) -> int:
     score = 30
     if value:
@@ -476,6 +601,12 @@ def _score(text: str, labels: list[str], value: float) -> int:
         score += 10
     if any(word in text for word in ("checklist", "template", "script", "automate", "export", "convert")):
         score += 10
+    if any(word in text for word in ("prompt consultant", "ai workflow", "automation consultant", "no-code automation")):
+        score += 16
+    if any(word in text for word in ("retainer", "productized", "async", "fixed price", "workflow audit")):
+        score += 12
+    if any(word in text for word in ("customer support", "knowledge base", "crm", "dashboard", "reporting")):
+        score += 10
     if "community-request" in labels:
         score += 8
     if any(word in text for word in ("import error", "install", "setup", "starter", "template")):
@@ -493,6 +624,8 @@ def _extract_value(text: str, cfg: dict) -> float:
     if amounts:
         return round(max(amounts), 2)
     target = float(cfg.get("daily_target_usd", 10.0) or 10.0)
+    if any(word in text for word in ("retainer", "consultant", "consulting", "audit", "productized")):
+        return max(target, float(cfg.get("outreach", {}).get("default_price_usd", target) or target))
     if any(word in text for word in ("paid", "fixed-price", "service")):
         return target
     if any(word in text for word in ("need", "looking for", "does anyone have", "anyone know")):
@@ -503,6 +636,12 @@ def _reason(text: str, labels: list[str], value: float) -> str:
     parts: list[str] = []
     if value:
         parts.append(f"visible or inferred value around ${value:.2f}")
+    if any(word in text for word in ("prompt consultant", "ai workflow", "automation consultant", "no-code automation")):
+        parts.append("matches leverage-style remote service demand from AI-assisted workflows")
+    if any(word in text for word in ("retainer", "productized", "async", "workflow audit")):
+        parts.append("can become a repeatable async offer instead of hourly labor")
+    if any(word in text for word in ("customer support", "knowledge base", "crm", "dashboard", "reporting")):
+        parts.append("ops cleanup has clear business value and bounded deliverables")
     if _is_starter_template_lead(text):
         parts.append("clean-checkout install/build proof fits automated AI patching")
         parts.append("template compatibility fixes are easy for maintainers to review")
@@ -525,6 +664,10 @@ def _reason(text: str, labels: list[str], value: float) -> str:
     return "; ".join(parts[:2])
 
 def _next_step(text: str) -> str:
+    if any(word in text for word in ("prompt consultant", "ai workflow", "automation consultant", "no-code automation")):
+        return "Find the public workflow, draft a one-page automation audit, and use the research LLM to propose a fixed-scope deliverable before any local build."
+    if any(word in text for word in ("customer support", "knowledge base", "crm", "dashboard", "reporting")):
+        return "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof."
     if _is_announcement_maintenance_lead(text):
         return "Inspect existing admin/RBAC/env docs, then patch the announcement and maintenance-mode paths with demo proof."
     if _is_starter_template_lead(text):
@@ -573,6 +716,14 @@ def _is_ai_automatable(text: str) -> bool:
         "automate",
         "export",
         "convert",
+        "prompt consultant",
+        "ai workflow",
+        "automation consultant",
+        "no-code automation",
+        "knowledge base",
+        "crm",
+        "dashboard",
+        "reporting",
     )
     private_context_terms = ("private", "credentials", "account", "manual review", "design", "brand")
     return any(term in text for term in proof_terms) and not any(term in text for term in private_context_terms)
@@ -650,6 +801,25 @@ def _write_report(state: dict[str, Any]) -> None:
     lines = ["# Code-Tech Earning Queue", "", f"Refreshed: {state.get('last_refresh_at')}", f"Daily target: ${float(state.get('daily_target_usd', 10.0) or 10.0):.2f}", "", "## Requirements", ""]
     for item in state.get("requirements", []):
         lines.append(f"- {item}")
+    lines.extend(["", "## Reference Sources", ""])
+    for item in state.get("reference_sources", []):
+        title = item.get("title", "untitled")
+        url = item.get("url", "")
+        takeaway = item.get("takeaway", "")
+        prefix = f"- [{title}]({url})" if url else f"- {title}"
+        lines.append(f"{prefix}: {takeaway}" if takeaway else prefix)
+    lines.extend(["", "## Remote Service Niches", ""])
+    for item in state.get("remote_service_niches", []):
+        lines.append(f"- {item}")
+    brief = state.get("online_ai_brief") or {}
+    if brief:
+        lines.extend(["", "## Online AI Brief", ""])
+        summary = str(brief.get("summary", "")).strip()
+        if summary:
+            lines.append(summary)
+            lines.append("")
+        for action in brief.get("owner_actions", []):
+            lines.append(f"- {action}")
     lines.extend(["", "## Underserved Focus", ""]) 
     for item in state.get("focus", []):
         lines.append(f"- {item}")

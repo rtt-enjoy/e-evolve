@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-06-04T05:07:36.429061+00:00
+Refreshed: 2026-06-05T08:52:50.187959+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,11 +31,12 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-Leveraging automation and specialization to tap into high-demand remote services like AI consulting, automation setup, and niche platforms, focusing on scalable solutions for efficiency and growth.
+Remote services like AI consulting, automation setup, and analytics dashboards offer high demand requiring specialized skills.
 
-- Implement automation tools
-- Target high-demand niches
-- Optimize workflows for scalability
+- Implement AI tools
+- Optimize workflows
+- Expand into niche areas
+- Enhance automation
 
 ## Underserved Focus
 
@@ -166,37 +167,7 @@ Leveraging automation and specialization to tap into high-demand remote services
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1ta5uby/a_restaurant_client_sent_2000_postcards_for_a/
-4. [I bootstrapped a content production service to $4k/month in 6 months and the entire business model is built on being fast not good](https://www.reddit.com/r/Entrepreneur/comments/1sa0sfe/i_bootstrapped_a_content_production_service_to/)
-   - Score: 100/100
-   - Value signal: $4200.00
-   - Why: visible or inferred value around $4200.00; can become a repeatable async offer instead of hourly labor
-   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: I bootstrapped a content production service to $4k/month in 6 months and the entire business model is built on being fast not good
-     Source: reddit:r/Entrepreneur
-     URL: https://www.reddit.com/r/Entrepreneur/comments/1sa0sfe/i_bootstrapped_a_content_production_service_to/
-     Why this is suitable: visible or inferred value around $4200.00; can become a repeatable async offer instead of hourly labor
-     First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: wait let me explain the title before everyone comes at me I don&#39;t mean the content is bad, I mean the competitive advantage of my business isn&#39;t premium quality production, it&#39;s speed, I can turn around social media video content for small businesses faster than anyone else they could hire and that&#39;s worth more to my clients than cinematic perfection. For context I was freelancing as a video editor making about $2k month doing traditional editing work, long timelines, lots of revisions and I noticed that my small business clients didn&#39;t actually need high-end editing, what they needed was someone who could take their phone footage and turn it into something postable within a few hours instead of a few days. so I built a service specifically around speed, clients send me raw phone footage nd i turn it around in 2-4 hours as ready to post content for their social channe
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "I bootstrapped a content production service to $4k/month in 6 months and the entire business model is built on being fast not good" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $4200.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/Entrepreneur/comments/1sa0sfe/i_bootstrapped_a_content_production_service_to/
-5. [Starting a Meta Ads agency for aesthetic clinics — no clients yet, need honest feedback on my cold email + pricing](https://www.reddit.com/r/smallbusiness/comments/1tljtzt/starting_a_meta_ads_agency_for_aesthetic_clinics/)
+4. [Starting a Meta Ads agency for aesthetic clinics — no clients yet, need honest feedback on my cold email + pricing](https://www.reddit.com/r/smallbusiness/comments/1tljtzt/starting_a_meta_ads_agency_for_aesthetic_clinics/)
    - Score: 100/100
    - Value signal: $2490.00
    - Why: visible or inferred value around $2490.00; public proof makes this suitable for automated AI patching
@@ -226,7 +197,7 @@ Leveraging automation and specialization to tap into high-demand remote services
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1tljtzt/starting_a_meta_ads_agency_for_aesthetic_clinics/
-6. [Commercial cleaning is a $112B market with 75-200% employee turnover. Its either a goldmine or a nightmare depending on one thing. Full brea](https://www.reddit.com/r/Entrepreneur/comments/1si80b4/commercial_cleaning_is_a_112b_market_with_75200/)
+5. [Commercial cleaning is a $112B market with 75-200% employee turnover. Its either a goldmine or a nightmare depending on one thing. Full brea](https://www.reddit.com/r/Entrepreneur/comments/1si80b4/commercial_cleaning_is_a_112b_market_with_75200/)
    - Score: 100/100
    - Value signal: $1800.00
    - Why: visible or inferred value around $1800.00; ops cleanup has clear business value and bounded deliverables
@@ -256,6 +227,53 @@ Leveraging automation and specialization to tap into high-demand remote services
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/Entrepreneur/comments/1si80b4/commercial_cleaning_is_a_112b_market_with_75200/
+6. [createIndex and indexExist different case for oracle](https://github.com/liquibase/liquibase/issues/3876)
+   - Score: 100/100
+   - Value signal: $1500.00
+   - Why: visible or inferred value around $1500.00; public proof makes this suitable for automated AI patching
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: createIndex and indexExist different case for oracle
+     Source: github
+     URL: https://github.com/liquibase/liquibase/issues/3876
+     Why this is suitable: visible or inferred value around $1500.00; public proof makes this suitable for automated AI patching
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ### Search first  - [X] I searched and no similar issues were found  ### Description  For oracledb index name in indexExist request is always in uppercase, but create index name is quoted.
+      This changeset generates error after second run:
+      ```
+          <changeSet id="create-index" author="test" runAlways="true">
+              <preConditions onFail="CONTINUE">
+                  <not>
+                      <indexExists tableName="test_table" indexName="index_-id"/>
+                  </not>
+              </preConditions>
+              <createIndex tableName="test_table" indexName="index_-id">
+                  <column name="name"/>
+              </createIndex>
+          </changeSet>
+      ```  ### Steps To Reproduce  1) Create oracle db (I have used https://github.com/oracle/docker-images/tree/main/OracleDatabase/SingleInstance)
+      2) Create changelog_test.xml with content:
+      ```
+      <databaseChangeLog
+              xmlns="http://www.liquibase.org/xml/ns
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "createIndex and indexExist different case for oracle" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $1500.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/liquibase/liquibase/issues/3876
 7. [Built an automation for a local business and got paid $1500 — sharing the process](https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/)
    - Score: 100/100
    - Value signal: $1500.00

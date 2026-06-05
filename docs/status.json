@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-06-05T04:47:38.254328+00:00",
-  "total_runs": 696,
+  "last_run": "2026-06-05T08:52:49.689163+00:00",
+  "total_runs": 697,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -51,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 89,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -197,19 +208,6 @@
         "archived_at": null
       },
       {
-        "title": "I bootstrapped a content production service to $4k/month in 6 months and the entire business model is built on being fast not good",
-        "url": "https://www.reddit.com/r/Entrepreneur/comments/1sa0sfe/i_bootstrapped_a_content_production_service_to/",
-        "source": "reddit:r/Entrepreneur",
-        "score": 100,
-        "estimated_value_usd": 4200.0,
-        "reason": "visible or inferred value around $4200.00; can become a repeatable async offer instead of hourly labor",
-        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I bootstrapped a content production service to $4k/month in 6 months and the entire business model is built on being fast not good\nSource: reddit:r/Entrepreneur\nURL: https://www.reddit.com/r/Entrepreneur/comments/1sa0sfe/i_bootstrapped_a_content_production_service_to/\nWhy this is suitable: visible or inferred value around $4200.00; can become a repeatable async offer instead of hourly labor\nFirst step: Open the latest failed job, capture the failure signature, and patch only the failing path.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: wait let me explain the title before everyone comes at me I don&#39;t mean the content is bad, I mean the competitive advantage of my business isn&#39;t premium quality production, it&#39;s speed, I can turn around social media video content for small businesses faster than anyone else they could hire and that&#39;s worth more to my clients than cinematic perfection. For context I was freelancing as a video editor making about $2k month doing traditional editing work, long timelines, lots of revisions and I noticed that my small business clients didn&#39;t actually need high-end editing, what they needed was someone who could take their phone footage and turn it into something postable within a few hours instead of a few days. so I built a service specifically around speed, clients send me raw phone footage nd i turn it around in 2-4 hours as ready to post content for their social channe",
-        "outreach_draft": "Hi, I found your request about \"I bootstrapped a content production service to $4k/month in 6 months and the entire business model is built on being fast not good\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $4200.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/Entrepreneur/comments/1sa0sfe/i_bootstrapped_a_content_production_service_to/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
         "title": "Starting a Meta Ads agency for aesthetic clinics \u2014 no clients yet, need honest feedback on my cold email + pricing",
         "url": "https://www.reddit.com/r/smallbusiness/comments/1tljtzt/starting_a_meta_ads_agency_for_aesthetic_clinics/",
         "source": "reddit:r/smallbusiness",
@@ -232,6 +230,19 @@
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
         "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Commercial cleaning is a $112B market with 75-200% employee turnover. Its either a goldmine or a nightmare depending on one thing. Full brea\nSource: reddit:r/Entrepreneur\nURL: https://www.reddit.com/r/Entrepreneur/comments/1si80b4/commercial_cleaning_is_a_112b_market_with_75200/\nWhy this is suitable: visible or inferred value around $1800.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Eighth industry deep dive Ive posted here. Already covered pest control, HVAC, restoration, home care, landscaping, roofing, and septic. Commercial cleaning is the one that splits people the hardest. On paper the economics look great: recurring contracts, essential service, massive market. In practice the labor situation is the worst of any industry Ive researched. 75-200% annual turnover. Let that number sit for a second. Heres everything I found. Why the market is bigger then you think $112 billion in 2026 per IBISWorld. Thats janitorial services alone, not including residential or specialty cleaning. About 77% of revenue comes from commercial cleaning, 17% residential, and 6% from damage restoration and specialty work. The market is growing at roughly 5-6% annually depending on which source you use. Post-COVID hygiene standards made this structural. OSHA compliance requirements, heigh",
         "outreach_draft": "Hi, I found your request about \"Commercial cleaning is a $112B market with 75-200% employee turnover. Its either a goldmine or a nightmare depending on one thing. Full brea\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $1800.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/Entrepreneur/comments/1si80b4/commercial_cleaning_is_a_112b_market_with_75200/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "createIndex and indexExist different case for oracle",
+        "url": "https://github.com/liquibase/liquibase/issues/3876",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 1500.0,
+        "reason": "visible or inferred value around $1500.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: createIndex and indexExist different case for oracle\nSource: github\nURL: https://github.com/liquibase/liquibase/issues/3876\nWhy this is suitable: visible or inferred value around $1500.00; public proof makes this suitable for automated AI patching\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ### Search first  - [X] I searched and no similar issues were found  ### Description  For oracledb index name in indexExist request is always in uppercase, but create index name is quoted.\r This changeset generates error after second run:\r ```\r     <changeSet id=\"create-index\" author=\"test\" runAlways=\"true\">\r         <preConditions onFail=\"CONTINUE\">\r             <not>\r                 <indexExists tableName=\"test_table\" indexName=\"index_-id\"/>\r             </not>\r         </preConditions>\r         <createIndex tableName=\"test_table\" indexName=\"index_-id\">\r             <column name=\"name\"/>\r         </createIndex>\r     </changeSet>\r ```  ### Steps To Reproduce  1) Create oracle db (I have used https://github.com/oracle/docker-images/tree/main/OracleDatabase/SingleInstance)\r 2) Create changelog_test.xml with content:\r ```\r <databaseChangeLog\r         xmlns=\"http://www.liquibase.org/xml/ns",
+        "outreach_draft": "Hi, I found your request about \"createIndex and indexExist different case for oracle\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $1500.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/liquibase/liquibase/issues/3876",
         "pursued": false,
         "archived_at": null
       },
@@ -304,7 +315,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-06-04T05:07:36.429061+00:00",
+    "last_refresh_at": "2026-06-05T08:52:50.187959+00:00",
     "reference_sources": [
       {
         "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
@@ -325,11 +336,12 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "Leveraging automation and specialization to tap into high-demand remote services like AI consulting, automation setup, and niche platforms, focusing on scalable solutions for efficiency and growth.",
+      "summary": "Remote services like AI consulting, automation setup, and analytics dashboards offer high demand requiring specialized skills.",
       "owner_actions": [
-        "Implement automation tools",
-        "Target high-demand niches",
-        "Optimize workflows for scalability"
+        "Implement AI tools",
+        "Optimize workflows",
+        "Expand into niche areas",
+        "Enhance automation"
       ]
     }
   },

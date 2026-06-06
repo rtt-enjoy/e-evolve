@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-06-05T08:52:50.187959+00:00
+Refreshed: 2026-06-06T10:22:46.594799+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,12 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-Remote services like AI consulting, automation setup, and analytics dashboards offer high demand requiring specialized skills.
+Leverage AI-driven automation and productized audit services in niches like CI/CD pipeline integration, performance testing dataset creation, and low‑code bug‑detection workflows to offer retainer‑based remote consulting that scales with minimal manual effort.
 
-- Implement AI tools
-- Optimize workflows
-- Expand into niche areas
-- Enhance automation
+- Conduct market validation interviews with development teams to identify top pain points in CI/CD automation and performance testing.
+- Build a prototype AI‑prompted workflow that automates dependency updates and CI gate integration, then test it on a pilot repository.
+- Package and price a retainer service for async technical documentation fixes and automated bug‑detection, targeting open‑source projects with active issue queues.
+- Develop a micro‑SaaS demo that generates synthetic performance test datasets and offer it as a paid add‑on for benchmarking and regression testing.
+- Create concise marketing assets (one‑page service sheet and short case study) to attract early adopters and generate initial leads.
 
 ## Underserved Focus
 
@@ -227,54 +228,7 @@ Remote services like AI consulting, automation setup, and analytics dashboards o
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/Entrepreneur/comments/1si80b4/commercial_cleaning_is_a_112b_market_with_75200/
-6. [createIndex and indexExist different case for oracle](https://github.com/liquibase/liquibase/issues/3876)
-   - Score: 100/100
-   - Value signal: $1500.00
-   - Why: visible or inferred value around $1500.00; public proof makes this suitable for automated AI patching
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: createIndex and indexExist different case for oracle
-     Source: github
-     URL: https://github.com/liquibase/liquibase/issues/3876
-     Why this is suitable: visible or inferred value around $1500.00; public proof makes this suitable for automated AI patching
-     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: ### Search first  - [X] I searched and no similar issues were found  ### Description  For oracledb index name in indexExist request is always in uppercase, but create index name is quoted.
-      This changeset generates error after second run:
-      ```
-          <changeSet id="create-index" author="test" runAlways="true">
-              <preConditions onFail="CONTINUE">
-                  <not>
-                      <indexExists tableName="test_table" indexName="index_-id"/>
-                  </not>
-              </preConditions>
-              <createIndex tableName="test_table" indexName="index_-id">
-                  <column name="name"/>
-              </createIndex>
-          </changeSet>
-      ```  ### Steps To Reproduce  1) Create oracle db (I have used https://github.com/oracle/docker-images/tree/main/OracleDatabase/SingleInstance)
-      2) Create changelog_test.xml with content:
-      ```
-      <databaseChangeLog
-              xmlns="http://www.liquibase.org/xml/ns
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "createIndex and indexExist different case for oracle" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $1500.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/liquibase/liquibase/issues/3876
-7. [Built an automation for a local business and got paid $1500 — sharing the process](https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/)
+6. [Built an automation for a local business and got paid $1500 — sharing the process](https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/)
    - Score: 100/100
    - Value signal: $1500.00
    - Why: visible or inferred value around $1500.00; public proof makes this suitable for automated AI patching
@@ -304,7 +258,7 @@ Remote services like AI consulting, automation setup, and analytics dashboards o
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-8. [30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks](https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/)
+7. [30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks](https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/)
    - Score: 100/100
    - Value signal: $820.00
    - Why: visible or inferred value around $820.00; can become a repeatable async offer instead of hourly labor
@@ -334,3 +288,33 @@ Remote services like AI consulting, automation setup, and analytics dashboards o
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/
+8. [Should I do a secure OpenClaw setup business?](https://www.reddit.com/r/Entrepreneur/comments/1sh256w/should_i_do_a_secure_openclaw_setup_business/)
+   - Score: 100/100
+   - Value signal: $500.00
+   - Why: visible or inferred value around $500.00; public proof makes this suitable for automated AI patching
+   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Should I do a secure OpenClaw setup business?
+     Source: reddit:r/Entrepreneur
+     URL: https://www.reddit.com/r/Entrepreneur/comments/1sh256w/should_i_do_a_secure_openclaw_setup_business/
+     Why this is suitable: visible or inferred value around $500.00; public proof makes this suitable for automated AI patching
+     First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Context: I am a cybersec guy and break AI systems. In the last 1 month I have found that literally every single OpenClaw box (And I mean every. single. one.) i audited had open CVEs. And don&#39;t even get me started on the number that literally had OpenClaw&#39;s port available to the internet. I am wondering if this could be a blessing in disguise. I have crazy cybersec experience, a recent legendary credential (A vuln confirmed by a major AI company in a popular tool) that I&#39;m not sure how to leverage and instead of simply breaking OpenClaw machines it&#39;s pretty obvious to me that I can also set them up. I am thinking of a simple pricing plan where I charge $500 to setup a fully secure box on any major cloud provider or their local machine. Include 2 hours of consulting (My usual rate is $90/hr on freelance sites) on both usage and security that they can use any time in the nex
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Should I do a secure OpenClaw setup business?" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $500.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/Entrepreneur/comments/1sh256w/should_i_do_a_secure_openclaw_setup_business/

@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-06-07T11:16:42.339887+00:00
+Refreshed: 2026-06-08T12:09:39.957737+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,12 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-Leverage the strong demand for automation, AI‑enhanced consulting, and productized services by offering niche remote solutions such as AI prompt and workflow consulting, no‑code/low‑code automation setup, AI‑driven customer‑support knowledge base cleanup, analytics dashboard and reporting automation, SEO/content operations systems, CRM and data import/export automation, and developer productivity retainers, using specialization, async work, and AI‑powered tools to detach income from hours.
+Analysis of GitHub issues reveals strong demand for specialized deployment troubleshooting, build system optimization, and CI/CD pipeline maintenance services. Companies are struggling with Next.js/Vinext edge runtime configurations, CSS asset handling, metadata streaming protocols, and OpenTelemetry integration—creating opportunities for productized audit services, async documentation fixes, and retainer-based developer productivity support that can be delivered remotely with minimal hourly commitment.
 
-- Research freelance platform trends to validate demand for the top three niches (AI prompt consulting, no‑code automation, and async documentation fixes).
-- Create a concise 2‑hour service package for AI prompt consulting, including a landing page and pricing model.
-- Build reusable automation templates (e.g., Zapier/Make) to deliver the no‑code automation service efficiently.
-- Launch a targeted outreach campaign on relevant communities (Indie Hackers, Reddit, LinkedIn groups) offering a limited‑time discount on the first service.
+- Package edge runtime and deployment troubleshooting as a productized audit service with standardized checklists for Next.js/Vinext implementations
+- Create async documentation and knowledge base cleanup offerings targeting the OpenTelemetry and metadata streaming issues prevalent in modern frameworks
+- Develop retainer packages for CI/CD pipeline maintenance focusing on the recurring build failures and test suite problems shown in the samples
+- Offer no-code automation setup services to help teams resolve CSS/SCSS asset pipeline configuration issues without deep engineering involvement
+- Establish micro-SaaS operations help for companies dealing with page extension resolution and custom configuration challenges
 
 ## Underserved Focus
 
@@ -287,7 +288,7 @@ Leverage the strong demand for automation, AI‑enhanced consulting, and product
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/
-8. [Should I do a secure OpenClaw setup business?](https://www.reddit.com/r/Entrepreneur/comments/1sh256w/should_i_do_a_secure_openclaw_setup_business/)
+8. [I'm placing free smart vending machines in small shops across the GTA (Toronto area) — here's how the model works and what I've learned so f](https://www.reddit.com/r/smallbusiness/comments/1s5ao6m/im_placing_free_smart_vending_machines_in_small/)
    - Score: 100/100
    - Value signal: $500.00
    - Why: visible or inferred value around $500.00; public proof makes this suitable for automated AI patching
@@ -295,9 +296,9 @@ Leverage the strong demand for automation, AI‑enhanced consulting, and product
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Should I do a secure OpenClaw setup business?
-     Source: reddit:r/Entrepreneur
-     URL: https://www.reddit.com/r/Entrepreneur/comments/1sh256w/should_i_do_a_secure_openclaw_setup_business/
+     Lead: I'm placing free smart vending machines in small shops across the GTA (Toronto area) — here's how the model works and what I've learned so f
+     Source: reddit:r/smallbusiness
+     URL: https://www.reddit.com/r/smallbusiness/comments/1s5ao6m/im_placing_free_smart_vending_machines_in_small/
      Why this is suitable: visible or inferred value around $500.00; public proof makes this suitable for automated AI patching
      First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
      
@@ -308,12 +309,12 @@ Leverage the strong demand for automation, AI‑enhanced consulting, and product
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: Context: I am a cybersec guy and break AI systems. In the last 1 month I have found that literally every single OpenClaw box (And I mean every. single. one.) i audited had open CVEs. And don&#39;t even get me started on the number that literally had OpenClaw&#39;s port available to the internet. I am wondering if this could be a blessing in disguise. I have crazy cybersec experience, a recent legendary credential (A vuln confirmed by a major AI company in a popular tool) that I&#39;m not sure how to leverage and instead of simply breaking OpenClaw machines it&#39;s pretty obvious to me that I can also set them up. I am thinking of a simple pricing plan where I charge $500 to setup a fully secure box on any major cloud provider or their local machine. Include 2 hours of consulting (My usual rate is $90/hr on freelance sites) on both usage and security that they can use any time in the nex
+     Request excerpt: &quot; Everyone please report and mods please ban any tool mentioned in response to this post &quot; Hey everyone — wanted to share something I&#39;ve been building over the past few months in case it&#39;s useful to anyone thinking about vending, unmanned retail, or partnership-based business models. Background: I&#39;ve been in operations and consumer electronics for about 20 years. Moved to Canada a few years ago and started looking at the vending space — specifically smart vending machines with cashless payment and image-based product recognition product recognition (no traditional coils/slots). We have about 30 machines (model S400) ready to deploy in the Greater Toronto Area. Instead of buying locations outright or paying rent, we&#39;re doing something different: The model: We place a machine in a small business (auto repair shops, barbershops, training centers, offices, etc.) for
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Should I do a secure OpenClaw setup business?" and can make a small working version.
+     Hi, I found your request about "I'm placing free smart vending machines in small shops across the GTA (Toronto area) — here's how the model works and what I've learned so f" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $500.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/Entrepreneur/comments/1sh256w/should_i_do_a_secure_openclaw_setup_business/
+     Reference: https://www.reddit.com/r/smallbusiness/comments/1s5ao6m/im_placing_free_smart_vending_machines_in_small/

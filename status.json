@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-06-10T11:04:21.806247+00:00",
-  "total_runs": 739,
+  "last_run": "2026-06-10T14:29:17.289344+00:00",
+  "total_runs": 740,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -51,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 98,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -184,6 +195,32 @@
         "archived_at": null
       },
       {
+        "title": "Am I Being Fairly Compensated for My Role in This Small Business?",
+        "url": "https://www.reddit.com/r/smallbusiness/comments/1u1xqez/am_i_being_fairly_compensated_for_my_role_in_this/",
+        "source": "reddit:r/smallbusiness",
+        "score": 100,
+        "estimated_value_usd": 13000.0,
+        "reason": "visible or inferred value around $13000.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Am I Being Fairly Compensated for My Role in This Small Business?\nSource: reddit:r/smallbusiness\nURL: https://www.reddit.com/r/smallbusiness/comments/1u1xqez/am_i_being_fairly_compensated_for_my_role_in_this/\nWhy this is suitable: visible or inferred value around $13000.00; public proof makes this suitable for automated AI patching\nFirst step: Open the latest failed job, capture the failure signature, and patch only the failing path.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I&#39;m 22 and work in a family-owned jewelry business with my cousin. My role has gradually grown to the point where I handle most of the day-to-day operations. I do product photography, create listings, manage Etsy, write descriptions, handle customer messages, manage social media, coordinate production, perform quality checks, pack orders, arrange shipping, and visit factories when needed. The Etsy shops I manage has generated around $13,000 in revenue with about 75 orders and nearly 10,000 visits. The business operates at roughly a 20% profit margin. My compensation is around $200 per month for expenses plus a 1.5% incentive on deposited sales. Because it&#39;s family, I&#39;ve never really pushed hard on compensation discussions. I&#39;ve always focused on helping the business grow. Lately, though, I&#39;ve started wondering whether my compensation reflects the amount of responsibil",
+        "outreach_draft": "Hi, I found your request about \"Am I Being Fairly Compensated for My Role in This Small Business?\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $13000.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/smallbusiness/comments/1u1xqez/am_i_being_fairly_compensated_for_my_role_in_this/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Small business owners: my experience with B&H Photo - 2 months, $9,500, a defective printer, and still no refund. Think twice before relying",
+        "url": "https://www.reddit.com/r/smallbusiness/comments/1u1ulyr/small_business_owners_my_experience_with_bh_photo/",
+        "source": "reddit:r/smallbusiness",
+        "score": 100,
+        "estimated_value_usd": 9500.0,
+        "reason": "visible or inferred value around $9500.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Small business owners: my experience with B&H Photo - 2 months, $9,500, a defective printer, and still no refund. Think twice before relying\nSource: reddit:r/smallbusiness\nURL: https://www.reddit.com/r/smallbusiness/comments/1u1ulyr/small_business_owners_my_experience_with_bh_photo/\nWhy this is suitable: visible or inferred value around $9500.00; public proof makes this suitable for automated AI patching\nFirst step: Open the latest failed job, capture the failure signature, and patch only the failing path.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I want to share my experience with B&amp;H Photo Video so other small business owners can factor it into their decisions. I run a wall art print business on Amazon and needed a production printer. What followed has been almost two months of stress and financial losses. The timeline: April 21 - Ordered a Canon imagePROGRAF PRO-4600 ($4,200, paid via B&amp;H&#39;s own Payboo credit card). Promised delivery: 5\u20139 days. Late April - early May - The freight carrier (ABF) loses the shipment. Every day of delay = Amazon orders I can&#39;t produce. During the delay I moved, so I asked B&amp;H to update the delivery address. They agreed multiple times on the phone... and did nothing for over two weeks. May 11 - I gave up, rented a truck ($200), hired movers, and spent an entire day retrieving the printer from the carrier&#39;s terminal myself. Setup day - The printer is defective out of the box. H",
+        "outreach_draft": "Hi, I found your request about \"Small business owners: my experience with B&H Photo - 2 months, $9,500, a defective printer, and still no refund. Think twice before relying\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $9500.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/smallbusiness/comments/1u1ulyr/small_business_owners_my_experience_with_bh_photo/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
         "title": "A restaurant client sent 2,000 postcards for a grand opening and booked solid for the weekend \u2014 what they did and what I'd change",
         "url": "https://www.reddit.com/r/smallbusiness/comments/1ta5uby/a_restaurant_client_sent_2000_postcards_for_a/",
         "source": "reddit:r/smallbusiness",
@@ -234,32 +271,6 @@
         "outreach_draft": "Hi, I found your request about \"Built an automation for a local business and got paid $1500 \u2014 sharing the process\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $1500.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/",
         "pursued": false,
         "archived_at": null
-      },
-      {
-        "title": "Data centers need $170B in construction and theres nobody to wire them. Heres why small electrical contractors are suddenly worth a fortune.",
-        "url": "https://www.reddit.com/r/Entrepreneur/comments/1u0vmrk/data_centers_need_170b_in_construction_and_theres/",
-        "source": "reddit:r/Entrepreneur",
-        "score": 100,
-        "estimated_value_usd": 865.0,
-        "reason": "visible or inferred value around $865.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Data centers need $170B in construction and theres nobody to wire them. Heres why small electrical contractors are suddenly worth a fortune.\nSource: reddit:r/Entrepreneur\nURL: https://www.reddit.com/r/Entrepreneur/comments/1u0vmrk/data_centers_need_170b_in_construction_and_theres/\nWhy this is suitable: visible or inferred value around $865.00; public proof makes this suitable for automated AI patching\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Eleventh deep dive. Already covered pest control, HVAC, restoration, home care, landscaping, roofing, septic, commercial cleaning, car wash, and insurance. Electrical is the one I keep coming back to because the macro tailwinds are so strong right now its almost unfair. Data centers. EV charging mandates. Solar installations. Grid modernization. Every major infrastructure trend for the next decade runs thru electrical contractors. And theres only so many licensed electricians to go around. Let me walk thru what I found. the market $255 billion according to Cascade Partners&#39; 2024 report. Alternative estimate from Northeastern Advisors puts it at $312B for 2025 depending on what you include. Growing at about 2.4% CAGR to $295B by 2030 per Cascade, tho that feels conservative given whats happening with data centers. The breakdown is roughly 70% electrical construction, 50% commercial/in",
-        "outreach_draft": "Hi, I found your request about \"Data centers need $170B in construction and theres nobody to wire them. Heres why small electrical contractors are suddenly worth a fortune.\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $865.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/Entrepreneur/comments/1u0vmrk/data_centers_need_170b_in_construction_and_theres/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks",
-        "url": "https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/",
-        "source": "reddit:r/Entrepreneur",
-        "score": 100,
-        "estimated_value_usd": 820.0,
-        "reason": "visible or inferred value around $820.00; can become a repeatable async offer instead of hourly labor",
-        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: 30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks\nSource: reddit:r/Entrepreneur\nURL: https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/\nWhy this is suitable: visible or inferred value around $820.00; can become a repeatable async offer instead of hourly labor\nFirst step: Open the latest failed job, capture the failure signature, and patch only the failing path.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Tenth post in this series. Already covered pest control, HVAC, restoration, home care, landscaping, roofing, septic, commercial cleaning, and car wash. Insurance is a completely different thing from all of those and honestly I wish I had looked at it earlier. No trucks. No equipment to maintain. No worrying about weather. Your entire business is client relationships and the commissions that come with them. And those commissions renew automatically every single year. Thats the part that blew my mind when I started digging into this. When a client buys a policy thru your agency, the carrier pays you a commission. When that client renews next year you get paid again. And the year after that. Best agencies are keeping 95% of their clients year over year which means basically all of last years revenue is already locked in before January even starts. Ive never seen retention numbers like that ",
-        "outreach_draft": "Hi, I found your request about \"30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $820.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/",
-        "pursued": false,
-        "archived_at": null
       }
     ],
     "requirements": [
@@ -304,7 +315,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-06-09T12:15:35.867269+00:00",
+    "last_refresh_at": "2026-06-10T14:29:18.155427+00:00",
     "reference_sources": [
       {
         "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
@@ -325,8 +336,14 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "",
-      "owner_actions": []
+      "summary": "High demand exists for AI-integrated automation tools, CI/CD optimization services, and async productized offerings targeting GitHub contributors and remote teams. Opportunities lie in developing specialized solutions for Docker/GitHub Actions wrappers, OpenAI-compatible endpoint integrations, and retainer-based bug bounty automation.",
+      "owner_actions": [
+        "Create a productized AI prompt consulting package targeting GitHub contributors with Docker/GitHub Actions use cases",
+        "Develop a CI/CD automation tool for OpenAI-compatible endpoint integration based on GitHub issue #5",
+        "Offer retainer-based services for async documentation fixes and micro-SaaS setup targeting remote teams",
+        "Build a tool to automate bug bounty issue creation from GitHub issues like #743",
+        "Design a Next.js SSR-safe tool integration service for React developers"
+      ]
     }
   },
   "configured_github_secrets": [

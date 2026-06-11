@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-06-10T14:29:18.155427+00:00
+Refreshed: 2026-06-11T16:28:32.404481+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,13 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-High demand exists for AI-integrated automation tools, CI/CD optimization services, and async productized offerings targeting GitHub contributors and remote teams. Opportunities lie in developing specialized solutions for Docker/GitHub Actions wrappers, OpenAI-compatible endpoint integrations, and retainer-based bug bounty automation.
+Market demand is shifting toward specialized, automated, and productized remote services—especially AI‑prompt consulting, no‑code/low‑code automation, analytics/dashboard automation, and async technical documentation or audit services—where income can be detached from billable hours through retainers, AI‑powered systems, and standardized deliverables.
 
-- Create a productized AI prompt consulting package targeting GitHub contributors with Docker/GitHub Actions use cases
-- Develop a CI/CD automation tool for OpenAI-compatible endpoint integration based on GitHub issue #5
-- Offer retainer-based services for async documentation fixes and micro-SaaS setup targeting remote teams
-- Build a tool to automate bug bounty issue creation from GitHub issues like #743
-- Design a Next.js SSR-safe tool integration service for React developers
+- Select one niche from the list (e.g., AI prompt and workflow consulting) and define a clear, repeatable service package with fixed pricing and deliverables.
+- Build a minimal viable product (e.g., a Notion template, a set of pre‑written prompts, or a no‑code automation workflow) that can be delivered asynchronously to clients.
+- Create a retainer‑based offering (monthly fee for ongoing prompt optimization, automation maintenance, or dashboard updates) and outline the scope, SLAs, and communication cadence.
+- Produce a short case study or demo using a real GitHub issue (like adding automated tests or fixing documentation) to showcase the service’s value and attract inbound leads.
+- Set up a simple outreach pipeline: monitor relevant GitHub help‑wanted issues, comment with a value‑added suggestion, and direct interested parties to a landing page or Calendly link for a discovery call.
 
 ## Underserved Focus
 
@@ -168,37 +168,7 @@ High demand exists for AI-integrated automation tools, CI/CD optimization servic
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1u1xqez/am_i_being_fairly_compensated_for_my_role_in_this/
-4. [Small business owners: my experience with B&H Photo - 2 months, $9,500, a defective printer, and still no refund. Think twice before relying](https://www.reddit.com/r/smallbusiness/comments/1u1ulyr/small_business_owners_my_experience_with_bh_photo/)
-   - Score: 100/100
-   - Value signal: $9500.00
-   - Why: visible or inferred value around $9500.00; public proof makes this suitable for automated AI patching
-   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Small business owners: my experience with B&H Photo - 2 months, $9,500, a defective printer, and still no refund. Think twice before relying
-     Source: reddit:r/smallbusiness
-     URL: https://www.reddit.com/r/smallbusiness/comments/1u1ulyr/small_business_owners_my_experience_with_bh_photo/
-     Why this is suitable: visible or inferred value around $9500.00; public proof makes this suitable for automated AI patching
-     First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: I want to share my experience with B&amp;H Photo Video so other small business owners can factor it into their decisions. I run a wall art print business on Amazon and needed a production printer. What followed has been almost two months of stress and financial losses. The timeline: April 21 - Ordered a Canon imagePROGRAF PRO-4600 ($4,200, paid via B&amp;H&#39;s own Payboo credit card). Promised delivery: 5–9 days. Late April - early May - The freight carrier (ABF) loses the shipment. Every day of delay = Amazon orders I can&#39;t produce. During the delay I moved, so I asked B&amp;H to update the delivery address. They agreed multiple times on the phone... and did nothing for over two weeks. May 11 - I gave up, rented a truck ($200), hired movers, and spent an entire day retrieving the printer from the carrier&#39;s terminal myself. Setup day - The printer is defective out of the box. H
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Small business owners: my experience with B&H Photo - 2 months, $9,500, a defective printer, and still no refund. Think twice before relying" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $9500.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/smallbusiness/comments/1u1ulyr/small_business_owners_my_experience_with_bh_photo/
-5. [A restaurant client sent 2,000 postcards for a grand opening and booked solid for the weekend — what they did and what I'd change](https://www.reddit.com/r/smallbusiness/comments/1ta5uby/a_restaurant_client_sent_2000_postcards_for_a/)
+4. [A restaurant client sent 2,000 postcards for a grand opening and booked solid for the weekend — what they did and what I'd change](https://www.reddit.com/r/smallbusiness/comments/1ta5uby/a_restaurant_client_sent_2000_postcards_for_a/)
    - Score: 100/100
    - Value signal: $8400.00
    - Why: visible or inferred value around $8400.00; public proof makes this suitable for automated AI patching
@@ -228,7 +198,7 @@ High demand exists for AI-integrated automation tools, CI/CD optimization servic
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1ta5uby/a_restaurant_client_sent_2000_postcards_for_a/
-6. [Starting a Meta Ads agency for aesthetic clinics — no clients yet, need honest feedback on my cold email + pricing](https://www.reddit.com/r/smallbusiness/comments/1tljtzt/starting_a_meta_ads_agency_for_aesthetic_clinics/)
+5. [Starting a Meta Ads agency for aesthetic clinics — no clients yet, need honest feedback on my cold email + pricing](https://www.reddit.com/r/smallbusiness/comments/1tljtzt/starting_a_meta_ads_agency_for_aesthetic_clinics/)
    - Score: 100/100
    - Value signal: $2490.00
    - Why: visible or inferred value around $2490.00; public proof makes this suitable for automated AI patching
@@ -258,7 +228,7 @@ High demand exists for AI-integrated automation tools, CI/CD optimization servic
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1tljtzt/starting_a_meta_ads_agency_for_aesthetic_clinics/
-7. [Commercial cleaning is a $112B market with 75-200% employee turnover. Its either a goldmine or a nightmare depending on one thing. Full brea](https://www.reddit.com/r/Entrepreneur/comments/1si80b4/commercial_cleaning_is_a_112b_market_with_75200/)
+6. [Commercial cleaning is a $112B market with 75-200% employee turnover. Its either a goldmine or a nightmare depending on one thing. Full brea](https://www.reddit.com/r/Entrepreneur/comments/1si80b4/commercial_cleaning_is_a_112b_market_with_75200/)
    - Score: 100/100
    - Value signal: $1800.00
    - Why: visible or inferred value around $1800.00; ops cleanup has clear business value and bounded deliverables
@@ -288,7 +258,7 @@ High demand exists for AI-integrated automation tools, CI/CD optimization servic
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/Entrepreneur/comments/1si80b4/commercial_cleaning_is_a_112b_market_with_75200/
-8. [Built an automation for a local business and got paid $1500 — sharing the process](https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/)
+7. [Built an automation for a local business and got paid $1500 — sharing the process](https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/)
    - Score: 100/100
    - Value signal: $1500.00
    - Why: visible or inferred value around $1500.00; public proof makes this suitable for automated AI patching
@@ -318,3 +288,33 @@ High demand exists for AI-integrated automation tools, CI/CD optimization servic
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
+8. [30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks](https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/)
+   - Score: 100/100
+   - Value signal: $820.00
+   - Why: visible or inferred value around $820.00; can become a repeatable async offer instead of hourly labor
+   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: 30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks
+     Source: reddit:r/Entrepreneur
+     URL: https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/
+     Why this is suitable: visible or inferred value around $820.00; can become a repeatable async offer instead of hourly labor
+     First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Tenth post in this series. Already covered pest control, HVAC, restoration, home care, landscaping, roofing, septic, commercial cleaning, and car wash. Insurance is a completely different thing from all of those and honestly I wish I had looked at it earlier. No trucks. No equipment to maintain. No worrying about weather. Your entire business is client relationships and the commissions that come with them. And those commissions renew automatically every single year. Thats the part that blew my mind when I started digging into this. When a client buys a policy thru your agency, the carrier pays you a commission. When that client renews next year you get paid again. And the year after that. Best agencies are keeping 95% of their clients year over year which means basically all of last years revenue is already locked in before January even starts. Ive never seen retention numbers like that
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $820.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/

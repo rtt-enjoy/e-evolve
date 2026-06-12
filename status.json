@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-06-12T16:27:54.523867+00:00",
-  "total_runs": 754,
+  "last_run": "2026-06-12T19:22:19.061548+00:00",
+  "total_runs": 755,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -51,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 84,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -158,80 +169,15 @@
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "Started a content marketing agency 8 years ago - $0 to $7,863,052 (2025 update)",
-        "url": "https://www.reddit.com/r/Entrepreneur/comments/1hxejqw/started_a_content_marketing_agency_8_years_ago_0/",
-        "source": "reddit:r/Entrepreneur",
+        "title": "DWVSCPS ENERGY INC \u2122\ufe0f \u00a9\ufe0f INFRASTRUCTURE FORMULA SYSTEM \ud83d\udd10 ARBITRATION",
+        "url": "https://github.com/dwvshell/Richard/issues/1",
+        "source": "github",
         "score": 100,
-        "estimated_value_usd": 7863052.0,
-        "reason": "visible or inferred value around $7863052.00; matches leverage-style remote service demand from AI-assisted workflows",
-        "next_step": "Find the public workflow, draft a one-page automation audit, and use the research LLM to propose a fixed-scope deliverable before any local build.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Started a content marketing agency 8 years ago - $0 to $7,863,052 (2025 update)\nSource: reddit:r/Entrepreneur\nURL: https://www.reddit.com/r/Entrepreneur/comments/1hxejqw/started_a_content_marketing_agency_8_years_ago_0/\nWhy this is suitable: visible or inferred value around $7863052.00; matches leverage-style remote service demand from AI-assisted workflows\nFirst step: Find the public workflow, draft a one-page automation audit, and use the research LLM to propose a fixed-scope deliverable before any local build.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Hey friends, My name is Tyler and for the past 8 years, I\u2019ve been documenting my experience building a content marketing agency called Optimist. Year 1 \u2014 0 to $500k ARR Year 2 \u2014 $500k to $1MM ARR Year 3 \u2014 $1MM ARR to $1.5MM(ish) ARR Year 4 \u2014 $3,333,686 Revenue Year 5 \u2014 $4,539,659 Revenue Year 6 \u2014 $5,974,324 Revenue Year 7 - $6,815,503 Revenue (Edit: Seems like links are banned now. You can check my post history for all of my previous updates with lessons and learnings.) How Optimist Works First, an overview/recap of the Optimist business model: We operate as a \u201ccollective\u201d of full time/professional freelancers Everyone aside from me is a contractor Entirely remote/distributed team We pay freelancers a flat fee for most work, working out to roughly $65-100/hour. Clients pay us a flat monthly fee for full-service content marketing (research, strategy, writing, editing, design/photography, ",
-        "outreach_draft": "Hi, I found your request about \"Started a content marketing agency 8 years ago - $0 to $7,863,052 (2025 update)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $7863052.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/Entrepreneur/comments/1hxejqw/started_a_content_marketing_agency_8_years_ago_0/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "$65k with AI Agents",
-        "url": "https://www.reddit.com/r/Entrepreneur/comments/1to8mim/65k_with_ai_agents/",
-        "source": "reddit:r/Entrepreneur",
-        "score": 100,
-        "estimated_value_usd": 65000.0,
-        "reason": "visible or inferred value around $65000.00; ops cleanup has clear business value and bounded deliverables",
+        "estimated_value_usd": 250000000000.0,
+        "reason": "visible or inferred value around $250000000000.00; ops cleanup has clear business value and bounded deliverables",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: $65k with AI Agents\nSource: reddit:r/Entrepreneur\nURL: https://www.reddit.com/r/Entrepreneur/comments/1to8mim/65k_with_ai_agents/\nWhy this is suitable: visible or inferred value around $65000.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Hello friends. Today I want to talk about agentic media buying. A few points why you might want to consider my perspective. I&#39;ve been media buying across multiple channels, specifically Meta ads, for over a decade. Previous to that, I had a career in cybersecurity protecting bank and government infrastructure from foreign intrusion. Now I build my own products and work with clients that are looking to grow their businesses. I&#39;ve been following the trends with AI for a while now. I was a beta tester for GPT-3 several years before ChatGPT was released to the public, and to the best of my ability, I&#39;ve tested most of the tools and underlying models that have come out over the last five or six years. Over the past month, there was a big release with the official Meta Ads MCP. Between that and the coding abilities provided by GPT-5.5 Codex, I&#39;ve been able to build out an agent",
-        "outreach_draft": "Hi, I found your request about \"$65k with AI Agents\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $65000.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/Entrepreneur/comments/1to8mim/65k_with_ai_agents/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Am I Being Fairly Compensated for My Role in This Small Business?",
-        "url": "https://www.reddit.com/r/smallbusiness/comments/1u1xqez/am_i_being_fairly_compensated_for_my_role_in_this/",
-        "source": "reddit:r/smallbusiness",
-        "score": 100,
-        "estimated_value_usd": 13000.0,
-        "reason": "visible or inferred value around $13000.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Am I Being Fairly Compensated for My Role in This Small Business?\nSource: reddit:r/smallbusiness\nURL: https://www.reddit.com/r/smallbusiness/comments/1u1xqez/am_i_being_fairly_compensated_for_my_role_in_this/\nWhy this is suitable: visible or inferred value around $13000.00; public proof makes this suitable for automated AI patching\nFirst step: Open the latest failed job, capture the failure signature, and patch only the failing path.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I&#39;m 22 and work in a family-owned jewelry business with my cousin. My role has gradually grown to the point where I handle most of the day-to-day operations. I do product photography, create listings, manage Etsy, write descriptions, handle customer messages, manage social media, coordinate production, perform quality checks, pack orders, arrange shipping, and visit factories when needed. The Etsy shops I manage has generated around $13,000 in revenue with about 75 orders and nearly 10,000 visits. The business operates at roughly a 20% profit margin. My compensation is around $200 per month for expenses plus a 1.5% incentive on deposited sales. Because it&#39;s family, I&#39;ve never really pushed hard on compensation discussions. I&#39;ve always focused on helping the business grow. Lately, though, I&#39;ve started wondering whether my compensation reflects the amount of responsibil",
-        "outreach_draft": "Hi, I found your request about \"Am I Being Fairly Compensated for My Role in This Small Business?\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $13000.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/smallbusiness/comments/1u1xqez/am_i_being_fairly_compensated_for_my_role_in_this/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "A restaurant client sent 2,000 postcards for a grand opening and booked solid for the weekend \u2014 what they did and what I'd change",
-        "url": "https://www.reddit.com/r/smallbusiness/comments/1ta5uby/a_restaurant_client_sent_2000_postcards_for_a/",
-        "source": "reddit:r/smallbusiness",
-        "score": 100,
-        "estimated_value_usd": 8400.0,
-        "reason": "visible or inferred value around $8400.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: A restaurant client sent 2,000 postcards for a grand opening and booked solid for the weekend \u2014 what they did and what I'd change\nSource: reddit:r/smallbusiness\nURL: https://www.reddit.com/r/smallbusiness/comments/1ta5uby/a_restaurant_client_sent_2000_postcards_for_a/\nWhy this is suitable: visible or inferred value around $8400.00; public proof makes this suitable for automated AI patching\nFirst step: Open the latest failed job, capture the failure signature, and patch only the failing path.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Wanted to share a campaign I helped a restaurant owner run last month because it worked surprisingly well, and there are some lessons in why . The setup: Second location of an existing restaurant in Dallas 2,000 postcards mailed to a 3-mile radius around the new spot Offer: 20% off first visit, valid for 30 days Mailed two weeks before opening, second wave the week of The results: 168 people redeemed the postcard offer in the first weekend (8.4% redemption) Booked solid Friday/Saturday, lines at lunch on Sunday Cost: ~$1,700 all-in (printing, postage, list) Estimated revenue from those 168 covers: ~$8,400 first visit, plus return visits Three things they did right: Targeted by drive distance, not zipcode. A 3-mile radius cut across multiple zipcodes \u2014 they used a mapping tool to pick households that were actually within a reasonable lunch/dinner drive. Two-wave campaign. First wave built",
-        "outreach_draft": "Hi, I found your request about \"A restaurant client sent 2,000 postcards for a grand opening and booked solid for the weekend \u2014 what they did and what I'd change\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $8400.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/smallbusiness/comments/1ta5uby/a_restaurant_client_sent_2000_postcards_for_a/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Starting a Meta Ads agency for aesthetic clinics \u2014 no clients yet, need honest feedback on my cold email + pricing",
-        "url": "https://www.reddit.com/r/smallbusiness/comments/1tljtzt/starting_a_meta_ads_agency_for_aesthetic_clinics/",
-        "source": "reddit:r/smallbusiness",
-        "score": 100,
-        "estimated_value_usd": 2490.0,
-        "reason": "visible or inferred value around $2490.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Starting a Meta Ads agency for aesthetic clinics \u2014 no clients yet, need honest feedback on my cold email + pricing\nSource: reddit:r/smallbusiness\nURL: https://www.reddit.com/r/smallbusiness/comments/1tljtzt/starting_a_meta_ads_agency_for_aesthetic_clinics/\nWhy this is suitable: visible or inferred value around $2490.00; public proof makes this suitable for automated AI patching\nFirst step: Open the latest failed job, capture the failure signature, and patch only the failing path.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Starting a Meta Ads agency for aesthetic clinics \u2014 no clients yet, need honest feedback on my cold email + pricing Hey everyone, I\u2019ve been building a marketing agency focused on aesthetic/plastic surgery clinics (UK, AU, CA, NZ markets). I have everything set up \u2014 GoHighLevel funnel, patient pre-qualification survey, Meta Ads knowledge, cold email infrastructure \u2014 but zero clients so far. I\u2019ve sent around 100 cold emails. 2 \u201cremove me\u201d replies, everything else silence. Open rate tracking is off for deliverability reasons so I can\u2019t see that metric. Here\u2019s my current email template: Subject line: 30 patient leads or we keep working Email1: Hi \\\\\\[FIRST\\\\\\_NAME\\\\\\], I&#39;ll keep this short. We get your clinic 30+ new patient leads every month \u2014 guaranteed. If we don&#39;t hit 30 leads, we keep working until we do \u2014 at no extra cost. That&#39;s the offer. Reply if you want the details. Fol",
-        "outreach_draft": "Hi, I found your request about \"Starting a Meta Ads agency for aesthetic clinics \u2014 no clients yet, need honest feedback on my cold email + pricing\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $2490.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/smallbusiness/comments/1tljtzt/starting_a_meta_ads_agency_for_aesthetic_clinics/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Commercial cleaning is a $112B market with 75-200% employee turnover. Its either a goldmine or a nightmare depending on one thing. Full brea",
-        "url": "https://www.reddit.com/r/Entrepreneur/comments/1si80b4/commercial_cleaning_is_a_112b_market_with_75200/",
-        "source": "reddit:r/Entrepreneur",
-        "score": 100,
-        "estimated_value_usd": 1800.0,
-        "reason": "visible or inferred value around $1800.00; ops cleanup has clear business value and bounded deliverables",
-        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Commercial cleaning is a $112B market with 75-200% employee turnover. Its either a goldmine or a nightmare depending on one thing. Full brea\nSource: reddit:r/Entrepreneur\nURL: https://www.reddit.com/r/Entrepreneur/comments/1si80b4/commercial_cleaning_is_a_112b_market_with_75200/\nWhy this is suitable: visible or inferred value around $1800.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Eighth industry deep dive Ive posted here. Already covered pest control, HVAC, restoration, home care, landscaping, roofing, and septic. Commercial cleaning is the one that splits people the hardest. On paper the economics look great: recurring contracts, essential service, massive market. In practice the labor situation is the worst of any industry Ive researched. 75-200% annual turnover. Let that number sit for a second. Heres everything I found. Why the market is bigger then you think $112 billion in 2026 per IBISWorld. Thats janitorial services alone, not including residential or specialty cleaning. About 77% of revenue comes from commercial cleaning, 17% residential, and 6% from damage restoration and specialty work. The market is growing at roughly 5-6% annually depending on which source you use. Post-COVID hygiene standards made this structural. OSHA compliance requirements, heigh",
-        "outreach_draft": "Hi, I found your request about \"Commercial cleaning is a $112B market with 75-200% employee turnover. Its either a goldmine or a nightmare depending on one thing. Full brea\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $1800.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/Entrepreneur/comments/1si80b4/commercial_cleaning_is_a_112b_market_with_75200/",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: DWVSCPS ENERGY INC \u2122\ufe0f \u00a9\ufe0f INFRASTRUCTURE FORMULA SYSTEM \ud83d\udd10 ARBITRATION\nSource: github\nURL: https://github.com/dwvshell/Richard/issues/1\nWhy this is suitable: visible or inferred value around $250000000000.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: DWVSCPS-ENERGY-MASTER999-PAYLOAD VERSION: 2026-QR-BACKUP-REV-A OWNER: RICHARD EVAN STOCKFORD JR CORPORATION: 15389089 CANADA INC. BRAND: DWVSCPS ENERGY\u2122  VIN: A1B02CEE8B1FC86E1 PIID: a1b02cee8b1fc86e15785ea7734d5cb80e55df39e68cad1e32466255da05237e  PRIMARY RIGHTS: - SOLE INVENTOR & OWNER - ALL RIGHTS RESERVED WORLDWIDE - TRADE SECRET PROTECTED - WIPO PCT PRIORITY 2014\u20132018 - BERNE CONVENTION PROTECTED  TECHNOLOGY STACK: DWVSCPS PLATFORM SMT3 SMART MONITORING TECH ASVA SAFETY VALVE ACTUATOR MASTER999 FORENSIC SYSTEM STOCKFORD CAPTURE EFFICIENCY (\u03b7capture) NET TAX EFFICIENCY (NTE) TOTAL COMPENSATION EQUATION (TCE) TOTAL CLAIM VALUATION (VTC)  REGULATORY ALIGNMENT: CCA CLASS 57 & 58 CCUS-ITC (ITA S.127.44) CLEAN ECONOMY TAX CREDITS CER SAFETY COMPLIANCE GLOBAL SAFETY ACT BLUEPRINT  ECONOMIC ENTITLEMENT: ANNUAL LICENSE RATE: $50,000,000 CAD RETROACTIVE CCUS-ITC: $1,800,000,000 CAD VTC: $1,64",
+        "outreach_draft": "Hi, I found your request about \"DWVSCPS ENERGY INC \u2122\ufe0f \u00a9\ufe0f INFRASTRUCTURE FORMULA SYSTEM \ud83d\udd10 ARBITRATION\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $250000000000.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/dwvshell/Richard/issues/1",
         "pursued": false,
         "archived_at": null
       },
@@ -249,15 +195,80 @@
         "archived_at": null
       },
       {
-        "title": "30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks",
-        "url": "https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/",
-        "source": "reddit:r/Entrepreneur",
+        "title": "\ud83d\udcca AI CLI Tools Digest 2026-06-12",
+        "url": "https://github.com/duanyytop/agents-radar/issues/1588",
+        "source": "github",
         "score": 100,
-        "estimated_value_usd": 820.0,
-        "reason": "visible or inferred value around $820.00; can become a repeatable async offer instead of hourly labor",
-        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: 30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks\nSource: reddit:r/Entrepreneur\nURL: https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/\nWhy this is suitable: visible or inferred value around $820.00; can become a repeatable async offer instead of hourly labor\nFirst step: Open the latest failed job, capture the failure signature, and patch only the failing path.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Tenth post in this series. Already covered pest control, HVAC, restoration, home care, landscaping, roofing, septic, commercial cleaning, and car wash. Insurance is a completely different thing from all of those and honestly I wish I had looked at it earlier. No trucks. No equipment to maintain. No worrying about weather. Your entire business is client relationships and the commissions that come with them. And those commissions renew automatically every single year. Thats the part that blew my mind when I started digging into this. When a client buys a policy thru your agency, the carrier pays you a commission. When that client renews next year you get paid again. And the year after that. Best agencies are keeping 95% of their clients year over year which means basically all of last years revenue is already locked in before January even starts. Ive never seen retention numbers like that ",
-        "outreach_draft": "Hi, I found your request about \"30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $820.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/",
+        "estimated_value_usd": 200.0,
+        "reason": "visible or inferred value around $200.00; can become a repeatable async offer instead of hourly labor",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udcca AI CLI Tools Digest 2026-06-12\nSource: github\nURL: https://github.com/duanyytop/agents-radar/issues/1588\nWhy this is suitable: visible or inferred value around $200.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # AI CLI Tools Community Digest 2026-06-12  > Generated: 2026-06-12 00:32 UTC | Tools covered: 9  - [Claude Code](https://github\u200b.com/anthropics/claude-code) - [OpenAI Codex](https://github\u200b.com/openai/codex) - [Gemini CLI](https://github\u200b.com/google-gemini/gemini-cli) - [GitHub Copilot CLI](https://github\u200b.com/github/copilot-cli) - [Kimi Code CLI](https://github\u200b.com/MoonshotAI/kimi-cli) - [OpenCode](https://github\u200b.com/anomalyco/opencode) - [Pi](https://github\u200b.com/badlogic/pi-mono) - [Qwen Code](https://github\u200b.com/QwenLM/qwen-code) - [DeepSeek TUI](https://github\u200b.com/Hmbown/DeepSeek-TUI) - [Claude Code Skills](https://github\u200b.com/anthropics/skills)  ---  ## Cross-Tool Comparison  # Cross-Tool Comparison Report: AI CLI Developer Tools Ecosystem **Date**: 2026-06-12  ---  ## 1. Ecosystem Overview  The AI CLI tools landscape is experiencing rapid maturation alongside significant growin",
+        "outreach_draft": "Hi, I found your request about \"\ud83d\udcca AI CLI Tools Digest 2026-06-12\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $200.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/duanyytop/agents-radar/issues/1588",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Adding more type annotations to the codebase",
+        "url": "https://github.com/sympy/sympy/issues/28806",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Adding more type annotations to the codebase\nSource: github\nURL: https://github.com/sympy/sympy/issues/28806\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: There is a long discussion in gh-17945 about adding type annotations to the sympy codebase but that is more of a historical issue with many tangents. Some parts of the codebase now have type annotations and this issue is about incrementally adding more type annotations. PRs are welcome both big and small (better to start small) that add type annotations to parts of the codebase where it makes sense to do so (not necessarily anywhere in the codebase - see below).  You can see related issues and PRs under the typing label: https://github.com/sympy/sympy/issues?q=label%3A%22typing%22  [PEP 484](https://peps.python.org/pep-0484/) introduced type annotations to Python but the sympy codebase predates that and so did not have type annotations when most parts were written. Over time the role of type annotations in Python has become a bit clearer and the situation is that type annotations are bas",
+        "outreach_draft": "Hi, I found your request about \"Adding more type annotations to the codebase\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/sympy/sympy/issues/28806",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "LKPR-89: lore_setup MCP tool \u2014 agent-guided linear onboarding flow",
+        "url": "https://github.com/Jessinra/Lorekeeper/issues/205",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: LKPR-89: lore_setup MCP tool \u2014 agent-guided linear onboarding flow\nSource: github\nURL: https://github.com/Jessinra/Lorekeeper/issues/205\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: --- id: LKPR-89 title: lore_setup MCP tool \u2014 agent-guided linear onboarding flow type: feature sprint: ~ github_issue: ~ rice_score: ~ filed_by: Akane filed_date: 2026-06-12 ---  # [LKPR-89] lore_setup MCP tool \u2014 agent-guided linear onboarding flow  ## Problem  Installing Lorekeeper is \"fast\" (uvx, one command) but the gap between install and a working MCP memory server is larger than it looks:  1. User installs Lorekeeper 2. User needs to configure their agent to connect to the MCP server 3. User needs to seed initial memories 4. User needs to verify search works 5. User needs to understand the feedback loop 6. User has to read docs, piece together steps, and troubleshoot alone  Currently this gap is bridged by LKPR-55 (seed prompt) and LKPR-7 (static setup docs). Neither is a guided flow. The user either reads docs and configures manually, or the agent configures itself through trial a",
+        "outreach_draft": "Hi, I found your request about \"LKPR-89: lore_setup MCP tool \u2014 agent-guided linear onboarding flow\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/Jessinra/Lorekeeper/issues/205",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "[P1] Eliminate the multi-rooted import scheme that loads the same module under 3+ names",
+        "url": "https://github.com/D-sorganization/Tools/issues/3316",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: [P1] Eliminate the multi-rooted import scheme that loads the same module under 3+ names\nSource: github\nURL: https://github.com/D-sorganization/Tools/issues/3316\nWhy this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Problem\r \r The same physical modules are importable (and actually imported, in-tree, today) under three or more different top-level names: `sidekick.x`, `shared.python.sidekick.x`, `src.shared.python.sidekick.x`, plus bare roots `theme`, `ai`, `chat`, `utils`, `compatibility`. Python treats each spelling as a distinct module object, so class identity breaks (`isinstance` fails across spellings), module-level singletons split-brain, and monkeypatching/tests patch the wrong copy. The repo already carries two scars proving this bites in practice: (1) `_is_workspace_registry()` in python_repl_tab.py exists solely to accept a WorkspaceRegistry loaded under the legacy `upstream_drift_tools.*` name; (2) conftest.py contains a ~200-line custom `RobustImportRedirector` meta-path finder whose only job is to alias the three spellings to one module object \u2014 but it is registered ONLY in conftest.p",
+        "outreach_draft": "Hi, I found your request about \"[P1] Eliminate the multi-rooted import scheme that loads the same module under 3+ names\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/D-sorganization/Tools/issues/3316",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/atlas-bi/Hub/issues/81",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/atlas-bi/Hub/issues/81\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/atlas-bi/Hub).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [bulma-checkradio](https://redirect.github.com/Wikiki/bulma-checkradio) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [bulma-tooltip](https://redirect.github.com/Wikiki/bulma-tooltip) | ![Unavailable](https://img.shields",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/atlas-bi/Hub/issues/81",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/IBM/tensorlakehouse-openeo-driver).  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/aiohappyeyeballs-2.x -->Update dependency aiohappyeyeballs to v2.6.2  - [ ] <!-- unlimit-branch=renovate/asttokens-3.x -->Update dependency asttokens to v3.0.1  - [ ] <!-- unlimit-branch=renovate/branca-0.x -->Update dependency branca to v0.8.2  - [ ] <!-- unlimit-branch=renovate/cdsapi-0.x -->Update dependency cdsapi to v0.7.7  - [ ] <!-- unlimit-branch=renovate/cfgrib-0.x -->Update dependency cfgrib to v0.9.15.1  - [ ] <!-- unlimit-branch=renova",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41",
         "pursued": false,
         "archived_at": null
       }
@@ -304,7 +315,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-06-11T16:28:32.404481+00:00",
+    "last_refresh_at": "2026-06-12T19:22:19.743951+00:00",
     "reference_sources": [
       {
         "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
@@ -325,13 +336,13 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "Market demand is shifting toward specialized, automated, and productized remote services\u2014especially AI\u2011prompt consulting, no\u2011code/low\u2011code automation, analytics/dashboard automation, and async technical documentation or audit services\u2014where income can be detached from billable hours through retainers, AI\u2011powered systems, and standardized deliverables.",
+      "summary": "Current GitHub activity shows strong demand for automation, AI\u2011enhanced workflows, and developer productivity improvements\u2014especially in areas like AI prompt consulting, no\u2011code/low\u2011code setup, AI\u2011driven support knowledge\u2011base cleanup, analytics reporting automation, SEO/content ops systems, CRM/data automation, developer\u2011focused CI retainers, async documentation fixes, productized audit/checklist services, and micro\u2011SaaS migration help. By packaging these needs into clear, retainer\u2011based or productized remote services, you can tap into a steady stream of paid work that leverages specialization, automation, and AI to detach income from hours.",
       "owner_actions": [
-        "Select one niche from the list (e.g., AI prompt and workflow consulting) and define a clear, repeatable service package with fixed pricing and deliverables.",
-        "Build a minimal viable product (e.g., a Notion template, a set of pre\u2011written prompts, or a no\u2011code automation workflow) that can be delivered asynchronously to clients.",
-        "Create a retainer\u2011based offering (monthly fee for ongoing prompt optimization, automation maintenance, or dashboard updates) and outline the scope, SLAs, and communication cadence.",
-        "Produce a short case study or demo using a real GitHub issue (like adding automated tests or fixing documentation) to showcase the service\u2019s value and attract inbound leads.",
-        "Set up a simple outreach pipeline: monitor relevant GitHub help\u2011wanted issues, comment with a value\u2011added suggestion, and direct interested parties to a landing page or Calendly link for a discovery call."
+        "Select one or two niches from the list that match your existing expertise (e.g., AI prompt and workflow consulting + no\u2011code automation setup) and define a specific, measurable deliverable (such as \"set up a GPT\u2011powered support KB with quarterly audits\" or \"build a no\u2011code Zapier/Make workflow to sync CRM data to Google Sheets\").",
+        "Create a short portfolio piece or demo using a real GitHub issue from the lead_samples (e.g., automate the QA\u2011server startup waste described in the dispatch issue) to showcase your ability to solve the exact pain points employers are posting about.",
+        "Package your service as a fixed\u2011price productized offering (e.g., \"AI Prompt Consulting Starter Pack \u2013 2\u2011hour workshop + custom prompt library for $499\") or a monthly retainer (e.g., \"Developer Productivity & CI Maintenance \u2013 $1,200/month\") and write a clear sales page that outlines the problem, solution, deliverables, timeline, and price.",
+        "Reach out to the repositories/issues that labeled \"help wanted\" and match your niche, offering a free audit or a discounted pilot in exchange for a testimonial or case study; use the issue URLs as personalized outreach hooks.",
+        "Set up a simple lead\u2011capture funnel (e.g., a Carrd site with a Calendly link) and automate follow\u2011up with a no\u2011code tool like Mailerlite or ConvertKit to nurture prospects who respond to your outreach, turning interest into paid engagements."
       ]
     }
   },

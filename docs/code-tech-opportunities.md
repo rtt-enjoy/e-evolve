@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-06-13T20:41:03.587885+00:00
+Refreshed: 2026-06-14T21:40:44.831348+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,13 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-Current demand signals indicate a high volume of technical debt and operational friction in open-source and early-stage projects, specifically regarding CI/CD stability, test suite failures, and API contract gaps. There is a recurring need for 'janitorial' technical work—such as fixing CORS test failures, resolving peer dependency conflicts, and optimizing evaluation workers—which aligns perfectly with productized audit and maintenance retainers. The presence of 'AI agent friendly' labels and 'advisory mode' agents suggests a growing market for consultants who can bridge the gap between AI-generated suggestions and production-ready implementations.
+The lead pool shows a strong demand for async, automation‑focused services such as GitHub advisory reporting, CI/CD and dependency dashboard maintenance, test‑flakiness debugging, and accessibility audits, all of which align with the listed remote‑service niches like AI workflow consulting, no‑code automation, developer productivity retainers, and productized audit checklists.
 
-- Develop a 'CI/CD Health Audit' productized service targeting projects with failing nightly test suites or flaky build logs.
-- Create a specialized offering for 'API Contract Completion' focusing on OpenAPI specification alignment and client generation.
-- Draft a retainer package for 'Developer Productivity Maintenance' that handles recurring chores like dependency updates and test suite cleanup.
-- Research a 'Human-in-the-Loop' consulting service to refine and implement findings from AI advisory agents in complex repositories.
-- Build a portfolio of 'Quick-Fix' case studies focusing on resolving common DevOps bottlenecks like CORS issues and environment configuration.
+- Create a productized "GitHub Advisory & Dependency Dashboard" service targeting open‑source maintainers, priced as a monthly retainer for triage, issue summarization, and automated Renovate PRs.
+- Develop a quick‑start “CI/CD Flakiness & Test Automation Fix” package for .NET and Kubernetes projects, leveraging AI‑assisted log analysis and scripted remediation.
+- Launch an “Accessibility Audit & Fix” micro‑SaaS offering, using automated a11y scanning tools and a checklist service to deliver remediation tickets within 48 hours.
+- Package AI prompt engineering and workflow automation consulting into a tiered offering (starter, growth, enterprise) for teams needing prompt optimization and no‑code integrations.
+- Build a lead magnet (e.g., a free audit of a project's GitHub issue backlog) to capture contacts, then upsell to the above retainers and audit services.
 
 ## Underserved Focus
 
@@ -108,67 +108,7 @@ Current demand signals indicate a high volume of technical debt and operational 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-2. [Необходимо мигрировать на последнюю версию python и langchain](https://github.com/inver/ai-dev-process/issues/1)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Необходимо мигрировать на последнюю версию python и langchain
-     Source: github
-     URL: https://github.com/inver/ai-dev-process/issues/1
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: # Plan: Необходимо мигрировать на последнюю версию python и langchain  **Issue:** #1 | **Iterations:** 2 | **Est:** 235 min  ## Summary Migrate the project to Python 3.14 and LangGraph >=0.4 by first discovering actual file locations and asyncio.run call sites, then updating version pins, replacing deprecated LangGraph set_entry_point across all confirmed graph files, refactoring asyncio.run wrappers to async def across all confirmed node modules, updating the existing Dockerfile with a correct lock-file install, generating a pinned requirements-lock.txt, and auditing CI workflows at their discovered paths for stale Python version strings.  ## Tasks ### T1: Repository discovery: confirm file locations and call-site scope Before editing any file, establish ground truth for every file the plan will touch. (a) Find the Dockerfile — confirm it exists at repo root or another location; record
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Необходимо мигрировать на последнюю версию python и langchain" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/inver/ai-dev-process/issues/1
-3. [Merge powermem-server and powermem-mcp into a single unified process](https://github.com/oceanbase/powermem/issues/1022)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Merge powermem-server and powermem-mcp into a single unified process
-     Source: github
-     URL: https://github.com/oceanbase/powermem/issues/1022
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: ## Summary  PowerMem currently ships two separate entry points for running a long-lived server process:  | Command | Role | Entry point | |---------|------|-------------| | `powermem-server` | REST API + Dashboard (+ optional MCP at `/mcp`) | `server.cli.server:server` | | `powermem-mcp` | Standalone MCP server (stdio / SSE / streamable-http) | `powermem.mcp.server:main` |  In practice, users and integrations sometimes run `powermem-server` and sometimes run `powermem-mcp`, depending on whether they need the REST API, the dashboard, or MCP-only access. This split adds operational and architectural complexity without a clear long-term benefit.  ## Problem  1. **Two processes, overlapping responsibilities** — Both processes expose memory operations over HTTP (streamable-http on port 8848 by default) and share the same underlying PowerMem core, but they are started and configured independen
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Merge powermem-server and powermem-mcp into a single unified process" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/oceanbase/powermem/issues/1022
-4. [Dependency Dashboard](https://github.com/panyichen48737/print-server/issues/10)
+2. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal-web-components/issues/789)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
@@ -178,7 +118,7 @@ Current demand signals indicate a high volume of technical debt and operational 
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/panyichen48737/print-server/issues/10
+     URL: https://github.com/uPortal-Project/uPortal-web-components/issues/789
      Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -189,7 +129,7 @@ Current demand signals indicate a high volume of technical debt and operational 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/panyichen48737/print-server).  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/ruff-0.15.x -->chore(deps): update dependency ruff to >=0.15.16  - [ ] <!-- unschedule-branch=renovate/python-3.14.x -->chore(deps): update python to v3.14.6  - [ ] <!-- unschedule-branch=renovate/fastapi-0.136.x -->fix(deps): update dependency fastapi to v0.136.3  - [ ] <!-- unschedule-branch=renovate/python-multipart-0.0.x -->fix(deps): update dependency python-multipart to v0.0.32  - [ ] <!-- unschedule-branch=renovate/golang.org-x-sys-0.x -->chore
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal-web-components).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@babel/plugin-proposal-class-properties](https://redirect.github.com/babel/babel) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [@babel/plugin-proposal-optional-chaining](https://redirect.githu
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -197,8 +137,8 @@ Current demand signals indicate a high volume of technical debt and operational 
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/panyichen48737/print-server/issues/10
-5. [Dependency Dashboard](https://github.com/101br03k/csv-browser/issues/91)
+     Reference: https://github.com/uPortal-Project/uPortal-web-components/issues/789
+3. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -208,7 +148,7 @@ Current demand signals indicate a high volume of technical debt and operational 
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/101br03k/csv-browser/issues/91
+     URL: https://github.com/ah-ha-admin/refactored-memory/issues/49
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -219,7 +159,7 @@ Current demand signals indicate a high volume of technical debt and operational 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/101br03k/csv-browser).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [react-beautiful-dnd](https://redirect.github.com/atlassian/react-beautiful-dnd) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) |  ## Open  The following updates have all been created. To force a retry/rebase of any, click
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/ah-ha-admin/refactored-memory).   - ⚠️ WARN: Package lookup failures  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/actions-upload-artifact-3.x -->Update actions/upload-artifact action to v3.2.2  - [ ] <!-- unlimit-branch=r
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -227,38 +167,8 @@ Current demand signals indicate a high volume of technical debt and operational 
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/101br03k/csv-browser/issues/91
-6. [Dependency Dashboard](https://github.com/ai-ecoverse/slicc/issues/211)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/ai-ecoverse/slicc/issues/211
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ai-ecoverse/slicc).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Pending Status Checks  The following updates await pending status checks. To force their creation now, click on a checkbox below.   - [ ] <!-- approvePr-branch=renovate/earendil-works-packages -->fix(deps): update earendil-works packages to ^0.79.0 (`@earendil-works/pi-agent-core`, `@earendil-works/pi-ai`, `@earendil-works/pi-coding-agent`)  - [ ] <!-- approvePr-branch=renovate/non-major -->fix(deps): update non-major dependencies (`@biomejs/biome`, `@biomejs/wasm-nodej
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/ai-ecoverse/slicc/issues/211
-7. [Dependency Dashboard](https://github.com/padok-team/terraform-azurerm-network/issues/15)
+     Reference: https://github.com/ah-ha-admin/refactored-memory/issues/49
+4. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal-start/issues/440)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -268,7 +178,7 @@ Current demand signals indicate a high volume of technical debt and operational 
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/padok-team/terraform-azurerm-network/issues/15
+     URL: https://github.com/uPortal-Project/uPortal-start/issues/440
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -279,7 +189,7 @@ Current demand signals indicate a high volume of technical debt and operational 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/padok-team/terraform-azurerm-network).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | github-actions | [google-github-actions/release-please-action](https://redirect.github.com/google-github-actions/release-please-action) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) |  ## Open  The following updates h
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal-start).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Pending Approval  The following branches are pending approval. To create them, click on a checkbox below.   - [ ] <!-- approve-branch=renovate/actions-checkout-6.x -->chore(deps): update actions/checkout action to v6  - [ ] <!-- approve-branch=renovate/actions-setup-java-5.x -->chore(deps): update actions/setup-java action to v5  - [ ] <!-- approve-branch=renovate/actions-setup-node-6.x -->chore(deps): update actions/setup-node action to v6  - [ ] <!-- appro
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -287,8 +197,8 @@ Current demand signals indicate a high volume of technical debt and operational 
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/padok-team/terraform-azurerm-network/issues/15
-8. [Dependency Dashboard](https://github.com/sekwah41/Re-Skin/issues/70)
+     Reference: https://github.com/uPortal-Project/uPortal-start/issues/440
+5. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal/issues/1874)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -298,7 +208,7 @@ Current demand signals indicate a high volume of technical debt and operational 
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/sekwah41/Re-Skin/issues/70
+     URL: https://github.com/uPortal-Project/uPortal/issues/1874
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -309,7 +219,7 @@ Current demand signals indicate a high volume of technical debt and operational 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/sekwah41/Re-Skin).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/sekwah41/Re-Skin).   - ⚠️ WARN: Package lookup failures  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | github-actions | [google-github-actions/release-please-action](https://redirect.githu
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/uPortal-Project/uPortal).   - ⚠️ WARN: No releases satisfy vulnerabilityFixVersion  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | gradle | [org.hibernate:hibernate-core](https://redirect.github.com/hibernate/hibernate-orm) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) | | gradle | [org.hibernate:h
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -317,4 +227,94 @@ Current demand signals indicate a high volume of technical debt and operational 
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/sekwah41/Re-Skin/issues/70
+     Reference: https://github.com/uPortal-Project/uPortal/issues/1874
+6. [UI feature request: model picker + drag-to-reorder for primary/fallback model selection in Agents > Overview](https://github.com/openclaw/openclaw/issues/80521)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: UI feature request: model picker + drag-to-reorder for primary/fallback model selection in Agents > Overview
+     Source: github
+     URL: https://github.com/openclaw/openclaw/issues/80521
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Summary  In the OpenClaw control UI at `OpenClaw › main › Agents › Overview`, the Primary Model and Fallbacks fields require operators to **type model identifiers as raw strings** (e.g. `claude-cli/claude-opus-4-7`, `openrouter/deepseek/deepseek-v4-pro`, `openai/gpt-5.5`). The fallbacks render as pill-style chips with `×` close buttons, but the chips are **not reorderable** — to change priority the operator has to remove and re-add them in the right sequence, retyping each one.  For any user who's tuning their fallback chain non-trivially (cost optimization, plan-quota-aware ordering, post-incident reconfiguration), this is painful enough that operators end up editing `openclaw.json` directly. Both surfaces — the UI and the JSON — share the same cognitive cost: "remember the exact provider/model slug and the exact ordering."  ## Requested  Two UX changes in the `Agents > Overview` pag
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "UI feature request: model picker + drag-to-reorder for primary/fallback model selection in Agents > Overview" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/openclaw/openclaw/issues/80521
+7. [🦞 Ecossistema de agentes de IA 2026-06-15](https://github.com/manelsen/agents-radar/issues/893)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: 🦞 Ecossistema de agentes de IA 2026-06-15
+     Source: github
+     URL: https://github.com/manelsen/agents-radar/issues/893
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: # Resumo diário do ecossistema de agentes de IA 2026-06-15  > Issues: 0 | PRs: 0 | Projetos cobertos: 7 | Gerado em: 2026-06-14 21:05 UTC  - [NullClaw](https://github​.com/nullclaw/nullclaw) - [NanoBot](https://github​.com/HKUDS/nanobot) - [Hermes Agent](https://github​.com/nousresearch/hermes-agent) - [PicoClaw](https://github​.com/sipeed/picoclaw) - [IronClaw](https://github​.com/nearai/ironclaw) - [CoPaw](https://github​.com/agentscope-ai/CoPaw) - [ZeroClaw](https://github​.com/zeroclaw-labs/zeroclaw)  ---  ## Análise aprofundada do projeto principal  Sem atividade nas últimas 24 horas.  ---  ## Comparação entre projetos do ecossistema  # Relatório Comparativo — Ecossistema Open Source de Agentes de IA  **Data de referência:** 2026-06-15 **Projetos analisados:** NullClaw, NanoBot, Hermes Agent, PicoClaw, IronClaw, CoPaw, ZeroClaw  ---  ## 1. Visão Geral do Ecossistema  O ecossistema d
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "🦞 Ecossistema de agentes de IA 2026-06-15" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/manelsen/agents-radar/issues/893
+8. [Dependency Dashboard](https://github.com/toondaey/nestjs-oauth2-server/issues/104)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/toondaey/nestjs-oauth2-server/issues/104
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/toondaey/nestjs-oauth2-server).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/rimraf` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) |  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-bran
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/toondaey/nestjs-oauth2-server/issues/104

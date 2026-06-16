@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-06-14T21:40:44.831348+00:00
+Refreshed: 2026-06-16T00:02:42.392296+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,13 +31,10 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-The lead pool shows a strong demand for async, automation‑focused services such as GitHub advisory reporting, CI/CD and dependency dashboard maintenance, test‑flakiness debugging, and accessibility audits, all of which align with the listed remote‑service niches like AI workflow consulting, no‑code automation, developer productivity retainers, and productized audit checklists.
+Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: 'User Safety: safe'
 
-- Create a productized "GitHub Advisory & Dependency Dashboard" service targeting open‑source maintainers, priced as a monthly retainer for triage, issue summarization, and automated Renovate PRs.
-- Develop a quick‑start “CI/CD Flakiness & Test Automation Fix” package for .NET and Kubernetes projects, leveraging AI‑assisted log analysis and scripted remediation.
-- Launch an “Accessibility Audit & Fix” micro‑SaaS offering, using automated a11y scanning tools and a checklist service to deliver remediation tickets within 48 hours.
-- Package AI prompt engineering and workflow automation consulting into a tiered offering (starter, growth, enterprise) for teams needing prompt optimization and no‑code integrations.
-- Build a lead magnet (e.g., a free audit of a project's GitHub issue backlog) to capture contacts, then upsell to the above retainers and audit services.
+- Use the top ranked lead with the clearest public proof.
+- Keep local Codex implementation to one small deliverable.
 
 ## Underserved Focus
 
@@ -108,37 +105,7 @@ The lead pool shows a strong demand for async, automation‑focused services suc
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-2. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal-web-components/issues/789)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/uPortal-Project/uPortal-web-components/issues/789
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal-web-components).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@babel/plugin-proposal-class-properties](https://redirect.github.com/babel/babel) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [@babel/plugin-proposal-optional-chaining](https://redirect.githu
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/uPortal-Project/uPortal-web-components/issues/789
-3. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
+2. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -159,7 +126,7 @@ The lead pool shows a strong demand for async, automation‑focused services suc
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/ah-ha-admin/refactored-memory).   - ⚠️ WARN: Package lookup failures  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/actions-upload-artifact-3.x -->Update actions/upload-artifact action to v3.2.2  - [ ] <!-- unlimit-branch=r
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/ah-ha-admin/refactored-memory).   - ⚠️ WARN: Package lookup failures  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/ex_doc-0.x -->Update dependency ex_doc to ~> 0.40  - [ ] <!-- unlimit-branch=renovate/go-1.x -->Update depe
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -168,7 +135,67 @@ The lead pool shows a strong demand for async, automation‑focused services suc
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ah-ha-admin/refactored-memory/issues/49
-4. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal-start/issues/440)
+3. [[Tracker]: v0.8.1 integration/channel/provider/tool queue and history](https://github.com/zeroclaw-labs/zeroclaw/issues/6970)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: [Tracker]: v0.8.1 integration/channel/provider/tool queue and history
+     Source: github
+     URL: https://github.com/zeroclaw-labs/zeroclaw/issues/6970
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Summary  Operational tracker for the v0.8.1 integration/channel/provider/tool queue across additive channels, providers, tools, accepted issue-only follow-ups, and integration-adjacent runtime/config/core work.  This complements #6489. That issue should stay focused on the long-term Integrations -> Plugins catalog architecture. This tracker is for release routing: which PRs are reviewable, dirty, blocked, consolidated, waiting for author action, still issue-only, merged, closed, superseded, deferred, or removed from the release queue.  Use the active queue groups for current review, merge, author-action, and no-PR-yet work. Use the terminal/off-ramp history for provenance; those entries are intentionally preserved, but they are not fresh review targets.  ## Problem statement  The v0.8.1 milestone has many open PRs and accepted issue-only follow-ups. Some are ordinary additive channel/
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "[Tracker]: v0.8.1 integration/channel/provider/tool queue and history" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/zeroclaw-labs/zeroclaw/issues/6970
+4. [P0: Release 3.0 readiness checklist](https://github.com/thunderdew-dawn/fls-pilot/issues/66)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: P0: Release 3.0 readiness checklist
+     Source: github
+     URL: https://github.com/thunderdew-dawn/fls-pilot/issues/66
+     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Goal  Release 3.0 only after rename, security, stability, docs and smoke checks are complete.  GitHub source-of-truth release train  - v2.0.1-maintenance: governance, GitHub automation, labels, release workflow hardening and snapshot docs only. No new FL Studio product behavior. - v3.0.0-alpha.1: breaking rename to fls-pilot / FL Studio Pilot. Package/import path becomes fls_pilot, CLI becomes fls-pilot, FLStudioMCP becomes FLSPilotMCP, fl-studio-mcp becomes fls-pilot-mcp and no old aliases are retained. - v3.0.0-alpha.2: safety-core validation. Persistent FL Studio writes must be classified, rollback-first, auditable and readback-aware where supported. - v3.0.0-beta.1: setup doctor and safe first-run path. Diagnostics must remain read-only. - v3.0.0-beta.2: user value pack 1: Mix Review, Project Preflight and Organizer proposal mode with explicit approval before any persistent write. -
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "P0: Release 3.0 readiness checklist" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/thunderdew-dawn/fls-pilot/issues/66
+5. [Dependency Dashboard](https://github.com/rjmurillo/ai-agents/issues/1351)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -178,7 +205,7 @@ The lead pool shows a strong demand for async, automation‑focused services suc
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/uPortal-Project/uPortal-start/issues/440
+     URL: https://github.com/rjmurillo/ai-agents/issues/1351
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -189,7 +216,7 @@ The lead pool shows a strong demand for async, automation‑focused services suc
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal-start).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Pending Approval  The following branches are pending approval. To create them, click on a checkbox below.   - [ ] <!-- approve-branch=renovate/actions-checkout-6.x -->chore(deps): update actions/checkout action to v6  - [ ] <!-- approve-branch=renovate/actions-setup-java-5.x -->chore(deps): update actions/setup-java action to v5  - [ ] <!-- approve-branch=renovate/actions-setup-node-6.x -->chore(deps): update actions/setup-node action to v6  - [ ] <!-- appro
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/rjmurillo/ai-agents).  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/anthropic-0.x -->[fix(deps): update dependency anthropic to v0.109.2](../pull/2609)  ## Detected Dependencies  <details><summary>bun (1)</summary> <blockquote>  <details><summary>packages/ai-agents-cli/package.json (3)</summary>   - `typescript ^6.0.0`  - `@types/node ^25.0.0`  - `node >=18`  </details>  </blockquote> </details>  <details><summary>github-actions (60)</summary> <blockquote>  <details><summary>.github/actions/agent-review/action.yml (2)</summary>   - `actio
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -197,19 +224,79 @@ The lead pool shows a strong demand for async, automation‑focused services suc
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/uPortal-Project/uPortal-start/issues/440
-5. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal/issues/1874)
+     Reference: https://github.com/rjmurillo/ai-agents/issues/1351
+6. [langgraph-0.2.60-py3-none-any.whl: 9 vulnerabilities (highest severity is: 9.6) [main] (reachable)](https://github.com/Emmanuel-Evenzur/Owasp-AI/issues/73)
    - Score: 100/100
    - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: langgraph-0.2.60-py3-none-any.whl: 9 vulnerabilities (highest severity is: 9.6) [main] (reachable)
+     Source: github
+     URL: https://github.com/Emmanuel-Evenzur/Owasp-AI/issues/73
+     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: <details>   <summary>📂 Vulnerable Library - <strong>langgraph-0.2.60-py3-none-any.whl</strong></summary>  Building stateful, multi-actor applications with LLMs    **Path to dependency file:** /initiatives/agent_security_initiative/samples/frameworks/langgraph/multi_agent/requirements.txt  **Path to vulnerable library:** /tmp/ws-ua_20260615195158_GPABNS/python_OANVBA/202606151952581/env/lib/python3.11/site-packages/langgraph-0.2.60.dist-info   </details>   # Findings | Finding | Severity | 🎯 CVSS | Exploit Maturity | EPSS | Library | Type | Fixed in | Remediation Available | **Reachability** | | ------------- | ------------- | ---- | --- | ----- | ----- | ----- | --- | --- | --- | | [ CVE-2025-64439 ](https://www.mend.io/vulnerability-database/CVE-2025-64439) | 🟣 Critical | 9.6 | Not Defined | 1.713% | langgraph_checkpoint-2.0.9-py3-none-any.whl | Direct | langgraph-checkpoint-sqlite - 3.
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "langgraph-0.2.60-py3-none-any.whl: 9 vulnerabilities (highest severity is: 9.6) [main] (reachable)" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/Emmanuel-Evenzur/Owasp-AI/issues/73
+7. [langgraph_checkpoint-2.0.9-py3-none-any.whl: 8 vulnerabilities (highest severity is: 9.6) [main] (reachable)](https://github.com/Emmanuel-Evenzur/Owasp-AI/issues/66)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: langgraph_checkpoint-2.0.9-py3-none-any.whl: 8 vulnerabilities (highest severity is: 9.6) [main] (reachable)
+     Source: github
+     URL: https://github.com/Emmanuel-Evenzur/Owasp-AI/issues/66
+     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: <details>   <summary>📂 Vulnerable Library - <strong>langgraph_checkpoint-2.0.9-py3-none-any.whl</strong></summary>  Library with base interfaces for LangGraph checkpoint savers.    **Path to dependency file:** /initiatives/agent_security_initiative/samples/frameworks/langgraph/github_improper_output_handling/pyproject.toml  **Path to vulnerable library:** /initiatives/agent_security_initiative/samples/frameworks/langgraph/github_improper_output_handling/.venv/lib/python3.12/site-packages/langgraph_checkpoint-2.0.9.dist-info   </details>   # Findings | Finding | Severity | 🎯 CVSS | Exploit Maturity | EPSS | Library | Type | Fixed in | Remediation Available | **Reachability** | | ------------- | ------------- | ---- | --- | ----- | ----- | ----- | --- | --- | --- | | [ CVE-2025-64439 ](https://www.mend.io/vulnerability-database/CVE-2025-64439) | 🟣 Critical | 9.6 | Not Defined | 1.713% | la
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "langgraph_checkpoint-2.0.9-py3-none-any.whl: 8 vulnerabilities (highest severity is: 9.6) [main] (reachable)" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/Emmanuel-Evenzur/Owasp-AI/issues/66
+8. [Dependency Dashboard](https://github.com/DemonicSavage/mikan/issues/15)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
    - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/uPortal-Project/uPortal/issues/1874
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     URL: https://github.com/DemonicSavage/mikan/issues/15
+     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
      Constraints:
@@ -219,7 +306,7 @@ The lead pool shows a strong demand for async, automation‑focused services suc
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/uPortal-Project/uPortal).   - ⚠️ WARN: No releases satisfy vulnerabilityFixVersion  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | gradle | [org.hibernate:hibernate-core](https://redirect.github.com/hibernate/hibernate-orm) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) | | gradle | [org.hibernate:h
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/DemonicSavage/mikan).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/actions-checkout-digest -->Update actions/checkout digest to df4cb1c  - [ ] <!-- unlimit-branch=renovate/distlib-0.x -->Update dependency distlib to v0.4.3  - [ ] <!-- unlimit-branch=renovate/filelock-3.x -->Update dependency filelock to v3.29.4  - [ ] <!-- unlimit-branch=renovate/pyproject_api-1.x -->Update depen
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -227,94 +314,4 @@ The lead pool shows a strong demand for async, automation‑focused services suc
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/uPortal-Project/uPortal/issues/1874
-6. [UI feature request: model picker + drag-to-reorder for primary/fallback model selection in Agents > Overview](https://github.com/openclaw/openclaw/issues/80521)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: UI feature request: model picker + drag-to-reorder for primary/fallback model selection in Agents > Overview
-     Source: github
-     URL: https://github.com/openclaw/openclaw/issues/80521
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: ## Summary  In the OpenClaw control UI at `OpenClaw › main › Agents › Overview`, the Primary Model and Fallbacks fields require operators to **type model identifiers as raw strings** (e.g. `claude-cli/claude-opus-4-7`, `openrouter/deepseek/deepseek-v4-pro`, `openai/gpt-5.5`). The fallbacks render as pill-style chips with `×` close buttons, but the chips are **not reorderable** — to change priority the operator has to remove and re-add them in the right sequence, retyping each one.  For any user who's tuning their fallback chain non-trivially (cost optimization, plan-quota-aware ordering, post-incident reconfiguration), this is painful enough that operators end up editing `openclaw.json` directly. Both surfaces — the UI and the JSON — share the same cognitive cost: "remember the exact provider/model slug and the exact ordering."  ## Requested  Two UX changes in the `Agents > Overview` pag
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "UI feature request: model picker + drag-to-reorder for primary/fallback model selection in Agents > Overview" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/openclaw/openclaw/issues/80521
-7. [🦞 Ecossistema de agentes de IA 2026-06-15](https://github.com/manelsen/agents-radar/issues/893)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: 🦞 Ecossistema de agentes de IA 2026-06-15
-     Source: github
-     URL: https://github.com/manelsen/agents-radar/issues/893
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: # Resumo diário do ecossistema de agentes de IA 2026-06-15  > Issues: 0 | PRs: 0 | Projetos cobertos: 7 | Gerado em: 2026-06-14 21:05 UTC  - [NullClaw](https://github​.com/nullclaw/nullclaw) - [NanoBot](https://github​.com/HKUDS/nanobot) - [Hermes Agent](https://github​.com/nousresearch/hermes-agent) - [PicoClaw](https://github​.com/sipeed/picoclaw) - [IronClaw](https://github​.com/nearai/ironclaw) - [CoPaw](https://github​.com/agentscope-ai/CoPaw) - [ZeroClaw](https://github​.com/zeroclaw-labs/zeroclaw)  ---  ## Análise aprofundada do projeto principal  Sem atividade nas últimas 24 horas.  ---  ## Comparação entre projetos do ecossistema  # Relatório Comparativo — Ecossistema Open Source de Agentes de IA  **Data de referência:** 2026-06-15 **Projetos analisados:** NullClaw, NanoBot, Hermes Agent, PicoClaw, IronClaw, CoPaw, ZeroClaw  ---  ## 1. Visão Geral do Ecossistema  O ecossistema d
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "🦞 Ecossistema de agentes de IA 2026-06-15" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/manelsen/agents-radar/issues/893
-8. [Dependency Dashboard](https://github.com/toondaey/nestjs-oauth2-server/issues/104)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/toondaey/nestjs-oauth2-server/issues/104
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/toondaey/nestjs-oauth2-server).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/rimraf` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) |  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-bran
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/toondaey/nestjs-oauth2-server/issues/104
+     Reference: https://github.com/DemonicSavage/mikan/issues/15

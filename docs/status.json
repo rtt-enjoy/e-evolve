@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-06-22T05:31:47.257613+00:00",
-  "total_runs": 824,
+  "last_run": "2026-06-22T12:26:29.639685+00:00",
+  "total_runs": 825,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -18,7 +18,9 @@
     "this_week_usd": 0.0,
     "last_cycle_usd": 0.0,
     "week_started": "2026-06-22",
-    "breakdown": {},
+    "breakdown": {
+      "code_techs": 0.0
+    },
     "history": [
       0.02,
       0.02,
@@ -49,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -67,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 75,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -169,93 +182,93 @@
         "archived_at": null
       },
       {
-        "title": "\ud83d\udcca AI CLI Tools Digest 2026-06-20",
-        "url": "https://github.com/duanyytop/agents-radar/issues/1729",
+        "title": "wpt-runner: adopt the real `wpt serve` instead of the hand-rolled static server (unblocks fetch/service-workers infra failures)",
+        "url": "https://github.com/lucid-softworks/browser/issues/78",
         "source": "github",
         "score": 100,
-        "estimated_value_usd": 200.0,
-        "reason": "visible or inferred value around $200.00; can become a repeatable async offer instead of hourly labor",
-        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udcca AI CLI Tools Digest 2026-06-20\nSource: github\nURL: https://github.com/duanyytop/agents-radar/issues/1729\nWhy this is suitable: visible or inferred value around $200.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # AI CLI Tools Community Digest 2026-06-20  > Generated: 2026-06-20 00:28 UTC | Tools covered: 9  - [Claude Code](https://github\u200b.com/anthropics/claude-code) - [OpenAI Codex](https://github\u200b.com/openai/codex) - [Gemini CLI](https://github\u200b.com/google-gemini/gemini-cli) - [GitHub Copilot CLI](https://github\u200b.com/github/copilot-cli) - [Kimi Code CLI](https://github\u200b.com/MoonshotAI/kimi-cli) - [OpenCode](https://github\u200b.com/anomalyco/opencode) - [Pi](https://github\u200b.com/badlogic/pi-mono) - [Qwen Code](https://github\u200b.com/QwenLM/qwen-code) - [DeepSeek TUI](https://github\u200b.com/Hmbown/DeepSeek-TUI) - [Claude Code Skills](https://github\u200b.com/anthropics/skills)  ---  ## Cross-Tool Comparison  # AI CLI Tools Ecosystem: Cross-Tool Comparison Report **Date:** 2026-06-20  ---  ## 1. Ecosystem Overview  The AI CLI developer tools landscape is experiencing a period of intense maturation, with six majo",
-        "outreach_draft": "Hi, I found your request about \"\ud83d\udcca AI CLI Tools Digest 2026-06-20\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $200.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/duanyytop/agents-radar/issues/1729",
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: wpt-runner: adopt the real `wpt serve` instead of the hand-rolled static server (unblocks fetch/service-workers infra failures)\nSource: github\nURL: https://github.com/lucid-softworks/browser/issues/78\nWhy this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching\nFirst step: Open the latest failed job, capture the failure signature, and patch only the failing path.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Area: `wpt-runner` (test harness / infra)  > **Revised.** The first version of this issue proposed reimplementing WPT's server-side endpoints natively in our toy static server. That's the wrong call \u2014 we can run WPT's *real* server (`wpt serve`), which does all of this correctly. This issue is now about adopting it. Thanks to @ImLunaHey for catching it.  ## Summary  WPT's official harness drives a real browser over WebDriver against `wpt serve` (WPT's Python server). We don't have WebDriver, so [`crates/wpt-runner`](crates/wpt-runner/src/main.rs#L1) loads tests **in-process** against a hand-rolled **static file server** instead. That server can only `std::fs::read` files off disk \u2014 it can't execute WPT's server-side endpoints, do request-context substitution, hand out auxiliary browsing contexts, or serve multiple origins. A large class of tests therefore fail for *infra* reasons rath",
+        "outreach_draft": "Hi, I found your request about \"wpt-runner: adopt the real `wpt serve` instead of the hand-rolled static server (unblocks fetch/service-workers infra failures)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/lucid-softworks/browser/issues/78",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/ni/measurement-plugin-python/issues/475",
+        "title": "Beta testers wanted \u2014 15 platforms \u00d7 3 operating systems",
+        "url": "https://github.com/mksglu/context-mode/issues/45",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/ni/measurement-plugin-python/issues/475\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ni/measurement-plugin-python).  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=users/renovate/third_party-ni-apis-digest -->chore(deps): update third_party/ni-apis digest to ac191b5  - [ ] <!-- unschedule-branch=users/renovate/lock-file-maintenance -->chore(deps): lock file maintenance  - [ ] <!-- create-all-awaiting-schedule-prs -->\ud83d\udd10 **Create all awaiting schedule PRs at once** \ud83d\udd10  ## Pending Status Checks  The following updates await pending status checks. To force their creation now, click on a checkbox below.   - [ ] <!-- approvePr-b",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/ni/measurement-plugin-python/issues/475",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Beta testers wanted \u2014 15 platforms \u00d7 3 operating systems\nSource: github\nURL: https://github.com/mksglu/context-mode/issues/45\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Help us ship stable releases across all platforms and operating systems  We run CI on Windows, Ubuntu, and macOS \u2014 but real-world usage catches things CI can't. If you want to help test pre-release versions before they hit `main`, sign up below.  **Beta testers who consistently contribute will be promoted to core contributors with write access.**  ### How it works  1. **Comment on this issue** with your OS + platform (e.g. \"macOS + Gemini CLI\") 2. We'll tag you on the PR when a new release is ready for testing 3. You test it and report back \u2014 either \"all good\" or open an issue  ### How to test  **Upgrade (existing users):** ``` /context-mode:ctx-upgrade ```  **Fresh install:** see [README](https://github.com/mksglu/context-mode#install) for your platform.  **Local dev (contributors):** see [Contributing Guide](https://github.com/mksglu/context-mode/blob/main/CONTRIBUTING.md).  **Diagn",
+        "outreach_draft": "Hi, I found your request about \"Beta testers wanted \u2014 15 platforms \u00d7 3 operating systems\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/mksglu/context-mode/issues/45",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/rmednitzer/relay-shell/issues/77",
+        "title": "Dashboard: streaming optimization UI (FastAPI + Svelte)",
+        "url": "https://github.com/nachollorca/promptuna/issues/39",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/rmednitzer/relay-shell/issues/77\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/rmednitzer/relay-shell).  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/pre-commit-hooks -->chore(deps): update pre-commit hooks to v0.15.18  - [ ] <!-- unschedule-branch=renovate/python-dependencies -->fix(deps): update python dependencies (`anyio`, `mcp`, `pytest`, `ruff`)  - [ ] <!-- unschedule-branch=renovate/actions-checkout-7.x -->chore(deps): update actions/checkout action to v7  - [ ] <!-- unschedule-branch=renovate/cryptography-49.x -->chore(deps): update dependency cryptography to v49  - [ ] <!-- unschedule-branch=re",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/rmednitzer/relay-shell/issues/77",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dashboard: streaming optimization UI (FastAPI + Svelte)\nSource: github\nURL: https://github.com/nachollorca/promptuna/issues/39\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Summary  Build a dashboard to visualize live results from `stream_optimize` (`src/promptuna/optimize.py`). Events (`Trial`, `Scoring`, `Step`) must render as they arrive, while users can expand and explore details without losing UI state when new events land.  This issue is the implementation plan and architecture handoff. It assumes no prior context beyond the codebase.  ---  ## Goals  | Requirement | Meaning | |---|---| | **Reactive** | Trials, scorings, and steps appear incrementally as `stream_optimize` yields them | | **Interactive** | Expand/collapse steps, trials, scorings, thinking blocks, templates, etc., while the stream continues | | **Maintainable** | Small surface area; no database for v1 | | **Future-proof** | Clean separation between library, API, and UI so the dashboard can grow without entangling core `promptuna` |  ## Non-goals (v1)  - Cloud deployment / production h",
+        "outreach_draft": "Hi, I found your request about \"Dashboard: streaming optimization UI (FastAPI + Svelte)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/nachollorca/promptuna/issues/39",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/LibrePhotos/librephotos/issues/929",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
-        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/LibrePhotos/librephotos/issues/929\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/LibrePhotos/librephotos).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/LibrePhotos/librephotos).   - \u26a0\ufe0f WARN: Error executing gradle wrapper update command. This may not necessarily be a blocker to the update, so please verify with the gradle wrapper output logs.  - \u26a0\ufe0f WARN: Error updating PR  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements avail",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/LibrePhotos/librephotos/issues/929",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Please consider fixing issues detected by repository checker",
-        "url": "https://github.com/Schmakus/ioBroker.lightcontrol/issues/337",
+        "title": "BuilderV2 dependency mkmetalink throws deprecation warnings",
+        "url": "https://github.com/QubesOS/qubes-issues/issues/9302",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
         "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Please consider fixing issues detected by repository checker\nSource: github\nURL: https://github.com/Schmakus/ioBroker.lightcontrol/issues/337\nWhy this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Notification from ioBroker Check and Service Bot Dear adapter developer,  I'm the ioBroker Check and Service Bot. I'm an automated tool processing routine tasks for the ioBroker infrastructure. I have recently checked the repository for your adapter _**lightcontrol**_ for common errors and appropiate suggestions to keep this adapter up to date.  ### This check is based on the current head revisions (master / main  branch) of the adapter repository  Please see the result of the check below.  ### [ioBroker.lightcontrol](https://github.com/Schmakus/ioBroker.lightcontrol) [![Downloads](https://img.shields.io/npm/dm/iobroker.lightcontrol.svg)](https://www.npmjs.com/package/iobroker.lightcontrol) ![Number of Installations (latest)](https://iobroker.live/badges/lightcontrol-installed.svg) ![Number of Installations (stable)](https://iobroker.live/badges/lightcontrol-stable.svg) - [![Test and ",
-        "outreach_draft": "Hi, I found your request about \"Please consider fixing issues detected by repository checker\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/Schmakus/ioBroker.lightcontrol/issues/337",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Renovate Dependency Updates",
-        "url": "https://github.com/timelessco/node-ts-app-template/issues/1",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
-        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Renovate Dependency Updates\nSource: github\nURL: https://github.com/timelessco/node-ts-app-template/issues/1\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/timelessco/node-ts-app-template).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/actions-checkout-7.x -->ci(ci-deps): \u2b06\ufe0f update actions/checkout action to v7  ## PR Edited (Blocked)  The following updates have been manually edited so Renovate will no longer make changes. To discard all commits and start over, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/major-2-",
-        "outreach_draft": "Hi, I found your request about \"Renovate Dependency Updates\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/timelessco/node-ts-app-template/issues/1",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: BuilderV2 dependency mkmetalink throws deprecation warnings\nSource: github\nURL: https://github.com/QubesOS/qubes-issues/issues/9302\nWhy this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: [How to file a helpful issue](https://www.qubes-os.org/doc/issue-tracking/)\r \r ### Qubes OS release\r \r R4.2, Builder template: Fedora 40.\r \r ### Brief summary\r \r \r \r ### Steps to reproduce\r \r [Try to build mkmetalink](https://github.com/qubesos/qubes-builderv2?tab=readme-ov-file#dependencies).\r \r ### Expected behavior\r \r No deprecation warning.\r \r ### Actual behavior\r \r ```sh\r $ sudo python3 setup.py install\r ```\r \r ```salt\r                  stderr:\r \r                     /usr/lib/python3.12/site-packages/setuptools/_distutils/cmd.py:66: SetuptoolsDeprecationWarning: setup.py install is deprecated.\r                     !!\r \r                             ********************************************************************************\r                             Please avoid running ``setup.py`` directly.\r                             Instead, use pypa/build, pypa/installer or other\r       ",
+        "outreach_draft": "Hi, I found your request about \"BuilderV2 dependency mkmetalink throws deprecation warnings\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/QubesOS/qubes-issues/issues/9302",
         "pursued": false,
         "archived_at": null
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/bitwarden/clients/issues/3782",
+        "url": "https://github.com/Yuliya65/Autogen/issues/4",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/bitwarden/clients/issues/3782\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/bitwarden/clients).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@angular-devkit/build-angular](https://redirect.github.com/angular/angular-cli) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [@angular/animations](https://redirect.github.com/angular/angular) | ![Unavailable](http",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/bitwarden/clients/issues/3782",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/Yuliya65/Autogen/issues/4\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/uuid` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | nuget | [Aspire.Hosting.NodeJs](https://redirect.github.com/dotnet/aspire) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | nuget | [Microsoft.Extensions.AI.Ollama](https://redirect.github.com/dotnet/extensions) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | nuget | [xunit](https://redirect.github.com/xunit/xunit) | ![Unavailable](htt",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/Yuliya65/Autogen/issues/4",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/prowler-cloud/prowler/issues/11301",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/prowler-cloud/prowler/issues/11301\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: > \u2139\ufe0f **Note** >  > This PR body was truncated due to platform limits.  This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/prowler-cloud/prowler).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/prowler-cloud/prowler).   - \u26a0\ufe0f WARN: Error updating branch: update failure  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [framer-motion](https://redirect.github.com/motiondivision/motion) | ![Available](https://img.shields.io/badge/available-green?style=f",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/prowler-cloud/prowler/issues/11301",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Renovate: Dependency Status",
+        "url": "https://github.com/PostHog/posthog/issues/54967",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Renovate: Dependency Status\nSource: github\nURL: https://github.com/PostHog/posthog/issues/54967\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: > \u2139\ufe0f **Note** >  > This PR body was truncated due to platform limits.  This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/PostHog/posthog).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/dompurify` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | `@types/dotenv` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?",
+        "outreach_draft": "Hi, I found your request about \"Renovate: Dependency Status\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/PostHog/posthog/issues/54967",
         "pursued": false,
         "archived_at": null
       }
@@ -302,7 +315,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-06-21T10:47:51.089460+00:00",
+    "last_refresh_at": "2026-06-22T12:26:30.250075+00:00",
     "reference_sources": [
       {
         "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
@@ -323,13 +336,12 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "Synthesizing demand signals from GitHub issues and remote job trends reveals opportunities to offer specialized, productized services in AI/ML, automation, and security auditing, leveraging async workflows and AI tools to scale income beyond hourly work.",
+      "summary": "Combine AI-driven specialization with productized, automated remote services\u2014such as prompt engineering consulting, no\u2011code workflow setup, and async technical documentation fixes\u2014to deliver high\u2011value, low\u2011hour offerings that meet developer and product teams\u2019 demand for efficiency and scalability.",
       "owner_actions": [
-        "Research and prioritize high-demand niches (e.g., AI adapters, Solidity security, no-code automation) by monitoring GitHub 'help wanted' issues and freelance platforms",
-        "Develop productized service packages (e.g., audit checklists, retainer-based CI maintenance, micro-SaaS setup) to standardize offerings and reduce custom work",
-        "Create async-friendly workflows using AI tools for tasks like code review, documentation, and vulnerability detection to handle multiple clients efficiently",
-        "Establish retainer models for ongoing services (e.g., developer productivity, CRM automation) to ensure recurring revenue streams",
-        "Build case studies and templates from successful GitHub issue resolutions to market services as scalable solutions rather than time-based projects"
+        "Analyze the issue trends to identify the most requested automation niches (e.g., CI/CD, test failures, tooling) and prioritize a productized service in that area.",
+        "Create a minimal, AI\u2011assisted service package (e.g., a prompt\u2011engineering audit with automated template generation) and define retainer pricing and delivery workflow.",
+        "Build an automated delivery pipeline using no\u2011code tools and AI assistants to produce and ship the service asynchronously, reducing manual effort.",
+        "Launch a targeted marketing campaign (blog post, LinkedIn carousel) highlighting time\u2011savings case studies and collect feedback to iterate the offering."
       ]
     }
   },

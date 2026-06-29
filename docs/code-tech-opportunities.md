@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-06-28T20:36:58.728108+00:00
+Refreshed: 2026-06-29T21:45:32.630623+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,11 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-The optimal remote-service earnings stem from leveraging specialized skills in AI-driven automation, data analysis, and technical support, focusing on high-demand areas like AI consulting and no-code solutions to maximize efficiency and income potential.
+High demand exists for specialized remote services leveraging AI, automation, and productized solutions in niches like blockchain development, CI/CD optimization, and technical documentation. Opportunities arise from GitHub issues highlighting pain points in smart contract security, testing infrastructure, and workflow automation.
 
-- Implement automation tools for data processing
-- Engage with GSC data providers
-- Address code bugs in existing systems
+- Offer AI prompt engineering and workflow consulting services targeting blockchain and DevOps teams facing CI/CD flakiness issues.
+- Develop productized audit/checklist packages for Solidity smart contract vulnerabilities identified in bounty posts.
+- Create async technical documentation fix services for GitHub advisory issues requiring structured knowledge base cleanup.
+- Design no-code automation tools for GitHub CI/Dispatch workflows to address flaky test failures and emulator startup problems.
+- Provide retainer-based AI customer-support knowledge base optimization for projects with unestablished testing frameworks.
 
 ## Underserved Focus
 
@@ -106,7 +108,7 @@ The optimal remote-service earnings stem from leveraging specialized skills in A
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-2. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal/issues/1874)
+2. [Dependency Dashboard](https://github.com/tadanobutubutu/screeps/issues/5)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -116,7 +118,7 @@ The optimal remote-service earnings stem from leveraging specialized skills in A
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/uPortal-Project/uPortal/issues/1874
+     URL: https://github.com/tadanobutubutu/screeps/issues/5
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -127,7 +129,7 @@ The optimal remote-service earnings stem from leveraging specialized skills in A
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/uPortal-Project/uPortal).   - ⚠️ WARN: No releases satisfy vulnerabilityFixVersion  - ⚠️ WARN: Package lookup failures  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | gradle | [org.hibernate:hibernate-core](https://redirect.github.com/hibernate/hibernate-orm) | ![Available](https://img.shields.io/badge/available-green?style=flat-s
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/tadanobutubutu/screeps).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/tadanobutubutu/screeps).   - ⚠️ WARN: Package lookup failures  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/posthog-js-1.x -->fix(deps): update dependency posthog-js to v1.396.2  - [ ] <!-- unschedule-branch=renovate/actions-checkout-7.x -->chore(deps): update actions/checkout action to v7  - [ ] <!-- create-all-awaiting-schedule-prs -->🔐 **Create all awaiting schedule PRs a
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -135,38 +137,8 @@ The optimal remote-service earnings stem from leveraging specialized skills in A
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/uPortal-Project/uPortal/issues/1874
-3. [📈 CI Daily Pulse](https://github.com/microsoft/aspire/issues/18232)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: 📈 CI Daily Pulse
-     Source: github
-     URL: https://github.com/microsoft/aspire/issues/18232
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: # 🔴 GH CI — `main` red at the tip (0/1) · 🟢 outerloop 100% · 🟢 internal 100% · 🔴 PR 64% — **1 item for a dev**  > ### 🔴 For a dev — rolling `main` still red at the tip: VS Code debug-dashboard E2E (Windows) timed out > **What:** rolling `main`'s latest run fails the **VS Code extension E2E (Windows, debug-dashboard)** job — its `debug stop removes running apphost` cases **time out** on the debug AppHost start/stop (`Timed out after 120000ms waiting for AppHost … to stop`; `180000ms waiting for debug AppHost startup`). The **Linux** shard on the same run passed → Windows-only. **Intermittent, not deterministic:** the debug-dashboard shard failed **2 of the last 3** `main` runs (Jun 28 00:07 + Jun 27 00:00); the run between (Jun 27 04:57) red-failed a *sibling* VS Code Windows job (unit tests) instead — so the Windows VS Code area recurs day-to-day without one shard failing every run. Roll
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "📈 CI Daily Pulse" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/microsoft/aspire/issues/18232
-4. [Dependency Dashboard](https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41)
+     Reference: https://github.com/tadanobutubutu/screeps/issues/5
+3. [Dependency Dashboard](https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
@@ -196,67 +168,7 @@ The optimal remote-service earnings stem from leveraging specialized skills in A
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41
-5. [Dependency Dashboard](https://github.com/ls1intum/edutelligence/issues/293)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/ls1intum/edutelligence/issues/293
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ls1intum/edutelligence).  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [react-query](https://redirect.github.com/tannerlinsley/react-query) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) |  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/atlas -->`Atlas`: Update atlas (`@docusaurus/core`, `@docusaurus/module-type-aliases`, `@docusa
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/ls1intum/edutelligence/issues/293
-6. [Dependency Dashboard](https://github.com/app-sre/qontract-reconcile/issues/5078)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/app-sre/qontract-reconcile/issues/5078
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.  ## Repository Problems  Renovate tried to run on this repository, but found these problems.   - ⚠️ WARN: Cannot access vulnerability alerts. Please ensure permissions have been granted.  - ⚠️ WARN: Some release(s) did not have a releaseTimestamp, but as we're running with minimumReleaseAgeBehaviour=timestamp-optional, proceeding. See debug logs for more information  - ⚠️ WARN: Dependency name is unset, skipping  - ⚠️ WARN: Some upgrade(s) did not have a releaseTimestamp, but as we're running with minimumReleaseAgeBehaviour=timestamp-optional, proceeding. See debug logs for more information  - ⚠️ WARN: Error updating branch: update failure  - ⚠️ WARN: Package lookup failures  ## Abandoned Dependencies  The following depende
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/app-sre/qontract-reconcile/issues/5078
-7. [Dependency Dashboard](https://github.com/hmcts/civil-citizen-ui/issues/1389)
+4. [Dependency Dashboard](https://github.com/ordermentum/steveo/issues/493)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -266,7 +178,7 @@ The optimal remote-service earnings stem from leveraging specialized skills in A
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/hmcts/civil-citizen-ui/issues/1389
+     URL: https://github.com/ordermentum/steveo/issues/493
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -277,7 +189,7 @@ The optimal remote-service earnings stem from leveraging specialized skills in A
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/hmcts/civil-citizen-ui).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/config` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | `@types/glob` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | `@types/uuid` | ![Unavailable](https://i
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ordermentum/steveo).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/ordermentum/steveo).   - ⚠️ WARN: Package lookup failures  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@steveojs/scheduler-prisma](https://redirect.github.com/ordermentum/steveo
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -285,8 +197,8 @@ The optimal remote-service earnings stem from leveraging specialized skills in A
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/hmcts/civil-citizen-ui/issues/1389
-8. [Dependency Dashboard](https://github.com/hmcts/em-icp-api/issues/253)
+     Reference: https://github.com/ordermentum/steveo/issues/493
+5. [Dependency Dashboard](https://github.com/graasp/graasp-app-starter-ts-vite/issues/13)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -296,7 +208,7 @@ The optimal remote-service earnings stem from leveraging specialized skills in A
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/hmcts/em-icp-api/issues/253
+     URL: https://github.com/graasp/graasp-app-starter-ts-vite/issues/13
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -307,7 +219,7 @@ The optimal remote-service earnings stem from leveraging specialized skills in A
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/hmcts/em-icp-api).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/config` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [@types/helmet](https://redirect.github.com/helmetjs/helmet) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm |
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/graasp/graasp-app-starter-ts-vite).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | github-actions | [google-github-actions/release-please-action](https://redirect.github.com/google-github-actions/release-please-action) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) | | npm | `@types/uuid` | ![Unavailabl
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -315,4 +227,94 @@ The optimal remote-service earnings stem from leveraging specialized skills in A
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/hmcts/em-icp-api/issues/253
+     Reference: https://github.com/graasp/graasp-app-starter-ts-vite/issues/13
+6. [Dependency Dashboard](https://github.com/FromDoppler/unlayer-editor/issues/417)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/FromDoppler/unlayer-editor/issues/417
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/FromDoppler/unlayer-editor).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@types/react-dnd](https://redirect.github.com/react-dnd/react-dnd) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | `@types/react-email-editor` | ![Unavailable](https://img.shields.io/badge/unavailable-orange
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/FromDoppler/unlayer-editor/issues/417
+7. [Dependency Dashboard](https://github.com/cloudposse/github-action-setup-atmos/issues/3)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/cloudposse/github-action-setup-atmos/issues/3
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/cloudposse/github-action-setup-atmos).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/actions-tool-cache-2.x-lockfile -->chore(deps): update dependency @actions/tool-cache to v2.0.2  - [ ] <!-- unlimit-branch=renovate/eslint-monorepo -->chore(deps): update dependency eslint to v8.57.1  - [ ] <!-- unlimit-branch=renovate/eslint-config-prettier-9.x -->chore(deps): update dependency e
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/cloudposse/github-action-setup-atmos/issues/3
+8. [Dependency Dashboard](https://github.com/technologiestiftung/hilf-mir.berlin/issues/4)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/technologiestiftung/hilf-mir.berlin/issues/4
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/technologiestiftung/hilf-mir.berlin).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/cycjimmy-semantic-release-action-6.x -->chore(deps): update cycjimmy/semantic-release-action action to v6  - [ ] <!-- unlimit-branch=renovate/node-24.x -->chore(deps): update node.js to v24  - [ ] <!-- unlimit-branch=renovate/maplibre-gl-5.x -->fix(deps): update dependency maplibre-gl to v5  - [ ]
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/technologiestiftung/hilf-mir.berlin/issues/4

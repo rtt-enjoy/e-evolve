@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-06-30T22:40:54.023702+00:00
+Refreshed: 2026-07-02T01:25:17.113615+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,13 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-GitHub issues reveal strong demand for remote, productized services that automate API documentation, dependency tracking, CI/CD maintenance, no‑code workflow setup, and AI‑enhanced support—opportunities to monetize specialization, automation, and retainer models while detaching income from hours worked.
+The gathered leads show a strong demand for specialized, async, and automation‑focused remote services such as AI prompt consulting, no‑code workflow setup, knowledge‑base cleanup, analytics dashboard automation, SEO/content ops, CRM/data pipelines, CI/CD maintenance, technical docs fixes, audit checklists, and micro‑SaaS migration, all of which align with high‑paying, low‑hour remote models that leverage specialization, productized retainers, and AI‑powered systems.
 
-- Select a niche aligned with the observed needs (e.g., API/OpenAPI spec enrichment or no‑code automation setup) and define a clear, fixed‑scope deliverable with pricing.
-- Create a reusable service package (templates, AI‑assisted tools, SLA) that can be delivered asynchronously, enabling a 4‑hour‑work‑week style workflow.
-- Engage the identified GitHub leads by commenting on the issues, offering a free audit or sample deliverable, and capturing interest for a paid engagement.
-- Set up a simple retention or subscription offering for ongoing maintenance (e.g., monthly dashboard updates, dependency dashboards, or CI health checks).
-- Track conversion and refine the offer based on feedback, then replicate the process across other niches from the list to scale remote‑service income.
+- Create a one‑page service catalog listing each niche with a clear value proposition, pricing tier (project, retainer, subscription), and typical deliverables.
+- Build a simple landing page or LinkedIn profile using no‑code tools (e.g., Carrd, Webflow) that highlights the 4‑hour work‑week model, automation focus, and case‑study snippets.
+- Develop a lead‑generation funnel: set up targeted LinkedIn outreach and GitHub issue monitoring scripts to capture "help wanted" tags, then send personalized outreach offering a free audit or quick win.
+- Design a productized service package for each niche (e.g., "AI Prompt & Workflow Audit – 2‑hour delivery for $500") and automate onboarding with Calendly, Typeform, and Zapier/Make.
+- Create a repeatable delivery workflow: use AI tools (ChatGPT, Claude) for prompt creation, no‑code platforms (Zapier, n8n) for automation, and a shared Notion or ClickUp board for client communication and retainer tracking.
 
 ## Underserved Focus
 
@@ -78,37 +78,7 @@ GitHub issues reveal strong demand for remote, productized services that automat
 
 ## Ranked Leads
 
-1. [inline-visualizer-v2 bug](https://github.com/Classic298/open-webui-plugins/issues/48)
-   - Score: 100/100
-   - Value signal: $3870.00
-   - Why: visible or inferred value around $3870.00; can become a repeatable async offer instead of hourly labor
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: inline-visualizer-v2 bug
-     Source: github
-     URL: https://github.com/Classic298/open-webui-plugins/issues/48
-     Why this is suitable: visible or inferred value around $3870.00; can become a repeatable async offer instead of hourly labor
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: # OpenWeb-UI version 0.10.1  ## Description  The "Rendering visualization" section never actually appears. My agent appears to properly follow the steps, so I believe this tool is not compatible with the latest version of OpenWebUI. `0.10.1`  Exact transcription of the log:  <img width="1170" height="776" alt="Image" src="https://github.com/user-attachments/assets/33a473cc-cc2c-477f-847e-3f718db16147" />  Qwen3.6-27B-Uncensored-HauhauCS-Balanced-Q3_K_P.gguf Today at 6:31 PM            Thought for 2 seconds          The user wants a simple visualization of the sun and the moon.     I should call view_skill("visualize") first to check the handbook.     Then I will generate a simple SVG with a yellow sun and a white/grey moon, perhaps on a dark background to represent space.     Let's start by viewing the skill.       View Result from view_skill     Input   id  visualize   Output    {   "na
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "inline-visualizer-v2 bug" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $3870.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/Classic298/open-webui-plugins/issues/48
-2. [Built an automation for a local business and got paid $1500 — sharing the process](https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/)
+1. [Built an automation for a local business and got paid $1500 — sharing the process](https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/)
    - Score: 100/100
    - Value signal: $1500.00
    - Why: visible or inferred value around $1500.00; public proof makes this suitable for automated AI patching
@@ -138,11 +108,11 @@ GitHub issues reveal strong demand for remote, productized services that automat
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-3. [Canonical: JavaScript multithreading support](https://github.com/zig-utils/zig-js/issues/1)
+2. [Canonical: JavaScript multithreading support](https://github.com/zig-utils/zig-js/issues/1)
    - Score: 100/100
    - Value signal: $262.00
    - Why: visible or inferred value around $262.00; can become a repeatable async offer instead of hourly labor
-   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
@@ -150,7 +120,7 @@ GitHub issues reveal strong demand for remote, productized services that automat
      Source: github
      URL: https://github.com/zig-utils/zig-js/issues/1
      Why this is suitable: visible or inferred value around $262.00; can become a repeatable async offer instead of hourly labor
-     First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -168,7 +138,7 @@ GitHub issues reveal strong demand for remote, productized services that automat
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/zig-utils/zig-js/issues/1
-4. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal/issues/1874)
+3. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal/issues/1874)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -198,67 +168,7 @@ GitHub issues reveal strong demand for remote, productized services that automat
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/uPortal-Project/uPortal/issues/1874
-5. [Upgrade to Transformers v5](https://github.com/vllm-project/vllm/issues/38379)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Upgrade to Transformers v5
-     Source: github
-     URL: https://github.com/vllm-project/vllm/issues/38379
-     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: ## What is this issue?  This issue serves as a living tracker for the current issues preventing us from upgrading vLLM to Transformers v5.  We will use sub-issues to track individual failures and PRs should be made against these sub-issues.  The solutions to these issues may need to be applied to either:  - Transformers in the form of:   - Adding missing backward compatibility (usually for custom code models)   - General bug fixes/improvements to new features of v5 - vLLM in the form of:   - Forward compatibility with how something is now done in v5   - Edge case handling for issues that v4 ignored (such as config validation)  Sometimes, the issue is simply with the model checkpoint itself, for example if it:  - Contains a malformed `config.json` that cannot be used to instantiate the newly input validated `PreTrainedConfig` class - Custom code* uses deprecated/removed APIs  In these sit
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Upgrade to Transformers v5" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/vllm-project/vllm/issues/38379
-6. [Dependency Dashboard](https://github.com/tadanobutubutu/screeps/issues/5)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/tadanobutubutu/screeps/issues/5
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/tadanobutubutu/screeps).  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/posthog-js-1.x -->fix(deps): update dependency posthog-js to v1.396.3  - [ ] <!-- unschedule-branch=renovate/actions-checkout-7.x -->chore(deps): update actions/checkout action to v7  - [ ] <!-- create-all-awaiting-schedule-prs -->🔐 **Create all awaiting schedule PRs at once** 🔐   ---  > [!WARNING] > Renovate failed to look up the following dependencies: `Failed to look up github-tags package linear-bots/gitstream-github-action: no-result`. >  > Files affe
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/tadanobutubutu/screeps/issues/5
-7. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
+4. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -288,19 +198,19 @@ GitHub issues reveal strong demand for remote, productized services that automat
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ah-ha-admin/refactored-memory/issues/49
-8. [Hackathon: build LLM-mocked tests for all examples in the repo](https://github.com/topoteretes/cognee/issues/3601)
+5. [Dependency Dashboard](https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41)
    - Score: 100/100
    - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Hackathon: build LLM-mocked tests for all examples in the repo
+     Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/topoteretes/cognee/issues/3601
-     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+     URL: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41
+     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -309,12 +219,102 @@ GitHub issues reveal strong demand for remote, productized services that automat
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## 🏆 Hackathon task: LLM-mocked tests for every example in the repo  ### The problem  We ship a lot of example scripts under [`examples/`](https://github.com/topoteretes/cognee/tree/main/examples) — quickstarts, demos, guides, custom pipelines, database integrations, and POCs (~70 scripts in total). They're the first thing new users run, but right now nothing guarantees they keep working. They:  - require real LLM API keys (and burn real tokens / money) to run, - are slow and non-deterministic, so they can't run in CI, - silently rot when an API, import path, or signature changes.  ### The goal  Add **LLM-mocked tests** for **all examples** so every example can run in CI, fast and for free, with **deterministic, mocked LLM responses** — catching breakage before users hit it.  The idea: mock the LLM (and embedding) layer so calls return canned, deterministic responses instead of hitting a
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/IBM/tensorlakehouse-openeo-driver).  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/asttokens-3.x -->Update dependency asttokens to v3.0.1  - [ ] <!-- unlimit-branch=renovate/branca-0.x -->Update dependency branca to v0.8.2  - [ ] <!-- unlimit-branch=renovate/cdsapi-0.x -->Update dependency cdsapi to v0.7.7  - [ ] <!-- unlimit-branch=renovate/cfgrib-0.x -->Update dependency cfgrib to v0.9.15.1  - [ ] <!-- unlimit-branch=renovate/cftime-1.x -->Update dependency cftime to v1.6.5  - [ ] <!-- unlimit-branch=renovate/charset-normalize
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Hackathon: build LLM-mocked tests for all examples in the repo" and can make a small working version.
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/topoteretes/cognee/issues/3601
+     Reference: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41
+6. [Dependency Dashboard](https://github.com/ni/measurement-plugin-python/issues/475)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/ni/measurement-plugin-python/issues/475
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ni/measurement-plugin-python).  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=users/renovate/third_party-ni-apis-digest -->chore(deps): update third_party/ni-apis digest to 28d8249  - [ ] <!-- unschedule-branch=users/renovate/github-actions -->chore(deps): update enricomi/publish-unit-test-result-action action to v2.24.0  - [ ] <!-- unschedule-branch=users/renovate/lock-file-maintenance -->chore(deps): lock file maintenance  - [ ] <!-- create-all-awaiting-schedule-prs -->🔐 **Create all awaiting schedule PRs at once** 🔐  ## Pending Stat
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/ni/measurement-plugin-python/issues/475
+7. [Dependency Dashboard](https://github.com/atlas-bi/Hub/issues/81)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/atlas-bi/Hub/issues/81
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/atlas-bi/Hub).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [bulma-checkradio](https://redirect.github.com/Wikiki/bulma-checkradio) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [bulma-tooltip](https://redirect.github.com/Wikiki/bulma-tooltip) | ![Unavailable](https://img.shields
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/atlas-bi/Hub/issues/81
+8. [Dependency Dashboard](https://github.com/windyakin/kosen-website-crawler/issues/178)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/windyakin/kosen-website-crawler/issues/178
+     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/windyakin/kosen-website-crawler).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/major-eslint-monorepo -->[Update dependency eslint to v10](../pull/424)  - [ ] <!-- rebase-branch=renovate/eslint-plugin-n-18.x -->[Update dependency eslint-plugin-n to v18](../pull/432)  - [ ] <!-- rebase-branch=renovate/major-puppeteer -->[Update dependency puppeteer to v25](../pull/405)  - [ ] <!-- rebase-bran
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/windyakin/kosen-website-crawler/issues/178

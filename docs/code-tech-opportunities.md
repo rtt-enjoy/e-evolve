@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-07-04T07:15:14.197866+00:00
+Refreshed: 2026-07-05T08:18:41.159681+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,13 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-Demand signals from GitHub issues and remote job trends indicate strong market opportunities for specialized technical services focused on CI/CD optimization, test automation, no-code/low-code solutions, and AI-powered workflow systems. The common thread is decoupling income from hours through productized services, retainers, and async deliverables that solve specific pain points like multi-arch container builds, flaky test resolution, and automated documentation systems.
+Analysis of GitHub issues and remote service niches reveals high demand for specialized technical automation, blockchain security audits, and developer productivity retainers, with bounties ranging from $5k-$9k for Solidity fixes and SDK improvements, while async documentation and CI/CD maintenance services show consistent 'help wanted' signals across .NET, C++, and Kubernetes ecosystems.
 
-- Package CI/CD expertise into a productized service offering multi-arch Docker image builds and secure GitHub Actions pinning with automated audit reports
-- Create a retainer-based test automation service targeting teams with flaky test issues, offering systematic identification and resolution of test failures across CI pipelines
-- Develop a no-code automation toolkit for common workflows (CRM sync, data imports, analytics dashboards) with template-based pricing and async implementation
-- Launch an AI-powered technical documentation service that audits existing docs and creates automated update systems for developer teams
-- Build a micro-SaaS monitoring service that tracks GitHub Actions security, test coverage gaps, and CI performance metrics with automated alerting
+- Target blockchain security audit opportunities by offering Solidity vulnerability assessment services for smart contracts, leveraging the $5k-$9k bounty patterns in OpenAgents issues
+- Develop productized no-code automation packages for CRM/data workflows, addressing the recurring 'help wanted' signals in GitHub issues requiring spreadsheet and data import/export solutions
+- Create async technical documentation retainer services focused on CI/CD pipeline optimization and test failure resolution, capitalizing on the 232 test failures in Kubestellar console and .NET runtime issues
+- Position as a specialist in AI-powered knowledge base cleanup for customer support systems, responding to the documented need for AI customer-support knowledge base maintenance
+- Offer micro-SaaS setup and migration consulting services, targeting developers seeking to productize their automation tools as seen in the re-toolbox project maintenance tracker
 
 ## Underserved Focus
 
@@ -108,7 +108,37 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-2. [Dependency Dashboard](https://github.com/tadanobutubutu/screeps/issues/5)
+2. [Project maintenance tracker: build, fixes, refactors, optimization, docs](https://github.com/mitsuakki/re-toolbox/issues/2)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Project maintenance tracker: build, fixes, refactors, optimization, docs
+     Source: github
+     URL: https://github.com/mitsuakki/re-toolbox/issues/2
+     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+     First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Meta: repo health - updates, fixes, refactors, optimizations  Notes to myself to organize maintenance work on the toolbox image. I'll split sub-items into their own issues/PRs as I pick them up.  ### Build and tooling - [ ] Split the Dockerfile into stages (base, r2/ghidra, angr/python stack, fuzzing, android) so a rebuild after a small change doesn't reinstall everything - [ ] Pin versions for radare2, Ghidra, angr, AFL++, honggfuzz, apktool, jadx, frida instead of pulling latest at build time, so builds are reproducible - [ ] Add a CI workflow that builds the image on push/PR and fails fast if the build breaks - [ ] Add a release workflow (tag, build and push image to GHCR/Docker Hub). No releases published yet - [ ] Review image size. 62.9% Python / 25% Dockerfile / 12.1% shell suggests a lot of tool installs. Look at multi-stage builds and removing build only deps from the final l
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Project maintenance tracker: build, fixes, refactors, optimization, docs" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/mitsuakki/re-toolbox/issues/2
+3. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal/issues/1874)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -118,7 +148,7 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/tadanobutubutu/screeps/issues/5
+     URL: https://github.com/uPortal-Project/uPortal/issues/1874
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -129,7 +159,7 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/tadanobutubutu/screeps).  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/sentry-javascript-monorepo -->fix(deps): update dependency @sentry/browser to v10.63.0  - [ ] <!-- unschedule-branch=renovate/posthog-js-1.x -->fix(deps): update dependency posthog-js to v1.396.6  - [ ] <!-- unschedule-branch=renovate/actions-checkout-7.x -->chore(deps): update actions/checkout action to v7  - [ ] <!-- create-all-awaiting-schedule-prs -->🔐 **Create all awaiting schedule PRs at once** 🔐   ---  > [!WARNING] > Renovate failed to look up the f
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/uPortal-Project/uPortal).   - ⚠️ WARN: No releases satisfy vulnerabilityFixVersion  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | gradle | [org.hibernate:hibernate-core](https://redirect.github.com/hibernate/hibernate-orm) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) | | gradle | [org.hibernate:h
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -137,8 +167,8 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/tadanobutubutu/screeps/issues/5
-3. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
+     Reference: https://github.com/uPortal-Project/uPortal/issues/1874
+4. [feat(roadmap): live PO-authored OKR roadmap — objectives + many-to-many tasks + dependencies + forecast vs target](https://github.com/meanllbrl/dreamcontext/issues/94)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -146,9 +176,9 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Dependency Dashboard
+     Lead: feat(roadmap): live PO-authored OKR roadmap — objectives + many-to-many tasks + dependencies + forecast vs target
      Source: github
-     URL: https://github.com/ah-ha-admin/refactored-memory/issues/49
+     URL: https://github.com/meanllbrl/dreamcontext/issues/94
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -159,16 +189,16 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/ah-ha-admin/refactored-memory).   - ⚠️ WARN: Package lookup failures  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/pnpm-7.x -->Update dependency pnpm to v7.33.7  - [ ] <!-- unlimit-branch=renovate/python-3.x -->Update depe
+     Request excerpt: <!-- dc:dates --> > 🗓️ **Start:** 2026-07-02 <!-- /dc:dates -->  ## Summary  The roadmap is a **product-owner-authored board of Objectives (OKR-style goals)** — *not* a derived shadow of tasks, and *not* a list of releases. Each objective is an **outcome** the PO is driving toward ("increase retention by 20%", "ship v0.2.3", "launch mobile app"). Tasks link to objectives **many-to-many** and roll their progress up. Objectives can **depend on each other**, so a slip in one **cascades along the dependency DAG**. Each objective carries a **target date** (the PO commits) versus a **forecast date** (computed) — and the gap between them is the live on-track / slipping signal.  The PO **owns the structure**; computation is the **assist layer underneath** (rollups, forecast, slip detection). It's a live, shareable, product-owner-managed board — so a PO can be more of a PO.  > Reviewed 2026-06-29
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     Hi, I found your request about "feat(roadmap): live PO-authored OKR roadmap — objectives + many-to-many tasks + dependencies + forecast vs target" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/ah-ha-admin/refactored-memory/issues/49
-4. [Dependency Dashboard](https://github.com/nolte/kamerplanter/issues/12)
+     Reference: https://github.com/meanllbrl/dreamcontext/issues/94
+5. [Dependency Dashboard](https://github.com/app-sre/qontract-reconcile/issues/5078)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
@@ -178,7 +208,7 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/nolte/kamerplanter/issues/12
+     URL: https://github.com/app-sre/qontract-reconcile/issues/5078
      Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -189,7 +219,7 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/nolte/kamerplanter).  ## PR Edited (Blocked)  The following updates have been manually edited so Renovate will no longer make changes. To discard all commits and start over, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/helm-charts -->chore(deps): update helm release ollama to v1.65.0  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/pin-dependencies -->[chore(deps): pin nolte/gh-plumbing action to 877fc02](../pull/330)  - [ ] <!-- rebase-branch=renovate/frontend-minorpatch -->[chore(deps): update dependency recharts to v3.9.
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.  ## Repository Problems  Renovate tried to run on this repository, but found these problems.   - ⚠️ WARN: Cannot access vulnerability alerts. Please ensure permissions have been granted.  - ⚠️ WARN: Dependency name is unset, skipping  - ⚠️ WARN: Some upgrade(s) did not have a releaseTimestamp, but as we're running with minimumReleaseAgeBehaviour=timestamp-optional, proceeding. See debug logs for more information  - ⚠️ WARN: Error updating branch: update failure  - ⚠️ WARN: Package lookup failures  ## Abandoned Dependencies  The following dependencies have not received updates for an extended period and may be unmaintained.  <details> <summary>View abandoned dependencies (11)</summary>  > [!NOTE] Packages are marked as aband
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -197,8 +227,8 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/nolte/kamerplanter/issues/12
-5. [Dependency Dashboard](https://github.com/GoogleCloudPlatform/vertex-ai-creative-studio/issues/4)
+     Reference: https://github.com/app-sre/qontract-reconcile/issues/5078
+6. [Dependency Dashboard](https://github.com/grafana/sigma-rule-deployment/issues/176)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -208,7 +238,7 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/GoogleCloudPlatform/vertex-ai-creative-studio/issues/4
+     URL: https://github.com/grafana/sigma-rule-deployment/issues/176
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -219,7 +249,7 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/GoogleCloudPlatform/vertex-ai-creative-studio).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/GoogleCloudPlatform/vertex-ai-creative-studio).   - ⚠️ WARN: Error updating branch: update failure  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@genkit-ai/googleai](https://redirect.github.com/firebase/genkit) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | np
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.  ## Repository Problems  Renovate tried to run on this repository, but found these problems.   - ⚠️ WARN: Package lookup failures  ## Abandoned Dependencies  The following dependencies have not received updates for an extended period and may be unmaintained.  <details> <summary>View abandoned dependencies (6)</summary>  > [!NOTE] Packages are marked as abandoned when they exceed the [`abandonmentThreshold`](https://docs.renovatebot.com/configuration-options/#abandonmentthreshold) since their last release. Unlike deprecated packages with official notices, abandonment is detected by release inactivity. >  | Datasource | Package | Last Updated | |------------|------|-------------| | gomod | [github.com/davecgh/go-spew](https:/
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -227,38 +257,8 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/GoogleCloudPlatform/vertex-ai-creative-studio/issues/4
-6. [Faz 24 audio-gateway transcript delivery rollout](https://github.com/Halildeu/platform-k8s-gitops/issues/2186)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Faz 24 audio-gateway transcript delivery rollout
-     Source: github
-     URL: https://github.com/Halildeu/platform-k8s-gitops/issues/2186
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: <!-- agent-state:v1 --> status: needs-runtime-smoke claim_session: Halil-MacBook-Pro-codex-faz24-product-surface-20260704-cont claim_worktree: /Users/halilkocoglu/Documents/.worktrees/platform-desktop-faz24-product-surface-20260629 claim_branch: codex/faz24-runtime-main-20260630 claim_updated_at: 2026-07-04T00:59:09Z expires_at: 2026-07-04T02:59:09Z <!-- /agent-state:v1 -->  **Faz:** Faz 24 · **Track:** gitops/runtime + desktop product surface · **Priority:** P1 · **Kind:** issue   **Owner repo:** Halildeu/platform-k8s-gitops   **Project #2:** Status `Needs Verify`, Faz `Faz 24`, Track `gitops`, Priority `P1`, Kind `issue`   **Current engineering blockers:** platform-desktop#34 GitHub build completion + live Turkish desktop smoke, authenticated redacted Meeting AI analyze smoke, GPU-host/live STT rollout evidence for platform-ai#233.  ## Context Faz 24 Meeting Intelligence acceptance is
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Faz 24 audio-gateway transcript delivery rollout" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/Halildeu/platform-k8s-gitops/issues/2186
-7. [Dependency Dashboard](https://github.com/tund93/api-tuloki/issues/1)
+     Reference: https://github.com/grafana/sigma-rule-deployment/issues/176
+7. [Dependency Dashboard](https://github.com/vil02/adv_2023/issues/1)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -268,7 +268,7 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/tund93/api-tuloki/issues/1
+     URL: https://github.com/vil02/adv_2023/issues/1
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -279,7 +279,7 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/tund93/api-tuloki).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/cache-manager` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | `@types/cache-manager-redis-store` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [cache-manager-io
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/vil02/adv_2023).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/networkx-3.x -->[fix(deps): update dependency networkx to v3.6.1](../pull/395)  ## Detected Dependencies  <details><summary>github-actions (4)</summary> <blockquote>  <details><summary>.github/workflows/black_format.yml (2)</summary>   - `actions/checkout v7.0.0@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0`  - `psf/black 26.5.1@87928
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -287,8 +287,8 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/tund93/api-tuloki/issues/1
-8. [Dependency Dashboard](https://github.com/pustovitDmytro/hermod/issues/1)
+     Reference: https://github.com/vil02/adv_2023/issues/1
+8. [Dependency Dashboard](https://github.com/guitar0-net/backend/issues/130)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -298,7 +298,7 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/pustovitDmytro/hermod/issues/1
+     URL: https://github.com/guitar0-net/backend/issues/130
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -309,7 +309,7 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/pustovitDmytro/hermod).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@babel/plugin-proposal-class-properties](https://redirect.github.com/babel/babel) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [@babel/plugin-proposal-object-rest-spread](https://redirect.github.com/babel/babe
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/guitar0-net/backend).  ## PR Closed (Blocked)  The following updates are blocked by an existing closed PR. To recreate the PR, click on a checkbox below.   - [ ] <!-- recreate-branch=renovate/postgres-18.x -->[chore(deps): Update postgres Docker tag to v18](../pull/133)  ## Detected Dependencies  <details><summary>docker-compose (1)</summary> <blockquote>  <details><summary>docker-compose.yml (1)</summary>   - `postgres 16-alpine` → [Updates: `18-alpine`]  </details>  </blockquote> </details>  <details><summary>dockerfile (1)</summary> <blockquote>  <details><summary>Dockerfile (2)</summary>   - `python 3.14.6-slim`  - `python 3.14.6-slim`
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -317,4 +317,4 @@ Demand signals from GitHub issues and remote job trends indicate strong market o
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/pustovitDmytro/hermod/issues/1
+     Reference: https://github.com/guitar0-net/backend/issues/130

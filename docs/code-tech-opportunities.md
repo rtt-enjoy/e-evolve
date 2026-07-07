@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-07-06T09:10:59.512525+00:00
+Refreshed: 2026-07-07T12:09:55.340101+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,11 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-Opportunities exist in automating developer workflows, optimizing CI/CD pipelines, and providing AI-driven solutions for dependency management and test reliability, leveraging niches like no-code automation, AI consulting, and productized audit services.
+GitHub issues reveal strong demand for CI/CD pipeline maintenance, test automation, and debugging services across open-source projects, with multiple repositories seeking help to resolve workflow failures, implement automated testing, and fix recurring technical issues - opportunities that align with productized retainer services and async automation workflows that can scale without proportional time investment.
 
-- Develop a productized CI/CD automation service targeting GitHub repository maintenance and test failure resolution.
-- Offer AI-powered dependency management consulting to address vulnerability warnings and build errors in repositories.
-- Create retainer-based support packages for developers needing async technical documentation fixes and performance counter optimization.
+- Create a standardized CI/CD audit checklist service targeting open-source maintainers, offering monthly retainers to monitor and fix workflow issues like the PR verifier failures seen in kubestellar and RIOT-OS projects
+- Develop an automated test failure triage product that integrates with GitHub Actions to categorize, prioritize, and suggest fixes for test suite regressions like the 305 failures in kubestellar/console
+- Launch async documentation cleanup packages focused on removing debug artifacts and standardizing codebases, addressing recurring issues like the std::cout cleanup needed in Ryan-Millard/Img2Num
+- Build no-code automation templates for common CI/CD patterns (pytest integration, nightly test reporting, coverage suite monitoring) that can be quickly deployed across repositories seeking help
+- Establish a micro-SaaS offering that monitors GitHub repositories for 'help wanted' labels and automatically generates actionable issue reports for maintainers to reduce manual triage overhead
 
 ## Underserved Focus
 
@@ -106,7 +108,7 @@ Opportunities exist in automating developer workflows, optimizing CI/CD pipeline
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-2. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal/issues/1874)
+2. [Dependency Dashboard](https://github.com/atlas-bi/Hub/issues/81)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -116,7 +118,7 @@ Opportunities exist in automating developer workflows, optimizing CI/CD pipeline
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/uPortal-Project/uPortal/issues/1874
+     URL: https://github.com/atlas-bi/Hub/issues/81
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -127,7 +129,7 @@ Opportunities exist in automating developer workflows, optimizing CI/CD pipeline
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/uPortal-Project/uPortal).   - ⚠️ WARN: No releases satisfy vulnerabilityFixVersion  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | gradle | [org.hibernate:hibernate-core](https://redirect.github.com/hibernate/hibernate-orm) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) | | gradle | [org.hibernate:h
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/atlas-bi/Hub).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [bulma-checkradio](https://redirect.github.com/Wikiki/bulma-checkradio) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [bulma-tooltip](https://redirect.github.com/Wikiki/bulma-tooltip) | ![Unavailable](https://img.shields
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -135,140 +137,20 @@ Opportunities exist in automating developer workflows, optimizing CI/CD pipeline
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/uPortal-Project/uPortal/issues/1874
-3. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal-start/issues/440)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/uPortal-Project/uPortal-start/issues/440
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal-start).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Pending Approval  The following branches are pending approval. To create them, click on a checkbox below.   - [ ] <!-- approve-branch=renovate/actions-checkout-7.x -->chore(deps): update actions/checkout action to v7  - [ ] <!-- approve-branch=renovate/actions-setup-java-5.x -->chore(deps): update actions/setup-java action to v5  - [ ] <!-- approve-branch=renovate/actions-setup-node-6.x -->chore(deps): update actions/setup-node action to v6  - [ ] <!-- appro
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/uPortal-Project/uPortal-start/issues/440
-4. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/ah-ha-admin/refactored-memory/issues/49
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/python-3.x -->Update dependency python to 3.14  - [ ] <!-- unlimit-branch=renovate/rubocop-1.x -->Update dependency rubocop to "~> 1.88.0"  - [ ] <!-- unlimit-branch=renovate/ruby-3.x -->Update dependency ruby to v3.4.10  - [ ] <!-- unlimit-branch=renovate/devops-actions-load-available-actions-2.x -->Upd
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/ah-ha-admin/refactored-memory/issues/49
-5. [Seeking external SUT / corpus review for VATE v0.3.x](https://github.com/Poke-nushi/Verifiable-Agent-Trust-Envelope/issues/2)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Seeking external SUT / corpus review for VATE v0.3.x
-     Source: github
-     URL: https://github.com/Poke-nushi/Verifiable-Agent-Trust-Envelope/issues/2
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: ## Summary  I am looking for independent implementers, external reviewers, and lightweight corpus reviewers for the current VATE v0.3.x corpus line.  VATE is a discussion-draft verifier-side admission and receipt profile for risky AI-agent actions. The current goal is not production deployment, certification, endorsement, or standardization. The goal is narrower: to check whether an implementation outside the reference runner can read the corpus, evaluate the cases, and publish comparable SUT results and implementation reports.  Current archived release: https://github.com/Poke-nushi/Verifiable-Agent-Trust-Envelope/releases/tag/v0.3.1  Previous v0.3.0 release: https://github.com/Poke-nushi/Verifiable-Agent-Trust-Envelope/releases/tag/v0.3.0  Public claim boundary: https://github.com/Poke-nushi/Verifiable-Agent-Trust-Envelope/blob/main/docs/public-claim-boundary.md  ## Lightweight First-P
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Seeking external SUT / corpus review for VATE v0.3.x" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/Poke-nushi/Verifiable-Agent-Trust-Envelope/issues/2
-6. [Auto-generator bypasses framework adapter, framework capabilities gated by name checks, and shadow tool taxonomy in src/praisonai/praisonai](https://github.com/MervinPraison/PraisonAI/issues/2675)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; matches leverage-style remote service demand from AI-assisted workflows
-   - Next: Find the public workflow, draft a one-page automation audit, and use the research LLM to propose a fixed-scope deliverable before any local build.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Auto-generator bypasses framework adapter, framework capabilities gated by name checks, and shadow tool taxonomy in src/praisonai/praisonai
-     Source: github
-     URL: https://github.com/MervinPraison/PraisonAI/issues/2675
-     Why this is suitable: visible or inferred value around $10.00; matches leverage-style remote service demand from AI-assisted workflows
-     First step: Find the public workflow, draft a one-page automation audit, and use the research LLM to propose a fixed-scope deliverable before any local build.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: ## Context  Focused review of `src/praisonai/praisonai/` against the stated philosophy — **Simpler · More extensible · Faster · Agent-centric**, and the engineering principles: DRY, protocol-driven core, minimal API, performance-first, production-ready (multi-agent + async safe), 3-way feature surface (CLI + YAML + Python).  Excluded per scope: docs, tests, coverage, file sizes, line counts. Three concrete gaps, each verified against `main` at HEAD. Prior wrapper issue #2566 (protocol mismatch / voice-call dedent / fake-async adapters) is closed; #2510 tracks storage/persistence duplication separately. Gaps below are complementary and distinct.  ---  ## Gap 1 — `AutoGenerator` maintains a shadow tool taxonomy that never syncs with the canonical `ToolResolver`  `auto.py` is one of the two agent-config entry points in the wrapper. Its sibling, `AgentsGenerator`, resolves tools through the
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Auto-generator bypasses framework adapter, framework capabilities gated by name checks, and shadow tool taxonomy in src/praisonai/praisonai" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/MervinPraison/PraisonAI/issues/2675
-7. [Dependency Dashboard](https://github.com/emersonmaddock/sophros/issues/62)
+     Reference: https://github.com/atlas-bi/Hub/issues/81
+3. [Audit: Dead Code, Wrapper Collapse, and Oversized Files](https://github.com/Leoyzen/agentpool/issues/123)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Dependency Dashboard
+     Lead: Audit: Dead Code, Wrapper Collapse, and Oversized Files
      Source: github
-     URL: https://github.com/emersonmaddock/sophros/issues/62
+     URL: https://github.com/Leoyzen/agentpool/issues/123
      Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -277,27 +159,57 @@ Opportunities exist in automating developer workflows, optimizing CI/CD pipeline
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/emersonmaddock/sophros).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/actions-cache-6.x -->Update actions/cache action to v6  - [ ] <!-- unlimit-branch=renovate/actions-checkout-7.x -->Update actions/checkout action to v7  - [ ] <!-- unlimit-branch=renovate/major-eslint-monorepo -->Update dependency eslint to v10  - [ ] <!-- unlimit-branch=renovate/mypy-2.x -->Update dependency m
+     Request excerpt: ## Summary  A comprehensive audit of the agentpool codebase (599 .py files, ~137,860 LOC under `src/`) identified **~3,500 LOC of dead/removable code**, **~550 LOC of stdlib/library reinvention**, and **10+ oversized files needing decomposition**. The findings also reveal significant **wrapper duplication of pydantic-ai internals** not yet tracked by existing issues or OpenSpec proposals.  This issue consolidates findings from two audit passes: 1. **Ponytail-audit** — dead code, stdlib reinvention, YAGNI abstractions, oversized files 2. **Thin-wrapper audit** — overlap with pydantic-ai source, wrapper duplication  > **Note**: Each item was validated by 8 parallel Oracle evaluations against the actual codebase. Invalid items are ~~struck through~~ with corrections. See [Oracle validation comment](https://github.com/Leoyzen/agentpool/issues/123#issuecomment-4903415833).  ---  ## Part 1: De
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     Hi, I found your request about "Audit: Dead Code, Wrapper Collapse, and Oversized Files" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/emersonmaddock/sophros/issues/62
-8. [Dependency Dashboard](https://github.com/ls1intum/edutelligence/issues/293)
+     Reference: https://github.com/Leoyzen/agentpool/issues/123
+4. [Nightly build is failing](https://github.com/Unidata/MetPy/issues/4070)
    - Score: 100/100
    - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Nightly build is failing
+     Source: github
+     URL: https://github.com/Unidata/MetPy/issues/4070
+     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: The [Nightly workflow](https://github.com/Unidata/MetPy/actions/runs/28858474403) is failing. The tests failed. Log: <details><pre>============================= test session starts ============================== platform linux -- Python 3.13.14, pytest-9.1.1, pluggy-1.6.0 Matplotlib: 3.11.0 Freetype: 2.14.3 Dep Versions: Cartopy: 0.25.0, Dask: 2026.6.0, Matplotlib: 3.11.0, Numpy: 2.5.1, 	Pandas: 3.0.3, Pint: 0.25.4.dev17+g7a927b451, Pooch: v1.9.0, Pyproj: 3.7.2, 	Scipy: 1.18.0, Shapely: 2.1.2, Traitlets: 5.15.1, Xarray: 2026.4.1.dev42+g02cd48103 rootdir: /home/runner/work/MetPy/MetPy configfile: pyproject.toml plugins: mpl-0.19.0 collected 1634 items  tests/calc/test_basic.py ............................................... [  2%] ........................................................................ [  7%] .......................                                                  [  8%]
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Nightly build is failing" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/Unidata/MetPy/issues/4070
+5. [Dependency Dashboard](https://github.com/lucernae/gatsby-starter-lucernae/issues/3)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
    - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/ls1intum/edutelligence/issues/293
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+     URL: https://github.com/lucernae/gatsby-starter-lucernae/issues/3
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
      Constraints:
@@ -307,7 +219,7 @@ Opportunities exist in automating developer workflows, optimizing CI/CD pipeline
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ls1intum/edutelligence).  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@angular/animations](https://redirect.github.com/angular/angular) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [react-query](https://redirect.github.com/tannerlinsley/react-query) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) |  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, c
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/lucernae/gatsby-starter-lucernae).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [remark-html-katex](https://redirect.github.com/remarkjs/remark-math) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) |  ## Rate-Limited  The following updates are currently rate-limited. To force their creation
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -315,4 +227,94 @@ Opportunities exist in automating developer workflows, optimizing CI/CD pipeline
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/ls1intum/edutelligence/issues/293
+     Reference: https://github.com/lucernae/gatsby-starter-lucernae/issues/3
+6. [Dependency Dashboard](https://github.com/leo91000/vue-tiptap-renderer/issues/2)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/leo91000/vue-tiptap-renderer/issues/2
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/leo91000/vue-tiptap-renderer).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/all-minor-patch -->chore(deps): update all non-major dependencies (`@tiptap/core`, `@tiptap/pm`, `@vitest/coverage-v8`, `vitest`, `vue`)  - [ ] <!-- unlimit-branch=renovate/antfu-eslint-config-9.x -->chore(deps): update dependency @antfu/eslint-config to v9  - [ ] <!-- unlimit-branch=renovate/antfu-ni-30.
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/leo91000/vue-tiptap-renderer/issues/2
+7. [Dependency Dashboard](https://github.com/NP-Project-Identity/project-identity/issues/85)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/NP-Project-Identity/project-identity/issues/85
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/NP-Project-Identity/project-identity).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/NP-Project-Identity/project-identity).   - ⚠️ WARN: Found renovate config warnings  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@angular-devkit/build-angular](
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/NP-Project-Identity/project-identity/issues/85
+8. [Dependency Dashboard](https://github.com/leosuncin/nest-api-example/issues/23)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/leosuncin/nest-api-example/issues/23
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/leosuncin/nest-api-example).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/bcryptjs` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) |  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branc
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/leosuncin/nest-api-example/issues/23

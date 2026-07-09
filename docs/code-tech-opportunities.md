@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-07-08T14:41:17.564123+00:00
+Refreshed: 2026-07-09T15:36:55.362426+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,13 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-GitHub help‑wanted issues reveal strong demand for remote, asynchronous services that automate CI/CD pipelines, fix documentation, clean up knowledge bases, and build productized audits or micro‑SaaS support—aligning perfectly with niches like AI prompt consulting, no‑code automation, analytics dashboard automation, SEO/content ops, CRM/data automation, developer productivity retainers, async docs fixes, audit/checklist services, and micro‑SaaS setup.
+Analysis of GitHub issues reveals strong demand for remote service providers in CI/CD pipeline optimization, no-code automation setup, test suite maintenance, and documentation systems—particularly for projects using Kubernetes, .NET, Go, and React Native stacks where teams need specialized expertise to resolve workflow failures, implement Docker support, and maintain async technical documentation.
 
-- Research the top‑cited GitHub issues (e.g., CI test failures, documentation gaps, automation requests) to validate pain points and prioritize three service niches.
-- Draft concrete service packages (scope, deliverables, timeline, pricing) for each prioritized niche, using AI‑powered templates and productized checklist formats.
-- Create sample artifacts (e.g., a no‑code workflow automation demo, an analytics dashboard prototype, a micro‑SaaS migration checklist) to showcase capability in a private portfolio.
-- Define an internal outreach plan (e.g., monitoring relevant repos, preparing personalized comment templates) for future engagement once the research phase is complete.
-- Set up a simple tracking system (spreadsheet or lightweight CRM) to log interest signals, service inquiries, and iteration feedback for continuous refinement.
+- Develop a productized audit service for CI/CD pipeline health checks targeting Kubernetes and .NET projects, priced at $250-500 per assessment
+- Create a no-code automation consulting package specifically for GitHub Actions workflow failures and Docker compose implementations
+- Launch a retainer-based service for async technical documentation maintenance and test suite regression analysis for open-source projects
+- Build a micro-SaaS setup and migration service focused on Prometheus/Thanos monitoring stack integrations
+- Offer developer productivity retainers for CI maintenance and performance counter library race condition fixes in .NET environments
 
 ## Underserved Focus
 
@@ -78,7 +78,37 @@ GitHub help‑wanted issues reveal strong demand for remote, asynchronous servic
 
 ## Ranked Leads
 
-1. [Built an automation for a local business and got paid $1500 — sharing the process](https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/)
+1. [docs](https://github.com/Huynhthuong2505/SandboxCodex/issues/10)
+   - Score: 100/100
+   - Value signal: $1800.00
+   - Why: visible or inferred value around $1800.00; CI/test work is concrete and easy for maintainers to accept
+   - Next: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: docs
+     Source: github
+     URL: https://github.com/Huynhthuong2505/SandboxCodex/issues/10
+     Why this is suitable: visible or inferred value around $1800.00; CI/test work is concrete and easy for maintainers to accept
+     First step: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: **Describe the bug** A clear and concise description of what the bug is.  **To Reproduce** Steps to reproduce the behavior: 1. Go to '...' 2. Click on '....' 3. Scroll down to '....' 4. See error  **Expected behavior** A clear and concise description of what you expected to happen.  **Screenshots** If applicable, add screenshots to help explain your problem.  **Desktop (please complete the following information):**  - OS: [e.g. iOS]  - Browser [e.g. chrome, safari]  - Version [e.g. 22]  **Smartphone (please complete the following information):**  - Device: [e.g. iPhone6]  - OS: [e.g. iOS8.1]  - Browser [e.g. stock browser, safari]  - Version [e.g. 22]  **Additional context** Add any other context about the problem here.  <p align="center">   <img src="assets/banner.png" alt="squeez — hook-based token compressor for AI CLIs" width="100%"> </p>  # squeez  [![CI](https://github.com/claudioe
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "docs" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $1800.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/Huynhthuong2505/SandboxCodex/issues/10
+2. [Built an automation for a local business and got paid $1500 — sharing the process](https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/)
    - Score: 100/100
    - Value signal: $1500.00
    - Why: visible or inferred value around $1500.00; public proof makes this suitable for automated AI patching
@@ -108,7 +138,67 @@ GitHub help‑wanted issues reveal strong demand for remote, asynchronous servic
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-2. [Dependency Dashboard](https://github.com/tadanobutubutu/screeps/issues/5)
+3. [Implement Secure Payment Gateway and Payment Service](https://github.com/SecureBananaLabs/bug-bounty/issues/1)
+   - Score: 100/100
+   - Value signal: $350.00
+   - Why: visible or inferred value around $350.00; can become a repeatable async offer instead of hourly labor
+   - Next: Skip unless the issue also has public reproduction steps the AI agent can patch and verify automatically.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Implement Secure Payment Gateway and Payment Service
+     Source: github
+     URL: https://github.com/SecureBananaLabs/bug-bounty/issues/1
+     Why this is suitable: visible or inferred value around $350.00; can become a repeatable async offer instead of hourly labor
+     First step: Skip unless the issue also has public reproduction steps the AI agent can patch and verify automatically.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Relevant Code  ```js export async function createPaymentIntent(payload) {   // TODO: integrate Stripe SDK and return client secret.   return {     paymentId: `pay_${Date.now()}`,     amount: payload.amount,     currency: payload.currency ?? "usd",     provider: "stripe"   }; } ```  **Goals** - Replace the stub implementation with a real Stripe `PaymentIntent` via the Stripe Node.js SDK - Return the `client_secret` from the created `PaymentIntent` to the caller - Handle Stripe API errors and surface them with meaningful error messages - Ensure `amount`, `currency`, and any required metadata are validated before the API call  **Acceptance Criteria** - [ ] `stripe` npm package is installed and a `STRIPE_SECRET_KEY` environment variable is used to initialise the client — no hardcoded keys - [ ] `payload.amount` is required and must be a positive integer (smallest currency unit, e.g. cents
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Implement Secure Payment Gateway and Payment Service" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $350.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/SecureBananaLabs/bug-bounty/issues/1
+4. [[$250] Search -  list does not split into "Recent chats" and "Search results" sections.](https://github.com/Expensify/App/issues/95710)
+   - Score: 100/100
+   - Value signal: $250.00
+   - Why: visible or inferred value around $250.00; public proof makes this suitable for automated AI patching
+   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: [$250] Search -  list does not split into "Recent chats" and "Search results" sections.
+     Source: github
+     URL: https://github.com/Expensify/App/issues/95710
+     Why this is suitable: visible or inferred value around $250.00; public proof makes this suitable for automated AI patching
+     First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: If you haven’t already, check out our [contributing guidelines](https://github.com/Expensify/ReactNativeChat/blob/main/contributingGuides/CONTRIBUTING.md) for onboarding and email contributors@expensify.com to request to join our Slack channel! ___  **Version Number:** 9.4.32-0 **Reproducible in staging?:** Yes **Reproducible in production?:** Yes **If this was caught during regression testing, add the test name, ID and link from BrowserStack:** https://test-management.browserstack.com/projects/2219752/test-runs/63957099/folder/13176964/41237738/1554721961 **Email or phone of affected tester (no customers):** emady.syed1234+400@gmail.com **Issue reported by:** Applause Internal Team **Bug source:** Regression TC Execution **Device used:** Windows 11 / Chrome **App Component:** Search  ## Action Performed: 1. Open staging.new.expensify and login 2. Open search  3. Type in a search query.
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "[$250] Search -  list does not split into "Recent chats" and "Search results" sections." and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $250.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/Expensify/App/issues/95710
+5. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -118,7 +208,7 @@ GitHub help‑wanted issues reveal strong demand for remote, asynchronous servic
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/tadanobutubutu/screeps/issues/5
+     URL: https://github.com/ah-ha-admin/refactored-memory/issues/49
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -129,7 +219,7 @@ GitHub help‑wanted issues reveal strong demand for remote, asynchronous servic
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/tadanobutubutu/screeps).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/tadanobutubutu/screeps).   - ⚠️ WARN: Package lookup failures  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/sentry-javascript-monorepo -->fix(deps): update dependency @sentry/browser to v10.64.0   ---  > [!WARNING] > Renovate failed to look up the following dependencies: `Failed to look up github-tags package linear-bots/gitstream-github-action: no-result`. >  > Files affect
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/python-3.x -->Update dependency python to 3.14  - [ ] <!-- unlimit-branch=renovate/rubocop-1.x -->Update dependency rubocop to "~> 1.88.0"  - [ ] <!-- unlimit-branch=renovate/ruby-3.x -->Update dependency ruby to v3.4.10  - [ ] <!-- unlimit-branch=renovate/devops-actions-load-available-actions-2.x -->Upd
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -137,20 +227,20 @@ GitHub help‑wanted issues reveal strong demand for remote, asynchronous servic
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/tadanobutubutu/screeps/issues/5
-3. [🗺️ ROADMAP: Self-host + web-capable PHP subset (living)](https://github.com/PurHur/php-compiler/issues/78)
+     Reference: https://github.com/ah-ha-admin/refactored-memory/issues/49
+6. [Add standard project metadata (license, classifiers, URLs) to all pyproject.toml files](https://github.com/chamoda/agent-foundry/issues/42)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: 🗺️ ROADMAP: Self-host + web-capable PHP subset (living)
+     Lead: Add standard project metadata (license, classifiers, URLs) to all pyproject.toml files
      Source: github
-     URL: https://github.com/PurHur/php-compiler/issues/78
+     URL: https://github.com/chamoda/agent-foundry/issues/42
      Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-     First step: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -159,46 +249,16 @@ GitHub help‑wanted issues reveal strong demand for remote, asynchronous servic
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## Living ROADMAP (high-signal, phased)  Merge gates are **local/Docker only** — no GitHub Actions (#394 ✅). Harness-safe: `make test-harness`, `./script/docker-ci-local.sh`, `./script/docker-exec.sh`.  **North star:** [#1492](https://github.com/PurHur/php-compiler/issues/1492) (M3→M5 self-host)  **Development focus (Jul 2026):** optimize for **fast M5 feedback** — not `north-star5-verify --strict` on every PR (~1h). Daily gates: `make north-star5-verify-fast` (~1–2 min), `make bootstrap-selfhost-vm-driver-execute-probe` (~20ms). Reserve `--strict` for pre-merge bootstrap/gen-0/vendor-prelink PRs. Doc: `docs/bootstrap-m5-fast-path.md` · Cursor rule: `.cursor/rules/m5-fast-development.mdc`.  ---  ## User release roadmap (next: **v1.1.0**)  Meta: [#8739](https://github.com/PurHur/php-compiler/issues/8739) (reopen on tag day) · Latest tag: **v1.0.0** (2026-05-29) · Pre-release: **v1.1.0-dev
+     Request excerpt: ## Problem / Motivation  All six `pyproject.toml` files (root workspace + core + 4 agents) lack standard Python project metadata. While `name`, `version`, `description`, and `requires-python` are present, the following standard fields are missing across every package:  | Missing field | Why it matters | |---|---| | `license` | The LICENSE file exists at repo root but isn't declared in package metadata. Tools like `uv`, `pip`, and indexers can't discover the license programmatically. | | `license-files` | PEP 639 convention for declaring license file paths. | | `classifiers` | No PyPI trove classifiers (Programming Language, License, Development Status). Prevents discoverability if ever published. | | `readme` | No README declared per package. `core/` has no README at all. | | `[project.urls]` | No Homepage, Repository, Bug Tracker, or Changelog links. Consumers and tooling have no way to
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "🗺️ ROADMAP: Self-host + web-capable PHP subset (living)" and can make a small working version.
+     Hi, I found your request about "Add standard project metadata (license, classifiers, URLs) to all pyproject.toml files" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/PurHur/php-compiler/issues/78
-4. [Dependency Dashboard](https://github.com/DataViking-Tech/SynthPanel/issues/73)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/DataViking-Tech/SynthPanel/issues/73
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/DataViking-Tech/SynthPanel).  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/github-actions -->[chore(deps): update github-actions](../pull/441) (`actions/checkout`, `actions/setup-python`, `github/codeql-action`, `python`)  - [ ] <!-- rebase-branch=renovate/minor-deps -->[chore(deps): update minor deps](../pull/468) (`docker/dockerfile`, `python`)  - [ ] <!-- rebase-branch=renovate/major-github-actions -->[chore(deps): update github-actions (major)](../pull/452) (`actions/checkout`, `actions/dependency-review-action`, `actions/setup-python
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/DataViking-Tech/SynthPanel/issues/73
-5. [Dependency Dashboard](https://github.com/HHS/simpler-grants-gov/issues/578)
+     Reference: https://github.com/chamoda/agent-foundry/issues/42
+7. [Dependency Dashboard](https://github.com/prowler-cloud/prowler/issues/11301)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -208,7 +268,7 @@ GitHub help‑wanted issues reveal strong demand for remote, asynchronous servic
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/HHS/simpler-grants-gov/issues/578
+     URL: https://github.com/prowler-cloud/prowler/issues/11301
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -219,7 +279,7 @@ GitHub help‑wanted issues reveal strong demand for remote, asynchronous servic
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/HHS/simpler-grants-gov).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/HHS/simpler-grants-gov).   - ⚠️ WARN: Package lookup failures  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@newrelic/next](https://redirect.github.com/newrelic/newrelic-node
+     Request excerpt: > ℹ️ **Note** >  > This PR body was truncated due to platform limits.  This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/prowler-cloud/prowler).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/prowler-cloud/prowler).   - ⚠️ WARN: Error updating branch: update failure  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [framer-motion](https://redirect.github.com/motiondivision/motion) | ![Available](https://img.shields.io/badge/available-green?style=f
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -227,8 +287,8 @@ GitHub help‑wanted issues reveal strong demand for remote, asynchronous servic
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/HHS/simpler-grants-gov/issues/578
-6. [Dependency Dashboard](https://github.com/MaibornWolff/metric-gardener/issues/116)
+     Reference: https://github.com/prowler-cloud/prowler/issues/11301
+8. [Dependency Dashboard](https://github.com/TUM-Dev/NavigaTUM/issues/574)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -238,7 +298,7 @@ GitHub help‑wanted issues reveal strong demand for remote, asynchronous servic
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/MaibornWolff/metric-gardener/issues/116
+     URL: https://github.com/TUM-Dev/NavigaTUM/issues/574
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -249,7 +309,7 @@ GitHub help‑wanted issues reveal strong demand for remote, asynchronous servic
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/MaibornWolff/metric-gardener).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/pin-dependencies -->chore(deps): pin dependencies (`actions/setup-node`, `node`)  - [ ] <!-- unlimit-branch=renovate/xo -->chore(deps): update dependency xo to v0.61.1  - [ ] <!-- unlimit-branch=renovate/tree-sitter-c-sharp-0.x -->fix(deps): update dependency tree-sitter-c-sharp to v0.23.5  - [ ] <!-- unl
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/TUM-Dev/NavigaTUM).  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/node -->chore(deps): update dependency vitest to v4.1.10  - [ ] <!-- unschedule-branch=renovate/rust-stable -->chore(deps): update rust crate regex to v1.13.0  - [ ] <!-- unschedule-branch=renovate/github-actions -->chore(deps): update taiki-e/install-action action to v2.83.0  - [ ] <!-- unschedule-branch=renovate/python -->fix(deps): update python (`dataframely`, `holidays`, `opening-hours-py`, `tqdm`, `xxhash`)  - [ ] <!-- unschedule-branch=renovate/lock-file
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -257,64 +317,4 @@ GitHub help‑wanted issues reveal strong demand for remote, asynchronous servic
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/MaibornWolff/metric-gardener/issues/116
-7. [Dependency Dashboard](https://github.com/KatherineVito/RenovateLocal/issues/3)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/KatherineVito/RenovateLocal/issues/3
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/KatherineVito/RenovateLocal).  ## Config Migration Needed  <!-- config-migration-pr-info --> See Config Migration PR: #65.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | dockerfile | [containerbase/node](https://redirect.github.com/containerbase/node) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) | | npm | `@types/diff` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | `@types/git-url-parse` | ![Unavailabl
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/KatherineVito/RenovateLocal/issues/3
-8. [Dependency Dashboard](https://github.com/sbb-design-systems/sbb-angular/issues/1196)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/sbb-design-systems/sbb-angular/issues/1196
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  Renovate tried to run on this repository, but found these problems.   - ⚠️ WARN: Found renovate config warnings  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@angular-devkit/build-angular](https://redirect.github.com/angular/angular-cli) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [@angular/animations](https://redirect.github.com/angula
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/sbb-design-systems/sbb-angular/issues/1196
+     Reference: https://github.com/TUM-Dev/NavigaTUM/issues/574

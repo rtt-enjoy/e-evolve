@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-07-10T17:08:08.138831+00:00
+Refreshed: 2026-07-11T17:16:46.941937+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,13 +31,11 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-Analysis of GitHub issues reveals strong demand for remote technical services in CI/CD pipeline automation, test infrastructure maintenance, and integration support across multiple repositories. Key opportunities exist in setting up GitHub Actions workflows, creating unit test frameworks, and automating low-hanging fruit bug detection systems.
+High demand for remote services in AI/automation niches (prompt engineering, no-code setup, analytics dashboards) and debugging/testing support, driven by GitHub issue trends showing frequent requests for technical fixes, test automation, and system optimization.
 
-- Develop a productized GitHub Actions CI setup service targeting open-source projects lacking automated testing workflows, priced at $500-1500 per repository
-- Create a no-code automation package for converting GitHub issues into structured test reports and CI failure analysis dashboards using Zapier or Make.com integrations
-- Offer async technical documentation services focused on converting CI/CD configuration files and test suite results into searchable knowledge bases
-- Build a micro-SaaS template for automated issue labeling and triage using AI agents, targeting repositories with high issue volumes like kubestellar/console
-- Package a developer productivity retainer service offering 2-4 hours weekly of CI pipeline optimization and test suite maintenance for early-stage tech teams
+- Develop specialized AI prompt engineering packages targeting developers facing test automation challenges
+- Create productized no-code automation setup services for GitHub-based projects with recurring dependency issues
+- Offer async technical documentation cleanup retainers for open-source projects with active issue queues
 
 ## Underserved Focus
 
@@ -78,7 +76,72 @@ Analysis of GitHub issues reveals strong demand for remote technical services in
 
 ## Ranked Leads
 
-1. [Built an automation for a local business and got paid $1500 — sharing the process](https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/)
+1. [Prove δ* — complete research dossier (v3) for the RS proximity-gap prize (successor to #464)](https://github.com/lalalune/ArkLib/issues/466)
+   - Score: 100/100
+   - Value signal: $1000000.00
+   - Why: visible or inferred value around $1000000.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Prove δ* — complete research dossier (v3) for the RS proximity-gap prize (successor to #464)
+     Source: github
+     URL: https://github.com/lalalune/ArkLib/issues/466
+     Why this is suitable: visible or inferred value around $1000000.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: # Prove δ\* — the complete research dossier (v3)
+      
+      > **🔁 This issue supersedes #464** (dossier v2 + 179 comments). #464 is closed; all δ\* work continues here.
+      > Canonical in-tree copy of this dossier: [`docs/kb/deltastar-DOSSIER-v3-2026-07-01.md`](https://github.com/lalalune/ArkLib/blob/main/docs/kb/deltastar-DOSSIER-v3-2026-07-01.md) · Lean workspace: [`PROXIMITY_PRIZE_WORKBENCH.lean`](https://github.com/lalalune/ArkLib/blob/main/ArkLib/Data/CodingTheory/ProximityGap/PROXIMITY_PRIZE_WORKBENCH.lean). Post new findings as comments; they will be folded into the next revision.
+      >
+      > **Mission.** Pin **δ\*** — the mutual-correlated-agreement (= list-decoding) threshold — for *explicit* smooth-domain Reed–Solomon codes in the **window interior `(1−√ρ, 1−ρ−Θ(1/log n))`**, worst-case, with a *closed* proof (reducing only to known-proven mathematics). This resolves **both** grand challenges.
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Prove δ* — complete research dossier (v3) for the RS proximity-gap prize (successor to #464)" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $1000000.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/lalalune/ArkLib/issues/466
+2. [Making sales but unsure if business is sustainable.](https://www.reddit.com/r/Entrepreneur/comments/1u4s8up/making_sales_but_unsure_if_business_is_sustainable/)
+   - Score: 100/100
+   - Value signal: $10000.00
+   - Why: visible or inferred value around $10000.00; public proof makes this suitable for automated AI patching
+   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Making sales but unsure if business is sustainable.
+     Source: reddit:r/Entrepreneur
+     URL: https://www.reddit.com/r/Entrepreneur/comments/1u4s8up/making_sales_but_unsure_if_business_is_sustainable/
+     Why this is suitable: visible or inferred value around $10000.00; public proof makes this suitable for automated AI patching
+     First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Hi folks, For the past few months I’ve been working on creating a physical product to address a need with financial institutions, specifically banks. Banks are notoriously hard to sell to (long sales cycles), and we&#39;ve been selling our product on pre-sale (i.e we have a digital mockup). The first batch of physical products will ship to our customers in the next 2 weeks. The physical product is intended for their customers. So it&#39;s B2B2C essentially. We&#39;ve managed to partner with 11 banks (ranging from $50M in assets to $8BN). They&#39;ve been buying my physical product without even holding it in their hands. Each of our 11 banks have agreed to a pilot program between $4000 - $10000, depending on how many physical products they want to pilot with. Average cost per unit is around $7.50. In some ways, I’m optimistic. Banks are notoriously slow to move, especially if the product
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Making sales but unsure if business is sustainable." and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10000.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/Entrepreneur/comments/1u4s8up/making_sales_but_unsure_if_business_is_sustainable/
+3. [Built an automation for a local business and got paid $1500 — sharing the process](https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/)
    - Score: 100/100
    - Value signal: $1500.00
    - Why: visible or inferred value around $1500.00; public proof makes this suitable for automated AI patching
@@ -108,19 +171,79 @@ Analysis of GitHub issues reveals strong demand for remote technical services in
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-2. [Main-red mypy remediation campaign: partition ledger + claim protocol](https://github.com/synaptent/aragora/issues/9099)
+4. [Implement Secure Payment Gateway and Payment Service](https://github.com/SecureBananaLabs/bug-bounty/issues/1)
+   - Score: 100/100
+   - Value signal: $350.00
+   - Why: visible or inferred value around $350.00; can become a repeatable async offer instead of hourly labor
+   - Next: Skip unless the issue also has public reproduction steps the AI agent can patch and verify automatically.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Implement Secure Payment Gateway and Payment Service
+     Source: github
+     URL: https://github.com/SecureBananaLabs/bug-bounty/issues/1
+     Why this is suitable: visible or inferred value around $350.00; can become a repeatable async offer instead of hourly labor
+     First step: Skip unless the issue also has public reproduction steps the AI agent can patch and verify automatically.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Relevant Code  ```js export async function createPaymentIntent(payload) {   // TODO: integrate Stripe SDK and return client secret.   return {     paymentId: `pay_${Date.now()}`,     amount: payload.amount,     currency: payload.currency ?? "usd",     provider: "stripe"   }; } ```  **Goals** - Replace the stub implementation with a real Stripe `PaymentIntent` via the Stripe Node.js SDK - Return the `client_secret` from the created `PaymentIntent` to the caller - Handle Stripe API errors and surface them with meaningful error messages - Ensure `amount`, `currency`, and any required metadata are validated before the API call  **Acceptance Criteria** - [ ] `stripe` npm package is installed and a `STRIPE_SECRET_KEY` environment variable is used to initialise the client — no hardcoded keys - [ ] `payload.amount` is required and must be a positive integer (smallest currency unit, e.g. cents
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Implement Secure Payment Gateway and Payment Service" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $350.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/SecureBananaLabs/bug-bounty/issues/1
+5. [Dependency Dashboard](https://github.com/tadanobutubutu/screeps/issues/5)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/tadanobutubutu/screeps/issues/5
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/tadanobutubutu/screeps).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/tadanobutubutu/screeps).   - ⚠️ WARN: Updating multiple npm lock files is deprecated and support will be removed in future versions.  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/python-3.x -->chore(deps): update dependency python to 3.14  - [ ] <!-- unschedule-branch=renovate/sentry-javascript-monorepo -->fix(deps): update dependency @sentry/browser to v10.65.0  - [ ] <!--
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/tadanobutubutu/screeps/issues/5
+6. [FLU-158: CI: ESP-IDF 5.4 bump + esp32p4 matrix leg](https://github.com/jettydiot/jettyd-firmware-template/issues/5)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Main-red mypy remediation campaign: partition ledger + claim protocol
+     Lead: FLU-158: CI: ESP-IDF 5.4 bump + esp32p4 matrix leg
      Source: github
-     URL: https://github.com/synaptent/aragora/issues/9099
+     URL: https://github.com/jettydiot/jettyd-firmware-template/issues/5
      Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-     First step: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -129,16 +252,16 @@ Analysis of GitHub issues reveals strong demand for remote technical services in
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## Purpose  Coordinate disjoint remediation slices for the truthful main-red mypy debt without colliding with existing work or relying on environment-dependent counts.  This campaign is pinned to `origin/main` `3fe2e5cf561fc094221008d064040ac84625bd4e`.  ## Current inventory  The provisional CI-matching environment is Python 3.12.12, mypy 2.2.0, mypy-baseline 0.7.4, the current workflow stub set, and PyJWT 2.13.0. It reports:  - 2,634 errors in 649 files; - 85 errors in five source files already claimed by #9083 and #9088; - 2,549 errors in 644 unclaimed files; - 72 top-level partitions.  The environment is explicitly **provisional pending #9096**. Without PyJWT, the same clean worktree reports 2,636 errors in the same 649 files: three `jwt_verify.py` errors disappear and one `push.py` error appears when PyJWT is installed. Do not regenerate a baseline until #9096 makes the dependency cl
+     Request excerpt: Repository: jettydiot/jettyd-firmware-template  CI: bump ESP-IDF to v5.4.x and add an esp32p4 leg to the template Build matrix. Prerequisite for ESP32-P4 camera work (FLU-159). Canonical spec: `specs/SPEC-media-camera.md` §5 Phase B (spec lives in jettydiot/jettyd repo).  **Repo:** jettydiot/jettyd-firmware-template  ## Acceptance Criteria  * `.github/workflows/build.yml`: `esp_idf_version` bumped from `v5.3.2` to the latest stable v5.4.x tag (check espressif/idf Docker Hub tags; pin the exact tag, never `latest` — house Docker-pinning rule). * Build matrix gains `esp32p4`: `[esp32s3, esp32c3, esp32c6, esp32p4]`. The existing IDF_TARGET env override mechanism (landed 2026-07-10) handles per-leg target selection — no CMake changes expected. * `firmware-release.yml` esp_idf_version bumped to the same tag (keep both workflows pinned identically). * ALL FOUR matrix legs green on the PR. If e
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Main-red mypy remediation campaign: partition ledger + claim protocol" and can make a small working version.
+     Hi, I found your request about "FLU-158: CI: ESP-IDF 5.4 bump + esp32p4 matrix leg" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/synaptent/aragora/issues/9099
-3. [Dependency Dashboard](https://github.com/kazupon/pnpmc/issues/17)
+     Reference: https://github.com/jettydiot/jettyd-firmware-template/issues/5
+7. [fix(manager/quadlet): pass specifyReplaceString to getDep so docker:pinDigests can pin/update digests](https://github.com/renovatebot/renovate/issues/44500)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -146,9 +269,9 @@ Analysis of GitHub issues reveals strong demand for remote technical services in
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Dependency Dashboard
+     Lead: fix(manager/quadlet): pass specifyReplaceString to getDep so docker:pinDigests can pin/update digests
      Source: github
-     URL: https://github.com/kazupon/pnpmc/issues/17
+     URL: https://github.com/renovatebot/renovate/issues/44500
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -159,16 +282,16 @@ Analysis of GitHub issues reveals strong demand for remote technical services in
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/kazupon/pnpmc).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/tsdown-rolldown-1.x -->chore(deps): update dependency tsdown>rolldown to v1.1.5  - [ ] <!-- unlimit-branch=renovate/pnpm-10.x -->chore(deps): update pnpm to v10.34.5  - [ ] <!-- unlimit-branch=renovate/gunshi-plugin-i18n-0.x -->chore(deps): update dependency @gunshi/plugin-i18n to v0.36.0  - [ ] <!-- unlimit-branch=reno
+     Request excerpt: ### Discussed in https://github.com/renovatebot/renovate/discussions/40092  <div type='discussions-op-text'>  <sup>Originally posted by **ambersand5** December 21, 2025</sup> ### How are you running Renovate?  Self-hosted Renovate  ### Which platform you running Renovate on?  Forgejo  ### Which version of Renovate are you using?  42.64.1  ### Please tell us more about your question or problem  I recently tried pinning all my Podman (quadlet) images with digests, as I had Renovate set up to manage the updates.  It however, does not work like expected: I have a repro file called `alpine.container`:  ``` [Container] Image=docker.io/library/alpine:3.23.0@sha256:51183f2cfa6320055da30872f211093f9ff1d3cf06f39a0bdb212314c5dc7375 ```  Where I would expect it to update from [`3.23.0`](https://hub.docker.com/layers/library/alpine/3.23.0/images/sha256-c78ded0fee4493809c8ca71d4a6057a46237763d952fae15
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     Hi, I found your request about "fix(manager/quadlet): pass specifyReplaceString to getDep so docker:pinDigests can pin/update digests" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/kazupon/pnpmc/issues/17
-4. [Dependency Dashboard](https://github.com/aws-samples/eks-workshop-v2/issues/856)
+     Reference: https://github.com/renovatebot/renovate/issues/44500
+8. [Dependency Dashboard](https://github.com/atlas-bi/Hub/issues/81)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -178,7 +301,7 @@ Analysis of GitHub issues reveals strong demand for remote technical services in
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/aws-samples/eks-workshop-v2/issues/856
+     URL: https://github.com/atlas-bi/Hub/issues/81
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -189,7 +312,7 @@ Analysis of GitHub issues reveals strong demand for remote technical services in
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/aws-samples/eks-workshop-v2).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/glob` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) |  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=r
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/atlas-bi/Hub).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [bulma-checkradio](https://redirect.github.com/Wikiki/bulma-checkradio) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [bulma-tooltip](https://redirect.github.com/Wikiki/bulma-tooltip) | ![Unavailable](https://img.shields
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -197,124 +320,4 @@ Analysis of GitHub issues reveals strong demand for remote technical services in
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/aws-samples/eks-workshop-v2/issues/856
-5. [Dependency Dashboard](https://github.com/theepicsaxguy/homelab/issues/3)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/theepicsaxguy/homelab/issues/3
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/theepicsaxguy/homelab).  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/patch-all-dependencies -->[chore(deps): update all dependencies (patch)](../pull/2656) (`argo-cd`, `assafelovic/gpt-researcher`, `authentik`, `cert-manager`, `cilium`, `cilium/cilium`, `cloudflare/cloudflared`, `cloudnative-pg`, `coredns/coredns`, `getmeili/meilisearch`, `ghcr.io/advplyr/audiobookshelf`, `ghcr.io/berriai/litellm-non_root`, `ghcr.io/blakeblackshear/frigate`, `ghcr.io/chriswritescode-dev/opencode-manager`, `ghcr.io/home-assistant/home-assistant`, `ghcr.io
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/theepicsaxguy/homelab/issues/3
-6. [Dependency Dashboard](https://github.com/FlatbreadLabs/flatbread/issues/47)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/FlatbreadLabs/flatbread/issues/47
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/FlatbreadLabs/flatbread).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/sade` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [apollo-server-core](https://redirect.github.com/apollographql/apollo-server) | ![Available](https://img.shields.io/badge/available-green?style=flat-
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/FlatbreadLabs/flatbread/issues/47
-7. [Dependency Dashboard](https://github.com/1Panel-dev/appstore/issues/108)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/1Panel-dev/appstore/issues/108
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/1Panel-dev/appstore).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/1Panel-dev/appstore).   - ⚠️ WARN: Package lookup failures  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/casbin-casdoor-3.x -->chore(deps): update casbin/casdoor docker tag to v3.113.0  - [ ] <!-- unlimit-branch=renovate/n8nio-n8n-2
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/1Panel-dev/appstore/issues/108
-8. [Dependency Dashboard](https://github.com/freelensapp/freelens/issues/64)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/freelensapp/freelens/issues/64
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/freelensapp/freelens).  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/chart.js` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | `@types/history` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | `@types/react-window` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | `@types/uuid` | ![Unavailable](https://img.shields.io/badge/unavailable
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/freelensapp/freelens/issues/64
+     Reference: https://github.com/atlas-bi/Hub/issues/81

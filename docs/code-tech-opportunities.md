@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-07-13T19:49:52.083777+00:00
+Refreshed: 2026-07-14T21:15:33.822546+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,13 +31,12 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-Based on the reference takeaway about using specialization, automation, and AI-powered systems to detach income from hours, combined with the remote service niches and GitHub issue patterns showing demand for technical documentation, CI/CD pipeline setup, WASM packaging, and automation workflows, there is strong demand for remote-service earning opportunities in AI prompt consulting, no-code automation setup, CI/CD pipeline maintenance, and technical documentation systems that leverage async work and productized services.
+Current demand signals from open-source repositories indicate a high volume of 'help wanted' issues centered around regression tracking, security vulnerability remediation (e.g., log injection), and CI/CD pipeline stability. There is a specific recurring need for automated testing maintenance, dependency management, and technical documentation for complex error patterns. This suggests a market for specialized remote services that focus on 'aintenance retainers'—specifically for stabilizing developer workflows, automating nightly test reporting, and performing security-focused code audits to prevent regressions.
 
-- Research and document 3-5 specific service offerings from the remote_service_niches list that align with the GitHub issue patterns showing 'help wanted' labels and technical automation needs
-- Create a portfolio of 3-5 micro-SaaS setup or migration case studies demonstrating how to productize audit/checklist services using the async technical documentation fixes approach
-- Develop a service package combining AI customer-support knowledge base cleanup with analytics dashboard automation for businesses with GitHub-style issue tracking systems
-- Build a retainer-based offering for developer productivity and CI maintenance that addresses the recurring patterns seen in the flaky test and WASM build issues
-- Draft a 4-hour work week service model using specialization in CRM/spreadsheet automation combined with AI-powered systems for data import/export workflows
+- Develop a 'CI/CD Stability Retainer' productized service targeting mid-sized open-source projects or startups to manage nightly test suites and regression tracking.
+- Create a specialized 'Security Remediation' service focused on resolving high-volume, low-complexity security alerts like log injection or dependency vulnerabilities.
+- Offer 'Automated Documentation' services that transform complex error logs and build failures into structured, searchable knowledge bases for engineering teams.
+- Package a 'Dependency Lifecycle Management' service that automates the auditing and updating of deprecated or risky third-party packages.
 
 ## Underserved Focus
 
@@ -108,7 +107,37 @@ Based on the reference takeaway about using specialization, automation, and AI-p
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-2. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal-start/issues/440)
+2. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/ah-ha-admin/refactored-memory/issues/49
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/ah-ha-admin/refactored-memory).   - ⚠️ WARN: Package lookup failures  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/rubocop-1.x -->Update dependency rubocop to "~> 1.88.0"  - [ ] <!-- unlimit-branch=renovate/ruby-3.x -->Upd
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/ah-ha-admin/refactored-memory/issues/49
+3. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal-start/issues/440)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -129,7 +158,7 @@ Based on the reference takeaway about using specialization, automation, and AI-p
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal-start).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Pending Approval  The following branches are pending approval. To create them, click on a checkbox below.   - [ ] <!-- approve-branch=renovate/actions-checkout-7.x -->chore(deps): update actions/checkout action to v7  - [ ] <!-- approve-branch=renovate/actions-setup-java-5.x -->chore(deps): update actions/setup-java action to v5  - [ ] <!-- approve-branch=renovate/actions-setup-node-6.x -->chore(deps): update actions/setup-node action to v6  - [ ] <!-- appro
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal-start).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Pending Approval  The following branches are pending approval. To create them, click on a checkbox below.   - [ ] <!-- approve-branch=renovate/actions-checkout-7.x -->chore(deps): update actions/checkout action to v7  - [ ] <!-- approve-branch=renovate/actions-setup-java-5.x -->chore(deps): update actions/setup-java action to v5  - [ ] <!-- approve-branch=renovate/actions-setup-node-7.x -->chore(deps): update actions/setup-node action to v7  - [ ] <!-- appro
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -138,19 +167,19 @@ Based on the reference takeaway about using specialization, automation, and AI-p
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/uPortal-Project/uPortal-start/issues/440
-3. [🗺️ ROADMAP: Self-host + web-capable PHP subset (living)](https://github.com/PurHur/php-compiler/issues/78)
+4. [Dependency Dashboard](https://github.com/koreanbots/cs-sdk/issues/6)
    - Score: 100/100
    - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: 🗺️ ROADMAP: Self-host + web-capable PHP subset (living)
+     Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/PurHur/php-compiler/issues/78
-     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-     First step: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+     URL: https://github.com/koreanbots/cs-sdk/issues/6
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -159,76 +188,16 @@ Based on the reference takeaway about using specialization, automation, and AI-p
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## Living ROADMAP (high-signal, phased)  Merge gates are **local/Docker only** — no GitHub Actions (#394 ✅). Harness-safe: `make test-harness`, `./script/docker-ci-local.sh`, `./script/docker-exec.sh`.  **North star:** [#1492](https://github.com/PurHur/php-compiler/issues/1492) (M3→M5 self-host)  **Development focus (Jul 2026):** optimize for **fast M5 feedback** — not `north-star5-verify --strict` on every PR (~1h). Daily gates: `make north-star5-verify-fast` (~1–2 min), `make bootstrap-selfhost-vm-driver-execute-probe` (~20ms). Reserve `--strict` for pre-merge bootstrap/gen-0/vendor-prelink PRs. Doc: `docs/bootstrap-m5-fast-path.md` · Cursor rule: `.cursor/rules/m5-fast-development.mdc`.  ---  ## User release roadmap (next: **v1.1.0**)  Meta: [#8739](https://github.com/PurHur/php-compiler/issues/8739) (reopen on tag day) · Latest tag: **v1.0.0** (2026-05-29) · Pre-release: **v1.1.0-dev
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/koreanbots/cs-sdk).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## PR Edited (Blocked)  The following updates have been manually edited so Renovate will no longer make changes. To discard all commits and start over, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/nunit-3.x -->[Update dependency NUnit to 3.14.0](../pull/11)  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/newtonsoft.json-13.x -->[Update dependency Newtonso
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "🗺️ ROADMAP: Self-host + web-capable PHP subset (living)" and can make a small working version.
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/PurHur/php-compiler/issues/78
-4. [Sink connector crashes with NullPointerException on cold start if ClickHouse isn't ready (race condition)](https://github.com/Altinity/clickhouse-sink-connector/issues/1331)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Sink connector crashes with NullPointerException on cold start if ClickHouse isn't ready (race condition)
-     Source: github
-     URL: https://github.com/Altinity/clickhouse-sink-connector/issues/1331
-     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-     First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: The sink connector crashes permanently with a `NullPointerException` if it attempts to connect to clickHouse before clickHouse (or mysql) is fully ready.  ### Steps to reproduce 1. Clone the repo and follow the [QuickStart Guide: Lightweight (MySQL)](https://github.com/Altinity/clickhouse-sink-connector/blob/develop/doc/quickstart.md)  2. Run a clean start: Note: I used `clickhouse-sink-connector:2.9.1-lt` image. ```bash    export CLICKHOUSE_SINK_CONNECTOR_LT_IMAGE=altinity/clickhouse-sink-connector:2.9.1-lt    docker compose -f docker-compose-mysql.yml up --renew-anon-volumes ``` 3. Check docker-clickhouse-sink-connector-lt logs: ```bash    docker logs docker-clickhouse-sink-connector-lt-1 ```  ### Expected behavior After running [Test replication](https://github.com/Altinity/clickhouse-sink-connector/blob/develop/doc/quickstart.md#test-replication) steps from `quickstart.md`, the initi
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Sink connector crashes with NullPointerException on cold start if ClickHouse isn't ready (race condition)" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/Altinity/clickhouse-sink-connector/issues/1331
-5. [Release v0.4.0](https://github.com/michelangelo-ai/michelangelo/issues/1505)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Release v0.4.0
-     Source: github
-     URL: https://github.com/michelangelo-ai/michelangelo/issues/1505
-     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: ## Pre-Release  - [ ] All CI checks pass on the release branch - [ ] Version numbers updated across all components:   - [ ] `python/pyproject.toml`   - [ ] `javascript/packages/core/package.json`   - [ ] `javascript/packages/rpc/package.json`   - [ ] `website/package.json`   - [ ] `helm/michelangelo/Chart.yaml` (both `version` and `appVersion`) - [ ] `CHANGELOG.md` updated via `git cliff` - [ ] Release notes drafted (follows three-layer template: summary, categorized changes, compatibility matrix) - [ ] Breaking changes reviewed and documented:   - [ ] All `BREAKING CHANGE:` commits identified in changelog   - [ ] Migration guide written for each breaking change   - [ ] `UPGRADING.md` updated with migration steps   - [ ] Deprecation warnings added for items being removed (see [Deprecation Policy](../../CONTRIBUTING.md#deprecation-policy)) - [ ] Compatibility matrix updated in release not
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Release v0.4.0" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/michelangelo-ai/michelangelo/issues/1505
-6. [LLM-judge + scoring/threshold + CI runner, packaged as a published aios-eval lib](https://github.com/eumemic/aios/issues/1351)
+     Reference: https://github.com/koreanbots/cs-sdk/issues/6
+5. [strands-labs/robots roadmap | v0.3.9 → v0.4.0 → v0.5.0](https://github.com/strands-labs/robots/issues/94)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
@@ -236,9 +205,9 @@ Based on the reference takeaway about using specialization, automation, and AI-p
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: LLM-judge + scoring/threshold + CI runner, packaged as a published aios-eval lib
+     Lead: strands-labs/robots roadmap | v0.3.9 → v0.4.0 → v0.5.0
      Source: github
-     URL: https://github.com/eumemic/aios/issues/1351
+     URL: https://github.com/strands-labs/robots/issues/94
      Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
      First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
      
@@ -249,27 +218,87 @@ Based on the reference takeaway about using specialization, automation, and AI-p
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: Part of #1339.  ## Context & problem  Structural assertions (#1350) prove the *shape* of a turn but cannot grade *quality* — "did the agent answer factually?", "does the transcript satisfy this rubric?". A judge closes that gap, and a CI runner turns a suite of scenarios into a pass/fail gate. Today there is no packaged way for the deep-research parity workload (#792) or any other consumer to grade transcripts without importing from `tests/` (which is not a distributable surface). There is also no canonical place for a `JudgeVerdict` record or a per-suite threshold gate.  ## Primitive lineage  Adds **NO new primitive**. It is a **composition** that lives entirely in a new published lib `packages/aios-eval/` — adds nothing to `src/aios/`. It reuses Slice A's (#1350) drive + assert helpers and rides only shipped surfaces for the judge call: - **ephemeral** = `call_litellm(...)` (`src/aios/
+     Request excerpt: > **Pinned roadmap** -- releases, merged PRs, active work, what's next. > > **Current tag**: [`v0.4.1`](https://github.com/strands-labs/robots/releases/tag/v0.4.1) (shipped 2026-07-01) -- the latest published tag. > **State**: v0.4.1 is out. It publishes the large post-v0.4.0 wave (ROS 2/RTPS interop, end-to-end training including from-scratch RL with a deterministic eval peer and a vectorized env, VERA, policy-execution/RTC correctness, recording + dataset-verification integrity, sim discovery/ergonomics + input validation, GPU-render reliability, a security pass on the LLM-callable filesystem/dependency surface, Newton GPU-backend maturation toward MuJoCo parity). A **post-v0.4.1 wave** is accumulating on `main` under `[Unreleased]` as the next patch tag (v0.4.2); this wave bumps the dependency floor to `lerobot>=0.6.0` (#1114), adds a **remote policy inference client/server split** fo
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "LLM-judge + scoring/threshold + CI runner, packaged as a published aios-eval lib" and can make a small working version.
+     Hi, I found your request about "strands-labs/robots roadmap | v0.3.9 → v0.4.0 → v0.5.0" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/eumemic/aios/issues/1351
-7. [Dependency Dashboard](https://github.com/dex4er/js-promise-readable/issues/52)
+     Reference: https://github.com/strands-labs/robots/issues/94
+6. [Add a pytest-based test runner for the dev environment](https://github.com/rucio/rucio/issues/8648)
    - Score: 100/100
    - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Add a pytest-based test runner for the dev environment
+     Source: github
+     URL: https://github.com/rucio/rucio/issues/8648
+     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+     First step: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Description  The `tests/ruciopytest/` package already exists in Rucio and holds the pytest helpers for no-parallel test grouping. This change extends that package with a test runner that runs any Rucio test suite with a single `pytest` command plus a few arguments. The runner handles the setup and cleanup a suite needs: it starts the dev `docker compose` stack, sets up the database and test data, selects the tests to run, and shuts the stack down afterwards. No separate shell scripts or matrix logic are needed to run a suite. The new runner sits alongside the existing helpers in the package, and the current test setup keeps working as before.  Two small, safe changes come along with the runner because it depends on them. The first is a guard around the statsd monitoring client. When Rucio creates its statsd client it resolves the configured monitoring host name; if that name cannot be
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Add a pytest-based test runner for the dev environment" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/rucio/rucio/issues/8648
+7. [[P0][Release/Supply Chain] Unificar versões e implementar release build-once com OIDC, SBOM, proveniência, assinatura e smoke real](https://github.com/wesleysimplicio/simplicio-loop/issues/292)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: [P0][Release/Supply Chain] Unificar versões e implementar release build-once com OIDC, SBOM, proveniência, assinatura e smoke real
+     Source: github
+     URL: https://github.com/wesleysimplicio/simplicio-loop/issues/292
+     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Contexto  A cadeia de release atual possui drift de versão, múltiplas construções independentes e provas de supply chain que não correspondem a verificações reais.  ### Drift observado na `main`  ```text pyproject.toml                         3.34.1 packaging/npm/package.json            3.34.0 .cursor-plugin/plugin.json            3.34.0 simplicio_loop/__init__.py fallback   3.34.0 launcher/manifesto legado             3.15.0 ```  O gate `scripts/release_manifest.py --json` retorna:  ```json {   "canonical_version": "3.34.1",   "ready": false,   "mismatches": ["cursor_plugin", "npm", "source_fallback"] } ```  O launcher `3.15.0` também precisa ser inventariado e incluído na fonte de verdade ou explicitamente removido da superfície publicada; deixá-lo fora do manifesto permite entregar uma combinação incompatível sob uma mesma release.  ### Fluxo atual problemático  1. `publish-pypi.ym
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "[P0][Release/Supply Chain] Unificar versões e implementar release build-once com OIDC, SBOM, proveniência, assinatura e smoke real" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/wesleysimplicio/simplicio-loop/issues/292
+8. [Dependency Dashboard](https://github.com/RyanLiu6/nexus/issues/10)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
    - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/dex4er/js-promise-readable/issues/52
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     URL: https://github.com/RyanLiu6/nexus/issues/10
+     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
      Constraints:
@@ -279,7 +308,7 @@ Based on the reference takeaway about using specialization, automation, and AI-p
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/dex4er/js-promise-readable).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@tsconfig/node16](https://redirect.github.com/tsconfig/bases) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) | | npm | `@types/eslint__js` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/RyanLiu6/nexus).  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/lscr.io-linuxserver-jellyfin-10.x -->chore(deps): update lscr.io/linuxserver/jellyfin docker tag to v10.11.11  - [ ] <!-- unlimit-branch=renovate/lscr.io-linuxserver-transmission-4.x -->chore(deps): update lscr.io/linuxserver/transmission docker tag to v4.1.3  - [ ] <!-- unlimit-branch=renovate/requests-2.x -->chore(deps): update dependency requests to v2.34.2  - [ ] <!-- unlimit-branch=renovate/prom-node-exporter-1.x -->chore(deps): update prom/node-exporter docker
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -287,34 +316,4 @@ Based on the reference takeaway about using specialization, automation, and AI-p
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/dex4er/js-promise-readable/issues/52
-8. [Dependency Dashboard](https://github.com/teo-garcia/nest-template-microservice/issues/2)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/teo-garcia/nest-template-microservice/issues/2
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/teo-garcia/nest-template-microservice).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/all-dependencies -->[chore(deps): update all dependencies](../pull/38) (`@nestjs/cli`, `@nestjs/common`, `@nestjs/core`, `@nestjs/platform-express`, `@nestjs/swagger`, `@nestjs/testing`, `@swc/core`, `@types/node`, `@typescript-eslint/eslint-plugin`, `eslint`, `eslint-plugin-jest`, `eslint-plugin-security`,
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/teo-garcia/nest-template-microservice/issues/2
+     Reference: https://github.com/RyanLiu6/nexus/issues/10

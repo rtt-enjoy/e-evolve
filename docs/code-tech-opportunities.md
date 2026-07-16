@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-07-15T21:15:45.397306+00:00
+Refreshed: 2026-07-16T21:17:15.051831+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,13 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-Based on the current demand signals from open‑source issue trackers and the high‑paying remote‑service niches identified, the most promising earning opportunities involve productized AI‑prompt consulting, no‑code automation setup, and micro‑SaaS migration services. These niches align with the frequent help‑wanted labels, the need for automation, and the high value of async, AI‑powered workflows.
+Leverage high-demand remote-service niches such as AI prompt consulting, no-code automation, async documentation fixes, and micro-SaaS operations support, positioning them as retainer-based, productized services that use automation and AI to generate income with minimal hourly commitment.
 
-- Identify 5 open‑source projects with "help wanted" or "good first issue" labels that match the niches (e.g., AI prompt, no‑code automation, micro‑SaaS).
-- Draft a service package for each niche, including scope, pricing, and deliverables, leveraging productized templates and retainers.
-- Build a portfolio of quick wins by completing 2–3 small issues from the identified projects, documenting the process and results.
-- Create a LinkedIn/Upwork profile highlighting the niche expertise and showcase the portfolio, targeting clients who need async AI or automation services.
-- Reach out to the maintainers of the selected projects with a concise pitch offering to resolve their issues in exchange for a paid retainer or a one‑time fee, positioning the service as a scalable, AI‑driven solution.
+- Conduct quick market validation by searching keywords from the listed niches on freelance platforms and noting pricing trends.
+- Create a minimal service offering (e.g., AI prompt workflow audit or no-code automation setup) with a clear retainer price and deliverable timeline.
+- Build a simple landing page or portfolio showcasing the service, including case studies or templates to attract clients.
+- Set up an automated outreach sequence to relevant communities (e.g., Discord, Slack, GitHub) and schedule follow-ups using async tools.
+- Automate client onboarding and delivery using no-code workflows (e.g., Zapier, Make) to maintain a low-hour, high-margin operation.
 
 ## Underserved Focus
 
@@ -108,18 +108,18 @@ Based on the current demand signals from open‑source issue trackers and the hi
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-2. [📈 CI Daily Pulse](https://github.com/microsoft/aspire/issues/18232)
+2. [I've spent $400 and 6 months building something that makes $0. Here's why I'm not stopping.](https://www.reddit.com/r/Entrepreneur/comments/1sc86je/ive_spent_400_and_6_months_building_something/)
    - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+   - Value signal: $400.00
+   - Why: visible or inferred value around $400.00; ops cleanup has clear business value and bounded deliverables
    - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: 📈 CI Daily Pulse
-     Source: github
-     URL: https://github.com/microsoft/aspire/issues/18232
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+     Lead: I've spent $400 and 6 months building something that makes $0. Here's why I'm not stopping.
+     Source: reddit:r/Entrepreneur
+     URL: https://www.reddit.com/r/Entrepreneur/comments/1sc86je/ive_spent_400_and_6_months_building_something/
+     Why this is suitable: visible or inferred value around $400.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
      Constraints:
@@ -129,28 +129,28 @@ Based on the current demand signals from open‑source issue trackers and the hi
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: # 🔴 GH main — red at the tip (hosting test / DCP) · 🟢 PR 87% · 🟢 outerloop green · ⚪ internal quiet (~23h) — **1 item for a dev**  > ### 🔴 For a dev — rolling GH main red at the tip: a hosting test can't start its resources > **What:** `DistributedApplicationTests.ParentProcessLifetimeReusesResourcesAcrossAppRestartsAndStopsWhenParentExits` failed — its Redis container and worker executable never started because **DCP rejected their create calls with a `BadRequest`** while parsing a time value (`0001-01-01T00:06:30Z`). This is **product-side** (a malformed / unparseable spec), not an external infra blip. It is **intermittent** — one occurrence in the window, and the commit that triggered the run ([#18792](https://github.com/microsoft/aspire/pull/18792)) only edits workflow YAML, so it is **not** a regression from that push. > **Do:** a dev should triage whether that DCP time value reflec
+     Request excerpt: Nobody told me to build this. It wasn&#39;t for a class, it wasn&#39;t to pad a resume, and it wasn&#39;t because I thought it would look good in an interview. I built it because I got to college as a finance major and within the first few weeks realized something nobody warns you about: there&#39;s a massive gap between what high school economics teaches you and what college expects you to already know. You can define GDP, you can explain what CPI measures, but when an upperclassman at a club meeting starts talking about what the latest jobs report means for Fed policy, you realize you can&#39;t actually read the economy. You just memorized definitions. I talked to my classmates and it wasn&#39;t just me. Almost everyone was dealing with the same thing. The information exists, it&#39;s scattered across YouTube, news sites, FRED data, and market reports, but there&#39;s no single place t
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "📈 CI Daily Pulse" and can make a small working version.
+     Hi, I found your request about "I've spent $400 and 6 months building something that makes $0. Here's why I'm not stopping." and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $400.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/microsoft/aspire/issues/18232
-3. [Strategic alignment: compiler excellence pillars (2026 H2)](https://github.com/PurHur/php-compiler/issues/10533)
+     Reference: https://www.reddit.com/r/Entrepreneur/comments/1sc86je/ive_spent_400_and_6_months_building_something/
+3. [I’m offering $300/month technical support for founders what would you want included?](https://www.reddit.com/r/Entrepreneur/comments/1r7ftx1/im_offering_300month_technical_support_for/)
    - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+   - Value signal: $300.00
+   - Why: visible or inferred value around $300.00; can become a repeatable async offer instead of hourly labor
+   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Strategic alignment: compiler excellence pillars (2026 H2)
-     Source: github
-     URL: https://github.com/PurHur/php-compiler/issues/10533
-     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-     First step: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+     Lead: I’m offering $300/month technical support for founders what would you want included?
+     Source: reddit:r/Entrepreneur
+     URL: https://www.reddit.com/r/Entrepreneur/comments/1r7ftx1/im_offering_300month_technical_support_for/
+     Why this is suitable: visible or inferred value around $300.00; can become a repeatable async offer instead of hourly labor
+     First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -159,27 +159,27 @@ Based on the current demand signals from open‑source issue trackers and the hi
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## North star (unchanged)  **Best compiler = self-hosting PHP compiler that compiles itself without Zend**, with honest gates, real Zend parity where it matters, and fast iteration loops.  Living trackers: [#1492](https://github.com/PurHur/php-compiler/issues/1492) (M3→M5) · [#78](https://github.com/PurHur/php-compiler/issues/78) (roadmap) · [#8739](https://github.com/PurHur/php-compiler/issues/8739) (v1.1.0 meta)  ---  ## Five pillars (priority order)  Every open issue should map to **one primary pillar**. Work top-to-bottom within each tier; do not start lower tiers while a higher tier gate is red on `master`.  | Pillar | Question it answers | Primary gates | Status (Jun 2026) | |--------|---------------------|---------------|-------------------| | **1. Trust** | Can we believe green CI? | `examples-aot-smoke`, `examples-web-smoke`, `north-star5-verify-fast`, `release-readiness --full`
+     Request excerpt: I’m a part-time Python developer working mostly with solo founders and small projects. Instead of doing one-off gigs, I’m testing a low-cost monthly technical support model ($300/month) where I: maintain automation scripts fix bugs build small internal tools handle data processing tasks help with Linux/server small tasks Goal is to give founders a “technical safety net” without hiring full-time. For those running small SaaS, e-commerce ops, or automation-heavy workflows: 👉 What would you expect from a developer on a small monthly retainer? 👉 What tasks would bring you the most value? Not selling anything here, just validating the model and seeing what founders actually need. &#32; submitted by &#32; /u/isaaclazrisec [link] &#32; [comments]
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Strategic alignment: compiler excellence pillars (2026 H2)" and can make a small working version.
+     Hi, I found your request about "I’m offering $300/month technical support for founders what would you want included?" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $300.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/PurHur/php-compiler/issues/10533
-4. [Final mainline audit: release blockers, pedagogical debt, and style contract](https://github.com/LiquidGunay/nano-vllm-jax/issues/17)
+     Reference: https://www.reddit.com/r/Entrepreneur/comments/1r7ftx1/im_offering_300month_technical_support_for/
+4. [[P2][Data] Tier labels are published as 28 g variants and corrupt price-per-gram ranking](https://github.com/Chicken3veryDay/Drop-finder/issues/22)
    - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+   - Value signal: $34.99
+   - Why: visible or inferred value around $34.99; public proof makes this suitable for automated AI patching
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Final mainline audit: release blockers, pedagogical debt, and style contract
+     Lead: [P2][Data] Tier labels are published as 28 g variants and corrupt price-per-gram ranking
      Source: github
-     URL: https://github.com/LiquidGunay/nano-vllm-jax/issues/17
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+     URL: https://github.com/Chicken3veryDay/Drop-finder/issues/22
+     Why this is suitable: visible or inferred value around $34.99; public proof makes this suitable for automated AI patching
      First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
      
      Constraints:
@@ -189,76 +189,16 @@ Based on the current demand signals from open‑source issue trackers and the hi
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## Status and intent  This is the final repository-wide audit of `main` at `38c253bfaeaf0187c5f138b5390afa3fe6169569`.  The feature scope is done. The repository should not add another model family, kernel route, distributed mode, serving backend, or benchmark lane before the first release. The remaining work is to make the existing contract exact, remove accidental machinery, and make the code teach the architecture without relying on prose to explain around avoidable complexity.  This issue supersedes the actionable parts of #10. Close #10 when this issue is resolved or deliberately triaged. The desired end state is a tagged `v0.1.0`, not another open-ended optimization cycle.  ## Bottom line  The repository is now a strong pedagogical miniature of a real JAX serving engine:  - the request lifecycle is explicit; - scheduler, block manager, runner, executor, and engine have meaningful o
+     Request excerpt: ## Summary  The production catalog pipeline interprets bare merchandising numbers such as `Tier 1` as ounce quantities. Those fabricated weights are then trusted as normalized input by catalog v4, which publishes affected products as 28 g variants with invented price-per-gram values.  The current shopper index contains multiple examples, including `ADL | THCa Flower | Tier 1`, `Fidel Runtz | THCa Flower | Tier 1`, `Grape Gasby | THCa Flower | Tier 1`, `Hash Burger | THCa Flower | Tier 1`, `Jack Herer | THCa Flower | Tier 1`, `LCG | THCa Flower | Tier 1`, and `Legends OG | THCa Flower | Tier 1`. Each is published as `28.0` g at `$34.99`, producing an unsupported `$1.2496/g` value.  Because the marketplace defaults to **Lowest Price/g** and exposes weight and price-per-gram filters, the contaminated values directly alter the primary shopping workflow.  ## Priority  **Priority:** P2   **Con
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Final mainline audit: release blockers, pedagogical debt, and style contract" and can make a small working version.
+     Hi, I found your request about "[P2][Data] Tier labels are published as 28 g variants and corrupt price-per-gram ranking" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $34.99 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/LiquidGunay/nano-vllm-jax/issues/17
-5. [Updates for Python and Docker](https://github.com/msu-denver/bili-core/issues/248)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Updates for Python and Docker
-     Source: github
-     URL: https://github.com/msu-denver/bili-core/issues/248
-     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: ## Background / why  Our supported Python floor and our Docker base image are both starting to age out, and this ticket is the umbrella to bring bili-core's whole environment (packaging metadata, local dev Docker image, and GitHub Actions) onto currently-supported versions together.  A few terms, since this touches a lot of surface area:  - **EOL (end of life)**: the point where the maintainers of a language or OS stop shipping security and bug fixes. Once something is EOL, the wider tooling ecosystem gradually stops supporting it too, which is exactly the pattern that forced the parallel Node/Debian ticket in the hub repo (msu-denver/sustainability-hub#1060). - **`requires-python` / `python_requires`**: a field in a Python package's packaging metadata that declares which Python versions the package supports. Pip and other installers read it to refuse installing on an unsupported interpr
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Updates for Python and Docker" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/msu-denver/bili-core/issues/248
-6. [Dependency Dashboard](https://github.com/openapi-generators/openapi-python-client/issues/483)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/openapi-generators/openapi-python-client/issues/483
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/openapi-generators/openapi-python-client).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/typer-0.x -->[chore(deps): update dependency typer to >0.16,<0.28](../pull/1463)  - [ ] <!-- rebase-branch=renovate/lock-file-maintenance -->[chore(deps): lock file maintenance](../pull/1458)  - [ ] <!-- rebase-all-open-prs -->**Click on this checkbox to rebase all open PRs at once**  ## PR Closed (Block
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/openapi-generators/openapi-python-client/issues/483
-7. [Dependency Dashboard](https://github.com/donmahallem/lerna/issues/5)
+     Reference: https://github.com/Chicken3veryDay/Drop-finder/issues/22
+5. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -268,7 +208,7 @@ Based on the current demand signals from open‑source issue trackers and the hi
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/donmahallem/lerna/issues/5
+     URL: https://github.com/ah-ha-admin/refactored-memory/issues/49
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -279,7 +219,7 @@ Based on the current demand signals from open‑source issue trackers and the hi
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/donmahallem/lerna).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/donmahallem/lerna).   - ⚠️ WARN: Using npm packages for Renovate presets is now deprecated. Please migrate to repository-based presets instead.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/ah-ha-admin/refactored-memory).   - ⚠️ WARN: Hidden Unicode characters have been discovered in file(s) in your repository. See your Renovate logs for more details. Please confirm that they are intended to be there, as they could be an attempt to "smuggle" text into your codebase, or used to confuse tools like Renovate or Large Language
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -287,19 +227,79 @@ Based on the current demand signals from open‑source issue trackers and the hi
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/donmahallem/lerna/issues/5
-8. [[WR] add - name: VerdictCI   uses: syntax-dot/verdict-cli@v0.1.1](https://github.com/midnghtsapphire/revvel-standards/issues/16186)
+     Reference: https://github.com/ah-ha-admin/refactored-memory/issues/49
+6. [bug: RAG ignores instructions to answer using only one document in a multi-file Knowledge Base](https://github.com/open-webui/open-webui/issues/27073)
    - Score: 100/100
    - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: bug: RAG ignores instructions to answer using only one document in a multi-file Knowledge Base
+     Source: github
+     URL: https://github.com/open-webui/open-webui/issues/27073
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ### Check Existing Issues  - [x] I have searched for any existing and/or related issues. - [x] I have searched for any existing and/or related discussions. - [x] I have also searched in the CLOSED issues AND CLOSED discussions and found no related items (your issue might already be addressed on the development branch!). - [x] I am using the latest version of Open WebUI.  ### Installation Method  Git Clone  ### Open WebUI Version  0.10.2  ### Ollama Version (if applicable)  n/a  ### Operating System  macOS Tahoe (M5 max)  ### Browser (if applicable)  n/a  ### Confirmation  - [x] I have read and followed all instructions in `README.md`. - [x] I am using the latest version of **both** Open WebUI and Ollama. - [x] I have included the browser console logs. - [x] I have included the Docker container logs. - [x] I have **provided every relevant configuration, setting, and environment variable u
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "bug: RAG ignores instructions to answer using only one document in a multi-file Knowledge Base" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/open-webui/open-webui/issues/27073
+7. [Strip orphan </think> tags in _parse_thinking_content](https://github.com/fasrc/archi/issues/84)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Strip orphan </think> tags in _parse_thinking_content
+     Source: github
+     URL: https://github.com/fasrc/archi/issues/84
+     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+     First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Objective  Harden `BaseReActAgent._parse_thinking_content` so it strips **orphan `</think>` closing tags** (a closing tag with no matching opening `<think>`), preventing Qwen3 chain-of-thought from bleeding into visible chat answers.  ## Context you need  **Repo state:** `fasrc/archi`, branch `dev`, HEAD `1e93420afc3b0053d70b34553f2736c38adf8f7a` at the time of writing.  **The method** is `src/archi/pipelines/agents/base_react.py:195`:  ```python def _parse_thinking_content(self, text: str) -> Tuple[str, str]:     """     Parse text to separate thinking content from visible content.     Handles <think>...</think> tags used by models like Qwen3.     Returns (visible_content, thinking_content).     """     if not text:         return "", ""     # Extract all thinking blocks     thinking_pattern = re.compile(r"<think>(.*?)</think>", re.DOTALL)   # line 206     thinking_matches = thinking
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Strip orphan </think> tags in _parse_thinking_content" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/fasrc/archi/issues/84
+8. [Triage: open issues recommended for closure](https://github.com/open-telemetry/opentelemetry-python-contrib/issues/4808)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: [WR] add - name: VerdictCI   uses: syntax-dot/verdict-cli@v0.1.1
+     Lead: Triage: open issues recommended for closure
      Source: github
-     URL: https://github.com/midnghtsapphire/revvel-standards/issues/16186
-     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+     URL: https://github.com/open-telemetry/opentelemetry-python-contrib/issues/4808
+     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
      First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
      
      Constraints:
@@ -309,12 +309,12 @@ Based on the current demand signals from open‑source issue trackers and the hi
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ### Output Type (required)  production-app  ### PDF pipeline batch  Not applicable  ### Research Mode  deepresearch  ### Delivery Mode  build-direct  ### Lifecycle Mode  new-build  ### Commercial Mode  saas-app  ### Assign To / Decision Team  orchestrator  ### Summary  add - name: VerdictCI   uses: syntax-dot/verdict-cli@v0.1.1  ### Objective  VerdictCI runs prompt, agent, and RAG evals in CI, writes a stable result JSON artifact, renders a readable Markdown summary, and exits non-zero when configured quality gates fail.  Install Requirements: Node.js 20 or newer.  npm install -D @syntaxname/verdictci npx verdictci --help Run without adding a dependency:  npm exec --package @syntaxname/verdictci -- verdictci --help CLI quick start Create verdictci.yaml:  suites:   - id: support-bot     fixture: examples/support-bot/fixtures/pass.json     thresholds:       passRate: 1       maxFailures: 0
+     Request excerpt: # opentelemetry-python-contrib — Open Issues Recommended for Closure  **Repository:** `open-telemetry/opentelemetry-python-contrib` **Analysis date:** 2026-07-12 **Scope:** all 551 open issues (PRs excluded), issue numbers #142 → #4797  ## Method  The full set of open issues was pulled via the GitHub API and split into 12 batches. Each batch was triaged against the current `main` branch and merged-PR history: for every issue we checked whether the requested feature/fix already shipped, whether it duplicates another issue, or whether it refers to tooling / Python versions / libraries that no longer exist. Only issues with a concrete reason to close are listed here; the ~461 not listed were judged to be still-valid open work (unimplemented feature requests, live bugs, active tracking issues).  **Confidence** reflects how sure we are the issue is closeable: HIGH = verified against code or a
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "[WR] add - name: VerdictCI   uses: syntax-dot/verdict-cli@v0.1.1" and can make a small working version.
+     Hi, I found your request about "Triage: open issues recommended for closure" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/midnghtsapphire/revvel-standards/issues/16186
+     Reference: https://github.com/open-telemetry/opentelemetry-python-contrib/issues/4808

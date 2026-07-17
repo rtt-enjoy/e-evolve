@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-07-17T21:08:19.332261+00:00",
-  "total_runs": 1070,
+  "last_run": "2026-07-17T22:06:46.022871+00:00",
+  "total_runs": 1071,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -51,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 86,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -171,93 +182,93 @@
         "archived_at": null
       },
       {
-        "title": "I've spent $400 and 6 months building something that makes $0. Here's why I'm not stopping.",
-        "url": "https://www.reddit.com/r/Entrepreneur/comments/1sc86je/ive_spent_400_and_6_months_building_something/",
-        "source": "reddit:r/Entrepreneur",
-        "score": 100,
-        "estimated_value_usd": 400.0,
-        "reason": "visible or inferred value around $400.00; ops cleanup has clear business value and bounded deliverables",
-        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I've spent $400 and 6 months building something that makes $0. Here's why I'm not stopping.\nSource: reddit:r/Entrepreneur\nURL: https://www.reddit.com/r/Entrepreneur/comments/1sc86je/ive_spent_400_and_6_months_building_something/\nWhy this is suitable: visible or inferred value around $400.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Nobody told me to build this. It wasn&#39;t for a class, it wasn&#39;t to pad a resume, and it wasn&#39;t because I thought it would look good in an interview. I built it because I got to college as a finance major and within the first few weeks realized something nobody warns you about: there&#39;s a massive gap between what high school economics teaches you and what college expects you to already know. You can define GDP, you can explain what CPI measures, but when an upperclassman at a club meeting starts talking about what the latest jobs report means for Fed policy, you realize you can&#39;t actually read the economy. You just memorized definitions. I talked to my classmates and it wasn&#39;t just me. Almost everyone was dealing with the same thing. The information exists, it&#39;s scattered across YouTube, news sites, FRED data, and market reports, but there&#39;s no single place t",
-        "outreach_draft": "Hi, I found your request about \"I've spent $400 and 6 months building something that makes $0. Here's why I'm not stopping.\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $400.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/Entrepreneur/comments/1sc86je/ive_spent_400_and_6_months_building_something/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "I\u2019m offering $300/month technical support for founders what would you want included?",
-        "url": "https://www.reddit.com/r/Entrepreneur/comments/1r7ftx1/im_offering_300month_technical_support_for/",
-        "source": "reddit:r/Entrepreneur",
-        "score": 100,
-        "estimated_value_usd": 300.0,
-        "reason": "visible or inferred value around $300.00; can become a repeatable async offer instead of hourly labor",
-        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I\u2019m offering $300/month technical support for founders what would you want included?\nSource: reddit:r/Entrepreneur\nURL: https://www.reddit.com/r/Entrepreneur/comments/1r7ftx1/im_offering_300month_technical_support_for/\nWhy this is suitable: visible or inferred value around $300.00; can become a repeatable async offer instead of hourly labor\nFirst step: Open the latest failed job, capture the failure signature, and patch only the failing path.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I\u2019m a part-time Python developer working mostly with solo founders and small projects. Instead of doing one-off gigs, I\u2019m testing a low-cost monthly technical support model ($300/month) where I: maintain automation scripts fix bugs build small internal tools handle data processing tasks help with Linux/server small tasks Goal is to give founders a \u201ctechnical safety net\u201d without hiring full-time. For those running small SaaS, e-commerce ops, or automation-heavy workflows: \ud83d\udc49 What would you expect from a developer on a small monthly retainer? \ud83d\udc49 What tasks would bring you the most value? Not selling anything here, just validating the model and seeing what founders actually need. &#32; submitted by &#32; /u/isaaclazrisec [link] &#32; [comments]",
-        "outreach_draft": "Hi, I found your request about \"I\u2019m offering $300/month technical support for founders what would you want included?\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $300.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/Entrepreneur/comments/1r7ftx1/im_offering_300month_technical_support_for/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "[P2][Data] Tier labels are published as 28 g variants and corrupt price-per-gram ranking",
-        "url": "https://github.com/Chicken3veryDay/Drop-finder/issues/22",
+        "title": "KRITISCH: /install.sh und /install.ps1 existieren nicht \u2014 jeder Kunden-One-Liner (#67/#68/#69/#71) f\u00fchrt ins Leere",
+        "url": "https://github.com/scimbe/claude-tunnel/issues/75",
         "source": "github",
         "score": 100,
-        "estimated_value_usd": 34.99,
-        "reason": "visible or inferred value around $34.99; public proof makes this suitable for automated AI patching",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: [P2][Data] Tier labels are published as 28 g variants and corrupt price-per-gram ranking\nSource: github\nURL: https://github.com/Chicken3veryDay/Drop-finder/issues/22\nWhy this is suitable: visible or inferred value around $34.99; public proof makes this suitable for automated AI patching\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Summary  The production catalog pipeline interprets bare merchandising numbers such as `Tier 1` as ounce quantities. Those fabricated weights are then trusted as normalized input by catalog v4, which publishes affected products as 28 g variants with invented price-per-gram values.  The current shopper index contains multiple examples, including `ADL | THCa Flower | Tier 1`, `Fidel Runtz | THCa Flower | Tier 1`, `Grape Gasby | THCa Flower | Tier 1`, `Hash Burger | THCa Flower | Tier 1`, `Jack Herer | THCa Flower | Tier 1`, `LCG | THCa Flower | Tier 1`, and `Legends OG | THCa Flower | Tier 1`. Each is published as `28.0` g at `$34.99`, producing an unsupported `$1.2496/g` value.  Because the marketplace defaults to **Lowest Price/g** and exposes weight and price-per-gram filters, the contaminated values directly alter the primary shopping workflow.  ## Priority  **Priority:** P2   **Con",
-        "outreach_draft": "Hi, I found your request about \"[P2][Data] Tier labels are published as 28 g variants and corrupt price-per-gram ranking\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $34.99 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/Chicken3veryDay/Drop-finder/issues/22",
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: KRITISCH: /install.sh und /install.ps1 existieren nicht \u2014 jeder Kunden-One-Liner (#67/#68/#69/#71) f\u00fchrt ins Leere\nSource: github\nURL: https://github.com/scimbe/claude-tunnel/issues/75\nWhy this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching\nFirst step: Open the latest failed job, capture the failure signature, and patch only the failing path.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Kritischer Fund  `/install.sh` und `/install.ps1` \u2014 die URLs, auf die **jeder** von der Portal- UI generierte Install-One-Liner zeigt (`/portal/tunnels/{id}/install`, verifiziert und poliert in #67/#68/#69/#71 diese Session) \u2014 **existieren nicht**. Ein echter Kunde, der den angezeigten Befehl exakt ausf\u00fchrt, bekommt sofort einen Fehler und keinerlei Installation.  ``` $ curl -s -o /dev/null -w \"%{http_code}\\n\" https://bunsenbrenner.org/install.sh 404 $ curl -s -o /dev/null -w \"%{http_code}\\n\" https://bunsenbrenner.org/install.ps1 404 ```  `crates/control-plane/src/installer.rs` enth\u00e4lt nur `install_one_liner` (reine Text-Generierung f\u00fcr die Anzeige) \u2014 keine Route, kein Handler, kein generiertes Skript f\u00fcr `/install.sh`/`/install.ps1` irgendwo im Code (gepr\u00fcft: `grep -rln \"install.sh\\|install.ps1\" crates/ examples/ scripts/ docker/` au\u00dferhalb von `.rs`-Dateien ergibt nichts; keine Date",
+        "outreach_draft": "Hi, I found your request about \"KRITISCH: /install.sh und /install.ps1 existieren nicht \u2014 jeder Kunden-One-Liner (#67/#68/#69/#71) f\u00fchrt ins Leere\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/scimbe/claude-tunnel/issues/75",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Rename MCP tool names to single-segment (drop the `crystalium.` self-prefix) \u2014 fixes double-prefix `mcp__crystalium__crystalium_*` (#33)",
+        "url": "https://github.com/Rynaro/crystalium/issues/35",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Rename MCP tool names to single-segment (drop the `crystalium.` self-prefix) \u2014 fixes double-prefix `mcp__crystalium__crystalium_*` (#33)\nSource: github\nURL: https://github.com/Rynaro/crystalium/issues/35\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Summary  crystalium registers **dotted** tool names in `build_tool_manifest()` (`mcp-server/src/crystalium/server.py`, ~L177\u2013430): `crystalium.recall`, `crystalium.commit`, \u2026 `crystalium.graph_export`. MCP tool names cannot contain `.`, so the host sanitizes `.`\u2192`_` **and** namespaces the server, producing the redundant **double-prefix** exposed name `mcp__crystalium__crystalium_recall`.  A caller reaching for the intuitive `mcp__crystalium__recall` gets **\"No such tool available\"** (root cause of #33). Every *other* engine MCP uses single-segment names \u2014 `mcp__tonberry__list`, `mcp__atomos__compose_handoff`, `mcp__atlas-aci__view_file` \u2014 so crystalium's `crystalium.` self-prefix is the lone outlier.  Glob grants (`mcp__crystalium__*`) **do** match the double-prefixed names, so already-wired agents keep working today; the failure is confined to callers/docs that use the un-prefixed sh",
+        "outreach_draft": "Hi, I found your request about \"Rename MCP tool names to single-segment (drop the `crystalium.` self-prefix) \u2014 fixes double-prefix `mcp__crystalium__crystalium_*` (#33)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/Rynaro/crystalium/issues/35",
         "pursued": false,
         "archived_at": null
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/ah-ha-admin/refactored-memory/issues/49",
+        "url": "https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/IBM/tensorlakehouse-openeo-driver).  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/asttokens-3.x -->Update dependency asttokens to v3.0.2  - [ ] <!-- unlimit-branch=renovate/branca-0.x -->Update dependency branca to v0.8.2  - [ ] <!-- unlimit-branch=renovate/cdsapi-0.x -->Update dependency cdsapi to v0.7.7  - [ ] <!-- unlimit-branch=renovate/cfgrib-0.x -->Update dependency cfgrib to v0.9.15.1  - [ ] <!-- unlimit-branch=renovate/cftime-1.x -->Update dependency cftime to v1.6.5  - [ ] <!-- unlimit-branch=renovate/charset-normalize",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/nationalarchives/ds-caselaw-data-enrichment-service/issues/235",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/ah-ha-admin/refactored-memory/issues/49\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/ah-ha-admin/refactored-memory).   - \u26a0\ufe0f WARN: Hidden Unicode characters have been discovered in file(s) in your repository. See your Renovate logs for more details. Please confirm that they are intended to be there, as they could be an attempt to \"smuggle\" text into your codebase, or used to confuse tools like Renovate or Large Language",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/ah-ha-admin/refactored-memory/issues/49",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/nationalarchives/ds-caselaw-data-enrichment-service/issues/235\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/nationalarchives/ds-caselaw-data-enrichment-service).  ## Abandoned Dependencies  The following dependencies have not received updates for an extended period and may be unmaintained.  <details> <summary>View abandoned dependencies (10)</summary>  > [!NOTE] Packages are marked as abandoned when they exceed the [`abandonmentThreshold`](https://docs.renovatebot.com/configuration-options/#abandonmentthreshold) since their last release. Unlike deprecated packages with official notices, abandonment is detected by release inactivity. >  | Datasource | Package | Last Updated | |------------|------|-------------| | github-actions | [pre-commit/actio",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/nationalarchives/ds-caselaw-data-enrichment-service/issues/235",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "bug: RAG ignores instructions to answer using only one document in a multi-file Knowledge Base",
-        "url": "https://github.com/open-webui/open-webui/issues/27073",
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/NorkzYT/comic-downloader/issues/3",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: bug: RAG ignores instructions to answer using only one document in a multi-file Knowledge Base\nSource: github\nURL: https://github.com/open-webui/open-webui/issues/27073\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ### Check Existing Issues  - [x] I have searched for any existing and/or related issues. - [x] I have searched for any existing and/or related discussions. - [x] I have also searched in the CLOSED issues AND CLOSED discussions and found no related items (your issue might already be addressed on the development branch!). - [x] I am using the latest version of Open WebUI.  ### Installation Method  Git Clone  ### Open WebUI Version  0.10.2  ### Ollama Version (if applicable)  n/a  ### Operating System  macOS Tahoe (M5 max)  ### Browser (if applicable)  n/a  ### Confirmation  - [x] I have read and followed all instructions in `README.md`. - [x] I am using the latest version of **both** Open WebUI and Ollama. - [x] I have included the browser console logs. - [x] I have included the Docker container logs. - [x] I have **provided every relevant configuration, setting, and environment variable u",
-        "outreach_draft": "Hi, I found your request about \"bug: RAG ignores instructions to answer using only one document in a multi-file Knowledge Base\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/open-webui/open-webui/issues/27073",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/NorkzYT/comic-downloader/issues/3\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/NorkzYT/comic-downloader).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/github.com-chromedp-chromedp-0.x -->fix(deps): update module github.com/chromedp/chromedp to v0.16.0  - [ ] <!-- unlimit-branch=renovate/actions-checkout-7.x -->chore(deps): update actions/checkout action to v7  - [ ] <!-- unlimit-branch=renovate/actions-setup-go-7.x -->chore(deps): update actions/setup-go ac",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/NorkzYT/comic-downloader/issues/3",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Strip orphan </think> tags in _parse_thinking_content",
-        "url": "https://github.com/fasrc/archi/issues/84",
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/DaSchTour/dasch-ng/issues/20",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
-        "next_step": "Open the latest failed job, capture the failure signature, and patch only the failing path.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Strip orphan </think> tags in _parse_thinking_content\nSource: github\nURL: https://github.com/fasrc/archi/issues/84\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Open the latest failed job, capture the failure signature, and patch only the failing path.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Objective  Harden `BaseReActAgent._parse_thinking_content` so it strips **orphan `</think>` closing tags** (a closing tag with no matching opening `<think>`), preventing Qwen3 chain-of-thought from bleeding into visible chat answers.  ## Context you need  **Repo state:** `fasrc/archi`, branch `dev`, HEAD `1e93420afc3b0053d70b34553f2736c38adf8f7a` at the time of writing.  **The method** is `src/archi/pipelines/agents/base_react.py:195`:  ```python def _parse_thinking_content(self, text: str) -> Tuple[str, str]:     \"\"\"     Parse text to separate thinking content from visible content.     Handles <think>...</think> tags used by models like Qwen3.     Returns (visible_content, thinking_content).     \"\"\"     if not text:         return \"\", \"\"     # Extract all thinking blocks     thinking_pattern = re.compile(r\"<think>(.*?)</think>\", re.DOTALL)   # line 206     thinking_matches = thinking",
-        "outreach_draft": "Hi, I found your request about \"Strip orphan </think> tags in _parse_thinking_content\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/fasrc/archi/issues/84",
+        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/DaSchTour/dasch-ng/issues/20\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/DaSchTour/dasch-ng).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/DaSchTour/dasch-ng).   - \u26a0\ufe0f WARN: Could not re-extract the packageFile after updating it  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | bun | [@angular-devkit/build-angular](https://redirect.github.com/angular/angular-cli) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | bun | [@angular/animation",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/DaSchTour/dasch-ng/issues/20",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Triage: open issues recommended for closure",
-        "url": "https://github.com/open-telemetry/opentelemetry-python-contrib/issues/4808",
+        "title": "Dependency Dashboard",
+        "url": "https://github.com/wpeverest/everest-forms/issues/733",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Triage: open issues recommended for closure\nSource: github\nURL: https://github.com/open-telemetry/opentelemetry-python-contrib/issues/4808\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # opentelemetry-python-contrib \u2014 Open Issues Recommended for Closure  **Repository:** `open-telemetry/opentelemetry-python-contrib` **Analysis date:** 2026-07-12 **Scope:** all 551 open issues (PRs excluded), issue numbers #142 \u2192 #4797  ## Method  The full set of open issues was pulled via the GitHub API and split into 12 batches. Each batch was triaged against the current `main` branch and merged-PR history: for every issue we checked whether the requested feature/fix already shipped, whether it duplicates another issue, or whether it refers to tooling / Python versions / libraries that no longer exist. Only issues with a concrete reason to close are listed here; the ~461 not listed were judged to be still-valid open work (unimplemented feature requests, live bugs, active tracking issues).  **Confidence** reflects how sure we are the issue is closeable: HIGH = verified against code or a",
-        "outreach_draft": "Hi, I found your request about \"Triage: open issues recommended for closure\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/open-telemetry/opentelemetry-python-contrib/issues/4808",
+        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/wpeverest/everest-forms/issues/733\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/wpeverest/everest-forms).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/react-datepicker` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | `@types/react-select` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [react-grid-system](h",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/wpeverest/everest-forms/issues/733",
         "pursued": false,
         "archived_at": null
       }
@@ -304,7 +315,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-07-16T21:17:15.051831+00:00",
+    "last_refresh_at": "2026-07-17T22:06:46.412650+00:00",
     "reference_sources": [
       {
         "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
@@ -325,13 +336,13 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "Leverage high-demand remote-service niches such as AI prompt consulting, no-code automation, async documentation fixes, and micro-SaaS operations support, positioning them as retainer-based, productized services that use automation and AI to generate income with minimal hourly commitment.",
+      "summary": "By combining specialization, automation, and productized services\u2014especially in AI prompt consulting, no\u2011code workflow setup, CRM/data automation, and analytics reporting\u2014you can turn scattered GitHub help\u2011wanted signals into retainer\u2011based remote income that decouples earnings from hours worked.",
       "owner_actions": [
-        "Conduct quick market validation by searching keywords from the listed niches on freelance platforms and noting pricing trends.",
-        "Create a minimal service offering (e.g., AI prompt workflow audit or no-code automation setup) with a clear retainer price and deliverable timeline.",
-        "Build a simple landing page or portfolio showcasing the service, including case studies or templates to attract clients.",
-        "Set up an automated outreach sequence to relevant communities (e.g., Discord, Slack, GitHub) and schedule follow-ups using async tools.",
-        "Automate client onboarding and delivery using no-code workflows (e.g., Zapier, Make) to maintain a low-hour, high-margin operation."
+        "Pick a niche from the list (e.g., AI prompt and workflow consulting or CRM/spreadsheet automation) and validate demand by scanning recent GitHub issues tagged \"help wanted\" in relevant repositories.",
+        "Create a concrete, repeatable service package: define scope, deliverables, timeline, and a fixed\u2011price or monthly retainer, then draft a one\u2011page proposal or landing page that includes a brief case study or demo.",
+        "Set up an automated outreach pipeline (using Zapier, Make, or a simple script) that watches for new \"help wanted\" issues in target repos, extracts key details, and sends a personalized pitch while logging responses in a lightweight CRM.",
+        "Complete a pilot project for the first client, gather a testimonial, and productize the workflow into a template, checklist, or micro\u2011SaaS offering that can be resold on retainer to similar prospects.",
+        "Iterate: use the collected data and feedback to refine the service, add automation for reporting or updates, and gradually increase rates or retainer fees as your portfolio and reputation grow."
       ]
     }
   },

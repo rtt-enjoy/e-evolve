@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-07-21T22:12:36.408276+00:00",
-  "total_runs": 1121,
+  "last_run": "2026-07-21T23:12:51.084002+00:00",
+  "total_runs": 1122,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -51,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 102,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -171,93 +182,93 @@
         "archived_at": null
       },
       {
-        "title": "Strategic alignment: compiler excellence pillars (2026 H2)",
-        "url": "https://github.com/PurHur/php-compiler/issues/10533",
+        "title": "\ud83d\udcca AI CLI Tools Digest 2026-07-22",
+        "url": "https://github.com/kky-wollu/agents-radar/issues/183",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Strategic alignment: compiler excellence pillars (2026 H2)\nSource: github\nURL: https://github.com/PurHur/php-compiler/issues/10533\nWhy this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching\nFirst step: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## North star (unchanged)  **Best compiler = self-hosting PHP compiler that compiles itself without Zend**, with honest gates, real Zend parity where it matters, and fast iteration loops.  Living trackers: [#1492](https://github.com/PurHur/php-compiler/issues/1492) (M3\u2192M5) \u00b7 [#78](https://github.com/PurHur/php-compiler/issues/78) (roadmap) \u00b7 [#8739](https://github.com/PurHur/php-compiler/issues/8739) (v1.1.0 meta)  ---  ## Five pillars (priority order)  Every open issue should map to **one primary pillar**. Work top-to-bottom within each tier; do not start lower tiers while a higher tier gate is red on `master`.  | Pillar | Question it answers | Primary gates | Status (Jun 2026) | |--------|---------------------|---------------|-------------------| | **1. Trust** | Can we believe green CI? | `examples-aot-smoke`, `examples-web-smoke`, `north-star5-verify-fast`, `release-readiness --full`",
-        "outreach_draft": "Hi, I found your request about \"Strategic alignment: compiler excellence pillars (2026 H2)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/PurHur/php-compiler/issues/10533",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "PRD: Phase 2 shared TUI helper and distribution for the runner family",
-        "url": "https://github.com/bradcstevens/git-loopy/issues/173",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
+        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: PRD: Phase 2 shared TUI helper and distribution for the runner family\nSource: github\nURL: https://github.com/bradcstevens/git-loopy/issues/173\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Problem Statement  The shell and PowerShell Orchestrators are complete Phase 1 members of the git-loopy Runner family, but their terminal experience stops at the raw JSONL Event stream. Operators who choose those ports because they do not want a Python dependency cannot see the live Dashboard that the Python reference runner provides. They must read machine-oriented events directly or inspect replay logs after the fact.  The Runner family also lacks a durable way to keep two renderer implementations aligned. The current Event schema does not yet carry all of the normalized lifecycle, attribution, Context fill, Consumption, closure, Iteration-breakdown, and capability facts required by the locked family-wide Dashboard contract. Building a standalone renderer without first strengthening that contract would force the TUI helper to infer meaning from incomplete low-level events and would ",
-        "outreach_draft": "Hi, I found your request about \"PRD: Phase 2 shared TUI helper and distribution for the runner family\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/bradcstevens/git-loopy/issues/173",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udcca AI CLI Tools Digest 2026-07-22\nSource: github\nURL: https://github.com/kky-wollu/agents-radar/issues/183\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # AI CLI Tools Community Digest 2026-07-22  > Generated: 2026-07-21 23:01 UTC | Tools covered: 9  - [Claude Code](https://github\u200b.com/anthropics/claude-code) - [OpenAI Codex](https://github\u200b.com/openai/codex) - [Gemini CLI](https://github\u200b.com/google-gemini/gemini-cli) - [GitHub Copilot CLI](https://github\u200b.com/github/copilot-cli) - [Kimi Code CLI](https://github\u200b.com/MoonshotAI/kimi-cli) - [OpenCode](https://github\u200b.com/anomalyco/opencode) - [Pi](https://github\u200b.com/badlogic/pi-mono) - [Qwen Code](https://github\u200b.com/QwenLM/qwen-code) - [DeepSeek TUI](https://github\u200b.com/Hmbown/DeepSeek-TUI) - [Claude Code Skills](https://github\u200b.com/anthropics/skills)  ---  ## Cross-Tool Comparison  # AI CLI Tools Ecosystem: Cross-Tool Comparison Report **Date:** 2026-07-22 | **Prepared for:** Technical Decision-Makers & Developers  ---  ## 1. Ecosystem Overview  The AI CLI tools landscape in mid-2026 ",
+        "outreach_draft": "Hi, I found your request about \"\ud83d\udcca AI CLI Tools Digest 2026-07-22\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/kky-wollu/agents-radar/issues/183",
         "pursued": false,
         "archived_at": null
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/ni/measurement-plugin-python/issues/475",
+        "url": "https://github.com/marimo-team/marimo/issues/1",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
+        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/ni/measurement-plugin-python/issues/475\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ni/measurement-plugin-python).  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=users/renovate/third_party-ni-apis-digest -->chore(deps): update third_party/ni-apis digest to e517f9c  - [ ] <!-- unschedule-branch=users/renovate/python -->chore(deps): update dependency docutils to v0.23  - [ ] <!-- unschedule-branch=users/renovate/lock-file-maintenance -->chore(deps): lock file maintenance  - [ ] <!-- create-all-awaiting-schedule-prs -->\ud83d\udd10 **Create all awaiting schedule PRs at once** \ud83d\udd10  ## Pending Status Checks  The following updates await",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/ni/measurement-plugin-python/issues/475",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/marimo-team/marimo/issues/1\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/marimo-team/marimo).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/marimo-team/marimo).   - \u26a0\ufe0f WARN: pep440: failed to calculate newValue  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/dompurify` | ![Unavailable](https://img.shields.io/bad",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/marimo-team/marimo/issues/1",
         "pursued": false,
         "archived_at": null
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/decentralized-identity/did-jwt/issues/194",
+        "url": "https://github.com/jpbede/aioelectricitymaps/issues/71",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
+        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/decentralized-identity/did-jwt/issues/194\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/decentralized-identity/did-jwt).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [codecov](https://redirect.github.com/codecov/codecov-node) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [multibase](https://redirect.github.com/multiformats/js-multibase) | ![Unavailable](https://img.",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/decentralized-identity/did-jwt/issues/194",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/jpbede/aioelectricitymaps/issues/71\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/jpbede/aioelectricitymaps).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/aioresponses-0.x -->\u2b06\ufe0f Update dependency aioresponses to v0.7.9  - [ ] <!-- unlimit-branch=renovate/codespell-2.x -->\u2b06\ufe0f Update dependency codespell to v2.4.3  - [ ] <!-- unlimit-branch=renovate/pre-commit-4.x -->\u2b06\ufe0f Update dependency pre-commit to v4.6.1  - [ ] <!-- unlimit-branch=renovate/pylint-4.x -->\u2b06\ufe0f Up",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/jpbede/aioelectricitymaps/issues/71",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Renovate Dashboard \ud83e\udd16",
+        "url": "https://github.com/TotallyNotRobots/CloudBot/issues/733",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Renovate Dashboard \ud83e\udd16\nSource: github\nURL: https://github.com/TotallyNotRobots/CloudBot/issues/733\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/TotallyNotRobots/CloudBot).  ## Abandoned Dependencies  The following dependencies have not received updates for an extended period and may be unmaintained.  <details> <summary>View abandoned dependencies (6)</summary>  > [!NOTE] Packages are marked as abandoned when they exceed the [`abandonmentThreshold`](https://docs.renovatebot.com/configuration-options/#abandonmentthreshold) since their last release. Unlike deprecated packages with official notices, abandonment is detected by release inactivity. >  | Datasource | Package | Last Updated | |------------|------|-------------| | pip_requirements | [cleverwrap](https://redirect.github.com/s",
+        "outreach_draft": "Hi, I found your request about \"Renovate Dashboard \ud83e\udd16\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/TotallyNotRobots/CloudBot/issues/733",
         "pursued": false,
         "archived_at": null
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/suiyun39/babel-plugin-jsx-asset-url-import/issues/2",
+        "url": "https://github.com/developing-today/code/issues/24",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/suiyun39/babel-plugin-jsx-asset-url-import/issues/2\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/suiyun39/babel-plugin-jsx-asset-url-import).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Pending Approval  The following branches are pending approval. To create them, click on a checkbox below.   - [ ] <!-- approve-branch=renovate/npm-dependencies -->chore(deps): update npm dependencies (`@babel/plugin-syntax-jsx`, `@babel/preset-typescript`, `@types/jest`, `@types/node`, `@types/react`, `eslint`, `eslint-config-rakko`, `husky`, `lint-staged`, `pnpm`, `ts-jest`, `tsup`, `typescript`)  - [ ] <!-- approve-branch=renovate/actions-chec",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/suiyun39/babel-plugin-jsx-asset-url-import/issues/2",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/developing-today/code/issues/24\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/developing-today/code).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | bun | [@starfederation/datastar](https://redirect.github.com/starfederation/datastar) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) |  ## Rate-Limited  The following updates are currently rate-limited. To force their creation n",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/developing-today/code/issues/24",
         "pursued": false,
         "archived_at": null
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/ZQ-jhon/react-base-bolierplate/issues/74",
+        "url": "https://github.com/SmirnovWorks/renovatebot-test/issues/4",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/ZQ-jhon/react-base-bolierplate/issues/74\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ZQ-jhon/react-base-bolierplate).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [node-sass](https://redirect.github.com/sass/node-sass) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) |  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a ",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/ZQ-jhon/react-base-bolierplate/issues/74",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/SmirnovWorks/renovatebot-test/issues/4\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/SmirnovWorks/renovatebot-test).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/react-dom-19.x -->Update dependency react-dom to v19  - [ ] <!-- unlimit-branch=renovate/web-vitals-6.x -->Update dependency web-vitals to v6  - [ ] <!-- create-all-rate-limited-prs -->\ud83d\udd10 **Create all rate-limited PRs at once** \ud83d\udd10  ## Open  The following updates have all been created. To force a retry/reba",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/SmirnovWorks/renovatebot-test/issues/4",
         "pursued": false,
         "archived_at": null
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/QuentinVdr/cra-template-quentinvdr/issues/4",
+        "url": "https://github.com/mgallagher56/flump/issues/8",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
+        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/QuentinVdr/cra-template-quentinvdr/issues/4\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/QuentinVdr/cra-template-quentinvdr).  ## Config Migration Needed  <!-- config-migration-pr-info --> See Config Migration PR: #54.  ## Abandoned Dependencies  The following dependencies have not received updates for an extended period and may be unmaintained.  <details> <summary>View abandoned dependencies (3)</summary>  > [!NOTE] Packages are marked as abandoned when they exceed the [`abandonmentThreshold`](https://docs.renovatebot.com/configuration-options/#abandonmentthreshold) since their last release. Unlike deprecated packages with official notices, abandonment is detected by release inactivity. >  | Datasource | Package | Last Updated",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/QuentinVdr/cra-template-quentinvdr/issues/4",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/mgallagher56/flump/issues/8\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/mgallagher56/flump).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/mgallagher56/flump).   - \u26a0\ufe0f WARN: Package lookup failures  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/c8-12.x -->chore(deps): update dependency c8 to v12  - [ ] <!-- unschedule-branch=renovate/typescript-7.x -->chore(deps): updat",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/mgallagher56/flump/issues/8",
         "pursued": false,
         "archived_at": null
       }
@@ -304,7 +315,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-07-20T22:13:20.284964+00:00",
+    "last_refresh_at": "2026-07-21T23:12:51.949895+00:00",
     "reference_sources": [
       {
         "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
@@ -325,13 +336,13 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "Based on the research, there's strong demand for specialized remote services that leverage AI, automation, and productized offerings. Key opportunities include AI prompt consulting, no-code automation setup, analytics dashboard creation, and micro-SaaS operations help. The lead samples show active GitHub issues labeled 'help wanted' across multiple domains like documentation, testing, and system maintenance, indicating real market needs for these specialized services.",
+      "summary": "Based on the high\u2011demand GitHub issues around smart\u2011contract development, security, and tooling, the most lucrative remote\u2011service niches are CI/CD automation, audit\u2011checklist productization, async documentation, micro\u2011SaaS migration, and AI\u2011prompt consulting for blockchain teams. By packaging these into retainers or productized services, you can detach income from hours and tap into the growing need for specialized, automated support in the decentralized space.",
       "owner_actions": [
-        "Create a service package for AI prompt and workflow consulting targeting developers and technical teams, focusing on optimizing their use of AI tools through structured prompt engineering and workflow automation",
-        "Develop a no-code automation setup service that helps businesses automate repetitive tasks using tools like Zapier, Make, or Bubble, with a focus on CRM, spreadsheet, and data workflow automation",
-        "Offer analytics dashboard and reporting automation services using tools like Google Data Studio, Tableau, or custom solutions to help businesses create automated reporting systems",
-        "Position yourself as a specialist in async technical documentation fixes, helping development teams maintain clean, up-to-date documentation with minimal disruption to their workflow",
-        "Create productized audit/checklist services for common development and business operations needs, offering standardized assessments with clear deliverables and timelines"
+        "Define a CI/CD automation bundle for blockchain projects and price it as a monthly retainer.",
+        "Create a reusable audit\u2011checklist template for smart\u2011contract security and sell it as a productized service.",
+        "Offer async documentation writing for contract docs, leveraging AI tools to accelerate delivery.",
+        "Develop a micro\u2011SaaS migration guide for blockchain tooling and market it to dev teams.",
+        "Reach out to GitHub issue owners and blockchain communities to pitch these services and secure pilot projects."
       ]
     }
   },

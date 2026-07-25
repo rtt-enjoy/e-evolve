@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-07-24T00:12:38.549561+00:00
+Refreshed: 2026-07-25T00:17:39.253073+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,12 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-Analyzing the high‑volume GitHub issues—particularly those focused on automated testing, CI/CD reliability, accessibility checks, and async documentation—reveals strong market demand for specialized, productized remote services that automate repetitive technical tasks and provide retainer‑based support, especially in AI‑enhanced workflow consulting, CI maintenance, and accessibility audit solutions.
+The current landscape of open‑source and enterprise projects shows a high density of "help‑wanted" issues across diverse stacks—CI/CD, dependency management, telemetry, API rate‑limiting, and documentation—indicating a strong demand for remote, asynchronous, productized support that can be delivered via AI‑augmented workflows, no‑code automation, and specialized audit services. By packaging these pain points into retainer‑based, AI‑driven consulting bundles—such as automated CI maintenance, dependency‑dashboard migration, or AI‑powered knowledge‑base cleanup—remote service providers can detach revenue from billable hours, scale with async delivery, and tap into the growing market for high‑value, low‑time‑commitment remote work.
 
-- Select a high‑demand niche such as async technical documentation fixes or CI pipeline automation and define a productized service package with clear deliverables and pricing.
-- Build a minimal MVP using no‑code/low‑code tools and AI prompts to deliver the service efficiently, ensuring it can be performed asynchronously.
-- Pilot the service with 2‑3 early‑adopter clients from relevant GitHub “help wanted” issue threads, offering a retainer or per‑issue pricing model.
-- Create a simple sales funnel (landing page, demo video, targeted outreach) to generate inbound leads and iterate on the offering based on feedback.
+- Identify the top 10 issue categories with the highest "help‑wanted" volume and map them to potential service offerings.
+- Draft a concise productized service catalog that pairs each category with a clear deliverable, pricing tier, and AI‑automation component.
+- Build a lightweight AI‑powered proposal generator and pricing calculator to streamline outreach and quoting.
+- Create a landing page and outreach email template that targets issue owners, highlighting the value of async, retainer‑based support.
+- Set up a retainer contract template, invoicing workflow, and a simple client onboarding process to enable quick scaling of the service model.
 
 ## Underserved Focus
 
@@ -107,19 +108,19 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-2. [Docker dev environment: one-command local setup for contracts + frontend](https://github.com/ToluLabs/StellarCred/issues/42)
+2. [Dependency Dashboard](https://github.com/uPortal-Project/uPortal-start/issues/440)
    - Score: 100/100
    - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Docker dev environment: one-command local setup for contracts + frontend
+     Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/ToluLabs/StellarCred/issues/42
-     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-     First step: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+     URL: https://github.com/uPortal-Project/uPortal-start/issues/440
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -128,15 +129,15 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## Summary  Setting up the full StellarCred dev environment requires installing Rust, the wasm32v1-none target, Stellar CLI, nargo, bb, Node, and pnpm — and the versions must match exactly. Add a Docker Compose setup so contributors can get a working environment with a single command, without polluting their host toolchain.  ## What to build  - `docker/Dockerfile.dev` — multi-stage image with all pinned toolchain versions:   - Rust stable + `wasm32v1-none` target   - Stellar CLI v27   - Noir `nargo` 1.0.0-beta.9   - Barretenberg `bb` 0.87.0   - Node 20 + pnpm 9 - `docker-compose.yml` at the repo root:   - `contracts` service: mounts the repo, runs `cargo test` and `cargo build`   - `frontend` service: mounts `frontend/`, runs `pnpm dev` on port 3000   - `circuits` service: mounts `circuits/`, runs `nargo compile --workspace` - `CONTRIBUTING.md` update: add a "Docker quickstart" section a
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal-start).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Pending Approval  The following branches are pending approval. To create them, click on a checkbox below.   - [ ] <!-- approve-branch=renovate/actions-checkout-7.x -->chore(deps): update actions/checkout action to v7  - [ ] <!-- approve-branch=renovate/actions-setup-java-5.x -->chore(deps): update actions/setup-java action to v5  - [ ] <!-- approve-branch=renovate/actions-setup-node-7.x -->chore(deps): update actions/setup-node action to v7  - [ ] <!-- appro
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Docker dev environment: one-command local setup for contracts + frontend" and can make a small working version.
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/ToluLabs/StellarCred/issues/42
+     Reference: https://github.com/uPortal-Project/uPortal-start/issues/440
 3. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
    - Score: 100/100
    - Value signal: $10.00
@@ -158,7 +159,7 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/github.com-mattn-go-isatty-0.x -->Update module github.com/mattn/go-isatty to v0.0.24  - [ ] <!-- unlimit-branch=renovate/github.com-sirupsen-logrus-1.x -->Update module github.com/sirupsen/logrus to v1.9.4  - [ ] <!-- unlimit-branch=renovate/actions-checkout-3.x -->Update actions/checkout action to v3.7
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/ah-ha-admin/refactored-memory).   - ⚠️ WARN: Hidden Unicode characters have been discovered in file(s) in your repository. See your Renovate logs for more details. Please confirm that they are intended to be there, as they could be an attempt to "smuggle" text into your codebase, or used to confuse tools like Renovate or Large Language
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -167,18 +168,18 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ah-ha-admin/refactored-memory/issues/49
-4. [docs: complete v1.0.0 documentation normalization](https://github.com/nkkmd/lingonberry/issues/144)
+4. [Status of testing Providers that were prepared on July 22, 2026](https://github.com/apache/airflow/issues/70355)
    - Score: 100/100
    - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: docs: complete v1.0.0 documentation normalization
+     Lead: Status of testing Providers that were prepared on July 22, 2026
      Source: github
-     URL: https://github.com/nkkmd/lingonberry/issues/144
-     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+     URL: https://github.com/apache/airflow/issues/70355
+     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
      First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
      
      Constraints:
@@ -188,16 +189,16 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: Parent: #109  ## Objective  Apply `docs/DOCUMENTATION_POLICY.md` before v1.0.0 release publication.  ## Required work  - inventory all existing Markdown and operator-facing text documents - classify each document as `BILINGUAL_REQUIRED`, `BILINGUAL_SCOPED`, `ENGLISH_ONLY`, `MERGE`, `ARCHIVE`, or `DELETE` - normalize Tier 1 files to English-first, Japanese-second form - provide the minimum bilingual operator runbook for installation, service lifecycle, health/readiness/logs, backup/restore, upgrade/rollback, and troubleshooting - convert internal architecture, reference, qualification, soak, evidence, CI, and maintainer-only procedures to English - add a documentation index and repair moved/renamed links - add CI checks for required bilingual markers, links, version consistency, and stale translations - ensure no unresolved release-blocking inventory actions remain - prepare bilingual v1.
+     Request excerpt: I have a kind request for all the contributors to the latest provider distributions release. Could you please help us to test the RC versions of the providers?  The guidelines on how to test providers can be found in  [Verify providers by contributors](https://github.com/apache/airflow/blob/main/dev/README_RELEASE_PROVIDERS.md#verify-the-release-candidate-by-contributors)  Let us know in the comments, whether the issue is addressed.  These are providers that require testing as there were some substantial changes introduced:   ## Provider [airbyte: 6.0.0rc1](https://pypi.org/project/apache-airflow-providers-airbyte/6.0.0rc1)    - [ ] [Migrate Airbyte provider to `airbyte-api` library 1.0 and `httpx` (#68882)](https://github.com/apache/airflow/pull/68882): @aaronsteers ## Provider [akeyless: 0.3.0rc1](https://pypi.org/project/apache-airflow-providers-akeyless/0.3.0rc1)    - [x] [Add cloud-
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "docs: complete v1.0.0 documentation normalization" and can make a small working version.
+     Hi, I found your request about "Status of testing Providers that were prepared on July 22, 2026" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/nkkmd/lingonberry/issues/144
-5. [Dependency Dashboard](https://github.com/atlas-bi/Hub/issues/81)
+     Reference: https://github.com/apache/airflow/issues/70355
+5. [Nightly realtime soak has never passed — `maturin develop` runs without a virtualenv (0/71 runs succeeded)](https://github.com/D-sorganization/UpstreamDrift/issues/7990)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -205,9 +206,9 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Dependency Dashboard
+     Lead: Nightly realtime soak has never passed — `maturin develop` runs without a virtualenv (0/71 runs succeeded)
      Source: github
-     URL: https://github.com/atlas-bi/Hub/issues/81
+     URL: https://github.com/D-sorganization/UpstreamDrift/issues/7990
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -218,7 +219,37 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/atlas-bi/Hub).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [bulma-checkradio](https://redirect.github.com/Wikiki/bulma-checkradio) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | [bulma-tooltip](https://redirect.github.com/Wikiki/bulma-tooltip) | ![Unavailable](https://img.shields
+     Request excerpt: ## Location  `.github/workflows/realtime-soak.yml:100-103`  ```yaml       - name: Build & install upstream_realtime wheel (maturin develop)         working-directory: rust_core/upstream-realtime         run: |           maturin develop --release ```  ## Problem  `maturin develop` requires an *active* virtualenv/conda environment — it installs the built extension into the environment maturin detects via `VIRTUAL_ENV`, `CONDA_PREFIX`, or a `.venv` in the current/parent directory. The soak job installs Python via `actions/setup-python` (system interpreter, no venv) and never creates or activates one, so this step aborts before building anything.  Because the step fails, the `Run 24h soak` step (`tests/soak/realtime/test_24h_soak.py`) never executes. The nightly soak has therefore **never** validated the `upstream-realtime` Rust WS pub-sub for leaks or latency, despite reporting as a schedul
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Nightly realtime soak has never passed — `maturin develop` runs without a virtualenv (0/71 runs succeeded)" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/D-sorganization/UpstreamDrift/issues/7990
+6. [Dependency Dashboard](https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41
+     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/IBM/tensorlakehouse-openeo-driver).  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/asttokens-3.x -->Update dependency asttokens to v3.0.2  - [ ] <!-- unlimit-branch=renovate/branca-0.x -->Update dependency branca to v0.8.2  - [ ] <!-- unlimit-branch=renovate/cdsapi-0.x -->Update dependency cdsapi to v0.7.7  - [ ] <!-- unlimit-branch=renovate/cfgrib-0.x -->Update dependency cfgrib to v0.9.15.1  - [ ] <!-- unlimit-branch=renovate/cftime-1.x -->Update dependency cftime to v1.6.5  - [ ] <!-- unlimit-branch=renovate/charset-normalize
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -226,8 +257,8 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/atlas-bi/Hub/issues/81
-6. [Dependency Dashboard](https://github.com/ni/measurement-plugin-python/issues/475)
+     Reference: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41
+7. [Renovate Dashboard 🤖](https://github.com/NovaMachina/home-ops/issues/1)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -235,9 +266,9 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Dependency Dashboard
+     Lead: Renovate Dashboard 🤖
      Source: github
-     URL: https://github.com/ni/measurement-plugin-python/issues/475
+     URL: https://github.com/NovaMachina/home-ops/issues/1
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -248,46 +279,16 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ni/measurement-plugin-python).  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=users/renovate/third_party-ni-apis-digest -->chore(deps): update third_party/ni-apis digest to e517f9c  - [ ] <!-- unschedule-branch=users/renovate/python -->chore(deps): update python packages (`docutils`, `grpcio`, `tox`)  - [ ] <!-- unschedule-branch=users/renovate/lock-file-maintenance -->chore(deps): lock file maintenance  - [ ] <!-- create-all-awaiting-schedule-prs -->🔐 **Create all awaiting schedule PRs at once** 🔐  ## Pending Status Checks  The follow
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/NovaMachina/home-ops).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/codeberg.org-forgejo-forgejo-15-rootless -->[chore(container): update image codeberg.org/forgejo/forgejo ( 4f4d168 → c040958 )](../pull/599)  - [ ] <!-- rebase-branch=renovate/docker.io-library-busybox-1.37.0 -->[chore(container): update image docker.io/library/busybox ( 1487d0a → 9532d8c )](../pull/553)  - [ ] <!-- rebase-
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     Hi, I found your request about "Renovate Dashboard 🤖" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/ni/measurement-plugin-python/issues/475
-7. [earthaccess: Python Library for NASA Earthdata APIs](https://github.com/pyOpenSci/software-submission/issues/302)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-   - Next: Open the latest failed job, capture the failure signature, and patch only the failing path.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: earthaccess: Python Library for NASA Earthdata APIs
-     Source: github
-     URL: https://github.com/pyOpenSci/software-submission/issues/302
-     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
-     First step: Open the latest failed job, capture the failure signature, and patch only the failing path.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Submitting Author: (@danielfromearth) All current maintainers: (@andypbarrett, @battistowx, @jrbourbeau, @itcarroll, @chuckwondo, @mfisher87, @danielfromearth, @jhkennedy, @betolink, @jules32, @JessicaS11, @asteiker, @Sherwin-14) Package Name: "earthaccess" One-Line Description of Package: "`earthaccess` is a python library to search for, and download or stream NASA Earth science data with just a few lines of code." Repository Link: "https://github.com/earthaccess-dev/earthaccess" Version submitted: "0.17.0" EiC: @kysolvik  Editor: @kysolvik  Reviewer 1: @ocefpaf Reviewer 2: TBD   Archive: TBD JOSS DOI: TBD Version accepted: TBD  Date accepted (month/day/year): TBD  ---  ## Code of Conduct & Commitment to Maintain Package  - [x] I agree to abide by [pyOpenSci's Code of Conduct][PyOpenSciCodeOfConduct] during the review process and in future interactions in spaces supported by pyOpenSci s
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "earthaccess: Python Library for NASA Earthdata APIs" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/pyOpenSci/software-submission/issues/302
-8. [Dependency Dashboard](https://github.com/canonical/spark-integration-hub-k8s-operator/issues/47)
+     Reference: https://github.com/NovaMachina/home-ops/issues/1
+8. [Dependency Dashboard](https://github.com/aoe-elo/aoe-elo-frontend/issues/12)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -297,7 +298,7 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/canonical/spark-integration-hub-k8s-operator/issues/47
+     URL: https://github.com/aoe-elo/aoe-elo-frontend/issues/12
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -308,7 +309,7 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/canonical/spark-integration-hub-k8s-operator).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/python-dependencies -->Update Python dependencies (`boto3`, `codespell`, `cosl`, `lightkube`, `mypy`, `ruff`, `types-boto3`)  - [ ] <!-- unschedule-branch=renovate/github-actions -->Update canonical/data-platform-workflows action to v50.2.0  - [ ] <!-- unschedule-branch=renovate/charmcra
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/aoe-elo/aoe-elo-frontend).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/playwright-monorepo -->chore(deps): update dependency @playwright/test to v1.62.0  - [ ] <!-- unlimit-branch=renovate/node-20.x-lockfile -->chore(deps): update dependency @types/node to v20.19.43  - [ ] <!-- unlimit-branch=renovate/dotenv-16.x-lockfile -->chore(deps): update dependency dotenv to v16.6.1  - [
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -316,4 +317,4 @@ Analyzing the high‑volume GitHub issues—particularly those focused on automa
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/canonical/spark-integration-hub-k8s-operator/issues/47
+     Reference: https://github.com/aoe-elo/aoe-elo-frontend/issues/12

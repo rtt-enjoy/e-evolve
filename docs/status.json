@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-07-26T00:15:12.923324+00:00",
-  "total_runs": 1168,
+  "last_run": "2026-07-26T03:59:12.623697+00:00",
+  "total_runs": 1169,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -51,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 91,
   "llm_roles": {
     "upgrade": "gemini",
     "research": "openrouter",
@@ -172,53 +183,66 @@
       },
       {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/uPortal-Project/uPortal-start/issues/440",
+        "url": "https://github.com/tadanobutubutu/screeps/issues/5",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/uPortal-Project/uPortal-start/issues/440\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/uPortal-Project/uPortal-start).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Pending Approval  The following branches are pending approval. To create them, click on a checkbox below.   - [ ] <!-- approve-branch=renovate/actions-checkout-7.x -->chore(deps): update actions/checkout action to v7  - [ ] <!-- approve-branch=renovate/actions-setup-java-5.x -->chore(deps): update actions/setup-java action to v5  - [ ] <!-- approve-branch=renovate/actions-setup-node-7.x -->chore(deps): update actions/setup-node action to v7  - [ ] <!-- appro",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/uPortal-Project/uPortal-start/issues/440",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/tadanobutubutu/screeps/issues/5\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/tadanobutubutu/screeps).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/tadanobutubutu/screeps).   - \u26a0\ufe0f WARN: Updating multiple npm lock files is deprecated and support will be removed in future versions.  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/posthog-js-1.x -->fix(deps): update dependency posthog-js to v1.407.2  - [ ] <!-- unschedule-branch=renovate/actions-checkout-7.x -->chore(deps): update actions/checkout action to v7  - [ ] <!-- uns",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/tadanobutubutu/screeps/issues/5",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/ah-ha-admin/refactored-memory/issues/49",
+        "title": "\ud83d\uddfa\ufe0f ROADMAP: Self-host + web-capable PHP subset (living)",
+        "url": "https://github.com/PurHur/php-compiler/issues/78",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
-        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/ah-ha-admin/refactored-memory/issues/49\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/ah-ha-admin/refactored-memory).   - \u26a0\ufe0f WARN: Hidden Unicode characters have been discovered in file(s) in your repository. See your Renovate logs for more details. Please confirm that they are intended to be there, as they could be an attempt to \"smuggle\" text into your codebase, or used to confuse tools like Renovate or Large Language",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/ah-ha-admin/refactored-memory/issues/49",
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\uddfa\ufe0f ROADMAP: Self-host + web-capable PHP subset (living)\nSource: github\nURL: https://github.com/PurHur/php-compiler/issues/78\nWhy this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching\nFirst step: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Living ROADMAP (high-signal, phased)  Merge gates are **local/Docker only** \u2014 no GitHub Actions (#394 \u2705). Harness-safe: `make test-harness`, `./script/docker-ci-local.sh`, `./script/docker-exec.sh`.  **North star:** [#1492](https://github.com/PurHur/php-compiler/issues/1492) (M3\u2192M5 self-host)  **Development focus (Jul 2026):** optimize for **fast M5 feedback** \u2014 not `north-star5-verify --strict` on every PR (~1h). Daily gates: `make north-star5-verify-fast` (~1\u20132 min), `make bootstrap-selfhost-vm-driver-execute-probe` (~20ms). Reserve `--strict` for pre-merge bootstrap/gen-0/vendor-prelink PRs. Doc: `docs/bootstrap-m5-fast-path.md` \u00b7 Cursor rule: `.cursor/rules/m5-fast-development.mdc`.  ---  ## User release roadmap (next: **v1.1.0**)  Meta: [#8739](https://github.com/PurHur/php-compiler/issues/8739) (reopen on tag day) \u00b7 Latest tag: **v1.0.0** (2026-05-29) \u00b7 Pre-release: **v1.1.0-dev",
+        "outreach_draft": "Hi, I found your request about \"\ud83d\uddfa\ufe0f ROADMAP: Self-host + web-capable PHP subset (living)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/PurHur/php-compiler/issues/78",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Status of testing Providers that were prepared on July 22, 2026",
-        "url": "https://github.com/apache/airflow/issues/70355",
+        "title": "docs: complete v1.0.0 documentation normalization",
+        "url": "https://github.com/nkkmd/lingonberry/issues/144",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
+        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: docs: complete v1.0.0 documentation normalization\nSource: github\nURL: https://github.com/nkkmd/lingonberry/issues/144\nWhy this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Parent: #109  ## Objective  Apply `docs/DOCUMENTATION_POLICY.md` before v1.0.0 release publication.  ## Required work  - inventory all existing Markdown and operator-facing text documents - classify each document as `BILINGUAL_REQUIRED`, `BILINGUAL_SCOPED`, `ENGLISH_ONLY`, `MERGE`, `ARCHIVE`, or `DELETE` - normalize Tier 1 files to English-first, Japanese-second form - provide the minimum bilingual operator runbook for installation, service lifecycle, health/readiness/logs, backup/restore, upgrade/rollback, and troubleshooting - convert internal architecture, reference, qualification, soak, evidence, CI, and maintainer-only procedures to English - add a documentation index and repair moved/renamed links - add CI checks for required bilingual markers, links, version consistency, and stale translations - ensure no unresolved release-blocking inventory actions remain - prepare bilingual v1.",
+        "outreach_draft": "Hi, I found your request about \"docs: complete v1.0.0 documentation normalization\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/nkkmd/lingonberry/issues/144",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "[Program] Complete TypeScript stack health, security, standardization, testing, docs, and performance",
+        "url": "https://github.com/bsv-blockchain/ts-stack/issues/324",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
+        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: [Program] Complete TypeScript stack health, security, standardization, testing, docs, and performance\nSource: github\nURL: https://github.com/bsv-blockchain/ts-stack/issues/324\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Purpose  This is the authoritative execution tracker for bringing the consolidated TypeScript stack to a fully healthy, current, secure, uniform, documented, tested, publishable, browser-aware, and operationally maintainable end state.  It captures the full-repository audit as of **2026-07-24** and converts every material finding into explicit work, ordering, evidence requirements, and completion gates. Child issues and PRs should link here, and this issue should be updated as facts change so no work remains implicit or gets lost between PRs.  ## Scope, assumptions, and explicit exclusions  - Baseline: [`main@f9137ff`](https://github.com/BSV-blockchain/ts-stack/commit/f9137ff037c6d608019d04b4e2f984812b0385b7). - Treat PRs #289 and #290, and all other non-draft consolidation/dependency work preceding this baseline, as merged. - **Do not incorporate draft PR #306 into this program until",
+        "outreach_draft": "Hi, I found your request about \"[Program] Complete TypeScript stack health, security, standardization, testing, docs, and performance\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/bsv-blockchain/ts-stack/issues/324",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "feat: migrate all tidas-tools functionality from Python to Rust",
+        "url": "https://github.com/tiangong-lca/tidas-tools/issues/117",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
         "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Status of testing Providers that were prepared on July 22, 2026\nSource: github\nURL: https://github.com/apache/airflow/issues/70355\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I have a kind request for all the contributors to the latest provider distributions release. Could you please help us to test the RC versions of the providers?  The guidelines on how to test providers can be found in  [Verify providers by contributors](https://github.com/apache/airflow/blob/main/dev/README_RELEASE_PROVIDERS.md#verify-the-release-candidate-by-contributors)  Let us know in the comments, whether the issue is addressed.  These are providers that require testing as there were some substantial changes introduced:   ## Provider [airbyte: 6.0.0rc1](https://pypi.org/project/apache-airflow-providers-airbyte/6.0.0rc1)    - [ ] [Migrate Airbyte provider to `airbyte-api` library 1.0 and `httpx` (#68882)](https://github.com/apache/airflow/pull/68882): @aaronsteers ## Provider [akeyless: 0.3.0rc1](https://pypi.org/project/apache-airflow-providers-akeyless/0.3.0rc1)    - [x] [Add cloud-",
-        "outreach_draft": "Hi, I found your request about \"Status of testing Providers that were prepared on July 22, 2026\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/apache/airflow/issues/70355",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Nightly realtime soak has never passed \u2014 `maturin develop` runs without a virtualenv (0/71 runs succeeded)",
-        "url": "https://github.com/D-sorganization/UpstreamDrift/issues/7990",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
-        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Nightly realtime soak has never passed \u2014 `maturin develop` runs without a virtualenv (0/71 runs succeeded)\nSource: github\nURL: https://github.com/D-sorganization/UpstreamDrift/issues/7990\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Location  `.github/workflows/realtime-soak.yml:100-103`  ```yaml       - name: Build & install upstream_realtime wheel (maturin develop)         working-directory: rust_core/upstream-realtime         run: |           maturin develop --release ```  ## Problem  `maturin develop` requires an *active* virtualenv/conda environment \u2014 it installs the built extension into the environment maturin detects via `VIRTUAL_ENV`, `CONDA_PREFIX`, or a `.venv` in the current/parent directory. The soak job installs Python via `actions/setup-python` (system interpreter, no venv) and never creates or activates one, so this step aborts before building anything.  Because the step fails, the `Run 24h soak` step (`tests/soak/realtime/test_24h_soak.py`) never executes. The nightly soak has therefore **never** validated the `upstream-realtime` Rust WS pub-sub for leaks or latency, despite reporting as a schedul",
-        "outreach_draft": "Hi, I found your request about \"Nightly realtime soak has never passed \u2014 `maturin develop` runs without a virtualenv (0/71 runs succeeded)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/D-sorganization/UpstreamDrift/issues/7990",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: feat: migrate all tidas-tools functionality from Python to Rust\nSource: github\nURL: https://github.com/tiangong-lca/tidas-tools/issues/117\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Summary - Rewrite the complete actively maintained tidas-tools Python feature set in Rust, not only the validator. - Make Rust the sole authoritative production implementation while retaining Python only as a feature-frozen internal parity oracle during a bounded migration; do not ship a compatibility wrapper. - The formal release product is one cross-platform `tidas` executable; reusable Rust crates remain the implementation and embedding layer. - Migration is complete only when all active workspace consumers use the Rust crates or `tidas` binary and the Python implementation has been removed from active source, build, release, and documentation paths.  ## Problem - The validator performance and OOM incident exposed a broader architectural problem: tidas-tools production behavior is spread across more than 6000 lines of Python plus schema, methodology, XSD, and XSLT assets. Rewriting",
+        "outreach_draft": "Hi, I found your request about \"feat: migrate all tidas-tools functionality from Python to Rust\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/tiangong-lca/tidas-tools/issues/117",
         "pursued": false,
         "archived_at": null
       },
@@ -236,28 +260,15 @@
         "archived_at": null
       },
       {
-        "title": "Renovate Dashboard \ud83e\udd16",
-        "url": "https://github.com/NovaMachina/home-ops/issues/1",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
-        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Renovate Dashboard \ud83e\udd16\nSource: github\nURL: https://github.com/NovaMachina/home-ops/issues/1\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/NovaMachina/home-ops).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/codeberg.org-forgejo-forgejo-15-rootless -->[chore(container): update image codeberg.org/forgejo/forgejo ( 4f4d168 \u2192 c040958 )](../pull/599)  - [ ] <!-- rebase-branch=renovate/docker.io-library-busybox-1.37.0 -->[chore(container): update image docker.io/library/busybox ( 1487d0a \u2192 9532d8c )](../pull/553)  - [ ] <!-- rebase-",
-        "outreach_draft": "Hi, I found your request about \"Renovate Dashboard \ud83e\udd16\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/NovaMachina/home-ops/issues/1",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
         "title": "Dependency Dashboard",
-        "url": "https://github.com/aoe-elo/aoe-elo-frontend/issues/12",
+        "url": "https://github.com/edgarrmondragon/citric/issues/283",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
         "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/aoe-elo/aoe-elo-frontend/issues/12\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/aoe-elo/aoe-elo-frontend).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/playwright-monorepo -->chore(deps): update dependency @playwright/test to v1.62.0  - [ ] <!-- unlimit-branch=renovate/node-20.x-lockfile -->chore(deps): update dependency @types/node to v20.19.43  - [ ] <!-- unlimit-branch=renovate/dotenv-16.x-lockfile -->chore(deps): update dependency dotenv to v16.6.1  - [ ",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/aoe-elo/aoe-elo-frontend/issues/12",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/edgarrmondragon/citric/issues/283\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/edgarrmondragon/citric).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/uv-0.x -->chore(deps): update dependency uv to v0.11.29  - [ ] <!-- unschedule-branch=renovate/nox-2026.x -->chore(deps): update dependency nox to v2026.7.11  - [ ] <!-- unschedule-branch=renovate/github-actions-minor-and-patch-updates -->chore(deps): update github-actions minor and patch updates (`actions/at",
+        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/edgarrmondragon/citric/issues/283",
         "pursued": false,
         "archived_at": null
       }
@@ -304,7 +315,7 @@
       "Unpaid speculative requests that need private context before value can be proven.",
       "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
     ],
-    "last_refresh_at": "2026-07-25T00:17:39.253073+00:00",
+    "last_refresh_at": "2026-07-26T03:59:13.069751+00:00",
     "reference_sources": [
       {
         "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
@@ -325,13 +336,12 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "The current landscape of open\u2011source and enterprise projects shows a high density of \"help\u2011wanted\" issues across diverse stacks\u2014CI/CD, dependency management, telemetry, API rate\u2011limiting, and documentation\u2014indicating a strong demand for remote, asynchronous, productized support that can be delivered via AI\u2011augmented workflows, no\u2011code automation, and specialized audit services. By packaging these pain points into retainer\u2011based, AI\u2011driven consulting bundles\u2014such as automated CI maintenance, dependency\u2011dashboard migration, or AI\u2011powered knowledge\u2011base cleanup\u2014remote service providers can detach revenue from billable hours, scale with async delivery, and tap into the growing market for high\u2011value, low\u2011time\u2011commitment remote work.",
+      "summary": "Analysis of open-source demand signals reveals a high concentration of technical debt in documentation, integration guides, and CI/CD pipelines, particularly within the Web3 and developer tooling sectors. There is a recurring need for specialized technical writing (integration guides, documentation fixes), automated testing/validation (snippet-check hardening, CI maintenance), and complex data pipeline engineering (on-chain event ingestion). These signals suggest a market for high-value, productized services that focus on 'completing' features or 'hardening' existing systems rather than broad-scope development.",
       "owner_actions": [
-        "Identify the top 10 issue categories with the highest \"help\u2011wanted\" volume and map them to potential service offerings.",
-        "Draft a concise productized service catalog that pairs each category with a clear deliverable, pricing tier, and AI\u2011automation component.",
-        "Build a lightweight AI\u2011powered proposal generator and pricing calculator to streamline outreach and quoting.",
-        "Create a landing page and outreach email template that targets issue owners, highlighting the value of async, retainer\u2011based support.",
-        "Set up a retainer contract template, invoicing workflow, and a simple client onboarding process to enable quick scaling of the service model."
+        "Develop a productized 'Integration Documentation' service specifically targeting Web3 protocols needing detailed user guides and SDK examples.",
+        "Offer 'CI/CD Hardening' retainers focused on automating snippet validation and testing-phase error resolution for developer tools.",
+        "Create a specialized service for 'Data Pipeline & Event Ingestion' setup, focusing on transactional outbox patterns and deterministic replay systems.",
+        "Market 'Technical Debt Remediation' packages that focus on resolving 'help wanted' issues related to documentation, translations, and minor bug fixes in high-growth repositories."
       ]
     }
   },

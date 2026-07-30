@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-07-29T06:45:38.618518+00:00
+Refreshed: 2026-07-30T09:42:49.950278+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,10 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: ''
+The demand signals across these GitHub issues reveal strong market need for remote specialists in CI/CD pipeline hardening, Kubernetes integration testing, dependency automation, AI/ML tooling advisory, and test-infrastructure setup — all areas where productized retainers, async workflows, and AI-augmented delivery can decouple income from hours.
 
-- Use the top ranked lead with the clearest public proof.
-- Keep local Codex implementation to one small deliverable.
+- Package a 'CI Reliability Retainer' offering that audits flaky tests, stabilizes nightly suites, and implements CodeQL/pre-commit hardening for open-source and early-stage teams.
+- Build a productized 'Kubernetes Plugin Migration & Integration' service that exercises deprecated notifiers, configmap publishers, and advisory-mode agent findings for teams upgrading k8s tooling.
+- Launch an 'AI/ML Fine-Tuning Advisory' micro-SaaS or checklist service that compares LoRA, AdaLoRA, and other conversational-AI techniques and delivers async recommendation reports.
+- Create a 'Dependency Health Dashboard' automation package using Renovate, Mend.io, and spreadsheet/CRM syncs to give maintainers ongoing visibility and import/export automation.
+- Develop an 'Async Test Infrastructure Setup' productized service (Vitest, React Testing Library, jsdom) that boots test harnesses for web apps and documents fixes in a retainer model.
 
 ## Underserved Focus
 
@@ -105,19 +108,19 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/smallbusiness/comments/1rx0yi0/built_an_automation_for_a_local_business_and_got/
-2. [Implement Secure Payment Gateway and Payment Service](https://github.com/SecureBananaLabs/bug-bounty/issues/1)
+2. [[RFC]: CI improvement plan — E2E layering, Acc, pinned deps, job matrix, pre-commit, CodeQL](https://github.com/vllm-project/vllm-omni/issues/5332)
    - Score: 100/100
-   - Value signal: $350.00
-   - Why: visible or inferred value around $350.00; can become a repeatable async offer instead of hourly labor
-   - Next: Skip unless the issue also has public reproduction steps the AI agent can patch and verify automatically.
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Implement Secure Payment Gateway and Payment Service
+     Lead: [RFC]: CI improvement plan — E2E layering, Acc, pinned deps, job matrix, pre-commit, CodeQL
      Source: github
-     URL: https://github.com/SecureBananaLabs/bug-bounty/issues/1
-     Why this is suitable: visible or inferred value around $350.00; can become a repeatable async offer instead of hourly labor
-     First step: Skip unless the issue also has public reproduction steps the AI agent can patch and verify automatically.
+     URL: https://github.com/vllm-project/vllm-omni/issues/5332
+     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -126,15 +129,15 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## Relevant Code  ```js export async function createPaymentIntent(payload) {   // TODO: integrate Stripe SDK and return client secret.   return {     paymentId: `pay_${Date.now()}`,     amount: payload.amount,     currency: payload.currency ?? "usd",     provider: "stripe"   }; } ```  **Goals** - Replace the stub implementation with a real Stripe `PaymentIntent` via the Stripe Node.js SDK - Return the `client_secret` from the created `PaymentIntent` to the caller - Handle Stripe API errors and surface them with meaningful error messages - Ensure `amount`, `currency`, and any required metadata are validated before the API call  Important: Star the repository https://github.com/SecureBananaLabs/bug-bounty   **Acceptance Criteria** - [ ] `stripe` npm package is installed and a `STRIPE_SECRET_KEY` environment variable is used to initialise the client — no hardcoded keys - [ ] `payload.amount
+     Request excerpt: ## Description  > **Amendment:** adds **pre-commit hardening** (vLLM-aligned) and **CodeQL / GitHub Code Scanning** as CI quality tracks (Design §9–§10, PRs 11–12). Existing E2E / Acc / pin / coverage plan unchanged.  ### Motivation.  | Issue | Current State | Target State | | :--- | :--- | :--- | | Split L2 tiny framework | [#4197](https://github.com/vllm-project/vllm-omni/issues/4197) partially landed under `tests/model_tests/diffusion/` (`DIFFUSION_TEST_SETTINGS`, builders, offline/online/alignment), while most L2/L3/L4 e2e still lives as one-off modules under `tests/e2e/{online_serving,offline_inference}/` (~100+ `test_*.py`) | One layered layout under `tests/e2e/models/`; shared launch / request / assert logic lives in `tests/helpers/` | | Boilerplate explosion | Each model adds a near-copy of `OmniServerParams` / `OmniRunner` param lists, prompt builders, and `send_*_request` + ass
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Implement Secure Payment Gateway and Payment Service" and can make a small working version.
+     Hi, I found your request about "[RFC]: CI improvement plan — E2E layering, Acc, pinned deps, job matrix, pre-commit, CodeQL" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $350.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/SecureBananaLabs/bug-bounty/issues/1
+     Reference: https://github.com/vllm-project/vllm-omni/issues/5332
 3. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
    - Score: 100/100
    - Value signal: $10.00
@@ -156,7 +159,7 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/github.com-mattn-go-isatty-0.x -->Update module github.com/mattn/go-isatty to v0.0.24  - [ ] <!-- unlimit-branch=renovate/github.com-sirupsen-logrus-1.x -->Update module github.com/sirupsen/logrus to v1.9.4  - [ ] <!-- unlimit-branch=renovate/actions-checkout-3.x -->Update actions/checkout action to v3.7
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/github.com-sirupsen-logrus-1.x -->Update module github.com/sirupsen/logrus to v1.9.4  - [ ] <!-- unlimit-branch=renovate/actions-checkout-3.x -->Update actions/checkout action to v3.7.0  - [ ] <!-- unlimit-branch=renovate/rubocop-1.x -->Update dependency rubocop to "~> 1.88.0"  - [ ] <!-- unlimit-branch=
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -165,18 +168,18 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ah-ha-admin/refactored-memory/issues/49
-4. [docs: ADR-008 describes WebSocket delivery as a future possibility, but it's already fully implemented](https://github.com/C-Address-Onboarding-Bridge/C-Address-Onboarding-Bridge-Backend/issues/310)
+4. [Migrate to mcp SDK 2.0 (mcp.server.fastmcp -> mcp.server.mcpserver)](https://github.com/alpacax/alpacon-mcp/issues/144)
    - Score: 100/100
    - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
    - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: docs: ADR-008 describes WebSocket delivery as a future possibility, but it's already fully implemented
+     Lead: Migrate to mcp SDK 2.0 (mcp.server.fastmcp -> mcp.server.mcpserver)
      Source: github
-     URL: https://github.com/C-Address-Onboarding-Bridge/C-Address-Onboarding-Bridge-Backend/issues/310
-     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+     URL: https://github.com/alpacax/alpacon-mcp/issues/144
+     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
      First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
      
      Constraints:
@@ -186,46 +189,16 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## Summary  ADR-008's decision text is phrased forward-looking ("a clear path to WebSocket delivery once the platform needs it"). But `websocket.ts` is a complete implementation mounted at a `/ws` upgrade endpoint with its own test suite and `ws` as a production dependency.  ## Checklist  - [ ] Update ADR-008 to reflect that WebSocket delivery is implemented, not a future possibility  ## Difficulty  🟢 **Good First Issue**  **File(s):** `docs/adr/adr-008-event-driven-architecture-for-status-updates.md`, `api/src/services/websocket.ts`  ## Getting started  This is a self-contained task — no additional repo access or secrets needed.  ```bash git clone https://github.com/<your-fork>/C-Address-Onboarding-Bridge-Backend.git cd C-Address-Onboarding-Bridge-Backend ```  If this issue touches a GitHub Actions workflow, the easiest way to verify your change is to open a draft PR — the workflow will
+     Request excerpt: ## Background  The `mcp` Python SDK released 2.0.0, which drops the `mcp.server.fastmcp` package. The package was renamed to `mcp.server.mcpserver` and `FastMCP` to `MCPServer`; `mcp/server/fastmcp/` no longer exists.  Because `pyproject.toml` declared `mcp>=1.28.1` with no upper bound and CI installs with `uv pip install -e .[dev]` (which ignores `uv.lock`), the Test workflow picked up 2.0.0 and every test module that imports `server.py` failed at collection:  ``` server.py:9: in <module>     from mcp.server.fastmcp import FastMCP E   ModuleNotFoundError: No module named 'mcp.server.fastmcp' ... Interrupted: 21 errors during collection ```  As an immediate fix the dependency was pinned to `mcp>=1.28.1,<2`. That unblocks CI but leaves us on the 1.x line. This issue tracks the actual migration.  The rename is the smaller half. `mcp` 2.0 is the SDK line that speaks the **2026-07-28 protoco
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "docs: ADR-008 describes WebSocket delivery as a future possibility, but it's already fully implemented" and can make a small working version.
+     Hi, I found your request about "Migrate to mcp SDK 2.0 (mcp.server.fastmcp -> mcp.server.mcpserver)" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/C-Address-Onboarding-Bridge/C-Address-Onboarding-Bridge-Backend/issues/310
-5. [[Program] Complete TypeScript stack health, security, standardization, testing, docs, and performance](https://github.com/bsv-blockchain/ts-stack/issues/324)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: [Program] Complete TypeScript stack health, security, standardization, testing, docs, and performance
-     Source: github
-     URL: https://github.com/bsv-blockchain/ts-stack/issues/324
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: ## Purpose  This is the authoritative execution tracker for bringing the consolidated TypeScript stack to a fully healthy, current, secure, uniform, documented, tested, publishable, browser-aware, and operationally maintainable end state.  It captures the full-repository audit as of **2026-07-24** and converts every material finding into explicit work, ordering, evidence requirements, and completion gates. Child issues and PRs should link here, and this issue should be updated as facts change so no work remains implicit or gets lost between PRs.  ## Scope, assumptions, and explicit exclusions  - Baseline: [`main@f9137ff`](https://github.com/BSV-blockchain/ts-stack/commit/f9137ff037c6d608019d04b4e2f984812b0385b7). - Treat PRs #289 and #290, and all other non-draft consolidation/dependency work preceding this baseline, as merged. - **Operator hold (2026-07-27): do not modify, rebase, comme
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "[Program] Complete TypeScript stack health, security, standardization, testing, docs, and performance" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/bsv-blockchain/ts-stack/issues/324
-6. [docs: v1.0.0 documentation overhaul — tracking issue](https://github.com/bioedca/tether/issues/187)
+     Reference: https://github.com/alpacax/alpacon-mcp/issues/144
+5. [Dependency Dashboard](https://github.com/ElasticBottle/webapp-template/issues/4)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -233,9 +206,9 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: docs: v1.0.0 documentation overhaul — tracking issue
+     Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/bioedca/tether/issues/187
+     URL: https://github.com/ElasticBottle/webapp-template/issues/4
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -246,27 +219,27 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: Tracking issue for the documentation overhaul that ships with **v1.0.0**. Every child issue below is independently mergeable and carries its own evidence, deliverables and acceptance criteria.  The work was scoped by auditing every documentation surface in this repository against the [INTERSECT "Better Documentation" lesson](https://intersect-training.org/Documentation/) — a research-software documentation curriculum covering audience analysis, the four Diátaxis modes (tutorial / how-to / reference / explanation), README contents, and documentation maintenance. That produced a 41-item rubric; this repository was then scored against every row.  ## The two defects that are live right now  Both are on the public site today, and **every existing gate is blind to both** — `mkdocs build --strict` builds 61 pages with zero warnings, because neither produces an unresolvable link.  - **#156** — a
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ElasticBottle/webapp-template).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | bun | [framer-motion](https://redirect.github.com/motiondivision/motion) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) |  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "docs: v1.0.0 documentation overhaul — tracking issue" and can make a small working version.
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/bioedca/tether/issues/187
-7. [Dependency Dashboard](https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41)
+     Reference: https://github.com/ElasticBottle/webapp-template/issues/4
+6. [Dependency Dashboard](https://github.com/Altinn/dialogporten-frontend/issues/74)
    - Score: 100/100
    - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
    - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+     URL: https://github.com/Altinn/dialogporten-frontend/issues/74
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
      Constraints:
@@ -276,7 +249,7 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/IBM/tensorlakehouse-openeo-driver).  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/asttokens-3.x -->Update dependency asttokens to v3.0.2  - [ ] <!-- unlimit-branch=renovate/branca-0.x -->Update dependency branca to v0.8.2  - [ ] <!-- unlimit-branch=renovate/cdsapi-0.x -->Update dependency cdsapi to v0.7.7  - [ ] <!-- unlimit-branch=renovate/cfgrib-0.x -->Update dependency cfgrib to v0.9.15.1  - [ ] <!-- unlimit-branch=renovate/cftime-1.x -->Update dependency cftime to v1.6.5  - [ ] <!-- unlimit-branch=renovate/charset-normalize
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/Altinn/dialogporten-frontend).  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | [@tsconfig/node22](https://redirect.github.com/tsconfig/bases) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) | | regex | [@tsconfig/node22](https://redirect.github.com/tsconfig/bases) | ![Available](https://img.shields.io/badge/available-green?style=flat-square) |  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -284,19 +257,19 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41
-8. [Dependency Dashboard](https://github.com/nolte/kamerplanter/issues/12)
+     Reference: https://github.com/Altinn/dialogporten-frontend/issues/74
+7. [Dependency Dashboard](https://github.com/CinquinAndy/MaevaSiteV2/issues/4)
    - Score: 100/100
    - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
    - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/nolte/kamerplanter/issues/12
-     Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
+     URL: https://github.com/CinquinAndy/MaevaSiteV2/issues/4
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
      Constraints:
@@ -306,7 +279,7 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/nolte/kamerplanter).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/nolte/kamerplanter).   - ⚠️ WARN: pip-compile: dependency not found in lock file  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/react-grid-layout` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) |  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an updat
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/CinquinAndy/MaevaSiteV2).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | bun | [@react-email/components](https://redirect.github.com/resend/react-email) | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | bun | [framer-motion](https://redirect.github.com/motiondivision/motion) | ![Unavailable](https
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -314,4 +287,34 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/nolte/kamerplanter/issues/12
+     Reference: https://github.com/CinquinAndy/MaevaSiteV2/issues/4
+8. [Dependency Dashboard](https://github.com/georgeowusuHO/sre-monitoring-as-code-gog-testing/issues/4)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Dependency Dashboard
+     Source: github
+     URL: https://github.com/georgeowusuHO/sre-monitoring-as-code-gog-testing/issues/4
+     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
+     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/georgeowusuHO/sre-monitoring-as-code-gog-testing).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/georgeowusuHO/sre-monitoring-as-code-gog-testing).   - ⚠️ WARN: Repology lookup failed with unexpected error  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/actions-upload-artifact-3.x -->Update actions/up
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/georgeowusuHO/sre-monitoring-as-code-gog-testing/issues/4

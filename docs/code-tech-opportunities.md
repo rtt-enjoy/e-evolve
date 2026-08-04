@@ -1,6 +1,6 @@
 # Code-Tech Earning Queue
 
-Refreshed: 2026-08-03T15:17:09.792388+00:00
+Refreshed: 2026-08-04T15:35:55.291446+00:00
 Daily target: $10.00
 
 ## Requirements
@@ -31,13 +31,13 @@ Daily target: $10.00
 
 ## Online AI Brief
 
-GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kubernetes reliability, IoT industrial protocols, and voice-agent evaluation infrastructure — all areas where productized remote services can decouple income from hours by packaging expertise into retainers, checklists, and async deliverables.
+The advisory reports and test failures indicate opportunities for productized audit services, async documentation fixes, and test automation. Prioritize high-impact, low-effort tasks like resolving critical test failures and enhancing documentation systems to align with remote-service efficiency models.
 
-- Package AI/ML advisory and code-review findings into a productized 'Hive-style advisory retainer' using async communication and AI-powered analysis tools.
-- Build a no-code/low-code automation template for Solis Modbus polling profiles and Python CI cleanup (Pyrefly/mypy migration) to sell as micro-SaaS setup services.
-- Create a productized audit checklist service for Kubernetes test-flakiness and .NET runtime race conditions, offered as async technical documentation and CI maintenance retainers.
-- Develop a pytest fixture library and evaluation framework for voice-agent scoring as a micro-SaaS or productized service with async delivery and AI-powered assertion generation.
-- Launch a specialized consulting niche around crossover-design statistical analysis and medical-imaging model improvement, positioned as a high-value async retainer with automation-backed reporting dashboards.
+- 1. Prioritize resolving the 88 test failures in Coverage Suite run #4627 by analyzing root causes and implementing fixes to prevent regressions.
+- 2. Develop a productized audit checklist for advisory workflows, leveraging the Hive Advisory Report structure to standardize code analysis and reporting processes.
+- 3. Automate nightly test suite tracking by integrating JSON result parsing into CI/CD pipelines, reducing manual monitoring overhead.
+- 4. Create a micro-SaaS template for async documentation fixes, using the KeyCloakSDK issue as a case study for scalable knowledge base cleanup.
+- 5. Implement a retainer-based model for CRM/data automation tasks, targeting the 68.4% API coverage gap in the BlocksBeyondTheStars project to maximize recurring revenue.
 
 ## Underserved Focus
 
@@ -78,7 +78,37 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
 
 ## Ranked Leads
 
-1. [Dependency Dashboard](https://github.com/ah-ha-admin/refactored-memory/issues/49)
+1. [feat(infra): Netcup production deploy stack — Compose + Caddy + container hardening on 8 GB](https://github.com/klasolsson81/jobbliggaren/issues/196)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: feat(infra): Netcup production deploy stack — Compose + Caddy + container hardening on 8 GB
+     Source: github
+     URL: https://github.com/klasolsson81/jobbliggaren/issues/196
+     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Context  Going live requires a production Docker-Compose stack (API + Worker + PostgreSQL + Redis + Caddy + FE container) on the **Netcup RS 1000 G12** — x86 (AMD EPYC 9645), 4 dedicated cores, **8 GB** DDR5 ECC, 256 GB NVMe, Nuremberg. Blocks all deploy. Cohesive stack build, not fragmentable.  **The host premise changed twice and is now settled.** ADR 0050 specified a Hetzner CAX31 (ARM, 16 GB) and explicitly rejected 8 GB boxes; Klas decided 2026-08-04 that Netcup is the host going forward and that both Hetzner and the interim "Swedish VPS" direction are off the table. The deviation is ratified in **ADR 0050's `Amendment 2026-08-04`** (PR #1200), which is **authoritative for the pre-beta-data gates**: Beslut 2 falls in full, Beslut 3's host reference, Beslut 4's Cloudflare half and backup target, and gate **M-5 retires into M-5a + M-5b**. ADR 0122 carries the host rationale but is
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "feat(infra): Netcup production deploy stack — Compose + Caddy + container hardening on 8 GB" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/klasolsson81/jobbliggaren/issues/196
+2. [[ASGK 2.0] Canonical product truth and self-governed migration program](https://github.com/stereosurfer/agent-safe-dev-governance-kit/issues/323)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -86,9 +116,9 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Dependency Dashboard
+     Lead: [ASGK 2.0] Canonical product truth and self-governed migration program
      Source: github
-     URL: https://github.com/ah-ha-admin/refactored-memory/issues/49
+     URL: https://github.com/stereosurfer/agent-safe-dev-governance-kit/issues/323
      Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -99,28 +129,28 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/ah-ha-admin/refactored-memory).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/github.com-mattn-go-isatty-0.x -->Update module github.com/mattn/go-isatty to v0.0.24  - [ ] <!-- unlimit-branch=renovate/github.com-sirupsen-logrus-1.x -->Update module github.com/sirupsen/logrus to v1.9.4  - [ ] <!-- unlimit-branch=renovate/actions-checkout-3.x -->Update actions/checkout action to v3.7
+     Request excerpt: ## Canonical facts — highest-priority authority  The facts in this section are the first and highest-priority constraints for ASGK 2.0 planning. If an active document, Roadmap, example, Skill, template, schema description, validator message, release policy, or prior v2 placeholder conflicts with them, that surface is migration input to review, rewrite, or delete; it is not authority to silently reinterpret these facts.  ### Approved core wording  > **ASGK 是一套讓人與 AI 能安全、順利交接工作的規則與工具。讓工作不被模型綁架，換誰接手都看得懂、接得下去、查得清楚。**  - **看得懂**：清楚掌握目前工作狀態。 - **接得下去**：支援人與 AI 之間的長期交接。 - **查得清楚**：快速追溯證據、限制與決策脈絡。  Neutral/formal wording:  > 避免工作依賴特定模型、供應商、Agent 或既有對話，確保人與 AI 都能持續接手並追溯決策。  ### Binding product interpretation  1. ASGK governs durable work authorization, boundaries, evidence, decisions, closeout, and handoff. 2. ASGK does not select, route, schedule, switch, price-tier, or orchestrate agents. 3. A
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     Hi, I found your request about "[ASGK 2.0] Canonical product truth and self-governed migration program" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/ah-ha-admin/refactored-memory/issues/49
-2. [Add pydantic-ai-backend](https://github.com/vstorm-co/agenticos/issues/36)
+     Reference: https://github.com/stereosurfer/agent-safe-dev-governance-kit/issues/323
+3. [tests: no filterwarnings policy — nothing escalates a warning, so leaks accumulate silently](https://github.com/alfred-os/AlfredOS/issues/560)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Add pydantic-ai-backend
+     Lead: tests: no filterwarnings policy — nothing escalates a warning, so leaks accumulate silently
      Source: github
-     URL: https://github.com/vstorm-co/agenticos/issues/36
+     URL: https://github.com/alfred-os/AlfredOS/issues/560
      Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary.
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -129,16 +159,16 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: **Source:** [VstormOS roadmap in Notion](https://app.notion.com/3adfa3d99576808d92c2e9bfea9fca4f) · Priority: **High** · Category: Development  Bring [`pydantic-ai-backend`](https://github.com/vstorm-co/pydantic-ai-backend) (our own OSS, PyPI `pydantic-ai-backend`, currently 0.2.21) into the platform so agents get file operations and sandboxed execution over a real backend instead of the single `run_python` tool they have now.  ## Where we are today  `app/agents/capabilities/code_execution/` is 229 lines across four files. `_sandbox.py` wraps `pydantic_monty.AsyncMonty` and exposes exactly one tool: run a Python snippet, get stdout back, clipped at 8000 chars, with a timeout and a memory cap. There is no filesystem — the agent cannot write a file, read it back, or grep anything. Every intermediate result has to fit in the model's context.  `pydantic-ai-backend` is the piece that fixes th
+     Request excerpt: `pyproject.toml`'s `[tool.pytest.ini_options]` has **no `filterwarnings` key at all**. Nothing in the suite escalates a warning, so warnings accumulate silently and indefinitely.  That is not hypothetical: it is exactly how 32 leaked sqlite connections went unnoticed until someone read the tail of a `make check` run. **A gate that cannot fail is a paper gate**, and this one is a paper gate by omission — there is no gate at all.  ## What is needed      [tool.pytest.ini_options]     filterwarnings = [         "error",         # dated, justified allowlist entries below     ]  `"error"` is the load-bearing part; the allowlist is what keeps CI green while third-party deprecations are outside our control.  ## The 21 warnings that must be allowlisted first  Censused on the unit lane at `10811a5d` (7387 passed, 4 skipped, 21 warnings). Four classes, all third-party or stdlib — none is ours:  | n
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Add pydantic-ai-backend" and can make a small working version.
+     Hi, I found your request about "tests: no filterwarnings policy — nothing escalates a warning, so leaks accumulate silently" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/vstorm-co/agenticos/issues/36
-3. [Dependency Dashboard](https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41)
+     Reference: https://github.com/alfred-os/AlfredOS/issues/560
+4. [Dependency Dashboard](https://github.com/internetarchive/openlibrary/issues/6234)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
@@ -148,7 +178,7 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41
+     URL: https://github.com/internetarchive/openlibrary/issues/6234
      Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -159,7 +189,7 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/IBM/tensorlakehouse-openeo-driver).  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/IBM/tensorlakehouse-openeo-driver).   - ⚠️ WARN: Package lookup failures  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/asttokens-3.x -->Update dependency asttokens to v3.0.2  - [ ] <!-- unlimit-branch=renovate/branca-0.x -->Update dependency branca to v0.8.2  - [ ] <!-- unlimit-branch=renovate/cdsapi-0.x -->Update dependency cdsapi to v0.7.7  - [ ] <!-- unlimit-bran
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/internetarchive/openlibrary).  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/eslint -->Update dependency eslint to v9.39.5  - [ ] <!-- unlimit-branch=renovate/astral-sh-setup-uv-8.x -->Update astral-sh/setup-uv action to v8.3.2  - [ ] <!-- unlimit-branch=renovate/actions-cache-6.x -->Update actions/cache action to v6  - [ ] <!-- unlimit-branch=renovate/actions-checkout-7.x -->Update actions/checkout action to v7  - [ ] <!-- unlimit-branch=renovate/actions-github-script-9.x -->Update actions/github-script action to v9  - [ ] <!--
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -167,8 +197,8 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/IBM/tensorlakehouse-openeo-driver/issues/41
-4. [Dependency Dashboard](https://github.com/aignostics/python-sdk/issues/4)
+     Reference: https://github.com/internetarchive/openlibrary/issues/6234
+5. [Dependency Dashboard](https://github.com/nolte/kamerplanter/issues/12)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
@@ -178,7 +208,7 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
      
      Lead: Dependency Dashboard
      Source: github
-     URL: https://github.com/aignostics/python-sdk/issues/4
+     URL: https://github.com/nolte/kamerplanter/issues/12
      Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
      First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
      
@@ -189,7 +219,7 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/aignostics/python-sdk).  ## Awaiting Schedule  The following updates are awaiting their schedule. To get an update now, click on a checkbox below.   - [ ] <!-- unschedule-branch=renovate/github-actions -->chore(deps): update actions/checkout action to v7.0.1  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/minor-and-patch-dependencies -->[fix(deps): update minor and patch dependencies](../pull/603) (`coverage`, `fastparquet`, `hatchling`, `idc-index-data`, `pyright`)  - [ ] <!-- rebase-branch=renovate/mypy-2.x -->[chore(deps): update depende
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/nolte/kamerplanter).  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/react-grid-layout` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) |  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/docker-databases -->chore(deps): update timescale/timescaledb docker tag to v2.29.1  ## PR Edited (Blocked)  The following updates have be
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -197,8 +227,38 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/aignostics/python-sdk/issues/4
-5. [Dependency Dashboard](https://github.com/HHS/simpler-grants-gov/issues/578)
+     Reference: https://github.com/nolte/kamerplanter/issues/12
+6. [Production-grade CI/CD + root Makefile (YAGNI)](https://github.com/mrae43/learning-hub-infra/issues/194)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Production-grade CI/CD + root Makefile (YAGNI)
+     Source: github
+     URL: https://github.com/mrae43/learning-hub-infra/issues/194
+     Why this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Problem Statement  Local development against the Learning Hub's Postgres + pgvector stack is currently an undocumented, ad-hoc `docker compose` invocation. A contributor opening the repo cold has no single, obvious entry point to start/tail/stop the local dev database, and there is no shared place to record how that lifecycle works. Separately, the repo's CI/CD has grown to six workflows, but its hygiene is inconsistent: most third-party actions are SHA-pinned to immutable commits, but some (notably `actions/checkout`) still float on unpinned major-version tags, and nothing in CI validates the workflow definitions themselves — so a malformed workflow ships to merge and only fails at run time.  Both problems point to the same root cause: the developer-facing and CI-facing tooling has grown piecemeal without a thin, documented layer that makes the local stack and the pipeline self-descr
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Production-grade CI/CD + root Makefile (YAGNI)" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/mrae43/learning-hub-infra/issues/194
+7. [Dependency Dashboard](https://github.com/HHS/simpler-grants-gov/issues/578)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
@@ -219,7 +279,7 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/HHS/simpler-grants-gov).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/dotenv` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) | | npm | `@types/uuid` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) |  ## Awaiting Schedule  The following updates are
+     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/HHS/simpler-grants-gov).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/HHS/simpler-grants-gov).   - ⚠️ WARN: Package lookup failures  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/dotenv` | ![Unavailable](https://img.shields.io/badge/unava
    - Owner-reviewed outreach draft:
      Hi, I found your request about "Dependency Dashboard" and can make a small working version.
      
@@ -228,19 +288,19 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/HHS/simpler-grants-gov/issues/578
-6. [Dependency Dashboard](https://github.com/SchweizerischeBundesbahnen/strictdoc-service/issues/2)
+8. [AlgoVoi open Decision chain (Apache-2.0): Passport + Mandate + Policy + Gate + Guardrail + Cancellation + Refund + Trust query + Execution +](https://github.com/x402-foundation/x402/issues/2737)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+   - Next: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Dependency Dashboard
+     Lead: AlgoVoi open Decision chain (Apache-2.0): Passport + Mandate + Policy + Gate + Guardrail + Cancellation + Refund + Trust query + Execution +
      Source: github
-     URL: https://github.com/SchweizerischeBundesbahnen/strictdoc-service/issues/2
+     URL: https://github.com/x402-foundation/x402/issues/2737
      Why this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
+     First step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -249,72 +309,12 @@ GitHub issues reveal strong demand across AI/ML advisory, CI/CD automation, Kube
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/SchweizerischeBundesbahnen/strictdoc-service).  ## Abandoned Dependencies  The following dependencies have not received updates for an extended period and may be unmaintained.  <details> <summary>View abandoned dependencies (1)</summary>  > [!NOTE] Packages are marked as abandoned when they exceed the [`abandonmentThreshold`](https://docs.renovatebot.com/configuration-options/#abandonmentthreshold) since their last release. Unlike deprecated packages with official notices, abandonment is detected by release inactivity. >  | Datasource | Package | Last Updated | |------------|------|-------------| | pep621 | [pathvalidate](https://redirect.g
+     Request excerpt: # Cell / KAF: assurance you can re-run  ## The short version  Every library ships a green CI badge and asks you to trust it. For money moving autonomously between AI agents, "trust my tests" is not an assurance model. **Cell/KAF** replaces the badge with something you can re-run yourself: a hermetic runtime that reproduces every conformance vector byte-for-byte, and a sealed, hash-chained receipt you can verify offline with no trust in us.  ## The problem with "it passes on my machine"  For agentic payments, a single disagreed byte is a failed receipt, a mis-bound payment, or a refund that will not compose. The question that actually matters: can you prove, independently, that an implementation produces exactly the right bytes, without trusting the author? Cell/KAF answers it in two layers.  ## Cell: the hermetic runtime  A Cell is a deterministic, isolated runtime. It takes the conforma
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
+     Hi, I found your request about "AlgoVoi open Decision chain (Apache-2.0): Passport + Mandate + Policy + Gate + Guardrail + Cancellation + Refund + Trust query + Execution +" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/SchweizerischeBundesbahnen/strictdoc-service/issues/2
-7. [Dependency Dashboard](https://github.com/maksimr/npm-monorepo-example/issues/3)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/maksimr/npm-monorepo-example/issues/3
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/maksimr/npm-monorepo-example).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Open  The following updates have all been created. To force a retry/rebase of any, click on a checkbox below.   - [ ] <!-- rebase-branch=renovate/actions-checkout-digest -->[chore(deps): update actions/checkout digest to 11d5960](../pull/44)  - [ ] <!-- rebase-branch=renovate/wireit-0.x-lockfile -->[chore(deps): update dependency wireit to v0.14.13](../pull/47)  - [ ] <!-- rebase-branch=renovate/node-20.x -->[chore(deps): update node.js to v20.20.2](../pull/5
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/maksimr/npm-monorepo-example/issues/3
-8. [Dependency Dashboard](https://github.com/resessh/nextjs-plugin-minify-css-classname/issues/13)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-   - Next: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Dependency Dashboard
-     Source: github
-     URL: https://github.com/resessh/nextjs-plugin-minify-css-classname/issues/13
-     Why this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables
-     First step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/resessh/nextjs-plugin-minify-css-classname).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/actions-cache-6.x -->chore(deps): update actions/cache action to v6  - [ ] <!-- unlimit-branch=renovate/actions-checkout-7.x -->chore(deps): update actions/checkout action to v7  - [ ] <!-- unlimit-branch=renovate/actions-github-script-9.x -->chore(deps): update actions/github-script action
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Dependency Dashboard" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/resessh/nextjs-plugin-minify-css-classname/issues/13
+     Reference: https://github.com/x402-foundation/x402/issues/2737

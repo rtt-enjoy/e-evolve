@@ -11,22 +11,22 @@ Commands are case-insensitive, one per line. Comment lines (starting with `#`) a
 
 ## Command Reference
 
-| Command | Effect |
-|---------|--------|
-| `force articles N` | Ignored; publishing is disabled |
-| `force trade aggressive` | Ignored; trading is disabled |
-| `force mint N` | Ignored; minting is disabled |
-| `skip evolution` | Skip Phase 3 (LLM evolution) this cycle |
-| `reset earnings` | Zero `this_week_usd` counter |
-| `post thread` | Ignored; posting is disabled |
+| Command                   | Effect                                                       |
+|---------------------------|--------------------------------------------------------------|
+| `force articles N`        | Ignored; publishing is disabled                              |
+| `force trade aggressive`  | Ignored; trading is disabled                                 |
+| `force mint N`            | Ignored; minting is disabled                                 |
+| `skip evolution`          | Skip Phase 3 (LLM evolution) this cycle                      |
+| `reset earnings`          | Zero `this_week_usd` counter                                 |
+| `post thread`             | Ignored; posting is disabled                                 |
 | `improve suggestion TEXT` | Ask the evolution agent to prioritize a dashboard suggestion |
-| `status report` | Dump full `status` dict to workflow log |
+| `status report`           | Dump full `status` dict to workflow log                      |
 
 ---
 
 ## How It Works
 
-`commands.py` reads commands before Phase 3 and stores parsed values in `status['_overrides']`.  
+`commands.py` reads commands before Phase 3 and stores parsed values in `status['_overrides']`.
 This dict is consumed by Phases 3 and 4, then stripped before saving to `status.json`.
 
 Overrides are runtime-only — they do not persist to the next cycle.

@@ -70,12 +70,12 @@ Phase 5: Update   — save status.json, write dashboard, commit
 
 Features activate automatically when their secrets are present in env.
 
-| Feature | Required Secrets |
-|---------|-----------------|
-| `llm_anthropic` | `ANTHROPIC_API_KEY` |
-| `llm_gemini` | `GEMINI_API_KEY` |
+| Feature          | Required Secrets     |
+|------------------|----------------------|
+| `llm_anthropic`  | `ANTHROPIC_API_KEY`  |
+| `llm_gemini`     | `GEMINI_API_KEY`     |
 | `llm_openrouter` | `OPENROUTER_API_KEY` |
-| `llm_groq` | `GROQ_API_KEY` |
+| `llm_groq`       | `GROQ_API_KEY`       |
 
 Publishing, posting, trading, minting, and payout secrets do not activate runtime actions. If such keys exist, they are treated as research context only.
 

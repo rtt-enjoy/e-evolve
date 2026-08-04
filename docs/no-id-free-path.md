@@ -15,13 +15,13 @@ social APIs, Claude premium features, paid LLM accounts, or funded wallets.
 
 ## Avoid By Default
 
-| Area | Why to avoid |
-|------|--------------|
-| Binance trading and payout | Exchange identity verification, address whitelisting, and funded balances are required in practice. |
-| Claude/Anthropic premium path | Useful quality, but it is not the no-cost path and can depend on paid access. |
-| Twitter/X API posting | Developer/API access can be phone-gated or paid, so do not make it a required earning path. |
-| Ethereum NFT minting | Requires wallet funding, deployed contracts, and chain fees. |
-| Any suggestion marked paid | The dashboard now filters these out of the main recommendation list. |
+| Area                          | Why to avoid                                                                                        |
+|-------------------------------|-----------------------------------------------------------------------------------------------------|
+| Binance trading and payout    | Exchange identity verification, address whitelisting, and funded balances are required in practice. |
+| Claude/Anthropic premium path | Useful quality, but it is not the no-cost path and can depend on paid access.                       |
+| Twitter/X API posting         | Developer/API access can be phone-gated or paid, so do not make it a required earning path.         |
+| Ethereum NFT minting          | Requires wallet funding, deployed contracts, and chain fees.                                        |
+| Any suggestion marked paid    | The dashboard now filters these out of the main recommendation list.                                |
 
 ## Notes Checked On 2026-05-16
 

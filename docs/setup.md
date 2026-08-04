@@ -10,12 +10,12 @@ Keep it public — required for free GitHub Pages and free Actions minutes.
 
 Repo → Settings → Secrets and variables → Actions → **New repository secret**
 
-| Secret | Source | Cost |
-|--------|--------|------|
-| `GROQ_API_KEY` | [console.groq.com](https://console.groq.com) | Free |
-| `GEMINI_API_KEY` | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier |
-| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys) | Free models available |
-| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) | Paid (higher quality) |
+| Secret               | Source                                                        | Cost                  |
+|----------------------|---------------------------------------------------------------|-----------------------|
+| `GROQ_API_KEY`       | [console.groq.com](https://console.groq.com)                  | Free                  |
+| `GEMINI_API_KEY`     | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier             |
+| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | Free models available |
+| `ANTHROPIC_API_KEY`  | [console.anthropic.com](https://console.anthropic.com)        | Paid (higher quality) |
 
 Only one is required. If you have no budget or cannot use premium LLM features,
 start with `GROQ_API_KEY` or `GEMINI_API_KEY`. API keys are used for RAG,
@@ -74,9 +74,9 @@ Legacy action-module notes below are intentionally not activation instructions.
 
 ### Articles
 
-| Secret | Source |
-|--------|--------|
-| `DEV_TO_API_KEY` | dev.to → Settings → Extensions |
+| Secret                     | Source                                      |
+|----------------------------|---------------------------------------------|
+| `DEV_TO_API_KEY`           | dev.to → Settings → Extensions              |
 | `MEDIUM_INTEGRATION_TOKEN` | medium.com/me/settings → Integration tokens |
 
 Either or both. Each present secret activates the corresponding platform.
@@ -85,20 +85,20 @@ Either or both. Each present secret activates the corresponding platform.
 
 All four required:
 
-| Secret | Notes |
-|--------|-------|
-| `TWITTER_API_KEY` | Developer Portal — needs Read+Write permission |
-| `TWITTER_API_SECRET` | " |
-| `TWITTER_ACCESS_TOKEN` | " |
-| `TWITTER_ACCESS_SECRET` | " |
+| Secret                  | Notes                                          |
+|-------------------------|------------------------------------------------|
+| `TWITTER_API_KEY`       | Developer Portal — needs Read+Write permission |
+| `TWITTER_API_SECRET`    | "                                              |
+| `TWITTER_ACCESS_TOKEN`  | "                                              |
+| `TWITTER_ACCESS_SECRET` | "                                              |
 
 ### Crypto (Binance)
 
-| Secret | Notes |
-|--------|-------|
-| `BINANCE_API_KEY` | Enable Spot trading only unless you intentionally enable auto-payout |
-| `BINANCE_SECRET_KEY` | " |
-| `BINANCE_WITHDRAW_ADDRESS` | Optional Exodus receive address for auto-payout |
+| Secret                     | Notes                                                                |
+|----------------------------|----------------------------------------------------------------------|
+| `BINANCE_API_KEY`          | Enable Spot trading only unless you intentionally enable auto-payout |
+| `BINANCE_SECRET_KEY`       | "                                                                    |
+| `BINANCE_WITHDRAW_ADDRESS` | Optional Exodus receive address for auto-payout                      |
 
 > **Warning:** Start with a small balance. LLM-driven trading is not guaranteed to be profitable.
 
@@ -111,12 +111,12 @@ with `T`, but the configured network and Exodus receive network must match.
 
 ### NFT (Ethereum)
 
-| Secret | Notes |
-|--------|-------|
-| `ETH_PRIVATE_KEY` | Use a dedicated wallet with minimal funds |
-| `ETH_WALLET_ADDRESS` | Corresponding public address |
-| `NFT_CONTRACT_ADDRESS` | Pre-deployed ERC-721 contract |
-| `NFT_STORAGE_TOKEN` | [nft.storage](https://nft.storage) — free IPFS pinning |
+| Secret                 | Notes                                                  |
+|------------------------|--------------------------------------------------------|
+| `ETH_PRIVATE_KEY`      | Use a dedicated wallet with minimal funds              |
+| `ETH_WALLET_ADDRESS`   | Corresponding public address                           |
+| `NFT_CONTRACT_ADDRESS` | Pre-deployed ERC-721 contract                          |
+| `NFT_STORAGE_TOKEN`    | [nft.storage](https://nft.storage) — free IPFS pinning |
 
 ---
 

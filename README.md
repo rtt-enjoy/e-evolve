@@ -16,13 +16,13 @@ Every hour at `:17`, one complete cycle runs:
 Init LLM → Status Check → Owner Commands → Codex-Owned Evolution Skip → Research Suggestions → State Update
 ```
 
-| Phase | What happens |
-|-------|-------------|
-| **Status** | Load `status.json`, detect active features from present secrets |
-| **Commands** | Read `command.txt` or GitHub Issues labelled `bot-command` |
-| **Evolution** | Skip automatic code changes; Codex owns implementation |
-| **Research** | Refresh RAG/research queues and ranked earning suggestions only |
-| **Update** | Save `status.json`, publish dashboard data files, commit all |
+| Phase         | What happens                                                    |
+|---------------|-----------------------------------------------------------------|
+| **Status**    | Load `status.json`, detect active features from present secrets |
+| **Commands**  | Read `command.txt` or GitHub Issues labelled `bot-command`      |
+| **Evolution** | Skip automatic code changes; Codex owns implementation          |
+| **Research**  | Refresh RAG/research queues and ranked earning suggestions only |
+| **Update**    | Save `status.json`, publish dashboard data files, commit all    |
 
 ---
 
@@ -36,12 +36,12 @@ Keep it public for free GitHub Pages.
 
 **Repo → Settings → Secrets and variables → Actions → New repository secret**
 
-| Secret | Source | Cost |
-|--------|--------|------|
-| `GROQ_API_KEY` | [console.groq.com](https://console.groq.com) | Free |
-| `GEMINI_API_KEY` | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier |
-| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys) | Free models available |
-| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) | Paid (higher quality) |
+| Secret               | Source                                                        | Cost                  |
+|----------------------|---------------------------------------------------------------|-----------------------|
+| `GROQ_API_KEY`       | [console.groq.com](https://console.groq.com)                  | Free                  |
+| `GEMINI_API_KEY`     | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier             |
+| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | Free models available |
+| `ANTHROPIC_API_KEY`  | [console.anthropic.com](https://console.anthropic.com)        | Paid (higher quality) |
 
 For local runs, copy `.env.example` to `.env` and fill the same variable names.
 `.env` stays ignored by git; GitHub Actions uses repository secrets online.

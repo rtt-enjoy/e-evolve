@@ -214,6 +214,9 @@ def _normalize(data: dict) -> dict:
     if body.lstrip().startswith("```markdown"):
         body = re.sub(r"^\s*```markdown\s*\n", "", body)
         body = re.sub(r"\n```\s*$", "", body)
+    # dev.to renders the title itself, so a top-level '#' heading shows up as a
+    # duplicate title. Demote any '# ' to '## '.
+    body = re.sub(r"^# (?!#)", "## ", body, flags=re.MULTILINE)
     # Collapse 3+ blank lines to 2; ensure headings have a blank line before them.
     body = re.sub(r"\n{4,}", "\n\n\n", body)
     body = re.sub(r"(?<!\n)\n(#{2,3} )", r"\n\n\1", body)

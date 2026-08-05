@@ -1,32 +1,34 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-05T00:51:22.007311+00:00",
-  "total_runs": 1277,
+  "last_run": "2026-08-05T03:33:46.061298+00:00",
+  "total_runs": 1278,
   "active_features": [
-    "llm_anthropic",
     "llm_gemini",
     "llm_openrouter",
     "llm_groq",
+    "usdt_wallet",
     "code_techs"
   ],
   "inactive_features": [
-    "llm_cerebras",
-    "usdt_wallet"
+    "llm_anthropic",
+    "llm_cerebras"
   ],
   "llm_provider": "openrouter",
   "earnings": {
-    "total_usd": 3.01,
-    "this_week_usd": 0.0,
-    "last_cycle_usd": 0.0,
+    "total_usd": 3.09,
+    "this_week_usd": 0.08,
+    "last_cycle_usd": 0.08,
     "week_started": "2026-08-03",
     "breakdown": {
-      "code_techs": 0.0
+      "code_techs": 0.0,
+      "dev.to": 0.08
     },
     "history": [
       0.02,
       0.02,
       0.02,
       0.02,
+      0.08,
       0.08,
       0.08
     ]
@@ -52,8 +54,16 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
-    "total_usd": 0.0
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "When Your Content Bot Hits an LLM Quota, Ship the Fallback",
+        "url": "https://dev.to/robust_true_try/when-your-content-bot-hits-an-llm-quota-ship-the-fallback-2j8i",
+        "estimated_usd": 0.08
+      }
+    ],
+    "total_usd": 0.08
   },
   "suggestions": [
     {
@@ -70,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 0,
+  "last_cycle_seconds": 943,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -81,12 +91,12 @@
   "last_payout_tx": null,
   "secret_readiness": {
     "llm_anthropic": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "ANTHROPIC_API_KEY"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     },
     "llm_gemini": {
@@ -126,12 +136,12 @@
       "required_count": 1
     },
     "usdt_wallet": {
-      "active": false,
-      "present": [],
-      "missing": [
+      "active": true,
+      "present": [
         "USDT_WALLET_ADDRESS"
       ],
-      "present_count": 0,
+      "missing": [],
+      "present_count": 1,
       "required_count": 1
     }
   },
@@ -159,8 +169,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-05-18",
-    "published": 2
+    "date": "2026-08-05",
+    "published": 3
   },
   "code_tech_earning": {
     "enabled": true,
@@ -460,10 +470,11 @@
     ]
   },
   "configured_github_secrets": [
-    "ANTHROPIC_API_KEY",
     "GEMINI_API_KEY",
+    "GH_TOKEN",
     "GROQ_API_KEY",
-    "OPENROUTER_API_KEY"
+    "OPENROUTER_API_KEY",
+    "USDT_WALLET_ADDRESS"
   ],
   "operation_mode": "research_and_article_publishing",
   "external_action_policy": {

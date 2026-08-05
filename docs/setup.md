@@ -10,16 +10,25 @@ Keep it public — required for free GitHub Pages and free Actions minutes.
 
 Repo → Settings → Secrets and variables → Actions → **New repository secret**
 
-| Secret               | Source                                                        | Cost                  |
-|----------------------|---------------------------------------------------------------|-----------------------|
-| `GROQ_API_KEY`       | [console.groq.com](https://console.groq.com)                  | Free                  |
-| `GEMINI_API_KEY`     | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier             |
-| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | Free models available |
-| `ANTHROPIC_API_KEY`  | [console.anthropic.com](https://console.anthropic.com)        | Paid (higher quality) |
+| Secret               | Source                                                        | Cost                          |
+|----------------------|---------------------------------------------------------------|-------------------------------|
+| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | **Main engine** — see below   |
+| `GROQ_API_KEY`       | [console.groq.com](https://console.groq.com)                  | Free                          |
+| `GEMINI_API_KEY`     | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier                     |
+| `ANTHROPIC_API_KEY`  | [console.anthropic.com](https://console.anthropic.com)        | Paid                          |
 
-Only one is required. If you have no budget or cannot use premium LLM features,
-start with `GROQ_API_KEY` or `GEMINI_API_KEY`. API keys are used for RAG,
-research, market analysis, suggestions, and draft-only text.
+Only one is required.
+
+**Main AI engine: Kimi K3 (`moonshotai/kimi-k3`) via OpenRouter.** Kimi K3 is
+paid — $3 per million input tokens, $15 per million output — so it needs
+credits at [openrouter.ai/credits](https://openrouter.ai/credits). Without
+credits the API returns 402 and the bot automatically steps down to free
+OpenRouter models, so cycles keep running at reduced quality rather than
+failing. Watch for `402 insufficient credits` in the workflow log: that means
+Kimi K3 is not actually being used.
+
+If you want zero spend, add `GROQ_API_KEY` or `GEMINI_API_KEY` too and the free
+chain covers you.
 
 Use the same variable names in both places:
 
@@ -36,19 +45,20 @@ The full environment key reference is in [`docs/environment.md`](environment.md)
 Use this order when you cannot use Binance identity verification, phone-gated
 social APIs, Claude premium features, paid LLM accounts, or funded wallets:
 
-1. Code-tech leads - enabled by default and no external secret required.
+1. Free-AI earning leads - enabled by default and no external secret required.
 2. `GROQ_API_KEY` or `GEMINI_API_KEY` - free LLM generation within rate limits.
-3. Optional `OPENROUTER_API_KEY` - free-model research fallback.
+3. `OPENROUTER_API_KEY` with no credits - still works, using free models only.
 
 These keys no longer activate runtime actions:
 
-1. dev.to or Medium publishing keys.
+1. `DEV_TO_API_KEY` — **active**. Enables live article publishing to dev.to,
+   one article per day. Omit it to keep the bot research-only.
 2. Twitter/X posting keys.
 3. Binance trading or payout keys.
 4. Ethereum NFT minting keys.
 
-If present, those keys are setup context only. The bot must not publish, post,
-trade, withdraw, mint, or comment on external issues.
+Keys 2-4 are setup context only. The bot must not post socially, trade,
+withdraw, mint, or comment on external issues.
 
 More detail: [`docs/no-id-free-path.md`](no-id-free-path.md).
 

@@ -28,13 +28,31 @@ _DEFAULT_CONFIG = {
     "auto_pursue": False,
     "pursue_score_threshold": 75,
     "requirements": [
-        "Default to online research and the configured free/low-cost research LLM before local fallback.",
-        "Prefer leveraged remote-service work: productized services, retainers, async delivery, and AI-assisted systems.",
-        "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
-        "Prefer boring maintenance where the failure and expected fix are visible without private context.",
-        "Require a deterministic command, log, docs page, or issue thread that an AI agent can use as proof.",
-        "Keep the first contribution small enough for the bot to patch, test, and explain automatically.",
+        "Lead with free AI services and free AI APIs: no credit card, generous free tier, usable today.",
+        "Every suggestion must name the free service, its real limits, and one concrete way to earn with it.",
+        "Prefer easy money: something the owner can start in under 2 hours with no upfront spend.",
+        "Prefer repeatable offers over one-off tasks, and same-week payout over deferred upside.",
+        "State the earning path in plain language: who pays, for what, and roughly how much.",
+        "Skip anything needing paid infrastructure, approval queues, or an audience the owner lacks.",
         "Do not count discovery or speculative upside as earnings."
+    ],
+    "free_ai_focus": [
+        "free-tier LLM APIs with no credit card requirement",
+        "free speech-to-text, TTS, and transcription APIs",
+        "free image generation and background-removal APIs",
+        "free OCR, document parsing, and PDF extraction APIs",
+        "free embedding and vector-search tiers",
+        "free translation and summarization APIs",
+        "free AI hosting, inference, and scheduled-compute tiers",
+        "open-weight models that run on free CPU/GPU allowances"
+    ],
+    "monetization_patterns": [
+        "Resell a free API as a tiny fixed-price service (transcribe, summarize, clean, convert).",
+        "Sell the setup, not the compute: charge to configure a free AI tool inside someone's workflow.",
+        "Bundle a free API into a one-page tool and charge a small one-time fee.",
+        "Offer a done-for-you batch job: send files, get results back, fixed price per batch.",
+        "Charge for the prompt library and workflow, and let the client bring their own free key.",
+        "Package a recurring report built on free-tier APIs as a low-cost monthly retainer."
     ],
     "reference_sources": [
         {
@@ -56,100 +74,85 @@ _DEFAULT_CONFIG = {
         "micro-SaaS setup, migration, and operations help"
     ],
     "github_searches": [
-        "is:issue is:open label:\"help wanted\" \"CI\"",
-        "is:issue is:open label:\"help wanted\" \"failing tests\"",
-        "is:issue is:open label:\"good first issue\" \"dependency update\"",
-        "is:issue is:open label:\"good first issue\" \"documentation\" \"example\"",
-        "is:issue is:open \"docs\" \"broken\" \"example\"",
-        "is:issue is:open \"README\" \"does not work\" \"install\"",
-        "is:issue is:open \"quickstart\" \"fails\" language:Python",
-        "is:issue is:open \"pyproject\" \"deprecation\"",
-        "is:issue is:open \"ruff\" \"mypy\" \"pytest\"",
-        "is:issue is:open \"Node 20\" \"migration\"",
-        "is:issue is:open \"Node 22\" \"migration\"",
-        "is:issue is:open \"GitHub Actions\" \"deprecated\" \"warning\"",
-        "is:issue is:open \"import error\" \"Python 3.12\"",
-        "is:issue is:open \"Python 3.13\" \"compatibility\"",
-        "is:issue is:open \"release notes\" \"breaking change\""
+        "free AI API list no credit card in:readme stars:>200",
+        "awesome free LLM API in:name,readme stars:>100",
+        "free tier AI services awesome list in:readme stars:>150",
+        "free OCR API python in:readme stars:>100",
+        "free speech to text API in:readme stars:>100",
+        "free image generation API wrapper in:readme stars:>100",
+        "free embeddings API tier in:readme stars:>50"
     ],
     "community_searches": [
-        "\"AI prompt consultant\" \"looking for\"",
-        "\"automation consultant\" \"need help\"",
-        "\"no-code automation\" \"looking for\"",
-        "\"AI workflow\" \"need help\"",
-        "\"customer support\" \"knowledge base\" \"cleanup\"",
-        "\"dashboard\" \"automate\" \"small business\"",
-        "\"CRM\" \"automate\" \"export\"",
-        "\"SEO\" \"content system\" \"automation\"",
-        "looking for a simple tool to",
-        "anyone know a tool that can",
-        "need a script to automate",
-        "is there a free tool for",
-        "does anyone have a checklist",
-        "looking for a template for",
-        "small app that can export",
-        "need help fixing install error",
-        "quickstart fails",
-        "github actions deprecated warning"
+        "free AI API no credit card",
+        "free LLM API free tier",
+        "best free AI API for",
+        "free tier AI service generous",
+        "free transcription API",
+        "free OCR API",
+        "free image generation API free",
+        "how I make money with AI free tools",
+        "side income AI automation no upfront cost",
+        "easiest way to make money with AI",
+        "charge clients for AI automation",
+        "productized AI service small",
+        "free API to build a paid tool",
+        "is there a free tool for"
     ],
     "reddit_subreddits": [
-        "smallbusiness",
+        "SideProject",
+        "sideproject",
         "Entrepreneur",
+        "smallbusiness",
         "SaaS",
-        "learnpython",
-        "webdev",
+        "LocalLLaMA",
+        "artificial",
         "automation",
-        "excel",
-        "Notion"
+        "freelance",
+        "WorkOnline"
     ],
     "reddit_searches": [
-        "AI prompt consultant",
-        "automation consultant need help",
-        "no-code automation looking for",
-        "AI workflow need help",
-        "knowledge base cleanup",
-        "dashboard automate small business",
-        "looking for a tool",
-        "need a script",
-        "automate this",
-        "does anyone have a template",
+        "free AI API",
+        "free LLM API no credit card",
+        "free tier AI service",
+        "free transcription API",
+        "free OCR API",
+        "make money with AI tools",
+        "easy side income automation",
+        "charge for AI automation setup",
+        "productized service AI",
+        "built a tool with free API",
         "is there a free tool",
-        "quickstart fails"
+        "how much to charge automation"
     ],
     "max_reddit_requests": 24,
     "underserved_focus": [
-        "AI prompt/workflow consulting where public before-after examples prove value",
-        "productized automations that reduce repeated admin work for a small niche",
-        "retainer-friendly reporting, CRM, and support-ops cleanup",
-        "async deliverables that can be reviewed without meetings",
-        "failing CI with a small, reproducible fix",
-        "dependency migration or deprecation cleanup",
-        "documentation examples that no longer run",
-        "test flakiness with a clear failure signature",
-        "type hints, packaging metadata, and release automation",
-        "small compatibility fixes in niche developer tools",
-        "abandoned but still-installed packages with open compatibility issues",
-        "template repos and starter kits whose quickstarts fail on current runtimes",
-        "internal-tool shaped repos where businesses need maintenance more than novelty",
-        "release-note gaps after breaking API changes",
-        "low-glamour data import/export bugs in small SaaS integrations"
+        "free AI APIs with real free tiers that most people have not heard of yet",
+        "boring conversions people pay for: audio to text, image to text, PDF to data",
+        "one-task tools that wrap a single free API and solve one annoyance well",
+        "AI setup help for non-technical owners who cannot configure a key themselves",
+        "batch jobs where the client sends files and gets clean output back",
+        "recurring reports assembled from free-tier APIs on a schedule",
+        "prompt libraries and workflows sold as a template, client brings their own free key",
+        "small-business tasks still done by hand that a free AI API removes entirely",
+        "niches where the buyer values the result and never asks what model produced it"
     ],
     "strategy_playbook": [
-        "Use online sources first, then ask the research LLM to turn fresh demand signals into ranked owner actions.",
-        "Borrow the article's leverage principle: sell outcomes, systems, and repeatable assets instead of hours.",
-        "Start from maintenance pain, not idea novelty.",
-        "Use proof as the sales asset: failing command, failing log line, short before/after note.",
-        "Favor repeatable chores that can become productized services.",
-        "Look for AI-automatable chores: stale issues with logs, forks with small fixes, unanswered install failures.",
-        "Bundle adjacent fixes only after trust exists.",
-        "Treat content as deal flow from solved niche issues."
+        "Search online for currently-free AI services first, then have Kimi K3 turn them into concrete earning offers.",
+        "Sell the outcome, not the technology. Buyers pay for clean output, not for an API name.",
+        "Keep input cost at zero: free API, free hosting, free scheduler. Every dollar in is margin.",
+        "Prefer offers the owner can deliver the same day with no upfront spend.",
+        "Start with one narrow task and a fixed price. Expand scope only after the first payment.",
+        "Let the free tier set the batch size, and price per batch so limits are never a problem.",
+        "Reuse each delivery as a public example that brings the next buyer."
     ],
     "avoid_patterns": [
-        "Large rewrites, vague feature requests, design taste debates, and architecture arguments without a failing proof.",
-        "Repos with no maintainer response, no recent users, no releases, and no business signal.",
-        "Crowded prize or beginner issues where many contributors compete for low-value visibility.",
-        "Unpaid speculative requests that need private context before value can be proven.",
-        "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
+        "Anything requiring paid infrastructure, credit-card-gated tiers, or upfront spend.",
+        "Services whose free tier is a short trial rather than an ongoing allowance.",
+        "Offers needing a large audience, ad spend, or a following the owner does not have.",
+        "Vague 'AI consulting' with no specific deliverable, fixed price, or named buyer.",
+        "Reselling an API in a way its terms of service forbid.",
+        "Bounty and prize hunting where many contributors compete for low-value visibility.",
+        "Crypto/NFT hype work and anything promising passive income without delivery."
     ],
     "outreach": {
         "enabled": True,
@@ -162,53 +165,60 @@ _DEFAULT_CONFIG = {
 
 _LOCAL_LEADS = [
     {
-        "title": "AI workflow audit for overloaded solo founders",
+        "title": "Meeting and podcast transcription with a free speech-to-text API",
         "url": "",
         "source": "local-playbook",
-        "body": "Package a short audit that finds one repetitive inbox, CRM, or reporting workflow and returns a runnable automation plan plus prompt library.",
-        "labels": ["ai-workflow", "automation", "productized-service"]
+        "body": "Free tiers from Groq Whisper, Deepgram, and AssemblyAI transcribe hours of audio at no cost. Sell a fixed price per hour of audio: clean transcript, speaker labels, and a short summary returned the same day. Buyers are podcasters, coaches, and small agencies who currently type it themselves.",
+        "labels": ["free-ai-api", "speech-to-text", "easy-money", "same-day"]
     },
     {
-        "title": "Support knowledge base cleanup sprint",
+        "title": "Scanned document and receipt data extraction with a free OCR API",
         "url": "",
         "source": "local-playbook",
-        "body": "Use public help docs or exported FAQs to identify stale support answers, missing setup paths, and AI-ready snippets for a fixed-price cleanup.",
-        "labels": ["support-ops", "knowledge-base", "async"]
+        "body": "Free OCR tiers plus a free vision LLM turn scans, receipts, and invoices into a clean spreadsheet. Charge per batch of pages. Bookkeepers and small shops pay for this because the alternative is manual retyping.",
+        "labels": ["free-ai-api", "ocr", "batch-job", "easy-money"]
     },
     {
-        "title": "Package migration cleanup for small Python projects",
+        "title": "Free-tier AI setup service for non-technical business owners",
         "url": "",
         "source": "local-playbook",
-        "body": "Let the AI agent patch pyproject.toml, ruff, mypy, pytest, and GitHub Actions drift from public CI logs.",
-        "labels": ["migration", "packaging", "ci"]
+        "body": "Most owners cannot get an API key, pick a model, or write a prompt. Charge a flat fee to configure one free AI tool inside the workflow they already use, hand over a short prompt library, and let them keep the free key. Zero input cost, all the value is in the setup.",
+        "labels": ["free-ai-api", "setup-service", "no-cost", "repeatable"]
     },
     {
-        "title": "Broken README examples in niche SDK repos",
+        "title": "Product description and listing generation on a free LLM tier",
         "url": "",
         "source": "local-playbook",
-        "body": "Find repos where the documented quickstart fails, then have the AI agent submit a runnable example fix.",
-        "labels": ["docs", "examples", "sdk"]
+        "body": "Free tiers from Groq, Gemini, and OpenRouter generate hundreds of listings per day at no cost. Sell per-batch copy for Etsy, Shopify, and marketplace sellers who have inventory but no time to write. Price per 50 listings.",
+        "labels": ["free-ai-api", "content", "batch-job", "easy-money"]
     },
     {
-        "title": "Flaky test triage for tiny open-source maintainers",
+        "title": "Recurring AI summary report built on free scheduled compute",
         "url": "",
         "source": "local-playbook",
-        "body": "Target intermittent CI failures with logs, seed control, network timeouts, and time-based assertions the bot can reproduce.",
-        "labels": ["tests", "ci", "flaky"]
+        "body": "GitHub Actions plus a free LLM tier produces a weekly digest of competitor pricing, review sentiment, or industry news. Sell it as a low-cost monthly retainer. The whole stack runs on free allowances, so margin is near total.",
+        "labels": ["free-ai-api", "retainer", "recurring", "free-compute"]
     },
     {
-        "title": "Deprecated GitHub Actions cleanup",
+        "title": "Spreadsheet and CSV cleanup with a free LLM",
         "url": "",
         "source": "local-playbook",
-        "body": "Patch action version warnings, Node runtime deprecations, cache key drift, and failing matrix jobs.",
-        "labels": ["github-actions", "deprecation", "ci"]
+        "body": "Messy exports need categorizing, deduping, and normalizing. A free LLM tier handles this in bulk. Charge per file. Buyers are small businesses migrating CRMs or preparing data for an accountant.",
+        "labels": ["free-ai-api", "data-cleanup", "batch-job", "easy-money"]
     },
     {
-        "title": "Starter template compatibility repair",
+        "title": "Image background removal and product photo cleanup on free tiers",
         "url": "",
         "source": "local-playbook",
-        "body": "Run a starter template from scratch, fix install/build/test failures, and document the exact working command.",
-        "labels": ["template", "quickstart", "compatibility"]
+        "body": "Free background-removal and image APIs clean up product photos at no cost. Sell per-image or per-batch to marketplace sellers who need consistent white-background shots.",
+        "labels": ["free-ai-api", "image", "batch-job", "easy-money"]
+    },
+    {
+        "title": "Translation and localization batches on a free API tier",
+        "url": "",
+        "source": "local-playbook",
+        "body": "Free translation and LLM tiers localize listings, menus, and help docs. Charge per thousand words. Small exporters and local restaurants need this and do not want a full agency.",
+        "labels": ["free-ai-api", "translation", "batch-job"]
     }
 ]
 
@@ -263,6 +273,8 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
         "requirements": _clean_list(cfg.get("requirements", [])),
         "reference_sources": _reference_sources(cfg),
         "remote_service_niches": _clean_list(cfg.get("remote_service_niches", [])),
+        "free_ai_focus": _clean_list(cfg.get("free_ai_focus", [])),
+        "monetization_patterns": _clean_list(cfg.get("monetization_patterns", [])),
         "online_ai_brief": _online_ai_brief(llm, raw, cfg),
         "focus": _clean_list(cfg.get("underserved_focus", [])),
         "strategy_playbook": _clean_list(cfg.get("strategy_playbook", [])),
@@ -549,75 +561,153 @@ def _online_ai_brief(llm: Any, leads: list[dict[str, Any]], cfg: dict[str, Any])
         })
 
     prompt = {
-        "task": "Synthesize online demand signals into remote-service earning suggestions.",
-        "policy": "Research and draft suggestions only. Do not post, publish, trade, mint, request payment, or contact anyone.",
-        "reference_takeaways": _reference_sources(cfg),
-        "remote_service_niches": _clean_list(cfg.get("remote_service_niches", [])),
+        "task": (
+            "Find FREE AI services and FREE AI APIs the owner can use to earn money, "
+            "and turn them into easy, concrete earning suggestions."
+        ),
+        "hard_rules": [
+            "Every free_ai_service entry must be a real service you are confident exists.",
+            "Prefer services with an ongoing free tier, not a time-limited trial.",
+            "Say plainly whether a credit card is required.",
+            "If unsure about a specific limit, write 'verify current limit' instead of inventing a number.",
+            "Each earning idea must state who pays, for what, and a realistic price in USD.",
+            "Prefer ideas startable in under 2 hours with zero upfront spend.",
+            "No passive-income promises, no get-rich framing, no audience-dependent plans.",
+        ],
+        "policy": "Research and suggestions only. Do not contact anyone, request payment, trade, or mint.",
+        "focus_areas": _clean_list(cfg.get("free_ai_focus", [])),
+        "monetization_patterns": _clean_list(cfg.get("monetization_patterns", [])),
+        "avoid": _clean_list(cfg.get("avoid_patterns", [])),
         "lead_samples": samples,
         "required_json_shape": {
-            "summary": "one concise paragraph",
-            "owner_actions": ["3-5 concrete next actions for the owner"],
+            "summary": "one concise paragraph on the best current free-AI earning angle",
+            "free_ai_services": [
+                {
+                    "name": "service or API name",
+                    "what_it_does": "capability in one short phrase",
+                    "free_tier": "what you get free, or 'verify current limit'",
+                    "credit_card_required": "no | yes | verify",
+                    "earn_with_it": "one concrete way to make money using it",
+                    "price_guide": "realistic price the owner could charge, in USD",
+                }
+            ],
+            "easy_earning_ideas": [
+                {
+                    "idea": "short name for the offer",
+                    "who_pays": "the specific buyer",
+                    "deliverable": "exactly what the buyer receives",
+                    "price_usd": "number or small range",
+                    "time_to_first_dollar": "e.g. 'same day', '2-3 days'",
+                    "free_stack": "the free services this runs on",
+                }
+            ],
+            "owner_actions": ["3-5 concrete next actions, most valuable first"],
         },
     }
     try:
         if hasattr(llm, "complete_json_for_role"):
-            data = llm.complete_json_for_role("research", json.dumps(prompt), max_tokens=900)
+            data = llm.complete_json_for_role("research", json.dumps(prompt), max_tokens=3000)
         else:
-            data = llm.complete_json(json.dumps(prompt), max_tokens=900)
+            data = llm.complete_json(json.dumps(prompt), max_tokens=3000)
     except Exception as exc:
         log.warning("[code_techs] online AI brief failed: %s", exc)
         return {
             "summary": f"Online AI brief failed; used online search and local scoring only. Error: {str(exc)[:160]}",
+            "free_ai_services": [],
+            "easy_earning_ideas": [],
             "owner_actions": [
-                "Use the top ranked lead with the clearest public proof.",
-                "Keep local Codex implementation to one small deliverable.",
+                "Review the ranked free-AI leads below and pick the one with the clearest buyer.",
+                "Verify the free tier limits yourself before quoting a price.",
             ],
         }
 
     return {
         "summary": str(data.get("summary", "")).strip()[:900],
+        "free_ai_services": _dicts(data.get("free_ai_services"), [
+            "name", "what_it_does", "free_tier", "credit_card_required",
+            "earn_with_it", "price_guide",
+        ], limit=10),
+        "easy_earning_ideas": _dicts(data.get("easy_earning_ideas"), [
+            "idea", "who_pays", "deliverable", "price_usd",
+            "time_to_first_dollar", "free_stack",
+        ], limit=8),
         "owner_actions": _clean_list(data.get("owner_actions", []))[:5],
     }
 
+
+def _dicts(value: Any, fields: list[str], limit: int) -> list[dict[str, str]]:
+    """Coerce an LLM list-of-objects into clean string dicts with known fields."""
+    if not isinstance(value, list):
+        return []
+    out: list[dict[str, str]] = []
+    for item in value:
+        if not isinstance(item, dict):
+            continue
+        row = {f: str(item.get(f, "")).strip()[:300] for f in fields}
+        if not any(row.values()):
+            continue
+        out.append(row)
+        if len(out) >= limit:
+            break
+    return out
+
 def _score(text: str, labels: list[str], value: float) -> int:
+    """Rank leads by: free AI service signal, ease of earning, and payout clarity."""
     score = 30
     if value:
-        score += min(35, int(value / 5))
-    if _is_ai_automatable(text):
-        score += 20
-    if any(word in text for word in ("bounty", "reward")):
-        score -= 18
-    if any(word in text for word in ("paid", "fixed-price", "service", "offer")):
-        score += 6
-    if _has_any(text, ("ci", "test", "flaky", "failing")):
+        score += min(25, int(value / 5))
+
+    # Core signal: a genuinely free AI service or API.
+    if _is_free_ai_lead(text):
+        score += 26
+    if any(word in text for word in ("no credit card", "no card", "without credit card")):
         score += 14
-    if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
+    if any(word in text for word in ("free tier", "free api", "free plan", "free quota", "free allowance")):
         score += 12
-    if _is_announcement_maintenance_lead(text):
-        score += 12
-    if any(word in text for word in ("python 3.12", "node 20", "pyproject", "deprecated", "warning")):
-        score += 10
-    if any(word in text for word in ("docs", "readme", "example", "quickstart")):
-        score += 10
-    if any(word in text for word in ("checklist", "template", "script", "automate", "export", "convert")):
-        score += 10
-    if any(word in text for word in ("prompt consultant", "ai workflow", "automation consultant", "no-code automation")):
-        score += 16
-    if any(word in text for word in ("retainer", "productized", "async", "fixed price", "workflow audit")):
-        score += 12
-    if any(word in text for word in ("customer support", "knowledge base", "crm", "dashboard", "reporting")):
-        score += 10
-    if "community-request" in labels:
-        score += 8
-    if any(word in text for word in ("import error", "install", "setup", "starter", "template")):
-        score += 8
-    if any(word in text for word in ("release notes", "breaking change", "changelog")):
+    if any(word in text for word in ("open source", "open-weight", "self-host", "local model")):
         score += 6
-    if any(word in text for word in ("design", "logo", "marketing", "translation", "rewrite")):
-        score -= 12
-    if "good first issue" in " ".join(labels):
-        score -= 4
+
+    # Ease of earning: fast to start, clear buyer, clear price.
+    if any(word in text for word in ("fixed price", "per batch", "per hour", "per file", "flat fee", "one-time")):
+        score += 12
+    if any(word in text for word in ("easy", "simple", "quick", "same day", "under an hour", "no setup")):
+        score += 10
+    if any(word in text for word in ("retainer", "recurring", "monthly", "subscription")):
+        score += 10
+    if any(word in text for word in ("productized", "template", "repeatable", "batch")):
+        score += 8
+
+    # Concrete, boring, well-paid conversion work.
+    if any(word in text for word in ("transcri", "ocr", "extract", "convert", "summari", "translat", "clean up", "cleanup")):
+        score += 12
+    if any(word in text for word in ("small business", "client", "customer", "seller", "freelance")):
+        score += 8
+    if "community-request" in labels or "free-ai-api" in labels:
+        score += 8
+
+    # Penalties: cost, competition, vagueness.
+    if any(word in text for word in ("bounty", "reward", "prize", "contest")):
+        score -= 20
+    if any(word in text for word in ("credit card required", "paid plan", "trial expires", "14-day trial", "30-day trial")):
+        score -= 20
+    if any(word in text for word in ("passive income", "get rich", "guaranteed income", "6-figure")):
+        score -= 25
+    if any(word in text for word in ("need an audience", "followers", "ad spend", "go viral")):
+        score -= 15
     return max(0, min(100, score))
+
+
+def _is_free_ai_lead(text: str) -> bool:
+    """True when the lead names an AI capability AND a free-access signal."""
+    ai_terms = (
+        "ai", "llm", "gpt", "model", "api", "whisper", "transcri", "ocr",
+        "embedding", "vision", "speech", "tts", "image generation", "inference",
+    )
+    free_terms = (
+        "free", "no credit card", "no-cost", "zero cost", "open source",
+        "open-weight", "free tier", "free api", "generous",
+    )
+    return any(t in text for t in ai_terms) and any(t in text for t in free_terms)
 
 def _extract_value(text: str, cfg: dict) -> float:
     amounts = [float(m.group(1).replace(",", "")) for m in re.finditer(r"\$(\d[\d,]*(?:\.\d+)?)", text)]
@@ -636,97 +726,42 @@ def _reason(text: str, labels: list[str], value: float) -> str:
     parts: list[str] = []
     if value:
         parts.append(f"visible or inferred value around ${value:.2f}")
-    if any(word in text for word in ("prompt consultant", "ai workflow", "automation consultant", "no-code automation")):
-        parts.append("matches leverage-style remote service demand from AI-assisted workflows")
-    if any(word in text for word in ("retainer", "productized", "async", "workflow audit")):
-        parts.append("can become a repeatable async offer instead of hourly labor")
-    if any(word in text for word in ("customer support", "knowledge base", "crm", "dashboard", "reporting")):
-        parts.append("ops cleanup has clear business value and bounded deliverables")
-    if _is_starter_template_lead(text):
-        parts.append("clean-checkout install/build proof fits automated AI patching")
-        parts.append("template compatibility fixes are easy for maintainers to review")
-    if _is_ai_automatable(text):
-        parts.append("public proof makes this suitable for automated AI patching")
-    if _is_announcement_maintenance_lead(text):
-        parts.append("scoped admin feature with RBAC, expiry, env config, docs, and demo proof")
-    if _has_any(text, ("ci", "test", "flaky", "failing")):
-        parts.append("CI/test work is concrete and easy for maintainers to accept")
-    if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
-        parts.append("migration chores are neglected but urgent")
-    if any(word in text for word in ("python 3.12", "node 20", "pyproject", "deprecated", "warning")):
-        parts.append("runtime and toolchain drift creates urgent maintenance demand")
-    if any(word in text for word in ("docs", "readme", "example", "quickstart")):
-        parts.append("working docs convert into trust quickly")
-    if any(word in text for word in ("import error", "install", "setup", "starter", "template")):
-        parts.append("setup failures are high‑friction and easy to prove")
+    if _is_free_ai_lead(text):
+        parts.append("runs on a free AI tier, so input cost is zero and margin is total")
+    if any(word in text for word in ("no credit card", "no card", "free tier", "free api")):
+        parts.append("no card and no upfront spend needed to start")
+    if any(word in text for word in ("transcri", "ocr", "extract", "convert", "summari", "translat", "cleanup")):
+        parts.append("boring conversion work buyers already pay humans to do by hand")
+    if any(word in text for word in ("fixed price", "per batch", "per hour", "per file", "flat fee")):
+        parts.append("priceable per unit, so scope and payout are unambiguous")
+    if any(word in text for word in ("retainer", "recurring", "monthly")):
+        parts.append("recurring revenue from one setup effort")
+    if any(word in text for word in ("easy", "simple", "quick", "same day")):
+        parts.append("startable today without new skills or tools")
+    if any(word in text for word in ("small business", "client", "seller", "customer")):
+        parts.append("buyer values the output and never asks which model made it")
     if not parts:
-        parts.append("small code maintenance lead with low competition")
+        parts.append("low-cost AI service lead with limited competition")
     return "; ".join(parts[:2])
 
 def _next_step(text: str) -> str:
-    if any(word in text for word in ("prompt consultant", "ai workflow", "automation consultant", "no-code automation")):
-        return "Find the public workflow, draft a one-page automation audit, and use the research LLM to propose a fixed-scope deliverable before any local build."
-    if any(word in text for word in ("customer support", "knowledge base", "crm", "dashboard", "reporting")):
-        return "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof."
-    if _is_announcement_maintenance_lead(text):
-        return "Inspect existing admin/RBAC/env docs, then patch the announcement and maintenance-mode paths with demo proof."
-    if _is_starter_template_lead(text):
-        return "Pick one starter repo with a failing quickstart, capture the install/build error, patch the dependency or command, and offer the cleanup at a fixed price."
-    if "bounty" in text:
-        return "Skip unless the issue also has public reproduction steps the AI agent can patch and verify automatically."
-    if any(word in text for word in ("migration", "deprecation", "upgrade", "compatibility")):
-        return "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup."
-    if any(word in text for word in ("python 3.12", "node 20", "pyproject", "deprecated", "warning")):
-        return "Reproduce on the current runtime, patch the compatibility issue, and note the exact version boundary."
-    if any(word in text for word in ("ci", "test", "flaky", "failing")):
-        return "Open the latest failed job, capture the failure signature, and patch only the failing path."
-    if any(word in text for word in ("docs", "readme", "example", "quickstart")):
-        return "Run the documented example from a clean checkout and submit the corrected command or snippet."
-    return "Reproduce locally, write a short maintainer note, and keep the first patch under one focused change."
-
-def _has_any(text: str, terms: tuple[str, ...]) -> bool:
-    return any(re.search(rf"\b{re.escape(term)}\b", text) for term in terms)
-
-def _is_announcement_maintenance_lead(text: str) -> bool:
-    return "notification" in text and "announcements" in text and "maintenance mode" in text
-
-def _is_starter_template_lead(text: str) -> bool:
-    return "starter" in text and "template" in text and _has_any(text, ("quickstart", "install", "build"))
-
-def _is_ai_automatable(text: str) -> bool:
-    proof_terms = (
-        "ci",
-        "test",
-        "failing",
-        "error",
-        "log",
-        "quickstart",
-        "readme",
-        "docs",
-        "example",
-        "install",
-        "build",
-        "deprecation",
-        "migration",
-        "compatibility",
-        "warning",
-        "checklist",
-        "template",
-        "script",
-        "automate",
-        "export",
-        "convert",
-        "prompt consultant",
-        "ai workflow",
-        "automation consultant",
-        "no-code automation",
-        "knowledge base",
-        "crm",
-        "dashboard",
-        "reporting",
-    )
-    private_context_terms = ("private", "credentials", "account", "manual review", "design", "brand")
-    return any(term in text for term in proof_terms) and not any(term in text for term in private_context_terms)
+    if any(word in text for word in ("transcri", "speech", "whisper", "audio")):
+        return "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio."
+    if any(word in text for word in ("ocr", "receipt", "invoice", "scan", "pdf")):
+        return "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages."
+    if any(word in text for word in ("image", "background", "photo", "logo")):
+        return "Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate."
+    if any(word in text for word in ("translat", "localiz")):
+        return "Translate one sample page on the free tier, verify quality, and price per thousand words."
+    if any(word in text for word in ("spreadsheet", "csv", "data", "cleanup", "dedupe")):
+        return "Clean one messy sample export with the free LLM tier and quote a flat rate per file."
+    if any(word in text for word in ("retainer", "recurring", "report", "monthly", "digest")):
+        return "Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer."
+    if any(word in text for word in ("setup", "configure", "install", "onboard")):
+        return "Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow."
+    if _is_free_ai_lead(text):
+        return "Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task."
+    return "Verify the service is genuinely free to use, produce one sample output as proof, and quote a fixed price for one narrow task."
 
 def _codex_prompt(title: str, lead: dict[str, Any], reason: str, next_step: str) -> str:
     url = str(lead.get("url", "")).strip()
@@ -798,9 +833,69 @@ def _parse_dt(value: Any) -> datetime | None:
 
 def _write_report(state: dict[str, Any]) -> None:
     _REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    lines = ["# Code-Tech Earning Queue", "", f"Refreshed: {state.get('last_refresh_at')}", f"Daily target: ${float(state.get('daily_target_usd', 10.0) or 10.0):.2f}", "", "## Requirements", ""]
+    lines = [
+        "# Free AI Earning Queue",
+        "",
+        f"Refreshed: {state.get('last_refresh_at')}",
+        f"Daily target: ${float(state.get('daily_target_usd', 10.0) or 10.0):.2f}",
+        "",
+        "Suggestions favour free AI services and free AI APIs with zero upfront cost.",
+        "",
+        "## Requirements",
+        "",
+    ]
     for item in state.get("requirements", []):
         lines.append(f"- {item}")
+
+    brief = state.get("online_ai_brief") or {}
+    summary = str(brief.get("summary", "")).strip()
+    if summary:
+        lines.extend(["", "## Current Best Angle", "", summary])
+
+    services = brief.get("free_ai_services") or []
+    if services:
+        lines.extend([
+            "", "## Free AI Services To Use", "",
+            "| Service | What it does | Free tier | Card? | How to earn | Price guide |",
+            "| --- | --- | --- | --- | --- | --- |",
+        ])
+        for svc in services:
+            lines.append(
+                "| {} | {} | {} | {} | {} | {} |".format(
+                    _cell(svc.get("name")), _cell(svc.get("what_it_does")),
+                    _cell(svc.get("free_tier")), _cell(svc.get("credit_card_required")),
+                    _cell(svc.get("earn_with_it")), _cell(svc.get("price_guide")),
+                )
+            )
+
+    ideas = brief.get("easy_earning_ideas") or []
+    if ideas:
+        lines.extend(["", "## Easy Earning Ideas", ""])
+        for index, idea in enumerate(ideas, start=1):
+            lines.extend([
+                f"{index}. **{idea.get('idea', 'untitled')}**",
+                f"   - Who pays: {idea.get('who_pays', '')}",
+                f"   - Deliverable: {idea.get('deliverable', '')}",
+                f"   - Price: {idea.get('price_usd', '')}",
+                f"   - Time to first dollar: {idea.get('time_to_first_dollar', '')}",
+                f"   - Free stack: {idea.get('free_stack', '')}",
+            ])
+
+    if brief.get("owner_actions"):
+        lines.extend(["", "## Next Actions", ""])
+        for action in brief["owner_actions"]:
+            lines.append(f"- {action}")
+
+    if state.get("monetization_patterns"):
+        lines.extend(["", "## Monetization Patterns", ""])
+        for item in state["monetization_patterns"]:
+            lines.append(f"- {item}")
+
+    if state.get("free_ai_focus"):
+        lines.extend(["", "## Free AI Focus Areas", ""])
+        for item in state["free_ai_focus"]:
+            lines.append(f"- {item}")
+
     lines.extend(["", "## Reference Sources", ""])
     for item in state.get("reference_sources", []):
         title = item.get("title", "untitled")
@@ -808,19 +903,7 @@ def _write_report(state: dict[str, Any]) -> None:
         takeaway = item.get("takeaway", "")
         prefix = f"- [{title}]({url})" if url else f"- {title}"
         lines.append(f"{prefix}: {takeaway}" if takeaway else prefix)
-    lines.extend(["", "## Remote Service Niches", ""])
-    for item in state.get("remote_service_niches", []):
-        lines.append(f"- {item}")
-    brief = state.get("online_ai_brief") or {}
-    if brief:
-        lines.extend(["", "## Online AI Brief", ""])
-        summary = str(brief.get("summary", "")).strip()
-        if summary:
-            lines.append(summary)
-            lines.append("")
-        for action in brief.get("owner_actions", []):
-            lines.append(f"- {action}")
-    lines.extend(["", "## Underserved Focus", ""]) 
+    lines.extend(["", "## Underserved Niches", ""])
     for item in state.get("focus", []):
         lines.append(f"- {item}")
     lines.extend(["", "## Strategy Playbook", ""]) 
@@ -829,7 +912,7 @@ def _write_report(state: dict[str, Any]) -> None:
     lines.extend(["", "## Avoid", ""]) 
     for item in state.get("avoid_patterns", []):
         lines.append(f"- {item}")
-    lines.extend(["", "## Ranked Leads", ""]) 
+    lines.extend(["", "## Ranked Leads From Online Search", ""])
     for index, op in enumerate(state.get("opportunities", []), start=1):
         title = op.get("title", "untitled")
         url = op.get("url", "")
@@ -851,3 +934,8 @@ def _write_report(state: dict[str, Any]) -> None:
 def _indent_block(text: str, prefix: str) -> str:
     cleaned = text.strip() or "(none)"
     return "\n".join(f"{prefix}{line}" for line in cleaned.splitlines())
+
+def _cell(value: Any) -> str:
+    """Escape a value for use inside a markdown table cell."""
+    text = str(value or "").replace("|", "\\|")
+    return re.sub(r"\s+", " ", text).strip() or "-"

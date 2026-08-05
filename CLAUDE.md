@@ -13,7 +13,9 @@
 
 E-Evolve is a GitHub Actions bot that runs hourly and refreshes RAG, market research, and earning suggestions. Code evolution and code updates are handled here in Codex. Zero server cost — runs entirely on GitHub Actions free tier.
 
-Current operating policy: API keys are for RAG, research, market analysis, suggestions, and draft-only text. The bot must not use keys to publish articles, post to social media, place trades, mint NFTs, withdraw funds, or comment on external issues.
+Current operating policy: API keys are for RAG, research, market analysis, suggestions, draft text, and **publishing articles to dev.to**. The bot must not use keys to post to social media, place trades, mint NFTs, withdraw funds, or comment on external issues.
+
+**Main AI engine: Kimi K3 (`moonshotai/kimi-k3`) via OpenRouter**, used for every role. Kimi K3 is paid ($3/M input, $15/M output) — it needs OpenRouter credits. When credits run out (402) or it rate-limits (429), `bot/llm.py` steps down through free models in `_OPENROUTER_MODELS` so a cycle never fails on cost alone.
 
 ---
 
@@ -45,11 +47,11 @@ command.txt          ← owner command input
 ## Cycle Flow (5 Phases)
 
 ```
-Phase 0: Init LLM (Anthropic > Groq, priority order)
+Phase 0: Init LLM (OpenRouter/Kimi K3 first, then Anthropic > Gemini > Groq)
 Phase 1: Status   — load status.json, detect active features from env secrets
 Phase 2: Commands — read command.txt + GitHub Issues labelled "bot-command"
-Phase 3: Evolution — skipped; Codex owns code changes, API keys stay research-only
-Phase 4: Research — refresh suggestion-only research queues
+Phase 3: Evolution — skipped; Codex owns code changes
+Phase 4: Research — refresh free-AI earning queue, then draft + publish one article
 Phase 5: Update   — save status.json, write dashboard, commit
 ```
 
@@ -77,14 +79,24 @@ Features activate automatically when their secrets are present in env.
 | `llm_openrouter` | `OPENROUTER_API_KEY` |
 | `llm_groq`       | `GROQ_API_KEY`       |
 
-Publishing, posting, trading, minting, and payout secrets do not activate runtime actions. If such keys exist, they are treated as research context only.
+`DEV_TO_API_KEY` enables live article publishing to dev.to (one article per day,
+capped by `articles.max_articles_per_cycle`). Without it, the articles module
+skips silently.
+
+Social posting, trading, minting, and payout secrets do not activate runtime
+actions. If such keys exist, they are treated as research context only.
 
 ---
 
 ## LLM Client (bot/llm.py)
 
-- Priority: `ANTHROPIC_API_KEY` → `GROQ_API_KEY`
-- Groq default model: `llama-3.3-70b-versatile` (fallback chain to smaller)
+- Provider priority: `OPENROUTER_API_KEY` → `ANTHROPIC_API_KEY` → `GEMINI_API_KEY` → `GROQ_API_KEY`
+- **Main engine: `moonshotai/kimi-k3` via OpenRouter, used for every role in `ROLE_PROVIDER`**
+- Kimi K3 is **paid**: $3/M input, $15/M output. It needs OpenRouter credits to run.
+- On 402 (no credits), 429, or 404 the OpenRouter call steps down through the free
+  models in `_OPENROUTER_MODELS` before abandoning the provider. Cost problems
+  degrade quality, never break the cycle.
+- To change the main engine, edit `KIMI_PRIMARY_MODEL` in `bot/llm.py`
 - Anthropic default model: `claude-sonnet-4-6` (fallback chain)
 - All calls retry 3× with exponential backoff
 - `complete_json()` appends JSON-only instruction and strips markdown fences
@@ -97,12 +109,12 @@ Write to `command.txt`, commit. Next cycle executes and clears them.
 Also works via GitHub Issues with label `bot-command`.
 
 ```
-force articles N         # ignored: publishing is disabled
+force articles N         # publish N articles now, bypassing the daily cap (max 5)
 force trade aggressive   # ignored: trading is disabled
 force mint N             # ignored: minting is disabled
 skip evolution           # skip Phase 3 this cycle
 reset earnings           # zero this_week_usd
-post thread              # ignored: posting is disabled
+post thread              # ignored: social posting is disabled
 status report            # dump full status to workflow log
 ```
 

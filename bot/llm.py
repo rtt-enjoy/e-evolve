@@ -30,22 +30,26 @@ _GEMINI_MODELS = [
     "gemini-2.5-flash",
     "gemini-2.5-flash-lite",
 ]
-# OpenRouter: strong free-tier models first, paid fallback
+# OpenRouter: Kimi K3 is the main engine. It is PAID ($3/M in, $15/M out),
+# so the rest of the chain is free-tier only — a credit or rate-limit failure
+# degrades to zero-cost models instead of breaking the cycle.
+KIMI_PRIMARY_MODEL = "moonshotai/kimi-k3"
 _OPENROUTER_MODELS = [
+    KIMI_PRIMARY_MODEL,
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "inclusionai/ling-3.0-flash:free",
     "openrouter/free",
-    "meta-llama/llama-3.3-70b-instruct:free",
-    "mistralai/mistral-7b-instruct:free",
-    "openai/gpt-4o-mini",
+    "openai/gpt-oss-20b:free",
 ]
 
-# Role → preferred provider mapping.
-# Callers use complete_for_role() to get role-appropriate routing.
+# Role → preferred provider mapping. Kimi K3 (via openrouter) is the main
+# engine for every role; gemini/groq remain as provider-level fallbacks.
 ROLE_PROVIDER: dict[str, str] = {
-    "upgrade":  "gemini",
-    "research": "openrouter",
-    "post":     "groq",
-    "think":      "gemini",
-    "fast":       "groq",
+    "upgrade":    "openrouter",
+    "research":   "openrouter",
+    "post":       "openrouter",
+    "think":      "openrouter",
+    "fast":       "openrouter",
     "experiment": "openrouter",
 }
 
@@ -107,6 +111,21 @@ class LLMClient:
                     # Auth errors: no point retrying same provider
                     if any(code in exc_str for code in ("401", "403", "authentication_error", "invalid x-api-key", "invalid_api_key", "API_KEY_INVALID")):
                         log.warning("LLM auth error on provider=%s -- skipping to fallback: %s", provider, exc)
+                        exhausted = True
+                        break
+
+                    # Out of credits / rate limited on a PAID OpenRouter model:
+                    # step down to the next model in the chain (which is free)
+                    # rather than abandoning OpenRouter entirely.
+                    if provider == "openrouter" and any(
+                        code in exc_str for code in ("402", "429", "insufficient", "rate_limit", "quota", "Too Many Requests")
+                    ):
+                        model_list = _model_list_for(provider)
+                        if p_model in model_list and model_list.index(p_model) < len(model_list) - 1:
+                            p_model = model_list[model_list.index(p_model) + 1]
+                            log.warning("openrouter model unavailable (%s) -- stepping down to %s", exc_str[:80], p_model)
+                            continue
+                        log.warning("openrouter model chain exhausted -- skipping to fallback: %s", exc)
                         exhausted = True
                         break
 
@@ -351,12 +370,18 @@ class LLMClient:
         )
         if rsp.status_code in (401, 403):
             raise RuntimeError(f"401 authentication_error from openrouter: {rsp.text[:200]}")
+        if rsp.status_code == 402:
+            raise RuntimeError(f"402 insufficient credits on openrouter model {model}: {rsp.text[:200]}")
         if rsp.status_code == 429:
             raise RuntimeError(f"429 rate_limit_exceeded from openrouter: {rsp.text[:200]}")
+        if rsp.status_code == 404:
+            raise RuntimeError(f"model_not_found on openrouter: {model}: {rsp.text[:200]}")
         rsp.raise_for_status()
         data = rsp.json()
         if "error" in data:
             raise RuntimeError(f"OpenRouter error: {data['error']}")
+        if not data.get("choices"):
+            raise RuntimeError(f"OpenRouter returned no choices for {model}: {str(data)[:200]}")
         text = data["choices"][0]["message"]["content"] or ""
         return LLMResponse(
             text      = text,
@@ -398,13 +423,13 @@ class LLMClient:
     def _pick_provider(self) -> str:
         if os.getenv("CLAUDE_CLI_MODE", "").strip() == "1":
             return "claude-cli"
-        if self._anthropic_key:
-            return "anthropic"
-        # Gemini preferred for default (hard thinking role)
-        if self._gemini_key:
-            return "gemini"
+        # OpenRouter first: it hosts Kimi K3, the configured main engine.
         if self._openrouter_key:
             return "openrouter"
+        if self._anthropic_key:
+            return "anthropic"
+        if self._gemini_key:
+            return "gemini"
         if self._groq_key:
             return "groq"
         raise RuntimeError(
@@ -432,9 +457,9 @@ class LLMClient:
         """Ordered fallback chain starting from primary provider."""
         all_providers = [
             ("claude-cli",   os.getenv("CLAUDE_CLI_MODE", "").strip() == "1"),
+            ("openrouter",   bool(self._openrouter_key)),
             ("anthropic",    bool(self._anthropic_key)),
             ("gemini",       bool(self._gemini_key)),
-            ("openrouter",   bool(self._openrouter_key)),
             ("groq",         bool(self._groq_key)),
         ]
         available = [p for p, has_key in all_providers if has_key]

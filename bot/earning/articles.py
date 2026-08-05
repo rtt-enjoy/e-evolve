@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 import time
 from pathlib import Path
 from typing import Any, Optional
@@ -30,36 +31,49 @@ _MAX_ARTICLES_PER_CYCLE = int(_article_config.get("max_articles_per_cycle", 1))
 _MIN_INTERVAL_HOURS = int(_article_config.get("min_interval_hours", 6))
 
 _SYSTEM = """\
-You are a technical writer for a developer audience.
+You are a senior engineer writing for a developer audience on dev.to.
 
-Write a short, practical article (600-1500 words) on Python, AI/LLMs, GitHub Actions, automation, or SaaS.
+Write a well-structured, practical article (900-1600 words) on Python, AI/LLMs,
+GitHub Actions, automation, or SaaS.
 
 Respond with ONLY a single JSON object.
 
 Schema:
 {
-  "title": "compelling title (max 80 chars)",
-  "description": "one-sentence description (max 150 chars)",
+  "title": "specific, benefit-driven title (max 80 chars)",
+  "description": "one-sentence summary (max 150 chars)",
   "body_markdown": "full article in markdown",
   "tags": ["python", "ai", "automation"]
 }
 
-Rules:
-- Title should be specific and benefit-driven
-- Include code snippets if relevant
-- End with a clear takeaway or CTA
-- Use 2-4 relevant tags
-- No promotional fluff or income guarantees"""
+FORMATTING RULES for body_markdown -- follow all of them:
+- Open with a 2-3 sentence hook stating the concrete problem. No "In today's world".
+- Use `##` for main sections and `###` for sub-points. Never use `#` (the title owns it).
+- 4-7 `##` sections with descriptive, specific headings. Not "Introduction"/"Conclusion".
+- Keep paragraphs to 2-4 sentences. Insert a blank line between every block.
+- Include at least two fenced code blocks with an explicit language tag
+  (```python, ```yaml, ```bash) and code that would actually run.
+- Explain each code block in prose immediately before or after it.
+- Use a markdown table when comparing 3+ options.
+- Use bulleted lists for enumerations, but never more than 7 items.
+- Bold key terms sparingly with **term**, at most a few per article.
+- End with a `## Key Takeaways` section of 3-5 concrete bullets.
+
+CONTENT RULES:
+- Be technically accurate and specific. Real library names, real flags.
+- Never invent benchmarks, pricing, citations, or version numbers you are unsure of.
+- No promotional fluff, no income guarantees, no "revolutionary"/"game-changing".
+- Write as a practitioner reporting what worked, not a marketer."""
 
 _TOPICS = [
-    "How to build a self-improving GitHub Actions bot",
+    "Building a multi-provider LLM fallback chain that never breaks",
+    "Free-tier AI APIs that need no credit card, and what each is good for",
     "Python patterns for AI agent orchestration",
-    "Free LLM APIs for automation in 2025",
-    "GitHub Actions as a free compute platform",
-    "Building a multi-platform content pipeline with Python",
+    "GitHub Actions as a free compute platform for scheduled AI jobs",
+    "Running a useful AI service on nothing but free tiers",
     "Error handling patterns for production AI agents",
-    "Automating code reviews with free LLMs",
-    "Setting up a self-hosting automation stack",
+    "How to validate and repair LLM output before you ship it",
+    "Cutting LLM costs by routing each task to the cheapest capable model",
 ]
 
 
@@ -78,11 +92,14 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     from datetime import datetime, timezone
     today = datetime.now(timezone.utc).date().isoformat()
     
-    if last_date == today:
+    forced = int(status.get("_overrides", {}).get("force_articles", 0) or 0)
+    if last_date == today and not forced:
         published_today = state.get("published", 0)
         if published_today >= _MAX_ARTICLES_PER_CYCLE:
             log.info("[articles] Already published %d article(s) today — skipping", published_today)
             return []
+    if forced:
+        log.info("[articles] daily cap bypassed by 'force articles' command")
 
     # Generate and publish
     article = _generate_article(llm, status)
@@ -120,20 +137,94 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
                 f'Write a practical article about: "{topic}". '
                 f"This is bot cycle #{run_count}. "
                 "Make it useful for Python developers interested in AI and automation. "
-                "JSON only."
+                "Follow every formatting rule in the system prompt. JSON only."
             )
             if hasattr(llm, "complete_json_for_role"):
-                data = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=2000)
+                data = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=6000)
             else:
-                data = llm.complete_json(prompt, system=_SYSTEM, max_tokens=2000)
-            
+                data = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
+
             if data.get("title") and data.get("body_markdown"):
-                return data
+                problems = _format_problems(data["body_markdown"])
+                if problems:
+                    log.info("[articles] format issues %s -- requesting revision", problems)
+                    data = _revise_format(llm, data, problems) or data
+                return _normalize(data)
         except Exception as exc:
             log.warning("[articles] LLM generation failed: %s", exc)
-    
+
     # Fallback to deterministic article
     return _fallback_article(topic, status, "LLM unavailable")
+
+
+def _format_problems(body: str) -> list[str]:
+    """Return a list of formatting rule violations in the generated markdown."""
+    problems: list[str] = []
+    words = len(body.split())
+    if words < 600:
+        problems.append(f"too short ({words} words, need 900+)")
+    if len(re.findall(r"^## ", body, re.MULTILINE)) < 4:
+        problems.append("fewer than 4 '##' sections")
+    if len(re.findall(r"^```\w+", body, re.MULTILINE)) < 2:
+        problems.append("fewer than 2 language-tagged code blocks")
+    if re.search(r"^# ", body, re.MULTILINE):
+        problems.append("uses a top-level '#' heading")
+    if "key takeaway" not in body.lower():
+        problems.append("missing '## Key Takeaways' section")
+    if re.search(r"^```\s*$", body, re.MULTILINE) and not re.search(r"^```\w+", body, re.MULTILINE):
+        problems.append("code block missing language tag")
+    return problems
+
+
+def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
+    """Ask the model to fix specific formatting violations. Returns None on failure."""
+    prompt = (
+        "Revise this article to fix the listed formatting problems. "
+        "Keep the technical content and voice; only restructure and expand as needed.\n\n"
+        f"Problems: {'; '.join(problems)}\n\n"
+        f"Title: {data.get('title', '')}\n\n"
+        f"Current body:\n{data.get('body_markdown', '')}\n\n"
+        "Return the same JSON schema with the corrected body_markdown."
+    )
+    try:
+        if hasattr(llm, "complete_json_for_role"):
+            revised = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=6000)
+        else:
+            revised = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
+    except Exception as exc:
+        log.warning("[articles] format revision failed: %s", exc)
+        return None
+
+    if not revised.get("body_markdown"):
+        return None
+    remaining = _format_problems(revised["body_markdown"])
+    if len(remaining) < len(problems):
+        log.info("[articles] revision improved format (%d -> %d issues)", len(problems), len(remaining))
+        revised.setdefault("title", data.get("title", ""))
+        revised.setdefault("description", data.get("description", ""))
+        revised.setdefault("tags", data.get("tags", []))
+        return revised
+    return None
+
+
+def _normalize(data: dict) -> dict:
+    """Clean up markdown artifacts that hurt rendering on dev.to."""
+    body = str(data.get("body_markdown", ""))
+    # Strip a stray wrapping code fence around the whole article.
+    if body.lstrip().startswith("```markdown"):
+        body = re.sub(r"^\s*```markdown\s*\n", "", body)
+        body = re.sub(r"\n```\s*$", "", body)
+    # Collapse 3+ blank lines to 2; ensure headings have a blank line before them.
+    body = re.sub(r"\n{4,}", "\n\n\n", body)
+    body = re.sub(r"(?<!\n)\n(#{2,3} )", r"\n\n\1", body)
+    data["body_markdown"] = body.strip()
+
+    tags = [
+        re.sub(r"[^a-z0-9]", "", str(t).lower())
+        for t in (data.get("tags") or ["python", "automation"])
+    ]
+    data["tags"] = [t for t in tags if t][:4] or ["python", "automation"]
+    return data
 
 
 def _fallback_article(topic: str, status: dict, error_type: str) -> dict:

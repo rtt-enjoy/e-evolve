@@ -34,19 +34,19 @@ FEATURE_MAP: dict[str, list[str]] = {
 
 LLM_ROLE_WORKFLOWS: dict[str, dict[str, str]] = {
     "upgrade": {
-        "provider": "gemini",
-        "model": "gemini-2.5-pro",
+        "provider": "openrouter",
+        "model": "moonshotai/kimi-k3",
         "purpose": "research-only repair suggestions for Codex-owned code changes",
     },
     "research": {
         "provider": "openrouter",
-        "model": "openrouter/free",
-        "purpose": "RAG, market research, and earning-suggestion briefs",
+        "model": "moonshotai/kimi-k3",
+        "purpose": "free-AI-service discovery, market research, and earning-suggestion briefs",
     },
     "post": {
-        "provider": "groq",
-        "model": "llama-3.3-70b-versatile",
-        "purpose": "draft-only suggestion text; no publishing or posting",
+        "provider": "openrouter",
+        "model": "moonshotai/kimi-k3",
+        "purpose": "article drafting and formatting for publication",
     },
 }
 

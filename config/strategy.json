@@ -12,75 +12,87 @@
     "auto_pursue": false,
     "pursue_score_threshold": 75,
     "requirements": [
-      "Default to online research and the configured free/low-cost research LLM before local fallback.",
-      "Prefer leveraged remote-service work: productized services, retainers, async delivery, and AI-assisted systems.",
-      "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
-      "Require a deterministic command, log, docs page, or issue thread that an AI agent can use as proof.",
-      "Keep the first contribution small enough for the bot to patch, test, and explain automatically.",
+      "Lead with free AI services and free AI APIs: no credit card, generous free tier, usable today.",
+      "Every suggestion must name the free service, its real limits, and one concrete way to earn with it.",
+      "Prefer easy money: something the owner can start in under 2 hours with no upfront spend.",
+      "Prefer repeatable offers over one-off tasks, and same-week payout over deferred upside.",
+      "State the earning path in plain language: who pays, for what, and roughly how much.",
+      "Skip anything needing paid infrastructure, approval queues, or an audience the owner lacks.",
       "Do not count discovery or speculative upside as earnings."
+    ],
+    "free_ai_focus": [
+      "free-tier LLM APIs with no credit card requirement",
+      "free speech-to-text, TTS, and transcription APIs",
+      "free image generation and background-removal APIs",
+      "free OCR, document parsing, and PDF extraction APIs",
+      "free embedding and vector-search tiers",
+      "free translation and summarization APIs",
+      "free AI hosting, inference, and scheduled-compute tiers",
+      "open-weight models that run on free CPU/GPU allowances"
+    ],
+    "monetization_patterns": [
+      "Resell a free API as a tiny fixed-price service (transcribe, summarize, clean, convert).",
+      "Sell the setup, not the compute: charge to configure a free AI tool inside someone's workflow.",
+      "Bundle a free API into a one-page tool and charge a small one-time fee.",
+      "Offer a done-for-you batch job: send files, get results back, fixed price per batch.",
+      "Charge for the prompt library and workflow, and let the client bring their own free key.",
+      "Package a recurring report built on free-tier APIs as a low-cost monthly retainer."
     ],
     "reference_sources": [
       {
-        "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
-        "url": "https://freedium-mirror.cfd/https://medium.com/@startup_Ideas/15-high-paying-remote-jobs-with-a-4-hour-work-week-and-how-people-actually-get-them-7e8d3562ff99",
-        "takeaway": "Use specialization, automation, productized services, retainers, async work, and AI-powered systems to detach income from hours."
+        "title": "OpenRouter free model list",
+        "url": "https://openrouter.ai/models?max_price=0",
+        "takeaway": "Live list of zero-cost models usable through a single API key."
       }
     ],
-    "remote_service_niches": [
-      "AI prompt and workflow consulting",
-      "no-code or low-code automation setup",
-      "AI customer-support knowledge base cleanup",
-      "analytics dashboard and reporting automation",
-      "SEO/content operations systems",
-      "CRM, spreadsheet, and data import/export automation",
-      "developer productivity and CI maintenance retainers",
-      "async technical documentation fixes",
-      "productized audit/checklist services",
-      "micro-SaaS setup, migration, and operations help"
+    "github_searches": [
+      "free AI API list no credit card in:readme stars:>200",
+      "awesome free LLM API in:name,readme stars:>100",
+      "free tier AI services awesome list in:readme stars:>150",
+      "free OCR API python in:readme stars:>100",
+      "free speech to text API in:readme stars:>100",
+      "free image generation API wrapper in:readme stars:>100",
+      "free embeddings API tier in:readme stars:>50"
     ],
     "community_searches": [
-      "\"AI prompt consultant\" \"looking for\"",
-      "\"automation consultant\" \"need help\"",
-      "\"no-code automation\" \"looking for\"",
-      "\"AI workflow\" \"need help\"",
-      "\"customer support\" \"knowledge base\" \"cleanup\"",
-      "\"dashboard\" \"automate\" \"small business\"",
-      "\"CRM\" \"automate\" \"export\"",
-      "\"SEO\" \"content system\" \"automation\"",
-      "looking for a simple tool to",
-      "anyone know a tool that can",
-      "need a script to automate",
-      "is there a free tool for",
-      "does anyone have a checklist",
-      "looking for a template for",
-      "small app that can export",
-      "need help fixing install error",
-      "quickstart fails",
-      "github actions deprecated warning"
+      "free AI API no credit card",
+      "free LLM API free tier",
+      "best free AI API for",
+      "free tier AI service generous",
+      "free transcription API",
+      "free OCR API",
+      "free image generation API free",
+      "how I make money with AI free tools",
+      "side income AI automation no upfront cost",
+      "easiest way to make money with AI",
+      "charge clients for AI automation",
+      "productized AI service small",
+      "free API to build a paid tool",
+      "is there a free tool for"
     ],
     "reddit_subreddits": [
-      "smallbusiness",
+      "SideProject",
       "Entrepreneur",
+      "smallbusiness",
       "SaaS",
-      "learnpython",
-      "webdev",
+      "LocalLLaMA",
       "automation",
-      "excel",
-      "Notion"
+      "freelance",
+      "WorkOnline"
     ],
     "reddit_searches": [
-      "AI prompt consultant",
-      "automation consultant need help",
-      "no-code automation looking for",
-      "AI workflow need help",
-      "knowledge base cleanup",
-      "dashboard automate small business",
-      "looking for a tool",
-      "need a script",
-      "automate this",
-      "does anyone have a template",
+      "free AI API",
+      "free LLM API no credit card",
+      "free tier AI service",
+      "free transcription API",
+      "free OCR API",
+      "make money with AI tools",
+      "easy side income automation",
+      "charge for AI automation setup",
+      "productized service AI",
+      "built a tool with free API",
       "is there a free tool",
-      "quickstart fails"
+      "how much to charge automation"
     ],
     "max_reddit_requests": 24,
     "outreach": {
@@ -91,8 +103,14 @@
       "fallback_payment_note": "Payment address is configured privately; add it manually before sending."
     }
   },
+  "llm": {
+    "main_engine": "moonshotai/kimi-k3",
+    "provider": "openrouter",
+    "note": "Kimi K3 is paid ($3/M in, $15/M out). Free models follow in the fallback chain."
+  },
   "research_policy": {
-    "mode": "research_suggestions_only",
-    "blocked_actions": ["publishing", "posting", "trading", "minting", "payouts"]
+    "mode": "research_and_article_publishing",
+    "allowed_actions": ["research", "suggestions", "drafts", "article publishing"],
+    "blocked_actions": ["social posting", "trading", "minting", "payouts"]
   }
 }

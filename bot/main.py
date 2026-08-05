@@ -123,15 +123,18 @@ def main() -> int:
     _hr("Phase 4 — Research")
     actions: list[dict] = []
 
-    status["operation_mode"] = "research_suggestions_only"
+    status["operation_mode"] = "research_and_article_publishing"
     status["external_action_policy"] = {
-        "mode": "research_suggestions_only",
-        "allowed": ["RAG", "research", "market analysis", "suggestions", "drafts"],
-        "blocked": ["publishing", "posting", "trading", "minting", "payouts"],
+        "mode": "research_and_article_publishing",
+        "allowed": [
+            "RAG", "research", "market analysis", "suggestions", "drafts",
+            "article publishing (dev.to)",
+        ],
+        "blocked": ["social posting", "trading", "minting", "payouts"],
     }
     if ov.get("blocked_action_commands"):
         log.warning(
-            "Ignored action commands under research-only policy: %s",
+            "Ignored action commands still blocked by policy: %s",
             ", ".join(ov["blocked_action_commands"]),
         )
 
@@ -141,11 +144,16 @@ def main() -> int:
     if _code_techs_enabled():
         actions += _module("code_techs", llm, status, errors)
 
+    # Article publishing to dev.to. Runs only when DEV_TO_API_KEY is set; the
+    # module rate-limits itself to max_articles_per_cycle per day.
+    actions += _module("articles", llm, status, errors)
+
     if not actions:
         log.warning(
-            "No research actions ran this cycle.\n"
-            "Add or refresh LLM/research keys for RAG, market research, and suggestions only.\n"
-            "Publishing, social posting, trading, minting, and payouts are disabled by policy."
+            "No actions ran this cycle.\n"
+            "Add or refresh LLM keys for research and article drafting.\n"
+            "Set DEV_TO_API_KEY to enable article publishing.\n"
+            "Social posting, trading, minting, and payouts remain disabled by policy."
         )
 
     # ── 5. Update ─────────────────────────────────────────────────────────────

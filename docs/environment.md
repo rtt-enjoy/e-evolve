@@ -48,9 +48,11 @@ according to the role routing in `bot/llm.py`.
 
 ## Legacy Action Credentials
 
-These names are kept for setup readiness, suggestions, and legacy modules.
-Current project policy treats them as research/setup context only: the bot must
-not publish, post, trade, withdraw, mint, or comment externally from these keys.
+`DEV_TO_API_KEY` is **active**: when set, the bot drafts and publishes one
+article per day to dev.to. The remaining names below are kept for setup
+readiness and legacy modules. Policy treats those as research/setup context
+only: the bot must not post socially, trade, withdraw, mint, or comment
+externally from them.
 
 | Key                        | Required | Legacy area   | Notes                                        |
 |----------------------------|----------|---------------|----------------------------------------------|

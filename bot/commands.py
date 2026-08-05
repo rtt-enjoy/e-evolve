@@ -4,12 +4,12 @@ Read commands from command.txt or GitHub Issues labelled "bot-command".
 Commands execute once, then are cleared automatically.
 
 Supported commands (case-insensitive, one per line):
-  force articles N         — ignored; publishing is disabled by policy
+  force articles N         — publish N articles now, bypassing the daily cap (max 5)
   force trade aggressive   — ignored; trading is disabled by policy
   force mint N             — ignored; minting is disabled by policy
   skip evolution           — skip evolution phase
   reset earnings           — zero this_week_usd
-  post thread              — ignored; posting is disabled by policy
+  post thread              — ignored; social posting is disabled by policy
   improve suggestion TEXT  — ask evolution to implement or refine a suggestion
   status report            — dump full status dict to workflow log
 """
@@ -52,8 +52,9 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
         log.info("Applying command: %r", cmd)
 
         if m := re.match(r"force articles (\d+)$", cmd):
-            blocked_action_commands.append(raw.strip())
-            log.warning("Ignoring %r: publishing is disabled by research-only policy", raw)
+            count = max(1, min(5, int(m.group(1))))
+            overrides["force_articles"] = count
+            log.info("Article publishing forced this cycle: %d", count)
 
         elif cmd == "force trade aggressive":
             blocked_action_commands.append(raw.strip())

@@ -13,50 +13,65 @@ changes belong in `frontend/src/`. Durable dashboard data contract changes
 belong in `bot/dashboard.py` and the status-producing backend modules.
 
 The dashboard must represent safe status only. Secret names such as
-`TWITTER_API_KEY` may be rendered so setup remains actionable, but actual secret
-values must never be written to tracked status files, built assets, or logs.
+`OPENROUTER_API_KEY` may be rendered so setup remains actionable, but actual
+secret values must never be written to tracked status files, built assets, or
+logs.
 
-## Required Frontend Signals
+## Information Architecture
 
-The first screen should answer these questions clearly:
+The dashboard is a multi-page shell: a fixed sidebar plus hash routes
+(`#/leads`, `#/leads/3`). Each route is code-split, so the first paint loads
+only the Overview chunk. Depth is deliberate — the landing page carries only
+essentials, and detail lives one click away.
 
-- Is the workflow fresh, late, stalled, or offline?
-- Which phase currently needs attention: status, commands, evolution, earning,
-  or update?
-- Which earning and model modules are active, inactive, or partially configured?
-- What changed in the latest evolution, and did it produce errors?
-- What actions ran in the latest earning cycle, and which failed?
-- What errors, suggestions, and setup gaps should the owner act on next?
-- Which integrations are active, inactive, or missing required secret names?
+| Route       | Answers                                                          |
+|-------------|------------------------------------------------------------------|
+| `#/overview`| Is it earning, is it fresh, what needs attention right now?       |
+| `#/leads`   | Which opportunities exist, worth what, and what is the first step?|
+| `#/research`| Which free AI services and earning playbooks were found?          |
+| `#/engine`  | Which model serves which role, and what did the last cycle do?    |
+| `#/health`  | Freshness, integration readiness, errors, blocked payouts.        |
+| `#/data`    | Every snapshot field, including keys no section claims yet.       |
 
-## Dashboard Panels
+`#/leads/<index>` is a detail view carrying the lead's `codex_prompt` and
+`outreach_draft` with copy buttons. Outreach is never sent automatically.
 
-- **Workflow Status**: phase-by-phase health derived from `last_run`,
-  `last_evolution`, `last_earning.actions`, `errors`, and cycle timing.
-- **Live Refresh**: in-browser polling of the latest status snapshot with a
-  visible last-polled timestamp and refresh control.
-- **Problems And Corrections**: ranked operational issues combining stale
-  workflow state, errors, failed actions, evolution failures, and missing
-  high-impact setup secrets.
-- **Secret Readiness**: per-feature readiness by secret name. It must never
-  expose secret values.
-- **Last Evolution**: latest summary, changed files, error label, and ranked
-  suggestions including activation steps when present.
-- **No-ID Free Path**: suggestion views should prefer code-tech, dev.to, and
-  free LLM work, while filtering recommendations that require Binance KYC,
-  Claude/Anthropic paid access, phone-gated Twitter/X APIs, funded wallets, or
-  paid-only services.
+## Section Registry
+
+`frontend/src/sections/registry.ts` is the mechanism that keeps this dashboard
+current as the bot evolves. Each section declares the `status.json` paths it
+consumes, and two behaviours follow:
+
+1. A section whose declared paths are all empty is **hidden from the nav**, so
+   routes never lead to a blank page.
+2. Every top-level key claimed by some section is *known*. Keys the bot starts
+   emitting later are **unclaimed**, and the Data section renders them
+   generically through `JsonNode` — with a "N new" badge in the sidebar.
+
+**New backend fields therefore appear in the UI with no frontend change.** When
+a new field deserves a first-class view, add its key to the relevant section's
+`keys` array and render it; that removes it from the unclaimed list.
+
+## Required Signals
+
+The Overview must answer, without scrolling:
+
+- Is the cycle fresh, late, or stalled?
+- Total earned, and the value sitting in the lead pipeline.
+- What needs attention, ranked, each linking to the section that resolves it.
+- Which of the five phases succeeded in the last run.
 
 ## Implementation Notes
 
-- Keep `status.json` backwards-compatible; every dashboard computed property must
-  tolerate missing keys.
+- Keep `status.json` backwards-compatible; every computed property must tolerate
+  missing keys. Sections receive the whole snapshot and must not assume presence.
 - Keep GitHub Pages static: no backend server. Python writes data, Vite builds
   the browser app, and the browser reads static files.
+- Suggestion views prefer code-tech, dev.to, and free LLM work. `isAvoidedSuggestion`
+  filters recommendations needing KYC, paid access, phone-gated APIs, or funded
+  wallets.
 - When adding a new module or secret, update `bot/status.py` first, then extend
-  labels and panels in `frontend/src/`.
-- If a new status field helps users diagnose a problem, persist it in
-  `status.json` and render it in the relevant panel rather than hiding it in
-  workflow logs only.
-- Build frontend changes with `npm run build` from `frontend/` so `docs/`
-  contains the public GitHub Pages artifacts.
+  the relevant section in `frontend/src/sections/`.
+- Build with `pnpm build` from `frontend/` so `docs/` holds the public artifacts.
+  The prebuild step clears all hashed bundles, because section chunk names are
+  open-ended and stale files would otherwise accumulate.

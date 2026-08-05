@@ -2,711 +2,886 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
+}
+
+:root {
+  --sidebar-w: 236px;
+}
+
+html, body {
+  height: 100%;
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  background: #090d12;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: theme('colors.ink');
+  color: theme('colors.text');
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-button,
-input,
-textarea {
+button, input, textarea, select {
   font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: theme('colors.accent' / 30%);
 }
 
 @layer components {
-  .panel {
-    @apply rounded-lg border border-line bg-panel p-5 shadow-panel;
+  /* ============================================================== shell */
+
+  .shell {
+    @apply flex min-h-screen;
   }
 
-  .panel h2 {
-    @apply text-base font-semibold md:text-lg;
+  .skip-link {
+    @apply absolute left-4 top-4 z-50 -translate-y-20 rounded-md bg-accent px-3 py-2 text-sm font-semibold text-ink transition focus:translate-y-0;
   }
 
-  .panel p {
-    @apply mt-1 text-sm leading-6 text-soft;
+  .sidebar {
+    @apply fixed inset-y-0 left-0 z-40 flex w-[var(--sidebar-w)] shrink-0 flex-col gap-5 border-r border-line bg-panel px-4 py-5;
+    @apply -translate-x-full transition-transform duration-200 lg:translate-x-0;
   }
 
-  .metric-card {
-    @apply min-h-40 rounded-lg border border-line bg-panel p-5 transition hover:border-soft/60;
+  .nav-open .sidebar {
+    @apply translate-x-0 shadow-2xl;
   }
 
-  .metric-card span {
-    @apply mt-4 block text-sm text-soft;
+  .brand {
+    @apply flex items-center gap-3;
   }
 
-  .metric-card strong {
-    @apply mt-2 block text-2xl font-semibold tabular-nums;
+  .brand-mark {
+    @apply grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent text-base font-bold text-ink;
   }
 
-  .metric-card p {
-    @apply mt-1 text-sm text-soft;
+  .brand strong {
+    @apply block truncate text-sm font-semibold;
   }
 
-  .metric-icon {
-    @apply flex h-10 w-10 items-center justify-center rounded-md border border-line bg-panel2 text-accent;
+  .brand span {
+    @apply block truncate text-xs text-soft;
   }
 
-  .metric-icon svg {
-    @apply h-5 w-5;
+  .nav-close {
+    @apply ml-auto lg:hidden;
   }
 
-  .pill {
-    @apply inline-flex max-w-full items-center gap-1 rounded-md border px-2 py-1 text-xs font-semibold;
+  .live {
+    @apply flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-line bg-panel2 px-3 py-2 text-xs;
   }
 
-  .pill.good {
-    @apply border-green/40 bg-green/10 text-green;
+  .live span {
+    @apply font-semibold tabular-nums;
   }
 
-  .pill.warn {
+  .live em {
+    @apply w-full not-italic text-soft;
+  }
+
+  .sidebar nav {
+    @apply flex flex-1 flex-col gap-1 overflow-y-auto;
+  }
+
+  .sidebar nav a {
+    @apply flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-soft transition;
+    @apply hover:bg-panel2 hover:text-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent;
+  }
+
+  .sidebar nav a.active {
+    @apply bg-accent/10 text-text;
+    box-shadow: inset 2px 0 0 theme('colors.accent');
+  }
+
+  .sidebar nav a span {
+    @apply flex-1 truncate;
+  }
+
+  .badge {
+    @apply shrink-0 rounded-md border border-line bg-panel2 px-1.5 py-0.5 text-[11px] font-semibold not-italic tabular-nums text-soft;
+  }
+
+  .badge.new {
     @apply border-yellow/40 bg-yellow/10 text-yellow;
   }
 
-  .pill.bad {
-    @apply border-red/40 bg-red/10 text-red;
+  .sidebar-foot {
+    @apply flex flex-wrap gap-2 border-t border-line pt-4;
   }
 
-  .pill.info {
-    @apply border-accent/40 bg-accent/10 text-accent;
+  .sidebar-foot .links {
+    @apply flex w-full flex-wrap gap-x-4 gap-y-1 text-xs text-soft;
   }
 
-  .pill.neutral {
-    @apply border-line bg-panel2 text-soft;
+  .sidebar-foot .links a {
+    @apply underline decoration-line underline-offset-4 transition hover:text-accent;
   }
 
-  .small-button,
-  .icon-button {
-    @apply inline-flex h-10 items-center justify-center gap-2 rounded-md border border-line bg-panel2 px-3 text-sm font-semibold text-text transition hover:border-accent hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent/40;
+  .nav-scrim {
+    @apply fixed inset-0 z-30 hidden bg-black/60;
   }
 
-  .icon-button {
-    @apply w-10 px-0;
+  .nav-open .nav-scrim {
+    @apply block lg:hidden;
   }
 
-  .view-switch {
-    @apply inline-grid grid-cols-1 overflow-hidden rounded-lg border border-line bg-panel2 p-1;
+  .main {
+    @apply flex min-w-0 flex-1 flex-col lg:pl-[var(--sidebar-w)];
   }
 
-  .view-switch.with-offline {
-    @apply sm:grid-cols-3;
+  /* ============================================================= topbar */
+
+  .topbar {
+    @apply sticky top-0 z-20 flex items-center gap-3 border-b border-line bg-ink/90 px-4 py-3 backdrop-blur;
   }
 
-  .view-switch button {
-    @apply inline-flex h-8 items-center justify-center gap-2 rounded-md px-3 text-xs font-semibold text-soft transition hover:text-text focus:outline-none focus:ring-2 focus:ring-accent/40;
+  .nav-open-btn {
+    @apply lg:hidden;
   }
 
-  .view-switch button.active {
-    @apply bg-accent text-ink;
+  .crumb {
+    @apply flex min-w-0 items-baseline gap-2;
   }
 
-  .mode-strip {
-    @apply inline-flex h-10 items-center gap-1 rounded-lg border border-line bg-panel2 p-1 text-xs font-semibold text-soft;
+  .crumb span {
+    @apply truncate text-sm font-semibold;
   }
 
-  .mode-strip span {
-    @apply inline-flex h-8 items-center rounded-md px-3;
+  .crumb em {
+    @apply not-italic text-xs text-soft;
   }
 
-  .mode-strip span.active {
-    @apply bg-green text-ink;
+  .topbar-actions {
+    @apply ml-auto flex items-center gap-3;
   }
 
-  .mode-strip.offline span.active {
-    @apply bg-accent;
+  .poll {
+    @apply hidden text-xs tabular-nums text-soft sm:block;
   }
 
-  .phase-card {
-    @apply min-h-32 rounded-lg border border-line bg-panel2 p-4;
+  .content {
+    @apply mx-auto flex w-full max-w-[1180px] flex-col gap-5 px-4 py-6 sm:px-6;
   }
 
-  .phase-card.good {
-    @apply border-green/30;
+  .foot {
+    @apply mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5 text-xs text-soft;
   }
 
-  .phase-card.warn,
-  .phase-card.info {
-    @apply border-yellow/30;
+  .linkish {
+    @apply underline decoration-line underline-offset-4 transition hover:text-accent;
   }
 
-  .phase-card.bad {
-    @apply border-red/40;
+  /* ========================================================== headings */
+
+  .section-head {
+    @apply flex flex-wrap items-start justify-between gap-4;
   }
 
-  .phase-card svg {
-    @apply mb-3 text-accent;
+  .section-head h1 {
+    @apply text-2xl font-semibold tracking-tight sm:text-3xl;
   }
 
-  .phase-card strong {
-    @apply block text-sm;
+  .section-head p {
+    @apply mt-1.5 max-w-3xl text-sm leading-6 text-soft;
   }
 
-  .phase-card p {
-    @apply line-clamp-3 text-xs;
+  .subhead {
+    @apply mt-2 flex items-center justify-between gap-3 border-b border-line pb-2;
   }
 
-  .control-strip {
-    @apply grid gap-px overflow-hidden rounded-lg border border-line bg-line md:grid-cols-4;
+  .subhead h3 {
+    @apply text-xs font-semibold uppercase tracking-[0.14em] text-soft;
   }
 
-  .status-cell {
-    @apply bg-panel px-4 py-3;
+  /* ============================================================= cards */
+
+  .card {
+    @apply rounded-xl border border-line bg-panel p-4 sm:p-5;
   }
 
-  .status-cell span {
-    @apply block text-xs font-semibold uppercase tracking-normal text-soft;
+  .card-head {
+    @apply mb-4 flex flex-wrap items-start justify-between gap-3;
   }
 
-  .status-cell strong {
+  .card-head h2 {
+    @apply text-sm font-semibold;
+  }
+
+  .card-head p {
+    @apply mt-1 max-w-2xl text-xs leading-5 text-soft;
+  }
+
+  .stack {
+    @apply flex flex-col gap-4;
+  }
+
+  .split {
+    @apply grid gap-5 xl:grid-cols-[minmax(0,1fr)_370px];
+  }
+
+  .grid-2 {
+    @apply grid gap-4 md:grid-cols-2;
+  }
+
+  .grid-3 {
+    @apply grid gap-4 md:grid-cols-2 xl:grid-cols-3;
+  }
+
+  /* ============================================================= tiles */
+
+  .tile-row {
+    @apply grid gap-3 sm:grid-cols-2 xl:grid-cols-4;
+  }
+
+  .tile {
+    @apply relative flex flex-col gap-1 overflow-hidden rounded-xl border border-line bg-panel p-4;
+  }
+
+  .tile.is-link {
+    @apply transition hover:border-accent/60 hover:bg-panel2;
+  }
+
+  .tile-label {
+    @apply text-xs font-medium uppercase tracking-wider text-soft;
+  }
+
+  .tile-value {
+    @apply text-[26px] font-semibold leading-tight tabular-nums;
+  }
+
+  .tile-value.good { @apply text-green; }
+  .tile-value.warn { @apply text-yellow; }
+  .tile-value.bad  { @apply text-red; }
+  .tile-value.info { @apply text-accent; }
+
+  .tile-detail {
+    @apply text-xs leading-5 text-soft;
+  }
+
+  .tile-arrow {
+    @apply absolute right-3 top-3 text-soft opacity-0 transition;
+  }
+
+  .tile.is-link:hover .tile-arrow {
+    @apply text-accent opacity-100;
+  }
+
+  .spark {
+    @apply h-6 w-full;
+    stroke: theme('colors.soft');
+  }
+
+  .spark.good { stroke: theme('colors.green'); }
+  .spark.info { stroke: theme('colors.accent'); }
+  .spark.warn { stroke: theme('colors.yellow'); }
+  .spark.bad  { stroke: theme('colors.red'); }
+
+  .stat-grid {
+    @apply grid grid-cols-2 gap-3;
+  }
+
+  .stat {
+    @apply rounded-lg border border-line bg-panel2 p-3;
+  }
+
+  .stat span {
+    @apply block text-[11px] font-medium uppercase tracking-wider text-soft;
+  }
+
+  .stat strong {
     @apply mt-1 block text-lg font-semibold tabular-nums;
   }
 
-  .status-cell p {
-    @apply mt-1 text-xs text-soft;
+  .stat p {
+    @apply mt-0.5 text-[11px] text-soft;
   }
 
-  .item-row {
-    @apply flex gap-3 rounded-lg border border-line bg-panel2 p-4;
+  /* ========================================================== progress */
+
+  .progress-wrap {
+    @apply w-full;
   }
 
-  .item-row strong {
-    @apply text-sm;
-  }
-
-  .item-row p {
-    @apply mt-1 text-sm text-soft;
-  }
-
-  .status-dot {
-    @apply mt-1 h-3 w-3 shrink-0 rounded-full bg-soft;
-  }
-
-  .status-dot.good {
-    @apply bg-green;
-  }
-
-  .status-dot.warn {
-    @apply bg-yellow;
-  }
-
-  .status-dot.bad {
-    @apply bg-red;
-  }
-
-  .issue-card {
-    @apply grid grid-cols-[36px_1fr] gap-3 rounded-lg border border-line bg-panel2 p-4;
-  }
-
-  .issue-rank {
-    @apply flex h-9 w-9 items-center justify-center rounded-md border border-line bg-ink text-sm font-semibold text-soft;
-  }
-
-  .issue-card strong {
-    @apply text-sm;
-  }
-
-  .issue-card p {
-    @apply text-sm leading-6 text-soft;
-  }
-
-  .code-card,
-  .secret-card,
-  .suggestion-card,
-  .action-card,
-  .route-card {
-    @apply rounded-lg border border-line bg-panel2 p-4;
-  }
-
-  .code-card code,
-  .secret-card code,
-  .suggestion-card code {
-    @apply mt-3 block overflow-x-auto rounded-md border border-line bg-ink px-2 py-1 text-xs text-cyan;
-  }
-
-  .action-card p,
-  .suggestion-card p,
-  .code-card p,
-  .route-card p {
-    @apply mt-2 text-sm leading-6 text-soft;
-  }
-
-  .route-card span {
-    @apply mt-3 block text-xs leading-5 text-soft;
-  }
-
-  .module-list {
-    @apply divide-y divide-line overflow-hidden rounded-lg border border-line;
-  }
-
-  .module-line {
-    @apply grid grid-cols-[12px_minmax(0,1fr)_auto] items-center gap-3 bg-panel2 px-3 py-3;
-  }
-
-  .module-line strong {
-    @apply truncate text-sm;
-  }
-
-  .inline-link {
-    @apply mt-3 inline-flex items-center gap-1 text-xs font-semibold text-accent hover:text-cyan;
+  .progress-label {
+    @apply mb-2 text-xs text-soft;
   }
 
   .progress {
-    @apply h-2 overflow-hidden rounded-full bg-ink;
+    @apply h-1.5 w-full overflow-hidden rounded-full bg-panel2;
   }
 
-  .progress span {
-    @apply block h-full rounded-full bg-accent;
+  .progress > span {
+    @apply block h-full rounded-full bg-accent transition-[width] duration-500;
   }
 
-  .empty {
-    @apply rounded-lg border border-dashed border-line bg-panel2 p-4 text-sm text-soft;
+  .readiness-head {
+    @apply mb-2 flex items-end justify-between gap-3;
   }
 
-  .suggestion-page {
-    @apply space-y-6;
+  .readiness-head strong {
+    @apply text-2xl font-semibold tabular-nums;
   }
 
-  .suggestion-hero {
-    @apply grid gap-5 rounded-lg border border-line bg-panel p-6 shadow-panel lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end;
+  .readiness-head span {
+    @apply text-xs text-soft;
   }
 
-  .suggestion-hero h2 {
-    @apply text-3xl font-semibold md:text-5xl;
+  /* ============================================================ badges */
+
+  .pill {
+    @apply inline-flex max-w-full shrink-0 items-center gap-1 rounded-md border px-2 py-0.5 text-[11px] font-semibold;
   }
 
-  .suggestion-hero p {
-    @apply mt-3 max-w-3xl text-sm leading-6 text-soft;
+  .pill.good    { @apply border-green/40 bg-green/10 text-green; }
+  .pill.warn    { @apply border-yellow/40 bg-yellow/10 text-yellow; }
+  .pill.bad     { @apply border-red/40 bg-red/10 text-red; }
+  .pill.info    { @apply border-accent/40 bg-accent/10 text-accent; }
+  .pill.neutral { @apply border-line bg-panel2 text-soft; }
+
+  .dot {
+    @apply inline-block h-2 w-2 shrink-0 rounded-full bg-soft;
   }
 
-  .suggestion-hero-panel {
-    @apply rounded-lg border border-line bg-panel2 p-5;
+  .dot.good { @apply bg-green; box-shadow: 0 0 0 3px theme('colors.green' / 18%); }
+  .dot.warn { @apply bg-yellow; box-shadow: 0 0 0 3px theme('colors.yellow' / 18%); }
+  .dot.bad  { @apply bg-red; box-shadow: 0 0 0 3px theme('colors.red' / 18%); }
+  .dot.info { @apply bg-accent; }
+
+  .chips {
+    @apply flex flex-wrap gap-1.5;
   }
 
-  .suggestion-hero-panel span {
-    @apply block text-xs font-semibold uppercase tracking-normal text-soft;
+  /* =========================================================== buttons */
+
+  .btn {
+    @apply inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-line bg-panel2 px-3 text-xs font-semibold text-text transition;
+    @apply hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent disabled:opacity-50;
   }
 
-  .suggestion-hero-panel strong {
-    @apply mt-3 block text-xl font-semibold leading-7;
+  .btn.primary {
+    @apply border-accent bg-accent text-ink hover:bg-accent/85 hover:text-ink;
   }
 
-  .suggestion-hero-panel p {
-    @apply mt-2 text-sm leading-6 text-cyan;
+  .btn.back {
+    @apply self-start;
   }
 
-  .suggestion-stat-grid {
-    @apply grid gap-3 sm:grid-cols-2 xl:grid-cols-4;
+  .icon-btn {
+    @apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line bg-panel2 text-soft transition;
+    @apply hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent;
   }
 
-  .suggestion-layout {
-    @apply grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px];
+  /* =========================================================== filters */
+
+  .filters {
+    @apply mb-4 flex flex-wrap items-center gap-2;
   }
 
-  .suggestion-side {
-    @apply space-y-6;
+  .search {
+    @apply flex h-9 min-w-[180px] flex-1 items-center gap-2 rounded-lg border border-line bg-panel2 px-3 text-soft focus-within:border-accent;
   }
 
-  .launchpad {
-    @apply grid gap-4 rounded-lg border border-green/30 bg-panel p-5 shadow-panel lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center;
+  .search input {
+    @apply w-full min-w-0 border-0 bg-transparent text-sm text-text outline-none placeholder:text-soft;
   }
 
-  .launchpad span {
-    @apply block text-xs font-semibold uppercase tracking-normal text-green;
+  .segmented {
+    @apply inline-flex flex-wrap gap-1 rounded-lg border border-line bg-panel2 p-1;
   }
 
-  .launchpad strong {
-    @apply mt-2 block text-lg font-semibold;
+  .segmented button {
+    @apply inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs font-semibold text-soft transition;
+    @apply hover:text-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent;
   }
 
-  .launchpad p {
-    @apply mt-2 text-sm leading-6 text-soft;
+  .segmented button.active {
+    @apply bg-accent text-ink;
   }
 
-  .command-stack {
-    @apply grid grid-cols-[minmax(0,1fr)_40px] gap-3 rounded-lg border border-line bg-ink p-3;
+  .segmented button em {
+    @apply not-italic tabular-nums opacity-70;
   }
 
-  .command-stack code {
-    @apply max-h-24 min-w-0 overflow-auto whitespace-pre-wrap py-2 text-xs leading-5 text-cyan;
+  /* ============================================================= leads */
+
+  .lead-list {
+    @apply flex flex-col;
   }
 
-  .automation-card {
-    @apply grid gap-4 rounded-lg border border-line bg-panel p-5 shadow-panel md:grid-cols-[42px_minmax(0,1fr)_auto];
+  .lead-list > li + li {
+    @apply border-t border-line;
   }
 
-  .automation-card.ready {
-    @apply border-green/30;
+  .lead-list a {
+    @apply flex items-center gap-3 py-2.5 transition hover:text-accent;
   }
 
-  .automation-card.blocked {
-    @apply border-yellow/30;
+  .lead-value {
+    @apply w-16 shrink-0 text-right text-sm font-semibold tabular-nums text-green;
   }
 
-  .automation-rank {
-    @apply flex h-10 w-10 items-center justify-center rounded-md border border-line bg-ink text-sm font-semibold text-soft;
+  .lead-body {
+    @apply min-w-0 flex-1;
   }
 
-  .automation-card strong {
-    @apply text-base;
+  .lead-body strong {
+    @apply block truncate text-sm font-medium;
   }
 
-  .automation-card p {
+  .lead-body em {
+    @apply block truncate text-xs not-italic text-soft;
+  }
+
+  .lead-table {
+    @apply flex flex-col;
+  }
+
+  .lead-row {
+    @apply flex flex-wrap items-start gap-3 border-t border-line py-3 transition first:border-t-0 hover:bg-panel2;
+  }
+
+  .lead-row-value {
+    @apply w-16 shrink-0 pt-0.5 text-right text-sm font-semibold tabular-nums text-green;
+  }
+
+  .lead-row-body {
+    @apply min-w-[200px] flex-1;
+  }
+
+  .lead-row-body strong {
+    @apply block text-sm font-medium leading-5;
+  }
+
+  .lead-row-body p {
+    @apply mt-1 line-clamp-2 text-xs leading-5 text-soft;
+  }
+
+  .lead-row-meta {
+    @apply flex shrink-0 flex-wrap items-center gap-1.5;
+  }
+
+  .pager {
+    @apply flex items-center justify-between gap-3;
+  }
+
+  /* ============================================================ issues */
+
+  .issue-list {
+    @apply flex flex-col;
+  }
+
+  .issue {
+    @apply flex items-start gap-3 border-t border-line py-3 first:border-t-0 first:pt-0;
+  }
+
+  .issue.is-link {
+    @apply transition hover:text-accent;
+  }
+
+  .issue strong {
+    @apply block text-sm font-medium leading-5;
+  }
+
+  .issue p {
+    @apply mt-1 text-xs leading-5 text-soft;
+  }
+
+  /* ============================================================ phases */
+
+  .phase-row {
+    @apply grid gap-2 sm:grid-cols-3 lg:grid-cols-5;
+  }
+
+  .phase {
+    @apply rounded-lg border border-line bg-panel2 p-3;
+  }
+
+  .phase strong {
+    @apply mt-2 block text-xs font-semibold;
+  }
+
+  .phase p {
+    @apply mt-0.5 truncate text-[11px] text-soft;
+  }
+
+  .phase.good svg { @apply text-green; }
+  .phase.warn svg { @apply text-yellow; }
+  .phase.bad  svg { @apply text-red; }
+  .phase.info svg { @apply text-accent; }
+
+  .phase.bad { @apply border-red/40; }
+
+  /* ======================================================== disclosure */
+
+  .disclosure {
+    @apply overflow-hidden rounded-xl border border-line bg-panel;
+  }
+
+  .disclosure > button {
+    @apply flex w-full items-center gap-2.5 px-4 py-3 text-left transition hover:bg-panel2;
+    @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent;
+  }
+
+  .disclosure .chevron {
+    @apply shrink-0 text-soft transition-transform duration-200;
+  }
+
+  .disclosure.open .chevron {
+    @apply rotate-90 text-accent;
+  }
+
+  .disclosure > button > span {
+    @apply flex-1;
+  }
+
+  .disclosure > button strong {
+    @apply block truncate text-sm font-semibold;
+  }
+
+  .disclosure > button em {
+    @apply block truncate text-xs not-italic text-soft;
+  }
+
+  .disclosure .count {
+    @apply shrink-0 rounded-md border border-line bg-panel2 px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-soft;
+  }
+
+  .disclosure-body {
+    @apply border-t border-line px-4 py-4;
+  }
+
+  /* =========================================================== content */
+
+  .prose {
     @apply text-sm leading-6 text-soft;
   }
 
-  .automation-grid {
-    @apply mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px];
+  .prose.lead-in {
+    @apply text-text;
   }
 
-  .check-list {
-    @apply mt-3 space-y-2;
+  .muted {
+    @apply text-xs text-soft;
   }
 
-  .check-list li {
-    @apply border-l border-accent/50 pl-3 text-sm leading-6 text-soft;
+  .error-text {
+    @apply mt-2 text-sm leading-6 text-red;
   }
 
-  .secret-chip-list {
-    @apply mb-4 mt-3 flex flex-wrap gap-2;
+  .bullets {
+    @apply flex flex-col gap-2;
   }
 
-  .secret-chip-list code,
-  .setup-list code {
-    @apply rounded-md border bg-ink px-2 py-1 text-xs;
+  .bullets li {
+    @apply relative pl-4 text-sm leading-6 text-soft;
   }
 
-  .secret-chip-list code.ready {
-    @apply border-green/40 text-green;
+  .bullets li::before {
+    content: '';
+    @apply absolute left-0 top-[11px] h-1 w-1 rounded-full bg-accent;
   }
 
-  .secret-chip-list code.missing,
-  .setup-list code {
-    @apply border-yellow/40 text-yellow;
+  .empty {
+    @apply rounded-lg border border-dashed border-line px-4 py-5 text-center text-xs text-soft;
   }
 
-  .secret-chip-list span {
-    @apply text-sm text-soft;
+  .legend {
+    @apply flex flex-wrap gap-x-5 gap-y-2 text-xs text-soft;
   }
 
-  .howto-box {
-    @apply mt-4 rounded-lg border border-line bg-panel2 p-4;
+  .legend span {
+    @apply inline-flex items-center gap-1.5;
   }
 
-  .howto-box p {
-    @apply mt-0 text-sm leading-6 text-soft;
+  .legend a {
+    @apply underline decoration-line underline-offset-4 transition hover:text-accent;
   }
 
-  .command-box {
-    @apply mt-4 grid grid-cols-[minmax(0,1fr)_40px] gap-3 rounded-lg border border-line bg-ink p-3;
+  .code-block {
+    @apply max-h-72 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-line bg-ink p-3 font-mono text-xs leading-5 text-soft;
   }
 
-  .command-box code {
-    @apply min-w-0 overflow-x-auto whitespace-nowrap py-2 text-xs text-cyan;
+  .code-block.error {
+    @apply border-red/40 text-red;
   }
 
-  .automation-actions {
-    @apply flex flex-wrap items-start justify-end gap-2;
+  .keyvalue {
+    @apply flex flex-col;
   }
 
-  .automation-steps {
-    @apply space-y-3;
+  .keyvalue > div {
+    @apply flex items-baseline justify-between gap-4 border-t border-line py-2 first:border-t-0 first:pt-0;
   }
 
-  .path-list {
-    @apply space-y-3;
+  .keyvalue dt {
+    @apply shrink-0 text-xs text-soft;
   }
 
-  .workflow-step {
-    @apply grid grid-cols-[34px_minmax(0,1fr)] gap-x-3 rounded-lg border border-line bg-panel2 p-4;
+  .keyvalue dd {
+    @apply min-w-0 truncate text-right text-xs font-medium tabular-nums;
   }
 
-  .workflow-step div {
-    @apply row-span-2 flex h-8 w-8 items-center justify-center rounded-md border border-line bg-ink text-accent;
+  .keyvalue dd a {
+    @apply text-accent underline decoration-line underline-offset-4;
   }
 
-  .workflow-step svg {
-    @apply h-4 w-4;
+  .mini-kv {
+    @apply mt-3 flex flex-col gap-2;
   }
 
-  .workflow-step strong {
-    @apply text-sm;
+  .mini-kv dt {
+    @apply text-[11px] font-medium uppercase tracking-wider text-soft;
   }
 
-  .workflow-step p {
-    @apply mt-1 text-sm leading-6 text-soft;
+  .mini-kv dd {
+    @apply mt-0.5 text-xs leading-5;
   }
 
-  .setup-list {
-    @apply flex flex-wrap gap-2;
+  .mini-kv dd.accent {
+    @apply font-semibold text-green;
   }
 
-  .completed-lead-list {
-    @apply space-y-3;
+  /* ========================================================== research */
+
+  .service .service-head,
+  .suggestion .suggestion-head {
+    @apply flex items-start justify-between gap-3;
   }
 
-  .completed-lead-card {
-    @apply rounded-lg border border-green/30 bg-panel2 p-4;
+  .service .service-head strong,
+  .suggestion .suggestion-head strong {
+    @apply min-w-0 text-sm font-semibold;
   }
 
-  .completed-lead-card strong {
-    @apply mt-3 block text-sm;
+  .service > .prose {
+    @apply mt-1.5;
   }
 
-  .completed-lead-card p {
-    @apply mt-2 text-sm leading-6 text-soft;
+  .idea-head {
+    @apply flex flex-wrap items-start justify-between gap-3;
   }
 
-  .completed-lead-card ul {
-    @apply mt-3 space-y-2;
+  .idea-head strong {
+    @apply block text-sm font-semibold;
   }
 
-  .completed-lead-card li {
-    @apply border-l border-green/40 pl-3 text-xs leading-5 text-soft;
-  }
-
-  .banner {
-    @apply flex items-center gap-2 rounded-lg border p-4 text-sm;
-  }
-
-  .banner.bad {
-    @apply border-red/40 bg-red/10 text-red;
-  }
-
-  .section-title {
-    @apply text-sm font-semibold uppercase tracking-normal text-soft;
-  }
-
-  .earning-hero {
-    @apply grid gap-5 rounded-lg border border-line bg-panel2 p-5 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-end;
-  }
-
-  .earning-hero h3 {
-    @apply text-3xl font-semibold tabular-nums;
-  }
-
-  .earning-hero p {
-    @apply mt-2 max-w-3xl text-sm leading-6 text-soft;
-  }
-
-  .earning-progress {
-    @apply rounded-lg border border-line bg-ink p-4;
-  }
-
-  .earning-progress span {
-    @apply mt-3 block text-sm text-soft;
-  }
-
-  .earning-stat-grid {
-    @apply grid gap-3 sm:grid-cols-2 xl:grid-cols-4;
-  }
-
-  .mini-stat {
-    @apply rounded-lg border border-line bg-panel2 p-4;
-  }
-
-  .mini-stat div {
-    @apply mb-3 flex h-9 w-9 items-center justify-center rounded-md border border-line bg-ink text-accent;
-  }
-
-  .mini-stat svg {
-    @apply h-5 w-5;
-  }
-
-  .mini-stat span {
-    @apply block text-xs font-semibold uppercase tracking-normal text-soft;
-  }
-
-  .mini-stat strong {
-    @apply mt-1 block text-xl font-semibold tabular-nums;
-  }
-
-  .mini-stat p {
+  .idea-head p {
     @apply mt-1 text-xs text-soft;
   }
 
-  .opportunity-list {
-    @apply space-y-3;
+  .idea-price {
+    @apply shrink-0 text-right;
   }
 
-  .opportunity-card {
-    @apply grid grid-cols-[34px_minmax(0,1fr)_40px] gap-3 rounded-lg border border-line bg-panel2 p-4;
+  .idea-price span {
+    @apply block text-sm font-semibold text-green;
   }
 
-  .opportunity-rank {
-    @apply flex h-8 w-8 items-center justify-center rounded-md border border-line bg-ink text-sm font-semibold text-soft;
+  .idea-price em {
+    @apply block text-[11px] not-italic text-soft;
   }
 
-  .opportunity-card strong {
-    @apply text-sm;
+  .suggestion {
+    @apply rounded-lg border border-line bg-panel2 p-3;
   }
 
-  .opportunity-card p {
-    @apply mt-1 text-sm leading-6 text-soft;
+  .suggestion .prose {
+    @apply mt-1.5;
   }
 
-  .opportunity-card span:not(.pill) {
-    @apply mt-2 block text-xs leading-5 text-cyan;
+  .suggestion code {
+    @apply mt-2 inline-block rounded-md border border-line bg-ink px-2 py-1 font-mono text-[11px] text-yellow;
   }
 
-  .earning-module-grid {
-    @apply grid gap-3;
+  .suggestion .bullets {
+    @apply mt-3;
   }
 
-  .earning-module-card {
-    @apply rounded-lg border border-line bg-panel2 p-4;
+  .reference {
+    @apply flex items-start justify-between gap-3 rounded-lg border border-line bg-panel2 p-3 transition hover:border-accent/60;
   }
 
-  .earning-module-card strong {
-    @apply text-sm;
+  .reference strong {
+    @apply block text-sm font-medium;
   }
 
-  .earning-module-card p {
-    @apply mt-3 text-sm leading-6 text-soft;
+  .reference p {
+    @apply mt-1 text-xs leading-5 text-soft;
   }
 
-  .earning-module-card span:not(.pill) {
-    @apply mt-2 block text-xs font-semibold text-cyan;
+  /* ============================================================ engine */
+
+  .route-head {
+    @apply flex items-start gap-2.5;
   }
 
-  .template-list {
-    @apply rounded-lg border border-line bg-panel2 p-4;
+  .route-icon {
+    @apply grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-line bg-panel2 text-accent;
   }
 
-  .template-title {
-    @apply mb-3 flex items-center gap-2 text-accent;
+  .route-head strong {
+    @apply block truncate text-sm font-semibold;
   }
 
-  .template-title svg {
-    @apply h-4 w-4;
+  .route-head em {
+    @apply block truncate text-xs not-italic text-soft;
   }
 
-  .template-title h3 {
-    @apply text-sm font-semibold text-text;
+  .route-model {
+    @apply mt-3 block break-all rounded-md border border-line bg-ink px-2 py-1.5 font-mono text-[11px] text-cyan;
   }
 
-  .template-list ul {
-    @apply space-y-2;
+  .route > .prose {
+    @apply mt-2.5;
   }
 
-  .template-list li {
-    @apply border-l border-line pl-3 text-sm leading-6 text-soft;
+  .route-secret {
+    @apply mt-2.5 inline-block rounded-md border border-line bg-panel2 px-2 py-0.5 font-mono text-[11px] text-soft;
   }
 
-  .revenue-row {
-    @apply rounded-lg border border-line bg-panel2 p-4;
+  .change {
+    @apply rounded-lg border border-line bg-panel2 p-3;
   }
 
-  .revenue-row strong,
-  .revenue-row span {
-    @apply mb-3 text-sm;
+  .change code {
+    @apply font-mono text-xs text-accent;
   }
 
-  .revenue-row span {
-    @apply tabular-nums text-soft;
+  .change p {
+    @apply mt-1 text-xs leading-5 text-soft;
   }
 
-  .compact-action {
-    @apply grid grid-cols-[12px_minmax(72px,auto)_minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-line bg-panel2 p-3;
+  .action {
+    @apply flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-line bg-panel2 p-3;
   }
 
-  .compact-action strong {
-    @apply text-sm;
+  .action.bad {
+    @apply border-red/40;
   }
 
-  .compact-action p {
-    @apply m-0 truncate text-sm text-soft;
+  .action-platform {
+    @apply inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold;
   }
 
-  .compact-action em {
-    @apply text-xs not-italic tabular-nums text-cyan;
+  .action.good .action-platform svg { @apply text-green; }
+  .action.bad  .action-platform svg { @apply text-red; }
+
+  .action p {
+    @apply min-w-0 flex-1 truncate text-xs text-soft;
   }
 
-  .submit-business-page {
-    @apply space-y-6;
+  .action a {
+    @apply shrink-0 text-xs text-accent underline decoration-line underline-offset-4;
   }
 
-  .submit-business-hero {
-    @apply grid gap-5 rounded-lg border border-line bg-panel p-6 shadow-panel lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end;
+  .action em {
+    @apply shrink-0 text-xs font-semibold not-italic tabular-nums text-green;
   }
 
-  .submit-business-hero h2 {
-    @apply text-3xl font-semibold md:text-5xl;
+  /* ============================================================ health */
+
+  .module-list {
+    @apply flex flex-col;
   }
 
-  .submit-business-hero p {
-    @apply mt-3 max-w-3xl text-sm leading-6 text-soft;
+  .module {
+    @apply flex items-center gap-2.5 border-t border-line py-2 first:border-t-0 first:pt-0;
   }
 
-  .submit-business-proof {
-    @apply rounded-lg border border-line bg-panel2 p-5;
+  .module strong {
+    @apply min-w-0 flex-1 truncate text-sm font-medium;
   }
 
-  .submit-business-proof span {
-    @apply block text-xs font-semibold uppercase tracking-normal text-soft;
+  .secret {
+    @apply rounded-lg border border-line bg-panel2 p-3;
   }
 
-  .submit-business-proof strong {
-    @apply mt-3 block text-xl font-semibold leading-7;
+  .secret-head {
+    @apply mb-2 flex items-center justify-between gap-3;
   }
 
-  .submit-business-proof a {
-    @apply mt-4 inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-cyan;
+  .secret-head strong {
+    @apply min-w-0 truncate text-sm font-medium;
   }
 
-  .submit-directory-grid {
-    @apply grid gap-4 md:grid-cols-3;
+  .secret code.missing {
+    @apply mt-2 block break-all font-mono text-[11px] text-yellow;
   }
 
-  .submit-directory-card {
-    @apply rounded-lg border border-line bg-panel2 p-5;
+  .policy {
+    @apply flex flex-col gap-3;
   }
 
-  .submit-directory-icon {
-    @apply mb-4 flex h-10 w-10 items-center justify-center rounded-md border border-line bg-ink text-accent;
+  .policy-label {
+    @apply mb-1.5 block text-[11px] font-semibold uppercase tracking-wider;
   }
 
-  .submit-directory-icon svg {
-    @apply h-5 w-5;
+  .policy-label.good { @apply text-green; }
+  .policy-label.bad  { @apply text-red; }
+
+  /* ============================================================== json */
+
+  .json-branch > button {
+    @apply flex w-full items-center gap-2 rounded-md py-1 text-left transition hover:text-accent;
+    @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent;
   }
 
-  .submit-directory-card span {
-    @apply block text-xs font-semibold uppercase tracking-normal text-soft;
+  .json-branch .chevron {
+    @apply shrink-0 text-soft transition-transform duration-150;
   }
 
-  .submit-directory-card strong {
-    @apply mt-2 block text-lg font-semibold;
+  .json-branch.open > button > .chevron {
+    @apply rotate-90 text-accent;
   }
 
-  .submit-directory-card p {
-    @apply min-h-24 text-sm leading-6 text-soft;
+  .json-children {
+    @apply ml-2 flex flex-col gap-0.5 border-l border-line pl-3;
   }
 
-  .submit-business-layout {
-    @apply grid gap-6 lg:grid-cols-[minmax(0,1fr)_420px];
+  .json-row {
+    @apply flex flex-wrap items-baseline gap-x-2 py-0.5;
   }
 
-  .submit-checklist {
-    @apply space-y-3;
+  .json-row.block {
+    @apply flex-col items-stretch gap-1.5 py-1.5;
   }
 
-  .submit-checklist li {
-    @apply rounded-lg border border-line bg-panel2 p-4 text-sm leading-6 text-soft;
+  .json-key {
+    @apply shrink-0 font-mono text-[11px] font-semibold text-soft;
   }
 
-  .listing-template {
-    @apply rounded-lg border border-line bg-panel2 p-4;
+  .json-meta {
+    @apply font-mono text-[11px] text-soft opacity-70;
   }
 
-  .listing-template span {
-    @apply mt-4 block text-xs font-semibold uppercase tracking-normal text-cyan first:mt-0;
+  .json-val {
+    @apply min-w-0 break-words font-mono text-[11px];
   }
 
-  .listing-template p {
-    @apply mt-2 text-sm leading-6 text-soft;
+  .json-val.str  { @apply text-text; }
+  .json-val.num  { @apply text-cyan; }
+  .json-val.null { @apply text-soft italic opacity-70; }
+  .json-val.true { @apply text-green; }
+  .json-val.false { @apply text-yellow; }
+
+  .json-val a {
+    @apply text-accent underline decoration-line underline-offset-2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

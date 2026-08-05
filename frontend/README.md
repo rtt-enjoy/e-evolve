@@ -18,8 +18,23 @@ pnpm install
 pnpm dev
 ```
 
-Local dev shows the offline agent screens by default. Those screens are hidden
-from production builds unless `VITE_ENABLE_OFFLINE_AGENT_UI=1` is set.
+Dev and production render the same sections; there is no gated UI mode.
+
+## Structure
+
+```
+src/sections/registry.ts   ← declares sections + which status.json keys they use
+src/sections/*Section.tsx  ← one lazy-loaded page per route
+src/components/ui.tsx      ← shared primitives (Tile, Card, Disclosure, …)
+src/components/JsonNode.tsx ← generic renderer for unmapped/new bot fields
+src/utils/route.ts         ← hash router (#/leads, #/leads/3)
+```
+
+Adding a section means adding one entry to `registry.ts` and one component. A
+section is auto-hidden when the keys it declares are empty, and any status.json
+key no section claims is rendered generically in the Data section — so new
+backend fields show up without touching the frontend. See
+`../docs/frontend-dashboard.md` for the full contract.
 
 ## Build For GitHub Pages
 

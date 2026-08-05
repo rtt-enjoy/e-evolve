@@ -29,6 +29,41 @@ export type CodeTechOpportunity = {
   estimated_value_usd?: number;
   reason?: string;
   next_step?: string;
+  codex_prompt?: string;
+  outreach_draft?: string;
+  pursued?: boolean;
+  archived_at?: string | null;
+};
+
+export type FreeAiService = {
+  name?: string;
+  what_it_does?: string;
+  free_tier?: string;
+  credit_card_required?: string;
+  earn_with_it?: string;
+  price_guide?: string;
+};
+
+export type EarningIdea = {
+  idea?: string;
+  who_pays?: string;
+  deliverable?: string;
+  price_usd?: string;
+  time_to_first_dollar?: string;
+  free_stack?: string;
+};
+
+export type OnlineAiBrief = {
+  summary?: string;
+  free_ai_services?: FreeAiService[];
+  easy_earning_ideas?: EarningIdea[];
+  owner_actions?: string[];
+};
+
+export type ReferenceSource = {
+  title?: string;
+  url?: string;
+  takeaway?: string;
 };
 
 export type CodeTechEarning = {
@@ -39,8 +74,13 @@ export type CodeTechEarning = {
   opportunities?: CodeTechOpportunity[];
   requirements?: string[];
   focus?: string[];
+  free_ai_focus?: string[];
   strategy_playbook?: string[];
   avoid_patterns?: string[];
+  monetization_patterns?: string[];
+  remote_service_niches?: string[];
+  reference_sources?: ReferenceSource[];
+  online_ai_brief?: OnlineAiBrief;
 };
 
 export type Status = {
@@ -69,6 +109,7 @@ export type Status = {
     total_usd?: number;
     this_week_usd?: number;
     last_cycle_usd?: number;
+    week_started?: string;
     breakdown?: Record<string, number>;
     history?: number[];
   };
@@ -78,6 +119,7 @@ export type Status = {
     suggestions?: Suggestion[];
     error?: string | null;
     error_type?: string;
+    version_bumped_to?: string;
   };
   last_earning?: {
     actions?: Action[];
@@ -102,4 +144,7 @@ export type Status = {
     published?: number;
   };
   code_tech_earning?: CodeTechEarning;
+
+  /** New keys the bot adds over time land here and surface in the Data explorer. */
+  [key: string]: unknown;
 };

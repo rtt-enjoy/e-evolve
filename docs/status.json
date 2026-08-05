@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-05T00:17:32.131136+00:00",
-  "total_runs": 1275,
+  "last_run": "2026-08-05T00:18:16.988726+00:00",
+  "total_runs": 1276,
   "active_features": [
     "llm_anthropic",
     "llm_gemini",
@@ -51,7 +51,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs\\code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -69,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 0,
+  "last_cycle_seconds": 150,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -158,163 +169,158 @@
     "refresh_hours": 24,
     "opportunities": [
       {
-        "title": "feat(infra): Netcup production deploy stack \u2014 Compose + Caddy + container hardening on 8 GB",
-        "url": "https://github.com/klasolsson81/jobbliggaren/issues/196",
+        "title": "feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)",
+        "url": "https://github.com/ava-agent/awesome-ai-ideas/pull/1379",
         "source": "github",
         "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: feat(infra): Netcup production deploy stack \u2014 Compose + Caddy + container hardening on 8 GB\nSource: github\nURL: https://github.com/klasolsson81/jobbliggaren/issues/196\nWhy this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Context  Going live requires a production Docker-Compose stack (API + Worker + PostgreSQL + Redis + Caddy + FE container) on the **Netcup RS 1000 G12** \u2014 x86 (AMD EPYC 9645), 4 dedicated cores, **8 GB** DDR5 ECC, 256 GB NVMe, Nuremberg. Blocks all deploy. Cohesive stack build, not fragmentable.  **The host premise changed twice and is now settled.** ADR 0050 specified a Hetzner CAX31 (ARM, 16 GB) and explicitly rejected 8 GB boxes; Klas decided 2026-08-04 that Netcup is the host going forward and that both Hetzner and the interim \"Swedish VPS\" direction are off the table. The deviation is ratified in **ADR 0050's `Amendment 2026-08-04`** (PR #1200), which is **authoritative for the pre-beta-data gates**: Beslut 2 falls in full, Beslut 3's host reference, Beslut 4's Cloudflare half and backup target, and gate **M-5 retires into M-5a + M-5b**. ADR 0122 carries the host rationale but is ",
-        "outreach_draft": "Hi, I found your request about \"feat(infra): Netcup production deploy stack \u2014 Compose + Caddy + container hardening on 8 GB\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/klasolsson81/jobbliggaren/issues/196",
+        "estimated_value_usd": 960.0,
+        "reason": "visible or inferred value around $960.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)\nSource: github\nURL: https://github.com/ava-agent/awesome-ai-ideas/pull/1379\nWhy this is suitable: visible or inferred value around $960.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # feat: MemoryAI - Memory-Enhanced AI Agents with Dual-Trace Architecture (Issue #1086)  > **Source**: Issue #1086 > **Status**: Executive PR Document | v1.0  ---  ## \ud83d\udccb Executive Summary  MemoryAI is an open-source AI agent platform introducing a **Dual-Trace Memory Architecture** \u2014 combining episodic memory (raw interaction logs with embeddings) and semantic memory (compressed knowledge graphs) \u2014 to give AI agents persistent, evolving context. Current LLM-based agents lose all context between sessions, leading to repetitive conversations, forgotten user preferences, and inability to learn from past interactions. MemoryAI solves this by providing a plug-and-play memory layer that reduces hallucination by 40%, improves task completion rates by 35%, and enables agents to genuinely \"remember\" and improve over time.  ### Key Metrics - **Market**: AI agent infrastructure market projected at $",
+        "outreach_draft": "Hi, I found your request about \"feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $960.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "[ASGK 2.0] Canonical product truth and self-governed migration program",
-        "url": "https://github.com/stereosurfer/agent-safe-dev-governance-kit/issues/323",
-        "source": "github",
+        "title": "I made Organice, a Finder utility for the file chores I loathe",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vfabi5/i_made_organice_a_finder_utility_for_the_file/",
+        "source": "reddit:r/SideProject",
         "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
-        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: [ASGK 2.0] Canonical product truth and self-governed migration program\nSource: github\nURL: https://github.com/stereosurfer/agent-safe-dev-governance-kit/issues/323\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Canonical facts \u2014 highest-priority authority  The facts in this section are the first and highest-priority constraints for ASGK 2.0 planning. If an active document, Roadmap, example, Skill, template, schema description, validator message, release policy, or prior v2 placeholder conflicts with them, that surface is migration input to review, rewrite, or delete; it is not authority to silently reinterpret these facts.  ### Approved core wording  > **ASGK \u662f\u4e00\u5957\u8b93\u4eba\u8207 AI \u80fd\u5b89\u5168\u3001\u9806\u5229\u4ea4\u63a5\u5de5\u4f5c\u7684\u898f\u5247\u8207\u5de5\u5177\u3002\u8b93\u5de5\u4f5c\u4e0d\u88ab\u6a21\u578b\u7d81\u67b6\uff0c\u63db\u8ab0\u63a5\u624b\u90fd\u770b\u5f97\u61c2\u3001\u63a5\u5f97\u4e0b\u53bb\u3001\u67e5\u5f97\u6e05\u695a\u3002**  - **\u770b\u5f97\u61c2**\uff1a\u6e05\u695a\u638c\u63e1\u76ee\u524d\u5de5\u4f5c\u72c0\u614b\u3002 - **\u63a5\u5f97\u4e0b\u53bb**\uff1a\u652f\u63f4\u4eba\u8207 AI \u4e4b\u9593\u7684\u9577\u671f\u4ea4\u63a5\u3002 - **\u67e5\u5f97\u6e05\u695a**\uff1a\u5feb\u901f\u8ffd\u6eaf\u8b49\u64da\u3001\u9650\u5236\u8207\u6c7a\u7b56\u8108\u7d61\u3002  Neutral/formal wording:  > \u907f\u514d\u5de5\u4f5c\u4f9d\u8cf4\u7279\u5b9a\u6a21\u578b\u3001\u4f9b\u61c9\u5546\u3001Agent \u6216\u65e2\u6709\u5c0d\u8a71\uff0c\u78ba\u4fdd\u4eba\u8207 AI \u90fd\u80fd\u6301\u7e8c\u63a5\u624b\u4e26\u8ffd\u6eaf\u6c7a\u7b56\u3002  ### Binding product interpretation  1. ASGK governs durable work authorization, boundaries, evidence, decisions, closeout, and handoff. 2. ASGK does not select, route, schedule, switch, price-tier, or orchestrate agents. 3. A ",
-        "outreach_draft": "Hi, I found your request about \"[ASGK 2.0] Canonical product truth and self-governed migration program\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/stereosurfer/agent-safe-dev-governance-kit/issues/323",
+        "estimated_value_usd": 24.99,
+        "reason": "visible or inferred value around $24.99; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I made Organice, a Finder utility for the file chores I loathe\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vfabi5/i_made_organice_a_finder_utility_for_the_file/\nWhy this is suitable: visible or inferred value around $24.99; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I\u2019m Dan, the developer of Organice, my attempt to make a Hazel-alternative, as a side project. I made it after noticing how often I opened a file for one tiny reason: copy the text, check a receipt total, give it a useful name, or move it somewhere sensible. None of that is difficult, but I lose track, I lose focus, I am less in touch with my files than I want to be. Doing it file by file is just irritating. I have looked at Hazel, and other similiar utility solutions, I want to bring my own flavour to it and hopefully it aligns well with more of you out there. The Problem I want order, I want systems. I keep struggling with focus and chores that should be elementary, due to my concentration disorder. With Organice, I can set and forget rules, run utility commands and essentially add a few actions to Finder. Select a file or folder, right-click, and you can: * organize a folder from read",
+        "outreach_draft": "Hi, I found your request about \"I made Organice, a Finder utility for the file chores I loathe\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $24.99 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://www.reddit.com/r/SideProject/comments/1vfabi5/i_made_organice_a_finder_utility_for_the_file/",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "tests: no filterwarnings policy \u2014 nothing escalates a warning, so leaks accumulate silently",
-        "url": "https://github.com/alfred-os/AlfredOS/issues/560",
+        "title": "\ud83d\udea8 P0: Launch ADA SaaS Container \u2014 Self-Hosted OpenClaw + GitHub (Founder Decision)",
+        "url": "https://github.com/ishan190425/autonomous-dev-agents/issues/155",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: tests: no filterwarnings policy \u2014 nothing escalates a warning, so leaks accumulate silently\nSource: github\nURL: https://github.com/alfred-os/AlfredOS/issues/560\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: `pyproject.toml`'s `[tool.pytest.ini_options]` has **no `filterwarnings` key at all**. Nothing in the suite escalates a warning, so warnings accumulate silently and indefinitely.  That is not hypothetical: it is exactly how 32 leaked sqlite connections went unnoticed until someone read the tail of a `make check` run. **A gate that cannot fail is a paper gate**, and this one is a paper gate by omission \u2014 there is no gate at all.  ## What is needed      [tool.pytest.ini_options]     filterwarnings = [         \"error\",         # dated, justified allowlist entries below     ]  `\"error\"` is the load-bearing part; the allowlist is what keeps CI green while third-party deprecations are outside our control.  ## The 21 warnings that must be allowlisted first  Censused on the unit lane at `10811a5d` (7387 passed, 4 skipped, 21 warnings). Four classes, all third-party or stdlib \u2014 none is ours:  | n",
-        "outreach_draft": "Hi, I found your request about \"tests: no filterwarnings policy \u2014 nothing escalates a warning, so leaks accumulate silently\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/alfred-os/AlfredOS/issues/560",
+        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udea8 P0: Launch ADA SaaS Container \u2014 Self-Hosted OpenClaw + GitHub (Founder Decision)\nSource: github\nURL: https://github.com/ishan190425/autonomous-dev-agents/issues/155\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Founder Decision \u2014 Ship ASAP  This is the priority. Build a containerized ADA SaaS that:  1. **Sets up OpenClaw + GitHub integration automatically** 2. **Enables ADA autostart** to work on its own repo (dogfooding) 3. **Configures read/write role permissions** for safe operation 4. **Frontend website with paywall** for users to sign up and pay  ---  ## Phase 1: Container Infrastructure  A single Docker container that anyone can deploy to get: - OpenClaw gateway running - GitHub App or PAT configured - ADA dispatch cron running automatically - Role-based permissions (read-only vs read-write)  ### Container Contents - `openclaw` gateway (configured) - `@ada-ai/cli` installed - GitHub integration (App or PAT) - Cron scheduler for dispatch cycles - Environment-based configuration  ### Configuration ```yaml # docker-compose.yml or env vars GITHUB_TOKEN: xxx           # or GitHub App creden",
+        "outreach_draft": "Hi, I found your request about \"\ud83d\udea8 P0: Launch ADA SaaS Container \u2014 Self-Hosted OpenClaw + GitHub (Founder Decision)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://github.com/ishan190425/autonomous-dev-agents/issues/155",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/internetarchive/openlibrary/issues/6234",
+        "title": "Starboard weekly repo digest - 2026-07-27",
+        "url": "https://github.com/Codevetter/starboard/issues/32",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
-        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/internetarchive/openlibrary/issues/6234\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/internetarchive/openlibrary).  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/eslint -->Update dependency eslint to v9.39.5  - [ ] <!-- unlimit-branch=renovate/astral-sh-setup-uv-8.x -->Update astral-sh/setup-uv action to v8.3.2  - [ ] <!-- unlimit-branch=renovate/actions-cache-6.x -->Update actions/cache action to v6  - [ ] <!-- unlimit-branch=renovate/actions-checkout-7.x -->Update actions/checkout action to v7  - [ ] <!-- unlimit-branch=renovate/actions-github-script-9.x -->Update actions/github-script action to v9  - [ ] <!--",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/internetarchive/openlibrary/issues/6234",
+        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Starboard weekly repo digest - 2026-07-27\nSource: github\nURL: https://github.com/Codevetter/starboard/issues/32\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Weekly repo discovery digest for the last 7 days.  Generated: 2026-07-27 UTC Threshold crossings: 86  ## Corpus snapshot  - 5,000+ stars: 12,283 repos - 10,000+ stars: 5,422 repos - 20,000+ stars: 2,196 repos - 50,000+ stars: 464 repos - 100,000+ stars: 119 repos  ### Top repos in corpus  - [codecrafters-io/build-your-own-x](https://github.com/codecrafters-io/build-your-own-x) - 531,612 stars - Markdown - Master programming by recreating your favorite technologies from scratch. - [sindresorhus/awesome](https://github.com/sindresorhus/awesome) - 489,106 stars - \ud83d\ude0e Awesome lists about all kinds of interesting topics - [freeCodeCamp/freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp) - 452,833 stars - TypeScript - freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free. - [public-apis/public-apis](https://github.com/public-apis/p",
+        "outreach_draft": "Hi, I found your request about \"Starboard weekly repo digest - 2026-07-27\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://github.com/Codevetter/starboard/issues/32",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/nolte/kamerplanter/issues/12",
-        "source": "github",
+        "title": "Quick update on Sumwise (posted here a few weeks back) \u2014 a Chrome extension that turns any article, YouTube video, or PDF into a structured ",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vfhd7m/quick_update_on_sumwise_posted_here_a_few_weeks/",
+        "source": "reddit:r/SideProject",
         "score": 100,
         "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
-        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/nolte/kamerplanter/issues/12\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/nolte/kamerplanter).  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/react-grid-layout` | ![Unavailable](https://img.shields.io/badge/unavailable-orange?style=flat-square) |  ## Rate-Limited  The following updates are currently rate-limited. To force their creation now, click on a checkbox below.   - [ ] <!-- unlimit-branch=renovate/docker-databases -->chore(deps): update timescale/timescaledb docker tag to v2.29.1  ## PR Edited (Blocked)  The following updates have be",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/nolte/kamerplanter/issues/12",
+        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Quick update on Sumwise (posted here a few weeks back) \u2014 a Chrome extension that turns any article, YouTube video, or PDF into a structured \nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vfhd7m/quick_update_on_sumwise_posted_here_a_few_weeks/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Shipped since then: - Summaries in 7 languages (EN/TR/ES/IT/AR/DE/FR) \u2014 output adapts to *your* language, not the page&#39;s. - ~2\u20137 seconds per summary after switching AI models - Markdown export \u2014 someone on Reddit asked for it under a previous post, so I built it. They came back and used it the same week, which honestly felt better than any metric. Free tier: 5 summaries/daily, no card needed. Blunt feedback welcome \u2014 and I&#39;m deciding what to build next, so if something&#39;s missing for your workflow, tell me. https://sumwise.ai Chrome Web Store: https://chromewebstore.google.com/detail/sumwise-ai-summarizer-for/hjkmgfaiphfbpoakiddanpapcnjijbac &#32; submitted by &#32; /u/the_codefather [link] &#32; [comments]",
+        "outreach_draft": "Hi, I found your request about \"Quick update on Sumwise (posted here a few weeks back) \u2014 a Chrome extension that turns any article, YouTube video, or PDF into a structured \" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://www.reddit.com/r/SideProject/comments/1vfhd7m/quick_update_on_sumwise_posted_here_a_few_weeks/",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Production-grade CI/CD + root Makefile (YAGNI)",
-        "url": "https://github.com/mrae43/learning-hub-infra/issues/194",
+        "title": "\ud83d\udd0d CLI Discovery: 2026-08-04 \u2014 18 candidates found",
+        "url": "https://github.com/RealZST/harnesskit-resources/issues/62",
         "source": "github",
         "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; public proof makes this suitable for automated AI patching",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Production-grade CI/CD + root Makefile (YAGNI)\nSource: github\nURL: https://github.com/mrae43/learning-hub-infra/issues/194\nWhy this is suitable: visible or inferred value around $10.00; public proof makes this suitable for automated AI patching\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Problem Statement  Local development against the Learning Hub's Postgres + pgvector stack is currently an undocumented, ad-hoc `docker compose` invocation. A contributor opening the repo cold has no single, obvious entry point to start/tail/stop the local dev database, and there is no shared place to record how that lifecycle works. Separately, the repo's CI/CD has grown to six workflows, but its hygiene is inconsistent: most third-party actions are SHA-pinned to immutable commits, but some (notably `actions/checkout`) still float on unpinned major-version tags, and nothing in CI validates the workflow definitions themselves \u2014 so a malformed workflow ships to merge and only fails at run time.  Both problems point to the same root cause: the developer-facing and CI-facing tooling has grown piecemeal without a thin, documented layer that makes the local stack and the pipeline self-descr",
-        "outreach_draft": "Hi, I found your request about \"Production-grade CI/CD + root Makefile (YAGNI)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/mrae43/learning-hub-infra/issues/194",
+        "estimated_value_usd": 0.0,
+        "reason": "runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand",
+        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udd0d CLI Discovery: 2026-08-04 \u2014 18 candidates found\nSource: github\nURL: https://github.com/RealZST/harnesskit-resources/issues/62\nWhy this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-04. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU \u2014 \u2b50 14247 \u2014 Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus \u2014 \u2b50 44995 \u2014 Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige",
+        "outreach_draft": "Hi, I found your request about \"\ud83d\udd0d CLI Discovery: 2026-08-04 \u2014 18 candidates found\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://github.com/RealZST/harnesskit-resources/issues/62",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Dependency Dashboard",
-        "url": "https://github.com/HHS/simpler-grants-gov/issues/578",
+        "title": "Starboard weekly repo digest - 2026-06-15",
+        "url": "https://github.com/Codevetter/starboard/issues/16",
         "source": "github",
         "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables",
-        "next_step": "Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Dependency Dashboard\nSource: github\nURL: https://github.com/HHS/simpler-grants-gov/issues/578\nWhy this is suitable: visible or inferred value around $10.00; ops cleanup has clear business value and bounded deliverables\nFirst step: Collect the visible workflow or docs, identify one repeated pain, and propose an async fixed-price cleanup with proof.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.<br>[View this repository on the Mend.io Web Portal](https://developer.mend.io/github/HHS/simpler-grants-gov).  ## Config Migration Needed   - [ ] <!-- create-config-migration-pr --> Select this checkbox to let Renovate create an automated Config Migration PR.  ## Repository Problems  These problems occurred while renovating this repository. [View logs](https://developer.mend.io//github/HHS/simpler-grants-gov).   - \u26a0\ufe0f WARN: Package lookup failures  ## Deprecations / Replacements > [!WARNING] The following dependencies are either deprecated or have replacements available.  | Datasource | Package | Replacement PR? | |------------|------|--------------| | npm | `@types/dotenv` | ![Unavailable](https://img.shields.io/badge/unava",
-        "outreach_draft": "Hi, I found your request about \"Dependency Dashboard\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/HHS/simpler-grants-gov/issues/578",
+        "estimated_value_usd": 0.0,
+        "reason": "runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start",
+        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Starboard weekly repo digest - 2026-06-15\nSource: github\nURL: https://github.com/Codevetter/starboard/issues/16\nWhy this is suitable: runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Weekly repo discovery digest for the last 7 days.  Generated: 2026-06-15 UTC Threshold crossings: 103  ## Corpus snapshot  - 5,000+ stars: 12,031 repos - 10,000+ stars: 5,309 repos - 20,000+ stars: 2,136 repos - 50,000+ stars: 444 repos - 100,000+ stars: 113 repos  ### Top repos in corpus  - [codecrafters-io/build-your-own-x](https://github.com/codecrafters-io/build-your-own-x) - 515,711 stars - Markdown - Master programming by recreating your favorite technologies from scratch. - [sindresorhus/awesome](https://github.com/sindresorhus/awesome) - 475,888 stars - \ud83d\ude0e Awesome lists about all kinds of interesting topics - [freeCodeCamp/freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp) - 447,519 stars - TypeScript - freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free. - [public-apis/public-apis](https://github.com/public-apis/",
+        "outreach_draft": "Hi, I found your request about \"Starboard weekly repo digest - 2026-06-15\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://github.com/Codevetter/starboard/issues/16",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "AlgoVoi open Decision chain (Apache-2.0): Passport + Mandate + Policy + Gate + Guardrail + Cancellation + Refund + Trust query + Execution +",
-        "url": "https://github.com/x402-foundation/x402/issues/2737",
-        "source": "github",
-        "score": 100,
+        "title": "By day AI was replacing me. By night I was using AI to replace other people. Six months ago I went indie.",
+        "url": "https://www.reddit.com/r/SideProject/comments/1ve9l4o/by_day_ai_was_replacing_me_by_night_i_was_using/",
+        "source": "reddit:r/SideProject",
+        "score": 98,
         "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor",
-        "next_step": "Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: AlgoVoi open Decision chain (Apache-2.0): Passport + Mandate + Policy + Gate + Guardrail + Cancellation + Refund + Trust query + Execution +\nSource: github\nURL: https://github.com/x402-foundation/x402/issues/2737\nWhy this is suitable: visible or inferred value around $10.00; can become a repeatable async offer instead of hourly labor\nFirst step: Find one outdated dependency path, reproduce the breakage, and propose a fixed-price cleanup.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # Cell / KAF: assurance you can re-run  ## The short version  Every library ships a green CI badge and asks you to trust it. For money moving autonomously between AI agents, \"trust my tests\" is not an assurance model. **Cell/KAF** replaces the badge with something you can re-run yourself: a hermetic runtime that reproduces every conformance vector byte-for-byte, and a sealed, hash-chained receipt you can verify offline with no trust in us.  ## The problem with \"it passes on my machine\"  For agentic payments, a single disagreed byte is a failed receipt, a mis-bound payment, or a refund that will not compose. The question that actually matters: can you prove, independently, that an implementation produces exactly the right bytes, without trusting the author? Cell/KAF answers it in two layers.  ## Cell: the hermetic runtime  A Cell is a deterministic, isolated runtime. It takes the conforma",
-        "outreach_draft": "Hi, I found your request about \"AlgoVoi open Decision chain (Apache-2.0): Passport + Mandate + Policy + Gate + Guardrail + Cancellation + Refund + Trust query + Execution +\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/x402-foundation/x402/issues/2737",
+        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: By day AI was replacing me. By night I was using AI to replace other people. Six months ago I went indie.\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1ve9l4o/by_day_ai_was_replacing_me_by_night_i_was_using/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Two of Australia&#39;s big four banks are laying off IT staff, round after round. I work at one of them. My closest friend works at the other. So I&#39;ve been watching this from both sides at once, and every day at work feels like waiting for a verdict - not knowing whether this round gets to your name. I have 15 years of development experience. Dozens of projects, big and small. I&#39;ve worked at a Fortune 500 IT company and at a multinational financial firm. By the old logic, that CV is about as safe as it gets in this country. Banks always need people to keep the systems running. But one of the things LLMs are best at is writing exactly the kind of code I make my living from. CRUD. Glue logic. Standard web business. I have been watching my core skill turn from a livelihood into a free bonus feature that ships with a model. And at the same time, something more twisted was happening i",
+        "outreach_draft": "Hi, I found your request about \"By day AI was replacing me. By night I was using AI to replace other people. Six months ago I went indie.\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://www.reddit.com/r/SideProject/comments/1ve9l4o/by_day_ai_was_replacing_me_by_night_i_was_using/",
         "pursued": false,
         "archived_at": null
       }
     ],
     "requirements": [
-      "Default to online research and the configured free/low-cost research LLM before local fallback.",
-      "Prefer leveraged remote-service work: productized services, retainers, async delivery, and AI-assisted systems.",
-      "Prefer work that can be reproduced from public logs, docs, or a clean checkout in under 30 minutes.",
-      "Require a deterministic command, log, docs page, or issue thread that an AI agent can use as proof.",
-      "Keep the first contribution small enough for the bot to patch, test, and explain automatically.",
+      "Lead with free AI services and free AI APIs: no credit card, generous free tier, usable today.",
+      "Every suggestion must name the free service, its real limits, and one concrete way to earn with it.",
+      "Prefer easy money: something the owner can start in under 2 hours with no upfront spend.",
+      "Prefer repeatable offers over one-off tasks, and same-week payout over deferred upside.",
+      "State the earning path in plain language: who pays, for what, and roughly how much.",
+      "Skip anything needing paid infrastructure, approval queues, or an audience the owner lacks.",
       "Do not count discovery or speculative upside as earnings."
     ],
     "focus": [
-      "AI prompt/workflow consulting where public before-after examples prove value",
-      "productized automations that reduce repeated admin work for a small niche",
-      "retainer-friendly reporting, CRM, and support-ops cleanup",
-      "async deliverables that can be reviewed without meetings",
-      "failing CI with a small, reproducible fix",
-      "dependency migration or deprecation cleanup",
-      "documentation examples that no longer run",
-      "test flakiness with a clear failure signature",
-      "type hints, packaging metadata, and release automation",
-      "small compatibility fixes in niche developer tools",
-      "abandoned but still-installed packages with open compatibility issues",
-      "template repos and starter kits whose quickstarts fail on current runtimes",
-      "internal-tool shaped repos where businesses need maintenance more than novelty",
-      "release-note gaps after breaking API changes",
-      "low-glamour data import/export bugs in small SaaS integrations"
+      "free AI APIs with real free tiers that most people have not heard of yet",
+      "boring conversions people pay for: audio to text, image to text, PDF to data",
+      "one-task tools that wrap a single free API and solve one annoyance well",
+      "AI setup help for non-technical owners who cannot configure a key themselves",
+      "batch jobs where the client sends files and gets clean output back",
+      "recurring reports assembled from free-tier APIs on a schedule",
+      "prompt libraries and workflows sold as a template, client brings their own free key",
+      "small-business tasks still done by hand that a free AI API removes entirely",
+      "niches where the buyer values the result and never asks what model produced it"
     ],
     "strategy_playbook": [
-      "Use online sources first, then ask the research LLM to turn fresh demand signals into ranked owner actions.",
-      "Borrow the article's leverage principle: sell outcomes, systems, and repeatable assets instead of hours.",
-      "Start from maintenance pain, not idea novelty.",
-      "Use proof as the sales asset: failing command, failing log line, short before/after note.",
-      "Favor repeatable chores that can become productized services.",
-      "Look for AI-automatable chores: stale issues with logs, forks with small fixes, unanswered install failures.",
-      "Bundle adjacent fixes only after trust exists.",
-      "Treat content as deal flow from solved niche issues."
+      "Search online for currently-free AI services first, then have Kimi K3 turn them into concrete earning offers.",
+      "Sell the outcome, not the technology. Buyers pay for clean output, not for an API name.",
+      "Keep input cost at zero: free API, free hosting, free scheduler. Every dollar in is margin.",
+      "Prefer offers the owner can deliver the same day with no upfront spend.",
+      "Start with one narrow task and a fixed price. Expand scope only after the first payment.",
+      "Let the free tier set the batch size, and price per batch so limits are never a problem.",
+      "Reuse each delivery as a public example that brings the next buyer."
     ],
     "avoid_patterns": [
-      "Large rewrites, vague feature requests, design taste debates, and architecture arguments without a failing proof.",
-      "Repos with no maintainer response, no recent users, no releases, and no business signal.",
-      "Crowded prize or beginner issues where many contributors compete for low-value visibility.",
-      "Unpaid speculative requests that need private context before value can be proven.",
-      "Crypto/NFT hype work unless there is a concrete paid maintenance task and bounded risk."
+      "Anything requiring paid infrastructure, credit-card-gated tiers, or upfront spend.",
+      "Services whose free tier is a short trial rather than an ongoing allowance.",
+      "Offers needing a large audience, ad spend, or a following the owner does not have.",
+      "Vague 'AI consulting' with no specific deliverable, fixed price, or named buyer.",
+      "Reselling an API in a way its terms of service forbid.",
+      "Bounty and prize hunting where many contributors compete for low-value visibility.",
+      "Crypto/NFT hype work and anything promising passive income without delivery."
     ],
-    "last_refresh_at": "2026-08-04T15:35:55.291446+00:00",
     "reference_sources": [
       {
-        "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
-        "url": "https://freedium-mirror.cfd/https://medium.com/@startup_Ideas/15-high-paying-remote-jobs-with-a-4-hour-work-week-and-how-people-actually-get-them-7e8d3562ff99",
-        "takeaway": "Use specialization, automation, productized services, retainers, async work, and AI-powered systems to detach income from hours."
+        "title": "OpenRouter free model list",
+        "url": "https://openrouter.ai/models?max_price=0",
+        "takeaway": "Live list of zero-cost models usable through a single API key."
       }
     ],
     "remote_service_niches": [
       "AI prompt and workflow consulting",
-      "no-code or low-code automation setup",
+      "No-code or low-code automation setup",
       "AI customer-support knowledge base cleanup",
       "analytics dashboard and reporting automation",
       "SEO/content operations systems",
@@ -325,15 +331,134 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "The advisory reports and test failures indicate opportunities for productized audit services, async documentation fixes, and test automation. Prioritize high-impact, low-effort tasks like resolving critical test failures and enhancing documentation systems to align with remote-service efficiency models.",
+      "summary": "The strongest immediate angle is reselling fast, free-tier LLM inference (Groq, Hugging Face) and audio transcription (Groq Whisper) as fixed-price micro-services \u2014 transcription, summarization, background removal, and translation \u2014 each deliverable in minutes with zero upfront cost and no credit card needed.",
+      "free_ai_services": [
+        {
+          "name": "Groq API",
+          "what_it_does": "Ultra-fast inference for open LLMs (Llama 3, Mixtral, Gemma) and Whisper speech-to-text",
+          "free_tier": "verify current limit",
+          "credit_card_required": "no",
+          "earn_with_it": "Transcribe audio/video files via Whisper endpoint; sell per-minute transcription",
+          "price_guide": "$0.10\u2013$0.25 per audio minute"
+        },
+        {
+          "name": "Hugging Face Inference API",
+          "what_it_does": "Serverless inference for 100k+ open models (LLM, embeddings, image, audio, vision)",
+          "free_tier": "verify current limit",
+          "credit_card_required": "no",
+          "earn_with_it": "Remove backgrounds from product photos using RMBG-1.4 or similar; charge per image",
+          "price_guide": "$0.05\u2013$0.15 per image"
+        },
+        {
+          "name": "LibreTranslate (public instance)",
+          "what_it_does": "Free machine translation API (self-hosted mirrors available)",
+          "free_tier": "verify current limit",
+          "credit_card_required": "no",
+          "earn_with_it": "Translate documents or subtitles for small businesses; charge per 1,000 characters",
+          "price_guide": "$1\u2013$3 per 1,000 chars"
+        },
+        {
+          "name": "MyMemory Translation API",
+          "what_it_does": "Translation memory API with free tier",
+          "free_tier": "1,000 requests/day",
+          "credit_card_required": "no",
+          "earn_with_it": "Batch-translate CSV/Excel files for e-commerce sellers; fixed price per file",
+          "price_guide": "$5\u2013$15 per 10k-word file"
+        },
+        {
+          "name": "Cloudflare Workers AI",
+          "what_it_does": "Run LLMs, embeddings, and vision models on Cloudflare's edge (Llama 3, BGE, ResNet, etc.)",
+          "free_tier": "verify current limit",
+          "credit_card_required": "verify",
+          "earn_with_it": "Schedule daily/weekly summarization reports (news, logs, docs) as a low-cost retainer",
+          "price_guide": "$20\u2013$50 per month per report"
+        },
+        {
+          "name": "GitHub Models",
+          "what_it_does": "Free inference for selected open models (Llama 3, Phi 3, etc.) via GitHub Marketplace",
+          "free_tier": "verify current limit",
+          "credit_card_required": "no",
+          "earn_with_it": "Prototype a one-page AI tool (e.g., SEO meta generator) and sell the tool + prompt library",
+          "price_guide": "$10\u2013$30 one-time per tool"
+        },
+        {
+          "name": "Hugging Face Spaces",
+          "what_it_does": "Free hosting for Gradio/Streamlit/Docker demos with CPU and optional GPU quota",
+          "free_tier": "verify current limit",
+          "credit_card_required": "no",
+          "earn_with_it": "Deploy a batch-processing UI (transcribe, translate, background removal) and charge per batch job",
+          "price_guide": "$5\u2013$20 per batch of 10\u201350 files"
+        }
+      ],
+      "easy_earning_ideas": [
+        {
+          "idea": "Audio Transcription Micro-Service",
+          "who_pays": "Podcasters, journalists, researchers, course creators",
+          "deliverable": "SRT/VTT/TXT transcript with timestamps, delivered via email or shared drive within 24h",
+          "price_usd": "0.15 per audio minute",
+          "time_to_first_dollar": "same day",
+          "free_stack": "Groq Whisper API + Python script (ffmpeg for splitting) + free file transfer (WeTransfer/Drive)"
+        },
+        {
+          "idea": "PDF/Document Summarization Pack",
+          "who_pays": "Consultants, lawyers, analysts, students",
+          "deliverable": "One-page bullet summary + key quotes + action items per PDF (up to 50 pages)",
+          "price_usd": "3\u20135 per document",
+          "time_to_first_dollar": "2\u20133 days",
+          "free_stack": "Groq Llama 3 70B + pdfplumber (local) + simple CLI wrapper"
+        },
+        {
+          "idea": "E-commerce Background Removal",
+          "who_pays": "Small Shopify/Etsy sellers, dropshippers",
+          "deliverable": "Clean PNG with transparent background, 1024x1024, delivered in zip folder",
+          "price_usd": "0.10 per image (min 20 images)",
+          "time_to_first_dollar": "same day",
+          "free_stack": "Hugging Face Inference API (RMBG-1.4) + Python batch script + free image hosting (imgur/Drive)"
+        },
+        {
+          "idea": "Monthly Competitor News Digest",
+          "who_pays": "Founders, marketers, product managers",
+          "deliverable": "Weekly 1-page PDF: top 10 articles summarized, trends highlighted, source links",
+          "price_usd": "30\u201350 per month",
+          "time_to_first_dollar": "2\u20133 days (first free sample, then paid)",
+          "free_stack": "Cloudflare Workers AI (scheduled) + RSS feeds + Groq/HF for summarization + PDF generation (fpdf)"
+        },
+        {
+          "idea": "Prompt Library + Setup Service",
+          "who_pays": "Agencies, solopreneurs, non-technical teams",
+          "deliverable": "Curated prompt pack (10\u201320 prompts) for a specific workflow (SEO, support, coding) + 30-min video walkthrough showing how to plug into their own free Groq/HF key",
+          "price_usd": "20\u201340 one-time",
+          "time_to_first_dollar": "same day",
+          "free_stack": "Groq/HF APIs (client brings key) + Notion/Google Doc for delivery + Loom (free) for video"
+        }
+      ],
       "owner_actions": [
-        "1. Prioritize resolving the 88 test failures in Coverage Suite run #4627 by analyzing root causes and implementing fixes to prevent regressions.",
-        "2. Develop a productized audit checklist for advisory workflows, leveraging the Hive Advisory Report structure to standardize code analysis and reporting processes.",
-        "3. Automate nightly test suite tracking by integrating JSON result parsing into CI/CD pipelines, reducing manual monitoring overhead.",
-        "4. Create a micro-SaaS template for async documentation fixes, using the KeyCloakSDK issue as a case study for scalable knowledge base cleanup.",
-        "5. Implement a retainer-based model for CRM/data automation tasks, targeting the 68.4% API coverage gap in the BlocksBeyondTheStars project to maximize recurring revenue."
+        "Create a simple Stripe/Gumroad/PayPal payment link for each micro-service (transcription, background removal, summarization).",
+        "Build a one-page portfolio (Carrd/Notion free) listing the 5 offers with prices, turnaround, and a 'Buy Now' button.",
+        "Post the transcription and background removal offers in 3 relevant Facebook/Reddit/Discord communities where buyers already ask for these services.",
+        "Record a 2-minute Loom demo of each workflow (upload file \u2192 get result) and add to the portfolio page.",
+        "Set up a free Calendly link for the prompt-library setup call; deliver the pack immediately after payment."
       ]
-    }
+    },
+    "last_refresh_at": "2026-08-05T00:18:17.070408+00:00",
+    "free_ai_focus": [
+      "free-tier LLM APIs with no credit card requirement",
+      "free speech-to-text, TTS, and transcription APIs",
+      "free image generation and background-removal APIs",
+      "free OCR, document parsing, and PDF extraction APIs",
+      "free embedding and vector-search tiers",
+      "free translation and summarization APIs",
+      "free AI hosting, inference, and scheduled-compute tiers",
+      "open-weight models that run on free CPU/GPU allowances"
+    ],
+    "monetization_patterns": [
+      "Resell a free API as a tiny fixed-price service (transcribe, summarize, clean, convert).",
+      "Sell the setup, not the compute: charge to configure a free AI tool inside someone's workflow.",
+      "Bundle a free API into a one-page tool and charge a small one-time fee.",
+      "Offer a done-for-you batch job: send files, get results back, fixed price per batch.",
+      "Charge for the prompt library and workflow, and let the client bring their own free key.",
+      "Package a recurring report built on free-tier APIs as a low-cost monthly retainer."
+    ]
   },
   "configured_github_secrets": [
     "ANTHROPIC_API_KEY",

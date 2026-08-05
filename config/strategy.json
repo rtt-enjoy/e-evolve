@@ -42,7 +42,22 @@
       {
         "title": "OpenRouter free model list",
         "url": "https://openrouter.ai/models?max_price=0",
-        "takeaway": "Live list of zero-cost models usable through a single API key."
+        "takeaway": "Live list of zero-cost models usable through a single API key. Free (:free) models are capped at 20 req/min and only 50 req/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit before relying on volume."
+      },
+      {
+        "title": "Google AI Studio (Gemini API)",
+        "url": "https://aistudio.google.com/app/apikey",
+        "takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day (10 RPM, 250K TPM); Gemini 2.0 Flash is roughly 15 RPM / 1M TPM. Much higher daily ceiling than OpenRouter's free chain -- verify current limit."
+      },
+      {
+        "title": "Cerebras Cloud free tier",
+        "url": "https://cloud.cerebras.ai/",
+        "takeaway": "No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model on fast inference hardware. Strong fallback once OpenRouter's free daily cap is hit -- verify current limit."
+      },
+      {
+        "title": "Groq Cloud free tier",
+        "url": "https://console.groq.com/",
+        "takeaway": "No credit card required. Generous daily request allowance (roughly 14K/day depending on model) with very low latency -- verify current limit."
       }
     ],
     "github_searches": [
@@ -104,9 +119,9 @@
     }
   },
   "llm": {
-    "main_engine": "moonshotai/kimi-k3",
+    "main_engine": "openai/gpt-oss-20b:free",
     "provider": "openrouter",
-    "note": "Kimi K3 is paid ($3/M in, $15/M out). Free models follow in the fallback chain."
+    "note": "All-free model chain (no paid Kimi K3): gpt-oss-20b:free default, nemotron-3-ultra-550b:free for research, per bot/llm.py ROLE_PROVIDER routing."
   },
   "research_policy": {
     "mode": "research_and_article_publishing",

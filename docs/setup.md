@@ -15,20 +15,34 @@ Repo → Settings → Secrets and variables → Actions → **New repository sec
 | `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | **Main engine** — see below   |
 | `GROQ_API_KEY`       | [console.groq.com](https://console.groq.com)                  | Free                          |
 | `GEMINI_API_KEY`     | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier                     |
+| `CEREBRAS_API_KEY`   | [cloud.cerebras.ai](https://cloud.cerebras.ai/)               | Free tier                     |
 | `ANTHROPIC_API_KEY`  | [console.anthropic.com](https://console.anthropic.com)        | Paid                          |
 
 Only one is required.
 
-**Main AI engine: Kimi K3 (`moonshotai/kimi-k3`) via OpenRouter.** Kimi K3 is
-paid — $3 per million input tokens, $15 per million output — so it needs
-credits at [openrouter.ai/credits](https://openrouter.ai/credits). Without
-credits the API returns 402 and the bot automatically steps down to free
-OpenRouter models, so cycles keep running at reduced quality rather than
-failing. Watch for `402 insufficient credits` in the workflow log: that means
-Kimi K3 is not actually being used.
+**Main AI engine: free OpenRouter models, no credits required.** `bot/llm.py`
+routes every role through a zero-cost OpenRouter model chain — `openai/gpt-oss-20b:free`
+by default, `nvidia/nemotron-3-ultra-550b-a55b:free` for research (long
+context, strongest reasoning), stepping down through more free models on
+429/rate-limit before ever failing a cycle. No OpenRouter credits are needed.
 
-If you want zero spend, add `GROQ_API_KEY` or `GEMINI_API_KEY` too and the free
-chain covers you.
+**Know the daily ceiling.** OpenRouter's free (`:free`) models are capped at
+20 requests/minute and only **50 requests/day** unless the account has ever
+purchased $10 in credits (then 1,000/day) — verify the current limit at
+[openrouter.ai/docs](https://openrouter.ai/docs/api-reference/limits). An
+hourly bot making multiple LLM calls per cycle can approach that ceiling, so
+add at least one fallback key:
+
+- `GEMINI_API_KEY` — free tier, no card, roughly 1,500 requests/day on
+  Gemini 2.5 Flash (verify current limit).
+- `CEREBRAS_API_KEY` — free tier, no card, roughly 1M tokens/day and 14,400
+  requests/day per model (verify current limit).
+- `GROQ_API_KEY` — free tier, no card, fast inference.
+
+`bot/llm.py` automatically steps down through the OpenRouter free-model chain
+and then falls back to the next configured provider on rate limits, so adding
+any of these only increases headroom — it never changes routing when
+OpenRouter has capacity.
 
 Use the same variable names in both places:
 

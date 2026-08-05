@@ -59,6 +59,21 @@ _DEFAULT_CONFIG = {
             "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
             "url": "https://freedium-mirror.cfd/https://medium.com/@startup_Ideas/15-high-paying-remote-jobs-with-a-4-hour-work-week-and-how-people-actually-get-them-7e8d3562ff99",
             "takeaway": "The viable path is not easy money; it is rare skill, specialization, automation, retainers, async work, and results-based delivery."
+        },
+        {
+            "title": "OpenRouter free model list",
+            "url": "https://openrouter.ai/models?max_price=0",
+            "takeaway": "Free (:free) models are capped at 20 req/min and only 50 req/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit before relying on volume."
+        },
+        {
+            "title": "Google AI Studio (Gemini API)",
+            "url": "https://aistudio.google.com/app/apikey",
+            "takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day; much higher daily ceiling than OpenRouter's free chain -- verify current limit."
+        },
+        {
+            "title": "Cerebras Cloud free tier",
+            "url": "https://cloud.cerebras.ai/",
+            "takeaway": "No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model -- verify current limit."
         }
     ],
     "remote_service_niches": [

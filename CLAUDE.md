@@ -15,7 +15,7 @@ E-Evolve is a GitHub Actions bot that runs hourly and refreshes RAG, market rese
 
 Current operating policy: API keys are for RAG, research, market analysis, suggestions, draft text, and **publishing articles to dev.to**. The bot must not use keys to post to social media, place trades, mint NFTs, withdraw funds, or comment on external issues.
 
-**Main AI engine: Kimi K3 (`moonshotai/kimi-k3`) via OpenRouter**, used for every role. Kimi K3 is paid ($3/M input, $15/M output) — it needs OpenRouter credits. When credits run out (402) or it rate-limits (429), `bot/llm.py` steps down through free models in `_OPENROUTER_MODELS` so a cycle never fails on cost alone.
+**Main AI engine: free OpenRouter models via `bot/llm.py`** — no paid engine, no credits required. Every role routes through a zero-cost model chain: `openai/gpt-oss-20b:free` (widest provider coverage, best uptime) as the general default, `nvidia/nemotron-3-ultra-550b-a55b:free` (1M context, strongest reasoning) leading the `research` role, and `openai/gpt-oss-20b:free` leading `post` for reliable structured JSON output. On 429/model-not-found, `bot/llm.py` steps down through the rest of the free chain (`_OPENROUTER_MODELS_BY_ROLE`) before falling back to another provider, so a cycle never fails on cost or a single model's rate limit.
 
 ---
 
@@ -47,7 +47,7 @@ command.txt          ← owner command input
 ## Cycle Flow (5 Phases)
 
 ```
-Phase 0: Init LLM (OpenRouter/Kimi K3 first, then Anthropic > Gemini > Groq)
+Phase 0: Init LLM (OpenRouter free-model chain first, then Anthropic > Gemini > Groq)
 Phase 1: Status   — load status.json, detect active features from env secrets
 Phase 2: Commands — read command.txt + GitHub Issues labelled "bot-command"
 Phase 3: Evolution — skipped; Codex owns code changes
@@ -78,6 +78,7 @@ Features activate automatically when their secrets are present in env.
 | `llm_gemini`     | `GEMINI_API_KEY`     |
 | `llm_openrouter` | `OPENROUTER_API_KEY` |
 | `llm_groq`       | `GROQ_API_KEY`       |
+| `llm_cerebras`   | `CEREBRAS_API_KEY`   |
 
 `DEV_TO_API_KEY` enables live article publishing to dev.to (one article per day,
 capped by `articles.max_articles_per_cycle`). Without it, the articles module
@@ -90,13 +91,22 @@ actions. If such keys exist, they are treated as research context only.
 
 ## LLM Client (bot/llm.py)
 
-- Provider priority: `OPENROUTER_API_KEY` → `ANTHROPIC_API_KEY` → `GEMINI_API_KEY` → `GROQ_API_KEY`
-- **Main engine: `moonshotai/kimi-k3` via OpenRouter, used for every role in `ROLE_PROVIDER`**
-- Kimi K3 is **paid**: $3/M input, $15/M output. It needs OpenRouter credits to run.
-- On 402 (no credits), 429, or 404 the OpenRouter call steps down through the free
-  models in `_OPENROUTER_MODELS` before abandoning the provider. Cost problems
-  degrade quality, never break the cycle.
-- To change the main engine, edit `KIMI_PRIMARY_MODEL` in `bot/llm.py`
+- Provider priority: `OPENROUTER_API_KEY` → `ANTHROPIC_API_KEY` → `GEMINI_API_KEY` → `CEREBRAS_API_KEY` → `GROQ_API_KEY`
+- **Main engine: free OpenRouter models, used for every role in `ROLE_PROVIDER`. No paid model, no credits needed.**
+- **OpenRouter free-tier ceiling:** `:free` models are capped at 20 req/min and only
+  50 requests/day unless the account has ever bought $10 in credits (then 1,000/day).
+  An hourly bot with multiple LLM calls per cycle can approach that ceiling — verify
+  the current limit at openrouter.ai/docs before assuming headroom.
+- Model chain is role-aware via `_OPENROUTER_MODELS_BY_ROLE`: `research` leads with `nvidia/nemotron-3-ultra-550b-a55b:free`
+  (1M context, strongest reasoning); `post` leads with `openai/gpt-oss-20b:free` (widest provider coverage, native
+  structured output); all other roles use the `_OPENROUTER_MODELS` default chain, also led by `openai/gpt-oss-20b:free`.
+- On 429 or model-not-found, the OpenRouter call steps down through the rest of the
+  role's free-model chain before abandoning the provider — a rate limit degrades
+  quality (smaller/different free model), never breaks the cycle.
+- `CEREBRAS_API_KEY` is an optional extra free-tier fallback (roughly 1M tokens/day,
+  14,400 requests/day per model, no credit card) used when OpenRouter/Anthropic/Gemini
+  are unavailable or exhausted. See `bot/llm.py` `_call_cerebras` / `_CEREBRAS_MODELS`.
+- To change the default engine, edit `_OPENROUTER_MODELS` (and the per-role lists) in `bot/llm.py`
 - Anthropic default model: `claude-sonnet-4-6` (fallback chain)
 - All calls retry 3× with exponential backoff
 - `complete_json()` appends JSON-only instruction and strips markdown fences

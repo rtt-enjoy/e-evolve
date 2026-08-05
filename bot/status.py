@@ -29,23 +29,24 @@ FEATURE_MAP: dict[str, list[str]] = {
     "llm_gemini":      ["GEMINI_API_KEY"],
     "llm_openrouter":  ["OPENROUTER_API_KEY"],
     "llm_groq":        ["GROQ_API_KEY"],
+    "llm_cerebras":    ["CEREBRAS_API_KEY"],
     "usdt_wallet":     ["USDT_WALLET_ADDRESS"],
 }
 
 LLM_ROLE_WORKFLOWS: dict[str, dict[str, str]] = {
     "upgrade": {
         "provider": "openrouter",
-        "model": "moonshotai/kimi-k3",
+        "model": "openai/gpt-oss-20b:free",
         "purpose": "research-only repair suggestions for Codex-owned code changes",
     },
     "research": {
         "provider": "openrouter",
-        "model": "moonshotai/kimi-k3",
+        "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
         "purpose": "free-AI-service discovery, market research, and earning-suggestion briefs",
     },
     "post": {
         "provider": "openrouter",
-        "model": "moonshotai/kimi-k3",
+        "model": "openai/gpt-oss-20b:free",
         "purpose": "article drafting and formatting for publication",
     },
 }
@@ -314,6 +315,7 @@ def _llm_workflows(
             "gemini": "GEMINI_API_KEY",
             "groq": "GROQ_API_KEY",
             "openrouter": "OPENROUTER_API_KEY",
+            "cerebras": "CEREBRAS_API_KEY",
         }.get(provider)
         feature = f"llm_{provider}"
         workflows[role] = {

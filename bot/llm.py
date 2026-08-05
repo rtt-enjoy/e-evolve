@@ -20,6 +20,13 @@ _GROQ_MODELS = [
     "llama3-70b-8192",
     "llama3-8b-8192",
 ]
+# Cerebras free tier: 1M tokens/day + 14,400 req/day per model, no credit card.
+# Far higher daily ceiling than OpenRouter's free 50 req/day, so it is a strong
+# fallback once OpenRouter's free chain is exhausted for the day.
+_CEREBRAS_MODELS = [
+    "llama-3.3-70b",
+    "llama3.1-8b",
+]
 _ANTHROPIC_MODELS = [
     "claude-sonnet-4-6",
     "claude-3-5-sonnet-20241022",
@@ -30,19 +37,47 @@ _GEMINI_MODELS = [
     "gemini-2.5-flash",
     "gemini-2.5-flash-lite",
 ]
-# OpenRouter: Kimi K3 is the main engine. It is PAID ($3/M in, $15/M out),
-# so the rest of the chain is free-tier only — a credit or rate-limit failure
-# degrades to zero-cost models instead of breaking the cycle.
-KIMI_PRIMARY_MODEL = "moonshotai/kimi-k3"
+# OpenRouter: Kimi K3 was the main engine but is PAID ($3/M in, $15/M out) and
+# fails outright without credits. The whole chain is now free-tier models,
+# chosen per role, so a cycle never depends on account balance.
+#
+# Default chain: general-purpose fallback order, led by the model with the
+# widest provider coverage on OpenRouter (best uptime/least rate-limiting).
 _OPENROUTER_MODELS = [
-    KIMI_PRIMARY_MODEL,
-    "nvidia/nemotron-3-ultra-550b-a55b:free",
-    "inclusionai/ling-3.0-flash:free",
-    "openrouter/free",
-    "openai/gpt-oss-20b:free",
+    "openai/gpt-oss-20b:free",          # 12 providers -- highest uptime, native structured output
+    "nvidia/nemotron-3-ultra-550b-a55b:free",  # 1M ctx, strongest reasoning, good research fallback
+    "google/gemma-4-26b-a4b-it:free",   # native function calling + structured outputs
+    "inclusionai/ling-3.0-flash:free",  # 262K ctx, token-efficient
+    "openrouter/free",                 # auto-router: always resolves to *some* free model
 ]
 
-# Role → preferred provider mapping. Kimi K3 (via openrouter) is the main
+# Research/long-context work: lead with the biggest-context, strongest-reasoning
+# free model, since research prompts are long and benefit most from it.
+_OPENROUTER_MODELS_RESEARCH = [
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "openai/gpt-oss-20b:free",
+    "google/gemma-4-26b-a4b-it:free",
+    "openrouter/free",
+]
+
+# Article writing (long-form structured JSON): lead with the highest-uptime
+# model that natively supports structured outputs, so drafts don't get dropped
+# to rate limits mid-cycle.
+_OPENROUTER_MODELS_POST = [
+    "openai/gpt-oss-20b:free",
+    "google/gemma-4-26b-a4b-it:free",
+    "cohere/north-mini-code:free",
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "openrouter/free",
+]
+
+_OPENROUTER_MODELS_BY_ROLE: dict[str, list[str]] = {
+    "research": _OPENROUTER_MODELS_RESEARCH,
+    "post":     _OPENROUTER_MODELS_POST,
+}
+
+# Role → preferred provider mapping. Free OpenRouter models are the main
 # engine for every role; gemini/groq remain as provider-level fallbacks.
 ROLE_PROVIDER: dict[str, str] = {
     "upgrade":    "openrouter",
@@ -70,7 +105,9 @@ class LLMClient:
         self._gemini_key     = os.getenv("GEMINI_API_KEY",     "").strip()
         self._openrouter_key = os.getenv("OPENROUTER_API_KEY", "").strip()
         self._groq_key       = os.getenv("GROQ_API_KEY",       "").strip()
+        self._cerebras_key   = os.getenv("CEREBRAS_API_KEY",   "").strip()
         self.provider        = self._pick_provider()
+        self._current_role: str | None = None
         self.model           = self._pick_model()
         self.info            = {"provider": self.provider, "model": self.model}
         log.info("LLM ready -- provider=%s model=%s", self.provider, self.model)
@@ -101,6 +138,8 @@ class LLMClient:
                         return self._call_gemini(p_prompt, system, max_tokens, temperature, p_model)
                     if provider == "openrouter":
                         return self._call_openrouter(p_prompt, system, max_tokens, temperature, p_model)
+                    if provider == "cerebras":
+                        return self._call_cerebras(p_prompt, system, max_tokens, temperature, p_model)
                     if provider == "claude-cli":
                         return self._call_claude_cli(p_prompt, system, max_tokens)
                     return self._call_groq(p_prompt, system, max_tokens, temperature, p_model)
@@ -120,7 +159,7 @@ class LLMClient:
                     if provider == "openrouter" and any(
                         code in exc_str for code in ("402", "429", "insufficient", "rate_limit", "quota", "Too Many Requests")
                     ):
-                        model_list = _model_list_for(provider)
+                        model_list = self._model_list_for(provider)
                         if p_model in model_list and model_list.index(p_model) < len(model_list) - 1:
                             p_model = model_list[model_list.index(p_model) + 1]
                             log.warning("openrouter model unavailable (%s) -- stepping down to %s", exc_str[:80], p_model)
@@ -145,7 +184,7 @@ class LLMClient:
 
                     # Model deprecated: advance to next in chain
                     if "model_not_found" in exc_str or "model not found" in exc_str.lower():
-                        model_list = _model_list_for(provider)
+                        model_list = self._model_list_for(provider)
                         if p_model in model_list:
                             idx = model_list.index(p_model)
                             if idx < len(model_list) - 1:
@@ -185,12 +224,15 @@ class LLMClient:
             if key_map.get(preferred):
                 log.info("Role=%s → provider=%s", role, preferred)
                 old_provider = self.provider
-                self.provider = preferred
+                old_role     = self._current_role
+                self.provider     = preferred
+                self._current_role = role
                 try:
                     return self.complete(prompt, system=system, max_tokens=max_tokens,
                                         temperature=temperature)
                 finally:
-                    self.provider = old_provider
+                    self.provider     = old_provider
+                    self._current_role = old_role
         return self.complete(prompt, system=system, max_tokens=max_tokens,
                              temperature=temperature)
 
@@ -390,6 +432,51 @@ class LLMClient:
             latency_s = round(time.monotonic() - t0, 2),
         )
 
+    # -- Cerebras ----------------------------------------------------------------
+
+    def _call_cerebras(
+        self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
+    ) -> LLMResponse:
+        import requests  # already in requirements
+        messages: list[dict] = []
+        if system:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
+        t0  = time.monotonic()
+        rsp = requests.post(
+            "https://api.cerebras.ai/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {self._cerebras_key}",
+                "Content-Type":  "application/json",
+            },
+            json={
+                "model":       model,
+                "messages":    messages,
+                "max_tokens":  max_tokens,
+                "temperature": temperature,
+            },
+            timeout=90,
+        )
+        if rsp.status_code in (401, 403):
+            raise RuntimeError(f"401 authentication_error from cerebras: {rsp.text[:200]}")
+        if rsp.status_code == 429:
+            raise RuntimeError(f"429 rate_limit_exceeded from cerebras: {rsp.text[:200]}")
+        if rsp.status_code == 404:
+            raise RuntimeError(f"model_not_found on cerebras: {model}: {rsp.text[:200]}")
+        rsp.raise_for_status()
+        data = rsp.json()
+        if "error" in data:
+            raise RuntimeError(f"Cerebras error: {data['error']}")
+        if not data.get("choices"):
+            raise RuntimeError(f"Cerebras returned no choices for {model}: {str(data)[:200]}")
+        text = data["choices"][0]["message"]["content"] or ""
+        return LLMResponse(
+            text      = text,
+            provider  = "cerebras",
+            model     = model,
+            latency_s = round(time.monotonic() - t0, 2),
+        )
+
     # -- Claude CLI (Pro subscription, no API key) -----------------------------
 
     def _call_claude_cli(
@@ -423,7 +510,7 @@ class LLMClient:
     def _pick_provider(self) -> str:
         if os.getenv("CLAUDE_CLI_MODE", "").strip() == "1":
             return "claude-cli"
-        # OpenRouter first: it hosts Kimi K3, the configured main engine.
+        # OpenRouter first: it hosts the free-tier model chain, the main engine.
         if self._openrouter_key:
             return "openrouter"
         if self._anthropic_key:
@@ -432,9 +519,11 @@ class LLMClient:
             return "gemini"
         if self._groq_key:
             return "groq"
+        if self._cerebras_key:
+            return "cerebras"
         raise RuntimeError(
             "No LLM API key found.\n"
-            "Add one of: ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY\n"
+            "Add one of: ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, CEREBRAS_API_KEY\n"
             "to GitHub -> Settings -> Secrets and variables -> Actions.\n"
             "For local dev with Claude Pro: set CLAUDE_CLI_MODE=1 in .env"
         )
@@ -448,10 +537,18 @@ class LLMClient:
         if provider == "gemini":
             return _GEMINI_MODELS[0]
         if provider == "openrouter":
-            return _OPENROUTER_MODELS[0]
+            return self._model_list_for(provider)[0]
+        if provider == "cerebras":
+            return _CEREBRAS_MODELS[0]
         if provider == "claude-cli":
             return "claude-sonnet-4-6"
         return _GROQ_MODELS[0]
+
+    def _model_list_for(self, provider: str) -> list[str]:
+        """Model fallback chain for a provider, role-aware for openrouter."""
+        if provider == "openrouter":
+            return _OPENROUTER_MODELS_BY_ROLE.get(self._current_role, _OPENROUTER_MODELS)
+        return _model_list_for(provider)
 
     def _provider_chain(self) -> list[str]:
         """Ordered fallback chain starting from primary provider."""
@@ -460,6 +557,7 @@ class LLMClient:
             ("openrouter",   bool(self._openrouter_key)),
             ("anthropic",    bool(self._anthropic_key)),
             ("gemini",       bool(self._gemini_key)),
+            ("cerebras",     bool(self._cerebras_key)),
             ("groq",         bool(self._groq_key)),
         ]
         available = [p for p, has_key in all_providers if has_key]
@@ -476,6 +574,7 @@ def _model_list_for(provider: str) -> list[str]:
         "anthropic":   _ANTHROPIC_MODELS,
         "gemini":      _GEMINI_MODELS,
         "openrouter":  _OPENROUTER_MODELS,
+        "cerebras":    _CEREBRAS_MODELS,
     }.get(provider, [])
 
 

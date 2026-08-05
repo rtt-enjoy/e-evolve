@@ -11,11 +11,12 @@ Set at least one LLM provider key for LLM-backed runs:
 | Key                  | Required    | Used by                         | Notes                            |
 |----------------------|-------------|---------------------------------|----------------------------------|
 | `GROQ_API_KEY`       | One LLM key | `bot/llm.py`, feature readiness | Free-tier friendly LLM provider. |
-| `GEMINI_API_KEY`     | One LLM key | `bot/llm.py`, feature readiness | Free-tier friendly LLM provider. |
-| `OPENROUTER_API_KEY` | One LLM key | `bot/llm.py`, feature readiness | Free-model fallback option.      |
+| `GEMINI_API_KEY`     | One LLM key | `bot/llm.py`, feature readiness | Free-tier friendly LLM provider; highest daily request ceiling of the free options. |
+| `OPENROUTER_API_KEY` | One LLM key | `bot/llm.py`, feature readiness | Free-model fallback option. Free (`:free`) models are capped at 50 requests/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit. |
 | `ANTHROPIC_API_KEY`  | One LLM key | `bot/llm.py`, feature readiness | Higher-quality paid provider.    |
+| `CEREBRAS_API_KEY`   | Optional    | `bot/llm.py`, feature readiness | Free-tier fallback: roughly 1M tokens/day, 14,400 requests/day per model, no credit card -- verify current limit. |
 
-Provider selection prefers Anthropic when present, then Gemini/OpenRouter/Groq
+Provider selection prefers Anthropic when present, then Gemini/OpenRouter/Groq/Cerebras
 according to the role routing in `bot/llm.py`.
 
 ## Local and GitHub Metadata

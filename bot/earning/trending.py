@@ -48,6 +48,19 @@ _HACKERRANK_FEED = "https://www.hackerrank.com/blog/feed/"
 _MIN_TITLE_LEN = 20
 _MAX_PER_SOURCE = 8
 
+# Hosts that truncate their RSS summary behind a paywall or member wall, so the
+# feed gives us a title and two sentences at most.
+_PAYWALLED_HOSTS = ("medium.com", "towardsdatascience.com", "betterprogramming.app",
+                    "levelup.gitconnected.com", "itnext.io", "javascript.plainenglish.io",
+                    "python.plainenglish.io", "blog.stackademic.com")
+
+# Public Freedium mirror, used only to read the full text of an article we intend
+# to write our own take on. Read-only, and only for paywalled hosts.
+_FREEDIUM_MIRROR = "https://freedium-mirror.cfd/"
+
+# Below this many characters the summary is too thin to write a real article from.
+_MIN_SUMMARY_CHARS = 400
+
 
 def fetch_candidates(max_age_hours: int = 24, limit: int = 40) -> list[dict[str, Any]]:
     """Return recent tech-article candidates, newest first.
@@ -214,6 +227,70 @@ def _fetch_feed(source: str, feed_url: str, cutoff: datetime) -> list[dict[str, 
         if len(out) >= _MAX_PER_SOURCE:
             break
     return out
+
+
+def is_paywalled(url: str) -> bool:
+    """True when a URL's host truncates its feed summary behind a member wall."""
+    host = _canonical_url(url).split("/")[0]
+    return any(host == p or host.endswith("." + p) for p in _PAYWALLED_HOSTS)
+
+
+def needs_unlock(item: dict[str, Any]) -> bool:
+    """True when we have a paywalled source with too little text to write from."""
+    return (
+        is_paywalled(str(item.get("url", "")))
+        and len(str(item.get("summary", ""))) < _MIN_SUMMARY_CHARS
+    )
+
+
+def unlock_summary(item: dict[str, Any], max_chars: int = 6000) -> str:
+    """Fetch fuller text for a paywalled article via the public Freedium mirror.
+
+    Returns the existing summary unchanged on any failure -- a mirror being down
+    must degrade the article's research depth, never break the cycle. Read-only.
+    """
+    url = str(item.get("url", "")).strip()
+    current = str(item.get("summary", ""))
+    if not url:
+        return current
+
+    try:
+        resp = requests.get(
+            _FREEDIUM_MIRROR + url,
+            headers={"User-Agent": _UA, "Accept": "text/html"},
+            timeout=25,
+        )
+        if resp.status_code != 200:
+            log.info("[trending] freedium unlock skipped (%s) for %s", resp.status_code, url)
+            return current
+        text = _extract_article_text(resp.text)
+    except Exception as exc:
+        log.info("[trending] freedium unlock failed: %s", exc)
+        return current
+
+    # Only accept the mirror's text if it is genuinely richer than the feed blurb.
+    if len(text) <= max(len(current), _MIN_SUMMARY_CHARS):
+        log.info("[trending] freedium returned no usable body for %s", url)
+        return current
+    log.info("[trending] unlocked %d chars via freedium for %s", len(text), url)
+    return text[:max_chars]
+
+
+def _extract_article_text(html: str) -> str:
+    """Pull readable prose out of a Freedium page without a parser dependency."""
+    # Drop non-content elements entirely before stripping tags.
+    for tag in ("script", "style", "nav", "header", "footer", "aside", "noscript"):
+        html = re.sub(rf"<{tag}\b.*?</{tag}>", " ", html, flags=re.DOTALL | re.IGNORECASE)
+    body = re.search(r"<(?:article|main)\b.*?>(.*?)</(?:article|main)>",
+                     html, flags=re.DOTALL | re.IGNORECASE)
+    if body:
+        html = body.group(1)
+    # Keep paragraph boundaries so the LLM sees structure, not one long run-on.
+    # A sentinel survives _strip_html's whitespace collapsing; a raw \n would not.
+    html = re.sub(r"</(p|h[1-6]|li|pre|blockquote)>", " ¶ ", html, flags=re.IGNORECASE)
+    text = _strip_html(html)
+    text = re.sub(r"(\s*¶\s*)+", "\n\n", text)
+    return text.strip()
 
 
 def _dedupe(items: list[dict[str, Any]]) -> list[dict[str, Any]]:

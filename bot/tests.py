@@ -7,14 +7,27 @@ from bot.earning.articles import (
     _duplicate_reason,
     _ensure_attribution,
     _fabrication_problems,
+    _format_problems,
     _generate_article,
+    _normalize,
     _pick_source,
     _publish_to_devto,
     _record_publish,
+    _strip_fabricated_tables,
+    _tone_problems,
     _too_similar_to_source,
 )
 from bot.earning.code_techs import _online_ai_brief, _outreach_draft, _parse_reddit_rss, _rank, _reference_sources
-from bot.earning.trending import _dedupe, _parse_dt, is_technical, normalize_title
+from bot.earning.trending import (
+    _dedupe,
+    _extract_article_text,
+    _parse_dt,
+    is_paywalled,
+    is_technical,
+    needs_unlock,
+    normalize_title,
+    unlock_summary,
+)
 from bot.earnings import update
 
 class TestArticleDeduplication(unittest.TestCase):
@@ -170,6 +183,191 @@ class TestFabricationDetection(unittest.TestCase):
 
     def test_versions_and_years_allowed(self):
         self.assertEqual(_fabrication_problems("Python 3.14 shipped in 2025."), [])
+
+
+class TestFabricatedTableStripping(unittest.TestCase):
+    """The shipped bug: a fabricated table was detected, then published anyway."""
+
+    _TABLE = (
+        "## Pick a Service\n\n"
+        "| Service | Latency | Size |\n|--|--|--|\n"
+        "| OpenAI | 200-400 ms | 175 B |\n| Anthropic | 250-500 ms | 1.3 T |\n\n"
+        "Cloud APIs scale easily but cost more.\n"
+    )
+
+    def test_fabricated_table_is_removed(self):
+        cleaned, removed = _strip_fabricated_tables(self._TABLE)
+        self.assertEqual(removed, 1)
+        self.assertNotIn("Anthropic", cleaned)
+        self.assertEqual(_fabrication_problems(cleaned), [])
+
+    def test_surrounding_prose_survives(self):
+        cleaned, _ = _strip_fabricated_tables(self._TABLE)
+        self.assertIn("## Pick a Service", cleaned)
+        self.assertIn("Cloud APIs scale easily", cleaned)
+
+    def test_no_heading_collision_after_removal(self):
+        cleaned, _ = _strip_fabricated_tables(self._TABLE)
+        self.assertNotRegex(cleaned, r"## Pick a Service\nCloud APIs")
+
+    def test_qualitative_table_is_kept(self):
+        body = (
+            "| Approach | Tradeoff | When to Use |\n|--|--|--|\n"
+            "| Cloud API | Costs more | Fast iteration |\n"
+            "| Local model | Needs a GPU | Private data |\n"
+        )
+        cleaned, removed = _strip_fabricated_tables(body)
+        self.assertEqual(removed, 0)
+        self.assertEqual(cleaned, body)
+
+    def test_prose_containing_pipe_is_not_treated_as_table(self):
+        body = "Run `a | b` in bash.\n\nThat pipes output.\n"
+        cleaned, removed = _strip_fabricated_tables(body)
+        self.assertEqual(removed, 0)
+        self.assertIn("Run `a | b`", cleaned)
+
+    def test_fabrication_in_prose_blocks_publishing(self):
+        # Not fixable by deleting a table, so _generate_article must bail.
+        class FakeLLM:
+            def complete_json(self, prompt, system=None, max_tokens=None):
+                return {
+                    "title": "A Totally Different Angle On Model Routing",
+                    "description": "d",
+                    "body_markdown": (
+                        "Intro paragraph here.\n\n## One\n\nThe model responds in "
+                        "200 ms on average.\n\n## Two\n\n```python\nx = 1\n```\n\n"
+                        "## Three\n\n```bash\nls\n```\n\n## Key Takeaways\n\n- a\n"
+                    ),
+                    "tags": ["python"],
+                }
+        import bot.earning.articles as articles_module
+        original = articles_module._pick_source
+        try:
+            articles_module._pick_source = lambda status: {
+                "title": "Some Source Article About Things", "url": "https://ex.com/a",
+                "source": "medium:python", "summary": "s",
+            }
+            self.assertIsNone(_generate_article(FakeLLM(), {}))
+        finally:
+            articles_module._pick_source = original
+
+
+class TestMarkdownNormalization(unittest.TestCase):
+    def test_numbered_headings_are_unnumbered(self):
+        out = _normalize({"body_markdown": "## 1. First\n\ntext\n\n### 2) Second\n\nmore"})
+        self.assertIn("## First", out["body_markdown"])
+        self.assertIn("### Second", out["body_markdown"])
+        self.assertNotIn("1.", out["body_markdown"])
+
+    def test_blank_line_inserted_after_heading(self):
+        out = _normalize({"body_markdown": "## Heading\nParagraph right after."})
+        self.assertIn("## Heading\n\nParagraph", out["body_markdown"])
+
+    def test_ordered_list_numbering_preserved(self):
+        # Only headings get unnumbered; real ordered lists must survive.
+        out = _normalize({"body_markdown": "## Steps\n\n1. First step\n2. Second step"})
+        self.assertIn("1. First step", out["body_markdown"])
+
+    def test_top_level_heading_demoted(self):
+        out = _normalize({"body_markdown": "# Title\n\ntext"})
+        self.assertIn("## Title", out["body_markdown"])
+        self.assertNotRegex(out["body_markdown"], r"^# ")
+
+
+class TestToneChecks(unittest.TestCase):
+    """The owner asked for a clear, clean, friendly tone. Enforce it mechanically."""
+
+    def test_hype_language_flagged(self):
+        self.assertTrue(_tone_problems("This revolutionary tool changes everything."))
+
+    def test_condescending_just_flagged(self):
+        self.assertIn('condescending "simply/just"', _tone_problems("Simply run the script."))
+
+    def test_corporate_jargon_flagged(self):
+        self.assertIn("corporate jargon", _tone_problems("We utilize a cache here."))
+
+    def test_cliche_opener_flagged(self):
+        self.assertTrue(_tone_problems("In today's fast-paced world, speed matters."))
+
+    def test_exclamation_flagged(self):
+        self.assertIn("exclamation mark", _tone_problems("It works great!"))
+
+    def test_long_sentences_flagged(self):
+        long_one = " ".join(["word"] * 40) + ". " + " ".join(["word"] * 40) + "."
+        self.assertTrue(any("too long" in p for p in _tone_problems(long_one)))
+
+    def test_clean_friendly_prose_passes(self):
+        body = (
+            "You probably hit this when your cache grows past memory. "
+            "I ran into it last month. The fix is small, and it holds up well.\n\n"
+            "Here is what changed. The reader can follow each step."
+        )
+        self.assertEqual(_tone_problems(body), [])
+
+    def test_code_blocks_exempt_from_tone_rules(self):
+        self.assertEqual(_tone_problems("```python\nprint('just do it!')\n```"), [])
+
+    def test_stacked_headings_flagged(self):
+        problems = _format_problems("## One\n\n## Two\n\ntext")
+        self.assertIn("stacked headings with no prose between them", problems)
+
+
+class TestFreediumUnlock(unittest.TestCase):
+    def test_medium_host_detected_as_paywalled(self):
+        self.assertTrue(is_paywalled("https://medium.com/@a/post-123"))
+        self.assertTrue(is_paywalled("https://towardsdatascience.com/x"))
+
+    def test_open_host_not_paywalled(self):
+        self.assertFalse(is_paywalled("https://dev.to/a/b"))
+        self.assertFalse(is_paywalled("https://github.blog/x"))
+
+    def test_lookalike_host_not_paywalled(self):
+        # Guard against suffix spoofing: notmedium.com must not match medium.com.
+        self.assertFalse(is_paywalled("https://notmedium.com/x"))
+
+    def test_thin_paywalled_summary_needs_unlock(self):
+        self.assertTrue(needs_unlock({"url": "https://medium.com/x", "summary": "Teaser."}))
+
+    def test_rich_summary_needs_no_unlock(self):
+        self.assertFalse(needs_unlock({"url": "https://medium.com/x", "summary": "x" * 900}))
+
+    def test_extracts_paragraphs_with_breaks(self):
+        html = "<article><p>First para.</p><p>Second para.</p></article>"
+        self.assertEqual(_extract_article_text(html), "First para.\n\nSecond para.")
+
+    def test_strips_scripts_and_nav(self):
+        html = "<article><script>evil()</script><nav>Menu</nav><p>Real text.</p></article>"
+        text = _extract_article_text(html)
+        self.assertNotIn("evil", text)
+        self.assertNotIn("Menu", text)
+        self.assertIn("Real text.", text)
+
+    def test_unlock_failure_returns_original_summary(self):
+        import bot.earning.trending as trending_module
+        original = trending_module.requests.get
+        try:
+            def boom(*args, **kwargs):
+                raise RuntimeError("mirror down")
+            trending_module.requests.get = boom
+            item = {"url": "https://medium.com/x", "summary": "Teaser."}
+            self.assertEqual(unlock_summary(item), "Teaser.")
+        finally:
+            trending_module.requests.get = original
+
+    def test_unlock_rejects_body_thinner_than_existing(self):
+        import bot.earning.trending as trending_module
+
+        class FakeResp:
+            status_code = 200
+            text = "<article><p>tiny</p></article>"
+
+        original = trending_module.requests.get
+        try:
+            trending_module.requests.get = lambda *a, **k: FakeResp()
+            item = {"url": "https://medium.com/x", "summary": "Teaser."}
+            self.assertEqual(unlock_summary(item), "Teaser.")
+        finally:
+            trending_module.requests.get = original
 
 
 class TestArticlePublishing(unittest.TestCase):

@@ -33,6 +33,7 @@ _MIN_INTERVAL_HOURS = int(_article_config.get("min_interval_hours", 6))
 _SOURCE_MAX_AGE_HOURS = int(_article_config.get("source_max_age_hours", 24))
 # How many past titles/sources to remember for duplicate detection.
 _HISTORY_LIMIT = int(_article_config.get("history_limit", 200))
+_MIN_WORDS = int(_article_config.get("min_words", 700))
 
 _SYSTEM = """\
 You are a senior engineer writing for a developer audience on dev.to.
@@ -50,14 +51,41 @@ Schema:
   "tags": ["python", "ai", "automation"]
 }
 
-FORMATTING RULES for body_markdown -- follow all of them:
+VOICE -- write like a helpful senior colleague explaining something at a whiteboard:
+- Warm and plain-spoken. Address the reader as "you". Use "I" for your own
+  experience. Contractions are good ("it's", "you'll", "doesn't").
+- Short, clean sentences. One idea each. If a sentence needs a comma splice or a
+  semicolon to hold together, split it in two.
+- Prefer the simple word: "use" over "utilize", "start" over "commence", "about"
+  over "approximately", "so" over "consequently".
+- Explain jargon the first time you use it, in one short clause. Never assume the
+  reader already knows the acronym.
+- Encouraging, never condescending. No "simply", "just", or "obviously" -- if it
+  were obvious the reader would not be here.
+- Calm and factual. No hype, no exclamation marks, no rhetorical questions
+  stacked up as a hook.
+
+STRUCTURE -- simple but very organized. The reader must be able to skim headings
+and know exactly what the article covers:
 - Open with a 2-3 sentence hook stating the concrete problem. No "In today's world".
+- Then one short "what you'll learn" line or 3-bullet list, so the reader knows
+  the payoff before investing time.
 - Use `##` for main sections and `###` for sub-points. Never use `#` (the title owns it).
 - 4-7 `##` sections with descriptive, specific headings. Not "Introduction"/"Conclusion".
+  A good heading states an outcome ("Cache the Expensive Call"), not a topic ("Caching").
+- Do NOT number your headings. Write `## Choose a Strategy`, never `## 2. Choose a Strategy`.
+- Leave one blank line after every heading, before the paragraph that follows it.
+- Order sections so each one builds on the last. Problem, then approach, then
+  implementation, then what breaks.
 - Keep paragraphs to 2-4 sentences. Insert a blank line between every block.
+- Never stack two headings with no prose between them.
+
+CODE AND TABLES:
 - Include at least two fenced code blocks with an explicit language tag
   (```python, ```yaml, ```bash) and code that would actually run.
-- Explain each code block in prose immediately before or after it.
+- Keep each block under ~25 lines. Show the interesting part, not the boilerplate.
+- Introduce every code block with one sentence saying what it does, and follow it
+  with a short explanation of *why* it is written that way.
 - Use a markdown table when comparing 3+ options, but ONLY for qualitative
   comparisons (approach, tradeoff, when-to-use). Never build a table of specs
   you would have to invent: no latency figures, parameter counts, model sizes,
@@ -73,6 +101,8 @@ CONTENT RULES:
   parameter counts, token prices, throughput, or rate limits as fact. If a
   number matters, describe it qualitatively ("noticeably slower", "cheaper per
   token") or tell the reader to check the provider's current docs.
+- A table with a "Latency" or "Model Size" column will be deleted before
+  publishing. Compare on approach and tradeoffs instead.
 - No promotional fluff, no income guarantees, no "revolutionary"/"game-changing".
 - Write as a practitioner reporting what worked, not a marketer.
 
@@ -201,12 +231,34 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
     # Normalize first: it deterministically fixes stray '#' headings and fence
     # artifacts, so we never spend free-tier LLM calls revising those.
     article = _normalize(data)
+
+    # Drop invented spec tables before anything else looks at the body. This is
+    # deterministic, so it costs no LLM call -- and asking the model to "fix"
+    # numbers it hallucinated tends to produce different hallucinated numbers.
+    article["body_markdown"], dropped = _strip_fabricated_tables(article["body_markdown"])
+    if dropped:
+        log.info("[articles] removed %d fabricated spec table(s)", dropped)
+
+    # Fabrication is a correctness gate, not a formatting nit. If invented
+    # figures survive table-stripping they are woven into prose, and no revision
+    # reliably fixes that -- the model just invents different numbers. Check this
+    # before spending a revision call, so a doomed article costs one call, not two.
+    fabricated = _fabrication_problems(article["body_markdown"])
+    if fabricated:
+        log.warning("[articles] unverifiable claims in prose %s -- not publishing", fabricated)
+        return None
+
     problems = _format_problems(article["body_markdown"])
     if problems:
         log.info("[articles] format issues %s -- requesting revision", problems)
         revised = _revise_format(llm, article, problems)
         if revised:
             article = _normalize(revised)
+            article["body_markdown"], _ = _strip_fabricated_tables(article["body_markdown"])
+            if _fabrication_problems(article["body_markdown"]):
+                log.warning("[articles] revision introduced invented figures -- not publishing")
+                return None
+
     article = _ensure_attribution(article, source)
 
     if _too_similar_to_source(article, source):
@@ -241,6 +293,17 @@ def _pick_source(status: dict) -> Optional[dict]:
             continue
         if title_key and title_key in used_titles:
             continue
+
+        # Paywalled feeds give us a two-sentence teaser, which is not enough to
+        # write a genuinely better article from. Try the public mirror once.
+        if trending.needs_unlock(item):
+            item["summary"] = trending.unlock_summary(item)
+            if trending.needs_unlock(item):
+                log.info(
+                    "[articles] skipping locked source with thin summary: %s",
+                    item.get("title", "")[:60],
+                )
+                continue
         return item
     return None
 
@@ -328,8 +391,8 @@ def _format_problems(body: str) -> list[str]:
     """Return a list of formatting rule violations in the generated markdown."""
     problems: list[str] = []
     words = len(body.split())
-    if words < 600:
-        problems.append(f"too short ({words} words, need 900+)")
+    if words < _MIN_WORDS:
+        problems.append(f"too short ({words} words, need {_MIN_WORDS}+)")
     if len(re.findall(r"^## ", body, re.MULTILINE)) < 4:
         problems.append("fewer than 4 '##' sections")
     if len(re.findall(r"^```\w+", body, re.MULTILINE)) < 2:
@@ -340,8 +403,43 @@ def _format_problems(body: str) -> list[str]:
         problems.append("missing '## Key Takeaways' section")
     if re.search(r"^```\s*$", body, re.MULTILINE) and not re.search(r"^```\w+", body, re.MULTILINE):
         problems.append("code block missing language tag")
+    if re.search(r"^(#{2,3} .*)\n+(#{2,3} )", body, re.MULTILINE):
+        problems.append("stacked headings with no prose between them")
     problems.extend(_fabrication_problems(body))
+    problems.extend(_tone_problems(body))
     return problems
+
+
+# Phrases that read as hype, filler, or condescension. The owner asked for a
+# clear, clean, friendly tone, and these are the specific tics that break it.
+_TONE_PATTERNS = [
+    (r"\bin today's (world|fast-paced)", "cliche opener \"in today's world\""),
+    (r"\b(revolutionary|game.changing|cutting.edge|paradigm shift)\b", "hype language"),
+    (r"\b(simply|just) (use|run|add|call|do|install)\b", "condescending \"simply/just\""),
+    (r"\bobviously\b", "condescending \"obviously\""),
+    (r"\b(utilize|utilise|leverage|commence|endeavour|endeavor)\b", "corporate jargon"),
+    (r"\b(delve|dive) (in|into) the (world|realm)\b", "cliche \"dive into the world\""),
+    (r"\bit is worth noting that\b", "filler phrase"),
+    (r"\b(unleash|supercharge|turbocharge|skyrocket)\b", "marketing verb"),
+    (r"!(\s|$)", "exclamation mark"),
+]
+
+
+def _tone_problems(body: str) -> list[str]:
+    """Flag writing that breaks the clear, friendly, jargon-free house style."""
+    prose = _strip_code_blocks(body)
+    found: list[str] = []
+    for pattern, label in _TONE_PATTERNS:
+        if re.search(pattern, prose, re.IGNORECASE) and label not in found:
+            found.append(label)
+
+    # Long average sentences read as dense no matter how good the content is.
+    sentences = [s for s in re.split(r"[.!?]+\s", prose) if len(s.split()) > 2]
+    if sentences:
+        avg = sum(len(s.split()) for s in sentences) / len(sentences)
+        if avg > 26:
+            found.append(f"sentences too long (avg {avg:.0f} words, aim under 22)")
+    return found
 
 
 # Numbers the model has no way to know and reliably invents: latency figures,
@@ -374,6 +472,41 @@ def _fabrication_problems(body: str) -> list[str]:
         if re.search(pattern, prose, re.IGNORECASE) and label not in found:
             found.append(label)
     return found
+
+
+def _strip_fabricated_tables(body: str) -> tuple[str, int]:
+    """Delete markdown tables containing invented specs. Returns (body, count).
+
+    A spec table is the model's favourite way to fabricate: it reaches for
+    latency, parameter counts, and prices to fill cells. Removing the table
+    keeps the rest of a good article publishable, and costs no LLM call.
+    """
+    lines = body.split("\n")
+    out: list[str] = []
+    removed = 0
+    i = 0
+    while i < len(lines):
+        # A table is a run of consecutive lines that all contain a pipe.
+        if "|" in lines[i]:
+            start = i
+            while i < len(lines) and "|" in lines[i]:
+                i += 1
+            block = lines[start:i]
+            # Two lines (header + separator) is the minimum real table.
+            if len(block) >= 2 and _fabrication_problems("\n".join(block)):
+                removed += 1
+                while i < len(lines) and not lines[i].strip():
+                    i += 1
+                # Leave exactly one blank line so the next block does not butt
+                # against the previous heading or paragraph.
+                if out and out[-1].strip() and i < len(lines):
+                    out.append("")
+                continue
+            out.extend(block)
+            continue
+        out.append(lines[i])
+        i += 1
+    return "\n".join(out), removed
 
 
 def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
@@ -417,9 +550,15 @@ def _normalize(data: dict) -> dict:
     # dev.to renders the title itself, so a top-level '#' heading shows up as a
     # duplicate title. Demote any '# ' to '## '.
     body = re.sub(r"^# (?!#)", "## ", body, flags=re.MULTILINE)
-    # Collapse 3+ blank lines to 2; ensure headings have a blank line before them.
+    # Strip "1. "/"2) " numbering the model adds to headings. dev.to renders a
+    # clean outline without it, and the numbers go stale if sections are reordered.
+    body = re.sub(r"^(#{2,3} )\d+[.)]\s+", r"\1", body, flags=re.MULTILINE)
+    # Collapse 3+ blank lines to 2, then guarantee one blank line on both sides of
+    # every heading. Without the trailing one, dev.to runs the first paragraph
+    # into the heading.
     body = re.sub(r"\n{4,}", "\n\n\n", body)
     body = re.sub(r"(?<!\n)\n(#{2,3} )", r"\n\n\1", body)
+    body = re.sub(r"^(#{2,3} .*)\n(?!\n)(?=\S)", r"\1\n\n", body, flags=re.MULTILINE)
     data["body_markdown"] = body.strip()
 
     tags = [

@@ -97,14 +97,28 @@ identical posts on dev.to. Each article starts from a real trending piece:
    carries science/culture stories that make bad developer articles. Feed-based
    sources are already topic-scoped and bypass the filter.
 3. `_pick_source()` takes the highest-ranked candidate not in
-   `status["article_history"]`, so a source is used at most once, ever.
+   `status["article_history"]`, so a source is used at most once, ever. If the
+   candidate is on a paywalled host (`trending._PAYWALLED_HOSTS`) and its feed
+   summary is too thin to write from, `trending.unlock_summary()` fetches the
+   full text once via the public `freedium-mirror.cfd` mirror. If the mirror is
+   down or returns nothing useful, that candidate is skipped and the next one is
+   tried — the mirror is never required for a cycle to succeed.
 4. The LLM writes an *improved, original* article on that subject. The system
    prompt forbids rewording and requires added value (working code, tradeoffs,
-   failure modes) plus a `## Source` attribution section.
-5. Three gates run before publishing: `_too_similar_to_source()` (title must not
-   restate the source), `_duplicate_reason()` (exact + near-duplicate check
-   against all past titles), and `_ensure_attribution()` (adds the source link
-   if the model omitted it).
+   failure modes) plus a `## Source` attribution section. It also fixes the
+   **voice**: plain-spoken, short sentences, "you"/"I", no hype, no jargon, and a
+   skimmable heading structure where each `##` states an outcome, not a topic.
+5. Gates run before publishing, in this order:
+   - `_strip_fabricated_tables()` — deletes invented spec tables (latency,
+     parameter counts, prices) but keeps the surrounding prose. Deterministic,
+     so it costs no LLM call.
+   - `_fabrication_problems()` — **hard reject.** If invented figures survive in
+     prose, publish nothing. Checked *before* `_revise_format()` so a doomed
+     article costs one LLM call instead of two.
+   - `_format_problems()` — structure + `_tone_problems()` (hype, "simply/just",
+     corporate jargon, exclamation marks, sentences averaging over 26 words).
+     Only these trigger a revision call.
+   - `_too_similar_to_source()`, `_duplicate_reason()`, `_ensure_attribution()`.
 
 **If no fresh source is found or the LLM fails, the bot publishes nothing.**
 There is deliberately no fallback article — a static fallback is what produced

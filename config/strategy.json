@@ -3,7 +3,8 @@
     "max_articles_per_cycle": 1,
     "min_interval_hours": 6,
     "source_max_age_hours": 24,
-    "history_limit": 200
+    "history_limit": 200,
+    "min_words": 700
   },
   "code_techs": {
     "enabled": true,

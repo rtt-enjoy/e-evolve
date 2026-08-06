@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-05T22:28:10.771895+00:00",
-  "total_runs": 1286,
+  "last_run": "2026-08-06T00:10:50.701342+00:00",
+  "total_runs": 1287,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -15,19 +15,20 @@
   ],
   "llm_provider": "openrouter",
   "earnings": {
-    "total_usd": 3.09,
-    "this_week_usd": 0.08,
-    "last_cycle_usd": 0.0,
+    "total_usd": 3.17,
+    "this_week_usd": 0.16,
+    "last_cycle_usd": 0.08,
     "week_started": "2026-08-03",
     "breakdown": {
       "code_techs": 0.0,
-      "dev.to": 0.08
+      "dev.to": 0.16
     },
     "history": [
       0.02,
       0.02,
       0.02,
       0.02,
+      0.08,
       0.08,
       0.08,
       0.08
@@ -54,8 +55,16 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
-    "total_usd": 0.0
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "When Your Content Bot Hits an LLM Quota, Ship the Fallback",
+        "url": "https://dev.to/robust_true_try/when-your-content-bot-hits-an-llm-quota-ship-the-fallback-3ibl",
+        "estimated_usd": 0.08
+      }
+    ],
+    "total_usd": 0.08
   },
   "suggestions": [
     {
@@ -72,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 276,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -161,8 +170,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-08-05",
-    "published": 3
+    "date": "2026-08-06",
+    "published": 4
   },
   "code_tech_earning": {
     "enabled": true,

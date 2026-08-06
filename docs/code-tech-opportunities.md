@@ -1,6 +1,6 @@
 # Free AI Earning Queue
 
-Refreshed: 2026-08-05T00:18:17.070408+00:00
+Refreshed: 2026-08-06T03:39:32.802211+00:00
 Daily target: $10.00
 
 Suggestions favour free AI services and free AI APIs with zero upfront cost.
@@ -17,60 +17,12 @@ Suggestions favour free AI services and free AI APIs with zero upfront cost.
 
 ## Current Best Angle
 
-The strongest immediate angle is reselling fast, free-tier LLM inference (Groq, Hugging Face) and audio transcription (Groq Whisper) as fixed-price micro-services — transcription, summarization, background removal, and translation — each deliverable in minutes with zero upfront cost and no credit card needed.
-
-## Free AI Services To Use
-
-| Service | What it does | Free tier | Card? | How to earn | Price guide |
-| --- | --- | --- | --- | --- | --- |
-| Groq API | Ultra-fast inference for open LLMs (Llama 3, Mixtral, Gemma) and Whisper speech-to-text | verify current limit | no | Transcribe audio/video files via Whisper endpoint; sell per-minute transcription | $0.10–$0.25 per audio minute |
-| Hugging Face Inference API | Serverless inference for 100k+ open models (LLM, embeddings, image, audio, vision) | verify current limit | no | Remove backgrounds from product photos using RMBG-1.4 or similar; charge per image | $0.05–$0.15 per image |
-| LibreTranslate (public instance) | Free machine translation API (self-hosted mirrors available) | verify current limit | no | Translate documents or subtitles for small businesses; charge per 1,000 characters | $1–$3 per 1,000 chars |
-| MyMemory Translation API | Translation memory API with free tier | 1,000 requests/day | no | Batch-translate CSV/Excel files for e-commerce sellers; fixed price per file | $5–$15 per 10k-word file |
-| Cloudflare Workers AI | Run LLMs, embeddings, and vision models on Cloudflare's edge (Llama 3, BGE, ResNet, etc.) | verify current limit | verify | Schedule daily/weekly summarization reports (news, logs, docs) as a low-cost retainer | $20–$50 per month per report |
-| GitHub Models | Free inference for selected open models (Llama 3, Phi 3, etc.) via GitHub Marketplace | verify current limit | no | Prototype a one-page AI tool (e.g., SEO meta generator) and sell the tool + prompt library | $10–$30 one-time per tool |
-| Hugging Face Spaces | Free hosting for Gradio/Streamlit/Docker demos with CPU and optional GPU quota | verify current limit | no | Deploy a batch-processing UI (transcribe, translate, background removal) and charge per batch job | $5–$20 per batch of 10–50 files |
-
-## Easy Earning Ideas
-
-1. **Audio Transcription Micro-Service**
-   - Who pays: Podcasters, journalists, researchers, course creators
-   - Deliverable: SRT/VTT/TXT transcript with timestamps, delivered via email or shared drive within 24h
-   - Price: 0.15 per audio minute
-   - Time to first dollar: same day
-   - Free stack: Groq Whisper API + Python script (ffmpeg for splitting) + free file transfer (WeTransfer/Drive)
-2. **PDF/Document Summarization Pack**
-   - Who pays: Consultants, lawyers, analysts, students
-   - Deliverable: One-page bullet summary + key quotes + action items per PDF (up to 50 pages)
-   - Price: 3–5 per document
-   - Time to first dollar: 2–3 days
-   - Free stack: Groq Llama 3 70B + pdfplumber (local) + simple CLI wrapper
-3. **E-commerce Background Removal**
-   - Who pays: Small Shopify/Etsy sellers, dropshippers
-   - Deliverable: Clean PNG with transparent background, 1024x1024, delivered in zip folder
-   - Price: 0.10 per image (min 20 images)
-   - Time to first dollar: same day
-   - Free stack: Hugging Face Inference API (RMBG-1.4) + Python batch script + free image hosting (imgur/Drive)
-4. **Monthly Competitor News Digest**
-   - Who pays: Founders, marketers, product managers
-   - Deliverable: Weekly 1-page PDF: top 10 articles summarized, trends highlighted, source links
-   - Price: 30–50 per month
-   - Time to first dollar: 2–3 days (first free sample, then paid)
-   - Free stack: Cloudflare Workers AI (scheduled) + RSS feeds + Groq/HF for summarization + PDF generation (fpdf)
-5. **Prompt Library + Setup Service**
-   - Who pays: Agencies, solopreneurs, non-technical teams
-   - Deliverable: Curated prompt pack (10–20 prompts) for a specific workflow (SEO, support, coding) + 30-min video walkthrough showing how to plug into their own free Groq/HF key
-   - Price: 20–40 one-time
-   - Time to first dollar: same day
-   - Free stack: Groq/HF APIs (client brings key) + Notion/Google Doc for delivery + Loom (free) for video
+Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: 'The user wants a JSON response with specific st
 
 ## Next Actions
 
-- Create a simple Stripe/Gumroad/PayPal payment link for each micro-service (transcription, background removal, summarization).
-- Build a one-page portfolio (Carrd/Notion free) listing the 5 offers with prices, turnaround, and a 'Buy Now' button.
-- Post the transcription and background removal offers in 3 relevant Facebook/Reddit/Discord communities where buyers already ask for these services.
-- Record a 2-minute Loom demo of each workflow (upload file → get result) and add to the portfolio page.
-- Set up a free Calendly link for the prompt-library setup call; deliver the pack immediately after payment.
+- Review the ranked free-AI leads below and pick the one with the clearest buyer.
+- Verify the free tier limits yourself before quoting a price.
 
 ## Monetization Patterns
 
@@ -94,7 +46,10 @@ The strongest immediate angle is reselling fast, free-tier LLM inference (Groq, 
 
 ## Reference Sources
 
-- [OpenRouter free model list](https://openrouter.ai/models?max_price=0): Live list of zero-cost models usable through a single API key.
+- [OpenRouter free model list](https://openrouter.ai/models?max_price=0): Live list of zero-cost models usable through a single API key. Free (:free) models are capped at 20 req/min and only 50 req/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit before relying on volume.
+- [Google AI Studio (Gemini API)](https://aistudio.google.com/app/apikey): No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day (10 RPM, 250K TPM); Gemini 2.0 Flash is roughly 15 RPM / 1M TPM. Much higher daily ceiling than OpenRouter's free chain -- verify current limit.
+- [Cerebras Cloud free tier](https://cloud.cerebras.ai/): No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model on fast inference hardware. Strong fallback once OpenRouter's free daily cap is hit -- verify current limit.
+- [Groq Cloud free tier](https://console.groq.com/): No credit card required. Generous daily request allowance (roughly 14K/day depending on model) with very low latency -- verify current limit.
 
 ## Underserved Niches
 
@@ -157,40 +112,10 @@ The strongest immediate angle is reselling fast, free-tier LLM inference (Groq, 
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $960.00 via crypto.
      
-     Payment address is configured privately; add it manually before sending.
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379
-2. [I made Organice, a Finder utility for the file chores I loathe](https://www.reddit.com/r/SideProject/comments/1vfabi5/i_made_organice_a_finder_utility_for_the_file/)
-   - Score: 100/100
-   - Value signal: $24.99
-   - Why: visible or inferred value around $24.99; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: I made Organice, a Finder utility for the file chores I loathe
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vfabi5/i_made_organice_a_finder_utility_for_the_file/
-     Why this is suitable: visible or inferred value around $24.99; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: I’m Dan, the developer of Organice, my attempt to make a Hazel-alternative, as a side project. I made it after noticing how often I opened a file for one tiny reason: copy the text, check a receipt total, give it a useful name, or move it somewhere sensible. None of that is difficult, but I lose track, I lose focus, I am less in touch with my files than I want to be. Doing it file by file is just irritating. I have looked at Hazel, and other similiar utility solutions, I want to bring my own flavour to it and hopefully it aligns well with more of you out there. The Problem I want order, I want systems. I keep struggling with focus and chores that should be elementary, due to my concentration disorder. With Organice, I can set and forget rules, run utility commands and essentially add a few actions to Finder. Select a file or folder, right-click, and you can: * organize a folder from read
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "I made Organice, a Finder utility for the file chores I loathe" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $24.99 via crypto.
-     
-     Payment address is configured privately; add it manually before sending.
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1vfabi5/i_made_organice_a_finder_utility_for_the_file/
-3. [🚨 P0: Launch ADA SaaS Container — Self-Hosted OpenClaw + GitHub (Founder Decision)](https://github.com/ishan190425/autonomous-dev-agents/issues/155)
+2. [🚨 P0: Launch ADA SaaS Container — Self-Hosted OpenClaw + GitHub (Founder Decision)](https://github.com/ishan190425/autonomous-dev-agents/issues/155)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -217,9 +142,39 @@ The strongest immediate angle is reselling fast, free-tier LLM inference (Groq, 
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
-     Payment address is configured privately; add it manually before sending.
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ishan190425/autonomous-dev-agents/issues/155
+3. [📡 AI Benchmark & Data Radar — 2026-08-06](https://github.com/ktwu01/benchmark-radar/issues/137)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: 📡 AI Benchmark & Data Radar — 2026-08-06
+     Source: github
+     URL: https://github.com/ktwu01/benchmark-radar/issues/137
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: <!-- benchmark-radar:daily:2026-08-06 --> <!-- generator: benchmark-radar/0.3.0 -->  # 📡 AI Benchmark & Data Radar — 2026-08-06  Evidence-first daily scan from `2026-08-04T00:29:21.158982+00:00` to `2026-08-06T01:47:54.268418+00:00`.  > Automated discovery and triage, not an endorsement. Open the primary source before using any claim.  **[Explore this day on the dashboard](https://ktwu01.github.io/benchmark-radar/?date=2026-08-06)**  ## Daily briefing  - Within this feed, several new benchmark releases anchor evaluation in concrete workflows: enterprise task reuse, production sales agents, scientific experiment design, and repository search\. This is a recurring specialization pattern across independent artifacts, not an activity trend over time\. \[E001, E003, E004, E007\] Why it matters: Evaluators should select tasks that reproduce their deployment workflow and decision criteria rathe
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "📡 AI Benchmark & Data Radar — 2026-08-06" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/ktwu01/benchmark-radar/issues/137
 4. [Starboard weekly repo digest - 2026-07-27](https://github.com/Codevetter/starboard/issues/32)
    - Score: 100/100
    - Value signal: $10.00
@@ -247,70 +202,10 @@ The strongest immediate angle is reselling fast, free-tier LLM inference (Groq, 
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
-     Payment address is configured privately; add it manually before sending.
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/Codevetter/starboard/issues/32
-5. [Quick update on Sumwise (posted here a few weeks back) — a Chrome extension that turns any article, YouTube video, or PDF into a structured ](https://www.reddit.com/r/SideProject/comments/1vfhd7m/quick_update_on_sumwise_posted_here_a_few_weeks/)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Quick update on Sumwise (posted here a few weeks back) — a Chrome extension that turns any article, YouTube video, or PDF into a structured 
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vfhd7m/quick_update_on_sumwise_posted_here_a_few_weeks/
-     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Shipped since then: - Summaries in 7 languages (EN/TR/ES/IT/AR/DE/FR) — output adapts to *your* language, not the page&#39;s. - ~2–7 seconds per summary after switching AI models - Markdown export — someone on Reddit asked for it under a previous post, so I built it. They came back and used it the same week, which honestly felt better than any metric. Free tier: 5 summaries/daily, no card needed. Blunt feedback welcome — and I&#39;m deciding what to build next, so if something&#39;s missing for your workflow, tell me. https://sumwise.ai Chrome Web Store: https://chromewebstore.google.com/detail/sumwise-ai-summarizer-for/hjkmgfaiphfbpoakiddanpapcnjijbac &#32; submitted by &#32; /u/the_codefather [link] &#32; [comments]
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Quick update on Sumwise (posted here a few weeks back) — a Chrome extension that turns any article, YouTube video, or PDF into a structured " and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address is configured privately; add it manually before sending.
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1vfhd7m/quick_update_on_sumwise_posted_here_a_few_weeks/
-6. [🔍 CLI Discovery: 2026-08-04 — 18 candidates found](https://github.com/RealZST/harnesskit-resources/issues/62)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: 🔍 CLI Discovery: 2026-08-04 — 18 candidates found
-     Source: github
-     URL: https://github.com/RealZST/harnesskit-resources/issues/62
-     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-04. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU — ⭐ 14247 — Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus — ⭐ 44995 — Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "🔍 CLI Discovery: 2026-08-04 — 18 candidates found" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address is configured privately; add it manually before sending.
-     
-     Reference: https://github.com/RealZST/harnesskit-resources/issues/62
-7. [Starboard weekly repo digest - 2026-06-15](https://github.com/Codevetter/starboard/issues/16)
+5. [Starboard weekly repo digest - 2026-06-15](https://github.com/Codevetter/starboard/issues/16)
    - Score: 100/100
    - Value signal: $0.00
    - Why: runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start
@@ -337,20 +232,80 @@ The strongest immediate angle is reselling fast, free-tier LLM inference (Groq, 
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
-     Payment address is configured privately; add it manually before sending.
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/Codevetter/starboard/issues/16
-8. [By day AI was replacing me. By night I was using AI to replace other people. Six months ago I went indie.](https://www.reddit.com/r/SideProject/comments/1ve9l4o/by_day_ai_was_replacing_me_by_night_i_was_using/)
-   - Score: 98/100
+6. [Starboard weekly repo digest - 2026-06-08](https://github.com/Codevetter/starboard/issues/8)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Starboard weekly repo digest - 2026-06-08
+     Source: github
+     URL: https://github.com/Codevetter/starboard/issues/8
+     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Weekly repo discovery digest for the last 7 days.  Generated: 2026-06-08 UTC Threshold crossings: 74  ## Corpus snapshot  - 5,000+ stars: 11,975 repos - 10,000+ stars: 5,282 repos - 20,000+ stars: 2,125 repos - 50,000+ stars: 435 repos - 100,000+ stars: 112 repos  ### Top repos in corpus  - [codecrafters-io/build-your-own-x](https://github.com/codecrafters-io/build-your-own-x) - 512,962 stars - Markdown - Master programming by recreating your favorite technologies from scratch. - [sindresorhus/awesome](https://github.com/sindresorhus/awesome) - 473,870 stars - 😎 Awesome lists about all kinds of interesting topics - [freeCodeCamp/freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp) - 446,389 stars - TypeScript - freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free. - [public-apis/public-apis](https://github.com/public-apis/p
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Starboard weekly repo digest - 2026-06-08" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/Codevetter/starboard/issues/8
+7. [Its been 4 months building my exam prep site, still 0 customers. Unable to figure out the next step.](https://www.reddit.com/r/SideProject/comments/1vgavw6/its_been_4_months_building_my_exam_prep_site/)
+   - Score: 99/100
+   - Value signal: $29.00
+   - Why: visible or inferred value around $29.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Its been 4 months building my exam prep site, still 0 customers. Unable to figure out the next step.
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vgavw6/its_been_4_months_building_my_exam_prep_site/
+     Why this is suitable: visible or inferred value around $29.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: So I&#39;ve been building for the last 4 months. Practice exams + an AI tutor for AWS certifications. I&#39;m solo, based in India, launched the website in April. Since launch I was getting very few visitors a week and zero sales. I kept thinking the product wasn&#39;t good enough , so I just kept adding stuff. More questions, more certifications, more features. But sadly nothing changed. Got it audited using Fable and figured out that payment system was broken. Had to pay myself 2 times to fix it and thats the only payment I received till now. I paying myself to keep running is the funny part. Anyway, all of that is fixed now. Site is fine, pages actually have content in them, payments works. There&#39;s a free diagnostic, free practice questions, and the tutor explains why each wrong answer is wrong with links to AWS docs. Pricing is $29 / Rs 1999 one time, no subscription. And even af
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Its been 4 months building my exam prep site, still 0 customers. Unable to figure out the next step." and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $29.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1vgavw6/its_been_4_months_building_my_exam_prep_site/
+8. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/496)
+   - Score: 96/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: By day AI was replacing me. By night I was using AI to replace other people. Six months ago I went indie.
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1ve9l4o/by_day_ai_was_replacing_me_by_night_i_was_using/
+     Lead: 💎 Knowledge Update & Optimization: 12 Jul 2026
+     Source: github
+     URL: https://github.com/nubenetes/awesome-kubernetes/pull/496
      Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
      
@@ -361,12 +316,12 @@ The strongest immediate angle is reselling fast, free-tier LLM inference (Groq, 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: Two of Australia&#39;s big four banks are laying off IT staff, round after round. I work at one of them. My closest friend works at the other. So I&#39;ve been watching this from both sides at once, and every day at work feels like waiting for a verdict - not knowing whether this round gets to your name. I have 15 years of development experience. Dozens of projects, big and small. I&#39;ve worked at a Fortune 500 IT company and at a multinational financial firm. By the old logic, that CV is about as safe as it gets in this country. Banks always need people to keep the systems running. But one of the things LLMs are best at is writing exactly the kind of code I make my living from. CRUD. Glue logic. Standard web business. I have been watching my core skill turn from a livelihood into a free bonus feature that ships with a model. And at the same time, something more twisted was happening i
+     Request excerpt: ## 💎 Knowledge Update: 12 Jul 2026  Processed **0** links.  ⚠️ **Detailed Safety Audit moved to comments due to scale.**   ### 🧠 AI Intelligence & Observability Report  #### 🤖 Agentic Roles & Model Selection (Dynamic) Execution utilized a multi-agent Analyst-Auditor workflow for maximum robustness.  | Agent Role | Model Used | Successes | | :--- | :--- | :---: |  #### 🤖 Model Performance Matrix | Model Used | Successful Calls | Hierarchy Logic | | :--- | :---: | :--- | | No AI calls | 0 | N/A |  #### 🔑 API Infrastructure & Quota Management | Key Index | Type | Provider Label | Usage | Errors (429/404) | | :--- | :--- | :--- | :---: | :---: |  #### 📊 Consumption and Efficiency Metrics (2026 Units) - **Total Prompt Tokens**: 0 - **Total Completion Tokens**: 0 - **💰 Estimated Cost**: **0.0000 €** - **Database-First Cache Hits**: **0** (0.0% hit ratio) - **Estimated Tokens Saved**: ~0 (Zero-
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "By day AI was replacing me. By night I was using AI to replace other people. Six months ago I went indie." and can make a small working version.
+     Hi, I found your request about "💎 Knowledge Update & Optimization: 12 Jul 2026" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
-     Payment address is configured privately; add it manually before sending.
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1ve9l4o/by_day_ai_was_replacing_me_by_night_i_was_using/
+     Reference: https://github.com/nubenetes/awesome-kubernetes/pull/496

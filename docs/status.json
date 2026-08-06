@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-06T00:10:50.701342+00:00",
-  "total_runs": 1287,
+  "last_run": "2026-08-06T03:39:32.145109+00:00",
+  "total_runs": 1288,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -17,7 +17,7 @@
   "earnings": {
     "total_usd": 3.17,
     "this_week_usd": 0.16,
-    "last_cycle_usd": 0.08,
+    "last_cycle_usd": 0.0,
     "week_started": "2026-08-03",
     "breakdown": {
       "code_techs": 0.0,
@@ -57,14 +57,17 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "dev.to",
+        "platform": "code_techs",
         "success": true,
-        "title": "When Your Content Bot Hits an LLM Quota, Ship the Fallback",
-        "url": "https://dev.to/robust_true_try/when-your-content-bot-hits-an-llm-quota-ship-the-fallback-3ibl",
-        "estimated_usd": 0.08
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
       }
     ],
-    "total_usd": 0.08
+    "total_usd": 0.0
   },
   "suggestions": [
     {
@@ -81,7 +84,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 276,
+  "last_cycle_seconds": 262,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -187,20 +190,7 @@
         "reason": "visible or inferred value around $960.00; runs on a free AI tier, so input cost is zero and margin is total",
         "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
         "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)\nSource: github\nURL: https://github.com/ava-agent/awesome-ai-ideas/pull/1379\nWhy this is suitable: visible or inferred value around $960.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # feat: MemoryAI - Memory-Enhanced AI Agents with Dual-Trace Architecture (Issue #1086)  > **Source**: Issue #1086 > **Status**: Executive PR Document | v1.0  ---  ## \ud83d\udccb Executive Summary  MemoryAI is an open-source AI agent platform introducing a **Dual-Trace Memory Architecture** \u2014 combining episodic memory (raw interaction logs with embeddings) and semantic memory (compressed knowledge graphs) \u2014 to give AI agents persistent, evolving context. Current LLM-based agents lose all context between sessions, leading to repetitive conversations, forgotten user preferences, and inability to learn from past interactions. MemoryAI solves this by providing a plug-and-play memory layer that reduces hallucination by 40%, improves task completion rates by 35%, and enables agents to genuinely \"remember\" and improve over time.  ### Key Metrics - **Market**: AI agent infrastructure market projected at $",
-        "outreach_draft": "Hi, I found your request about \"feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $960.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "I made Organice, a Finder utility for the file chores I loathe",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vfabi5/i_made_organice_a_finder_utility_for_the_file/",
-        "source": "reddit:r/SideProject",
-        "score": 100,
-        "estimated_value_usd": 24.99,
-        "reason": "visible or inferred value around $24.99; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I made Organice, a Finder utility for the file chores I loathe\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vfabi5/i_made_organice_a_finder_utility_for_the_file/\nWhy this is suitable: visible or inferred value around $24.99; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I\u2019m Dan, the developer of Organice, my attempt to make a Hazel-alternative, as a side project. I made it after noticing how often I opened a file for one tiny reason: copy the text, check a receipt total, give it a useful name, or move it somewhere sensible. None of that is difficult, but I lose track, I lose focus, I am less in touch with my files than I want to be. Doing it file by file is just irritating. I have looked at Hazel, and other similiar utility solutions, I want to bring my own flavour to it and hopefully it aligns well with more of you out there. The Problem I want order, I want systems. I keep struggling with focus and chores that should be elementary, due to my concentration disorder. With Organice, I can set and forget rules, run utility commands and essentially add a few actions to Finder. Select a file or folder, right-click, and you can: * organize a folder from read",
-        "outreach_draft": "Hi, I found your request about \"I made Organice, a Finder utility for the file chores I loathe\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $24.99 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://www.reddit.com/r/SideProject/comments/1vfabi5/i_made_organice_a_finder_utility_for_the_file/",
+        "outreach_draft": "Hi, I found your request about \"feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $960.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379",
         "pursued": false,
         "archived_at": null
       },
@@ -213,7 +203,20 @@
         "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
         "next_step": "Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.",
         "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udea8 P0: Launch ADA SaaS Container \u2014 Self-Hosted OpenClaw + GitHub (Founder Decision)\nSource: github\nURL: https://github.com/ishan190425/autonomous-dev-agents/issues/155\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Founder Decision \u2014 Ship ASAP  This is the priority. Build a containerized ADA SaaS that:  1. **Sets up OpenClaw + GitHub integration automatically** 2. **Enables ADA autostart** to work on its own repo (dogfooding) 3. **Configures read/write role permissions** for safe operation 4. **Frontend website with paywall** for users to sign up and pay  ---  ## Phase 1: Container Infrastructure  A single Docker container that anyone can deploy to get: - OpenClaw gateway running - GitHub App or PAT configured - ADA dispatch cron running automatically - Role-based permissions (read-only vs read-write)  ### Container Contents - `openclaw` gateway (configured) - `@ada-ai/cli` installed - GitHub integration (App or PAT) - Cron scheduler for dispatch cycles - Environment-based configuration  ### Configuration ```yaml # docker-compose.yml or env vars GITHUB_TOKEN: xxx           # or GitHub App creden",
-        "outreach_draft": "Hi, I found your request about \"\ud83d\udea8 P0: Launch ADA SaaS Container \u2014 Self-Hosted OpenClaw + GitHub (Founder Decision)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://github.com/ishan190425/autonomous-dev-agents/issues/155",
+        "outreach_draft": "Hi, I found your request about \"\ud83d\udea8 P0: Launch ADA SaaS Container \u2014 Self-Hosted OpenClaw + GitHub (Founder Decision)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/ishan190425/autonomous-dev-agents/issues/155",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "\ud83d\udce1 AI Benchmark & Data Radar \u2014 2026-08-06",
+        "url": "https://github.com/ktwu01/benchmark-radar/issues/137",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udce1 AI Benchmark & Data Radar \u2014 2026-08-06\nSource: github\nURL: https://github.com/ktwu01/benchmark-radar/issues/137\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: <!-- benchmark-radar:daily:2026-08-06 --> <!-- generator: benchmark-radar/0.3.0 -->  # \ud83d\udce1 AI Benchmark & Data Radar \u2014 2026-08-06  Evidence-first daily scan from `2026-08-04T00:29:21.158982+00:00` to `2026-08-06T01:47:54.268418+00:00`.  > Automated discovery and triage, not an endorsement. Open the primary source before using any claim.  **[Explore this day on the dashboard](https://ktwu01.github.io/benchmark-radar/?date=2026-08-06)**  ## Daily briefing  - Within this feed, several new benchmark releases anchor evaluation in concrete workflows: enterprise task reuse, production sales agents, scientific experiment design, and repository search\\. This is a recurring specialization pattern across independent artifacts, not an activity trend over time\\. \\[E001, E003, E004, E007\\] Why it matters: Evaluators should select tasks that reproduce their deployment workflow and decision criteria rathe",
+        "outreach_draft": "Hi, I found your request about \"\ud83d\udce1 AI Benchmark & Data Radar \u2014 2026-08-06\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/ktwu01/benchmark-radar/issues/137",
         "pursued": false,
         "archived_at": null
       },
@@ -226,33 +229,7 @@
         "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
         "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
         "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Starboard weekly repo digest - 2026-07-27\nSource: github\nURL: https://github.com/Codevetter/starboard/issues/32\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Weekly repo discovery digest for the last 7 days.  Generated: 2026-07-27 UTC Threshold crossings: 86  ## Corpus snapshot  - 5,000+ stars: 12,283 repos - 10,000+ stars: 5,422 repos - 20,000+ stars: 2,196 repos - 50,000+ stars: 464 repos - 100,000+ stars: 119 repos  ### Top repos in corpus  - [codecrafters-io/build-your-own-x](https://github.com/codecrafters-io/build-your-own-x) - 531,612 stars - Markdown - Master programming by recreating your favorite technologies from scratch. - [sindresorhus/awesome](https://github.com/sindresorhus/awesome) - 489,106 stars - \ud83d\ude0e Awesome lists about all kinds of interesting topics - [freeCodeCamp/freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp) - 452,833 stars - TypeScript - freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free. - [public-apis/public-apis](https://github.com/public-apis/p",
-        "outreach_draft": "Hi, I found your request about \"Starboard weekly repo digest - 2026-07-27\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://github.com/Codevetter/starboard/issues/32",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "Quick update on Sumwise (posted here a few weeks back) \u2014 a Chrome extension that turns any article, YouTube video, or PDF into a structured ",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vfhd7m/quick_update_on_sumwise_posted_here_a_few_weeks/",
-        "source": "reddit:r/SideProject",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Quick update on Sumwise (posted here a few weeks back) \u2014 a Chrome extension that turns any article, YouTube video, or PDF into a structured \nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vfhd7m/quick_update_on_sumwise_posted_here_a_few_weeks/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Shipped since then: - Summaries in 7 languages (EN/TR/ES/IT/AR/DE/FR) \u2014 output adapts to *your* language, not the page&#39;s. - ~2\u20137 seconds per summary after switching AI models - Markdown export \u2014 someone on Reddit asked for it under a previous post, so I built it. They came back and used it the same week, which honestly felt better than any metric. Free tier: 5 summaries/daily, no card needed. Blunt feedback welcome \u2014 and I&#39;m deciding what to build next, so if something&#39;s missing for your workflow, tell me. https://sumwise.ai Chrome Web Store: https://chromewebstore.google.com/detail/sumwise-ai-summarizer-for/hjkmgfaiphfbpoakiddanpapcnjijbac &#32; submitted by &#32; /u/the_codefather [link] &#32; [comments]",
-        "outreach_draft": "Hi, I found your request about \"Quick update on Sumwise (posted here a few weeks back) \u2014 a Chrome extension that turns any article, YouTube video, or PDF into a structured \" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://www.reddit.com/r/SideProject/comments/1vfhd7m/quick_update_on_sumwise_posted_here_a_few_weeks/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "\ud83d\udd0d CLI Discovery: 2026-08-04 \u2014 18 candidates found",
-        "url": "https://github.com/RealZST/harnesskit-resources/issues/62",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand",
-        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udd0d CLI Discovery: 2026-08-04 \u2014 18 candidates found\nSource: github\nURL: https://github.com/RealZST/harnesskit-resources/issues/62\nWhy this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-04. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU \u2014 \u2b50 14247 \u2014 Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus \u2014 \u2b50 44995 \u2014 Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige",
-        "outreach_draft": "Hi, I found your request about \"\ud83d\udd0d CLI Discovery: 2026-08-04 \u2014 18 candidates found\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://github.com/RealZST/harnesskit-resources/issues/62",
+        "outreach_draft": "Hi, I found your request about \"Starboard weekly repo digest - 2026-07-27\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/Codevetter/starboard/issues/32",
         "pursued": false,
         "archived_at": null
       },
@@ -265,20 +242,46 @@
         "reason": "runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start",
         "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
         "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Starboard weekly repo digest - 2026-06-15\nSource: github\nURL: https://github.com/Codevetter/starboard/issues/16\nWhy this is suitable: runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Weekly repo discovery digest for the last 7 days.  Generated: 2026-06-15 UTC Threshold crossings: 103  ## Corpus snapshot  - 5,000+ stars: 12,031 repos - 10,000+ stars: 5,309 repos - 20,000+ stars: 2,136 repos - 50,000+ stars: 444 repos - 100,000+ stars: 113 repos  ### Top repos in corpus  - [codecrafters-io/build-your-own-x](https://github.com/codecrafters-io/build-your-own-x) - 515,711 stars - Markdown - Master programming by recreating your favorite technologies from scratch. - [sindresorhus/awesome](https://github.com/sindresorhus/awesome) - 475,888 stars - \ud83d\ude0e Awesome lists about all kinds of interesting topics - [freeCodeCamp/freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp) - 447,519 stars - TypeScript - freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free. - [public-apis/public-apis](https://github.com/public-apis/",
-        "outreach_draft": "Hi, I found your request about \"Starboard weekly repo digest - 2026-06-15\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://github.com/Codevetter/starboard/issues/16",
+        "outreach_draft": "Hi, I found your request about \"Starboard weekly repo digest - 2026-06-15\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/Codevetter/starboard/issues/16",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "By day AI was replacing me. By night I was using AI to replace other people. Six months ago I went indie.",
-        "url": "https://www.reddit.com/r/SideProject/comments/1ve9l4o/by_day_ai_was_replacing_me_by_night_i_was_using/",
+        "title": "Starboard weekly repo digest - 2026-06-08",
+        "url": "https://github.com/Codevetter/starboard/issues/8",
+        "source": "github",
+        "score": 100,
+        "estimated_value_usd": 0.0,
+        "reason": "runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start",
+        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Starboard weekly repo digest - 2026-06-08\nSource: github\nURL: https://github.com/Codevetter/starboard/issues/8\nWhy this is suitable: runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Weekly repo discovery digest for the last 7 days.  Generated: 2026-06-08 UTC Threshold crossings: 74  ## Corpus snapshot  - 5,000+ stars: 11,975 repos - 10,000+ stars: 5,282 repos - 20,000+ stars: 2,125 repos - 50,000+ stars: 435 repos - 100,000+ stars: 112 repos  ### Top repos in corpus  - [codecrafters-io/build-your-own-x](https://github.com/codecrafters-io/build-your-own-x) - 512,962 stars - Markdown - Master programming by recreating your favorite technologies from scratch. - [sindresorhus/awesome](https://github.com/sindresorhus/awesome) - 473,870 stars - \ud83d\ude0e Awesome lists about all kinds of interesting topics - [freeCodeCamp/freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp) - 446,389 stars - TypeScript - freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free. - [public-apis/public-apis](https://github.com/public-apis/p",
+        "outreach_draft": "Hi, I found your request about \"Starboard weekly repo digest - 2026-06-08\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/Codevetter/starboard/issues/8",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Its been 4 months building my exam prep site, still 0 customers. Unable to figure out the next step.",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vgavw6/its_been_4_months_building_my_exam_prep_site/",
         "source": "reddit:r/SideProject",
-        "score": 98,
+        "score": 99,
+        "estimated_value_usd": 29.0,
+        "reason": "visible or inferred value around $29.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Its been 4 months building my exam prep site, still 0 customers. Unable to figure out the next step.\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vgavw6/its_been_4_months_building_my_exam_prep_site/\nWhy this is suitable: visible or inferred value around $29.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: So I&#39;ve been building for the last 4 months. Practice exams + an AI tutor for AWS certifications. I&#39;m solo, based in India, launched the website in April. Since launch I was getting very few visitors a week and zero sales. I kept thinking the product wasn&#39;t good enough , so I just kept adding stuff. More questions, more certifications, more features. But sadly nothing changed. Got it audited using Fable and figured out that payment system was broken. Had to pay myself 2 times to fix it and thats the only payment I received till now. I paying myself to keep running is the funny part. Anyway, all of that is fixed now. Site is fine, pages actually have content in them, payments works. There&#39;s a free diagnostic, free practice questions, and the tutor explains why each wrong answer is wrong with links to AWS docs. Pricing is $29 / Rs 1999 one time, no subscription. And even af",
+        "outreach_draft": "Hi, I found your request about \"Its been 4 months building my exam prep site, still 0 customers. Unable to figure out the next step.\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $29.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vgavw6/its_been_4_months_building_my_exam_prep_site/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "\ud83d\udc8e Knowledge Update & Optimization: 12 Jul 2026",
+        "url": "https://github.com/nubenetes/awesome-kubernetes/pull/496",
+        "source": "github",
+        "score": 96,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
         "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: By day AI was replacing me. By night I was using AI to replace other people. Six months ago I went indie.\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1ve9l4o/by_day_ai_was_replacing_me_by_night_i_was_using/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Two of Australia&#39;s big four banks are laying off IT staff, round after round. I work at one of them. My closest friend works at the other. So I&#39;ve been watching this from both sides at once, and every day at work feels like waiting for a verdict - not knowing whether this round gets to your name. I have 15 years of development experience. Dozens of projects, big and small. I&#39;ve worked at a Fortune 500 IT company and at a multinational financial firm. By the old logic, that CV is about as safe as it gets in this country. Banks always need people to keep the systems running. But one of the things LLMs are best at is writing exactly the kind of code I make my living from. CRUD. Glue logic. Standard web business. I have been watching my core skill turn from a livelihood into a free bonus feature that ships with a model. And at the same time, something more twisted was happening i",
-        "outreach_draft": "Hi, I found your request about \"By day AI was replacing me. By night I was using AI to replace other people. Six months ago I went indie.\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address is configured privately; add it manually before sending.\n\nReference: https://www.reddit.com/r/SideProject/comments/1ve9l4o/by_day_ai_was_replacing_me_by_night_i_was_using/",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udc8e Knowledge Update & Optimization: 12 Jul 2026\nSource: github\nURL: https://github.com/nubenetes/awesome-kubernetes/pull/496\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## \ud83d\udc8e Knowledge Update: 12 Jul 2026  Processed **0** links.  \u26a0\ufe0f **Detailed Safety Audit moved to comments due to scale.**   ### \ud83e\udde0 AI Intelligence & Observability Report  #### \ud83e\udd16 Agentic Roles & Model Selection (Dynamic) Execution utilized a multi-agent Analyst-Auditor workflow for maximum robustness.  | Agent Role | Model Used | Successes | | :--- | :--- | :---: |  #### \ud83e\udd16 Model Performance Matrix | Model Used | Successful Calls | Hierarchy Logic | | :--- | :---: | :--- | | No AI calls | 0 | N/A |  #### \ud83d\udd11 API Infrastructure & Quota Management | Key Index | Type | Provider Label | Usage | Errors (429/404) | | :--- | :--- | :--- | :---: | :---: |  #### \ud83d\udcca Consumption and Efficiency Metrics (2026 Units) - **Total Prompt Tokens**: 0 - **Total Completion Tokens**: 0 - **\ud83d\udcb0 Estimated Cost**: **0.0000 \u20ac** - **Database-First Cache Hits**: **0** (0.0% hit ratio) - **Estimated Tokens Saved**: ~0 (Zero-",
+        "outreach_draft": "Hi, I found your request about \"\ud83d\udc8e Knowledge Update & Optimization: 12 Jul 2026\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/nubenetes/awesome-kubernetes/pull/496",
         "pursued": false,
         "archived_at": null
       }
@@ -325,7 +328,22 @@
       {
         "title": "OpenRouter free model list",
         "url": "https://openrouter.ai/models?max_price=0",
-        "takeaway": "Live list of zero-cost models usable through a single API key."
+        "takeaway": "Live list of zero-cost models usable through a single API key. Free (:free) models are capped at 20 req/min and only 50 req/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit before relying on volume."
+      },
+      {
+        "title": "Google AI Studio (Gemini API)",
+        "url": "https://aistudio.google.com/app/apikey",
+        "takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day (10 RPM, 250K TPM); Gemini 2.0 Flash is roughly 15 RPM / 1M TPM. Much higher daily ceiling than OpenRouter's free chain -- verify current limit."
+      },
+      {
+        "title": "Cerebras Cloud free tier",
+        "url": "https://cloud.cerebras.ai/",
+        "takeaway": "No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model on fast inference hardware. Strong fallback once OpenRouter's free daily cap is hit -- verify current limit."
+      },
+      {
+        "title": "Groq Cloud free tier",
+        "url": "https://console.groq.com/",
+        "takeaway": "No credit card required. Generous daily request allowance (roughly 14K/day depending on model) with very low latency -- verify current limit."
       }
     ],
     "remote_service_niches": [
@@ -341,116 +359,15 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "The strongest immediate angle is reselling fast, free-tier LLM inference (Groq, Hugging Face) and audio transcription (Groq Whisper) as fixed-price micro-services \u2014 transcription, summarization, background removal, and translation \u2014 each deliverable in minutes with zero upfront cost and no credit card needed.",
-      "free_ai_services": [
-        {
-          "name": "Groq API",
-          "what_it_does": "Ultra-fast inference for open LLMs (Llama 3, Mixtral, Gemma) and Whisper speech-to-text",
-          "free_tier": "verify current limit",
-          "credit_card_required": "no",
-          "earn_with_it": "Transcribe audio/video files via Whisper endpoint; sell per-minute transcription",
-          "price_guide": "$0.10\u2013$0.25 per audio minute"
-        },
-        {
-          "name": "Hugging Face Inference API",
-          "what_it_does": "Serverless inference for 100k+ open models (LLM, embeddings, image, audio, vision)",
-          "free_tier": "verify current limit",
-          "credit_card_required": "no",
-          "earn_with_it": "Remove backgrounds from product photos using RMBG-1.4 or similar; charge per image",
-          "price_guide": "$0.05\u2013$0.15 per image"
-        },
-        {
-          "name": "LibreTranslate (public instance)",
-          "what_it_does": "Free machine translation API (self-hosted mirrors available)",
-          "free_tier": "verify current limit",
-          "credit_card_required": "no",
-          "earn_with_it": "Translate documents or subtitles for small businesses; charge per 1,000 characters",
-          "price_guide": "$1\u2013$3 per 1,000 chars"
-        },
-        {
-          "name": "MyMemory Translation API",
-          "what_it_does": "Translation memory API with free tier",
-          "free_tier": "1,000 requests/day",
-          "credit_card_required": "no",
-          "earn_with_it": "Batch-translate CSV/Excel files for e-commerce sellers; fixed price per file",
-          "price_guide": "$5\u2013$15 per 10k-word file"
-        },
-        {
-          "name": "Cloudflare Workers AI",
-          "what_it_does": "Run LLMs, embeddings, and vision models on Cloudflare's edge (Llama 3, BGE, ResNet, etc.)",
-          "free_tier": "verify current limit",
-          "credit_card_required": "verify",
-          "earn_with_it": "Schedule daily/weekly summarization reports (news, logs, docs) as a low-cost retainer",
-          "price_guide": "$20\u2013$50 per month per report"
-        },
-        {
-          "name": "GitHub Models",
-          "what_it_does": "Free inference for selected open models (Llama 3, Phi 3, etc.) via GitHub Marketplace",
-          "free_tier": "verify current limit",
-          "credit_card_required": "no",
-          "earn_with_it": "Prototype a one-page AI tool (e.g., SEO meta generator) and sell the tool + prompt library",
-          "price_guide": "$10\u2013$30 one-time per tool"
-        },
-        {
-          "name": "Hugging Face Spaces",
-          "what_it_does": "Free hosting for Gradio/Streamlit/Docker demos with CPU and optional GPU quota",
-          "free_tier": "verify current limit",
-          "credit_card_required": "no",
-          "earn_with_it": "Deploy a batch-processing UI (transcribe, translate, background removal) and charge per batch job",
-          "price_guide": "$5\u2013$20 per batch of 10\u201350 files"
-        }
-      ],
-      "easy_earning_ideas": [
-        {
-          "idea": "Audio Transcription Micro-Service",
-          "who_pays": "Podcasters, journalists, researchers, course creators",
-          "deliverable": "SRT/VTT/TXT transcript with timestamps, delivered via email or shared drive within 24h",
-          "price_usd": "0.15 per audio minute",
-          "time_to_first_dollar": "same day",
-          "free_stack": "Groq Whisper API + Python script (ffmpeg for splitting) + free file transfer (WeTransfer/Drive)"
-        },
-        {
-          "idea": "PDF/Document Summarization Pack",
-          "who_pays": "Consultants, lawyers, analysts, students",
-          "deliverable": "One-page bullet summary + key quotes + action items per PDF (up to 50 pages)",
-          "price_usd": "3\u20135 per document",
-          "time_to_first_dollar": "2\u20133 days",
-          "free_stack": "Groq Llama 3 70B + pdfplumber (local) + simple CLI wrapper"
-        },
-        {
-          "idea": "E-commerce Background Removal",
-          "who_pays": "Small Shopify/Etsy sellers, dropshippers",
-          "deliverable": "Clean PNG with transparent background, 1024x1024, delivered in zip folder",
-          "price_usd": "0.10 per image (min 20 images)",
-          "time_to_first_dollar": "same day",
-          "free_stack": "Hugging Face Inference API (RMBG-1.4) + Python batch script + free image hosting (imgur/Drive)"
-        },
-        {
-          "idea": "Monthly Competitor News Digest",
-          "who_pays": "Founders, marketers, product managers",
-          "deliverable": "Weekly 1-page PDF: top 10 articles summarized, trends highlighted, source links",
-          "price_usd": "30\u201350 per month",
-          "time_to_first_dollar": "2\u20133 days (first free sample, then paid)",
-          "free_stack": "Cloudflare Workers AI (scheduled) + RSS feeds + Groq/HF for summarization + PDF generation (fpdf)"
-        },
-        {
-          "idea": "Prompt Library + Setup Service",
-          "who_pays": "Agencies, solopreneurs, non-technical teams",
-          "deliverable": "Curated prompt pack (10\u201320 prompts) for a specific workflow (SEO, support, coding) + 30-min video walkthrough showing how to plug into their own free Groq/HF key",
-          "price_usd": "20\u201340 one-time",
-          "time_to_first_dollar": "same day",
-          "free_stack": "Groq/HF APIs (client brings key) + Notion/Google Doc for delivery + Loom (free) for video"
-        }
-      ],
+      "summary": "Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: 'The user wants a JSON response with specific st",
+      "free_ai_services": [],
+      "easy_earning_ideas": [],
       "owner_actions": [
-        "Create a simple Stripe/Gumroad/PayPal payment link for each micro-service (transcription, background removal, summarization).",
-        "Build a one-page portfolio (Carrd/Notion free) listing the 5 offers with prices, turnaround, and a 'Buy Now' button.",
-        "Post the transcription and background removal offers in 3 relevant Facebook/Reddit/Discord communities where buyers already ask for these services.",
-        "Record a 2-minute Loom demo of each workflow (upload file \u2192 get result) and add to the portfolio page.",
-        "Set up a free Calendly link for the prompt-library setup call; deliver the pack immediately after payment."
+        "Review the ranked free-AI leads below and pick the one with the clearest buyer.",
+        "Verify the free tier limits yourself before quoting a price."
       ]
     },
-    "last_refresh_at": "2026-08-05T00:18:17.070408+00:00",
+    "last_refresh_at": "2026-08-06T03:39:32.802211+00:00",
     "free_ai_focus": [
       "free-tier LLM APIs with no credit card requirement",
       "free speech-to-text, TTS, and transcription APIs",

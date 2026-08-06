@@ -31,7 +31,8 @@ bot/earnings.py      ← cumulative earnings tracker + weekly reset
 bot/dashboard.py     ← writes docs/index.html + earnings-log.md
 bot/git_utils.py     ← git commit helpers
 bot/earning/
-  articles.py        ← legacy publishing module; not called by default
+  articles.py        ← drafts + publishes one dev.to article per day from a trending source
+  trending.py        ← finds recent (24h) tech articles from free public feeds
   twitter.py         ← legacy social module; not called by default
   crypto.py          ← legacy trading module; not called by default
   nft.py             ← legacy minting module; not called by default
@@ -83,6 +84,33 @@ Features activate automatically when their secrets are present in env.
 `DEV_TO_API_KEY` enables live article publishing to dev.to (one article per day,
 capped by `articles.max_articles_per_cycle`). Without it, the articles module
 skips silently.
+
+### Article sourcing (bot/earning/trending.py)
+
+Articles are **never** written from a static topic list — that caused dozens of
+identical posts on dev.to. Each article starts from a real trending piece:
+
+1. `trending.fetch_candidates()` pulls tech stories from the last 24h via free,
+   keyless public feeds: HN front page (Algolia API), TLDR, InfoQ, Lobsters,
+   HackerNoon, dev.to, Smashing, GitHub Blog, Medium tag RSS, HackerRank blog.
+2. HN items are keyword-screened by `is_technical()` — its front page also
+   carries science/culture stories that make bad developer articles. Feed-based
+   sources are already topic-scoped and bypass the filter.
+3. `_pick_source()` takes the highest-ranked candidate not in
+   `status["article_history"]`, so a source is used at most once, ever.
+4. The LLM writes an *improved, original* article on that subject. The system
+   prompt forbids rewording and requires added value (working code, tradeoffs,
+   failure modes) plus a `## Source` attribution section.
+5. Three gates run before publishing: `_too_similar_to_source()` (title must not
+   restate the source), `_duplicate_reason()` (exact + near-duplicate check
+   against all past titles), and `_ensure_attribution()` (adds the source link
+   if the model omitted it).
+
+**If no fresh source is found or the LLM fails, the bot publishes nothing.**
+There is deliberately no fallback article — a static fallback is what produced
+the duplicate flood. Title matching is stemmed and stopword-stripped
+(`trending.normalize_title`) so "Costs"/"Cost" and "Under"/"During" variants
+cannot slip a repeat through.
 
 Social posting, trading, minting, and payout secrets do not activate runtime
 actions. If such keys exist, they are treated as research context only.

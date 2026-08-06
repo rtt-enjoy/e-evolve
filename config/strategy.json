@@ -1,7 +1,9 @@
 {
   "articles": {
     "max_articles_per_cycle": 1,
-    "min_interval_hours": 6
+    "min_interval_hours": 6,
+    "source_max_age_hours": 24,
+    "history_limit": 200
   },
   "code_techs": {
     "enabled": true,

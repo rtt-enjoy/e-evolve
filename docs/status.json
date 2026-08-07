@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-06T15:28:47.204922+00:00",
-  "total_runs": 1292,
+  "last_run": "2026-08-07T00:15:58.276240+00:00",
+  "total_runs": 1293,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -15,19 +15,20 @@
   ],
   "llm_provider": "openrouter",
   "earnings": {
-    "total_usd": 3.25,
-    "this_week_usd": 0.24,
+    "total_usd": 3.33,
+    "this_week_usd": 0.32,
     "last_cycle_usd": 0.08,
     "week_started": "2026-08-03",
     "breakdown": {
       "code_techs": 0.0,
-      "dev.to": 0.24
+      "dev.to": 0.32
     },
     "history": [
       0.02,
       0.02,
       0.02,
       0.02,
+      0.08,
       0.08,
       0.08,
       0.08,
@@ -60,11 +61,11 @@
       {
         "platform": "dev.to",
         "success": true,
-        "title": "Keeping Your Hobby Project Human: A Practical Guide to Adding LLMs Without Losing Community Trust",
-        "url": "https://dev.to/robust_true_try/keeping-your-hobby-project-human-a-practical-guide-to-adding-llms-without-losin-m6a",
+        "title": "Deploying Qwen3.8 Max as a Task\u2011Oriented Agent in Python",
+        "url": "https://dev.to/robust_true_try/deploying-qwen38-max-as-a-task-oriented-agent-in-python-1c03",
         "estimated_usd": 0.08,
-        "source_url": "https://blog.fogus.me/llm/born-against.html",
-        "source_title": "Born Against, or why hobby programming communities are against LLM usage"
+        "source_url": "https://artificialanalysis.ai/?intelligence=agentic-index",
+        "source_title": "Qwen3.8 Max now ranked as the best overall model by agentic index"
       }
     ],
     "total_usd": 0.08
@@ -84,7 +85,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 91,
+  "last_cycle_seconds": 325,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -173,8 +174,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-08-06",
-    "published": 1
+    "date": "2026-08-07",
+    "published": 2
   },
   "code_tech_earning": {
     "enabled": true,
@@ -414,13 +415,16 @@
   },
   "article_history": {
     "source_urls": [
-      "blog.fogus.me/llm/born-against.html"
+      "blog.fogus.me/llm/born-against.html",
+      "artificialanalysis.ai"
     ],
     "source_titles": [
-      "born hobby programming community llm usage"
+      "born hobby programming community llm usage",
+      "qwen3 8 max now ranked best overall model agentic index"
     ],
     "titles": [
-      "keeping hobby project human practical adding llms losing community trust"
+      "keeping hobby project human practical adding llms losing community trust",
+      "deploying qwen3 8 max task oriented agent python"
     ]
   },
   "github_repo": "rtt-enjoy/e-evolve"

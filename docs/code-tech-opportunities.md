@@ -1,6 +1,6 @@
 # Free AI Earning Queue
 
-Refreshed: 2026-08-07T05:50:50.836183+00:00
+Refreshed: 2026-08-08T05:56:53.824230+00:00
 Daily target: $10.00
 
 Suggestions favour free AI services and free AI APIs with zero upfront cost.
@@ -17,61 +17,75 @@ Suggestions favour free AI services and free AI APIs with zero upfront cost.
 
 ## Current Best Angle
 
-The strongest immediate angle is packaging free-tier LLM, transcription, and image APIs into fixed-price micro-services (e.g., $10–$30 per batch) for solo professionals who need one-off document cleanup, meeting summaries, or product-image background removal but don't want to learn the tools.
+The strongest immediate angle is reselling free-tier AI APIs as fixed-price micro-services (transcription, summarization, background removal, OCR) to small businesses and creators who need the output but don't want to wrangle API keys, rate limits, or prompt engineering. All services below have genuine ongoing free tiers; most require no credit card. Each idea can be listed on Fiverr, Upwork, or a simple Gumroad page in under two hours with zero spend.
 
 ## Free AI Services To Use
 
 | Service | What it does | Free tier | Card? | How to earn | Price guide |
 | --- | --- | --- | --- | --- | --- |
-| Groq Cloud | Fast inference for Llama, Mixtral, Gemma models | 14,400 requests/day, 30K tokens/min (verify current limit) | no | Sell 500-word blog drafts or email sequences generated from client bullet points | $15 per 5-piece batch |
-| Hugging Face Inference API | Serverless inference for 100k+ open models | 30k requests/month on shared CPU (verify current limit) | no | Run batch sentiment analysis or topic tagging on exported CSV reviews | $20 per 1,000 rows delivered as annotated CSV |
-| Whisper.cpp (local) | Offline speech-to-text on CPU/GPU | Unlimited, runs on any laptop | no | Transcribe 60-min audio/video files to timestamped SRT + clean TXT | $12 per hour of audio |
-| LibreTranslate (self-hosted or public instance) | Open-source translation API | Public instance: 5k chars/request, no key; self-host: unlimited | no | Translate product descriptions or support macros into 5 languages | $25 per 100 strings × 5 languages |
-| Remove.bg API | Automatic background removal | 50 free credits/month (1 credit = 1 image ≤ 0.25 MP) | no | Deliver clean PNGs for Etsy/Shopify sellers' product photos | $10 per 20 images (use free tier, upsell bulk) |
-| Tesseract OCR (local) | OCR for scanned PDFs/images | Unlimited, CLI or Python wrapper | no | Convert scanned contracts/invoices to searchable PDF + JSON key fields | $18 per 50-page batch |
-| ChromaDB (local or free cloud) | Embedding store + vector search | Unlimited local; cloud free tier 5k vectors (verify current limit) | no | Build a 'ask your PDFs' prototype for a consultant's knowledge base | $150 one-time setup + $30/mo maintenance |
-| GitHub Actions | Free CI/CD minutes for scheduled jobs | 2,000 min/mo on Ubuntu runners | no | Schedule daily competitor-price scrape + LLM summary emailed to client | $40/mo per competitor tracked |
+| Groq API | Ultra-fast LLM inference (Llama 3, Mixtral, Gemma) via OpenAI-compatible endpoint | 14,400 requests/day, 30K tokens/min on most models; verify current limit | no | Sell 500-word article summaries or email drafts delivered in a Google Doc within 15 minutes | $3–$5 per item |
+| Google AI Studio (Gemini 1.5 Flash) | Multimodal LLM with 1M token context, text/image/video/audio input | 1,500 requests/day, 1M tokens/min; verify current limit | no | Turn long YouTube transcripts or meeting recordings into structured notes/action-items | $8–$15 per hour of source material |
+| AssemblyAI | Speech-to-text with speaker diarization, punctuation, profanity filter | 100 hours/month free (Core transcription); verify current limit | no | Deliver clean, speaker-labeled transcripts for podcasters/coaches as .txt + .srt | $0.50–$1 per audio minute |
+| ElevenLabs API | High-quality text-to-speech, 29 languages, voice cloning | 10,000 characters/month (~10 min audio); verify current limit | no | Produce short voiceovers for Reels/TikTok/ads using client's script and a stock voice | $5–$10 per 60-second clip |
+| Remove.bg API | Automatic background removal for images | 50 free credits/month (1 credit = 1 image up to 0.25 MP); verify current limit | no | Batch-remove backgrounds for Etsy/Shopify sellers' product photos, deliver PNGs | $0.25–$0.50 per image (min batch 20) |
+| Tesseract OCR (local) / OCR.space API | Extract text from scanned PDFs, photos, screenshots | OCR.space: 25,000 requests/month free; Tesseract: unlimited local | no | Convert stacks of scanned receipts/invoices into CSV/Excel for bookkeepers | $10–$20 per 100 pages |
+| Hugging Face Inference API | Hosted inference for 100k+ open models (embeddings, classification, generation) | 30,000 requests/month on shared infrastructure; verify current limit | no | Run sentiment analysis or topic tagging on customer feedback CSVs, return tagged file | $15–$25 per 1,000 rows |
+| Cloudflare Workers AI | Serverless GPU inference (Llama, Whisper, Stable Diffusion, embeddings) at edge | 100,000 requests/day free across all models; verify current limit | no | Deploy a one-page tool (e.g., 'paste text → get blog outline') and sell access via Gumroad | $7–$12 one-time per tool |
+| Supabase (pgvector) | PostgreSQL + vector search + auth + edge functions, generous free tier | 500 MB database, 2 GB bandwidth, 50 MB file storage; verify current limit | no | Build a 'chat with your PDF' prototype for a client using their free Supabase project | $150–$300 fixed setup fee |
+| GitHub Models | Free playground + API for GPT-4o, Llama 3.1, Phi-3, Mistral via GitHub token | Rate-limited free access for personal use; verify current limit | no | Sell a 'prompt pack + setup guide' so clients run the model in their own GitHub Codespace | $20–$40 per pack |
 
 ## Easy Earning Ideas
 
-1. **Meeting-to-Action-Items Service**
-   - Who pays: Solo consultants, coaches, agency owners
-   - Deliverable: Clean markdown with decisions, owners, due dates from uploaded Zoom/Teams recording
-   - Price: 15-25 per meeting
+1. **Podcast Transcript + Show Notes Package**
+   - Who pays: Solo podcasters / small agencies (1–5 shows)
+   - Deliverable: Speaker-labeled transcript (.txt, .srt) + 300-word summary + 5 timestamps + 3 quote cards as PNG
+   - Price: 25–40 per episode
    - Time to first dollar: same day
-   - Free stack: Whisper.cpp + Groq Cloud + GitHub Actions for batch
-2. **Product Photo Background Removal Pack**
-   - Who pays: Etsy sellers, dropshippers, small Shopify stores
-   - Deliverable: 20 transparent PNGs + white-background JPGs, named SKU-ready
-   - Price: 10-15 per 20 images
+   - Free stack: AssemblyAI (transcript) + Groq (summary/quotes) + Canva free (quote cards)
+2. **Etsy/Shopify Product Background Removal Batch**
+   - Who pays: Handmade sellers with 20–200 SKUs
+   - Deliverable: Transparent PNGs (original resolution) delivered via shared Drive folder, naming preserved
+   - Price: 0.35 per image (min $10/order)
    - Time to first dollar: same day
-   - Free stack: Remove.bg free tier + Photopea for touch-ups
-3. **Scanned Invoice → Structured JSON**
-   - Who pays: Bookkeepers, virtual assistants, small accounting firms
-   - Deliverable: CSV with vendor, date, total, tax, line items from 50-page PDF batch
-   - Price: 18-25 per batch
-   - Time to first dollar: 2-3 days
-   - Free stack: Tesseract OCR + Groq Cloud for field extraction
-4. **Multilingual Support Macro Pack**
-   - Who pays: SaaS founders, customer-support leads
-   - Deliverable: 50 canned replies translated to ES, FR, DE, PT, JA in CSV
-   - Price: 25-35 per 50 macros × 5 langs
+   - Free stack: Remove.bg API (50 free/mo) + local Python script for batching
+3. **Meeting Recording → Action Items + CRM-ready CSV**
+   - Who pays: Consultants, coaches, fractional execs
+   - Deliverable: Google Doc with decisions/owners/due-dates + CSV (task, owner, due, priority) for Notion/Asana import
+   - Price: 12–18 per hour of recording
+   - Time to first dollar: 2–3 days
+   - Free stack: Google AI Studio (Gemini 1.5 Flash) for long-context extraction
+4. **Scanned Receipts/Invoices → Bookkeeping CSV**
+   - Who pays: Freelancers, small biz owners prepping for tax
+   - Deliverable: CSV columns: date, vendor, amount, category, tax-deductible (Y/N), source filename
+   - Price: 15 per 100 pages
    - Time to first dollar: same day
-   - Free stack: LibreTranslate + Groq Cloud for polish
-5. **Daily Competitor Price Digest**
-   - Who pays: E-commerce managers, brand owners
-   - Deliverable: Email with price changes, stock status, 3-sentence LLM summary
-   - Price: 40-60 per competitor/mo
-   - Time to first dollar: 2-3 days
-   - Free stack: GitHub Actions scraper + Groq Cloud + SendGrid free tier
+   - Free stack: OCR.space API (25k free req/mo) + Groq for line-item parsing
+5. **One-Page 'Chat With Your PDF' Setup Service**
+   - Who pays: Course creators, HR teams, researchers with private docs
+   - Deliverable: Working Streamlit/Gradio app deployed on Hugging Face Spaces (free) + 15-min walkthrough video
+   - Price: 120–180 fixed
+   - Time to first dollar: 2–3 days
+   - Free stack: Hugging Face Spaces (free hosting) + sentence-transformers embeddings + Groq LLM
+6. **Short-Form Voiceover Pack for Content Creators**
+   - Who pays: Faceless YouTube/TikTok/Reels channels
+   - Deliverable: 5 × 60-sec MP3s (intro, hook, body, CTA, outro) in chosen voice, commercial license
+   - Price: 30–45 per pack
+   - Time to first dollar: same day
+   - Free stack: ElevenLabs free tier (10k chars ≈ 5 mins) + Audacity for cleanup
+7. **Customer Feedback Sentiment & Theme Report**
+   - Who pays: SaaS founders, product managers with <5k responses
+   - Deliverable: PDF: overall sentiment %, top 5 themes with verbatim quotes, priority matrix chart
+   - Price: 40–60 per 1,000 responses
+   - Time to first dollar: 2–3 days
+   - Free stack: Hugging Face Inference API (sentiment + zero-shot classification) + Python matplotlib
 
 ## Next Actions
 
-- Pick one idea, create a 1-page Notion/Google Doc offer sheet with price, turnaround, and 3 FAQs.
-- Record a 2-min Loom demo using your own sample file; embed in the offer sheet.
-- Post the offer in 3 relevant Facebook/Slack/Discord communities where buyers already ask for this.
-- Deliver the first 2 orders manually to refine prompts and workflow, then script the batch.
-- Set up a simple Stripe Payment Link or PayPal.Me for instant payment; reinvest zero profit into ads only after 5 paid orders.
+- Pick ONE idea above, create a Fiverr/Upwork/Gumroad listing tonight with exact deliverable, price, and 24-hr turnaround promise.
+- Sign up for the 2–3 free APIs that idea needs (no credit card); run 3 test jobs end-to-end to confirm quality and latency.
+- Build a 1-page Notion/Google Site portfolio with 'before/after' samples (redacted) and a Calendly link for discovery calls.
+- Post the offer in 3 relevant Facebook/Reddit/Discord communities where buyers already ask for this work (e.g., r/podcasting, Etsy seller groups).
+- After first 3 paid jobs, document the exact workflow into a checklist/template so delivery stays under 30 minutes per unit.
 
 ## Monetization Patterns
 
@@ -164,7 +178,37 @@ The strongest immediate angle is packaging free-tier LLM, transcription, and ima
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379
-2. [I was tired of using 5+ tools to manage my Instagram so I created 1 tool that does everything in way less, and does it way better](https://www.reddit.com/r/SideProject/comments/1vhcb06/i_was_tired_of_using_5_tools_to_manage_my/)
+2. [Receiptify - I got tired of being the guy doing receipt math at dinner, so I built a splitter where your friends claim their own items from ](https://www.reddit.com/r/SideProject/comments/1viluob/receiptify_i_got_tired_of_being_the_guy_doing/)
+   - Score: 100/100
+   - Value signal: $850.00
+   - Why: visible or inferred value around $850.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Receiptify - I got tired of being the guy doing receipt math at dinner, so I built a splitter where your friends claim their own items from 
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1viluob/receiptify_i_got_tired_of_being_the_guy_doing/
+     Why this is suitable: visible or inferred value around $850.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: every group dinner ended the same way for me. i pay, screenshot the receipt, then spend 20 minutes in my notes app trying to remember whether dan had two cocktails or three. the thing that annoyed me about every splitting app i tried is they all assume the whole table installs the app. half my friends will not do that for one dinner, and honestly they are right. so receiptify works the other way around. you scan the receipt, AI pulls the line items, you send a link. your friends open it in a browser, no account, no download, and tap what they had. tax and tip split proportionally across whatever each person claimed, and there is a running tab per person for the ones you eat with constantly. stack is expo + supabase, gpt-4o-mini for the OCR. the bug that nearly killed it: OCR reads $8.50 as $850 roughly 1 in 200 receipts. an app that occasionally tells your friend he owes $850 for a burri
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Receiptify - I got tired of being the guy doing receipt math at dinner, so I built a splitter where your friends claim their own items from " and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $850.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1viluob/receiptify_i_got_tired_of_being_the_guy_doing/
+3. [I was tired of using 5+ tools to manage my Instagram so I created 1 tool that does everything in way less, and does it way better](https://www.reddit.com/r/SideProject/comments/1vhcb06/i_was_tired_of_using_5_tools_to_manage_my/)
    - Score: 100/100
    - Value signal: $249.00
    - Why: visible or inferred value around $249.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -194,19 +238,19 @@ The strongest immediate angle is packaging free-tier LLM, transcription, and ima
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://www.reddit.com/r/SideProject/comments/1vhcb06/i_was_tired_of_using_5_tools_to_manage_my/
-3. [I built a free browser-based photo editor as an alternative to Lightroom](https://www.reddit.com/r/SideProject/comments/1vhrzrb/i_built_a_free_browserbased_photo_editor_as_an/)
+4. [ShipKit - Bun + Elysia + Next.js 16 SaaS boilerplate, 11 apps shipped on it](https://www.reddit.com/r/SideProject/comments/1viltc9/shipkit_bun_elysia_nextjs_16_saas_boilerplate_11/)
    - Score: 100/100
-   - Value signal: $129.00
-   - Why: visible or inferred value around $129.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
+   - Value signal: $149.00
+   - Why: visible or inferred value around $149.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: I built a free browser-based photo editor as an alternative to Lightroom
+     Lead: ShipKit - Bun + Elysia + Next.js 16 SaaS boilerplate, 11 apps shipped on it
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vhrzrb/i_built_a_free_browserbased_photo_editor_as_an/
-     Why this is suitable: visible or inferred value around $129.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
+     URL: https://www.reddit.com/r/SideProject/comments/1viltc9/shipkit_bun_elysia_nextjs_16_saas_boilerplate_11/
+     Why this is suitable: visible or inferred value around $149.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -215,16 +259,16 @@ The strongest immediate angle is packaging free-tier LLM, transcription, and ima
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: Paying for Lightroom every month to edit photos felt ridiculous, so I decided to build something that does it in the browser instead. Lumetry runs on WebGPU with a 16-bit float pipeline, handles RAW files natively, and nothing ever gets uploaded anywhere. Your photos stay on your machine. Full adjustment stack, masks, before/after comparison, cropping, rating and flagging, smart auto-cull, and a one-click IG carousel export. Pro adds and voice editing and a higher RAW cap. Free tier covers casual editing. Pro ($7/mo or $129 lifetime) unlocks unlimited imports, auto-cull, and the AI features. I’m curious to see what also want from a browser-based editor. What’s missing? What would make you switch? lumetry.photo &#32; submitted by &#32; /u/Primary_Arm_9175 [link] &#32; [comments]
+     Request excerpt: I build client SaaS for a living, and every project started the same way: three or four weeks rebuilding auth, payments, admin and email before touching the actual product. So I extracted all of it into one monorepo and kept using it. Stack: Bun + Elysia.js API + Next.js 16 web + Postgres/Drizzle + Better Auth + Polar payments + Redis, plus a separate admin app with RBAC and a setup CLI. 7 apps, 17 packages, 68 UI components. What makes it not a demo: eleven apps have shipped on it, and four are written up with the exact package diff against the boilerplate, so you can see what each app had to build itself and which of those additions later landed in the box. runmate.net — AI running coach on top of Strava history astervis.io — licensing platform vgr.uz — e-commerce with its own courier app provaqt.com — payroll and time tracking Honest numbers, since this sub tends to like them: 4 sales
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "I built a free browser-based photo editor as an alternative to Lightroom" and can make a small working version.
+     Hi, I found your request about "ShipKit - Bun + Elysia + Next.js 16 SaaS boilerplate, 11 apps shipped on it" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $129.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $149.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1vhrzrb/i_built_a_free_browserbased_photo_editor_as_an/
-4. [🚨 P0: Launch ADA SaaS Container — Self-Hosted OpenClaw + GitHub (Founder Decision)](https://github.com/ishan190425/autonomous-dev-agents/issues/155)
+     Reference: https://www.reddit.com/r/SideProject/comments/1viltc9/shipkit_bun_elysia_nextjs_16_saas_boilerplate_11/
+5. [🚨 P0: Launch ADA SaaS Container — Self-Hosted OpenClaw + GitHub (Founder Decision)](https://github.com/ishan190425/autonomous-dev-agents/issues/155)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -254,7 +298,7 @@ The strongest immediate angle is packaging free-tier LLM, transcription, and ima
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ishan190425/autonomous-dev-agents/issues/155
-5. [Starboard weekly repo digest - 2026-07-27](https://github.com/Codevetter/starboard/issues/32)
+6. [Starboard weekly repo digest - 2026-07-27](https://github.com/Codevetter/starboard/issues/32)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -284,7 +328,37 @@ The strongest immediate angle is packaging free-tier LLM, transcription, and ima
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/Codevetter/starboard/issues/32
-6. [🔍 CLI Discovery: 2026-08-07 — 20 candidates found](https://github.com/RealZST/harnesskit-resources/issues/63)
+7. [I’m electrician who can’t write single line of code. I built a voice to invoice app. Here’s everything that broke.](https://www.reddit.com/r/SideProject/comments/1viapoz/im_electrician_who_cant_write_single_line_of_code/)
+   - Score: 100/100
+   - Value signal: $9.99
+   - Why: visible or inferred value around $9.99; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: I’m electrician who can’t write single line of code. I built a voice to invoice app. Here’s everything that broke.
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1viapoz/im_electrician_who_cant_write_single_line_of_code/
+     Why this is suitable: visible or inferred value around $9.99; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: I do solar and smart home installs. Most of my invoicing used to happen at 9pm, sitting in the van, thumbs covered in dust, typing into a spreadsheet I hated. So I started building an app where you just talk. “Ran 40 meters of cable at the Novak house, four hours labour, two grand.” It transcribes, parses it into line items, spits out a PDF invoice. Takes about 20 seconds. I can’t code. Everything here was built through AI agents, and honestly the debugging was the actual job. A few of the more stupid things that happened: The transcription kept turning English speech into Cyrillic. Took me two days to work out why. There was Slovak text left in the system prompt, so Whisper decided the audio was probably Slovak too and transliterated everything. “Two grand” parsed as $0. Every single time. The model handled “two thousand dollars” fine but spoken shorthand just fell through. That’s the e
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "I’m electrician who can’t write single line of code. I built a voice to invoice app. Here’s everything that broke." and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $9.99 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1viapoz/im_electrician_who_cant_write_single_line_of_code/
+8. [🔍 CLI Discovery: 2026-08-07 — 20 candidates found](https://github.com/RealZST/harnesskit-resources/issues/63)
    - Score: 100/100
    - Value signal: $0.00
    - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
@@ -314,63 +388,3 @@ The strongest immediate angle is packaging free-tier LLM, transcription, and ima
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/RealZST/harnesskit-resources/issues/63
-7. [I made a life dashboard that tells me what I need to hear - offline, one folder, no account](https://www.reddit.com/r/SideProject/comments/1vhcolg/i_made_a_life_dashboard_that_tells_me_what_i_need/)
-   - Score: 98/100
-   - Value signal: $3.00
-   - Why: visible or inferred value around $3.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: I made a life dashboard that tells me what I need to hear - offline, one folder, no account
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vhcolg/i_made_a_life_dashboard_that_tells_me_what_i_need/
-     Why this is suitable: visible or inferred value around $3.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: I couldn&#39;t find a life tracker that worked the way I wanted, so I ended up making one for myself. The main thing I wanted was something that doesn&#39;t just show numbers, but actually says something about them. Instead of opening another dashboard full of charts, I wanted it to tell me things like: It isn&#39;t AI trying to be your therapist. It&#39;s just looking at your own data and giving you a quick reality check. Besides that, it has goals with milestones and ETA predictions, a small Kanban board, focus sessions, notes, 60+ achievements with XP, and an assistant called Zerox that summarizes your day from your own data. The paid version also adds finance tracking, platform stats, skills, team features and analytics. The whole thing is just HTML, CSS and JavaScript. No installation, no build step, no server and no account. You can unzip it and open index.html , or just press Run
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "I made a life dashboard that tells me what I need to hear - offline, one folder, no account" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $3.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1vhcolg/i_made_a_life_dashboard_that_tells_me_what_i_need/
-8. [I built Ticketdesk AI - The AI agent and chatbot for customer support making 16k revenue](https://www.reddit.com/r/SideProject/comments/1vgypn0/i_built_ticketdesk_ai_the_ai_agent_and_chatbot/)
-   - Score: 97/100
-   - Value signal: $2500.00
-   - Why: visible or inferred value around $2500.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: I built Ticketdesk AI - The AI agent and chatbot for customer support making 16k revenue
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vgypn0/i_built_ticketdesk_ai_the_ai_agent_and_chatbot/
-     Why this is suitable: visible or inferred value around $2500.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: After spending years building SaaS products, I kept seeing the same problem: small teams want to offer fast customer support, but hiring agents is expensive and managing support across email and chat is time-consuming (especially for repetitive questions) So I built Ticketdesk AI . The goal wasn&#39;t to replace support teams, it was to automate the repetitive questions so human agent can focus on the ones that actually need attention. MRR: $2,500 All time revenue - $16k TrustMRR - https://trustmrr.com/startup/ticketdesk-ai Launching on Product hunt today - https://www.producthunt.com/products/ticketdesk-ai The Ticketdesk AI is available for email ticketing and a embeddable AI chatbot to handle customer queries via email and chat. Ask me anything! &#32; submitted by &#32; /u/vickyrathee [link] &#32; [comments]
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "I built Ticketdesk AI - The AI agent and chatbot for customer support making 16k revenue" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $2500.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1vgypn0/i_built_ticketdesk_ai_the_ai_agent_and_chatbot/

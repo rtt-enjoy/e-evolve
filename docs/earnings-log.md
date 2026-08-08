@@ -1271,3 +1271,7 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-08-07 05:53 UTC
 
 - [ok] **code_techs**: [Code-tech queue refreshed (8 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+
+### 2026-08-08 02:33 UTC
+
+- [ok] **dev.to**: [How to Manage AI-Generated Code in Strict Open Source Projec](https://dev.to/robust_true_try/how-to-manage-ai-generated-code-in-strict-open-source-projects-4cg3) (est. $0.08)

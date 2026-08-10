@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-09T23:47:42.978227+00:00",
-  "total_runs": 1353,
+  "last_run": "2026-08-10T02:35:13.668437+00:00",
+  "total_runs": 1354,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -15,19 +15,19 @@
   ],
   "llm_provider": "openrouter",
   "earnings": {
-    "total_usd": 3.49,
-    "this_week_usd": 0.48,
-    "last_cycle_usd": 0.0,
-    "week_started": "2026-08-03",
+    "total_usd": 3.57,
+    "this_week_usd": 0.08,
+    "last_cycle_usd": 0.08,
+    "week_started": "2026-08-10",
     "breakdown": {
-      "code_techs": 0.0,
-      "dev.to": 0.48
+      "dev.to": 0.08
     },
     "history": [
       0.02,
       0.02,
       0.02,
       0.02,
+      0.08,
       0.08,
       0.08,
       0.08,
@@ -59,8 +59,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
-    "total_usd": 0.0
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "Prototype a DIY Solid\u2011State Intelligence Module for Home Automation",
+        "url": "https://dev.to/robust_true_try/prototype-a-diy-solid-state-intelligence-module-for-home-automation-1eog",
+        "estimated_usd": 0.08,
+        "source_url": "https://kibotronics.net/unlisted/lilly-machines/",
+        "source_title": "John C. Lilly on solid state intelligence and the elimination of man (1978)"
+      }
+    ],
+    "total_usd": 0.08
   },
   "suggestions": [
     {
@@ -77,7 +87,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 0,
+  "last_cycle_seconds": 400,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -166,8 +176,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-08-09",
-    "published": 4
+    "date": "2026-08-10",
+    "published": 5
   },
   "code_tech_earning": {
     "enabled": true,
@@ -527,19 +537,22 @@
       "blog.fogus.me/llm/born-against.html",
       "artificialanalysis.ai",
       "app.dealroom.co/news/feed/oracle-bans-ai-generated-code-from-openjdk-despite-ellison-s-claim-oracle-isn-t-writing-its-own-code",
-      "blog.senko.net/code-was-never-the-hard-part-is-an-insult-to-all-programmers"
+      "blog.senko.net/code-was-never-the-hard-part-is-an-insult-to-all-programmers",
+      "kibotronics.net/unlisted/lilly-machines"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
       "qwen3 8 max now ranked best overall model agentic index",
       "oracle bans ai generated code openjdk",
-      "code never hard insult all programmer"
+      "code never hard insult all programmer",
+      "john c lilly solid state intelligence elimination man 1978"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
       "deploying qwen3 8 max task oriented agent python",
       "manage ai generated code strict open source project",
-      "automated refactoring making maintenance habit"
+      "automated refactoring making maintenance habit",
+      "prototype diy solid state intelligence module home automation"
     ]
   }
 }

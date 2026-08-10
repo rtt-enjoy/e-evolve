@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-10T04:55:06.633801+00:00",
-  "total_runs": 1355,
+  "last_run": "2026-08-10T06:42:35.957117+00:00",
+  "total_runs": 1356,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -20,7 +20,8 @@
     "last_cycle_usd": 0.0,
     "week_started": "2026-08-10",
     "breakdown": {
-      "dev.to": 0.08
+      "dev.to": 0.08,
+      "code_techs": 0.0
     },
     "history": [
       0.02,
@@ -59,7 +60,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -77,7 +89,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 355,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -188,19 +200,6 @@
         "archived_at": null
       },
       {
-        "title": "\ud83d\udea8 P0: Launch ADA SaaS Container \u2014 Self-Hosted OpenClaw + GitHub (Founder Decision)",
-        "url": "https://github.com/ishan190425/autonomous-dev-agents/issues/155",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udea8 P0: Launch ADA SaaS Container \u2014 Self-Hosted OpenClaw + GitHub (Founder Decision)\nSource: github\nURL: https://github.com/ishan190425/autonomous-dev-agents/issues/155\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Founder Decision \u2014 Ship ASAP  This is the priority. Build a containerized ADA SaaS that:  1. **Sets up OpenClaw + GitHub integration automatically** 2. **Enables ADA autostart** to work on its own repo (dogfooding) 3. **Configures read/write role permissions** for safe operation 4. **Frontend website with paywall** for users to sign up and pay  ---  ## Phase 1: Container Infrastructure  A single Docker container that anyone can deploy to get: - OpenClaw gateway running - GitHub App or PAT configured - ADA dispatch cron running automatically - Role-based permissions (read-only vs read-write)  ### Container Contents - `openclaw` gateway (configured) - `@ada-ai/cli` installed - GitHub integration (App or PAT) - Cron scheduler for dispatch cycles - Environment-based configuration  ### Configuration ```yaml # docker-compose.yml or env vars GITHUB_TOKEN: xxx           # or GitHub App creden",
-        "outreach_draft": "Hi, I found your request about \"\ud83d\udea8 P0: Launch ADA SaaS Container \u2014 Self-Hosted OpenClaw + GitHub (Founder Decision)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/ishan190425/autonomous-dev-agents/issues/155",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
         "title": "Starboard weekly repo digest - 2026-07-27",
         "url": "https://github.com/Codevetter/starboard/issues/32",
         "source": "github",
@@ -214,28 +213,28 @@
         "archived_at": null
       },
       {
-        "title": "I spent a year building a DSA learning platform with 111 interactive visualizers. Would love feedback.",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vj4ea2/i_spent_a_year_building_a_dsa_learning_platform/",
-        "source": "reddit:r/SideProject",
-        "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I spent a year building a DSA learning platform with 111 interactive visualizers. Would love feedback.\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vj4ea2/i_spent_a_year_building_a_dsa_learning_platform/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: A few years ago, I failed interviews at Google, Amazon, and Microsoft. The reason was simple: I could code, but I never properly understood Data Structures and Algorithms. I spent almost a year learning DSA after that. During that time, I realized I don&#39;t learn by memorizing. I learn by building. And I couldn&#39;t find a tool that taught DSA the way I wanted to learn it. So I built one. What I built: AlgoPatterns - a platform for learning DSA patterns with interactive visualizations. The tech: Frontend: Next.js 16, React 19, Tailwind CSS 4 Backend: Go with Gin framework Code execution: Judge0 sandbox AI: DeepSeek V3 with RAG for the Socratic tutor Database: CockroachDB Hosting: Cloudflare Pages + GCP Cloud Run Features: 18 algorithm patterns (Two Pointers, Sliding Window, DP, Graphs, etc.) 111 interactive visualizers - you watch algorithms work step by step. This took the most time ",
-        "outreach_draft": "Hi, I found your request about \"I spent a year building a DSA learning platform with 111 interactive visualizers. Would love feedback.\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vj4ea2/i_spent_a_year_building_a_dsa_learning_platform/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "\ud83d\udd0d CLI Discovery: 2026-08-07 \u2014 20 candidates found",
-        "url": "https://github.com/RealZST/harnesskit-resources/issues/63",
+        "title": "\ud83d\udd0d CLI Discovery: 2026-08-10 \u2014 20 candidates found",
+        "url": "https://github.com/RealZST/harnesskit-resources/issues/65",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 0.0,
         "reason": "runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand",
         "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udd0d CLI Discovery: 2026-08-07 \u2014 20 candidates found\nSource: github\nURL: https://github.com/RealZST/harnesskit-resources/issues/63\nWhy this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-07. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU \u2014 \u2b50 14268 \u2014 Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus \u2014 \u2b50 45147 \u2014 Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige",
-        "outreach_draft": "Hi, I found your request about \"\ud83d\udd0d CLI Discovery: 2026-08-07 \u2014 20 candidates found\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/RealZST/harnesskit-resources/issues/63",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udd0d CLI Discovery: 2026-08-10 \u2014 20 candidates found\nSource: github\nURL: https://github.com/RealZST/harnesskit-resources/issues/65\nWhy this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-10. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU \u2014 \u2b50 14275 \u2014 Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus \u2014 \u2b50 45217 \u2014 Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige",
+        "outreach_draft": "Hi, I found your request about \"\ud83d\udd0d CLI Discovery: 2026-08-10 \u2014 20 candidates found\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/RealZST/harnesskit-resources/issues/65",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "I had 312,000 emails in my Gmail. I got tired of it and built something to clean it",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vk8r6n/i_had_312000_emails_in_my_gmail_i_got_tired_of_it/",
+        "source": "reddit:r/SideProject",
+        "score": 98,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Clean one messy sample export with the free LLM tier and quote a flat rate per file.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I had 312,000 emails in my Gmail. I got tired of it and built something to clean it\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vk8r6n/i_had_312000_emails_in_my_gmail_i_got_tired_of_it/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Full disclosure before anything else: I built this, it is mine, Mods, if that breaks the rules here, remove it, no hard feelings. I just feel this app is too good to keep to myself and I wanted to share it with people who need it. For years my Gmail was a landfill. Newsletters I signed up for once in 2019. Promotions. Order confirmations from stores that do not exist anymore. Every few months Google told me I was out of space, I deleted a few hundred by hand, got bored, and gave up. The thing is, Gmail is built to handle one email at a time. It is very good at that. It is terrible at handling twenty thousand at once. So I built sogmailcleaner. Here is what it actually does. **Bulk sender cleanup.** This is one of the best features the app has. Why? Because it lets you delete every email from one sender in a single click, even if that sender has already sent you more than 10,000. You can ",
+        "outreach_draft": "Hi, I found your request about \"I had 312,000 emails in my Gmail. I got tired of it and built something to clean it\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vk8r6n/i_had_312000_emails_in_my_gmail_i_got_tired_of_it/",
         "pursued": false,
         "archived_at": null
       },
@@ -275,6 +274,19 @@
         "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
         "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udcc8 AI Open Source Trends 2026-08-07\nSource: github\nURL: https://github.com/stevenko2002/agents-radar/issues/555\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # AI Open Source Trends 2026-08-07  > Sources: GitHub Trending + GitHub Search API | Generated: 2026-08-06 22:16 UTC  ---  Got it, let's tackle this step by step. First, I need to do Step 1: filter all the non-AI related repos first. Let's go through the original trending list first: First, the 13 trending repos: 1. TencentCloud/TencentDB-Agent-Memory: AI Agent memory, AI related \u2714\ufe0f 2. addyosmani/agent-skills: AI coding agent skills, AI related \u2714\ufe0f 3. cloudflare/computer: gives agents a computer, agent tooling, AI related \u2714\ufe0f 4. mattpocock/skills: real engineer skills for agents, AI related \u2714\ufe0f 5. goauthentik/authentik: auth tool, general, not AI \u274c skip 6. huangruiteng/loopx: AI agent loop kernel, AI related \u2714\ufe0f 7. google/guava: Java general lib, not AI \u274c skip 8. TapXWorld/ChinaTextbook: textbook repo, not AI \u274c skip 9. Significant-Gravitas/AutoGPT: AI agent framework, AI related \u2714\ufe0f 10. tirth",
         "outreach_draft": "Hi, I found your request about \"\ud83d\udcc8 AI Open Source Trends 2026-08-07\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/stevenko2002/agents-radar/issues/555",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "I built an AI tutor you point at paper \u2014 snap a photo of any handwritten problem and it tutors you Socratically (100% client-side, no backen",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vjwvlv/i_built_an_ai_tutor_you_point_at_paper_snap_a/",
+        "source": "reddit:r/SideProject",
+        "score": 93,
+        "estimated_value_usd": 45.0,
+        "reason": "visible or inferred value around $45.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built an AI tutor you point at paper \u2014 snap a photo of any handwritten problem and it tutors you Socratically (100% client-side, no backen\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vjwvlv/i_built_an_ai_tutor_you_point_at_paper_snap_a/\nWhy this is suitable: visible or inferred value around $45.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Built this for a hackathon challenge and figured this sub might find the approach interesting. **The idea:** you point your camera at anything \u2014 a handwritten equation, a textbook page, a circuit diagram, messy notes \u2014 and it becomes an interactive tutoring session. **What surprised me most:** I expected to need an OCR pipeline (Tesseract or similar) before sending anything to the LLM. Turns out you don&#39;t. The Gemini API accepts raw images inline in the same request as text, and it reads messy handwriting and diagrams natively. The entire &quot;vision pipeline&quot; is just base64-encoding a camera frame into the JSON payload. **Features:** - Explain mode \u2014 step-by-step worked solutions from a photo - Socratic tutor mode \u2014 this one&#39;s my favourite. The system prompt forbids it from giving the answer; it asks you one guiding question at a time and reacts to your replies (full conve",
+        "outreach_draft": "Hi, I found your request about \"I built an AI tutor you point at paper \u2014 snap a photo of any handwritten problem and it tutors you Socratically (100% client-side, no backen\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $45.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vjwvlv/i_built_an_ai_tutor_you_point_at_paper_snap_a/",
         "pursued": false,
         "archived_at": null
       }
@@ -352,132 +364,15 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "The strongest immediate angle is reselling free-tier API capabilities as fixed-price micro-services (transcription, summarization, background removal, OCR) to small businesses and creators who need one-off batch jobs done but lack technical setup time. Cloudflare Workers AI, Groq, and Hugging Face Inference provide genuine no-card free tiers that can be wrapped in a simple web form or script and sold per batch.",
-      "free_ai_services": [
-        {
-          "name": "Cloudflare Workers AI",
-          "what_it_does": "Serverless GPU inference for Llama, Whisper, Stable Diffusion, and embedding models",
-          "free_tier": "100,000 requests/day across all models; 10M neurons/day for Workers AI",
-          "credit_card_required": "no",
-          "earn_with_it": "Deploy a one-page Whisper transcription tool on Cloudflare Pages; sell 30-minute audio-to-text batches for $5",
-          "price_guide": "$5 per 30-minute batch"
-        },
-        {
-          "name": "Groq Cloud",
-          "what_it_does": "Ultra-fast LPU inference for Llama 3, Mixtral, Gemma, Whisper",
-          "free_tier": "14,400 requests/day for Llama 3 8B; 6,000 requests/day for Whisper Large v3",
-          "credit_card_required": "no",
-          "earn_with_it": "Offer same-day meeting summarization: client uploads audio, you return cleaned transcript + 3-bullet summary + action items for $10",
-          "price_guide": "$10 per meeting (up to 60 min)"
-        },
-        {
-          "name": "Hugging Face Inference API",
-          "what_it_does": "Hosted inference for 100k+ open models (text, image, audio, embeddings)",
-          "free_tier": "30,000 requests/month shared across models; rate-limited",
-          "credit_card_required": "no",
-          "earn_with_it": "Run background-removal (briaai/RMBG-1.4) or image-upscaling batches for Etsy sellers; $15 per 50 images",
-          "price_guide": "$15 per 50 images"
-        },
-        {
-          "name": "GitHub Models (Azure AI)",
-          "what_it_does": "Free playground + API for GPT-4o, Phi-3, Llama 3.1, Mistral, embeddings",
-          "free_tier": "150 requests/day for chat; 1,500 embeddings/day; verify current limit",
-          "credit_card_required": "no",
-          "earn_with_it": "Sell a 'prompt library + setup' package: 20 tested prompts for content repurposing + 30-min walkthrough configuring the free key in their n8n/Zapier/Make workflow for $49",
-          "price_guide": "$49 one-time"
-        },
-        {
-          "name": "LibreTranslate (public instances)",
-          "what_it_does": "Open-source translation API (100+ languages)",
-          "free_tier": "Unlimited on self-hosted; public instances like libretranslate.de allow ~5000 chars/request, no key",
-          "credit_card_required": "no",
-          "earn_with_it": "Batch-translate subtitle files (SRT/VTT) for YouTubers targeting Spanish/Portuguese; $8 per 10k words",
-          "price_guide": "$8 per 10k words"
-        },
-        {
-          "name": "Ollama (local)",
-          "what_it_does": "Run Llama 3, Phi-3, Gemma, Qwen, CodeLlama locally on CPU/GPU",
-          "free_tier": "Unlimited, hardware-bound",
-          "credit_card_required": "no",
-          "earn_with_it": "Offer 'private data Q&A' setup: install Ollama + a RAG script on client's laptop, index their PDFs/Notion, deliver a local chat shortcut; $99 flat",
-          "price_guide": "$99 one-time"
-        },
-        {
-          "name": "Tesseract OCR (local / Docker)",
-          "what_it_does": "Open-source OCR for 100+ languages, PDF/image to text",
-          "free_tier": "Unlimited",
-          "credit_card_required": "no",
-          "earn_with_it": "Convert scanned PDF invoices/receipts to CSV/JSON for bookkeepers; $20 per 100 pages",
-          "price_guide": "$20 per 100 pages"
-        },
-        {
-          "name": "Whisper.cpp (local)",
-          "what_it_does": "Fast C++ port of OpenAI Whisper, runs on CPU",
-          "free_tier": "Unlimited",
-          "credit_card_required": "no",
-          "earn_with_it": "Transcribe podcast episodes to timestamped SRT + clean TXT for show notes; $12 per episode (up to 45 min)",
-          "price_guide": "$12 per episode"
-        }
-      ],
-      "easy_earning_ideas": [
-        {
-          "idea": "Audio-to-Text Batch Service",
-          "who_pays": "Podcasters, coaches, researchers with 5-20 episodes backlog",
-          "deliverable": "ZIP with per-episode: cleaned .txt, .srt, 3-bullet summary, action-items list",
-          "price_usd": "12-15 per episode",
-          "time_to_first_dollar": "same day",
-          "free_stack": "Groq Whisper + Cloudflare Workers AI for summary"
-        },
-        {
-          "idea": "Image Background Removal for Etsy Sellers",
-          "who_pays": "Etsy/Shopify sellers with 50-200 product photos needing white backgrounds",
-          "deliverable": "Folder of transparent PNGs + optional 1200x1200 JPG on white",
-          "price_usd": "15 per 50 images",
-          "time_to_first_dollar": "2-3 days",
-          "free_stack": "Hugging Face Inference API (briaai/RMBG-1.4)"
-        },
-        {
-          "idea": "Scanned PDF to Structured CSV",
-          "who_pays": "Bookkeepers, VAs, small agencies drowning in receipt/invoice scans",
-          "deliverable": "CSV with columns: date, vendor, amount, category, tax; plus original PDF renamed by date",
-          "price_usd": "20 per 100 pages",
-          "time_to_first_dollar": "same day",
-          "free_stack": "Tesseract OCR + local Llama 3 (Ollama) for field extraction"
-        },
-        {
-          "idea": "Private RAG Setup on Client Laptop",
-          "who_pays": "Consultants, lawyers, researchers with sensitive PDFs/Notion docs",
-          "deliverable": "Installed Ollama + Python RAG script + desktop shortcut; 30-min handoff call",
-          "price_usd": "99 flat",
-          "time_to_first_dollar": "2-3 days",
-          "free_stack": "Ollama (Llama 3 / Phi-3) + ChromaDB local"
-        },
-        {
-          "idea": "Multilingual Subtitle Translation",
-          "who_pays": "YouTubers, course creators expanding to ES/PT/DE/FR",
-          "deliverable": "Translated .srt/.vtt files with timing preserved; glossary sheet for brand terms",
-          "price_usd": "8 per 10k words",
-          "time_to_first_dollar": "same day",
-          "free_stack": "LibreTranslate public API + Python script for batch SRT handling"
-        },
-        {
-          "idea": "Meeting Summarization Pack",
-          "who_pays": "Agency owners, project managers with 3-10 weekly client calls",
-          "deliverable": "Per meeting: transcript, 5-bullet summary, decisions log, action items with owners/dates",
-          "price_usd": "10 per meeting",
-          "time_to_first_dollar": "same day",
-          "free_stack": "Groq Whisper + Groq Llama 3 8B for summarization"
-        }
-      ],
+      "summary": "Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"summary\": \"The strongest immediate angle ",
+      "free_ai_services": [],
+      "easy_earning_ideas": [],
       "owner_actions": [
-        "Pick ONE idea above; build a minimal landing page (Carrd/Notion + Stripe payment link) in 30 minutes.",
-        "Create a 3-file demo pack (sample input \u2192 sample output) to prove quality before first sale.",
-        "Post the offer in 2-3 relevant communities (IndieHackers, r/smallbusiness, niche Discord/Slack) with a direct 'DM me to start' CTA.",
-        "Set up a simple intake form (Tally/Google Forms) that collects files + email; automate the pipeline with a Cloudflare Worker or local script.",
-        "After 3 paid jobs, raise price 20% and add a 'retainer' option (e.g., 10 episodes/month for $100)."
+        "Review the ranked free-AI leads below and pick the one with the clearest buyer.",
+        "Verify the free tier limits yourself before quoting a price."
       ]
     },
-    "last_refresh_at": "2026-08-09T05:58:19.674855+00:00",
+    "last_refresh_at": "2026-08-10T06:42:36.644941+00:00",
     "free_ai_focus": [
       "free-tier LLM APIs with no credit card requirement",
       "free speech-to-text, TTS, and transcription APIs",

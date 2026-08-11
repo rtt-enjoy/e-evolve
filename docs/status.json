@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-10T23:51:34.538468+00:00",
-  "total_runs": 1370,
+  "last_run": "2026-08-11T02:28:11.775784+00:00",
+  "total_runs": 1371,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -60,7 +60,15 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "error": "no fresh trending source or LLM output available",
+        "estimated_usd": 0.0
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -78,7 +86,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 162,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",

@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-11T10:12:53.943363+00:00",
-  "total_runs": 1376,
+  "last_run": "2026-08-11T11:06:13.649804+00:00",
+  "total_runs": 1377,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -15,12 +15,12 @@
   ],
   "llm_provider": "openrouter",
   "earnings": {
-    "total_usd": 3.57,
-    "this_week_usd": 0.08,
-    "last_cycle_usd": 0.0,
+    "total_usd": 3.65,
+    "this_week_usd": 0.16,
+    "last_cycle_usd": 0.08,
     "week_started": "2026-08-10",
     "breakdown": {
-      "dev.to": 0.08,
+      "dev.to": 0.16,
       "code_techs": 0.0
     },
     "history": [
@@ -28,6 +28,7 @@
       0.02,
       0.02,
       0.02,
+      0.08,
       0.08,
       0.08,
       0.08,
@@ -63,13 +64,15 @@
     "actions": [
       {
         "platform": "dev.to",
-        "success": false,
-        "skipped": true,
-        "error": "no fresh trending source or LLM output available",
-        "estimated_usd": 0.0
+        "success": true,
+        "title": "Deploying Meta\u2019s Llama 3 in a Production Python Service",
+        "url": "https://dev.to/robust_true_try/deploying-metas-llama-3-in-a-production-python-service-13o6",
+        "estimated_usd": 0.08,
+        "source_url": "https://www.ft.com/content/4e3957f8-ea7c-4c46-a3de-cdce8e526878",
+        "source_title": "Mark Zuckerberg attacks 'closed' AI rivals as Meta returns to open models"
       }
     ],
-    "total_usd": 0.0
+    "total_usd": 0.08
   },
   "suggestions": [
     {
@@ -86,7 +89,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 317,
+  "last_cycle_seconds": 183,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -175,8 +178,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-08-10",
-    "published": 5
+    "date": "2026-08-11",
+    "published": 6
   },
   "code_tech_earning": {
     "enabled": true,
@@ -420,21 +423,24 @@
       "artificialanalysis.ai",
       "app.dealroom.co/news/feed/oracle-bans-ai-generated-code-from-openjdk-despite-ellison-s-claim-oracle-isn-t-writing-its-own-code",
       "blog.senko.net/code-was-never-the-hard-part-is-an-insult-to-all-programmers",
-      "kibotronics.net/unlisted/lilly-machines"
+      "kibotronics.net/unlisted/lilly-machines",
+      "ft.com/content/4e3957f8-ea7c-4c46-a3de-cdce8e526878"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
       "qwen3 8 max now ranked best overall model agentic index",
       "oracle bans ai generated code openjdk",
       "code never hard insult all programmer",
-      "john c lilly solid state intelligence elimination man 1978"
+      "john c lilly solid state intelligence elimination man 1978",
+      "mark zuckerberg attack closed ai rival meta return open model"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
       "deploying qwen3 8 max task oriented agent python",
       "manage ai generated code strict open source project",
       "automated refactoring making maintenance habit",
-      "prototype diy solid state intelligence module home automation"
+      "prototype diy solid state intelligence module home automation",
+      "deploying meta s llama 3 production python service"
     ]
   }
 }

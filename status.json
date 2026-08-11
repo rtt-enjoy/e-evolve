@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-11T06:04:23.613220+00:00",
-  "total_runs": 1373,
+  "last_run": "2026-08-11T07:38:01.788214+00:00",
+  "total_runs": 1374,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -62,6 +62,16 @@
   "last_earning": {
     "actions": [
       {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      },
+      {
         "platform": "dev.to",
         "success": false,
         "skipped": true,
@@ -86,7 +96,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 148,
+  "last_cycle_seconds": 638,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -210,28 +220,15 @@
         "archived_at": null
       },
       {
-        "title": "\ud83d\udd0d CLI Discovery: 2026-08-10 \u2014 20 candidates found",
-        "url": "https://github.com/RealZST/harnesskit-resources/issues/65",
-        "source": "github",
-        "score": 100,
-        "estimated_value_usd": 0.0,
-        "reason": "runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand",
-        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udd0d CLI Discovery: 2026-08-10 \u2014 20 candidates found\nSource: github\nURL: https://github.com/RealZST/harnesskit-resources/issues/65\nWhy this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-10. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU \u2014 \u2b50 14275 \u2014 Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus \u2014 \u2b50 45217 \u2014 Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige",
-        "outreach_draft": "Hi, I found your request about \"\ud83d\udd0d CLI Discovery: 2026-08-10 \u2014 20 candidates found\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/RealZST/harnesskit-resources/issues/65",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "I had 312,000 emails in my Gmail. I got tired of it and built something to clean it",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vk8r6n/i_had_312000_emails_in_my_gmail_i_got_tired_of_it/",
+        "title": "I got tired of Gboard's mediocre suggestions and dictation so I built an Android keyboard that runs speech and language models entirely on y",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vl26mp/i_got_tired_of_gboards_mediocre_suggestions_and/",
         "source": "reddit:r/SideProject",
-        "score": 98,
+        "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Clean one messy sample export with the free LLM tier and quote a flat rate per file.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I had 312,000 emails in my Gmail. I got tired of it and built something to clean it\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vk8r6n/i_had_312000_emails_in_my_gmail_i_got_tired_of_it/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Full disclosure before anything else: I built this, it is mine, Mods, if that breaks the rules here, remove it, no hard feelings. I just feel this app is too good to keep to myself and I wanted to share it with people who need it. For years my Gmail was a landfill. Newsletters I signed up for once in 2019. Promotions. Order confirmations from stores that do not exist anymore. Every few months Google told me I was out of space, I deleted a few hundred by hand, got bored, and gave up. The thing is, Gmail is built to handle one email at a time. It is very good at that. It is terrible at handling twenty thousand at once. So I built sogmailcleaner. Here is what it actually does. **Bulk sender cleanup.** This is one of the best features the app has. Why? Because it lets you delete every email from one sender in a single click, even if that sender has already sent you more than 10,000. You can ",
-        "outreach_draft": "Hi, I found your request about \"I had 312,000 emails in my Gmail. I got tired of it and built something to clean it\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vk8r6n/i_had_312000_emails_in_my_gmail_i_got_tired_of_it/",
+        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I got tired of Gboard's mediocre suggestions and dictation so I built an Android keyboard that runs speech and language models entirely on y\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vl26mp/i_got_tired_of_gboards_mediocre_suggestions_and/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: The dictation in this video is running entirely on my phone. An NVIDIA parakeet model downloaded once. Nothing I say leaves the device. I built Lexo because I knew LLMs should be able to provide a huge increase in typing suggestion quality, and I wasn&#39;t seeing it from Gboard or SwiftKey. I added dictation because I found the UX of Wispr Flow sorely lacking. The suggestions are already much better than any other keyboard I&#39;ve used, and I&#39;m still improving them. They use a fused pipeline: a word-frequency prior plus your own recurring vocabulary, with a small LLM&#39;s next-token distribution (Qwen2.5-0.5B) blended in on top through llama.cpp. It also does autocorrect and glide typing, and everything works in six languages: English, Spanish, Portuguese, Swedish, German, and French. It all runs on the phone, no API calls, nothing you type leaves it either. The only required netw",
+        "outreach_draft": "Hi, I found your request about \"I got tired of Gboard's mediocre suggestions and dictation so I built an Android keyboard that runs speech and language models entirely on y\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vl26mp/i_got_tired_of_gboards_mediocre_suggestions_and/",
         "pursued": false,
         "archived_at": null
       },
@@ -275,15 +272,28 @@
         "archived_at": null
       },
       {
-        "title": "I built an AI tutor you point at paper \u2014 snap a photo of any handwritten problem and it tutors you Socratically (100% client-side, no backen",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vjwvlv/i_built_an_ai_tutor_you_point_at_paper_snap_a/",
+        "title": "I built a free Pok\u00e9mon Team Builder with damage calcs, threat analysis, and a built-in smart coach, supports all 1,285 forms across 9 langua",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vksdpa/i_built_a_free_pok\u00e9mon_team_builder_with_damage/",
         "source": "reddit:r/SideProject",
-        "score": 93,
-        "estimated_value_usd": 45.0,
-        "reason": "visible or inferred value around $45.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "score": 94,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Translate one sample page on the free tier, verify quality, and price per thousand words.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built a free Pok\u00e9mon Team Builder with damage calcs, threat analysis, and a built-in smart coach, supports all 1,285 forms across 9 langua\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vksdpa/i_built_a_free_pok\u00e9mon_team_builder_with_damage/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Translate one sample page on the free tier, verify quality, and price per thousand words.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Hi, wanted to share something I&#39;ve been working on for a while now. pokemonteambuild.com It&#39;s a team builder that actually analyzes your team as you build it; not just type coverage, but real damage calculations, threat analysis against the current meta, speed tier comparisons, and an AI coach that tells you what&#39;s wrong and how to fix it. You pick up to 6 Pok\u00e9mon and the app immediately starts showing you where your team is strong and where it&#39;s getting walled. There&#39;s a score ring (0-100) that weighs defensive coverage, offensive coverage, speed tiers, role balance, and team synergy. The coach panel gives you actual advice like &quot;your team has 3 Ground-weak Pok\u00e9mon, consider X&quot; with an &quot;Apply fix&quot; button that swaps in the suggestion. But the part I&#39;m most proud of is the damage grid ; it&#39;s a matrix of your team vs the top threats in whatev",
+        "outreach_draft": "Hi, I found your request about \"I built a free Pok\u00e9mon Team Builder with damage calcs, threat analysis, and a built-in smart coach, supports all 1,285 forms across 9 langua\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vksdpa/i_built_a_free_pok\u00e9mon_team_builder_with_damage/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "\ud83d\udcc8 AI Open Source Trends 2026-08-03",
+        "url": "https://github.com/xavier9802/agents-radar/issues/153",
+        "source": "github",
+        "score": 92,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
         "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built an AI tutor you point at paper \u2014 snap a photo of any handwritten problem and it tutors you Socratically (100% client-side, no backen\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vjwvlv/i_built_an_ai_tutor_you_point_at_paper_snap_a/\nWhy this is suitable: visible or inferred value around $45.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Built this for a hackathon challenge and figured this sub might find the approach interesting. **The idea:** you point your camera at anything \u2014 a handwritten equation, a textbook page, a circuit diagram, messy notes \u2014 and it becomes an interactive tutoring session. **What surprised me most:** I expected to need an OCR pipeline (Tesseract or similar) before sending anything to the LLM. Turns out you don&#39;t. The Gemini API accepts raw images inline in the same request as text, and it reads messy handwriting and diagrams natively. The entire &quot;vision pipeline&quot; is just base64-encoding a camera frame into the JSON payload. **Features:** - Explain mode \u2014 step-by-step worked solutions from a photo - Socratic tutor mode \u2014 this one&#39;s my favourite. The system prompt forbids it from giving the answer; it asks you one guiding question at a time and reacts to your replies (full conve",
-        "outreach_draft": "Hi, I found your request about \"I built an AI tutor you point at paper \u2014 snap a photo of any handwritten problem and it tutors you Socratically (100% client-side, no backen\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $45.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vjwvlv/i_built_an_ai_tutor_you_point_at_paper_snap_a/",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udcc8 AI Open Source Trends 2026-08-03\nSource: github\nURL: https://github.com/xavier9802/agents-radar/issues/153\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # AI Open Source Trends 2026-08-03  > Sources: GitHub Trending + GitHub Search API | Generated: 2026-08-03 03:35 UTC  ---    # AI Open Source Trends Report \u2014 2026-08-03  ---  ## 1. Today's Highlights  The standout story today is **AirLLM** by lyogavin, which enables 70B-parameter model inference on a single 4 GB GPU \u2014 a dramatic democratization of large-model local inference. The community is also rallying around **coding-agent tooling**, with three projects debuting simultaneously: DeepSeek-Reasonix (Go-native terminal agent), Openwork (open-source Claude Cowork alternative), and TencentDB-Agent-Memory (team-level agent memory). Microsoft's two beginner-focused courses continue to attract massive interest, while the **LLM-model topic** is seeing emerging interest in Rust-based decoder architectures (AarambhStudio) and quantum-enhanced language models (Qelm), signaling that the \"build it",
+        "outreach_draft": "Hi, I found your request about \"\ud83d\udcc8 AI Open Source Trends 2026-08-03\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/xavier9802/agents-radar/issues/153",
         "pursued": false,
         "archived_at": null
       }
@@ -369,7 +379,7 @@
         "Verify the free tier limits yourself before quoting a price."
       ]
     },
-    "last_refresh_at": "2026-08-10T06:42:36.644941+00:00",
+    "last_refresh_at": "2026-08-11T07:38:02.594763+00:00",
     "free_ai_focus": [
       "free-tier LLM APIs with no credit card requirement",
       "free speech-to-text, TTS, and transcription APIs",

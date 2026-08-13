@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-12T23:58:56.798759+00:00",
-  "total_runs": 1404,
+  "last_run": "2026-08-13T02:47:55.997716+00:00",
+  "total_runs": 1405,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -15,12 +15,12 @@
   ],
   "llm_provider": "openrouter",
   "earnings": {
-    "total_usd": 3.73,
-    "this_week_usd": 0.24,
-    "last_cycle_usd": 0.0,
+    "total_usd": 3.81,
+    "this_week_usd": 0.32,
+    "last_cycle_usd": 0.08,
     "week_started": "2026-08-10",
     "breakdown": {
-      "dev.to": 0.24,
+      "dev.to": 0.32,
       "code_techs": 0.0
     },
     "history": [
@@ -28,6 +28,7 @@
       0.02,
       0.02,
       0.02,
+      0.08,
       0.08,
       0.08,
       0.08,
@@ -62,8 +63,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
-    "total_usd": 0.0
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "Safely Resetting SQLite WAL in Production: Lessons from Tailscale",
+        "url": "https://dev.to/robust_true_try/safely-resetting-sqlite-wal-in-production-lessons-from-tailscale-3ln4",
+        "estimated_usd": 0.08,
+        "source_url": "https://tailscale.com/blog/sqlite-wal-reset-bug",
+        "source_title": "Tailscale Traces Database Corruption to 16y/o SQLite WAL-Reset Bug"
+      }
+    ],
+    "total_usd": 0.08
   },
   "suggestions": [
     {
@@ -80,7 +91,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 297,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -169,8 +180,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-08-12",
-    "published": 7
+    "date": "2026-08-13",
+    "published": 8
   },
   "code_tech_earning": {
     "enabled": true,
@@ -416,7 +427,8 @@
       "blog.senko.net/code-was-never-the-hard-part-is-an-insult-to-all-programmers",
       "kibotronics.net/unlisted/lilly-machines",
       "ft.com/content/4e3957f8-ea7c-4c46-a3de-cdce8e526878",
-      "bbc.com/news/articles/c75gk620r22o"
+      "bbc.com/news/articles/c75gk620r22o",
+      "tailscale.com/blog/sqlite-wal-reset-bug"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -425,7 +437,8 @@
       "code never hard insult all programmer",
       "john c lilly solid state intelligence elimination man 1978",
       "mark zuckerberg attack closed ai rival meta return open model",
-      "england set one first country eliminate hepatiti c"
+      "england set one first country eliminate hepatiti c",
+      "tailscale trac database corruption 16y o sqlite wal reset bug"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -434,7 +447,8 @@
       "automated refactoring making maintenance habit",
       "prototype diy solid state intelligence module home automation",
       "deploying meta s llama 3 production python service",
-      "building surveillance pipelin public health data"
+      "building surveillance pipelin public health data",
+      "safely resetting sqlite wal production lesson tailscale"
     ]
   },
   "github_repo": "rtt-enjoy/e-evolve"

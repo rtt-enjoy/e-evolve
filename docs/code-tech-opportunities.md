@@ -1,6 +1,6 @@
 # Free AI Earning Queue
 
-Refreshed: 2026-08-12T08:39:51.359824+00:00
+Refreshed: 2026-08-13T08:43:55.089208+00:00
 Daily target: $10.00
 
 Suggestions favour free AI services and free AI APIs with zero upfront cost.
@@ -17,7 +17,7 @@ Suggestions favour free AI services and free AI APIs with zero upfront cost.
 
 ## Current Best Angle
 
-Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: '{\n  "summary": "The fastest path to cash is pa
+Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: '{\n  "summary": "The strongest immediate angle
 
 ## Next Actions
 
@@ -85,97 +85,7 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
 
 ## Ranked Leads From Online Search
 
-1. [Buying a roofing company in 2026: $100B market, 2x entry multiples, and one PE roll-up that went bankrupt. Full breakdown inside.](https://www.reddit.com/r/Entrepreneur/comments/1s5rswx/buying_a_roofing_company_in_2026_100b_market_2x/)
-   - Score: 100/100
-   - Value signal: $75000.00
-   - Why: visible or inferred value around $75000.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Buying a roofing company in 2026: $100B market, 2x entry multiples, and one PE roll-up that went bankrupt. Full breakdown inside.
-     Source: reddit:r/Entrepreneur
-     URL: https://www.reddit.com/r/Entrepreneur/comments/1s5rswx/buying_a_roofing_company_in_2026_100b_market_2x/
-     Why this is suitable: visible or inferred value around $75000.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Sixth industry deep dive Ive posted here. This was one of the most requested industry. Already covered pest control, HVAC, restoration, home care, and landscaping. Roofing is the one that has the most dramatic PE activity of anything Ive researched. The amount of capital pouring into this space right now is staggering. But its also the industry where a PE roll-up literally went bankrupt last year, so the risks are just as real as the opportunity. Heres everything I found. Why roofing is attracting so much PE capital $100 billion market. Thats contractor services revenue in 2025 per IBISWorld, growing at roughly 6% CAGR. About 106,000 roofing businesses in the US with the top 3 controlling less then 6% market share. Thats textbook PE roll-up territory. But heres what makes roofing different from the other industries Ive covered: 80% of demand comes from re-roofing, not new construction. T
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Buying a roofing company in 2026: $100B market, 2x entry multiples, and one PE roll-up that went bankrupt. Full breakdown inside." and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $75000.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/Entrepreneur/comments/1s5rswx/buying_a_roofing_company_in_2026_100b_market_2x/
-2. [Car washes went from simple service businesses to real estate + subscription plays practically overnight. PE has spent billions and the math](https://www.reddit.com/r/Entrepreneur/comments/1st95tp/car_washes_went_from_simple_service_businesses_to/)
-   - Score: 100/100
-   - Value signal: $52500.00
-   - Why: visible or inferred value around $52500.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Car washes went from simple service businesses to real estate + subscription plays practically overnight. PE has spent billions and the math
-     Source: reddit:r/Entrepreneur
-     URL: https://www.reddit.com/r/Entrepreneur/comments/1st95tp/car_washes_went_from_simple_service_businesses_to/
-     Why this is suitable: visible or inferred value around $52500.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Ninth industry deep dive Ive posted here. Already covered pest control, HVAC, restoration, home care, landscaping, roofing, septic, and commercial cleaning. Car wash is the one that gets the most attention from first-time buyers and for good reason. The membership model has fundamentally changed the economics of this business in the last 5-10 years. But oversaturation in Sun Belt corridors is a real risk that most people underestimate. Heres everything I found. Why car washes arent what they used to be $15 billion US market per the International Carwash Association and Grand View Research ($15.28B in 2025). About 60,000+ sites nationwide. Express exterior washes now account for 42% of the market and thats where all the PE money and new construction is going. The transformation happened because of unlimited monthly memberships. Instead of paying $12-18 per wash and coming whenever you fee
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Car washes went from simple service businesses to real estate + subscription plays practically overnight. PE has spent billions and the math" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $52500.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/Entrepreneur/comments/1st95tp/car_washes_went_from_simple_service_businesses_to/
-3. [Looking for advice - How/Where Should I Sell My Smaller (ish) Ecommerce business? (Not drop-shipping) Should I even sell it or let it print?](https://www.reddit.com/r/Entrepreneur/comments/1v5vysj/looking_for_advice_howwhere_should_i_sell_my/)
-   - Score: 100/100
-   - Value signal: $4500.00
-   - Why: visible or inferred value around $4500.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Looking for advice - How/Where Should I Sell My Smaller (ish) Ecommerce business? (Not drop-shipping) Should I even sell it or let it print?
-     Source: reddit:r/Entrepreneur
-     URL: https://www.reddit.com/r/Entrepreneur/comments/1v5vysj/looking_for_advice_howwhere_should_i_sell_my/
-     Why this is suitable: visible or inferred value around $4500.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Quick brief: I have run a business for 6+ years now and my career is taking off (and I can’t manage both). The return on my time with my career outpaces the business. I am looking for opinions/advice. Do I sell? How? Where? Or do I keep it? Business: ecom, but i ship everything. At least currently. I am in the automotive space and have a established brand and product lines. I also have the ability to be the retailer for a couple thousand brands (it actually takes a lot to get access to this, there is a huge amount of value that for someone in this space). Over the last few years I have been putting the minimum time into it and it has still be marginally growing (again, time into career is the goal and what I have been doing). Economics of the business: monthly revenue is $4,500-9,500 a month. Profit margins range monthly from 35-45%. And that all operates with an average investment of 15
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Looking for advice - How/Where Should I Sell My Smaller (ish) Ecommerce business? (Not drop-shipping) Should I even sell it or let it print?" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $4500.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/Entrepreneur/comments/1v5vysj/looking_for_advice_howwhere_should_i_sell_my/
-4. [feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)](https://github.com/ava-agent/awesome-ai-ideas/pull/1379)
+1. [feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)](https://github.com/ava-agent/awesome-ai-ideas/pull/1379)
    - Score: 100/100
    - Value signal: $960.00
    - Why: visible or inferred value around $960.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -205,79 +115,19 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379
-5. [30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks](https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/)
+2. [i spent 4 months building the paid version of my own open source project. here's what it cost and what i got wrong](https://www.reddit.com/r/SideProject/comments/1vmmr4u/i_spent_4_months_building_the_paid_version_of_my/)
    - Score: 100/100
-   - Value signal: $820.00
-   - Why: visible or inferred value around $820.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.
+   - Value signal: $199.00
+   - Why: visible or inferred value around $199.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: 30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks
-     Source: reddit:r/Entrepreneur
-     URL: https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/
-     Why this is suitable: visible or inferred value around $820.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Tenth post in this series. Already covered pest control, HVAC, restoration, home care, landscaping, roofing, septic, commercial cleaning, and car wash. Insurance is a completely different thing from all of those and honestly I wish I had looked at it earlier. No trucks. No equipment to maintain. No worrying about weather. Your entire business is client relationships and the commissions that come with them. And those commissions renew automatically every single year. Thats the part that blew my mind when I started digging into this. When a client buys a policy thru your agency, the carrier pays you a commission. When that client renews next year you get paid again. And the year after that. Best agencies are keeping 95% of their clients year over year which means basically all of last years revenue is already locked in before January even starts. Ive never seen retention numbers like that
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "30,000 insurance agency owners are retiring with no succession plan. Heres why I think this is the best acquisition opportunity nobody talks" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $820.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/Entrepreneur/comments/1tf4hbe/30000_insurance_agency_owners_are_retiring_with/
-6. [How I'm generating 6 - 13 b2b calls per day with paid ads](https://www.reddit.com/r/Entrepreneur/comments/1t4auwa/how_im_generating_6_13_b2b_calls_per_day_with/)
-   - Score: 100/100
-   - Value signal: $500.00
-   - Why: visible or inferred value around $500.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: How I'm generating 6 - 13 b2b calls per day with paid ads
-     Source: reddit:r/Entrepreneur
-     URL: https://www.reddit.com/r/Entrepreneur/comments/1t4auwa/how_im_generating_6_13_b2b_calls_per_day_with/
-     Why this is suitable: visible or inferred value around $500.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Imo, paid ads are the best &amp; fastest way to grow your company. When all the pieces click into their respective places, you have a system that turns advertising dollars into profit. I&#39;ve talked to a lot of business owners and the aforementioned scenario is definitely not the reality for many. Maybe you tried to run ads yourself or even hired an agency to do it for you, butin the end you burned more cash than you made. Why? I mean if you logged into your Meta business manager, clicked a couple of buttons and called it a day, what did you expect? Or if you hired an agency to do that and all they did was launch a couple of ads in your BM.. Congrats, you paid 4 figures for someone to click through a setup that&#39;s so easy that you could guide a grandma through it over the phone. Month over month, META is making it easier and easier to set up campaigns, but you don&#39;t make money t
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "How I'm generating 6 - 13 b2b calls per day with paid ads" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $500.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/Entrepreneur/comments/1t4auwa/how_im_generating_6_13_b2b_calls_per_day_with/
-7. [Built a DIY calculator site in a weekend — betting on "boring tools" over content](https://www.reddit.com/r/SideProject/comments/1vlpujz/built_a_diy_calculator_site_in_a_weekend_betting/)
-   - Score: 100/100
-   - Value signal: $300.00
-   - Why: visible or inferred value around $300.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Built a DIY calculator site in a weekend — betting on "boring tools" over content
+     Lead: i spent 4 months building the paid version of my own open source project. here's what it cost and what i got wrong
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vlpujz/built_a_diy_calculator_site_in_a_weekend_betting/
-     Why this is suitable: visible or inferred value around $300.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
+     URL: https://www.reddit.com/r/SideProject/comments/1vmmr4u/i_spent_4_months_building_the_paid_version_of_my/
+     Why this is suitable: visible or inferred value around $199.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -286,27 +136,27 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: After my last project (an AI debate platform) got rejected by AdSense for &quot;low value content,&quot; I went the opposite direction: no content treadmill, no AI features, no backend. Just genuinely useful calculators. studandslab.com — 10 free calculators for woodworking and home projects (board feet, stair stringers, concrete, drywall). Everything runs client-side, so hosting is free and every visitor costs me $0. The bet: utility tools still rank in Google where blog content can&#39;t, they get bookmarked and shared in forums, and AI Overviews can&#39;t replace an interactive tool the way they replace articles. Stack: Next.js + Tailwind + Vercel free tier. Total spend so far: $12 for the domain. Monetization plan: Amazon affiliate links now, display ads (Ezoic → Mediavine) once traffic supports it. Realistic target is $300–1,200/mo by month 9–12 if a few pages crack page 1. Currentl
+     Request excerpt: i maintain holyclaude (2.4k stars, 132k docker pulls, mit) and holycode (another 9k pulls). both free, both self-hostable, both still shipping. this year i built the hosted version and started charging for it, and the honest report is more interesting than the launch post. to be exact about the timeline, since the title compresses it: the open source work started in march. the hosted version is about five weeks old. first commit early july, on sale 28 july. what it is: a linux box in the cloud that stays yours. one vm and one persistent disk per person on fly. you ssh in or open a terminal in the browser, run whatever coding agent you like with your own api key, and close your laptop. the work carries on without you, because it was never happening on your machine. six agent clis on it (claude code, codex, opencode, gemini, cursor, pi) and 60+ dev tools already installed, so the box is us
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Built a DIY calculator site in a weekend — betting on "boring tools" over content" and can make a small working version.
+     Hi, I found your request about "i spent 4 months building the paid version of my own open source project. here's what it cost and what i got wrong" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $300.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $199.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1vlpujz/built_a_diy_calculator_site_in_a_weekend_betting/
-8. [I added up every tool subscription I pay as a solo founder. The total surprised me more than my revenue.](https://www.reddit.com/r/Entrepreneur/comments/1rxvmve/i_added_up_every_tool_subscription_i_pay_as_a/)
+     Reference: https://www.reddit.com/r/SideProject/comments/1vmmr4u/i_spent_4_months_building_the_paid_version_of_my/
+3. [Lifetime: My project passed 50 users and Im so grateful! I built Ghost, an always on and ready personal agent using your existing Chatgpt/Cl](https://www.reddit.com/r/SideProject/comments/1vmpid5/lifetime_my_project_passed_50_users_and_im_so/)
    - Score: 100/100
-   - Value signal: $200.00
-   - Why: visible or inferred value around $200.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Value signal: $14.99
+   - Why: visible or inferred value around $14.99; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: I added up every tool subscription I pay as a solo founder. The total surprised me more than my revenue.
-     Source: reddit:r/Entrepreneur
-     URL: https://www.reddit.com/r/Entrepreneur/comments/1rxvmve/i_added_up_every_tool_subscription_i_pay_as_a/
-     Why this is suitable: visible or inferred value around $200.00; runs on a free AI tier, so input cost is zero and margin is total
+     Lead: Lifetime: My project passed 50 users and Im so grateful! I built Ghost, an always on and ready personal agent using your existing Chatgpt/Cl
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vmpid5/lifetime_my_project_passed_50_users_and_im_so/
+     Why this is suitable: visible or inferred value around $14.99; runs on a free AI tier, so input cost is zero and margin is total
      First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
      
      Constraints:
@@ -316,12 +166,162 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: I run a few online products as a solo founder. No employees, no office, just me and a laptop. I&#39;ve always tracked what I earn, but I never once sat down and added up what I spend on tools every month. Turns out it&#39;s more than I thought. Hosting: $5/mo. AI tools (Claude, OpenAI): $30-40/mo. Lovable: $20/mo. DataFast: $90/year. Another SaaS tool: $89/year. Domain renewals: $40/year base, plus $10 for every new domain. Plus company taxes just so I can accept payments through Stripe. Converted everything to monthly and I&#39;m somewhere around $80-90/mo, on tools alone, before taxes, before any one-off purchases. I currently make $0/mo in recurring revenue, and earn &lt;$200 in February. So my &quot;business&quot; is just a machine that currently costs $80-90/mo and produces just content and code. The weird part is I never felt like I was spending that much. Each tool is $5 or $10 or
+     Request excerpt: I kept hitting the same wall: one focused hour of work meant a ChatGPT tab, a local model UI, a terminal agent, a document viewer, a timer app, Calendar and Reminders with seven surfaces just to get anything done. So I built Ghost: a native macOS AI workspace that replaces all of them with one surface that lives in your menu bar. Press ⌥Space anywhere and it drops from the camera notch (or floats as a small text bar near the bottom of the screen, your choice). Ask, act, and it disappears again. No Dock icon, no tab management, no full-screen takeover. What it does: - Routes every prompt by intent (14 kinds) to the right model: LM Studio or Ollama fully local, or Claude, Gemini, DeepSeek, OpenCode, any OpenAI-compatible server. It even runs chat through your existing Claude Code or Codex subscription, no extra cost. - ~78 tools, 4 risk tiers: files (DOCX/PDF/PPTX/XLSX/Markdown), Calendar,
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "I added up every tool subscription I pay as a solo founder. The total surprised me more than my revenue." and can make a small working version.
+     Hi, I found your request about "Lifetime: My project passed 50 users and Im so grateful! I built Ghost, an always on and ready personal agent using your existing Chatgpt/Cl" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $200.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $14.99 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/Entrepreneur/comments/1rxvmve/i_added_up_every_tool_subscription_i_pay_as_a/
+     Reference: https://www.reddit.com/r/SideProject/comments/1vmpid5/lifetime_my_project_passed_50_users_and_im_so/
+4. [🔍 CLI Discovery: 2026-08-13 — 20 candidates found](https://github.com/RealZST/harnesskit-resources/issues/66)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: 🔍 CLI Discovery: 2026-08-13 — 20 candidates found
+     Source: github
+     URL: https://github.com/RealZST/harnesskit-resources/issues/66
+     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-13. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU — ⭐ 14294 — Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus — ⭐ 45331 — Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "🔍 CLI Discovery: 2026-08-13 — 20 candidates found" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/RealZST/harnesskit-resources/issues/66
+5. [🔍 CLI Discovery: 2026-08-10 — 20 candidates found](https://github.com/RealZST/harnesskit-resources/issues/65)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: 🔍 CLI Discovery: 2026-08-10 — 20 candidates found
+     Source: github
+     URL: https://github.com/RealZST/harnesskit-resources/issues/65
+     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-10. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU — ⭐ 14275 — Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus — ⭐ 45217 — Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "🔍 CLI Discovery: 2026-08-10 — 20 candidates found" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/RealZST/harnesskit-resources/issues/65
+6. [🔍 CLI Discovery: 2026-08-07 — 20 candidates found](https://github.com/RealZST/harnesskit-resources/issues/63)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: 🔍 CLI Discovery: 2026-08-07 — 20 candidates found
+     Source: github
+     URL: https://github.com/RealZST/harnesskit-resources/issues/63
+     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-07. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU — ⭐ 14268 — Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus — ⭐ 45147 — Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "🔍 CLI Discovery: 2026-08-07 — 20 candidates found" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/RealZST/harnesskit-resources/issues/63
+7. [🔍 CLI Discovery: 2026-08-04 — 18 candidates found](https://github.com/RealZST/harnesskit-resources/issues/62)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: 🔍 CLI Discovery: 2026-08-04 — 18 candidates found
+     Source: github
+     URL: https://github.com/RealZST/harnesskit-resources/issues/62
+     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-04. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU — ⭐ 14247 — Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus — ⭐ 44995 — Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "🔍 CLI Discovery: 2026-08-04 — 18 candidates found" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/RealZST/harnesskit-resources/issues/62
+8. [🔍 CLI Discovery: 2026-08-01 — 18 candidates found](https://github.com/RealZST/harnesskit-resources/issues/60)
+   - Score: 100/100
+   - Value signal: $0.00
+   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: 🔍 CLI Discovery: 2026-08-01 — 18 candidates found
+     Source: github
+     URL: https://github.com/RealZST/harnesskit-resources/issues/60
+     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-01. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU — ⭐ 14212 — Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus — ⭐ 44888 — Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "🔍 CLI Discovery: 2026-08-01 — 18 candidates found" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/RealZST/harnesskit-resources/issues/60

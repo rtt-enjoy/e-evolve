@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-13T02:47:55.997716+00:00",
-  "total_runs": 1405,
+  "last_run": "2026-08-13T05:06:37.699454+00:00",
+  "total_runs": 1406,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -17,7 +17,7 @@
   "earnings": {
     "total_usd": 3.81,
     "this_week_usd": 0.32,
-    "last_cycle_usd": 0.08,
+    "last_cycle_usd": 0.0,
     "week_started": "2026-08-10",
     "breakdown": {
       "dev.to": 0.32,
@@ -63,18 +63,8 @@
     "error": null
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Safely Resetting SQLite WAL in Production: Lessons from Tailscale",
-        "url": "https://dev.to/robust_true_try/safely-resetting-sqlite-wal-in-production-lessons-from-tailscale-3ln4",
-        "estimated_usd": 0.08,
-        "source_url": "https://tailscale.com/blog/sqlite-wal-reset-bug",
-        "source_title": "Tailscale Traces Database Corruption to 16y/o SQLite WAL-Reset Bug"
-      }
-    ],
-    "total_usd": 0.08
+    "actions": [],
+    "total_usd": 0.0
   },
   "suggestions": [
     {
@@ -91,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 297,
+  "last_cycle_seconds": 1,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",

@@ -1,6 +1,6 @@
 # Free AI Earning Queue
 
-Refreshed: 2026-08-13T08:43:55.089208+00:00
+Refreshed: 2026-08-14T10:17:21.498158+00:00
 Daily target: $10.00
 
 Suggestions favour free AI services and free AI APIs with zero upfront cost.
@@ -85,7 +85,37 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
 
 ## Ranked Leads From Online Search
 
-1. [feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)](https://github.com/ava-agent/awesome-ai-ideas/pull/1379)
+1. [Built a working QR+GPS+FaceID attendance system for SMBs — selling the entire product](https://www.reddit.com/r/SideProject/comments/1vnwver/built_a_working_qrgpsfaceid_attendance_system_for/)
+   - Score: 100/100
+   - Value signal: $2500.00
+   - Why: visible or inferred value around $2500.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Built a working QR+GPS+FaceID attendance system for SMBs — selling the entire product
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vnwver/built_a_working_qrgpsfaceid_attendance_system_for/
+     Why this is suitable: visible or inferred value around $2500.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Built a complete employee attendance system: QR check-in, GPS geofencing, and on-device face recognition (fully local, no third-party AI APIs, no per-scan costs). Selling the whole thing — code, apps, infrastructure. What&#39;s included: - Desktop admin app (Windows, Electron) — works fully offline on the client&#39;s own PC, or connected to the cloud, admin&#39;s choice - Android tablet app for the front-desk kiosk - Android phone app for employees (optional — employees can also just scan with their regular camera, no app needed) - Cloud server (Node.js), already deployed and tested live - Separate license-server for managing client subscriptions/billing - Full non-technical install docs Everything&#39;s tested end-to-end: registration, check-in, face matching, GPS blocking, HTTPS/certs all handled. No revenue/customers yet — this is a ready-to-launch product, not an operating business,
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Built a working QR+GPS+FaceID attendance system for SMBs — selling the entire product" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $2500.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1vnwver/built_a_working_qrgpsfaceid_attendance_system_for/
+2. [feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)](https://github.com/ava-agent/awesome-ai-ideas/pull/1379)
    - Score: 100/100
    - Value signal: $960.00
    - Why: visible or inferred value around $960.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -115,19 +145,19 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379
-2. [i spent 4 months building the paid version of my own open source project. here's what it cost and what i got wrong](https://www.reddit.com/r/SideProject/comments/1vmmr4u/i_spent_4_months_building_the_paid_version_of_my/)
+3. [I spent 20+ years doing web design and SEO on the side. No tool did what I needed on a budget, so I created Built For SEO](https://www.reddit.com/r/SideProject/comments/1vnteg6/i_spent_20_years_doing_web_design_and_seo_on_the/)
    - Score: 100/100
-   - Value signal: $199.00
-   - Why: visible or inferred value around $199.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
+   - Value signal: $399.00
+   - Why: visible or inferred value around $399.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: i spent 4 months building the paid version of my own open source project. here's what it cost and what i got wrong
+     Lead: I spent 20+ years doing web design and SEO on the side. No tool did what I needed on a budget, so I created Built For SEO
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vmmr4u/i_spent_4_months_building_the_paid_version_of_my/
-     Why this is suitable: visible or inferred value around $199.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
+     URL: https://www.reddit.com/r/SideProject/comments/1vnteg6/i_spent_20_years_doing_web_design_and_seo_on_the/
+     Why this is suitable: visible or inferred value around $399.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -136,28 +166,28 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: i maintain holyclaude (2.4k stars, 132k docker pulls, mit) and holycode (another 9k pulls). both free, both self-hostable, both still shipping. this year i built the hosted version and started charging for it, and the honest report is more interesting than the launch post. to be exact about the timeline, since the title compresses it: the open source work started in march. the hosted version is about five weeks old. first commit early july, on sale 28 july. what it is: a linux box in the cloud that stays yours. one vm and one persistent disk per person on fly. you ssh in or open a terminal in the browser, run whatever coding agent you like with your own api key, and close your laptop. the work carries on without you, because it was never happening on your machine. six agent clis on it (claude code, codex, opencode, gemini, cursor, pi) and 60+ dev tools already installed, so the box is us
+     Request excerpt: I’m an IT professional by day. On the side, I’ve been doing web design and SEO for a little over 20 years — small businesses, local service companies, the kind of clients who need rankings, a Google Business Profile that stays accurate, and a report they can actually understand. For most of that time, the tool problem was the same. The platforms that could do national SEO (Ahrefs, Semrush, etc.) were priced for agencies with retainers. The local tools (BrightLocal, Local Falcon, and the rest) were better at map grids and citations, then fell apart when you needed keyword research, backlinks, GSC, and client reporting in one place. So you stacked three or four subscriptions, paid for a pile of data you barely used, and still bounced between tabs to answer a simple client question. I got tired of that. I wanted one workspace that covered local and organic, without a $300–400/month floor be
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "i spent 4 months building the paid version of my own open source project. here's what it cost and what i got wrong" and can make a small working version.
+     Hi, I found your request about "I spent 20+ years doing web design and SEO on the side. No tool did what I needed on a budget, so I created Built For SEO" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $199.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $399.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1vmmr4u/i_spent_4_months_building_the_paid_version_of_my/
-3. [Lifetime: My project passed 50 users and Im so grateful! I built Ghost, an always on and ready personal agent using your existing Chatgpt/Cl](https://www.reddit.com/r/SideProject/comments/1vmpid5/lifetime_my_project_passed_50_users_and_im_so/)
+     Reference: https://www.reddit.com/r/SideProject/comments/1vnteg6/i_spent_20_years_doing_web_design_and_seo_on_the/
+4. [I've built an app that runs real spoken mock job interviews with an AI — it researches the company first, then grills you for 30 minutes](https://www.reddit.com/r/SideProject/comments/1vo0ipz/ive_built_an_app_that_runs_real_spoken_mock_job/)
    - Score: 100/100
-   - Value signal: $14.99
-   - Why: visible or inferred value around $14.99; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Value signal: $89.99
+   - Why: visible or inferred value around $89.99; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Lifetime: My project passed 50 users and Im so grateful! I built Ghost, an always on and ready personal agent using your existing Chatgpt/Cl
+     Lead: I've built an app that runs real spoken mock job interviews with an AI — it researches the company first, then grills you for 30 minutes
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vmpid5/lifetime_my_project_passed_50_users_and_im_so/
-     Why this is suitable: visible or inferred value around $14.99; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     URL: https://www.reddit.com/r/SideProject/comments/1vo0ipz/ive_built_an_app_that_runs_real_spoken_mock_job/
+     Why this is suitable: visible or inferred value around $89.99; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -166,28 +196,28 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: I kept hitting the same wall: one focused hour of work meant a ChatGPT tab, a local model UI, a terminal agent, a document viewer, a timer app, Calendar and Reminders with seven surfaces just to get anything done. So I built Ghost: a native macOS AI workspace that replaces all of them with one surface that lives in your menu bar. Press ⌥Space anywhere and it drops from the camera notch (or floats as a small text bar near the bottom of the screen, your choice). Ask, act, and it disappears again. No Dock icon, no tab management, no full-screen takeover. What it does: - Routes every prompt by intent (14 kinds) to the right model: LM Studio or Ollama fully local, or Claude, Gemini, DeepSeek, OpenCode, any OpenAI-compatible server. It even runs chat through your existing Claude Code or Codex subscription, no extra cost. - ~78 tools, 4 risk tiers: files (DOCX/PDF/PPTX/XLSX/Markdown), Calendar,
+     Request excerpt: I&#39;ve built an app that runs a real, spoken mock job interview with an AI. Most interview-prep apps hand you a list of questions to read. That never helped me, because the part I&#39;m bad at isn&#39;t knowing the answer — it&#39;s saying it out loud, under pressure, without rambling. So I built the version I wanted. How it works: You enter the role you&#39;re going for and the company. It researches that company live and generates 8–12 questions tailored to that specific job, not a generic list. Optionally upload your CV and it works your actual experience into the questions. Then it interviews you. Out loud, voice only, up to 30 minutes. No typing, no script to read from. Afterwards you get a report: an overall score out of 10, per-question analysis of what worked and what didn&#39;t, and a rewritten version of each answer so you can see what a stronger response sounds like. Session
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Lifetime: My project passed 50 users and Im so grateful! I built Ghost, an always on and ready personal agent using your existing Chatgpt/Cl" and can make a small working version.
+     Hi, I found your request about "I've built an app that runs real spoken mock job interviews with an AI — it researches the company first, then grills you for 30 minutes" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $14.99 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $89.99 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1vmpid5/lifetime_my_project_passed_50_users_and_im_so/
-4. [🔍 CLI Discovery: 2026-08-13 — 20 candidates found](https://github.com/RealZST/harnesskit-resources/issues/66)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     Reference: https://www.reddit.com/r/SideProject/comments/1vo0ipz/ive_built_an_app_that_runs_real_spoken_mock_job/
+5. [Bica - Your New Nutrition Companion](https://www.reddit.com/r/SideProject/comments/1vo352c/bica_your_new_nutrition_companion/)
+   - Score: 98/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: 🔍 CLI Discovery: 2026-08-13 — 20 candidates found
-     Source: github
-     URL: https://github.com/RealZST/harnesskit-resources/issues/66
-     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     Lead: Bica - Your New Nutrition Companion
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vo352c/bica_your_new_nutrition_companion/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -196,27 +226,27 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-13. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU — ⭐ 14294 — Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus — ⭐ 45331 — Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige
+     Request excerpt: Hello all! As someone who&#39;s been connected to fitness and sports my whole life, I couldn&#39;t find THE nutrition tracker that suited my needs. I wanted something easy to use, fast to log and intuitive to analyze my stats, while feeling conversational instead of just filling in data. So I created Bica . Bica is a nutrition tracker that you can write or speak to: tell it what you ate, and it logs, gives feedback and helps you adapt on the go. It&#39;ll give you hints based on your trends (&quot;your sugar has been over your target the last couple of days&quot;) and even suggest options to meet your goals (&quot;consider a lighter dinner prioritizing lean proteins&quot;). You can ask it questions, keep an eye on weekly/monthly/yearly trends, and most importantly, it helps build your habits. Features include setting dietary preferences and allergies, target macro and micronutrient AI su
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "🔍 CLI Discovery: 2026-08-13 — 20 candidates found" and can make a small working version.
+     Hi, I found your request about "Bica - Your New Nutrition Companion" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/RealZST/harnesskit-resources/issues/66
-5. [🔍 CLI Discovery: 2026-08-10 — 20 candidates found](https://github.com/RealZST/harnesskit-resources/issues/65)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+     Reference: https://www.reddit.com/r/SideProject/comments/1vo352c/bica_your_new_nutrition_companion/
+6. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/496)
+   - Score: 96/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: 🔍 CLI Discovery: 2026-08-10 — 20 candidates found
+     Lead: 💎 Knowledge Update & Optimization: 12 Jul 2026
      Source: github
-     URL: https://github.com/RealZST/harnesskit-resources/issues/65
-     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+     URL: https://github.com/nubenetes/awesome-kubernetes/pull/496
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
      
      Constraints:
@@ -226,27 +256,27 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-10. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU — ⭐ 14275 — Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus — ⭐ 45217 — Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige
+     Request excerpt: ## 💎 Knowledge Update: 12 Jul 2026  Processed **0** links.  ⚠️ **Detailed Safety Audit moved to comments due to scale.**   ### 🧠 AI Intelligence & Observability Report  #### 🤖 Agentic Roles & Model Selection (Dynamic) Execution utilized a multi-agent Analyst-Auditor workflow for maximum robustness.  | Agent Role | Model Used | Successes | | :--- | :--- | :---: |  #### 🤖 Model Performance Matrix | Model Used | Successful Calls | Hierarchy Logic | | :--- | :---: | :--- | | No AI calls | 0 | N/A |  #### 🔑 API Infrastructure & Quota Management | Key Index | Type | Provider Label | Usage | Errors (429/404) | | :--- | :--- | :--- | :---: | :---: |  #### 📊 Consumption and Efficiency Metrics (2026 Units) - **Total Prompt Tokens**: 0 - **Total Completion Tokens**: 0 - **💰 Estimated Cost**: **0.0000 €** - **Database-First Cache Hits**: **0** (0.0% hit ratio) - **Estimated Tokens Saved**: ~0 (Zero-
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "🔍 CLI Discovery: 2026-08-10 — 20 candidates found" and can make a small working version.
+     Hi, I found your request about "💎 Knowledge Update & Optimization: 12 Jul 2026" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/RealZST/harnesskit-resources/issues/65
-6. [🔍 CLI Discovery: 2026-08-07 — 20 candidates found](https://github.com/RealZST/harnesskit-resources/issues/63)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+     Reference: https://github.com/nubenetes/awesome-kubernetes/pull/496
+7. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/495)
+   - Score: 96/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: 🔍 CLI Discovery: 2026-08-07 — 20 candidates found
+     Lead: 💎 Knowledge Update & Optimization: 12 Jul 2026
      Source: github
-     URL: https://github.com/RealZST/harnesskit-resources/issues/63
-     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
+     URL: https://github.com/nubenetes/awesome-kubernetes/pull/495
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
      
      Constraints:
@@ -256,28 +286,28 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-07. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU — ⭐ 14268 — Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus — ⭐ 45147 — Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige
+     Request excerpt: ## 💎 Knowledge Update: 12 Jul 2026  Processed **0** links.  ⚠️ **Detailed Safety Audit moved to comments due to scale.**   ### 🧠 AI Intelligence & Observability Report  #### 🤖 Agentic Roles & Model Selection (Dynamic) Execution utilized a multi-agent Analyst-Auditor workflow for maximum robustness.  | Agent Role | Model Used | Successes | | :--- | :--- | :---: |  #### 🤖 Model Performance Matrix | Model Used | Successful Calls | Hierarchy Logic | | :--- | :---: | :--- | | No AI calls | 0 | N/A |  #### 🔑 API Infrastructure & Quota Management | Key Index | Type | Provider Label | Usage | Errors (429/404) | | :--- | :--- | :--- | :---: | :---: |  #### 📊 Consumption and Efficiency Metrics (2026 Units) - **Total Prompt Tokens**: 0 - **Total Completion Tokens**: 0 - **💰 Estimated Cost**: **0.0000 €** - **Database-First Cache Hits**: **0** (0.0% hit ratio) - **Estimated Tokens Saved**: ~0 (Zero-
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "🔍 CLI Discovery: 2026-08-07 — 20 candidates found" and can make a small working version.
+     Hi, I found your request about "💎 Knowledge Update & Optimization: 12 Jul 2026" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/RealZST/harnesskit-resources/issues/63
-7. [🔍 CLI Discovery: 2026-08-04 — 18 candidates found](https://github.com/RealZST/harnesskit-resources/issues/62)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     Reference: https://github.com/nubenetes/awesome-kubernetes/pull/495
+8. [📈 AI Open Source Trends 2026-08-06](https://github.com/xavier9802/agents-radar/issues/198)
+   - Score: 94/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: 🔍 CLI Discovery: 2026-08-04 — 18 candidates found
+     Lead: 📈 AI Open Source Trends 2026-08-06
      Source: github
-     URL: https://github.com/RealZST/harnesskit-resources/issues/62
-     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     URL: https://github.com/xavier9802/agents-radar/issues/198
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -286,42 +316,12 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-04. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU — ⭐ 14247 — Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus — ⭐ 44995 — Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige
+     Request excerpt: # AI Open Source Trends 2026-08-06  > Sources: GitHub Trending + GitHub Search API | Generated: 2026-08-06 03:16 UTC  ---    # AI Open Source Trends Report — 2026-08-06  ---  ## 1. Today's Highlights  The AI-agent ecosystem is experiencing a breakout moment on GitHub today, with agent-memory, agent-loop, and agent-security tooling all trending in the top 13. TencentDB-Agent-Memory leads the day with **+1,892 new stars**, signaling intense demand for team-level shared memory between autonomous agents. The DeepSeek-native coding agent **DeepSeek-Reasonix** (Go) is making waves for prefix-cache stability, while Cloudflare's **computer** project proposes giving AI agents dedicated computing environments. Simultaneously, the long-running favorites — Ollama, Firecrawl, Dify, and open-webui — continue to dominate their respective topic clusters, confirming that local-first, self-hosted AI infra
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "🔍 CLI Discovery: 2026-08-04 — 18 candidates found" and can make a small working version.
+     Hi, I found your request about "📈 AI Open Source Trends 2026-08-06" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/RealZST/harnesskit-resources/issues/62
-8. [🔍 CLI Discovery: 2026-08-01 — 18 candidates found](https://github.com/RealZST/harnesskit-resources/issues/60)
-   - Score: 100/100
-   - Value signal: $0.00
-   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: 🔍 CLI Discovery: 2026-08-01 — 18 candidates found
-     Source: github
-     URL: https://github.com/RealZST/harnesskit-resources/issues/60
-     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: ## Agent-first CLI Candidates  Auto-discovered on 2026-08-01. Review each candidate and check the ones to add to `registry.json`.  ### Candidates  #### 1. memU — ⭐ 14212 — Score: 10 - **Repo**: [NevaMind-AI/memU](https://github.com/NevaMind-AI/memU) - **Description**: Personal memory across agents - **Install**: `pip install memu-cli         # library + memu + memu-codex CLIs` - **Signals**: SKILL.md / .skill/ (+3), stars > 100 (+3), active within 6 months (+2), prebuilt binaries (+2) - **README excerpt**: ...Personal memory, stored as Wiki  **Across Sessions. Across Agents. Across Devices.**  [![PyPI version](https://badge.fury.io/py/memu-cli.svg)](https://badge.fury.io/py/memu-cli) [![License: Apache 2....  #### 2. GitNexus — ⭐ 44888 — Score: 7 - **Repo**: [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) - **Description**: GitNexus: The Zero-Server Code Intellige
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "🔍 CLI Discovery: 2026-08-01 — 18 candidates found" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/RealZST/harnesskit-resources/issues/60
+     Reference: https://github.com/xavier9802/agents-radar/issues/198

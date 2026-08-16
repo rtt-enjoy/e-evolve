@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-16T09:43:05.339885+00:00",
-  "total_runs": 1470,
+  "last_run": "2026-08-16T10:41:12.457005+00:00",
+  "total_runs": 1471,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -66,7 +66,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -84,7 +95,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 310,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -182,6 +193,19 @@
     "refresh_hours": 24,
     "opportunities": [
       {
+        "title": "XMOX AI SaaS for Sale",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vp64w4/xmox_ai_saas_for_sale/",
+        "source": "reddit:r/SideProject",
+        "score": 100,
+        "estimated_value_usd": 15000.0,
+        "reason": "visible or inferred value around $15000.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: XMOX AI SaaS for Sale\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vp64w4/xmox_ai_saas_for_sale/\nWhy this is suitable: visible or inferred value around $15000.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I\u2019m selling XMOX.ai , a fully built and operational AI SaaS platform focused on audio/video transcription and AI-powered analysis. XMOX allows users to upload audio or video files and automatically transcribe conversations, identify speakers, analyze sentiment and key topics, extract action items, generate summaries, and chat with their recordings using AI . It supports multiple languages, including English, Hebrew and Arabic, and includes PDF export, user dashboards, recording history, API documentation, guides and a complete marketing website. \ud83d\udcb0 Recurring Subscription Business Model XMOX is built around a simple monthly recurring subscription model : Basic \u2014 $20/month: Up to 10 files/month Pro \u2014 $50/month: Up to 30 files/month, up to 120 minutes per file Max \u2014 $100/month: Up to 70 files/month, up to 120 minutes per file Free tier: Allows users to try the product before upgrading The pr",
+        "outreach_draft": "Hi, I found your request about \"XMOX AI SaaS for Sale\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $15000.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vp64w4/xmox_ai_saas_for_sale/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
         "title": "feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)",
         "url": "https://github.com/ava-agent/awesome-ai-ideas/pull/1379",
         "source": "github",
@@ -195,15 +219,41 @@
         "archived_at": null
       },
       {
-        "title": "Built a Free & Local Windows-app for Streamers, Lets Players, and Gaming Creators to turn their long form gameplay videos into clipable mome",
-        "url": "https://www.reddit.com/r/SideProject/comments/1voobew/built_a_free_local_windowsapp_for_streamers_lets/",
+        "title": "Built a pet monitor that runs in the browser on both ends, P2P, no hardware to buy",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vp1x30/built_a_pet_monitor_that_runs_in_the_browser_on/",
         "source": "reddit:r/SideProject",
-        "score": 98,
+        "score": 100,
+        "estimated_value_usd": 39.99,
+        "reason": "visible or inferred value around $39.99; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Built a pet monitor that runs in the browser on both ends, P2P, no hardware to buy\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vp1x30/built_a_pet_monitor_that_runs_in_the_browser_on/\nWhy this is suitable: visible or inferred value around $39.99; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I&#39;ve been building SeeBoop, a pet monitor that turns two devices you already own into a camera and a viewer. It went live on Product Hunt this morning, so here&#39;s the honest version. The premise A dead phone in a drawer has a better camera, mic, speaker, and chip than most dedicated pet cameras, and most households have two or three of them. So one device becomes the Station (the camera near the pet), another becomes the Viewer (you, anywhere). Pair them with a QR code. Phone, tablet, or laptop, any combination, and it runs in the browser on both ends so there&#39;s nothing to install unless you want the app. The two problems I actually cared about Sound detection in this category is useless. Everyone listens for generic noise, or at best barks. I run a classifier on the Station device itself that separates barks, meows, and crashes. Cats are completely invisible to every bark-onl",
+        "outreach_draft": "Hi, I found your request about \"Built a pet monitor that runs in the browser on both ends, P2P, no hardware to buy\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $39.99 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vp1x30/built_a_pet_monitor_that_runs_in_the_browser_on/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "I built a tiny Windows batch-renaming tool \u2014 looking for brutally honest feedback",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vptlrb/i_built_a_tiny_windows_batchrenaming_tool_looking/",
+        "source": "reddit:r/SideProject",
+        "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Built a Free & Local Windows-app for Streamers, Lets Players, and Gaming Creators to turn their long form gameplay videos into clipable mome\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1voobew/built_a_free_local_windowsapp_for_streamers_lets/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Been working on this project for about 2 months now building out what im calling Replay Foundry, a Windows desktop workflow for streamers and gameplay creators who want to turn long recordings into short form videos without having to pay for subscriptions or use SaaS cloud services. The workflow is: Import a gameplay recording Find promising moments Trim and review clips in Studio Add animated captions Render vertical videos Organize them locally Review and publish to YouTube The core application works locally. There is also an optional AI package (using Qwen V3) for compatible NVIDIA systems that adds local transcription, deeper visual review, and grounded title/description assistance (still working on the kinks for the titles and descriptions). That package is downloaded only if the user selects it during installation. Its also got some backend features like: Missed Moments, a tinder l",
-        "outreach_draft": "Hi, I found your request about \"Built a Free & Local Windows-app for Streamers, Lets Players, and Gaming Creators to turn their long form gameplay videos into clipable mome\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1voobew/built_a_free_local_windowsapp_for_streamers_lets/",
+        "next_step": "Clean one messy sample export with the free LLM tier and quote a flat rate per file.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built a tiny Windows batch-renaming tool \u2014 looking for brutally honest feedback\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vptlrb/i_built_a_tiny_windows_batchrenaming_tool_looking/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Hey everyone, I just finished and released my first small desktop software project, and I&#39;m mainly posting it here because I want feedback. It&#39;s called Batch Renamer. It&#39;s a very simple Windows utility for renaming multiple files at once. The idea is deliberately boring: Drop/select your files Define a naming pattern Preview the result Rename them The processed files are placed into a separate BR_results folder I wanted to keep it extremely lightweight, so it&#39;s portable. There&#39;s no installer, account system, subscription, ads, or cloud processing. The application runs locally on the user&#39;s computer. There is also no &quot;AI&quot; component collecting data or secretly sending files somewhere. The files being renamed stay on the local machine. I built it because I wanted a tool that could just do one thing without turning into a giant application. I&#39;m not looki",
+        "outreach_draft": "Hi, I found your request about \"I built a tiny Windows batch-renaming tool \u2014 looking for brutally honest feedback\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vptlrb/i_built_a_tiny_windows_batchrenaming_tool_looking/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "\ud83d\ude80 Save on LLM Costs? Help Me Build the Perfect Token Archiving Tool!",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vpnch3/save_on_llm_costs_help_me_build_the_perfect_token/",
+        "source": "reddit:r/SideProject",
+        "score": 99,
+        "estimated_value_usd": 5000.0,
+        "reason": "visible or inferred value around $5000.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\ude80 Save on LLM Costs? Help Me Build the Perfect Token Archiving Tool!\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vpnch3/save_on_llm_costs_help_me_build_the_perfect_token/\nWhy this is suitable: visible or inferred value around $5000.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: To all developers, indie hackers, and tech leads out there, Are your OpenAI and Anthropic API bills getting out of hand? \ud83d\udcb8 I am currently building a Token Savings SaaS product designed to help developers and companies optimize, cache, and archive their AI prompts and responses to drastically cut down on API expenses. To build the best possible solution, I need to understand your actual pain points and current spending habits. Whether you are a solo hacker spending $10/month or an enterprise spending $5,000+, your input is incredibly valuable. Could you spare 60 seconds to fill out this quick, anonymous Google Form? \ud83d\udc49 https://docs.google.com/forms/d/e/1FAIpQLSfyuJuzceGgZxqilY6WEsNiHFRtuW9wGGjYQ3w-Rqw3HhEi6g/viewform?usp=dialog What&#39;s in it for you? Leave your email at the end of the survey if you want early beta access and a permanent discount once we launch! Thank you for your time a",
+        "outreach_draft": "Hi, I found your request about \"\ud83d\ude80 Save on LLM Costs? Help Me Build the Perfect Token Archiving Tool!\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $5000.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vpnch3/save_on_llm_costs_help_me_build_the_perfect_token/",
         "pursued": false,
         "archived_at": null
       },
@@ -234,19 +284,6 @@
         "archived_at": null
       },
       {
-        "title": "Slingstar - my little one-tap arcade game, live on Google Play this week (indie, solo dev built with my daughter)",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vou60b/slingstar_my_little_onetap_arcade_game_live_on/",
-        "source": "reddit:r/SideProject",
-        "score": 95,
-        "estimated_value_usd": 99.0,
-        "reason": "visible or inferred value around $99.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Slingstar - my little one-tap arcade game, live on Google Play this week (indie, solo dev built with my daughter)\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vou60b/slingstar_my_little_onetap_arcade_game_live_on/\nWhy this is suitable: visible or inferred value around $99.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: i&#39;m a single dad/indie dev on the side. For the past few months I&#39;ve spent evenings building Slingstar with my daughter. it&#39;s a one-tap arcade game: your ship circles a spinning ring, you tap to sling it toward the next one. Combos, daily bonuses, a world leaderboard, unlockable ships. It went live on Google Play a few hours ago and the iOS version is close behind. It&#39;s written with heavy AI assistance, I directed, played, and hand-tuned everything on a real phone, and the AI typed a lot of the Dart. The art is drawn by code and the sound effects are procedurally generated, so there are no AI-generated assets anywhere. the whole aesthetic is math. what it cost: Google&#39;s $25, Apple&#39;s $99/year, and a small paid tester package to meet Play&#39;s 12-tester requirement for new accounts. That&#39;s the entire budget. The plan is a portfolio of small games like this rath",
-        "outreach_draft": "Hi, I found your request about \"Slingstar - my little one-tap arcade game, live on Google Play this week (indie, solo dev built with my daughter)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $99.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vou60b/slingstar_my_little_onetap_arcade_game_live_on/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
         "title": "\ud83d\udcc8 AI Open Source Trends 2026-08-07",
         "url": "https://github.com/stevenko2002/agents-radar/issues/555",
         "source": "github",
@@ -256,32 +293,6 @@
         "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
         "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udcc8 AI Open Source Trends 2026-08-07\nSource: github\nURL: https://github.com/stevenko2002/agents-radar/issues/555\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # AI Open Source Trends 2026-08-07  > Sources: GitHub Trending + GitHub Search API | Generated: 2026-08-06 22:16 UTC  ---  Got it, let's tackle this step by step. First, I need to do Step 1: filter all the non-AI related repos first. Let's go through the original trending list first: First, the 13 trending repos: 1. TencentCloud/TencentDB-Agent-Memory: AI Agent memory, AI related \u2714\ufe0f 2. addyosmani/agent-skills: AI coding agent skills, AI related \u2714\ufe0f 3. cloudflare/computer: gives agents a computer, agent tooling, AI related \u2714\ufe0f 4. mattpocock/skills: real engineer skills for agents, AI related \u2714\ufe0f 5. goauthentik/authentik: auth tool, general, not AI \u274c skip 6. huangruiteng/loopx: AI agent loop kernel, AI related \u2714\ufe0f 7. google/guava: Java general lib, not AI \u274c skip 8. TapXWorld/ChinaTextbook: textbook repo, not AI \u274c skip 9. Significant-Gravitas/AutoGPT: AI agent framework, AI related \u2714\ufe0f 10. tirth",
         "outreach_draft": "Hi, I found your request about \"\ud83d\udcc8 AI Open Source Trends 2026-08-07\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/stevenko2002/agents-radar/issues/555",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "\ud83d\udcc8 AI Open Source Trends 2026-08-03",
-        "url": "https://github.com/xavier9802/agents-radar/issues/153",
-        "source": "github",
-        "score": 92,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udcc8 AI Open Source Trends 2026-08-03\nSource: github\nURL: https://github.com/xavier9802/agents-radar/issues/153\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # AI Open Source Trends 2026-08-03  > Sources: GitHub Trending + GitHub Search API | Generated: 2026-08-03 03:35 UTC  ---    # AI Open Source Trends Report \u2014 2026-08-03  ---  ## 1. Today's Highlights  The standout story today is **AirLLM** by lyogavin, which enables 70B-parameter model inference on a single 4 GB GPU \u2014 a dramatic democratization of large-model local inference. The community is also rallying around **coding-agent tooling**, with three projects debuting simultaneously: DeepSeek-Reasonix (Go-native terminal agent), Openwork (open-source Claude Cowork alternative), and TencentDB-Agent-Memory (team-level agent memory). Microsoft's two beginner-focused courses continue to attract massive interest, while the **LLM-model topic** is seeing emerging interest in Rust-based decoder architectures (AarambhStudio) and quantum-enhanced language models (Qelm), signaling that the \"build it",
-        "outreach_draft": "Hi, I found your request about \"\ud83d\udcc8 AI Open Source Trends 2026-08-03\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/xavier9802/agents-radar/issues/153",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "emailverifier.dev - Email verification API for signup checks",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vok104/emailverifierdev_email_verification_api_for/",
-        "source": "reddit:r/SideProject",
-        "score": 92,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: emailverifier.dev - Email verification API for signup checks\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vok104/emailverifierdev_email_verification_api_for/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I built emailverifier.dev for developers who need to check an address before accepting a signup or trial. It checks syntax, mail-routing DNS, disposable and free providers, role addresses, and likely typos. When SMTP verification is available, it also checks recipient acceptance and catch-all behavior. The API returns deliverable, risky, undeliverable, or unknown. So, it lets you know what signup/email to block. People can also use this for cleaning up their email lists (instead of using those expensive tools). It even has MCP support. There\u2019s a public demo that works without an API key. New accounts receive 1,000 non-expiring credits with no card required. Additional packs contain 20,000 credits for a one-time $10 payment. I\u2019d like feedback on the API response and documentation. Is the result clear enough to decide whether your signup flow should allow, review, or reject an address? htt",
-        "outreach_draft": "Hi, I found your request about \"emailverifier.dev - Email verification API for signup checks\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vok104/emailverifierdev_email_verification_api_for/",
         "pursued": false,
         "archived_at": null
       }
@@ -367,7 +378,7 @@
         "Verify the free tier limits yourself before quoting a price."
       ]
     },
-    "last_refresh_at": "2026-08-15T10:40:37.272453+00:00",
+    "last_refresh_at": "2026-08-16T10:41:13.252739+00:00",
     "free_ai_focus": [
       "free-tier LLM APIs with no credit card requirement",
       "free speech-to-text, TTS, and transcription APIs",

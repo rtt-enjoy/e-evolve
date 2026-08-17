@@ -1370,3 +1370,9 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-08-16 10:46 UTC
 
 - [ok] **code_techs**: [Code-tech queue refreshed (8 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+
+## Week 2026-08-10 — $0.5600 (dev.to: $0.5600, code_techs: $0.0000)
+
+### 2026-08-17 01:59 UTC
+
+- [ok] **dev.to**: [Deploying Distilled LLMs for Edge Inference: A Practical Gui](https://dev.to/robust_true_try/deploying-distilled-llms-for-edge-inference-a-practical-guide-4jb5) (est. $0.08)

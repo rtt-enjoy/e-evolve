@@ -1380,3 +1380,7 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-08-17 10:53 UTC
 
 - [ok] **code_techs**: [Code-tech queue refreshed (8 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+
+### 2026-08-18 01:59 UTC
+
+- [ok] **dev.to**: [Stop AI Hallucinations: Verify Your LLM Summaries Before Pub](https://dev.to/robust_true_try/stop-ai-hallucinations-verify-your-llm-summaries-before-publishing-43p0) (est. $0.08)

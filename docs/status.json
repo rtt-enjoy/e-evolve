@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-18T10:47:20.729448+00:00",
-  "total_runs": 1517,
+  "last_run": "2026-08-18T11:42:16.214298+00:00",
+  "total_runs": 1518,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -68,7 +68,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -86,7 +97,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 295,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -197,6 +208,19 @@
         "archived_at": null
       },
       {
+        "title": "I built a net worth tracker that handles LLC and trust assets \u2014 free, no card",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vr7yuy/i_built_a_net_worth_tracker_that_handles_llc_and/",
+        "source": "reddit:r/SideProject",
+        "score": 100,
+        "estimated_value_usd": 249.0,
+        "reason": "visible or inferred value around $249.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Clean one messy sample export with the free LLM tier and quote a flat rate per file.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built a net worth tracker that handles LLC and trust assets \u2014 free, no card\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vr7yuy/i_built_a_net_worth_tracker_that_handles_llc_and/\nWhy this is suitable: visible or inferred value around $249.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I kept running into the same problem: my net worth lived in six places. A brokerage app, two crypto wallets, an old 401k, a rental property, and a spreadsheet I stopped updating in 2023. The existing tools each solved part of it. Crypto trackers ignore property. Net worth apps ignore crypto wallets. The one tool that does both properly is $249/year. And most of them want my exchange API keys, which I wasn&#39;t willing to hand over. So I built OnePlace Investments. Crypto, stocks, real estate, retirement, debts, and assets held in an LLC or trust \u2014 all in one dashboard. Crypto syncs from public wallet addresses only, so it never asks for seed phrases, private keys, or passwords, and it can&#39;t move funds. Stack is Next.js + Supabase + Vercel if anyone&#39;s curious. Free plan is 15 assets and one synced wallet, no card. $9.99/mo if you outgrow it. It&#39;s early and rough in places \u2014 I",
+        "outreach_draft": "Hi, I found your request about \"I built a net worth tracker that handles LLC and trust assets \u2014 free, no card\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $249.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vr7yuy/i_built_a_net_worth_tracker_that_handles_llc_and/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
         "title": "Wayfinder map: StoneReader final UI design",
         "url": "https://github.com/akj/stonereader/issues/17",
         "source": "github",
@@ -206,6 +230,45 @@
         "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
         "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Wayfinder map: StoneReader final UI design\nSource: github\nURL: https://github.com/akj/stonereader/issues/17\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## Destination\r \r A locked UI design spec for StoneReader's final shape: an app-wide keyboard-navigation contract (ADR), screen topology and information architecture (ADR), module seams for input/announcement/navigation (ADR), and a per-surface UI spec \u2014 detailed enough that implementation PRDs can be opened against it with nothing left to decide.\r \r ## Notes\r \r - Consult `/grilling` + `/domain-modeling` on every grilling ticket; `/prototype` for prototype work; `/research` for research tickets. Domain language lives in `CONTEXT.md`; keymap policy in ADR-0003.\r - **Charting decisions** (locked while naming the destination, 2026-08-13):\r   - **Audience**: screen-reader users only. `CONTEXT.md` keeps its User definition. Firestone/HSDT are feature inspiration, not architecture models (both have zero shipped screen-reader support).\r   - **Platform**: stay native wxPython. Web/Electron rejec",
         "outreach_draft": "Hi, I found your request about \"Wayfinder map: StoneReader final UI design\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/akj/stonereader/issues/17",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "I built a free tool that shows whether ChatGPT/Gemini/Perplexity can even see your website",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vr8j0v/i_built_a_free_tool_that_shows_whether/",
+        "source": "reddit:r/SideProject",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built a free tool that shows whether ChatGPT/Gemini/Perplexity can even see your website\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vr8j0v/i_built_a_free_tool_that_shows_whether/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: After watching Google CTRs drop and AI assistants eat the top of the funnel, I built WhoCanFindMe \u2014 it audits any site&#39;s &quot;AI visibility&quot;: can GPTBot/ClaudeBot/PerplexityBot actually crawl it, is there extractable schema, is the content answer-first, are there freshness signals. Per-engine scores, because the engines retrieve differently. Free scan, no signup, and you get a public shareable result link: whocanfindme.com There&#39;s also a head-to-head mode (you vs a competitor) and a standalone AI-crawler check. The thing that started it: I asked ChatGPT to recommend a business category in my city. It listed five. The one that ranks #1 on Google wasn&#39;t among them \u2014 their robots.txt was blocking AI crawlers. One line of config, written years ago, quietly removing them from every AI recommendation. Business model, since people always ask: free scan \u2192 \u00a312 one-time deep repo",
+        "outreach_draft": "Hi, I found your request about \"I built a free tool that shows whether ChatGPT/Gemini/Perplexity can even see your website\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vr8j0v/i_built_a_free_tool_that_shows_whether/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "I built AI Subtitle Studio out of frustration with missing, out-of-sync, and poorly translated subtitles",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vr48zt/i_built_ai_subtitle_studio_out_of_frustration/",
+        "source": "reddit:r/SideProject",
+        "score": 99,
+        "estimated_value_usd": 9.99,
+        "reason": "visible or inferred value around $9.99; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built AI Subtitle Studio out of frustration with missing, out-of-sync, and poorly translated subtitles\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vr48zt/i_built_ai_subtitle_studio_out_of_frustration/\nWhy this is suitable: visible or inferred value around $9.99; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I built AI Subtitle Studio out of frustration with missing subtitles, out-of-sync subtitles, and poor-quality translations. It can generate subtitles from video, sync existing subtitles, and transcribe videos but the real power is the low-cost AI translation. You can translate subtitles into multiple languages without paying for expensive subscriptions (you only pay for the API key). People are already using it, which has been really encouraging. It\u2019s a $9.99 one-time purchase, with no subscription. If you&#39;d like to try it, send me a DM and I&#39;ll give you a free license key. https://www.aisubtitlestudio.com/ &#32; submitted by &#32; /u/loginhd [link] &#32; [comments]",
+        "outreach_draft": "Hi, I found your request about \"I built AI Subtitle Studio out of frustration with missing, out-of-sync, and poorly translated subtitles\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $9.99 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vr48zt/i_built_ai_subtitle_studio_out_of_frustration/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "You told me not to quit. I didn't. Here's what happened.",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vrlgzd/you_told_me_not_to_quit_i_didnt_heres_what/",
+        "source": "reddit:r/SideProject",
+        "score": 97,
+        "estimated_value_usd": 29.0,
+        "reason": "visible or inferred value around $29.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Clean one messy sample export with the free LLM tier and quote a flat rate per file.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: You told me not to quit. I didn't. Here's what happened.\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vrlgzd/you_told_me_not_to_quit_i_didnt_heres_what/\nWhy this is suitable: visible or inferred value around $29.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Hi everyone! I posted here a few times about the product that I am building. All of you were very encouraging and said a lot of kind things. I also got my first customer from here. Fast forward a few weeks, I now have 6 paying customers and all of them were acquired through SEO. I have built around 70 pages and one page is ranking. I get most of my traffic from that one page. It&#39;s not a lot since the keyword it&#39;s ranking for is fairly low volume, around 40-50 visitors a day on average. The app is simple: you enter your data, generate a chart and export in the format you need. My first customer suggested I work on an API so users can generate charts directly in their dashboards, which I thought was a great idea, so that&#39;s what I&#39;m currently working on. Apart from that it&#39;s mostly bug fixes from my current customers, which is very minimal. I&#39;m also planning to work ",
+        "outreach_draft": "Hi, I found your request about \"You told me not to quit. I didn't. Here's what happened.\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $29.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vrlgzd/you_told_me_not_to_quit_i_didnt_heres_what/",
         "pursued": false,
         "archived_at": null
       },
@@ -232,58 +295,6 @@
         "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
         "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udc8e Knowledge Update & Optimization: 12 Jul 2026\nSource: github\nURL: https://github.com/nubenetes/awesome-kubernetes/pull/495\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: ## \ud83d\udc8e Knowledge Update: 12 Jul 2026  Processed **0** links.  \u26a0\ufe0f **Detailed Safety Audit moved to comments due to scale.**   ### \ud83e\udde0 AI Intelligence & Observability Report  #### \ud83e\udd16 Agentic Roles & Model Selection (Dynamic) Execution utilized a multi-agent Analyst-Auditor workflow for maximum robustness.  | Agent Role | Model Used | Successes | | :--- | :--- | :---: |  #### \ud83e\udd16 Model Performance Matrix | Model Used | Successful Calls | Hierarchy Logic | | :--- | :---: | :--- | | No AI calls | 0 | N/A |  #### \ud83d\udd11 API Infrastructure & Quota Management | Key Index | Type | Provider Label | Usage | Errors (429/404) | | :--- | :--- | :--- | :---: | :---: |  #### \ud83d\udcca Consumption and Efficiency Metrics (2026 Units) - **Total Prompt Tokens**: 0 - **Total Completion Tokens**: 0 - **\ud83d\udcb0 Estimated Cost**: **0.0000 \u20ac** - **Database-First Cache Hits**: **0** (0.0% hit ratio) - **Estimated Tokens Saved**: ~0 (Zero-",
         "outreach_draft": "Hi, I found your request about \"\ud83d\udc8e Knowledge Update & Optimization: 12 Jul 2026\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/nubenetes/awesome-kubernetes/pull/495",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "\ud83d\udcc8 AI Open Source Trends 2026-08-07",
-        "url": "https://github.com/stevenko2002/agents-radar/issues/555",
-        "source": "github",
-        "score": 94,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udcc8 AI Open Source Trends 2026-08-07\nSource: github\nURL: https://github.com/stevenko2002/agents-radar/issues/555\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # AI Open Source Trends 2026-08-07  > Sources: GitHub Trending + GitHub Search API | Generated: 2026-08-06 22:16 UTC  ---  Got it, let's tackle this step by step. First, I need to do Step 1: filter all the non-AI related repos first. Let's go through the original trending list first: First, the 13 trending repos: 1. TencentCloud/TencentDB-Agent-Memory: AI Agent memory, AI related \u2714\ufe0f 2. addyosmani/agent-skills: AI coding agent skills, AI related \u2714\ufe0f 3. cloudflare/computer: gives agents a computer, agent tooling, AI related \u2714\ufe0f 4. mattpocock/skills: real engineer skills for agents, AI related \u2714\ufe0f 5. goauthentik/authentik: auth tool, general, not AI \u274c skip 6. huangruiteng/loopx: AI agent loop kernel, AI related \u2714\ufe0f 7. google/guava: Java general lib, not AI \u274c skip 8. TapXWorld/ChinaTextbook: textbook repo, not AI \u274c skip 9. Significant-Gravitas/AutoGPT: AI agent framework, AI related \u2714\ufe0f 10. tirth",
-        "outreach_draft": "Hi, I found your request about \"\ud83d\udcc8 AI Open Source Trends 2026-08-07\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/stevenko2002/agents-radar/issues/555",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "added gpt-4o vision to my free seller extension to generate listings from photos (v1.2.1)",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vqooc3/added_gpt4o_vision_to_my_free_seller_extension_to/",
-        "source": "reddit:r/SideProject",
-        "score": 94,
-        "estimated_value_usd": 0.0,
-        "reason": "runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand",
-        "next_step": "Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: added gpt-4o vision to my free seller extension to generate listings from photos (v1.2.1)\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vqooc3/added_gpt4o_vision_to_my_free_seller_extension_to/\nWhy this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand\nFirst step: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: hey devs &amp; marketers, quick update on my extension ListCraft AI . We&#39;re growing steady (40+ downloads) and just pushed v1.2.1 to address heavy user feedback around workflow friction. Key Technical &amp; UX Additions: Image-to-SEO Pipeline: Converts uploaded product images to base64 and feeds them directly to OpenAI&#39;s vision model to extract attributes (color, texture, type) automatically. DOM Form Auto-Fill: Expanded the content script ( content.js ) to parse and populate eBay&#39;s dynamic &quot;Item Specifics&quot; DOM fields alongside titles/tags. Request Queue &amp; Local Storage Caching: Implemented an API queue to prevent rate limits for multi-item sellers. Check out the update: https://chromewebstore.google.com/detail/listcraft-ai/obghnpghhcjencohkjjbiiankdldldcc If you build Manifest v3 tools or use vision APIs in production, I&#39;d love any feedback on edge-case err",
-        "outreach_draft": "Hi, I found your request about \"added gpt-4o vision to my free seller extension to generate listings from photos (v1.2.1)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vqooc3/added_gpt4o_vision_to_my_free_seller_extension_to/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "First time sharing my projects with anyone and kinda nervous",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vqj8g8/first_time_sharing_my_projects_with_anyone_and/",
-        "source": "reddit:r/SideProject",
-        "score": 90,
-        "estimated_value_usd": 0.0,
-        "reason": "runs on a free AI tier, so input cost is zero and margin is total; startable today without new skills or tools",
-        "next_step": "Clean one messy sample export with the free LLM tier and quote a flat rate per file.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: First time sharing my projects with anyone and kinda nervous\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vqj8g8/first_time_sharing_my_projects_with_anyone_and/\nWhy this is suitable: runs on a free AI tier, so input cost is zero and margin is total; startable today without new skills or tools\nFirst step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I started building last summer, but I haven&#39;t actually shared my projects with anyone before. These are some of the projects I&#39;ve built since this winter and I&#39;d really love some feedback :) Eidornis eidornis.ai \u00b7 demo ( TypeScript, Electron, React, Swift) Desktop workspace that turns a repo or product brief into a staffed organization of agents with real ownership and permission scopes. Three bits I think are interesting: the agent learns a site&#39;s private API over CDP and emits a persisted, typed tool instead of re-perceiving pages every run; conversations are a DAG with one shared history, so forking is nearly free and branches open automatically on a topic switch; each agent gets its own Electron session partition, so credential isolation is real rather than notional. Quick demo above on it using its own recipe to find a post from X for me. Vaultin swap engine \u00b7 wallet",
-        "outreach_draft": "Hi, I found your request about \"First time sharing my projects with anyone and kinda nervous\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vqj8g8/first_time_sharing_my_projects_with_anyone_and/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "The save button doesn't actually save anything, so I built an app that does",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vq8283/the_save_button_doesnt_actually_save_anything_so/",
-        "source": "reddit:r/SideProject",
-        "score": 89,
-        "estimated_value_usd": 19.99,
-        "reason": "visible or inferred value around $19.99; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: The save button doesn't actually save anything, so I built an app that does\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vq8283/the_save_button_doesnt_actually_save_anything_so/\nWhy this is suitable: visible or inferred value around $19.99; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I lost the same noodle recipe three separate times. Saved it on instagram, couldn&#39;t find it, stumbled on it again weeks later, lost it again. I resorted to texting myself things I wanted to revisit, but it would always eventually get lost in the void before I got to it. The actual problem is that saved folders store a thumbnail and a link, nothing else. There&#39;s no text in a reel, so there&#39;s nothing to search. You just scroll thumbnails until you give up. So the app (TroveAI) reads whatever you share to it. Reels, tiktoks, screenshots, articles, links. Transcribes the video, OCRs the screenshot, parses the article. Cooking videos come out as actual ingredient lists and steps, travel videos become a map of the places mentioned, and apartment screenshots turn into text you can search instead of 40 near-identical photos of kitchens. The part I didn&#39;t expect to use this much: ",
-        "outreach_draft": "Hi, I found your request about \"The save button doesn't actually save anything, so I built an app that does\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $19.99 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vq8283/the_save_button_doesnt_actually_save_anything_so/",
         "pursued": false,
         "archived_at": null
       }
@@ -361,15 +372,148 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"summary\": \"The strongest immediate angle ",
-      "free_ai_services": [],
-      "easy_earning_ideas": [],
+      "summary": "The strongest immediate angle is packaging free-tier LLM APIs (Groq, Hugging Face, Google AI Studio) and local open-weight models into fixed-price micro-services \u2014 transcription, summarization, data extraction, and format conversion \u2014 that small businesses and solopreneurs can buy per batch without managing API keys or prompts themselves.",
+      "free_ai_services": [
+        {
+          "name": "Groq API",
+          "what_it_does": "Fast inference for open-weight LLMs (Llama 3, Mixtral, Gemma)",
+          "free_tier": "14,400 requests/day and 1M tokens/minute on supported models; verify current limit",
+          "credit_card_required": "no",
+          "earn_with_it": "Resell batch summarization or classification of customer-supplied texts (meeting notes, support tickets, product reviews) at a flat per-100-items price.",
+          "price_guide": "$15\u2013$30 per 100 items"
+        },
+        {
+          "name": "Hugging Face Inference API",
+          "what_it_does": "Serverless inference for 100k+ models (text, audio, vision, embeddings)",
+          "free_tier": "30,000 requests/month on shared infrastructure; verify current limit",
+          "credit_card_required": "no",
+          "earn_with_it": "Offer a done-for-you background-removal or image-captioning batch job using models like `briaai/RMBG-1.4` or `Salesforce/blip-image-captioning-large`.",
+          "price_guide": "$10\u2013$25 per 50 images"
+        },
+        {
+          "name": "Google AI Studio (Gemini API)",
+          "what_it_does": "Gemini 1.5 Flash/Pro multimodal LLM with large context window",
+          "free_tier": "1,500 requests/day and 1M tokens/minute for Flash; verify current limit",
+          "credit_card_required": "no",
+          "earn_with_it": "Sell a fixed-price PDF/data-sheet extraction service: client sends up to 20 PDFs, you return structured JSON (prices, specs, tables) using Gemini's 1M-token context.",
+          "price_guide": "$20\u2013$40 per 20 PDFs"
+        },
+        {
+          "name": "Whisper.cpp / faster-whisper (local)",
+          "what_it_does": "Offline speech-to-text transcription on CPU/GPU",
+          "free_tier": "Unlimited \u2014 runs on your machine",
+          "credit_card_required": "no",
+          "earn_with_it": "Transcribe audio/video files for podcasters, researchers, or course creators; deliver SRT/VTT/TXT with speaker labels via `pyannote.audio` diarization (also local).",
+          "price_guide": "$5\u2013$10 per 30 minutes of audio"
+        },
+        {
+          "name": "rembg (Python library)",
+          "what_it_does": "Background removal for images (u2net, isnet models)",
+          "free_tier": "Unlimited \u2014 runs locally",
+          "credit_card_required": "no",
+          "earn_with_it": "Batch background removal for e-commerce sellers (Etsy, Shopify, eBay) who need clean product photos on white/transparent backgrounds.",
+          "price_guide": "$8\u2013$15 per 100 images"
+        },
+        {
+          "name": "LibreTranslate (self-hosted or public instance)",
+          "what_it_does": "Open-source machine translation API",
+          "free_tier": "Public instance: generous rate limits; self-hosted: unlimited",
+          "credit_card_required": "no",
+          "earn_with_it": "Translate product descriptions, support macros, or subtitles for small businesses expanding to one new language; deliver CSV/JSON with source+target columns.",
+          "price_guide": "$12\u2013$25 per 1,000 strings"
+        },
+        {
+          "name": "Hugging Face Spaces (CPU free tier)",
+          "what_it_does": "Host Gradio/Streamlit/Docker apps with persistent storage",
+          "free_tier": "2 CPU cores, 16 GB RAM, 50 GB disk \u2014 always free",
+          "credit_card_required": "no",
+          "earn_with_it": "Deploy a one-page tool (e.g., 'Paste CSV \u2192 get AI-cleaned CSV') and charge a one-time access fee or sell the Space configuration + prompt library to the client.",
+          "price_guide": "$30\u2013$60 for tool + prompt pack"
+        },
+        {
+          "name": "GitHub Actions (free minutes)",
+          "what_it_does": "Scheduled/triggered compute in Ubuntu/Windows/macOS runners",
+          "free_tier": "2,000 minutes/month for private repos (unlimited for public); verify current limit",
+          "credit_card_required": "no",
+          "earn_with_it": "Build a nightly report generator: client drops files in a repo, Action runs your Python script (using any local model above), emails results \u2014 sell the workflow setup.",
+          "price_guide": "$50\u2013$100 one-time setup fee"
+        },
+        {
+          "name": "Ollama (local LLM runner)",
+          "what_it_does": "Run Llama 3, Phi-3, Gemma, Qwen, etc. locally via simple CLI/API",
+          "free_tier": "Unlimited \u2014 limited only by your hardware",
+          "credit_card_required": "no",
+          "earn_with_it": "Create a 'bring your own key' prompt library for common tasks (SEO meta tags, email rewrites, code docstrings) and sell the curated prompts + integration snippets.",
+          "price_guide": "$20\u2013$40 for a 20-prompt pack"
+        }
+      ],
+      "easy_earning_ideas": [
+        {
+          "idea": "Batch PDF Data Extraction",
+          "who_pays": "Real-estate agents, procurement managers, researchers drowning in PDFs",
+          "deliverable": "CSV/JSON with extracted fields (prices, dates, addresses, tables) from up to 20 PDFs per order",
+          "price_usd": "30",
+          "time_to_first_dollar": "same day",
+          "free_stack": "Google AI Studio (Gemini 1.5 Flash) + Python script"
+        },
+        {
+          "idea": "Audio Transcription + Summary Package",
+          "who_pays": "Podcasters, journalists, students with recorded interviews/lectures",
+          "deliverable": "SRT subtitles + 200-word summary + key-topics list per 30-min file",
+          "price_usd": "12",
+          "time_to_first_dollar": "same day",
+          "free_stack": "faster-whisper (local) + Groq API (Llama 3 8B for summary)"
+        },
+        {
+          "idea": "E-commerce Background Removal",
+          "who_pays": "Etsy/Shopify sellers with 50\u2013200 product photos needing clean backgrounds",
+          "deliverable": "PNG files with transparent backgrounds, delivered via zip/Google Drive",
+          "price_usd": "15",
+          "time_to_first_dollar": "same day",
+          "free_stack": "rembg (Python) + optional Hugging Face Inference API for upscaling"
+        },
+        {
+          "idea": "Support-Ticket Classification & Draft Replies",
+          "who_pays": "Solo founders or micro-SaaS owners using Help Scout, Gmail, or Notion for support",
+          "deliverable": "CSV with ticket ID, predicted category, priority, and a ready-to-send draft reply",
+          "price_usd": "25",
+          "time_to_first_dollar": "2-3 days",
+          "free_stack": "Groq API (Llama 3 70B) + Google Sheets/AppScript for delivery"
+        },
+        {
+          "idea": "Multilingual Product Description Pack",
+          "who_pays": "Amazon/Etsy sellers expanding to one new market (ES, FR, DE, JP)",
+          "deliverable": "CSV with original English + translated title, bullets, description for up to 50 SKUs",
+          "price_usd": "35",
+          "time_to_first_dollar": "2-3 days",
+          "free_stack": "LibreTranslate (self-hosted on HF Spaces) + Groq for polish/QA"
+        },
+        {
+          "idea": "One-Page AI Tool Setup + Prompt Library",
+          "who_pays": "Non-technical consultants, coaches, course creators who want a branded 'AI assistant' page",
+          "deliverable": "Deployed Hugging Face Space (Gradio) + 15 tested prompts + embed code + 30-min walkthrough",
+          "price_usd": "50",
+          "time_to_first_dollar": "2-3 days",
+          "free_stack": "Hugging Face Spaces (CPU) + Groq/HF Inference API + curated prompts"
+        },
+        {
+          "idea": "Weekly Competitor-Content Digest",
+          "who_pays": "Marketing managers at B2B startups tracking 5\u201310 competitor blogs/newsletters",
+          "deliverable": "One-page PDF every Monday: headlines, key claims, content gaps, suggested response topics",
+          "price_usd": "40",
+          "time_to_first_dollar": "2-3 days",
+          "free_stack": "GitHub Actions (scheduled) + Groq API + RSS/HTML scraping + email delivery"
+        }
+      ],
       "owner_actions": [
-        "Review the ranked free-AI leads below and pick the one with the clearest buyer.",
-        "Verify the free tier limits yourself before quoting a price."
+        "Pick ONE idea above that matches a buyer you can reach today (e.g., a podcaster friend, an Etsy seller in a Discord, a solo founder on Indie Hackers).",
+        "Build the minimal deliverable locally using the free stack listed \u2014 aim for a working end-to-end run in < 2 hours.",
+        "Create a one-page Notion/Gumroad/Google Doc offer with fixed price, exact deliverable, 24-hr turnaround, and a 'buy now' button (Stripe Payment Link or PayPal.me).",
+        "Send the offer directly to 5\u201310 specific prospects with a personal note: 'I built this for X problem \u2014 $Y, done tomorrow. Want in?'",
+        "After first paid delivery, ask for a one-sentence testimonial and permission to list the result (anonymized) as a case study for the next batch of outreach."
       ]
     },
-    "last_refresh_at": "2026-08-17T10:48:37.727828+00:00",
+    "last_refresh_at": "2026-08-18T11:42:16.686345+00:00",
     "free_ai_focus": [
       "free-tier LLM APIs with no credit card requirement",
       "free speech-to-text, TTS, and transcription APIs",

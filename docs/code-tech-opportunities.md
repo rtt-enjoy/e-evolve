@@ -1,6 +1,6 @@
 # Free AI Earning Queue
 
-Refreshed: 2026-08-18T11:42:16.686345+00:00
+Refreshed: 2026-08-19T13:09:31.196544+00:00
 Daily target: $10.00
 
 Suggestions favour free AI services and free AI APIs with zero upfront cost.
@@ -17,74 +17,12 @@ Suggestions favour free AI services and free AI APIs with zero upfront cost.
 
 ## Current Best Angle
 
-The strongest immediate angle is packaging free-tier LLM APIs (Groq, Hugging Face, Google AI Studio) and local open-weight models into fixed-price micro-services — transcription, summarization, data extraction, and format conversion — that small businesses and solopreneurs can buy per batch without managing API keys or prompts themselves.
-
-## Free AI Services To Use
-
-| Service | What it does | Free tier | Card? | How to earn | Price guide |
-| --- | --- | --- | --- | --- | --- |
-| Groq API | Fast inference for open-weight LLMs (Llama 3, Mixtral, Gemma) | 14,400 requests/day and 1M tokens/minute on supported models; verify current limit | no | Resell batch summarization or classification of customer-supplied texts (meeting notes, support tickets, product reviews) at a flat per-100-items price. | $15–$30 per 100 items |
-| Hugging Face Inference API | Serverless inference for 100k+ models (text, audio, vision, embeddings) | 30,000 requests/month on shared infrastructure; verify current limit | no | Offer a done-for-you background-removal or image-captioning batch job using models like `briaai/RMBG-1.4` or `Salesforce/blip-image-captioning-large`. | $10–$25 per 50 images |
-| Google AI Studio (Gemini API) | Gemini 1.5 Flash/Pro multimodal LLM with large context window | 1,500 requests/day and 1M tokens/minute for Flash; verify current limit | no | Sell a fixed-price PDF/data-sheet extraction service: client sends up to 20 PDFs, you return structured JSON (prices, specs, tables) using Gemini's 1M-token context. | $20–$40 per 20 PDFs |
-| Whisper.cpp / faster-whisper (local) | Offline speech-to-text transcription on CPU/GPU | Unlimited — runs on your machine | no | Transcribe audio/video files for podcasters, researchers, or course creators; deliver SRT/VTT/TXT with speaker labels via `pyannote.audio` diarization (also local). | $5–$10 per 30 minutes of audio |
-| rembg (Python library) | Background removal for images (u2net, isnet models) | Unlimited — runs locally | no | Batch background removal for e-commerce sellers (Etsy, Shopify, eBay) who need clean product photos on white/transparent backgrounds. | $8–$15 per 100 images |
-| LibreTranslate (self-hosted or public instance) | Open-source machine translation API | Public instance: generous rate limits; self-hosted: unlimited | no | Translate product descriptions, support macros, or subtitles for small businesses expanding to one new language; deliver CSV/JSON with source+target columns. | $12–$25 per 1,000 strings |
-| Hugging Face Spaces (CPU free tier) | Host Gradio/Streamlit/Docker apps with persistent storage | 2 CPU cores, 16 GB RAM, 50 GB disk — always free | no | Deploy a one-page tool (e.g., 'Paste CSV → get AI-cleaned CSV') and charge a one-time access fee or sell the Space configuration + prompt library to the client. | $30–$60 for tool + prompt pack |
-| GitHub Actions (free minutes) | Scheduled/triggered compute in Ubuntu/Windows/macOS runners | 2,000 minutes/month for private repos (unlimited for public); verify current limit | no | Build a nightly report generator: client drops files in a repo, Action runs your Python script (using any local model above), emails results — sell the workflow setup. | $50–$100 one-time setup fee |
-| Ollama (local LLM runner) | Run Llama 3, Phi-3, Gemma, Qwen, etc. locally via simple CLI/API | Unlimited — limited only by your hardware | no | Create a 'bring your own key' prompt library for common tasks (SEO meta tags, email rewrites, code docstrings) and sell the curated prompts + integration snippets. | $20–$40 for a 20-prompt pack |
-
-## Easy Earning Ideas
-
-1. **Batch PDF Data Extraction**
-   - Who pays: Real-estate agents, procurement managers, researchers drowning in PDFs
-   - Deliverable: CSV/JSON with extracted fields (prices, dates, addresses, tables) from up to 20 PDFs per order
-   - Price: 30
-   - Time to first dollar: same day
-   - Free stack: Google AI Studio (Gemini 1.5 Flash) + Python script
-2. **Audio Transcription + Summary Package**
-   - Who pays: Podcasters, journalists, students with recorded interviews/lectures
-   - Deliverable: SRT subtitles + 200-word summary + key-topics list per 30-min file
-   - Price: 12
-   - Time to first dollar: same day
-   - Free stack: faster-whisper (local) + Groq API (Llama 3 8B for summary)
-3. **E-commerce Background Removal**
-   - Who pays: Etsy/Shopify sellers with 50–200 product photos needing clean backgrounds
-   - Deliverable: PNG files with transparent backgrounds, delivered via zip/Google Drive
-   - Price: 15
-   - Time to first dollar: same day
-   - Free stack: rembg (Python) + optional Hugging Face Inference API for upscaling
-4. **Support-Ticket Classification & Draft Replies**
-   - Who pays: Solo founders or micro-SaaS owners using Help Scout, Gmail, or Notion for support
-   - Deliverable: CSV with ticket ID, predicted category, priority, and a ready-to-send draft reply
-   - Price: 25
-   - Time to first dollar: 2-3 days
-   - Free stack: Groq API (Llama 3 70B) + Google Sheets/AppScript for delivery
-5. **Multilingual Product Description Pack**
-   - Who pays: Amazon/Etsy sellers expanding to one new market (ES, FR, DE, JP)
-   - Deliverable: CSV with original English + translated title, bullets, description for up to 50 SKUs
-   - Price: 35
-   - Time to first dollar: 2-3 days
-   - Free stack: LibreTranslate (self-hosted on HF Spaces) + Groq for polish/QA
-6. **One-Page AI Tool Setup + Prompt Library**
-   - Who pays: Non-technical consultants, coaches, course creators who want a branded 'AI assistant' page
-   - Deliverable: Deployed Hugging Face Space (Gradio) + 15 tested prompts + embed code + 30-min walkthrough
-   - Price: 50
-   - Time to first dollar: 2-3 days
-   - Free stack: Hugging Face Spaces (CPU) + Groq/HF Inference API + curated prompts
-7. **Weekly Competitor-Content Digest**
-   - Who pays: Marketing managers at B2B startups tracking 5–10 competitor blogs/newsletters
-   - Deliverable: One-page PDF every Monday: headlines, key claims, content gaps, suggested response topics
-   - Price: 40
-   - Time to first dollar: 2-3 days
-   - Free stack: GitHub Actions (scheduled) + Groq API + RSS/HTML scraping + email delivery
+Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: '{\n  "summary": "The strongest immediate angle
 
 ## Next Actions
 
-- Pick ONE idea above that matches a buyer you can reach today (e.g., a podcaster friend, an Etsy seller in a Discord, a solo founder on Indie Hackers).
-- Build the minimal deliverable locally using the free stack listed — aim for a working end-to-end run in < 2 hours.
-- Create a one-page Notion/Gumroad/Google Doc offer with fixed price, exact deliverable, 24-hr turnaround, and a 'buy now' button (Stripe Payment Link or PayPal.me).
-- Send the offer directly to 5–10 specific prospects with a personal note: 'I built this for X problem — $Y, done tomorrow. Want in?'
-- After first paid delivery, ask for a one-sentence testimonial and permission to list the result (anonymized) as a case study for the next batch of outreach.
+- Review the ranked free-AI leads below and pick the one with the clearest buyer.
+- Verify the free tier limits yourself before quoting a price.
 
 ## Monetization Patterns
 
@@ -177,18 +115,18 @@ The strongest immediate angle is packaging free-tier LLM APIs (Groq, Hugging Fac
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379
-2. [I built a net worth tracker that handles LLC and trust assets — free, no card](https://www.reddit.com/r/SideProject/comments/1vr7yuy/i_built_a_net_worth_tracker_that_handles_llc_and/)
+2. [I built a free tool to stop your best customer reviews from getting buried in your inbox](https://www.reddit.com/r/SideProject/comments/1vs2jod/i_built_a_free_tool_to_stop_your_best_customer/)
    - Score: 100/100
-   - Value signal: $249.00
-   - Why: visible or inferred value around $249.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Value signal: $99.00
+   - Why: visible or inferred value around $99.00; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: I built a net worth tracker that handles LLC and trust assets — free, no card
+     Lead: I built a free tool to stop your best customer reviews from getting buried in your inbox
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vr7yuy/i_built_a_net_worth_tracker_that_handles_llc_and/
-     Why this is suitable: visible or inferred value around $249.00; runs on a free AI tier, so input cost is zero and margin is total
+     URL: https://www.reddit.com/r/SideProject/comments/1vs2jod/i_built_a_free_tool_to_stop_your_best_customer/
+     Why this is suitable: visible or inferred value around $99.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
      
      Constraints:
@@ -198,15 +136,15 @@ The strongest immediate angle is packaging free-tier LLM APIs (Groq, Hugging Fac
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: I kept running into the same problem: my net worth lived in six places. A brokerage app, two crypto wallets, an old 401k, a rental property, and a spreadsheet I stopped updating in 2023. The existing tools each solved part of it. Crypto trackers ignore property. Net worth apps ignore crypto wallets. The one tool that does both properly is $249/year. And most of them want my exchange API keys, which I wasn&#39;t willing to hand over. So I built OnePlace Investments. Crypto, stocks, real estate, retirement, debts, and assets held in an LLC or trust — all in one dashboard. Crypto syncs from public wallet addresses only, so it never asks for seed phrases, private keys, or passwords, and it can&#39;t move funds. Stack is Next.js + Supabase + Vercel if anyone&#39;s curious. Free plan is 15 assets and one synced wallet, no card. $9.99/mo if you outgrow it. It&#39;s early and rough in places — I
+     Request excerpt: Hey, wanted to share something I built. Every business gets those messages. A customer emails you saying your product saved their week. Someone drops a kind word in a DM at midnight. A review lands on some platform you forgot you signed up for. And then... nothing. You screenshot it, maybe share it once, and it slowly disappears into the void. Meanwhile your website is sitting there with a generic &quot;trusted by thousands&quot; line that nobody actually believes. I got tired of watching that happen, so I built Praisly — a dead simple way to collect, organize, and showcase customer testimonials. How it works: Create a collection link with a custom question Share it with your customers (email, WhatsApp, thank-you page, QR code, whatever) They submit a testimonial — no account needed, no friction You approve the ones you like and feature the best ones Display them on a &quot;wall of love&
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "I built a net worth tracker that handles LLC and trust assets — free, no card" and can make a small working version.
+     Hi, I found your request about "I built a free tool to stop your best customer reviews from getting buried in your inbox" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $249.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $99.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1vr7yuy/i_built_a_net_worth_tracker_that_handles_llc_and/
+     Reference: https://www.reddit.com/r/SideProject/comments/1vs2jod/i_built_a_free_tool_to_stop_your_best_customer/
 3. [Wayfinder map: StoneReader final UI design](https://github.com/akj/stonereader/issues/17)
    - Score: 100/100
    - Value signal: $10.00
@@ -246,18 +184,18 @@ The strongest immediate angle is packaging free-tier LLM APIs (Groq, Hugging Fac
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/akj/stonereader/issues/17
-4. [I built a free tool that shows whether ChatGPT/Gemini/Perplexity can even see your website](https://www.reddit.com/r/SideProject/comments/1vr8j0v/i_built_a_free_tool_that_shows_whether/)
+4. [I refuse to spend thousands on courses when YouTube has all the best lectures for free. There is just one problem...](https://www.reddit.com/r/SideProject/comments/1vs2obh/i_refuse_to_spend_thousands_on_courses_when/)
    - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Value signal: $7.99
+   - Why: visible or inferred value around $7.99; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: I built a free tool that shows whether ChatGPT/Gemini/Perplexity can even see your website
+     Lead: I refuse to spend thousands on courses when YouTube has all the best lectures for free. There is just one problem...
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vr8j0v/i_built_a_free_tool_that_shows_whether/
-     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     URL: https://www.reddit.com/r/SideProject/comments/1vs2obh/i_refuse_to_spend_thousands_on_courses_when/
+     Why this is suitable: visible or inferred value around $7.99; runs on a free AI tier, so input cost is zero and margin is total
      First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
      
      Constraints:
@@ -267,76 +205,16 @@ The strongest immediate angle is packaging free-tier LLM APIs (Groq, Hugging Fac
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: After watching Google CTRs drop and AI assistants eat the top of the funnel, I built WhoCanFindMe — it audits any site&#39;s &quot;AI visibility&quot;: can GPTBot/ClaudeBot/PerplexityBot actually crawl it, is there extractable schema, is the content answer-first, are there freshness signals. Per-engine scores, because the engines retrieve differently. Free scan, no signup, and you get a public shareable result link: whocanfindme.com There&#39;s also a head-to-head mode (you vs a competitor) and a standalone AI-crawler check. The thing that started it: I asked ChatGPT to recommend a business category in my city. It listed five. The one that ranks #1 on Google wasn&#39;t among them — their robots.txt was blocking AI crawlers. One line of config, written years ago, quietly removing them from every AI recommendation. Business model, since people always ask: free scan → £12 one-time deep repo
+     Request excerpt: Hi r/SideProject , The problem with trying to learn from YouTube is that videos are unstructured, scattered, and built for passive watching. The platform is designed exceptionally well, but it is designed to keep you watching, not to help you actually retain information. I used to tell myself spending hours on YouTube wasn&#39;t that bad because at least I was being productive and learning things. But I learned the truth the hard way a few months ago. It was two weeks before my final exams. I was sitting in the library, surrounded by macroeconomics flashcards. My calendar was completely packed. Suddenly, my phone lit up with a message from my favorite client: &quot;Hey Karl, we have a massive new project here. Can you edit a video like this for us?&quot; I opened the reference video and froze. It looked incredible, but it was on a level I had never edited before. My first thought: &quot;
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "I built a free tool that shows whether ChatGPT/Gemini/Perplexity can even see your website" and can make a small working version.
+     Hi, I found your request about "I refuse to spend thousands on courses when YouTube has all the best lectures for free. There is just one problem..." and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $7.99 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1vr8j0v/i_built_a_free_tool_that_shows_whether/
-5. [I built AI Subtitle Studio out of frustration with missing, out-of-sync, and poorly translated subtitles](https://www.reddit.com/r/SideProject/comments/1vr48zt/i_built_ai_subtitle_studio_out_of_frustration/)
-   - Score: 99/100
-   - Value signal: $9.99
-   - Why: visible or inferred value around $9.99; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: I built AI Subtitle Studio out of frustration with missing, out-of-sync, and poorly translated subtitles
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vr48zt/i_built_ai_subtitle_studio_out_of_frustration/
-     Why this is suitable: visible or inferred value around $9.99; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: I built AI Subtitle Studio out of frustration with missing subtitles, out-of-sync subtitles, and poor-quality translations. It can generate subtitles from video, sync existing subtitles, and transcribe videos but the real power is the low-cost AI translation. You can translate subtitles into multiple languages without paying for expensive subscriptions (you only pay for the API key). People are already using it, which has been really encouraging. It’s a $9.99 one-time purchase, with no subscription. If you&#39;d like to try it, send me a DM and I&#39;ll give you a free license key. https://www.aisubtitlestudio.com/ &#32; submitted by &#32; /u/loginhd [link] &#32; [comments]
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "I built AI Subtitle Studio out of frustration with missing, out-of-sync, and poorly translated subtitles" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $9.99 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1vr48zt/i_built_ai_subtitle_studio_out_of_frustration/
-6. [You told me not to quit. I didn't. Here's what happened.](https://www.reddit.com/r/SideProject/comments/1vrlgzd/you_told_me_not_to_quit_i_didnt_heres_what/)
-   - Score: 97/100
-   - Value signal: $29.00
-   - Why: visible or inferred value around $29.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: You told me not to quit. I didn't. Here's what happened.
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vrlgzd/you_told_me_not_to_quit_i_didnt_heres_what/
-     Why this is suitable: visible or inferred value around $29.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Hi everyone! I posted here a few times about the product that I am building. All of you were very encouraging and said a lot of kind things. I also got my first customer from here. Fast forward a few weeks, I now have 6 paying customers and all of them were acquired through SEO. I have built around 70 pages and one page is ranking. I get most of my traffic from that one page. It&#39;s not a lot since the keyword it&#39;s ranking for is fairly low volume, around 40-50 visitors a day on average. The app is simple: you enter your data, generate a chart and export in the format you need. My first customer suggested I work on an API so users can generate charts directly in their dashboards, which I thought was a great idea, so that&#39;s what I&#39;m currently working on. Apart from that it&#39;s mostly bug fixes from my current customers, which is very minimal. I&#39;m also planning to work
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "You told me not to quit. I didn't. Here's what happened." and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $29.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1vrlgzd/you_told_me_not_to_quit_i_didnt_heres_what/
-7. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/496)
+     Reference: https://www.reddit.com/r/SideProject/comments/1vs2obh/i_refuse_to_spend_thousands_on_courses_when/
+5. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/496)
    - Score: 96/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -366,7 +244,7 @@ The strongest immediate angle is packaging free-tier LLM APIs (Groq, Hugging Fac
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/nubenetes/awesome-kubernetes/pull/496
-8. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/495)
+6. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/495)
    - Score: 96/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -396,3 +274,63 @@ The strongest immediate angle is packaging free-tier LLM APIs (Groq, Hugging Fac
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/nubenetes/awesome-kubernetes/pull/495
+7. [📈 AI Open Source Trends 2026-08-07](https://github.com/stevenko2002/agents-radar/issues/555)
+   - Score: 94/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: 📈 AI Open Source Trends 2026-08-07
+     Source: github
+     URL: https://github.com/stevenko2002/agents-radar/issues/555
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: # AI Open Source Trends 2026-08-07  > Sources: GitHub Trending + GitHub Search API | Generated: 2026-08-06 22:16 UTC  ---  Got it, let's tackle this step by step. First, I need to do Step 1: filter all the non-AI related repos first. Let's go through the original trending list first: First, the 13 trending repos: 1. TencentCloud/TencentDB-Agent-Memory: AI Agent memory, AI related ✔️ 2. addyosmani/agent-skills: AI coding agent skills, AI related ✔️ 3. cloudflare/computer: gives agents a computer, agent tooling, AI related ✔️ 4. mattpocock/skills: real engineer skills for agents, AI related ✔️ 5. goauthentik/authentik: auth tool, general, not AI ❌ skip 6. huangruiteng/loopx: AI agent loop kernel, AI related ✔️ 7. google/guava: Java general lib, not AI ❌ skip 8. TapXWorld/ChinaTextbook: textbook repo, not AI ❌ skip 9. Significant-Gravitas/AutoGPT: AI agent framework, AI related ✔️ 10. tirth
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "📈 AI Open Source Trends 2026-08-07" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/stevenko2002/agents-radar/issues/555
+8. [I built a tool to fix the fact that I forget almost everything I read a week later](https://www.reddit.com/r/SideProject/comments/1vsjdsy/i_built_a_tool_to_fix_the_fact_that_i_forget/)
+   - Score: 88/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: I built a tool to fix the fact that I forget almost everything I read a week later
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vsjdsy/i_built_a_tool_to_fix_the_fact_that_i_forget/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: I kept noticing the same pattern: I&#39;d read a great article or doc, feel like I learned something, and a week later couldn&#39;t tell you a single specific thing from it. I tried Anki, but manually writing cards for everything I read felt like homework on top of homework, so the deck just died. Highlighting and bookmarking tools didn&#39;t fix it either, they just gave me a bigger pile of stuff I&#39;d also forget. Highlighting is the easy 20%; actually retaining it is the harder part. So I built Myto . The capture side is a Chrome extension (highlight text on any webpage or PDF, or screenshot a diagram/slide/code block), but the actual product is what happens after: a web app that turns what you captured into a quiz system, automatically. AI generates concept-level questions from what you highlighted, not fill-in-the-blank recall, actual &quot;do you understand this&quot; questions,
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "I built a tool to fix the fact that I forget almost everything I read a week later" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1vsjdsy/i_built_a_tool_to_fix_the_fact_that_i_forget/

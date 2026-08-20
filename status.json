@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-19T23:37:57.434110+00:00",
-  "total_runs": 1553,
+  "last_run": "2026-08-20T01:52:07.701675+00:00",
+  "total_runs": 1554,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -15,12 +15,12 @@
   ],
   "llm_provider": "openrouter",
   "earnings": {
-    "total_usd": 4.29,
-    "this_week_usd": 0.24,
-    "last_cycle_usd": 0.0,
+    "total_usd": 4.37,
+    "this_week_usd": 0.32,
+    "last_cycle_usd": 0.08,
     "week_started": "2026-08-17",
     "breakdown": {
-      "dev.to": 0.24,
+      "dev.to": 0.32,
       "code_techs": 0.0
     },
     "history": [
@@ -28,6 +28,7 @@
       0.02,
       0.02,
       0.02,
+      0.08,
       0.08,
       0.08,
       0.08,
@@ -69,8 +70,18 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
-    "total_usd": 0.0
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "GPU\u2011Accelerated Island Detection from Satellite Images: A Practical CUDA Walkthrough",
+        "url": "https://dev.to/robust_true_try/gpu-accelerated-island-detection-from-satellite-images-a-practical-cuda-walkthr-2635",
+        "estimated_usd": 0.08,
+        "source_url": "https://yassa9.github.io/osint/gralhix-004/",
+        "source_title": "Geolocating a random island using geometry and CUDA programming"
+      }
+    ],
+    "total_usd": 0.08
   },
   "suggestions": [
     {
@@ -87,7 +98,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 246,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -176,8 +187,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-08-19",
-    "published": 14
+    "date": "2026-08-20",
+    "published": 15
   },
   "code_tech_earning": {
     "enabled": true,
@@ -430,7 +441,8 @@
       "davidepiffer.com/p/ai-isnt-outthinking-mathematicians",
       "w4g1.dev/blog/models-are-getting-dumber-on-purpose",
       "rickmanelius.com/p/aidr-ai-didnt-read",
-      "quantum5.ca/2026/08/16/fixing-bricked-amd-7040-series-framework-13-laptop-with-20-tools"
+      "quantum5.ca/2026/08/16/fixing-bricked-amd-7040-series-framework-13-laptop-with-20-tools",
+      "yassa9.github.io/osint/gralhix-004"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -446,7 +458,8 @@
       "ai has acces vastly larger working memory than human brain",
       "model getting dumber purpose",
       "ai dr ai didn t read",
-      "fixing bricked framework laptop"
+      "fixing bricked framework laptop",
+      "geolocating random island geometry cuda programming"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -462,7 +475,8 @@
       "reviewing entire repository 32k token llm context",
       "deploying distilled llms edge inference practical",
       "stop ai hallucination verify llm summary publishing",
-      "recover bricked framework 13 diy usb flash"
+      "recover bricked framework 13 diy usb flash",
+      "gpu accelerated island detection satellite imag practical cuda walkthrough"
     ]
   }
 }

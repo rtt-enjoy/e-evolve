@@ -1,6 +1,6 @@
 # Free AI Earning Queue
 
-Refreshed: 2026-08-19T13:09:31.196544+00:00
+Refreshed: 2026-08-20T13:11:37.028340+00:00
 Daily target: $10.00
 
 Suggestions favour free AI services and free AI APIs with zero upfront cost.
@@ -17,7 +17,7 @@ Suggestions favour free AI services and free AI APIs with zero upfront cost.
 
 ## Current Best Angle
 
-Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: '{\n  "summary": "The strongest immediate angle
+Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: '{\n  "summary": "The strongest current angle is
 
 ## Next Actions
 
@@ -115,37 +115,7 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379
-2. [I built a free tool to stop your best customer reviews from getting buried in your inbox](https://www.reddit.com/r/SideProject/comments/1vs2jod/i_built_a_free_tool_to_stop_your_best_customer/)
-   - Score: 100/100
-   - Value signal: $99.00
-   - Why: visible or inferred value around $99.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: I built a free tool to stop your best customer reviews from getting buried in your inbox
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vs2jod/i_built_a_free_tool_to_stop_your_best_customer/
-     Why this is suitable: visible or inferred value around $99.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Hey, wanted to share something I built. Every business gets those messages. A customer emails you saying your product saved their week. Someone drops a kind word in a DM at midnight. A review lands on some platform you forgot you signed up for. And then... nothing. You screenshot it, maybe share it once, and it slowly disappears into the void. Meanwhile your website is sitting there with a generic &quot;trusted by thousands&quot; line that nobody actually believes. I got tired of watching that happen, so I built Praisly — a dead simple way to collect, organize, and showcase customer testimonials. How it works: Create a collection link with a custom question Share it with your customers (email, WhatsApp, thank-you page, QR code, whatever) They submit a testimonial — no account needed, no friction You approve the ones you like and feature the best ones Display them on a &quot;wall of love&
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "I built a free tool to stop your best customer reviews from getting buried in your inbox" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $99.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1vs2jod/i_built_a_free_tool_to_stop_your_best_customer/
-3. [Wayfinder map: StoneReader final UI design](https://github.com/akj/stonereader/issues/17)
+2. [Wayfinder map: StoneReader final UI design](https://github.com/akj/stonereader/issues/17)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -184,37 +154,7 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/akj/stonereader/issues/17
-4. [I refuse to spend thousands on courses when YouTube has all the best lectures for free. There is just one problem...](https://www.reddit.com/r/SideProject/comments/1vs2obh/i_refuse_to_spend_thousands_on_courses_when/)
-   - Score: 100/100
-   - Value signal: $7.99
-   - Why: visible or inferred value around $7.99; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: I refuse to spend thousands on courses when YouTube has all the best lectures for free. There is just one problem...
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vs2obh/i_refuse_to_spend_thousands_on_courses_when/
-     Why this is suitable: visible or inferred value around $7.99; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Hi r/SideProject , The problem with trying to learn from YouTube is that videos are unstructured, scattered, and built for passive watching. The platform is designed exceptionally well, but it is designed to keep you watching, not to help you actually retain information. I used to tell myself spending hours on YouTube wasn&#39;t that bad because at least I was being productive and learning things. But I learned the truth the hard way a few months ago. It was two weeks before my final exams. I was sitting in the library, surrounded by macroeconomics flashcards. My calendar was completely packed. Suddenly, my phone lit up with a message from my favorite client: &quot;Hey Karl, we have a massive new project here. Can you edit a video like this for us?&quot; I opened the reference video and froze. It looked incredible, but it was on a level I had never edited before. My first thought: &quot;
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "I refuse to spend thousands on courses when YouTube has all the best lectures for free. There is just one problem..." and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $7.99 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1vs2obh/i_refuse_to_spend_thousands_on_courses_when/
-5. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/496)
+3. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/496)
    - Score: 96/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -244,18 +184,18 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/nubenetes/awesome-kubernetes/pull/496
-6. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/495)
-   - Score: 96/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+4. [The gate that was never built, the application that could not run, and what Team actually sells](https://github.com/famouslytrill-boop/sonara-os/pull/202)
+   - Score: 95/100
+   - Value signal: $79.00
+   - Why: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: 💎 Knowledge Update & Optimization: 12 Jul 2026
+     Lead: The gate that was never built, the application that could not run, and what Team actually sells
      Source: github
-     URL: https://github.com/nubenetes/awesome-kubernetes/pull/495
-     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     URL: https://github.com/famouslytrill-boop/sonara-os/pull/202
+     Why this is suitable: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
      
      Constraints:
@@ -265,16 +205,16 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## 💎 Knowledge Update: 12 Jul 2026  Processed **0** links.  ⚠️ **Detailed Safety Audit moved to comments due to scale.**   ### 🧠 AI Intelligence & Observability Report  #### 🤖 Agentic Roles & Model Selection (Dynamic) Execution utilized a multi-agent Analyst-Auditor workflow for maximum robustness.  | Agent Role | Model Used | Successes | | :--- | :--- | :---: |  #### 🤖 Model Performance Matrix | Model Used | Successful Calls | Hierarchy Logic | | :--- | :---: | :--- | | No AI calls | 0 | N/A |  #### 🔑 API Infrastructure & Quota Management | Key Index | Type | Provider Label | Usage | Errors (429/404) | | :--- | :--- | :--- | :---: | :---: |  #### 📊 Consumption and Efficiency Metrics (2026 Units) - **Total Prompt Tokens**: 0 - **Total Completion Tokens**: 0 - **💰 Estimated Cost**: **0.0000 €** - **Database-First Cache Hits**: **0** (0.0% hit ratio) - **Estimated Tokens Saved**: ~0 (Zero-
+     Request excerpt: `pnpm run verify:launch` green across **26 commands**. **2,299 tests** passing across 202 files. `server.js` is **4,035 lines**. 288 registered routes, 96 migrations, 160 register records, 270 documented API operations across 194 paths, 15 free calculators, 15 builtin prompts.  &gt; Earlier narratives for this branch are preserved in the commit history and in `docs/SPRINT_LOG.md`, which is the hand-written record. This description covers the work that most distinguishes the branch from `main`.  ---  # 1. The recurring defect, found five more times  The pattern this branch keeps hitting is not broken code. It is **a table with exactly the right columns that nothing at runtime has ever read**, or **a check that reports success without being true**. Both turned up repeatedly.  - **`service_comments`** — the reply thread on a service request. No runtime reader or writer, and no request detai
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "💎 Knowledge Update & Optimization: 12 Jul 2026" and can make a small working version.
+     Hi, I found your request about "The gate that was never built, the application that could not run, and what Team actually sells" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $79.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/nubenetes/awesome-kubernetes/pull/495
-7. [📈 AI Open Source Trends 2026-08-07](https://github.com/stevenko2002/agents-radar/issues/555)
+     Reference: https://github.com/famouslytrill-boop/sonara-os/pull/202
+5. [📈 AI Open Source Trends 2026-08-07](https://github.com/stevenko2002/agents-radar/issues/555)
    - Score: 94/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -304,17 +244,17 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/stevenko2002/agents-radar/issues/555
-8. [I built a tool to fix the fact that I forget almost everything I read a week later](https://www.reddit.com/r/SideProject/comments/1vsjdsy/i_built_a_tool_to_fix_the_fact_that_i_forget/)
-   - Score: 88/100
+6. [🤖 AI Agent 每周速递 — 2026-08-17](https://github.com/jojowadaxi/ai-agent-trending/issues/19)
+   - Score: 86/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: I built a tool to fix the fact that I forget almost everything I read a week later
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vsjdsy/i_built_a_tool_to_fix_the_fact_that_i_forget/
+     Lead: 🤖 AI Agent 每周速递 — 2026-08-17
+     Source: github
+     URL: https://github.com/jojowadaxi/ai-agent-trending/issues/19
      Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
      
@@ -325,12 +265,72 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: I kept noticing the same pattern: I&#39;d read a great article or doc, feel like I learned something, and a week later couldn&#39;t tell you a single specific thing from it. I tried Anki, but manually writing cards for everything I read felt like homework on top of homework, so the deck just died. Highlighting and bookmarking tools didn&#39;t fix it either, they just gave me a bigger pile of stuff I&#39;d also forget. Highlighting is the easy 20%; actually retaining it is the harder part. So I built Myto . The capture side is a Chrome extension (highlight text on any webpage or PDF, or screenshot a diagram/slide/code block), but the actual product is what happens after: a web app that turns what you captured into a quiz system, automatically. AI generates concept-level questions from what you highlighted, not fill-in-the-blank recall, actual &quot;do you understand this&quot; questions,
+     Request excerpt: # 🤖 AI Agent Trending — 2026-08-17  每周自动抓取 GitHub 上与 AI Agent 相关的热门/新晋项目。  ## Topic: `ai-agent` (按 Stars 排序)  | # | 仓库 | Stars | 语言 | 最近更新 | 简介 | |---|------|-------|------|----------|------| | 1 | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | ⭐ 231,554 | Python | 2026-08-17 | The agent that grows with you | | 2 | [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) | ⭐ 74,394 | Python | 2026-08-16 | Bash is all you need -  A nano claude code–like 「agent harness」, built from 0 to 1 | | 3 | [thedaviddias/Front-End-Checklist](https://github.com/thedaviddias/Front-End-Checklist) | ⭐ 73,540 | MDX | 2026-08-14 | 🗂 The essential checklist for modern web development, for humans and AI agents | | 4 | [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) | ⭐ 72,325 | Python | 2026-08-12 | Give your AI agent eyes to see the
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "I built a tool to fix the fact that I forget almost everything I read a week later" and can make a small working version.
+     Hi, I found your request about "🤖 AI Agent 每周速递 — 2026-08-17" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1vsjdsy/i_built_a_tool_to_fix_the_fact_that_i_forget/
+     Reference: https://github.com/jojowadaxi/ai-agent-trending/issues/19
+7. [Technical Specification: AI Agent Bot with Token System & Admin CRM](https://github.com/labtgbot/telegram-ai-agent/issues/1)
+   - Score: 84/100
+   - Value signal: $13.00
+   - Why: visible or inferred value around $13.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Technical Specification: AI Agent Bot with Token System & Admin CRM
+     Source: github
+     URL: https://github.com/labtgbot/telegram-ai-agent/issues/1
+     Why this is suitable: visible or inferred value around $13.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: > **Issue Type**: `feature` | **Priority**: `critical` | **Epic**: `telegram-ai-agent-v1`   > **Assignee**: `hive-mind` | **Labels**: `bot`, `tokens`, `crm`, `monetization`, `admin-panel`  ---  ## 🎯 Project Overview  Создание конкурентного продукта на основе **Mira** с внутренней токеновой экономикой, ценообразованием на **50% дешевле** аналогов и профессиональной **CRM-системой** для администрирования.  ### 📊 Competitive Analysis (Mira Pricing)  | Пакет Mira | Stars | Наши цены (-50%) | Экономия | |------------|-------|------------------|----------| | 500 токенов | 500 ⭐ | **250 ⭐** | 250 ⭐ | | 1,200 токенов (-17%) | 1,000 ⭐ | **500 ⭐** | 500 ⭐ | | 2,000 токенов (-25%) | 1,500 ⭐ | **750 ⭐** | 750 ⭐ | | Mira Pro (месяц) | 999 ⭐ (~$13) | **500 ⭐ (~$6.50)** | 499 ⭐ |  ---  ## 🏗️ System Architecture  ```mermaid graph TB     A[Telegram User] --> B[Telegram Bot API]     A --> C[Mini App Inter
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Technical Specification: AI Agent Bot with Token System & Admin CRM" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $13.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/labtgbot/telegram-ai-agent/issues/1
+8. [Repos created or updated in the past week](https://github.com/Z-Arghavan/awesome-digital-built-environment/issues/7)
+   - Score: 84/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Repos created or updated in the past week
+     Source: github
+     URL: https://github.com/Z-Arghavan/awesome-digital-built-environment/issues/7
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Automatically discovered repositories that may fit this awesome list. Review each one, then either add it to README.md or check it off if not relevant.  ### BIM / IFC tools - [ ] [pascalorg/editor](https://github.com/pascalorg/editor) (21443 stars): Create and share 3D architectural projects. - [ ] [opf/openproject](https://github.com/opf/openproject) (15864 stars): OpenProject is the leading open source project management software for product, project and portfolio management. A... - [ ] [assimp/assimp](https://github.com/assimp/assimp) (13136 stars): The official Open-Asset-Importer-Library Repository. Loads 40+ 3D-file-formats into one unified and clean data... - [ ] [eunomia-bpf/ActPlane](https://github.com/eunomia-bpf/ActPlane) (89 stars): eBPF Information Flow Enforcement for AI Agent safety, security and effectiveness - [ ] [QuantumNovice/awesome-civil-engineering](https://github.
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Repos created or updated in the past week" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/Z-Arghavan/awesome-digital-built-environment/issues/7

@@ -506,5 +506,70 @@ class TestCodeTechOpportunities(unittest.TestCase):
         self.assertEqual(len(refs), 1)
         self.assertIn("leverage", refs[0]["takeaway"])
 
+class TestWalletEarnings(unittest.TestCase):
+    """Only confirmed on-chain USDT counts as earned money."""
+
+    def _run(self, balances):
+        import os
+        import bot.status as status_module
+        original_fetch = status_module._fetch_usdt_balance
+        original_env = os.environ.get("USDT_WALLET_ADDRESS")
+        os.environ["USDT_WALLET_ADDRESS"] = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
+        queue = list(balances)
+        status_module._fetch_usdt_balance = lambda addr: queue.pop(0)
+        try:
+            status = status_module._defaults()
+            for _ in balances:
+                status_module._snapshot_wallet(status)
+                update(status, [])
+            return status
+        finally:
+            status_module._fetch_usdt_balance = original_fetch
+            if original_env is None:
+                os.environ.pop("USDT_WALLET_ADDRESS", None)
+            else:
+                os.environ["USDT_WALLET_ADDRESS"] = original_env
+
+    def test_articles_never_count_as_revenue(self):
+        """dev.to pays nothing, so publishing must not move the earned figure."""
+        status = {"earnings": {}, "wallet": {"confirmed_usd": 0.0}}
+        updated = update(status, [
+            {"platform": "dev.to", "success": True, "estimated_usd": 0.0},
+            {"platform": "dev.to", "success": True, "estimated_usd": 0.0},
+        ])
+        self.assertEqual(updated["earnings"]["confirmed_usd"], 0.0)
+        self.assertEqual(updated["earnings"]["received_total_usd"], 0.0)
+        self.assertEqual(updated["earnings"]["history"], [])
+
+    def test_deposit_is_counted_once(self):
+        status = self._run([0.0, 5.0, 5.0, 5.0])
+        self.assertEqual(status["wallet"]["received_total_usd"], 5.0)
+        self.assertEqual(status["earnings"]["history"], [5.0])
+
+    def test_manual_withdrawal_does_not_double_count(self):
+        """Balance 5 -> 2 (owner withdrew) -> 9 is $4 of new income, not $7."""
+        status = self._run([0.0, 5.0, 2.0, 9.0])
+        self.assertEqual(status["wallet"]["received_total_usd"], 9.0)
+        self.assertEqual(status["wallet"]["last_received_usd"], 4.0)
+
+    def test_failed_lookup_keeps_balance_and_adds_no_income(self):
+        """A chain outage must not invent a repeat receipt."""
+        status = self._run([0.0, 5.0, None, None])
+        wallet = status["wallet"]
+        self.assertTrue(wallet["stale"])
+        self.assertEqual(wallet["confirmed_usd"], 5.0)
+        self.assertEqual(wallet["received_total_usd"], 5.0)
+        self.assertEqual(wallet["last_received_usd"], 0.0)
+        self.assertEqual(status["earnings"]["history"], [5.0])
+
+    def test_raw_address_never_persisted(self):
+        import json
+        import bot.status as status_module
+        status = self._run([0.0, 1.0])
+        blob = json.dumps(status_module.sanitize_for_git(status))
+        self.assertNotIn("TFTNsfyomKrnUutRjBTGVULp19ByW29KbY", blob)
+        self.assertIn("TFTNsf", blob)  # masked form survives
+
+
 if __name__ == "__main__":
     unittest.main()

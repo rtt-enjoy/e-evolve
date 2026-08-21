@@ -92,10 +92,9 @@ export const SECTIONS: SectionDef[] = [
       'active_features',
       'inactive_features',
       'errors',
-      // Payout fields: rendered as explicitly-disabled rather than "new data".
+      // Receive wallet: the real earnings source, rendered in full here.
+      'wallet',
       'usdt_balance',
-      'last_payout_total_usd',
-      'last_payout_tx',
     ],
     always: true,
     badge: (status) => (status.errors || []).length || null,

@@ -3,52 +3,27 @@
   "last_run": "2026-08-21T13:11:26.946516+00:00",
   "total_runs": 1588,
   "active_features": [
+    "llm_anthropic",
+    "usdt_wallet"
+  ],
+  "inactive_features": [
     "llm_gemini",
     "llm_openrouter",
     "llm_groq",
-    "usdt_wallet",
-    "code_techs"
-  ],
-  "inactive_features": [
-    "llm_anthropic",
     "llm_cerebras"
   ],
   "llm_provider": "openrouter",
   "earnings": {
-    "total_usd": 4.45,
-    "this_week_usd": 0.4,
+    "total_usd": 0.0,
+    "this_week_usd": 0.0,
     "last_cycle_usd": 0.0,
     "week_started": "2026-08-17",
-    "breakdown": {
-      "dev.to": 0.4,
-      "code_techs": 0.0
-    },
-    "history": [
-      0.02,
-      0.02,
-      0.02,
-      0.02,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08,
-      0.08
-    ]
+    "breakdown": {},
+    "history": [],
+    "confirmed_usd": 0.0,
+    "received_total_usd": 0.0,
+    "last_received_usd": 0.0,
+    "source": "on-chain USDT balance"
   },
   "last_evolution": {
     "summary": "Skipped: code evolution is handled in Codex; API keys are research/suggestions only",
@@ -96,43 +71,41 @@
     "post": "openrouter"
   },
   "usdt_balance": 0.0,
-  "last_payout_total_usd": 0.0,
-  "last_payout_tx": null,
   "secret_readiness": {
     "llm_anthropic": {
+      "active": true,
+      "present": [
+        "ANTHROPIC_API_KEY"
+      ],
+      "missing": [],
+      "present_count": 1,
+      "required_count": 1
+    },
+    "llm_gemini": {
       "active": false,
       "present": [],
       "missing": [
-        "ANTHROPIC_API_KEY"
+        "GEMINI_API_KEY"
       ],
       "present_count": 0,
       "required_count": 1
     },
-    "llm_gemini": {
-      "active": true,
-      "present": [
-        "GEMINI_API_KEY"
-      ],
-      "missing": [],
-      "present_count": 1,
-      "required_count": 1
-    },
     "llm_openrouter": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "OPENROUTER_API_KEY"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     },
     "llm_groq": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "GROQ_API_KEY"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     },
     "llm_cerebras": {
@@ -159,21 +132,21 @@
       "provider": "openrouter",
       "model": "openai/gpt-oss-20b:free",
       "purpose": "research-only repair suggestions for Codex-owned code changes",
-      "active": true,
+      "active": false,
       "secret": "OPENROUTER_API_KEY"
     },
     "research": {
       "provider": "openrouter",
       "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
       "purpose": "free-AI-service discovery, market research, and earning-suggestion briefs",
-      "active": true,
+      "active": false,
       "secret": "OPENROUTER_API_KEY"
     },
     "post": {
       "provider": "openrouter",
       "model": "openai/gpt-oss-20b:free",
       "purpose": "article drafting and formatting for publication",
-      "active": true,
+      "active": false,
       "secret": "OPENROUTER_API_KEY"
     }
   },
@@ -393,10 +366,7 @@
     ]
   },
   "configured_github_secrets": [
-    "GEMINI_API_KEY",
-    "GH_TOKEN",
-    "GROQ_API_KEY",
-    "OPENROUTER_API_KEY",
+    "ANTHROPIC_API_KEY",
     "USDT_WALLET_ADDRESS"
   ],
   "operation_mode": "research_and_article_publishing",
@@ -472,5 +442,18 @@
       "gpu accelerated island detection satellite imag practical cuda walkthrough",
       "defending rust build maliciou proc macro"
     ]
+  },
+  "wallet": {
+    "configured": true,
+    "address_masked": "TFTNsf\u20269KbY",
+    "network": "TRC-20",
+    "confirmed_usd": 0.0,
+    "received_total_usd": 0.0,
+    "last_received_usd": 0.0,
+    "last_received_at": null,
+    "checked_at": "2026-08-21T13:24:42.540764+00:00",
+    "stale": false,
+    "error": null,
+    "balance_high_water_usd": 0.0
   }
 }

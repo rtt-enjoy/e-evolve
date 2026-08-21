@@ -86,18 +86,7 @@ def snapshot(status: dict[str, Any]) -> dict[str, Any]:
     status["configured_github_secrets"] = sorted(configured_secrets)
     status["secret_readiness"]  = _secret_readiness(active, inactive, configured_secrets)
     status["llm_workflows"]     = _llm_workflows(active, configured_secrets)
-    usdt_wallet = os.getenv("USDT_WALLET_ADDRESS", "").strip()
-    if usdt_wallet:
-        prev_balance = float(status.get("usdt_balance", 0.0))
-        new_balance  = _fetch_usdt_balance(usdt_wallet)
-        if new_balance is not None:
-            status["usdt_balance"] = new_balance
-            if new_balance > prev_balance:
-                status["usdt_received"] = round(new_balance - prev_balance, 6)
-                status["usdt_received_at"] = datetime.now(timezone.utc).isoformat()
-            else:
-                status.pop("usdt_received", None)
-                status.pop("usdt_received_at", None)
+    _snapshot_wallet(status)
 
     log.info("Cycle #%d | v%s | active=%s",
              status["total_runs"], version, active)
@@ -124,35 +113,172 @@ def sanitize_for_git(status: dict[str, Any]) -> dict[str, Any]:
 
 # ── Internals ───────────────────────────────────────────────────────────────
 
-def _fetch_usdt_balance(address: str) -> float | None:
-    """Query on-chain USDT balance. TRC-20 if address starts with T, else ERC-20."""
-    import urllib.request
-    import urllib.error
-    try:
-        if address.startswith("T"):
-            # TRC-20 USDT via Tronscan public API (no key needed)
-            url = f"https://apilist.tronscanapi.com/api/account/tokens?address={address}&token=TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
-            with urllib.request.urlopen(url, timeout=10) as r:
-                data = json.loads(r.read())
-            for tok in data.get("data", []):
-                if tok.get("tokenId") == "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t":
-                    return float(tok.get("quantity", 0)) / 1e6
-            return 0.0
-        elif address.startswith("0x"):
-            # ERC-20 USDT via Etherscan (ETHERSCAN_API_KEY optional, free tier works without)
-            contract  = "0xdac17f958d2ee523a2206206994597c13d831ec7"
-            etherscan_key = os.getenv("ETHERSCAN_API_KEY", "YourApiKeyToken").strip()
-            url = (f"https://api.etherscan.io/api?module=account&action=tokenbalance"
-                   f"&contractaddress={contract}&address={address}&tag=latest&apikey={etherscan_key}")
-            with urllib.request.urlopen(url, timeout=10) as r:
-                data = json.loads(r.read())
-            if data.get("status") == "1":
-                return float(data["result"]) / 1e6
-            return 0.0
+def _mask_address(address: str) -> str:
+    """Public-safe form of a receive address: enough to recognise, not to typo."""
+    if len(address) <= 12:
+        return address
+    return f"{address[:6]}…{address[-4:]}"
+
+
+def _snapshot_wallet(status: dict[str, Any]) -> None:
+    """
+    Record real, on-chain earnings for USDT_WALLET_ADDRESS.
+
+    This is the only source of truth for money in this project. Earning modules
+    report 0.0 because none of them actually pay (see bot/earning/articles.py);
+    the wallet is a receive address handed to clients in outreach drafts, so a
+    payment arrives already at its destination and no transfer step exists.
+
+    `wallet.confirmed_usd` is the live balance. `wallet.received_total_usd`
+    accumulates every observed increase, so it survives a withdrawal the owner
+    makes by hand — the balance drops, lifetime receipts do not.
+    """
+    address = os.getenv("USDT_WALLET_ADDRESS", "").strip()
+    wallet = status.setdefault("wallet", _wallet_defaults())
+
+    if not address:
+        wallet["configured"] = False
+        wallet["error"] = "USDT_WALLET_ADDRESS not set"
+        return
+
+    wallet["configured"] = True
+    wallet["address_masked"] = _mask_address(address)
+    wallet["network"] = "TRC-20" if address.startswith("T") else "ERC-20"
+
+    prev_balance = float(wallet.get("confirmed_usd") or 0.0)
+    balance = _fetch_usdt_balance(address)
+
+    if balance is None:
+        # Chain lookup failed or the address format is unrecognised. Keep the
+        # last confirmed figure rather than reporting a false $0, but clear the
+        # per-cycle receipt so a stale value is not re-counted as new income.
+        wallet["error"] = "balance lookup unavailable"
+        wallet["stale"] = True
+        wallet["last_received_usd"] = 0.0
+        return
+
+    now = datetime.now(timezone.utc).isoformat()
+    wallet["error"] = None
+    wallet["stale"] = False
+    wallet["confirmed_usd"] = round(balance, 6)
+    wallet["checked_at"] = now
+
+    delta = round(balance - prev_balance, 6)
+    if delta > 0:
+        # Credit only what exceeds the high-water mark. Without this, a manual
+        # withdrawal ($5 -> $2) followed by a deposit ($2 -> $9) would credit
+        # $7 and double-count the $2 already counted before the withdrawal.
+        high_water = float(wallet.get("balance_high_water_usd") or 0.0)
+        new_income = round(balance - max(prev_balance, high_water), 6)
+        if new_income > 0:
+            wallet["received_total_usd"] = round(
+                float(wallet.get("received_total_usd") or 0.0) + new_income, 6)
+            wallet["last_received_usd"] = new_income
+            wallet["last_received_at"] = now
+            log.info("Wallet received +$%.6f USDT (balance $%.6f)", new_income, balance)
         else:
+            # Balance recovering toward a level already counted as income.
+            wallet["last_received_usd"] = 0.0
+    else:
+        wallet["last_received_usd"] = 0.0
+
+    wallet["balance_high_water_usd"] = round(
+        max(balance, float(wallet.get("balance_high_water_usd") or 0.0)), 6)
+
+    # Legacy mirrors: older dashboards and docs read these flat keys.
+    status["usdt_balance"] = wallet["confirmed_usd"]
+
+
+def _wallet_defaults() -> dict[str, Any]:
+    return {
+        "configured":         False,
+        "address_masked":     None,
+        "network":            None,
+        "confirmed_usd":      0.0,
+        "received_total_usd": 0.0,
+        "last_received_usd":  0.0,
+        "last_received_at":   None,
+        "checked_at":         None,
+        "stale":              False,
+        "error":              None,
+        # Highest balance ever observed, so income is never counted twice after
+        # the owner withdraws by hand.
+        "balance_high_water_usd": 0.0,
+    }
+
+
+_TRC20_USDT = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+_ERC20_USDT = "0xdac17f958d2ee523a2206206994597c13d831ec7"
+
+
+def _fetch_usdt_balance(address: str) -> float | None:
+    """
+    Live on-chain USDT balance. TRC-20 if the address starts with T, ERC-20 for
+    0x. Returns None when the balance genuinely could not be read, so callers
+    can show the last known figure instead of a false $0.
+    """
+    if address.startswith("T"):
+        return _fetch_trc20_usdt(address)
+    if address.startswith("0x"):
+        return _fetch_erc20_usdt(address)
+    log.warning("Unrecognised USDT address format: %s…", address[:6])
+    return None
+
+
+def _fetch_trc20_usdt(address: str) -> float | None:
+    """
+    TRC-20 balance via the official TronGrid node, which needs no API key.
+
+    Read via balanceOf() on the USDT contract rather than an indexer endpoint:
+    apilist.tronscanapi.com started returning HTTP 401 without a key, which
+    left the balance permanently stale.
+    """
+    import urllib.request
+
+    payload = json.dumps({
+        "owner_address":     address,
+        "contract_address":  _TRC20_USDT,
+        "function_selector": "balanceOf(address)",
+        "parameter":         "",
+        "visible":           True,
+    }).encode()
+    req = urllib.request.Request(
+        "https://api.trongrid.io/wallet/triggerconstantcontract",
+        data=payload,
+        headers={"Content-Type": "application/json"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as r:
+            data = json.loads(r.read())
+        words = data.get("constant_result") or []
+        if not words:
+            log.debug("TronGrid returned no result: %s", str(data.get("result"))[:120])
             return None
+        return int(words[0], 16) / 1e6
     except Exception as exc:
-        log.debug("USDT balance fetch failed: %s", exc)
+        log.debug("TRC-20 balance fetch failed: %s", exc)
+        return None
+
+
+def _fetch_erc20_usdt(address: str) -> float | None:
+    """ERC-20 balance via Etherscan. ETHERSCAN_API_KEY is optional but advised."""
+    import urllib.request
+
+    key = os.getenv("ETHERSCAN_API_KEY", "").strip()
+    url = (f"https://api.etherscan.io/api?module=account&action=tokenbalance"
+           f"&contractaddress={_ERC20_USDT}&address={address}&tag=latest")
+    if key:
+        url += f"&apikey={key}"
+    try:
+        with urllib.request.urlopen(url, timeout=15) as r:
+            data = json.loads(r.read())
+        if data.get("status") == "1":
+            return float(data["result"]) / 1e6
+        # status 0 covers rate limits and "NOTOK" — not a real zero balance.
+        log.debug("Etherscan declined: %s", str(data.get("result"))[:120])
+        return None
+    except Exception as exc:
+        log.debug("ERC-20 balance fetch failed: %s", exc)
         return None
 
 
@@ -194,8 +320,7 @@ def _defaults() -> dict[str, Any]:
         "errors":                [],
         "usdt_wallet":           "",
         "usdt_balance":          0.0,
-        "last_payout_total_usd": 0.0,
-        "last_payout_tx":        None,
+        "wallet":                _wallet_defaults(),
     }
 
 

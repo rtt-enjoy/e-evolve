@@ -30,7 +30,7 @@ essentials, and detail lives one click away.
 | `#/leads`   | Which opportunities exist, worth what, and what is the first step?|
 | `#/research`| Which free AI services and earning playbooks were found?          |
 | `#/engine`  | Which model serves which role, and what did the last cycle do?    |
-| `#/health`  | Freshness, integration readiness, errors, blocked payouts.        |
+| `#/health`  | Freshness, integration readiness, errors, receive-wallet state.  |
 | `#/data`    | Every snapshot field, including keys no section claims yet.       |
 
 `#/leads/<index>` is a detail view carrying the lead's `codex_prompt` and
@@ -57,9 +57,37 @@ a new field deserves a first-class view, add its key to the relevant section's
 The Overview must answer, without scrolling:
 
 - Is the cycle fresh, late, or stalled?
-- Total earned, and the value sitting in the lead pipeline.
+- Earnings confirmed on-chain, and the value sitting in the lead pipeline.
 - What needs attention, ranked, each linking to the section that resolves it.
 - Which of the five phases succeeded in the last run.
+
+## What "Earned" Means
+
+The Overview's earnings tile shows **only money confirmed on-chain** at
+`USDT_WALLET_ADDRESS` — `status.wallet.confirmed_usd`, read live from Tronscan
+(TRC-20) or Etherscan (ERC-20) each cycle by `bot/status.py:_snapshot_wallet`.
+
+Nothing else may be rendered as revenue:
+
+- Publishing platforms pay nothing, so `bot/earning/articles.py` reports
+  `estimated_usd: 0.0`. A non-zero constant there fabricates income — an earlier
+  version summed `$0.08` per article into "Total earned" and showed $4.45 that
+  did not exist anywhere.
+- `earnings.total_usd` / `this_week_usd` are therefore **activity value**, not
+  money. Label them as such wherever they appear.
+- `code_tech_earning` lead values are **unrealised pipeline**, shown separately.
+
+`wallet.received_total_usd` accumulates observed balance increases above a
+high-water mark, so it survives a manual withdrawal without double-counting the
+recovery. `wallet.stale` means the chain lookup failed and the last known
+balance is being shown; no receipt is recorded for that cycle.
+
+The wallet is a **receive** address handed to clients in outreach drafts, so
+payments arrive already at their destination. There is no transfer step and no
+withdrawal code path — `bot/earning/payout.py` remains uncalled by design.
+
+Only the masked address (`wallet.address_masked`) is written to tracked files;
+`sanitize_for_git` redacts the raw value.
 
 ## Implementation Notes
 

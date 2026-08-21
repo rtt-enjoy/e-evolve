@@ -43,7 +43,7 @@ according to the role routing in `bot/llm.py`.
 
 | Key                   | Required | Used by         | Notes                                                                       |
 |-----------------------|----------|-----------------|-----------------------------------------------------------------------------|
-| `USDT_WALLET_ADDRESS` | Optional | `bot/status.py` | Enables wallet/status readiness and balance lookup.                         |
+| `USDT_WALLET_ADDRESS` | Optional | `bot/status.py` | **Receive** address. Its live on-chain balance is the only figure the dashboard reports as earned. Never used to send. |
 | `ETHERSCAN_API_KEY`   | Optional | `bot/status.py` | Improves Etherscan balance checks; free fallback token is used when absent. |
 
 ## Legacy Action Credentials

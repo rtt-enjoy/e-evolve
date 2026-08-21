@@ -597,7 +597,10 @@ def _publish_to_devto(article: dict, api_key: str) -> dict:
             "success": True,
             "title": article.get("title", "Untitled"),
             "url": article_url,
-            "estimated_usd": 0.08,
+            # dev.to pays nothing. Publishing is reach, not revenue, so this
+            # must stay 0.0 — a non-zero constant here fabricates earnings.
+            # Real money is only ever the on-chain wallet balance.
+            "estimated_usd": 0.0,
         }
     except Exception as exc:
         log.error("[articles] dev.to publish failed: %s", exc)
@@ -634,7 +637,9 @@ def _publish_to_medium(article: dict, integration_token: str) -> dict:
                 "success": True,
                 "title": article.get("title", "Untitled"),
                 "url": article_url,
-                "estimated_usd": 0.07,
+                # Medium's Partner Program does not pay through this API path.
+                # Keep at 0.0 for the same reason as dev.to above.
+                "estimated_usd": 0.0,
             }
         else:
             log.error("[articles] Medium publish failed: %s - %s", resp.status_code, resp.text)

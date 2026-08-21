@@ -136,15 +136,30 @@ export default function HealthSection({ status }: { status: Status }) {
             />
           </Card>
 
-          <Card title="Payouts" hint="Withdrawals are a blocked action; these fields stay at zero by policy.">
+          <Card title="Receive wallet" hint="The only real source of earnings. Clients pay this address directly.">
             <KeyValue
               rows={[
-                ['USDT balance', money(status.usdt_balance || 0)],
-                ['Last payout', money(status.last_payout_total_usd || 0)],
-                ['Last tx', status.last_payout_tx || 'none'],
+                ['Address', status.wallet?.address_masked || 'not configured'],
+                ['Network', status.wallet?.network || '—'],
+                ['Confirmed balance', money(status.wallet?.confirmed_usd ?? status.usdt_balance ?? 0)],
+                ['Received all-time', money(status.wallet?.received_total_usd || 0)],
+                ['Last received', status.wallet?.last_received_at
+                  ? `${money(status.wallet?.last_received_usd || 0)} · ${formatDate(status.wallet.last_received_at)}`
+                  : 'nothing yet'],
+                ['Checked', formatDate(status.wallet?.checked_at || undefined)],
               ]}
             />
-            <Pill tone="bad">payouts disabled</Pill>
+            {!status.wallet?.configured ? (
+              <Pill tone="warn">set USDT_WALLET_ADDRESS</Pill>
+            ) : status.wallet?.stale ? (
+              <Pill tone="warn">chain lookup failed — showing last known</Pill>
+            ) : (
+              <Pill tone="good">reading live from chain</Pill>
+            )}
+            <p className="muted mt-4">
+              Funds arrive already at this address, so no withdrawal step exists.
+              Outgoing transfers stay disabled by policy.
+            </p>
           </Card>
         </div>
       </div>

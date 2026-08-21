@@ -7,6 +7,13 @@ import type { Status } from '../types/status';
 
 export default function OverviewSection({ status }: { status: Status }) {
   const earnings = status.earnings || {};
+  const wallet = status.wallet || {};
+  // "Earned" means money confirmed on-chain at the receive address — nothing
+  // else. Article publishing reports $0 because dev.to and Medium do not pay,
+  // so activity counts are shown separately and never summed into revenue.
+  const confirmed = wallet.confirmed_usd ?? earnings.confirmed_usd ?? 0;
+  const receivedTotal = wallet.received_total_usd ?? earnings.received_total_usd ?? 0;
+  const lastReceived = wallet.last_received_usd ?? earnings.last_received_usd ?? 0;
   const opportunities = status.code_tech_earning?.opportunities || [];
   const stats = useMemo(() => buildOpportunityStats(opportunities), [opportunities]);
   const readiness = useMemo(() => buildReadiness(status), [status]);
@@ -27,11 +34,20 @@ export default function OverviewSection({ status }: { status: Status }) {
 
       <div className="tile-row">
         <Tile
-          label="Total earned"
-          value={money(earnings.total_usd || 0)}
-          detail={`${money(earnings.this_week_usd || 0)} this week`}
-          tone={(earnings.total_usd || 0) > 0 ? 'good' : 'neutral'}
+          label="Earned (on-chain)"
+          value={money(confirmed)}
+          detail={
+            !wallet.configured
+              ? 'no wallet address set'
+              : wallet.stale
+                ? 'chain lookup unavailable · last known'
+                : `${money(receivedTotal)} received all-time${
+                    lastReceived > 0 ? ` · +${money(lastReceived)} this cycle` : ''
+                  }`
+          }
+          tone={confirmed > 0 ? 'good' : 'neutral'}
           spark={history}
+          to="#/health"
         />
         <Tile
           label="Pipeline value"
@@ -127,6 +143,40 @@ export default function OverviewSection({ status }: { status: Status }) {
               <Stat label="Active modules" value={String((status.active_features || []).length)} detail={`${(status.inactive_features || []).length} idle`} />
               <Stat label="LLM roles" value={String(Object.keys(status.llm_workflows || status.llm_roles || {}).length)} detail={status.llm_provider || 'none'} />
             </div>
+          </Card>
+
+          <Card title="Where earnings come from" hint="Only confirmed on-chain USDT counts as earned.">
+            <div className="stat-grid">
+              <Stat
+                label="Wallet balance"
+                value={money(confirmed)}
+                detail={wallet.address_masked
+                  ? `${wallet.network || 'USDT'} · ${wallet.address_masked}`
+                  : 'no address configured'}
+              />
+              <Stat
+                label="Received all-time"
+                value={money(receivedTotal)}
+                detail={wallet.last_received_at
+                  ? `last ${formatDate(wallet.last_received_at)}`
+                  : 'nothing received yet'}
+              />
+              <Stat
+                label="Articles published"
+                value={String(status.article_daily?.published || 0)}
+                detail="reach, not revenue — pays $0"
+              />
+              <Stat
+                label="Pipeline (unrealised)"
+                value={compactMoney(stats.estimatedValue)}
+                detail={`${stats.total} leads awaiting payment`}
+              />
+            </div>
+            <p className="muted mt-4">
+              Clients pay this address directly, so funds arrive already at their
+              destination — there is no transfer step. Publishing platforms pay
+              nothing, so they are counted as activity only.
+            </p>
           </Card>
 
           <Card title="Action policy" hint="What the bot's API keys are permitted to do.">

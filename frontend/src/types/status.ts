@@ -106,12 +106,33 @@ export type Status = {
     present?: string[];
   }>;
   earnings?: {
+    /** Live on-chain USDT balance of the receive wallet. Real money. */
+    confirmed_usd?: number;
+    /** Lifetime sum of observed balance increases. Survives manual withdrawals. */
+    received_total_usd?: number;
+    /** Increase observed during the last cycle. */
+    last_received_usd?: number;
+    source?: string;
+    /** Activity value, NOT revenue: publishing reach, no payment attached. */
     total_usd?: number;
     this_week_usd?: number;
     last_cycle_usd?: number;
     week_started?: string;
     breakdown?: Record<string, number>;
+    /** Trend spark of real wallet receipts. */
     history?: number[];
+  };
+  wallet?: {
+    configured?: boolean;
+    address_masked?: string | null;
+    network?: string | null;
+    confirmed_usd?: number;
+    received_total_usd?: number;
+    last_received_usd?: number;
+    last_received_at?: string | null;
+    checked_at?: string | null;
+    stale?: boolean;
+    error?: string | null;
   };
   last_evolution?: {
     summary?: string;
@@ -130,8 +151,6 @@ export type Status = {
   last_cycle_seconds?: number;
   github_repo?: string;
   usdt_balance?: number;
-  last_payout_total_usd?: number;
-  last_payout_tx?: string | null;
   llm_workflows?: Record<string, {
     provider?: string;
     model?: string;

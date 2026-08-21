@@ -1,6 +1,6 @@
 # Free AI Earning Queue
 
-Refreshed: 2026-08-20T13:11:37.028340+00:00
+Refreshed: 2026-08-21T13:58:40.693186+00:00
 Daily target: $10.00
 
 Suggestions favour free AI services and free AI APIs with zero upfront cost.
@@ -17,7 +17,7 @@ Suggestions favour free AI services and free AI APIs with zero upfront cost.
 
 ## Current Best Angle
 
-Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: '{\n  "summary": "The strongest current angle is
+Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: '{\n  "summary": "The strongest immediate angle
 
 ## Next Actions
 
@@ -115,7 +115,37 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379
-2. [Wayfinder map: StoneReader final UI design](https://github.com/akj/stonereader/issues/17)
+2. [The gate that was never built, the application that could not run, and what Team actually sells](https://github.com/famouslytrill-boop/sonara-os/pull/202)
+   - Score: 100/100
+   - Value signal: $79.00
+   - Why: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: The gate that was never built, the application that could not run, and what Team actually sells
+     Source: github
+     URL: https://github.com/famouslytrill-boop/sonara-os/pull/202
+     Why this is suitable: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: `pnpm run verify:launch` green across **26 commands**. **2,525 tests** passing across 214 files. `server.js` is **4,044 lines**. 291 registered routes, 99 migrations, 160 register records, 275 documented API operations across 199 paths, 15 free calculators, 15 builtin prompts.  > Earlier narratives for this branch are preserved in the commit history and in `docs/SPRINT_LOG.md`, which is the hand-written record. This description covers the work that most distinguishes the branch from `main`.  ---  # 1. The recurring defect, found five more times  The pattern this branch keeps hitting is not broken code. It is **a table with exactly the right columns that nothing at runtime has ever read**, or **a check that reports success without being true**. Both turned up repeatedly.  - **`service_comments`** — the reply thread on a service request. No runtime reader or writer, and no request detail p
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "The gate that was never built, the application that could not run, and what Team actually sells" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $79.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/famouslytrill-boop/sonara-os/pull/202
+3. [I’m building a self-hosted control plane for GitHub and AI coding agents](https://www.reddit.com/r/SideProject/comments/1vueihd/im_building_a_selfhosted_control_plane_for_github/)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -123,9 +153,9 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Wayfinder map: StoneReader final UI design
-     Source: github
-     URL: https://github.com/akj/stonereader/issues/17
+     Lead: I’m building a self-hosted control plane for GitHub and AI coding agents
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vueihd/im_building_a_selfhosted_control_plane_for_github/
      Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
      
@@ -136,25 +166,76 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: ## Destination
-      
-      A locked UI design spec for StoneReader's final shape: an app-wide keyboard-navigation contract (ADR), screen topology and information architecture (ADR), module seams for input/announcement/navigation (ADR), and a per-surface UI spec — detailed enough that implementation PRDs can be opened against it with nothing left to decide.
-      
-      ## Notes
-      
-      - Consult `/grilling` + `/domain-modeling` on every grilling ticket; `/prototype` for prototype work; `/research` for research tickets. Domain language lives in `CONTEXT.md`; keymap policy in ADR-0003.
-      - **Charting decisions** (locked while naming the destination, 2026-08-13):
-        - **Audience**: screen-reader users only. `CONTEXT.md` keeps its User definition. Firestone/HSDT are feature inspiration, not architecture models (both have zero shipped screen-reader support).
-        - **Platform**: stay native wxPython. Web/Electron rejec
+     Request excerpt: AI coding agents could do the work, but I still had to coordinate everything across GitHub, terminals, CI, and scattered bot comments. So I built Companion. Companion is an open-source, self-hosted control plane for managing GitHub repositories with agents such as Codex, Claude Code, Moxxy (my own harness - feel free to check it out!), or a built-in runtime. I&#39;m using my personal subscriptions (it auto-detects them), but you&#39;re free to use the API version if you need to. Cloud hosted version with full RBAC is also here :) Now, my typical workflow looks like this: Connect a GitHub repository. Pick an issue, pull request, or planned piece of work. Send it to the appropriate agent and runtime. Let several agent runs continue independently. Review their changes, checks, comments, transcripts, and evidence. Approve the final GitHub action when it is ready. Companion brings together: p
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Wayfinder map: StoneReader final UI design" and can make a small working version.
+     Hi, I found your request about "I’m building a self-hosted control plane for GitHub and AI coding agents" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/akj/stonereader/issues/17
-3. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/496)
+     Reference: https://www.reddit.com/r/SideProject/comments/1vueihd/im_building_a_selfhosted_control_plane_for_github/
+4. [vatnode — turned my own "ugh, VIES SOAP again" problem into a small API](https://www.reddit.com/r/SideProject/comments/1vue5qc/vatnode_turned_my_own_ugh_vies_soap_again_problem/)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: vatnode — turned my own "ugh, VIES SOAP again" problem into a small API
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vue5qc/vatnode_turned_my_own_ugh_vies_soap_again_problem/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Side project that&#39;s actually live: an EU VAT number validation API. The EU Commission runs a free service for this (VIES) but it&#39;s SOAP over WSDL, no cache, and the error handling is a MS_UNAVAILABLE / SERVICE_UNAVAILABLE mess that&#39;s genuinely annoying to code against. I wrapped it: clean JSON in/out, 15-min cache, fallback to the national tax registry for the handful of countries where VIES itself is unreliable (CZ/DE/PL/RO), bulk validation, daily monitoring + webhooks for customers whose VAT number goes invalid after the fact, and the &quot;consultation number&quot; auditors in France/Germany actually ask for. Free tier, no card. Would love feedback, especially from anyone who&#39;s fought with VIES directly and can tell me what I&#39;m still missing. https://vatnode.dev &#32; submitted by &#32; /u/Total-Reasonable [link] &#32; [comments]
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "vatnode — turned my own "ugh, VIES SOAP again" problem into a small API" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1vue5qc/vatnode_turned_my_own_ugh_vies_soap_again_problem/
+5. [My project board is mostly on autopilot now.](https://www.reddit.com/r/SideProject/comments/1vuapk1/my_project_board_is_mostly_on_autopilot_now/)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: My project board is mostly on autopilot now.
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vuapk1/my_project_board_is_mostly_on_autopilot_now/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Hey everyone, Karsten here. Solo founder of Claire, an AI-first project management tool. I&#39;ll try to describe it without the landing page voice. The short version: every PM tool waits for you. You keep the board current, you set the priorities, you notice what slips. Claire doesn&#39;t wait. It schedules tasks into the free space in your week, suggests priorities, and flags problems before you see them. And when you want to know something, you ask the board. That last part is what I use most. In the morning I ask the board what needs attention. It reads everything and answers in a couple of seconds: one deadline is tight, one task got five new comments overnight, here are the links. That replaced my scrolling and most of my status checking. Second thing: agents live inside tasks. You mention them like a coworker. &quot;@Claire, summarise this comment thread into the task description.
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "My project board is mostly on autopilot now." and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1vuapk1/my_project_board_is_mostly_on_autopilot_now/
+6. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/496)
    - Score: 96/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -184,19 +265,19 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/nubenetes/awesome-kubernetes/pull/496
-4. [The gate that was never built, the application that could not run, and what Team actually sells](https://github.com/famouslytrill-boop/sonara-os/pull/202)
-   - Score: 95/100
-   - Value signal: $79.00
-   - Why: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+7. [I built the thing that picks the meme for me. No stock footage, no AI-generated images, no hour of scrolling a folder](https://www.reddit.com/r/SideProject/comments/1vubzx8/i_built_the_thing_that_picks_the_meme_for_me_no/)
+   - Score: 96/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: The gate that was never built, the application that could not run, and what Team actually sells
-     Source: github
-     URL: https://github.com/famouslytrill-boop/sonara-os/pull/202
-     Why this is suitable: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     Lead: I built the thing that picks the meme for me. No stock footage, no AI-generated images, no hour of scrolling a folder
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vubzx8/i_built_the_thing_that_picks_the_meme_for_me_no/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -205,16 +286,16 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: `pnpm run verify:launch` green across **26 commands**. **2,299 tests** passing across 202 files. `server.js` is **4,035 lines**. 288 registered routes, 96 migrations, 160 register records, 270 documented API operations across 194 paths, 15 free calculators, 15 builtin prompts.  &gt; Earlier narratives for this branch are preserved in the commit history and in `docs/SPRINT_LOG.md`, which is the hand-written record. This description covers the work that most distinguishes the branch from `main`.  ---  # 1. The recurring defect, found five more times  The pattern this branch keeps hitting is not broken code. It is **a table with exactly the right columns that nothing at runtime has ever read**, or **a check that reports success without being true**. Both turned up repeatedly.  - **`service_comments`** — the reply thread on a service request. No runtime reader or writer, and no request detai
+     Request excerpt: I make faceless story videos on the side. Writing one takes about twenty minutes. Then I&#39;d lose the next hour in CapCut, scrolling a folder of saved reaction images, looking for the one that fits this line, dropping it on the timeline, nudging it a few frames so it hits on the punchline instead of just after it. Every one of you has the version of this where the fun part takes twenty minutes and the stupid part takes an hour. Everyone right now is building AI that generates images. What I needed was the opposite: AI that finds an image that already exists. A meme is funny partly because you have seen it a thousand times and it arrives carrying everyone else&#39;s use of it. Generate a new one and you get clip art with a caption on it, technically correct and completely unfunny. So the problem was never generation. It was retrieval, on one line at a time. I wrote a script for myself t
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "The gate that was never built, the application that could not run, and what Team actually sells" and can make a small working version.
+     Hi, I found your request about "I built the thing that picks the meme for me. No stock footage, no AI-generated images, no hour of scrolling a folder" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $79.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/famouslytrill-boop/sonara-os/pull/202
-5. [📈 AI Open Source Trends 2026-08-07](https://github.com/stevenko2002/agents-radar/issues/555)
+     Reference: https://www.reddit.com/r/SideProject/comments/1vubzx8/i_built_the_thing_that_picks_the_meme_for_me_no/
+8. [📈 AI Open Source Trends 2026-08-07](https://github.com/stevenko2002/agents-radar/issues/555)
    - Score: 94/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -244,93 +325,3 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/stevenko2002/agents-radar/issues/555
-6. [🤖 AI Agent 每周速递 — 2026-08-17](https://github.com/jojowadaxi/ai-agent-trending/issues/19)
-   - Score: 86/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: 🤖 AI Agent 每周速递 — 2026-08-17
-     Source: github
-     URL: https://github.com/jojowadaxi/ai-agent-trending/issues/19
-     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: # 🤖 AI Agent Trending — 2026-08-17  每周自动抓取 GitHub 上与 AI Agent 相关的热门/新晋项目。  ## Topic: `ai-agent` (按 Stars 排序)  | # | 仓库 | Stars | 语言 | 最近更新 | 简介 | |---|------|-------|------|----------|------| | 1 | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | ⭐ 231,554 | Python | 2026-08-17 | The agent that grows with you | | 2 | [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) | ⭐ 74,394 | Python | 2026-08-16 | Bash is all you need -  A nano claude code–like 「agent harness」, built from 0 to 1 | | 3 | [thedaviddias/Front-End-Checklist](https://github.com/thedaviddias/Front-End-Checklist) | ⭐ 73,540 | MDX | 2026-08-14 | 🗂 The essential checklist for modern web development, for humans and AI agents | | 4 | [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) | ⭐ 72,325 | Python | 2026-08-12 | Give your AI agent eyes to see the
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "🤖 AI Agent 每周速递 — 2026-08-17" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/jojowadaxi/ai-agent-trending/issues/19
-7. [Technical Specification: AI Agent Bot with Token System & Admin CRM](https://github.com/labtgbot/telegram-ai-agent/issues/1)
-   - Score: 84/100
-   - Value signal: $13.00
-   - Why: visible or inferred value around $13.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Technical Specification: AI Agent Bot with Token System & Admin CRM
-     Source: github
-     URL: https://github.com/labtgbot/telegram-ai-agent/issues/1
-     Why this is suitable: visible or inferred value around $13.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: > **Issue Type**: `feature` | **Priority**: `critical` | **Epic**: `telegram-ai-agent-v1`   > **Assignee**: `hive-mind` | **Labels**: `bot`, `tokens`, `crm`, `monetization`, `admin-panel`  ---  ## 🎯 Project Overview  Создание конкурентного продукта на основе **Mira** с внутренней токеновой экономикой, ценообразованием на **50% дешевле** аналогов и профессиональной **CRM-системой** для администрирования.  ### 📊 Competitive Analysis (Mira Pricing)  | Пакет Mira | Stars | Наши цены (-50%) | Экономия | |------------|-------|------------------|----------| | 500 токенов | 500 ⭐ | **250 ⭐** | 250 ⭐ | | 1,200 токенов (-17%) | 1,000 ⭐ | **500 ⭐** | 500 ⭐ | | 2,000 токенов (-25%) | 1,500 ⭐ | **750 ⭐** | 750 ⭐ | | Mira Pro (месяц) | 999 ⭐ (~$13) | **500 ⭐ (~$6.50)** | 499 ⭐ |  ---  ## 🏗️ System Architecture  ```mermaid graph TB     A[Telegram User] --> B[Telegram Bot API]     A --> C[Mini App Inter
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Technical Specification: AI Agent Bot with Token System & Admin CRM" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $13.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/labtgbot/telegram-ai-agent/issues/1
-8. [Repos created or updated in the past week](https://github.com/Z-Arghavan/awesome-digital-built-environment/issues/7)
-   - Score: 84/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Repos created or updated in the past week
-     Source: github
-     URL: https://github.com/Z-Arghavan/awesome-digital-built-environment/issues/7
-     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Automatically discovered repositories that may fit this awesome list. Review each one, then either add it to README.md or check it off if not relevant.  ### BIM / IFC tools - [ ] [pascalorg/editor](https://github.com/pascalorg/editor) (21443 stars): Create and share 3D architectural projects. - [ ] [opf/openproject](https://github.com/opf/openproject) (15864 stars): OpenProject is the leading open source project management software for product, project and portfolio management. A... - [ ] [assimp/assimp](https://github.com/assimp/assimp) (13136 stars): The official Open-Asset-Importer-Library Repository. Loads 40+ 3D-file-formats into one unified and clean data... - [ ] [eunomia-bpf/ActPlane](https://github.com/eunomia-bpf/ActPlane) (89 stars): eBPF Information Flow Enforcement for AI Agent safety, security and effectiveness - [ ] [QuantumNovice/awesome-civil-engineering](https://github.
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Repos created or updated in the past week" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/Z-Arghavan/awesome-digital-built-environment/issues/7

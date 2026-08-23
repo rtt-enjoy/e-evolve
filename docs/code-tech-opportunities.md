@@ -1,6 +1,6 @@
 # Free AI Earning Queue
 
-Refreshed: 2026-08-22T14:39:30.211143+00:00
+Refreshed: 2026-08-23T14:40:58.425077+00:00
 Daily target: $10.00
 
 Suggestions favour free AI services and free AI APIs with zero upfront cost.
@@ -17,12 +17,69 @@ Suggestions favour free AI services and free AI APIs with zero upfront cost.
 
 ## Current Best Angle
 
-Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: '{\n  "summary": "The strongest immediate angle
+The strongest current angle is packaging free-tier LLM, transcription, and image APIs into fixed-price micro-services (e.g., $5–$20 per batch) that solve a specific, repeatable workflow for small businesses — no audience, no ads, no upfront spend, and startable in under two hours.
+
+## Free AI Services To Use
+
+| Service | What it does | Free tier | Card? | How to earn | Price guide |
+| --- | --- | --- | --- | --- | --- |
+| Hugging Face Inference API | Serverless inference for 100k+ open models (LLM, embeddings, ASR, translation, summarization) | 30k tokens/month for most models; rate-limited; verify current limit | no | Resell a 'summarize 50 PDFs to 1-page bullets' batch job for $15 per 50 files | $10–$20 per batch of 50 documents |
+| Groq Cloud API | Ultra-fast Llama/Mistral/Gemma inference (LPU hardware) | 14,400 requests/day, 30k tokens/minute; verify current limit | no | Offer 'instant first-draft blog posts from outlines' — 10 posts for $25 | $20–$30 per 10 articles |
+| DeepInfra API | Low-cost hosted open models (LLM, Whisper, Stable Diffusion, embeddings) | ~1M tokens/month free across models; verify current limit | no | Sell 'transcribe + summarize 60-min meeting recordings' at $8 per hour of audio | $5–$10 per hour of audio |
+| remove.bg API | Automatic background removal for images | 50 free credits/month (1 credit = 1 image up to 0.25 MP); verify current limit | no | Bundle into 'clean 100 product photos for Shopify' fixed-price gig at $30 | $25–$40 per 100 images |
+| LibreTranslate (self-hosted or public instance) | Open-source translation API (100+ languages) | Public instance: unlimited with rate limits; self-hosted: free on any CPU | no | Charge $0.02/word to translate SRT subtitles using your own hosted instance | $10–$15 per 1k words |
+| Whisper.cpp (local) / Hugging Face Whisper API | Speech-to-text transcription (multilingual, timestamps) | Local: unlimited on own CPU/GPU; HF API: 30k tokens/month; verify current limit | no | Done-for-you: 'Send me 5 hours of voice memos, get clean .txt + .srt' for $20 | $15–$25 per 5 hours audio |
+| Hugging Face Spaces (CPU free tier) | Host Gradio/Streamlit/Docker apps with persistent CPU and 16 GB RAM | Unlimited CPU spaces, sleeps after inactivity; verify current limit | no | Deploy a one-page 'PDF → JSON extractor' tool and sell access for $10 one-time | $10–$20 per tool license |
+| GitHub Actions (free minutes) | Scheduled CI/CD compute (2,000 min/month on Ubuntu runners) | 2,000 minutes/month for private repos; verify current limit | no | Build a nightly 'competitor price scrape + LLM summary' report delivered via email for $30/mo | $25–$40 per month per report |
+| Qdrant Cloud (free tier) | Managed vector database with filtering and payload | 1 GB storage, 1M vectors; verify current limit | verify | Set up a 'semantic search over your Notion/Google Docs' index for a client at $50 setup fee | $40–$60 one-time setup |
+| Ollama (local) | Run Llama 3, Mistral, Phi-3, Gemma locally on CPU/GPU | Unlimited on own hardware | no | Sell a 'private LLM chatbot configured on your laptop' setup service for $100 | $80–$120 per setup |
+
+## Easy Earning Ideas
+
+1. **Batch PDF Summarizer**
+   - Who pays: Consultants, researchers, legal assistants drowning in PDFs
+   - Deliverable: CSV with filename, 3-bullet summary, key entities, page count — delivered in 24h
+   - Price: 15
+   - Time to first dollar: same day
+   - Free stack: Hugging Face Inference API (summarization model) + Python script
+2. **Meeting Audio → Action Items**
+   - Who pays: Project managers, freelance developers, small agencies
+   - Deliverable: Markdown file per meeting: transcript, decisions, action items with owners, due dates
+   - Price: 8
+   - Time to first dollar: 2-3 days
+   - Free stack: DeepInfra Whisper API + Groq LLM for extraction
+3. **Product Photo Background Cleanup**
+   - Who pays: Etsy sellers, Shopify store owners, dropshippers
+   - Deliverable: 100 PNGs with transparent backgrounds, renamed SKU_001.png, delivered via zip
+   - Price: 30
+   - Time to first dollar: same day
+   - Free stack: remove.bg API (50 free/mo) + local batch script for the rest
+4. **Subtitle Translation Pack**
+   - Who pays: YouTubers, course creators, indie filmmakers
+   - Deliverable: Translated .srt files for 5 languages, timed and QC'd, delivered in 48h
+   - Price: 25
+   - Time to first dollar: 2-3 days
+   - Free stack: LibreTranslate (self-hosted on HF Spaces) + Whisper.cpp for initial transcription
+5. **Weekly Competitor Digest**
+   - Who pays: Founders, product managers, sales leads at B2B SaaS
+   - Deliverable: One-page PDF every Monday: pricing changes, new features, positioning shifts, sourced from public pages
+   - Price: 35
+   - Time to first dollar: 2-3 days
+   - Free stack: GitHub Actions (scheduled scrape) + Groq LLM (summarize) + HF Spaces (host report generator)
+6. **Private LLM Setup Service**
+   - Who pays: Privacy-conscious professionals (lawyers, therapists, accountants)
+   - Deliverable: Ollama installed, model pulled, system prompt tuned, shortcut created, 30-min walkthrough
+   - Price: 100
+   - Time to first dollar: same day
+   - Free stack: Ollama (local) + your prompt library
 
 ## Next Actions
 
-- Review the ranked free-AI leads below and pick the one with the clearest buyer.
-- Verify the free tier limits yourself before quoting a price.
+- Pick ONE idea above, write a 3-sentence offer description, and post it in 2 relevant Facebook/LinkedIn/Slack communities where buyers hang out.
+- Build the minimal delivery script (Python + requests) for that idea today; test with 3 sample files from public datasets.
+- Create a simple intake form (Google Form / Tally) that collects files + email, and a Stripe Payment Link (no monthly fee) for the fixed price.
+- Deliver the first 2 orders manually, document the exact steps, then turn the steps into a checklist you can hand off later.
+- Track time spent vs. revenue for the first 5 orders; if hourly rate > $30, double down; if not, switch to the next idea on the list.
 
 ## Monetization Patterns
 
@@ -115,19 +172,19 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379
-2. [The gate that was never built, the application that could not run, and what Team actually sells](https://github.com/famouslytrill-boop/sonara-os/pull/202)
+2. [I spent months building a dictation app for myself, then open sourced it. Hold a key, speak, and the text appears in whatever app you were i](https://www.reddit.com/r/SideProject/comments/1vw1fjs/i_spent_months_building_a_dictation_app_for/)
    - Score: 100/100
-   - Value signal: $79.00
-   - Why: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: The gate that was never built, the application that could not run, and what Team actually sells
-     Source: github
-     URL: https://github.com/famouslytrill-boop/sonara-os/pull/202
-     Why this is suitable: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     Lead: I spent months building a dictation app for myself, then open sourced it. Hold a key, speak, and the text appears in whatever app you were i
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vw1fjs/i_spent_months_building_a_dictation_app_for/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -136,16 +193,46 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: `pnpm run verify:launch` green across **26 commands**. **2,525 tests** passing across 214 files. `server.js` is **4,044 lines**. 291 registered routes, 99 migrations, 160 register records, 275 documented API operations across 199 paths, 15 free calculators, 15 builtin prompts.  > Earlier narratives for this branch are preserved in the commit history and in `docs/SPRINT_LOG.md`, which is the hand-written record. This description covers the work that most distinguishes the branch from `main`.  ---  # 1. The recurring defect, found five more times  The pattern this branch keeps hitting is not broken code. It is **a table with exactly the right columns that nothing at runtime has ever read**, or **a check that reports success without being true**. Both turned up repeatedly.  - **`service_comments`** — the reply thread on a service request. No runtime reader or writer, and no request detail p
+     Request excerpt: I dictate a lot of prompts and I got tired of typing them. Every existing option wanted an account, a subscription, or both, and sent my audio somewhere by default. So I built DictateFlow AI . Hold a shortcut, speak, release. The text lands in whatever app had focus. What makes it different from the paid ones: It can run fully offline. Pick the local engine and after a one-time model download the app never touches the network again. Or use Groq for cloud speed - your call, switchable in the title bar. No account. No login. No subscription. Everything is a SQLite file on your disk. Transform - tap a different shortcut and an LLM rewrites the text already in your field, in place. I use it to turn rough dictated prompts into structured ones before hitting send in ChatGPT. A personal dictionary that permanently fixes the proper nouns transcribers always mangle. History with audio playback, p
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "The gate that was never built, the application that could not run, and what Team actually sells" and can make a small working version.
+     Hi, I found your request about "I spent months building a dictation app for myself, then open sourced it. Hold a key, speak, and the text appears in whatever app you were i" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $79.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/famouslytrill-boop/sonara-os/pull/202
-3. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/496)
+     Reference: https://www.reddit.com/r/SideProject/comments/1vw1fjs/i_spent_months_building_a_dictation_app_for/
+3. [I spent months building a dictation app for myself, then open sourced it. Hold a key, speak, and the text appears in whatever app you were i](https://www.reddit.com/r/SideProject/comments/1vw1cpm/i_spent_months_building_a_dictation_app_for/)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: I spent months building a dictation app for myself, then open sourced it. Hold a key, speak, and the text appears in whatever app you were i
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vw1cpm/i_spent_months_building_a_dictation_app_for/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: I dictate a lot of prompts and I got tired of typing them. Every existing option wanted an account, a subscription, or both, and sent my audio somewhere by default. So I built DictateFlow AI . Hold a shortcut, speak, release. The text lands in whatever app had focus. What makes it different from the paid ones: It can run fully offline. Pick the local engine and after a one-time model download the app never touches the network again. Or use Groq for cloud speed - your call, switchable in the title bar. No account. No login. No subscription. Everything is a SQLite file on your disk. Transform - tap a different shortcut and an LLM rewrites the text already in your field, in place. I use it to turn rough dictated prompts into structured ones before hitting send in ChatGPT. A personal dictionary that permanently fixes the proper nouns transcribers always mangle. History with audio playback, p
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "I spent months building a dictation app for myself, then open sourced it. Hold a key, speak, and the text appears in whatever app you were i" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1vw1cpm/i_spent_months_building_a_dictation_app_for/
+4. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/496)
    - Score: 96/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -175,17 +262,47 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/nubenetes/awesome-kubernetes/pull/496
-4. [📈 AI Open Source Trends 2026-08-07](https://github.com/stevenko2002/agents-radar/issues/555)
-   - Score: 94/100
+5. [Built a free temp-mail API for testing email flows — no signup, real webhooks](https://www.reddit.com/r/SideProject/comments/1vw1e5n/built_a_free_tempmail_api_for_testing_email_flows/)
+   - Score: 92/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: Built a free temp-mail API for testing email flows — no signup, real webhooks
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vw1e5n/built_a_free_tempmail_api_for_testing_email_flows/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Kept running into the same problem testing signup/verification flows: every temp-mail API I tried was either paywalled after a few requests or so rate-limited it wasn&#39;t usable in CI. So I built TempMail.name. Free tier, no credit card: create an inbox via API, poll or register a webhook for email.received, done. Also detects OTP codes and verification links automatically if you want to grab them programmatically instead of parsing the body yourself. There&#39;s also a set of free email tools if you&#39;re debugging deliverability — SPF/DKIM/DMARC checkers and an MX lookup, no signup needed for those. Not trying to oversell it — API key issuance is still manual (admin mints keys, no self-serve signup yet) since there&#39;s no user-account system. Happy to hand out a key if anyone here wants to try it in a real project. Repo&#39;s closed-source for now but the API docs are public: temp
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "Built a free temp-mail API for testing email flows — no signup, real webhooks" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1vw1e5n/built_a_free_tempmail_api_for_testing_email_flows/
+6. [After 8 years building apps for other people, I finally shipped one that's mine](https://www.reddit.com/r/SideProject/comments/1vvyovm/after_8_years_building_apps_for_other_people_i/)
+   - Score: 92/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: 📈 AI Open Source Trends 2026-08-07
-     Source: github
-     URL: https://github.com/stevenko2002/agents-radar/issues/555
+     Lead: After 8 years building apps for other people, I finally shipped one that's mine
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vvyovm/after_8_years_building_apps_for_other_people_i/
      Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
      
@@ -196,16 +313,46 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: # AI Open Source Trends 2026-08-07  > Sources: GitHub Trending + GitHub Search API | Generated: 2026-08-06 22:16 UTC  ---  Got it, let's tackle this step by step. First, I need to do Step 1: filter all the non-AI related repos first. Let's go through the original trending list first: First, the 13 trending repos: 1. TencentCloud/TencentDB-Agent-Memory: AI Agent memory, AI related ✔️ 2. addyosmani/agent-skills: AI coding agent skills, AI related ✔️ 3. cloudflare/computer: gives agents a computer, agent tooling, AI related ✔️ 4. mattpocock/skills: real engineer skills for agents, AI related ✔️ 5. goauthentik/authentik: auth tool, general, not AI ❌ skip 6. huangruiteng/loopx: AI agent loop kernel, AI related ✔️ 7. google/guava: Java general lib, not AI ❌ skip 8. TapXWorld/ChinaTextbook: textbook repo, not AI ❌ skip 9. Significant-Gravitas/AutoGPT: AI agent framework, AI related ✔️ 10. tirth
+     Request excerpt: For 8 years I&#39;ve built iOS apps for clients. Somebody else&#39;s idea, somebody else&#39;s roadmap, somebody else&#39;s name on the App Store. It was good work and it paid the bills, but at some point you realize you&#39;ve shipped a dozen apps and none of them are yours. So this year I finally built my own. I still have the full time job, so this happened in evenings and weekends, which I know is the least original founder story on this sub, but here we are. The idea came from a dumb daily annoyance. I&#39;d say things to Siri while driving and half the time it would save something wrong, or dump a whole thought into one useless reminder, and I never got a chance to check what it actually understood before it was gone. So I built a thing where you just talk, it pulls out the tasks, reminders and events, and shows you what it got before saving anything into Apple&#39;s Reminders and
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "📈 AI Open Source Trends 2026-08-07" and can make a small working version.
+     Hi, I found your request about "After 8 years building apps for other people, I finally shipped one that's mine" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/stevenko2002/agents-radar/issues/555
-5. [🤖 AI Agent 每周速递 — 2026-08-17](https://github.com/jojowadaxi/ai-agent-trending/issues/19)
+     Reference: https://www.reddit.com/r/SideProject/comments/1vvyovm/after_8_years_building_apps_for_other_people_i/
+7. [I built an AI Factory that turns GitHub repos into custom n8n nodes — looking for honest feedback](https://www.reddit.com/r/SideProject/comments/1vw23ck/i_built_an_ai_factory_that_turns_github_repos/)
+   - Score: 89/100
+   - Value signal: $250.00
+   - Why: visible or inferred value around $250.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: I built an AI Factory that turns GitHub repos into custom n8n nodes — looking for honest feedback
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vw23ck/i_built_an_ai_factory_that_turns_github_repos/
+     Why this is suitable: visible or inferred value around $250.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: I built an AI Factory that turns GitHub repositories, libraries and documentation into custom n8n nodes. The goal is to automate the difficult part of building integrations: GitHub repo / API / docs + natural-language requirement → AI analyzes the repository → designs the n8n node → generates TypeScript + credentials + tests → builds and tests it → automatically repairs failures → runs security checks → packages the final node The current system has 79 n8n nodes and 9 specialized AI agents, with MCP-based GitHub, documentation and filesystem integrations. The core product is already built. Right now I&#39;m trying to understand its real-world value before taking it to the next stage. I&#39;d really appreciate honest feedback: • From 1–10, how valuable does this sound to you? • Would this save you meaningful development time? • What would you expect a tool like this to do before you would
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "I built an AI Factory that turns GitHub repos into custom n8n nodes — looking for honest feedback" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $250.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1vw23ck/i_built_an_ai_factory_that_turns_github_repos/
+8. [🤖 AI Agent 每周速递 — 2026-08-17](https://github.com/jojowadaxi/ai-agent-trending/issues/19)
    - Score: 86/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -235,93 +382,3 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/jojowadaxi/ai-agent-trending/issues/19
-6. [Technical Specification: AI Agent Bot with Token System & Admin CRM](https://github.com/labtgbot/telegram-ai-agent/issues/1)
-   - Score: 84/100
-   - Value signal: $13.00
-   - Why: visible or inferred value around $13.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Technical Specification: AI Agent Bot with Token System & Admin CRM
-     Source: github
-     URL: https://github.com/labtgbot/telegram-ai-agent/issues/1
-     Why this is suitable: visible or inferred value around $13.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: > **Issue Type**: `feature` | **Priority**: `critical` | **Epic**: `telegram-ai-agent-v1`   > **Assignee**: `hive-mind` | **Labels**: `bot`, `tokens`, `crm`, `monetization`, `admin-panel`  ---  ## 🎯 Project Overview  Создание конкурентного продукта на основе **Mira** с внутренней токеновой экономикой, ценообразованием на **50% дешевле** аналогов и профессиональной **CRM-системой** для администрирования.  ### 📊 Competitive Analysis (Mira Pricing)  | Пакет Mira | Stars | Наши цены (-50%) | Экономия | |------------|-------|------------------|----------| | 500 токенов | 500 ⭐ | **250 ⭐** | 250 ⭐ | | 1,200 токенов (-17%) | 1,000 ⭐ | **500 ⭐** | 500 ⭐ | | 2,000 токенов (-25%) | 1,500 ⭐ | **750 ⭐** | 750 ⭐ | | Mira Pro (месяц) | 999 ⭐ (~$13) | **500 ⭐ (~$6.50)** | 499 ⭐ |  ---  ## 🏗️ System Architecture  ```mermaid graph TB     A[Telegram User] --> B[Telegram Bot API]     A --> C[Mini App Inter
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Technical Specification: AI Agent Bot with Token System & Admin CRM" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $13.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/labtgbot/telegram-ai-agent/issues/1
-7. [📈 AI Open Source Trends 2026-08-14](https://github.com/stevenko2002/agents-radar/issues/685)
-   - Score: 84/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: 📈 AI Open Source Trends 2026-08-14
-     Source: github
-     URL: https://github.com/stevenko2002/agents-radar/issues/685
-     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: # AI Open Source Trends 2026-08-14  > Sources: GitHub Trending + GitHub Search API | Generated: 2026-08-13 22:15 UTC  ---  Got it, let's tackle this report step by step. First, I need to do Step 1: Filter out non-AI projects from the trending list and the topic search. First, let's look at the 17 trending repos. Let's go one by one: 1. cathrynlavery/diagram-design: It's for Claude Code diagram types, AI-adjacent but wait, is it core AI? Wait no, wait it's a tool for AI coding agents, right? Wait no, let's check: it's 29 diagram types for Claude Code, self-contained HTML/SVG. Oh right, it's a skill/tool for AI coding agents, so AI relevant. 2. semantica-agi/semantica: Graph-native for accountable AI, definitely AI. 3. anthropics/skills: Public Agent Skills for Anthropic, AI agent related, yes. 4. cactus-compute/needle: 14MB foundation model for tiny devices, core AI/LLM, yes. 5. altic-dev
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "📈 AI Open Source Trends 2026-08-14" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/stevenko2002/agents-radar/issues/685
-8. [📈 AI Open Source Trends 2026-08-17](https://github.com/xavier9802/agents-radar/issues/361)
-   - Score: 76/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: 📈 AI Open Source Trends 2026-08-17
-     Source: github
-     URL: https://github.com/xavier9802/agents-radar/issues/361
-     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: # AI Open Source Trends 2026-08-17  > Sources: GitHub Trending + GitHub Search API | Generated: 2026-08-17 01:42 UTC  ---    # AI Open Source Trends Report — August 17, 2026  ---  ## 1. Today's Highlights  The most striking development today is the rapid maturation of **local-first agent infrastructures**: Unsloth, Ollama, and Needle collectively signal that running LLMs on personal hardware is shifting from niche experiment to baseline workflow. The trending list also highlights **Cactus Compute's Needle** — a mere 14 MB foundation model targeting phones, wearables, and robots — which marks a dramatic compression of capability into edge-deployable packages. Meanwhile, the agent ecosystem continues its explosive growth, with tools like Agent-Reach and Claude-Mem demonstrating that the next competitive frontier is **context persistence and web-scale information access**, not just model si
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "📈 AI Open Source Trends 2026-08-17" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/xavier9802/agents-radar/issues/361

@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-22T23:35:36.415948+00:00",
-  "total_runs": 1622,
+  "last_run": "2026-08-23T02:00:00.886175+00:00",
+  "total_runs": 1623,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -50,7 +50,17 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "Running an Office of AI Clones in Production with Munder Difflin",
+        "url": "https://dev.to/robust_true_try/running-an-office-of-ai-clones-in-production-with-munder-difflin-1fhk",
+        "estimated_usd": 0.0,
+        "source_url": "https://munderdiffl.in/",
+        "source_title": "Munder Difflin \u2013 Agent harness to run an office of your clones"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -68,7 +78,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 166,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -155,8 +165,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-08-22",
-    "published": 17
+    "date": "2026-08-23",
+    "published": 18
   },
   "code_tech_earning": {
     "enabled": true,
@@ -412,7 +422,8 @@
       "quantum5.ca/2026/08/16/fixing-bricked-amd-7040-series-framework-13-laptop-with-20-tools",
       "yassa9.github.io/osint/gralhix-004",
       "safedep.io/arrayref-proc-macro1-rust-build-time-malware",
-      "nytimes.com/2026/08/21/us/politics/samuel-tunick-deleted-phone-felony.html"
+      "nytimes.com/2026/08/21/us/politics/samuel-tunick-deleted-phone-felony.html",
+      "munderdiffl.in"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -431,7 +442,8 @@
       "fixing bricked framework laptop",
       "geolocating random island geometry cuda programming",
       "maliciou rust crate arrayref runs build time payload",
-      "felony charg citizen deleting phone data us border"
+      "felony charg citizen deleting phone data us border",
+      "munder difflin agent harnes run office clon"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -450,7 +462,8 @@
       "recover bricked framework 13 diy usb flash",
       "gpu accelerated island detection satellite imag practical cuda walkthrough",
       "defending rust build maliciou proc macro",
-      "secure phone crossing border"
+      "secure phone crossing border",
+      "running office ai clon production munder difflin"
     ]
   },
   "wallet": {
@@ -461,7 +474,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-22T23:35:36.586863+00:00",
+    "checked_at": "2026-08-23T02:00:03.366750+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0

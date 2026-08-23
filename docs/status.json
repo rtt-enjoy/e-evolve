@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-23T02:00:00.886175+00:00",
-  "total_runs": 1623,
+  "last_run": "2026-08-23T03:16:01.795128+00:00",
+  "total_runs": 1624,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -50,17 +50,7 @@
     "error": null
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Running an Office of AI Clones in Production with Munder Difflin",
-        "url": "https://dev.to/robust_true_try/running-an-office-of-ai-clones-in-production-with-munder-difflin-1fhk",
-        "estimated_usd": 0.0,
-        "source_url": "https://munderdiffl.in/",
-        "source_title": "Munder Difflin \u2013 Agent harness to run an office of your clones"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -78,7 +68,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 166,
+  "last_cycle_seconds": 1,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -474,7 +464,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-23T02:00:03.366750+00:00",
+    "checked_at": "2026-08-23T03:16:01.989284+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0

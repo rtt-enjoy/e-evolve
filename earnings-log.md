@@ -1428,3 +1428,9 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-08-23 14:44 UTC
 
 - [ok] **code_techs**: [Code-tech queue refreshed (8 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+
+## Week 2026-08-17 — $0.0000 (code_techs: $0.0000, dev.to: $0.0000)
+
+### 2026-08-24 02:03 UTC
+
+- [ok] **dev.to**: [Run Legacy DOS Apps in CI with MartyPC](https://dev.to/robust_true_try/run-legacy-dos-apps-in-ci-with-martypc-1hdm) (est. $0.00)

@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-24T15:01:00.598083+00:00",
-  "total_runs": 1658,
+  "last_run": "2026-08-24T15:56:10.161116+00:00",
+  "total_runs": 1659,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -50,18 +50,7 @@
     "error": null
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 8,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -79,7 +68,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 420,
+  "last_cycle_seconds": 1,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -478,7 +467,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-24T15:01:01.073585+00:00",
+    "checked_at": "2026-08-24T15:56:10.397081+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0

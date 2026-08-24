@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-24T01:58:18.545972+00:00",
-  "total_runs": 1646,
+  "last_run": "2026-08-24T03:17:04.751552+00:00",
+  "total_runs": 1647,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -49,17 +49,7 @@
     "error": null
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Run Legacy DOS Apps in CI with MartyPC",
-        "url": "https://dev.to/robust_true_try/run-legacy-dos-apps-in-ci-with-martypc-1hdm",
-        "estimated_usd": 0.0,
-        "source_url": "https://martypc.net/",
-        "source_title": "MartyPC is a cross-platform emulator of early PCs written in Rust"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -77,7 +67,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 337,
+  "last_cycle_seconds": 1,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -609,7 +599,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-24T01:58:18.795034+00:00",
+    "checked_at": "2026-08-24T03:17:05.335421+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0

@@ -1,7 +1,7 @@
 {
-  "version": "1.34.0",
-  "last_run": "2026-08-25T05:06:44.650359+00:00",
-  "total_runs": 1674,
+  "version": "1.34.1",
+  "last_run": "2026-08-25T05:14:45.320728+00:00",
+  "total_runs": 1675,
   "active_features": [
     "llm_anthropic",
     "llm_gemini",
@@ -46,7 +46,7 @@
         ]
       }
     ],
-    "version_bumped_to": "1.34.0",
+    "version_bumped_to": "1.34.1",
     "error": null
   },
   "last_earning": {
@@ -134,21 +134,21 @@
   "llm_workflows": {
     "upgrade": {
       "provider": "openrouter",
-      "model": "openai/gpt-oss-20b:free",
+      "model": "stealth/ox-alpha",
       "purpose": "research-only repair suggestions for Codex-owned code changes",
       "active": true,
       "secret": "OPENROUTER_API_KEY"
     },
     "research": {
       "provider": "openrouter",
-      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "model": "stealth/ox-alpha",
       "purpose": "free-AI-service discovery, market research, and earning-suggestion briefs",
       "active": true,
       "secret": "OPENROUTER_API_KEY"
     },
     "post": {
       "provider": "openrouter",
-      "model": "openai/gpt-oss-20b:free",
+      "model": "stealth/ox-alpha",
       "purpose": "article drafting and formatting for publication",
       "active": true,
       "secret": "OPENROUTER_API_KEY"

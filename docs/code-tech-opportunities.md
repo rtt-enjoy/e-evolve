@@ -1,6 +1,6 @@
 # Free AI Earning Queue
 
-Refreshed: 2026-08-24T15:01:01.421884+00:00
+Refreshed: 2026-08-25T15:06:05.814781+00:00
 Daily target: $10.00
 
 Suggestions favour free AI services and free AI APIs with zero upfront cost.
@@ -17,7 +17,7 @@ Suggestions favour free AI services and free AI APIs with zero upfront cost.
 
 ## Current Best Angle
 
-Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: '{\n  "summary": "The strongest immediate angle
+Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: ''
 
 ## Next Actions
 
@@ -115,19 +115,19 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379
-2. [Couldn't find what I was looking for, so I built my first app](https://www.reddit.com/r/SideProject/comments/1vwnngq/couldnt_find_what_i_was_looking_for_so_i_built_my/)
-   - Score: 98/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+2. [I started with a static HTML file containing 12 job boards. 4 years later it passed 100K 💵](https://www.reddit.com/r/SideProject/comments/1vy0fpv/i_started_with_a_static_html_file_containing_12/)
+   - Score: 100/100
+   - Value signal: $100.00
+   - Why: visible or inferred value around $100.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Couldn't find what I was looking for, so I built my first app
+     Lead: I started with a static HTML file containing 12 job boards. 4 years later it passed 100K 💵
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vwnngq/couldnt_find_what_i_was_looking_for_so_i_built_my/
-     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     URL: https://www.reddit.com/r/SideProject/comments/1vy0fpv/i_started_with_a_static_html_file_containing_12/
+     Why this is suitable: visible or inferred value around $100.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -136,27 +136,57 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: first app i&#39;ve ever built, mixed a bit of AI help with the little dev knowledge i had lol. been on the play store for a few days now i know people&#39;s hate for anything AI-related grows more every day, and honestly i get why, but if it&#39;s actually useful for yourself first, i don&#39;t see why not. main thing for me was being able to use this nicely for myself, maybe it fits someone else&#39;s situation too and they get something out of it as well quick story behind the app: when i was learning german i couldn&#39;t find a read-and-learn app that actually worked for me, everything was messy, no reading atmosphere, honestly felt more like a kids game than something for learning a language. so i decided to build it myself you upload your own book (pdf/epub/txt), build your own library, read books in whatever language. tap a word you don&#39;t know or select a sentence and it trans
+     Request excerpt: Over four years ago I had a static HTML file with about a dozen niche job boards. That was JobBoardSearch. Today it has: • 800+ job boards, all submitted organically by their founders • $100K+ lifetime revenue • 26K members in the subreddit • 6K+ members in the Telegram community • Multiple revenue streams • And it&#39;s still mostly just me running it The interesting part is that I never scraped the job boards. Many of the boards provide an API, XML or RSS feed, so I fetch those feeds and reuse the data in several different ways. Each job board has its own page on JobBoardSearch, where I show jobs from its feed. I call this the &quot;meta&quot; part of the site. Those same feeds power: → The main job search → A Reddit bot that posts jobs every hour → A Telegram bot with personalized alerts based on keywords, locations, industries and cadence → SEO pages → And increasingly, AI citations
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Couldn't find what I was looking for, so I built my first app" and can make a small working version.
+     Hi, I found your request about "I started with a static HTML file containing 12 job boards. 4 years later it passed 100K 💵" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $100.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1vwnngq/couldnt_find_what_i_was_looking_for_so_i_built_my/
-3. [how much revenue are you loosing due to missed calls as small business?](https://www.reddit.com/r/SideProject/comments/1vx4qj1/how_much_revenue_are_you_loosing_due_to_missed/)
-   - Score: 97/100
-   - Value signal: $2500.00
-   - Why: visible or inferred value around $2500.00; runs on a free AI tier, so input cost is zero and margin is total
+     Reference: https://www.reddit.com/r/SideProject/comments/1vy0fpv/i_started_with_a_static_html_file_containing_12/
+3. [The gate that was never built, the application that could not run, and what Team actually sells](https://github.com/famouslytrill-boop/sonara-os/pull/202)
+   - Score: 100/100
+   - Value signal: $79.00
+   - Why: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: The gate that was never built, the application that could not run, and what Team actually sells
+     Source: github
+     URL: https://github.com/famouslytrill-boop/sonara-os/pull/202
+     Why this is suitable: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: `pnpm run verify:launch` green across **26 commands**. **2,767 tests** passing across 225 files. `server.js` is **3,838 lines**. 297 registered routes, 100 migrations, 160 register records, 278 documented API operations across 202 paths, 15 free calculators, 15 builtin prompts.  > Earlier narratives for this branch are preserved in the commit history and in `docs/SPRINT_LOG.md`, which is the hand-written record. This description covers the work that most distinguishes the branch from `main`.  ---  # 1. The recurring defect, found five more times  The pattern this branch keeps hitting is not broken code. It is **a table with exactly the right columns that nothing at runtime has ever read**, or **a check that reports success without being true**. Both turned up repeatedly.  - **`service_comments`** — the reply thread on a service request. No runtime reader or writer, and no request detail
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "The gate that was never built, the application that could not run, and what Team actually sells" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $79.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/famouslytrill-boop/sonara-os/pull/202
+4. [I built a screenshot redactor after realizing blur doesn't actually delete anything — here's what I learned](https://www.reddit.com/r/SideProject/comments/1vy1ax6/i_built_a_screenshot_redactor_after_realizing/)
+   - Score: 100/100
+   - Value signal: $39.00
+   - Why: visible or inferred value around $39.00; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: how much revenue are you loosing due to missed calls as small business?
+     Lead: I built a screenshot redactor after realizing blur doesn't actually delete anything — here's what I learned
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vx4qj1/how_much_revenue_are_you_loosing_due_to_missed/
-     Why this is suitable: visible or inferred value around $2500.00; runs on a free AI tier, so input cost is zero and margin is total
+     URL: https://www.reddit.com/r/SideProject/comments/1vy1ax6/i_built_a_screenshot_redactor_after_realizing/
+     Why this is suitable: visible or inferred value around $39.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
      
      Constraints:
@@ -166,16 +196,46 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: built this small free calculator tool to allow us to calculate how much revenue are we loosing due to missed calls and lost customers. https://qexo.ai/tools/missed-call-revenue-calculator On avg, if you receive 100 calls per month, and you miss 25% of them, at avg price per service of 400 dollars, you are roughly loosing out on ~ $2500 or revenue. &#32; submitted by &#32; /u/SuryXBD [link] &#32; [comments]
+     Request excerpt: Been building SnapShield AI for a while — a Windows tool for redacting screenshots before you share them. What got me into this: blur and pixelation are reversible. I tested it myself with deconvolution and found the naive &quot;just blur it&quot; approach fails in exactly the ways people don&#39;t expect. Wrote it up here if you&#39;re curious: https://nexoradia.com/blog/gaussian-blur-is-not-redaction/ The tool actually destroys the pixels instead of covering them, runs fully local (no upload), and I had it security-audited before release — fixed 5 findings in the process. Free tier is fully functional, Pro is a one-time $39 (no subscription). Windows only for now. Happy to answer questions about the build, the security side, or anything else. Try it: https://nexoradia.com &#32; submitted by &#32; /u/farshid_dev [link] &#32; [comments]
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "how much revenue are you loosing due to missed calls as small business?" and can make a small working version.
+     Hi, I found your request about "I built a screenshot redactor after realizing blur doesn't actually delete anything — here's what I learned" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $2500.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $39.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1vx4qj1/how_much_revenue_are_you_loosing_due_to_missed/
-4. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/496)
+     Reference: https://www.reddit.com/r/SideProject/comments/1vy1ax6/i_built_a_screenshot_redactor_after_realizing/
+5. [I built an AI assistant for new parents after almost missing my newborn's jaundice. Launching on Product Hunt today.](https://www.reddit.com/r/SideProject/comments/1vy02es/i_built_an_ai_assistant_for_new_parents_after/)
+   - Score: 97/100
+   - Value signal: $99.00
+   - Why: visible or inferred value around $99.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: I built an AI assistant for new parents after almost missing my newborn's jaundice. Launching on Product Hunt today.
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vy02es/i_built_an_ai_assistant_for_new_parents_after/
+     Why this is suitable: visible or inferred value around $99.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Hi r/SideProject , I&#39;m Warren. My wife Joanna and I took the prenatal class. We sat through the discharge briefing before we left the hospital. We asked questions. But nobody specifically told us what to actually watch for: signs of jaundice, whether he was getting enough colostrum, whether he was feeding enough. By day 4 our son was jaundiced enough that he needed to be admitted for phototherapy. That gap between what we were taught and what we actually needed to know is why we built [Hey Susan]( https://heysusan.app ), an AI assistant for new parents, and we&#39;re launching on Product Hunt today. At 3am on day 4, exhausted, under nursery light, we described what we were seeing to a generic AI chatbot because we didn&#39;t know who else to call at that hour. It flagged the pattern as jaundice and told us to get him checked. We brought him in that morning and his bilirubin was high
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "I built an AI assistant for new parents after almost missing my newborn's jaundice. Launching on Product Hunt today." and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $99.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1vy02es/i_built_an_ai_assistant_for_new_parents_after/
+6. [💎 Knowledge Update & Optimization: 12 Jul 2026](https://github.com/nubenetes/awesome-kubernetes/pull/496)
    - Score: 96/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -205,79 +265,19 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/nubenetes/awesome-kubernetes/pull/496
-5. [Repos created or updated in the past week](https://github.com/Z-Arghavan/awesome-digital-built-environment/issues/7)
-   - Score: 92/100
-   - Value signal: $0.00
-   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Repos created or updated in the past week
-     Source: github
-     URL: https://github.com/Z-Arghavan/awesome-digital-built-environment/issues/7
-     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Automatically discovered repositories that may fit this awesome list. Review each one, then either add it to README.md or check it off if not relevant.  ### BIM / IFC tools - [ ] [pascalorg/editor](https://github.com/pascalorg/editor) (21673 stars): Create and share 3D architectural projects. - [ ] [opf/openproject](https://github.com/opf/openproject) (15915 stars): OpenProject is the leading open source project management software for product, project and portfolio management. A... - [ ] [assimp/assimp](https://github.com/assimp/assimp) (13157 stars): The official Open-Asset-Importer-Library Repository. Loads 40+ 3D-file-formats into one unified and clean data... - [ ] [buildingSMART/Certification-datasets](https://github.com/buildingSMART/Certification-datasets) (345 stars): Sample files of various formats and schema versions. Used for certification purposes.  - [ ] [eunomia-bpf/ActPla
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Repos created or updated in the past week" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/Z-Arghavan/awesome-digital-built-environment/issues/7
-6. [I'm a PM who got tired of writing up meetings, so I spent 4 months building an app that does it. Live on both stores — tear it apart.](https://www.reddit.com/r/SideProject/comments/1vx0eir/im_a_pm_who_got_tired_of_writing_up_meetings_so_i/)
-   - Score: 88/100
-   - Value signal: $0.00
-   - Why: runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start
-   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: I'm a PM who got tired of writing up meetings, so I spent 4 months building an app that does it. Live on both stores — tear it apart.
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1vx0eir/im_a_pm_who_got_tired_of_writing_up_meetings_so_i/
-     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start
-     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: I work as a PM, which means half my job is meetings and the other half is writing up what happened in them. Although I use Gemini notes for online meetings, I didnt like that I have to click into each meeting to see the notes so four months ago I started building a solution (primarily for in-person meetings but also for online ones, where I can create project/folders etc.), and it&#39;s now live on iOS and Android. How it works: record any meeting on your phone, tap once, and it produces six outputs: a summary, formal minutes, action items with owners, decisions, a draft follow-up email, and the full transcript. It also handles close to 100 languages and returns notes in English — a lot of my meetings in the UAE aren&#39;t in English, so that part came first. It&#39;s called MinutedAI. There&#39;s a free tier, and the recent features came directly from early-user complaints. What would m
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "I'm a PM who got tired of writing up meetings, so I spent 4 months building an app that does it. Live on both stores — tear it apart." and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1vx0eir/im_a_pm_who_got_tired_of_writing_up_meetings_so_i/
-7. [🤖 AI Agent 每周速递 — 2026-08-17](https://github.com/jojowadaxi/ai-agent-trending/issues/19)
-   - Score: 86/100
+7. [We rebuilt our AI website builder from scratch — then migrated all 12+ of our own products onto it](https://www.reddit.com/r/SideProject/comments/1vy1ja5/we_rebuilt_our_ai_website_builder_from_scratch/)
+   - Score: 96/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: 🤖 AI Agent 每周速递 — 2026-08-17
-     Source: github
-     URL: https://github.com/jojowadaxi/ai-agent-trending/issues/19
+     Lead: We rebuilt our AI website builder from scratch — then migrated all 12+ of our own products onto it
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vy1ja5/we_rebuilt_our_ai_website_builder_from_scratch/
      Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -286,28 +286,28 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: # 🤖 AI Agent Trending — 2026-08-17  每周自动抓取 GitHub 上与 AI Agent 相关的热门/新晋项目。  ## Topic: `ai-agent` (按 Stars 排序)  | # | 仓库 | Stars | 语言 | 最近更新 | 简介 | |---|------|-------|------|----------|------| | 1 | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | ⭐ 231,554 | Python | 2026-08-17 | The agent that grows with you | | 2 | [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) | ⭐ 74,394 | Python | 2026-08-16 | Bash is all you need -  A nano claude code–like 「agent harness」, built from 0 to 1 | | 3 | [thedaviddias/Front-End-Checklist](https://github.com/thedaviddias/Front-End-Checklist) | ⭐ 73,540 | MDX | 2026-08-14 | 🗂 The essential checklist for modern web development, for humans and AI agents | | 4 | [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) | ⭐ 72,325 | Python | 2026-08-12 | Give your AI agent eyes to see the
+     Request excerpt: Sharing this because the pivot was a bigger leap than it looked from the outside. I&#39;m on the team at Modulify. For the last couple of years we built as a Webflow accelerator — our AI assembled sites from pre-built components, and the built site would be exported into Webflow to publish, host, and manage the CMS. We sped up the building part, but Webflow did everything downstream. Worked well for Webflow users, but it capped us at a specific audience and left the parts that mattered most — publishing, hosting, data, auth — on someone else&#39;s platform. We&#39;ve now launched v2 as a full standalone platform. Proper AI code generation, own hosting, built-in CMS, database, authentication, analytics, forms, and more — all under one subscription. Free subdomain is out of the box, and you can connect a custom domain whenever you&#39;re ready. But the harder decision was betting on it our
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "🤖 AI Agent 每周速递 — 2026-08-17" and can make a small working version.
+     Hi, I found your request about "We rebuilt our AI website builder from scratch — then migrated all 12+ of our own products onto it" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/jojowadaxi/ai-agent-trending/issues/19
-8. [Technical Specification: AI Agent Bot with Token System & Admin CRM](https://github.com/labtgbot/telegram-ai-agent/issues/1)
-   - Score: 84/100
-   - Value signal: $13.00
-   - Why: visible or inferred value around $13.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     Reference: https://www.reddit.com/r/SideProject/comments/1vy1ja5/we_rebuilt_our_ai_website_builder_from_scratch/
+8. [I built a Hacker News reader users can modify locally with an AI agent — useful idea or maintenance nightmare?](https://www.reddit.com/r/SideProject/comments/1vxybmp/i_built_a_hacker_news_reader_users_can_modify/)
+   - Score: 96/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Technical Specification: AI Agent Bot with Token System & Admin CRM
-     Source: github
-     URL: https://github.com/labtgbot/telegram-ai-agent/issues/1
-     Why this is suitable: visible or inferred value around $13.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     Lead: I built a Hacker News reader users can modify locally with an AI agent — useful idea or maintenance nightmare?
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1vxybmp/i_built_a_hacker_news_reader_users_can_modify/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -316,12 +316,12 @@ Online AI brief failed; used online search and local scoring only. Error: Could 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: > **Issue Type**: `feature` | **Priority**: `critical` | **Epic**: `telegram-ai-agent-v1`   > **Assignee**: `hive-mind` | **Labels**: `bot`, `tokens`, `crm`, `monetization`, `admin-panel`  ---  ## 🎯 Project Overview  Создание конкурентного продукта на основе **Mira** с внутренней токеновой экономикой, ценообразованием на **50% дешевле** аналогов и профессиональной **CRM-системой** для администрирования.  ### 📊 Competitive Analysis (Mira Pricing)  | Пакет Mira | Stars | Наши цены (-50%) | Экономия | |------------|-------|------------------|----------| | 500 токенов | 500 ⭐ | **250 ⭐** | 250 ⭐ | | 1,200 токенов (-17%) | 1,000 ⭐ | **500 ⭐** | 500 ⭐ | | 2,000 токенов (-25%) | 1,500 ⭐ | **750 ⭐** | 750 ⭐ | | Mira Pro (месяц) | 999 ⭐ (~$13) | **500 ⭐ (~$6.50)** | 499 ⭐ |  ---  ## 🏗️ System Architecture  ```mermaid graph TB     A[Telegram User] --> B[Telegram Bot API]     A --> C[Mini App Inter
+     Request excerpt: Disclosure: I built both the Hacker News Reader and DeepDeck, the open-source desktop environment it runs on. DeepDeck is based on DeepSeek Harness, but it is not an official DeepSeek product. At first glance, the reader is fairly conventional: Top/New/Best/Ask/Show/Jobs feeds, search, complete comment trees, profiles, and Explain or Summarize actions backed by normal Harness sessions. The experiment is elsewhere: I do not want an installed app to remain a fixed artifact that only its original author can change. From the app&#39;s settings, a user can open a Creator workspace bound to the local source, describe a change to an agent, rebuild with Bun, and hot-reload the Cordis Host and Client into the running app. The intended loop is: Find something awkward while actually using the app. Ask an agent to change the local source. Build and use the modified version on your own machine. Keep
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Technical Specification: AI Agent Bot with Token System & Admin CRM" and can make a small working version.
+     Hi, I found your request about "I built a Hacker News reader users can modify locally with an AI agent — useful idea or maintenance nightmare?" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $13.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://github.com/labtgbot/telegram-ai-agent/issues/1
+     Reference: https://www.reddit.com/r/SideProject/comments/1vxybmp/i_built_a_hacker_news_reader_users_can_modify/

@@ -1,7 +1,7 @@
 {
   "version": "1.33.0",
-  "last_run": "2026-08-25T03:13:05.151631+00:00",
-  "total_runs": 1669,
+  "last_run": "2026-08-25T04:01:08.689114+00:00",
+  "total_runs": 1670,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -50,17 +50,7 @@
     "error": null
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Preserve Your Coding Edge While Using AI Pair Programmers",
-        "url": "https://dev.to/robust_true_try/preserve-your-coding-edge-while-using-ai-pair-programmers-2690",
-        "estimated_usd": 0.0,
-        "source_url": "https://larsfaye.com/articles/ai-coding-will-prevent-expertise",
-        "source_title": "Coding expertise is going to collapse from AI reliance"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -78,7 +68,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 607,
+  "last_cycle_seconds": 1,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -480,7 +470,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-25T03:13:05.473425+00:00",
+    "checked_at": "2026-08-25T04:01:08.840685+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0

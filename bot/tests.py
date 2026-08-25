@@ -571,5 +571,89 @@ class TestWalletEarnings(unittest.TestCase):
         self.assertIn("TFTNsf", blob)  # masked form survives
 
 
+class TestOpenRouterModelChains(unittest.TestCase):
+    """Free-model chains must be role-aware and fully walked on failure."""
+
+    def _chains(self):
+        import bot.llm as llm_module
+        chains = dict(llm_module._OPENROUTER_MODELS_BY_ROLE)
+        chains["_default"] = llm_module._OPENROUTER_MODELS
+        return chains
+
+    def test_ox_alpha_leads_every_chain(self):
+        for role, chain in self._chains().items():
+            self.assertEqual(chain[0], "stealth/ox-alpha", role)
+
+    def test_every_role_has_a_multi_model_chain(self):
+        """A single-model chain has nothing to fall back to on a rate limit."""
+        import bot.llm as llm_module
+        for role in ("upgrade", "research", "post"):
+            chain = llm_module._OPENROUTER_MODELS_BY_ROLE[role]
+            self.assertGreaterEqual(len(chain), 3, role)
+            self.assertEqual(len(chain), len(set(chain)), f"{role} has duplicates")
+            # auto-router last: it always resolves to *some* free model
+            self.assertEqual(chain[-1], "openrouter/free", role)
+
+    def test_all_chain_models_are_free_tier(self):
+        """A paid model in the chain would fail outright without credits."""
+        for role, chain in self._chains().items():
+            for model in chain:
+                self.assertTrue(
+                    model.endswith(":free")
+                    or model in ("openrouter/free", "stealth/ox-alpha"),
+                    f"{role}: {model} is not a free-tier slug",
+                )
+
+    def _walk(self, role, error):
+        """Run a role's chain with every call failing; return models attempted."""
+        import bot.llm as llm_module
+        tried: list[str] = []
+
+        def fake(self, prompt, system, max_tokens, temperature, model):
+            tried.append(model)
+            raise RuntimeError(error)
+
+        real_call, real_sleep = llm_module.LLMClient._call_openrouter, llm_module.time.sleep
+        keys = ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY")
+        saved = {k: os.environ.pop(k, None) for k in keys}
+        saved_or = os.environ.get("OPENROUTER_API_KEY")
+        os.environ["OPENROUTER_API_KEY"] = "test-key"
+        llm_module.LLMClient._call_openrouter = fake
+        llm_module.time.sleep = lambda *a, **kw: None
+        try:
+            client = llm_module.LLMClient()
+            with self.assertRaises(RuntimeError):
+                client.complete_for_role(role, "hi")
+        finally:
+            llm_module.LLMClient._call_openrouter = real_call
+            llm_module.time.sleep = real_sleep
+            for k, v in saved.items():
+                if v is not None:
+                    os.environ[k] = v
+            if saved_or is None:
+                os.environ.pop("OPENROUTER_API_KEY", None)
+            else:
+                os.environ["OPENROUTER_API_KEY"] = saved_or
+
+        ordered: list[str] = []
+        for model in tried:
+            if not ordered or ordered[-1] != model:
+                ordered.append(model)
+        return ordered
+
+    def test_rate_limit_steps_through_entire_chain(self):
+        """Regression: step-downs must not consume the per-model retry budget."""
+        import bot.llm as llm_module
+        for role in ("upgrade", "research", "post"):
+            walked = self._walk(role, "429 rate_limit_exceeded from openrouter")
+            self.assertEqual(walked, llm_module._OPENROUTER_MODELS_BY_ROLE[role], role)
+
+    def test_withdrawn_model_falls_through_to_next(self):
+        """Stealth previews can vanish; a 404 must not strand the chain."""
+        import bot.llm as llm_module
+        walked = self._walk("post", "model_not_found on openrouter: stealth/ox-alpha")
+        self.assertEqual(walked, llm_module._OPENROUTER_MODELS_BY_ROLE["post"])
+
+
 if __name__ == "__main__":
     unittest.main()

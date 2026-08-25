@@ -122,13 +122,23 @@
     }
   },
   "llm": {
-    "main_engine": "openai/gpt-oss-20b:free",
+    "main_engine": "stealth/ox-alpha",
     "provider": "openrouter",
-    "note": "All-free model chain (no paid Kimi K3): gpt-oss-20b:free default, nemotron-3-ultra-550b:free for research, per bot/llm.py ROLE_PROVIDER routing."
+    "note": "All-free model chain, ordered by capability per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. stealth/ox-alpha leads every chain (1M ctx, $0, coding/agentic reasoning); on 402/429/404 the client steps down the rest of the role's free chain before changing provider."
   },
   "research_policy": {
     "mode": "research_and_article_publishing",
-    "allowed_actions": ["research", "suggestions", "drafts", "article publishing"],
-    "blocked_actions": ["social posting", "trading", "minting", "payouts"]
+    "allowed_actions": [
+      "research",
+      "suggestions",
+      "drafts",
+      "article publishing"
+    ],
+    "blocked_actions": [
+      "social posting",
+      "trading",
+      "minting",
+      "payouts"
+    ]
   }
 }

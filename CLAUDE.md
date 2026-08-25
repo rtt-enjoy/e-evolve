@@ -15,7 +15,7 @@ E-Evolve is a GitHub Actions bot that runs hourly and refreshes RAG, market rese
 
 Current operating policy: API keys are for RAG, research, market analysis, suggestions, draft text, and **publishing articles to dev.to**. The bot must not use keys to post to social media, place trades, mint NFTs, withdraw funds, or comment on external issues.
 
-**Main AI engine: free OpenRouter models via `bot/llm.py`** — no paid engine, no credits required. Every role routes through a zero-cost model chain: `openai/gpt-oss-20b:free` (widest provider coverage, best uptime) as the general default, `nvidia/nemotron-3-ultra-550b-a55b:free` (1M context, strongest reasoning) leading the `research` role, and `openai/gpt-oss-20b:free` leading `post` for reliable structured JSON output. On 429/model-not-found, `bot/llm.py` steps down through the rest of the free chain (`_OPENROUTER_MODELS_BY_ROLE`) before falling back to another provider, so a cycle never fails on cost or a single model's rate limit.
+**Main AI engine: free OpenRouter models via `bot/llm.py`** — no paid engine, no credits required. Every role routes through a zero-cost chain ordered by capability, all led by `stealth/ox-alpha` (1M context, $0 in/out, reasoning model built for coding and sustained agentic work, native `response_format` + tools). Each role then diverges by task: `upgrade` falls back to code-specialised models (`poolside/laguna-s-2.1:free`, `cohere/north-mini-code:free`), `research` to the largest-context reasoners (`nvidia/nemotron-3-ultra-550b-a55b:free`, `minimax/minimax-m3:free`), and `post` to models with native structured output. On 402/429/model-not-found, `bot/llm.py` steps down through *every* remaining model in the role's chain — each getting a fresh retry budget — before falling back to another provider, so a cycle never fails on cost or one model's rate limit.
 
 ---
 
@@ -146,9 +146,17 @@ actions. If such keys exist, they are treated as research context only.
   50 requests/day unless the account has ever bought $10 in credits (then 1,000/day).
   An hourly bot with multiple LLM calls per cycle can approach that ceiling — verify
   the current limit at openrouter.ai/docs before assuming headroom.
-- Model chain is role-aware via `_OPENROUTER_MODELS_BY_ROLE`: `research` leads with `nvidia/nemotron-3-ultra-550b-a55b:free`
-  (1M context, strongest reasoning); `post` leads with `openai/gpt-oss-20b:free` (widest provider coverage, native
-  structured output); all other roles use the `_OPENROUTER_MODELS` default chain, also led by `openai/gpt-oss-20b:free`.
+- Model chain is role-aware via `_OPENROUTER_MODELS_BY_ROLE`. Every chain leads with
+  `stealth/ox-alpha` and holds 6 entries, ordered hardest/most-capable first and ending in the
+  `openrouter/free` auto-router so there is always a last resort:
+  - `upgrade` → code-specialised fallbacks (`poolside/laguna-s-2.1:free`, `cohere/north-mini-code:free`)
+  - `research` → largest-context reasoners (`nvidia/nemotron-3-ultra-550b-a55b:free`, `minimax/minimax-m3:free`)
+  - `post` → models with native `response_format`, so JSON drafts don't come back wrapped in prose
+  - all other roles use the `_OPENROUTER_MODELS` default chain
+- **`stealth/ox-alpha` is a stealth release**: unmetered preview, and it can be renamed or withdrawn
+  without notice. It is never the only entry in a chain; a 404 advances to the next model.
+- Stepping down the model chain does **not** consume the 3-attempt retry budget — each model gets its
+  own. (Before this was fixed, a 5-model chain gave up after 3 models.)
 - On 429 or model-not-found, the OpenRouter call steps down through the rest of the
   role's free-model chain before abandoning the provider — a rate limit degrades
   quality (smaller/different free model), never breaks the cycle.
@@ -217,7 +225,7 @@ Tunable by owner or changed here in Codex:
                       "source_max_age_hours": 24, "history_limit": 200, "min_words": 700 },
   "code_techs":     { "enabled": true, "refresh_hours": 24, "max_items": 8,
                       "min_score": 55, "auto_pursue": false, "...": "searches, sources, outreach" },
-  "llm":            { "main_engine": "openai/gpt-oss-20b:free", "provider": "openrouter" },
+  "llm":            { "main_engine": "stealth/ox-alpha", "provider": "openrouter" },
   "research_policy":{ "allowed_actions": ["research", "suggestions", "drafts", "article publishing"],
                       "blocked_actions": ["social posting", "trading", "minting", "payouts"] }
 }

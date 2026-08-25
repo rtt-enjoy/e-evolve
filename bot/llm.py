@@ -37,42 +37,64 @@ _GEMINI_MODELS = [
     "gemini-2.5-flash",
     "gemini-2.5-flash-lite",
 ]
-# OpenRouter: Kimi K3 was the main engine but is PAID ($3/M in, $15/M out) and
-# fails outright without credits. The whole chain is now free-tier models,
-# chosen per role, so a cycle never depends on account balance.
+# OpenRouter: every chain is zero-cost. Kimi K3 was the main engine but is PAID
+# and fails outright without credits, so the whole chain is free-tier models,
+# ordered by capability so a rate limit degrades quality instead of breaking a
+# cycle.
 #
-# Default chain: general-purpose fallback order, led by the model with the
-# widest provider coverage on OpenRouter (best uptime/least rate-limiting).
+# stealth/ox-alpha leads every chain: it is a stealth-release reasoning model
+# priced at $0 in/$0 out with a 1M context window, native response_format and
+# tool support, and is explicitly built for coding and sustained agentic work.
+# Stealth models are unmetered previews -- they can be withdrawn or renamed
+# without notice, so it is never the only entry in a chain.
+_OX_ALPHA = "stealth/ox-alpha"
+
+# Default chain: general-purpose fallback order, strongest first.
 _OPENROUTER_MODELS = [
-    "openai/gpt-oss-20b:free",          # 12 providers -- highest uptime, native structured output
-    "nvidia/nemotron-3-ultra-550b-a55b:free",  # 1M ctx, strongest reasoning, good research fallback
-    "google/gemma-4-26b-a4b-it:free",   # native function calling + structured outputs
-    "inclusionai/ling-3.0-flash:free",  # 262K ctx, token-efficient
-    "openrouter/free",                 # auto-router: always resolves to *some* free model
+    _OX_ALPHA,                                  # 1M ctx, reasoning, structured output
+    "minimax/minimax-m3:free",                  # 1M ctx, response_format + tools
+    "nvidia/nemotron-3-ultra-550b-a55b:free",   # 1M ctx, strongest open-weight reasoning
+    "google/gemma-4-26b-a4b-it:free",           # 262K ctx, native function calling
+    "z-ai/glm-5.2:free",                        # 256K ctx, response_format
+    "openrouter/free",                          # auto-router: always resolves to *some* free model
 ]
 
-# Research/long-context work: lead with the biggest-context, strongest-reasoning
-# free model, since research prompts are long and benefit most from it.
-_OPENROUTER_MODELS_RESEARCH = [
+# Code / repair suggestions ("upgrade"): lead with the models that are actually
+# trained for software engineering, then fall back to general reasoners. This
+# role previously had no chain of its own and silently used the default.
+_OPENROUTER_MODELS_UPGRADE = [
+    _OX_ALPHA,                                  # built for long-horizon software engineering
+    "poolside/laguna-s-2.1:free",               # code-specialised, 262K ctx
+    "cohere/north-mini-code:free",              # code-specialised
+    "minimax/minimax-m3:free",
     "nvidia/nemotron-3-ultra-550b-a55b:free",
-    "nvidia/nemotron-3-super-120b-a12b:free",
-    "openai/gpt-oss-20b:free",
+    "openrouter/free",
+]
+
+# Research/long-context work: research prompts are long, so rank by context
+# window and reasoning strength.
+_OPENROUTER_MODELS_RESEARCH = [
+    _OX_ALPHA,
+    "nvidia/nemotron-3-ultra-550b-a55b:free",   # 1M ctx
+    "minimax/minimax-m3:free",                  # 1M ctx
+    "nvidia/nemotron-3-super-120b-a12b:free",   # 262K ctx, response_format
     "google/gemma-4-26b-a4b-it:free",
     "openrouter/free",
 ]
 
-# Article writing (long-form structured JSON): lead with the highest-uptime
-# model that natively supports structured outputs, so drafts don't get dropped
-# to rate limits mid-cycle.
+# Article writing (long-form structured JSON): every model here must support
+# response_format natively, so drafts don't come back as prose-wrapped JSON.
 _OPENROUTER_MODELS_POST = [
-    "openai/gpt-oss-20b:free",
+    _OX_ALPHA,
+    "minimax/minimax-m3:free",
     "google/gemma-4-26b-a4b-it:free",
-    "cohere/north-mini-code:free",
-    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "z-ai/glm-5.2:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
     "openrouter/free",
 ]
 
 _OPENROUTER_MODELS_BY_ROLE: dict[str, list[str]] = {
+    "upgrade":  _OPENROUTER_MODELS_UPGRADE,
     "research": _OPENROUTER_MODELS_RESEARCH,
     "post":     _OPENROUTER_MODELS_POST,
 }
@@ -130,7 +152,12 @@ class LLMClient:
             p_model   = self._model_for_provider(provider)
             exhausted = False
 
-            for attempt in range(1, 4):
+            # `attempt` counts real retries of the *same* model. Stepping down
+            # the model chain must not consume that budget, otherwise a long
+            # free-model chain is abandoned after only 2-3 entries.
+            attempt = 0
+            while attempt < 3:
+                attempt += 1
                 try:
                     if provider == "anthropic":
                         return self._call_anthropic(p_prompt, system, max_tokens, temperature, p_model)
@@ -163,6 +190,7 @@ class LLMClient:
                         if p_model in model_list and model_list.index(p_model) < len(model_list) - 1:
                             p_model = model_list[model_list.index(p_model) + 1]
                             log.warning("openrouter model unavailable (%s) -- stepping down to %s", exc_str[:80], p_model)
+                            attempt = 0  # new model gets a fresh retry budget
                             continue
                         log.warning("openrouter model chain exhausted -- skipping to fallback: %s", exc)
                         exhausted = True
@@ -183,14 +211,21 @@ class LLMClient:
                         continue
 
                     # Model deprecated: advance to next in chain
+                    # Model deprecated/withdrawn (stealth previews can vanish
+                    # without notice): advance to the next entry in the chain.
                     if "model_not_found" in exc_str or "model not found" in exc_str.lower():
                         model_list = self._model_list_for(provider)
                         if p_model in model_list:
                             idx = model_list.index(p_model)
                             if idx < len(model_list) - 1:
                                 p_model = model_list[idx + 1]
-                                log.warning("%s model deprecated -- advancing to %s", provider, p_model)
+                                log.warning("%s model %s unavailable -- advancing to %s",
+                                            provider, model_list[idx], p_model)
+                                attempt = 0  # new model gets a fresh retry budget
                                 continue
+                        log.warning("%s model chain exhausted -- skipping to fallback", provider)
+                        exhausted = True
+                        break
 
                     log.warning("LLM attempt %d/3 provider=%s failed: %s", attempt, provider, exc)
                     if attempt < 3:

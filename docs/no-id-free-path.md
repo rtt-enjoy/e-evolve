@@ -9,9 +9,7 @@ social APIs, Claude premium features, paid LLM accounts, or funded wallets.
    account secret.
 2. Add `GROQ_API_KEY` or `GEMINI_API_KEY` for free LLM capacity.
 3. Add `DEV_TO_API_KEY` when you want the bot to publish articles.
-4. Add optional GitHub Actions variables `EARN_CTA_URL` and `EARN_CTA_LABEL`
-   for a sponsor, tip, newsletter, affiliate, portfolio, or product link.
-5. Use OpenRouter free models only if Groq or Gemini limits are not enough.
+4. Use OpenRouter free models only if Groq or Gemini limits are not enough.
 
 ## Avoid By Default
 

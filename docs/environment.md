@@ -47,26 +47,15 @@ according to the role routing in `bot/llm.py`.
 ## Legacy Action Credentials
 
 `DEV_TO_API_KEY` is **active**: when set, the bot drafts and publishes one
-article per day to dev.to. The remaining names below are kept for setup
-readiness and legacy modules. Policy treats those as research/setup context
-only: the bot must not post socially, trade, withdraw, mint, or comment
-externally from them.
+article per day to dev.to. It is the only outbound publishing key the bot uses.
 
-| Key                        | Required | Legacy area   | Notes                                        |
-|----------------------------|----------|---------------|----------------------------------------------|
-| `DEV_TO_API_KEY`           | Optional | articles      | dev.to API key.                              |
-| `MEDIUM_INTEGRATION_TOKEN` | Optional | articles      | Medium integration token.                    |
-| `TWITTER_API_KEY`          | Optional | Twitter/X     | Consumer API key.                            |
-| `TWITTER_API_SECRET`       | Optional | Twitter/X     | Consumer API secret.                         |
-| `TWITTER_ACCESS_TOKEN`     | Optional | Twitter/X     | Access token.                                |
-| `TWITTER_ACCESS_SECRET`    | Optional | Twitter/X     | Access token secret.                         |
-| `BINANCE_API_KEY`          | Optional | crypto/payout | Binance API key.                             |
-| `BINANCE_SECRET_KEY`       | Optional | crypto/payout | Binance secret key.                          |
-| `BINANCE_WITHDRAW_ADDRESS` | Optional | payout        | Destination address for legacy payout logic. |
-| `ETH_PRIVATE_KEY`          | Optional | NFT           | Dedicated wallet private key.                |
-| `ETH_WALLET_ADDRESS`       | Optional | NFT           | Corresponding public wallet address.         |
-| `NFT_CONTRACT_ADDRESS`     | Optional | NFT           | Pre-deployed ERC-721 contract address.       |
-| `NFT_STORAGE_TOKEN`        | Optional | NFT           | nft.storage token for IPFS pinning.          |
+| Key                | Required | Used by  | Notes                                              |
+|--------------------|----------|----------|----------------------------------------------------|
+| `DEV_TO_API_KEY`   | Optional | articles | dev.to API key. Without it the module skips.       |
+
+Social posting, trading, minting, and payouts are blocked by policy, and the
+modules that implemented them have been removed from the tree. No secrets exist
+for them, and `.github/workflows/evolve.yml` no longer exports any.
 
 ## Workflow-Only Mapping
 

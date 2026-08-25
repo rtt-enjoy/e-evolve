@@ -98,49 +98,27 @@ Legacy action-module notes below are intentionally not activation instructions.
 
 ### Articles
 
-| Secret                     | Source                                      |
-|----------------------------|---------------------------------------------|
-| `DEV_TO_API_KEY`           | dev.to → Settings → Extensions              |
-| `MEDIUM_INTEGRATION_TOKEN` | medium.com/me/settings → Integration tokens |
+| Secret             | Source                         |
+|--------------------|--------------------------------|
+| `DEV_TO_API_KEY`   | dev.to → Settings → Extensions |
 
-Either or both. Each present secret activates the corresponding platform.
+This is the only publishing secret. Without it the articles module skips
+silently and the cycle still succeeds.
 
-### Twitter / X
+### Read-only wallet balance (optional)
 
-All four required:
+| Secret                | Notes                                                  |
+|-----------------------|--------------------------------------------------------|
+| `USDT_WALLET_ADDRESS` | Receive address. Reported read-only on the dashboard.  |
+| `ETHERSCAN_API_KEY`   | Optional, improves ERC-20 balance lookup reliability.  |
 
-| Secret                  | Notes                                          |
-|-------------------------|------------------------------------------------|
-| `TWITTER_API_KEY`       | Developer Portal — needs Read+Write permission |
-| `TWITTER_API_SECRET`    | "                                              |
-| `TWITTER_ACCESS_TOKEN`  | "                                              |
-| `TWITTER_ACCESS_SECRET` | "                                              |
+There is no withdrawal or transfer code path anywhere in the tree.
 
-### Crypto (Binance)
+### Removed capabilities
 
-| Secret                     | Notes                                                                |
-|----------------------------|----------------------------------------------------------------------|
-| `BINANCE_API_KEY`          | Enable Spot trading only unless you intentionally enable auto-payout |
-| `BINANCE_SECRET_KEY`       | "                                                                    |
-| `BINANCE_WITHDRAW_ADDRESS` | Optional Exodus receive address for auto-payout                      |
-
-> **Warning:** Start with a small balance. LLM-driven trading is not guaranteed to be profitable.
-
-For Exodus payouts, the default strategy withdraws `USDT` on `BSC` to match an
-Exodus BNB Smart Chain receive address. In Exodus, copy the receive address for
-the same network configured in `config/strategy.json`, then whitelist that exact
-address and network in Binance before enabling API withdrawals. The payout guard
-also accepts `ETH` addresses that start with `0x` and `TRX` addresses that start
-with `T`, but the configured network and Exodus receive network must match.
-
-### NFT (Ethereum)
-
-| Secret                 | Notes                                                  |
-|------------------------|--------------------------------------------------------|
-| `ETH_PRIVATE_KEY`      | Use a dedicated wallet with minimal funds              |
-| `ETH_WALLET_ADDRESS`   | Corresponding public address                           |
-| `NFT_CONTRACT_ADDRESS` | Pre-deployed ERC-721 contract                          |
-| `NFT_STORAGE_TOKEN`    | [nft.storage](https://nft.storage) — free IPFS pinning |
+Social posting, crypto trading, NFT minting, and payouts are blocked by policy.
+The modules that implemented them have been deleted, so there is nothing to
+configure and no secret to add.
 
 ---
 

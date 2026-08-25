@@ -65,7 +65,7 @@ _(none open)_
 
 - **Evolution LLM prompt included earnings history + last_earning** - fixed 2026-05-02. Stripped before send.
 
-- **Add `MEDIUM_INTEGRATION_TOKEN`** - fixed in v1.22.0. Dual-publishes the same generated article to Medium when the secret is present, with no extra article generation call.
+- **Add `MEDIUM_INTEGRATION_TOKEN`** - fixed in v1.22.0, then reverted in v1.34.0. Medium publishing is outside the dev.to-only policy, so the code path and secret were removed.
 
 - **Dashboard frontend lacked a ranked revenue focus** - fixed in v1.22.1. Added a responsive Research & Revenue Focus section and moved provider/warning colors back through `:root` variables.
 

@@ -176,18 +176,18 @@ status report            # dump full status to workflow log
 .github/workflows/evolve.yml  ← hourly workflow (never evolved)
 bot/
   main.py                     ← 5-phase orchestrator
-  llm.py                      ← LLM client (Groq / Anthropic, auto-selected)
-  status.py                   ← Phase 1: load/save state
+  llm.py                      ← LLM client (OpenRouter free chain, then Anthropic/Gemini/Cerebras/Groq)
+  status.py                   ← Phase 1: load/save state, feature detection
   commands.py                 ← Phase 2: owner command system
-  evolution.py                ← Phase 3: self-improvement engine
   earnings.py                 ← cumulative earnings + weekly reset
   dashboard.py                ← dashboard data publisher + earnings log
   git_utils.py                ← git commit helpers
+  github_secrets.py           ← reads configured secret names only, never values
+  tests.py                    ← unittest suite (python -m unittest bot.tests)
   earning/
-    articles.py               ← legacy publishing module; not called by default
-    twitter.py                ← legacy social module; not called by default
-    crypto.py                 ← legacy trading module; not called by default
-    nft.py                    ← legacy minting module; not called by default
+    articles.py               ← publishes one dev.to article per day from a trending source
+    trending.py               ← finds recent tech articles from free public feeds
+    code_techs.py             ← free-AI earning opportunity queue (research only)
 config/
   strategy.json               ← tunable strategy parameters
 frontend/

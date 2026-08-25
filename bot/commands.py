@@ -7,10 +7,10 @@ Supported commands (case-insensitive, one per line):
   force articles N         — publish N articles now, bypassing the daily cap (max 5)
   force trade aggressive   — ignored; trading is disabled by policy
   force mint N             — ignored; minting is disabled by policy
-  skip evolution           — skip evolution phase
+  skip evolution           — no-op; automatic code evolution was removed
   reset earnings           — zero this_week_usd
   post thread              — ignored; social posting is disabled by policy
-  improve suggestion TEXT  — ask evolution to implement or refine a suggestion
+  improve suggestion TEXT  — no-op; code changes are owned by Codex
   status report            — dump full status dict to workflow log
 """
 from __future__ import annotations
@@ -65,7 +65,7 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
             log.warning("Ignoring %r: minting is disabled by research-only policy", raw)
 
         elif cmd == "skip evolution":
-            overrides["skip_evolution"] = True
+            log.info("Ignoring %r: Phase 3 is already a no-op", raw)
 
         elif cmd == "reset earnings":
             status.setdefault("earnings", {})["this_week_usd"] = 0.0
@@ -75,9 +75,8 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
             blocked_action_commands.append(raw.strip())
             log.warning("Ignoring %r: posting is disabled by research-only policy", raw)
 
-        elif m := re.match(r"improve suggestion(?:\s+(.+))?$", cmd):
-            target = (m.group(1) or "").strip()
-            overrides["improve_suggestion"] = target or "highest priority"
+        elif re.match(r"improve suggestion(?:\s+(.+))?$", cmd):
+            log.warning("Ignoring %r: code changes are owned by Codex, not the bot", raw)
 
         elif cmd == "status report":
             from bot.status import sanitize_for_git

@@ -36,8 +36,6 @@ according to the role routing in `bot/llm.py`.
 |--------------------------------|----------|--------------------------------------------|----------------------------------------------------------------------------------------------------|
 | `CLAUDE_CLI_MODE`              | Optional | `bot/llm.py`                               | Set to `1` only when using an installed, authenticated Claude CLI locally.                         |
 | `CODE_TECH_EARN_ENABLED`       | Optional | `bot/main.py`, `bot/earning/code_techs.py` | Default is enabled. Set to `0`, `false`, `no`, or `off` to disable code-tech opportunity research. |
-| `EARN_CTA_URL`                 | Optional | `bot/earning/twitter.py`                   | URL appended by legacy draft/social helpers.                                                       |
-| `EARN_CTA_LABEL`               | Optional | `bot/earning/twitter.py`                   | Human-readable label for `EARN_CTA_URL`; defaults to project-link text.                            |
 
 ## Read-Only Status Context
 

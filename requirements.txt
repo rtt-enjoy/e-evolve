@@ -1,12 +1,7 @@
 requests>=2.32.0
 python-dotenv>=1.0.0
+# LLM providers, selected at runtime by bot/llm.py (all imported lazily).
+# OpenRouter and Cerebras are called over plain HTTP via requests -- no SDK.
 anthropic>=0.39.0
 google-generativeai>=0.8.0
 groq>=0.13.0
-python-binance>=1.0.19
-web3>=6.12.0
-tweepy>=4.14.0
-# Added dependencies for optional earning modules
-# - twitter (tweepy)
-# - binance trading (python-binance)
-# - NFT minting (web3)

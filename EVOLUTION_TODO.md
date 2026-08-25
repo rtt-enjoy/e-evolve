@@ -31,7 +31,8 @@ _(none open)_
 ## Do Not Touch
 
 - `.github/workflows/evolve.yml` - heartbeat, never evolve
-- Safety boundaries in `bot/evolution.py` - hardcoded, intentional
+- Research-only policy guards in `bot/main.py`, `bot/commands.py`, and
+  `bot/status.py` (FEATURE_MAP) - hardcoded, intentional
 
 ---
 

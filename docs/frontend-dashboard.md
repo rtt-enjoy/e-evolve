@@ -84,7 +84,7 @@ balance is being shown; no receipt is recorded for that cycle.
 
 The wallet is a **receive** address handed to clients in outreach drafts, so
 payments arrive already at their destination. There is no transfer step and no
-withdrawal code path — `bot/earning/payout.py` remains uncalled by design.
+withdrawal code path anywhere in the tree — the payout module was removed.
 
 Only the masked address (`wallet.address_masked`) is written to tracked files;
 `sanitize_for_git` redacts the raw value.

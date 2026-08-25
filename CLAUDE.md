@@ -23,19 +23,19 @@ Current operating policy: API keys are for RAG, research, market analysis, sugge
 
 ```
 bot/main.py          ← 5-phase orchestrator (entry point)
-bot/llm.py           ← LLM abstraction (Groq or Anthropic, auto-selected)
-bot/status.py        ← Phase 1: load/save status.json
+bot/llm.py           ← LLM abstraction (OpenRouter free chain, then Anthropic/Gemini/Cerebras/Groq)
+bot/status.py        ← Phase 1: load/save status.json, feature detection, wallet balance
 bot/commands.py      ← Phase 2: owner commands (command.txt or GitHub Issues)
-bot/evolution.py     ← legacy evolution engine; not called by default
 bot/earnings.py      ← cumulative earnings tracker + weekly reset
 bot/dashboard.py     ← writes docs/index.html + earnings-log.md
 bot/git_utils.py     ← git commit helpers
+bot/github_secrets.py ← reads configured secret NAMES only (never values)
+bot/tests.py         ← unittest suite: python -m unittest bot.tests
 bot/earning/
   articles.py        ← drafts + publishes one dev.to article per day from a trending source
   trending.py        ← finds recent (24h) tech articles from free public feeds
-  twitter.py         ← legacy social module; not called by default
-  crypto.py          ← legacy trading module; not called by default
-  nft.py             ← legacy minting module; not called by default
+  code_techs.py      ← free-AI earning opportunity queue (research/suggestion only)
+frontend/            ← React + Vite dashboard, built to docs/ by .github/workflows/frontend.yml
 .github/workflows/evolve.yml  ← hourly scheduler (never evolved)
 config/strategy.json ← tunable strategy parameters
 status.json          ← persisted bot state (auto-updated each cycle)
@@ -58,14 +58,21 @@ Phase 5: Update   — save status.json, write dashboard, commit
 
 ---
 
-## Safety Boundaries (evolution.py — hardcoded, cannot be LLM-overridden)
+## Safety Boundaries (runtime policy — enforced in code, not by the LLM)
 
-- Writes only to: `bot/`, `docs/`, `config/`, `requirements.txt`, `version.txt`
-- Never touches: `.github/`, `.git/`
-- No path traversal (`..` rejected)
-- Python files AST-parsed before writing
-- Max 3 file changes per cycle
-- Originals backed up to `.evolution_backups/` before overwrite
+Automatic code evolution was removed. Phase 3 is a hardcoded no-op and Codex
+owns all code changes, so there is no LLM-driven file writer to sandbox.
+
+What the bot may still do at runtime:
+
+- **Allowed:** RAG, research, market analysis, suggestions, drafts, and
+  publishing articles to dev.to.
+- **Blocked:** social posting, trading, minting, payouts, and commenting on
+  external issues. These are refused in code, not merely unconfigured.
+- Secrets for blocked actions are treated as research context only and never
+  activate a feature (see `status.FEATURE_MAP`).
+- Secret *values* are never logged or persisted; `status._secret_values()`
+  redacts them before write.
 
 ---
 
@@ -164,7 +171,7 @@ Also works via GitHub Issues with label `bot-command`.
 force articles N         # publish N articles now, bypassing the daily cap (max 5)
 force trade aggressive   # ignored: trading is disabled
 force mint N             # ignored: minting is disabled
-skip evolution           # skip Phase 3 this cycle
+skip evolution           # no-op: Phase 3 is already a no-op
 reset earnings           # zero this_week_usd
 post thread              # ignored: social posting is disabled
 status report            # dump full status to workflow log
@@ -206,10 +213,13 @@ Tunable by owner or changed here in Codex:
 
 ```json
 {
-  "articles":  { "per_cycle": 1, "min_words": 600 },
-  "crypto":    { "risk_per_trade_pct": 0.02, "min_usdt_balance": 10.0, "symbols": ["BTCUSDT", "ETHUSDT"] },
-  "nft":       { "per_cycle": 1, "chain": "ethereum" },
-  "twitter":   { "min_tweets": 5, "max_tweets": 7 }
+  "articles":       { "max_articles_per_cycle": 1, "min_interval_hours": 6,
+                      "source_max_age_hours": 24, "history_limit": 200, "min_words": 700 },
+  "code_techs":     { "enabled": true, "refresh_hours": 24, "max_items": 8,
+                      "min_score": 55, "auto_pursue": false, "...": "searches, sources, outreach" },
+  "llm":            { "main_engine": "openai/gpt-oss-20b:free", "provider": "openrouter" },
+  "research_policy":{ "allowed_actions": ["research", "suggestions", "drafts", "article publishing"],
+                      "blocked_actions": ["social posting", "trading", "minting", "payouts"] }
 }
 ```
 

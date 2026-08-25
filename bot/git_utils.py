@@ -51,13 +51,6 @@ def commit(message: str, paths: Optional[list[str]] = None) -> dict:
         return {"success": False, "committed": False, "error": err}
 
 
-def short_sha() -> str:
-    try:
-        return _run("rev-parse", "--short", "HEAD", capture=True)
-    except Exception:
-        return "unknown"
-
-
 # ── internal ────────────────────────────────────────────────────────────────
 
 def _run(

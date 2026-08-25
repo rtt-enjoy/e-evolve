@@ -309,11 +309,6 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
         "url": str(_REPORT_FILE)
     }]
 
-def _pursue_lead(opportunity: Opportunity, cfg: dict) -> bool:
-    log.warning("[code_techs] pursue request ignored: research-only policy forbids posting comments")
-    return False
-
-
 def _config() -> dict[str, Any]:
     try:
         strategy = json.loads(_STRATEGY_FILE.read_text(encoding="utf-8"))

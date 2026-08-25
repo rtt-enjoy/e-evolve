@@ -1,8 +1,9 @@
 """
-Earning Module — Articles (dev.to and Medium)
-Generates and publishes technical articles to dev.to and Medium.
+Earning Module — Articles (dev.to)
+Generates and publishes one original technical article per day to dev.to,
+written from a real trending source found by ``trending``.
 
-Activates with: DEV_TO_API_KEY, MEDIUM_INTEGRATION_TOKEN (optional)
+Activates with: DEV_TO_API_KEY. Without it the module skips silently.
 """
 from __future__ import annotations
 
@@ -125,8 +126,7 @@ SOURCE HANDLING -- this part is mandatory:
 def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     """Main entry point for the articles earning module."""
     devto_api_key = os.getenv("DEV_TO_API_KEY", "").strip()
-    medium_token = os.getenv("MEDIUM_INTEGRATION_TOKEN", "").strip()
-    
+
     if not devto_api_key:
         log.debug("[articles] DEV_TO_API_KEY not set — skipping")
         return []
@@ -163,11 +163,6 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
     # Publish to dev.to
     devto_result = _publish_to_devto(article, devto_api_key)
     results.append(devto_result)
-
-    # Publish to Medium if token is available
-    if medium_token:
-        medium_result = _publish_to_medium(article, medium_token)
-        results.append(medium_result)
 
     # Update state if at least one platform succeeded
     if any(r.get("success") for r in results):
@@ -606,53 +601,6 @@ def _publish_to_devto(article: dict, api_key: str) -> dict:
         log.error("[articles] dev.to publish failed: %s", exc)
         return {
             "platform": "dev.to",
-            "success": False,
-            "error": str(exc)[:200],
-            "estimated_usd": 0.0,
-        }
-
-
-def _publish_to_medium(article: dict, integration_token: str) -> dict:
-    """Publish article to Medium and return action result."""
-    url = "https://api.medium.com/v1/users/me/posts"
-    headers = {
-        "Authorization": f"Bearer {integration_token}",
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "title": article.get("title", "Untitled"),
-        "content": article.get("body_markdown", ""),
-        "contentFormat": "markdown",
-        "publishStatus": "public",
-    }
-    
-    try:
-        resp = requests.post(url, headers=headers, json=payload, timeout=30)
-        if resp.status_code == 201:
-            data = resp.json()
-            article_url = data.get("url", "")
-            log.info("[articles] Published to Medium: %s", article_url)
-            return {
-                "platform": "Medium",
-                "success": True,
-                "title": article.get("title", "Untitled"),
-                "url": article_url,
-                # Medium's Partner Program does not pay through this API path.
-                # Keep at 0.0 for the same reason as dev.to above.
-                "estimated_usd": 0.0,
-            }
-        else:
-            log.error("[articles] Medium publish failed: %s - %s", resp.status_code, resp.text)
-            return {
-                "platform": "Medium",
-                "success": False,
-                "error": f"HTTP {resp.status_code}: {resp.text[:200]}",
-                "estimated_usd": 0.0,
-            }
-    except Exception as exc:
-        log.error("[articles] Medium publish failed: %s", exc)
-        return {
-            "platform": "Medium",
             "success": False,
             "error": str(exc)[:200],
             "estimated_usd": 0.0,

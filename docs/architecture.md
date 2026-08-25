@@ -42,6 +42,6 @@ GitHub Secrets / env vars
     -> dashboard.py publishes safe public status data
 ```
 
-`bot/evolution.py` remains as legacy reference code, but `bot/main.py` does not
-call it. Prompt-driven code updates are made here in Codex, verified locally,
-then committed and pushed.
+Automatic code evolution has been removed: Phase 3 is a hardcoded no-op and
+there is no evolution engine in the tree. Prompt-driven code updates are made
+here in Codex, verified locally, then committed and pushed.

@@ -1,17 +1,17 @@
 {
   "version": "1.34.1",
-  "last_run": "2026-08-25T05:14:45.320728+00:00",
-  "total_runs": 1675,
+  "last_run": "2026-08-25T05:48:36.391961+00:00",
+  "total_runs": 1676,
   "active_features": [
-    "llm_anthropic",
     "llm_gemini",
     "llm_openrouter",
     "llm_groq",
+    "usdt_wallet",
     "code_techs"
   ],
   "inactive_features": [
-    "llm_cerebras",
-    "usdt_wallet"
+    "llm_anthropic",
+    "llm_cerebras"
   ],
   "llm_provider": "openrouter",
   "earnings": {
@@ -68,7 +68,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 0,
+  "last_cycle_seconds": 1,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -77,12 +77,12 @@
   "usdt_balance": 0.0,
   "secret_readiness": {
     "llm_anthropic": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "ANTHROPIC_API_KEY"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     },
     "llm_gemini": {
@@ -122,12 +122,12 @@
       "required_count": 1
     },
     "usdt_wallet": {
-      "active": false,
-      "present": [],
-      "missing": [
+      "active": true,
+      "present": [
         "USDT_WALLET_ADDRESS"
       ],
-      "present_count": 0,
+      "missing": [],
+      "present_count": 1,
       "required_count": 1
     }
   },
@@ -370,10 +370,11 @@
     ]
   },
   "configured_github_secrets": [
-    "ANTHROPIC_API_KEY",
     "GEMINI_API_KEY",
+    "GH_TOKEN",
     "GROQ_API_KEY",
-    "OPENROUTER_API_KEY"
+    "OPENROUTER_API_KEY",
+    "USDT_WALLET_ADDRESS"
   ],
   "operation_mode": "research_and_article_publishing",
   "external_action_policy": {
@@ -462,16 +463,16 @@
     ]
   },
   "wallet": {
-    "configured": false,
+    "configured": true,
     "address_masked": "TFTNsf\u20269KbY",
     "network": "TRC-20",
     "confirmed_usd": 0.0,
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-25T04:54:32.193149+00:00",
+    "checked_at": "2026-08-25T05:48:36.665715+00:00",
     "stale": false,
-    "error": "USDT_WALLET_ADDRESS not set",
+    "error": null,
     "balance_high_water_usd": 0.0
   }
 }

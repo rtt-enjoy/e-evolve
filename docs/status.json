@@ -1,7 +1,7 @@
 {
   "version": "1.35.0",
-  "last_run": "2026-08-26T19:18:33.862813+00:00",
-  "total_runs": 1712,
+  "last_run": "2026-08-26T23:35:00.190985+00:00",
+  "total_runs": 1713,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,10 +33,10 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.35.0",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: ''",
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\"version\": \"1.35.1\", \"summary\": \"Fix the evolution JSON parse failure by adding a robust fallback parser that recovers valid JSON from malformed LLM output, preventing skipped upgrade cycles.\", \"sugg'",
     "changes_applied": [],
     "suggestions": [],
-    "error": "Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: ''",
+    "error": "Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\"version\": \"1.35.1\", \"summary\": \"Fix the evolution JSON parse failure by adding a robust fallback parser that recovers valid JSON from malformed LLM output, preventing skipped upgrade cycles.\", \"sugg'",
     "error_type": "json"
   },
   "last_earning": {
@@ -58,9 +58,9 @@
     }
   ],
   "errors": [
-    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: ''"
+    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: '{\"version\": \"1.35.1\", \"summary\": \"Fix the evolution JSON parse failure by adding a robust fallback parser that recovers valid JSON from malformed LLM output, preventing skipped upgrade cycles.\", \"sugg'"
   ],
-  "last_cycle_seconds": 347,
+  "last_cycle_seconds": 289,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -465,7 +465,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-26T19:18:34.269504+00:00",
+    "checked_at": "2026-08-26T23:35:00.595891+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0

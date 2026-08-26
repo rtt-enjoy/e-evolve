@@ -1,7 +1,7 @@
 {
   "version": "1.35.0",
-  "last_run": "2026-08-26T16:59:49.999742+00:00",
-  "total_runs": 1711,
+  "last_run": "2026-08-26T19:18:33.862813+00:00",
+  "total_runs": 1712,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -60,7 +60,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: ''"
   ],
-  "last_cycle_seconds": 302,
+  "last_cycle_seconds": 347,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -465,7 +465,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-26T16:59:50.449951+00:00",
+    "checked_at": "2026-08-26T19:18:34.269504+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0

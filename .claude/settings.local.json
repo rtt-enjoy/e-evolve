@@ -1,7 +1,28 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python -c \"import json; s=json.load\\(open\\('status.json'\\)\\); print\\(json.dumps\\(s.get\\('suggestions',[]\\), indent=2\\)\\); print\\('---'\\); print\\(json.dumps\\(s.get\\('last_evolution',{}\\).get\\('suggestions',[]\\), indent=2\\)\\)\")"
+      "Bash(python -c \"import json; s=json.load\\(open\\('status.json'\\)\\); print\\(json.dumps\\(s.get\\('suggestions',[]\\), indent=2\\)\\); print\\('---'\\); print\\(json.dumps\\(s.get\\('last_evolution',{}\\).get\\('suggestions',[]\\), indent=2\\)\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(python -)",
+      "Bash(python -m py_compile bot/*.py bot/earning/*.py)",
+      "Bash(python -m unittest bot.tests -v)",
+      "Bash(python -m unittest bot.tests)",
+      "Bash(PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python -c ' *)",
+      "Bash(PYTHONUTF8=1 python -c ' *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python -m py_compile bot/*.py bot/earning/*.py)",
+      "Bash(PYTHONIOENCODING=utf-8 PYTHONUTF8=1 python -m unittest bot.tests -q)",
+      "Bash(PYTHONIOENCODING=utf-8 PYTHONUTF8=1 timeout 480 python -c ' *)",
+      "Bash(PYTHONIOENCODING=utf-8 PYTHONUTF8=1 cat \"C:/Users/RTT/AppData/Local/Temp/claude/d--Work-Enjoy-Source-e-evolve/46a4ebb4-d787-45bd-8f56-4cf006a96444/tasks/bpx1xowx7.output\")",
+      "Bash(PYTHONIOENCODING=utf-8 PYTHONUTF8=1 timeout 500 python -c ' *)",
+      "Bash(git commit -m ' *)",
+      "Bash(timeout 180 python -c ' *)",
+      "Bash(python -c \"import json; json.load\\(open\\('config/strategy.json'\\)\\); print\\('strategy.json VALID'\\)\")",
+      "Bash(git commit -q -m '@ *)",
+      "Bash(git pull *)",
+      "Bash(git stash *)"
     ]
   }
 }

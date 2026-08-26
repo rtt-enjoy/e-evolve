@@ -162,5 +162,11 @@
 			"minting",
 			"payouts"
 		]
+	},
+	"evolution": {
+		"enabled": true,
+		"branch_prefix": "evolve",
+		"max_changes": 3,
+		"note": "LLM code proposals are committed to a review branch (branch_prefix/<version>-<utc>) and never to main. Merge the branch to apply. Writes are restricted to bot/, docs/, config/, requirements.txt, version.txt; bot/main.py, bot/llm.py, bot/status.py, bot/commands.py, bot/evolution.py, bot/git_utils.py and .github/ can never be written. Engine is the free OpenRouter 'upgrade' chain led by stealth/ox-alpha; no paid model."
 	}
 }

@@ -81,14 +81,52 @@ def main() -> int:
 	_hr("Phase 3 — Evolution")
 	import bot.git_utils as _git
 
-	log.info("Automatic code evolution disabled; Codex owns project code updates")
-	evo = {
-		"summary":           "Skipped: code evolution is handled in Codex; API keys are research/suggestions only",
-		"changes_applied":   [],
-		"suggestions":       status.get("suggestions", []),
-		"version_bumped_to": status.get("version"),
-		"error":             None,
-	}
+	import bot.evolution as _evo
+
+	if ov.get("skip_evolution"):
+		log.info("Evolution skipped by owner command")
+		evo = {
+			"summary":           "Skipped by owner command",
+			"changes_applied":   [],
+			"suggestions":       status.get("suggestions", []),
+			"version_bumped_to": status.get("version"),
+			"error":             None,
+		}
+	elif not _evo.enabled():
+		log.info("Evolution disabled (config/strategy.json evolution.enabled=false)")
+		evo = {
+			"summary":           "Skipped: evolution.enabled is false in config/strategy.json",
+			"changes_applied":   [],
+			"suggestions":       status.get("suggestions", []),
+			"version_bumped_to": status.get("version"),
+			"error":             None,
+		}
+	else:
+		try:
+			evo = _evo.run(llm, status)
+		except Exception as exc:
+			# Evolution must never take the cycle down: research and publishing
+			# still have to run even when a code proposal blows up.
+			msg = f"[EVOLUTION FAIL] {exc}"
+			log.exception("Evolution raised")
+			errors.append(msg)
+			evo = {
+				"summary":           f"Evolution failed: {exc}"[:200],
+				"changes_applied":   [],
+				"suggestions":       status.get("suggestions", []),
+				"version_bumped_to": status.get("version"),
+				"error":             str(exc)[:500],
+			}
+		if evo.get("branch"):
+			log.info(
+				"Evolution proposal on branch %s (%d file(s)) — review and merge to apply",
+				evo["branch"], len(evo.get("changes_applied", [])),
+			)
+		if evo.get("error"):
+			errors.append(f"[EVOLUTION] {evo['error']}")
+
+	status["last_evolution_branch"] = evo.get("branch")
+	status["evolution_pending_review"] = bool(evo.get("branch"))
 
 	status["last_evolution"] = evo
 	if evo.get("version_bumped_to"):
@@ -108,16 +146,6 @@ def main() -> int:
 			if not sg.get("secret_needed") or sg["secret_needed"] not in active_secrets
 		]
 
-	if evo.get("changes_applied"):
-		changed_files = [c["file"] for c in evo["changes_applied"]]
-		git_result = _git.commit(
-			f"🧬 evolve v{status['version']}: {evo['summary'][:80]}",
-			paths=changed_files + ["version.txt"],
-		)
-		if not git_result["success"]:
-			msg = f"[GIT FAIL] evolution commit: {git_result['error']}"
-			log.error(msg)
-			errors.append(msg)
 
 	# ── 4. Research / suggestions ────────────────────────────────────────────
 	_hr("Phase 4 — Research")

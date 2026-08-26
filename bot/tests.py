@@ -34,6 +34,12 @@ from bot.earning.articles import (
 import bot.earning.articles as articles_module
 import bot.earning.devto_stats as devto_stats
 import bot.earning.mrr_ideas as mrr_module
+import bot.evolution as evolution_module
+from bot.evolution import (
+	_apply_changes as _evo_apply_changes,
+	_is_safe as _evo_is_safe,
+)
+from pathlib import Path
 # _hours_until_due is already bound to the newsletter's copy above; alias this
 # one so it cannot shadow it and silently break the cadence tests.
 from bot.earning.mrr_ideas import (
@@ -1255,6 +1261,91 @@ class TestFollowUpOverrides(unittest.TestCase):
 		status = {}
 		_followup_target(status, "key")
 		self.assertEqual(status["article_stats"]["best_views"], 3)
+
+
+class TestEvolutionSandbox(unittest.TestCase):
+	"""The sandbox is the only thing between an LLM and this repo's source."""
+
+	def test_workflow_directory_is_never_writable(self):
+		self.assertFalse(_evo_is_safe(".github/workflows/evolve.yml"))
+
+	def test_git_directory_is_never_writable(self):
+		self.assertFalse(_evo_is_safe(".git/config"))
+
+	def test_path_traversal_rejected(self):
+		self.assertFalse(_evo_is_safe("bot/../../../etc/passwd"))
+
+	def test_unlisted_toplevel_path_rejected(self):
+		self.assertFalse(_evo_is_safe("setup.py"))
+
+	def test_allowed_module_path_accepted(self):
+		self.assertTrue(_evo_is_safe("bot/earning/articles.py"))
+
+	def test_protected_orchestrator_files_are_not_written(self):
+		"""A model that proposes rewriting llm.py or main.py must be ignored."""
+		for target in ("bot/main.py", "bot/llm.py", "bot/status.py",
+					   "bot/commands.py", "bot/evolution.py", "bot/git_utils.py"):
+			applied = _evo_apply_changes(
+				[{"file": target, "content": "x = 1", "reason": "test"}]
+			)
+			self.assertEqual(applied, [], f"{target} must be protected")
+
+	def test_syntactically_invalid_python_is_not_written(self):
+		applied = _evo_apply_changes(
+			[{"file": "bot/earning/_sandbox_probe.py",
+			  "content": "def broken( syntax error", "reason": "test"}]
+		)
+		self.assertEqual(applied, [])
+		self.assertFalse(Path("bot/earning/_sandbox_probe.py").exists())
+
+	def test_change_count_is_capped_by_config(self):
+		changes = [
+			{"file": f"docs/_probe_{i}.md", "content": "x", "reason": "r"}
+			for i in range(5)
+		]
+		try:
+			applied = _evo_apply_changes(changes, max_changes=2)
+			self.assertEqual(len(applied), 2)
+		finally:
+			for i in range(5):
+				Path(f"docs/_probe_{i}.md").unlink(missing_ok=True)
+
+	def test_config_cannot_raise_the_hard_ceiling(self):
+		"""max_changes may lower MAX_CHANGES but never exceed it."""
+		changes = [
+			{"file": f"docs/_probe_{i}.md", "content": "x", "reason": "r"}
+			for i in range(10)
+		]
+		try:
+			applied = _evo_apply_changes(changes, max_changes=99)
+			self.assertLessEqual(len(applied), evolution_module.MAX_CHANGES)
+		finally:
+			for i in range(10):
+				Path(f"docs/_probe_{i}.md").unlink(missing_ok=True)
+
+
+class TestEvolutionGate(unittest.TestCase):
+	"""Evolution is opt-in: absence of config must mean off, never on."""
+
+	def test_disabled_by_default_when_config_missing(self):
+		self.assertFalse(evolution_module.enabled({}))
+
+	def test_explicit_false_disables(self):
+		self.assertFalse(evolution_module.enabled({"enabled": False}))
+
+	def test_explicit_true_enables(self):
+		self.assertTrue(evolution_module.enabled({"enabled": True}))
+
+	def test_branch_name_is_unique_and_git_legal(self):
+		name = evolution_module._branch_name("1.2.3", "evolve")
+		self.assertTrue(name.startswith("evolve/1.2.3-"))
+		self.assertNotIn(" ", name)
+		self.assertNotIn("~", name)
+
+	def test_branch_name_sanitizes_hostile_version(self):
+		name = evolution_module._branch_name("1.0 ../evil~", "evolve")
+		for bad in (" ", "..", "~"):
+			self.assertNotIn(bad, name.split("/", 1)[1])
 
 
 if __name__ == "__main__":

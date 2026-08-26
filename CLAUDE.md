@@ -11,7 +11,7 @@
 
 ## Project Overview
 
-E-Evolve is a GitHub Actions bot that runs hourly and refreshes RAG, market research, and earning suggestions. Code evolution and code updates are handled here in Codex. Zero server cost — runs entirely on GitHub Actions free tier.
+E-Evolve is a GitHub Actions bot that runs hourly and refreshes RAG, market research, and earning suggestions. It also proposes its own code changes: Phase 3 evolution is enabled, but every proposal lands on an `evolve/*` review branch and reaches `main` only when a human merges it. Zero server cost — runs entirely on GitHub Actions free tier.
 
 Current operating policy: API keys are for RAG, research, market analysis, suggestions, draft text, and **publishing articles to dev.to**. The bot must not use keys to post to social media, place trades, mint NFTs, withdraw funds, or comment on external issues.
 
@@ -26,9 +26,10 @@ bot/main.py          ← 5-phase orchestrator (entry point)
 bot/llm.py           ← LLM abstraction (OpenRouter free chain, then Anthropic/Gemini/Cerebras/Groq)
 bot/status.py        ← Phase 1: load/save status.json, feature detection, wallet balance
 bot/commands.py      ← Phase 2: owner commands (command.txt or GitHub Issues)
+bot/evolution.py     ← Phase 3: LLM code proposals → review branch (never main)
 bot/earnings.py      ← cumulative earnings tracker + weekly reset
 bot/dashboard.py     ← writes docs/index.html + earnings-log.md
-bot/git_utils.py     ← git commit helpers
+bot/git_utils.py     ← git commit helpers + commit_to_branch (review gate)
 bot/github_secrets.py ← reads configured secret NAMES only (never values)
 bot/tests.py         ← unittest suite: python -m unittest bot.tests
 bot/earning/
@@ -54,7 +55,8 @@ command.txt          ← owner command input
 Phase 0: Init LLM (OpenRouter free-model chain first, then Anthropic > Gemini > Groq)
 Phase 1: Status   — load status.json, detect active features from env secrets
 Phase 2: Commands — read command.txt + GitHub Issues labelled "bot-command"
-Phase 3: Evolution — skipped; Codex owns code changes
+Phase 3: Evolution — LLM proposes code changes; applied to a sandbox, verified,
+                    then committed to an evolve/* review branch for human merge
 Phase 4: Research — refresh free-AI earning queue and MRR idea triage,
                     draft + publish one article, then draft + publish the
                     weekly newsletter digest when due
@@ -65,8 +67,35 @@ Phase 5: Update   — save status.json, write dashboard, commit
 
 ## Safety Boundaries (runtime policy — enforced in code, not by the LLM)
 
-Automatic code evolution was removed. Phase 3 is a hardcoded no-op and Codex
-owns all code changes, so there is no LLM-driven file writer to sandbox.
+Automatic code evolution is **enabled but human-gated**. Phase 3 lets the LLM
+propose code changes, but nothing it writes can reach `main` on its own.
+
+The gate, in order:
+
+1. **Off unless enabled.** `evolution.enabled` in `config/strategy.json` must be
+   `true`. Missing config means disabled — never the reverse.
+2. **Path allowlist.** Writes only under `bot/`, `docs/`, `config/`,
+   `requirements.txt`, `version.txt`. `.github/` and `.git/` are refused, and
+   `..` traversal is rejected.
+3. **Protected files.** `bot/main.py`, `bot/llm.py`, `bot/status.py`,
+   `bot/commands.py`, `bot/evolution.py`, and `bot/git_utils.py` can never be
+   written — the orchestrator and the sandbox itself are off limits.
+4. **Change cap.** At most `MAX_CHANGES` (3) files per cycle. `max_changes` in
+   config can lower this but never raise it.
+5. **Syntax + import check.** Python is AST-parsed before writing and
+   import-checked in a subprocess after. Failures get up to 2 LLM repair
+   attempts, then the backup is restored.
+6. **Review branch.** Verified changes are committed to
+   `evolve/<version>-<utc>` via `git_utils.commit_to_branch`, then reverted on
+   the working branch. The workflow pushes the branch but **never merges it**.
+   `main` is unchanged until a human merges.
+
+`version.txt` is bumped **on the review branch only**; the running version
+changes when you merge, not when the bot proposes.
+
+The engine is the free OpenRouter `upgrade` chain led by `stealth/ox-alpha` —
+no paid model and no credits, so a cost error can never break a cycle. Paid
+Qwen3.8 variants were evaluated and rejected for this reason.
 
 What the bot may still do at runtime:
 
@@ -344,7 +373,8 @@ force newsletter         # publish a newsletter digest now, bypassing the weekly
 force mrr                # refresh the MRR idea triage now, bypassing the interval
 force trade aggressive   # ignored: trading is disabled
 force mint N             # ignored: minting is disabled
-skip evolution           # no-op: Phase 3 is already a no-op
+skip evolution           # skip Phase 3 evolution for this cycle
+improve suggestion TEXT  # focus this cycle's evolution on that suggestion
 reset earnings           # zero this_week_usd
 post thread              # ignored: social posting is disabled
 status report            # dump full status to workflow log
@@ -404,6 +434,7 @@ Tunable by owner or changed here in Codex:
                       "min_score": 50, "history_limit": 100 },
   "code_techs":     { "enabled": true, "refresh_hours": 24, "max_items": 8,
                       "min_score": 55, "auto_pursue": false, "...": "searches, sources, outreach" },
+  "evolution":      { "enabled": true, "branch_prefix": "evolve", "max_changes": 3 },
   "llm":            { "main_engine": "stealth/ox-alpha", "provider": "openrouter" },
   "research_policy":{ "allowed_actions": ["research", "suggestions", "drafts", "article publishing"],
                       "blocked_actions": ["social posting", "trading", "minting", "payouts"] }

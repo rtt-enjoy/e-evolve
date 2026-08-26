@@ -11,10 +11,10 @@ Supported commands (case-insensitive, one per line):
   force mrr                — refresh the MRR idea triage now, bypassing the interval
   force trade aggressive   — ignored; trading is disabled by policy
   force mint N             — ignored; minting is disabled by policy
-  skip evolution           — no-op; automatic code evolution was removed
+  skip evolution           — skip Phase 3 code evolution for this cycle
   reset earnings           — zero this_week_usd
   post thread              — ignored; social posting is disabled by policy
-  improve suggestion TEXT  — no-op; code changes are owned by Codex
+  improve suggestion TEXT  — focus this cycle's evolution on that suggestion
   status report            — dump full status dict to workflow log
 """
 from __future__ import annotations
@@ -85,7 +85,8 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
 			log.warning("Ignoring %r: minting is disabled by research-only policy", raw)
 
 		elif cmd == "skip evolution":
-			log.info("Ignoring %r: Phase 3 is already a no-op", raw)
+			overrides["skip_evolution"] = 1
+			log.info("Evolution skipped this cycle by owner command")
 
 		elif cmd == "reset earnings":
 			status.setdefault("earnings", {})["this_week_usd"] = 0.0
@@ -95,8 +96,13 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
 			blocked_action_commands.append(raw.strip())
 			log.warning("Ignoring %r: posting is disabled by research-only policy", raw)
 
-		elif re.match(r"improve suggestion(?:\s+(.+))?$", cmd):
-			log.warning("Ignoring %r: code changes are owned by Codex, not the bot", raw)
+		elif m := re.match(r"improve suggestion(?:\s+(.+))?$", cmd):
+			target = (m.group(1) or "").strip()
+			if target:
+				overrides["improve_suggestion"] = target
+				log.info("Evolution will prioritise suggestion: %s", target)
+			else:
+				log.warning("Ignoring %r: name the suggestion to improve", raw)
 
 		elif cmd == "status report":
 			from bot.status import sanitize_for_git

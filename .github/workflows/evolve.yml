@@ -66,6 +66,15 @@ jobs:
         env:
           PYTHONUNBUFFERED: "1"
 
+      - name: Push evolution review branches
+        # Evolution proposals live on evolve/* branches and are NOT merged here.
+        # Pushing makes the diff reviewable; merging stays a human action.
+        run: |
+          for b in $(git branch --list 'evolve/*' --format='%(refname:short)'); do
+            git push origin "refs/heads/$b" && echo "Pushed review branch: $b" \
+              || echo "Could not push $b — will retry next cycle."
+          done
+
       - name: Push all bot commits
         run: |
           git push origin HEAD:main || (

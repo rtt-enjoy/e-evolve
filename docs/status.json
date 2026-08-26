@@ -1,7 +1,7 @@
 {
   "version": "1.35.0",
-  "last_run": "2026-08-26T15:53:21.142558+00:00",
-  "total_runs": 1710,
+  "last_run": "2026-08-26T16:59:49.999742+00:00",
+  "total_runs": 1711,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -32,38 +32,15 @@
     "source": "on-chain USDT balance"
   },
   "last_evolution": {
-    "summary": "Skipped: code evolution is handled in Codex; API keys are research/suggestions only",
-    "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Add unit tests for core modules",
-        "description": "Increase reliability by automatically testing article generation fallback and earnings aggregation",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Ensure Python's unittest module is available (built\u2011in)",
-          "2. The tests run automatically each cycle via the existing CI configuration",
-          "3. Review test results in the GitHub Actions logs"
-        ]
-      }
-    ],
     "version_bumped_to": "1.35.0",
-    "error": null
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: ''",
+    "changes_applied": [],
+    "suggestions": [],
+    "error": "Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: ''",
+    "error_type": "json"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 8,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -80,8 +57,10 @@
       ]
     }
   ],
-  "errors": [],
-  "last_cycle_seconds": 2077,
+  "errors": [
+    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): No valid JSON object found in LLM response. First 200 chars: ''"
+  ],
+  "last_cycle_seconds": 302,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -486,7 +465,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-26T15:53:21.445360+00:00",
+    "checked_at": "2026-08-26T16:59:50.449951+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -693,5 +672,7 @@
       "Notion / digital template store"
     ]
   },
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "github_repo": "rtt-enjoy/e-evolve"
 }

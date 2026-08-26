@@ -11,6 +11,12 @@ export default function ResearchSection({ status }: { status: Status }) {
 	const ideas = brief.easy_earning_ideas || [];
 	const ownerActions = brief.owner_actions || [];
 	const suggestions = (status.suggestions || []).filter((suggestion) => !isAvoidedSuggestion(suggestion));
+	const mrr = status.mrr_ideas || {};
+	const mrrRanked = mrr.ranked_ideas || [];
+	const mrrViable = mrr.viable || [];
+	const mrrRefused = mrr.refused || [];
+	const mrrSteps = mrr.validation_steps || [];
+	const mrrActions = mrr.owner_actions || [];
 
 	return (
 		<>
@@ -24,6 +30,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 				<Tile label="Earning ideas" value={String(ideas.length)} detail="with pricing guidance" tone="info" />
 				<Tile label="Owner actions" value={String(ownerActions.length)} detail="manual setup steps" tone={ownerActions.length ? 'warn' : 'neutral'} />
 				<Tile label="Bot suggestions" value={String(suggestions.length)} detail="free-tier only" tone="neutral" />
+				<Tile label="MRR models kept" value={String(mrrViable.length)} detail={`${mrrRefused.length} refused`} tone={mrrViable.length ? 'good' : 'neutral'} />
 			</div>
 
 			{brief.summary ? (
@@ -80,6 +87,92 @@ export default function ResearchSection({ status }: { status: Status }) {
 				</div>
 			) : (
 				<Card><Empty text="No earning ideas recorded yet." /></Card>
+			)}
+
+			<Subhead>Recurring revenue (MRR) triage</Subhead>
+			{mrrViable.length || mrrRefused.length ? (
+				<div className="stack">
+					{mrr.summary ? (
+						<Card title="Best current angle" hint="The strongest recurring-revenue fit for this stack.">
+							<p className="prose lead-in">{mrr.summary}</p>
+						</Card>
+					) : null}
+
+					{mrrRanked.length ? (
+						<div className="stack">
+							{mrrRanked.map((idea) => (
+								<Card key={idea.name || Math.random()} className="idea">
+									<div className="idea-head">
+										<div className="min-w-0">
+											<strong>{idea.name || 'Unnamed model'}</strong>
+											<p>{idea.narrow_niche ? `Niche: ${idea.narrow_niche}` : 'No niche recorded.'}</p>
+										</div>
+										<div className="idea-price">
+											<span>{idea.monthly_price_usd || '—'}</span>
+											<em>{idea.runway_to_first_dollar || 'unknown'}</em>
+										</div>
+									</div>
+									<dl className="mini-kv">
+										<div><dt>who pays</dt><dd>{idea.who_pays || '—'}</dd></div>
+										<div><dt>first proof</dt><dd>{idea.first_proof_artifact || '—'}</dd></div>
+										<div><dt>why this stack</dt><dd>{idea.why_this_stack_fits || '—'}</dd></div>
+										<div><dt>you do by hand</dt><dd>{idea.owner_must_do_by_hand || '—'}</dd></div>
+									</dl>
+								</Card>
+							))}
+						</div>
+					) : mrrViable.length ? (
+						<Card title="Surviving models" hint="Deterministic triage; no LLM brief this refresh.">
+							<div className="stack">
+								{mrrViable.map((model) => (
+									<article className="suggestion" key={model.name || Math.random()}>
+										<div className="suggestion-head">
+											<strong>{model.name || 'Unnamed model'}</strong>
+											<Pill tone="info">{model.bot_role || 'none'}</Pill>
+										</div>
+										<p className="prose">{model.mrr_model || 'No MRR model recorded.'}</p>
+										{(model.manual_steps || []).length ? (
+											<Bullets items={model.manual_steps || []} />
+										) : null}
+									</article>
+								))}
+							</div>
+						</Card>
+					) : null}
+
+					{mrrSteps.length ? (
+						<Disclosure title="Validate without outreach" hint="Inbound only — the bot cannot contact anyone" count={mrrSteps.length} defaultOpen>
+							<Bullets items={mrrSteps} />
+						</Disclosure>
+					) : null}
+
+					{/* The refusals are the point: this is where the owner looks when
+					    wondering why an idea they read about was not built. */}
+					{mrrRefused.length ? (
+						<Disclosure title="Refused, and why" hint="Needs a blocked action or absent infrastructure" count={mrrRefused.length}>
+							<div className="stack">
+								{mrrRefused.map((model) => (
+									<article className="suggestion" key={model.name || Math.random()}>
+										<div className="suggestion-head">
+											<strong>{model.name || 'Unnamed model'}</strong>
+											<Pill tone="warn">refused</Pill>
+										</div>
+										<p className="prose">{model.reason || 'No reason recorded.'}</p>
+										{model.mrr_model ? <code>{model.mrr_model}</code> : null}
+									</article>
+								))}
+							</div>
+						</Disclosure>
+					) : null}
+
+					{mrrActions.length ? (
+						<Disclosure title="MRR next actions" hint="Most valuable first" count={mrrActions.length}>
+							<Bullets items={mrrActions} />
+						</Disclosure>
+					) : null}
+				</div>
+			) : (
+				<Card><Empty text="No MRR triage recorded yet." /></Card>
 			)}
 
 			<Subhead>Strategy and guardrails</Subhead>

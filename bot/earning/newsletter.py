@@ -46,6 +46,10 @@ _DEFAULTS = {
 	"source_max_age_hours": 168,
 	"history_limit": 200,
 	"min_words": 500,
+	# Empty means today's behaviour: a general developer digest. Set it to angle
+	# every issue for one audience -- the source article's point that a narrow
+	# niche beats a broad one. Choosing the niche is the owner's call.
+	"niche_focus": "",
 }
 
 
@@ -216,6 +220,17 @@ def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
 		"JSON only.\n\n"
 		+ "\n\n".join(_format_item(i, item) for i, item in enumerate(items, 1))
 	)
+
+	# Angle the issue for one audience when the owner has chosen one. Appended to
+	# the prompt, not to _SYSTEM: that constant is shared with the tone gates and
+	# must stay stable.
+	niche = str(cfg.get("niche_focus", "")).strip()
+	if niche:
+		prompt += (
+			f"\n\nAudience focus: write for {niche}. When a story matters more to "
+			f"that audience, say why in that section. Do not drop a story to fit "
+			f"the niche -- cover all of them, angled for this reader."
+		)
 
 	try:
 		if hasattr(llm, "complete_json_for_role"):

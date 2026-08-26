@@ -64,13 +64,14 @@ export const SECTIONS: SectionDef[] = [
 	{
 		id: 'research',
 		label: 'Research',
-		blurb: 'Free-tier AI services, earning playbooks, and the strategy guardrails.',
-		keys: ['suggestions'],
+		blurb: 'Free-tier AI services, earning playbooks, MRR idea triage, and the strategy guardrails.',
+		keys: ['suggestions', 'mrr_ideas'],
 		badge: (status) => {
 			const brief = status.code_tech_earning?.online_ai_brief;
 			const services = brief?.free_ai_services?.length || 0;
 			const ideas = brief?.easy_earning_ideas?.length || 0;
-			return services + ideas || null;
+			const mrr = status.mrr_ideas?.viable?.length || 0;
+			return services + ideas + mrr || null;
 		},
 		load: () => import('./ResearchSection'),
 	},

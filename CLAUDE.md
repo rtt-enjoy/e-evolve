@@ -36,6 +36,7 @@ bot/earning/
   newsletter.py      ← drafts + publishes a weekly dev.to digest of several trending stories
   trending.py        ← finds recent (24h) tech articles from free public feeds
   code_techs.py      ← free-AI earning opportunity queue (research/suggestion only)
+  mrr_ideas.py       ← recurring-revenue idea triage (research/suggestion only)
 frontend/            ← React + Vite dashboard, built to docs/ by .github/workflows/frontend.yml
 .github/workflows/evolve.yml  ← hourly scheduler (never evolved)
 config/strategy.json ← tunable strategy parameters
@@ -53,8 +54,9 @@ Phase 0: Init LLM (OpenRouter free-model chain first, then Anthropic > Gemini > 
 Phase 1: Status   — load status.json, detect active features from env secrets
 Phase 2: Commands — read command.txt + GitHub Issues labelled "bot-command"
 Phase 3: Evolution — skipped; Codex owns code changes
-Phase 4: Research — refresh free-AI earning queue, draft + publish one article,
-                    then draft + publish the weekly newsletter digest when due
+Phase 4: Research — refresh free-AI earning queue and MRR idea triage,
+                    draft + publish one article, then draft + publish the
+                    weekly newsletter digest when due
 Phase 5: Update   — save status.json, write dashboard, commit
 ```
 
@@ -174,6 +176,67 @@ Newsletter history and cadence live in `status["newsletter_history"]` and
 > widening those boundaries needs an explicit owner decision. Only the newsletter
 > was built, and it publishes to dev.to — a channel already allowed.
 
+### MRR idea triage (bot/earning/mrr_ideas.py)
+
+A recurring-revenue reality check. It scores business models against this
+project's real constraints — zero server, no payment processing, no inbound
+HTTP, no outreach channel — and writes `docs/mrr-ideas.md` with the few that
+survive plus, explicitly, the ones it refuses and why.
+
+- Suggestion-only. It never contacts anyone, processes a payment, or hosts a
+  service. No new secret; it gates on `mrr_ideas.enabled` in strategy config.
+- The triage is **deterministic** (`_triage` against `_BLOCKERS`), so refusals
+  cost no LLM call and cannot be argued away by a model.
+- The line is drawn at **delivery, not billing.** Every recurring-revenue model
+  needs a way to charge — that is what MRR means — and the owner can open a
+  Gumroad or Substack account by hand. So `payments` is a `_MANUAL_STEPS`
+  prerequisite, not a blocker. Treating it as a blocker refused all 20 ideas and
+  made the report useless; that was caught and fixed during implementation.
+- **One LLM call per refresh**, and `refresh_hours: 48`, so the module costs
+  about 0.5 free-tier requests a day. Every cheap gate — disabled, interval not
+  due, nothing viable, no LLM client — returns before that call.
+- A dead or failing LLM degrades to the deterministic triage rather than
+  erroring: the refusal record is the useful half and it still gets written.
+- State lives in `status["mrr_ideas"]` / `status["mrr_ideas_history"]`, bounded
+  by `history_limit`.
+
+> **Not implemented, on purpose.** The source article ("Top 20 Side Hustle
+> Projects That Will Generate MRR in 2026") lists twenty models. Eighteen do not
+> survive this stack's constraints, and the module records each refusal rather
+> than pretending otherwise:
+>
+> - **Blocked by policy (7):** local-business AI automation agency, social media
+>   management, SEO retainer, email marketing management, paid Discord/Slack
+>   community, YouTube automation, and content repurposing. Every one needs cold
+>   outreach to acquire a client or social posting to deliver, and both are
+>   refused in code. This is the same decision already recorded for the
+>   newsletter's source article; widening those boundaries needs an explicit
+>   owner decision.
+> - **Impossible on this infrastructure (9):** micro SaaS, bookkeeping, podcast
+>   production, white-label SaaS reselling, no-code app dev, tutoring/coaching,
+>   virtual assistant agency, a niche API/data feed, and a niche job board.
+>   These need a human delivering a service, a paid platform, inbound HTTP, or a
+>   credential the owner lacks. None exists here and none is free.
+> - **Below the fit threshold (1):** online course membership — unblocked, but it
+>   needs a pre-existing audience plus two manual setup steps, which scores
+>   under `min_score`.
+>
+> The article's own critical first step — "find 10 people with the problem, talk
+> to them, charge before building" — is outreach plus payment collection. The bot
+> cannot do it, so the report tells the **owner** how to do it through inbound
+> channels instead, and says plainly which part no automation here will cover.
+>
+> A **paid** API/data feed (idea 17) was also not built beyond being refused.
+> GitHub Pages can serve static JSON for free, but a paid feed needs auth,
+> metering, and billing, and a free feed earns nothing while adding a
+> maintenance surface. That tradeoff is the owner's call, not a default.
+>
+> **This module produces no revenue by itself.** It produces a
+> constraint-checked shortlist and a refusal record. With client acquisition and
+> payment collection both outside the boundary, that is the ceiling for
+> automation here — the article says as much: "none of these will work on
+> autopilot in month one."
+
 Social posting, trading, minting, and payout secrets do not activate runtime
 actions. If such keys exist, they are treated as research context only.
 
@@ -219,6 +282,7 @@ Also works via GitHub Issues with label `bot-command`.
 ```
 force articles N         # publish N articles now, bypassing the daily cap (max 5)
 force newsletter         # publish a newsletter digest now, bypassing the weekly cadence
+force mrr                # refresh the MRR idea triage now, bypassing the interval
 force trade aggressive   # ignored: trading is disabled
 force mint N             # ignored: minting is disabled
 skip evolution           # no-op: Phase 3 is already a no-op
@@ -257,8 +321,9 @@ Keys prefixed `_` are runtime-only and not persisted.
 
 Earning modules own their own sub-trees alongside the above: `article_daily` /
 `article_history` (articles), `newsletter_daily` / `newsletter_history`
-(newsletter), and `code_tech_earning` (code_techs). Every list stored in these is
-bounded by the module's `history_limit` so `status.json` cannot grow without end.
+(newsletter), `code_tech_earning` (code_techs), and `mrr_ideas` /
+`mrr_ideas_history` (mrr_ideas). Every list stored in these is bounded by the
+module's `history_limit` so `status.json` cannot grow without end.
 
 ---
 
@@ -272,7 +337,9 @@ Tunable by owner or changed here in Codex:
                       "source_max_age_hours": 24, "history_limit": 200, "min_words": 700 },
   "newsletter":     { "enabled": true, "min_interval_hours": 168, "items_per_issue": 7,
                       "min_items": 4, "source_max_age_hours": 168,
-                      "history_limit": 200, "min_words": 500 },
+                      "history_limit": 200, "min_words": 500, "niche_focus": "" },
+  "mrr_ideas":      { "enabled": true, "refresh_hours": 48, "max_ideas": 8,
+                      "min_score": 50, "history_limit": 100 },
   "code_techs":     { "enabled": true, "refresh_hours": 24, "max_items": 8,
                       "min_score": 55, "auto_pursue": false, "...": "searches, sources, outreach" },
   "llm":            { "main_engine": "stealth/ox-alpha", "provider": "openrouter" },

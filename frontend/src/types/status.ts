@@ -83,6 +83,49 @@ export type CodeTechEarning = {
 	online_ai_brief?: OnlineAiBrief;
 };
 
+/** One recurring-revenue model that survived the constraint matrix. */
+export type MrrIdea = {
+	name?: string;
+	why_this_stack_fits?: string;
+	narrow_niche?: string;
+	first_proof_artifact?: string;
+	who_pays?: string;
+	monthly_price_usd?: string;
+	runway_to_first_dollar?: string;
+	owner_must_do_by_hand?: string;
+};
+
+/** A model the triage kept, before the LLM brief expands on it. */
+export type MrrViableModel = {
+	name?: string;
+	mrr_model?: string;
+	source_note?: string;
+	bot_role?: string;
+	score?: number;
+	manual_steps?: string[];
+};
+
+/** A model this stack cannot support, with the reason. */
+export type MrrRefusedModel = {
+	name?: string;
+	mrr_model?: string;
+	reason?: string;
+};
+
+export type MrrIdeas = {
+	enabled?: boolean;
+	last_refresh_at?: string;
+	refresh_hours?: number;
+	constraints?: string[];
+	summary?: string;
+	ranked_ideas?: MrrIdea[];
+	validation_steps?: string[];
+	owner_actions?: string[];
+	viable?: MrrViableModel[];
+	refused?: MrrRefusedModel[];
+	llm_used?: boolean;
+};
+
 export type Status = {
 	version?: string;
 	last_run?: string;
@@ -163,6 +206,7 @@ export type Status = {
 		published?: number;
 	};
 	code_tech_earning?: CodeTechEarning;
+	mrr_ideas?: MrrIdeas;
 
 	/** New keys the bot adds over time land here and surface in the Data explorer. */
 	[key: string]: unknown;

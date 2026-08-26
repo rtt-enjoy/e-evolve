@@ -144,6 +144,11 @@ def main() -> int:
 	if _code_techs_enabled():
 		actions += _module("code_techs", llm, status, errors)
 
+	# Recurring-revenue idea triage. Suggestion-only: it scores business models
+	# against this stack's real constraints and records the ones it must refuse.
+	# Self-throttles to mrr_ideas.refresh_hours so it costs ~0.5 LLM calls/day.
+	actions += _module("mrr_ideas", llm, status, errors)
+
 	# Article publishing to dev.to. Runs only when DEV_TO_API_KEY is set; the
 	# module rate-limits itself to max_articles_per_cycle per day.
 	actions += _module("articles", llm, status, errors)
@@ -188,6 +193,7 @@ def main() -> int:
 			"status.json", "earnings-log.md", "docs/index.html",
 			"docs/status.json", "docs/earnings-log.md", "command.txt",
 			"docs/code-tech-opportunities.md",
+			"docs/mrr-ideas.md",
 		],
 	)
 	if not git_result["success"]:

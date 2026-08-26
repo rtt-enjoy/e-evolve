@@ -26,6 +26,15 @@ from bot.earning.articles import (
 	_tone_problems,
 	_too_similar_to_source,
 )
+import bot.earning.mrr_ideas as mrr_module
+# _hours_until_due is already bound to the newsletter's copy above; alias this
+# one so it cannot shadow it and silently break the cadence tests.
+from bot.earning.mrr_ideas import (
+	_hours_until_due as _mrr_hours_until_due,
+	_record_refresh,
+	_triage,
+	_viability_brief,
+)
 from bot.earning.code_techs import _online_ai_brief, _outreach_draft, _parse_reddit_rss, _rank, _reference_sources
 from bot.earning.trending import (
 	_dedupe,
@@ -544,6 +553,203 @@ class TestNewsletterDigest(unittest.TestCase):
 			"platform": "dev.to-newsletter", "success": True,
 			"title": "Weekly Digest", "url": "https://dev.to/x",
 			"item_count": 7, "estimated_usd": 0.0,
+		}])
+		self.assertEqual(updated["earnings"]["total_usd"], 0.0)
+		self.assertEqual(updated["earnings"]["confirmed_usd"], 0.0)
+
+	def test_niche_focus_absent_by_default(self):
+		# Shipping a niche the owner did not choose would change every issue.
+		self.assertEqual(newsletter_module._DEFAULTS["niche_focus"], "")
+
+	def test_niche_focus_reaches_the_prompt(self):
+		captured = {}
+
+		class FakeLLM:
+			def complete_json(self, prompt, system=None, max_tokens=None):
+				captured["prompt"] = prompt
+				return {}   # rejected downstream; we only care about the prompt
+
+		original = newsletter_module.trending.fetch_candidates
+		try:
+			newsletter_module.trending.fetch_candidates = lambda **kw: self._items(5)
+			_generate_issue(FakeLLM(), {}, self._cfg(niche_focus="platform engineers"))
+			self.assertIn("platform engineers", captured["prompt"])
+			# The niche angles the writing; it must not filter the sources.
+			self.assertIn("STORY 5", captured["prompt"])
+		finally:
+			newsletter_module.trending.fetch_candidates = original
+
+
+class TestMrrIdeaTriage(unittest.TestCase):
+	"""Recurring-revenue triage must refuse blocked models and never invent MRR."""
+
+	def _cfg(self, **over):
+		cfg = dict(mrr_module._DEFAULTS)
+		cfg.update(over)
+		return cfg
+
+	def _triaged(self, **over):
+		return _triage(mrr_module._CATALOGUE, self._cfg(**over))
+
+	def _refused_names(self, **over):
+		return {r["name"]: r["reason"] for r in self._triaged(**over)[1]}
+
+	# ── the policy guarantee: these are the tests that matter most ──────────
+
+	def test_outreach_dependent_idea_is_refused(self):
+		# An agency cannot acquire clients without cold outreach, which is blocked.
+		reason = self._refused_names()["Local business AI automation agency"]
+		self.assertIn("cold email", reason)
+
+	def test_social_delivery_idea_is_refused(self):
+		reason = self._refused_names()["Social media management retainer"]
+		self.assertIn("social platforms", reason)
+
+	def test_human_delivery_idea_is_refused(self):
+		reason = self._refused_names()["Virtual assistant agency"]
+		self.assertIn("human", reason)
+
+	def test_inbound_http_idea_is_refused(self):
+		# GitHub Actions is outbound-only: nothing can accept a request.
+		reason = self._refused_names()["Niche job board / marketplace"]
+		self.assertIn("outbound-only", reason)
+
+	def test_every_refusal_carries_a_reason(self):
+		# An unexplained refusal is useless to the owner.
+		_, refused = self._triaged()
+		self.assertTrue(refused)
+		for entry in refused:
+			self.assertTrue(entry["reason"].strip(), entry["name"])
+
+	def test_no_refused_idea_leaks_into_viable(self):
+		viable, refused = self._triaged()
+		self.assertFalse({i["name"] for i in viable} & {r["name"] for r in refused})
+
+	def test_every_catalogue_entry_is_accounted_for(self):
+		# Nothing may be silently dropped: the owner read about all 20.
+		viable, refused = self._triaged()
+		self.assertEqual(
+			{i["name"] for i in viable} | {r["name"] for r in refused},
+			{i["name"] for i in mrr_module._CATALOGUE},
+		)
+
+	def test_payments_alone_does_not_refuse(self):
+		# Every MRR model needs billing -- that is what MRR means. The owner can
+		# open a Gumroad account by hand, so it is a prerequisite, not a blocker.
+		viable, _ = self._triaged()
+		names = {i["name"] for i in viable}
+		self.assertIn("Paid newsletter", names)
+		steps = next(i for i in viable if i["name"] == "Paid newsletter")["manual_steps"]
+		self.assertTrue(any("payment" in s for s in steps))
+
+	def test_something_survives_triage(self):
+		# Guard against a blocker model so coarse that it refuses everything.
+		viable, _ = self._triaged()
+		self.assertTrue(viable)
+
+	# ── cost discipline: every gate must precede the LLM call ───────────────
+
+	def test_interval_blocks_early_refresh(self):
+		recent = datetime.now(timezone.utc).isoformat()
+		self.assertGreater(_mrr_hours_until_due({"last_refresh_at": recent}, 48), 0)
+
+	def test_interval_allows_when_due(self):
+		old = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
+		self.assertEqual(_mrr_hours_until_due({"last_refresh_at": old}, 48), 0.0)
+
+	def test_unparseable_stamp_does_not_wedge_module(self):
+		self.assertEqual(_mrr_hours_until_due({"last_refresh_at": "not-a-date"}, 48), 0.0)
+
+	def test_first_run_is_due_immediately(self):
+		self.assertEqual(_mrr_hours_until_due({}, 48), 0.0)
+
+	def test_disabled_in_config_skips_without_llm_call(self):
+		class ExplodingLLM:
+			def complete_json_for_role(self, *a, **kw):
+				raise AssertionError("disabled module must not call the LLM")
+
+		original = mrr_module._config
+		try:
+			mrr_module._config = lambda: self._cfg(enabled=False)
+			self.assertEqual(mrr_module.run(ExplodingLLM(), {}), [])
+		finally:
+			mrr_module._config = original
+
+	def test_fresh_interval_skips_without_llm_call(self):
+		class ExplodingLLM:
+			def complete_json_for_role(self, *a, **kw):
+				raise AssertionError("throttled module must not call the LLM")
+
+		status = {"mrr_ideas": {"last_refresh_at": datetime.now(timezone.utc).isoformat()}}
+		self.assertEqual(mrr_module.run(ExplodingLLM(), status), [])
+
+	def test_force_override_bypasses_interval(self):
+		status = {
+			"mrr_ideas": {"last_refresh_at": datetime.now(timezone.utc).isoformat()},
+			"_overrides": {"force_mrr": 1},
+		}
+		self.assertEqual(len(mrr_module.run(None, status)), 1)
+
+	def test_no_llm_still_writes_deterministic_triage(self):
+		# A dead LLM must still produce the refusal record, and raise nothing.
+		status = {}
+		actions = mrr_module.run(None, status)
+		self.assertEqual(len(actions), 1)
+		self.assertTrue(actions[0]["success"])
+		self.assertFalse(actions[0]["llm"])
+		self.assertTrue(status["mrr_ideas"]["refused"])
+
+	def test_llm_failure_degrades_to_deterministic_triage(self):
+		class BoomLLM:
+			def complete_json_for_role(self, *a, **kw):
+				raise RuntimeError("provider down")
+
+		self.assertEqual(_viability_brief(BoomLLM(), [], self._cfg()), {})
+
+	def test_non_dict_llm_output_is_rejected(self):
+		class WeirdLLM:
+			def complete_json_for_role(self, *a, **kw):
+				return ["not", "an", "object"]
+
+		self.assertEqual(_viability_brief(WeirdLLM(), [], self._cfg()), {})
+
+	def test_brief_never_invents_fields(self):
+		# Only whitelisted keys survive, so a chatty model cannot inject prose.
+		class FakeLLM:
+			def complete_json_for_role(self, *a, **kw):
+				return {
+					"summary": "one angle",
+					"ranked_ideas": [{"name": "X", "who_pays": "devs", "junk": "drop me"}],
+					"validation_steps": ["ask in a community you already belong to"],
+					"owner_actions": ["do the thing"],
+				}
+
+		brief = _viability_brief(FakeLLM(), [], self._cfg())
+		self.assertNotIn("junk", brief["ranked_ideas"][0])
+		self.assertEqual(brief["ranked_ideas"][0]["who_pays"], "devs")
+
+	# ── shared invariants ───────────────────────────────────────────────────
+
+	def test_history_is_bounded(self):
+		status = {}
+		for i in range(300):
+			_record_refresh(status, [{"name": f"Model {i}"}], 100)
+		self.assertLessEqual(len(status["mrr_ideas_history"]["names"]), 100)
+
+	def test_history_limit_zero_does_not_wipe_list(self):
+		status = {}
+		_record_refresh(status, [{"name": "Only One"}], 0)
+		self.assertEqual(status["mrr_ideas_history"]["names"], ["Only One"])
+
+	def test_triage_never_counts_as_revenue(self):
+		# Mirrors the newsletter guard: research is not income.
+		status = {"earnings": {"total_usd": 0.0, "this_week_usd": 0.0,
+								"last_cycle_usd": 0.0, "week_started": None,
+								"breakdown": {}}}
+		updated = update(status, [{
+			"platform": "mrr-ideas", "success": True,
+			"title": "MRR idea triage refreshed", "url": "docs/mrr-ideas.md",
+			"idea_count": 2, "refused_count": 18, "estimated_usd": 0.0,
 		}])
 		self.assertEqual(updated["earnings"]["total_usd"], 0.0)
 		self.assertEqual(updated["earnings"]["confirmed_usd"], 0.0)

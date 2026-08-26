@@ -6,6 +6,7 @@ Commands execute once, then are cleared automatically.
 Supported commands (case-insensitive, one per line):
   force articles N         — publish N articles now, bypassing the daily cap (max 5)
   force newsletter         — publish a newsletter digest now, bypassing the cadence
+  force mrr                — refresh the MRR idea triage now, bypassing the interval
   force trade aggressive   — ignored; trading is disabled by policy
   force mint N             — ignored; minting is disabled by policy
   skip evolution           — no-op; automatic code evolution was removed
@@ -60,6 +61,10 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
 		elif cmd == "force newsletter":
 			overrides["force_newsletter"] = 1
 			log.info("Newsletter digest forced this cycle (cadence bypassed)")
+
+		elif cmd == "force mrr":
+			overrides["force_mrr"] = 1
+			log.info("MRR idea triage forced this cycle (interval bypassed)")
 
 		elif cmd == "force trade aggressive":
 			blocked_action_commands.append(raw.strip())

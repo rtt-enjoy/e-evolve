@@ -12,10 +12,11 @@ Exceptions are caught by `main.py._module()` — a crashed module does not stop 
 
 ---
 
-Only two modules run: `code_techs` (research/suggestions only) and `articles`
-(publishes to dev.to when `DEV_TO_API_KEY` is set). Social posting, crypto
-trading, NFT minting, payouts, and external comments are blocked by policy —
-the modules that once implemented them have been removed from the tree.
+Four modules run: `code_techs` and `mrr_ideas` (research/suggestions only), plus
+`articles` and `newsletter` (both publish to dev.to when `DEV_TO_API_KEY` is
+set). Social posting, crypto trading, NFT minting, payouts, and external
+comments are blocked by policy — the modules that once implemented them have
+been removed from the tree.
 
 ## Code Techs (`bot/earning/code_techs.py`)
 
@@ -92,6 +93,48 @@ duplicate flood on dev.to.
 ```
 
 **Override:** `force articles N` command posts N articles in one cycle.
+
+---
+
+## MRR Ideas (`bot/earning/mrr_ideas.py`)
+
+**Activates when:** `mrr_ideas.enabled` is true in `config/strategy.json`. No
+secret required — it publishes nothing and contacts no one.
+
+**What it does:**
+1. Scores a static catalogue of 20 recurring-revenue business models against
+   this project's real constraints: zero server, no payment processing, no
+   inbound HTTP, no outreach channel.
+2. Splits them deterministically into viable and refused. The split is plain
+   Python against `_BLOCKERS`, so a refusal costs no LLM call and no model can
+   argue it away.
+3. Distinguishes a **blocker** (delivery needs an action refused in code, or
+   absent infrastructure) from a **manual prerequisite** (the owner opens a
+   Gumroad account by hand). Every MRR model needs billing, so billing alone is
+   never a refusal — otherwise the triage would refuse all 20.
+4. Makes **one** LLM call per refresh to expand the survivors into named buyers,
+   niches, and first proof artifacts.
+5. Writes `docs/mrr-ideas.md`, including a `## Refused, And Why` table.
+6. Returns an action dict with `idea_count`, `refused_count`, and
+   `estimated_usd: 0.0`.
+
+**Cost:** `refresh_hours` defaults to 48, and every cheap gate (disabled,
+interval not due, nothing viable, no LLM) returns before the call — so the
+module costs about half a free-tier request per day.
+
+```json
+{
+  "mrr_ideas": {
+    "enabled": true,
+    "refresh_hours": 48,
+    "max_ideas": 8,
+    "min_score": 50,
+    "history_limit": 100
+  }
+}
+```
+
+**Override:** `force mrr` refreshes now, bypassing the interval.
 
 ---
 

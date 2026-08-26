@@ -1,7 +1,7 @@
 {
   "version": "1.35.0",
-  "last_run": "2026-08-26T10:12:00.266883+00:00",
-  "total_runs": 1704,
+  "last_run": "2026-08-26T10:33:27.827019+00:00",
+  "total_runs": 1705,
   "active_features": [
     "llm_anthropic",
     "llm_gemini",
@@ -58,7 +58,7 @@
         "success": true,
         "idea_count": 2,
         "refused_count": 18,
-        "llm": false,
+        "llm": true,
         "estimated_usd": 0.0,
         "title": "MRR idea triage refreshed (2 viable, 18 refused)",
         "url": "docs\\mrr-ideas.md"
@@ -81,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 340,
+  "last_cycle_seconds": 252,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -521,7 +521,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-08-26T10:12:00.375106+00:00",
+    "last_refresh_at": "2026-08-26T10:33:27.947490+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -530,10 +530,43 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "",
-    "ranked_ideas": [],
-    "validation_steps": [],
-    "owner_actions": [],
+    "summary": "The only recurring-revenue model that fits a zero\u2011cost, research\u2011first stack that can only publish to dev.to is a paid newsletter: the bot writes and publishes articles, the owner manually turns those articles into a weekly email issue, and the owner sets up a simple subscription page (e.g., Substack or Gumroad) by hand to collect $10/mo from individual developers who want curated, niche\u2011specific technical insights.",
+    "ranked_ideas": [
+      {
+        "name": "Paid newsletter",
+        "why_this_stack_fits": "The bot can produce the exact long\u2011form content the newsletter needs, and dev.to publishing builds the inbound audience without any outreach or paid ads.",
+        "narrow_niche": "Go performance optimization for cloud\u2011native microservices",
+        "first_proof_artifact": "A 5\u2011issue sample newsletter published as five dev.to articles, each ending with a subscription call\u2011to\u2011action",
+        "who_pays": "Individual backend engineers (2\u20115 years experience) who write Go services on Kubernetes and want a weekly curated tip sheet",
+        "monthly_price_usd": "10",
+        "runway_to_first_dollar": "6\u201110 weeks",
+        "owner_must_do_by_hand": "Create and maintain a Substack/Gumroad account, set up the subscription landing page, manually import each dev.to article into the newsletter, manage the subscriber list, and send each weekly issue"
+      },
+      {
+        "name": "Notion / digital template store",
+        "why_this_stack_fits": "The bot can draft detailed Notion templates and accompanying documentation, which the owner can then package and sell.",
+        "narrow_niche": "Ready\u2011to\u2011use OpenAPI spec templates for Go gRPC services with CI/CD pipelines",
+        "first_proof_artifact": "One complete Notion template (spec file, folder structure, GitHub Actions workflow) published as a dev.to article with a download link",
+        "who_pays": "Solo Go developers or small teams building new gRPC services who need a compliant OpenAPI contract from day one",
+        "monthly_price_usd": "15",
+        "runway_to_first_dollar": "8\u201112 weeks",
+        "owner_must_do_by_hand": "Open a Gumroad/Stripe account, create the product listing, upload the Notion template files, handle order fulfillment (manual email with download link), and maintain the storefront"
+      }
+    ],
+    "validation_steps": [
+      "Publish a dev.to article titled \"5 Go performance traps in Kubernetes\" that ends with the question: \"Which of these traps hits your service the most? Comment below.\"",
+      "Monitor the comments for 2 weeks; collect the usernames of developers who describe the same pain points.",
+      "Join the \"Go Performance\" Discord server you already belong to; post a short summary of the article and ask members if they would pay for a weekly tip sheet.",
+      "Create a simple Google Form (shared only in the article and Discord) asking for email and willingness to pay $10/mo; count responses after 1 week.",
+      "If at least 10 distinct developers express willingness, proceed to set up the subscription page."
+    ],
+    "owner_actions": [
+      "Write and publish the first 5 dev.to articles covering the top Go performance traps, each with a clear subscription CTA.",
+      "Manually create a Substack newsletter, import the 5 articles as the inaugural issues, and configure the $10/mo paid tier.",
+      "Add a subscription link to the bottom of every existing and future dev.to article.",
+      "Each week, manually copy the latest dev.to article into Substack, format it, and send to subscribers.",
+      "After 4 weeks, review subscriber count and feedback; decide whether to continue, adjust price, or pivot."
+    ],
     "viable": [
       {
         "name": "Paid newsletter",
@@ -651,7 +684,7 @@
         "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
       }
     ],
-    "llm_used": false
+    "llm_used": true
   },
   "mrr_ideas_history": {
     "names": [

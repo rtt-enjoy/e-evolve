@@ -24,14 +24,14 @@ The dashboard is a multi-page shell: a fixed sidebar plus hash routes
 only the Overview chunk. Depth is deliberate — the landing page carries only
 essentials, and detail lives one click away.
 
-| Route       | Answers                                                          |
-|-------------|------------------------------------------------------------------|
-| `#/overview`| Is it earning, is it fresh, what needs attention right now?       |
-| `#/leads`   | Which opportunities exist, worth what, and what is the first step?|
-| `#/research`| Which free AI services and earning playbooks were found?          |
-| `#/engine`  | Which model serves which role, and what did the last cycle do?    |
-| `#/health`  | Freshness, integration readiness, errors, receive-wallet state.  |
-| `#/data`    | Every snapshot field, including keys no section claims yet.       |
+| Route        | Answers                                                         	  |
+|--------------|--------------------------------------------------------------------|
+| `#/overview` | Is it earning, is it fresh, what needs attention right now?        |
+| `#/leads`    | Which opportunities exist, worth what, and what is the first step? |
+| `#/research` | Which free AI services and earning playbooks were found?           |
+| `#/engine`   | Which model serves which role, and what did the last cycle do?     |
+| `#/health`   | Freshness, integration readiness, errors, receive-wallet state.    |
+| `#/data`     | Every snapshot field, including keys no section claims yet.        |
 
 `#/leads/<index>` is a detail view carrying the lead's `codex_prompt` and
 `outreach_draft` with copy buttons. Outreach is never sent automatically.

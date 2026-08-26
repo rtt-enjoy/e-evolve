@@ -1,7 +1,7 @@
 {
   "version": "1.34.1",
-  "last_run": "2026-08-26T09:02:58.219602+00:00",
-  "total_runs": 1702,
+  "last_run": "2026-08-26T09:58:05.286698+00:00",
+  "total_runs": 1703,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -21,7 +21,8 @@
     "week_started": "2026-08-24",
     "breakdown": {
       "dev.to": 0.0,
-      "code_techs": 0.0
+      "code_techs": 0.0,
+      "dev.to-newsletter": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -50,7 +51,16 @@
     "error": null
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to-newsletter",
+        "success": true,
+        "title": "This Week in Dev: X Claws Back, DIY Builds, and AI Reality Checks",
+        "url": "https://dev.to/robust_true_try/this-week-in-dev-x-claws-back-diy-builds-and-ai-reality-checks-5a1f",
+        "estimated_usd": 0.0,
+        "item_count": 7
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -68,7 +78,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1,
+  "last_cycle_seconds": 27,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -473,10 +483,39 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-26T09:02:58.838449+00:00",
+    "checked_at": "2026-08-26T09:58:05.683543+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
+  },
+  "newsletter_daily": {
+    "enabled": true,
+    "date": "2026-08-26",
+    "published_at": "2026-08-26T09:58:32.296464+00:00",
+    "published": 1,
+    "last_item_count": 7,
+    "last_title": "This Week in Dev: X Claws Back, DIY Builds, and AI Reality Checks",
+    "last_url": "https://dev.to/robust_true_try/this-week-in-dev-x-claws-back-diy-builds-and-ai-reality-checks-5a1f"
+  },
+  "newsletter_history": {
+    "source_urls": [
+      "github.com/zedeus/nitter/issues/1442",
+      "imkylelambert.com/articles/building-a-backyard-office-the-build-and-cost-breakdown",
+      "github.com/jeffhajewski/latticedb",
+      "sethmlarson.dev/when-str-lower-is-a-security-vulnerability",
+      "medium.com/weblineglobal/your-ai-agent-works-in-the-demo-heres-what-breaks-in-production-cb4f49f44af6",
+      "dev.to/stridexclothingstore/family-matching-outfits-how-to-create-stylish-looks-for-every-family-member-c8c",
+      "medium.com/@marlonsteiner/the-4-stages-of-working-with-ai-most-people-never-leave-stage-zero-49a8fb8999a7"
+    ],
+    "source_titles": [
+      "nitter xcancel receive cease desist notic",
+      "building backyard office build cost breakdown",
+      "show hn latticedb like sqlite graph databas",
+      "str lower security vulnerability python",
+      "ai agent work demo here s break production",
+      "family matching outfit create stylish look every family member",
+      "4 stag working ai most people never leave stage zero"
+    ]
   },
   "github_repo": "rtt-enjoy/e-evolve"
 }

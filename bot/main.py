@@ -148,11 +148,15 @@ def main() -> int:
 	# module rate-limits itself to max_articles_per_cycle per day.
 	actions += _module("articles", llm, status, errors)
 
+	# Newsletter digest to dev.to. Same key, same policy; the module self-throttles
+	# to newsletter.min_interval_hours so the hourly pulse publishes one per week.
+	actions += _module("newsletter", llm, status, errors)
+
 	if not actions:
 		log.warning(
 			"No actions ran this cycle.\n"
 			"Add or refresh LLM keys for research and article drafting.\n"
-			"Set DEV_TO_API_KEY to enable article publishing.\n"
+			"Set DEV_TO_API_KEY to enable article and newsletter publishing.\n"
 			"Social posting, trading, minting, and payouts remain disabled by policy."
 		)
 

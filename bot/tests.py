@@ -1,8 +1,17 @@
 import unittest
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import bot.earnings as earnings_module
+import bot.earning.newsletter as newsletter_module
+from bot.earning.newsletter import (
+	_digest_problems,
+	_ensure_sources,
+	_generate_issue,
+	_hours_until_due,
+	_pick_sources,
+	_record_issue,
+)
 from bot.earning.articles import (
 	_duplicate_reason,
 	_ensure_attribution,
@@ -400,6 +409,145 @@ class TestArticlePublishing(unittest.TestCase):
 			articles_module.requests.post = original
 
 		self.assertNotIn("_source", captured.get("article", {}))
+
+class TestNewsletterDigest(unittest.TestCase):
+	"""The digest must never repeat a story or invent one."""
+
+	def _cfg(self, **over):
+		cfg = dict(newsletter_module._DEFAULTS)
+		cfg.update(over)
+		return cfg
+
+	def _items(self, n, start=0):
+		return [
+			{"title": f"Some Real Tech Story Number {i}",
+			 "url": f"https://example.com/post/{i}",
+			 "source": "feed", "summary": "x" * 500}
+			for i in range(start, start + n)
+		]
+
+	def test_no_llm_publishes_nothing(self):
+		# Regression guard: never emit a fallback issue when the LLM is absent.
+		self.assertIsNone(_generate_issue(None, {}, self._cfg()))
+
+	def test_too_few_fresh_items_publishes_nothing(self):
+		# The anti-duplicate-flood guard: a thin digest is worse than none.
+		original = newsletter_module.trending.fetch_candidates
+		try:
+			newsletter_module.trending.fetch_candidates = lambda **kw: self._items(2)
+			self.assertIsNone(_generate_issue(object(), {}, self._cfg(min_items=4)))
+		finally:
+			newsletter_module.trending.fetch_candidates = original
+
+	def test_featured_item_not_reused(self):
+		status = {}
+		_record_issue(status, self._items(3), 200)
+		original = newsletter_module.trending.fetch_candidates
+		try:
+			# Same three stories come back next week; none may be picked again.
+			newsletter_module.trending.fetch_candidates = lambda **kw: self._items(3)
+			self.assertEqual(_pick_sources(status, self._cfg()), [])
+		finally:
+			newsletter_module.trending.fetch_candidates = original
+
+	def test_fresh_items_still_selected_after_history(self):
+		status = {}
+		_record_issue(status, self._items(3), 200)
+		original = newsletter_module.trending.fetch_candidates
+		try:
+			newsletter_module.trending.fetch_candidates = lambda **kw: self._items(6)
+			picked = _pick_sources(status, self._cfg())
+			self.assertEqual(len(picked), 3)  # the 3 unseen ones
+		finally:
+			newsletter_module.trending.fetch_candidates = original
+
+	def test_duplicate_within_one_fetch_picked_once(self):
+		original = newsletter_module.trending.fetch_candidates
+		try:
+			dupes = self._items(1) * 3
+			newsletter_module.trending.fetch_candidates = lambda **kw: dupes
+			self.assertEqual(len(_pick_sources({}, self._cfg())), 1)
+		finally:
+			newsletter_module.trending.fetch_candidates = original
+
+	def test_history_is_bounded(self):
+		status = {}
+		for i in range(300):
+			_record_issue(status, self._items(1, start=i), 200)
+		self.assertLessEqual(len(status["newsletter_history"]["source_urls"]), 200)
+
+	def test_fetch_failure_survives(self):
+		original = newsletter_module.trending.fetch_candidates
+		try:
+			def boom(**kwargs):
+				raise RuntimeError("network down")
+			newsletter_module.trending.fetch_candidates = boom
+			self.assertEqual(_pick_sources({}, self._cfg()), [])
+		finally:
+			newsletter_module.trending.fetch_candidates = original
+
+	def test_missing_source_link_flagged(self):
+		items = self._items(4)
+		body = "## One\n\ntext\n\n## Two\n\ntext\n\n## Three\n\ntext\n\n## Four\n\ntext"
+		problems = _digest_problems(body, items, self._cfg(min_words=1))
+		self.assertTrue(any("source link" in p for p in problems))
+
+	def test_missing_source_link_is_repaired(self):
+		items = self._items(2)
+		repaired = _ensure_sources("## One\n\ntext", items)
+		for item in items:
+			self.assertIn(item["url"], repaired)
+
+	def test_present_source_links_not_duplicated(self):
+		items = self._items(1)
+		body = f"## One\n\nSource: [t]({items[0]['url']})"
+		self.assertEqual(_ensure_sources(body, items), body)
+
+	def test_too_few_sections_flagged(self):
+		problems = _digest_problems("## Only One\n\ntext", [], self._cfg(min_words=1))
+		self.assertTrue(any("'##' sections" in p for p in problems))
+
+	def test_fabricated_numbers_flagged(self):
+		body = ("## One\n\nIt responds in 45ms.\n\n## Two\n\nt\n\n"
+				"## Three\n\nt\n\n## Four\n\nt")
+		problems = _digest_problems(body, [], self._cfg(min_words=1))
+		self.assertTrue(any("latency" in p for p in problems))
+
+	def test_cadence_blocks_early_republish(self):
+		recent = datetime.now(timezone.utc).isoformat()
+		self.assertGreater(_hours_until_due({"published_at": recent}, 168), 0)
+
+	def test_cadence_allows_when_due(self):
+		old = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
+		self.assertEqual(_hours_until_due({"published_at": old}, 168), 0.0)
+
+	def test_unparseable_stamp_does_not_wedge_module(self):
+		self.assertEqual(_hours_until_due({"published_at": "not-a-date"}, 168), 0.0)
+
+	def test_first_run_is_due_immediately(self):
+		self.assertEqual(_hours_until_due({}, 168), 0.0)
+
+	def test_missing_devto_key_skips_silently(self):
+		original = os.environ.pop("DEV_TO_API_KEY", None)
+		try:
+			self.assertEqual(newsletter_module.run(object(), {}), [])
+		finally:
+			if original is not None:
+				os.environ["DEV_TO_API_KEY"] = original
+
+	def test_newsletter_never_counts_as_revenue(self):
+		# Mirrors the articles revenue guard: publishing is reach, not income.
+		status = {"earnings": {"total_usd": 0.0, "this_week_usd": 0.0,
+								"last_cycle_usd": 0.0, "week_started": None,
+								"breakdown": {}}}
+		updated = update(status, [{
+			"platform": "dev.to-newsletter", "success": True,
+			"title": "Weekly Digest", "url": "https://dev.to/x",
+			"item_count": 7, "estimated_usd": 0.0,
+		}])
+		self.assertEqual(updated["earnings"]["total_usd"], 0.0)
+		self.assertEqual(updated["earnings"]["confirmed_usd"], 0.0)
+
 
 class TestEarningsUpdate(unittest.TestCase):
 	def test_week_reset(self):

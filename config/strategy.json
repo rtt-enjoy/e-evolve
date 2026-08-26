@@ -6,6 +6,15 @@
 		"history_limit": 200,
 		"min_words": 700
 	},
+	"newsletter": {
+		"enabled": true,
+		"min_interval_hours": 168,
+		"items_per_issue": 7,
+		"min_items": 4,
+		"source_max_age_hours": 168,
+		"history_limit": 200,
+		"min_words": 500
+	},
 	"code_techs": {
 		"enabled": true,
 		"refresh_hours": 24,

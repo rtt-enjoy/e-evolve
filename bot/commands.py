@@ -5,6 +5,7 @@ Commands execute once, then are cleared automatically.
 
 Supported commands (case-insensitive, one per line):
   force articles N         — publish N articles now, bypassing the daily cap (max 5)
+  force newsletter         — publish a newsletter digest now, bypassing the cadence
   force trade aggressive   — ignored; trading is disabled by policy
   force mint N             — ignored; minting is disabled by policy
   skip evolution           — no-op; automatic code evolution was removed
@@ -55,6 +56,10 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
 			count = max(1, min(5, int(m.group(1))))
 			overrides["force_articles"] = count
 			log.info("Article publishing forced this cycle: %d", count)
+
+		elif cmd == "force newsletter":
+			overrides["force_newsletter"] = 1
+			log.info("Newsletter digest forced this cycle (cadence bypassed)")
 
 		elif cmd == "force trade aggressive":
 			blocked_action_commands.append(raw.strip())

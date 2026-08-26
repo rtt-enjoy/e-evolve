@@ -33,6 +33,7 @@ bot/github_secrets.py ← reads configured secret NAMES only (never values)
 bot/tests.py         ← unittest suite: python -m unittest bot.tests
 bot/earning/
   articles.py        ← drafts + publishes one dev.to article per day from a trending source
+  newsletter.py      ← drafts + publishes a weekly dev.to digest of several trending stories
   trending.py        ← finds recent (24h) tech articles from free public feeds
   code_techs.py      ← free-AI earning opportunity queue (research/suggestion only)
 frontend/            ← React + Vite dashboard, built to docs/ by .github/workflows/frontend.yml
@@ -52,7 +53,8 @@ Phase 0: Init LLM (OpenRouter free-model chain first, then Anthropic > Gemini > 
 Phase 1: Status   — load status.json, detect active features from env secrets
 Phase 2: Commands — read command.txt + GitHub Issues labelled "bot-command"
 Phase 3: Evolution — skipped; Codex owns code changes
-Phase 4: Research — refresh free-AI earning queue, then draft + publish one article
+Phase 4: Research — refresh free-AI earning queue, draft + publish one article,
+                    then draft + publish the weekly newsletter digest when due
 Phase 5: Update   — save status.json, write dashboard, commit
 ```
 
@@ -133,6 +135,45 @@ the duplicate flood. Title matching is stemmed and stopword-stripped
 (`trending.normalize_title`) so "Costs"/"Cost" and "Under"/"During" variants
 cannot slip a repeat through.
 
+### Newsletter digest (bot/earning/newsletter.py)
+
+A weekly "what shipped in tech" digest published to dev.to. Where `articles`
+writes one deep piece about a single source, the newsletter writes one short
+section about each of several sources. Same secret (`DEV_TO_API_KEY`), same
+policy, same house style — it is a second product, not a second channel.
+
+- Sources come from the same `trending.fetch_candidates()`, with
+  `source_max_age_hours: 168` so a weekly issue sees the whole week.
+- `_pick_sources()` takes the top `items_per_issue` (7) candidates not already in
+  `status["newsletter_history"]`. A story is featured **at most once, ever**.
+- If fewer than `min_items` (4) fresh stories survive, **it publishes nothing** —
+  and returns before calling the LLM, so a dead week costs zero free-tier requests.
+- **One LLM call per issue**, not one per story. This matters against the
+  OpenRouter free-tier daily ceiling.
+- It does *not* call `trending.unlock_summary()`; a digest paragraph does not
+  need full paywalled text, and skipping it avoids ~7 extra HTTP fetches.
+- Gates reuse `articles`' `_normalize`, `_strip_fabricated_tables`,
+  `_fabrication_problems`, and `_tone_problems`, so the two modules cannot drift
+  apart on fabrication or voice. Structural checks are local
+  (`_digest_problems`), because `articles._format_problems` asserts essay rules
+  (2+ code blocks, `## Key Takeaways`) a digest legitimately lacks.
+- A dropped source link is repaired deterministically by `_ensure_sources()`
+  rather than rejecting the whole issue; anything else fails the issue.
+- Cadence is self-managed via `newsletter_daily.published_at` against
+  `min_interval_hours` (168). The hourly pulse therefore yields one issue a week.
+- History is deliberately **separate** from `article_history`: a story may be
+  both a digest paragraph and, later, a full article.
+
+Newsletter history and cadence live in `status["newsletter_history"]` and
+`status["newsletter_daily"]`. Both are bounded by `history_limit`.
+
+> **Not implemented, on purpose.** The source article that prompted this feature
+> described three "autopilot income" systems. Systems 2 (auto-posting affiliate
+> content to social platforms) and 3 (scraping leads and auto-sending cold email)
+> were **rejected**: both require actions this project blocks in code, and
+> widening those boundaries needs an explicit owner decision. Only the newsletter
+> was built, and it publishes to dev.to — a channel already allowed.
+
 Social posting, trading, minting, and payout secrets do not activate runtime
 actions. If such keys exist, they are treated as research context only.
 
@@ -177,6 +218,7 @@ Also works via GitHub Issues with label `bot-command`.
 
 ```
 force articles N         # publish N articles now, bypassing the daily cap (max 5)
+force newsletter         # publish a newsletter digest now, bypassing the weekly cadence
 force trade aggressive   # ignored: trading is disabled
 force mint N             # ignored: minting is disabled
 skip evolution           # no-op: Phase 3 is already a no-op
@@ -213,6 +255,11 @@ status report            # dump full status to workflow log
 
 Keys prefixed `_` are runtime-only and not persisted.
 
+Earning modules own their own sub-trees alongside the above: `article_daily` /
+`article_history` (articles), `newsletter_daily` / `newsletter_history`
+(newsletter), and `code_tech_earning` (code_techs). Every list stored in these is
+bounded by the module's `history_limit` so `status.json` cannot grow without end.
+
 ---
 
 ## Strategy Config (config/strategy.json)
@@ -223,6 +270,9 @@ Tunable by owner or changed here in Codex:
 {
   "articles":       { "max_articles_per_cycle": 1, "min_interval_hours": 6,
                       "source_max_age_hours": 24, "history_limit": 200, "min_words": 700 },
+  "newsletter":     { "enabled": true, "min_interval_hours": 168, "items_per_issue": 7,
+                      "min_items": 4, "source_max_age_hours": 168,
+                      "history_limit": 200, "min_words": 500 },
   "code_techs":     { "enabled": true, "refresh_hours": 24, "max_items": 8,
                       "min_score": 55, "auto_pursue": false, "...": "searches, sources, outreach" },
   "llm":            { "main_engine": "stealth/ox-alpha", "provider": "openrouter" },

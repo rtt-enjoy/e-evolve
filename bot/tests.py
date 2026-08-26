@@ -13,19 +13,26 @@ from bot.earning.newsletter import (
 	_record_issue,
 )
 from bot.earning.articles import (
+	_boost_tags,
 	_duplicate_reason,
 	_ensure_attribution,
+	_ensure_backlink,
 	_fabrication_problems,
 	_format_problems,
+	_followup_target,
 	_generate_article,
 	_normalize,
 	_pick_source,
 	_publish_to_devto,
 	_record_publish,
 	_strip_fabricated_tables,
+	_title_problems,
+	_titles_overlap,
 	_tone_problems,
 	_too_similar_to_source,
 )
+import bot.earning.articles as articles_module
+import bot.earning.devto_stats as devto_stats
 import bot.earning.mrr_ideas as mrr_module
 # _hours_until_due is already bound to the newsletter's copy above; alias this
 # one so it cannot shadow it and silently break the cadence tests.
@@ -1007,6 +1014,247 @@ class TestOpenRouterModelChains(unittest.TestCase):
 		import bot.llm as llm_module
 		walked = self._walk("post", "model_not_found on openrouter: stealth/ox-alpha")
 		self.assertEqual(walked, llm_module._OPENROUTER_MODELS_BY_ROLE["post"])
+
+
+class TestTitleQualityGate(unittest.TestCase):
+	"""Low view counts: flat or clickbait titles never earn a feed click."""
+
+	def test_concrete_specific_title_passes(self):
+		for title in (
+			"The Postgres Index That Made Queries Slower",
+			"I Was Wrong About Async Context Managers",
+			"How Rate Limiters Actually Drop Your Requests",
+			"Why Is Your Docker Build So Slow?",
+		):
+			self.assertEqual(_title_problems(title), [], title)
+
+	def test_clickbait_words_rejected(self):
+		self.assertTrue(any("ultimate" in p for p in _title_problems(
+			"Ultimate Guide to Docker Networking Basics")))
+		self.assertTrue(any("you need to know" in p for p in _title_problems(
+			"Ten Python Features You Need to Know About")))
+
+	def test_exclamation_and_shouting_rejected(self):
+		self.assertTrue(any("exclamation" in p for p in _title_problems(
+			"This Postgres Trick Changed My Whole Workflow!")))
+		self.assertTrue(any("ALL-CAPS" in p for p in _title_problems(
+			"This Postgres Trick Is INSANELY Useful For You")))
+
+	def test_real_acronyms_are_not_treated_as_shouting(self):
+		"""Regression: blocking all-caps rejected legitimate technical titles."""
+		for title in (
+			"Why Your JSON Parser Is Slower Than It Looks",
+			"The HTTPS Redirect That Broke Our Login Flow",
+			"How SQLite Handles Concurrent Writes Under Load",
+		):
+			self.assertEqual(_title_problems(title), [], title)
+
+	def test_listicle_framing_rejected(self):
+		self.assertTrue(_title_problems("Top 10 Python Libraries For Data Work"))
+		self.assertTrue(_title_problems("7 Ways You Can Speed Up Your Builds"))
+
+	def test_vague_title_rejected(self):
+		self.assertTrue(any("vague" in p for p in _title_problems(
+			"An Introduction To Writing Better Code In Python")))
+
+	def test_length_bounds_enforced(self):
+		self.assertTrue(any("too short" in p for p in _title_problems("Docker Tips")))
+		self.assertTrue(any("too long" in p for p in _title_problems(
+			"How To Configure A Production Ready Postgres Replica With Streaming "
+			"Replication And Automatic Failover")))
+
+	def test_colon_padding_rejected(self):
+		self.assertTrue(any("colon" in p for p in _title_problems(
+			"Retry Logic In Python: A Practical Guide To Exponential Backoff")))
+
+	def test_short_prefix_colon_allowed(self):
+		"""A short scoping prefix is fine; two full clauses are not."""
+		self.assertEqual(_title_problems("Postgres: The Index That Slowed Us Down"), [])
+
+	def test_empty_title_rejected(self):
+		self.assertEqual(_title_problems(""), ["title is empty"])
+
+
+class TestTagReach(unittest.TestCase):
+	"""dev.to distributes by tag; niche-only tags reach nobody."""
+
+	def test_high_traffic_tag_added_when_all_tags_are_niche(self):
+		tags = _boost_tags(["pgbouncer", "wal"], [])
+		self.assertIn("programming", tags)
+
+	def test_account_proven_tag_preferred_over_default(self):
+		tags = _boost_tags(["pgbouncer"], ["python", "webdev"])
+		self.assertIn("python", tags)
+		self.assertNotIn("programming", tags)
+
+	def test_existing_high_traffic_tag_left_alone(self):
+		tags = _boost_tags(["python", "pgbouncer"], [])
+		self.assertEqual(tags, ["python", "pgbouncer"])
+
+	def test_devto_four_tag_limit_respected(self):
+		tags = _boost_tags(["pgbouncer", "wal", "vacuum", "toast", "mvcc"], [])
+		self.assertLessEqual(len(tags), 4)
+
+	def test_tags_are_slugified(self):
+		self.assertEqual(_boost_tags(["Machine Learning!", "Python"], []),
+						 ["machinelearning", "python"])
+
+	def test_empty_tags_get_a_usable_default(self):
+		self.assertTrue(_boost_tags([], []))
+
+
+class TestFollowUpSelection(unittest.TestCase):
+	"""Improve the post readers actually showed up for."""
+
+	def _article(self, **kw):
+		base = {
+			"id": 1, "title": "A Postgres Index That Slowed Us Down", "url": "u",
+			"page_views": 500, "reactions": 10, "comments": 2,
+			"published_at": datetime.now(timezone.utc).isoformat(), "tags": ["python"],
+		}
+		base.update(kw)
+		return base
+
+	def test_highest_engagement_wins(self):
+		low = self._article(id=1, page_views=300, reactions=0, comments=0)
+		high = self._article(id=2, page_views=200, reactions=20, comments=3)
+		best = devto_stats.top_performer([low, high], min_views=1)
+		self.assertEqual(best["id"], 2, "reactions and comments must outweigh raw views")
+
+	def test_stale_posts_excluded(self):
+		old = self._article(
+			published_at=(datetime.now(timezone.utc) - timedelta(hours=200)).isoformat())
+		self.assertIsNone(devto_stats.top_performer([old], within_hours=48, min_views=1))
+
+	def test_already_followed_up_post_skipped(self):
+		art = self._article(id=7)
+		self.assertIsNone(devto_stats.top_performer([art], min_views=1, exclude_ids={7}))
+
+	def test_below_min_views_skipped(self):
+		self.assertIsNone(devto_stats.top_performer(
+			[self._article(page_views=3)], min_views=40))
+
+	def test_missing_timestamp_is_not_followed_up(self):
+		"""A post with no date must not be treated as recent."""
+		self.assertIsNone(devto_stats.top_performer(
+			[self._article(published_at="")], min_views=1))
+
+	def test_empty_list_returns_none(self):
+		self.assertIsNone(devto_stats.top_performer([], min_views=1))
+
+	def test_winning_tags_average_rather_than_sum(self):
+		arts = [
+			{"tags": ["hit"], "page_views": 1000, "reactions": 0, "comments": 0},
+			{"tags": ["meh"], "page_views": 10, "reactions": 0, "comments": 0},
+			{"tags": ["meh"], "page_views": 10, "reactions": 0, "comments": 0},
+			{"tags": ["meh"], "page_views": 10, "reactions": 0, "comments": 0},
+		]
+		self.assertEqual(devto_stats.winning_tags(arts)[0], "hit")
+
+	def test_followup_records_parent_so_it_is_not_mined_twice(self):
+		status = {}
+		_record_publish(status, {
+			"title": "Deeper Into Postgres Index Bloat",
+			"_source": {}, "_followup_of": 42, "_followup_title": "old",
+		})
+		self.assertIn(42, status["article_history"]["followed_up_ids"])
+
+	def test_stats_failure_does_not_break_the_cycle(self):
+		"""A dev.to outage must fall through to the normal trending path."""
+		original = devto_stats.fetch_published
+		devto_stats.fetch_published = lambda *a, **k: []
+		try:
+			self.assertIsNone(_followup_target({}, "key"))
+		finally:
+			devto_stats.fetch_published = original
+
+	def test_followup_disabled_by_config(self):
+		original = articles_module._FOLLOWUP_ENABLED
+		articles_module._FOLLOWUP_ENABLED = False
+		try:
+			self.assertIsNone(_followup_target({}, "key"))
+		finally:
+			articles_module._FOLLOWUP_ENABLED = original
+
+
+class TestFollowUpContent(unittest.TestCase):
+	"""A sequel must be distinguishable from its parent and link back to it."""
+
+	def test_repeated_parent_title_detected(self):
+		self.assertTrue(_titles_overlap(
+			"The Postgres Index That Made Queries Slower",
+			"The Postgres Index That Made Queries Slower"))
+
+	def test_deeper_angle_on_same_subject_allowed(self):
+		self.assertFalse(_titles_overlap(
+			"What Index Bloat Does To Your Autovacuum Budget",
+			"The Postgres Index That Made Queries Slower"))
+
+	def test_backlink_added_when_model_omits_it(self):
+		article = {"body_markdown": "Opening paragraph.\n\n## First Section\n\nBody."}
+		out = _ensure_backlink(article, {"title": "Earlier Post", "url": "https://x.dev/1"})
+		self.assertIn("https://x.dev/1", out["body_markdown"])
+		# It must read as context near the top, not as a trailing footnote.
+		self.assertLess(out["body_markdown"].index("https://x.dev/1"),
+						out["body_markdown"].index("## First Section"))
+
+	def test_existing_backlink_not_duplicated(self):
+		body = "Intro linking [earlier](https://x.dev/1) already.\n\n## S\n\nBody."
+		out = _ensure_backlink({"body_markdown": body},
+							   {"title": "Earlier", "url": "https://x.dev/1"})
+		self.assertEqual(out["body_markdown"].count("https://x.dev/1"), 1)
+
+	def test_backlink_skipped_without_url(self):
+		body = "Intro.\n\n## S\n\nBody."
+		out = _ensure_backlink({"body_markdown": body}, {"title": "t", "url": ""})
+		self.assertEqual(out["body_markdown"], body)
+
+
+class TestFollowUpOverrides(unittest.TestCase):
+	"""Owner commands must be able to force or skip a follow-up."""
+
+	def setUp(self):
+		self._orig = devto_stats.fetch_published
+		self._recent = datetime.now(timezone.utc).isoformat()
+
+	def tearDown(self):
+		devto_stats.fetch_published = self._orig
+
+	def _stub(self, views):
+		devto_stats.fetch_published = lambda *a, **k: [{
+			"id": 9, "title": "A Quiet Post About Postgres Vacuum", "url": "u",
+			"tags": ["python"], "page_views": views, "reactions": 0, "comments": 0,
+			"published_at": self._recent, "description": "d",
+		}]
+
+	def test_skip_followup_command_forces_fresh_source(self):
+		self._stub(9999)
+		status = {"_overrides": {"skip_followup": 1}}
+		self.assertIsNone(_followup_target(status, "key"))
+
+	def test_force_followup_bypasses_view_threshold(self):
+		"""A post below followup_min_views is eligible when forced."""
+		self._stub(3)
+		self.assertIsNone(_followup_target({}, "key"), "unforced: below threshold")
+		target = _followup_target({"_overrides": {"force_followup": 1}}, "key")
+		self.assertIsNotNone(target, "forced: threshold must be bypassed")
+		self.assertEqual(target["id"], 9)
+
+	def test_force_followup_still_respects_already_followed_up(self):
+		"""Forcing must not produce the same sequel twice."""
+		self._stub(3)
+		status = {
+			"_overrides": {"force_followup": 1},
+			"article_history": {"followed_up_ids": [9]},
+		}
+		self.assertIsNone(_followup_target(status, "key"))
+
+	def test_stats_recorded_even_when_no_followup_is_written(self):
+		"""Reach numbers are the point of the loop; record them regardless."""
+		self._stub(3)
+		status = {}
+		_followup_target(status, "key")
+		self.assertEqual(status["article_stats"]["best_views"], 3)
 
 
 if __name__ == "__main__":

@@ -32,7 +32,8 @@ bot/git_utils.py     ← git commit helpers
 bot/github_secrets.py ← reads configured secret NAMES only (never values)
 bot/tests.py         ← unittest suite: python -m unittest bot.tests
 bot/earning/
-  articles.py        ← drafts + publishes one dev.to article per day from a trending source
+  articles.py        ← drafts + publishes one dev.to article per day; follows up its own best post
+  devto_stats.py     ← reads own dev.to view counts (the reach feedback loop)
   newsletter.py      ← drafts + publishes a weekly dev.to digest of several trending stories
   trending.py        ← finds recent (24h) tech articles from free public feeds
   code_techs.py      ← free-AI earning opportunity queue (research/suggestion only)
@@ -126,9 +127,24 @@ identical posts on dev.to. Each article starts from a real trending piece:
    - `_fabrication_problems()` — **hard reject.** If invented figures survive in
      prose, publish nothing. Checked *before* `_revise_format()` so a doomed
      article costs one LLM call instead of two.
+   - `_title_problems()` — **the reach gate.** A weak headline is why a good
+     article gets no views, so the title is checked on its own and, if weak,
+     rewritten by a cheap title-only call (`_revise_title`). If the rewrite is
+     still weak, **publish nothing** — a title that cannot earn a click makes
+     the body irrelevant. Rejects clickbait ("ultimate", "top N", "you need to
+     know", "deep dive"), exclamation marks, shouted words, vague filler
+     ("getting started", "better code"), colon-subtitle padding, and anything
+     outside `title_min_chars`–`title_max_chars`. Real acronyms (JSON, HTTPS,
+     SQLite) are allowlisted, so `_shouted_words` does not reject legitimate
+     technical headlines.
    - `_format_problems()` — structure + `_tone_problems()` (hype, "simply/just",
      corporate jargon, exclamation marks, sentences averaging over 26 words).
-     Only these trigger a revision call.
+     Only these trigger a revision call. The vetted title is re-applied
+     afterwards, because `_revise_format` tends to echo the pre-gate one.
+   - `_boost_tags()` — tags are how dev.to distributes a post, so a post tagged
+     only with niche slugs reaches nobody. Guarantees at least one high-traffic
+     tag, preferring one proven on this account (`article_stats.winning_tags`)
+     over the static default.
    - `_too_similar_to_source()`, `_duplicate_reason()`, `_ensure_attribution()`.
 
 **If no fresh source is found or the LLM fails, the bot publishes nothing.**
@@ -136,6 +152,49 @@ There is deliberately no fallback article — a static fallback is what produced
 the duplicate flood. Title matching is stemmed and stopword-stripped
 (`trending.normalize_title`) so "Costs"/"Cost" and "Under"/"During" variants
 cannot slip a repeat through.
+
+### Reach feedback loop (bot/earning/devto_stats.py)
+
+Views were low partly because the bot never looked at its own numbers — every
+post was a blind guess. `devto_stats` closes that loop by reading
+`GET /api/articles/me/published`, which returns `page_views_count`,
+`positive_reactions_count`, and `comments_count` for the key's own articles.
+
+- Read-only, and it reuses `DEV_TO_API_KEY`. **No new secret.**
+- `engagement_score()` weights a reaction at 25 views and a comment at 50. Raw
+  views alone rank a single lucky aggregator link above a post that genuinely
+  landed, which is the wrong thing to imitate.
+- `summarize()` writes `status["article_stats"]` (count, total/avg views, best
+  post) so reach is visible in `status.json` instead of invisible.
+- `winning_tags()` averages engagement per tag rather than summing it, so a tag
+  used once on a hit is not buried by a tag used twenty times on quiet posts.
+- Every function returns empty/None on failure. Stats are an optimisation: a
+  dev.to outage must never stop the day's article.
+
+**Follow-up articles.** When a recent post has earned real attention,
+the next article is a *deeper sequel* to it rather than a cold trending guess:
+
+1. `_followup_target()` picks the best post within `followup_window_hours` (48)
+   that cleared `followup_min_views` (40) and has not been followed up before.
+2. `_generate_followup()` writes it under `_FOLLOWUP_SYSTEM` — `_SYSTEM` plus
+   follow-up rules: recap the first post in at most two sentences, then add the
+   depth it lacked (production edge cases, what is harder than it looks, what
+   you'd do differently). Re-explaining the basics is explicitly forbidden.
+3. `_titles_overlap()` discards a sequel whose title merely repeats the parent's.
+4. `_ensure_backlink()` inserts the link to the parent after the opening
+   paragraph — as context, not a trailing footnote — if the model dropped it.
+5. The parent's id is recorded in `article_history.followed_up_ids`, so the same
+   winner is not mined again while it remains the top performer.
+
+A **new post** is published rather than editing the original in place: dev.to
+does not re-surface edited posts in the feed, so an in-place edit gains almost
+no new readers. Two live posts both rank, and the backlink sends the sequel's
+readers to the original.
+
+Both paths share one gate pipeline (`_finalize`), so the fresh and follow-up
+articles cannot drift apart on fabrication, tone, title quality, or duplicates.
+A failed follow-up falls through to the normal trending path — it never costs
+the day's article.
 
 ### Newsletter digest (bot/earning/newsletter.py)
 
@@ -320,7 +379,7 @@ status report            # dump full status to workflow log
 Keys prefixed `_` are runtime-only and not persisted.
 
 Earning modules own their own sub-trees alongside the above: `article_daily` /
-`article_history` (articles), `newsletter_daily` / `newsletter_history`
+`article_history` / `article_stats` (articles), `newsletter_daily` / `newsletter_history`
 (newsletter), `code_tech_earning` (code_techs), and `mrr_ideas` /
 `mrr_ideas_history` (mrr_ideas). Every list stored in these is bounded by the
 module's `history_limit` so `status.json` cannot grow without end.
@@ -334,7 +393,10 @@ Tunable by owner or changed here in Codex:
 ```json
 {
   "articles":       { "max_articles_per_cycle": 1, "min_interval_hours": 6,
-                      "source_max_age_hours": 24, "history_limit": 200, "min_words": 700 },
+                      "source_max_age_hours": 24, "history_limit": 200, "min_words": 700,
+                      "followup_enabled": true, "followup_window_hours": 48,
+                      "followup_min_views": 40,
+                      "title_min_chars": 25, "title_max_chars": 70 },
   "newsletter":     { "enabled": true, "min_interval_hours": 168, "items_per_issue": 7,
                       "min_items": 4, "source_max_age_hours": 168,
                       "history_limit": 200, "min_words": 500, "niche_focus": "" },

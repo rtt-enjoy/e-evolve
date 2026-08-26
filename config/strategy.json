@@ -4,7 +4,12 @@
 		"min_interval_hours": 6,
 		"source_max_age_hours": 24,
 		"history_limit": 200,
-		"min_words": 700
+		"min_words": 700,
+		"followup_enabled": true,
+		"followup_window_hours": 48,
+		"followup_min_views": 40,
+		"title_min_chars": 25,
+		"title_max_chars": 70
 	},
 	"newsletter": {
 		"enabled": true,

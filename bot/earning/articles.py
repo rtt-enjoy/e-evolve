@@ -15,7 +15,7 @@ from typing import Any, Optional
 
 import requests
 
-from . import trending
+from . import devto_stats, trending
 
 log = logging.getLogger(__name__)
 
@@ -35,6 +35,12 @@ _SOURCE_MAX_AGE_HOURS = int(_article_config.get("source_max_age_hours", 24))
 # How many past titles/sources to remember for duplicate detection.
 _HISTORY_LIMIT = int(_article_config.get("history_limit", 200))
 _MIN_WORDS = int(_article_config.get("min_words", 700))
+# Follow-up behaviour: mine the best recent post for a deeper second article.
+_FOLLOWUP_ENABLED = bool(_article_config.get("followup_enabled", True))
+_FOLLOWUP_WINDOW_HOURS = int(_article_config.get("followup_window_hours", 48))
+_FOLLOWUP_MIN_VIEWS = int(_article_config.get("followup_min_views", 40))
+_TITLE_MAX_CHARS = int(_article_config.get("title_max_chars", 70))
+_TITLE_MIN_CHARS = int(_article_config.get("title_min_chars", 25))
 
 _SYSTEM = """\
 You are a senior engineer writing for a developer audience on dev.to.
@@ -46,11 +52,41 @@ Respond with ONLY a single JSON object.
 
 Schema:
 {
-  "title": "specific, benefit-driven title (max 80 chars)",
+  "title": "concrete, curiosity-driving title (25-70 chars)",
   "description": "one-sentence summary (max 150 chars)",
   "body_markdown": "full article in markdown",
   "tags": ["python", "ai", "automation"]
 }
+
+TITLE -- this decides whether anyone reads the article at all. Spend real effort here:
+- 25-70 characters. Long titles get truncated in the dev.to feed and on social cards.
+- Lead with the concrete thing at stake. A reader scanning a feed must learn what
+  they gain or avoid within the first four words.
+- Use ONE of these proven shapes, whichever fits the content honestly:
+  * The specific failure: "The Postgres Index That Made Queries Slower"
+  * The corrected belief: "I Was Wrong About Async Context Managers"
+  * The concrete number: "Three Retry Bugs That Survive Code Review"
+  * The direct question a reader is already asking: "Why Is Your Docker Build Slow?"
+  * The mechanism revealed: "How Rate Limiters Actually Drop Your Requests"
+- Name a real technology, error, or mechanism. "Better Python Code" is invisible;
+  "Your Python Retry Loop Is Lying To You" is not.
+- Create a curiosity gap and then PAY IT OFF in the body. Never promise something
+  the article does not deliver -- dev.to readers punish that in the comments.
+- Title Case The Important Words. It reads as considered, not shouted.
+- BANNED in titles: exclamation marks, "Ultimate", "Complete Guide",
+  "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
+  "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
+  and any ALL-CAPS word. These read as spam and suppress clicks here.
+- No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
+  wastes the scannable half of the line. Pick the sharper half and stop.
+
+TAGS -- tags are how dev.to distributes the post, so treat them as reach, not labels:
+- Exactly 4 tags. Fewer costs you feed placement.
+- Include at least two large, high-traffic tags a reader actually follows
+  (for example: programming, python, javascript, webdev, ai, devops, tutorial,
+  beginners, opensource, react, node, typescript, career, productivity).
+- Then one or two specific tags matching the real subject.
+- Lowercase, letters and digits only, no spaces, no punctuation.
 
 VOICE -- write like a helpful senior colleague explaining something at a whiteboard:
 - Warm and plain-spoken. Address the reader as "you". Use "I" for your own
@@ -123,6 +159,30 @@ SOURCE HANDLING -- this part is mandatory:
   `[<source title>](<source url>)` and one sentence on what you added."""
 
 
+# A follow-up post has a different job from a fresh take: the subject is already
+# proven to draw readers on this account, so the second piece must go deeper
+# rather than re-explain. Sharing _SYSTEM's voice/format rules keeps the two
+# paths from drifting apart on style.
+_FOLLOWUP_EXTRA = """\
+
+FOLLOW-UP MODE -- you are writing a sequel to an article of mine that readers
+actually turned up for. The subject is proven; do not re-explain it.
+- Assume the reader may not have read the first post. Recap it in at most two
+  sentences, then move past it.
+- The value of this piece is DEPTH the first one lacked: the edge case that bites
+  in production, the part that is harder than it looked, what you would do
+  differently, or the next step a reader hits immediately after the first post.
+- Do not restate the first article's structure or reuse its headings.
+- Your title must clearly differ from the first article's title while signalling
+  the same subject, so a returning reader recognises it and a new reader still
+  understands it standalone.
+- Link the earlier post once, inline, where a reader would naturally want the
+  background -- not as a footnote.
+- The `## Source` section still credits the ORIGINAL external source."""
+
+_FOLLOWUP_SYSTEM = _SYSTEM + _FOLLOWUP_EXTRA
+
+
 def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	"""Main entry point for the articles earning module."""
 	devto_api_key = os.getenv("DEV_TO_API_KEY", "").strip()
@@ -176,12 +236,14 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 			if result.get("success"):
 				result["source_url"] = source.get("url", "")
 				result["source_title"] = source.get("title", "")
+				if article.get("_followup_of") is not None:
+					result["followup_of"] = article.get("_followup_title", "")
 
 	return results
 
 
 def _generate_article(llm: Any, status: dict) -> Optional[dict]:
-	"""Write an improved take on a real trending article.
+	"""Write today's article: a deeper follow-up if one is earned, else a fresh take.
 
     Returns None when no fresh source is available or the LLM fails. Publishing
     nothing is correct here -- a static fallback article is what caused dozens of
@@ -190,6 +252,19 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 	if not llm:
 		log.warning("[articles] no LLM available -- not publishing")
 		return None
+
+	# Prefer following up a post that readers actually showed up for. A proven
+	# subject beats a cold trending guess, and the backlink compounds reach
+	# across both posts.
+	target = _followup_target(status, os.getenv("DEV_TO_API_KEY", "").strip())
+	if target:
+		log.info("[articles] following up %r (%d views)",
+				 target.get("title", "")[:60], target.get("page_views", 0))
+		followup = _generate_followup(llm, status, target)
+		if followup:
+			return followup
+		# A failed follow-up must not cost the day's article.
+		log.info("[articles] follow-up unusable -- falling back to a fresh source")
 
 	source = _pick_source(status)
 	if not source:
@@ -207,7 +282,8 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 		"Pick a specific practitioner angle on this subject. Add working code, "
 		"tradeoffs, and failure modes the source does not cover. Do not reword the "
 		"source. Your title must differ from the source title. Follow every "
-		"formatting and source-handling rule in the system prompt. JSON only."
+		"formatting and source-handling rule in the system prompt, including the "
+		"TITLE and TAGS rules. JSON only."
 	)
 
 	try:
@@ -223,6 +299,24 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 		log.warning("[articles] LLM returned no usable article -- not publishing")
 		return None
 
+	article = _finalize(llm, data, source, status)
+	if not article:
+		return None
+
+	if _too_similar_to_source(article, source):
+		log.warning("[articles] output too close to source title -- not publishing")
+		return None
+
+	article["_source"] = source
+	return article
+
+
+def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict]:
+	"""Run every quality gate shared by the fresh and follow-up paths.
+
+    Kept as one function so the two paths cannot drift apart on fabrication,
+    tone, title quality, or duplicate detection. Returns None to publish nothing.
+    """
 	# Normalize first: it deterministically fixes stray '#' headings and fence
 	# artifacts, so we never spend free-tier LLM calls revising those.
 	article = _normalize(data)
@@ -243,12 +337,27 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 		log.warning("[articles] unverifiable claims in prose %s -- not publishing", fabricated)
 		return None
 
+	# The title decides whether the body is ever read, so a weak one is worth a
+	# retry of its own. Retitling is one cheap call and does not touch the body.
+	title_issues = _title_problems(article.get("title", ""))
+	if title_issues:
+		log.info("[articles] title issues %s -- requesting a better title", title_issues)
+		better = _revise_title(llm, article, title_issues)
+		if better:
+			article["title"] = better
+		else:
+			log.warning("[articles] could not fix title %s -- not publishing", title_issues)
+			return None
+
 	problems = _format_problems(article["body_markdown"])
 	if problems:
 		log.info("[articles] format issues %s -- requesting revision", problems)
 		revised = _revise_format(llm, article, problems)
 		if revised:
+			# Keep the vetted title: _revise_format may echo the pre-gate one.
+			vetted_title = article.get("title", "")
 			article = _normalize(revised)
+			article["title"] = vetted_title
 			article["body_markdown"], _ = _strip_fabricated_tables(article["body_markdown"])
 			if _fabrication_problems(article["body_markdown"]):
 				log.warning("[articles] revision introduced invented figures -- not publishing")
@@ -256,16 +365,196 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 
 	article = _ensure_attribution(article, source)
 
-	if _too_similar_to_source(article, source):
-		log.warning("[articles] output too close to source title -- not publishing")
-		return None
+	# Tags are dev.to's distribution mechanism, so this runs on every path.
+	preferred = list(status.get("article_stats", {}).get("winning_tags", []))
+	article["tags"] = _boost_tags(article.get("tags", []), preferred)
 
 	dup = _duplicate_reason(article, status)
 	if dup:
 		log.warning("[articles] %s -- not publishing", dup)
 		return None
 
+	return article
+
+
+def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
+	"""Ask for a stronger headline only. Returns the new title, or None.
+
+    Body-only retries are wasteful when the headline is the problem, so this
+    sends just the title and the article's opening for context.
+    """
+	body = str(data.get("body_markdown", ""))
+	opening = " ".join(body.split()[:120])
+	prompt = (
+		"Rewrite ONLY the title of this article so it earns clicks in the dev.to feed.\n\n"
+		f"Current title: {data.get('title', '')}\n"
+		f"Problems with it: {'; '.join(problems)}\n\n"
+		f"Article opening for context:\n{opening}\n\n"
+		"Follow the TITLE rules in the system prompt exactly: "
+		f"{_TITLE_MIN_CHARS}-{_TITLE_MAX_CHARS} characters, concrete, names a real "
+		"technology or failure, no clickbait words, no exclamation marks, no "
+		"ALL-CAPS, no colon-subtitle padding.\n\n"
+		'Respond with ONLY this JSON: {"title": "..."}'
+	)
+	try:
+		if hasattr(llm, "complete_json_for_role"):
+			out = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=300)
+		else:
+			out = llm.complete_json(prompt, system=_SYSTEM, max_tokens=300)
+	except Exception as exc:
+		log.warning("[articles] title revision failed: %s", exc)
+		return None
+
+	candidate = str((out or {}).get("title", "")).strip()
+	if not candidate:
+		return None
+	remaining = _title_problems(candidate)
+	if remaining:
+		log.info("[articles] revised title still weak %s", remaining)
+		return None
+	log.info("[articles] title improved: %r", candidate)
+	return candidate
+
+
+def _followup_target(status: dict, api_key: str) -> Optional[dict]:
+	"""Pick a recent high-performing post worth a deeper second article.
+
+    Returns None whenever there is nothing clearly worth following up, so the
+    normal trending path runs instead. Stats are an optimisation: a dev.to
+    outage or a quiet week must never stop the daily article.
+    """
+	overrides = status.get("_overrides", {})
+	if overrides.get("skip_followup"):
+		log.info("[articles] follow-up skipped by owner command")
+		return None
+	if not _FOLLOWUP_ENABLED:
+		return None
+
+	published = devto_stats.fetch_published(api_key)
+	if not published:
+		return None
+
+	# Record the reach numbers regardless of whether we follow up -- this is the
+	# only place the bot ever learns whether its articles are read.
+	status["article_stats"] = devto_stats.summarize(published)
+	status["article_stats"]["winning_tags"] = devto_stats.winning_tags(published)
+
+	hist = _history(status)
+	done = {i for i in hist.get("followed_up_ids", []) if i is not None}
+	# 'force followup' drops the view threshold so the owner can follow up a
+	# post that has not yet cleared it. The already-followed-up guard still
+	# applies, so this cannot produce the same sequel twice.
+	forced = bool(overrides.get("force_followup"))
+	best = devto_stats.top_performer(
+		published,
+		within_hours=_FOLLOWUP_WINDOW_HOURS,
+		min_views=1 if forced else _FOLLOWUP_MIN_VIEWS,
+		exclude_ids=done,
+	)
+	if not best:
+		log.info("[articles] no post cleared %d views in %dh -- writing a fresh take",
+				 _FOLLOWUP_MIN_VIEWS, _FOLLOWUP_WINDOW_HOURS)
+		return None
+	return best
+
+
+def _generate_followup(llm: Any, status: dict, target: dict) -> Optional[dict]:
+	"""Write a deeper sequel to a post that earned views. None if unusable."""
+	source = _source_for_followup(status, target)
+	prompt = (
+		"Write a follow-up article that goes deeper than my earlier post below.\n\n"
+		f"MY EARLIER POST TITLE: {target.get('title', '')}\n"
+		f"MY EARLIER POST URL: {target.get('url', '')}\n"
+		f"MY EARLIER POST SUMMARY: {target.get('description', '') or '(none)'}\n"
+		f"IT EARNED: {target.get('page_views', 0)} views, "
+		f"{target.get('reactions', 0)} reactions, {target.get('comments', 0)} comments\n"
+		f"TAGS THAT WORKED: {', '.join(target.get('tags', [])) or '(none)'}\n\n"
+		f"ORIGINAL EXTERNAL SOURCE: {source.get('title', '')} — {source.get('url', '')}\n\n"
+		"Readers showed up for this subject, so do not re-explain the basics. Go "
+		"one level deeper: production edge cases, what is harder than it looks, "
+		"what you would do differently, or the problem a reader hits right after "
+		"the first post. Link my earlier post once, inline. Follow every rule in "
+		"the system prompt, including the TITLE rules. JSON only."
+	)
+
+	try:
+		if hasattr(llm, "complete_json_for_role"):
+			data = llm.complete_json_for_role(
+				"post", prompt, system=_FOLLOWUP_SYSTEM, max_tokens=6000)
+		else:
+			data = llm.complete_json(prompt, system=_FOLLOWUP_SYSTEM, max_tokens=6000)
+	except Exception as exc:
+		log.warning("[articles] follow-up generation failed: %s", exc)
+		return None
+
+	if not (data.get("title") and data.get("body_markdown")):
+		log.warning("[articles] follow-up returned no usable article")
+		return None
+
+	article = _finalize(llm, data, source, status)
+	if not article:
+		return None
+
+	# A sequel that repeats the parent's title is worthless for reach.
+	if _titles_overlap(article.get("title", ""), target.get("title", "")):
+		log.warning("[articles] follow-up title too close to the original -- discarding")
+		return None
+
 	article["_source"] = source
+	article["_followup_of"] = target.get("id")
+	article["_followup_title"] = target.get("title", "")
+	# Guarantee the inline backlink even if the model dropped it.
+	article = _ensure_backlink(article, target)
+	return article
+
+
+def _source_for_followup(status: dict, target: dict) -> dict:
+	"""Best-known external source for the post being followed up.
+
+    The follow-up still credits the original external article. We do not store a
+    per-post source map, so fall back to the target itself; ``_ensure_attribution``
+    then links the earlier post rather than inventing a citation.
+    """
+	return {
+		"title": target.get("title", ""),
+		"url": target.get("url", ""),
+		"source": "dev.to",
+		"summary": target.get("description", ""),
+	}
+
+
+def _titles_overlap(new_title: str, old_title: str, threshold: float = 0.7) -> bool:
+	"""True when two titles are close enough to read as the same headline."""
+	new_key = trending.normalize_title(new_title)
+	old_key = trending.normalize_title(old_title)
+	if not new_key or not old_key:
+		return False
+	if new_key == old_key:
+		return True
+	new_words, old_words = set(new_key.split()), set(old_key.split())
+	if not new_words or not old_words:
+		return False
+	return len(new_words & old_words) / len(new_words | old_words) >= threshold
+
+
+def _ensure_backlink(article: dict, target: dict) -> dict:
+	"""Make sure the follow-up links the post it builds on."""
+	body = str(article.get("body_markdown", ""))
+	url = str(target.get("url", "")).strip()
+	if not url or url in body:
+		return article
+	title = str(target.get("title", "")).strip() or "my earlier post"
+	# Insert after the opening paragraph so it reads as context, not a footnote.
+	marker = "\n\n## "
+	idx = body.find(marker)
+	note = (
+		f"\n\nThis builds on [{title}]({url}). You do not need to read that first, "
+		"but it covers the background this post assumes.\n"
+	)
+	if idx == -1:
+		article["body_markdown"] = body.rstrip() + note
+	else:
+		article["body_markdown"] = body[:idx] + note + body[idx:]
 	return article
 
 
@@ -326,6 +615,15 @@ def _record_publish(status: dict, article: dict) -> None:
 		# Bound the history so status.json cannot grow without limit.
 		del entries[:-_HISTORY_LIMIT]
 
+	# Remember which post we already mined for a follow-up, so the same winner is
+	# not followed up every cycle for as long as it stays the top performer.
+	parent_id = article.get("_followup_of")
+	if parent_id is not None:
+		done = hist.setdefault("followed_up_ids", [])
+		if parent_id not in done:
+			done.append(parent_id)
+		del done[:-_HISTORY_LIMIT]
+
 
 def _duplicate_reason(article: dict, status: dict) -> str:
 	"""Return a reason string if this article repeats an earlier one."""
@@ -380,6 +678,129 @@ def _ensure_attribution(article: dict, source: dict) -> dict:
 	)
 	article["body_markdown"] = body
 	return article
+
+
+# Title patterns that suppress clicks on dev.to. These are not merely hype -- the
+# audience here reads them as low-effort content-farm output and scrolls past.
+_TITLE_BANNED = [
+	(r"\bultimate\b", 'clickbait word "ultimate"'),
+	(r"\bcomplete guide\b", 'overused "complete guide"'),
+	(r"\beverything you (need|ever needed) to know\b", 'overused "everything you need to know"'),
+	(r"\byou need to know\b", 'clickbait "you need to know"'),
+	(r"\b(amazing|awesome|incredible|mind.blowing|insane|crazy)\b", "hype adjective"),
+	(r"\b(secrets?|hacks?)\b", 'content-farm word "secrets/hacks"'),
+	(r"\bdeep dive\b", 'overused "deep dive"'),
+	(r"\btop \d+\b", 'listicle "top N"'),
+	(r"\bmust.(know|read|have)\b", 'clickbait "must-know"'),
+	(r"!", "exclamation mark"),
+	("__SHOUTING__", "ALL-CAPS word"),
+	(r"\b\d+\s*(things|ways|tips|tricks)\s+(you|to|that)\b", "generic listicle framing"),
+]
+
+# Vague nouns that make a title invisible in a feed. Flagged only when the title
+# carries no concrete technical anchor at all.
+_TITLE_VAGUE = (
+	"better code", "best practices", "getting started", "introduction to",
+	"a guide to", "an overview", "the basics", "explained simply", "made easy",
+	"for beginners", "in 2024", "in 2025", "in 2026",
+)
+
+
+# Acronyms that are normal in a technical title. Blocking these would reject
+# perfectly good headlines like "Why Your JSON Parser Is Slower Than It Looks",
+# so only non-acronym all-caps words count as shouting.
+_KNOWN_ACRONYMS = {
+	"JSON", "HTTP", "HTTPS", "HTML", "CSS", "YAML", "TOML", "CSV", "XML", "SQL",
+	"REST", "GRPC", "GRAPHQL", "JWT", "OAUTH", "SAML", "CORS", "CRUD", "ACID",
+	"TCP", "UDP", "DNS", "SSH", "TLS", "SSL", "VPN", "CDN", "URL", "URI", "API",
+	"SDK", "CLI", "GUI", "IDE", "CPU", "GPU", "RAM", "SSD", "OS", "VM", "AWS",
+	"GCP", "SQLITE", "POSTGRES", "MYSQL", "REDIS", "NGINX", "LLM", "LLMS", "RAG",
+	"GPT", "AI", "ML", "ETL", "CI", "CD", "TDD", "DDD", "MVC", "ORM", "UUID",
+	"ASCII", "UTF", "REGEX", "WASM", "PDF", "OCR", "NPM", "PIP", "GIT", "AST",
+	"IO", "FIFO", "LIFO", "RPC", "SSR", "SPA", "PWA", "DOM", "SEO", "MRR", "IDE",
+}
+
+
+def _shouted_words(text: str) -> list[str]:
+	"""All-caps words that are not recognised acronyms."""
+	return [
+		word for word in re.findall(r"\b[A-Z]{2,}\b", text)
+		if word.upper() not in _KNOWN_ACRONYMS
+	]
+
+
+def _title_problems(title: str) -> list[str]:
+	"""Reject titles that will not earn a click.
+
+    Views are decided in the feed, before anyone sees the body, so the title
+    gets a gate of its own. Deterministic -- costs no LLM call.
+    """
+	text = str(title or "").strip()
+	problems: list[str] = []
+	if not text:
+		return ["title is empty"]
+
+	if len(text) > _TITLE_MAX_CHARS:
+		problems.append(f"title too long ({len(text)} chars, max {_TITLE_MAX_CHARS})")
+	if len(text) < _TITLE_MIN_CHARS:
+		problems.append(f"title too short ({len(text)} chars, min {_TITLE_MIN_CHARS})")
+
+	for pattern, label in _TITLE_BANNED:
+		if pattern == "__SHOUTING__":
+			if _shouted_words(text):
+				problems.append(f"title has {label}")
+			continue
+		if re.search(pattern, text, re.IGNORECASE):
+			problems.append(f"title has {label}")
+
+	lowered = text.lower()
+	vague = [phrase for phrase in _TITLE_VAGUE if phrase in lowered]
+	if vague:
+		problems.append(f"title uses vague filler: {vague[0]!r}")
+
+	# A colon subtitle usually means the model padded a weak headline. Allow a
+	# short prefix ("Postgres: ...") but reject two full clauses.
+	if ":" in text:
+		head, _, tail = text.partition(":")
+		if len(head.split()) >= 3 and len(tail.split()) >= 4:
+			problems.append("title padded with a colon subtitle; pick the sharper half")
+
+	return problems
+
+
+# Large dev.to tags that actually carry feed traffic. A post needs at least one
+# of these or it is only discoverable by direct link.
+_HIGH_TRAFFIC_TAGS = {
+	"programming", "python", "javascript", "webdev", "ai", "devops", "tutorial",
+	"beginners", "opensource", "react", "node", "typescript", "career",
+	"productivity", "computerscience", "coding", "database", "docker", "aws",
+	"security", "testing", "rust", "go", "linux", "git", "machinelearning",
+	"datascience", "cloud", "performance", "architecture", "llm",
+}
+
+
+def _boost_tags(tags: list[str], preferred: list[str]) -> list[str]:
+	"""Guarantee the post lands in at least one high-traffic tag.
+
+    dev.to distributes almost entirely by tag. A technically perfect article
+    tagged only with niche slugs reaches nobody, which is the single cheapest
+    reach bug to fix. ``preferred`` comes from what has actually worked on this
+    account, so the account's own history wins over the static list.
+    """
+	clean: list[str] = []
+	for tag in tags:
+		slug = re.sub(r"[^a-z0-9]", "", str(tag).lower())
+		if slug and slug not in clean:
+			clean.append(slug)
+
+	if not any(t in _HIGH_TRAFFIC_TAGS for t in clean):
+		# Prefer a tag proven on this account, else fall back to the broadest one.
+		boost = next((t for t in preferred if t in _HIGH_TRAFFIC_TAGS), "programming")
+		# Drop the weakest (last) tag rather than exceeding dev.to's 4-tag limit.
+		clean = [boost] + clean[:3]
+		log.info("[articles] added high-traffic tag %r for reach", boost)
+
+	return clean[:4] or ["programming", "python"]
 
 
 def _format_problems(body: str) -> list[str]:

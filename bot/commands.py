@@ -6,6 +6,8 @@ Commands execute once, then are cleared automatically.
 Supported commands (case-insensitive, one per line):
   force articles N         — publish N articles now, bypassing the daily cap (max 5)
   force newsletter         — publish a newsletter digest now, bypassing the cadence
+  force followup           — follow up the best recent post, ignoring the view threshold
+  skip followup            — write a fresh trending take instead of a follow-up
   force mrr                — refresh the MRR idea triage now, bypassing the interval
   force trade aggressive   — ignored; trading is disabled by policy
   force mint N             — ignored; minting is disabled by policy
@@ -61,6 +63,14 @@ def apply(commands: list[str], status: dict[str, Any]) -> dict[str, Any]:
 		elif cmd == "force newsletter":
 			overrides["force_newsletter"] = 1
 			log.info("Newsletter digest forced this cycle (cadence bypassed)")
+
+		elif cmd == "force followup":
+			overrides["force_followup"] = 1
+			log.info("Follow-up article forced this cycle (view threshold bypassed)")
+
+		elif cmd == "skip followup":
+			overrides["skip_followup"] = 1
+			log.info("Follow-up skipped this cycle; writing a fresh trending take")
 
 		elif cmd == "force mrr":
 			overrides["force_mrr"] = 1

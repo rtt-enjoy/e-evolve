@@ -1,17 +1,17 @@
 {
-  "version": "1.34.1",
-  "last_run": "2026-08-26T09:58:05.286698+00:00",
-  "total_runs": 1703,
+  "version": "1.35.0",
+  "last_run": "2026-08-26T10:12:00.266883+00:00",
+  "total_runs": 1704,
   "active_features": [
+    "llm_anthropic",
     "llm_gemini",
     "llm_openrouter",
     "llm_groq",
-    "usdt_wallet",
     "code_techs"
   ],
   "inactive_features": [
-    "llm_anthropic",
-    "llm_cerebras"
+    "llm_cerebras",
+    "usdt_wallet"
   ],
   "llm_provider": "openrouter",
   "earnings": {
@@ -22,7 +22,8 @@
     "breakdown": {
       "dev.to": 0.0,
       "code_techs": 0.0,
-      "dev.to-newsletter": 0.0
+      "dev.to-newsletter": 0.0,
+      "mrr-ideas": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -47,18 +48,20 @@
         ]
       }
     ],
-    "version_bumped_to": "1.34.1",
+    "version_bumped_to": "1.35.0",
     "error": null
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "dev.to-newsletter",
+        "platform": "mrr-ideas",
         "success": true,
-        "title": "This Week in Dev: X Claws Back, DIY Builds, and AI Reality Checks",
-        "url": "https://dev.to/robust_true_try/this-week-in-dev-x-claws-back-diy-builds-and-ai-reality-checks-5a1f",
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": false,
         "estimated_usd": 0.0,
-        "item_count": 7
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "docs\\mrr-ideas.md"
       }
     ],
     "total_usd": 0.0
@@ -78,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 27,
+  "last_cycle_seconds": 340,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -87,12 +90,12 @@
   "usdt_balance": 0.0,
   "secret_readiness": {
     "llm_anthropic": {
-      "active": false,
-      "present": [],
-      "missing": [
+      "active": true,
+      "present": [
         "ANTHROPIC_API_KEY"
       ],
-      "present_count": 0,
+      "missing": [],
+      "present_count": 1,
       "required_count": 1
     },
     "llm_gemini": {
@@ -132,12 +135,12 @@
       "required_count": 1
     },
     "usdt_wallet": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "USDT_WALLET_ADDRESS"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     }
   },
@@ -380,11 +383,10 @@
     ]
   },
   "configured_github_secrets": [
+    "ANTHROPIC_API_KEY",
     "GEMINI_API_KEY",
-    "GH_TOKEN",
     "GROQ_API_KEY",
-    "OPENROUTER_API_KEY",
-    "USDT_WALLET_ADDRESS"
+    "OPENROUTER_API_KEY"
   ],
   "operation_mode": "research_and_article_publishing",
   "external_action_policy": {
@@ -476,7 +478,7 @@
     ]
   },
   "wallet": {
-    "configured": true,
+    "configured": false,
     "address_masked": "TFTNsf\u20269KbY",
     "network": "TRC-20",
     "confirmed_usd": 0.0,
@@ -485,7 +487,7 @@
     "last_received_at": null,
     "checked_at": "2026-08-26T09:58:05.683543+00:00",
     "stale": false,
-    "error": null,
+    "error": "USDT_WALLET_ADDRESS not set",
     "balance_high_water_usd": 0.0
   },
   "newsletter_daily": {
@@ -517,5 +519,144 @@
       "4 stag working ai most people never leave stage zero"
     ]
   },
-  "github_repo": "rtt-enjoy/e-evolve"
+  "mrr_ideas": {
+    "enabled": true,
+    "last_refresh_at": "2026-08-26T10:12:00.375106+00:00",
+    "refresh_hours": 48,
+    "constraints": [
+      "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
+      "No inbound HTTP. Nothing can accept a request, a form, or a webhook.",
+      "No payment processing. Nothing can charge a card or bill a subscription.",
+      "No outreach. Cold email, DMs, and social posting are refused in code.",
+      "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
+    ],
+    "summary": "",
+    "ranked_ideas": [],
+    "validation_steps": [],
+    "owner_actions": [],
+    "viable": [
+      {
+        "name": "Paid newsletter",
+        "mrr_model": "$10-20/mo per subscriber",
+        "source_note": "narrow niche beats broad; audience must exist first",
+        "bot_role": "publish",
+        "score": 65,
+        "manual_steps": [
+          "owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe)",
+          "owner creates and maintains the storefront or channel by hand",
+          "needs an existing audience; the dev.to byline is the only one this stack builds"
+        ]
+      },
+      {
+        "name": "Notion / digital template store",
+        "mrr_model": "$500-5K/mo, library subscription",
+        "source_note": "specificity wins; Gumroad/Payhip/Etsy listings are manual",
+        "bot_role": "draft",
+        "score": 60,
+        "manual_steps": [
+          "owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe)",
+          "owner creates and maintains the storefront or channel by hand"
+        ]
+      }
+    ],
+    "refused": [
+      {
+        "name": "Micro SaaS",
+        "mrr_model": "$15-99/mo subscription",
+        "reason": "needs a server accepting requests; GitHub Actions is outbound-only"
+      },
+      {
+        "name": "Local business AI automation agency",
+        "mrr_model": "$300-800/mo retainer per client",
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform"
+      },
+      {
+        "name": "Online course membership",
+        "mrr_model": "$49/mo; ~204 members = $10K MRR",
+        "reason": "fit score 45 is below the 50 threshold for this stack"
+      },
+      {
+        "name": "Bookkeeping as a service",
+        "mrr_model": "$200-600/mo retainer",
+        "reason": "requires a professional credential the owner does not hold; requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
+      },
+      {
+        "name": "Social media management retainer",
+        "mrr_model": "$500-1.5K/mo per client",
+        "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
+      },
+      {
+        "name": "SEO retainer",
+        "mrr_model": "$400-3K/mo per client",
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client"
+      },
+      {
+        "name": "Podcast production service",
+        "mrr_model": "$500-2K/mo retainer",
+        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
+      },
+      {
+        "name": "White-label SaaS reselling",
+        "mrr_model": "platform markup, $1-6K/mo",
+        "reason": "requires a paid third-party platform; client acquisition needs cold email/DM \u2014 blocked in code"
+      },
+      {
+        "name": "Email marketing management retainer",
+        "mrr_model": "$400-1.2K/mo per client",
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client"
+      },
+      {
+        "name": "Paid Discord / Slack community",
+        "mrr_model": "$15-50/mo per member",
+        "reason": "delivery requires posting to social platforms \u2014 blocked in code"
+      },
+      {
+        "name": "No-code app dev for one industry",
+        "mrr_model": "hosting + maintenance retainer",
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform"
+      },
+      {
+        "name": "YouTube automation channel",
+        "mrr_model": "AdSense + affiliate + memberships",
+        "reason": "delivery requires posting to social platforms \u2014 blocked in code"
+      },
+      {
+        "name": "Freelance writing retainer",
+        "mrr_model": "4-8 articles/mo, $1.5-8K",
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code"
+      },
+      {
+        "name": "Online tutoring / coaching subscription",
+        "mrr_model": "$150-500/mo per client",
+        "reason": "requires a human performing the service per client"
+      },
+      {
+        "name": "API or data feed for a niche",
+        "mrr_model": "recurring API access fee",
+        "reason": "needs a server accepting requests; GitHub Actions is outbound-only"
+      },
+      {
+        "name": "Virtual assistant agency",
+        "mrr_model": "$500-2K/mo per client",
+        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
+      },
+      {
+        "name": "Niche job board / marketplace",
+        "mrr_model": "$99-499 per posting, recruiter memberships",
+        "reason": "needs a server accepting requests; GitHub Actions is outbound-only"
+      },
+      {
+        "name": "Content repurposing service",
+        "mrr_model": "$500-1.5K/mo retainer",
+        "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
+      }
+    ],
+    "llm_used": false
+  },
+  "mrr_ideas_history": {
+    "names": [
+      "Paid newsletter",
+      "Notion / digital template store"
+    ]
+  }
 }

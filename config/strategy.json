@@ -1,144 +1,144 @@
 {
-  "articles": {
-    "max_articles_per_cycle": 1,
-    "min_interval_hours": 6,
-    "source_max_age_hours": 24,
-    "history_limit": 200,
-    "min_words": 700
-  },
-  "code_techs": {
-    "enabled": true,
-    "refresh_hours": 24,
-    "daily_target_usd": 10.0,
-    "max_items": 8,
-    "min_score": 55,
-    "auto_pursue": false,
-    "pursue_score_threshold": 75,
-    "requirements": [
-      "Lead with free AI services and free AI APIs: no credit card, generous free tier, usable today.",
-      "Every suggestion must name the free service, its real limits, and one concrete way to earn with it.",
-      "Prefer easy money: something the owner can start in under 2 hours with no upfront spend.",
-      "Prefer repeatable offers over one-off tasks, and same-week payout over deferred upside.",
-      "State the earning path in plain language: who pays, for what, and roughly how much.",
-      "Skip anything needing paid infrastructure, approval queues, or an audience the owner lacks.",
-      "Do not count discovery or speculative upside as earnings."
-    ],
-    "free_ai_focus": [
-      "free-tier LLM APIs with no credit card requirement",
-      "free speech-to-text, TTS, and transcription APIs",
-      "free image generation and background-removal APIs",
-      "free OCR, document parsing, and PDF extraction APIs",
-      "free embedding and vector-search tiers",
-      "free translation and summarization APIs",
-      "free AI hosting, inference, and scheduled-compute tiers",
-      "open-weight models that run on free CPU/GPU allowances"
-    ],
-    "monetization_patterns": [
-      "Resell a free API as a tiny fixed-price service (transcribe, summarize, clean, convert).",
-      "Sell the setup, not the compute: charge to configure a free AI tool inside someone's workflow.",
-      "Bundle a free API into a one-page tool and charge a small one-time fee.",
-      "Offer a done-for-you batch job: send files, get results back, fixed price per batch.",
-      "Charge for the prompt library and workflow, and let the client bring their own free key.",
-      "Package a recurring report built on free-tier APIs as a low-cost monthly retainer."
-    ],
-    "reference_sources": [
-      {
-        "title": "OpenRouter free model list",
-        "url": "https://openrouter.ai/models?max_price=0",
-        "takeaway": "Live list of zero-cost models usable through a single API key. Free (:free) models are capped at 20 req/min and only 50 req/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit before relying on volume."
-      },
-      {
-        "title": "Google AI Studio (Gemini API)",
-        "url": "https://aistudio.google.com/app/apikey",
-        "takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day (10 RPM, 250K TPM); Gemini 2.0 Flash is roughly 15 RPM / 1M TPM. Much higher daily ceiling than OpenRouter's free chain -- verify current limit."
-      },
-      {
-        "title": "Cerebras Cloud free tier",
-        "url": "https://cloud.cerebras.ai/",
-        "takeaway": "No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model on fast inference hardware. Strong fallback once OpenRouter's free daily cap is hit -- verify current limit."
-      },
-      {
-        "title": "Groq Cloud free tier",
-        "url": "https://console.groq.com/",
-        "takeaway": "No credit card required. Generous daily request allowance (roughly 14K/day depending on model) with very low latency -- verify current limit."
-      }
-    ],
-    "github_searches": [
-      "free AI API list no credit card in:readme stars:>200",
-      "awesome free LLM API in:name,readme stars:>100",
-      "free tier AI services awesome list in:readme stars:>150",
-      "free OCR API python in:readme stars:>100",
-      "free speech to text API in:readme stars:>100",
-      "free image generation API wrapper in:readme stars:>100",
-      "free embeddings API tier in:readme stars:>50"
-    ],
-    "community_searches": [
-      "free AI API no credit card",
-      "free LLM API free tier",
-      "best free AI API for",
-      "free tier AI service generous",
-      "free transcription API",
-      "free OCR API",
-      "free image generation API free",
-      "how I make money with AI free tools",
-      "side income AI automation no upfront cost",
-      "easiest way to make money with AI",
-      "charge clients for AI automation",
-      "productized AI service small",
-      "free API to build a paid tool",
-      "is there a free tool for"
-    ],
-    "reddit_subreddits": [
-      "SideProject",
-      "Entrepreneur",
-      "smallbusiness",
-      "SaaS",
-      "LocalLLaMA",
-      "automation",
-      "freelance",
-      "WorkOnline"
-    ],
-    "reddit_searches": [
-      "free AI API",
-      "free LLM API no credit card",
-      "free tier AI service",
-      "free transcription API",
-      "free OCR API",
-      "make money with AI tools",
-      "easy side income automation",
-      "charge for AI automation setup",
-      "productized service AI",
-      "built a tool with free API",
-      "is there a free tool",
-      "how much to charge automation"
-    ],
-    "max_reddit_requests": 24,
-    "outreach": {
-      "enabled": true,
-      "default_price_usd": 10.0,
-      "payment_label": "crypto",
-      "crypto_address_env": "USDT_WALLET_ADDRESS",
-      "fallback_payment_note": "Payment address is configured privately; add it manually before sending."
-    }
-  },
-  "llm": {
-    "main_engine": "stealth/ox-alpha",
-    "provider": "openrouter",
-    "note": "All-free model chain, ordered by capability per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. stealth/ox-alpha leads every chain (1M ctx, $0, coding/agentic reasoning); on 402/429/404 the client steps down the rest of the role's free chain before changing provider."
-  },
-  "research_policy": {
-    "mode": "research_and_article_publishing",
-    "allowed_actions": [
-      "research",
-      "suggestions",
-      "drafts",
-      "article publishing"
-    ],
-    "blocked_actions": [
-      "social posting",
-      "trading",
-      "minting",
-      "payouts"
-    ]
-  }
+	"articles": {
+		"max_articles_per_cycle": 1,
+		"min_interval_hours": 6,
+		"source_max_age_hours": 24,
+		"history_limit": 200,
+		"min_words": 700
+	},
+	"code_techs": {
+		"enabled": true,
+		"refresh_hours": 24,
+		"daily_target_usd": 10.0,
+		"max_items": 8,
+		"min_score": 55,
+		"auto_pursue": false,
+		"pursue_score_threshold": 75,
+		"requirements": [
+			"Lead with free AI services and free AI APIs: no credit card, generous free tier, usable today.",
+			"Every suggestion must name the free service, its real limits, and one concrete way to earn with it.",
+			"Prefer easy money: something the owner can start in under 2 hours with no upfront spend.",
+			"Prefer repeatable offers over one-off tasks, and same-week payout over deferred upside.",
+			"State the earning path in plain language: who pays, for what, and roughly how much.",
+			"Skip anything needing paid infrastructure, approval queues, or an audience the owner lacks.",
+			"Do not count discovery or speculative upside as earnings."
+		],
+		"free_ai_focus": [
+			"free-tier LLM APIs with no credit card requirement",
+			"free speech-to-text, TTS, and transcription APIs",
+			"free image generation and background-removal APIs",
+			"free OCR, document parsing, and PDF extraction APIs",
+			"free embedding and vector-search tiers",
+			"free translation and summarization APIs",
+			"free AI hosting, inference, and scheduled-compute tiers",
+			"open-weight models that run on free CPU/GPU allowances"
+		],
+		"monetization_patterns": [
+			"Resell a free API as a tiny fixed-price service (transcribe, summarize, clean, convert).",
+			"Sell the setup, not the compute: charge to configure a free AI tool inside someone's workflow.",
+			"Bundle a free API into a one-page tool and charge a small one-time fee.",
+			"Offer a done-for-you batch job: send files, get results back, fixed price per batch.",
+			"Charge for the prompt library and workflow, and let the client bring their own free key.",
+			"Package a recurring report built on free-tier APIs as a low-cost monthly retainer."
+		],
+		"reference_sources": [
+			{
+				"title": "OpenRouter free model list",
+				"url": "https://openrouter.ai/models?max_price=0",
+				"takeaway": "Live list of zero-cost models usable through a single API key. Free (:free) models are capped at 20 req/min and only 50 req/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit before relying on volume."
+			},
+			{
+				"title": "Google AI Studio (Gemini API)",
+				"url": "https://aistudio.google.com/app/apikey",
+				"takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day (10 RPM, 250K TPM); Gemini 2.0 Flash is roughly 15 RPM / 1M TPM. Much higher daily ceiling than OpenRouter's free chain -- verify current limit."
+			},
+			{
+				"title": "Cerebras Cloud free tier",
+				"url": "https://cloud.cerebras.ai/",
+				"takeaway": "No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model on fast inference hardware. Strong fallback once OpenRouter's free daily cap is hit -- verify current limit."
+			},
+			{
+				"title": "Groq Cloud free tier",
+				"url": "https://console.groq.com/",
+				"takeaway": "No credit card required. Generous daily request allowance (roughly 14K/day depending on model) with very low latency -- verify current limit."
+			}
+		],
+		"github_searches": [
+			"free AI API list no credit card in:readme stars:>200",
+			"awesome free LLM API in:name,readme stars:>100",
+			"free tier AI services awesome list in:readme stars:>150",
+			"free OCR API python in:readme stars:>100",
+			"free speech to text API in:readme stars:>100",
+			"free image generation API wrapper in:readme stars:>100",
+			"free embeddings API tier in:readme stars:>50"
+		],
+		"community_searches": [
+			"free AI API no credit card",
+			"free LLM API free tier",
+			"best free AI API for",
+			"free tier AI service generous",
+			"free transcription API",
+			"free OCR API",
+			"free image generation API free",
+			"how I make money with AI free tools",
+			"side income AI automation no upfront cost",
+			"easiest way to make money with AI",
+			"charge clients for AI automation",
+			"productized AI service small",
+			"free API to build a paid tool",
+			"is there a free tool for"
+		],
+		"reddit_subreddits": [
+			"SideProject",
+			"Entrepreneur",
+			"smallbusiness",
+			"SaaS",
+			"LocalLLaMA",
+			"automation",
+			"freelance",
+			"WorkOnline"
+		],
+		"reddit_searches": [
+			"free AI API",
+			"free LLM API no credit card",
+			"free tier AI service",
+			"free transcription API",
+			"free OCR API",
+			"make money with AI tools",
+			"easy side income automation",
+			"charge for AI automation setup",
+			"productized service AI",
+			"built a tool with free API",
+			"is there a free tool",
+			"how much to charge automation"
+		],
+		"max_reddit_requests": 24,
+		"outreach": {
+			"enabled": true,
+			"default_price_usd": 10.0,
+			"payment_label": "crypto",
+			"crypto_address_env": "USDT_WALLET_ADDRESS",
+			"fallback_payment_note": "Payment address is configured privately; add it manually before sending."
+		}
+	},
+	"llm": {
+		"main_engine": "stealth/ox-alpha",
+		"provider": "openrouter",
+		"note": "All-free model chain, ordered by capability per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. stealth/ox-alpha leads every chain (1M ctx, $0, coding/agentic reasoning); on 402/429/404 the client steps down the rest of the role's free chain before changing provider."
+	},
+	"research_policy": {
+		"mode": "research_and_article_publishing",
+		"allowed_actions": [
+			"research",
+			"suggestions",
+			"drafts",
+			"article publishing"
+		],
+		"blocked_actions": [
+			"social posting",
+			"trading",
+			"minting",
+			"payouts"
+		]
+	}
 }

@@ -1,20 +1,20 @@
 {
-  "inactive_features": {
-    "llm_anthropic": {
-      "error_message": "Anthropic LLM is not active"
-    },
-    "llm_gemini": {
-      "error_message": "Gemini LLM is not active"
-    },
-    "llm_openrouter": {
-      "error_message": "OpenRouter research LLM is not active"
-    },
-    "llm_groq": {
-      "error_message": "Groq draft LLM is not active"
-    }
-  },
-  "policy": {
-    "mode": "research_suggestions_only",
-    "blocked_actions": ["publishing", "posting", "trading", "minting", "payouts"]
-  }
+	"inactive_features": {
+		"llm_anthropic": {
+			"error_message": "Anthropic LLM is not active"
+		},
+		"llm_gemini": {
+			"error_message": "Gemini LLM is not active"
+		},
+		"llm_openrouter": {
+			"error_message": "OpenRouter research LLM is not active"
+		},
+		"llm_groq": {
+			"error_message": "Groq draft LLM is not active"
+		}
+	},
+	"policy": {
+		"mode": "research_suggestions_only",
+		"blocked_actions": ["publishing", "posting", "trading", "minting", "payouts"]
+	}
 }

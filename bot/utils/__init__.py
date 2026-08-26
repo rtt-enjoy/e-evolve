@@ -11,16 +11,16 @@ from typing import Optional
 
 
 def get_env(name: str) -> Optional[str]:
-    """Return the stripped value of an environment variable or ``None``.
+	"""Return the stripped value of an environment variable or ``None``.
 
     The function treats empty strings as missing and logs a debug message
     (the bot's logger is configured globally).  Modules can import this
     helper and replace repetitive ``os.getenv(...).strip()`` calls.
     """
-    value = os.getenv(name)
-    if value is None:
-        return None
-    stripped = value.strip()
-    return stripped or None
+	value = os.getenv(name)
+	if value is None:
+		return None
+	stripped = value.strip()
+	return stripped or None
 
 __all__ = ["get_env"]

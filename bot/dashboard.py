@@ -28,85 +28,85 @@ _PUBLIC_LOG_FILE = Path("docs/earnings-log.md")
 
 
 def write_log(actions: list[dict]) -> None:
-    """Append this cycle's completed actions to earnings-log.md."""
-    if not actions:
-        return
+	"""Append this cycle's completed actions to earnings-log.md."""
+	if not actions:
+		return
 
-    ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    lines = [f"\n### {ts}\n"]
+	ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+	lines = [f"\n### {ts}\n"]
 
-    for action in actions:
-        ok = action.get("success", False)
-        icon = "[ok]" if ok else "[fail]"
-        platform = action.get("platform", "?")
+	for action in actions:
+		ok = action.get("success", False)
+		icon = "[ok]" if ok else "[fail]"
+		platform = action.get("platform", "?")
 
-        if "title" in action:
-            url = action.get("url", "")
-            title = str(action.get("title", ""))[:60]
-            link = f"[{title}]({url})" if url else title
-            est = float(action.get("estimated_usd", 0) or 0)
-            lines.append(f"- {icon} **{platform}**: {link} (est. ${est:.2f})")
+		if "title" in action:
+			url = action.get("url", "")
+			title = str(action.get("title", ""))[:60]
+			link = f"[{title}]({url})" if url else title
+			est = float(action.get("estimated_usd", 0) or 0)
+			lines.append(f"- {icon} **{platform}**: {link} (est. ${est:.2f})")
 
-        elif "side" in action:
-            side = action.get("side", "")
-            symbol = action.get("symbol", "")
-            if side in ("BUY", "SELL"):
-                val = float(action.get("value_usd", 0) or 0)
-                lines.append(f"- {icon} **{platform}** {side} {symbol} - ${val:.2f}")
-            elif side == "HOLD":
-                lines.append(f"- [hold] **{platform}** {symbol} - HOLD")
-            else:
-                err = str(action.get("error", ""))[:80]
-                lines.append(f"- [fail] **{platform}** {symbol} - {err}")
+		elif "side" in action:
+			side = action.get("side", "")
+			symbol = action.get("symbol", "")
+			if side in ("BUY", "SELL"):
+				val = float(action.get("value_usd", 0) or 0)
+				lines.append(f"- {icon} **{platform}** {side} {symbol} - ${val:.2f}")
+			elif side == "HOLD":
+				lines.append(f"- [hold] **{platform}** {symbol} - HOLD")
+			else:
+				err = str(action.get("error", ""))[:80]
+				lines.append(f"- [fail] **{platform}** {symbol} - {err}")
 
-        elif "thread_length" in action:
-            url = action.get("url", "#")
-            topic = str(action.get("topic", "thread"))[:50]
-            n = action.get("thread_length", 0)
-            lines.append(f"- {icon} **{platform}** [{topic}]({url}) ({n} tweets)")
+		elif "thread_length" in action:
+			url = action.get("url", "#")
+			topic = str(action.get("topic", "thread"))[:50]
+			n = action.get("thread_length", 0)
+			lines.append(f"- {icon} **{platform}** [{topic}]({url}) ({n} tweets)")
 
-        elif "metadata_uri" in action:
-            tx = action.get("tx_hash") or "log-only"
-            uri = str(action.get("metadata_uri", ""))[:60]
-            lines.append(f"- {icon} **{platform}** NFT tx=`{tx}` uri={uri}")
+		elif "metadata_uri" in action:
+			tx = action.get("tx_hash") or "log-only"
+			uri = str(action.get("metadata_uri", ""))[:60]
+			lines.append(f"- {icon} **{platform}** NFT tx=`{tx}` uri={uri}")
 
-        else:
-            lines.append(f"- {icon} **{platform}** action recorded")
+		else:
+			lines.append(f"- {icon} **{platform}** action recorded")
 
-    with _LOG_FILE.open("a", encoding="utf-8") as handle:
-        handle.write("\n".join(lines) + "\n")
+	with _LOG_FILE.open("a", encoding="utf-8") as handle:
+		handle.write("\n".join(lines) + "\n")
 
-    log.info("earnings-log.md updated (%d actions)", len(actions))
+	log.info("earnings-log.md updated (%d actions)", len(actions))
 
 
 def write_html(status: dict[str, Any]) -> None:
-    """Publish safe dashboard data files consumed by the React frontend."""
-    _HTML_FILE.parent.mkdir(parents=True, exist_ok=True)
-    from bot.status import sanitize_for_git
-    public_status = sanitize_for_git(status)
-    github_repo = os.getenv("GITHUB_REPO", "").strip()
-    if github_repo:
-        public_status["github_repo"] = github_repo
-    _PUBLIC_STATUS_FILE.write_text(
-        json.dumps(public_status, indent=2, default=str),
-        encoding="utf-8",
-    )
+	"""Publish safe dashboard data files consumed by the React frontend."""
+	_HTML_FILE.parent.mkdir(parents=True, exist_ok=True)
+	from bot.status import sanitize_for_git
+	public_status = sanitize_for_git(status)
+	github_repo = os.getenv("GITHUB_REPO", "").strip()
+	if github_repo:
+		public_status["github_repo"] = github_repo
+	_PUBLIC_STATUS_FILE.write_text(
+		json.dumps(public_status, indent=2, default=str),
+		encoding="utf-8",
+	)
 
-    if _LOG_FILE.exists():
-        _PUBLIC_LOG_FILE.write_text(
-            _LOG_FILE.read_text(encoding="utf-8"),
-            encoding="utf-8",
-        )
+	if _LOG_FILE.exists():
+		_PUBLIC_LOG_FILE.write_text(
+			_LOG_FILE.read_text(encoding="utf-8"),
+			encoding="utf-8",
+		)
 
-    if not _HTML_FILE.exists():
-        _HTML_FILE.write_text(_fallback_index(), encoding="utf-8")
+	if not _HTML_FILE.exists():
+		_HTML_FILE.write_text(_fallback_index(), encoding="utf-8")
 
-    log.info("Dashboard data written -> docs/status.json")
+	log.info("Dashboard data written -> docs/status.json")
 
 
 def _fallback_index() -> str:
-    """Minimal page shown only before the frontend bundle is built."""
-    return """<!doctype html>
+	"""Minimal page shown only before the frontend bundle is built."""
+	return """<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">

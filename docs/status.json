@@ -1,7 +1,7 @@
 {
-  "version": "1.35.0",
-  "last_run": "2026-08-27T03:34:28.895431+00:00",
-  "total_runs": 1716,
+  "version": "1.36.0",
+  "last_run": "2026-08-27T03:36:01.023732+00:00",
+  "total_runs": 1717,
   "active_features": [
     "llm_anthropic",
     "llm_gemini",
@@ -75,7 +75,7 @@
         ]
       }
     ],
-    "version_bumped_to": "1.35.0",
+    "version_bumped_to": "1.36.0",
     "error": null
   },
   "last_earning": {

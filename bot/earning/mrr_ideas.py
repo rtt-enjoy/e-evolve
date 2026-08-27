@@ -24,15 +24,15 @@ from __future__ import annotations
 import json
 import logging
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from ._shared import bounded_append, hours_until_due, load_config
 from .code_techs import _cell, _clean_list, _dicts
 
 log = logging.getLogger(__name__)
 
-_CONFIG_FILE = Path("config/strategy.json")
 _REPORT_FILE = Path("docs/mrr-ideas.md")
 
 # Earnings breakdown key. Distinct from the other modules so this product stays
@@ -50,14 +50,7 @@ _DEFAULTS = {
 
 def _config() -> dict:
 	"""Strategy config for this module, defaults filled in for missing keys."""
-	try:
-		raw = json.loads(_CONFIG_FILE.read_text(encoding="utf-8")).get("mrr_ideas", {})
-	except Exception:
-		raw = {}
-	cfg = dict(_DEFAULTS)
-	if isinstance(raw, dict):
-		cfg.update(raw)
-	return cfg
+	return load_config("mrr_ideas", _DEFAULTS)
 
 
 # Requirements that make a model impossible here, so the idea is REFUSED.
@@ -286,7 +279,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 
 	forced = bool(status.get("_overrides", {}).get("force_mrr"))
 	if not forced:
-		waiting = _hours_until_due(state, int(cfg["refresh_hours"]))
+		waiting = hours_until_due(state, "last_refresh_at", int(cfg["refresh_hours"]))
 		if waiting > 0:
 			log.info("[mrr_ideas] next refresh due in %.1fh — skipping", waiting)
 			return []
@@ -334,23 +327,6 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		"title": f"MRR idea triage refreshed ({len(viable)} viable, {len(refused)} refused)",
 		"url": str(_REPORT_FILE),
 	}]
-
-
-def _hours_until_due(state: dict, refresh_hours: int) -> float:
-	"""Hours remaining before the next refresh. 0.0 when due now."""
-	stamp = str(state.get("last_refresh_at") or "").strip()
-	if not stamp:
-		return 0.0
-	try:
-		last = datetime.fromisoformat(stamp)
-	except ValueError:
-		# An unparseable stamp must not wedge the module forever.
-		return 0.0
-	if not last.tzinfo:
-		last = last.replace(tzinfo=timezone.utc)
-	due = last + timedelta(hours=max(1, refresh_hours))
-	remaining = (due - datetime.now(timezone.utc)).total_seconds() / 3600
-	return max(0.0, remaining)
 
 
 def _triage(catalogue: list[dict], cfg: dict) -> tuple[list[dict], list[dict]]:
@@ -525,11 +501,7 @@ def _record_refresh(status: dict, ideas: list[dict], limit: int) -> None:
 	hist = _history(status)
 	entries = hist.setdefault("names", [])
 	for idea in ideas:
-		name = str(idea.get("name", "")).strip()
-		if name and name not in entries:
-			entries.append(name)
-	# Bound the history so status.json cannot grow without limit.
-	del entries[: -max(1, limit)]
+		bounded_append(entries, str(idea.get("name", "")).strip(), limit)
 
 
 def _write_report(state: dict[str, Any]) -> None:

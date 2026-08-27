@@ -14,9 +14,10 @@ from urllib.parse import quote_plus
 
 import requests
 
+from ._shared import load_config, parse_dt, strip_html, xml_text
+
 log = logging.getLogger(__name__)
 
-_STRATEGY_FILE = Path("config/strategy.json")
 _REPORT_FILE = Path("docs/code-tech-opportunities.md")
 
 _DEFAULT_CONFIG = {
@@ -265,7 +266,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 
 	now = datetime.now(timezone.utc)
 	refresh_hours = max(1, int(cfg.get("refresh_hours", 24) or 24))
-	last_run = _parse_dt(state.get("last_refresh_at"))
+	last_run = parse_dt(state.get("last_refresh_at"))
 	if last_run and now - last_run < timedelta(hours=refresh_hours):
 		log.info("[code_techs] queue is fresh; next refresh after %sh", refresh_hours)
 		return []
@@ -310,13 +311,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	}]
 
 def _config() -> dict[str, Any]:
-	try:
-		strategy = json.loads(_STRATEGY_FILE.read_text(encoding="utf-8"))
-	except Exception:
-		strategy = {}
-	cfg = dict(_DEFAULT_CONFIG)
-	cfg.update(strategy.get("code_techs", {}) or {})
-	return cfg
+	return load_config("code_techs", _DEFAULT_CONFIG)
 
 def _enabled(cfg: dict[str, Any]) -> bool:
 	raw = os.getenv("CODE_TECH_EARN_ENABLED", "").strip().lower()
@@ -412,7 +407,7 @@ def _fetch_hn_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 					"title": title,
 					"url": url,
 					"source": "hacker-news",
-					"body": _strip_html(str(body)),
+					"body": strip_html(str(body)),
 					"labels": ["community-request", "free-api"],
 				})
 		except Exception as exc:
@@ -460,8 +455,8 @@ def _parse_reddit_rss(feed_text: str, subreddit: str) -> list[dict[str, Any]]:
 
 	leads: list[dict[str, Any]] = []
 	for entry in root.findall(".//{*}entry"):
-		title = _xml_text(entry, "title")
-		body = _xml_text(entry, "content") or _xml_text(entry, "summary")
+		title = xml_text(entry, "title")
+		body = xml_text(entry, "content") or xml_text(entry, "summary")
 		url = ""
 		for link in entry.findall("{*}link"):
 			href = str(link.attrib.get("href", "")).strip()
@@ -474,7 +469,7 @@ def _parse_reddit_rss(feed_text: str, subreddit: str) -> list[dict[str, Any]]:
 			"title": title,
 			"url": url,
 			"source": f"reddit:r/{subreddit}",
-			"body": _strip_html(body),
+			"body": strip_html(body),
 			"labels": ["reddit", "community-request", "free-rss"],
 		})
 	return leads
@@ -821,25 +816,6 @@ def _payment_note(outreach_cfg: dict[str, Any]) -> str:
 			"Payment address is configured privately; add it manually before sending.",
 		)
 	)
-
-def _strip_html(value: str) -> str:
-	value = re.sub(r"<[^>]+>", " ", value)
-	return re.sub(r"\s+", " ", value).strip()
-
-def _xml_text(parent: ET.Element, tag: str) -> str:
-	element = parent.find(f"{{*}}{tag}")
-	if element is None or element.text is None:
-		return ""
-	return element.text.strip()
-
-def _parse_dt(value: Any) -> datetime | None:
-	if not value:
-		return None
-	try:
-		dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
-		return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
-	except Exception:
-		return None
 
 def _write_report(state: dict[str, Any]) -> None:
 	_REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)

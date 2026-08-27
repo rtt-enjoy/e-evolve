@@ -7,32 +7,24 @@ single source, this writes one short paragraph about each of several sources.
 
 Activates with: DEV_TO_API_KEY. Without it the module skips silently.
 
-Quality gates, history bounding, and the dev.to call are reused from
-``articles`` rather than reimplemented -- the two modules publish to the same
-platform under the same house style, so they must not drift apart.
+Quality gates and the dev.to call come from ``devto`` rather than being
+reimplemented -- the two modules publish to the same platform under the same
+house style, so they must not drift apart. Structural checks stay local
+(``_digest_problems``), because a digest legitimately lacks the essay rules
+``articles`` asserts.
 """
 from __future__ import annotations
 
-import json
 import logging
 import os
 import re
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
+from datetime import datetime, timezone
 from typing import Any, Optional
 
-from . import trending
-from .articles import (
-	_fabrication_problems,
-	_normalize,
-	_publish_to_devto,
-	_strip_fabricated_tables,
-	_tone_problems,
-)
+from . import devto, trending
+from ._shared import bounded_append, hours_until_due, load_config
 
 log = logging.getLogger(__name__)
-
-_CONFIG_FILE = Path("config/strategy.json")
 
 # dev.to breakdown key. Distinct from the "dev.to" articles use, so the two
 # products stay separately visible in earnings["breakdown"].
@@ -55,14 +47,7 @@ _DEFAULTS = {
 
 def _config() -> dict:
 	"""Strategy config for this module, defaults filled in for missing keys."""
-	try:
-		raw = json.loads(_CONFIG_FILE.read_text(encoding="utf-8")).get("newsletter", {})
-	except Exception:
-		raw = {}
-	cfg = dict(_DEFAULTS)
-	if isinstance(raw, dict):
-		cfg.update(raw)
-	return cfg
+	return load_config("newsletter", _DEFAULTS)
 
 
 _SYSTEM = """\
@@ -137,7 +122,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 
 	forced = bool(status.get("_overrides", {}).get("force_newsletter"))
 	if not forced:
-		waiting = _hours_until_due(state, int(cfg["min_interval_hours"]))
+		waiting = hours_until_due(state, "published_at", int(cfg["min_interval_hours"]))
 		if waiting > 0:
 			log.info("[newsletter] next issue due in %.1fh — skipping", waiting)
 			return []
@@ -159,7 +144,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		}]
 
 	items = issue.pop("_items", [])
-	result = _publish_to_devto(issue, api_key)
+	result = devto.publish(issue, api_key)
 	result["platform"] = _PLATFORM
 	result["item_count"] = len(items)
 
@@ -176,23 +161,6 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		_record_issue(status, items, int(cfg["history_limit"]))
 
 	return [result]
-
-
-def _hours_until_due(state: dict, min_interval_hours: int) -> float:
-	"""Hours remaining before the next issue is allowed. 0.0 when due now."""
-	stamp = str(state.get("published_at") or "").strip()
-	if not stamp:
-		return 0.0
-	try:
-		last = datetime.fromisoformat(stamp)
-	except ValueError:
-		# An unparseable stamp must not wedge the module forever.
-		return 0.0
-	if not last.tzinfo:
-		last = last.replace(tzinfo=timezone.utc)
-	due = last + timedelta(hours=max(1, min_interval_hours))
-	remaining = (due - datetime.now(timezone.utc)).total_seconds() / 3600
-	return max(0.0, remaining)
 
 
 def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
@@ -246,8 +214,8 @@ def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
 		return None
 
 	# Deterministic cleanup first, so no LLM call is spent on fixable artifacts.
-	issue = _normalize(data)
-	issue["body_markdown"], dropped = _strip_fabricated_tables(issue["body_markdown"])
+	issue = devto.normalize(data)
+	issue["body_markdown"], dropped = devto.strip_fabricated_tables(issue["body_markdown"])
 	if dropped:
 		log.info("[newsletter] removed %d fabricated spec table(s)", dropped)
 
@@ -326,11 +294,7 @@ def _record_issue(status: dict, items: list[dict], limit: int) -> None:
 		):
 			if not value:
 				continue
-			entries = hist.setdefault(key, [])
-			if value not in entries:
-				entries.append(value)
-			# Bound the history so status.json cannot grow without limit.
-			del entries[: -max(1, limit)]
+			bounded_append(hist.setdefault(key, []), value, limit)
 
 
 def _ensure_sources(body: str, items: list[dict]) -> str:
@@ -380,6 +344,6 @@ def _digest_problems(body: str, items: list[dict], cfg: dict) -> list[str]:
 	if missing:
 		problems.append(f"{len(missing)} source link(s) missing from body")
 
-	problems.extend(_fabrication_problems(body))
-	problems.extend(_tone_problems(body))
+	problems.extend(devto.fabrication_problems(body))
+	problems.extend(devto.tone_problems(body))
 	return problems

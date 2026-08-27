@@ -10,37 +10,50 @@ from __future__ import annotations
 import logging
 import os
 import re
-from pathlib import Path
 from typing import Any, Optional
 
-import requests
-
-from . import devto_stats, trending
+from . import devto, devto_stats, trending
+from ._shared import bounded_append, load_config
 
 log = logging.getLogger(__name__)
 
-_CONFIG_FILE = Path("config/strategy.json")
+_PLATFORM = "dev.to"
 
-def _load_config() -> dict:
-	try:
-		import json
-		return json.loads(_CONFIG_FILE.read_text(encoding="utf-8"))
-	except Exception:
-		return {}
+_DEFAULTS = {
+	"max_articles_per_cycle": 1,
+	# NOTE: articles gate on the calendar date (one per UTC day), not on an
+	# elapsed interval, so strategy.json's articles.min_interval_hours is not
+	# read here. It is left in the config file rather than silently honoured.
+	"source_max_age_hours": 24,
+	# How many past titles/sources to remember for duplicate detection.
+	"history_limit": 200,
+	"min_words": 700,
+	# Follow-up behaviour: mine the best recent post for a deeper second article.
+	"followup_enabled": True,
+	"followup_window_hours": 48,
+	"followup_min_views": 40,
+	"title_min_chars": 25,
+	"title_max_chars": 70,
+}
 
-_article_config = _load_config().get("articles", {})
-_MAX_ARTICLES_PER_CYCLE = int(_article_config.get("max_articles_per_cycle", 1))
-_MIN_INTERVAL_HOURS = int(_article_config.get("min_interval_hours", 6))
-_SOURCE_MAX_AGE_HOURS = int(_article_config.get("source_max_age_hours", 24))
-# How many past titles/sources to remember for duplicate detection.
-_HISTORY_LIMIT = int(_article_config.get("history_limit", 200))
-_MIN_WORDS = int(_article_config.get("min_words", 700))
-# Follow-up behaviour: mine the best recent post for a deeper second article.
-_FOLLOWUP_ENABLED = bool(_article_config.get("followup_enabled", True))
-_FOLLOWUP_WINDOW_HOURS = int(_article_config.get("followup_window_hours", 48))
-_FOLLOWUP_MIN_VIEWS = int(_article_config.get("followup_min_views", 40))
-_TITLE_MAX_CHARS = int(_article_config.get("title_max_chars", 70))
-_TITLE_MIN_CHARS = int(_article_config.get("title_min_chars", 25))
+
+def _config() -> dict:
+	"""Strategy config for this module, defaults filled in for missing keys.
+
+    Read per call, not at import. These settings used to be module constants
+    captured at import time, which meant an owner's config edit could not take
+    effect without a reimport and a test had to monkeypatch a global to change
+    one value.
+    """
+	cfg = load_config("articles", _DEFAULTS)
+	if _FOLLOWUP_OVERRIDE is not None:
+		cfg["followup_enabled"] = _FOLLOWUP_OVERRIDE
+	return cfg
+
+
+# Test hook: force follow-ups off/on regardless of config. None means defer to
+# config, which is always the case in production.
+_FOLLOWUP_OVERRIDE: bool | None = None
 
 _SYSTEM = """\
 You are a senior engineer writing for a developer audience on dev.to.
@@ -200,7 +213,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	forced = int(status.get("_overrides", {}).get("force_articles", 0) or 0)
 	if last_date == today and not forced:
 		published_today = state.get("published", 0)
-		if published_today >= _MAX_ARTICLES_PER_CYCLE:
+		if published_today >= int(_config()["max_articles_per_cycle"]):
 			log.info("[articles] Already published %d article(s) today — skipping", published_today)
 			return []
 	if forced:
@@ -221,7 +234,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	results = []
 
 	# Publish to dev.to
-	devto_result = _publish_to_devto(article, devto_api_key)
+	devto_result = devto.publish(article, devto_api_key)
 	results.append(devto_result)
 
 	# Update state if at least one platform succeeded
@@ -319,12 +332,12 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
     """
 	# Normalize first: it deterministically fixes stray '#' headings and fence
 	# artifacts, so we never spend free-tier LLM calls revising those.
-	article = _normalize(data)
+	article = devto.normalize(data)
 
 	# Drop invented spec tables before anything else looks at the body. This is
 	# deterministic, so it costs no LLM call -- and asking the model to "fix"
 	# numbers it hallucinated tends to produce different hallucinated numbers.
-	article["body_markdown"], dropped = _strip_fabricated_tables(article["body_markdown"])
+	article["body_markdown"], dropped = devto.strip_fabricated_tables(article["body_markdown"])
 	if dropped:
 		log.info("[articles] removed %d fabricated spec table(s)", dropped)
 
@@ -332,7 +345,7 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 	# figures survive table-stripping they are woven into prose, and no revision
 	# reliably fixes that -- the model just invents different numbers. Check this
 	# before spending a revision call, so a doomed article costs one call, not two.
-	fabricated = _fabrication_problems(article["body_markdown"])
+	fabricated = devto.fabrication_problems(article["body_markdown"])
 	if fabricated:
 		log.warning("[articles] unverifiable claims in prose %s -- not publishing", fabricated)
 		return None
@@ -356,10 +369,10 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 		if revised:
 			# Keep the vetted title: _revise_format may echo the pre-gate one.
 			vetted_title = article.get("title", "")
-			article = _normalize(revised)
+			article = devto.normalize(revised)
 			article["title"] = vetted_title
-			article["body_markdown"], _ = _strip_fabricated_tables(article["body_markdown"])
-			if _fabrication_problems(article["body_markdown"]):
+			article["body_markdown"], _ = devto.strip_fabricated_tables(article["body_markdown"])
+			if devto.fabrication_problems(article["body_markdown"]):
 				log.warning("[articles] revision introduced invented figures -- not publishing")
 				return None
 
@@ -378,6 +391,7 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 
 
 def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
+	cfg = _config()
 	"""Ask for a stronger headline only. Returns the new title, or None.
 
     Body-only retries are wasteful when the headline is the problem, so this
@@ -391,7 +405,7 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		f"Problems with it: {'; '.join(problems)}\n\n"
 		f"Article opening for context:\n{opening}\n\n"
 		"Follow the TITLE rules in the system prompt exactly: "
-		f"{_TITLE_MIN_CHARS}-{_TITLE_MAX_CHARS} characters, concrete, names a real "
+		f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
 		"technology or failure, no clickbait words, no exclamation marks, no "
 		"ALL-CAPS, no colon-subtitle padding.\n\n"
 		'Respond with ONLY this JSON: {"title": "..."}'
@@ -427,7 +441,8 @@ def _followup_target(status: dict, api_key: str) -> Optional[dict]:
 	if overrides.get("skip_followup"):
 		log.info("[articles] follow-up skipped by owner command")
 		return None
-	if not _FOLLOWUP_ENABLED:
+	cfg = _config()
+	if not cfg["followup_enabled"]:
 		return None
 
 	published = devto_stats.fetch_published(api_key)
@@ -447,13 +462,13 @@ def _followup_target(status: dict, api_key: str) -> Optional[dict]:
 	forced = bool(overrides.get("force_followup"))
 	best = devto_stats.top_performer(
 		published,
-		within_hours=_FOLLOWUP_WINDOW_HOURS,
-		min_views=1 if forced else _FOLLOWUP_MIN_VIEWS,
+		within_hours=int(cfg["followup_window_hours"]),
+		min_views=1 if forced else int(cfg["followup_min_views"]),
 		exclude_ids=done,
 	)
 	if not best:
 		log.info("[articles] no post cleared %d views in %dh -- writing a fresh take",
-				 _FOLLOWUP_MIN_VIEWS, _FOLLOWUP_WINDOW_HOURS)
+				 cfg["followup_min_views"], cfg["followup_window_hours"])
 		return None
 	return best
 
@@ -562,7 +577,7 @@ def _pick_source(status: dict) -> Optional[dict]:
 	"""Return the best trending candidate that has not been used before."""
 	try:
 		candidates = trending.fetch_candidates(
-			max_age_hours=_SOURCE_MAX_AGE_HOURS, limit=40
+			max_age_hours=int(_config()["source_max_age_hours"]), limit=40
 		)
 	except Exception as exc:
 		log.warning("[articles] trending fetch failed: %s", exc)
@@ -600,6 +615,7 @@ def _history(status: dict) -> dict:
 def _record_publish(status: dict, article: dict) -> None:
 	"""Remember this article so it can never be published twice."""
 	hist = _history(status)
+	limit = int(_config()["history_limit"])
 	source = article.get("_source") or {}
 
 	for key, value in (
@@ -609,20 +625,13 @@ def _record_publish(status: dict, article: dict) -> None:
 	):
 		if not value:
 			continue
-		entries = hist.setdefault(key, [])
-		if value not in entries:
-			entries.append(value)
-		# Bound the history so status.json cannot grow without limit.
-		del entries[:-_HISTORY_LIMIT]
+		bounded_append(hist.setdefault(key, []), value, limit)
 
 	# Remember which post we already mined for a follow-up, so the same winner is
 	# not followed up every cycle for as long as it stays the top performer.
 	parent_id = article.get("_followup_of")
 	if parent_id is not None:
-		done = hist.setdefault("followed_up_ids", [])
-		if parent_id not in done:
-			done.append(parent_id)
-		del done[:-_HISTORY_LIMIT]
+		bounded_append(hist.setdefault("followed_up_ids", []), parent_id, limit)
 
 
 def _duplicate_reason(article: dict, status: dict) -> str:
@@ -729,21 +738,24 @@ def _shouted_words(text: str) -> list[str]:
 	]
 
 
-def _title_problems(title: str) -> list[str]:
+def _title_problems(title: str, cfg: dict | None = None) -> list[str]:
 	"""Reject titles that will not earn a click.
 
     Views are decided in the feed, before anyone sees the body, so the title
     gets a gate of its own. Deterministic -- costs no LLM call.
     """
+	cfg = cfg or _config()
 	text = str(title or "").strip()
 	problems: list[str] = []
 	if not text:
 		return ["title is empty"]
 
-	if len(text) > _TITLE_MAX_CHARS:
-		problems.append(f"title too long ({len(text)} chars, max {_TITLE_MAX_CHARS})")
-	if len(text) < _TITLE_MIN_CHARS:
-		problems.append(f"title too short ({len(text)} chars, min {_TITLE_MIN_CHARS})")
+	hi = int(cfg["title_max_chars"])
+	lo = int(cfg["title_min_chars"])
+	if len(text) > hi:
+		problems.append(f"title too long ({len(text)} chars, max {hi})")
+	if len(text) < lo:
+		problems.append(f"title too short ({len(text)} chars, min {lo})")
 
 	for pattern, label in _TITLE_BANNED:
 		if pattern == "__SHOUTING__":
@@ -803,12 +815,13 @@ def _boost_tags(tags: list[str], preferred: list[str]) -> list[str]:
 	return clean[:4] or ["programming", "python"]
 
 
-def _format_problems(body: str) -> list[str]:
+def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 	"""Return a list of formatting rule violations in the generated markdown."""
 	problems: list[str] = []
+	min_words = int((cfg or _config())["min_words"])
 	words = len(body.split())
-	if words < _MIN_WORDS:
-		problems.append(f"too short ({words} words, need {_MIN_WORDS}+)")
+	if words < min_words:
+		problems.append(f"too short ({words} words, need {min_words}+)")
 	if len(re.findall(r"^## ", body, re.MULTILINE)) < 4:
 		problems.append("fewer than 4 '##' sections")
 	if len(re.findall(r"^```\w+", body, re.MULTILINE)) < 2:
@@ -821,108 +834,26 @@ def _format_problems(body: str) -> list[str]:
 		problems.append("code block missing language tag")
 	if re.search(r"^(#{2,3} .*)\n+(#{2,3} )", body, re.MULTILINE):
 		problems.append("stacked headings with no prose between them")
-	problems.extend(_fabrication_problems(body))
-	problems.extend(_tone_problems(body))
+	problems.extend(devto.fabrication_problems(body))
+	problems.extend(devto.tone_problems(body))
 	return problems
 
 
 # Phrases that read as hype, filler, or condescension. The owner asked for a
 # clear, clean, friendly tone, and these are the specific tics that break it.
-_TONE_PATTERNS = [
-	(r"\bin today's (world|fast-paced)", "cliche opener \"in today's world\""),
-	(r"\b(revolutionary|game.changing|cutting.edge|paradigm shift)\b", "hype language"),
-	(r"\b(simply|just) (use|run|add|call|do|install)\b", "condescending \"simply/just\""),
-	(r"\bobviously\b", "condescending \"obviously\""),
-	(r"\b(utilize|utilise|leverage|commence|endeavour|endeavor)\b", "corporate jargon"),
-	(r"\b(delve|dive) (in|into) the (world|realm)\b", "cliche \"dive into the world\""),
-	(r"\bit is worth noting that\b", "filler phrase"),
-	(r"\b(unleash|supercharge|turbocharge|skyrocket)\b", "marketing verb"),
-	(r"!(\s|$)", "exclamation mark"),
-]
 
 
-def _tone_problems(body: str) -> list[str]:
-	"""Flag writing that breaks the clear, friendly, jargon-free house style."""
-	prose = _strip_code_blocks(body)
-	found: list[str] = []
-	for pattern, label in _TONE_PATTERNS:
-		if re.search(pattern, prose, re.IGNORECASE) and label not in found:
-			found.append(label)
-
-	# Long average sentences read as dense no matter how good the content is.
-	sentences = [s for s in re.split(r"[.!?]+\s", prose) if len(s.split()) > 2]
-	if sentences:
-		avg = sum(len(s.split()) for s in sentences) / len(sentences)
-		if avg > 26:
-			found.append(f"sentences too long (avg {avg:.0f} words, aim under 22)")
-	return found
 
 
 # Numbers the model has no way to know and reliably invents: latency figures,
 # parameter counts, prices per token, context windows. Prose outside code blocks
 # only -- real numbers inside code (timeouts, retries) are fine.
-_FABRICATION_PATTERNS = [
-	(r"\b\d+\s*[-‐-―~]?\s*\d*\s*ms\b", "invented latency figures (ms)"),
-	(r"\b\d+(\.\d+)?\s*[BTM]\b(?=[^a-z])", "invented model parameter counts"),
-	(r"\$\s?\d+(\.\d+)?\s*(/|per\s)", "invented pricing"),
-	(r"\b\d+(\.\d+)?\s*(tokens?/s|tok/s|req/s|requests?/(sec|second))", "invented throughput"),
-	(r"\b\d+\s*%\s*(faster|slower|cheaper|better|more accurate)", "invented benchmark deltas"),
-]
 
 
-def _strip_code_blocks(body: str) -> str:
-	"""Remove fenced code and inline code so only prose claims are checked."""
-	body = re.sub(r"```.*?```", " ", body, flags=re.DOTALL)
-	return re.sub(r"`[^`\n]*`", " ", body)
 
 
-def _fabrication_problems(body: str) -> list[str]:
-	"""Flag unverifiable numeric claims in prose and tables.
-
-    The model cannot know current latency, pricing, or parameter counts, and
-    stating them as fact is the fastest way to lose a technical reader.
-    """
-	prose = _strip_code_blocks(body)
-	found: list[str] = []
-	for pattern, label in _FABRICATION_PATTERNS:
-		if re.search(pattern, prose, re.IGNORECASE) and label not in found:
-			found.append(label)
-	return found
 
 
-def _strip_fabricated_tables(body: str) -> tuple[str, int]:
-	"""Delete markdown tables containing invented specs. Returns (body, count).
-
-    A spec table is the model's favourite way to fabricate: it reaches for
-    latency, parameter counts, and prices to fill cells. Removing the table
-    keeps the rest of a good article publishable, and costs no LLM call.
-    """
-	lines = body.split("\n")
-	out: list[str] = []
-	removed = 0
-	i = 0
-	while i < len(lines):
-		# A table is a run of consecutive lines that all contain a pipe.
-		if "|" in lines[i]:
-			start = i
-			while i < len(lines) and "|" in lines[i]:
-				i += 1
-			block = lines[start:i]
-			# Two lines (header + separator) is the minimum real table.
-			if len(block) >= 2 and _fabrication_problems("\n".join(block)):
-				removed += 1
-				while i < len(lines) and not lines[i].strip():
-					i += 1
-				# Leave exactly one blank line so the next block does not butt
-				# against the previous heading or paragraph.
-				if out and out[-1].strip() and i < len(lines):
-					out.append("")
-				continue
-			out.extend(block)
-			continue
-		out.append(lines[i])
-		i += 1
-	return "\n".join(out), removed
 
 
 def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
@@ -956,73 +887,5 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 	return None
 
 
-def _normalize(data: dict) -> dict:
-	"""Clean up markdown artifacts that hurt rendering on dev.to."""
-	body = str(data.get("body_markdown", ""))
-	# Strip a stray wrapping code fence around the whole article.
-	if body.lstrip().startswith("```markdown"):
-		body = re.sub(r"^\s*```markdown\s*\n", "", body)
-		body = re.sub(r"\n```\s*$", "", body)
-	# dev.to renders the title itself, so a top-level '#' heading shows up as a
-	# duplicate title. Demote any '# ' to '## '.
-	body = re.sub(r"^# (?!#)", "## ", body, flags=re.MULTILINE)
-	# Strip "1. "/"2) " numbering the model adds to headings. dev.to renders a
-	# clean outline without it, and the numbers go stale if sections are reordered.
-	body = re.sub(r"^(#{2,3} )\d+[.)]\s+", r"\1", body, flags=re.MULTILINE)
-	# Collapse 3+ blank lines to 2, then guarantee one blank line on both sides of
-	# every heading. Without the trailing one, dev.to runs the first paragraph
-	# into the heading.
-	body = re.sub(r"\n{4,}", "\n\n\n", body)
-	body = re.sub(r"(?<!\n)\n(#{2,3} )", r"\n\n\1", body)
-	body = re.sub(r"^(#{2,3} .*)\n(?!\n)(?=\S)", r"\1\n\n", body, flags=re.MULTILINE)
-	data["body_markdown"] = body.strip()
-
-	tags = [
-		re.sub(r"[^a-z0-9]", "", str(t).lower())
-		for t in (data.get("tags") or ["python", "automation"])
-	]
-	data["tags"] = [t for t in tags if t][:4] or ["python", "automation"]
-	return data
 
 
-def _publish_to_devto(article: dict, api_key: str) -> dict:
-	"""Publish article to dev.to and return action result."""
-	url = "https://dev.to/api/articles"
-	headers = {
-		"api-key": api_key,
-		"Content-Type": "application/json",
-	}
-	payload = {
-		"article": {
-			"title": article.get("title", "Untitled")[:80],
-			"body_markdown": article.get("body_markdown", ""),
-			"description": article.get("description", "")[:150] or article.get("title", "")[:150],
-			"published": True,
-			"tags": article.get("tags", ["python", "automation"])[:4],
-		}
-	}
-	
-	try:
-		resp = requests.post(url, headers=headers, json=payload, timeout=30)
-		resp.raise_for_status()
-		data = resp.json()
-		article_url = data.get("url", "")
-		log.info("[articles] Published to dev.to: %s", article_url)
-		return {
-			"platform": "dev.to",
-			"success": True,
-			"title": article.get("title", "Untitled"),
-			"url": article_url,
-			# dev.to pays nothing. Publishing is reach, not revenue, so this
-			# must stay 0.0 — a non-zero constant here fabricates earnings.
-			# Real money is only ever the on-chain wallet balance.
-			"estimated_usd": 0.0,
-		}
-	except Exception as exc:
-		log.error("[articles] dev.to publish failed: %s", exc)
-		return {
-			"platform": "dev.to",
-			"success": False,
-			"error": str(exc)[:200],
-			"estimated_usd": 0.0,
-		}

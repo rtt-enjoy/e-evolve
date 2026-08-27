@@ -16,6 +16,8 @@ from typing import Any, Optional
 
 import requests
 
+from ._shared import parse_dt as _parse_dt
+
 log = logging.getLogger(__name__)
 
 _API = "https://dev.to/api/articles/me/published"
@@ -165,17 +167,3 @@ def winning_tags(articles: list[dict[str, Any]], top_n: int = 6) -> list[str]:
 	averaged = [(sum(v) / len(v), tag) for tag, v in buckets.items()]
 	averaged.sort(reverse=True)
 	return [tag for _, tag in averaged[:top_n]]
-
-
-def _parse_dt(value: str) -> Optional[datetime]:
-	"""Parse dev.to's ISO timestamps, tolerating 'Z' and naive values."""
-	text = str(value or "").strip()
-	if not text:
-		return None
-	try:
-		parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
-	except ValueError:
-		return None
-	if parsed.tzinfo is None:
-		parsed = parsed.replace(tzinfo=timezone.utc)
-	return parsed

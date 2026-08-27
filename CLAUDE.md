@@ -32,13 +32,15 @@ bot/dashboard.py     ← writes docs/index.html + earnings-log.md
 bot/git_utils.py     ← git commit helpers + commit_to_branch (review gate)
 bot/github_secrets.py ← reads configured secret NAMES only (never values)
 bot/tests.py         ← unittest suite: python -m unittest bot.tests
-bot/earning/
-  articles.py        ← drafts + publishes one dev.to article per day; follows up its own best post
-  devto_stats.py     ← reads own dev.to view counts (the reach feedback loop)
-  newsletter.py      ← drafts + publishes a weekly dev.to digest of several trending stories
-  trending.py        ← finds recent (24h) tech articles from free public feeds
-  code_techs.py      ← free-AI earning opportunity queue (research/suggestion only)
-  mrr_ideas.py       ← recurring-revenue idea triage (research/suggestion only)
+bot/earning/         ← products own a run(llm, status); support modules do not
+  articles.py        ← [product] one dev.to article per day; follows up its own best post
+  newsletter.py      ← [product] a weekly dev.to digest of several trending stories
+  code_techs.py      ← [product] free-AI earning opportunity queue (research/suggestion only)
+  mrr_ideas.py       ← [product] recurring-revenue idea triage (research/suggestion only)
+  _shared.py         ← [support] config loading, cadence, feed parsing — used by all four
+  devto.py           ← [support] the dev.to publish call + gates every post passes
+  trending.py        ← [support] finds recent tech articles from free public feeds
+  devto_stats.py     ← [support] reads own dev.to view counts (the reach feedback loop)
 frontend/            ← React + Vite dashboard, built to docs/ by .github/workflows/frontend.yml
 .github/workflows/evolve.yml  ← hourly scheduler (never evolved)
 config/strategy.json ← tunable strategy parameters
@@ -125,6 +127,41 @@ Features activate automatically when their secrets are present in env.
 `DEV_TO_API_KEY` enables live article publishing to dev.to (one article per day,
 capped by `articles.max_articles_per_cycle`). Without it, the articles module
 skips silently.
+
+### Shared earning layer (bot/earning/_shared.py, bot/earning/devto.py)
+
+Earning modules split into **products** (each exports `run(llm, status)` and is
+called by the orchestrator) and **support** modules (imported by the products,
+no `run`). Two support modules exist to stop the products from drifting apart:
+
+- **`_shared.py`** — `load_config`, `hours_until_due`, `parse_dt`,
+  `strip_html`, `xml_text`, `bounded_append`. Every module used to carry its own
+  copy of these and **the copies had diverged**: `code_techs` held a `_parse_dt`
+  that could not read RFC-822 RSS dates (so Reddit/HN `pubDate` silently
+  returned `None`) and a `_strip_html` that stripped tags but left `<script>`
+  bodies in place as if they were prose. Consolidation adopted the stronger
+  implementation, so this was a bug fix, not only a cleanup.
+- **`devto.py`** — the publish call plus the gates every dev.to post passes
+  (`normalize`, `strip_fabricated_tables`, `fabrication_problems`,
+  `tone_problems`, `strip_code_blocks`). `newsletter` used to import these as
+  underscore-prefixed privates from `articles`; they are one product's internals
+  no longer, so they are a public API here.
+
+Rules for this layer:
+
+- **Config is read at call time, never at import.** `articles` used to bind
+  `_MIN_WORDS`, `_TITLE_MAX_CHARS`, and friends into module constants at import,
+  which meant an owner's `config/strategy.json` edit could not take effect
+  without a reimport, and a test had to monkeypatch a global to change one
+  value. Every module now calls `_config()` per invocation. `_title_problems`
+  and `_format_problems` take an optional `cfg` so a caller can inject one.
+- **A helper used by two modules belongs in `_shared` or `devto`**, not copied
+  into the second one and not imported across products through a private name.
+- **Product-specific rules stay in the product.** `articles._format_problems`
+  asserts essay structure; `newsletter._digest_problems` asserts digest
+  structure. Those must not be merged.
+- `articles.min_interval_hours` in `config/strategy.json` is **not read**:
+  articles gate on the calendar date (one per UTC day), not an elapsed interval.
 
 ### Article sourcing (bot/earning/trending.py)
 
@@ -242,8 +279,8 @@ policy, same house style — it is a second product, not a second channel.
   OpenRouter free-tier daily ceiling.
 - It does *not* call `trending.unlock_summary()`; a digest paragraph does not
   need full paywalled text, and skipping it avoids ~7 extra HTTP fetches.
-- Gates reuse `articles`' `_normalize`, `_strip_fabricated_tables`,
-  `_fabrication_problems`, and `_tone_problems`, so the two modules cannot drift
+- Gates come from `devto` (`normalize`, `strip_fabricated_tables`,
+  `fabrication_problems`, `tone_problems`), so the two modules cannot drift
   apart on fabrication or voice. Structural checks are local
   (`_digest_problems`), because `articles._format_problems` asserts essay rules
   (2+ code blocks, `## Key Takeaways`) a digest legitimately lacks.

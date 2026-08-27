@@ -18,6 +18,8 @@ from urllib.parse import quote_plus, urlparse
 
 import requests
 
+from ._shared import parse_dt as _parse_dt, strip_html as _strip_html, xml_text as _xml_text
+
 log = logging.getLogger(__name__)
 
 _UA = "e-evolve-trending/1.0 read-only article research"
@@ -357,35 +359,3 @@ _STOPWORDS = {
 	"can", "will", "should", "would", "could", "do", "does", "did", "get", "got",
 	"guide", "tutorial", "introduction", "intro", "part", "beginners", "beginner",
 }
-
-
-def _strip_html(value: str) -> str:
-	value = re.sub(r"<script.*?</script>", " ", value, flags=re.DOTALL | re.IGNORECASE)
-	value = re.sub(r"<[^>]+>", " ", value)
-	value = re.sub(r"&[a-z]+;", " ", value)
-	return re.sub(r"\s+", " ", value).strip()
-
-
-def _xml_text(parent: ET.Element, tag: str) -> str:
-	element = parent.find(f"{{*}}{tag}")
-	if element is None or element.text is None:
-		return ""
-	return element.text.strip()
-
-
-def _parse_dt(value: Any) -> datetime | None:
-	"""Parse ISO-8601 or RFC-822 (RSS pubDate) timestamps."""
-	if not value:
-		return None
-	raw = str(value).strip()
-	try:
-		dt = datetime.fromisoformat(raw.replace("Z", "+00:00"))
-		return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
-	except Exception:
-		pass
-	try:
-		from email.utils import parsedate_to_datetime
-		dt = parsedate_to_datetime(raw)
-		return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
-	except Exception:
-		return None

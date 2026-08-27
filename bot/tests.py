@@ -10,28 +10,32 @@ from bot.earning.newsletter import (
 	_digest_problems,
 	_ensure_sources,
 	_generate_issue,
-	_hours_until_due,
 	_pick_sources,
 	_record_issue,
 )
+import bot.earning.devto as devto_module
+import bot.earning._shared as shared
+from bot.earning._shared import hours_until_due
 from bot.earning.articles import (
 	_boost_tags,
 	_duplicate_reason,
 	_ensure_attribution,
 	_ensure_backlink,
-	_fabrication_problems,
 	_format_problems,
 	_followup_target,
 	_generate_article,
-	_normalize,
 	_pick_source,
-	_publish_to_devto,
 	_record_publish,
-	_strip_fabricated_tables,
 	_title_problems,
 	_titles_overlap,
-	_tone_problems,
 	_too_similar_to_source,
+)
+from bot.earning.devto import (
+	fabrication_problems as _fabrication_problems,
+	normalize as _normalize,
+	publish as _publish_to_devto,
+	strip_fabricated_tables as _strip_fabricated_tables,
+	tone_problems as _tone_problems,
 )
 import bot.earning.articles as articles_module
 import bot.earning.devto_stats as devto_stats
@@ -42,10 +46,7 @@ from bot.evolution import (
 	_is_safe as _evo_is_safe,
 )
 from pathlib import Path
-# _hours_until_due is already bound to the newsletter's copy above; alias this
-# one so it cannot shadow it and silently break the cadence tests.
 from bot.earning.mrr_ideas import (
-	_hours_until_due as _mrr_hours_until_due,
 	_record_refresh,
 	_triage,
 	_viability_brief,
@@ -419,18 +420,18 @@ class TestArticlePublishing(unittest.TestCase):
 			def raise_for_status(self): pass
 			def json(self): return {"url": "https://dev.to/x"}
 
-		original = articles_module.requests.post
+		original = devto_module.requests.post
 		try:
 			def fake_post(url, headers=None, json=None, timeout=None):
 				captured.update(json or {})
 				return FakeResp()
-			articles_module.requests.post = fake_post
+			devto_module.requests.post = fake_post
 			_publish_to_devto(
 				{"title": "t", "body_markdown": "b", "_source": {"url": "https://ex.com"}},
 				"key",
 			)
 		finally:
-			articles_module.requests.post = original
+			devto_module.requests.post = original
 
 		self.assertNotIn("_source", captured.get("article", {}))
 
@@ -539,17 +540,17 @@ class TestNewsletterDigest(unittest.TestCase):
 
 	def test_cadence_blocks_early_republish(self):
 		recent = datetime.now(timezone.utc).isoformat()
-		self.assertGreater(_hours_until_due({"published_at": recent}, 168), 0)
+		self.assertGreater(hours_until_due({"published_at": recent}, "published_at", 168), 0)
 
 	def test_cadence_allows_when_due(self):
 		old = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
-		self.assertEqual(_hours_until_due({"published_at": old}, 168), 0.0)
+		self.assertEqual(hours_until_due({"published_at": old}, "published_at", 168), 0.0)
 
 	def test_unparseable_stamp_does_not_wedge_module(self):
-		self.assertEqual(_hours_until_due({"published_at": "not-a-date"}, 168), 0.0)
+		self.assertEqual(hours_until_due({"published_at": "not-a-date"}, "published_at", 168), 0.0)
 
 	def test_first_run_is_due_immediately(self):
-		self.assertEqual(_hours_until_due({}, 168), 0.0)
+		self.assertEqual(hours_until_due({}, "published_at", 168), 0.0)
 
 	def test_missing_devto_key_skips_silently(self):
 		original = os.environ.pop("DEV_TO_API_KEY", None)
@@ -666,17 +667,17 @@ class TestMrrIdeaTriage(unittest.TestCase):
 
 	def test_interval_blocks_early_refresh(self):
 		recent = datetime.now(timezone.utc).isoformat()
-		self.assertGreater(_mrr_hours_until_due({"last_refresh_at": recent}, 48), 0)
+		self.assertGreater(hours_until_due({"last_refresh_at": recent}, "last_refresh_at", 48), 0)
 
 	def test_interval_allows_when_due(self):
 		old = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
-		self.assertEqual(_mrr_hours_until_due({"last_refresh_at": old}, 48), 0.0)
+		self.assertEqual(hours_until_due({"last_refresh_at": old}, "last_refresh_at", 48), 0.0)
 
 	def test_unparseable_stamp_does_not_wedge_module(self):
-		self.assertEqual(_mrr_hours_until_due({"last_refresh_at": "not-a-date"}, 48), 0.0)
+		self.assertEqual(hours_until_due({"last_refresh_at": "not-a-date"}, "last_refresh_at", 48), 0.0)
 
 	def test_first_run_is_due_immediately(self):
-		self.assertEqual(_mrr_hours_until_due({}, 48), 0.0)
+		self.assertEqual(hours_until_due({}, "last_refresh_at", 48), 0.0)
 
 	def test_disabled_in_config_skips_without_llm_call(self):
 		class ExplodingLLM:
@@ -1196,12 +1197,12 @@ class TestFollowUpSelection(unittest.TestCase):
 			devto_stats.fetch_published = original
 
 	def test_followup_disabled_by_config(self):
-		original = articles_module._FOLLOWUP_ENABLED
-		articles_module._FOLLOWUP_ENABLED = False
+		original = articles_module._FOLLOWUP_OVERRIDE
+		articles_module._FOLLOWUP_OVERRIDE = False
 		try:
 			self.assertIsNone(_followup_target({}, "key"))
 		finally:
-			articles_module._FOLLOWUP_ENABLED = original
+			articles_module._FOLLOWUP_OVERRIDE = original
 
 
 class TestFollowUpContent(unittest.TestCase):
@@ -1443,3 +1444,101 @@ class TestJsonParsing(unittest.TestCase):
 
 if __name__ == "__main__":
 	unittest.main()
+
+
+class TestSharedPrimitives(unittest.TestCase):
+	"""The consolidated helpers every earning module now shares.
+
+    Each module used to carry its own copy and the copies had drifted. These
+    lock in the stronger behaviour so a future edit cannot quietly regress the
+    module that previously had the weaker version.
+    """
+
+	def test_parses_rfc822_rss_dates(self):
+		# code_techs' old _parse_dt returned None here, so Reddit/HN RSS
+		# pubDates were silently unparseable in that module.
+		parsed = shared.parse_dt("Wed, 27 Aug 2026 10:30:00 GMT")
+		self.assertIsNotNone(parsed)
+		self.assertEqual(parsed.year, 2026)
+		self.assertIsNotNone(parsed.tzinfo)
+
+	def test_parses_iso_and_assumes_utc_when_naive(self):
+		self.assertEqual(shared.parse_dt("2026-08-27T10:30:00Z").hour, 10)
+		self.assertEqual(shared.parse_dt("2026-08-27T10:30:00").tzinfo, timezone.utc)
+
+	def test_parse_dt_returns_none_on_junk(self):
+		for junk in ("", None, "not-a-date", 0):
+			self.assertIsNone(shared.parse_dt(junk), junk)
+
+	def test_strip_html_drops_script_bodies(self):
+		# code_techs' old _strip_html removed the tags but kept the JS source,
+		# so script text reached the LLM as if it were post prose.
+		out = shared.strip_html("<p>real</p><script>var x = 1;</script><p>text</p>")
+		self.assertIn("real", out)
+		self.assertIn("text", out)
+		self.assertNotIn("var x", out)
+
+	def test_load_config_fills_defaults_and_survives_missing_file(self):
+		original = shared.CONFIG_FILE
+		shared.CONFIG_FILE = Path("does/not/exist.json")
+		try:
+			cfg = shared.load_config("articles", {"min_words": 700})
+			self.assertEqual(cfg["min_words"], 700)
+		finally:
+			shared.CONFIG_FILE = original
+
+	def test_load_config_reads_live_file_not_import_time_snapshot(self):
+		cfg = shared.load_config("articles", {"min_words": 1})
+		self.assertEqual(cfg["min_words"], 700)
+
+	def test_hours_until_due_respects_the_named_key(self):
+		recent = datetime.now(timezone.utc).isoformat()
+		self.assertGreater(shared.hours_until_due({"a": recent}, "a", 168), 0)
+		# A stamp under a different key must not block this cadence.
+		self.assertEqual(shared.hours_until_due({"b": recent}, "a", 168), 0.0)
+
+	def test_bounded_append_dedupes_and_trims_to_newest(self):
+		entries = []
+		for value in ("a", "b", "a", "c"):
+			shared.bounded_append(entries, value, limit=2)
+		self.assertEqual(entries, ["b", "c"])
+
+	def test_bounded_append_ignores_empty_values(self):
+		entries = ["a"]
+		shared.bounded_append(entries, "", limit=5)
+		self.assertEqual(entries, ["a"])
+
+
+class TestArticleConfigIsReadAtCallTime(unittest.TestCase):
+	"""Config edits must take effect without reimporting the module."""
+
+	def test_title_gate_honours_injected_config(self):
+		title = "Postgres: The Index That Slowed Us Down"
+		self.assertEqual(_title_problems(title), [])
+		tight = dict(articles_module._DEFAULTS, title_max_chars=10)
+		self.assertTrue(any("too long" in p for p in _title_problems(title, tight)))
+
+	def test_format_gate_honours_injected_config(self):
+		body = "## One\n\n" + ("word " * 50)
+		self.assertTrue(any("too short" in p for p in _format_problems(body)))
+		loose = dict(articles_module._DEFAULTS, min_words=10)
+		self.assertFalse(any("too short" in p for p in _format_problems(body, loose)))
+
+
+class TestDevtoModuleIsThePublicSeam(unittest.TestCase):
+	"""articles and newsletter must share one dev.to gate, via a public API."""
+
+	def test_both_modules_use_the_same_gate_objects(self):
+		self.assertIs(articles_module.devto, devto_module)
+		self.assertIs(newsletter_module.devto, devto_module)
+
+	def test_shared_gates_are_public_names(self):
+		for name in ("publish", "normalize", "tone_problems",
+					 "fabrication_problems", "strip_fabricated_tables"):
+			self.assertTrue(hasattr(devto_module, name), name)
+
+	def test_articles_no_longer_owns_the_moved_gates(self):
+		# They live in devto now; a stale copy left behind is exactly the drift
+		# this split exists to prevent.
+		for name in ("_publish_to_devto", "_normalize", "_tone_problems"):
+			self.assertFalse(hasattr(articles_module, name), name)

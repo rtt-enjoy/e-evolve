@@ -1,5 +1,7 @@
 import unittest
 import os
+import json
+import bot.llm as llm_module
 from datetime import datetime, timedelta, timezone
 
 import bot.earnings as earnings_module
@@ -1365,6 +1367,78 @@ class TestEvolutionGate(unittest.TestCase):
 		name = evolution_module._branch_name("1.0 ../evil~", "evolve")
 		for bad in (" ", "..", "~"):
 			self.assertNotIn(bad, name.split("/", 1)[1])
+
+
+class TestJsonParsing(unittest.TestCase):
+	"""Truncated-plan recovery: the model hitting max_tokens must not cost a cycle."""
+
+	def _plan(self):
+		return {
+			"version": "1.35.1",
+			"summary": "fix the parse failure",
+			"suggestions": [{"title": "a"}, {"title": "b"}],
+			"changes": [
+				{"file": "bot/earning/x.py", "content": "print('hi')", "reason": "r1"},
+				{"file": "bot/earning/y.py", "content": "z" * 400, "reason": "r2"},
+			],
+		}
+
+	def test_parses_plain_and_fenced(self):
+		plan = self._plan()
+		raw  = json.dumps(plan)
+		self.assertEqual(llm_module.parse_json(raw), plan)
+		self.assertEqual(llm_module.parse_json("```json" + chr(10) + raw + chr(10) + "```"), plan)
+
+	def test_parses_object_wrapped_in_prose(self):
+		raw = "Here is the plan:" + chr(10) + json.dumps(self._plan())
+		self.assertEqual(llm_module.parse_json(raw)["version"], "1.35.1")
+
+	def test_recovers_complete_changes_from_truncated_response(self):
+		plan = self._plan()
+		raw  = json.dumps(plan)
+		# Cut mid-string inside the SECOND change's content.
+		cut  = raw.index("z" * 20) + 100
+		got  = llm_module.parse_json(raw[:cut])
+		# The complete first change survives; the half-written one is dropped.
+		self.assertEqual(got["changes"], [plan["changes"][0]])
+		self.assertEqual(got["suggestions"], plan["suggestions"])
+		self.assertEqual(got["version"], "1.35.1")
+
+	def test_recovers_scalars_when_first_change_is_cut(self):
+		plan = self._plan()
+		raw  = json.dumps(plan)
+		got  = llm_module.parse_json(raw[:raw.index("print(") + 3])
+		self.assertEqual(got.get("changes", []), [])
+		self.assertEqual(got["summary"], "fix the parse failure")
+
+	def test_recovers_complete_suggestions_only(self):
+		plan = self._plan()
+		raw  = json.dumps(plan)
+		got  = llm_module.parse_json(raw[:raw.index('"title": "b"') + 8])
+		self.assertEqual(got["suggestions"], [plan["suggestions"][0]])
+
+	def test_rejects_non_dict_and_garbage(self):
+		for bad in ("[1,2,3]", "not json at all", "", "{", '{"a":'):
+			with self.assertRaises(ValueError):
+				llm_module.parse_json(bad)
+
+	def test_recovers_leading_scalar_before_cut(self):
+		# Cut inside the second value: the first complete pair still survives.
+		got = llm_module.parse_json('{"version": "1.0.0", "summary": "cut off here')
+		self.assertEqual(got["version"], "1.0.0")
+
+	def test_truncation_error_names_max_tokens(self):
+		# Cut before any pair completes -- nothing to salvage, so it must raise,
+		# and the message must point at max_tokens rather than a bad prompt.
+		with self.assertRaises(ValueError) as ctx:
+			llm_module.parse_json('{"version": "1.0.0')
+		self.assertIn("max_tokens", str(ctx.exception))
+
+	def test_evolution_plan_budget_exceeds_legacy_6k(self):
+		# The schema asks for COMPLETE contents of up to MAX_CHANGES files;
+		# 6k tokens could not hold that, which is what caused the cut-off.
+		self.assertGreaterEqual(evolution_module._MAX_PLAN_TOKENS, 32_000)
+		self.assertGreaterEqual(evolution_module._MAX_FIX_TOKENS, 16_000)
 
 
 if __name__ == "__main__":

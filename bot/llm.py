@@ -640,7 +640,11 @@ def parse_json(text: str) -> dict[str, Any]:
 	text = text.strip()
 
 	try:
-		return json.loads(text)
+		obj = json.loads(text)
+		# A bare list parses fine but every caller does plan.get(...), so
+		# returning it swaps a handled ValueError for an AttributeError crash.
+		if isinstance(obj, dict):
+			return obj
 	except json.JSONDecodeError:
 		pass
 
@@ -653,4 +657,109 @@ def parse_json(text: str) -> dict[str, Any]:
 		except json.JSONDecodeError:
 			pass
 
+		recovered = _recover_truncated(text[start:])
+		if recovered is not None:
+			log.warning(
+				"Recovered truncated JSON (%d chars, kept keys: %s)",
+				len(text), sorted(recovered),
+			)
+			return recovered
+
+	# Distinguish the two failure modes: a response that opens as a JSON object
+	# but never closes was cut off by max_tokens, and the fix is a bigger output
+	# budget or a smaller ask -- not a better prompt. Saying "no valid JSON"
+	# for both sent the last diagnosis down the wrong path.
+	if start != -1 and text.rstrip().endswith("}") is False:
+		raise ValueError(
+			f"Truncated JSON in LLM response ({len(text)} chars, unterminated) "
+			f"-- response likely hit max_tokens. First 200 chars: {text[:200]!r}"
+		)
 	raise ValueError(f"No valid JSON object found in LLM response. First 200 chars: {text[:200]!r}")
+
+
+def _recover_truncated(text: str) -> dict[str, Any] | None:
+	"""
+    Salvage a JSON object that was cut off by the model hitting max_tokens.
+
+    The response is well-formed up to the cut, so walk the string, remember the
+    last position where the object was closable at depth 1 (a completed
+    top-level value), and re-parse the prefix with the closing braces added.
+    Half-written values are dropped rather than guessed at.
+
+    Returns None when nothing complete survives.
+    """
+	depth       = 0
+	in_string   = False
+	escaped     = False
+	# Position just after the last complete top-level key/value pair.
+	last_good   = -1
+	# Stack of container chars so a cut inside a list closes as a list.
+	stack: list[str] = []
+
+	for i, ch in enumerate(text):
+		if in_string:
+			if escaped:
+				escaped = False
+			elif ch == "\\":
+				escaped = True
+			elif ch == '"':
+				in_string = False
+			continue
+
+		if ch == '"':
+			in_string = True
+		elif ch in "{[":
+			stack.append(ch)
+			depth += 1
+		elif ch in "}]":
+			if not stack:
+				break
+			stack.pop()
+			depth -= 1
+			if depth in (1, 2):
+				# depth 1: a completed top-level value.
+				# depth 2: a completed element of a top-level array -- keeping
+				# these is the point, since a cut inside changes[1] must not
+				# throw away the complete changes[0].
+				last_good = i + 1
+			elif depth == 0:
+				# A complete object -- raw_decode already handles this case.
+				last_good = i + 1
+				break
+		elif ch == "," and depth in (1, 2):
+			last_good = i
+
+	if last_good <= 0:
+		return None
+
+	prefix = text[:last_good].rstrip().rstrip(",")
+	# Close whatever containers were still open at the cut, innermost first.
+	depth_at_cut = 0
+	in_string    = False
+	escaped      = False
+	closers: list[str] = []
+	for ch in prefix:
+		if in_string:
+			if escaped:
+				escaped = False
+			elif ch == "\\":
+				escaped = True
+			elif ch == '"':
+				in_string = False
+			continue
+		if ch == '"':
+			in_string = True
+		elif ch == "{":
+			closers.append("}")
+		elif ch == "[":
+			closers.append("]")
+		elif ch in "}]":
+			if closers:
+				closers.pop()
+
+	candidate = prefix + "".join(reversed(closers))
+	try:
+		obj = json.loads(candidate)
+	except json.JSONDecodeError:
+		return None
+	return obj if isinstance(obj, dict) else None

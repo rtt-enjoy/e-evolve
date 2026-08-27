@@ -40,8 +40,18 @@ PROTECTED_FILES = {
 }
 MAX_CHANGES       = 3
 MAX_FIX_RETRIES   = 2
+# Output budget for one evolution plan. The schema demands COMPLETE file
+# contents for up to MAX_CHANGES files; three ~500-line modules plus suggestions
+# do not fit in 6k tokens, and the model gets cut off mid-string -- which reads
+# as "invalid JSON" but is really "not enough room to finish". Every model in
+# the free upgrade chain accepts 32k output.
+_MAX_PLAN_TOKENS = 32_000
+# A repair returns one rewritten file, so it needs a full file's worth too.
+_MAX_FIX_TOKENS  = 16_000
 # Per-provider codebase snapshot limits.
 # Groq free tier: 12k TPM total — status JSON ~1k, system prompt ~0.6k, response 6k → 4k left for codebase.
+# Groq is a fallback only; _MAX_PLAN_TOKENS is sized for the openrouter
+# upgrade chain, so a groq cycle stays capped by that 12k TPM ceiling.
 # Gemini/Anthropic: large context, no TPM issue.
 # OpenRouter: the free upgrade chain leads with 1M-context models and the
 # smallest entry still holds 256K, so 30k starved the model -- one module filled
@@ -179,7 +189,7 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
     )
 
     try:
-        plan = llm.complete_json_for_role("upgrade", prompt, system=_SYSTEM, max_tokens=6000)
+        plan = llm.complete_json_for_role("upgrade", prompt, system=_SYSTEM, max_tokens=_MAX_PLAN_TOKENS)
     except Exception as exc:
         log.error("Evolution LLM call failed: %s", exc)
         return _error_result(str(exc), status.get("version", "1.0.0"))
@@ -429,7 +439,7 @@ def _verify_and_fix(applied: list[dict], llm: Any, status: dict) -> list[dict]:
                 "Fix the file. JSON only."
             )
             try:
-                fix_plan = llm.complete_json_for_role("upgrade", fix_prompt, system=_FIX_SYSTEM, max_tokens=4000)
+                fix_plan = llm.complete_json_for_role("upgrade", fix_prompt, system=_FIX_SYSTEM, max_tokens=_MAX_FIX_TOKENS)
                 fixed_content = str(fix_plan.get("content", "")).strip()
                 fix_reason    = str(fix_plan.get("reason", ""))
             except Exception as exc:

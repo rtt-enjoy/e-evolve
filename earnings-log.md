@@ -1470,3 +1470,7 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-08-26 16:27 UTC
 
 - [ok] **code_techs**: [Code-tech queue refreshed (8 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+
+### 2026-08-27 09:53 UTC
+
+- [ok] **dev.to**: [When Your Self-Hosted Nitter Instance Gets Banned](https://dev.to/robust_true_try/when-your-self-hosted-nitter-instance-gets-banned-3j6p) (est. $0.00)

@@ -1,17 +1,17 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-08-27T03:36:01.023732+00:00",
-  "total_runs": 1717,
+  "last_run": "2026-08-27T09:51:23.556745+00:00",
+  "total_runs": 1718,
   "active_features": [
-    "llm_anthropic",
     "llm_gemini",
     "llm_openrouter",
     "llm_groq",
+    "usdt_wallet",
     "code_techs"
   ],
   "inactive_features": [
-    "llm_cerebras",
-    "usdt_wallet"
+    "llm_anthropic",
+    "llm_cerebras"
   ],
   "llm_provider": "openrouter",
   "earnings": {
@@ -32,22 +32,19 @@
     "source": "on-chain USDT balance"
   },
   "last_evolution": {
-    "summary": "Skipped by owner command",
-    "changes_applied": [],
-    "suggestions": [
+    "version_bumped_to": "1.36.0",
+    "summary": "Add a shared JSON-repair utility so LLM calls that wrap valid JSON in stray prose still succeed instead of skipping the cycle.",
+    "changes_applied": [
       {
-        "title": "Add a small JSON-repair utility used by every LLM caller",
-        "description": "The last evolution was skipped because the upgrade LLM wrapped a valid JSON object in stray text, the same shape every other LLM call also produces. A shared repair helper lets every LLM-bound module (evolution, articles, newsletter, mrr_ideas, code_techs) recover the first balanced JSON object from messy output without each module re-implementing the same walk.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Drop the new file in place: bot/json_repair.py",
-          "2. No secrets required; pure-Python",
-          "3. Each LLM caller in bot/earning/* and bot/evolution can call repair_json_object() before giving up",
-          "4. Watch the next evolution cycle: skipped upgrade counts in status.errors should drop to zero"
-        ]
+        "file": "bot/json_repair.py",
+        "reason": "The last evolution was skipped because the upgrade LLM wrapped a valid JSON object in stray prose, and the mrr_ideas brief in this status shows the same failure mode ('No valid JSON object found in LLM response'). Centralising the recovery in one pure-Python helper removes the failure from every LLM caller at zero cost; the second change in this response wires it into the worst offender (code_techs) so the next status shows the new path working."
       },
+      {
+        "file": "bot/earning/code_techs.py",
+        "reason": "The mrr_ideas brief in this status failed with 'No valid JSON object found in LLM response', and the code_techs module has the same exposure (it calls llm.complete_json_for_role with the same kind of multi-section prompt). Wire the new bot.json_repair helper into the brief path so a wrapped object is recovered before being discarded, and degrade with an explanatory message if even the repair fails. Keeps the rest of the module byte-for-byte identical and does not touch any other call site in this single change."
+      }
+    ],
+    "suggestions": [
       {
         "title": "Activate Cerebras free tier as a third LLM fallback",
         "description": "OpenRouter's free chain is throttled to ~50 req/day and that throttling is what killed the last upgrade call. Cerebras offers ~1M tokens/day with no credit card; adding its key buys a second independent free provider so one provider's rate limit cannot stop an evolution.",
@@ -73,29 +70,41 @@
           "3. The React dashboard picks it up automatically next build",
           "4. Open docs/index.html after the next run to confirm the new field renders"
         ]
+      },
+      {
+        "title": "Repair malformed LLM JSON in every earning module",
+        "description": "The mrr_ideas brief in this status failed with 'No valid JSON object found in LLM response', the same failure mode the last evolution skip had. Wiring bot.json_repair into every llm.complete_json_for_role caller turns those skips into successful runs at zero LLM-call cost.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Add bot/json_repair.py to the repo (pure-Python, no new dependencies)",
+          "2. Wrap every llm.complete_json / complete_json_for_role call site in bot/earning/*.py with repair_json_object(...) before returning",
+          "3. No secrets or config changes needed",
+          "4. Watch status.errors and the 'skipped upgrades' counter on the dashboard; both should drop to near zero"
+        ]
       }
     ],
-    "version_bumped_to": "1.36.0",
-    "error": null
+    "error": null,
+    "branch": "evolve/1.36.1-20260827-095238",
+    "proposed_version": "1.36.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "When Your Self-Hosted Nitter Instance Gets Banned",
+        "url": "https://dev.to/robust_true_try/when-your-self-hosted-nitter-instance-gets-banned-3j6p",
+        "estimated_usd": 0.0,
+        "source_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
+        "source_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
+        "followup_of": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
-    {
-      "title": "Add a small JSON-repair utility used by every LLM caller",
-      "description": "The last evolution was skipped because the upgrade LLM wrapped a valid JSON object in stray text, the same shape every other LLM call also produces. A shared repair helper lets every LLM-bound module (evolution, articles, newsletter, mrr_ideas, code_techs) recover the first balanced JSON object from messy output without each module re-implementing the same walk.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Drop the new file in place: bot/json_repair.py",
-        "2. No secrets required; pure-Python",
-        "3. Each LLM caller in bot/earning/* and bot/evolution can call repair_json_object() before giving up",
-        "4. Watch the next evolution cycle: skipped upgrade counts in status.errors should drop to zero"
-      ]
-    },
     {
       "title": "Activate Cerebras free tier as a third LLM fallback",
       "description": "OpenRouter's free chain is throttled to ~50 req/day and that throttling is what killed the last upgrade call. Cerebras offers ~1M tokens/day with no credit card; adding its key buys a second independent free provider so one provider's rate limit cannot stop an evolution.",
@@ -121,10 +130,23 @@
         "3. The React dashboard picks it up automatically next build",
         "4. Open docs/index.html after the next run to confirm the new field renders"
       ]
+    },
+    {
+      "title": "Repair malformed LLM JSON in every earning module",
+      "description": "The mrr_ideas brief in this status failed with 'No valid JSON object found in LLM response', the same failure mode the last evolution skip had. Wiring bot.json_repair into every llm.complete_json_for_role caller turns those skips into successful runs at zero LLM-call cost.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Add bot/json_repair.py to the repo (pure-Python, no new dependencies)",
+        "2. Wrap every llm.complete_json / complete_json_for_role call site in bot/earning/*.py with repair_json_object(...) before returning",
+        "3. No secrets or config changes needed",
+        "4. Watch status.errors and the 'skipped upgrades' counter on the dashboard; both should drop to near zero"
+      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 0,
+  "last_cycle_seconds": 111,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -133,12 +155,12 @@
   "usdt_balance": 0.0,
   "secret_readiness": {
     "llm_anthropic": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "ANTHROPIC_API_KEY"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     },
     "llm_gemini": {
@@ -178,12 +200,12 @@
       "required_count": 1
     },
     "usdt_wallet": {
-      "active": false,
-      "present": [],
-      "missing": [
+      "active": true,
+      "present": [
         "USDT_WALLET_ADDRESS"
       ],
-      "present_count": 0,
+      "missing": [],
+      "present_count": 1,
       "required_count": 1
     }
   },
@@ -211,8 +233,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-08-26",
-    "published": 21
+    "date": "2026-08-27",
+    "published": 22
   },
   "code_tech_earning": {
     "enabled": true,
@@ -426,10 +448,11 @@
     ]
   },
   "configured_github_secrets": [
-    "ANTHROPIC_API_KEY",
     "GEMINI_API_KEY",
+    "GH_TOKEN",
     "GROQ_API_KEY",
-    "OPENROUTER_API_KEY"
+    "OPENROUTER_API_KEY",
+    "USDT_WALLET_ADDRESS"
   ],
   "operation_mode": "research_and_article_publishing",
   "external_action_policy": {
@@ -471,7 +494,8 @@
       "munderdiffl.in",
       "martypc.net",
       "larsfaye.com/articles/ai-coding-will-prevent-expertise",
-      "github.com/zedeus/nitter/issues/1442"
+      "github.com/zedeus/nitter/issues/1442",
+      "dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -494,7 +518,8 @@
       "munder difflin agent harnes run office clon",
       "martypc cros platform emulator early pcs written rust",
       "coding expertise going collapse ai reliance",
-      "nitter xcancel receive cease desist notic"
+      "nitter xcancel receive cease desist notic",
+      "reading twitter x practical nitter alternativ 2024"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -517,20 +542,24 @@
       "running office ai clon production munder difflin",
       "run legacy dos apps ci martypc",
       "preserve coding edge ai pair programmer",
-      "reading twitter x practical nitter alternativ 2024"
+      "reading twitter x practical nitter alternativ 2024",
+      "self hosted nitter instance gets banned"
+    ],
+    "followed_up_ids": [
+      4489474
     ]
   },
   "wallet": {
-    "configured": false,
+    "configured": true,
     "address_masked": "TFTNsf\u20269KbY",
     "network": "TRC-20",
     "confirmed_usd": 0.0,
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-26T23:35:00.595891+00:00",
+    "checked_at": "2026-08-27T09:51:23.802602+00:00",
     "stale": false,
-    "error": "USDT_WALLET_ADDRESS not set",
+    "error": null,
     "balance_high_water_usd": 0.0
   },
   "newsletter_daily": {
@@ -735,6 +764,23 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false
+  "last_evolution_branch": "evolve/1.36.1-20260827-095238",
+  "evolution_pending_review": true,
+  "article_stats": {
+    "count": 8,
+    "total_views": 261,
+    "avg_views": 32.6,
+    "best_title": "Recover a Bricked Framework 13 with a DIY USB Flash",
+    "best_views": 72,
+    "best_url": "https://dev.to/robust_true_try/recover-a-bricked-framework-13-with-a-diy-usb-flash-9li",
+    "winning_tags": [
+      "linux",
+      "hardware",
+      "framework",
+      "twitter",
+      "selfhosting",
+      "privacy"
+    ]
+  },
+  "github_repo": "rtt-enjoy/e-evolve"
 }

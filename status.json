@@ -1,7 +1,7 @@
 {
   "version": "1.35.0",
-  "last_run": "2026-08-27T03:14:03.810650+00:00",
-  "total_runs": 1714,
+  "last_run": "2026-08-27T03:27:17.159318+00:00",
+  "total_runs": 1715,
   "active_features": [
     "llm_anthropic",
     "llm_gemini",
@@ -33,11 +33,19 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.35.0",
-    "summary": "Add a JSON repair helper for LLM output and wire it into a new `bot/json_repair.py` so evolution cycles can recover from the 'No valid JSON object found' failure that skipped the last upgrade.",
+    "summary": "Add a small JSON-repair helper for LLM output and wire it into the two LLM-bound earning modules (mrr_ideas, code_techs) so the 'No valid JSON object found' failure cannot skip the next evolution or erase the next research brief.",
     "changes_applied": [
       {
         "file": "bot/json_repair.py",
-        "reason": "The last evolution was skipped because the upgrade LLM returned a valid JSON object wrapped in stray text. The orchestrator file is protected, but a small repair helper is the cheapest, reviewable fix: every LLM-bound module can call it before giving up, and the next evolution cycle can actually land a change instead of recording another 'No valid JSON object found' error."
+        "reason": "The last evolution was skipped because the upgrade LLM returned a valid JSON object wrapped in stray text. The orchestrator file is protected, so the smallest reviewable fix is a tiny, pure-stdlib repair helper that every LLM-bound module (mrr_ideas, code_techs, articles, newsletter, and bot/evolution when it is updated) can call before giving up. A single 1.35.0 -> 1.35.1 change is much easier to review than three speculative rewrites, and it directly addresses the only error recorded in the last cycle."
+      },
+      {
+        "file": "bot/earning/mrr_ideas.py",
+        "reason": "The status payload from the last cycle shows code_techs._online_ai_brief failed with 'No valid JSON object found in LLM response', which costs the report its best-current-angle section. The orchestrator file is protected, but the two LLM-bound earning modules it can still touch are mrr_ideas and code_techs. Wiring repair_json_object into _viability_brief turns a wrapped-but-valid LLM response (the exact failure shape that skipped the last evolution) into a usable brief, with no second LLM call, no change to the gate order, and no change to the deterministic-triage fallback that already keeps the report honest when the LLM truly is dead."
+      },
+      {
+        "file": "bot/earning/code_techs.py",
+        "reason": "The current cycle's status payload records that the online_ai_brief failed with the exact 'No valid JSON object found in LLM response' shape the upgrade LLM also produced \u2014 the LLM is wrapping a valid object in stray prose, not failing. _online_ai_brief gives up immediately. Wiring repair_json_object here turns a wrapped-but-valid response into a usable brief, costs no second LLM call, and keeps the deterministic-fallback branch (no LLM / genuine error) honest so the owner still sees when the LLM is truly dead. The change is local to one function plus its import, and the existing test for the no-LLM path keeps passing because the LLM=None branch returns before any parse."
       }
     ],
     "suggestions": [
@@ -82,7 +90,7 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.35.1-20260827-031427",
+    "branch": "evolve/1.35.1-20260827-032942",
     "proposed_version": "1.35.1"
   },
   "last_earning": {
@@ -131,7 +139,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 24,
+  "last_cycle_seconds": 146,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -742,6 +750,6 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.35.1-20260827-031427",
+  "last_evolution_branch": "evolve/1.35.1-20260827-032942",
   "evolution_pending_review": true
 }

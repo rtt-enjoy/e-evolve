@@ -1029,6 +1029,17 @@ class TestOpenRouterModelChains(unittest.TestCase):
 		walked = self._walk("post", "model_not_found on openrouter: some/withdrawn-model")
 		self.assertEqual(walked, llm_module._OPENROUTER_MODELS_BY_ROLE["post"])
 
+	def test_dashboard_role_model_matches_live_chain(self):
+		"""Regression: the dashboard named stealth/ox-alpha for weeks after the
+		chains moved off it, because status.py hardcoded the model separately."""
+		import bot.llm as llm_module
+		from bot import status as status_module
+		for role, cfg in status_module._role_workflow_spec().items():
+			chain = llm_module._OPENROUTER_MODELS_BY_ROLE[role]
+			self.assertEqual(cfg["provider"], llm_module.ROLE_PROVIDER[role], role)
+			self.assertEqual(cfg["model"], chain[0], role)
+			self.assertTrue(cfg["purpose"], role)
+
 
 class TestTitleQualityGate(unittest.TestCase):
 	"""Low view counts: flat or clickbait titles never earn a feed click."""

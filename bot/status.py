@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from bot import github_secrets
+from bot import github_secrets, llm
 
 log = logging.getLogger(__name__)
 
@@ -33,23 +33,31 @@ FEATURE_MAP: dict[str, list[str]] = {
 	"usdt_wallet":     ["USDT_WALLET_ADDRESS"],
 }
 
-LLM_ROLE_WORKFLOWS: dict[str, dict[str, str]] = {
-	"upgrade": {
-		"provider": "openrouter",
-		"model": "minimax/minimax-m3:free",
-		"purpose": "research-only repair suggestions for Codex-owned code changes",
-	},
-	"research": {
-		"provider": "openrouter",
-		"model": "minimax/minimax-m3:free",
-		"purpose": "free-AI-service discovery, market research, and earning-suggestion briefs",
-	},
-	"post": {
-		"provider": "openrouter",
-		"model": "minimax/minimax-m3:free",
-		"purpose": "article drafting and formatting for publication",
-	},
+# Role purposes are local; provider + model are derived from bot/llm.py so the
+# dashboard can never advertise a model the client no longer calls. Hardcoding
+# them here once left the UI naming stealth/ox-alpha after it was withdrawn.
+_LLM_ROLE_PURPOSES: dict[str, str] = {
+	"upgrade":  "research-only repair suggestions for Codex-owned code changes",
+	"research": "free-AI-service discovery, market research, and earning-suggestion briefs",
+	"post":     "article drafting and formatting for publication",
 }
+
+
+def _role_workflow_spec() -> dict[str, dict[str, str]]:
+	"""Read the live role routing out of bot/llm.py."""
+	spec: dict[str, dict[str, str]] = {}
+	for role, purpose in _LLM_ROLE_PURPOSES.items():
+		provider = llm.ROLE_PROVIDER.get(role, "openrouter")
+		chain = llm._OPENROUTER_MODELS_BY_ROLE.get(role, llm._OPENROUTER_MODELS)
+		spec[role] = {
+			"provider": provider,
+			"model": chain[0] if provider == "openrouter" and chain else "",
+			"purpose": purpose,
+		}
+	return spec
+
+
+LLM_ROLE_WORKFLOWS: dict[str, dict[str, str]] = _role_workflow_spec()
 
 
 # ── Public API ──────────────────────────────────────────────────────────────
@@ -434,7 +442,7 @@ def _llm_workflows(
 	active_set = set(active_features or [])
 	configured = configured_secrets or set()
 	workflows: dict[str, Any] = {}
-	for role, cfg in LLM_ROLE_WORKFLOWS.items():
+	for role, cfg in _role_workflow_spec().items():
 		provider = cfg["provider"]
 		secret = {
 			"gemini": "GEMINI_API_KEY",

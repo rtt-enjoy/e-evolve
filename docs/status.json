@@ -126,21 +126,21 @@
   "llm_workflows": {
     "upgrade": {
       "provider": "openrouter",
-      "model": "stealth/ox-alpha",
+      "model": "minimax/minimax-m3:free",
       "purpose": "research-only repair suggestions for Codex-owned code changes",
       "active": true,
       "secret": "OPENROUTER_API_KEY"
     },
     "research": {
       "provider": "openrouter",
-      "model": "stealth/ox-alpha",
+      "model": "minimax/minimax-m3:free",
       "purpose": "free-AI-service discovery, market research, and earning-suggestion briefs",
       "active": true,
       "secret": "OPENROUTER_API_KEY"
     },
     "post": {
       "provider": "openrouter",
-      "model": "stealth/ox-alpha",
+      "model": "minimax/minimax-m3:free",
       "purpose": "article drafting and formatting for publication",
       "active": true,
       "secret": "OPENROUTER_API_KEY"

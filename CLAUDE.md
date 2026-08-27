@@ -349,6 +349,14 @@ actions. If such keys exist, they are treated as research context only.
   withdrawn from OpenRouter; the chains were re-led by `minimax/minimax-m3:free`, chosen by
   probing the live `/api/v1/models` catalogue and test-calling each candidate. No model is ever
   the only entry in a chain; a 404 advances to the next one.
+- **The dashboard reads the chain, it does not restate it.** `status.LLM_ROLE_WORKFLOWS`
+  is derived from `llm.ROLE_PROVIDER` + `llm._OPENROUTER_MODELS_BY_ROLE` at call time, so the
+  Engine panel can never advertise a model the client no longer calls. `bot/status.py` used to
+  hardcode the model a second time, which left the UI naming `stealth/ox-alpha` after the chains
+  had already moved off it. Only role *purposes* are local to `status.py`.
+- **`status.json` is a snapshot, not a source of truth.** The dashboard fetches
+  `docs/status.json` at runtime, so a chain change only reaches the UI after the next cycle
+  writes it. Changing a model without running a cycle leaves the old name on screen.
 - **Verified-unusable, deliberately absent:** `thinkingmachines/inkling{,-small}:free` is the
   strongest free model on paper (975B MoE, 1M ctx) but returns **HTTP 403 — "only available on
   agentic harnesses"**, so this bot cannot call it. `dots-studio/dots-3-note-preview:free` and

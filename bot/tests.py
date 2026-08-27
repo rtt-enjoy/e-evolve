@@ -947,9 +947,17 @@ class TestOpenRouterModelChains(unittest.TestCase):
 		chains["_default"] = llm_module._OPENROUTER_MODELS
 		return chains
 
-	def test_ox_alpha_leads_every_chain(self):
+	def test_main_engine_leads_every_chain(self):
+		import bot.llm as llm_module
 		for role, chain in self._chains().items():
-			self.assertEqual(chain[0], "stealth/ox-alpha", role)
+			self.assertEqual(chain[0], llm_module._MAIN, role)
+
+	def test_main_engine_is_a_live_free_model(self):
+		"""stealth/ox-alpha led every chain until it was withdrawn from
+		OpenRouter. The lead must be a real, free, non-stealth slug."""
+		import bot.llm as llm_module
+		self.assertTrue(llm_module._MAIN.endswith(":free"), llm_module._MAIN)
+		self.assertFalse(llm_module._MAIN.startswith("stealth/"), llm_module._MAIN)
 
 	def test_every_role_has_a_multi_model_chain(self):
 		"""A single-model chain has nothing to fall back to on a rate limit."""
@@ -966,8 +974,7 @@ class TestOpenRouterModelChains(unittest.TestCase):
 		for role, chain in self._chains().items():
 			for model in chain:
 				self.assertTrue(
-					model.endswith(":free")
-					or model in ("openrouter/free", "stealth/ox-alpha"),
+					model.endswith(":free") or model == "openrouter/free",
 					f"{role}: {model} is not a free-tier slug",
 				)
 
@@ -1016,9 +1023,10 @@ class TestOpenRouterModelChains(unittest.TestCase):
 			self.assertEqual(walked, llm_module._OPENROUTER_MODELS_BY_ROLE[role], role)
 
 	def test_withdrawn_model_falls_through_to_next(self):
-		"""Stealth previews can vanish; a 404 must not strand the chain."""
+		"""A model can be withdrawn (as stealth/ox-alpha was); a 404 must not
+		strand the chain."""
 		import bot.llm as llm_module
-		walked = self._walk("post", "model_not_found on openrouter: stealth/ox-alpha")
+		walked = self._walk("post", "model_not_found on openrouter: some/withdrawn-model")
 		self.assertEqual(walked, llm_module._OPENROUTER_MODELS_BY_ROLE["post"])
 
 

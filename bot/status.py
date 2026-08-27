@@ -36,17 +36,17 @@ FEATURE_MAP: dict[str, list[str]] = {
 LLM_ROLE_WORKFLOWS: dict[str, dict[str, str]] = {
 	"upgrade": {
 		"provider": "openrouter",
-		"model": "stealth/ox-alpha",
+		"model": "minimax/minimax-m3:free",
 		"purpose": "research-only repair suggestions for Codex-owned code changes",
 	},
 	"research": {
 		"provider": "openrouter",
-		"model": "stealth/ox-alpha",
+		"model": "minimax/minimax-m3:free",
 		"purpose": "free-AI-service discovery, market research, and earning-suggestion briefs",
 	},
 	"post": {
 		"provider": "openrouter",
-		"model": "stealth/ox-alpha",
+		"model": "minimax/minimax-m3:free",
 		"purpose": "article drafting and formatting for publication",
 	},
 }

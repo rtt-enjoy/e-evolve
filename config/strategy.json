@@ -144,9 +144,9 @@
 		}
 	},
 	"llm": {
-		"main_engine": "stealth/ox-alpha",
+		"main_engine": "minimax/minimax-m3:free",
 		"provider": "openrouter",
-		"note": "All-free model chain, ordered by capability per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. stealth/ox-alpha leads every chain (1M ctx, $0, coding/agentic reasoning); on 402/429/404 the client steps down the rest of the role's free chain before changing provider."
+		"note": "All-free model chain, ordered by capability per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. minimax/minimax-m3:free leads every chain (1M ctx, $0, native response_format + tools); on 402/429/404 the client steps down the rest of the role's free chain before changing provider. It replaced stealth/ox-alpha, which was withdrawn from OpenRouter."
 	},
 	"research_policy": {
 		"mode": "research_and_article_publishing",
@@ -167,6 +167,6 @@
 		"enabled": true,
 		"branch_prefix": "evolve",
 		"max_changes": 3,
-		"note": "LLM code proposals are committed to a review branch (branch_prefix/<version>-<utc>) and never to main. Merge the branch to apply. Writes are restricted to bot/, docs/, config/, requirements.txt, version.txt; bot/main.py, bot/llm.py, bot/status.py, bot/commands.py, bot/evolution.py, bot/git_utils.py and .github/ can never be written. Engine is the free OpenRouter 'upgrade' chain led by stealth/ox-alpha; no paid model."
+		"note": "LLM code proposals are committed to a review branch (branch_prefix/<version>-<utc>) and never to main. Merge the branch to apply. Writes are restricted to bot/, docs/, config/, requirements.txt, version.txt; bot/main.py, bot/llm.py, bot/status.py, bot/commands.py, bot/evolution.py, bot/git_utils.py and .github/ can never be written. Engine is the free OpenRouter 'upgrade' chain led by minimax/minimax-m3:free; no paid model."
 	}
 }

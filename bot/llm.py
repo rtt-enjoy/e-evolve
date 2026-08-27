@@ -42,20 +42,33 @@ _GEMINI_MODELS = [
 # ordered by capability so a rate limit degrades quality instead of breaking a
 # cycle.
 #
-# stealth/ox-alpha leads every chain: it is a stealth-release reasoning model
-# priced at $0 in/$0 out with a 1M context window, native response_format and
-# tool support, and is explicitly built for coding and sustained agentic work.
-# Stealth models are unmetered previews -- they can be withdrawn or renamed
-# without notice, so it is never the only entry in a chain.
-_OX_ALPHA = "stealth/ox-alpha"
+# minimax/minimax-m3:free leads every chain. It is $0 in/$0 out with a 1M
+# context window and is the only free model that advertises BOTH native
+# response_format and tools, which is what keeps JSON drafts from coming back
+# wrapped in prose. It was picked by probing the live OpenRouter catalogue:
+# it returned valid, compiling, spec-complete code on every trial and was the
+# fastest candidate (2-3s vs 5-42s).
+#
+# It replaced stealth/ox-alpha, which has been withdrawn from OpenRouter --
+# exactly the stealth-release risk noted below. That is why no chain here ever
+# has a single entry.
+#
+# Rejected during that probe, so they are deliberately absent:
+#   thinkingmachines/inkling{,-small}:free -- best on paper (975B MoE, 1M ctx)
+#     but returns HTTP 403 "only available on agentic harnesses". It is
+#     allowlisted to approved apps, so this bot can never call it.
+#   dots-studio/dots-3-note-preview:free   -- 512K ctx but failed to emit
+#     parseable JSON on repeated trials.
+#   nvidia/nemotron-3.5-lightning:free     -- slow (42s) and failed JSON.
+_MAIN = "minimax/minimax-m3:free"
 
 # Default chain: general-purpose fallback order, strongest first.
 _OPENROUTER_MODELS = [
-	_OX_ALPHA,                                  # 1M ctx, reasoning, structured output
-	"minimax/minimax-m3:free",                  # 1M ctx, response_format + tools
+	_MAIN,                                      # 1M ctx, response_format + tools
 	"nvidia/nemotron-3-ultra-550b-a55b:free",   # 1M ctx, strongest open-weight reasoning
 	"google/gemma-4-26b-a4b-it:free",           # 262K ctx, native function calling
 	"z-ai/glm-5.2:free",                        # 256K ctx, response_format
+	"minimax/minimax-m2.7:free",                # verified fallback, response_format
 	"openrouter/free",                          # auto-router: always resolves to *some* free model
 ]
 
@@ -63,33 +76,33 @@ _OPENROUTER_MODELS = [
 # trained for software engineering, then fall back to general reasoners. This
 # role previously had no chain of its own and silently used the default.
 _OPENROUTER_MODELS_UPGRADE = [
-	_OX_ALPHA,                                  # built for long-horizon software engineering
+	_MAIN,                                      # verified: compiling code + strict JSON
 	"poolside/laguna-s-2.1:free",               # code-specialised, 262K ctx
 	"cohere/north-mini-code:free",              # code-specialised
-	"minimax/minimax-m3:free",
 	"nvidia/nemotron-3-ultra-550b-a55b:free",
+	"minimax/minimax-m2.7:free",                # verified fallback
 	"openrouter/free",
 ]
 
 # Research/long-context work: research prompts are long, so rank by context
 # window and reasoning strength.
 _OPENROUTER_MODELS_RESEARCH = [
-	_OX_ALPHA,
+	_MAIN,                                      # 1M ctx
 	"nvidia/nemotron-3-ultra-550b-a55b:free",   # 1M ctx
-	"minimax/minimax-m3:free",                  # 1M ctx
 	"nvidia/nemotron-3-super-120b-a12b:free",   # 262K ctx, response_format
 	"google/gemma-4-26b-a4b-it:free",
+	"minimax/minimax-m2.7:free",                # verified fallback
 	"openrouter/free",
 ]
 
 # Article writing (long-form structured JSON): every model here must support
 # response_format natively, so drafts don't come back as prose-wrapped JSON.
 _OPENROUTER_MODELS_POST = [
-	_OX_ALPHA,
-	"minimax/minimax-m3:free",
+	_MAIN,
 	"google/gemma-4-26b-a4b-it:free",
 	"z-ai/glm-5.2:free",
 	"nvidia/nemotron-3-super-120b-a12b:free",
+	"minimax/minimax-m2.7:free",                # verified sibling fallback
 	"openrouter/free",
 ]
 

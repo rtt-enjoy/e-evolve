@@ -14,6 +14,7 @@ from urllib.parse import quote_plus
 
 import requests
 
+from .. import json_repair
 from ._shared import load_config, parse_dt, strip_html, xml_text
 
 log = logging.getLogger(__name__)
@@ -623,6 +624,23 @@ def _online_ai_brief(llm: Any, leads: list[dict[str, Any]], cfg: dict[str, Any])
 			"owner_actions": [
 				"Review the ranked free-AI leads below and pick the one with the clearest buyer.",
 				"Verify the free tier limits yourself before quoting a price.",
+			],
+		}
+
+	# The free-tier research model frequently returns a valid JSON object wrapped
+	# in stray prose or a markdown fence, which used to discard the whole brief.
+	# ``repair_json_object`` is the single source of truth for that recovery --
+	# see bot/json_repair.py. Without this, a one-line model preface loses the
+	# cycle's free-AI brief and the report degrades to local-only scoring.
+	data = json_repair.repair_json_object(data)
+	if not isinstance(data, dict):
+		log.warning("[code_techs] online AI brief returned no parseable object after repair")
+		return {
+			"summary": "Online AI brief returned no parseable JSON even after repair; used local scoring only.",
+			"free_ai_services": [],
+			"easy_earning_ideas": [],
+			"owner_actions": [
+				"Review the ranked free-AI leads below and pick the one with the clearest buyer.",
 			],
 		}
 

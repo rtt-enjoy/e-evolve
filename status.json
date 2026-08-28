@@ -1,7 +1,7 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-08-27T20:31:58.056688+00:00",
-  "total_runs": 1719,
+  "last_run": "2026-08-28T05:25:24.327159+00:00",
+  "total_runs": 1720,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,8 +33,13 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.36.0",
-    "summary": "Wire the shared JSON-repair helper into mrr_ideas and newsletter, the two remaining callers still reporting the wrapped-JSON failure mode that the last evolution introduced the helper for.",
-    "changes_applied": [],
+    "summary": "Fix the circular import that breaks code_techs, mrr_ideas, and newsletter by exposing json_repair through a separate top-level helper module that they can import directly without going through bot.earning.__init__.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/code_techs.py",
+        "reason": "Drop the now-broken ``from . import devto, devto_stats, trending`` style import path for the JSON helper and import the standalone json_repair module directly. This is the only safe call site for the helper inside code_techs; the LLM-failure branch in _online_ai_brief already returns a dict, so nothing else here has to change for the three previously-failing modules to start working again. [fix: Added the missing _cell, _clean_list, and _dicts helper functions that mrr_ideas.py imports from this module.]"
+      }
+    ],
     "suggestions": [
       {
         "title": "Activate Cerebras free tier as a third LLM fallback",
@@ -50,8 +55,8 @@
         ]
       },
       {
-        "title": "Surface a 7-day rolling 'skipped evolutions' counter on the dashboard",
-        "description": "The status shows only the last skip, so silent repeated failures are invisible. A small counter that counts every evolution-skip in the last 7 days and shows it on docs/index.html turns a one-line error into a trend the owner notices.",
+        "title": "Add a 7-day rolling 'skipped evolutions' counter on the dashboard",
+        "description": "The status shows only the last skip, so silent repeated failures are invisible. A small counter that counts every evolution-skip in the last 7 days and turns it into a trend on docs/index.html makes silent repeated failures impossible to miss.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -77,25 +82,29 @@
       }
     ],
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.36.1-20260828-052613",
     "proposed_version": "1.36.1"
   },
   "last_earning": {
     "actions": [
       {
         "platform": "code_techs",
-        "success": false,
-        "error": "cannot import name 'json_repair' from partially initialized module 'bot.earning' (most likely due to a circular import) (/home/runner/work/e-evolve/e-evolve/bot/earning/__init__.py)"
+        "success": true,
+        "opportunity_count": 8,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
       },
       {
-        "platform": "mrr_ideas",
-        "success": false,
-        "error": "cannot import name 'json_repair' from partially initialized module 'bot.earning' (most likely due to a circular import) (/home/runner/work/e-evolve/e-evolve/bot/earning/__init__.py)"
-      },
-      {
-        "platform": "newsletter",
-        "success": false,
-        "error": "cannot import name 'json_repair' from partially initialized module 'bot.earning' (most likely due to a circular import) (/home/runner/work/e-evolve/e-evolve/bot/earning/__init__.py)"
+        "platform": "dev.to",
+        "success": true,
+        "title": "Why Your In-Memory Cache Uses 10x More RAM Than It Should",
+        "url": "https://dev.to/robust_true_try/why-your-in-memory-cache-uses-10x-more-ram-than-it-should-4cd1",
+        "estimated_usd": 0.0,
+        "source_url": "https://blog.cloudflare.com/dns-cache-memory-optimization-1111/",
+        "source_title": "Saving 100 terabytes of memory by optimizing 1.1.1.1's DNS cache"
       }
     ],
     "total_usd": 0.0
@@ -115,8 +124,8 @@
       ]
     },
     {
-      "title": "Surface a 7-day rolling 'skipped evolutions' counter on the dashboard",
-      "description": "The status shows only the last skip, so silent repeated failures are invisible. A small counter that counts every evolution-skip in the last 7 days and shows it on docs/index.html turns a one-line error into a trend the owner notices.",
+      "title": "Add a 7-day rolling 'skipped evolutions' counter on the dashboard",
+      "description": "The status shows only the last skip, so silent repeated failures are invisible. A small counter that counts every evolution-skip in the last 7 days and turns it into a trend on docs/index.html makes silent repeated failures impossible to miss.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -141,12 +150,8 @@
       ]
     }
   ],
-  "errors": [
-    "code_techs: cannot import name 'json_repair' from partially initialized module 'bot.earning' (most likely due to a circular import) (/home/runner/work/e-evolve/e-evolve/bot/earning/__init__.py)",
-    "mrr_ideas: cannot import name 'json_repair' from partially initialized module 'bot.earning' (most likely due to a circular import) (/home/runner/work/e-evolve/e-evolve/bot/earning/__init__.py)",
-    "newsletter: cannot import name 'json_repair' from partially initialized module 'bot.earning' (most likely due to a circular import) (/home/runner/work/e-evolve/e-evolve/bot/earning/__init__.py)"
-  ],
-  "last_cycle_seconds": 204,
+  "errors": [],
+  "last_cycle_seconds": 144,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -233,8 +238,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-08-27",
-    "published": 22
+    "date": "2026-08-28",
+    "published": 23
   },
   "code_tech_earning": {
     "enabled": true,
@@ -255,93 +260,93 @@
         "archived_at": null
       },
       {
-        "title": "I built an AI tool to stop spending 3 hours every Monday on client reports (First month free)",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vypm2x/i_built_an_ai_tool_to_stop_spending_3_hours_every/",
-        "source": "reddit:r/SideProject",
-        "score": 100,
-        "estimated_value_usd": 200.0,
-        "reason": "visible or inferred value around $200.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built an AI tool to stop spending 3 hours every Monday on client reports (First month free)\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vypm2x/i_built_an_ai_tool_to_stop_spending_3_hours_every/\nWhy this is suitable: visible or inferred value around $200.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Hey r/SideProject ! \ud83d\udc4b Every Monday morning, agencies and freelancers waste hours manually pulling metrics from 4 different dashboards, fixing broken spreadsheet formulas, and designing slide decks or PDFs. Enterprise BI tools like Tableau or Looker are bloated, complex, and cost $200+/month. To fix this, I built ReportNest: \u2022 Flexible Ingestion: Upload raw CSVs, dashboard screenshots (PNG/JPG), or PDF exports. The built-in AI parser pulls the metrics automatically. \u2022 Context-Aware AI Summaries: Calculates metric changes, generates visual charts, and writes narrative executive summaries in your brand voice. \u2022 100% White-Labeled: Brand reports with your agency logo, colors, and layout. \u2022 Multiple Formats: Send via pixel-perfect PDFs, interactive live links, or clean HTML emails. \u2022 Bring Your Own Key (BYOK): Connect your own OpenAI, Claude, Gemini, or Groq API keys. We just opened public ac",
-        "outreach_draft": "Hi, I found your request about \"I built an AI tool to stop spending 3 hours every Monday on client reports (First month free)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $200.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vypm2x/i_built_an_ai_tool_to_stop_spending_3_hours_every/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "The gate that was never built, the application that could not run, and what Team actually sells",
+        "title": "A licence granting this source away, a check that failed its own rule, and each product against its own competitors",
         "url": "https://github.com/famouslytrill-boop/sonara-os/pull/202",
         "source": "github",
         "score": 100,
         "estimated_value_usd": 79.0,
         "reason": "visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total",
         "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: The gate that was never built, the application that could not run, and what Team actually sells\nSource: github\nURL: https://github.com/famouslytrill-boop/sonara-os/pull/202\nWhy this is suitable: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: `pnpm run verify:launch` green across **26 commands**. **3,414 tests** passing \u2014 3,037 in the repository across 237 files, plus 221 (serverless CLI), 69 (agentkit), 44 (songsmith) and 43 (AWS emulator) in `tools/`. `server.js` is **3,844 lines** across 115 `lib/` modules and 38 `routes/` modules. 101 migrations, 145 canonical tables, 166 reviewed external repositories, 39 free calculators.  > **This description is kept current deliberately.** It was refreshed on 26 August 2026, replacing one whose figures had gone stale \u2014 a number typed into prose with nothing watching it, which is the exact defect this branch is organised against \u2014 and updated again the same day when the register changed under it. Earlier narratives are preserved in the commit history and in `docs/SPRINT_LOG.md`, which is the hand-written record; `docs/HANDOFF_PROMPT.md` is generated from the repository on every release",
-        "outreach_draft": "Hi, I found your request about \"The gate that was never built, the application that could not run, and what Team actually sells\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $79.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/famouslytrill-boop/sonara-os/pull/202",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: A licence granting this source away, a check that failed its own rule, and each product against its own competitors\nSource: github\nURL: https://github.com/famouslytrill-boop/sonara-os/pull/202\nWhy this is suitable: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: `pnpm run verify:launch` green across **27 commands**. **3,478 tests** passing \u2014 3,101 in the repository across 236 files, plus 221 (serverless CLI), 69 (agentkit), 44 (songsmith) and 43 (AWS emulator) in `tools/`. `server.js` is **3,845 lines** across 117 `lib/` modules and 39 `routes/` modules. 101 migrations, 145 canonical tables, 165 reviewed external repositories.  > **This description is kept current deliberately.** Refreshed again on 26 August 2026, and this time the refresh found the branch's own defect sitting in its own description: the table below said this application **cannot upload a file**, which stopped being true earlier the same day. A claim that quietly stopped holding is exactly what every check on this branch exists to catch, and prose in a pull request has nothing watching it. Earlier narratives are preserved in the commit history and in `docs/SPRINT_LOG.md`, which ",
+        "outreach_draft": "Hi, I found your request about \"A licence granting this source away, a check that failed its own rule, and each product against its own competitors\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $79.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/famouslytrill-boop/sonara-os/pull/202",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "I built \"FFmpeg as a service\" for AI agents: typed video ops, no shell access",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vyz6gu/i_built_ffmpeg_as_a_service_for_ai_agents_typed/",
+        "title": "443 users, 4 paying, and people are making second accounts to farm my free tier. Should I be happy or worried?",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vzy5lc/443_users_4_paying_and_people_are_making_second/",
         "source": "reddit:r/SideProject",
         "score": 100,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "estimated_value_usd": 39.0,
+        "reason": "visible or inferred value around $39.00; runs on a free AI tier, so input cost is zero and margin is total",
         "next_step": "Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built \"FFmpeg as a service\" for AI agents: typed video ops, no shell access\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vyz6gu/i_built_ffmpeg_as_a_service_for_ai_agents_typed/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I kept hitting the same wall: agents can decide what edit a video needs, but letting them run FFmpeg is a security and reliability nightmare (hallucinated flags, shell injection, jobs that die halfway). So I built KinoPipe: hosted FFmpeg behind typed operations (resize, trim, compress, convert, subtitles, merge, 39 in total). The agent picks a validated operation instead of writing a command, and gets back a downloadable URL. It&#39;s an MCP server + REST API, runs on GPU workers, compound edits are single-pass. It&#39;s brand new and I&#39;m solo, so I&#39;d love brutal feedback from anyone building agent/automation/video stuff. Free tier is 100 credits, no card, and I&#39;ll top up credits for anyone who sends real feedback (trying to earn honest testimonials the right way instead of faking them). Link in a comment so this isn&#39;t just an ad. Happy to answer anything about the archit",
-        "outreach_draft": "Hi, I found your request about \"I built \"FFmpeg as a service\" for AI agents: typed video ops, no shell access\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vyz6gu/i_built_ffmpeg_as_a_service_for_ai_agents_typed/",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: 443 users, 4 paying, and people are making second accounts to farm my free tier. Should I be happy or worried?\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vzy5lc/443_users_4_paying_and_people_are_making_second/\nWhy this is suitable: visible or inferred value around $39.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Day 15 of building in public. numbers first so nobody has to dig for them: 444 signups, 4 paying. some context on why the split is that ugly. My free tier is 5 comment-to-DM automations with no cap on how many people each one replies to, plus unlimited post and reel scheduling. no credit card. I made it that generous on purpose. Manychat&#39;s free plan is 25 active contacts a month and 4 automations. Essential is $14/mo for 250 contacts. The pro is $39/mo, or $29 if you prepay the year, and that covers 2,500 contacts before it starts charging $0.05 per contact on top. I wanted people to land on my free plan and feel like they&#39;d already gotten the thing they were about to pay for. That part worked. It worked so well that people finished their 5 automations, signed up again with a different email, and kept going. I can see it happening in the Posthog analytics. It&#39;s a compliment I",
+        "outreach_draft": "Hi, I found your request about \"443 users, 4 paying, and people are making second accounts to farm my free tier. Should I be happy or worried?\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $39.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vzy5lc/443_users_4_paying_and_people_are_making_second/",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "Got fed up with \"AI girlfriends\" designed just to grab your cash, so I built a companion app with real memory, actual boundaries, and minima",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vz0k3m/got_fed_up_with_ai_girlfriends_designed_just_to/",
+        "title": "I built an open-source dictation app so I could stop wrestling with Wispr Flow. Would love feedback.",
+        "url": "https://www.reddit.com/r/SideProject/comments/1w0h2df/i_built_an_opensource_dictation_app_so_i_could/",
         "source": "reddit:r/SideProject",
         "score": 100,
-        "estimated_value_usd": 0.3,
-        "reason": "visible or inferred value around $0.30; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Clean one messy sample export with the free LLM tier and quote a flat rate per file.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Got fed up with \"AI girlfriends\" designed just to grab your cash, so I built a companion app with real memory, actual boundaries, and minima\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vz0k3m/got_fed_up_with_ai_girlfriends_designed_just_to/\nWhy this is suitable: visible or inferred value around $0.30; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Hey everyone! After about 6 months of solo-deving (and learning everything from scratch basically), I launched an Early Access of my AI companion app ( HEAR ME OUT...! ) I promise it&#39;s NOT another AI wrapper #6969 with &quot;act like my AI girlfriend&quot; instructions, designed to get the bag off of users. Instead of another boring, over-filtered, yes-man bot with chronic amnesia, I wanted to build something that feels genuinely real and like someone has put more than 5 minutes (at best) of thoughts into it. Something that has: actual boundaries, different moods, chatting tones, hobbies, personality cores, long-term memory, daily schedule, and stuff like that. \ud83d\udd25SO WHAT MAKES IT DIFFERENT? 1. Dynamic relationship stats Every message exchange is additionally analyzed by an impartial Chat Supervisor AI model that changes the stats of your relationship. You start as Strangers (LVL 1) an",
-        "outreach_draft": "Hi, I found your request about \"Got fed up with \"AI girlfriends\" designed just to grab your cash, so I built a companion app with real memory, actual boundaries, and minima\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $0.30 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vz0k3m/got_fed_up_with_ai_girlfriends_designed_just_to/",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "I built a bookkeeping app for my wife's business",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vyi12k/i_built_a_bookkeeping_app_for_my_wifes_business/",
-        "source": "reddit:r/SideProject",
-        "score": 98,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built a bookkeeping app for my wife's business\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vyi12k/i_built_a_bookkeeping_app_for_my_wifes_business/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: My wife opened an African grocery store / international market back in May, and she needed a way to keep track of the money side of things. QuickBooks and the other bookkeeping apps were too expensive for a business that was just starting up, so I took it on myself. I started brainstorming and ended up building TillJotter. It&#39;s a double-entry bookkeeping app with AI built in to make categorizing transactions easy for small businesses with no accounting background. Everything is in plain English, and you can give access to a bookkeeper or CPA if you want them in there too. We&#39;ve been running the store on it and it&#39;s been working well for us. Reconciliation matching is my favorite part. You upload your statement and it automatically matches the transactions to the entries in your ledger, so you&#39;re not going back and forth between a bank statement and your laptop screen tryi",
-        "outreach_draft": "Hi, I found your request about \"I built a bookkeeping app for my wife's business\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vyi12k/i_built_a_bookkeeping_app_for_my_wifes_business/",
+        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built an open-source dictation app so I could stop wrestling with Wispr Flow. Would love feedback.\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1w0h2df/i_built_an_opensource_dictation_app_so_i_could/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Hey all \u2014 sharing a project I&#39;ve been working on for a while. What it is: SmoothFlow \u2014 a free, open-source, cross-platform voice-dictation app. Hold a hotkey, speak, release, and your words land cleaned up and typed into whatever app you&#39;re focused on. Email, chat, Word, terminal, browser \u2014 anywhere you can type. Why I built it: I wanted Wispr Flow&#39;s magic but without the subscription and the lock-in. So it&#39;s BYO-provider: you plug in your own API key (Groq has a free tier \u2014 ~2 minutes to set up, no credit card), and it works with any OpenAI-compatible transcription endpoint. Your key, your provider, no lock-in. Things that make it different: Clean text automatically \u2014 ending punctuation added, um/uh fillers stripped, self-corrections resolved ( I&#39;m going I&#39;m going to \u2192 I&#39;m going to ), and spoken emails/URLs converted ( user at gmail dot com \u2192 user@gmail.com )",
+        "outreach_draft": "Hi, I found your request about \"I built an open-source dictation app so I could stop wrestling with Wispr Flow. Would love feedback.\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1w0h2df/i_built_an_opensource_dictation_app_so_i_could/",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "I got tired of having 8 tabs open and still not knowing if a trip was affordable, so I built something that does it in one sentence",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vywlfy/i_got_tired_of_having_8_tabs_open_and_still_not/",
+        "title": "I'm 21, still in school, and I built a prospecting tool because the \"industry standard\" ones are useless for half the people paying for them",
+        "url": "https://www.reddit.com/r/SideProject/comments/1w048q2/im_21_still_in_school_and_i_built_a_prospecting/",
         "source": "reddit:r/SideProject",
-        "score": 89,
-        "estimated_value_usd": 3000.0,
-        "reason": "visible or inferred value around $3000.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "score": 96,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
         "next_step": "Clean one messy sample export with the free LLM tier and quote a flat rate per file.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I got tired of having 8 tabs open and still not knowing if a trip was affordable, so I built something that does it in one sentence\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vywlfy/i_got_tired_of_having_8_tabs_open_and_still_not/\nWhy this is suitable: visible or inferred value around $3000.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Planning a trip always went the same way for me: flights on one site, hotels on another, food and getting around a guess, and the real total living in a spreadsheet. Multiple hours in, I&#39;d still not know if we could actually afford it. So I built TripVerdict . You type one sentence \u2014 &quot;Canc\u00fan for a week in March, two of us, $3,000&quot; \u2014 and it comes back with a specific flight, three places to stay picked for your party, the all-in total, and a straight answer on whether it fits. Two things I did deliberately that might be interesting: It&#39;s allowed to say no. If the trip doesn&#39;t fit, it says so and then shows what would make it work \u2014 different dates, a rental instead of a hotel, or the real number the trip actually needs. Booking links only appear after the verdict, and commission never touches which flight or hotel it picks. It suggests alternate gateway cities and do",
-        "outreach_draft": "Hi, I found your request about \"I got tired of having 8 tabs open and still not knowing if a trip was affordable, so I built something that does it in one sentence\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $3000.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vywlfy/i_got_tired_of_having_8_tabs_open_and_still_not/",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I'm 21, still in school, and I built a prospecting tool because the \"industry standard\" ones are useless for half the people paying for them\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1w048q2/im_21_still_in_school_and_i_built_a_prospecting/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Not a launch-hype post, just sharing the thing I built and the annoyance behind it, because I think a specific group of people will relate. I am a marketing student, and I was actually looking into getting into sales myself. So before building anything I just started asking SDRs and reps what their day actually looks like. Same complaint every time: the research before every cold email eats hours. Read the company, figure out the pain, find a real contact, write something that isn&#39;t a template. Then do it 50 more times. BUT the part that really got me was talking to people who sell to small businesses. HVAC companies, contractors, local trades, small agencies. These reps pay for the same expensive tools everyone recommends (Apollo, ZoomInfo, etc.), type in a local business, and get nothing. Empty. Because those tools run on giant databases that basically only have big companies in th",
+        "outreach_draft": "Hi, I found your request about \"I'm 21, still in school, and I built a prospecting tool because the \"industry standard\" ones are useless for half the people paying for them\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1w048q2/im_21_still_in_school_and_i_built_a_prospecting/",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "I got tired of tab-switching between Google Calendar and Outlook, so I built a Chrome extension that merges both into one popup",
-        "url": "https://www.reddit.com/r/SideProject/comments/1vyyubx/i_got_tired_of_tabswitching_between_google/",
+        "title": "I built a bookmark app you can save to from WhatsApp, because my saved links were dying in 6 different apps",
+        "url": "https://www.reddit.com/r/SideProject/comments/1vzy3ep/i_built_a_bookmark_app_you_can_save_to_from/",
         "source": "reddit:r/SideProject",
         "score": 88,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Translate one sample page on the free tier, verify quality, and price per thousand words.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I got tired of tab-switching between Google Calendar and Outlook, so I built a Chrome extension that merges both into one popup\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vyyubx/i_got_tired_of_tabswitching_between_google/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Translate one sample page on the free tier, verify quality, and price per thousand words.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Chrome Extension Link: https://chromewebstore.google.com/detail/calendario/bnmmigoiecilbkipdngjofpbpaoofnoi Between a personal Gmail calendar and a work Outlook account, I was constantly alt-tabbing just to check what my next meeting was. Calendar apps also felt heavier than I needed for a quick &quot;what&#39;s next&quot; glance, so I built Calendario \u2014 a Chrome extension that merges both into a single popup. What it does: Connects Google Calendar and Outlook/Microsoft 365 side by side \u2014 events from both show up merged and sorted in one agenda, and you can toggle individual calendars (like a shared &quot;Family&quot; one) on/off per account. The toolbar icon itself shows your next event&#39;s start time, or &quot;NOW&quot; while you&#39;re in a meeting \u2014 no need to even open the popup. One-tap RSVP (accept/decline/tentative), Meet/Teams join links detected automatically, attendee respon",
-        "outreach_draft": "Hi, I found your request about \"I got tired of tab-switching between Google Calendar and Outlook, so I built a Chrome extension that merges both into one popup\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vyyubx/i_got_tired_of_tabswitching_between_google/",
+        "estimated_value_usd": 4.0,
+        "reason": "visible or inferred value around $4.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built a bookmark app you can save to from WhatsApp, because my saved links were dying in 6 different apps\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1vzy3ep/i_built_a_bookmark_app_you_can_save_to_from/\nWhy this is suitable: visible or inferred value around $4.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Saved stuff was scattered across Instagram saves, WhatsApp messages to myself, browser bookmarks and three note apps. None of it searchable together, and I never opened any of it again. So I built Dissect. You forward a link, reel, PDF or voice note to it (browser extension, share sheet, or literally a WhatsApp message), it transcribes video and audio, OCRs images and PDFs, and then you ask your own library a question in plain language and get an answer with the source attached. The part that took longest was making retrieval not depend on a model call. An upstream model stalled for 129 seconds once and took search down with it, so now search works even when the AI layer is completely down. Free tier is 10 saves a month, paid is $4. Happy to answer anything about how it&#39;s built. Also genuinely want to know what makes you bounce off tools like this, since I know the category is crowde",
+        "outreach_draft": "Hi, I found your request about \"I built a bookmark app you can save to from WhatsApp, because my saved links were dying in 6 different apps\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $4.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1vzy3ep/i_built_a_bookmark_app_you_can_save_to_from/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "I built an AI CFO for small businesses, where tapping any number opens the math behind it. Three App Store submissions later, it's live!",
+        "url": "https://www.reddit.com/r/SideProject/comments/1w05rj7/i_built_an_ai_cfo_for_small_businesses_where/",
+        "source": "reddit:r/SideProject",
+        "score": 88,
+        "estimated_value_usd": 0.0,
+        "reason": "runs on a free AI tier, so input cost is zero and margin is total; startable today without new skills or tools",
+        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built an AI CFO for small businesses, where tapping any number opens the math behind it. Three App Store submissions later, it's live!\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1w05rj7/i_built_an_ai_cfo_for_small_businesses_where/\nWhy this is suitable: runs on a free AI tier, so input cost is zero and margin is total; startable today without new skills or tools\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: My app went live on the App Store this morning after three submissions and I&#39;m still a little wired, so here&#39;s the story while it&#39;s fresh. For the last while I&#39;ve been maintaining an open source stats engine called Aurora. Its whole thing is that it measures its own false positive rate and refuses to report findings it can&#39;t defend. Very satisfying to build. Used by approximately nobody outside of data people. At some point it hit me that the people who could actually use math like this aren&#39;t data scientists, they&#39;re small business owners. The coffee shop, the landscaping crew, the Etsy shop. They&#39;re sitting on years of their own Square and QuickBooks and bank data and getting basically zero decisions out of it, and every AI tool that offers to help will confidently make things up, which is worse than nothing when it&#39;s your rent on the line. So I spen",
+        "outreach_draft": "Hi, I found your request about \"I built an AI CFO for small businesses, where tapping any number opens the math behind it. Three App Store submissions later, it's live!\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1w05rj7/i_built_an_ai_cfo_for_small_businesses_where/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "While building my apps, I figured out about a third of what I paid for Claude Code bought me nothing. So our next app went after the waste.",
+        "url": "https://www.reddit.com/r/SideProject/comments/1w0ec22/while_building_my_apps_i_figured_out_about_a/",
+        "source": "reddit:r/SideProject",
+        "score": 87,
+        "estimated_value_usd": 19.99,
+        "reason": "visible or inferred value around $19.99; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: While building my apps, I figured out about a third of what I paid for Claude Code bought me nothing. So our next app went after the waste.\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1w0ec22/while_building_my_apps_i_figured_out_about_a/\nWhy this is suitable: visible or inferred value around $19.99; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I build apps for a living. A couple on the Mac, others in the digital forensics space. Like a lot of people here, Claude Code has become a bigger and bigger part of how we build since it came out, and the bill lands every month. A while back I started analyzing my own usage, and about a third of what I was paying for bought me nothing. Not lower quality work. Nothing. The same files read over and over. Old chats re-read at full price inside every new chat. And the whole time, the Mac doing the building sat there with a perfectly good AI chip in it, mostly idle. There are three people behind this company and as developers we were all running into the same issue. So that became the next app. It&#39;s called Peddra ( peddra.com ). Phase 1 is live and it&#39;s simple: your Mac uses Apple Intelligence to read your chats as they grow, even overnight, without spending a single token, and when a",
+        "outreach_draft": "Hi, I found your request about \"While building my apps, I figured out about a third of what I paid for Claude Code bought me nothing. So our next app went after the waste.\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $19.99 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1w0ec22/while_building_my_apps_i_figured_out_about_a/",
         "pursued": false,
         "archived_at": null
       }
@@ -419,15 +424,93 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "Online AI brief failed; used online search and local scoring only. Error: Could not get valid JSON from LLM (role=research): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"summary\": \"The strongest immediate angle ",
-      "free_ai_services": [],
+      "summary": "The strongest free-AI earning angle right now is reselling small, fixed-price micro-services (transcription, summarization, translation, OCR cleanup, image background removal) to small-business owners, solo creators, and local service providers, using only free-tier APIs and a thin wrapper. You charge for the deliverable, not the compute, so the work scales to a few hundred dollars per month without paid infrastructure, an audience, or a credit card on file.",
+      "free_ai_services": [
+        {
+          "name": "Google Gemini API (AI Studio)",
+          "what_it_does": "Multimodal LLM for text generation, summarization, translation, vision, and structured JSON",
+          "free_tier": "Ongoing free tier with per-minute rate limits; verify current limit on the AI Studio page",
+          "credit_card_required": "no",
+          "earn_with_it": "Offer fixed-price 'clean up this transcript / summarize these notes / translate this page' jobs to small-business owners",
+          "price_guide": "$5 to $25 per job, $30 to $80/month per retainer client"
+        },
+        {
+          "name": "OpenRouter (free models)",
+          "what_it_does": "Unified API routing to multiple open-weight LLMs that are free to call",
+          "free_tier": "A rotating set of free models with daily or per-request caps; verify current limit per model",
+          "credit_card_required": "no",
+          "earn_with_it": "Sell a 'bring your own data, I build your prompt chain' setup that calls free models under the hood",
+          "price_guide": "$15 to $50 per prompt-chain setup, $20/month for maintenance"
+        },
+        {
+          "name": "Groq Cloud Free Tier",
+          "what_it_does": "Fast LLM inference API (Llama, Mixtral, Gemma) and Whisper speech-to-text",
+          "free_tier": "Ongoing free developer tier with per-minute token and audio limits; verify current limit",
+          "credit_card_required": "no",
+          "earn_with_it": "Resell transcription + clean summary as a one-page service for podcasters and YouTubers",
+          "price_guide": "$3 to $10 per hour of audio, $15/month per channel retainer"
+        },
+        {
+          "name": "OpenAI Whisper (self-hosted via Whisper.cpp or faster-whisper)",
+          "what_it_does": "Open-source speech-to-text model",
+          "free_tier": "Free to run on your own machine or free-tier compute; no API cost when self-hosted",
+          "credit_card_required": "no",
+          "earn_with_it": "Run batch transcription jobs for court reporters, journalists, or researchers on a free VM",
+          "price_guide": "$0.50 to $1.50 per audio minute billed to client, $50 per batch of 10 hours"
+        },
+        {
+          "name": "Hugging Face Inference API (free tier)",
+          "what_it_does": "Hosted inference for thousands of open models: TTS, translation, embeddings, vision, OCR",
+          "free_tier": "Ongoing free monthly inference credits; verify current limit on the account billing page",
+          "credit_card_required": "no",
+          "earn_with_it": "Batch-convert product photos: remove background, upscale, or generate alt text for ecommerce sellers",
+          "price_guide": "$0.20 to $0.50 per image, $20 per 100-image batch"
+        },
+        {
+          "name": "Cohere Trial (Command + Embed)",
+          "what_it_does": "LLM text generation, classification, and embeddings via API",
+          "free_tier": "Ongoing trial-tier keys with monthly request caps; verify current limit",
+          "credit_card_required": "no",
+          "earn_with_it": "Build a one-off FAQ or product-description rewriter that small Shopify stores pay a flat fee to use",
+          "price_guide": "$10 to $30 one-time setup, $10/month for ongoing rewrites"
+        },
+        {
+          "name": "Mistral AI (La Plateforme free tier)",
+          "what_it_does": "Hosted Mistral open-weight models for chat, JSON, and embeddings",
+          "free_tier": "Ongoing free experimentation tier with rate limits; verify current limit per model",
+          "credit_card_required": "no",
+          "earn_with_it": "Offer 'I will rewrite your 50 product listings for SEO' as a fixed-price job",
+          "price_guide": "$25 to $75 per 50 listings"
+        },
+        {
+          "name": "remove.bg API alternative: @imgly/background-removal (open-source, on-device)",
+          "what_it_does": "Open-source background removal model that runs locally or in a browser",
+          "free_tier": "Free forever (MIT) when self-hosted; no quota",
+          "credit_card_required": "no",
+          "earn_with_it": "Sell a '100 product photos, background removed, ready for Shopify' done-for-you batch",
+          "price_guide": "$0.10 to $0.30 per photo, $15 per 100-photo batch"
+        },
+        {
+          "name": "Tesseract OCR (open-source)",
+          "what_it_does": "Open-source OCR engine for scanned PDFs and images",
+          "free_tier": "Free forever, runs on your own machine",
+          "credit_card_required": "no",
+          "earn_with_it": "Extract text from scanned receipts, contracts, or old books as a fixed-price OCR job",
+          "price_guide": "$0.05 to $0.20 per page, $20 per 200-page batch"
+        },
+        {
+          "name": "Surya OCR (open-source)",
+          "what_it_does": "Modern open-source OCR with layout analysis, table extraction, and 90+ language support",
+          "free_tier": "Free forever when self-hosted; no API cost",
+          "credit_card_required": "no",
+          "earn_with_it": "Offer 'PDF to clean Excel/CSV' conversion for small accounting and real-estate offices",
+          "price_guide": "$5 to $15 per 20-page document, $50/month per office retainer"
+        }
+      ],
       "easy_earning_ideas": [],
-      "owner_actions": [
-        "Review the ranked free-AI leads below and pick the one with the clearest buyer.",
-        "Verify the free tier limits yourself before quoting a price."
-      ]
+      "owner_actions": []
     },
-    "last_refresh_at": "2026-08-26T15:53:21.848153+00:00",
+    "last_refresh_at": "2026-08-28T05:26:13.716987+00:00",
     "free_ai_focus": [
       "free-tier LLM APIs with no credit card requirement",
       "free speech-to-text, TTS, and transcription APIs",
@@ -495,7 +578,8 @@
       "martypc.net",
       "larsfaye.com/articles/ai-coding-will-prevent-expertise",
       "github.com/zedeus/nitter/issues/1442",
-      "dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig"
+      "dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
+      "blog.cloudflare.com/dns-cache-memory-optimization-1111"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -519,7 +603,8 @@
       "martypc cros platform emulator early pcs written rust",
       "coding expertise going collapse ai reliance",
       "nitter xcancel receive cease desist notic",
-      "reading twitter x practical nitter alternativ 2024"
+      "reading twitter x practical nitter alternativ 2024",
+      "saving 100 terabyt memory optimizing 1 1 1 1 s dns cache"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -543,7 +628,8 @@
       "run legacy dos apps ci martypc",
       "preserve coding edge ai pair programmer",
       "reading twitter x practical nitter alternativ 2024",
-      "self hosted nitter instance gets banned"
+      "self hosted nitter instance gets banned",
+      "memory cache uses 10x more ram than"
     ],
     "followed_up_ids": [
       4489474
@@ -557,7 +643,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-27T20:31:58.242674+00:00",
+    "checked_at": "2026-08-28T05:25:24.500736+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -764,22 +850,22 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.36.1-20260828-052613",
+  "evolution_pending_review": true,
   "article_stats": {
-    "count": 8,
-    "total_views": 261,
-    "avg_views": 32.6,
-    "best_title": "Recover a Bricked Framework 13 with a DIY USB Flash",
-    "best_views": 72,
-    "best_url": "https://dev.to/robust_true_try/recover-a-bricked-framework-13-with-a-diy-usb-flash-9li",
+    "count": 9,
+    "total_views": 391,
+    "avg_views": 43.4,
+    "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
+    "best_views": 170,
+    "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
-      "linux",
-      "hardware",
-      "framework",
       "twitter",
       "selfhosting",
-      "privacy"
+      "privacy",
+      "linux",
+      "hardware",
+      "framework"
     ]
   }
 }

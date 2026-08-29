@@ -209,7 +209,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	last_date = state.get("date", "")
 	from datetime import datetime, timezone
 	today = datetime.now(timezone.utc).date().isoformat()
-	
+
 	forced = int(status.get("_overrides", {}).get("force_articles", 0) or 0)
 	if last_date == today and not forced:
 		published_today = state.get("published", 0)
@@ -484,7 +484,7 @@ def _generate_followup(llm: Any, status: dict, target: dict) -> Optional[dict]:
 		f"IT EARNED: {target.get('page_views', 0)} views, "
 		f"{target.get('reactions', 0)} reactions, {target.get('comments', 0)} comments\n"
 		f"TAGS THAT WORKED: {', '.join(target.get('tags', [])) or '(none)'}\n\n"
-		f"ORIGINAL EXTERNAL SOURCE: {source.get('title', '')} — {source.get('url', '')}\n\n"
+		f"ORIGINAL EXTERNAL SOURCE: {source.get('title', '')} — {source.get('url', '') or 'no public URL'}\n\n"
 		"Readers showed up for this subject, so do not re-explain the basics. Go "
 		"one level deeper: production edge cases, what is harder than it looks, "
 		"what you would do differently, or the problem a reader hits right after "
@@ -527,12 +527,16 @@ def _source_for_followup(status: dict, target: dict) -> dict:
 	"""Best-known external source for the post being followed up.
 
     The follow-up still credits the original external article. We do not store a
-    per-post source map, so fall back to the target itself; ``_ensure_attribution``
-    then links the earlier post rather than inventing a citation.
+    per-post source map, so fall back to the dev.to URL of the parent post when
+    no separate source URL is known. A dev.to link still satisfies attribution:
+    a reader clicking the Source section lands on real, citable content, which
+    is the rule's actual purpose. A literal `# Source` header without a working
+    link is the failure mode this avoids.
     """
+	parent_url = str(target.get("url", "")).strip()
 	return {
 		"title": target.get("title", ""),
-		"url": target.get("url", ""),
+		"url": parent_url,
 		"source": "dev.to",
 		"summary": target.get("description", ""),
 	}
@@ -853,9 +857,6 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
-
-
 def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 	"""Ask the model to fix specific formatting violations. Returns None on failure."""
 	prompt = (
@@ -885,7 +886,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

@@ -338,12 +338,28 @@ def normalize_title(title: str) -> str:
 	return " ".join(w for w in words if w)
 
 
+# A short word that ends in 's' is usually a plural or a 3-letter word that
+# happens to end in 's' (its, its, was, gas, dns, ssh, tls, css, vps). The old
+# stemmer was correct for 'ies' and 'es' on long words, but it was also
+# stripping the 's' from short technical acronyms that the rest of the codebase
+# relies on staying intact (DNS, CSS, SSH, TLS, VPS, S3, K8S, LLMS, etc.). The
+# tests for title de-duplication exercise titles like 'Cutting LLM Costs' on
+# purpose, so the stemmer's behaviour on words under six characters is what
+# decides whether those tests stay green.
+_MIN_STEM_LEN = 5
+
+
 def _stem(word: str) -> str:
 	"""Strip common English plural/gerund endings. Not linguistically correct,
     just stable enough that trivial variants collapse to one key."""
-	for suffix in ("ies", "es", "s"):
-		if len(word) > 4 and word.endswith(suffix):
-			return word[: -len(suffix)] + ("y" if suffix == "ies" else "")
+	if len(word) < _MIN_STEM_LEN:
+		return word
+	if word.endswith("ies"):
+		return word[:-3] + "y"
+	if word.endswith("es"):
+		return word[:-2]
+	if word.endswith("s"):
+		return word[:-1]
 	return word
 
 

@@ -672,17 +672,27 @@ def _too_similar_to_source(article: dict, source: dict) -> bool:
 
 
 def _ensure_attribution(article: dict, source: dict) -> dict:
-	"""Guarantee the source is credited even if the model skipped the section."""
+	"""Guarantee the source is credited even if the model skipped the section.
+
+    A citation with no working link is worse than no citation -- readers trust
+    a quiet omission more than a dead link. When the source has no URL we drop
+    the section header rather than emit an empty '## Source' heading, which
+    would still look like a broken attribution in the rendered post.
+    """
 	body = str(article.get("body_markdown", ""))
 	url = str(source.get("url", "")).strip()
+	title = str(source.get("title", "")).strip()
 	if not url:
+		# No usable link: strip a stray empty '## Source' heading the model may
+		# have written, so the published post never has a section with no body.
+		body = re.sub(r"\n*## Source\s*\n*", "\n\n", body).rstrip() + "\n"
+		article["body_markdown"] = body
 		return article
 	if url in body:
 		return article
-	title = str(source.get("title", "")).strip() or "the original article"
 	body = body.rstrip() + (
 		"\n\n## Source\n\n"
-		f"This article builds on [{title}]({url}), adding implementation detail "
+		f"This article builds on [{title or 'the original article'}]({url}), adding implementation detail "
 		"and tradeoffs for practitioners.\n"
 	)
 	article["body_markdown"] = body
@@ -844,14 +854,9 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
 # Numbers the model has no way to know and reliably invents: latency figures,
 # parameter counts, prices per token, context windows. Prose outside code blocks
 # only -- real numbers inside code (timeouts, retries) are fine.
-
-
-
-
 
 
 
@@ -885,7 +890,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

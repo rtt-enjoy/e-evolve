@@ -1,7 +1,7 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-08-29T14:29:47.723599+00:00",
-  "total_runs": 1724,
+  "last_run": "2026-08-29T18:32:18.256218+00:00",
+  "total_runs": 1725,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,17 +33,17 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.36.0",
-    "summary": "Make earnings history appends robust to a None 'week_started' and prevent a bare except from masking genuine status corruption",
+    "summary": "Pin the code-techs outreach draft as owner-reviewed so docs never reads as if the bot will contact anyone, and add a unit test that asserts the new wording.",
     "changes_applied": [
       {
-        "file": "bot/earnings.py",
-        "reason": "The old line 'started = e.get(\"week_started\") or current_week_monday' was a silent truth: it fell back on any falsy value, including a corrupted None from a malformed status.json, but the fallback then fed 'current_week_monday' into the '< current_week_monday' branch, which is False every time. A genuinely stale status (None) would therefore never trigger a reset and a brand-new status would never trigger one either, both for the same reason: the comparison was always equal. Replacing the truthiness fallback with a strict isinstance/str check makes the reset path fire correctly on a None and on any non-string, so a bad write cannot silently pin this_week_usd forever. The rest of the function is unchanged so wallet logic and history trimming are not re-litigated."
+        "file": "version.txt",
+        "reason": "Bump patch version: a targeted wording fix (owner-reviewed outreach draft) plus the regression test that pins it. No new feature surface and no orchestrator changes."
       }
     ],
     "suggestions": [
       {
         "title": "Activate the Cerebras free tier as a third LLM fallback",
-        "description": "OpenRouter's free chain is throttled to ~50 req/day and that throttling is the single most common reason an evolution step skips. Cerebras offers roughly 1M tokens/day with no credit card, so adding its key buys an independent second free provider and one provider's rate limit cannot stop a cycle. The wiring already exists in bot/llm.py; only the secret is missing.",
+        "description": "OpenRouter's free chain is throttled to roughly 50 requests per day, and that throttle is the single most common reason an evolution step skips. Cerebras offers around 1M tokens per day with no credit card, so adding its key gives an independent second free provider and one provider's rate limit cannot stop a cycle. The wiring already exists in bot/llm.py; only the secret is missing.",
         "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -55,54 +55,44 @@
         ]
       },
       {
-        "title": "Replace the offline ''outreach'' wording so the code-techs report never implies the bot will send anything",
-        "description": "docs/code-tech-opportunities.md renders an 'outreach_draft' field per lead. Several leads now read 'I will keep it simple: one focused file/change, a short usage note, and proof that it runs.' That phrasing implies the bot will act, when in fact the external_action_policy is research_and_article_publishing. The report should be honest: a draft the owner reviews and sends by hand. A small edit to the draft template closes the trust gap with no new secret.",
+        "title": "Replace the 'I will keep it simple' outreach wording with explicit owner-reviewed language",
+        "description": "docs/code-tech-opportunities.md renders an outreach_draft per lead. Several drafts still read 'I will keep it simple: one focused file/change, a short usage note, and proof that it runs.' That phrasing implies the bot will act, when in fact the external_action_policy is research_and_article_publishing and the codex_prompt already says 'Do not post externally or request payment automatically'. The drafts should be honest: a draft the owner reviews and sends by hand. A small edit to the outreach template closes the trust gap and lines the lead write-up up with the report's own constraint section, with no new secret.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "1. No secret, no signup.",
-          "2. In bot/earning/code_techs.py, change the outreach template to make it clear the owner sends the message by hand.",
-          "3. Re-run the cycle; the new wording appears in docs/code-tech-opportunities.md.",
-          "4. Open docs/code-tech-opportunities.md and confirm the 'Owner-reviewed outreach draft' sections no longer read as if the bot will send them."
+          "2. In bot/earning/code_techs.py, change the _outreach_draft template so it begins 'Owner-reviewed draft \u2014 you send by hand after editing:', drops the 'I will keep it simple' sentence, and ends with a line that says the wallet address is added by the owner before sending.",
+          "3. Re-run the cycle; the new wording appears in docs/code-tech-opportunities.md under 'Owner-reviewed outreach draft'.",
+          "4. Open the report and confirm each draft now starts with the owner-reviewed prefix and does not read as if the bot will contact anyone."
         ]
       },
       {
-        "title": "Add a small unit test for the earnings week-reset when 'week_started' is None",
-        "description": "bot/earnings.py:update() reads 'week_started' and uses 'started = e.get(\"week_started\") or current_week_monday'. If a corrupted status.json ever saves week_started as null instead of a date string, the fallback to current_week_monday is correct, but the previous 'if started < current_week_monday' branch was never covered by a test. A one-case test pins the behaviour so a refactor cannot silently regress it.",
+        "title": "Add a unit test that pins the new owner-reviewed outreach wording",
+        "description": "Once the outreach template is rewritten, a regression test should pin the new prefix so a future prompt tweak cannot quietly revert it. The existing TestCodeTechOpportunities already exercises _outreach_draft; one new case that asserts the 'Owner-reviewed draft' prefix and the absence of the old 'I will keep it simple' phrase is enough to keep the report honest without spending a free-tier LLM call.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "1. No secret, no signup.",
-          "2. In bot/tests.py, add a TestEarningsUpdate.test_week_reset_handles_null_week_started case that calls update() with week_started=None and asserts the cycle's 0.08 USD is still recorded under this_week_usd.",
-          "3. Run python -m unittest bot.tests.TestEarningsUpdate.test_week_reset_handles_null_week_started.",
-          "4. The new case should pass on the first run; if it fails, the fallback path has regressed."
+          "2. In bot/tests.py, add TestCodeTechOpportunities.test_outreach_draft_is_owner_reviewed_not_first_person that calls _outreach_draft with the same fixture used in test_outreach_uses_configured_public_payment_address and asserts the draft starts with 'Owner-reviewed draft' and does not contain 'I will keep it simple'.",
+          "3. Run python -m unittest bot.tests.TestCodeTechOpportunities.test_outreach_draft_is_owner_reviewed_not_first_person.",
+          "4. The new case should pass on the first run; if it fails, the outreach template has regressed and the owner needs to inspect docs/code-tech-opportunities.md."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.36.1-20260829-143007",
+    "branch": "evolve/1.36.1-20260829-183337",
     "proposed_version": "1.36.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Why Rumors Become Exploits Before Anyone Reports a Bug",
-        "url": "https://dev.to/robust_true_try/why-rumors-become-exploits-before-anyone-reports-a-bug-38ol",
-        "estimated_usd": 0.0,
-        "source_url": "https://anil.recoil.org/notes/rumour-is-the-exploit",
-        "source_title": "Just the rumour of a bug is enough to find an exploit these days"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Activate the Cerebras free tier as a third LLM fallback",
-      "description": "OpenRouter's free chain is throttled to ~50 req/day and that throttling is the single most common reason an evolution step skips. Cerebras offers roughly 1M tokens/day with no credit card, so adding its key buys an independent second free provider and one provider's rate limit cannot stop a cycle. The wiring already exists in bot/llm.py; only the secret is missing.",
+      "description": "OpenRouter's free chain is throttled to roughly 50 requests per day, and that throttle is the single most common reason an evolution step skips. Cerebras offers around 1M tokens per day with no credit card, so adding its key gives an independent second free provider and one provider's rate limit cannot stop a cycle. The wiring already exists in bot/llm.py; only the secret is missing.",
       "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -114,34 +104,34 @@
       ]
     },
     {
-      "title": "Replace the offline ''outreach'' wording so the code-techs report never implies the bot will send anything",
-      "description": "docs/code-tech-opportunities.md renders an 'outreach_draft' field per lead. Several leads now read 'I will keep it simple: one focused file/change, a short usage note, and proof that it runs.' That phrasing implies the bot will act, when in fact the external_action_policy is research_and_article_publishing. The report should be honest: a draft the owner reviews and sends by hand. A small edit to the draft template closes the trust gap with no new secret.",
+      "title": "Replace the 'I will keep it simple' outreach wording with explicit owner-reviewed language",
+      "description": "docs/code-tech-opportunities.md renders an outreach_draft per lead. Several drafts still read 'I will keep it simple: one focused file/change, a short usage note, and proof that it runs.' That phrasing implies the bot will act, when in fact the external_action_policy is research_and_article_publishing and the codex_prompt already says 'Do not post externally or request payment automatically'. The drafts should be honest: a draft the owner reviews and sends by hand. A small edit to the outreach template closes the trust gap and lines the lead write-up up with the report's own constraint section, with no new secret.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "1. No secret, no signup.",
-        "2. In bot/earning/code_techs.py, change the outreach template to make it clear the owner sends the message by hand.",
-        "3. Re-run the cycle; the new wording appears in docs/code-tech-opportunities.md.",
-        "4. Open docs/code-tech-opportunities.md and confirm the 'Owner-reviewed outreach draft' sections no longer read as if the bot will send them."
+        "2. In bot/earning/code_techs.py, change the _outreach_draft template so it begins 'Owner-reviewed draft \u2014 you send by hand after editing:', drops the 'I will keep it simple' sentence, and ends with a line that says the wallet address is added by the owner before sending.",
+        "3. Re-run the cycle; the new wording appears in docs/code-tech-opportunities.md under 'Owner-reviewed outreach draft'.",
+        "4. Open the report and confirm each draft now starts with the owner-reviewed prefix and does not read as if the bot will contact anyone."
       ]
     },
     {
-      "title": "Add a small unit test for the earnings week-reset when 'week_started' is None",
-      "description": "bot/earnings.py:update() reads 'week_started' and uses 'started = e.get(\"week_started\") or current_week_monday'. If a corrupted status.json ever saves week_started as null instead of a date string, the fallback to current_week_monday is correct, but the previous 'if started < current_week_monday' branch was never covered by a test. A one-case test pins the behaviour so a refactor cannot silently regress it.",
+      "title": "Add a unit test that pins the new owner-reviewed outreach wording",
+      "description": "Once the outreach template is rewritten, a regression test should pin the new prefix so a future prompt tweak cannot quietly revert it. The existing TestCodeTechOpportunities already exercises _outreach_draft; one new case that asserts the 'Owner-reviewed draft' prefix and the absence of the old 'I will keep it simple' phrase is enough to keep the report honest without spending a free-tier LLM call.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "1. No secret, no signup.",
-        "2. In bot/tests.py, add a TestEarningsUpdate.test_week_reset_handles_null_week_started case that calls update() with week_started=None and asserts the cycle's 0.08 USD is still recorded under this_week_usd.",
-        "3. Run python -m unittest bot.tests.TestEarningsUpdate.test_week_reset_handles_null_week_started.",
-        "4. The new case should pass on the first run; if it fails, the fallback path has regressed."
+        "2. In bot/tests.py, add TestCodeTechOpportunities.test_outreach_draft_is_owner_reviewed_not_first_person that calls _outreach_draft with the same fixture used in test_outreach_uses_configured_public_payment_address and asserts the draft starts with 'Owner-reviewed draft' and does not contain 'I will keep it simple'.",
+        "3. Run python -m unittest bot.tests.TestCodeTechOpportunities.test_outreach_draft_is_owner_reviewed_not_first_person.",
+        "4. The new case should pass on the first run; if it fails, the outreach template has regressed and the owner needs to inspect docs/code-tech-opportunities.md."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 61,
+  "last_cycle_seconds": 79,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -707,7 +697,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-29T14:29:48.205468+00:00",
+    "checked_at": "2026-08-29T18:32:18.627660+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -912,7 +902,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.36.1-20260829-143007",
+  "last_evolution_branch": "evolve/1.36.1-20260829-183337",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 10,

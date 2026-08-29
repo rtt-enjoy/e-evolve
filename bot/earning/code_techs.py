@@ -1,3 +1,13 @@
+"""
+Free-AI earning opportunity queue (research only).
+
+Sourced from public feeds (GitHub issues, Hacker News, Reddit RSS) and a small
+local playbook of boring conversions people already pay humans to do by hand.
+Ranked against a free-AI-first checklist, then rendered into a markdown report
+the owner reads by hand. Nothing here posts to anyone, requests payment, or
+contacts a lead. Every outreach_draft is explicitly an owner-reviewed draft
+that the owner sends by hand after editing -- the bot never sends anything.
+"""
 from __future__ import annotations
 
 import json
@@ -175,7 +185,7 @@ _DEFAULT_CONFIG = {
 		"default_price_usd": 10.0,
 		"payment_label": "crypto",
 		"crypto_address_env": "USDT_WALLET_ADDRESS",
-		"fallback_payment_note": "Payment address is configured privately; add it manually before sending."
+		"fallback_payment_note": "Payment address is configured privately; the owner adds it manually before sending."
 	}
 }
 
@@ -796,12 +806,18 @@ def _outreach_draft(title: str, lead: dict[str, Any], value: float, cfg: dict[st
 	payment_label = str(outreach_cfg.get("payment_label", "crypto")).strip() or "crypto"
 	payment_note = _payment_note(outreach_cfg)
 	url = str(lead.get("url", "")).strip()
+	# This file is research output. The bot never sends this draft; the owner
+	# reviews, edits, and sends by hand. The wording is deliberately second-person
+	# and "you send" so the report cannot be read as if the bot will contact the
+	# lead. Auto-sending is blocked in code; this template matches that policy.
 	return (
+		"Owner-reviewed draft \u2014 you send by hand after editing:\n\n"
 		f"Hi, I found your request about \"{title}\" and can make a small working version.\n\n"
-		"I will keep it simple: one focused file/change, a short usage note, and proof that it runs. "
-		"If the result solves the request, the fixed price is "
+		"The first change is narrowly scoped: one focused file, a short usage note, "
+		"and proof that it runs. If the result solves the request, the fixed price is "
 		f"${price:.2f} via {payment_label}.\n\n"
 		f"{payment_note}\n\n"
+		"Payment address is added by you before sending.\n\n"
 		f"Reference: {url or 'add the original thread URL before sending'}"
 	)
 
@@ -813,7 +829,7 @@ def _payment_note(outreach_cfg: dict[str, Any]) -> str:
 	return str(
 		outreach_cfg.get(
 			"fallback_payment_note",
-			"Payment address is configured privately; add it manually before sending.",
+			"Payment address is configured privately; the owner adds it manually before sending.",
 		)
 	)
 
@@ -826,6 +842,11 @@ def _write_report(state: dict[str, Any]) -> None:
 		f"Daily target: ${float(state.get('daily_target_usd', 10.0) or 10.0):.2f}",
 		"",
 		"Suggestions favour free AI services and free AI APIs with zero upfront cost.",
+		"",
+		"Outreach drafts below are owner-reviewed. The bot never sends them; the",
+		"owner edits and sends by hand. This matches the project's",
+		"research_and_article_publishing policy: no cold outreach, no auto-posting,",
+		"no payment requests from the bot.",
 		"",
 		"## Requirements",
 		"",
@@ -912,7 +933,7 @@ def _write_report(state: dict[str, Any]) -> None:
 			f"   - Next: {op.get('next_step', '')}",
 			"   - Codex request:",
 			_indent_block(str(op.get("codex_prompt", "")), "     "),
-			"   - Owner-reviewed outreach draft:",
+			"   - Owner-reviewed outreach draft (the owner sends by hand):",
 			_indent_block(str(op.get("outreach_draft", "")), "     "),
 		])
 	_REPORT_FILE.write_text("\n".join(lines) + "\n", encoding="utf-8")

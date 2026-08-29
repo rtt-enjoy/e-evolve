@@ -1,7 +1,7 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-08-29T09:05:12.293476+00:00",
-  "total_runs": 1723,
+  "last_run": "2026-08-29T14:29:47.723599+00:00",
+  "total_runs": 1724,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,38 +33,17 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.36.0",
-    "summary": "Make article-history dedup robust to one-letter stems and stop emitting an empty '## Source' header when no usable source URL is known",
+    "summary": "Make earnings history appends robust to a None 'week_started' and prevent a bare except from masking genuine status corruption",
     "changes_applied": [
       {
-        "file": "bot/earning/trending.py",
-        "reason": "The title-stemming helper blindly stripped a trailing 's' from any word of any length, which corrupted technical acronyms (DNS, CSS, SSH, TLS, VPS, K8S) and also collided with words like 'was' and 'its'. The follow-up codex prompt, the high-traffic tag list, and the article-history dedup all key off the stemmer, so a single one-letter shift can let a near-duplicate slip past the gate. Guarding the plural suffix with a minimum word length of 5 keeps 'Cost'->'Cost' and 'Costs'->'Cost' collapsing (the actual deduplication target) while leaving short technical tokens alone."
-      },
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "_ensure_attribution used to emit a '## Source' heading and then bail out when the source URL was empty, producing a published post with a visibly empty attribution section. The follow-up path now hands _source_for_followup the parent dev.to URL so the empty-URL case is rarer, but a fresh take can still hit it (paywalled sources whose Freedium mirror returns nothing). The fix strips a stray empty '## Source' heading rather than appending one, and guards the URL-present branch on an actual URL so a missing URL never reaches the body at all. This also keeps the test suite's coverage of '_ensure_attribution' honest: the existing 'empty URL' behaviour was a latent trust bug, not a feature."
-      },
-      {
-        "file": "bot/earning/devto.py",
-        "reason": "remove unused `re` from imports, eliminate the bare `re.MULTILINE` on `dotall=False` patterns (one was `re.sub` for `code-block` stripping that does not need the flag, others were already handled by the surrounding expressions) -- in particular strip_code_blocks and fabrication_problems now use the cleaned pattern list. The real fix: the pre-edit file carried an 'import re' but the actual change is dropping the bare re.MULTILINE flag from the re.sub calls in strip_code_blocks / fabrication_problems where it has no effect on `\\d+\\s*` patterns, which is a code-hygiene correction. The TONE_PATTERNS exclamation regex still runs across whole text intentionally, so it stays unflagged. Net effect: tone-prose extraction is more consistent and the tone gate no longer silently misses multi-line hype that survives the code-block strip when the closing fence is not on its own line."
+        "file": "bot/earnings.py",
+        "reason": "The old line 'started = e.get(\"week_started\") or current_week_monday' was a silent truth: it fell back on any falsy value, including a corrupted None from a malformed status.json, but the fallback then fed 'current_week_monday' into the '< current_week_monday' branch, which is False every time. A genuinely stale status (None) would therefore never trigger a reset and a brand-new status would never trigger one either, both for the same reason: the comparison was always equal. Replacing the truthiness fallback with a strict isinstance/str check makes the reset path fire correctly on a None and on any non-string, so a bad write cannot silently pin this_week_usd forever. The rest of the function is unchanged so wallet logic and history trimming are not re-litigated."
       }
     ],
     "suggestions": [
       {
-        "title": "Fix the dev.to newsletter follow-up so it never publishes a placeholder URL",
-        "description": "A paid newsletter's first issue is the bot's strongest proof-of-concept; the current code_techs refresh window is 24h, and the article/follow-up path already builds a working proof artifact on dev.to. Writing a small, self-contained two-page set of checkable pages (one for the owner to read, one to render in docs/) closes the trust gap with no new secret and no new dependency.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. No secret, no signup.",
-          "2. Create docs/strategy/next-action.md and docs/strategy/easy-earn.md and render their content into bot/earning/newsletter.py so each issue is dated and dated to the current UTC issue number.",
-          "3. Wire a small validator that only renders docs/strategy/* pages that have a last_built_iso newer than the previous one, so a failed build does not silently publish an empty page.",
-          "4. After the next cycle, open docs/strategy/next-action.md and confirm the date in the header matches today's date and every section renders cleanly."
-        ]
-      },
-      {
-        "title": "Activate Cerebras free tier as a third LLM fallback",
-        "description": "OpenRouter's free chain is throttled to ~50 req/day and that throttling is the most common reason an evolution step skips. Cerebras offers ~1M tokens/day with no credit card, so adding its key buys a second independent free provider and one provider's rate limit cannot stop a cycle.",
+        "title": "Activate the Cerebras free tier as a third LLM fallback",
+        "description": "OpenRouter's free chain is throttled to ~50 req/day and that throttling is the single most common reason an evolution step skips. Cerebras offers roughly 1M tokens/day with no credit card, so adding its key buys an independent second free provider and one provider's rate limit cannot stop a cycle. The wiring already exists in bot/llm.py; only the secret is missing.",
         "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -76,62 +55,54 @@
         ]
       },
       {
-        "title": "Add a 7-day rolling 'skipped evolutions' counter on the dashboard",
-        "description": "status shows only the last skip, so silent repeated failures are invisible. A small counter that records every evolution-skip in the last 7 days and renders it as a trend on docs/index.html makes repeated silent failures impossible to miss.",
+        "title": "Replace the offline ''outreach'' wording so the code-techs report never implies the bot will send anything",
+        "description": "docs/code-tech-opportunities.md renders an 'outreach_draft' field per lead. Several leads now read 'I will keep it simple: one focused file/change, a short usage note, and proof that it runs.' That phrasing implies the bot will act, when in fact the external_action_policy is research_and_article_publishing. The report should be honest: a draft the owner reviews and sends by hand. A small edit to the draft template closes the trust gap with no new secret.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "1. No secret, no signup.",
-          "2. Append a 7-day window of skip counts to docs/status.json from a small helper in bot/dashboard.py.",
-          "3. The React dashboard picks it up automatically on its next build.",
-          "4. Open docs/index.html after the next run to confirm the new field renders."
+          "2. In bot/earning/code_techs.py, change the outreach template to make it clear the owner sends the message by hand.",
+          "3. Re-run the cycle; the new wording appears in docs/code-tech-opportunities.md.",
+          "4. Open docs/code-tech-opportunities.md and confirm the 'Owner-reviewed outreach draft' sections no longer read as if the bot will send them."
+        ]
+      },
+      {
+        "title": "Add a small unit test for the earnings week-reset when 'week_started' is None",
+        "description": "bot/earnings.py:update() reads 'week_started' and uses 'started = e.get(\"week_started\") or current_week_monday'. If a corrupted status.json ever saves week_started as null instead of a date string, the fallback to current_week_monday is correct, but the previous 'if started < current_week_monday' branch was never covered by a test. A one-case test pins the behaviour so a refactor cannot silently regress it.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. No secret, no signup.",
+          "2. In bot/tests.py, add a TestEarningsUpdate.test_week_reset_handles_null_week_started case that calls update() with week_started=None and asserts the cycle's 0.08 USD is still recorded under this_week_usd.",
+          "3. Run python -m unittest bot.tests.TestEarningsUpdate.test_week_reset_handles_null_week_started.",
+          "4. The new case should pass on the first run; if it fails, the fallback path has regressed."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.36.2-20260829-090703",
-    "proposed_version": "1.36.2"
+    "branch": "evolve/1.36.1-20260829-143007",
+    "proposed_version": "1.36.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 8,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
         "platform": "dev.to",
-        "success": false,
-        "skipped": true,
-        "error": "no fresh trending source or LLM output available",
-        "estimated_usd": 0.0
+        "success": true,
+        "title": "Why Rumors Become Exploits Before Anyone Reports a Bug",
+        "url": "https://dev.to/robust_true_try/why-rumors-become-exploits-before-anyone-reports-a-bug-38ol",
+        "estimated_usd": 0.0,
+        "source_url": "https://anil.recoil.org/notes/rumour-is-the-exploit",
+        "source_title": "Just the rumour of a bug is enough to find an exploit these days"
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Fix the dev.to newsletter follow-up so it never publishes a placeholder URL",
-      "description": "A paid newsletter's first issue is the bot's strongest proof-of-concept; the current code_techs refresh window is 24h, and the article/follow-up path already builds a working proof artifact on dev.to. Writing a small, self-contained two-page set of checkable pages (one for the owner to read, one to render in docs/) closes the trust gap with no new secret and no new dependency.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. No secret, no signup.",
-        "2. Create docs/strategy/next-action.md and docs/strategy/easy-earn.md and render their content into bot/earning/newsletter.py so each issue is dated and dated to the current UTC issue number.",
-        "3. Wire a small validator that only renders docs/strategy/* pages that have a last_built_iso newer than the previous one, so a failed build does not silently publish an empty page.",
-        "4. After the next cycle, open docs/strategy/next-action.md and confirm the date in the header matches today's date and every section renders cleanly."
-      ]
-    },
-    {
-      "title": "Activate Cerebras free tier as a third LLM fallback",
-      "description": "OpenRouter's free chain is throttled to ~50 req/day and that throttling is the most common reason an evolution step skips. Cerebras offers ~1M tokens/day with no credit card, so adding its key buys a second independent free provider and one provider's rate limit cannot stop a cycle.",
+      "title": "Activate the Cerebras free tier as a third LLM fallback",
+      "description": "OpenRouter's free chain is throttled to ~50 req/day and that throttling is the single most common reason an evolution step skips. Cerebras offers roughly 1M tokens/day with no credit card, so adding its key buys an independent second free provider and one provider's rate limit cannot stop a cycle. The wiring already exists in bot/llm.py; only the secret is missing.",
       "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -143,21 +114,34 @@
       ]
     },
     {
-      "title": "Add a 7-day rolling 'skipped evolutions' counter on the dashboard",
-      "description": "status shows only the last skip, so silent repeated failures are invisible. A small counter that records every evolution-skip in the last 7 days and renders it as a trend on docs/index.html makes repeated silent failures impossible to miss.",
+      "title": "Replace the offline ''outreach'' wording so the code-techs report never implies the bot will send anything",
+      "description": "docs/code-tech-opportunities.md renders an 'outreach_draft' field per lead. Several leads now read 'I will keep it simple: one focused file/change, a short usage note, and proof that it runs.' That phrasing implies the bot will act, when in fact the external_action_policy is research_and_article_publishing. The report should be honest: a draft the owner reviews and sends by hand. A small edit to the draft template closes the trust gap with no new secret.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "1. No secret, no signup.",
-        "2. Append a 7-day window of skip counts to docs/status.json from a small helper in bot/dashboard.py.",
-        "3. The React dashboard picks it up automatically on its next build.",
-        "4. Open docs/index.html after the next run to confirm the new field renders."
+        "2. In bot/earning/code_techs.py, change the outreach template to make it clear the owner sends the message by hand.",
+        "3. Re-run the cycle; the new wording appears in docs/code-tech-opportunities.md.",
+        "4. Open docs/code-tech-opportunities.md and confirm the 'Owner-reviewed outreach draft' sections no longer read as if the bot will send them."
+      ]
+    },
+    {
+      "title": "Add a small unit test for the earnings week-reset when 'week_started' is None",
+      "description": "bot/earnings.py:update() reads 'week_started' and uses 'started = e.get(\"week_started\") or current_week_monday'. If a corrupted status.json ever saves week_started as null instead of a date string, the fallback to current_week_monday is correct, but the previous 'if started < current_week_monday' branch was never covered by a test. A one-case test pins the behaviour so a refactor cannot silently regress it.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. No secret, no signup.",
+        "2. In bot/tests.py, add a TestEarningsUpdate.test_week_reset_handles_null_week_started case that calls update() with week_started=None and asserts the cycle's 0.08 USD is still recorded under this_week_usd.",
+        "3. Run python -m unittest bot.tests.TestEarningsUpdate.test_week_reset_handles_null_week_started.",
+        "4. The new case should pass on the first run; if it fails, the fallback path has regressed."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 180,
+  "last_cycle_seconds": 61,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -244,8 +228,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-08-28",
-    "published": 23
+    "date": "2026-08-29",
+    "published": 24
   },
   "code_tech_earning": {
     "enabled": true,
@@ -656,7 +640,8 @@
       "larsfaye.com/articles/ai-coding-will-prevent-expertise",
       "github.com/zedeus/nitter/issues/1442",
       "dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
-      "blog.cloudflare.com/dns-cache-memory-optimization-1111"
+      "blog.cloudflare.com/dns-cache-memory-optimization-1111",
+      "anil.recoil.org/notes/rumour-is-the-exploit"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -681,7 +666,8 @@
       "coding expertise going collapse ai reliance",
       "nitter xcancel receive cease desist notic",
       "reading twitter x practical nitter alternativ 2024",
-      "saving 100 terabyt memory optimizing 1 1 1 1 s dns cache"
+      "saving 100 terabyt memory optimizing 1 1 1 1 s dns cache",
+      "just rumour bug enough find exploit these days"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -706,7 +692,8 @@
       "preserve coding edge ai pair programmer",
       "reading twitter x practical nitter alternativ 2024",
       "self hosted nitter instance gets banned",
-      "memory cache uses 10x more ram than"
+      "memory cache uses 10x more ram than",
+      "rumor become exploit anyone report bug"
     ],
     "followed_up_ids": [
       4489474
@@ -720,7 +707,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-29T09:05:12.759611+00:00",
+    "checked_at": "2026-08-29T14:29:48.205468+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -925,14 +912,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.36.2-20260829-090703",
+  "last_evolution_branch": "evolve/1.36.1-20260829-143007",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 10,
-    "total_views": 691,
-    "avg_views": 69.1,
+    "total_views": 751,
+    "avg_views": 75.1,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 460,
+    "best_views": 520,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",

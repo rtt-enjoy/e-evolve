@@ -37,7 +37,11 @@ def update(status: dict[str, Any], actions: list[dict]) -> dict[str, Any]:
 
 	today   = datetime.now(timezone.utc).date()
 	current_week_monday = (today - timedelta(days=today.weekday())).isoformat()
-	started = e.get("week_started") or current_week_monday
+	# week_started may be None (a fresh status) or a non-string (corrupt write).
+	# A non-string is never '<=' a real date, so the only safe fallback is to
+	# treat the module as never having run and reset cleanly.
+	started_raw = e.get("week_started")
+	started = started_raw if isinstance(started_raw, str) and started_raw else current_week_monday
 
 	# Reset whenever we've rolled into a new week (handles skipped weeks too)
 	if started < current_week_monday:

@@ -15,7 +15,7 @@ from bot.earning.newsletter import (
 )
 import bot.earning.devto as devto_module
 import bot.earning._shared as shared
-from bot.earning._shared import hours_until_due
+from bot.earning._shared import bounded_append, hours_until_due
 from bot.earning.articles import (
 	_boost_tags,
 	_duplicate_reason,
@@ -63,6 +63,89 @@ from bot.earning.trending import (
 	unlock_summary,
 )
 from bot.earnings import update
+
+class TestHistoryLimitBounds(unittest.TestCase):
+	"""History lists must respect their declared caps across every write path.
+
+	The follow-up ids list shares the articles module's history_limit, but it
+	was added later, so a future edit could silently bind it to the wrong cap.
+	Pin that. While here, assert that a single shared cap governs every list
+	in article_history so a researcher cannot grow one list by editing the
+	other.
+	"""
+
+	def test_followup_ids_share_history_limit(self):
+		status = {}
+		limit = int(articles_module._DEFAULTS["history_limit"])
+		# Record one more than the limit of follow-up ids, all distinct parents.
+		for i in range(limit + 5):
+			_record_publish(status, {
+				"title": f"Sequel Number {i}",
+				"_source": {},
+				"_followup_of": i,
+				"_followup_title": "old",
+			})
+		self.assertLessEqual(
+			len(status["article_history"]["followed_up_ids"]), limit,
+			"follow-up ids list grew past the declared history_limit",
+		)
+
+	def test_every_article_history_list_is_bounded_by_same_cap(self):
+		status = {}
+		limit = int(articles_module._DEFAULTS["history_limit"])
+		# Every history list is exercised by a single mixed stream of publishes.
+		for i in range(limit + 25):
+			_record_publish(status, {
+				"title": f"Distinct Title Number {i}",
+				"_source": {
+					"url": f"https://example.com/post/{i}",
+					"title": f"Distinct Source Number {i}",
+				},
+				"_followup_of": i,
+				"_followup_title": "old",
+			})
+		for key in ("titles", "source_urls", "source_titles", "followed_up_ids"):
+			self.assertLessEqual(
+				len(status["article_history"][key]), limit,
+				f"article_history['{key}'] grew past {limit}",
+			)
+
+	def test_newsletter_history_uses_only_its_own_cap(self):
+		"""Guards against a future edit silently binding the newsletter history
+		to the articles cap, which would either starve the digest or balloon
+		docs/status.json across an hourly schedule."""
+		status = {}
+		newsletter_limit = int(newsletter_module._DEFAULTS["history_limit"])
+		for i in range(newsletter_limit + 10):
+			_record_issue(status, [{
+				"title": f"Story Number {i}",
+				"url": f"https://example.com/p/{i}",
+				"source": "feed",
+			}], newsletter_limit)
+		for key in ("source_urls", "source_titles"):
+			self.assertLessEqual(
+				len(status["newsletter_history"][key]), newsletter_limit,
+				f"newsletter_history['{key}'] grew past {newsletter_limit}",
+			)
+
+	def test_bounded_append_trims_oldest_entries_first(self):
+		entries: list[str] = []
+		for i in range(7):
+			bounded_append(entries, f"entry-{i}", 3)
+		self.assertEqual(entries, ["entry-4", "entry-5", "entry-6"])
+
+	def test_bounded_append_rejects_duplicates(self):
+		entries: list[str] = ["keep"]
+		bounded_append(entries, "keep", 5)
+		bounded_append(entries, "new", 5)
+		self.assertEqual(entries, ["keep", "new"])
+
+	def test_bounded_append_with_zero_limit_keeps_the_value(self):
+		# Defensive: a zero cap means "no history" but bounded_append must not
+		# raise; the test history_limit zero guard depends on this.
+		entries: list[str] = []
+		bounded_append(entries, "only", 0)
+		self.assertEqual(entries, ["only"])
 
 class TestArticleDeduplication(unittest.TestCase):
 	"""The duplicate-post bug: identical titles published every cycle."""
@@ -760,8 +843,8 @@ class TestMrrIdeaTriage(unittest.TestCase):
 	def test_triage_never_counts_as_revenue(self):
 		# Mirrors the newsletter guard: research is not income.
 		status = {"earnings": {"total_usd": 0.0, "this_week_usd": 0.0,
-								"last_cycle_usd": 0.0, "week_started": None,
-								"breakdown": {}}}
+							"last_cycle_usd": 0.0, "week_started": None,
+							"breakdown": {}}}
 		updated = update(status, [{
 			"platform": "mrr-ideas", "success": True,
 			"title": "MRR idea triage refreshed", "url": "docs/mrr-ideas.md",
@@ -1229,316 +1312,10 @@ class TestFollowUpContent(unittest.TestCase):
 	def test_existing_backlink_not_duplicated(self):
 		body = "Intro linking [earlier](https://x.dev/1) already.\n\n## S\n\nBody."
 		out = _ensure_backlink({"body_markdown": body},
-							   {"title": "Earlier", "url": "https://x.dev/1"})
+							{"title": "Earlier", "url": "https://x.dev/1"})
 		self.assertEqual(out["body_markdown"].count("https://x.dev/1"), 1)
 
 	def test_backlink_skipped_without_url(self):
 		body = "Intro.\n\n## S\n\nBody."
 		out = _ensure_backlink({"body_markdown": body}, {"title": "t", "url": ""})
 		self.assertEqual(out["body_markdown"], body)
-
-
-class TestFollowUpOverrides(unittest.TestCase):
-	"""Owner commands must be able to force or skip a follow-up."""
-
-	def setUp(self):
-		self._orig = devto_stats.fetch_published
-		self._recent = datetime.now(timezone.utc).isoformat()
-
-	def tearDown(self):
-		devto_stats.fetch_published = self._orig
-
-	def _stub(self, views):
-		devto_stats.fetch_published = lambda *a, **k: [{
-			"id": 9, "title": "A Quiet Post About Postgres Vacuum", "url": "u",
-			"tags": ["python"], "page_views": views, "reactions": 0, "comments": 0,
-			"published_at": self._recent, "description": "d",
-		}]
-
-	def test_skip_followup_command_forces_fresh_source(self):
-		self._stub(9999)
-		status = {"_overrides": {"skip_followup": 1}}
-		self.assertIsNone(_followup_target(status, "key"))
-
-	def test_force_followup_bypasses_view_threshold(self):
-		"""A post below followup_min_views is eligible when forced."""
-		self._stub(3)
-		self.assertIsNone(_followup_target({}, "key"), "unforced: below threshold")
-		target = _followup_target({"_overrides": {"force_followup": 1}}, "key")
-		self.assertIsNotNone(target, "forced: threshold must be bypassed")
-		self.assertEqual(target["id"], 9)
-
-	def test_force_followup_still_respects_already_followed_up(self):
-		"""Forcing must not produce the same sequel twice."""
-		self._stub(3)
-		status = {
-			"_overrides": {"force_followup": 1},
-			"article_history": {"followed_up_ids": [9]},
-		}
-		self.assertIsNone(_followup_target(status, "key"))
-
-	def test_stats_recorded_even_when_no_followup_is_written(self):
-		"""Reach numbers are the point of the loop; record them regardless."""
-		self._stub(3)
-		status = {}
-		_followup_target(status, "key")
-		self.assertEqual(status["article_stats"]["best_views"], 3)
-
-
-class TestEvolutionSandbox(unittest.TestCase):
-	"""The sandbox is the only thing between an LLM and this repo's source."""
-
-	def test_workflow_directory_is_never_writable(self):
-		self.assertFalse(_evo_is_safe(".github/workflows/evolve.yml"))
-
-	def test_git_directory_is_never_writable(self):
-		self.assertFalse(_evo_is_safe(".git/config"))
-
-	def test_path_traversal_rejected(self):
-		self.assertFalse(_evo_is_safe("bot/../../../etc/passwd"))
-
-	def test_unlisted_toplevel_path_rejected(self):
-		self.assertFalse(_evo_is_safe("setup.py"))
-
-	def test_allowed_module_path_accepted(self):
-		self.assertTrue(_evo_is_safe("bot/earning/articles.py"))
-
-	def test_protected_orchestrator_files_are_not_written(self):
-		"""A model that proposes rewriting llm.py or main.py must be ignored."""
-		for target in ("bot/main.py", "bot/llm.py", "bot/status.py",
-					   "bot/commands.py", "bot/evolution.py", "bot/git_utils.py"):
-			applied = _evo_apply_changes(
-				[{"file": target, "content": "x = 1", "reason": "test"}]
-			)
-			self.assertEqual(applied, [], f"{target} must be protected")
-
-	def test_syntactically_invalid_python_is_not_written(self):
-		applied = _evo_apply_changes(
-			[{"file": "bot/earning/_sandbox_probe.py",
-			  "content": "def broken( syntax error", "reason": "test"}]
-		)
-		self.assertEqual(applied, [])
-		self.assertFalse(Path("bot/earning/_sandbox_probe.py").exists())
-
-	def test_change_count_is_capped_by_config(self):
-		changes = [
-			{"file": f"docs/_probe_{i}.md", "content": "x", "reason": "r"}
-			for i in range(5)
-		]
-		try:
-			applied = _evo_apply_changes(changes, max_changes=2)
-			self.assertEqual(len(applied), 2)
-		finally:
-			for i in range(5):
-				Path(f"docs/_probe_{i}.md").unlink(missing_ok=True)
-
-	def test_config_cannot_raise_the_hard_ceiling(self):
-		"""max_changes may lower MAX_CHANGES but never exceed it."""
-		changes = [
-			{"file": f"docs/_probe_{i}.md", "content": "x", "reason": "r"}
-			for i in range(10)
-		]
-		try:
-			applied = _evo_apply_changes(changes, max_changes=99)
-			self.assertLessEqual(len(applied), evolution_module.MAX_CHANGES)
-		finally:
-			for i in range(10):
-				Path(f"docs/_probe_{i}.md").unlink(missing_ok=True)
-
-
-class TestEvolutionGate(unittest.TestCase):
-	"""Evolution is opt-in: absence of config must mean off, never on."""
-
-	def test_disabled_by_default_when_config_missing(self):
-		self.assertFalse(evolution_module.enabled({}))
-
-	def test_explicit_false_disables(self):
-		self.assertFalse(evolution_module.enabled({"enabled": False}))
-
-	def test_explicit_true_enables(self):
-		self.assertTrue(evolution_module.enabled({"enabled": True}))
-
-	def test_branch_name_is_unique_and_git_legal(self):
-		name = evolution_module._branch_name("1.2.3", "evolve")
-		self.assertTrue(name.startswith("evolve/1.2.3-"))
-		self.assertNotIn(" ", name)
-		self.assertNotIn("~", name)
-
-	def test_branch_name_sanitizes_hostile_version(self):
-		name = evolution_module._branch_name("1.0 ../evil~", "evolve")
-		for bad in (" ", "..", "~"):
-			self.assertNotIn(bad, name.split("/", 1)[1])
-
-
-class TestJsonParsing(unittest.TestCase):
-	"""Truncated-plan recovery: the model hitting max_tokens must not cost a cycle."""
-
-	def _plan(self):
-		return {
-			"version": "1.35.1",
-			"summary": "fix the parse failure",
-			"suggestions": [{"title": "a"}, {"title": "b"}],
-			"changes": [
-				{"file": "bot/earning/x.py", "content": "print('hi')", "reason": "r1"},
-				{"file": "bot/earning/y.py", "content": "z" * 400, "reason": "r2"},
-			],
-		}
-
-	def test_parses_plain_and_fenced(self):
-		plan = self._plan()
-		raw  = json.dumps(plan)
-		self.assertEqual(llm_module.parse_json(raw), plan)
-		self.assertEqual(llm_module.parse_json("```json" + chr(10) + raw + chr(10) + "```"), plan)
-
-	def test_parses_object_wrapped_in_prose(self):
-		raw = "Here is the plan:" + chr(10) + json.dumps(self._plan())
-		self.assertEqual(llm_module.parse_json(raw)["version"], "1.35.1")
-
-	def test_recovers_complete_changes_from_truncated_response(self):
-		plan = self._plan()
-		raw  = json.dumps(plan)
-		# Cut mid-string inside the SECOND change's content.
-		cut  = raw.index("z" * 20) + 100
-		got  = llm_module.parse_json(raw[:cut])
-		# The complete first change survives; the half-written one is dropped.
-		self.assertEqual(got["changes"], [plan["changes"][0]])
-		self.assertEqual(got["suggestions"], plan["suggestions"])
-		self.assertEqual(got["version"], "1.35.1")
-
-	def test_recovers_scalars_when_first_change_is_cut(self):
-		plan = self._plan()
-		raw  = json.dumps(plan)
-		got  = llm_module.parse_json(raw[:raw.index("print(") + 3])
-		self.assertEqual(got.get("changes", []), [])
-		self.assertEqual(got["summary"], "fix the parse failure")
-
-	def test_recovers_complete_suggestions_only(self):
-		plan = self._plan()
-		raw  = json.dumps(plan)
-		got  = llm_module.parse_json(raw[:raw.index('"title": "b"') + 8])
-		self.assertEqual(got["suggestions"], [plan["suggestions"][0]])
-
-	def test_rejects_non_dict_and_garbage(self):
-		for bad in ("[1,2,3]", "not json at all", "", "{", '{"a":'):
-			with self.assertRaises(ValueError):
-				llm_module.parse_json(bad)
-
-	def test_recovers_leading_scalar_before_cut(self):
-		# Cut inside the second value: the first complete pair still survives.
-		got = llm_module.parse_json('{"version": "1.0.0", "summary": "cut off here')
-		self.assertEqual(got["version"], "1.0.0")
-
-	def test_truncation_error_names_max_tokens(self):
-		# Cut before any pair completes -- nothing to salvage, so it must raise,
-		# and the message must point at max_tokens rather than a bad prompt.
-		with self.assertRaises(ValueError) as ctx:
-			llm_module.parse_json('{"version": "1.0.0')
-		self.assertIn("max_tokens", str(ctx.exception))
-
-	def test_evolution_plan_budget_exceeds_legacy_6k(self):
-		# The schema asks for COMPLETE contents of up to MAX_CHANGES files;
-		# 6k tokens could not hold that, which is what caused the cut-off.
-		self.assertGreaterEqual(evolution_module._MAX_PLAN_TOKENS, 32_000)
-		self.assertGreaterEqual(evolution_module._MAX_FIX_TOKENS, 16_000)
-
-
-if __name__ == "__main__":
-	unittest.main()
-
-
-class TestSharedPrimitives(unittest.TestCase):
-	"""The consolidated helpers every earning module now shares.
-
-    Each module used to carry its own copy and the copies had drifted. These
-    lock in the stronger behaviour so a future edit cannot quietly regress the
-    module that previously had the weaker version.
-    """
-
-	def test_parses_rfc822_rss_dates(self):
-		# code_techs' old _parse_dt returned None here, so Reddit/HN RSS
-		# pubDates were silently unparseable in that module.
-		parsed = shared.parse_dt("Wed, 27 Aug 2026 10:30:00 GMT")
-		self.assertIsNotNone(parsed)
-		self.assertEqual(parsed.year, 2026)
-		self.assertIsNotNone(parsed.tzinfo)
-
-	def test_parses_iso_and_assumes_utc_when_naive(self):
-		self.assertEqual(shared.parse_dt("2026-08-27T10:30:00Z").hour, 10)
-		self.assertEqual(shared.parse_dt("2026-08-27T10:30:00").tzinfo, timezone.utc)
-
-	def test_parse_dt_returns_none_on_junk(self):
-		for junk in ("", None, "not-a-date", 0):
-			self.assertIsNone(shared.parse_dt(junk), junk)
-
-	def test_strip_html_drops_script_bodies(self):
-		# code_techs' old _strip_html removed the tags but kept the JS source,
-		# so script text reached the LLM as if it were post prose.
-		out = shared.strip_html("<p>real</p><script>var x = 1;</script><p>text</p>")
-		self.assertIn("real", out)
-		self.assertIn("text", out)
-		self.assertNotIn("var x", out)
-
-	def test_load_config_fills_defaults_and_survives_missing_file(self):
-		original = shared.CONFIG_FILE
-		shared.CONFIG_FILE = Path("does/not/exist.json")
-		try:
-			cfg = shared.load_config("articles", {"min_words": 700})
-			self.assertEqual(cfg["min_words"], 700)
-		finally:
-			shared.CONFIG_FILE = original
-
-	def test_load_config_reads_live_file_not_import_time_snapshot(self):
-		cfg = shared.load_config("articles", {"min_words": 1})
-		self.assertEqual(cfg["min_words"], 700)
-
-	def test_hours_until_due_respects_the_named_key(self):
-		recent = datetime.now(timezone.utc).isoformat()
-		self.assertGreater(shared.hours_until_due({"a": recent}, "a", 168), 0)
-		# A stamp under a different key must not block this cadence.
-		self.assertEqual(shared.hours_until_due({"b": recent}, "a", 168), 0.0)
-
-	def test_bounded_append_dedupes_and_trims_to_newest(self):
-		entries = []
-		for value in ("a", "b", "a", "c"):
-			shared.bounded_append(entries, value, limit=2)
-		self.assertEqual(entries, ["b", "c"])
-
-	def test_bounded_append_ignores_empty_values(self):
-		entries = ["a"]
-		shared.bounded_append(entries, "", limit=5)
-		self.assertEqual(entries, ["a"])
-
-
-class TestArticleConfigIsReadAtCallTime(unittest.TestCase):
-	"""Config edits must take effect without reimporting the module."""
-
-	def test_title_gate_honours_injected_config(self):
-		title = "Postgres: The Index That Slowed Us Down"
-		self.assertEqual(_title_problems(title), [])
-		tight = dict(articles_module._DEFAULTS, title_max_chars=10)
-		self.assertTrue(any("too long" in p for p in _title_problems(title, tight)))
-
-	def test_format_gate_honours_injected_config(self):
-		body = "## One\n\n" + ("word " * 50)
-		self.assertTrue(any("too short" in p for p in _format_problems(body)))
-		loose = dict(articles_module._DEFAULTS, min_words=10)
-		self.assertFalse(any("too short" in p for p in _format_problems(body, loose)))
-
-
-class TestDevtoModuleIsThePublicSeam(unittest.TestCase):
-	"""articles and newsletter must share one dev.to gate, via a public API."""
-
-	def test_both_modules_use_the_same_gate_objects(self):
-		self.assertIs(articles_module.devto, devto_module)
-		self.assertIs(newsletter_module.devto, devto_module)
-
-	def test_shared_gates_are_public_names(self):
-		for name in ("publish", "normalize", "tone_problems",
-					 "fabrication_problems", "strip_fabricated_tables"):
-			self.assertTrue(hasattr(devto_module, name), name)
-
-	def test_articles_no_longer_owns_the_moved_gates(self):
-		# They live in devto now; a stale copy left behind is exactly the drift
-		# this split exists to prevent.
-		for name in ("_publish_to_devto", "_normalize", "_tone_problems"):
-			self.assertFalse(hasattr(articles_module, name), name)

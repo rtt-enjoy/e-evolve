@@ -1,7 +1,7 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-08-30T21:07:49.037091+00:00",
-  "total_runs": 1731,
+  "last_run": "2026-08-30T23:31:02.271164+00:00",
+  "total_runs": 1732,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,8 +33,13 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.36.0",
-    "summary": "Add the tenth _LOCAL_LEADS entry for a free-tier prompt-library/template-store gig and a regression test pinning the nine existing entries against silent removal.",
-    "changes_applied": [],
+    "summary": "Add a regression test that the article history limit is shared with the follow-up ids list, and a watchdog test that source histories never exceed their declared caps across consecutive cycles.",
+    "changes_applied": [
+      {
+        "file": "bot/tests.py",
+        "reason": "History caps must hold across every list and every write path: the follow-up ids list shares articles.history_limit and a future edit could silently bind it to a different cap, letting docs/status.json balloon across an hourly schedule. These tests pin the cap on each list (titles, source_urls, source_titles, followed_up_ids) under one mixed publish stream, assert the newsletter cap is independent, and pin bounded_append's oldest-first trimming so duplicate-detection correctness cannot regress."
+      }
+    ],
     "suggestions": [
       {
         "title": "Activate Anthropic Claude as a fourth LLM provider",
@@ -61,25 +66,27 @@
           "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it CEREBRAS_API_KEY, paste the key, and save.",
           "4. The next cycle will list llm_cerebras as active in status.json and start using Cerebras as a fallback for research and post roles."
         ]
+      },
+      {
+        "title": "Bind a custom domain to the GitHub Pages dashboard",
+        "description": "docs/index.html is a static fallback; once the React build is published the dashboard lives at https://<owner>.github.io/<repo>/. A custom domain (CNAME) costs nothing and makes the byline easier to share when pitching the newsletter idea to readers. It is a one-time repo setting plus a DNS record at the registrar.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Decide on a short subdomain you own (e.g. dashboard.example.com).",
+          "2. In your DNS provider, add a CNAME record pointing that subdomain to <owner>.github.io.",
+          "3. In the GitHub repo go to Settings -> Pages -> Custom domain, enter the subdomain, and click Save.",
+          "4. Wait for the green checkmark, then tick 'Enforce HTTPS'. The next cycle's dashboard will load at the new URL."
+        ]
       }
     ],
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.36.1-20260830-233209",
     "proposed_version": "1.36.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "mrr-ideas",
-        "success": true,
-        "idea_count": 2,
-        "refused_count": 18,
-        "llm": true,
-        "estimated_usd": 0.0,
-        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
-        "url": "docs/mrr-ideas.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -108,10 +115,23 @@
         "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it CEREBRAS_API_KEY, paste the key, and save.",
         "4. The next cycle will list llm_cerebras as active in status.json and start using Cerebras as a fallback for research and post roles."
       ]
+    },
+    {
+      "title": "Bind a custom domain to the GitHub Pages dashboard",
+      "description": "docs/index.html is a static fallback; once the React build is published the dashboard lives at https://<owner>.github.io/<repo>/. A custom domain (CNAME) costs nothing and makes the byline easier to share when pitching the newsletter idea to readers. It is a one-time repo setting plus a DNS record at the registrar.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Decide on a short subdomain you own (e.g. dashboard.example.com).",
+        "2. In your DNS provider, add a CNAME record pointing that subdomain to <owner>.github.io.",
+        "3. In the GitHub repo go to Settings -> Pages -> Custom domain, enter the subdomain, and click Save.",
+        "4. Wait for the green checkmark, then tick 'Enforce HTTPS'. The next cycle's dashboard will load at the new URL."
+      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 25,
+  "last_cycle_seconds": 68,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -641,7 +661,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-30T21:07:49.445469+00:00",
+    "checked_at": "2026-08-30T23:31:02.592379+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -846,8 +866,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.36.1-20260830-233209",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 11,
     "total_views": 881,

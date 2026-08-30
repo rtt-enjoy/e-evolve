@@ -1,6 +1,6 @@
 # Recurring Revenue (MRR) Idea Triage
 
-Refreshed: 2026-08-28T18:49:24.174219+00:00
+Refreshed: 2026-08-30T21:08:07.532543+00:00
 
 Research and suggestions only. This bot does not contact anyone, collect
 payment, or host a service. Every figure quoted from the source article
@@ -16,29 +16,29 @@ is unverified — check it yourself before acting on it.
 
 ## Best Current Angle
 
-The only recurring-revenue path that fits a zero‑cost, research‑first stack that can only publish to dev.to is a paid, niche‑focused newsletter where each issue is a polished article the bot drafts and the owner manually distributes; a template‑store model would require a storefront and file delivery that the current stack cannot support without a payment processor or inbound HTTP.
+The only honest recurring-revenue fit for a stack that can only research, draft, and publish to dev.to is a tightly-narrowed paid newsletter whose subscription is sold and collected entirely by hand off-platform. The dev.to byline is an audience-building tool, not a revenue tool; the owner funnels readers toward a newsletter signup the bot cannot manage, and payment, list hygiene, and renewals all happen outside the stack. This is a content business with a manual backend, not automation, and revenue depends on a niche narrow enough that a single writer can out-research and out-write the alternatives.
 
 ## Ranked Ideas
 
-### Paid newsletter
+### Paid newsletter, niche developer audience
 
-- **Niche:** Junior backend engineers who need weekly, code‑level guidance on optimizing PostgreSQL query performance in Kubernetes environments
-- **Who pays:** Engineering leads at Series‑A SaaS companies who allocate a learning budget for their backend teams
+- **Niche:** Solo developers or indie hackers building internal tooling in Go or Rust who need a monthly digest of obscure RFC changes, CVEs, and migration pitfalls they can read in 10 minutes.
+- **Who pays:** Independent developers or one-person SaaS founders who already pay for one or two newsletters and use Go or Rust in production.
 - **Monthly price:** 10-15
-- **Why this stack fits:** The bot can research, draft, and publish each issue as a dev.to article; the owner only needs to copy the article into an email and send it by hand.
-- **First proof artifact:** A single, complete newsletter issue (≈1500 words) covering one concrete query‑tuning pattern with a runnable SQL snippet
-- **Runway to first dollar:** 4-8 weeks
-- **You must do by hand:** Open a payment/subscription account on a platform of their choice, collect subscriber emails manually (e.g., via dev.to comments), copy each drafted article into an email client, and send the newsletter each week
+- **Why this stack fits:** Publishing articles to dev.to is a real channel; subscriptions and storefronts are owned and run by hand, so no payment or outreach code is required and no constraints are violated.
+- **First proof artifact:** One free 1,000-word sample issue published as a dev.to article, plus a hand-built landing page describing the paid cadence, scope, and price.
+- **Runway to first dollar:** 6-10 weeks to build a small reading list on dev.to, then a hand-collected first subscriber
+- **You must do by hand:** Open the payment or subscription account, maintain the subscriber list by hand, collect renewals by hand, and personally write each issue — no automation here can do any of this.
 
-### Notion / digital template store
+### Notion or digital template library, very narrow niche
 
-- **Niche:** DevOps engineers who need ready‑to‑apply Helm chart templates for zero‑downtime PostgreSQL upgrades on GKE
-- **Who pays:** Platform teams at mid‑size fintech firms that run PostgreSQL on GKE and have a budget for internal tooling
-- **Monthly price:** 20-30
-- **Why this stack fits:** The bot can draft template documentation and usage guides as dev.to articles, but the store requires a storefront, file hosting, and recurring billing that the stack cannot provide.
-- **First proof artifact:** One fully‑tested Helm chart template with a step‑by‑step migration guide published as a dev.to article
-- **Runway to first dollar:** 8-12 weeks
-- **You must do by hand:** Create a storefront on a payment/subscription platform of their choice, upload the chart files, manage subscription renewals, and deliver updates manually to each buyer
+- **Niche:** Incident-postmortem and runbook templates for solo SREs or on-call engineers at small startups running on-call for the first time.
+- **Who pays:** Solo SREs, on-call engineers, or DevOps generalists at seed- to Series-A startups who have just inherited on-call duties.
+- **Monthly price:** 8-15 per subscriber for a library subscription, paid manually through a storefront the owner runs
+- **Why this stack fits:** The bot can draft and structure templates; selling and delivering them happens on a storefront the owner runs by hand, so the stack stays within its limits and no client-acquisition or payment processing is automated.
+- **First proof artifact:** Three free runbook and postmortem templates published as a single dev.to article or downloadable PDF, formatted from drafts the bot produces.
+- **Runway to first dollar:** 8-14 weeks to validate demand through dev.to readership before charging
+- **You must do by hand:** Open and run the template storefront or subscription page, price the library, manage subscribers and access by hand, and curate every template — none of this can be automated inside the stack.
 
 
 ## Set Up By Hand First
@@ -50,9 +50,9 @@ None of these is a blocker — but no money moves until you do them.
 
 ## How To Validate Without Outreach
 
-- Publish a dev.to article that explains the PostgreSQL‑on‑K8s pain point and ends with a single question: “Would you pay $10‑15/mo for a weekly 1500‑word deep‑dive on this topic?”
-- Post the same question as a comment thread in the dev.to community you already follow (e.g., #kubernetes #postgresql) and monitor replies
-- Join the existing “Kubernetes PostgreSQL Operators” Discord/Slack you already belong to and ask the same question in the #general channel, noting only inbound responses
+- Publish a dev.to article that ends with one concrete question and reply to every comment by hand to find who is wrestling with the problem.
+- Start or join one existing community the owner already belongs to (a Slack, a Discord, a long-running comment thread on dev.to) and read what people ask about repeatedly without posting or cold-messaging anyone.
+- Track which free sample or template gets downloaded or shared the most by hand, using only the analytics dev.to surfaces, to estimate whether a paid audience exists at all.
 
 ## Refused, And Why
 
@@ -82,8 +82,8 @@ code, or infrastructure that does not exist here and is not free.
 
 ## Next Actions
 
-1. Write and publish the validation article on dev.to (bot drafts, owner hits publish)
-2. Manually create a payment/subscription account on a platform of your choice and set up a simple subscriber list (e.g., a spreadsheet)
-3. Produce the first proof newsletter issue using the bot’s draft, copy it into your email client, and send it to the first 5‑10 addresses you collected from comments
-4. Schedule a recurring weekly block (1‑2 hours) to research, let the bot draft, review, and manually send the next issue
-5. Track open‑rate and reply‑rate in the spreadsheet; after 4 weeks decide whether to continue, adjust price, or pivot
+1. Pick the single narrowest niche from the two ideas above and commit to it for 90 days, writing one dev.to article per week by hand.
+2. Open the payment or subscription account the owner will use and build the landing page by hand, even before the audience is large.
+3. Publish the first proof artifact (sample newsletter issue or free templates) on dev.to and note every reader signal by hand.
+4. Reply personally to every comment on every dev.to article to build a small, named reading list without any automation.
+5. Re-evaluate after 8-10 weeks whether the hand-collected interest justifies continuing, and stop if it does not.

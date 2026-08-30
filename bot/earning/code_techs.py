@@ -202,6 +202,13 @@ _LOCAL_LEADS = [
 		"labels": ["free-ai-api", "setup-service", "no-cost", "repeatable"]
 	},
 	{
+		"title": "Flat-fee free-LLM setup for non-technical owners",
+		"url": "",
+		"source": "local-playbook",
+		"body": "The single most common Reddit and Fiverr listing is 'I cannot configure this myself'. Charge a flat fee (about $25-50) to create a free Gemini, Groq, or OpenRouter key on the client's own account, paste it into one tool they already use, and hand over a five-prompt starter kit they can run themselves. Input cost is zero, the value is the setup, and the same prompt pack can be reused for the next client.",
+		"labels": ["free-ai-api", "setup-service", "flat-fee", "repeatable"]
+	},
+	{
 		"title": "Product description and listing generation on a free LLM tier",
 		"url": "",
 		"source": "local-playbook",
@@ -238,7 +245,7 @@ _LOCAL_LEADS = [
 	}
 ]
 
-# In‑memory request counter for GitHub API throttling
+# In-memory request counter for GitHub API throttling
 _GITHUB_REQ_COUNT = 0
 _GITHUB_WINDOW_START = time.time()
 _GITHUB_MAX_PER_MIN = 10
@@ -276,6 +283,13 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	raw = _fetch_online_leads(cfg) or list(_LOCAL_LEADS)
 	opportunities = _rank(raw, cfg, max_items=max_items, min_score=min_score)
 
+	# auto_pursue is intentionally a no-op here. The external_action_policy is
+	# research_and_article_publishing, which forbids posting comments or DMs;
+	# the only legal use of this flag is to let the owner toggle it from a
+	# status.json override when the policy is widened. Keeping the refusal in
+	# code (not just a comment) means a future contributor who deletes the
+	# warning still cannot accidentally turn _rank into an auto-poster -- a
+	# unit test pins this behaviour.
 	pursued_count = 0
 	if cfg.get("auto_pursue"):
 		log.warning("[code_techs] auto_pursue ignored: research-only policy forbids posting comments")
@@ -333,7 +347,7 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 		headers["Authorization"] = f"Bearer {token}"
 
 	for query in cfg.get("github_searches", []):
-		# Simple rate‑limit handling
+		# Simple rate-limit handling
 		now = time.time()
 		if now - _GITHUB_WINDOW_START >= 60:
 			_GITHUB_WINDOW_START = now
@@ -518,6 +532,8 @@ def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_
 			next_step=next_step,
 			codex_prompt=_codex_prompt(title_for_prompt, lead, reason, next_step),
 			outreach_draft=_outreach_draft(title_for_prompt, lead, value, cfg),
+			# pursued is decided once, in run(), based on cfg.auto_pursue and the
+			# research_and_article_publishing policy. _rank never flips it.
 			pursued=False,
 			archived_at=None
 		))
@@ -637,7 +653,7 @@ def _online_ai_brief(llm: Any, leads: list[dict[str, Any]], cfg: dict[str, Any])
 			"time_to_first_dollar", "free_stack",
 		], limit=8),
 		"owner_actions": _clean_list(data.get("owner_actions", []))[:5],
-	}
+}
 
 
 def _dicts(value: Any, fields: list[str], limit: int) -> list[dict[str, str]]:
@@ -796,13 +812,19 @@ def _outreach_draft(title: str, lead: dict[str, Any], value: float, cfg: dict[st
 	payment_label = str(outreach_cfg.get("payment_label", "crypto")).strip() or "crypto"
 	payment_note = _payment_note(outreach_cfg)
 	url = str(lead.get("url", "")).strip()
+	# The bot never contacts anyone: this draft is reviewed and sent by hand.
+	# Keep that promise in the wording so docs/code-tech-opportunities.md never
+	# reads as an auto-sender. The prefix and the wallet-address footer are
+	# pinned by bot.tests.TestCodeTechOpportunities.test_outreach_draft_is_owner_reviewed_not_first_person.
 	return (
+		f"Owner-reviewed draft \u2014 you send by hand after editing:\n\n"
 		f"Hi, I found your request about \"{title}\" and can make a small working version.\n\n"
-		"I will keep it simple: one focused file/change, a short usage note, and proof that it runs. "
-		"If the result solves the request, the fixed price is "
-		f"${price:.2f} via {payment_label}.\n\n"
+		f"If the result solves the request, the fixed price is ${price:.2f} via {payment_label}.\n\n"
 		f"{payment_note}\n\n"
-		f"Reference: {url or 'add the original thread URL before sending'}"
+		f"Reference: {url or 'add the original thread URL before sending'}\n"
+		"---\n"
+		"Reminder before sending: paste your wallet address manually at the line "
+		"marked above; never let the bot add it for you."
 	)
 
 def _payment_note(outreach_cfg: dict[str, Any]) -> str:
@@ -826,6 +848,8 @@ def _write_report(state: dict[str, Any]) -> None:
 		f"Daily target: ${float(state.get('daily_target_usd', 10.0) or 10.0):.2f}",
 		"",
 		"Suggestions favour free AI services and free AI APIs with zero upfront cost.",
+		"Every outreach line below is an owner-reviewed draft -- this bot does "
+		"not contact anyone on its own.",
 		"",
 		"## Requirements",
 		"",

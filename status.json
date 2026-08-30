@@ -1,7 +1,7 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-08-30T12:55:05.050399+00:00",
-  "total_runs": 1729,
+  "last_run": "2026-08-30T17:30:41.521811+00:00",
+  "total_runs": 1730,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,17 +33,12 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.36.0",
-    "summary": "Add a regression test pinning the owner-reviewed outreach prefix and the research-only auto_pursue refusal in code_techs, plus a runtime guard that enforces them before the report is written.",
-    "changes_applied": [
-      {
-        "file": "bot/tests.py",
-        "reason": "Pins the two policies the owner reviewed and the report depends on (the outreach prefix and the research-only auto_pursue refusal) with deterministic, LLM-free tests so a future prompt tweak or contributor cannot silently revert them."
-      }
-    ],
+    "summary": "Add the ninth _LOCAL_LEADS entry for a flat-fee free-LLM setup gig and a regression test pinning it against silent removal or rewording.",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Activate Anthropic Claude as a fourth LLM provider",
-        "description": "The repo already supports per-role provider keys and the chain-walking client; llm_anthropic is the only listed feature still inactive. Adding ANTHROPIC_API_KEY widens the free-fallback surface (a different rate-limit pool, different failure modes) and is one secret with no code change.",
+        "description": "llm_anthropic is the only inactive feature still listed. Adding ANTHROPIC_API_KEY widens the free-fallback surface with a different rate-limit pool and failure modes. Already plumbed through the same chain client as Gemini and Groq, so no code change is required.",
         "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -51,12 +46,12 @@
           "1. Go to https://console.anthropic.com/ and create a free-tier account (no credit card required for the evaluation tier).",
           "2. In Settings -> API Keys, click 'Create Key', name it 'e-evolve', and copy the sk-ant-... value.",
           "3. In your GitHub repo go to Settings -> Secrets and variables -> Actions -> New repository secret, name it ANTHROPIC_API_KEY, paste the key, and click Add secret.",
-          "4. The next scheduled run will pick it up automatically; status.json's secret_readiness.llm_anthropic.active will flip to true and llm_workflows.upgrade will use Claude as a higher-quality fallback for repair suggestions."
+          "4. The next scheduled run will flip status.json's secret_readiness.llm_anthropic.active to true and the upgrade role will gain Claude as a higher-quality fallback for repair suggestions."
         ]
       },
       {
         "title": "Activate Cerebras Cloud as a fourth free-tier provider",
-        "description": "llm_cerebras is listed inactive; Cerebras offers ~1M tokens/day free with no credit card, which gives a third independent fallback when OpenRouter free caps are exhausted. Already plumbed through the same chain client as Gemini and Groq.",
+        "description": "llm_cerebras is listed inactive. Cerebras offers roughly 1M tokens/day free with no credit card, which gives a third independent fallback when OpenRouter free caps are exhausted. Already plumbed through the same chain client as Gemini and Groq.",
         "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -69,7 +64,7 @@
       },
       {
         "title": "Add a ninth _LOCAL_LEADS entry for a flat-fee free-LLM setup gig",
-        "description": "The eight _LOCAL_LEADS entries already cover transcription, OCR, listing copy, retainers, cleanup, image, translation, and recurring reports. The single most common Reddit/Fiverr listing in the current online lead batch is 'I cannot configure this myself' \u2014 a flat-fee setup for a free LLM key plus a five-prompt starter kit is the easiest money in the brief, and the local playbook should name it as a default fallback so reports without an LLM brief still surface it. No new secret, no new model call.",
+        "description": "The eight _LOCAL_LEADS entries cover transcription, OCR, listing copy, retainers, cleanup, image, translation, and recurring reports. The most common Reddit/Fiverr listing in the current online lead batch is 'I cannot configure this myself' -- a flat-fee setup for a free LLM key plus a five-prompt starter kit is the easiest money in the brief, and the local playbook should name it as a default fallback so reports without an LLM brief still surface it. No new secret, no new model call.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -82,28 +77,17 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.36.1-20260830-125623",
+    "branch": null,
     "proposed_version": "1.36.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 5,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (5 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Activate Anthropic Claude as a fourth LLM provider",
-      "description": "The repo already supports per-role provider keys and the chain-walking client; llm_anthropic is the only listed feature still inactive. Adding ANTHROPIC_API_KEY widens the free-fallback surface (a different rate-limit pool, different failure modes) and is one secret with no code change.",
+      "description": "llm_anthropic is the only inactive feature still listed. Adding ANTHROPIC_API_KEY widens the free-fallback surface with a different rate-limit pool and failure modes. Already plumbed through the same chain client as Gemini and Groq, so no code change is required.",
       "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -111,12 +95,12 @@
         "1. Go to https://console.anthropic.com/ and create a free-tier account (no credit card required for the evaluation tier).",
         "2. In Settings -> API Keys, click 'Create Key', name it 'e-evolve', and copy the sk-ant-... value.",
         "3. In your GitHub repo go to Settings -> Secrets and variables -> Actions -> New repository secret, name it ANTHROPIC_API_KEY, paste the key, and click Add secret.",
-        "4. The next scheduled run will pick it up automatically; status.json's secret_readiness.llm_anthropic.active will flip to true and llm_workflows.upgrade will use Claude as a higher-quality fallback for repair suggestions."
+        "4. The next scheduled run will flip status.json's secret_readiness.llm_anthropic.active to true and the upgrade role will gain Claude as a higher-quality fallback for repair suggestions."
       ]
     },
     {
       "title": "Activate Cerebras Cloud as a fourth free-tier provider",
-      "description": "llm_cerebras is listed inactive; Cerebras offers ~1M tokens/day free with no credit card, which gives a third independent fallback when OpenRouter free caps are exhausted. Already plumbed through the same chain client as Gemini and Groq.",
+      "description": "llm_cerebras is listed inactive. Cerebras offers roughly 1M tokens/day free with no credit card, which gives a third independent fallback when OpenRouter free caps are exhausted. Already plumbed through the same chain client as Gemini and Groq.",
       "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -129,7 +113,7 @@
     },
     {
       "title": "Add a ninth _LOCAL_LEADS entry for a flat-fee free-LLM setup gig",
-      "description": "The eight _LOCAL_LEADS entries already cover transcription, OCR, listing copy, retainers, cleanup, image, translation, and recurring reports. The single most common Reddit/Fiverr listing in the current online lead batch is 'I cannot configure this myself' \u2014 a flat-fee setup for a free LLM key plus a five-prompt starter kit is the easiest money in the brief, and the local playbook should name it as a default fallback so reports without an LLM brief still surface it. No new secret, no new model call.",
+      "description": "The eight _LOCAL_LEADS entries cover transcription, OCR, listing copy, retainers, cleanup, image, translation, and recurring reports. The most common Reddit/Fiverr listing in the current online lead batch is 'I cannot configure this myself' -- a flat-fee setup for a free LLM key plus a five-prompt starter kit is the easiest money in the brief, and the local playbook should name it as a default fallback so reports without an LLM brief still surface it. No new secret, no new model call.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -142,7 +126,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 106,
+  "last_cycle_seconds": 174,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -672,7 +656,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-30T12:55:05.487895+00:00",
+    "checked_at": "2026-08-30T17:30:41.926252+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -877,8 +861,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.36.1-20260830-125623",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 11,
     "total_views": 881,

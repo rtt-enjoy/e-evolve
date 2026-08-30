@@ -1,7 +1,7 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-08-30T00:21:34.495457+00:00",
-  "total_runs": 1727,
+  "last_run": "2026-08-30T06:41:41.269615+00:00",
+  "total_runs": 1728,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,30 +33,12 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.36.0",
-    "summary": "Refresh the local free-AI playbook in code_techs.py to add a fixed-price LLM config-for-non-technical-owners gig, pin the existing owner-reviewed outreach wording with a regression test, and assert the deterministic lead gate that guards auto_pursue.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/code_techs.py",
-        "reason": "Adds a ninth local-playbook lead for a flat-fee free-LLM setup gig (the most common Reddit/Fiverr pattern in the current online lead batch), rewrites _outreach_draft to be the owner-reviewed wording without the 'I will keep it simple' first-person sentence, prefixes the report's intro and opportunity heading with 'Owner-reviewed outreach draft' so docs/code-tech-opportunities.md never reads as an auto-sender, and documents in run() that _rank never flips pursued (the refusal lives in run()) so the research_and_article_publishing policy is enforced in code rather than a comment."
-      }
-    ],
+    "summary": "Add regression tests pinning the owner-reviewed outreach wording and the research-only auto_pursue refusal in code_techs so a future prompt tweak or contributor cannot silently revert them.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Add a fixed-price 'free LLM setup' gig to the local playbook",
-        "description": "The eight _LOCAL_LEADS entries already cover transcription, OCR, listing copy, retainers, cleanup, image, translation, and recurring reports. The single most common Reddit/Fiverr listing in the current online lead batch is 'I cannot configure this myself' \u2014 a flat-fee setup for a free LLM key plus one prompt is the easiest money in the brief, and the local playbook should name it as a default fallback so reports without an LLM brief still surface it. No new secret, no new model call.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. No secret, no signup.",
-          "2. In bot/earning/code_techs.py, add a ninth entry to _LOCAL_LEADS titled 'Flat-fee free-LLM setup for non-technical owners' with source 'local-playbook' and labels ['free-ai-api', 'setup-service', 'flat-fee', 'repeatable'].",
-          "3. The body should say: 'Most small-business owners cannot pick a model, paste a key, or write a prompt. Charge a flat fee to configure one free LLM key inside a tool they already use, hand over a five-prompt starter kit, and let them keep the free key. Input cost is zero; the value is the setup.'",
-          "4. Re-run the cycle; the new lead appears in docs/code-tech-opportunities.md under 'Ranked Leads From Online Search' with its own outreach draft."
-        ]
-      },
-      {
         "title": "Pin the owner-reviewed outreach wording with a regression test",
-        "description": "Last cycle rewrote _outreach_draft so every lead's outreach_draft starts with 'Owner-reviewed draft \u2014 you send by hand after editing:' and never contains 'I will keep it simple'. There is no test that catches a future prompt tweak reverting that wording, and the report is the only public surface that distinguishes this project from a spam bot. A test against the existing _outreach_draft fixture locks the prefix in for good.",
+        "description": "Every lead's outreach_draft must start with 'Owner-reviewed draft \u2014 you send by hand after editing:' and never contain 'I will keep it simple'. There is no test guarding that wording today, and the report is the only public surface distinguishing this project from a spam bot. A regression test against _outreach_draft locks the prefix in for good and is purely a local change, no secret, no LLM call.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -68,52 +50,54 @@
         ]
       },
       {
-        "title": "Assert that _rank respects the research_and_article_publishing auto_pursue refusal",
-        "description": "The orchestrator comment in run() says 'auto_pursue ignored: research-only policy forbids posting comments', but no test pins that. A future contributor who deletes that warning and turns auto_pursue into a real call would silently start commenting on GitHub and Reddit from this account. A test that asserts _rank returns 0 pursued regardless of cfg['auto_pursue'] catches that drift at unit-test time, before the next cycle ships it.",
+        "title": "Assert _rank and run() never set pursued=True regardless of auto_pursue",
+        "description": "run() logs 'auto_pursue ignored: research-only policy forbids posting comments', but no test pins that. A future contributor who deletes that warning and turns auto_pursue into a real call would silently start commenting on GitHub and Reddit from this account. A test that asserts _rank returns 0 pursued and run() never executes a pursued branch catches that drift at unit-test time, before the next cycle ships it.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "1. No secret, no signup.",
-          "2. In bot/tests.py, add TestCodeTechOpportunities.test_rank_never_auto_pursues that calls _rank with cfg={'auto_pursue': True} and a single high-score lead.",
-          "3. Assert every returned Opportunity has pursued=False (rank does not even know about auto_pursue \u2014 the refusal lives in run()).",
-          "4. Add a second test test_run_never_pursues_even_when_auto_pursue_is_true that monkeypatches the 'pursued' branch in run() to record a call, sets cfg['auto_pursue']=True and a high max_items, and asserts no 'pursued' branch fired; the existing log line should be the only signal."
+          "2. In bot/tests.py, add TestCodeTechOpportunities.test_rank_never_auto_pursues that calls _rank with cfg={'auto_pursue': True} and a single high-score lead; assert every returned Opportunity has pursued=False.",
+          "3. Add TestCodeTechOpportunities.test_run_never_pursues_even_when_auto_pursue_is_true that monkeypatches the pursued branch in run() to record a call, sets cfg['auto_pursue']=True with a high max_items, and asserts no pursued branch fired; the existing log line should be the only signal.",
+          "4. Run python -m unittest bot.tests.TestCodeTechOpportunities.test_rank_never_auto_pursues bot.tests.TestCodeTechOpportunities.test_run_never_pursues_even_when_auto_pursue_is_true \u2014 both should pass."
+        ]
+      },
+      {
+        "title": "Add a ninth _LOCAL_LEADS entry for a flat-fee free-LLM setup gig",
+        "description": "The eight _LOCAL_LEADS entries already cover transcription, OCR, listing copy, retainers, cleanup, image, translation, and recurring reports. The single most common Reddit/Fiverr listing in the current online lead batch is 'I cannot configure this myself' \u2014 a flat-fee setup for a free LLM key plus a five-prompt starter kit is the easiest money in the brief, and the local playbook should name it as a default fallback so reports without an LLM brief still surface it. No new secret, no new model call.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. No secret, no signup.",
+          "2. In bot/earning/code_techs.py, add a ninth entry to _LOCAL_LEADS titled 'Flat-fee free-LLM setup for non-technical owners' with source 'local-playbook' and labels ['free-ai-api', 'setup-service', 'flat-fee', 'repeatable'].",
+          "3. The body should say: 'Most small-business owners cannot pick a model, paste a key, or write a prompt. Charge a flat fee to configure one free LLM key inside a tool they already use, hand over a five-prompt starter kit, and let them keep the free key. Input cost is zero; the value is the setup.'",
+          "4. Re-run the cycle; the new lead appears in docs/code-tech-opportunities.md under 'Ranked Leads From Online Search' with its own outreach draft."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.36.1-20260830-002326",
+    "branch": null,
     "proposed_version": "1.36.1"
   },
   "last_earning": {
     "actions": [
       {
         "platform": "dev.to",
-        "success": false,
-        "skipped": true,
-        "error": "no fresh trending source or LLM output available",
-        "estimated_usd": 0.0
+        "success": true,
+        "title": "Three Culture Bugs That Kill Your Engineering Velocity",
+        "url": "https://dev.to/robust_true_try/three-culture-bugs-that-kill-your-engineering-velocity-4n5c",
+        "estimated_usd": 0.0,
+        "source_url": "https://newsletter.eng-leadership.com/p/good-culture-is-the-biggest-productivity",
+        "source_title": "Good Culture Is the Biggest Productivity Hack, Not AI"
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add a fixed-price 'free LLM setup' gig to the local playbook",
-      "description": "The eight _LOCAL_LEADS entries already cover transcription, OCR, listing copy, retainers, cleanup, image, translation, and recurring reports. The single most common Reddit/Fiverr listing in the current online lead batch is 'I cannot configure this myself' \u2014 a flat-fee setup for a free LLM key plus one prompt is the easiest money in the brief, and the local playbook should name it as a default fallback so reports without an LLM brief still surface it. No new secret, no new model call.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. No secret, no signup.",
-        "2. In bot/earning/code_techs.py, add a ninth entry to _LOCAL_LEADS titled 'Flat-fee free-LLM setup for non-technical owners' with source 'local-playbook' and labels ['free-ai-api', 'setup-service', 'flat-fee', 'repeatable'].",
-        "3. The body should say: 'Most small-business owners cannot pick a model, paste a key, or write a prompt. Charge a flat fee to configure one free LLM key inside a tool they already use, hand over a five-prompt starter kit, and let them keep the free key. Input cost is zero; the value is the setup.'",
-        "4. Re-run the cycle; the new lead appears in docs/code-tech-opportunities.md under 'Ranked Leads From Online Search' with its own outreach draft."
-      ]
-    },
-    {
       "title": "Pin the owner-reviewed outreach wording with a regression test",
-      "description": "Last cycle rewrote _outreach_draft so every lead's outreach_draft starts with 'Owner-reviewed draft \u2014 you send by hand after editing:' and never contains 'I will keep it simple'. There is no test that catches a future prompt tweak reverting that wording, and the report is the only public surface that distinguishes this project from a spam bot. A test against the existing _outreach_draft fixture locks the prefix in for good.",
+      "description": "Every lead's outreach_draft must start with 'Owner-reviewed draft \u2014 you send by hand after editing:' and never contain 'I will keep it simple'. There is no test guarding that wording today, and the report is the only public surface distinguishing this project from a spam bot. A regression test against _outreach_draft locks the prefix in for good and is purely a local change, no secret, no LLM call.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -125,21 +109,34 @@
       ]
     },
     {
-      "title": "Assert that _rank respects the research_and_article_publishing auto_pursue refusal",
-      "description": "The orchestrator comment in run() says 'auto_pursue ignored: research-only policy forbids posting comments', but no test pins that. A future contributor who deletes that warning and turns auto_pursue into a real call would silently start commenting on GitHub and Reddit from this account. A test that asserts _rank returns 0 pursued regardless of cfg['auto_pursue'] catches that drift at unit-test time, before the next cycle ships it.",
+      "title": "Assert _rank and run() never set pursued=True regardless of auto_pursue",
+      "description": "run() logs 'auto_pursue ignored: research-only policy forbids posting comments', but no test pins that. A future contributor who deletes that warning and turns auto_pursue into a real call would silently start commenting on GitHub and Reddit from this account. A test that asserts _rank returns 0 pursued and run() never executes a pursued branch catches that drift at unit-test time, before the next cycle ships it.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "1. No secret, no signup.",
-        "2. In bot/tests.py, add TestCodeTechOpportunities.test_rank_never_auto_pursues that calls _rank with cfg={'auto_pursue': True} and a single high-score lead.",
-        "3. Assert every returned Opportunity has pursued=False (rank does not even know about auto_pursue \u2014 the refusal lives in run()).",
-        "4. Add a second test test_run_never_pursues_even_when_auto_pursue_is_true that monkeypatches the 'pursued' branch in run() to record a call, sets cfg['auto_pursue']=True and a high max_items, and asserts no 'pursued' branch fired; the existing log line should be the only signal."
+        "2. In bot/tests.py, add TestCodeTechOpportunities.test_rank_never_auto_pursues that calls _rank with cfg={'auto_pursue': True} and a single high-score lead; assert every returned Opportunity has pursued=False.",
+        "3. Add TestCodeTechOpportunities.test_run_never_pursues_even_when_auto_pursue_is_true that monkeypatches the pursued branch in run() to record a call, sets cfg['auto_pursue']=True with a high max_items, and asserts no pursued branch fired; the existing log line should be the only signal.",
+        "4. Run python -m unittest bot.tests.TestCodeTechOpportunities.test_rank_never_auto_pursues bot.tests.TestCodeTechOpportunities.test_run_never_pursues_even_when_auto_pursue_is_true \u2014 both should pass."
+      ]
+    },
+    {
+      "title": "Add a ninth _LOCAL_LEADS entry for a flat-fee free-LLM setup gig",
+      "description": "The eight _LOCAL_LEADS entries already cover transcription, OCR, listing copy, retainers, cleanup, image, translation, and recurring reports. The single most common Reddit/Fiverr listing in the current online lead batch is 'I cannot configure this myself' \u2014 a flat-fee setup for a free LLM key plus a five-prompt starter kit is the easiest money in the brief, and the local playbook should name it as a default fallback so reports without an LLM brief still surface it. No new secret, no new model call.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. No secret, no signup.",
+        "2. In bot/earning/code_techs.py, add a ninth entry to _LOCAL_LEADS titled 'Flat-fee free-LLM setup for non-technical owners' with source 'local-playbook' and labels ['free-ai-api', 'setup-service', 'flat-fee', 'repeatable'].",
+        "3. The body should say: 'Most small-business owners cannot pick a model, paste a key, or write a prompt. Charge a flat fee to configure one free LLM key inside a tool they already use, hand over a five-prompt starter kit, and let them keep the free key. Input cost is zero; the value is the setup.'",
+        "4. Re-run the cycle; the new lead appears in docs/code-tech-opportunities.md under 'Ranked Leads From Online Search' with its own outreach draft."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 126,
+  "last_cycle_seconds": 171,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -226,8 +223,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-08-29",
-    "published": 24
+    "date": "2026-08-30",
+    "published": 25
   },
   "code_tech_earning": {
     "enabled": true,
@@ -639,7 +636,8 @@
       "github.com/zedeus/nitter/issues/1442",
       "dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
       "blog.cloudflare.com/dns-cache-memory-optimization-1111",
-      "anil.recoil.org/notes/rumour-is-the-exploit"
+      "anil.recoil.org/notes/rumour-is-the-exploit",
+      "newsletter.eng-leadership.com/p/good-culture-is-the-biggest-productivity"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -665,7 +663,8 @@
       "nitter xcancel receive cease desist notic",
       "reading twitter x practical nitter alternativ 2024",
       "saving 100 terabyt memory optimizing 1 1 1 1 s dns cache",
-      "just rumour bug enough find exploit these days"
+      "just rumour bug enough find exploit these days",
+      "good culture biggest productivity hack ai"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -691,7 +690,8 @@
       "reading twitter x practical nitter alternativ 2024",
       "self hosted nitter instance gets banned",
       "memory cache uses 10x more ram than",
-      "rumor become exploit anyone report bug"
+      "rumor become exploit anyone report bug",
+      "three culture bugs kill engineering velocity"
     ],
     "followed_up_ids": [
       4489474
@@ -705,7 +705,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-30T00:21:34.822385+00:00",
+    "checked_at": "2026-08-30T06:41:41.607395+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -910,14 +910,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.36.1-20260830-002326",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 11,
-    "total_views": 801,
-    "avg_views": 72.8,
+    "total_views": 881,
+    "avg_views": 80.1,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 570,
+    "best_views": 650,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",

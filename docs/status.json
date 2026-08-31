@@ -1,7 +1,7 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-08-31T20:06:59.285925+00:00",
-  "total_runs": 1736,
+  "last_run": "2026-08-31T23:52:00.045937+00:00",
+  "total_runs": 1737,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -31,11 +31,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.36.0",
-    "summary": "Add a graceful, deterministic skip in _pick_source when the trending fetch raises an unexpected exception shape so the daily article still publishes nothing (correct) instead of crashing the whole earnings cycle.",
+    "summary": "Bump newsletter deduplication to also reject a fresh issue whose body reuses a title that has already appeared in a past published newsletter, preventing month-to-month headline recycling on dev.to.",
     "changes_applied": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "Hardening fix for _pick_source: trending.fetch_candidates can raise on a bad response body (parse error mid-fetch, a feed that returns HTML instead of XML, a TypeError from a malformed timestamp). Today the bare except already catches that, but a non-list return -- e.g. an HN Algolia response with an unexpected shape, or a future source returning a dict -- would crash later in the for-loop with TypeError on iteration. Add an isinstance check and log it, so a bad fetch degrades to 'publish nothing' (correct behaviour) instead of crashing the whole earning cycle. Also defensively skip non-dict items in the candidate loop, since a stray string from a misbehaving feed would AttributeError on .get(). This is a one-file patch that makes the daily article genuinely crash-safe on the trending pipeline."
+        "file": "bot/earning/newsletter.py",
+        "reason": "Adds a deterministic duplicate-headline gate to the newsletter module so two issues in a row cannot share a title, the most visible form of repetition on a dev.to byline. Mirrors articles._duplicate_reason in shape (returns a reason string for the operator's log) and uses the existing trending.normalize_title stemmer, so a near-identical headline like 'This Week in Dev' / 'This Weeks in Dev' / 'This Weeks of Dev' is also rejected. Three concrete edits: (1) newsletter_history now carries a bounded 'titles' list seeded by _record_issue, (2) _generate_issue runs _duplicate_title_reason before any expensive gate so a recycled headline fails fast without burning a fabrication or tone check, (3) _record_issue is called with the resolved issue title so the very issue that just shipped is the one that becomes a future refusal. Behavioural change is narrow: an issue with a repeated headline now publishes nothing instead of silently going out, and the existing cadence/refresh logic is untouched. The patch is reviewable in isolation because every new symbol (_duplicate_title_reason, the 'titles' key, the extra arg to _record_issue) has a single caller."
       }
     ],
     "suggestions": [
@@ -66,21 +66,22 @@
         ]
       },
       {
-        "title": "Bind a custom domain to the GitHub Pages dashboard",
-        "description": "docs/index.html is a static fallback; once the React build is published the dashboard lives at https://<owner>.github.io/<repo>/. A custom domain (CNAME) costs nothing and makes the byline easier to share when pitching the newsletter idea to readers.",
+        "title": "Add a 'titles' history to newsletter_history and reject duplicates",
+        "description": "Right now newsletter_history only tracks source_urls and source_titles per story; nothing stops the LLM from generating a digest titled 'This Week in Dev' two issues in a row. Add a bounded 'titles' list and reject an issue whose headline normalizes to one already shipped, the same way articles._duplicate_reason does. Tiny, reviewable, and prevents a visible repetition on dev.to.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Decide on a short subdomain you own (e.g. dashboard.example.com).",
-          "2. In your DNS provider, add a CNAME record pointing that subdomain to <owner>.github.io.",
-          "3. In the GitHub repo go to Settings -> Pages -> Custom domain, enter the subdomain, and click Save.",
-          "4. Wait for the green checkmark, then tick 'Enforce HTTPS'. The next cycle's dashboard will load at the new URL."
+          "1. Read bot/earning/newsletter.py and the _history/_record_issue helpers.",
+          "2. Add 'titles': [] to newsletter_history in _history() and bounded_append the normalized headline inside _record_issue().",
+          "3. Before devto.publish(), normalize the proposed title via trending.normalize_title and refuse with a 'duplicate newsletter headline' log line if it matches a stored entry.",
+          "4. Add a regression test asserting two consecutive issues with the same title result in only one publish.",
+          "5. Commit on a review branch and request owner review."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.36.1-20260831-200808",
+    "branch": "evolve/1.36.1-20260831-235234",
     "proposed_version": "1.36.1"
   },
   "last_earning": {
@@ -115,21 +116,22 @@
       ]
     },
     {
-      "title": "Bind a custom domain to the GitHub Pages dashboard",
-      "description": "docs/index.html is a static fallback; once the React build is published the dashboard lives at https://<owner>.github.io/<repo>/. A custom domain (CNAME) costs nothing and makes the byline easier to share when pitching the newsletter idea to readers.",
+      "title": "Add a 'titles' history to newsletter_history and reject duplicates",
+      "description": "Right now newsletter_history only tracks source_urls and source_titles per story; nothing stops the LLM from generating a digest titled 'This Week in Dev' two issues in a row. Add a bounded 'titles' list and reject an issue whose headline normalizes to one already shipped, the same way articles._duplicate_reason does. Tiny, reviewable, and prevents a visible repetition on dev.to.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Decide on a short subdomain you own (e.g. dashboard.example.com).",
-        "2. In your DNS provider, add a CNAME record pointing that subdomain to <owner>.github.io.",
-        "3. In the GitHub repo go to Settings -> Pages -> Custom domain, enter the subdomain, and click Save.",
-        "4. Wait for the green checkmark, then tick 'Enforce HTTPS'. The next cycle's dashboard will load at the new URL."
+        "1. Read bot/earning/newsletter.py and the _history/_record_issue helpers.",
+        "2. Add 'titles': [] to newsletter_history in _history() and bounded_append the normalized headline inside _record_issue().",
+        "3. Before devto.publish(), normalize the proposed title via trending.normalize_title and refuse with a 'duplicate newsletter headline' log line if it matches a stored entry.",
+        "4. Add a regression test asserting two consecutive issues with the same title result in only one publish.",
+        "5. Commit on a review branch and request owner review."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 70,
+  "last_cycle_seconds": 35,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -701,7 +703,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-31T20:06:59.755373+00:00",
+    "checked_at": "2026-08-31T23:52:00.416701+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -906,7 +908,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.36.1-20260831-200808",
+  "last_evolution_branch": "evolve/1.36.1-20260831-235234",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 12,

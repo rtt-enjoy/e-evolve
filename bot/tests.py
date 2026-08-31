@@ -38,6 +38,7 @@ from bot.earning.devto import (
 	tone_problems as _tone_problems,
 )
 import bot.earning.articles as articles_module
+import bot.earning.trending as trending_module
 import bot.earning.devto_stats as devto_stats
 import bot.earning.mrr_ideas as mrr_module
 import bot.evolution as evolution_module
@@ -160,8 +161,17 @@ class TestTrendingSourcing(unittest.TestCase):
 		self.assertTrue(is_technical(
 			{"source": "hacker-news", "title": "Self-hosted distributed Durable Objects", "summary": ""}))
 
-	def test_topic_scoped_feeds_bypass_keyword_filter(self):
-		self.assertTrue(is_technical({"source": "medium:python", "title": "A Story", "summary": ""}))
+	def test_curated_feeds_bypass_keyword_filter(self):
+		# InfoQ, the Go blog and friends are edited, so their scoping is trusted.
+		self.assertTrue(is_technical({"source": "infoq", "title": "A Story", "summary": ""}))
+
+	def test_open_submission_feeds_are_screened(self):
+		# Medium tags are open-submission: the feed name guarantees nothing, and
+		# untechnical personal essays used to reach the candidate pool this way.
+		self.assertFalse(is_technical(
+			{"source": "medium:python", "title": "I Just Want to Grow Into This One", "summary": ""}))
+		self.assertTrue(is_technical(
+			{"source": "medium:python", "title": "Async Database Pooling in Python", "summary": ""}))
 
 	def test_dedupe_collapses_tracking_params_and_case(self):
 		items = [
@@ -186,6 +196,147 @@ class TestTrendingSourcing(unittest.TestCase):
 			self.assertIsNone(_pick_source({}))
 		finally:
 			articles_module.trending.fetch_candidates = original
+
+
+class TestSourceAuthorityRanking(unittest.TestCase):
+	"""Feed items used to score a flat 20, which tied most of the pool together
+    and let recency alone pick the source. Authority must break that tie."""
+
+	def test_edited_publisher_outranks_medium_tag_feed(self):
+		self.assertGreater(
+			trending_module._feed_score("github-blog", True),
+			trending_module._feed_score("medium:programming", True),
+		)
+
+	def test_authority_beats_recency(self):
+		# A dated Medium post must still lose to a dated reputable publisher.
+		self.assertGreater(
+			trending_module._feed_score("infoq", True),
+			trending_module._feed_score("medium:python", True),
+		)
+
+	def test_unknown_source_gets_default_not_zero(self):
+		self.assertGreater(trending_module._feed_score("brand-new-feed", True), 0)
+
+	def test_spam_titles_rejected(self):
+		for title in (
+			"13 Reliable Platforms to Buy Gmail Accounts",
+			"Buy Verified Stripe Accounts Cheap",
+			"Top 10 Sites to Learn Rust",
+		):
+			self.assertTrue(trending_module.is_spam({"title": title}), title)
+
+	def test_legitimate_titles_not_flagged_as_spam(self):
+		for title in (
+			"Why Your In-Memory Cache Uses 10x More RAM Than It Should",
+			"Buying Guide for Rust Crates",
+			"Zig: Pointer Stability for ArrayLists",
+		):
+			self.assertFalse(trending_module.is_spam({"title": title}), title)
+
+
+class TestReaderInterestAnalysis(unittest.TestCase):
+	def _posts(self, spec):
+		return [
+			{"id": i, "title": t, "tags": [], "page_views": v,
+			 "reactions": r, "comments": 0, "published_at": ""}
+			for i, (t, v, r) in enumerate(spec)
+		]
+
+	def test_classifies_known_shapes(self):
+		self.assertEqual(
+			devto_stats.classify("Recover a Bricked Framework 13 with a DIY USB Flash"),
+			"problem-workaround")
+		self.assertEqual(
+			devto_stats.classify("Deploying Meta's Llama 3 in a Production Python Service"),
+			"build-tutorial")
+		self.assertEqual(
+			devto_stats.classify("Why Your In-Memory Cache Uses 10x More RAM"),
+			"surprising-behavior")
+
+	def test_report_ranks_archetype_by_average_not_volume(self):
+		# One strong workaround post must beat three quiet tutorials.
+		posts = self._posts([
+			("Recover a Bricked Laptop", 600, 5),
+			("Building a Thing", 5, 0),
+			("Building Another Thing", 5, 0),
+			("Deploying a Third Thing", 5, 0),
+		])
+		report = devto_stats.interest_report(posts)
+		self.assertEqual(report["best_archetype"], "problem-workaround")
+
+	def test_no_steering_until_sample_is_large_enough(self):
+		posts = self._posts([("Recover a Bricked Laptop", 600, 5)])
+		self.assertEqual(devto_stats.preferred_archetypes(devto_stats.interest_report(posts)), [])
+
+	def test_no_steering_when_nothing_earned_engagement(self):
+		posts = self._posts([(f"Building Thing {i}", 0, 0) for i in range(8)])
+		self.assertEqual(devto_stats.preferred_archetypes(devto_stats.interest_report(posts)), [])
+
+	def test_steers_once_evidence_exists(self):
+		posts = self._posts(
+			[("Recover a Bricked Laptop", 600, 5)] + [(f"Building Thing {i}", 0, 0) for i in range(7)]
+		)
+		self.assertIn(
+			"problem-workaround",
+			devto_stats.preferred_archetypes(devto_stats.interest_report(posts)),
+		)
+
+	def test_empty_input_is_safe(self):
+		report = devto_stats.interest_report([])
+		self.assertEqual(report["sample_size"], 0)
+		self.assertEqual(devto_stats.preferred_archetypes(report), [])
+
+
+class TestAudienceSteering(unittest.TestCase):
+	_PROVEN = {
+		"archetypes": [{"archetype": "problem-workaround", "count": 7,
+						"avg_engagement": 90.0, "avg_views": 90.0, "best_title": "x"}],
+		"best_archetype": "problem-workaround",
+		"worst_archetype": "build-tutorial",
+		"sample_size": 8,
+	}
+
+	def test_proven_archetype_wins_a_close_call(self):
+		candidates = [
+			{"title": "Building a Kubernetes Operator", "score": 63},
+			{"title": "When Your Postgres Replica Gets Banned", "score": 55},
+		]
+		ordered = articles_module._prefer_proven_archetypes(candidates, {"article_interest": self._PROVEN})
+		self.assertIn("Banned", ordered[0]["title"])
+
+	def test_archetype_bonus_cannot_rescue_a_weak_source(self):
+		# The whole point of authority ranking is that a low-credibility feed
+		# does not get promoted just because its title matches a keyword.
+		candidates = [
+			{"title": "Cloudflare Workers Accept Inbound TCP", "score": 63},
+			{"title": "Stop Typing Code. Start Building by Voice.", "score": 26},
+		]
+		ordered = articles_module._prefer_proven_archetypes(candidates, {"article_interest": self._PROVEN})
+		self.assertIn("Cloudflare", ordered[0]["title"])
+
+	def test_steering_preserves_all_candidates(self):
+		candidates = [{"title": f"Building Thing {i}", "score": i} for i in range(5)]
+		ordered = articles_module._prefer_proven_archetypes(candidates, {"article_interest": self._PROVEN})
+		self.assertEqual(len(ordered), 5)
+
+	def test_no_interest_data_leaves_order_untouched(self):
+		candidates = [{"title": "B", "score": 2}, {"title": "A", "score": 1}]
+		self.assertEqual(
+			articles_module._prefer_proven_archetypes(candidates, {}), candidates)
+
+	def test_guidance_empty_without_evidence(self):
+		self.assertEqual(articles_module._audience_guidance({}), "")
+
+	def test_guidance_mentions_proven_archetype(self):
+		text = articles_module._audience_guidance({"article_interest": self._PROVEN})
+		self.assertIn("problem-workaround", text)
+		self.assertIn("AUDIENCE EVIDENCE", text)
+
+	def test_guidance_does_not_leak_into_article(self):
+		# The model must be told not to write about the account's own stats.
+		text = articles_module._audience_guidance({"article_interest": self._PROVEN})
+		self.assertIn("Do not mention this evidence", text)
 
 
 class TestFabricationDetection(unittest.TestCase):

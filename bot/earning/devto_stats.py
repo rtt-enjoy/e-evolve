@@ -167,3 +167,126 @@ def winning_tags(articles: list[dict[str, Any]], top_n: int = 6) -> list[str]:
 	averaged = [(sum(v) / len(v), tag) for tag, v in buckets.items()]
 	averaged.sort(reverse=True)
 	return [tag for _, tag in averaged[:top_n]]
+
+
+# --- Reader-interest analysis -------------------------------------------------
+#
+# Tags alone were the only feedback this module produced, and on a young account
+# they are close to noise: one post that happened to land sets the "winning"
+# tags for everything after it. What actually predicts engagement is the *kind*
+# of article, so classify each post into an archetype and score the archetypes.
+#
+# Each archetype is (name, keyword patterns). Matching is on title text, which is
+# what a reader in the feed actually judges the post by.
+_ARCHETYPES: tuple[tuple[str, tuple[str, ...]], ...] = (
+	# A concrete thing broke and here is the way out. Historically the account's
+	# strongest performer.
+	("problem-workaround", (
+		"fix", "fixed", "broke", "broken", "bricked", "recover", "repair",
+		"banned", "blocked", "without", "alternative", "workaround", "escape",
+		"migrate off", "replace", "stop", "avoid", "when your",
+	)),
+	# A belief the reader holds is wrong.
+	("myth-correction", (
+		"wrong", "myth", "actually", "isn't", "is not", "lying", "misleading",
+		"mistake", "mistakes", "anti-pattern", "stop using", "don't", "truth",
+	)),
+	# A surprising measured or observed behaviour.
+	("surprising-behavior", (
+		"why", "10x", "slower", "faster", "leak", "leaks", "surprising",
+		"unexpected", "hidden", "gotcha", "silently", "more ram", "more memory",
+	)),
+	# Build/deploy walkthrough. The account's most common output and its weakest.
+	("build-tutorial", (
+		"build", "building", "deploy", "deploying", "create", "creating",
+		"implement", "implementing", "setting up", "set up", "how to",
+		"getting started", "pipeline", "integrate",
+	)),
+	# Team, process, and career.
+	("engineering-culture", (
+		"team", "culture", "velocity", "review", "process", "hiring", "career",
+		"productivity", "burnout", "management", "onboarding",
+	)),
+	# Security and privacy exposure.
+	("security-privacy", (
+		"security", "secure", "exploit", "vulnerability", "cve", "attack",
+		"privacy", "surveillance", "leak", "malicious", "backdoor", "border",
+	)),
+)
+
+_UNCLASSIFIED = "other"
+
+
+def classify(title: str, tags: Optional[list] = None) -> str:
+	"""Bucket an article title into a reader-interest archetype.
+
+    First match wins, and the tuple is ordered by how distinctive each archetype
+    is -- "build-tutorial" keywords are generic enough that a more specific
+    archetype should claim the post first.
+    """
+	text = str(title or "").lower()
+	if tags:
+		text += " " + " ".join(str(t).lower() for t in tags)
+	for name, keywords in _ARCHETYPES:
+		if any(k in text for k in keywords):
+			return name
+	return _UNCLASSIFIED
+
+
+def interest_report(articles: list[dict[str, Any]]) -> dict[str, Any]:
+	"""Which kinds of article this audience actually reads.
+
+    Returns {archetypes: [...], best_archetype, worst_archetype, sample_size}.
+    Each archetype entry carries its post count and mean engagement, so a single
+    lucky post cannot be mistaken for a repeatable pattern -- ``count`` is
+    reported alongside the average precisely so a caller can discount n=1.
+    """
+	if not articles:
+		return {"archetypes": [], "best_archetype": "", "worst_archetype": "", "sample_size": 0}
+
+	buckets: dict[str, list[dict[str, Any]]] = {}
+	for art in articles:
+		kind = classify(art.get("title", ""), art.get("tags"))
+		buckets.setdefault(kind, []).append(art)
+
+	rows: list[dict[str, Any]] = []
+	for kind, posts in buckets.items():
+		scores = [engagement_score(p) for p in posts]
+		views = [int(p.get("page_views", 0)) for p in posts]
+		rows.append({
+			"archetype": kind,
+			"count": len(posts),
+			"avg_engagement": round(sum(scores) / len(scores), 1),
+			"avg_views": round(sum(views) / len(views), 1),
+			"best_title": max(posts, key=engagement_score).get("title", ""),
+		})
+	rows.sort(key=lambda r: r["avg_engagement"], reverse=True)
+
+	return {
+		"archetypes": rows,
+		"best_archetype": rows[0]["archetype"] if rows else "",
+		"worst_archetype": rows[-1]["archetype"] if rows else "",
+		"sample_size": len(articles),
+	}
+
+
+# An archetype backed by a single post is a coincidence, not a pattern. Below
+# this many posts the report is still written (it is the raw material for the
+# next one) but callers must not steer article selection by it.
+_MIN_CONFIDENT_SAMPLE = 6
+
+
+def preferred_archetypes(report: dict[str, Any], limit: int = 2) -> list[str]:
+	"""Archetypes worth steering toward, best first, or [] when not yet earned.
+
+    Returns nothing until the account has enough posts and at least one
+    archetype has actually earned engagement. Steering on an all-zero history
+    would just lock in whatever was published first.
+    """
+	rows = report.get("archetypes") or []
+	if int(report.get("sample_size", 0)) < _MIN_CONFIDENT_SAMPLE:
+		return []
+	earning = [r for r in rows if float(r.get("avg_engagement", 0)) > 0]
+	if not earning:
+		return []
+	return [r["archetype"] for r in earning[:limit]]

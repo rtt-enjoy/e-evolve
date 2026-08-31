@@ -170,23 +170,37 @@ identical posts on dev.to. Each article starts from a real trending piece:
 
 1. `trending.fetch_candidates()` pulls tech stories from the last 24h via free,
    keyless public feeds: HN front page (Algolia API), TLDR, InfoQ, Lobsters,
-   HackerNoon, dev.to, Smashing, GitHub Blog, Medium tag RSS, HackerRank blog.
-2. HN items are keyword-screened by `is_technical()` — its front page also
-   carries science/culture stories that make bad developer articles. Feed-based
-   sources are already topic-scoped and bypass the filter.
-3. `_pick_source()` takes the highest-ranked candidate not in
+   HackerNoon, dev.to, Smashing, GitHub Blog, Medium tag RSS, HackerRank blog,
+   plus named engineering blogs whose masthead a developer recognises —
+   Cloudflare, Netflix Tech, Stack Overflow, Martin Fowler, AWS Architecture,
+   Google Cloud, GitLab, the Go/Rust/Python release blogs, Chrome for
+   Developers, and Mozilla Hacks.
+2. **Sources are ranked by editorial authority** (`trending._AUTHORITY`), not by
+   recency alone. Every feed item used to score a flat `20`, which left ~26 of
+   40 candidates tied and made recency the only tiebreak — so a random Medium
+   tag-feed post ranked level with InfoQ, and the bot wrote articles from
+   sources nobody has heard of (`kibotronics.net`, a 1978 essay on "solid state
+   intelligence"). `_feed_score()` now returns authority + a small recency
+   bonus. Medium tag feeds are open-submission and capped at
+   `_MEDIUM_AUTHORITY` so they can never outrank an edited publication.
+3. Open-submission sources — HN, HackerNoon, dev.to, and every Medium tag — are
+   keyword-screened by `is_technical()`; curated single-publisher feeds are
+   edited, so their scoping is trusted. `is_spam()` additionally rejects
+   affiliate/listicle spam ("13 Reliable Platforms to Buy Gmail Accounts"),
+   which reached the candidate pool because only HN was being screened.
+4. `_pick_source()` takes the highest-ranked candidate not in
    `status["article_history"]`, so a source is used at most once, ever. If the
    candidate is on a paywalled host (`trending._PAYWALLED_HOSTS`) and its feed
    summary is too thin to write from, `trending.unlock_summary()` fetches the
    full text once via the public `freedium-mirror.cfd` mirror. If the mirror is
    down or returns nothing useful, that candidate is skipped and the next one is
    tried — the mirror is never required for a cycle to succeed.
-4. The LLM writes an *improved, original* article on that subject. The system
+5. The LLM writes an *improved, original* article on that subject. The system
    prompt forbids rewording and requires added value (working code, tradeoffs,
    failure modes) plus a `## Source` attribution section. It also fixes the
    **voice**: plain-spoken, short sentences, "you"/"I", no hype, no jargon, and a
    skimmable heading structure where each `##` states an outcome, not a topic.
-5. Gates run before publishing, in this order:
+6. Gates run before publishing, in this order:
    - `_strip_fabricated_tables()` — deletes invented spec tables (latency,
      parameter counts, prices) but keeps the surrounding prose. Deterministic,
      so it costs no LLM call.
@@ -236,6 +250,40 @@ post was a blind guess. `devto_stats` closes that loop by reading
   used once on a hit is not buried by a tag used twenty times on quiet posts.
 - Every function returns empty/None on failure. Stats are an optimisation: a
   dev.to outage must never stop the day's article.
+
+**Which articles readers actually want (`interest_report`).** Tags were the only
+feedback this loop produced, and on a young account they are close to noise —
+one post that happened to land sets the "winning" tags for everything after it.
+What predicts engagement is the *kind* of article, so `classify()` buckets each
+post into an archetype (`problem-workaround`, `myth-correction`,
+`surprising-behavior`, `build-tutorial`, `engineering-culture`,
+`security-privacy`) and `interest_report()` ranks the archetypes by **mean**
+engagement, reporting `count` alongside so an n=1 fluke is visible as one.
+
+On the real account this immediately showed that `problem-workaround` earns
+roughly 25x the engagement of `build-tutorial` — and `build-tutorial` was the
+most common thing the bot published. That finding is the point of the feature.
+
+The result feeds two places, and only once it is trustworthy:
+
+- `articles._prefer_proven_archetypes()` re-ranks candidate sources. The
+  archetype match is a **bounded bonus on top of** the authority score
+  (`_ARCHETYPE_BONUS`), never a replacement for it. Sorting by archetype alone
+  let a score-26 Medium post outrank a score-63 InfoQ story purely because its
+  title contained "stop" — caught in end-to-end testing and fixed.
+- `articles._audience_guidance()` appends the measured evidence to the writing
+  prompt, so the article's angle and title are shaped by it. The prompt
+  explicitly forbids mentioning the account or its statistics in the article.
+
+`preferred_archetypes()` returns `[]` — no steering at all — until the account
+has at least `_MIN_CONFIDENT_SAMPLE` (6) posts **and** some archetype has
+actually earned engagement. Steering on an all-zero history would just entrench
+whatever happened to be published first.
+
+`status["article_interest"]` holds the report. Stats now refresh on **every**
+path via `articles._refresh_stats()`, not just the follow-up path: the guards
+for `followup_enabled` and `skip followup` used to return before the fetch, so
+turning follow-ups off silently froze the reach data the fresh path depends on.
 
 **Follow-up articles.** When a recent post has earned real attention,
 the next article is a *deeper sequel* to it rather than a cold trending guess:
@@ -461,7 +509,7 @@ status report            # dump full status to workflow log
 Keys prefixed `_` are runtime-only and not persisted.
 
 Earning modules own their own sub-trees alongside the above: `article_daily` /
-`article_history` / `article_stats` (articles), `newsletter_daily` / `newsletter_history`
+`article_history` / `article_stats` / `article_interest` (articles), `newsletter_daily` / `newsletter_history`
 (newsletter), `code_tech_earning` (code_techs), and `mrr_ideas` /
 `mrr_ideas_history` (mrr_ideas). Every list stored in these is bounded by the
 module's `history_limit` so `status.json` cannot grow without end.

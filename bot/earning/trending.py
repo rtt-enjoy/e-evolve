@@ -25,6 +25,11 @@ log = logging.getLogger(__name__)
 _UA = "e-evolve-trending/1.0 read-only article research"
 
 # Public RSS/Atom feeds. All are free, keyless, and publisher-sanctioned.
+#
+# Ordered by editorial authority, which is what `_AUTHORITY` below encodes. A
+# story that cleared an editor at InfoQ or shipped on the GitHub engineering
+# blog is a better article subject than an arbitrary Medium tag-feed post, and
+# readers can tell the difference in the first paragraph.
 _FEEDS = [
 	("tldr", "https://tldr.tech/api/rss/tech"),
 	("infoq", "https://feed.infoq.com/"),
@@ -33,7 +38,49 @@ _FEEDS = [
 	("devto-top", "https://dev.to/feed/tag/programming"),
 	("smashing", "https://www.smashingmagazine.com/feed/"),
 	("github-blog", "https://github.blog/feed/"),
+	# Named engineering blogs and outlets. These carry the stories a developer
+	# audience already recognises, which is the point of "famous source".
+	("aws-arch", "https://aws.amazon.com/blogs/architecture/feed/"),
+	("cloudflare", "https://blog.cloudflare.com/rss/"),
+	("netflix-tech", "https://netflixtechblog.com/feed"),
+	("stackoverflow", "https://stackoverflow.blog/feed/"),
+	("martinfowler", "https://martinfowler.com/feed.atom"),
+	("gcp-blog", "https://cloudblog.withgoogle.com/rss/"),
+	("gitlab", "https://about.gitlab.com/atom.xml"),
+	("go-blog", "https://go.dev/blog/feed.atom"),
+	("rust-blog", "https://blog.rust-lang.org/feed.xml"),
+	("python-insider", "https://blog.python.org/feeds/posts/default"),
+	("chrome-dev", "https://developer.chrome.com/static/blog/feed.xml"),
+	("mozilla-hacks", "https://hacks.mozilla.org/feed/"),
 ]
+
+# Editorial authority per source, 0-100. This is the fix for a real ranking
+# bug: every feed item used to score a flat 20, which left ~26 of 40 candidates
+# tied and made recency the only tiebreak. A Medium tag-feed post then ranked
+# level with InfoQ, and the bot wrote articles from sources no reader has heard
+# of. Higher here means "a developer audience recognises this masthead".
+_AUTHORITY = {
+	"github-blog": 62,
+	"martinfowler": 62,
+	"rust-blog": 60,
+	"go-blog": 60,
+	"python-insider": 60,
+	"cloudflare": 58,
+	"netflix-tech": 56,
+	"infoq": 55,
+	"stackoverflow": 55,
+	"chrome-dev": 54,
+	"mozilla-hacks": 54,
+	"lobsters": 52,
+	"aws-arch": 50,
+	"gcp-blog": 50,
+	"gitlab": 48,
+	"tldr": 46,
+	"smashing": 44,
+	"devto-top": 34,
+	"hackernoon": 26,
+	"hackerrank": 24,
+}
 
 # Medium tag feeds are public RSS -- no scraping needed for these.
 _MEDIUM_TAGS = [
@@ -46,6 +93,24 @@ _MEDIUM_TAGS = [
 
 # HackerRank's blog exposes a WordPress-style feed.
 _HACKERRANK_FEED = "https://www.hackerrank.com/blog/feed/"
+
+# Medium tag feeds are open-submission: anyone can publish to a tag. They stay
+# in the pool for coverage but must never outrank an edited publication.
+_MEDIUM_AUTHORITY = 18
+_DEFAULT_AUTHORITY = 20
+
+def _feed_score(source: str, dated: bool) -> int:
+	"""Rank a feed item by how much authority its publisher carries.
+
+    Recency is a small bonus, not the deciding factor: a two-day-old GitHub
+    Blog post is a better article subject than a fresh anonymous tag-feed post.
+    """
+	if source.startswith("medium:"):
+		base = _MEDIUM_AUTHORITY
+	else:
+		base = _AUTHORITY.get(source, _DEFAULT_AUTHORITY)
+	return base + (8 if dated else 0)
+
 
 _MIN_TITLE_LEN = 20
 _MAX_PER_SOURCE = 8
@@ -80,7 +145,7 @@ def fetch_candidates(max_age_hours: int = 24, limit: int = 40) -> list[dict[str,
 		items.extend(_fetch_feed(f"medium:{tag}", f"https://medium.com/feed/tag/{quote_plus(tag)}", cutoff))
 	items.extend(_fetch_feed("hackerrank", _HACKERRANK_FEED, cutoff))
 
-	relevant = [i for i in _dedupe(items) if is_technical(i)]
+	relevant = [i for i in _dedupe(items) if is_technical(i) and not is_spam(i)]
 	relevant.sort(key=lambda i: (i.get("score", 0), i.get("published_at") or ""), reverse=True)
 	return relevant[:limit]
 
@@ -108,14 +173,39 @@ _TECH_TERMS = {
 }
 
 
+# Open-submission sources: anyone can publish into these, so the feed's own
+# topic scoping guarantees nothing. Medium tag feeds delivered both outright spam
+# ("13 Reliable Platforms to Buy Gmail Accounts") and non-technical personal
+# essays into the candidate pool, because only Hacker News was being screened.
+_UNSCREENED_SOURCES = ("hacker-news", "hackernoon", "devto-top")
+
+# Titles matching these never make a good developer article, whatever the feed.
+_SPAM_PATTERNS = (
+	r"\bbuy\s+\w+\s+accounts?\b",
+	r"\b(?:best|top)\s+\d+\s+(?:sites?|places?|platforms?|websites?)\b",
+	r"\bbuy\s+(?:verified|aged|cheap|bulk)\b",
+	r"\b(?:casino|betting|essay writing|write my|coupon|promo code)\b",
+	r"\bfollowers?\s+for\s+sale\b",
+	r"\b(?:crypto|forex)\s+signals?\b",
+)
+
+
+def is_spam(item: dict[str, Any]) -> bool:
+	"""True for listicle/affiliate spam that leaks in through open feeds."""
+	title = str(item.get("title", "")).lower()
+	return any(re.search(p, title) for p in _SPAM_PATTERNS)
+
+
 def is_technical(item: dict[str, Any]) -> bool:
 	"""True when a candidate looks like engineering content.
 
-    Feed-based sources are already topic-scoped by the feed itself; only the
-    open-ended HN front page needs keyword screening.
+    Curated single-publisher feeds (InfoQ, the Go blog, Cloudflare) are edited,
+    so their scoping can be trusted. Open-submission sources cannot be: Hacker
+    News carries science and culture stories, and a Medium tag is whatever the
+    author typed. Both get keyword-screened.
     """
 	source = str(item.get("source", ""))
-	if source != "hacker-news":
+	if not (source in _UNSCREENED_SOURCES or source.startswith("medium:")):
 		return True
 	text = f"{item.get('title', '')} {item.get('summary', '')}".lower()
 	words = set(re.split(r"[^a-z0-9+#-]+", text))
@@ -223,8 +313,10 @@ def _fetch_feed(source: str, feed_url: str, cutoff: datetime) -> list[dict[str, 
 			"source": source,
 			"summary": _strip_html(summary)[:1200],
 			"published_at": published.isoformat() if published else "",
-			# Feeds carry no engagement metric; score by recency presence only.
-			"score": 20 if published else 10,
+			# Feeds carry no engagement metric, so rank them by the credibility
+			# of the masthead instead. A flat score here used to tie most of the
+			# pool together and let recency alone decide.
+			"score": _feed_score(source, published is not None),
 		})
 		if len(out) >= _MAX_PER_SOURCE:
 			break

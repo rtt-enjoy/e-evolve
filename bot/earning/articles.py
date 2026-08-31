@@ -297,6 +297,7 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 		"source. Your title must differ from the source title. Follow every "
 		"formatting and source-handling rule in the system prompt, including the "
 		"TITLE and TAGS rules. JSON only."
+		+ _audience_guidance(status)
 	)
 
 	try:
@@ -430,6 +431,103 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 	return candidate
 
 
+# What each archetype means as a writing instruction. Kept next to the prompt
+# builder because this is editorial direction, not analysis -- the analysis
+# lives in devto_stats.
+# How much a proven archetype is worth when ranking sources, in trending-score
+# points. Deliberately smaller than the authority gap between an edited
+# publisher and an open tag feed (see trending._AUTHORITY), so interest breaks
+# ties between comparable sources rather than promoting a weak one.
+_ARCHETYPE_BONUS = 12.0
+_ARCHETYPE_BONUS_STEP = 4.0
+
+_ARCHETYPE_ANGLES = {
+	"problem-workaround": (
+		"Frame it as a concrete thing that breaks and the way out. Name the "
+		"failure in the title. Readers of this account turn up for a specific "
+		"broken situation plus a working escape route."
+	),
+	"myth-correction": (
+		"Frame it as a belief the reader probably holds that turns out to be "
+		"wrong, then show what is actually true and what to do instead."
+	),
+	"surprising-behavior": (
+		"Frame it around behaviour that surprises a competent engineer -- "
+		"something that costs more, runs slower, or fails more quietly than "
+		"expected -- and explain the mechanism behind it."
+	),
+	"security-privacy": (
+		"Frame it around concrete exposure: what an attacker or an observer can "
+		"actually see or do, and the specific change that closes it."
+	),
+	"engineering-culture": (
+		"Frame it around how a team's habits produce a technical outcome, with "
+		"specific practices rather than general advice."
+	),
+	"build-tutorial": (
+		"Frame it as a build, but lead with the non-obvious part rather than the "
+		"setup steps."
+	),
+}
+
+
+def _audience_guidance(status: dict) -> str:
+	"""Extra prompt text describing what this account's readers actually read.
+
+    Empty until the interest report is backed by enough posts to be a signal
+    rather than a coincidence -- steering the model on an all-zero history would
+    just entrench whatever happened to be published first.
+    """
+	report = status.get("article_interest") or {}
+	preferred = devto_stats.preferred_archetypes(report)
+	if not preferred:
+		return ""
+
+	lines = [
+		"",
+		"",
+		"AUDIENCE EVIDENCE -- measured from this account's own published posts, "
+		"not a guess. Weight it above your instinct about what 'should' do well:",
+	]
+	for rank, name in enumerate(preferred):
+		hint = _ARCHETYPE_ANGLES.get(name)
+		if not hint:
+			continue
+		lead = "earns the most engagement here" if rank == 0 else "also performs well here"
+		lines.append(f"- The '{name}' kind {lead}. {hint}")
+
+	weak = str(report.get("worst_archetype", ""))
+	if weak and weak not in preferred and weak in _ARCHETYPE_ANGLES:
+		lines.append(
+			f"- The '{weak}' kind has earned the least engagement here. Avoid that "
+			"shape unless the source genuinely demands it."
+		)
+
+	lines.append(
+		"Apply this to the ANGLE and the TITLE. Do not mention this evidence, "
+		"the account, or its statistics anywhere in the article."
+	)
+	return "\n".join(lines)
+
+
+def _refresh_stats(status: dict, api_key: str) -> list:
+	"""Pull this account's reach numbers into status and return the raw posts.
+
+    Runs on every path, not just the follow-up one: reach data is what tells the
+    next article which subjects and which kinds of post are worth writing.
+    Returns [] on any failure -- stats are an optimisation, never a blocker.
+    """
+	published = devto_stats.fetch_published(api_key)
+	if not published:
+		return []
+	status["article_stats"] = devto_stats.summarize(published)
+	status["article_stats"]["winning_tags"] = devto_stats.winning_tags(published)
+	# Which *kinds* of article this audience reads, not just which tags. Tags
+	# label a post; the archetype is the editorial decision that produced it.
+	status["article_interest"] = devto_stats.interest_report(published)
+	return published
+
+
 def _followup_target(status: dict, api_key: str) -> Optional[dict]:
 	"""Pick a recent high-performing post worth a deeper second article.
 
@@ -438,21 +536,21 @@ def _followup_target(status: dict, api_key: str) -> Optional[dict]:
     outage or a quiet week must never stop the daily article.
     """
 	overrides = status.get("_overrides", {})
+	cfg = _config()
+
+	# Refresh reach numbers BEFORE the skip guards. This is the only place the
+	# bot learns whether its articles are read, and that lesson is needed even
+	# when follow-ups are off -- the interest report steers source selection and
+	# the writing prompt on the fresh path too.
+	published = _refresh_stats(status, api_key)
+
 	if overrides.get("skip_followup"):
 		log.info("[articles] follow-up skipped by owner command")
 		return None
-	cfg = _config()
 	if not cfg["followup_enabled"]:
 		return None
-
-	published = devto_stats.fetch_published(api_key)
 	if not published:
 		return None
-
-	# Record the reach numbers regardless of whether we follow up -- this is the
-	# only place the bot ever learns whether its articles are read.
-	status["article_stats"] = devto_stats.summarize(published)
-	status["article_stats"]["winning_tags"] = devto_stats.winning_tags(published)
 
 	hist = _history(status)
 	done = {i for i in hist.get("followed_up_ids", []) if i is not None}
@@ -585,6 +683,14 @@ def _pick_source(status: dict) -> Optional[dict]:
 
 	used_urls = set(_history(status).get("source_urls", []))
 	used_titles = set(_history(status).get("source_titles", []))
+
+	# Re-rank by what this audience has actually read. trending ranks by
+	# publisher authority and recency, which says nothing about whether *our*
+	# readers turn up for that kind of story. Ordering is only nudged, never
+	# filtered: a proven archetype is a tiebreak among good sources, and
+	# filtering on it would starve the pool on a quiet day.
+	candidates = _prefer_proven_archetypes(candidates, status)
+
 	for item in candidates:
 		url_key = trending._canonical_url(item.get("url", ""))
 		title_key = trending.normalize_title(item.get("title", ""))
@@ -605,6 +711,37 @@ def _pick_source(status: dict) -> Optional[dict]:
 				continue
 		return item
 	return None
+
+
+def _prefer_proven_archetypes(candidates: list, status: dict) -> list:
+	"""Re-rank candidates by blending publisher authority with proven interest.
+
+    Archetype match is a *bonus on top of* the trending score, not a replacement
+    for it. Sorting by archetype alone would let a low-authority tag-feed post
+    outrank an InfoQ story purely because its title contained "stop" -- which is
+    the exact failure the authority ranking exists to prevent. The bonus is
+    capped below the gap between a reputable publisher and an open feed, so it
+    breaks ties among comparable sources without overturning credibility.
+
+    Returns the list unchanged until the account has enough posts for the
+    interest report to mean anything (see ``devto_stats.preferred_archetypes``),
+    so a brand-new account is never steered by a single lucky post.
+    """
+	report = status.get("article_interest") or {}
+	preferred = devto_stats.preferred_archetypes(report)
+	if not preferred:
+		return candidates
+
+	bonus = {name: _ARCHETYPE_BONUS - i * _ARCHETYPE_BONUS_STEP
+			 for i, name in enumerate(preferred)}
+
+	def key(item):
+		kind = devto_stats.classify(item.get("title", ""))
+		return -(float(item.get("score", 0)) + bonus.get(kind, 0.0))
+
+	ordered = sorted(candidates, key=key)
+	log.info("[articles] source order steered toward %s", ", ".join(preferred))
+	return ordered
 
 
 def _history(status: dict) -> dict:

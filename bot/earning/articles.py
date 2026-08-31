@@ -672,13 +672,25 @@ def _ensure_backlink(article: dict, target: dict) -> dict:
 
 
 def _pick_source(status: dict) -> Optional[dict]:
-	"""Return the best trending candidate that has not been used before."""
+	"""Return the best trending candidate that has not been used before.
+
+    Any exception from the trending pipeline (network, parse, or unexpected
+    shape) is logged and treated as "no source available" -- publishing nothing
+    is correct. Crashing the whole cycle would be worse than a quiet day.
+    """
 	try:
+		cfg = _config()
 		candidates = trending.fetch_candidates(
-			max_age_hours=int(_config()["source_max_age_hours"]), limit=40
+			max_age_hours=int(cfg["source_max_age_hours"]), limit=40
 		)
 	except Exception as exc:
-		log.warning("[articles] trending fetch failed: %s", exc)
+		log.warning("[articles] trending fetch failed: %s -- publishing nothing", exc)
+		return None
+	if not isinstance(candidates, list):
+		log.warning(
+			"[articles] trending fetch returned %s, expected list -- publishing nothing",
+			type(candidates).__name__,
+		)
 		return None
 
 	used_urls = set(_history(status).get("source_urls", []))
@@ -692,6 +704,8 @@ def _pick_source(status: dict) -> Optional[dict]:
 	candidates = _prefer_proven_archetypes(candidates, status)
 
 	for item in candidates:
+		if not isinstance(item, dict):
+			continue
 		url_key = trending._canonical_url(item.get("url", ""))
 		title_key = trending.normalize_title(item.get("title", ""))
 		if url_key and url_key in used_urls:
@@ -991,8 +1005,6 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
-
 def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 	"""Ask the model to fix specific formatting violations. Returns None on failure."""
 	prompt = (
@@ -1022,7 +1034,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

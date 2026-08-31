@@ -158,7 +158,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		state["last_url"] = result.get("url", "")
 		# Record before returning so a story can never be featured twice, even if
 		# a later phase of the cycle fails.
-		_record_issue(status, items, int(cfg["history_limit"]))
+		_record_issue(status, items, issue.get("title", ""), int(cfg["history_limit"]))
 
 	return [result]
 
@@ -220,6 +220,13 @@ def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
 		log.info("[newsletter] removed %d fabricated spec table(s)", dropped)
 
 	issue["body_markdown"] = _ensure_sources(issue["body_markdown"], items)
+
+	# Headline recycling is the most visible form of repetition on dev.to, so
+	# reject it before any expensive gate runs. Mirrors articles._duplicate_reason.
+	repeat = _duplicate_title_reason(issue.get("title", ""), status)
+	if repeat:
+		log.warning("[newsletter] %s — publishing nothing", repeat)
+		return None
 
 	problems = _digest_problems(issue["body_markdown"], items, cfg)
 	if problems:
@@ -284,8 +291,13 @@ def _history(status: dict) -> dict:
 	return status.setdefault("newsletter_history", {})
 
 
-def _record_issue(status: dict, items: list[dict], limit: int) -> None:
-	"""Remember every featured story so it is never featured again."""
+def _record_issue(status: dict, items: list[dict], title: str, limit: int) -> None:
+	"""Remember every featured story and the issue's own headline.
+
+    Recording the digest title -- separately from per-story history -- is what
+    stops the bot from publishing two issues with the same headline in a row,
+    which is the most visible kind of repetition on a dev.to byline.
+    """
 	hist = _history(status)
 	for item in items:
 		for key, value in (
@@ -295,6 +307,26 @@ def _record_issue(status: dict, items: list[dict], limit: int) -> None:
 			if not value:
 				continue
 			bounded_append(hist.setdefault(key, []), value, limit)
+
+	title_key = trending.normalize_title(title)
+	if title_key:
+		bounded_append(hist.setdefault("titles", []), title_key, limit)
+
+
+def _duplicate_title_reason(title: str, status: dict) -> str:
+	"""Reject a digest whose headline already shipped in a prior issue.
+
+    Returns "" when the title is fresh, or a reason string the caller logs
+    before returning the "publish nothing" action. Same shape as
+    articles._duplicate_reason so the operator's logs read the same way.
+    """
+	key = trending.normalize_title(title)
+	if not key:
+		return "newsletter has no usable title"
+	prior = set(_history(status).get("titles", []))
+	if key in prior:
+		return f"duplicate newsletter headline already published: {title!r}"
+	return ""
 
 
 def _ensure_sources(body: str, items: list[dict]) -> str:

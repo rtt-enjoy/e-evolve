@@ -1,7 +1,7 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-08-31T13:54:06.393383+00:00",
-  "total_runs": 1735,
+  "last_run": "2026-08-31T20:06:59.285925+00:00",
+  "total_runs": 1736,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -31,11 +31,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.36.0",
-    "summary": "Patch utils.get_env with missing imports plus tests for paywall suffix spoofing and article fetch_candidates failure; reconcile __all__ docstring claim.",
+    "summary": "Add a graceful, deterministic skip in _pick_source when the trending fetch raises an unexpected exception shape so the daily article still publishes nothing (correct) instead of crashing the whole earnings cycle.",
     "changes_applied": [
       {
-        "file": "bot/utils/__init__.py",
-        "reason": "The previous module used the global logging.getLogger pattern but never bound a logger, so a future call from inside get_env that referenced a local log would raise NameError. Bind a module logger, switch the empty-string branch to debug-level logging instead of an assertion, and keep the documented __all__ so star-imports and the docstring claim both hold."
+        "file": "bot/earning/articles.py",
+        "reason": "Hardening fix for _pick_source: trending.fetch_candidates can raise on a bad response body (parse error mid-fetch, a feed that returns HTML instead of XML, a TypeError from a malformed timestamp). Today the bare except already catches that, but a non-list return -- e.g. an HN Algolia response with an unexpected shape, or a future source returning a dict -- would crash later in the for-loop with TypeError on iteration. Add an isinstance check and log it, so a bad fetch degrades to 'publish nothing' (correct behaviour) instead of crashing the whole earning cycle. Also defensively skip non-dict items in the candidate loop, since a stray string from a misbehaving feed would AttributeError on .get(). This is a one-file patch that makes the daily article genuinely crash-safe on the trending pipeline."
       }
     ],
     "suggestions": [
@@ -80,22 +80,11 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.36.1-20260831-135514",
+    "branch": "evolve/1.36.1-20260831-200808",
     "proposed_version": "1.36.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 8,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -140,7 +129,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 140,
+  "last_cycle_seconds": 70,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -712,7 +701,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-31T13:54:06.819481+00:00",
+    "checked_at": "2026-08-31T20:06:59.755373+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -917,7 +906,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.36.1-20260831-135514",
+  "last_evolution_branch": "evolve/1.36.1-20260831-200808",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 12,

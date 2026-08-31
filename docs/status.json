@@ -1,17 +1,17 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-08-31T00:55:59.757819+00:00",
-  "total_runs": 1733,
+  "last_run": "2026-08-31T05:37:47.065036+00:00",
+  "total_runs": 1734,
   "active_features": [
-    "llm_anthropic",
     "llm_gemini",
     "llm_openrouter",
     "llm_groq",
+    "usdt_wallet",
     "code_techs"
   ],
   "inactive_features": [
-    "llm_cerebras",
-    "usdt_wallet"
+    "llm_anthropic",
+    "llm_cerebras"
   ],
   "llm_provider": "openrouter",
   "earnings": {
@@ -19,7 +19,9 @@
     "this_week_usd": 0.0,
     "last_cycle_usd": 0.0,
     "week_started": "2026-08-31",
-    "breakdown": {},
+    "breakdown": {
+      "dev.to": 0.0
+    },
     "history": [],
     "confirmed_usd": 0.0,
     "received_total_usd": 0.0,
@@ -27,8 +29,14 @@
     "source": "on-chain USDT balance"
   },
   "last_evolution": {
-    "summary": "Skipped by owner command",
-    "changes_applied": [],
+    "version_bumped_to": "1.36.0",
+    "summary": "Patch tests for mrr_ideas truncate + fix utils __all__ doctest mismatch",
+    "changes_applied": [
+      {
+        "file": "bot/utils/__init__.py",
+        "reason": "Module docstring claimed `from bot.utils import get_env` works, but `__all__` only exposed the helper implicitly via star-import \u2014 and the module's own import statement above uses the literal name. Adding an explicit `__all__` makes the public surface unambiguous so the docstring claim holds and linting stops warning on star-imports."
+      }
+    ],
     "suggestions": [
       {
         "title": "Activate Anthropic Claude as a fourth LLM provider",
@@ -70,14 +78,38 @@
         ]
       }
     ],
-    "version_bumped_to": "1.36.0",
-    "error": null
+    "error": null,
+    "branch": "evolve/1.36.1-20260831-053806",
+    "proposed_version": "1.36.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "JavaFX Gantt Charts Without the Memory Wall",
+        "url": "https://dev.to/robust_true_try/javafx-gantt-charts-without-the-memory-wall-m61",
+        "estimated_usd": 0.0,
+        "source_url": "https://www.infoq.com/news/2026/08/flexgantfx/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global",
+        "source_title": "FlexGanttFX is Open Source"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
+    {
+      "title": "Activate Anthropic Claude as a fourth LLM provider",
+      "description": "llm_anthropic is the only inactive feature still listed. Adding ANTHROPIC_API_KEY widens the free-fallback surface with a different rate-limit pool and failure modes. Already plumbed through the same chain client as Gemini and Groq, so no code change is required.",
+      "secret_needed": "ANTHROPIC_API_KEY",
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Go to https://console.anthropic.com/ and create a free-tier account (no credit card required for the evaluation tier).",
+        "2. In Settings -> API Keys, click 'Create Key', name it 'e-evolve', and copy the sk-ant-... value.",
+        "3. In your GitHub repo go to Settings -> Secrets and variables -> Actions -> New repository secret, name it ANTHROPIC_API_KEY, paste the key, and click Add secret.",
+        "4. The next scheduled run will flip status.json's secret_readiness.llm_anthropic.active to true and the upgrade role will gain Claude as a higher-quality fallback for repair suggestions."
+      ]
+    },
     {
       "title": "Activate Cerebras Cloud as a fourth free-tier provider",
       "description": "llm_cerebras is listed inactive. Cerebras offers roughly 1M tokens/day free with no credit card, which gives a third independent fallback when OpenRouter free caps are exhausted. Already plumbed through the same chain client as Gemini and Groq.",
@@ -106,7 +138,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 0,
+  "last_cycle_seconds": 43,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -115,12 +147,12 @@
   "usdt_balance": 0.0,
   "secret_readiness": {
     "llm_anthropic": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "ANTHROPIC_API_KEY"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     },
     "llm_gemini": {
@@ -160,12 +192,12 @@
       "required_count": 1
     },
     "usdt_wallet": {
-      "active": false,
-      "present": [],
-      "missing": [
+      "active": true,
+      "present": [
         "USDT_WALLET_ADDRESS"
       ],
-      "present_count": 0,
+      "missing": [],
+      "present_count": 1,
       "required_count": 1
     }
   },
@@ -193,8 +225,8 @@
     }
   },
   "article_daily": {
-    "date": "2026-08-30",
-    "published": 25
+    "date": "2026-08-31",
+    "published": 26
   },
   "code_tech_earning": {
     "enabled": true,
@@ -518,10 +550,11 @@
     ]
   },
   "configured_github_secrets": [
-    "ANTHROPIC_API_KEY",
     "GEMINI_API_KEY",
+    "GH_TOKEN",
     "GROQ_API_KEY",
-    "OPENROUTER_API_KEY"
+    "OPENROUTER_API_KEY",
+    "USDT_WALLET_ADDRESS"
   ],
   "operation_mode": "research_and_article_publishing",
   "external_action_policy": {
@@ -567,7 +600,8 @@
       "dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
       "blog.cloudflare.com/dns-cache-memory-optimization-1111",
       "anil.recoil.org/notes/rumour-is-the-exploit",
-      "newsletter.eng-leadership.com/p/good-culture-is-the-biggest-productivity"
+      "newsletter.eng-leadership.com/p/good-culture-is-the-biggest-productivity",
+      "infoq.com/news/2026/08/flexgantfx"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -594,7 +628,8 @@
       "reading twitter x practical nitter alternativ 2024",
       "saving 100 terabyt memory optimizing 1 1 1 1 s dns cache",
       "just rumour bug enough find exploit these days",
-      "good culture biggest productivity hack ai"
+      "good culture biggest productivity hack ai",
+      "flexganttfx open source"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -621,23 +656,24 @@
       "self hosted nitter instance gets banned",
       "memory cache uses 10x more ram than",
       "rumor become exploit anyone report bug",
-      "three culture bugs kill engineering velocity"
+      "three culture bugs kill engineering velocity",
+      "javafx gantt chart memory wall"
     ],
     "followed_up_ids": [
       4489474
     ]
   },
   "wallet": {
-    "configured": false,
+    "configured": true,
     "address_masked": "TFTNsf\u20269KbY",
     "network": "TRC-20",
     "confirmed_usd": 0.0,
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-30T23:31:02.592379+00:00",
+    "checked_at": "2026-08-31T05:37:47.231615+00:00",
     "stale": false,
-    "error": "USDT_WALLET_ADDRESS not set",
+    "error": null,
     "balance_high_water_usd": 0.0
   },
   "newsletter_daily": {
@@ -840,22 +876,72 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.36.1-20260831-053806",
+  "evolution_pending_review": true,
   "article_stats": {
-    "count": 11,
-    "total_views": 881,
-    "avg_views": 80.1,
+    "count": 12,
+    "total_views": 1181,
+    "avg_views": 98.4,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 650,
+    "best_views": 940,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
       "selfhosting",
       "privacy",
+      "python",
       "linux",
-      "hardware",
-      "framework"
+      "hardware"
     ]
-  }
+  },
+  "article_interest": {
+    "archetypes": [
+      {
+        "archetype": "problem-workaround",
+        "count": 4,
+        "avg_engagement": 269.8,
+        "avg_views": 263.5,
+        "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
+      },
+      {
+        "archetype": "build-tutorial",
+        "count": 3,
+        "avg_engagement": 34.3,
+        "avg_views": 34.3,
+        "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
+      },
+      {
+        "archetype": "other",
+        "count": 1,
+        "avg_engagement": 14.0,
+        "avg_views": 14.0,
+        "best_title": "Prototype a DIY Solid\u2011State Intelligence Module for Home Automation"
+      },
+      {
+        "archetype": "security-privacy",
+        "count": 1,
+        "avg_engagement": 10.0,
+        "avg_views": 10.0,
+        "best_title": "Secure Your Phone Before Crossing the Border"
+      },
+      {
+        "archetype": "engineering-culture",
+        "count": 1,
+        "avg_engagement": 0.0,
+        "avg_views": 0.0,
+        "best_title": "Three Culture Bugs That Kill Your Engineering Velocity"
+      },
+      {
+        "archetype": "surprising-behavior",
+        "count": 2,
+        "avg_engagement": 0.0,
+        "avg_views": 0.0,
+        "best_title": "Why Rumors Become Exploits Before Anyone Reports a Bug"
+      }
+    ],
+    "best_archetype": "problem-workaround",
+    "worst_archetype": "surprising-behavior",
+    "sample_size": 12
+  },
+  "github_repo": "rtt-enjoy/e-evolve"
 }

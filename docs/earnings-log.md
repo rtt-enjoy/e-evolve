@@ -1520,3 +1520,7 @@ Autonomous earnings generated every hourly cycle.
 - [ok] **mrr-ideas**: [MRR idea triage refreshed (2 viable, 18 refused)](docs/mrr-ideas.md) (est. $0.00)
 
 ## Week 2026-08-24 — $0.0000 (dev.to: $0.0000, code_techs: $0.0000, dev.to-newsletter: $0.0000, mrr-ideas: $0.0000)
+
+### 2026-08-31 05:38 UTC
+
+- [ok] **dev.to**: [JavaFX Gantt Charts Without the Memory Wall](https://dev.to/robust_true_try/javafx-gantt-charts-without-the-memory-wall-m61) (est. $0.00)

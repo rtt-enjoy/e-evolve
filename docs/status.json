@@ -1,7 +1,7 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-08-31T05:37:47.065036+00:00",
-  "total_runs": 1734,
+  "last_run": "2026-08-31T13:54:06.393383+00:00",
+  "total_runs": 1735,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -20,7 +20,8 @@
     "last_cycle_usd": 0.0,
     "week_started": "2026-08-31",
     "breakdown": {
-      "dev.to": 0.0
+      "dev.to": 0.0,
+      "code_techs": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -30,11 +31,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.36.0",
-    "summary": "Patch tests for mrr_ideas truncate + fix utils __all__ doctest mismatch",
+    "summary": "Patch utils.get_env with missing imports plus tests for paywall suffix spoofing and article fetch_candidates failure; reconcile __all__ docstring claim.",
     "changes_applied": [
       {
         "file": "bot/utils/__init__.py",
-        "reason": "Module docstring claimed `from bot.utils import get_env` works, but `__all__` only exposed the helper implicitly via star-import \u2014 and the module's own import statement above uses the literal name. Adding an explicit `__all__` makes the public surface unambiguous so the docstring claim holds and linting stops warning on star-imports."
+        "reason": "The previous module used the global logging.getLogger pattern but never bound a logger, so a future call from inside get_env that referenced a local log would raise NameError. Bind a module logger, switch the empty-string branch to debug-level logging instead of an assertion, and keep the documented __all__ so star-imports and the docstring claim both hold."
       }
     ],
     "suggestions": [
@@ -66,7 +67,7 @@
       },
       {
         "title": "Bind a custom domain to the GitHub Pages dashboard",
-        "description": "docs/index.html is a static fallback; once the React build is published the dashboard lives at https://<owner>.github.io/<repo>/. A custom domain (CNAME) costs nothing and makes the byline easier to share when pitching the newsletter idea to readers. It is a one-time repo setting plus a DNS record at the registrar.",
+        "description": "docs/index.html is a static fallback; once the React build is published the dashboard lives at https://<owner>.github.io/<repo>/. A custom domain (CNAME) costs nothing and makes the byline easier to share when pitching the newsletter idea to readers.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -79,19 +80,20 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.36.1-20260831-053806",
+    "branch": "evolve/1.36.1-20260831-135514",
     "proposed_version": "1.36.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "dev.to",
+        "platform": "code_techs",
         "success": true,
-        "title": "JavaFX Gantt Charts Without the Memory Wall",
-        "url": "https://dev.to/robust_true_try/javafx-gantt-charts-without-the-memory-wall-m61",
+        "opportunity_count": 8,
+        "pursued_count": 0,
         "estimated_usd": 0.0,
-        "source_url": "https://www.infoq.com/news/2026/08/flexgantfx/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global",
-        "source_title": "FlexGanttFX is Open Source"
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
       }
     ],
     "total_usd": 0.0
@@ -125,7 +127,7 @@
     },
     {
       "title": "Bind a custom domain to the GitHub Pages dashboard",
-      "description": "docs/index.html is a static fallback; once the React build is published the dashboard lives at https://<owner>.github.io/<repo>/. A custom domain (CNAME) costs nothing and makes the byline easier to share when pitching the newsletter idea to readers. It is a one-time repo setting plus a DNS record at the registrar.",
+      "description": "docs/index.html is a static fallback; once the React build is published the dashboard lives at https://<owner>.github.io/<repo>/. A custom domain (CNAME) costs nothing and makes the byline easier to share when pitching the newsletter idea to readers.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -138,7 +140,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 43,
+  "last_cycle_seconds": 140,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -247,6 +249,19 @@
         "archived_at": null
       },
       {
+        "title": "Two weeks ago I asked for feedback on Scinta, our screenshots-to-actions Mac app. We just launched",
+        "url": "https://www.reddit.com/r/SideProject/comments/1w2si2i/two_weeks_ago_i_asked_for_feedback_on_scinta_our/",
+        "source": "reddit:r/SideProject",
+        "score": 100,
+        "estimated_value_usd": 80.0,
+        "reason": "visible or inferred value around $80.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Two weeks ago I asked for feedback on Scinta, our screenshots-to-actions Mac app. We just launched\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1w2si2i/two_weeks_ago_i_asked_for_feedback_on_scinta_our/\nWhy this is suitable: visible or inferred value around $80.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Hey everybody! My wife and I are building Scinta - a macOS app that turns screenshots into actions: an error becomes a ticket, dinner Saturday at 7 becomes a calendar event, an email signature becomes a contact. Two weeks ago I showed it here and got some really useful feedback. What came out of it: feature ideas from the comments went to the roadmap - a sharing action, highlighting which part of the screenshot produced each extracted field, accessibility checklist from a UI screenshot - several new features are already on the finish line and will be in one of upcoming releases soon the most common question from different threads and communities - why not just paste the screenshot into ChatGPT? - became our main pitch. There you switch apps, upload, write a prompt, copy the result back and still create the event yourself. Scinta does it in one click. I have my own AI setup and still do n",
+        "outreach_draft": "Hi, I found your request about \"Two weeks ago I asked for feedback on Scinta, our screenshots-to-actions Mac app. We just launched\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $80.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1w2si2i/two_weeks_ago_i_asked_for_feedback_on_scinta_our/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
         "title": "A licence granting this source away, a check that failed its own rule, and each product against its own competitors",
         "url": "https://github.com/famouslytrill-boop/sonara-os/pull/202",
         "source": "github",
@@ -260,41 +275,67 @@
         "archived_at": null
       },
       {
-        "title": "Technical Specification: AI Agent Bot with Token System & Admin CRM",
-        "url": "https://github.com/labtgbot/telegram-ai-agent/issues/1",
-        "source": "github",
-        "score": 84,
-        "estimated_value_usd": 13.0,
-        "reason": "visible or inferred value around $13.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "title": "I built an open-source PDF editor that keeps your files on your computer",
+        "url": "https://www.reddit.com/r/SideProject/comments/1w39bei/i_built_an_opensource_pdf_editor_that_keeps_your/",
+        "source": "reddit:r/SideProject",
+        "score": 100,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
         "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Technical Specification: AI Agent Bot with Token System & Admin CRM\nSource: github\nURL: https://github.com/labtgbot/telegram-ai-agent/issues/1\nWhy this is suitable: visible or inferred value around $13.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: > **Issue Type**: `feature` | **Priority**: `critical` | **Epic**: `telegram-ai-agent-v1`   > **Assignee**: `hive-mind` | **Labels**: `bot`, `tokens`, `crm`, `monetization`, `admin-panel`  ---  ## \ud83c\udfaf Project Overview  \u0421\u043e\u0437\u0434\u0430\u043d\u0438\u0435 \u043a\u043e\u043d\u043a\u0443\u0440\u0435\u043d\u0442\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u0430 \u043d\u0430 \u043e\u0441\u043d\u043e\u0432\u0435 **Mira** \u0441 \u0432\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u0435\u0439 \u0442\u043e\u043a\u0435\u043d\u043e\u0432\u043e\u0439 \u044d\u043a\u043e\u043d\u043e\u043c\u0438\u043a\u043e\u0439, \u0446\u0435\u043d\u043e\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u043d\u0438\u0435\u043c \u043d\u0430 **50% \u0434\u0435\u0448\u0435\u0432\u043b\u0435** \u0430\u043d\u0430\u043b\u043e\u0433\u043e\u0432 \u0438 \u043f\u0440\u043e\u0444\u0435\u0441\u0441\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u043e\u0439 **CRM-\u0441\u0438\u0441\u0442\u0435\u043c\u043e\u0439** \u0434\u043b\u044f \u0430\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f.  ### \ud83d\udcca Competitive Analysis (Mira Pricing)  | \u041f\u0430\u043a\u0435\u0442 Mira | Stars | \u041d\u0430\u0448\u0438 \u0446\u0435\u043d\u044b (-50%) | \u042d\u043a\u043e\u043d\u043e\u043c\u0438\u044f | |------------|-------|------------------|----------| | 500 \u0442\u043e\u043a\u0435\u043d\u043e\u0432 | 500 \u2b50 | **250 \u2b50** | 250 \u2b50 | | 1,200 \u0442\u043e\u043a\u0435\u043d\u043e\u0432 (-17%) | 1,000 \u2b50 | **500 \u2b50** | 500 \u2b50 | | 2,000 \u0442\u043e\u043a\u0435\u043d\u043e\u0432 (-25%) | 1,500 \u2b50 | **750 \u2b50** | 750 \u2b50 | | Mira Pro (\u043c\u0435\u0441\u044f\u0446) | 999 \u2b50 (~$13) | **500 \u2b50 (~$6.50)** | 499 \u2b50 |  ---  ## \ud83c\udfd7\ufe0f System Architecture  ```mermaid graph TB     A[Telegram User] --> B[Telegram Bot API]     A --> C[Mini App Inter",
-        "outreach_draft": "Hi, I found your request about \"Technical Specification: AI Agent Bot with Token System & Admin CRM\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $13.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/labtgbot/telegram-ai-agent/issues/1",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built an open-source PDF editor that keeps your files on your computer\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1w39bei/i_built_an_opensource_pdf_editor_that_keeps_your/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: I got tired of PDF tools that ask you to upload your documents somewhere before you can do anything with them. So I built PDF Editor Offline, a free and open-source PDF editor designed around one simple rule: your documents stay on your machine. No account. No file uploads. No recurring subscription. It can handle most of the PDF tasks I regularly need: Edit and annotate PDFs Add text, images, drawings, highlights and comments Fill and sign forms Merge, split, reorder, rotate and crop pages Compress PDFs Convert PDF \u2194 Word, PowerPoint, Excel, images, Markdown, EPUB, etc. Run OCR locally Permanently redact sensitive information Remove metadata and hidden/private data Protect and unlock PDFs Search documents There\u2019s also a CLI and Python API for automation, plus Docker support for self-hosting. The desktop app is built with Tauri, the editor uses React, and the backend/tooling is primarily",
+        "outreach_draft": "Hi, I found your request about \"I built an open-source PDF editor that keeps your files on your computer\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1w39bei/i_built_an_opensource_pdf_editor_that_keeps_your/",
         "pursued": false,
         "archived_at": null
       },
       {
-        "title": "\ud83d\udcc8 AI Open Source Trends 2026-08-17",
-        "url": "https://github.com/xavier9802/agents-radar/issues/361",
-        "source": "github",
-        "score": 76,
+        "title": "I built a project management tool that turns unstructured notes into tasks and documentation",
+        "url": "https://www.reddit.com/r/SideProject/comments/1w390c0/i_built_a_project_management_tool_that_turns/",
+        "source": "reddit:r/SideProject",
+        "score": 100,
         "estimated_value_usd": 10.0,
         "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I built a project management tool that turns unstructured notes into tasks and documentation\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1w390c0/i_built_a_project_management_tool_that_turns/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Sooo, why even make yet another tool like this, you might ask? To put it simply, like many devs do, I wasn&#39;t happy with the mainstream options and made my own. Now, some more detail! I&#39;ve been a dev for about 10 years and, for the past 2, I&#39;ve been managing a team. When I was just getting tasks assigned, mostly on Jira/Asana, it wasn&#39;t so bad. The problem is that now I have to run meetings, take notes and plan work for others it&#39;s not so simple anymore. It takes ages and with AI accelerating development it&#39;s already hard to keep up. And the big players having such complex flows and UIs is not helping. To be fair, in bigger/more structured companies it makes sense. Also, why is it that on most project management tools it&#39;s so hard to track what others are doing!? Anyway, tools are either too simple or have grown into beasts that are too complex. So I&#39;ve tri",
+        "outreach_draft": "Hi, I found your request about \"I built a project management tool that turns unstructured notes into tasks and documentation\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1w390c0/i_built_a_project_management_tool_that_turns/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "gave away 100k free credits at launch and now I can't tell if that was smart or stupid",
+        "url": "https://www.reddit.com/r/SideProject/comments/1w3cqrg/gave_away_100k_free_credits_at_launch_and_now_i/",
+        "source": "reddit:r/SideProject",
+        "score": 92,
+        "estimated_value_usd": 10.0,
+        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
+        "next_step": "Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: gave away 100k free credits at launch and now I can't tell if that was smart or stupid\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1w3cqrg/gave_away_100k_free_credits_at_launch_and_now_i/\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Shipped a chrome extension on august 10th, 148 weekly users now. It builds google forms with ai. Free tier is 100k credits, no card, works out to something like 5 forms before you hit the wall. The idea was obvious, remove every reason not to try it. And people do try it. What I did not expect is that a big chunk of people who install never send a single message. Not sent one and bounced . Zero. They install, the panel opens, they close it. So I don&#39;t think my problem is the free tier at all. I think I have an activation problem and I spent weeks tuning credits instead of looking at that. I only found it because I finally sat down with the session replays and watched people just... not type anything. The empty state has suggestion chips you can click and I still watched people close the panel. Kind of annoyed at myself because I had the analytics wired up in the first week and didn&#",
+        "outreach_draft": "Hi, I found your request about \"gave away 100k free credits at launch and now I can't tell if that was smart or stupid\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1w3cqrg/gave_away_100k_free_credits_at_launch_and_now_i/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "Real Estate Scraper A token-efficient scraper with llm formatting",
+        "url": "https://www.reddit.com/r/SideProject/comments/1w3apwz/real_estate_scraper_a_tokenefficient_scraper_with/",
+        "source": "reddit:r/SideProject",
+        "score": 92,
+        "estimated_value_usd": 0.0,
+        "reason": "runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand",
+        "next_step": "Clean one messy sample export with the free LLM tier and quote a flat rate per file.",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: Real Estate Scraper A token-efficient scraper with llm formatting\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1w3apwz/real_estate_scraper_a_tokenefficient_scraper_with/\nWhy this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand\nFirst step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Hey everyone! I built an open-source tool designed to discover, crawl, and extract structured real estate data across any city or country using LLM structured outputs Why this was built: Traditional scrapers break whenever property portals change their layout. LLM-based scrapers solve this, but usually consume huge amounts of tokens. How token efficiency was achieved: DOM Condensation (~75% reduction) : Cleans noise, scripts, and banners prior to LLM processing. Micro-Batch Slicing : Prevents TPM/RPM rate limits, allowing full extraction on free-tier APIs (Google Gemini, Groq, OpenRouter). Index-Matched Curation : AI selects distinct deep portal URLs without hallucinations. Streamlit Dashboard : Client-side filtering, price sorting, and one-click CSV/JSON export. I recommend Start with 1 Curated Site and 1 Page to test your location and conserve token quota. GitHub Repo: https://github.c",
+        "outreach_draft": "Hi, I found your request about \"Real Estate Scraper A token-efficient scraper with llm formatting\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1w3apwz/real_estate_scraper_a_tokenefficient_scraper_with/",
+        "pursued": false,
+        "archived_at": null
+      },
+      {
+        "title": "I got tired of paying for subscriptions for voice dictation, so I built a 100% local, open-source alternative (OpenDictate)",
+        "url": "https://www.reddit.com/r/SideProject/comments/1w2q4ke/i_got_tired_of_paying_for_subscriptions_for_voice/",
+        "source": "reddit:r/SideProject",
+        "score": 90,
+        "estimated_value_usd": 20.0,
+        "reason": "visible or inferred value around $20.00; runs on a free AI tier, so input cost is zero and margin is total",
         "next_step": "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udcc8 AI Open Source Trends 2026-08-17\nSource: github\nURL: https://github.com/xavier9802/agents-radar/issues/361\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # AI Open Source Trends 2026-08-17  > Sources: GitHub Trending + GitHub Search API | Generated: 2026-08-17 01:42 UTC  ---    # AI Open Source Trends Report \u2014 August 17, 2026  ---  ## 1. Today's Highlights  The most striking development today is the rapid maturation of **local-first agent infrastructures**: Unsloth, Ollama, and Needle collectively signal that running LLMs on personal hardware is shifting from niche experiment to baseline workflow. The trending list also highlights **Cactus Compute's Needle** \u2014 a mere 14 MB foundation model targeting phones, wearables, and robots \u2014 which marks a dramatic compression of capability into edge-deployable packages. Meanwhile, the agent ecosystem continues its explosive growth, with tools like Agent-Reach and Claude-Mem demonstrating that the next competitive frontier is **context persistence and web-scale information access**, not just model si",
-        "outreach_draft": "Hi, I found your request about \"\ud83d\udcc8 AI Open Source Trends 2026-08-17\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/xavier9802/agents-radar/issues/361",
-        "pursued": false,
-        "archived_at": null
-      },
-      {
-        "title": "\ud83d\udd25 GitHub Trending AI \u65e9\u62a5 \u00b7 2026-07-09 \u00b7 Top 7 \u9879\u76ee",
-        "url": "https://github.com/happydog-intj/ai-xiaohongshu-daily/issues/272",
-        "source": "github",
-        "score": 70,
-        "estimated_value_usd": 10.0,
-        "reason": "visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total",
-        "next_step": "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.",
-        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: \ud83d\udd25 GitHub Trending AI \u65e9\u62a5 \u00b7 2026-07-09 \u00b7 Top 7 \u9879\u76ee\nSource: github\nURL: https://github.com/happydog-intj/ai-xiaohongshu-daily/issues/272\nWhy this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: # \ud83d\udd25 GitHub Trending AI \u65e9\u62a5 \u00b7 2026.07.09  > \u7531 GitHub Actions \u81ea\u52a8\u751f\u6210 \u00b7 \u6570\u636e\u6765\u6e90\uff1aGitHub Trending\uff08\u6bcf\u65e5\u699c\uff09  ---  ## \ud83d\udcca \u4eca\u65e5 AI \u70ed\u699c\u603b\u89c8  ![trending-summary](https://raw.githubusercontent.com/happydog-intj/ai-xiaohongshu-daily/master/assets/2026-07-09/trending/summary.png)  1. **[addyosmani/agent-skills](https://github.com/addyosmani/agent-skills)** \u00b7 JavaScript \u00b7 \u2b50 73,993 \u00b7 \ud83d\udd3a 1,297 stars today    _Production-grade engineering skills for AI coding agents._  2. **[TencentCloud/TencentDB-Agent-Memory](https://github.com/TencentCloud/TencentDB-Agent-Memory)** \u00b7 TypeScript \u00b7 \u2b50 7,615 \u00b7 \ud83d\udd3a 318 stars today    _TencentDB Agent Memory delivers fully local long-term memory for AI Agents via a 4-tier progressive pipeline, with zero external API dependencies._  3. **[mvanhorn/last30days-skill](https://github.com/mvanhorn/last30days-skill)** \u00b7 Python \u00b7 \u2b50 50,727 \u00b7 \ud83d\udd3a 352 stars today    _AI agent skill that researches any topi",
-        "outreach_draft": "Hi, I found your request about \"\ud83d\udd25 GitHub Trending AI \u65e9\u62a5 \u00b7 2026-07-09 \u00b7 Top 7 \u9879\u76ee\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://github.com/happydog-intj/ai-xiaohongshu-daily/issues/272",
+        "codex_prompt": "Implement a small, verifiable solution for this public request.\n\nLead: I got tired of paying for subscriptions for voice dictation, so I built a 100% local, open-source alternative (OpenDictate)\nSource: reddit:r/SideProject\nURL: https://www.reddit.com/r/SideProject/comments/1w2q4ke/i_got_tired_of_paying_for_subscriptions_for_voice/\nWhy this is suitable: visible or inferred value around $20.00; runs on a free AI tier, so input cost is zero and margin is total\nFirst step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.\n\nConstraints:\n- Keep the first change narrowly scoped.\n- Use free APIs or offline code paths when possible.\n- Add or update a specific file that demonstrates the result.\n- Include exact verification commands and output notes.\n- Do not post externally or request payment automatically.\n\nRequest excerpt: Hey r/SideProject ! Like many developers and writers, I love using voice dictation to write at 150+ WPM. But existing tools like Wispr Flow or Superwhisper either require monthly cloud subscriptions ($12\u2013$20/mo), lock you into macOS, or stream your raw microphone audio to remote servers. I spent the last few weeks building OpenDictate , a completely free, local-first, open-source AI voice dictation app for your desktop. What it does: Global Hotkey, Anywhere : Press Ctrl+Alt+Space (or \u2318+Shift+Space on Mac), speak naturally, and your words are instantly typed into whatever app has focus (VS Code, Notion, Slack, Obsidian, terminal, etc.). 100% Offline Private : Speech recognition runs entirely on your device via ONNX Runtime (FastConformer, Parakeet TDT, Whisper Large v3 Turbo). Zero cloud, zero telemetry. Hands-Free Wake Word : Say Hey Dictate to start dictating without touching your keybo",
+        "outreach_draft": "Hi, I found your request about \"I got tired of paying for subscriptions for voice dictation, so I built a 100% local, open-source alternative (OpenDictate)\" and can make a small working version.\n\nI will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $20.00 via crypto.\n\nPayment address (USDT_WALLET_ADDRESS): [redacted]\n\nReference: https://www.reddit.com/r/SideProject/comments/1w2q4ke/i_got_tired_of_paying_for_subscriptions_for_voice/",
         "pursued": false,
         "archived_at": null
       }
@@ -372,164 +413,164 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "The strongest current angle is becoming a 'done-for-you AI batch processor' for local small businesses, solopreneurs, and creators: you bundle free-tier APIs (e.g., OpenRouter's no-card models, Groq's free LLM API, and HF Inference) into fixed-price batch jobs like transcription cleanup, PDF-to-structured-data extraction, and background removal for product photos. Buyers pay per batch, you pay nothing upfront, and you can deliver within hours because the heavy lifting runs on someone else's free compute.",
+      "summary": "The cleanest current angle is selling tiny done-for-you services (transcription cleanup, meeting notes, PDF data extraction, background removal, translation passes) built on top of free-tier APIs like Groq, Google Gemini, Mistral, OpenRouter, and Hugging Face Inference. Each job is a fixed-price deliverable with a named buyer (local small businesses, freelancers, real-estate agents, Etsy sellers, podcasters), so no audience, ad spend, or paid infrastructure is required, and start-up cost is essentially zero.",
       "free_ai_services": [
         {
-          "name": "Groq Cloud (Free Tier)",
-          "what_it_does": "Very fast LLM inference (Llama, Mixtral, Gemma) and Whisper speech-to-text",
-          "free_tier": "Ongoing free API keys with daily token/minute limits; verify current limit on console.groq.com",
+          "name": "Groq Cloud (LLM API)",
+          "what_it_does": "Very fast LLM inference for Llama, Mixtral, Gemma, Whisper",
+          "free_tier": "Free dev tier with rate-limited requests; verify current limit",
           "credit_card_required": "no",
-          "earn_with_it": "Offer fast transcript cleanup and meeting-summary batches for $10-25 per hour of audio",
-          "price_guide": "$15-30 per deliverable (per hour of audio or per 50-page document)"
+          "earn_with_it": "Offer a '1-hour meeting -> clean notes + action items' done-for-you service.",
+          "price_guide": "$7-$15 per meeting"
         },
         {
-          "name": "OpenRouter (Free Models)",
-          "what_it_does": "Unified API to multiple free open-weight LLMs",
-          "free_tier": "Several models free with rate limits; verify current model list and daily allowance",
+          "name": "Google AI Studio / Gemini API",
+          "what_it_does": "Gemini LLM API with generous free quota",
+          "free_tier": "Free tier with RPM/RPD limits; verify current limit",
           "credit_card_required": "no",
-          "earn_with_it": "Resell as a structured-data extractor: turn messy listings/CSV/HTML into clean JSON for $20 per batch",
-          "price_guide": "$15-40 per batch job"
+          "earn_with_it": "Sell a 'messy notes -> structured doc' or email/draft rewrite service.",
+          "price_guide": "$5 per rewrite, $10 per structured doc"
         },
         {
-          "name": "Hugging Face Inference API (Free Tier)",
-          "what_it_does": "Hosted models for summarization, translation, embeddings, image gen, OCR",
-          "free_tier": "Ongoing free monthly credits for inference providers; verify current limit per model",
+          "name": "OpenRouter (free model router)",
+          "what_it_does": "Single API key to call multiple free LLMs (DeepSeek, Qwen, Mistral, Llama)",
+          "free_tier": "Several models marked ':free' with daily request caps; verify current limit",
           "credit_card_required": "no",
-          "earn_with_it": "Run multilingual summarization or translation batches for e-commerce sellers at $10 per 5,000 words",
-          "price_guide": "$10-30 per batch"
+          "earn_with_it": "Build a prompt-routing setup for clients and charge for the configuration + prompts.",
+          "price_guide": "$25-$75 setup fee per client"
         },
         {
-          "name": "Google Cloud Speech-to-Text (Free Tier)",
-          "what_it_does": "Audio transcription via API",
-          "free_tier": "Free minutes per month for standard models; verify current monthly allowance",
-          "credit_card_required": "no",
-          "earn_with_it": "Transcribe podcasts/interview audio for creators at $1-2 per minute, billed in 30-min chunks",
-          "price_guide": "$15-60 per hour of audio"
+          "name": "Mistral AI (La Plateforme)",
+          "what_it_does": "Mistral / Mixtral LLM API",
+          "free_tier": "Free experimentation tier with limited requests; verify current limit",
+          "credit_card_required": "verify",
+          "earn_with_it": "Run batch summarization of articles or PDFs as a fixed-price job.",
+          "price_guide": "$0.10-$0.30 per article, $5 per 20-page PDF"
         },
         {
-          "name": "remove.bg API (Free Tier)",
-          "what_it_does": "Background removal from product photos",
-          "free_tier": "Ongoing free images per month with API key; verify current monthly cap",
+          "name": "Hugging Face Inference API",
+          "what_it_does": "Hosted models for summarization, translation, embeddings, ASR, TTS, image tasks",
+          "free_tier": "Free tier with monthly credit allowance; verify current limit",
           "credit_card_required": "no",
-          "earn_with_it": "Batch-clean product photos for Etsy/eBay sellers at $0.50-1 per photo with a $20 minimum order",
-          "price_guide": "$20-100 per 50-100 photos"
+          "earn_with_it": "Resell speech-to-text transcription or translation as a fixed-price service.",
+          "price_guide": "$0.05-$0.15 per audio minute, $1 per 1k words translated"
         },
         {
-          "name": "OCR.space Free OCR API",
-          "what_it_does": "Extract text from images and PDFs",
-          "free_tier": "Ongoing free monthly requests; verify current monthly cap",
-          "credit_card_required": "no",
-          "earn_with_it": "Convert scanned receipts/invoices/contracts to Excel/CSV for bookkeepers at $5 per 50 pages",
-          "price_guide": "$15-40 per job"
+          "name": "Cohere Trial API",
+          "what_it_does": "LLM, summarization, embeddings, classification",
+          "free_tier": "Trial keys with monthly request allowance; verify current limit",
+          "credit_card_required": "verify",
+          "earn_with_it": "Sell bulk classification/tagging of product reviews or support tickets.",
+          "price_guide": "$10 per 1,000 items"
         },
         {
-          "name": "Cohere Trial Free Tier",
-          "what_it_does": "Embeddings, text generation, rerank API",
-          "free_tier": "Free trial keys (verify whether currently ongoing or time-limited in your region)",
-          "credit_card_required": "no",
-          "earn_with_it": "Build a small FAQ/menu search improvement service for Shopify owners, charged per store",
-          "price_guide": "$25-75 per store setup"
+          "name": "Google Cloud Speech-to-Text (free tier)",
+          "what_it_does": "Audio transcription API",
+          "free_tier": "Free monthly usage up to a cap; verify current limit",
+          "credit_card_required": "yes",
+          "earn_with_it": "Transcribe podcasts or YouTube audio and sell cleaned transcripts.",
+          "price_guide": "$1 per 10 minutes of audio"
         },
         {
-          "name": "Chroma / Qdrant Cloud Free Tier",
-          "what_it_does": "Hosted vector database for semantic search",
-          "free_tier": "Free tier with small storage; verify current GB limit",
-          "credit_card_required": "no",
-          "earn_with_it": "Charge a one-time fee to ingest a small business's docs and configure semantic search",
-          "price_guide": "$50-150 per setup"
+          "name": "Deepgram (free tier)",
+          "what_it_does": "Speech-to-text API with diarization",
+          "free_tier": "Free monthly credits on signup; verify current limit",
+          "credit_card_required": "yes",
+          "earn_with_it": "Offer 'interview audio -> transcript + summary' to journalists and researchers.",
+          "price_guide": "$5 per interview"
         },
         {
-          "name": "Google Translate API (Free Tier via Cloudflare Workers AI or similar)",
-          "what_it_does": "Machine translation",
-          "free_tier": "Workers AI free daily neurons; verify current daily allowance",
+          "name": "edge-tts (open-source)",
+          "what_it_does": "Free Microsoft Edge TTS, runs on your machine",
+          "free_tier": "Free, no key",
           "credit_card_required": "no",
-          "earn_with_it": "Translate product listings or short documents for sellers at $5 per 1,000 words",
-          "price_guide": "$10-30 per batch"
+          "earn_with_it": "Generate voiceovers for short videos or IVR prompts as a service.",
+          "price_guide": "$3-$8 per finished minute of audio"
         },
         {
-          "name": "Replicate (Free Trial / Free CPU)",
-          "what_it_does": "On-demand inference for many open models (image, audio, LLM)",
-          "free_tier": "Free trial credit; CPU endpoints are cheap; verify ongoing free credits",
+          "name": "Piper TTS (open-source)",
+          "what_it_does": "Local neural TTS, runs on CPU",
+          "free_tier": "Free, runs locally",
           "credit_card_required": "no",
-          "earn_with_it": "Offer custom image generation or upscaling as one-off paid batches",
-          "price_guide": "$10-50 per batch"
+          "earn_with_it": "Produce audiobook-style narration samples for indie authors.",
+          "price_guide": "$5 per 1,000 words narrated"
         }
       ],
       "easy_earning_ideas": [
         {
-          "idea": "Batch audio transcription + cleanup",
-          "who_pays": "Podcasters, journalists, course creators, therapists with recorded sessions",
-          "deliverable": "Clean transcript (TXT/DOCX) plus a short summary and key-points list per recording",
-          "price_usd": "20-60 per hour of audio (bundled in 30-min chunks)",
-          "time_to_first_dollar": "same day, after posting on Fiverr/Upwork/local Facebook groups",
-          "free_stack": "Groq Whisper + Groq Llama for cleanup"
+          "idea": "Meeting Notes Cleanup Service",
+          "who_pays": "Freelancers, consultants, small agency owners, real-estate agents",
+          "deliverable": "Clean structured notes + action items from a recorded meeting (audio or rough transcript)",
+          "price_usd": "$7-$15 per meeting",
+          "time_to_first_dollar": "same day",
+          "free_stack": "Groq Whisper for transcription + Groq LLM or Gemini for structuring"
         },
         {
-          "idea": "PDF / scanned doc to structured spreadsheet",
-          "who_pays": "Small bookkeepers, property managers, e-commerce sellers with supplier invoices",
-          "deliverable": "Excel/CSV file with extracted fields (vendor, date, totals, line items) and a master sheet",
-          "price_usd": "15-40 per 50 pages; $5 minimum",
-          "time_to_first_dollar": "1-3 days (post in r/slavelabour, Upwork, local biz groups)",
-          "free_stack": "OCR.space + Hugging Face table extraction + Groq for field normalization"
+          "idea": "PDF-to-Spreadsheet Extraction",
+          "who_pays": "Bookkeepers, accountants, property managers, small e-commerce sellers",
+          "deliverable": "Clean Excel/CSV file extracted from messy PDF invoices, statements, or rent rolls",
+          "price_usd": "$10-$25 per document batch",
+          "time_to_first_dollar": "2-3 days",
+          "free_stack": "Marker/PyMuPDF + Tesseract for parsing, Gemini for structuring, Supabase or local scripts for assembly"
         },
         {
-          "idea": "Product photo background removal batches",
-          "who_pays": "Etsy / eBay / Shopify sellers who don't want to learn Photoshop",
-          "deliverable": "PNG files with transparent backgrounds, resized to their spec (e.g., 2000x2000)",
-          "price_usd": "0.50-1 per photo, $20 minimum order",
-          "time_to_first_dollar": "same day (list in Fiverr gig, post in seller Facebook groups)",
-          "free_stack": "remove.bg free tier + Pillow for resizing"
+          "idea": "Background Removal for Resellers",
+          "who_pays": "Etsy, eBay, Poshmark, Depop sellers",
+          "deliverable": "Cleaned product photos with backgrounds removed and optional white background",
+          "price_usd": "$10 per 50 images",
+          "time_to_first_dollar": "same day",
+          "free_stack": "rembg running locally, bundled via a small free-hosted tool or simple email intake"
         },
         {
-          "idea": "Translate + localize product listings",
-          "who_pays": "E-commerce sellers expanding to EU/AS markets",
-          "deliverable": "Translated titles, bullet points, and descriptions for a set of listings, in a CSV ready to upload",
-          "price_usd": "10-30 per 100 listings or per 5,000 words",
-          "time_to_first_dollar": "2-3 days (post in Amazon seller forums, Fiverr)",
-          "free_stack": "OpenRouter free models + HF translation models + manual spot-check"
+          "idea": "Podcast Episode Transcription + Summary",
+          "who_pays": "Indie podcasters, YouTubers, coaches, course creators",
+          "deliverable": "Timestamped transcript plus a 5-bullet summary and 3 suggested titles",
+          "price_usd": "$8-$15 per 30-min episode",
+          "time_to_first_dollar": "2-3 days",
+          "free_stack": "OpenAI Whisper via Groq or Hugging Face for ASR, Gemini for summary/titles"
         },
         {
-          "idea": "Meeting notes and action-item pack",
-          "who_pays": "Small agencies, coaches, remote teams, real estate agents",
-          "deliverable": "Per meeting: transcript, summary, decisions, action items with owners, sent as a formatted doc",
-          "price_usd": "10-25 per meeting; monthly retainer $80-150 for up to 10 meetings",
-          "time_to_first_dollar": "1-2 days (pitch to local business networks, Slack/Discord communities)",
-          "free_stack": "Groq Whisper + Groq Llama for structured summary"
+          "idea": "Bulk Product Review Tagging",
+          "who_pays": "Small DTC brands, Amazon FBA sellers, Shopify store owners",
+          "deliverable": "CSV of customer reviews labeled with topic tags (shipping, quality, fit, etc.) and sentiment",
+          "price_usd": "$10 per 1,000 reviews",
+          "time_to_first_dollar": "3-5 days",
+          "free_stack": "Cohere or OpenRouter free models for classification, Python scripts for batching"
         },
         {
-          "idea": "Setup of a free internal AI assistant (BYO key)",
-          "who_pays": "Freelancers, copywriters, small agencies who want ChatGPT-like help but with templates",
-          "deliverable": "Configured open-source chat UI + 20+ prompt templates + SOPs, installed on their machine or a free HF Space",
-          "price_usd": "75-200 per setup, plus optional $30/mo maintenance",
-          "time_to_first_dollar": "2-5 days (sell via direct outreach in indie/Slack communities)",
-          "free_stack": "Open WebUI on a free HF Space + Ollama or OpenRouter free models"
+          "idea": "Translation Pass for Short Content",
+          "who_pays": "Indie authors, bloggers, course creators, app developers",
+          "deliverable": "Clean translation of articles, app store listings, or short marketing copy into EN/ES/FR/DE/JA",
+          "price_usd": "$1 per 1,000 words",
+          "time_to_first_dollar": "same day",
+          "free_stack": "Hugging Face translation models or OpenRouter free LLMs, human-style post-editing pass"
         },
         {
-          "idea": "Resume / cover-letter rewrite batches",
-          "who_pays": "Job seekers, career changers, recent grads",
-          "deliverable": "Rewritten resume tailored to a specific job ad + matching cover letter, 24h turnaround",
-          "price_usd": "25-60 per resume bundle",
-          "time_to_first_dollar": "same day (Fiverr gig, university Facebook groups)",
-          "free_stack": "OpenRouter free LLM + your own prompt templates"
+          "idea": "Resume / Cover Letter Rewrite",
+          "who_pays": "Job seekers in tech, marketing, and ops",
+          "deliverable": "Rewritten, ATS-friendly resume tailored to a specific job posting",
+          "price_usd": "$15-$30 per resume",
+          "time_to_first_dollar": "1-3 days",
+          "free_stack": "Gemini or OpenRouter free models with a prompt template you sell as part of the deliverable"
         },
         {
-          "idea": "Real-estate listing description packs",
-          "who_pays": "Independent realtors / property managers",
-          "deliverable": "Per property: MLS-style description, social captions, 5 image captions, email blast",
-          "price_usd": "15-30 per property; $100 monthly retainer for up to 8 listings",
-          "time_to_first_dollar": "2-3 days (direct outreach to local realtors)",
-          "free_stack": "OpenRouter free LLM + HF image captioning model"
+          "idea": "Bulk Headshot / Product Stylization",
+          "who_pays": "Etsy sellers, small Shopify stores, indie game devs",
+          "deliverable": "5-10 stylized product or character images in a chosen style",
+          "price_usd": "$5 per 5-image pack",
+          "time_to_first_dollar": "same day",
+          "free_stack": "Pollinations.ai or local Stable Diffusion via ComfyUI on Colab free GPU"
         }
       ],
       "owner_actions": [
-        "Sign up today (no card) for Groq, OpenRouter, Hugging Face, remove.bg, and OCR.space, and save API keys in a single .env file so you can switch providers when one is rate-limited.",
-        "Pick ONE of the eight ideas above, build a tiny demo deliverable (one real example), and post a fixed-price gig on Fiverr or Upwork today \u2014 do not build a full site before you have one paid order.",
-        "Write a one-page 'menu' (PDF or Notion page) listing your 3-5 batch services with prices, turnaround, and 'send me files, get results back' wording; share it in 3 relevant Facebook groups, Slack/Discords, and subreddits where your buyers already hang out.",
-        "Create a reusable prompt-and-script kit per service (transcription cleanup, PDF extraction, listing translation) so each new order takes under 60 minutes to deliver, leaving room for margin even at $15 per job.",
-        "Track every order, cost-equivalent (which free API did it use), and turnaround time in a simple spreadsheet; once one service hits 10 orders, raise the price by $5-10 or convert it into a $80-150 monthly retainer for repeat buyers."
+        "Pick one easy idea (start with meeting notes cleanup or background removal) and post a concrete offer on a local freelancer marketplace or community board today.",
+        "Build a 1-page intake form using a free Google Form or Tally linked to a free-hosted AI tool on Vercel or HF Spaces.",
+        "Test the full pipeline end-to-end with 2-3 sample jobs before publishing, so pricing and turnaround time are realistic.",
+        "Create a fixed-scope, fixed-price listing or DM template that names a specific buyer, a specific deliverable, and a specific price.",
+        "Collect before/after samples (anonymized) into a one-page portfolio so buyers can see the output quality."
       ]
     },
-    "last_refresh_at": "2026-08-30T12:56:23.107318+00:00",
+    "last_refresh_at": "2026-08-31T13:55:14.253880+00:00",
     "free_ai_focus": [
       "free-tier LLM APIs with no credit card requirement",
       "free speech-to-text, TTS, and transcription APIs",
@@ -671,7 +712,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-31T05:37:47.231615+00:00",
+    "checked_at": "2026-08-31T13:54:06.819481+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -876,7 +917,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.36.1-20260831-053806",
+  "last_evolution_branch": "evolve/1.36.1-20260831-135514",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 12,

@@ -23,4 +23,5 @@ def get_env(name: str) -> Optional[str]:
 	stripped = value.strip()
 	return stripped or None
 
+
 __all__ = ["get_env"]

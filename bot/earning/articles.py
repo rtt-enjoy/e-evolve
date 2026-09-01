@@ -10,6 +10,7 @@ from __future__ import annotations
 import logging
 import os
 import re
+from datetime import datetime, timezone
 from typing import Any, Optional
 
 from . import devto, devto_stats, trending
@@ -244,7 +245,6 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	# Check rate limiting
 	state = status.setdefault("article_daily", {})
 	last_date = state.get("date", "")
-	from datetime import datetime, timezone
 	today = datetime.now(timezone.utc).date().isoformat()
 	
 	forced = int(status.get("_overrides", {}).get("force_articles", 0) or 0)
@@ -815,15 +815,27 @@ def _record_reject(status: dict, code: str) -> None:
     more useful question, "which gate is actually costing us articles". Without
     the tally a gate that silently kills one draft in three looks identical to
     one that has never fired.
+
+    Monthly buckets guard against a different silent failure: the lifetime
+    tally was monotonically increasing, so a gate that has fired every cycle
+    since launch looks indistinguishable from one that fired only once. The
+    dashboard would then show "fabricated: 12" forever, which is what the
+    owner called "no way to tell a quiet month from a permanently broken
+    gate". The per-month buckets reset the visible number, so the owner can
+    see when a gate is currently broken instead of reading its full history.
     """
 	rec = status.setdefault("article_rejects", {})
 	rec["last_reason"] = code
 	rec["last_detail"] = _REJECTS.get(code, code)
-	from datetime import datetime, timezone
 	rec["last_at"] = datetime.now(timezone.utc).isoformat()
 	counts = rec.setdefault("counts", {})
 	counts[code] = int(counts.get(code, 0)) + 1
 	rec["total"] = int(rec.get("total", 0)) + 1
+	month = datetime.now(timezone.utc).strftime("%Y-%m")
+	by_month = rec.setdefault("by_month", {})
+	month_bucket = by_month.setdefault(month, {})
+	month_bucket[code] = int(month_bucket.get(code, 0)) + 1
+	month_bucket["total"] = int(month_bucket.get("total", 0)) + 1
 
 
 def _duplicate_reason(article: dict, status: dict) -> str:
@@ -839,13 +851,13 @@ def _duplicate_reason(article: dict, status: dict) -> str:
 	# Catch near-duplicates that differ by a word or two.
 	new_words = set(title_key.split())
 	if len(new_words) >= 3:
-		for old in hist.get("titles", []):
-			old_words = set(old.split())
+		for stored in hist.get("titles", []):
+			old_words = set(stored.split())
 			if not old_words:
 				continue
 			overlap = len(new_words & old_words) / len(new_words | old_words)
 			if overlap >= 0.8:
-				return f"near-duplicate of earlier title ({overlap:.0%} overlap): {old!r}"
+				return f"near-duplicate of earlier title ({overlap:.0%} overlap): {stored!r}"
 	return ""
 
 
@@ -891,7 +903,7 @@ _TITLE_BANNED = [
 	(r"\b(amazing|awesome|incredible|mind.blowing|insane|crazy)\b", "hype adjective"),
 	(r"\b(secrets?|hacks?)\b", 'content-farm word "secrets/hacks"'),
 	(r"\bdeep dive\b", 'overused "deep dive"'),
-	(r"\btop \d+\b", 'listicle "top N"'),
+	(r"\btop \d\b", 'listicle "top N"'),
 	(r"\bmust.(know|read|have)\b", 'clickbait "must-know"'),
 	(r"!", "exclamation mark"),
 	("__SHOUTING__", "ALL-CAPS word"),
@@ -1037,11 +1049,10 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
+
 # Numbers the model has no way to know and reliably invents: latency figures,
 # parameter counts, prices per token, context windows. Prose outside code blocks
 # only -- real numbers inside code (timeouts, retries) are fine.
-
-
 
 
 
@@ -1077,7 +1088,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

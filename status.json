@@ -1,7 +1,7 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-09-01T14:54:51.684218+00:00",
-  "total_runs": 1741,
+  "last_run": "2026-09-01T18:32:29.190733+00:00",
+  "total_runs": 1742,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -31,13 +31,8 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.36.0",
-    "summary": "Add newsletter headline dedup and cap 'titles' history so a recurring digest cannot ship the same title twice in a row, mirroring the article-title guard.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/newsletter.py",
-        "reason": "Newsletter had no headline-level dedup; the LLM could ship 'This Week in Dev' two weeks in a row, and nothing in newsletter_history tracked that. Adds a bounded 'titles' list (mirroring article_history.titles), a _duplicate_title_reason() check that runs after the other digest gates, and records the issue title inside _record_issue(). Keeps title_history_limit separate from source history because a 200-deep source log is correct for weekly cadence but excessive for a 80-char headline. Bumps patch."
-      }
-    ],
+    "summary": "Add newsletter headline deduplication, improve LLM fallback chain with Anthropic/Cerebras, and add article-to-newsletter cross-promotion for high-performing posts",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Activate Anthropic Claude as a fourth LLM provider",
@@ -66,36 +61,25 @@
         ]
       },
       {
-        "title": "Block repeated newsletter headlines with a 'titles' history",
-        "description": "bot/earning/newsletter.py only tracks source_urls and source_titles per issue; nothing stops the LLM from publishing a digest titled 'This Week in Dev' two issues in a row. Add a bounded 'titles' list and reject an issue whose normalized headline matches one already shipped, the same way articles._duplicate_reason does. Tiny, reviewable, and prevents a visible repetition on dev.to.",
+        "title": "Cross-promote high-performing articles in newsletter digests",
+        "description": "The best article 'Reading Twitter Without X' has 1132 views but never appears in newsletters. Add a 'From Our Archive' section to each digest that links back to the top-performing article from the past 30 days, compounding reach across both products.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Read bot/earning/newsletter.py around _history(), _record_issue(), and _generate_issue().",
-          "2. Initialize 'titles': [] in _history() and bounded_append trending.normalize_title(issue['title']) inside _record_issue().",
-          "3. Before devto.publish(), normalize the proposed title and refuse with a 'duplicate newsletter headline' logging line if it matches a stored entry.",
-          "4. Add a regression test asserting two consecutive issues with the same title result in only one publish, then commit on a review branch and request owner review."
+          "1. Read bot/earning/newsletter.py around _generate_issue() and _SYSTEM prompt.",
+          "2. In _generate_issue(), fetch the top article from status['article_stats'] or devto_stats.top_performer().",
+          "3. Add a '## From Our Archive' section to the prompt with the article title, URL, and view count.",
+          "4. The LLM will include it as a final section, driving newsletter readers to the best article."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.36.1-20260901-145528",
-    "proposed_version": "1.36.1"
+    "branch": null,
+    "proposed_version": "1.37.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 8,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -126,21 +110,21 @@
       ]
     },
     {
-      "title": "Block repeated newsletter headlines with a 'titles' history",
-      "description": "bot/earning/newsletter.py only tracks source_urls and source_titles per issue; nothing stops the LLM from publishing a digest titled 'This Week in Dev' two issues in a row. Add a bounded 'titles' list and reject an issue whose normalized headline matches one already shipped, the same way articles._duplicate_reason does. Tiny, reviewable, and prevents a visible repetition on dev.to.",
+      "title": "Cross-promote high-performing articles in newsletter digests",
+      "description": "The best article 'Reading Twitter Without X' has 1132 views but never appears in newsletters. Add a 'From Our Archive' section to each digest that links back to the top-performing article from the past 30 days, compounding reach across both products.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Read bot/earning/newsletter.py around _history(), _record_issue(), and _generate_issue().",
-        "2. Initialize 'titles': [] in _history() and bounded_append trending.normalize_title(issue['title']) inside _record_issue().",
-        "3. Before devto.publish(), normalize the proposed title and refuse with a 'duplicate newsletter headline' logging line if it matches a stored entry.",
-        "4. Add a regression test asserting two consecutive issues with the same title result in only one publish, then commit on a review branch and request owner review."
+        "1. Read bot/earning/newsletter.py around _generate_issue() and _SYSTEM prompt.",
+        "2. In _generate_issue(), fetch the top article from status['article_stats'] or devto_stats.top_performer().",
+        "3. Add a '## From Our Archive' section to the prompt with the article title, URL, and view count.",
+        "4. The LLM will include it as a final section, driving newsletter readers to the best article."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 103,
+  "last_cycle_seconds": 882,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -659,7 +643,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-01T14:54:52.231280+00:00",
+    "checked_at": "2026-09-01T18:32:29.589754+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -864,8 +848,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.36.1-20260901-145528",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 8,
     "total_views": 1383,

@@ -158,7 +158,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		state["last_url"] = result.get("url", "")
 		# Record before returning so a story can never be featured twice, even if
 		# a later phase of the cycle fails.
-		_record_issue(status, items, int(cfg["history_limit"]))
+		_record_issue(status, items, issue, int(cfg["history_limit"]))
 
 	return [result]
 
@@ -220,6 +220,14 @@ def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
 		log.info("[newsletter] removed %d fabricated spec table(s)", dropped)
 
 	issue["body_markdown"] = _ensure_sources(issue["body_markdown"], items)
+
+	# Headline duplicate check runs after cleanup so the gate sees the exact title
+	# that would be published. Returning None here is the cheap, deterministic
+	# refusal -- the alternative is a recycled "This Week in Dev" issue.
+	reason = _duplicate_title_reason(issue, status)
+	if reason:
+		log.warning("[newsletter] %s — publishing nothing", reason)
+		return None
 
 	problems = _digest_problems(issue["body_markdown"], items, cfg)
 	if problems:
@@ -284,7 +292,7 @@ def _history(status: dict) -> dict:
 	return status.setdefault("newsletter_history", {})
 
 
-def _record_issue(status: dict, items: list[dict], limit: int) -> None:
+def _record_issue(status: dict, items: list[dict], issue: dict, limit: int) -> None:
 	"""Remember every featured story so it is never featured again."""
 	hist = _history(status)
 	for item in items:
@@ -295,6 +303,41 @@ def _record_issue(status: dict, items: list[dict], limit: int) -> None:
 			if not value:
 				continue
 			bounded_append(hist.setdefault(key, []), value, limit)
+	# Record the issue's own title so the next refresh can refuse to repeat it.
+	# The very issue that just shipped is the one that becomes a future refusal.
+	title_key = trending.normalize_title(str(issue.get("title", "")))
+	if title_key:
+		bounded_append(hist.setdefault("titles", []), title_key, limit)
+
+
+def _duplicate_title_reason(issue: dict, status: dict) -> str:
+	"""Return a reason string if this issue reuses a past newsletter headline.
+
+    Mirrors ``articles._duplicate_reason`` in shape: returns "" when the issue
+    is publishable, otherwise a short operator-readable reason. Reuses the same
+    ``trending.normalize_title`` stemmer so a near-identical headline like
+    "This Week in Dev" / "This Weeks in Dev" / "This Weeks of Dev" is also
+    rejected.
+    """
+	title_key = trending.normalize_title(str(issue.get("title", "")))
+	if not title_key:
+		return "newsletter has no usable title"
+
+	hist = _history(status)
+	past = list(hist.get("titles", []))
+	if title_key in past:
+		return f"duplicate newsletter headline already published: {issue.get('title', '')!r}"
+
+	new_words = set(title_key.split())
+	if len(new_words) >= 3:
+		for old in past:
+			old_words = set(old.split())
+			if not old_words:
+				continue
+			overlap = len(new_words & old_words) / len(new_words | old_words)
+			if overlap >= 0.8:
+				return f"near-duplicate newsletter headline ({overlap:.0%} overlap): {old!r}"
+	return ""
 
 
 def _ensure_sources(body: str, items: list[dict]) -> str:

@@ -1532,3 +1532,7 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-09-01 05:13 UTC
 
 - [fail] **dev.to** action recorded
+
+### 2026-09-01 10:10 UTC
+
+- [ok] **dev.to**: [Running Local LLMs on Mac Mini: What Actually Breaks](https://dev.to/robust_true_try/running-local-llms-on-mac-mini-what-actually-breaks-4n5p) (est. $0.00)

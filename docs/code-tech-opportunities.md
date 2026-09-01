@@ -1,6 +1,6 @@
 # Free AI Earning Queue
 
-Refreshed: 2026-08-31T13:55:14.253880+00:00
+Refreshed: 2026-09-01T14:55:28.470571+00:00
 Daily target: $10.00
 
 Suggestions favour free AI services and free AI APIs with zero upfront cost.
@@ -17,81 +17,65 @@ Suggestions favour free AI services and free AI APIs with zero upfront cost.
 
 ## Current Best Angle
 
-The cleanest current angle is selling tiny done-for-you services (transcription cleanup, meeting notes, PDF data extraction, background removal, translation passes) built on top of free-tier APIs like Groq, Google Gemini, Mistral, OpenRouter, and Hugging Face Inference. Each job is a fixed-price deliverable with a named buyer (local small businesses, freelancers, real-estate agents, Etsy sellers, podcasters), so no audience, ad spend, or paid infrastructure is required, and start-up cost is essentially zero.
+The fastest path to first dollar is offering focused, fixed-price AI micro-services where the buyer pays for the output, not the compute. Groq's free LLM API (no credit card, fast inference), AssemblyAI's free speech-to-text tier, Hugging Face's free inference API, ElevenLabs' free TTS tier, Cohere's free embedding tier, and LibreTranslate's open-source translation can each be packaged into deliverables with prices between $5-$50, starting same-day with no upfront spend.
 
 ## Free AI Services To Use
 
 | Service | What it does | Free tier | Card? | How to earn | Price guide |
 | --- | --- | --- | --- | --- | --- |
-| Groq Cloud (LLM API) | Very fast LLM inference for Llama, Mixtral, Gemma, Whisper | Free dev tier with rate-limited requests; verify current limit | no | Offer a '1-hour meeting -> clean notes + action items' done-for-you service. | $7-$15 per meeting |
-| Google AI Studio / Gemini API | Gemini LLM API with generous free quota | Free tier with RPM/RPD limits; verify current limit | no | Sell a 'messy notes -> structured doc' or email/draft rewrite service. | $5 per rewrite, $10 per structured doc |
-| OpenRouter (free model router) | Single API key to call multiple free LLMs (DeepSeek, Qwen, Mistral, Llama) | Several models marked ':free' with daily request caps; verify current limit | no | Build a prompt-routing setup for clients and charge for the configuration + prompts. | $25-$75 setup fee per client |
-| Mistral AI (La Plateforme) | Mistral / Mixtral LLM API | Free experimentation tier with limited requests; verify current limit | verify | Run batch summarization of articles or PDFs as a fixed-price job. | $0.10-$0.30 per article, $5 per 20-page PDF |
-| Hugging Face Inference API | Hosted models for summarization, translation, embeddings, ASR, TTS, image tasks | Free tier with monthly credit allowance; verify current limit | no | Resell speech-to-text transcription or translation as a fixed-price service. | $0.05-$0.15 per audio minute, $1 per 1k words translated |
-| Cohere Trial API | LLM, summarization, embeddings, classification | Trial keys with monthly request allowance; verify current limit | verify | Sell bulk classification/tagging of product reviews or support tickets. | $10 per 1,000 items |
-| Google Cloud Speech-to-Text (free tier) | Audio transcription API | Free monthly usage up to a cap; verify current limit | yes | Transcribe podcasts or YouTube audio and sell cleaned transcripts. | $1 per 10 minutes of audio |
-| Deepgram (free tier) | Speech-to-text API with diarization | Free monthly credits on signup; verify current limit | yes | Offer 'interview audio -> transcript + summary' to journalists and researchers. | $5 per interview |
-| edge-tts (open-source) | Free Microsoft Edge TTS, runs on your machine | Free, no key | no | Generate voiceovers for short videos or IVR prompts as a service. | $3-$8 per finished minute of audio |
-| Piper TTS (open-source) | Local neural TTS, runs on CPU | Free, runs locally | no | Produce audiobook-style narration samples for indie authors. | $5 per 1,000 words narrated |
+| Groq | Fast free LLM inference with Llama 3.1 70B | 14,400 tokens/min, no time limit | no | Resell as a document-cleaning, rewrite, or summarization API | $5-25 per document batch |
+| AssemblyAI | Speech-to-text with speaker diarization | verify current limit (3 hours/month typical free tier) | verify (may require signup) | Sell transcribed podcast summaries or meeting notes | $10-30 per hour of audio |
+| Hugging Face Inference API | Hosted image generation, OCR, and embedding models | Rate-limited free tier on Spaces and Endpoints | no for Spaces, verify for Endpoints | Bundle image gen or document extraction into a one-page tool | $5-20 per task |
+| ElevenLabs | AI voice generation and text-to-speech | 10,000 characters/month free | no | Sell short voiceover clips for videos or audiobooks | $5-15 per 500-word clip |
+| Cohere | LLM commands, embeddings, and reranking | Free tier for Command R+ and embeddings, no credit card | no | Build a document Q&A tool and charge per query | $0.05-0.10 per query to client, bundle at $10-30/month |
+| LibreTranslate | Open-source machine translation API | Self-host free or use public instances free | no | Sell batch document translation at $0.01-0.05/page | $5-50 per document depending on length |
 
 ## Easy Earning Ideas
 
-1. **Meeting Notes Cleanup Service**
-   - Who pays: Freelancers, consultants, small agency owners, real-estate agents
-   - Deliverable: Clean structured notes + action items from a recorded meeting (audio or rough transcript)
-   - Price: $7-$15 per meeting
-   - Time to first dollar: same day
-   - Free stack: Groq Whisper for transcription + Groq LLM or Gemini for structuring
-2. **PDF-to-Spreadsheet Extraction**
-   - Who pays: Bookkeepers, accountants, property managers, small e-commerce sellers
-   - Deliverable: Clean Excel/CSV file extracted from messy PDF invoices, statements, or rent rolls
-   - Price: $10-$25 per document batch
-   - Time to first dollar: 2-3 days
-   - Free stack: Marker/PyMuPDF + Tesseract for parsing, Gemini for structuring, Supabase or local scripts for assembly
-3. **Background Removal for Resellers**
-   - Who pays: Etsy, eBay, Poshmark, Depop sellers
-   - Deliverable: Cleaned product photos with backgrounds removed and optional white background
-   - Price: $10 per 50 images
-   - Time to first dollar: same day
-   - Free stack: rembg running locally, bundled via a small free-hosted tool or simple email intake
-4. **Podcast Episode Transcription + Summary**
-   - Who pays: Indie podcasters, YouTubers, coaches, course creators
-   - Deliverable: Timestamped transcript plus a 5-bullet summary and 3 suggested titles
-   - Price: $8-$15 per 30-min episode
-   - Time to first dollar: 2-3 days
-   - Free stack: OpenAI Whisper via Groq or Hugging Face for ASR, Gemini for summary/titles
-5. **Bulk Product Review Tagging**
-   - Who pays: Small DTC brands, Amazon FBA sellers, Shopify store owners
-   - Deliverable: CSV of customer reviews labeled with topic tags (shipping, quality, fit, etc.) and sentiment
-   - Price: $10 per 1,000 reviews
-   - Time to first dollar: 3-5 days
-   - Free stack: Cohere or OpenRouter free models for classification, Python scripts for batching
-6. **Translation Pass for Short Content**
-   - Who pays: Indie authors, bloggers, course creators, app developers
-   - Deliverable: Clean translation of articles, app store listings, or short marketing copy into EN/ES/FR/DE/JA
-   - Price: $1 per 1,000 words
-   - Time to first dollar: same day
-   - Free stack: Hugging Face translation models or OpenRouter free LLMs, human-style post-editing pass
-7. **Resume / Cover Letter Rewrite**
-   - Who pays: Job seekers in tech, marketing, and ops
-   - Deliverable: Rewritten, ATS-friendly resume tailored to a specific job posting
-   - Price: $15-$30 per resume
-   - Time to first dollar: 1-3 days
-   - Free stack: Gemini or OpenRouter free models with a prompt template you sell as part of the deliverable
-8. **Bulk Headshot / Product Stylization**
-   - Who pays: Etsy sellers, small Shopify stores, indie game devs
-   - Deliverable: 5-10 stylized product or character images in a chosen style
-   - Price: $5 per 5-image pack
-   - Time to first dollar: same day
-   - Free stack: Pollinations.ai or local Stable Diffusion via ComfyUI on Colab free GPU
+1. **Audio-to-meeting-notes pipeline**
+   - Who pays: Freelancers, small agency owners, researchers
+   - Deliverable: Upload MP3, receive cleaned, bullet-pointed notes with action items
+   - Price: $15-25 per recording
+   - Time to first dollar: same day (announce on LinkedIn, Upwork profile)
+   - Free stack: AssemblyAI (transcription) + Groq (summarization)
+2. **Resume rewrite service**
+   - Who pays: Job seekers needing cover letters or resume rewrites
+   - Deliverable: Upload resume + job posting, receive rewritten resume tailored to role
+   - Price: $20-40 per resume
+   - Time to first dollar: 2-3 days (create a simple landing page or Fiverr gig)
+   - Free stack: Groq LLM (rewrite)
+3. **YouTube video chapter generator**
+   - Who pays: YouTube creators needing auto-generated timestamps and summaries
+   - Deliverable: Upload video URL, receive chapter list and short description
+   - Price: $5-15 per video
+   - Time to first dollar: same day (offer in YouTube creator Facebook groups)
+   - Free stack: AssemblyAI or Groq Whisper (transcription) + Groq (structuring)
+4. **PDF text-extraction and summary tool**
+   - Who pays: Lawyers, researchers, students needing document digestion
+   - Deliverable: Upload PDF, receive extracted text and key-point summary
+   - Price: $10-30 per document
+   - Time to first dollar: 2-3 days (post on Reddit r/regulations, research communities)
+   - Free stack: Hugging Face OCR + Groq summarization
+5. **Small-business chatbot setup**
+   - Who pays: Local shops, clinics, or service businesses wanting a Q&A bot
+   - Deliverable: Configure a free-tier AI chatbot on their website with their FAQ data
+   - Price: $50-150 one-time setup fee
+   - Time to first dollar: 1-2 weeks (cold outreach to local businesses)
+   - Free stack: Cohere embeddings + free vector DB (Qdrant) + simple frontend
+6. **Batch image background removal**
+   - Who pays: E-commerce sellers, photographers needing quick background removal
+   - Deliverable: Upload ZIP of images, receive processed images back within 24h
+   - Price: $20-50 per batch of 20-50 images
+   - Time to first dollar: same day (post in Shopify seller groups)
+   - Free stack: Hugging Face Spaces (RemBG or similar free models)
 
 ## Next Actions
 
-- Pick one easy idea (start with meeting notes cleanup or background removal) and post a concrete offer on a local freelancer marketplace or community board today.
-- Build a 1-page intake form using a free Google Form or Tally linked to a free-hosted AI tool on Vercel or HF Spaces.
-- Test the full pipeline end-to-end with 2-3 sample jobs before publishing, so pricing and turnaround time are realistic.
-- Create a fixed-scope, fixed-price listing or DM template that names a specific buyer, a specific deliverable, and a specific price.
-- Collect before/after samples (anonymized) into a one-page portfolio so buyers can see the output quality.
+- 1. Sign up for Groq and AssemblyAI today (no credit card) to test the transcription + summarization pipeline on one real audio file.
+- 2. Create a simple single-page offer on Gumroad or a Google Form titled 'Audio to Meeting Notes - $20' and post the link in two relevant online communities.
+- 3. Verify Cohere's exact free embedding limits and draft a one-page prompt library for document Q&A that you can sell as a template.
+- 4. Pick one earning idea above and spend 2 hours building the minimum viable version: upload button, API call, output display.
+- 5. Reach out to 5 potential buyers directly (no audience needed) with the specific deliverable and price before building anything else.
 
 ## Monetization Patterns
 
@@ -134,7 +118,7 @@ The cleanest current angle is selling tiny done-for-you services (transcription 
 
 ## Strategy Playbook
 
-- Search online for currently-free AI services first, then have Kimi K3 turn them into concrete earning offers.
+- Search online for currently-free AI services first, then have the LLM turn them into concrete earning offers.
 - Sell the outcome, not the technology. Buyers pay for clean output, not for an API name.
 - Keep input cost at zero: free API, free hosting, free scheduler. Every dollar in is margin.
 - Prefer offers the owner can deliver the same day with no upfront spend.
@@ -184,37 +168,7 @@ The cleanest current angle is selling tiny done-for-you services (transcription 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379
-2. [Two weeks ago I asked for feedback on Scinta, our screenshots-to-actions Mac app. We just launched](https://www.reddit.com/r/SideProject/comments/1w2si2i/two_weeks_ago_i_asked_for_feedback_on_scinta_our/)
-   - Score: 100/100
-   - Value signal: $80.00
-   - Why: visible or inferred value around $80.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Two weeks ago I asked for feedback on Scinta, our screenshots-to-actions Mac app. We just launched
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w2si2i/two_weeks_ago_i_asked_for_feedback_on_scinta_our/
-     Why this is suitable: visible or inferred value around $80.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Hey everybody! My wife and I are building Scinta - a macOS app that turns screenshots into actions: an error becomes a ticket, dinner Saturday at 7 becomes a calendar event, an email signature becomes a contact. Two weeks ago I showed it here and got some really useful feedback. What came out of it: feature ideas from the comments went to the roadmap - a sharing action, highlighting which part of the screenshot produced each extracted field, accessibility checklist from a UI screenshot - several new features are already on the finish line and will be in one of upcoming releases soon the most common question from different threads and communities - why not just paste the screenshot into ChatGPT? - became our main pitch. There you switch apps, upload, write a prompt, copy the result back and still create the event yourself. Scinta does it in one click. I have my own AI setup and still do n
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Two weeks ago I asked for feedback on Scinta, our screenshots-to-actions Mac app. We just launched" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $80.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1w2si2i/two_weeks_ago_i_asked_for_feedback_on_scinta_our/
-3. [A licence granting this source away, a check that failed its own rule, and each product against its own competitors](https://github.com/famouslytrill-boop/sonara-os/pull/202)
+2. [A licence granting this source away, a check that failed its own rule, and each product against its own competitors](https://github.com/famouslytrill-boop/sonara-os/pull/202)
    - Score: 100/100
    - Value signal: $79.00
    - Why: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -244,7 +198,37 @@ The cleanest current angle is selling tiny done-for-you services (transcription 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/famouslytrill-boop/sonara-os/pull/202
-4. [I built an open-source PDF editor that keeps your files on your computer](https://www.reddit.com/r/SideProject/comments/1w39bei/i_built_an_opensource_pdf_editor_that_keeps_your/)
+3. [My domain renewals kept ambushing me in random months, so I built a tracker for everything my side projects cost](https://www.reddit.com/r/SideProject/comments/1w4c0cm/my_domain_renewals_kept_ambushing_me_in_random/)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: My domain renewals kept ambushing me in random months, so I built a tracker for everything my side projects cost
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1w4c0cm/my_domain_renewals_kept_ambushing_me_in_random/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Like probably half this sub, I had a spreadsheet that was supposed to track what my side projects cost me. It was last updated in March. Meanwhile the actual numbers lived in six different tabs. Stripe for revenue, the hosting dashboard, Neon for the database, Cloudflare, GitHub, and a bank statement full of small charges I couldn&#39;t map to anything anymore. The one question I actually cared about, is this project making or losing money , had no single place where it got answered. So I did the cliché thing and built a tool for it. It&#39;s called StackMemo. What it does: You list each project&#39;s services with costs and renewal dates. The annual domain renewal that ambushes you every year now shows up in advance instead It connects to Stripe, GitHub, Neon, Cloudflare and Koyeb and pulls MRR, stars, traffic and so on every hour. Anything else with a JSON API works through a generic H
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "My domain renewals kept ambushing me in random months, so I built a tracker for everything my side projects cost" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1w4c0cm/my_domain_renewals_kept_ambushing_me_in_random/
+4. [Clypy is live on Product Hunt today after months of building across five platforms](https://www.reddit.com/r/SideProject/comments/1w44tju/clypy_is_live_on_product_hunt_today_after_months/)
    - Score: 100/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
@@ -252,9 +236,9 @@ The cleanest current angle is selling tiny done-for-you services (transcription 
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: I built an open-source PDF editor that keeps your files on your computer
+     Lead: Clypy is live on Product Hunt today after months of building across five platforms
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w39bei/i_built_an_opensource_pdf_editor_that_keeps_your/
+     URL: https://www.reddit.com/r/SideProject/comments/1w44tju/clypy_is_live_on_product_hunt_today_after_months/
      Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
      
@@ -265,117 +249,27 @@ The cleanest current angle is selling tiny done-for-you services (transcription 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: I got tired of PDF tools that ask you to upload your documents somewhere before you can do anything with them. So I built PDF Editor Offline, a free and open-source PDF editor designed around one simple rule: your documents stay on your machine. No account. No file uploads. No recurring subscription. It can handle most of the PDF tasks I regularly need: Edit and annotate PDFs Add text, images, drawings, highlights and comments Fill and sign forms Merge, split, reorder, rotate and crop pages Compress PDFs Convert PDF ↔ Word, PowerPoint, Excel, images, Markdown, EPUB, etc. Run OCR locally Permanently redact sensitive information Remove metadata and hidden/private data Protect and unlock PDFs Search documents There’s also a CLI and Python API for automation, plus Docker support for self-hosting. The desktop app is built with Tauri, the editor uses React, and the backend/tooling is primarily
+     Request excerpt: I previously shared Clypy here while it was still being built. Today it is officially live on Product Hunt. Clypy started with a simple problem: I would copy something on one device and need it on another. It has grown into one private, searchable clipboard across Mac, Windows, Linux, iOS, and Android. The finished product includes: • Unlimited local clipboard history • End-to-end encrypted device sync • Semantic search • On-device screenshot OCR • Collections and reusable snippets • Mobile keyboards and widgets • User-approved memory for AI agents through MCP Unlimited local history is free and requires no account. Pro adds the cross-device features through a one-time purchase. Thank you to everyone here who gave feedback during the build. I would now appreciate feedback on the finished product, launch page, and onboarding. Try Clypy: https://clypy.app Product Hunt: https://www.producth
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "I built an open-source PDF editor that keeps your files on your computer" and can make a small working version.
+     Hi, I found your request about "Clypy is live on Product Hunt today after months of building across five platforms" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1w39bei/i_built_an_opensource_pdf_editor_that_keeps_your/
-5. [I built a project management tool that turns unstructured notes into tasks and documentation](https://www.reddit.com/r/SideProject/comments/1w390c0/i_built_a_project_management_tool_that_turns/)
-   - Score: 100/100
+     Reference: https://www.reddit.com/r/SideProject/comments/1w44tju/clypy_is_live_on_product_hunt_today_after_months/
+5. [My friend wrote this note to explain my app so it wouldn't look like AI slop.](https://www.reddit.com/r/SideProject/comments/1w4dr6g/my_friend_wrote_this_note_to_explain_my_app_so_it/)
+   - Score: 94/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: I built a project management tool that turns unstructured notes into tasks and documentation
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w390c0/i_built_a_project_management_tool_that_turns/
-     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Sooo, why even make yet another tool like this, you might ask? To put it simply, like many devs do, I wasn&#39;t happy with the mainstream options and made my own. Now, some more detail! I&#39;ve been a dev for about 10 years and, for the past 2, I&#39;ve been managing a team. When I was just getting tasks assigned, mostly on Jira/Asana, it wasn&#39;t so bad. The problem is that now I have to run meetings, take notes and plan work for others it&#39;s not so simple anymore. It takes ages and with AI accelerating development it&#39;s already hard to keep up. And the big players having such complex flows and UIs is not helping. To be fair, in bigger/more structured companies it makes sense. Also, why is it that on most project management tools it&#39;s so hard to track what others are doing!? Anyway, tools are either too simple or have grown into beasts that are too complex. So I&#39;ve tri
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "I built a project management tool that turns unstructured notes into tasks and documentation" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1w390c0/i_built_a_project_management_tool_that_turns/
-6. [gave away 100k free credits at launch and now I can't tell if that was smart or stupid](https://www.reddit.com/r/SideProject/comments/1w3cqrg/gave_away_100k_free_credits_at_launch_and_now_i/)
-   - Score: 92/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: gave away 100k free credits at launch and now I can't tell if that was smart or stupid
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w3cqrg/gave_away_100k_free_credits_at_launch_and_now_i/
-     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Shipped a chrome extension on august 10th, 148 weekly users now. It builds google forms with ai. Free tier is 100k credits, no card, works out to something like 5 forms before you hit the wall. The idea was obvious, remove every reason not to try it. And people do try it. What I did not expect is that a big chunk of people who install never send a single message. Not sent one and bounced . Zero. They install, the panel opens, they close it. So I don&#39;t think my problem is the free tier at all. I think I have an activation problem and I spent weeks tuning credits instead of looking at that. I only found it because I finally sat down with the session replays and watched people just... not type anything. The empty state has suggestion chips you can click and I still watched people close the panel. Kind of annoyed at myself because I had the analytics wired up in the first week and didn&#
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "gave away 100k free credits at launch and now I can't tell if that was smart or stupid" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1w3cqrg/gave_away_100k_free_credits_at_launch_and_now_i/
-7. [Real Estate Scraper A token-efficient scraper with llm formatting](https://www.reddit.com/r/SideProject/comments/1w3apwz/real_estate_scraper_a_tokenefficient_scraper_with/)
-   - Score: 92/100
-   - Value signal: $0.00
-   - Why: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
-   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Real Estate Scraper A token-efficient scraper with llm formatting
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w3apwz/real_estate_scraper_a_tokenefficient_scraper_with/
-     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; boring conversion work buyers already pay humans to do by hand
-     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Hey everyone! I built an open-source tool designed to discover, crawl, and extract structured real estate data across any city or country using LLM structured outputs Why this was built: Traditional scrapers break whenever property portals change their layout. LLM-based scrapers solve this, but usually consume huge amounts of tokens. How token efficiency was achieved: DOM Condensation (~75% reduction) : Cleans noise, scripts, and banners prior to LLM processing. Micro-Batch Slicing : Prevents TPM/RPM rate limits, allowing full extraction on free-tier APIs (Google Gemini, Groq, OpenRouter). Index-Matched Curation : AI selects distinct deep portal URLs without hallucinations. Streamlit Dashboard : Client-side filtering, price sorting, and one-click CSV/JSON export. I recommend Start with 1 Curated Site and 1 Page to test your location and conserve token quota. GitHub Repo: https://github.c
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Real Estate Scraper A token-efficient scraper with llm formatting" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1w3apwz/real_estate_scraper_a_tokenefficient_scraper_with/
-8. [I got tired of paying for subscriptions for voice dictation, so I built a 100% local, open-source alternative (OpenDictate)](https://www.reddit.com/r/SideProject/comments/1w2q4ke/i_got_tired_of_paying_for_subscriptions_for_voice/)
-   - Score: 90/100
-   - Value signal: $20.00
-   - Why: visible or inferred value around $20.00; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: I got tired of paying for subscriptions for voice dictation, so I built a 100% local, open-source alternative (OpenDictate)
+     Lead: My friend wrote this note to explain my app so it wouldn't look like AI slop.
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w2q4ke/i_got_tired_of_paying_for_subscriptions_for_voice/
-     Why this is suitable: visible or inferred value around $20.00; runs on a free AI tier, so input cost is zero and margin is total
+     URL: https://www.reddit.com/r/SideProject/comments/1w4dr6g/my_friend_wrote_this_note_to_explain_my_app_so_it/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
      
      Constraints:
@@ -385,12 +279,102 @@ The cleanest current angle is selling tiny done-for-you services (transcription 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: Hey r/SideProject ! Like many developers and writers, I love using voice dictation to write at 150+ WPM. But existing tools like Wispr Flow or Superwhisper either require monthly cloud subscriptions ($12–$20/mo), lock you into macOS, or stream your raw microphone audio to remote servers. I spent the last few weeks building OpenDictate , a completely free, local-first, open-source AI voice dictation app for your desktop. What it does: Global Hotkey, Anywhere : Press Ctrl+Alt+Space (or ⌘+Shift+Space on Mac), speak naturally, and your words are instantly typed into whatever app has focus (VS Code, Notion, Slack, Obsidian, terminal, etc.). 100% Offline Private : Speech recognition runs entirely on your device via ONNX Runtime (FastConformer, Parakeet TDT, Whisper Large v3 Turbo). Zero cloud, zero telemetry. Hands-Free Wake Word : Say Hey Dictate to start dictating without touching your keybo
+     Request excerpt: I&#39;ve been building SpeakoFlow for the past few months. It&#39;s a local, open-source voice assistant that lets you talk to your computer instead of constantly reaching for your keyboard. I actually use it myself. Emails, Slack replies, asking AI questions, drafting things, and regular dictation all go through it. But there was one part I wasn&#39;t really happy with. The speech-to-text worked well, but the cleanup didn&#39;t. If I wanted the kind of dictation cleanup you get from paid cloud services, I either had to wait too long or send my text to a cloud provider. That kind of defeated the point. I wanted SpeakoFlow to be fast, local, and private. So I decided to fine-tune a really small open-weight language model specifically for dictation cleanup. The goal was simple: fix the mistakes and corrections I actually made while speaking, without rewriting everything else. I recently fi
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "I got tired of paying for subscriptions for voice dictation, so I built a 100% local, open-source alternative (OpenDictate)" and can make a small working version.
+     Hi, I found your request about "My friend wrote this note to explain my app so it wouldn't look like AI slop." and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $20.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1w2q4ke/i_got_tired_of_paying_for_subscriptions_for_voice/
+     Reference: https://www.reddit.com/r/SideProject/comments/1w4dr6g/my_friend_wrote_this_note_to_explain_my_app_so_it/
+6. [I launched a one-time-payment alternative to subscription legal doc generators, then found out my paywall had been silently broken for 6 mon](https://www.reddit.com/r/SideProject/comments/1w4d7xx/i_launched_a_onetimepayment_alternative_to/)
+   - Score: 90/100
+   - Value signal: $24.99
+   - Why: visible or inferred value around $24.99; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: I launched a one-time-payment alternative to subscription legal doc generators, then found out my paywall had been silently broken for 6 mon
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1w4d7xx/i_launched_a_onetimepayment_alternative_to/
+     Why this is suitable: visible or inferred value around $24.99; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Six months ago I shipped PrivacyPage — a generator for privacy policies, terms of service, EULAs, cookie policies, and disclaimers. The angle: tools like Termly and iubenda charge a monthly subscription forever for a document that changes maybe twice a year. Mine is pay-once (₹849 / $9.99 per doc, $24.99 for all five), and your license key gets you free regenerations whenever laws change. Last week I sat down to audit all 6 of my side projects. PrivacyPage is the only one with a paywall. The paywall was broken. So was the AI generation behind it. It had been dead for months — every person who tried to pay me hit a wall, and I had no error reporting, so I never knew. I rebuilt the entire money path in one day: payment (Razorpay, geo-priced INR/USD), license key issuance, entitlement checks, generation. Then I added the monitoring I should have had from day one. Also shipped today: an open
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "I launched a one-time-payment alternative to subscription legal doc generators, then found out my paywall had been silently broken for 6 mon" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $24.99 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1w4d7xx/i_launched_a_onetimepayment_alternative_to/
+7. [🤖 AI Agent 每周速递 — 2026-08-17](https://github.com/jojowadaxi/ai-agent-trending/issues/19)
+   - Score: 86/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: 🤖 AI Agent 每周速递 — 2026-08-17
+     Source: github
+     URL: https://github.com/jojowadaxi/ai-agent-trending/issues/19
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: # 🤖 AI Agent Trending — 2026-08-17  每周自动抓取 GitHub 上与 AI Agent 相关的热门/新晋项目。  ## Topic: `ai-agent` (按 Stars 排序)  | # | 仓库 | Stars | 语言 | 最近更新 | 简介 | |---|------|-------|------|----------|------| | 1 | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | ⭐ 231,554 | Python | 2026-08-17 | The agent that grows with you | | 2 | [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) | ⭐ 74,394 | Python | 2026-08-16 | Bash is all you need -  A nano claude code–like 「agent harness」, built from 0 to 1 | | 3 | [thedaviddias/Front-End-Checklist](https://github.com/thedaviddias/Front-End-Checklist) | ⭐ 73,540 | MDX | 2026-08-14 | 🗂 The essential checklist for modern web development, for humans and AI agents | | 4 | [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) | ⭐ 72,325 | Python | 2026-08-12 | Give your AI agent eyes to see the
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "🤖 AI Agent 每周速递 — 2026-08-17" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://github.com/jojowadaxi/ai-agent-trending/issues/19
+8. [API to extract data from tiktok, instagram and facebook posts (plus 50+ other platforms)](https://www.reddit.com/r/SideProject/comments/1w46ccl/api_to_extract_data_from_tiktok_instagram_and/)
+   - Score: 86/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: API to extract data from tiktok, instagram and facebook posts (plus 50+ other platforms)
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1w46ccl/api_to_extract_data_from_tiktok_instagram_and/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
+     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: I&#39;m launching Post Reef, an API to extract data from tiktok/instagram/facebook/any website posts and videos. As of now, we extracted data from 51 different platforms. You POST a URL and out comes structured data (JSON). You can extract any sort of data from it, just create your own schema or use one of our own predefined ones. It uses AI to analyse video, transcript, comments, images and captions. I made this product because I use it on another product, cliprecipe, to extract recipes from social media videos. So yes, I&#39;m the first customer! And it works great. If you don&#39;t want to use the AI extraction, you can still just download the assets (images, videos and text elements) and it costs less credits (cheaper). I think this can be useful if: You are building a nutrition, meal planing or recipe app If you want to save automatically trip ideas from a bunch of tiktok videos If
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "API to extract data from tiktok, instagram and facebook posts (plus 50+ other platforms)" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1w46ccl/api_to_extract_data_from_tiktok_instagram_and/

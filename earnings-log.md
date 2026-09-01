@@ -1536,3 +1536,7 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-09-01 10:10 UTC
 
 - [ok] **dev.to**: [Running Local LLMs on Mac Mini: What Actually Breaks](https://dev.to/robust_true_try/running-local-llms-on-mac-mini-what-actually-breaks-4n5p) (est. $0.00)
+
+### 2026-09-01 14:56 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (8 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)

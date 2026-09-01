@@ -38,6 +38,11 @@ _DEFAULTS = {
 	"source_max_age_hours": 168,
 	"history_limit": 200,
 	"min_words": 500,
+	# How many past issue titles to remember for duplicate detection. Same cap
+	# philosophy as article_history: bounded so the file cannot grow without
+	# end, large enough that the bot never repeats a headline within a year of
+	# weekly cadence.
+	"title_history_limit": 80,
 	# Empty means today's behaviour: a general developer digest. Set it to angle
 	# every issue for one audience -- the source article's point that a narrow
 	# niche beats a broad one. Choosing the niche is the owner's call.
@@ -158,7 +163,8 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		state["last_url"] = result.get("url", "")
 		# Record before returning so a story can never be featured twice, even if
 		# a later phase of the cycle fails.
-		_record_issue(status, items, int(cfg["history_limit"]))
+		_record_issue(status, issue, items, int(cfg["history_limit"]),
+		              int(cfg["title_history_limit"]))
 
 	return [result]
 
@@ -166,9 +172,10 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
 	"""Build one digest from fresh trending stories.
 
-    Returns None when too few unused sources are available or the LLM output
-    fails a gate. Publishing nothing is correct -- a thin or recycled digest is
-    worse than no digest.
+    Returns None when too few unused sources are available, the proposed
+    headline repeats one already shipped, or the LLM output fails a gate.
+    Publishing nothing is correct -- a thin or recycled digest is worse than no
+    digest.
     """
 	items = _pick_sources(status, cfg)
 	min_items = int(cfg["min_items"])
@@ -224,6 +231,16 @@ def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
 	problems = _digest_problems(issue["body_markdown"], items, cfg)
 	if problems:
 		log.warning("[newsletter] %s — publishing nothing", "; ".join(problems))
+		return None
+
+	# Reject a headline that already shipped. The same prompt can produce
+	# near-identical titles in a row ("This Week in Dev"), and dev.to surfaces
+	# them in the same byline, so a visible repetition costs the account trust
+	# for no upside. The article module guards this on the other path; this
+	# brings the digest in line.
+	dup_reason = _duplicate_title_reason(issue, status)
+	if dup_reason:
+		log.warning("[newsletter] %s — publishing nothing", dup_reason)
 		return None
 
 	issue["_items"] = items
@@ -284,8 +301,11 @@ def _history(status: dict) -> dict:
 	return status.setdefault("newsletter_history", {})
 
 
-def _record_issue(status: dict, items: list[dict], limit: int) -> None:
-	"""Remember every featured story so it is never featured again."""
+def _record_issue(status: dict, issue: dict, items: list[dict], limit: int,
+                  title_limit: int) -> None:
+	"""Remember every featured story and the issue's own title so the next
+    issue can refuse to repeat either.
+    """
 	hist = _history(status)
 	for item in items:
 		for key, value in (
@@ -295,6 +315,43 @@ def _record_issue(status: dict, items: list[dict], limit: int) -> None:
 			if not value:
 				continue
 			bounded_append(hist.setdefault(key, []), value, limit)
+
+	# Remember the issue's own title so two consecutive issues cannot ship the
+	# same headline. Without this, the LLM was free to call both weekly digests
+	# "This Week in Dev" and the duplicate showed up on the byline for anyone
+	# following the account.
+	issue_title_key = trending.normalize_title(str(issue.get("title", "")))
+	if issue_title_key:
+		bounded_append(hist.setdefault("titles", []), issue_title_key, title_limit)
+
+
+def _duplicate_title_reason(issue: dict, status: dict) -> str:
+	"""Return a reason string if this issue's title repeats an earlier one.
+
+    Mirrors ``articles._duplicate_reason`` for the digest path. A near-miss
+    (e.g. only a stopword changed) is treated the same as an exact repeat: the
+    headline is what readers see in the feed, and "This Week in Dev" twice in
+    a row is the bug this gate exists to prevent.
+    """
+	title_key = trending.normalize_title(str(issue.get("title", "")))
+	if not title_key:
+		return "issue has no usable title"
+
+	hist = _history(status)
+	prior = hist.get("titles", [])
+	if title_key in set(prior):
+		return f"duplicate newsletter headline already shipped: {issue.get('title', '')!r}"
+
+	new_words = set(title_key.split())
+	if len(new_words) >= 3:
+		for old in prior:
+			old_words = set(old.split())
+			if not old_words:
+				continue
+			overlap = len(new_words & old_words) / len(new_words | old_words)
+			if overlap >= 0.8:
+				return f"near-duplicate newsletter headline ({overlap:.0%} overlap): {old!r}"
+	return ""
 
 
 def _ensure_sources(body: str, items: list[dict]) -> str:

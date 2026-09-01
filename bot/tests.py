@@ -1177,12 +1177,28 @@ class TestOpenRouterModelChains(unittest.TestCase):
 		for role, chain in self._chains().items():
 			self.assertEqual(chain[0], llm_module._MAIN, role)
 
-	def test_main_engine_is_a_live_free_model(self):
-		"""stealth/ox-alpha led every chain until it was withdrawn from
-		OpenRouter. The lead must be a real, free, non-stealth slug."""
+	def test_main_engine_is_the_free_auto_router(self):
+		"""The lead is the free auto-router, so model choice tracks the live
+		catalogue instead of a hand-maintained slug that can be withdrawn
+		(as stealth/ox-alpha was)."""
 		import bot.llm as llm_module
-		self.assertTrue(llm_module._MAIN.endswith(":free"), llm_module._MAIN)
-		self.assertFalse(llm_module._MAIN.startswith("stealth/"), llm_module._MAIN)
+		self.assertEqual(llm_module._MAIN, "openrouter/free")
+
+	def test_paid_auto_router_is_never_used(self):
+		"""openrouter/auto bills at the routed model's rate and can select paid
+		models. A cycle must never be able to spend credits."""
+		import bot.llm as llm_module
+		for role, chain in self._chains().items():
+			self.assertNotIn("openrouter/auto", chain, role)
+			self.assertNotIn("openrouter/auto-beta", chain, role)
+
+	def test_named_fallback_follows_the_router(self):
+		"""The router is one upstream service; if it degrades the cycle still
+		needs a concrete model to fall back to."""
+		import bot.llm as llm_module
+		for role, chain in self._chains().items():
+			self.assertEqual(chain[1], llm_module._MAIN_NAMED, role)
+			self.assertTrue(llm_module._MAIN_NAMED.endswith(":free"))
 
 	def test_every_role_has_a_multi_model_chain(self):
 		"""A single-model chain has nothing to fall back to on a rate limit."""
@@ -1191,8 +1207,9 @@ class TestOpenRouterModelChains(unittest.TestCase):
 			chain = llm_module._OPENROUTER_MODELS_BY_ROLE[role]
 			self.assertGreaterEqual(len(chain), 3, role)
 			self.assertEqual(len(chain), len(set(chain)), f"{role} has duplicates")
-			# auto-router last: it always resolves to *some* free model
-			self.assertEqual(chain[-1], "openrouter/free", role)
+			# free auto-router first: it picks the best zero-cost model per
+			# request, and the named models behind it cover it being down.
+			self.assertEqual(chain[0], "openrouter/free", role)
 
 	def test_all_chain_models_are_free_tier(self):
 		"""A paid model in the chain would fail outright without credits."""

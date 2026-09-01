@@ -15,7 +15,7 @@ E-Evolve is a GitHub Actions bot that runs hourly and refreshes RAG, market rese
 
 Current operating policy: API keys are for RAG, research, market analysis, suggestions, draft text, and **publishing articles to dev.to**. The bot must not use keys to post to social media, place trades, mint NFTs, withdraw funds, or comment on external issues.
 
-**Main AI engine: free OpenRouter models via `bot/llm.py`** — no paid engine, no credits required. Every role routes through a zero-cost chain ordered by capability, all led by `minimax/minimax-m3:free` (1M context, $0 in/out, native `response_format` + tools). Each role then diverges by task: `upgrade` falls back to code-specialised models (`poolside/laguna-s-2.1:free`, `cohere/north-mini-code:free`), `research` to the largest-context reasoners (`nvidia/nemotron-3-ultra-550b-a55b:free`, `nvidia/nemotron-3-super-120b-a12b:free`), and `post` to models with native structured output. On 402/429/model-not-found, `bot/llm.py` steps down through *every* remaining model in the role's chain — each getting a fresh retry budget — before falling back to another provider, so a cycle never fails on cost or one model's rate limit.
+**Main AI engine: free OpenRouter models via `bot/llm.py`** — no paid engine, no credits required. Every role routes through a zero-cost chain led by **`openrouter/free`**, OpenRouter's *free auto-router*: it selects the best zero-cost model per request and filters for the features the request needs, so no role has to name a model up front and the choice tracks the live catalogue. Behind it sits a named fallback chain ordered by capability, led by `minimax/minimax-m3:free` (1M context, $0 in/out, native `response_format` + tools), for when the router itself is rate-limited. Each role's fallbacks then diverge by task: `upgrade` falls back to code-specialised models (`poolside/laguna-s-2.1:free`, `cohere/north-mini-code:free`), `research` to the largest-context reasoners (`nvidia/nemotron-3-ultra-550b-a55b:free`, `nvidia/nemotron-3-super-120b-a12b:free`), and `post` to models with native structured output. On 402/429/model-not-found, `bot/llm.py` steps down through *every* remaining model in the role's chain — each getting a fresh retry budget — before falling back to another provider, so a cycle never fails on cost or one model's rate limit.
 
 ---
 
@@ -95,9 +95,10 @@ The gate, in order:
 `version.txt` is bumped **on the review branch only**; the running version
 changes when you merge, not when the bot proposes.
 
-The engine is the free OpenRouter `upgrade` chain led by `minimax/minimax-m3:free` —
-no paid model and no credits, so a cost error can never break a cycle. Paid
-Qwen3.8 variants were evaluated and rejected for this reason.
+The engine is the free OpenRouter `upgrade` chain led by the `openrouter/free`
+auto-router — no paid model and no credits, so a cost error can never break a
+cycle. Paid Qwen3.8 variants were evaluated and rejected for this reason, and
+`openrouter/auto` is refused on the same grounds (see below).
 
 What the bot may still do at runtime:
 
@@ -454,17 +455,26 @@ actions. If such keys exist, they are treated as research context only.
   50 requests/day unless the account has ever bought $10 in credits (then 1,000/day).
   An hourly bot with multiple LLM calls per cycle can approach that ceiling — verify
   the current limit at openrouter.ai/docs before assuming headroom.
-- Model chain is role-aware via `_OPENROUTER_MODELS_BY_ROLE`. Every chain leads with
-  `minimax/minimax-m3:free` and holds 6 entries, ordered hardest/most-capable first and ending in the
-  `openrouter/free` auto-router so there is always a last resort:
+- **`openrouter/auto` is deliberately NOT used.** It is the same auto-routing idea, but its
+  candidate set includes **paid** models and it bills at the routed model's rate (the catalogue
+  reports its pricing as `-1`, i.e. variable). OpenRouter's docs say it is "built for quality, not
+  for staying free" and point zero-cost callers at `openrouter/free` instead. An hourly bot on
+  `openrouter/auto` would spend credits every cycle — the exact failure that removed Kimi K3.
+  `openrouter/auto-beta` is the same deal. Verified against `/api/v1/models`: `openrouter/auto`
+  prices `-1`/`-1`; `openrouter/free` prices `0`/`0`.
+- Model chain is role-aware via `_OPENROUTER_MODELS_BY_ROLE`. Every chain leads with the
+  `openrouter/free` auto-router (`_MAIN`), followed by `minimax/minimax-m3:free` (`_MAIN_NAMED`)
+  and 4 more named free models, ordered hardest/most-capable first. The named tail is not
+  redundancy for its own sake — the router is a single upstream service, and a cycle still needs
+  somewhere to go when it is rate-limited or degraded:
   - `upgrade` → code-specialised fallbacks (`poolside/laguna-s-2.1:free`, `cohere/north-mini-code:free`)
   - `research` → largest-context reasoners (`nvidia/nemotron-3-ultra-550b-a55b:free`, `minimax/minimax-m3:free`)
   - `post` → models with native `response_format`, so JSON drafts don't come back wrapped in prose
   - all other roles use the `_OPENROUTER_MODELS` default chain
-- **Model availability is not permanent.** `stealth/ox-alpha` led every chain until it was
-  withdrawn from OpenRouter; the chains were re-led by `minimax/minimax-m3:free`, chosen by
-  probing the live `/api/v1/models` catalogue and test-calling each candidate. No model is ever
-  the only entry in a chain; a 404 advances to the next one.
+- **Model availability is not permanent** — which is the main argument for the router. `stealth/ox-alpha`
+  led every chain until it was withdrawn from OpenRouter, and the chains had to be re-led by hand.
+  `openrouter/free` resolves against the live catalogue per request, so a withdrawn model is its
+  problem, not a code change here. No model is ever the only entry in a chain; a 404 advances to the next one.
 - **The dashboard reads the chain, it does not restate it.** `status.LLM_ROLE_WORKFLOWS`
   is derived from `llm.ROLE_PROVIDER` + `llm._OPENROUTER_MODELS_BY_ROLE` at call time, so the
   Engine panel can never advertise a model the client no longer calls. `bot/status.py` used to

@@ -42,12 +42,29 @@ _GEMINI_MODELS = [
 # ordered by capability so a rate limit degrades quality instead of breaking a
 # cycle.
 #
-# minimax/minimax-m3:free leads every chain. It is $0 in/$0 out with a 1M
-# context window and is the only free model that advertises BOTH native
-# response_format and tools, which is what keeps JSON drafts from coming back
-# wrapped in prose. It was picked by probing the live OpenRouter catalogue:
-# it returned valid, compiling, spec-complete code on every trial and was the
-# fastest candidate (2-3s vs 5-42s).
+# openrouter/free -- the Free Models Router -- leads every chain. It is
+# OpenRouter's auto-router restricted to zero-cost models: it picks the best
+# free model per request and filters for the features the request needs
+# (response_format, tools), so the model choice tracks the live catalogue
+# instead of a hand-maintained list that goes stale when a model is withdrawn.
+#
+# openrouter/auto is deliberately NOT used. It is the same routing idea but its
+# candidate set includes PAID models and it bills at the routed model's rate
+# (the catalogue reports pricing "-1", i.e. variable). OpenRouter's own docs say
+# it is "built for quality, not for staying free" and point zero-cost callers at
+# openrouter/free. An hourly bot on openrouter/auto would spend real credits
+# every cycle, which is the exact failure that removed Kimi K3.
+#
+# The named models below stay as an explicit fallback chain: the router is one
+# upstream service, and if it is rate-limited or degraded the cycle still needs
+# somewhere to go. They are ordered hardest-first and were picked by probing the
+# live OpenRouter catalogue.
+#
+# minimax/minimax-m3:free is the strongest of them -- $0 in/$0 out with a 1M
+# context window, and the only free model that advertises BOTH native
+# response_format and tools. It returned valid, compiling, spec-complete code on
+# every trial and was the fastest candidate (2-3s vs 5-42s). It led every chain
+# before the router did.
 #
 # It replaced stealth/ox-alpha, which has been withdrawn from OpenRouter --
 # exactly the stealth-release risk noted below. That is why no chain here ever
@@ -60,50 +77,55 @@ _GEMINI_MODELS = [
 #   dots-studio/dots-3-note-preview:free   -- 512K ctx but failed to emit
 #     parseable JSON on repeated trials.
 #   nvidia/nemotron-3.5-lightning:free     -- slow (42s) and failed JSON.
-_MAIN = "minimax/minimax-m3:free"
+# Free auto-router: selects the best zero-cost model per request. Leads every
+# chain, so no role has to name a model up front.
+_MAIN = "openrouter/free"
+
+# Strongest named free model; the first fallback when the router is unavailable.
+_MAIN_NAMED = "minimax/minimax-m3:free"
 
 # Default chain: general-purpose fallback order, strongest first.
 _OPENROUTER_MODELS = [
-	_MAIN,                                      # 1M ctx, response_format + tools
+	_MAIN,                                      # free auto-router: picks per request
+	_MAIN_NAMED,                                # 1M ctx, response_format + tools
 	"nvidia/nemotron-3-ultra-550b-a55b:free",   # 1M ctx, strongest open-weight reasoning
 	"google/gemma-4-26b-a4b-it:free",           # 262K ctx, native function calling
 	"z-ai/glm-5.2:free",                        # 256K ctx, response_format
 	"minimax/minimax-m2.7:free",                # verified fallback, response_format
-	"openrouter/free",                          # auto-router: always resolves to *some* free model
 ]
 
 # Code / repair suggestions ("upgrade"): lead with the models that are actually
 # trained for software engineering, then fall back to general reasoners. This
 # role previously had no chain of its own and silently used the default.
 _OPENROUTER_MODELS_UPGRADE = [
-	_MAIN,                                      # verified: compiling code + strict JSON
+	_MAIN,                                      # free auto-router: picks per request
+	_MAIN_NAMED,                                # verified: compiling code + strict JSON
 	"poolside/laguna-s-2.1:free",               # code-specialised, 262K ctx
 	"cohere/north-mini-code:free",              # code-specialised
 	"nvidia/nemotron-3-ultra-550b-a55b:free",
 	"minimax/minimax-m2.7:free",                # verified fallback
-	"openrouter/free",
 ]
 
 # Research/long-context work: research prompts are long, so rank by context
 # window and reasoning strength.
 _OPENROUTER_MODELS_RESEARCH = [
-	_MAIN,                                      # 1M ctx
+	_MAIN,                                      # free auto-router: picks per request
+	_MAIN_NAMED,                                # 1M ctx
 	"nvidia/nemotron-3-ultra-550b-a55b:free",   # 1M ctx
 	"nvidia/nemotron-3-super-120b-a12b:free",   # 262K ctx, response_format
 	"google/gemma-4-26b-a4b-it:free",
 	"minimax/minimax-m2.7:free",                # verified fallback
-	"openrouter/free",
 ]
 
 # Article writing (long-form structured JSON): every model here must support
 # response_format natively, so drafts don't come back as prose-wrapped JSON.
 _OPENROUTER_MODELS_POST = [
-	_MAIN,
+	_MAIN,                                      # free auto-router: filters for response_format
+	_MAIN_NAMED,
 	"google/gemma-4-26b-a4b-it:free",
 	"z-ai/glm-5.2:free",
 	"nvidia/nemotron-3-super-120b-a12b:free",
 	"minimax/minimax-m2.7:free",                # verified sibling fallback
-	"openrouter/free",
 ]
 
 _OPENROUTER_MODELS_BY_ROLE: dict[str, list[str]] = {

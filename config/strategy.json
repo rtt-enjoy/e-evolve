@@ -144,9 +144,9 @@
 		}
 	},
 	"llm": {
-		"main_engine": "minimax/minimax-m3:free",
+		"main_engine": "openrouter/free",
 		"provider": "openrouter",
-		"note": "All-free model chain, ordered by capability per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. minimax/minimax-m3:free leads every chain (1M ctx, $0, native response_format + tools); on 402/429/404 the client steps down the rest of the role's free chain before changing provider. It replaced stealth/ox-alpha, which was withdrawn from OpenRouter."
+		"note": "All-free model chain, ordered per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. openrouter/free -- the free auto-router -- leads every chain: it picks the best zero-cost model per request and filters for the features the request needs, so model choice tracks the live catalogue. openrouter/auto is deliberately NOT used: its candidate set includes paid models and it bills at the routed model's rate. Named free models (led by minimax/minimax-m3:free, 1M ctx, native response_format + tools) follow as fallback for when the router is rate-limited; on 402/429/404 the client steps down the rest of the role's free chain before changing provider."
 	},
 	"research_policy": {
 		"mode": "research_and_article_publishing",
@@ -167,6 +167,6 @@
 		"enabled": true,
 		"branch_prefix": "evolve",
 		"max_changes": 3,
-		"note": "LLM code proposals are committed to a review branch (branch_prefix/<version>-<utc>) and never to main. Merge the branch to apply. Writes are restricted to bot/, docs/, config/, requirements.txt, version.txt; bot/main.py, bot/llm.py, bot/status.py, bot/commands.py, bot/evolution.py, bot/git_utils.py and .github/ can never be written. Engine is the free OpenRouter 'upgrade' chain led by minimax/minimax-m3:free; no paid model."
+		"note": "LLM code proposals are committed to a review branch (branch_prefix/<version>-<utc>) and never to main. Merge the branch to apply. Writes are restricted to bot/, docs/, config/, requirements.txt, version.txt; bot/main.py, bot/llm.py, bot/status.py, bot/commands.py, bot/evolution.py, bot/git_utils.py and .github/ can never be written. Engine is the free OpenRouter 'upgrade' chain led by the openrouter/free auto-router; no paid model."
 	}
 }

@@ -32,7 +32,6 @@ export type CodeTechOpportunity = {
 	codex_prompt?: string;
 	outreach_draft?: string;
 	pursued?: boolean;
-	archived_at?: string | null;
 };
 
 export type FreeAiService = {

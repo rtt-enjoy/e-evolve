@@ -134,7 +134,7 @@ function LeadDetail({ lead, index, total }: { lead: CodeTechOpportunity; index: 
 				<Tile label="Estimated value" value={compactMoney(lead.estimated_value_usd || 0)} tone="good" />
 				<Tile label="Fit score" value={String(lead.score || 0)} detail="out of 100" tone={scoreTone(lead.score)} />
 				<Tile label="Source" value={sourceLabel(lead.source)} detail={`lead ${index + 1} of ${total}`} tone="info" />
-				<Tile label="Status" value={lead.pursued ? 'pursued' : 'open'} detail={lead.archived_at ? `archived ${formatDate(lead.archived_at)}` : 'in active queue'} tone={lead.pursued ? 'good' : 'warn'} />
+				<Tile label="Status" value={lead.pursued ? 'pursued' : 'open'} detail="in active queue" tone={lead.pursued ? 'good' : 'warn'} />
 			</div>
 
 			<div className="split">

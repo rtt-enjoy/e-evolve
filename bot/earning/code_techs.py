@@ -255,7 +255,6 @@ class Opportunity:
 	codex_prompt: str
 	outreach_draft: str
 	pursued: bool = False
-	archived_at: str | None = None
 
 def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	cfg = _config()
@@ -487,16 +486,7 @@ def _dedupe(leads: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_score: int) -> list[Opportunity]:
 	ranked: list[Opportunity] = []
-	now = datetime.now(timezone.utc)
 	for lead in leads:
-		# Skip archived leads older than 30 days
-		if lead.get("archived_at"):
-			try:
-				arch_dt = datetime.fromisoformat(lead["archived_at"]).replace(tzinfo=timezone.utc)
-				if now - arch_dt > timedelta(days=30):
-					continue
-			except Exception:
-				pass
 		title = str(lead.get("title", "")).strip()
 		body = str(lead.get("body", "")).strip()
 		labels = [str(x).lower() for x in lead.get("labels", [])]
@@ -518,8 +508,7 @@ def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_
 			next_step=next_step,
 			codex_prompt=_codex_prompt(title_for_prompt, lead, reason, next_step),
 			outreach_draft=_outreach_draft(title_for_prompt, lead, value, cfg),
-			pursued=False,
-			archived_at=None
+			pursued=False
 		))
 	ranked.sort(key=lambda op: (op.score, op.estimated_value_usd), reverse=True)
 	return ranked[:max_items]

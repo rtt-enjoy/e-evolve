@@ -75,7 +75,7 @@ _BLOCKERS: dict[str, str] = {
 # what has to happen off-bot before a dollar arrives.
 _MANUAL_STEPS: dict[str, str] = {
 	"payments":       "owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe)",
-	"platform_setup": "owner creates and maintains the storefront or channel by hand",
+	"platform_setup": "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API)",
 	"audience_first": "needs an existing audience; the dev.to byline is the only one this stack builds",
 }
 
@@ -130,7 +130,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 	{
 		"name": "Notion / digital template store",
 		"mrr_model": "$500-5K/mo, library subscription",
-		"source_note": "specificity wins; Gumroad/Payhip/Etsy listings are manual",
+		"source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token — Payhip/Etsy stay manual",
 		"blockers": [],
 		"manual": ["payments", "platform_setup"],
 		"bot_role": "draft",

@@ -153,7 +153,7 @@ _DEFAULT_CONFIG = {
 		"niches where the buyer values the result and never asks what model produced it"
 	],
 	"strategy_playbook": [
-		"Search online for currently-free AI services first, then have Kimi K3 turn them into concrete earning offers.",
+		"Search online for currently-free AI services first, then have the LLM turn them into concrete earning offers.",
 		"Sell the outcome, not the technology. Buyers pay for clean output, not for an API name.",
 		"Keep input cost at zero: free API, free hosting, free scheduler. Every dollar in is margin.",
 		"Prefer offers the owner can deliver the same day with no upfront spend.",

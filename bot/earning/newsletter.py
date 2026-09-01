@@ -42,6 +42,10 @@ _DEFAULTS = {
 	# every issue for one audience -- the source article's point that a narrow
 	# niche beats a broad one. Choosing the niche is the owner's call.
 	"niche_focus": "",
+	# Cross-promote the top-performing article from this account in every digest.
+	# The archive section drives newsletter readers to the best article, compounding
+	# reach across both products.
+	"archive_promotion": True,
 }
 
 
@@ -200,6 +204,16 @@ def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
 			f"the niche -- cover all of them, angled for this reader."
 		)
 
+	# Cross-promote the top-performing article from this account. The best article
+	# "Reading Twitter Without X" has 1132 views but never appears in newsletters.
+	# Adding an archive section compounds reach across both products: newsletter
+	# readers discover the best article, and the article backlink brings readers back.
+	if cfg.get("archive_promotion", True):
+		archive_section = _build_archive_section(status)
+		if archive_section:
+			prompt += "\n\n" + archive_section
+			log.info("[newsletter] archive section added to prompt")
+
 	try:
 		if hasattr(llm, "complete_json_for_role"):
 			data = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=6000)
@@ -228,6 +242,31 @@ def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
 
 	issue["_items"] = items
 	return issue
+
+
+def _build_archive_section(status: dict) -> str:
+	"""Build the 'From Our Archive' prompt section for the top-performing article.
+
+    Returns "" when no article has earned enough views to feature, so the digest
+    never promotes an article with no social proof.
+    """
+	stats = status.get("article_stats", {})
+	title = str(stats.get("best_title", "")).strip()
+	url = str(stats.get("best_url", "")).strip()
+	views = int(stats.get("best_views", 0) or 0)
+
+	# Require at least 50 views as social proof before promoting. An article with
+	# single-digit views has no credibility to transfer to newsletter readers.
+	if not title or not url or views < 50:
+		return ""
+
+	return (
+		"\n\n---\n\n"
+		"FROM OUR ARCHIVE\n\n"
+		"One article from this newsletter's audience that readers keep finding useful:\n\n"
+		f"**[{title}]({url})**\n\n"
+		f"{views:,} views — worth a read if you missed it first time round."
+	)
 
 
 def _format_item(index: int, item: dict) -> str:

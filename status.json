@@ -1,7 +1,7 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-08-31T23:52:00.045937+00:00",
-  "total_runs": 1737,
+  "last_run": "2026-09-01T05:11:41.319259+00:00",
+  "total_runs": 1738,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -31,11 +31,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.36.0",
-    "summary": "Bump newsletter deduplication to also reject a fresh issue whose body reuses a title that has already appeared in a past published newsletter, preventing month-to-month headline recycling on dev.to.",
+    "summary": "Add a bounded 'titles' history to newsletter_history and reject a duplicate newsletter headline before publishing, so two issues in a row cannot share a title.",
     "changes_applied": [
       {
         "file": "bot/earning/newsletter.py",
-        "reason": "Adds a deterministic duplicate-headline gate to the newsletter module so two issues in a row cannot share a title, the most visible form of repetition on a dev.to byline. Mirrors articles._duplicate_reason in shape (returns a reason string for the operator's log) and uses the existing trending.normalize_title stemmer, so a near-identical headline like 'This Week in Dev' / 'This Weeks in Dev' / 'This Weeks of Dev' is also rejected. Three concrete edits: (1) newsletter_history now carries a bounded 'titles' list seeded by _record_issue, (2) _generate_issue runs _duplicate_title_reason before any expensive gate so a recycled headline fails fast without burning a fabrication or tone check, (3) _record_issue is called with the resolved issue title so the very issue that just shipped is the one that becomes a future refusal. Behavioural change is narrow: an issue with a repeated headline now publishes nothing instead of silently going out, and the existing cadence/refresh logic is untouched. The patch is reviewable in isolation because every new symbol (_duplicate_title_reason, the 'titles' key, the extra arg to _record_issue) has a single caller."
+        "reason": "Mirrors the v1.36.0 newsletter change but covers the remaining hole: newsletter_history had no record of past issue titles, so the same headline could ship every week. (1) _record_issue now also bounded_appends the normalized issue title into a new 'titles' list (carries one extra arg, kept as a required position so no silent caller drift). (2) _generate_issue calls _duplicate_title_reason BEFORE _digest_problems, so a recycled headline fails fast without burning fabrication/tone checks. (3) _duplicate_title_reason reuses trending.normalize_title and the same Jaccard-overlap gate (>=0.8) as articles._duplicate_reason, so near-identical variants are rejected too. Behavioural change is narrow: an issue whose title reuses a past newsletter headline now publishes nothing, and the existing cadence/cleanup/link-repair logic is untouched. Every new symbol has a single caller, which is why this patch is reviewable in isolation."
       }
     ],
     "suggestions": [
@@ -74,18 +74,26 @@
         "how_to": [
           "1. Read bot/earning/newsletter.py and the _history/_record_issue helpers.",
           "2. Add 'titles': [] to newsletter_history in _history() and bounded_append the normalized headline inside _record_issue().",
-          "3. Before devto.publish(), normalize the proposed title via trending.normalize_title and refuse with a 'duplicate newsletter headline' log line if it matches a stored entry.",
+          "3. Before devto.publish(), normalize the proposed title via trending.normalize_title and refuse with a 'duplicate newsletter headline' logging line if it matches a stored entry.",
           "4. Add a regression test asserting two consecutive issues with the same title result in only one publish.",
           "5. Commit on a review branch and request owner review."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.36.1-20260831-235234",
+    "branch": "evolve/1.36.1-20260901-051315",
     "proposed_version": "1.36.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "error": "no fresh trending source or LLM output available",
+        "estimated_usd": 0.0
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -124,14 +132,14 @@
       "how_to": [
         "1. Read bot/earning/newsletter.py and the _history/_record_issue helpers.",
         "2. Add 'titles': [] to newsletter_history in _history() and bounded_append the normalized headline inside _record_issue().",
-        "3. Before devto.publish(), normalize the proposed title via trending.normalize_title and refuse with a 'duplicate newsletter headline' log line if it matches a stored entry.",
+        "3. Before devto.publish(), normalize the proposed title via trending.normalize_title and refuse with a 'duplicate newsletter headline' logging line if it matches a stored entry.",
         "4. Add a regression test asserting two consecutive issues with the same title result in only one publish.",
         "5. Commit on a review branch and request owner review."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 35,
+  "last_cycle_seconds": 117,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -695,7 +703,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-08-31T23:52:00.416701+00:00",
+    "checked_at": "2026-09-01T05:11:41.488523+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -900,14 +908,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.36.1-20260831-235234",
+  "last_evolution_branch": "evolve/1.36.1-20260901-051315",
   "evolution_pending_review": true,
   "article_stats": {
-    "count": 12,
-    "total_views": 1181,
-    "avg_views": 98.4,
+    "count": 8,
+    "total_views": 1343,
+    "avg_views": 167.9,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 940,
+    "best_views": 1092,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -922,16 +930,16 @@
     "archetypes": [
       {
         "archetype": "problem-workaround",
-        "count": 4,
-        "avg_engagement": 269.8,
-        "avg_views": 263.5,
+        "count": 5,
+        "avg_engagement": 250.2,
+        "avg_views": 245.2,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
         "archetype": "build-tutorial",
-        "count": 3,
-        "avg_engagement": 34.3,
-        "avg_views": 34.3,
+        "count": 2,
+        "avg_engagement": 51.5,
+        "avg_views": 51.5,
         "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
       },
       {
@@ -940,31 +948,10 @@
         "avg_engagement": 14.0,
         "avg_views": 14.0,
         "best_title": "Prototype a DIY Solid\u2011State Intelligence Module for Home Automation"
-      },
-      {
-        "archetype": "security-privacy",
-        "count": 1,
-        "avg_engagement": 10.0,
-        "avg_views": 10.0,
-        "best_title": "Secure Your Phone Before Crossing the Border"
-      },
-      {
-        "archetype": "engineering-culture",
-        "count": 1,
-        "avg_engagement": 0.0,
-        "avg_views": 0.0,
-        "best_title": "Three Culture Bugs That Kill Your Engineering Velocity"
-      },
-      {
-        "archetype": "surprising-behavior",
-        "count": 2,
-        "avg_engagement": 0.0,
-        "avg_views": 0.0,
-        "best_title": "Why Rumors Become Exploits Before Anyone Reports a Bug"
       }
     ],
     "best_archetype": "problem-workaround",
-    "worst_archetype": "surprising-behavior",
-    "sample_size": 12
+    "worst_archetype": "other",
+    "sample_size": 8
   }
 }

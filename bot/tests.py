@@ -1,5 +1,6 @@
 import unittest
 import os
+import time
 import json
 import bot.llm as llm_module
 from datetime import datetime, timedelta, timezone
@@ -1495,6 +1496,48 @@ class TestEvolutionSandbox(unittest.TestCase):
 		finally:
 			for i in range(10):
 				Path(f"docs/_probe_{i}.md").unlink(missing_ok=True)
+
+
+class TestEvolutionRestore(unittest.TestCase):
+	"""
+	Regression: a failed repair used to leave a truncated module on disk.
+
+	Every fix attempt took its own backup, so the newest .bak was a broken
+	fix, and _restore_backup restored that instead of the pre-cycle original.
+	One real cycle shrank articles.py from 42KB to 1.6KB and code_techs.py to
+	427 bytes; all four earning modules then crashed on import.
+	"""
+
+	def setUp(self):
+		self.target = Path("bot/earning/_restore_probe.py")
+		self.target.write_text("ORIGINAL = 1\n", encoding="utf-8")
+		self.addCleanup(self.target.unlink)
+
+	def test_restore_prefers_the_recorded_pre_cycle_backup(self):
+		original = evolution_module._backup(str(self.target))
+		self.assertIsNotNone(original)
+		self.addCleanup(Path(original).unlink, True)
+
+		# A later, broken "fix" snapshot -- newer on disk than the original.
+		broken = evolution_module._backup(str(self.target))
+		Path(broken).write_text("TRUNCATED = 1\n", encoding="utf-8")
+		self.addCleanup(Path(broken).unlink, True)
+		os.utime(broken, (time.time() + 10, time.time() + 10))
+
+		self.target.write_text("TRUNCATED = 1\n", encoding="utf-8")
+		evolution_module._restore_backup(str(self.target), original)
+		self.assertEqual(self.target.read_text(encoding="utf-8"), "ORIGINAL = 1\n")
+
+	def test_apply_changes_records_the_backup_it_took(self):
+		applied = _evo_apply_changes(
+			[{"file": "bot/earning/_restore_probe.py",
+			  "content": "REPLACED = 1", "reason": "probe"}]
+		)
+		self.assertEqual(len(applied), 1)
+		backup = applied[0].get("_backup")
+		self.assertTrue(backup and Path(backup).exists())
+		self.addCleanup(Path(backup).unlink, True)
+		self.assertEqual(Path(backup).read_text(encoding="utf-8"), "ORIGINAL = 1\n")
 
 
 class TestEvolutionGate(unittest.TestCase):

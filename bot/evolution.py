@@ -230,7 +230,10 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
     return {
         "version_bumped_to": version,
         "summary":           summary,
-        "changes_applied":   applied,
+        # Strip runtime-only bookkeeping (_backup) so it never reaches status.json.
+        "changes_applied":   [
+            {k: v for k, v in ch.items() if not k.startswith("_")} for ch in applied
+        ],
         "suggestions":       plan.get("suggestions", []),
         "error":             branch_error,
         "branch":            branch,
@@ -319,12 +322,12 @@ def _apply_changes(changes: list, max_changes: Any = None) -> list[dict]:
             log.warning("Skipping file with Python syntax error: %s", filepath)
             continue
 
-        _backup(filepath)
+        original_backup = _backup(filepath)
         dest = Path(filepath)
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(content, encoding="utf-8")
         log.info("Wrote %s — %s", filepath, reason[:60])
-        applied.append({"file": filepath, "reason": reason})
+        applied.append({"file": filepath, "reason": reason, "_backup": original_backup})
 
     return applied
 
@@ -450,7 +453,6 @@ def _verify_and_fix(applied: list[dict], llm: Any, status: dict) -> list[dict]:
                 log.warning("Fix attempt %d produced invalid Python for %s", attempt, filepath)
                 continue
 
-            _backup(filepath)
             Path(filepath).write_text(fixed_content, encoding="utf-8")
             log.info("Applied fix attempt %d to %s: %s", attempt, filepath, fix_reason[:60])
 
@@ -469,17 +471,32 @@ def _verify_and_fix(applied: list[dict], llm: Any, status: dict) -> list[dict]:
                 "Could not fix %s after %d attempts — restoring backup",
                 filepath, MAX_FIX_RETRIES,
             )
-            _restore_backup(filepath)
+            _restore_backup(filepath, change.get("_backup"))
 
     return verified
 
 
-def _restore_backup(filepath: str) -> None:
-    """Restore the most recent backup for filepath."""
+def _restore_backup(filepath: str, original: str | None = None) -> None:
+    """
+    Restore filepath from the snapshot taken BEFORE this cycle touched it.
+
+    `original` is that snapshot, recorded by _apply_changes. It must be used in
+    preference to "the newest .bak", because every failed repair attempt used to
+    take its own backup: the newest snapshot is then a broken fix, and restoring
+    it left a truncated module on disk that crashed every importer. Falling back
+    to the newest backup is only for a caller that has no recorded original.
+    """
+    src = Path(filepath)
+    if original:
+        candidate = Path(original)
+        if candidate.exists():
+            shutil.copy2(candidate, src)
+            log.info("Restored %s from %s", filepath, candidate.name)
+            return
+        log.warning("Recorded backup %s for %s is gone — falling back to newest", original, filepath)
+
     bdir = Path(".evolution_backups")
-    src  = Path(filepath)
-    pattern = f"{src.name}.*.bak"
-    baks = sorted(bdir.glob(pattern), key=lambda p: p.stat().st_mtime, reverse=True)
+    baks = sorted(bdir.glob(f"{src.name}.*.bak"), key=lambda p: p.stat().st_mtime, reverse=True)
     if not baks:
         log.warning("No backup found for %s — leaving broken file in place", filepath)
         return
@@ -510,18 +527,25 @@ def _is_valid_python(src: str) -> bool:
         return False
 
 
-def _backup(filepath: str) -> None:
+def _backup(filepath: str) -> str | None:
+    """Snapshot filepath and return the backup path, or None if there was nothing to copy."""
     src = Path(filepath)
     if not src.exists():
-        return
+        return None
     bdir = Path(".evolution_backups")
     bdir.mkdir(exist_ok=True)
-    ts   = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-    shutil.copy2(src, bdir / f"{src.name}.{ts}.bak")
+    # Microseconds, not seconds: two backups of the same file inside one second
+    # used to collide on the same name, so the second silently overwrote the
+    # first -- destroying the pre-cycle original this function exists to keep.
+    ts   = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S_%f")
+    dest = bdir / f"{src.name}.{ts}.bak"
+    shutil.copy2(src, dest)
     # Prune: keep only newest 20 backups
     baks = sorted(bdir.glob("*.bak"), key=lambda p: p.stat().st_mtime)
-    for old in baks[:-20]:
-        old.unlink()
+    for stale in baks[:-20]:
+        if stale != dest:
+            stale.unlink()
+    return str(dest)
 
 
 def _resolve_version(proposed: Any, current: str) -> str:

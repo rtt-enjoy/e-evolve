@@ -237,6 +237,27 @@ identical posts on dev.to. Each article starts from a real trending piece:
      over the static default.
    - `_too_similar_to_source()`, `_duplicate_reason()`, `_ensure_attribution()`.
 
+**Why a cycle published nothing (`status["article_rejects"]`).** `_generate_article`
+has nine distinct failure exits, and every one used to return a bare `None`.
+`run()` then reported all nine as *"no fresh trending source or LLM output
+available"* — a message naming **sourcing**, which is usually not the cause. A
+live check during a failing cycle found 40 fresh candidates and 0 duplicates
+while that string was being written, so the one number the owner could see
+pointed at the wrong stage.
+
+Each exit now calls `_reject(code)`, and `_record_reject` persists both
+`last_reason` and a running `counts` tally. The tally is the useful half: a
+single reason says what happened today, while the counts say *which gate is
+actually costing articles* — without them, a gate that quietly kills one draft
+in three looks identical to one that has never fired. Codes: `no_llm`,
+`no_source`, `llm_error`, `empty_draft`, `fabricated`, `weak_title`,
+`revision_fabricated`, `duplicate`, `too_similar`.
+
+`dashboard.write_log` was the other half of the same blind spot: its fallback
+branch printed `"action recorded"` and discarded the action's `error`, which is
+why 17 dev.to failures in `earnings-log.md` are indistinguishable from each
+other. Failed actions now log their reason.
+
 **If no fresh source is found or the LLM fails, the bot publishes nothing.**
 There is deliberately no fallback article — a static fallback is what produced
 the duplicate flood. Title matching is stemmed and stopword-stripped

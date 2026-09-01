@@ -1806,3 +1806,109 @@ class TestDevtoModuleIsThePublicSeam(unittest.TestCase):
 		# this split exists to prevent.
 		for name in ("_publish_to_devto", "_normalize", "_tone_problems"):
 			self.assertFalse(hasattr(articles_module, name), name)
+
+
+class TestRejectReasonIsRecorded(unittest.TestCase):
+	"""A cycle that publishes nothing must say which gate stopped it.
+
+	Every rejection path used to return a bare None, and run() reported them all
+	as "no fresh trending source or LLM available" -- which named sourcing even
+	when the source pool was full and the real cause was a gate or the LLM.
+	"""
+
+	def setUp(self):
+		import bot.earning.articles as A
+		self.A = A
+		self._picked = A._pick_source
+		self._target = A._followup_target
+		A._followup_target = lambda status, key: None
+		os.environ["DEV_TO_API_KEY"] = "test-key"
+
+	def tearDown(self):
+		self.A._pick_source = self._picked
+		self.A._followup_target = self._target
+		os.environ.pop("DEV_TO_API_KEY", None)
+
+	def test_missing_llm_is_not_reported_as_a_sourcing_failure(self):
+		status = {}
+		result = self.A.run(None, status)[0]
+		self.assertEqual(result["reject_code"], "no_llm")
+		self.assertNotIn("trending", result["error"])
+
+	def test_empty_source_pool_reports_no_source(self):
+		self.A._pick_source = lambda status: None
+
+		class LLM:
+			def complete_json_for_role(self, *a, **k):
+				return {"title": "t", "body_markdown": "b"}
+
+		result = self.A.run(LLM(), {})[0]
+		self.assertEqual(result["reject_code"], "no_source")
+
+	def test_llm_failure_is_distinguished_from_an_empty_draft(self):
+		self.A._pick_source = lambda status: {
+			"url": "https://ex.com/a", "title": "T", "summary": "s", "source": "hn"}
+
+		class Boom:
+			def complete_json_for_role(self, *a, **k):
+				raise RuntimeError("429 rate limited")
+
+		class Empty:
+			def complete_json_for_role(self, *a, **k):
+				return {}
+
+		self.assertEqual(self.A.run(Boom(), {})[0]["reject_code"], "llm_error")
+		self.assertEqual(self.A.run(Empty(), {})[0]["reject_code"], "empty_draft")
+
+	def test_rejects_accumulate_so_a_costly_gate_becomes_visible(self):
+		self.A._pick_source = lambda status: None
+
+		class LLM:
+			def complete_json_for_role(self, *a, **k):
+				return {"title": "t", "body_markdown": "b"}
+
+		status = {}
+		for _ in range(3):
+			self.A.run(LLM(), status)
+		rec = status["article_rejects"]
+		self.assertEqual(rec["total"], 3)
+		self.assertEqual(rec["counts"]["no_source"], 3)
+		self.assertEqual(rec["last_reason"], "no_source")
+
+	def test_every_reject_code_has_human_readable_text(self):
+		for code in self.A._REJECTS:
+			self.assertTrue(self.A._REJECTS[code].strip())
+
+
+class TestFailedActionsLogTheirReason(unittest.TestCase):
+	"""earnings-log.md must not flatten a failure into 'action recorded'."""
+
+	def test_error_text_reaches_the_log(self):
+		import tempfile, pathlib
+		from bot import dashboard
+		original = dashboard._LOG_FILE
+		tmp = pathlib.Path(tempfile.mkdtemp()) / "log.md"
+		try:
+			dashboard._LOG_FILE = tmp
+			dashboard.write_log([{
+				"platform": "dev.to", "success": False,
+				"error": "unverifiable figures in prose",
+			}])
+			written = tmp.read_text(encoding="utf-8")
+		finally:
+			dashboard._LOG_FILE = original
+		self.assertIn("unverifiable figures in prose", written)
+		self.assertNotIn("action recorded", written)
+
+	def test_successful_action_without_detail_still_logs(self):
+		import tempfile, pathlib
+		from bot import dashboard
+		original = dashboard._LOG_FILE
+		tmp = pathlib.Path(tempfile.mkdtemp()) / "log.md"
+		try:
+			dashboard._LOG_FILE = tmp
+			dashboard.write_log([{"platform": "x", "success": True}])
+			written = tmp.read_text(encoding="utf-8")
+		finally:
+			dashboard._LOG_FILE = original
+		self.assertIn("action recorded", written)

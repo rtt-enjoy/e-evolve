@@ -71,7 +71,14 @@ def write_log(actions: list[dict]) -> None:
 			lines.append(f"- {icon} **{platform}** NFT tx=`{tx}` uri={uri}")
 
 		else:
-			lines.append(f"- {icon} **{platform}** action recorded")
+			# A failed action carries an "error" explaining itself; printing
+			# only "action recorded" threw that away, so 17 dev.to failures in
+			# this log are indistinguishable from each other and from a crash.
+			err = str(action.get("error", "")).strip()
+			if not ok and err:
+				lines.append(f"- {icon} **{platform}**: {err[:120]}")
+			else:
+				lines.append(f"- {icon} **{platform}** action recorded")
 
 	with _LOG_FILE.open("a", encoding="utf-8") as handle:
 		handle.write("\n".join(lines) + "\n")

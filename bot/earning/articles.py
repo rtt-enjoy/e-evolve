@@ -55,6 +55,43 @@ def _config() -> dict:
 # config, which is always the case in production.
 _FOLLOWUP_OVERRIDE: bool | None = None
 
+
+# Why a draft was thrown away. Every rejection path used to return a bare None,
+# and run() then reported all of them as "no fresh trending source or LLM output
+# available" -- a string that names sourcing, which is usually NOT the cause.
+# Checking a real failing cycle showed 40 fresh candidates and 0 duplicates
+# while that message was being written, so the one number the owner could see
+# was pointing at the wrong stage. The reason now travels with the None and is
+# persisted, so "why did nothing publish today" is answerable from status.json
+# instead of from workflow logs that have already scrolled away.
+_REJECTS = {
+	"no_llm": "no LLM client available",
+	"no_source": "no fresh unused trending source found",
+	"llm_error": "LLM call failed",
+	"empty_draft": "LLM returned no usable title/body",
+	"fabricated": "unverifiable figures in prose",
+	"weak_title": "title too weak to earn a click, and the rewrite failed",
+	"revision_fabricated": "format revision introduced invented figures",
+	"duplicate": "too close to something already published",
+	"too_similar": "output too close to the source title",
+}
+
+# Set by _generate_article on the way out so run() can report the real cause.
+_LAST_REJECT: str = ""
+
+
+def _reject(code: str, detail: str = "") -> None:
+	"""Record why this cycle publishes nothing, then return None to the caller.
+
+    Returning None is what the callers already expect; this only makes the
+    cause survive the return so it can be counted and displayed.
+    """
+	global _LAST_REJECT
+	_LAST_REJECT = code
+	log.warning("[articles] rejected (%s): %s%s", code, _REJECTS.get(code, code),
+				f" -- {detail}" if detail else "")
+	return None
+
 _SYSTEM = """\
 You are a senior engineer writing for a developer audience on dev.to.
 
@@ -220,14 +257,18 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		log.info("[articles] daily cap bypassed by 'force articles' command")
 
 	# Generate and publish
+	global _LAST_REJECT
+	_LAST_REJECT = ""
 	article = _generate_article(llm, status)
 	if not article:
-		log.warning("[articles] No article generated — publishing nothing this cycle")
+		code = _LAST_REJECT or "unknown"
+		_record_reject(status, code)
 		return [{
 			"platform": "dev.to",
 			"success": False,
 			"skipped": True,
-			"error": "no fresh trending source or LLM output available",
+			"reject_code": code,
+			"error": _REJECTS.get(code, "no article produced"),
 			"estimated_usd": 0.0,
 		}]
 
@@ -268,8 +309,7 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
     identical posts on dev.to.
     """
 	if not llm:
-		log.warning("[articles] no LLM available -- not publishing")
-		return None
+		return _reject("no_llm")
 
 	# Prefer following up a post that readers actually showed up for. A proven
 	# subject beats a cold trending guess, and the backlink compounds reach
@@ -286,8 +326,7 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 
 	source = _pick_source(status)
 	if not source:
-		log.warning("[articles] no fresh unused trending source found -- not publishing")
-		return None
+		return _reject("no_source")
 
 	log.info("[articles] source: %s (%s)", source.get("title", "")[:70], source.get("source"))
 
@@ -311,20 +350,17 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 		else:
 			data = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
 	except Exception as exc:
-		log.warning("[articles] LLM generation failed: %s -- not publishing", exc)
-		return None
+		return _reject("llm_error", str(exc))
 
 	if not (data.get("title") and data.get("body_markdown")):
-		log.warning("[articles] LLM returned no usable article -- not publishing")
-		return None
+		return _reject("empty_draft")
 
 	article = _finalize(llm, data, source, status)
 	if not article:
 		return None
 
 	if _too_similar_to_source(article, source):
-		log.warning("[articles] output too close to source title -- not publishing")
-		return None
+		return _reject("too_similar")
 
 	article["_source"] = source
 	return article
@@ -353,8 +389,7 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 	# before spending a revision call, so a doomed article costs one call, not two.
 	fabricated = devto.fabrication_problems(article["body_markdown"])
 	if fabricated:
-		log.warning("[articles] unverifiable claims in prose %s -- not publishing", fabricated)
-		return None
+		return _reject("fabricated", ", ".join(fabricated))
 
 	# The title decides whether the body is ever read, so a weak one is worth a
 	# retry of its own. Retitling is one cheap call and does not touch the body.
@@ -365,8 +400,7 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 		if better:
 			article["title"] = better
 		else:
-			log.warning("[articles] could not fix title %s -- not publishing", title_issues)
-			return None
+			return _reject("weak_title", ", ".join(title_issues))
 
 	problems = _format_problems(article["body_markdown"])
 	if problems:
@@ -379,8 +413,7 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 			article["title"] = vetted_title
 			article["body_markdown"], _ = devto.strip_fabricated_tables(article["body_markdown"])
 			if devto.fabrication_problems(article["body_markdown"]):
-				log.warning("[articles] revision introduced invented figures -- not publishing")
-				return None
+				return _reject("revision_fabricated")
 
 	article = _ensure_attribution(article, source)
 
@@ -390,8 +423,7 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 
 	dup = _duplicate_reason(article, status)
 	if dup:
-		log.warning("[articles] %s -- not publishing", dup)
-		return None
+		return _reject("duplicate", dup)
 
 	return article
 
@@ -774,6 +806,24 @@ def _record_publish(status: dict, article: dict) -> None:
 	parent_id = article.get("_followup_of")
 	if parent_id is not None:
 		bounded_append(hist.setdefault("followed_up_ids", []), parent_id, limit)
+
+
+def _record_reject(status: dict, code: str) -> None:
+	"""Persist why a cycle published nothing, and keep a running tally.
+
+    A single last_reason answers "what happened today"; the counts answer the
+    more useful question, "which gate is actually costing us articles". Without
+    the tally a gate that silently kills one draft in three looks identical to
+    one that has never fired.
+    """
+	rec = status.setdefault("article_rejects", {})
+	rec["last_reason"] = code
+	rec["last_detail"] = _REJECTS.get(code, code)
+	from datetime import datetime, timezone
+	rec["last_at"] = datetime.now(timezone.utc).isoformat()
+	counts = rec.setdefault("counts", {})
+	counts[code] = int(counts.get(code, 0)) + 1
+	rec["total"] = int(rec.get("total", 0)) + 1
 
 
 def _duplicate_reason(article: dict, status: dict) -> str:

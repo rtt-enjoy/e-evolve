@@ -239,8 +239,13 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 
 	# Update state if at least one platform succeeded
 	if any(r.get("success") for r in results):
+		# Count within the day only. Carrying yesterday's total forward made
+		# this a lifetime tally (it read 26 against 8 real posts), which is
+		# meaningless on the dashboard and would cap the day the moment
+		# max_articles_per_cycle rose above 1.
+		carried = state.get("published", 0) if state.get("date") == today else 0
 		state["date"] = today
-		state["published"] = state.get("published", 0) + 1
+		state["published"] = carried + 1
 		# Record before returning so a repeat can never slip through, even if a
 		# later phase of the cycle fails.
 		_record_publish(status, article)

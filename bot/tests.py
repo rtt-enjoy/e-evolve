@@ -370,6 +370,36 @@ class TestFabricationDetection(unittest.TestCase):
 	def test_versions_and_years_allowed(self):
 		self.assertEqual(_fabrication_problems("Python 3.14 shipped in 2025."), [])
 
+	def test_model_size_notation_allowed(self):
+		"""Regression: a rule on bare sizes blocked correct prose and stopped a day's article.
+
+        "7B"/"70B" quotes a published model's size -- it is standard notation,
+        not an invented spec. Rejecting it killed two of three drafts on an
+        LLM-hardware source on 2026-09-01 while their prose was accurate.
+        """
+		body = (
+			"A 7B parameter model in 4-bit quantization sits around 4 GB. "
+			"A 13B model in 4-bit is closer to 8 GB, and a 70B model needs more. "
+			"We ran Llama 3 70B on the box."
+		)
+		self.assertEqual(_fabrication_problems(body), [])
+
+	def test_plain_uppercase_units_allowed(self):
+		"""The old rule ran case-insensitively and swallowed ordinary measurements."""
+		for body in ("it took 3 m to run", "we copied 2 T of data", "the drive holds 4 T"):
+			self.assertEqual(_fabrication_problems(body), [], body)
+
+	def test_other_fabrication_rules_still_fire(self):
+		"""Removing the size rule must not weaken the four that remain."""
+		self.assertIn("invented latency figures (ms)",
+					  _fabrication_problems("It replies in 45 ms."))
+		self.assertIn("invented pricing",
+					  _fabrication_problems("It costs $5 per million requests."))
+		self.assertIn("invented throughput",
+					  _fabrication_problems("It sustains 120 tokens/s."))
+		self.assertIn("invented benchmark deltas",
+					  _fabrication_problems("It is 40% faster than the alternative."))
+
 
 class TestFabricatedTableStripping(unittest.TestCase):
 	"""The shipped bug: a fabricated table was detected, then published anyway."""
@@ -586,6 +616,46 @@ class TestArticlePublishing(unittest.TestCase):
 			devto_module.requests.post = original
 
 		self.assertNotIn("_source", captured.get("article", {}))
+
+	def test_daily_counter_resets_on_a_new_day(self):
+		"""The counter is per-day, not a lifetime tally.
+
+        It carried yesterday's total forward, so it read 26 against 8 real
+        posts -- meaningless on the dashboard, and it would cap the day the
+        moment max_articles_per_cycle rose above 1.
+        """
+		import bot.earning.articles as articles_module
+		from datetime import datetime, timezone
+
+		today = datetime.now(timezone.utc).date().isoformat()
+
+		class FakeResp:
+			status_code = 201
+			def raise_for_status(self): pass
+			def json(self): return {"url": "https://dev.to/x", "id": 1}
+
+		status = {"article_daily": {"date": "1999-01-01", "published": 26}}
+		original_post = devto_module.requests.post
+		original_gen = articles_module._generate_article
+		original_key = os.environ.get("DEV_TO_API_KEY")
+		try:
+			devto_module.requests.post = lambda *a, **k: FakeResp()
+			articles_module._generate_article = lambda llm, st: {
+				"title": "t", "body_markdown": "b", "tags": ["python"], "_source": {},
+			}
+			os.environ["DEV_TO_API_KEY"] = "key"
+			articles_module.run(object(), status)
+		finally:
+			devto_module.requests.post = original_post
+			articles_module._generate_article = original_gen
+			if original_key is None:
+				os.environ.pop("DEV_TO_API_KEY", None)
+			else:
+				os.environ["DEV_TO_API_KEY"] = original_key
+
+		self.assertEqual(status["article_daily"]["date"], today)
+		self.assertEqual(status["article_daily"]["published"], 1)
+
 
 class TestNewsletterDigest(unittest.TestCase):
 	"""The digest must never repeat a story or invent one."""

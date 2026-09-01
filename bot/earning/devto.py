@@ -53,11 +53,31 @@ def tone_problems(body: str) -> list[str]:
 
 FABRICATION_PATTERNS = [
 	(r"\b\d+\s*[-‐-―~]?\s*\d*\s*ms\b", "invented latency figures (ms)"),
-	(r"\b\d+(\.\d+)?\s*[BTM]\b(?=[^a-z])", "invented model parameter counts"),
 	(r"\$\s?\d+(\.\d+)?\s*(/|per\s)", "invented pricing"),
 	(r"\b\d+(\.\d+)?\s*(tokens?/s|tok/s|req/s|requests?/(sec|second))", "invented throughput"),
 	(r"\b\d+\s*%\s*(faster|slower|cheaper|better|more accurate)", "invented benchmark deltas"),
 ]
+
+# Deliberately absent: a rule matching bare model sizes (r"\d+(\.\d+)?\s*[BTM]\b"
+# labelled "invented model parameter counts"). It was removed, not narrowed.
+#
+# It rejected correct prose. "A 7B model in 4-bit sits around 4 GB" is how every
+# practitioner writes it, and 7B is a published property of a real model, not a
+# figure the writer invented -- so the gate blocked the very articles it should
+# wave through. Two of three drafts on an LLM-hardware source died here with
+# their prose intact; that is why nothing published on 2026-09-01.
+#
+# Under re.IGNORECASE it was wider still, also firing on "3 m", "2 T of data"
+# and "5 M rows", none of which are parameter counts at all.
+#
+# Narrowing it was tried and abandoned: the honest test is whether a size is a
+# real published model's or one the model made up, and no regex over surrounding
+# words decides that. Every attempt either kept rejecting correct prose or
+# reduced to a check that could never fire -- dead code wearing a gate's name.
+#
+# The other four rules are unaffected and still catch invented latency, pricing,
+# throughput and benchmark deltas. Fabricated parameter counts are now the one
+# claim this gate does not police; the writing prompt still forbids them.
 
 
 def strip_code_blocks(body: str) -> str:
@@ -69,8 +89,8 @@ def strip_code_blocks(body: str) -> str:
 def fabrication_problems(body: str) -> list[str]:
 	"""Flag unverifiable numeric claims in prose and tables.
 
-    The model cannot know current latency, pricing, or parameter counts, and
-    stating them as fact is the fastest way to lose a technical reader.
+    The model cannot know current latency, pricing, or throughput, and stating
+    them as fact is the fastest way to lose a technical reader.
     """
 	prose = strip_code_blocks(body)
 	found: list[str] = []

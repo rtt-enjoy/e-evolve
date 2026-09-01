@@ -206,7 +206,17 @@ identical posts on dev.to. Each article starts from a real trending piece:
      so it costs no LLM call.
    - `_fabrication_problems()` — **hard reject.** If invented figures survive in
      prose, publish nothing. Checked *before* `_revise_format()` so a doomed
-     article costs one LLM call instead of two.
+     article costs one LLM call instead of two. It polices four claims:
+     latency, pricing, throughput, and benchmark deltas.
+     **Model parameter counts are deliberately not among them.** A rule matching
+     bare sizes (`7B`, `70B`) was removed after it blocked two of three drafts on
+     an LLM-hardware source while their prose was correct — "a 7B model in 4-bit
+     sits around 4 GB" is standard notation quoting a published model, not an
+     invented spec. That false rejection is why nothing published on 2026-09-01.
+     Narrowing it was tried and abandoned: no regex over neighbouring words can
+     tell a real model's size from a made-up one, and every attempt either kept
+     rejecting correct prose or collapsed into a check that could never fire.
+     The writing prompt still forbids fabricated parameter counts.
    - `_title_problems()` — **the reach gate.** A weak headline is why a good
      article gets no views, so the title is checked on its own and, if weak,
      rewritten by a cheap title-only call (`_revise_title`). If the rewrite is

@@ -1,1 +1,0 @@
-{'upgrade': {'provider': 'gemini', 'workflow': 'default'}, 'research': {'provider': 'openrouter', 'workflow': 'default'}, 'post': {'provider': 'groq', 'workflow': 'default'}}

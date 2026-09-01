@@ -1,7 +1,7 @@
 {
   "version": "1.36.0",
-  "last_run": "2026-09-01T18:32:29.190733+00:00",
-  "total_runs": 1742,
+  "last_run": "2026-09-01T21:47:43.423749+00:00",
+  "total_runs": 1743,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -21,7 +21,8 @@
     "week_started": "2026-08-31",
     "breakdown": {
       "dev.to": 0.0,
-      "code_techs": 0.0
+      "code_techs": 0.0,
+      "mrr-ideas": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -31,8 +32,13 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.36.0",
-    "summary": "Add newsletter headline deduplication, improve LLM fallback chain with Anthropic/Cerebras, and add article-to-newsletter cross-promotion for high-performing posts",
-    "changes_applied": [],
+    "summary": "Add newsletter archive cross-promotion to surface the best-performing article in every digest, compounding reach across newsletter and article audiences",
+    "changes_applied": [
+      {
+        "file": "bot/earning/newsletter.py",
+        "reason": "The best article 'Reading Twitter Without X' has 1132 views but never appears in newsletters. Adding an archive cross-promotion section to every digest surfaces the top-performing article to newsletter readers, compounding reach across both products. The change injects the archive section into the LLM prompt only when article stats show a clear winner (50+ views required as social proof), adds a _build_archive_section helper, and is gated by config so owners can disable it. No other module is touched."
+      }
+    ],
     "suggestions": [
       {
         "title": "Activate Anthropic Claude as a fourth LLM provider",
@@ -62,24 +68,34 @@
       },
       {
         "title": "Cross-promote high-performing articles in newsletter digests",
-        "description": "The best article 'Reading Twitter Without X' has 1132 views but never appears in newsletters. Add a 'From Our Archive' section to each digest that links back to the top-performing article from the past 30 days, compounding reach across both products.",
+        "description": "The best article 'Reading Twitter Without X' has 1132 views but never appears in newsletters. This change adds a 'From Our Archive' section to each digest that links back to the top-performing article from the past 30 days, compounding reach across both products. Already coded in this evolution.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Read bot/earning/newsletter.py around _generate_issue() and _SYSTEM prompt.",
-          "2. In _generate_issue(), fetch the top article from status['article_stats'] or devto_stats.top_performer().",
-          "3. Add a '## From Our Archive' section to the prompt with the article title, URL, and view count.",
-          "4. The LLM will include it as a final section, driving newsletter readers to the best article."
+          "1. This change is already applied by this evolution \u2014 no action needed.",
+          "2. The next newsletter digest will automatically include a 'From Our Archive' section with the best-performing article.",
+          "3. Verify by checking a future newsletter digest for the new section near the end."
         ]
       }
     ],
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.37.0-20260901-214837",
     "proposed_version": "1.37.0"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "mrr-ideas",
+        "success": true,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
+        "estimated_usd": 0.0,
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "docs/mrr-ideas.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -111,20 +127,19 @@
     },
     {
       "title": "Cross-promote high-performing articles in newsletter digests",
-      "description": "The best article 'Reading Twitter Without X' has 1132 views but never appears in newsletters. Add a 'From Our Archive' section to each digest that links back to the top-performing article from the past 30 days, compounding reach across both products.",
+      "description": "The best article 'Reading Twitter Without X' has 1132 views but never appears in newsletters. This change adds a 'From Our Archive' section to each digest that links back to the top-performing article from the past 30 days, compounding reach across both products. Already coded in this evolution.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Read bot/earning/newsletter.py around _generate_issue() and _SYSTEM prompt.",
-        "2. In _generate_issue(), fetch the top article from status['article_stats'] or devto_stats.top_performer().",
-        "3. Add a '## From Our Archive' section to the prompt with the article title, URL, and view count.",
-        "4. The LLM will include it as a final section, driving newsletter readers to the best article."
+        "1. This change is already applied by this evolution \u2014 no action needed.",
+        "2. The next newsletter digest will automatically include a 'From Our Archive' section with the best-performing article.",
+        "3. Verify by checking a future newsletter digest for the new section near the end."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 882,
+  "last_cycle_seconds": 96,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -643,7 +658,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-01T18:32:29.589754+00:00",
+    "checked_at": "2026-09-01T21:47:43.942188+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -679,7 +694,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-08-30T21:08:07.532543+00:00",
+    "last_refresh_at": "2026-09-01T21:48:37.520206+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -688,40 +703,28 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The only honest recurring-revenue fit for a stack that can only research, draft, and publish to dev.to is a tightly-narrowed paid newsletter whose subscription is sold and collected entirely by hand off-platform. The dev.to byline is an audience-building tool, not a revenue tool; the owner funnels readers toward a newsletter signup the bot cannot manage, and payment, list hygiene, and renewals all happen outside the stack. This is a content business with a manual backend, not automation, and revenue depends on a niche narrow enough that a single writer can out-research and out-write the alternatives.",
+    "summary": "A dev.to writer can turn a single Notion template for GitHub project documentation into a recurring revenue stream by publishing a how\u2011to article that attracts the niche audience, then offering the template for a $10 monthly subscription via a manually created Gumroad product.",
     "ranked_ideas": [
       {
-        "name": "Paid newsletter, niche developer audience",
-        "why_this_stack_fits": "Publishing articles to dev.to is a real channel; subscriptions and storefronts are owned and run by hand, so no payment or outreach code is required and no constraints are violated.",
-        "narrow_niche": "Solo developers or indie hackers building internal tooling in Go or Rust who need a monthly digest of obscure RFC changes, CVEs, and migration pitfalls they can read in 10 minutes.",
-        "first_proof_artifact": "One free 1,000-word sample issue published as a dev.to article, plus a hand-built landing page describing the paid cadence, scope, and price.",
-        "who_pays": "Independent developers or one-person SaaS founders who already pay for one or two newsletters and use Go or Rust in production.",
-        "monthly_price_usd": "10-15",
-        "runway_to_first_dollar": "6-10 weeks to build a small reading list on dev.to, then a hand-collected first subscriber",
-        "owner_must_do_by_hand": "Open the payment or subscription account, maintain the subscriber list by hand, collect renewals by hand, and personally write each issue \u2014 no automation here can do any of this."
-      },
-      {
-        "name": "Notion or digital template library, very narrow niche",
-        "why_this_stack_fits": "The bot can draft and structure templates; selling and delivering them happens on a storefront the owner runs by hand, so the stack stays within its limits and no client-acquisition or payment processing is automated.",
-        "narrow_niche": "Incident-postmortem and runbook templates for solo SREs or on-call engineers at small startups running on-call for the first time.",
-        "first_proof_artifact": "Three free runbook and postmortem templates published as a single dev.to article or downloadable PDF, formatted from drafts the bot produces.",
-        "who_pays": "Solo SREs, on-call engineers, or DevOps generalists at seed- to Series-A startups who have just inherited on-call duties.",
-        "monthly_price_usd": "8-15 per subscriber for a library subscription, paid manually through a storefront the owner runs",
-        "runway_to_first_dollar": "8-14 weeks to validate demand through dev.to readership before charging",
-        "owner_must_do_by_hand": "Open and run the template storefront or subscription page, price the library, manage subscribers and access by hand, and curate every template \u2014 none of this can be automated inside the stack."
+        "name": "Notion / digital template store",
+        "why_this_stack_fits": "Zero\u2011cost research and publishing on dev.to can attract a niche audience and drive sales of a single digital product without needing a large team.",
+        "narrow_niche": "GitHub\u2011focused developers who want ready\u2011made Notion templates to organize their project documentation",
+        "first_proof_artifact": "A single Notion template (e.g., a project\u2011tracking page) published as a public doc and linked in a dev.to article",
+        "who_pays": "Developers who want a ready\u2011made Notion template to organize their project documentation",
+        "monthly_price_usd": "10",
+        "runway_to_first_dollar": "4-6 weeks",
+        "owner_must_do_by_hand": "['Open a Gumroad account and create a product listing (manual setup)', 'Draft and publish a dev.to article that ends with a question about needing the template', 'Create the Notion template file and upload it to the Gumroad product']"
       }
     ],
     "validation_steps": [
-      "Publish a dev.to article that ends with one concrete question and reply to every comment by hand to find who is wrestling with the problem.",
-      "Start or join one existing community the owner already belongs to (a Slack, a Discord, a long-running comment thread on dev.to) and read what people ask about repeatedly without posting or cold-messaging anyone.",
-      "Track which free sample or template gets downloaded or shared the most by hand, using only the analytics dev.to surfaces, to estimate whether a paid audience exists at all."
+      "Write a dev.to article that frames a problem for GitHub developers and ends with a question asking if readers would pay $10 for a ready\u2011made Notion template; the article\u2019s organic reads and comments will reveal interest without any cold outreach."
     ],
     "owner_actions": [
-      "Pick the single narrowest niche from the two ideas above and commit to it for 90 days, writing one dev.to article per week by hand.",
-      "Open the payment or subscription account the owner will use and build the landing page by hand, even before the audience is large.",
-      "Publish the first proof artifact (sample newsletter issue or free templates) on dev.to and note every reader signal by hand.",
-      "Reply personally to every comment on every dev.to article to build a small, named reading list without any automation.",
-      "Re-evaluate after 8-10 weeks whether the hand-collected interest justifies continuing, and stop if it does not."
+      "Write a dev.to article about the pain of manually tracking GitHub project documentation and end with a question asking if readers would pay $10 for a ready\u2011made Notion template",
+      "Create a basic Notion template (e.g., a project\u2011tracking page) and publish it as a public doc",
+      "Set up a Gumroad account and create a product listing for the template (manual step)",
+      "Publish the article and share the link only in the dev.to community feed, letting inbound readers discover it",
+      "Monitor article comments and reads; when a reader asks for the template, provide the Gumroad link"
     ],
     "viable": [
       {
@@ -732,19 +735,19 @@
         "score": 65,
         "manual_steps": [
           "owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe)",
-          "owner creates and maintains the storefront or channel by hand",
+          "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API)",
           "needs an existing audience; the dev.to byline is the only one this stack builds"
         ]
       },
       {
         "name": "Notion / digital template store",
         "mrr_model": "$500-5K/mo, library subscription",
-        "source_note": "specificity wins; Gumroad/Payhip/Etsy listings are manual",
+        "source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token \u2014 Payhip/Etsy stay manual",
         "bot_role": "draft",
         "score": 60,
         "manual_steps": [
           "owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe)",
-          "owner creates and maintains the storefront or channel by hand"
+          "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API)"
         ]
       }
     ],
@@ -848,8 +851,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.37.0-20260901-214837",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 8,
     "total_views": 1383,

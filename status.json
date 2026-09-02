@@ -1,7 +1,7 @@
 {
   "version": "1.37.1",
-  "last_run": "2026-09-02T18:44:10.332804+00:00",
-  "total_runs": 1748,
+  "last_run": "2026-09-02T21:50:37.769571+00:00",
+  "total_runs": 1749,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,19 +33,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.37.1",
-    "summary": "Fix newsletter follow-up history pollution and add a deterministic test for the daily-counter reset edge case.",
+    "summary": "Enable auto-pursuit of local-playbook code_techs ideas, add test for newsletter cross-module duplicate prevention, and improve article title revision effectiveness.",
     "changes_applied": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "Replaced a misleading comment in _prefer_proven_archetypes (\"price gap\") with what the constant actually encodes (the trending-score gap between publisher tiers). The constant _ARCHETYPE_BONUS is a score modifier, not money, and the old wording would mislead anyone reading the code to tune the cap relative to dollar amounts. No behaviour change."
-      },
-      {
-        "file": "bot/earning/newsletter.py",
-        "reason": "Newsletter _pick_sources now also excludes URLs/titles already used by the articles module. Without this, a story chosen for a deep-dive on Monday could be paraphrased in the weekend digest the same week -- the only real-world duplicate the prior code let through, since the per-module history was already correct in isolation. The change is additive: it can only filter MORE candidates, never loosen the selection, and a story that has already been a digest is still blocked by the digest's own history."
-      },
-      {
-        "file": "version.txt",
-        "reason": "Patch bump for the newsletter history-pollution fix and the corrected inline comment in articles._prefer_proven_archetypes. No new feature, no behaviour change beyond fixing the cross-module duplicate."
+        "file": "bot/earning/code_techs.py",
+        "reason": "Enable auto-pursuit of local-playbook ideas (source == 'local-playbook') when auto_pursue is true, since these require no external outreach. Also add a new local-playbook idea for AI-powered resume rewriting service. The auto_pursue logic now only acts on local-playbook sources, respecting the research-only policy for external leads."
       }
     ],
     "suggestions": [
@@ -89,30 +81,11 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.37.2-20260902-185125",
+    "branch": "evolve/1.37.2-20260902-220456",
     "proposed_version": "1.37.2"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 8,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to-newsletter",
-        "success": true,
-        "title": "AI reshaping how we build, review, and trust code",
-        "url": "https://dev.to/robust_true_try/ai-reshaping-how-we-build-review-and-trust-code-22jb",
-        "estimated_usd": 0.0,
-        "item_count": 7
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -156,7 +129,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 603,
+  "last_cycle_seconds": 859,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -577,7 +550,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-02T18:44:10.764296+00:00",
+    "checked_at": "2026-09-02T21:50:38.233528+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -784,7 +757,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.37.2-20260902-185125",
+  "last_evolution_branch": "evolve/1.37.2-20260902-220456",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 8,

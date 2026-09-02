@@ -1,6 +1,6 @@
 # Recurring Revenue (MRR) Idea Triage
 
-Refreshed: 2026-09-01T21:48:37.520206+00:00
+Refreshed: 2026-09-02T00:05:45.278578+00:00
 
 Research and suggestions only. This bot does not contact anyone, collect
 payment, or host a service. Every figure quoted from the source article
@@ -14,22 +14,12 @@ is unverified — check it yourself before acting on it.
 - No outreach. Cold email, DMs, and social posting are refused in code.
 - Can research, analyse, draft, and publish articles to dev.to. That is the whole surface.
 
-## Best Current Angle
+## Surviving Models (no LLM brief this refresh)
 
-A dev.to writer can turn a single Notion template for GitHub project documentation into a recurring revenue stream by publishing a how‑to article that attracts the niche audience, then offering the template for a $10 monthly subscription via a manually created Gumroad product.
-
-## Ranked Ideas
-
-### Notion / digital template store
-
-- **Niche:** GitHub‑focused developers who want ready‑made Notion templates to organize their project documentation
-- **Who pays:** Developers who want a ready‑made Notion template to organize their project documentation
-- **Monthly price:** 10
-- **Why this stack fits:** Zero‑cost research and publishing on dev.to can attract a niche audience and drive sales of a single digital product without needing a large team.
-- **First proof artifact:** A single Notion template (e.g., a project‑tracking page) published as a public doc and linked in a dev.to article
-- **Runway to first dollar:** 4-6 weeks
-- **You must do by hand:** ['Open a Gumroad account and create a product listing (manual setup)', 'Draft and publish a dev.to article that ends with a question about needing the template', 'Create the Notion template file and upload it to the Gumroad product']
-
+| Model | MRR model | Bot can | Score |
+|---|---|---|---|
+| Paid newsletter | $10-20/mo per subscriber | publish | 65 |
+| Notion / digital template store | $500-5K/mo, library subscription | draft | 60 |
 
 ## Set Up By Hand First
 
@@ -37,10 +27,6 @@ None of these is a blocker — but no money moves until you do them.
 
 - **Paid newsletter:** owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe); owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API); needs an existing audience; the dev.to byline is the only one this stack builds
 - **Notion / digital template store:** owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe); owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API)
-
-## How To Validate Without Outreach
-
-- Write a dev.to article that frames a problem for GitHub developers and ends with a question asking if readers would pay $10 for a ready‑made Notion template; the article’s organic reads and comments will reveal interest without any cold outreach.
 
 ## Refused, And Why
 
@@ -67,11 +53,3 @@ code, or infrastructure that does not exist here and is not free.
 | Virtual assistant agency | $500-2K/mo per client | requires a human performing the service per client; client acquisition needs cold email/DM — blocked in code |
 | Niche job board / marketplace | $99-499 per posting, recruiter memberships | needs a server accepting requests; GitHub Actions is outbound-only |
 | Content repurposing service | $500-1.5K/mo retainer | delivery requires posting to social platforms — blocked in code; client acquisition needs cold email/DM — blocked in code |
-
-## Next Actions
-
-1. Write a dev.to article about the pain of manually tracking GitHub project documentation and end with a question asking if readers would pay $10 for a ready‑made Notion template
-2. Create a basic Notion template (e.g., a project‑tracking page) and publish it as a public doc
-3. Set up a Gumroad account and create a product listing for the template (manual step)
-4. Publish the article and share the link only in the dev.to community feed, letting inbound readers discover it
-5. Monitor article comments and reads; when a reader asks for the template, provide the Gumroad link

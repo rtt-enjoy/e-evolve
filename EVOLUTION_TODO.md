@@ -1,6 +1,6 @@
 # Evolution TODO
 
-Bot state: v1.36.1 - cycle #1741 - active: `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
+Bot state: v1.37.1 - cycle #1743 - active: `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
 
 ---
 

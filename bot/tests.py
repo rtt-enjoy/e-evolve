@@ -1897,6 +1897,69 @@ class TestRejectReasonIsRecorded(unittest.TestCase):
 			self.assertTrue(self.A._REJECTS[code].strip())
 
 
+class TestForceArticlesHonoursItsCount(unittest.TestCase):
+	"""`force articles N` must publish N, not silently publish one.
+
+	commands.py parses and clamps N to 1-5 and logs the number, but run() read
+	the override only as a truthy cap-bypass flag and always published a single
+	article. The owner's count was accepted, logged, and then discarded.
+	"""
+
+	def setUp(self):
+		import bot.earning.articles as A
+		self.A = A
+		self._saved = (A._generate_article, A._record_publish, A._refresh_stats,
+					   A.devto.publish)
+		os.environ["DEV_TO_API_KEY"] = "test-key"
+		self.published = []
+
+		def fake_generate(llm, status):
+			return {"title": f"T{len(self.published)}",
+					"body_markdown": "b", "tags": [], "_source": {}}
+
+		def fake_publish(article, key):
+			self.published.append(article["title"])
+			return {"platform": "dev.to", "success": True, "estimated_usd": 0.0}
+
+		A._generate_article = fake_generate
+		A._record_publish = lambda status, article: None
+		A._refresh_stats = lambda status, key: None
+		A.devto.publish = fake_publish
+
+	def tearDown(self):
+		(self.A._generate_article, self.A._record_publish,
+		 self.A._refresh_stats, self.A.devto.publish) = self._saved
+		os.environ.pop("DEV_TO_API_KEY", None)
+
+	def test_force_three_publishes_three(self):
+		status = {"_overrides": {"force_articles": 3}}
+		results = self.A.run(None, status)
+		self.assertEqual(len(self.published), 3)
+		self.assertEqual(sum(1 for r in results if r.get("success")), 3)
+
+	def test_unforced_cycle_still_publishes_one(self):
+		status = {}
+		self.A.run(None, status)
+		self.assertEqual(len(self.published), 1)
+
+	def test_a_failure_partway_stops_the_forced_batch(self):
+		"""A dead source mid-batch must not spin the remaining attempts."""
+		calls = {"n": 0}
+
+		def flaky(llm, status):
+			calls["n"] += 1
+			if calls["n"] >= 2:
+				return self.A._reject("no_source")
+			return {"title": "T", "body_markdown": "b", "tags": [], "_source": {}}
+
+		self.A._generate_article = flaky
+		status = {"_overrides": {"force_articles": 4}}
+		results = self.A.run(None, status)
+		self.assertEqual(len(self.published), 1)
+		self.assertTrue(any(r.get("reject_code") == "no_source" for r in results))
+		self.assertEqual(calls["n"], 2)
+
+
 class TestFailedActionsLogTheirReason(unittest.TestCase):
 	"""earnings-log.md must not flatten a failure into 'action recorded'."""
 

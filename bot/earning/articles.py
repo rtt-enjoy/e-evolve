@@ -256,7 +256,35 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	if forced:
 		log.info("[articles] daily cap bypassed by 'force articles' command")
 
-	# Generate and publish
+	# `force articles N` is documented as "publish N articles now". commands.py
+	# already parses and clamps N to 1-5 and logs it, but this only ever
+	# published one: `forced` was read as a truthy cap-bypass and the count was
+	# discarded. Each attempt is independent -- it picks its own unused source
+	# -- so the batch is just the single-article path run N times.
+	wanted = forced if forced else 1
+	results: list[dict] = []
+	for attempt in range(wanted):
+		batch, published = _publish_once(llm, status, devto_api_key, state, today)
+		results.extend(batch)
+		if not published:
+			# Stop the batch on the first failure. Sources are consumed from one
+			# pool, so once a cycle cannot produce an article the remaining
+			# attempts would burn free-tier LLM calls to fail the same way.
+			if attempt:
+				log.info("[articles] forced batch stopped after %d of %d", attempt, wanted)
+			break
+
+	return results
+
+
+def _publish_once(
+	llm: Any,
+	status: dict[str, Any],
+	devto_api_key: str,
+	state: dict[str, Any],
+	today: str,
+) -> tuple[list[dict], bool]:
+	"""Generate and publish a single article. Returns (results, published)."""
 	global _LAST_REJECT
 	_LAST_REJECT = ""
 	article = _generate_article(llm, status)
@@ -270,7 +298,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 			"reject_code": code,
 			"error": _REJECTS.get(code, "no article produced"),
 			"estimated_usd": 0.0,
-		}]
+		}], False
 
 	results = []
 
@@ -279,7 +307,8 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	results.append(devto_result)
 
 	# Update state if at least one platform succeeded
-	if any(r.get("success") for r in results):
+	published = any(r.get("success") for r in results)
+	if published:
 		# Count within the day only. Carrying yesterday's total forward made
 		# this a lifetime tally (it read 26 against 8 real posts), which is
 		# meaningless on the dashboard and would cap the day the moment
@@ -298,7 +327,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 				if article.get("_followup_of") is not None:
 					result["followup_of"] = article.get("_followup_title", "")
 
-	return results
+	return results, published
 
 
 def _generate_article(llm: Any, status: dict) -> Optional[dict]:

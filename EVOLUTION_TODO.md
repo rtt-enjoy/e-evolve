@@ -1,6 +1,6 @@
 # Evolution TODO
 
-Bot state: v1.23.0 - cycle #463 - $2.77 total - active: `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
+Bot state: v1.36.1 - cycle #1741 - active: `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
 
 ---
 
@@ -37,6 +37,20 @@ _(none open)_
 ---
 
 ## Resolved
+
+- **`force articles N` ignored its own count** - fixed 2026-09-02. `commands.py`
+  parsed and clamped N to 1-5 and logged it, but `articles.run()` read the
+  override only as a truthy cap-bypass and always published exactly one article.
+  The publish path is now `_publish_once`, looped N times and stopped at the
+  first failure so a dead source pool cannot burn free-tier LLM calls.
+
+- **Dead config files were being fed to the evolution LLM** - fixed 2026-09-02.
+  `bot/evolution.py` globs `config/*.json` into the codebase snapshot.
+  `config/llm_providers.json` and `config/llm_workflows.json` were not valid JSON
+  (Python dict reprs) and named obsolete Gemini/Groq per-role routing;
+  `config/error_handling.json` blocked `publishing`, contradicting the live
+  `research_and_article_publishing` policy. All three removed, plus the unused
+  `bot/utils/` package and three docs describing removed behaviour.
 
 - **Dashboard realtime sync used root-only state** - fixed 2026-05-08. `bot/dashboard.py` now publishes `docs/status.json` and `docs/earnings-log.md` alongside the generated dashboard, and the live UI reloads when a new cycle/version arrives so every panel stays synchronized.
 

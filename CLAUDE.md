@@ -43,7 +43,7 @@ bot/earning/         ← products own a run(llm, status); support modules do not
   devto_stats.py     ← [support] reads own dev.to view counts (the reach feedback loop)
 frontend/            ← React + Vite dashboard, built to docs/ by .github/workflows/frontend.yml
 .github/workflows/evolve.yml  ← hourly scheduler (never evolved)
-config/strategy.json ← tunable strategy parameters
+config/strategy.json ← tunable strategy parameters (the ONLY file in config/)
 status.json          ← persisted bot state (auto-updated each cycle)
 version.txt          ← current bot version (X.Y.Z)
 command.txt          ← owner command input
@@ -509,7 +509,10 @@ Write to `command.txt`, commit. Next cycle executes and clears them.
 Also works via GitHub Issues with label `bot-command`.
 
 ```
-force articles N         # publish N articles now, bypassing the daily cap (max 5)
+force articles N         # publish N articles now, bypassing the daily cap (max 5).
+                         # N is honoured: run() loops the publish path N times and
+                         # stops at the first failure. It previously read the override
+                         # as a bare cap-bypass flag and always published exactly one.
 force newsletter         # publish a newsletter digest now, bypassing the weekly cadence
 force mrr                # refresh the MRR idea triage now, bypassing the interval
 force trade aggressive   # ignored: trading is disabled
@@ -558,6 +561,24 @@ module's `history_limit` so `status.json` cannot grow without end.
 ---
 
 ## Strategy Config (config/strategy.json)
+
+`config/` holds **exactly one file**, and that is deliberate.
+`bot/evolution.py` globs `config/*.json` into the codebase snapshot it sends the
+evolution LLM, so anything left in that directory is read by the model as live
+configuration. Four stale files were removed for that reason:
+
+- `config/llm_providers.json` and `config/llm_workflows.json` were not valid
+  JSON at all — they held Python dict reprs with single quotes, written by
+  evolve cycles v1.26.0/v1.28.0 — and described per-role Gemini/Groq routing
+  that the all-OpenRouter chain replaced long ago. Nothing ever read them.
+- `config/error_handling.json` declared `research_suggestions_only` and blocked
+  `publishing`, directly contradicting `strategy.json`'s
+  `research_and_article_publishing`. Nothing read it either, but the evolution
+  prompt did.
+- `bot/utils/` (a `get_env` helper from evolve v1.32.12) was imported by nothing
+  and only padded the same snapshot.
+
+Before adding a file under `config/`, make sure something reads it.
 
 Tunable by owner or changed here in Codex:
 

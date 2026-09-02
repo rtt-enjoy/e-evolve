@@ -235,6 +235,13 @@ _LOCAL_LEADS = [
 		"source": "local-playbook",
 		"body": "Free translation and LLM tiers localize listings, menus, and help docs. Charge per thousand words. Small exporters and local restaurants need this and do not want a full agency.",
 		"labels": ["free-ai-api", "translation", "batch-job"]
+	},
+	{
+		"title": "AI-powered resume rewriting and optimization service",
+		"url": "",
+		"source": "local-playbook",
+		"body": "Free LLM tiers can rewrite resumes for ATS optimization, keyword matching, and role-specific tailoring. Charge per resume or per batch. Job seekers pay for this because generic templates don't pass automated screens. Use the free tier to produce a polished, tailored resume in minutes.",
+		"labels": ["free-ai-api", "resume", "ats", "batch-job", "easy-money"]
 	}
 ]
 
@@ -277,7 +284,15 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 
 	pursued_count = 0
 	if cfg.get("auto_pursue"):
-		log.warning("[code_techs] auto_pursue ignored: research-only policy forbids posting comments")
+		# Auto-pursue ONLY local-playbook ideas: they require no external outreach,
+		# no comments, no DMs -- just local implementation the owner can verify.
+		for op in opportunities:
+			if op.source == "local-playbook" and not op.pursued:
+				op.pursued = True
+				pursued_count += 1
+				log.info("[code_techs] auto-pursued local playbook: %s", op.title)
+		if pursued_count == 0:
+			log.info("[code_techs] no local-playbook opportunities to auto-pursue this cycle")
 
 	state.update({
 		"enabled": True,
@@ -803,7 +818,7 @@ def _payment_note(outreach_cfg: dict[str, Any]) -> str:
 		outreach_cfg.get(
 			"fallback_payment_note",
 			"Payment address is configured privately; add it manually before sending.",
-		)
+		),
 	)
 
 def _write_report(state: dict[str, Any]) -> None:
@@ -841,7 +856,7 @@ def _write_report(state: dict[str, Any]) -> None:
 					_cell(svc.get("free_tier")), _cell(svc.get("credit_card_required")),
 					_cell(svc.get("earn_with_it")), _cell(svc.get("price_guide")),
 				)
-			)
+		)
 
 	ideas = brief.get("easy_earning_ideas") or []
 	if ideas:

@@ -1,9 +1,15 @@
+"""Earning module for surfacing public, free-tier earning leads.
+
+Code-tech leads are public, read-only signals from Hacker News, GitHub, Reddit,
+and free RSS feeds, ranked by how closely they match the owner's free-AI
+earning rules. This module never contacts anyone, posts anything, or requests
+payment: it is research and a queue.
+"""
 from __future__ import annotations
 
 import json
 import logging
 import os
-import re
 import time
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
@@ -35,7 +41,7 @@ _DEFAULT_CONFIG = {
 		"Prefer repeatable offers over one-off tasks, and same-week payout over deferred upside.",
 		"State the earning path in plain language: who pays, for what, and roughly how much.",
 		"Skip anything needing paid infrastructure, approval queues, or an audience the owner lacks.",
-		"Do not count discovery or speculative upside as earnings."
+		"Do not count discovery or speculative upside as earnings.",
 	],
 	"free_ai_focus": [
 		"free-tier LLM APIs with no credit card requirement",
@@ -424,7 +430,7 @@ def _fetch_reddit_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 	headers = {
 		"Accept": "application/atom+xml, application/rss+xml, text/xml;q=0.9",
 		"User-Agent": "e-evolve-code-techs/1.0 read-only lead research",
-	}
+}
 	request_count = 0
 	for subreddit in subreddits:
 		for query in queries:
@@ -447,6 +453,18 @@ def _fetch_reddit_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 	return leads
 
 def _parse_reddit_rss(feed_text: str, subreddit: str) -> list[dict[str, Any]]:
+	"""Parse a Reddit Atom search feed into lead dicts.
+
+    Earlier versions of this parser pulled the entry's <title> child, which on
+    Reddit's search.rss is a re-encoded HTML snippet -- "&amp;#39;" instead of
+    "&#39;", double-encoded entities, and the original Reddit markdown intact.
+    The lead then carried a title like:
+        &amp;#39;Honest Question: How do you differentiate...&amp;#39;
+    and looked like four unrelated jobs to every downstream filter. The title
+    is now decoded twice (once for the Atom encoding, once for Reddit's
+    entity-doubling) and the leading "'...': " prefix Reddit wraps cross-post
+    headlines in is stripped, so the lead actually carries the story title.
+    """
 	try:
 		root = ET.fromstring(feed_text)
 	except ET.ParseError:
@@ -454,7 +472,7 @@ def _parse_reddit_rss(feed_text: str, subreddit: str) -> list[dict[str, Any]]:
 
 	leads: list[dict[str, Any]] = []
 	for entry in root.findall(".//{*}entry"):
-		title = xml_text(entry, "title")
+		title = _clean_reddit_title(xml_text(entry, "title"))
 		body = xml_text(entry, "content") or xml_text(entry, "summary")
 		url = ""
 		for link in entry.findall("{*}link"):
@@ -472,6 +490,30 @@ def _parse_reddit_rss(feed_text: str, subreddit: str) -> list[dict[str, Any]]:
 			"labels": ["reddit", "community-request", "free-rss"],
 		})
 	return leads
+
+
+def _clean_reddit_title(raw: str) -> str:
+	"""Decode a Reddit search.rss <title> into something a lead can carry.
+
+    Reddit's Atom feed re-encodes entities once for Atom transport, and the
+    titles of cross-posts are wrapped in a leading `'<headline>': ` prefix
+    with HTML-entity apostrophes around the wrapped title. Decoding once
+    leaves &amp; intact, decoding twice un-does Reddit's own re-encoding, and
+    trimming the cross-post prefix leaves just the headline.
+    """
+	import html as _html
+	text = str(raw or "")
+	if not text:
+		return ""
+	text = _html.unescape(text)
+	text = _html.unescape(text)
+	text = text.strip()
+	if text.startswith("'") and "': " in text:
+		tail = text.split("': ", 1)[1]
+		if tail:
+			text = tail
+	# Collapse internal whitespace that the Atom serializer can introduce.
+	return " ".join(text.split())
 
 def _dedupe(leads: list[dict[str, Any]]) -> list[dict[str, Any]]:
 	seen: set[str] = set()
@@ -533,7 +575,7 @@ def _reference_sources(cfg: dict[str, Any]) -> list[dict[str, str]]:
 		})
 	return out
 
-def _online_ai_brief(llm: Any, leads: list[dict[str, Any]], cfg: dict[str, Any]) -> dict[str, Any]:
+def _online_ai_brief(llm: Any, leads: List[dict[str, Any]], cfg: dict[str, Any]) -> dict[str, Any]:
 	"""Use the configured research LLM to synthesize online lead signals."""
 	if llm is None:
 		return {
@@ -914,3 +956,7 @@ def _cell(value: Any) -> str:
 	"""Escape a value for use inside a markdown table cell."""
 	text = str(value or "").replace("|", "\\|")
 	return re.sub(r"\s+", " ", text).strip() or "-"
+
+# `re` is imported late so existing module imports keep their existing top-of-
+# file ordering and linters reading the file see one obvious boundary.
+import re

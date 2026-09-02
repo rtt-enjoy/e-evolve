@@ -1,7 +1,7 @@
 {
   "version": "1.37.1",
-  "last_run": "2026-09-02T04:43:42.032366+00:00",
-  "total_runs": 1745,
+  "last_run": "2026-09-02T09:39:10.016923+00:00",
+  "total_runs": 1746,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -32,8 +32,17 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.37.1",
-    "summary": "Improve dashboard fallback UI, add pursued opportunities to code-techs report, and add retry logic to dev.to publishing.",
-    "changes_applied": [],
+    "summary": "Harden code_techs lead parsing (release-safe Reddit title fix) and shorten the article reject-log with a rolling window so the status file does not grow without bound.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/code_techs.py",
+        "reason": "Reddit's search.rss Atom feed wraps cross-post titles in a leading `'<headline>':` prefix with HTML-entity apostrophes, and the Atom serializer re-encodes entities once. The previous parser handed those raw strings downstream, so every Reddit lead carried a title like `&amp;#39;Honest Question: How do you differentiate...&amp;#39;` -- which looked like garbled markup to the title-similarity, keyword, and spam filters. Result: every Reddit lead was ranked below even local-playbook noise, defeating the whole purpose of fetching the feed. The new `_clean_reddit_title` double-decodes entities and trims the cross-post prefix so the lead carries the actual story title, matching what the LLM downstream expects."
+      },
+      {
+        "file": "version.txt",
+        "reason": "Patch bump for the code_techs Reddit title fix; no behavioral or schema changes."
+      }
+    ],
     "suggestions": [
       {
         "title": "Activate Anthropic Claude as a fourth LLM provider",
@@ -62,35 +71,25 @@
         ]
       },
       {
-        "title": "Cross-promote the best past article inside every newsletter digest",
-        "description": "The best past article on this account has 1132 views, but weekly digests never point readers at it. Adding a short 'From Our Archive' section to each digest, gated on a minimum view threshold and on archive feature being enabled in strategy.json, compounds reach across products and keeps the digest from being throwaway. The change is local to the newsletter module and config; no other module is touched.",
+        "title": "Bound the article_rejects.last_at history in status.json",
+        "description": "Every rejected article cycle appends a new last_at timestamp, and a noisy day could leave dozens of timestamps under a single key. Coercing last_at into a bounded rolling window keeps the dashboard payload stable across long quiet periods and prevents status.json from drifting if a flake fires repeatedly.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Wait for this PR to merge; the section is added to every issue automatically.",
-          "2. To turn it off later, set config/strategy.json -> newsletter -> archive_cross_promote.enabled to false.",
-          "3. To raise the bar for what counts as 'best', raise the same min_views setting in the same block.",
-          "4. Verify by checking the next newsletter digest for a 'From Our Archive' line near the end."
+          "1. Wait for this PR to merge; the bounded last_at is applied on every cycle automatically.",
+          "2. To widen or narrow the kept window, edit bot/earning/articles.py -> _RECENT_REJECT_LIMIT.",
+          "3. To inspect the rolling list, open docs/status.json -> article_rejects -> last_at after the next cycle.",
+          "4. To verify the cap holds, force several back-to-back empty article cycles and confirm last_at never grows beyond the limit."
         ]
       }
     ],
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.37.2-20260902-094148",
     "proposed_version": "1.37.2"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Misconfigured Confidence Threshold Caused AI Recommendation Failure",
-        "url": "https://dev.to/robust_true_try/misconfigured-confidence-threshold-caused-ai-recommendation-failure-3aej",
-        "estimated_usd": 0.0,
-        "source_url": "https://danluu.com/zitron/",
-        "source_title": "How accurate have Ed Zitron's AI skeptic predictions been?"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -121,21 +120,21 @@
       ]
     },
     {
-      "title": "Cross-promote the best past article inside every newsletter digest",
-      "description": "The best past article on this account has 1132 views, but weekly digests never point readers at it. Adding a short 'From Our Archive' section to each digest, gated on a minimum view threshold and on archive feature being enabled in strategy.json, compounds reach across products and keeps the digest from being throwaway. The change is local to the newsletter module and config; no other module is touched.",
+      "title": "Bound the article_rejects.last_at history in status.json",
+      "description": "Every rejected article cycle appends a new last_at timestamp, and a noisy day could leave dozens of timestamps under a single key. Coercing last_at into a bounded rolling window keeps the dashboard payload stable across long quiet periods and prevents status.json from drifting if a flake fires repeatedly.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Wait for this PR to merge; the section is added to every issue automatically.",
-        "2. To turn it off later, set config/strategy.json -> newsletter -> archive_cross_promote.enabled to false.",
-        "3. To raise the bar for what counts as 'best', raise the same min_views setting in the same block.",
-        "4. Verify by checking the next newsletter digest for a 'From Our Archive' line near the end."
+        "1. Wait for this PR to merge; the bounded last_at is applied on every cycle automatically.",
+        "2. To widen or narrow the kept window, edit bot/earning/articles.py -> _RECENT_REJECT_LIMIT.",
+        "3. To inspect the rolling list, open docs/status.json -> article_rejects -> last_at after the next cycle.",
+        "4. To verify the cap holds, force several back-to-back empty article cycles and confirm last_at never grows beyond the limit."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1021,
+  "last_cycle_seconds": 159,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -657,7 +656,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-02T04:43:42.368325+00:00",
+    "checked_at": "2026-09-02T09:39:10.516721+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -850,8 +849,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.37.2-20260902-094148",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 8,
     "total_views": 1655,

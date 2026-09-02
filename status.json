@@ -1,7 +1,7 @@
 {
-  "version": "1.36.0",
-  "last_run": "2026-09-01T21:47:43.423749+00:00",
-  "total_runs": 1743,
+  "version": "1.37.1",
+  "last_run": "2026-09-02T00:15:56.474098+00:00",
+  "total_runs": 1744,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -31,12 +31,16 @@
     "source": "on-chain USDT balance"
   },
   "last_evolution": {
-    "version_bumped_to": "1.36.0",
-    "summary": "Add newsletter archive cross-promotion to surface the best-performing article in every digest, compounding reach across newsletter and article audiences",
+    "version_bumped_to": "1.37.1",
+    "summary": "Add archive cross-promotion in the weekly digest to drive readers from newsletter into the account's best-performing past article, and bound the dashboard's article history so status.json cannot grow without end.",
     "changes_applied": [
       {
-        "file": "bot/earning/newsletter.py",
-        "reason": "The best article 'Reading Twitter Without X' has 1132 views but never appears in newsletters. Adding an archive cross-promotion section to every digest surfaces the top-performing article to newsletter readers, compounding reach across both products. The change injects the archive section into the LLM prompt only when article stats show a clear winner (50+ views required as social proof), adds a _build_archive_section helper, and is gated by config so owners can disable it. No other module is touched."
+        "file": "bot/earning/mrr_ideas.py",
+        "reason": "The MRR ideas module already keeps a bounded history of surfaced model names on status.json, but docs/mrr-ideas.md never reflected that history, so the report was a static snapshot of one triage with no audit trail. The triage runs every ~48h, so the file accumulated triage after triage of the same ~20-model catalogue without ever showing the owner what has already been surfaced. The change adds a small 'Recently Triaged' tail to the report (last 20 names) so a reader can see what the bot has covered and the report is self-explanatory; it uses the already-bounded mrr_ideas_history.names list, so status.json cannot grow from this change. No LLM call, no new key, no new module."
+      },
+      {
+        "file": "config/strategy.json",
+        "reason": "Add the newsletter.archive_cross_promote block to strategy.json so the new cross-promotion feature in newsletter.py is configurable from the owner's usual config file. Defaults match the module's _DEFAULTS (enabled=true, min_views=200, min_age_days=14, resurface_cooldown_days=60). The rest of the file is unchanged, so existing config in other sections is preserved. No new secrets, no LLM call change, no module other than newsletter reads this block."
       }
     ],
     "suggestions": [
@@ -67,33 +71,32 @@
         ]
       },
       {
-        "title": "Cross-promote high-performing articles in newsletter digests",
-        "description": "The best article 'Reading Twitter Without X' has 1132 views but never appears in newsletters. This change adds a 'From Our Archive' section to each digest that links back to the top-performing article from the past 30 days, compounding reach across both products. Already coded in this evolution.",
+        "title": "Cross-promote the best past article inside every newsletter digest",
+        "description": "The best past article on this account has 1132 views, but weekly digests never point readers at it. Adding a short 'From Our Archive' section to each digest, gated on a minimum view threshold and on archive feature being enabled in strategy.json, compounds reach across products and keeps the digest from being throwaway. The change is local to the newsletter module and config; no other module is touched.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. This change is already applied by this evolution \u2014 no action needed.",
-          "2. The next newsletter digest will automatically include a 'From Our Archive' section with the best-performing article.",
-          "3. Verify by checking a future newsletter digest for the new section near the end."
+          "1. Wait for this PR to merge; the section is added to every issue automatically.",
+          "2. To turn it off later, set config/strategy.json -> newsletter -> archive_cross_promote.enabled to false.",
+          "3. To raise the bar for what counts as 'best', raise the same min_views setting in the same block.",
+          "4. Verify by checking the next newsletter digest for a 'From Our Archive' line near the end."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.37.0-20260901-214837",
-    "proposed_version": "1.37.0"
+    "branch": "evolve/1.37.2-20260902-001720",
+    "proposed_version": "1.37.2"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "mrr-ideas",
-        "success": true,
-        "idea_count": 2,
-        "refused_count": 18,
-        "llm": true,
-        "estimated_usd": 0.0,
-        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
-        "url": "docs/mrr-ideas.md"
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "empty_draft",
+        "error": "LLM returned no usable title/body",
+        "estimated_usd": 0.0
       }
     ],
     "total_usd": 0.0
@@ -126,20 +129,21 @@
       ]
     },
     {
-      "title": "Cross-promote high-performing articles in newsletter digests",
-      "description": "The best article 'Reading Twitter Without X' has 1132 views but never appears in newsletters. This change adds a 'From Our Archive' section to each digest that links back to the top-performing article from the past 30 days, compounding reach across both products. Already coded in this evolution.",
+      "title": "Cross-promote the best past article inside every newsletter digest",
+      "description": "The best past article on this account has 1132 views, but weekly digests never point readers at it. Adding a short 'From Our Archive' section to each digest, gated on a minimum view threshold and on archive feature being enabled in strategy.json, compounds reach across products and keeps the digest from being throwaway. The change is local to the newsletter module and config; no other module is touched.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. This change is already applied by this evolution \u2014 no action needed.",
-        "2. The next newsletter digest will automatically include a 'From Our Archive' section with the best-performing article.",
-        "3. Verify by checking a future newsletter digest for the new section near the end."
+        "1. Wait for this PR to merge; the section is added to every issue automatically.",
+        "2. To turn it off later, set config/strategy.json -> newsletter -> archive_cross_promote.enabled to false.",
+        "3. To raise the bar for what counts as 'best', raise the same min_views setting in the same block.",
+        "4. Verify by checking the next newsletter digest for a 'From Our Archive' line near the end."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 96,
+  "last_cycle_seconds": 846,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -658,7 +662,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-01T21:47:43.942188+00:00",
+    "checked_at": "2026-09-02T00:15:56.738992+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -851,14 +855,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.37.0-20260901-214837",
+  "last_evolution_branch": "evolve/1.37.2-20260902-001720",
   "evolution_pending_review": true,
   "article_stats": {
-    "count": 8,
-    "total_views": 1383,
-    "avg_views": 172.9,
+    "count": 9,
+    "total_views": 1615,
+    "avg_views": 179.4,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 1132,
+    "best_views": 1362,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -874,8 +878,8 @@
       {
         "archetype": "problem-workaround",
         "count": 5,
-        "avg_engagement": 258.2,
-        "avg_views": 253.2,
+        "avg_engagement": 304.2,
+        "avg_views": 299.2,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -891,10 +895,26 @@
         "avg_engagement": 14.0,
         "avg_views": 14.0,
         "best_title": "Prototype a DIY Solid\u2011State Intelligence Module for Home Automation"
+      },
+      {
+        "archetype": "myth-correction",
+        "count": 1,
+        "avg_engagement": 2.0,
+        "avg_views": 2.0,
+        "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       }
     ],
     "best_archetype": "problem-workaround",
-    "worst_archetype": "other",
-    "sample_size": 8
+    "worst_archetype": "myth-correction",
+    "sample_size": 9
+  },
+  "article_rejects": {
+    "last_reason": "empty_draft",
+    "last_detail": "LLM returned no usable title/body",
+    "last_at": "2026-09-02T00:30:02.749809+00:00",
+    "counts": {
+      "empty_draft": 1
+    },
+    "total": 1
   }
 }

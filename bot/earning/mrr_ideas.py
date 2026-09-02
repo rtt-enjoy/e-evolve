@@ -1,5 +1,5 @@
 """
-Earning Module — Recurring-Revenue (MRR) Idea Triage
+Earning Module \u2014 Recurring-Revenue (MRR) Idea Triage
 
 Research and suggestions only. Takes a catalogue of recurring-revenue business
 models and scores each one against THIS project's hard constraints -- zero
@@ -62,8 +62,8 @@ def _config() -> dict:
 # delivery that requires an action this project refuses in code, or
 # infrastructure that does not exist here and is not free.
 _BLOCKERS: dict[str, str] = {
-	"outreach":        "client acquisition needs cold email/DM — blocked in code",
-	"social_posting":  "delivery requires posting to social platforms — blocked in code",
+	"outreach":        "client acquisition needs cold email/DM \u2014 blocked in code",
+	"social_posting":  "delivery requires posting to social platforms \u2014 blocked in code",
 	"inbound_http":    "needs a server accepting requests; GitHub Actions is outbound-only",
 	"human_delivery":  "requires a human performing the service per client",
 	"paid_dependency": "requires a paid third-party platform",
@@ -130,7 +130,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 	{
 		"name": "Notion / digital template store",
 		"mrr_model": "$500-5K/mo, library subscription",
-		"source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token — Payhip/Etsy stay manual",
+		"source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token \u2014 Payhip/Etsy stay manual",
 		"blockers": [],
 		"manual": ["payments", "platform_setup"],
 		"bot_role": "draft",
@@ -273,7 +273,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 
 	if not cfg.get("enabled", True):
 		state["enabled"] = False
-		log.debug("[mrr_ideas] disabled in strategy config — skipping")
+		log.debug("[mrr_ideas] disabled in strategy config \u2014 skipping")
 		return []
 	state["enabled"] = True
 
@@ -281,7 +281,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	if not forced:
 		waiting = hours_until_due(state, "last_refresh_at", int(cfg["refresh_hours"]))
 		if waiting > 0:
-			log.info("[mrr_ideas] next refresh due in %.1fh — skipping", waiting)
+			log.info("[mrr_ideas] next refresh due in %.1fh \u2014 skipping", waiting)
 			return []
 	else:
 		log.info("[mrr_ideas] interval bypassed by 'force mrr' command")
@@ -297,7 +297,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		# Still worth writing: the refusal list is the useful part.
 		log.warning("[mrr_ideas] no idea survived the constraint matrix")
 	elif llm is None:
-		log.warning("[mrr_ideas] no LLM available — writing deterministic triage only")
+		log.warning("[mrr_ideas] no LLM available \u2014 writing deterministic triage only")
 	else:
 		brief = _viability_brief(llm, viable, cfg)
 
@@ -459,7 +459,7 @@ def _viability_brief(llm: Any, viable: list[dict], cfg: dict) -> dict:
 			],
 			"validation_steps": [
 				"how to find 10 people with the problem and talk to them WITHOUT "
-				"cold outreach — inbound only: an article that ends in a question, "
+				"cold outreach \u2014 inbound only: an article that ends in a question, "
 				"a thread the owner posts by hand, a community they already belong to"
 			],
 			"owner_actions": ["3-5 concrete next actions, most valuable first"],
@@ -472,11 +472,11 @@ def _viability_brief(llm: Any, viable: list[dict], cfg: dict) -> dict:
 		else:
 			data = llm.complete_json(json.dumps(prompt), max_tokens=3000)
 	except Exception as exc:
-		log.warning("[mrr_ideas] viability brief failed: %s — keeping deterministic triage", exc)
+		log.warning("[mrr_ideas] viability brief failed: %s \u2014 keeping deterministic triage", exc)
 		return {}
 
 	if not isinstance(data, dict):
-		log.warning("[mrr_ideas] viability brief returned no object — keeping deterministic triage")
+		log.warning("[mrr_ideas] viability brief returned no object \u2014 keeping deterministic triage")
 		return {}
 
 	return {
@@ -513,7 +513,7 @@ def _write_report(state: dict[str, Any]) -> None:
 		"",
 		"Research and suggestions only. This bot does not contact anyone, collect",
 		"payment, or host a service. Every figure quoted from the source article",
-		"is unverified — check it yourself before acting on it.",
+		"is unverified \u2014 check it yourself before acting on it.",
 		"",
 		"## What This Stack Can Actually Support",
 		"",
@@ -563,7 +563,7 @@ def _write_report(state: dict[str, Any]) -> None:
 			"",
 			"## Set Up By Hand First",
 			"",
-			"None of these is a blocker — but no money moves until you do them.",
+			"None of these is a blocker \u2014 but no money moves until you do them.",
 			"",
 		]
 		for name, steps in prereqs:
@@ -594,6 +594,17 @@ def _write_report(state: dict[str, Any]) -> None:
 	if actions:
 		lines += ["", "## Next Actions", ""]
 		lines += [f"{n}. {a}" for n, a in enumerate(actions, 1)]
+
+	# Always bound the history lists in the report itself. The status dict is
+	# already trimmed by _record_refresh, but doc readers land here first, and a
+	# report that only ever shows the last dozen triages is more useful than one
+	# that grows without end. The same value is the soft cap, not a separate one.
+	hist = state.get("mrr_ideas_history") or {}
+	names = list(hist.get("names") or [])
+	if names:
+		lines += ["", "## Recently Triaged", ""]
+		for name in names[-20:]:
+			lines.append(f"- {name}")
 
 	lines.append("")
 	_REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)

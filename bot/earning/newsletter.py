@@ -1,5 +1,5 @@
 """
-Earning Module — Newsletter Digest (dev.to)
+Earning Module \u2014 Newsletter Digest (dev.to)
 
 Publishes a recurring "what shipped in tech" digest built from real trending
 stories found by ``trending``. Where ``articles`` writes one deep piece about a
@@ -111,26 +111,26 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 
 	if not cfg.get("enabled", True):
 		state["enabled"] = False
-		log.debug("[newsletter] disabled in strategy config — skipping")
+		log.debug("[newsletter] disabled in strategy config \u2014 skipping")
 		return []
 	state["enabled"] = True
 
 	api_key = os.getenv("DEV_TO_API_KEY", "").strip()
 	if not api_key:
-		log.debug("[newsletter] DEV_TO_API_KEY not set — skipping")
+		log.debug("[newsletter] DEV_TO_API_KEY not set \u2014 skipping")
 		return []
 
 	forced = bool(status.get("_overrides", {}).get("force_newsletter"))
 	if not forced:
 		waiting = hours_until_due(state, "published_at", int(cfg["min_interval_hours"]))
 		if waiting > 0:
-			log.info("[newsletter] next issue due in %.1fh — skipping", waiting)
+			log.info("[newsletter] next issue due in %.1fh \u2014 skipping", waiting)
 			return []
 	else:
 		log.info("[newsletter] cadence bypassed by 'force newsletter' command")
 
 	if not llm:
-		log.warning("[newsletter] no LLM available — publishing nothing")
+		log.warning("[newsletter] no LLM available \u2014 publishing nothing")
 		return []
 
 	issue = _generate_issue(llm, status, cfg)
@@ -174,7 +174,7 @@ def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
 	min_items = int(cfg["min_items"])
 	if len(items) < min_items:
 		log.warning(
-			"[newsletter] only %d fresh source(s), need %d — publishing nothing",
+			"[newsletter] only %d fresh source(s), need %d \u2014 publishing nothing",
 			len(items), min_items,
 		)
 		return None
@@ -206,11 +206,11 @@ def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
 		else:
 			data = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
 	except Exception as exc:
-		log.warning("[newsletter] LLM generation failed: %s — publishing nothing", exc)
+		log.warning("[newsletter] LLM generation failed: %s \u2014 publishing nothing", exc)
 		return None
 
 	if not (data.get("title") and data.get("body_markdown")):
-		log.warning("[newsletter] LLM returned no usable digest — publishing nothing")
+		log.warning("[newsletter] LLM returned no usable digest \u2014 publishing nothing")
 		return None
 
 	# Deterministic cleanup first, so no LLM call is spent on fixable artifacts.
@@ -223,7 +223,7 @@ def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
 
 	problems = _digest_problems(issue["body_markdown"], items, cfg)
 	if problems:
-		log.warning("[newsletter] %s — publishing nothing", "; ".join(problems))
+		log.warning("[newsletter] %s \u2014 publishing nothing", "; ".join(problems))
 		return None
 
 	issue["_items"] = items
@@ -243,7 +243,15 @@ def _format_item(index: int, item: dict) -> str:
 
 
 def _pick_sources(status: dict, cfg: dict) -> list[dict]:
-	"""Return the top unused trending candidates for this issue."""
+	"""Return the top unused trending candidates for this issue.
+
+    Excludes both the newsletter's own history (so a story never appears in two
+    digests) and the articles module's history (so a story that became a daily
+    deep-dive is not also paraphrased in a digest the same week). Two modules,
+    two products: the same story being both a digest paragraph AND a separate
+    full article is fine, but the same story being both a digest AND a digest
+    is the repeat the newsletter_history list exists to prevent.
+    """
 	try:
 		candidates = trending.fetch_candidates(
 			max_age_hours=int(cfg["source_max_age_hours"]), limit=40
@@ -253,8 +261,9 @@ def _pick_sources(status: dict, cfg: dict) -> list[dict]:
 		return []
 
 	hist = _history(status)
-	used_urls = set(hist.get("source_urls", []))
-	used_titles = set(hist.get("source_titles", []))
+	article_hist = status.get("article_history") or {}
+	used_urls = set(hist.get("source_urls", [])) | set(article_hist.get("source_urls", []))
+	used_titles = set(hist.get("source_titles", [])) | set(article_hist.get("source_titles", []))
 
 	picked: list[dict] = []
 	for item in candidates:

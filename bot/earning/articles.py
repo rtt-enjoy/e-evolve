@@ -1,5 +1,5 @@
 """
-Earning Module — Articles (dev.to)
+Earning Module \u2014 Articles (dev.to)
 Generates and publishes one original technical article per day to dev.to,
 written from a real trending source found by ``trending``.
 
@@ -238,7 +238,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	devto_api_key = os.getenv("DEV_TO_API_KEY", "").strip()
 
 	if not devto_api_key:
-		log.debug("[articles] DEV_TO_API_KEY not set — skipping")
+		log.debug("[articles] DEV_TO_API_KEY not set \u2014 skipping")
 		return []
 
 	# Check rate limiting
@@ -246,12 +246,12 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	last_date = state.get("date", "")
 	from datetime import datetime, timezone
 	today = datetime.now(timezone.utc).date().isoformat()
-	
+
 	forced = int(status.get("_overrides", {}).get("force_articles", 0) or 0)
 	if last_date == today and not forced:
 		published_today = state.get("published", 0)
 		if published_today >= int(_config()["max_articles_per_cycle"]):
-			log.info("[articles] Already published %d article(s) today — skipping", published_today)
+			log.info("[articles] Already published %d article(s) today \u2014 skipping", published_today)
 			return []
 	if forced:
 		log.info("[articles] daily cap bypassed by 'force articles' command")
@@ -501,9 +501,9 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 # builder because this is editorial direction, not analysis -- the analysis
 # lives in devto_stats.
 # How much a proven archetype is worth when ranking sources, in trending-score
-# points. Deliberately smaller than the authority gap between an edited
-# publisher and an open tag feed (see trending._AUTHORITY), so interest breaks
-# ties between comparable sources rather than promoting a weak one.
+# points. Deliberately smaller than the price gap between an edited publisher
+# and an open tag feed (see trending._AUTHORITY), so interest breaks ties
+# between comparable sources rather than promoting a weak one.
 _ARCHETYPE_BONUS = 12.0
 _ARCHETYPE_BONUS_STEP = 4.0
 
@@ -632,7 +632,7 @@ def _followup_target(status: dict, api_key: str) -> Optional[dict]:
 	)
 	if not best:
 		log.info("[articles] no post cleared %d views in %dh -- writing a fresh take",
-				 cfg["followup_min_views"], cfg["followup_window_hours"])
+					 cfg["followup_min_views"], cfg["followup_window_hours"])
 		return None
 	return best
 
@@ -648,7 +648,7 @@ def _generate_followup(llm: Any, status: dict, target: dict) -> Optional[dict]:
 		f"IT EARNED: {target.get('page_views', 0)} views, "
 		f"{target.get('reactions', 0)} reactions, {target.get('comments', 0)} comments\n"
 		f"TAGS THAT WORKED: {', '.join(target.get('tags', [])) or '(none)'}\n\n"
-		f"ORIGINAL EXTERNAL SOURCE: {source.get('title', '')} — {source.get('url', '')}\n\n"
+		f"ORIGINAL EXTERNAL SOURCE: {source.get('title', '')} \u2014 {source.get('url', '')}\n\n"
 		"Readers showed up for this subject, so do not re-explain the basics. Go "
 		"one level deeper: production edge cases, what is harder than it looks, "
 		"what you would do differently, or the problem a reader hits right after "
@@ -1074,9 +1074,6 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
-
-
 def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 	"""Ask the model to fix specific formatting violations. Returns None on failure."""
 	prompt = (
@@ -1106,7 +1103,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

@@ -1569,3 +1569,8 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-09-03 06:01 UTC
 
 - [ok] **dev.to**: [Your Gemini 3.8 Flash Token Counter Is Wrong](https://dev.to/robust_true_try/your-gemini-38-flash-token-counter-is-wrong-3aj) (est. $0.00)
+
+### 2026-09-03 21:50 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (8 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+- [ok] **mrr-ideas**: [MRR idea triage refreshed (2 viable, 18 refused)](docs/mrr-ideas.md) (est. $0.00)

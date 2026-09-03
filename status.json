@@ -1,7 +1,7 @@
 {
-  "version": "1.37.1",
-  "last_run": "2026-09-03T09:04:49.282097+00:00",
-  "total_runs": 1752,
+  "version": "1.37.2",
+  "last_run": "2026-09-03T09:45:08.923263+00:00",
+  "total_runs": 1753,
   "active_features": [
     "llm_anthropic",
     "llm_gemini",
@@ -36,19 +36,6 @@
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Activate Anthropic Claude as a fourth LLM provider",
-        "description": "Widens the free-fallback surface with a different rate-limit pool and failure modes, improving reliability for repair suggestions",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Go to https://console.anthropic.com/ and create a free-tier account (no credit card required for the evaluation tier).",
-          "2. In Settings -> API Keys, click 'Create Key', name it 'e-evolve', and copy the sk-ant-... value.",
-          "3. In your GitHub repo go to Settings -> Secrets and variables -> Actions -> New repository secret, name it ANTHROPIC_API_KEY, paste the key, and click Add secret.",
-          "4. The next scheduled run will flip status.json's secret_readiness.llm_anthropic.active to true and the upgrade role will gain Claude as a higher-quality fallback for repair suggestions."
-        ]
-      },
-      {
         "title": "Activate Cerebras Cloud as a fourth free-tier LLM provider",
         "description": "Provides roughly 1M tokens/day free with no credit card, giving a third independent fallback when OpenRouter free caps are exhausted",
         "secret_needed": "CEREBRAS_API_KEY",
@@ -75,7 +62,7 @@
         ]
       }
     ],
-    "version_bumped_to": "1.37.1",
+    "version_bumped_to": "1.37.2",
     "error": null
   },
   "last_earning": {

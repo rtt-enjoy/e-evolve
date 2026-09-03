@@ -1,7 +1,7 @@
 {
   "version": "1.37.1",
-  "last_run": "2026-09-02T21:50:37.769571+00:00",
-  "total_runs": 1749,
+  "last_run": "2026-09-03T00:17:32.873243+00:00",
+  "total_runs": 1750,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,17 +33,12 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.37.1",
-    "summary": "Enable auto-pursuit of local-playbook code_techs ideas, add test for newsletter cross-module duplicate prevention, and improve article title revision effectiveness.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/code_techs.py",
-        "reason": "Enable auto-pursuit of local-playbook ideas (source == 'local-playbook') when auto_pursue is true, since these require no external outreach. Also add a new local-playbook idea for AI-powered resume rewriting service. The auto_pursue logic now only acts on local-playbook sources, respecting the research-only policy for external leads."
-      }
-    ],
+    "summary": "Add new earning ideas and activate additional LLM fallback providers",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Activate Anthropic Claude as a fourth LLM provider",
-        "description": "llm_anthropic is the only inactive provider still listed. Adding ANTHROPIC_API_KEY widens the free-fallback surface with a different rate-limit pool and failure modes. Already plumbed through the same chain client as Gemini and Groq, so no code change is required.",
+        "description": "Widens the free-fallback surface with a different rate-limit pool and failure modes, improving reliability for repair suggestions",
         "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -55,8 +50,8 @@
         ]
       },
       {
-        "title": "Activate Cerebras Cloud as a fourth free-tier provider",
-        "description": "llm_cerebras is listed inactive. Cerebras offers roughly 1M tokens/day free with no credit card, which gives a third independent fallback when OpenRouter free caps are exhausted. Already plumbed through the same chain client as Gemini and Groq.",
+        "title": "Activate Cerebras Cloud as a fourth free-tier LLM provider",
+        "description": "Provides roughly 1M tokens/day free with no credit card, giving a third independent fallback when OpenRouter free caps are exhausted",
         "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -68,30 +63,40 @@
         ]
       },
       {
-        "title": "Add AI-powered resume rewriting service to code_techs queue",
-        "description": "Adds a new local-playbook earning idea for resume rewriting using free AI tiers, expanding the queue of actionable suggestions for the owner.",
+        "title": "Add AI-powered code documentation service to code_techs queue",
+        "description": "Adds a new local-playbook earning idea for generating code documentation using free AI tiers, expanding the queue of actionable suggestions for the owner",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "1. This change adds a new idea to the code_techs earning module.",
-          "2. The idea will appear in the next code_techs queue refresh.",
-          "3. The owner can then pursue it manually by following the outreach draft generated for the idea."
+          "2. The idea will appear in the next code_techs queue refresh (every 24 hours).",
+          "3. The owner can then pursue it manually by following the outreach draft generated for the idea.",
+          "4. To implement: add the new idea entry to the _LOCAL_LEADS list in code_techs.py following the existing pattern, including title, source, body, and labels."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.37.2-20260902-220456",
+    "branch": null,
     "proposed_version": "1.37.2"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "empty_draft",
+        "error": "LLM returned no usable title/body",
+        "estimated_usd": 0.0
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Activate Anthropic Claude as a fourth LLM provider",
-      "description": "llm_anthropic is the only inactive provider still listed. Adding ANTHROPIC_API_KEY widens the free-fallback surface with a different rate-limit pool and failure modes. Already plumbed through the same chain client as Gemini and Groq, so no code change is required.",
+      "description": "Widens the free-fallback surface with a different rate-limit pool and failure modes, improving reliability for repair suggestions",
       "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -103,8 +108,8 @@
       ]
     },
     {
-      "title": "Activate Cerebras Cloud as a fourth free-tier provider",
-      "description": "llm_cerebras is listed inactive. Cerebras offers roughly 1M tokens/day free with no credit card, which gives a third independent fallback when OpenRouter free caps are exhausted. Already plumbed through the same chain client as Gemini and Groq.",
+      "title": "Activate Cerebras Cloud as a fourth free-tier LLM provider",
+      "description": "Provides roughly 1M tokens/day free with no credit card, giving a third independent fallback when OpenRouter free caps are exhausted",
       "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -116,20 +121,21 @@
       ]
     },
     {
-      "title": "Add AI-powered resume rewriting service to code_techs queue",
-      "description": "Adds a new local-playbook earning idea for resume rewriting using free AI tiers, expanding the queue of actionable suggestions for the owner.",
+      "title": "Add AI-powered code documentation service to code_techs queue",
+      "description": "Adds a new local-playbook earning idea for generating code documentation using free AI tiers, expanding the queue of actionable suggestions for the owner",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "1. This change adds a new idea to the code_techs earning module.",
-        "2. The idea will appear in the next code_techs queue refresh.",
-        "3. The owner can then pursue it manually by following the outreach draft generated for the idea."
+        "2. The idea will appear in the next code_techs queue refresh (every 24 hours).",
+        "3. The owner can then pursue it manually by following the outreach draft generated for the idea.",
+        "4. To implement: add the new idea entry to the _LOCAL_LEADS list in code_techs.py following the existing pattern, including title, source, body, and labels."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 859,
+  "last_cycle_seconds": 870,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -550,7 +556,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-02T21:50:38.233528+00:00",
+    "checked_at": "2026-09-03T00:17:33.294145+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -757,14 +763,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.37.2-20260902-220456",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
-    "count": 8,
-    "total_views": 1655,
-    "avg_views": 206.9,
+    "count": 10,
+    "total_views": 1808,
+    "avg_views": 180.8,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 1402,
+    "best_views": 1532,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -780,43 +786,43 @@
       {
         "archetype": "problem-workaround",
         "count": 4,
-        "avg_engagement": 390.2,
-        "avg_views": 384.0,
+        "avg_engagement": 422.8,
+        "avg_views": 416.5,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
         "archetype": "build-tutorial",
-        "count": 2,
-        "avg_engagement": 51.5,
-        "avg_views": 51.5,
+        "count": 3,
+        "avg_engagement": 34.3,
+        "avg_views": 34.3,
         "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
       },
       {
         "archetype": "other",
-        "count": 1,
-        "avg_engagement": 14.0,
-        "avg_views": 14.0,
+        "count": 2,
+        "avg_engagement": 13.5,
+        "avg_views": 13.5,
         "best_title": "Prototype a DIY Solid\u2011State Intelligence Module for Home Automation"
       },
       {
         "archetype": "myth-correction",
         "count": 1,
-        "avg_engagement": 2.0,
-        "avg_views": 2.0,
+        "avg_engagement": 12.0,
+        "avg_views": 12.0,
         "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       }
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "myth-correction",
-    "sample_size": 8
+    "sample_size": 10
   },
   "article_rejects": {
     "last_reason": "empty_draft",
     "last_detail": "LLM returned no usable title/body",
-    "last_at": "2026-09-02T00:30:02.749809+00:00",
+    "last_at": "2026-09-03T00:32:02.979902+00:00",
     "counts": {
-      "empty_draft": 1
+      "empty_draft": 2
     },
-    "total": 1
+    "total": 2
   }
 }

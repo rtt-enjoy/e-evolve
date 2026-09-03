@@ -1561,3 +1561,7 @@ Autonomous earnings generated every hourly cycle.
 
 - [ok] **code_techs**: [Code-tech queue refreshed (8 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
 - [ok] **dev.to-newsletter**: [AI reshaping how we build, review, and trust code](https://dev.to/robust_true_try/ai-reshaping-how-we-build-review-and-trust-code-22jb) (est. $0.00)
+
+### 2026-09-03 00:32 UTC
+
+- [fail] **dev.to**: LLM returned no usable title/body

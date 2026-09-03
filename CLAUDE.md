@@ -184,24 +184,60 @@ identical posts on dev.to. Each article starts from a real trending piece:
    intelligence"). `_feed_score()` now returns authority + a small recency
    bonus. Medium tag feeds are open-submission and capped at
    `_MEDIUM_AUTHORITY` so they can never outrank an edited publication.
-3. Open-submission sources — HN, HackerNoon, dev.to, and every Medium tag — are
-   keyword-screened by `is_technical()`; curated single-publisher feeds are
-   edited, so their scoping is trusted. `is_spam()` additionally rejects
-   affiliate/listicle spam ("13 Reliable Platforms to Buy Gmail Accounts"),
-   which reached the candidate pool because only HN was being screened.
-4. `_pick_source()` takes the highest-ranked candidate not in
+3. Open-submission sources — HN, HackerNoon, dev.to, and every Medium tag — pass
+   three independent screens; curated single-publisher feeds are edited, so
+   their scoping is trusted. The screens are separate on purpose: each catches
+   something the others provably cannot.
+   - `is_technical()` — **vocabulary.** The title has to carry a technical term
+     on its own; an untechnical title is only rescued by a technical summary.
+     This used to pour title and summary into one bag of words and accept a
+     single hit anywhere, so one incidental word in a marketing blurb
+     whitelisted the post. That is how **"Family Matching Outfits: How to
+     Create Stylish Looks for Every Family Member"** — a dev.to clothing-store
+     advert — was published as a story in a weekly developer digest, on a
+     summary that happened to say "build" and "data".
+   - `is_spam()` — **intent.** Vocabulary cannot catch promotional content:
+     "MATLAB Online Training | MATLAB Training Courses Online" is full of real
+     technical words. Rejects affiliate/listicle spam ("13 Reliable Platforms
+     to Buy Gmail Accounts"), agency and course marketing ("Content Marketing
+     Services in Noida", "Best PPC and SEO Company in Noida"), roundup padding
+     ("100+ ChatGPT Prompts … The Ultimate Collection", "X vs Y vs Z"), and
+     feeds in scripts this audience does not read.
+   - `is_off_topic()` — **subject.** For posts that are neither keyword-poor nor
+     overtly selling: clothing, diet, astrology, visas, and gambling fronts.
+     "Shree Win Game Online" cleared the summary rule on a single mention of
+     "security" in otherwise pure ad copy.
+
+   **Tightening these is bounded by a false-negative cost.** Demoting generic
+   terms (`ai`, `model`, `release`) to weak signals was tried and **reverted**:
+   it dropped "Gemini 3.8 Flash", "Quasar 438B" and "Polars 2.0" off Hacker
+   News — exactly the stories this bot exists to write about. An empty candidate
+   pool is a worse failure than a mediocre source, so when a screen and a real
+   article conflict, the article wins and the vocabulary gets the missing word.
+4. **The bot's own posts are excluded** (`fetch_candidates(exclude_authors=…)`).
+   One of the feeds is dev.to's programming tag, which is also where this bot
+   publishes, so its own articles came back as "trending news" a day later. It
+   wrote a take on its own top post and credited itself in a `## Source`
+   section as though it were someone else's reporting. Following up on our own
+   work is a real feature — `_generate_followup`, which recaps honestly and
+   backlinks the parent — and this path must not counterfeit it. The account's
+   URLs come from `devto_stats.account_urls()` (the dev.to API the stats loop
+   already calls), are cached in `article_history.own_urls`, and are read by
+   both products through `devto.own_post_urls()`: one account, one list, **no
+   new secret and no hardcoded handle**, so it survives a rename.
+5. `_pick_source()` takes the highest-ranked candidate not in
    `status["article_history"]`, so a source is used at most once, ever. If the
    candidate is on a paywalled host (`trending._PAYWALLED_HOSTS`) and its feed
    summary is too thin to write from, `trending.unlock_summary()` fetches the
    full text once via the public `freedium-mirror.cfd` mirror. If the mirror is
    down or returns nothing useful, that candidate is skipped and the next one is
    tried — the mirror is never required for a cycle to succeed.
-5. The LLM writes an *improved, original* article on that subject. The system
+6. The LLM writes an *improved, original* article on that subject. The system
    prompt forbids rewording and requires added value (working code, tradeoffs,
    failure modes) plus a `## Source` attribution section. It also fixes the
    **voice**: plain-spoken, short sentences, "you"/"I", no hype, no jargon, and a
    skimmable heading structure where each `##` states an outcome, not a topic.
-6. Gates run before publishing, in this order:
+7. Gates run before publishing, in this order:
    - `_strip_fabricated_tables()` — deletes invented spec tables (latency,
      parameter counts, prices) but keeps the surrounding prose. Deterministic,
      so it costs no LLM call.
@@ -352,7 +388,12 @@ policy, same house style — it is a second product, not a second channel.
 - Sources come from the same `trending.fetch_candidates()`, with
   `source_max_age_hours: 168` so a weekly issue sees the whole week.
 - `_pick_sources()` takes the top `items_per_issue` (7) candidates not already in
-  `status["newsletter_history"]`. A story is featured **at most once, ever**.
+  `status["newsletter_history"]`. A story is featured **at most once, ever**, and
+  the account's own posts are excluded via `devto.own_post_urls()` like the
+  articles path. This product had the worse version of that bug: it features
+  seven stories an issue, so a self-post would be presented as one of the week's
+  tech news. It also shipped the clothing advert that `is_off_topic()` now
+  rejects — a digest paragraph on "Family Matching Outfits" ran as tech news.
 - If fewer than `min_items` (4) fresh stories survive, **it publishes nothing** —
   and returns before calling the LLM, so a dead week costs zero free-tier requests.
 - **One LLM call per issue**, not one per story. This matters against the
@@ -575,6 +616,9 @@ Earning modules own their own sub-trees alongside the above: `article_daily` /
 (newsletter), `code_tech_earning` (code_techs), and `mrr_ideas` /
 `mrr_ideas_history` (mrr_ideas). Every list stored in these is bounded by the
 module's `history_limit` so `status.json` cannot grow without end.
+`article_history.own_urls` is the account's own dev.to post URLs, refreshed from
+the API each cycle by `articles._refresh_stats` and read by **both** products
+through `devto.own_post_urls()` so neither can source from itself.
 
 ---
 

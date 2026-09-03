@@ -13,6 +13,7 @@ import logging
 import re
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
+from collections.abc import Iterable
 from typing import Any
 from urllib.parse import quote_plus, urlparse
 
@@ -129,11 +130,24 @@ _FREEDIUM_MIRROR = "https://freedium-mirror.cfd/"
 _MIN_SUMMARY_CHARS = 400
 
 
-def fetch_candidates(max_age_hours: int = 24, limit: int = 40) -> list[dict[str, Any]]:
+def fetch_candidates(
+	max_age_hours: int = 24,
+	limit: int = 40,
+	exclude_authors: Iterable[str] = (),
+) -> list[dict[str, Any]]:
 	"""Return recent tech-article candidates, newest first.
 
     Each candidate: {title, url, source, summary, published_at, score}.
     Sources that fail are logged and skipped -- a dead feed never breaks a cycle.
+
+    ``exclude_authors`` drops the bot's own published work. One of the feeds
+    here is dev.to's programming tag, which is also where this bot publishes, so
+    its own posts come back as "trending news" a day later. That is not
+    hypothetical: it wrote a trending take on its own top article, and the
+    resulting post credited itself in a ``## Source`` section as though it were
+    somebody else's reporting. Following up on our own work is a real feature --
+    it is ``articles._generate_followup``, which recaps honestly and backlinks
+    the parent -- so this path must not counterfeit it.
     """
 	cutoff = datetime.now(timezone.utc) - timedelta(hours=max(1, max_age_hours))
 	items: list[dict[str, Any]] = []
@@ -145,9 +159,53 @@ def fetch_candidates(max_age_hours: int = 24, limit: int = 40) -> list[dict[str,
 		items.extend(_fetch_feed(f"medium:{tag}", f"https://medium.com/feed/tag/{quote_plus(tag)}", cutoff))
 	items.extend(_fetch_feed("hackerrank", _HACKERRANK_FEED, cutoff))
 
-	relevant = [i for i in _dedupe(items) if is_technical(i) and not is_spam(i)]
+	own = _author_keys(exclude_authors)
+	relevant = [
+		i for i in _dedupe(items)
+		if is_technical(i)
+		and not is_spam(i)
+		and not is_off_topic(i)
+		and not is_own_post(i, own)
+	]
 	relevant.sort(key=lambda i: (i.get("score", 0), i.get("published_at") or ""), reverse=True)
 	return relevant[:limit]
+
+
+def _author_keys(authors: Iterable[str]) -> set[str]:
+	"""Normalize author URLs or handles into ``host/handle`` prefix keys.
+
+    Accepts whatever the caller has to hand: a full article URL from the dev.to
+    API, a profile URL, or a bare handle. A bare handle is assumed to be dev.to,
+    since that is the only place this bot publishes.
+    """
+	keys: set[str] = set()
+	for raw in authors or ():
+		value = str(raw or "").strip()
+		if not value:
+			continue
+		if "/" not in value and "." not in value:
+			keys.add(f"dev.to/{value.lower().lstrip('@')}")
+			continue
+		canon = _canonical_url(value if "//" in value else f"https://{value}")
+		if not canon:
+			continue
+		host, _, path = canon.partition("/")
+		handle = path.split("/")[0] if path else ""
+		if handle:
+			keys.add(f"{host}/{handle}")
+	return keys
+
+
+def is_own_post(item: dict[str, Any], author_keys: set[str]) -> bool:
+	"""True when a candidate was published by this bot's own account."""
+	if not author_keys:
+		return False
+	canon = _canonical_url(item.get("url", ""))
+	if not canon:
+		return False
+	host, _, path = canon.partition("/")
+	handle = path.split("/")[0] if path else ""
+	return bool(handle) and f"{host}/{handle}" in author_keys
 
 
 # A dev.to audience wants engineering content. HN's front page also carries
@@ -170,6 +228,26 @@ _TECH_TERMS = {
 	"self-hosted", "selfhosted", "server", "deploy", "deployment", "build",
 	"data", "pipeline", "etl", "embedding", "embeddings", "vector", "inference",
 	"gpu", "cpu", "memory", "cache", "concurrency", "async", "thread", "threads",
+	# Named technologies and engineering nouns the live dev.to feed exposed as
+	# gaps: real posts ("What Boot adds over plain Spring", "Production
+	# Multi-Agent Systems") were being dropped because no word in them was
+	# listed. A missing term costs a genuine article, which is the worse error.
+	"spring", "boot", "django", "flask", "rails", "laravel", "spark", "hadoop",
+	"nginx", "grpc", "graphql", "rest", "json", "yaml", "regex", "orm",
+	"microservice", "microservices", "multi-agent", "agentic", "llms",
+	"tokenizer", "quantization", "finetuning", "fine-tuning", "transformer",
+	"observability", "telemetry", "logging", "profiler", "profiling",
+	"scaling", "distributed", "queue", "webhook", "oauth", "jwt", "tls", "ssl",
+	"compiler", "linker", "runtime", "garbage", "allocator", "syscall",
+	"container", "containers", "pod", "pods", "helm", "ansible", "nixos",
+	"goroutine", "goroutines", "leak", "leaks", "deadlock", "mutex", "race",
+	"heap", "stack", "pointer", "buffer", "parser", "lexer", "ast", "bytecode",
+	"schema", "migration", "index", "indexes", "query", "queries", "transaction",
+	"lambda", "kubectl", "webassembly", "polyfill", "middleware", "daemon",
+	# Game and graphics engineering. Real posts here are not gambling ads, and
+	# the vocabulary has to be able to tell them apart.
+	"engine", "renderer", "rendering", "shader", "physics", "timestep",
+	"framerate", "raytracing", "simd", "vulkan", "opengl", "webgl",
 }
 
 
@@ -180,6 +258,13 @@ _TECH_TERMS = {
 _UNSCREENED_SOURCES = ("hacker-news", "hackernoon", "devto-top")
 
 # Titles matching these never make a good developer article, whatever the feed.
+#
+# These are intent signals, not vocabulary. Screening on technical words alone
+# cannot separate "MATLAB Online Training | MATLAB Training Courses Online" from
+# a real MATLAB post -- both are full of technical words -- and a clothing advert
+# whose blurb happened to say "build" and "data" was published as a story in a
+# weekly developer digest on exactly that failure. What marks these out is that
+# they are selling something or padding a listicle, and the title says so.
 _SPAM_PATTERNS = (
 	r"\bbuy\s+\w+\s+accounts?\b",
 	r"\b(?:best|top)\s+\d+\s+(?:sites?|places?|platforms?|websites?)\b",
@@ -187,13 +272,62 @@ _SPAM_PATTERNS = (
 	r"\b(?:casino|betting|essay writing|write my|coupon|promo code)\b",
 	r"\bfollowers?\s+for\s+sale\b",
 	r"\b(?:crypto|forex)\s+signals?\b",
+	# Agency and course marketing. "Content Marketing Services in Noida",
+	# "Best PPC and SEO Company in Noida" and "MATLAB Online Training | MATLAB
+	# Training Courses Online" all reached the pool through dev.to's tag feed.
+	r"\b(?:seo|ppc|smm|digital marketing|content marketing)\b",
+	r"\b(?:services?|company|agency|solutions?)\s+in\s+[a-z]",
+	r"\b(?:online\s+training|training\s+courses?|courses?\s+online)\b",
+	r"\|.*\b(?:training|courses?|services?|company|agency)\b",
+	# Listicle and roundup padding: "100+ ChatGPT Prompts for Developers -- The
+	# Ultimate Collection", "MeetGeek vs MeetingMinutes vs Otter.ai".
+	r"\b\d{2,}\+?\s+\w+\s+(?:prompts?|tools?|tips?|tricks?|resources?|ideas?)\b",
+	r"\bultimate\s+(?:collection|guide|list)\b",
+	r"\b[\w.]+\s+vs\.?\s+[\w.]+\s+vs\.?\s+[\w.]+",
+	# Feeds in scripts this audience does not read. Two Arabic-language finance
+	# posts came through the dev.to programming tag.
+	r"[؀-ۿЀ-ӿ]{4,}",
 )
+
+
+# Subjects that are never a developer article, however the blurb is worded.
+# A summary keyword cannot rescue these: "Family Matching Outfits: How to Create
+# Stylish Looks for Every Family Member" reached a weekly developer digest
+# because its marketing blurb happened to contain "build" and "data", and no
+# amount of counting technical words in that blurb would have stopped it. The
+# title's subject is the thing that disqualifies it.
+_OFF_TOPIC_PATTERNS = (
+	r"\b(?:outfits?|clothing|fashion|apparel|jewell?ery|footwear|shoes)\b",
+	r"\b(?:weight loss|diet|skincare|makeup|perfume|supplements?)\b",
+	r"\b(?:astrology|horoscope|tarot|manifestation)\b",
+	r"\b(?:visa|immigration|passport|travel packages?|honeymoon)\b",
+	r"\b(?:real estate|mortgages?|insurance quotes?|loan offers?)\b",
+	r"\b(?:matching|stylish)\s+(?:looks?|outfits?|styles?)\b",
+	# Gambling and betting fronts. "Shree Win Game Online - How the Platform
+	# Works" cleared the summary rule on a single mention of "security" in
+	# otherwise pure ad copy -- the same failure as the clothing advert: one
+	# incidental keyword in a blurb about something else entirely.
+	r"\b(?:casino|lottery|jackpot|rummy|teen patti|betting\s+(?:app|site|platform))\b",
+	r"\b(?:win|earn)\s+(?:real\s+)?(?:money|cash)\b",
+	r"\bgame\s+online\b",
+)
+
+
+def is_off_topic(item: dict[str, Any]) -> bool:
+	"""True when the title's subject rules a post out for a developer audience."""
+	return any(re.search(p, str(item.get("title", "")).lower())
+			   for p in _OFF_TOPIC_PATTERNS)
 
 
 def is_spam(item: dict[str, Any]) -> bool:
 	"""True for listicle/affiliate spam that leaks in through open feeds."""
 	title = str(item.get("title", "")).lower()
 	return any(re.search(p, title) for p in _SPAM_PATTERNS)
+
+
+def _tech_words(text: str) -> set[str]:
+	"""Technical vocabulary present in a piece of text."""
+	return set(re.split(r"[^a-z0-9+#-]+", str(text).lower())) & _TECH_TERMS
 
 
 def is_technical(item: dict[str, Any]) -> bool:
@@ -203,13 +337,24 @@ def is_technical(item: dict[str, Any]) -> bool:
     so their scoping can be trusted. Open-submission sources cannot be: Hacker
     News carries science and culture stories, and a Medium tag is whatever the
     author typed. Both get keyword-screened.
+
+    The title has to earn its place on its own. This used to pour title and
+    summary into one bag of words, so a single incidental hit anywhere in a
+    marketing blurb whitelisted the post: a dev.to clothing-store advert reached
+    a weekly developer digest because its summary said "build" and "data" while
+    its title said nothing technical at all. A technical title is decisive; an
+    untechnical one has to be carried by a summary that is technical too.
+
+    Vocabulary alone cannot catch promotional content -- "MATLAB Online Training
+    | MATLAB Training Courses Online" is full of real technical words. That is
+    what ``is_spam`` is for, and the two run together in ``fetch_candidates``.
     """
 	source = str(item.get("source", ""))
 	if not (source in _UNSCREENED_SOURCES or source.startswith("medium:")):
 		return True
-	text = f"{item.get('title', '')} {item.get('summary', '')}".lower()
-	words = set(re.split(r"[^a-z0-9+#-]+", text))
-	return bool(words & _TECH_TERMS)
+	if _tech_words(item.get("title", "")):
+		return True
+	return len(_tech_words(item.get("summary", ""))) >= 1
 
 
 def _fetch_hn_front_page(cutoff: datetime) -> list[dict[str, Any]]:

@@ -1,6 +1,6 @@
 # Evolution TODO
 
-Bot state: v1.37.2 - cycle #1752 - active: `llm_anthropic`, `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
+Bot state: v1.37.2 - cycle #1753 - active: `llm_anthropic`, `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
 
 ---
 
@@ -37,6 +37,33 @@ _(none open)_
 ---
 
 ## Resolved
+
+- **The bot sourced trending articles from its own dev.to posts** - fixed
+  2026-09-03. `trending._FEEDS` reads dev.to's programming tag, which is also
+  where the bot publishes, and `_pick_source` only ever filtered against
+  *sources it had written from* - never against *articles it had published*. It
+  wrote a "trending take" on its own top post (1562 of its 1838 lifetime views)
+  and `_ensure_attribution` credited that post in a `## Source` section as
+  though it were somebody else's reporting. `fetch_candidates` now takes
+  `exclude_authors`; the account's URLs come from `devto_stats.account_urls()`
+  (the dev.to API the stats loop already calls), are cached in
+  `article_history.own_urls`, and both products read them through
+  `devto.own_post_urls()`. No new secret, no hardcoded handle. The newsletter
+  had the same hole and features 7 stories an issue, so it was the worse case.
+
+- **Ad copy passed the technical screen on one incidental word** - fixed
+  2026-09-03. `is_technical` merged title and summary into one bag of words and
+  accepted a single hit anywhere, so a dev.to clothing-store advert - "Family
+  Matching Outfits: How to Create Stylish Looks for Every Family Member" - was
+  published as a story in a weekly developer digest because its blurb said
+  "build" and "data". The title now has to carry a technical term on its own.
+  Vocabulary alone cannot catch promotional content ("MATLAB Online Training |
+  MATLAB Training Courses Online" is full of technical words), so intent moved
+  to `is_spam` (agency/course marketing, roundup padding, non-Latin ad feeds)
+  and subject to a new `is_off_topic` (clothing, diet, astrology, visas,
+  gambling). Screening on *stricter vocabulary* was tried and **reverted**: it
+  dropped "Gemini 3.8 Flash", "Quasar 438B" and "Polars 2.0" off Hacker News.
+  16 regression tests added; verified against live feeds, pool still at 40.
 
 - **An empty LLM response was treated as a valid answer** - fixed 2026-09-03.
   All five provider paths in `bot/llm.py` coerced a missing completion to `""`

@@ -164,6 +164,19 @@ def normalize(data: dict) -> dict:
 	return data
 
 
+def own_post_urls(status: dict) -> list[str]:
+	"""This account's own dev.to post URLs, for excluding them as sources.
+
+    Lives here, not in a product, because both ``articles`` and ``newsletter``
+    read the same trending feeds and publish to the same account -- there is one
+    identity, so there is one list. ``articles._refresh_stats`` writes it from
+    the dev.to API each cycle; a product importing it from the other would be
+    reaching across a boundary for one account's identity.
+    """
+	hist = (status or {}).get("article_history") or {}
+	return [str(u) for u in hist.get("own_urls", []) if u]
+
+
 def publish(article: dict, api_key: str) -> dict:
 	"""Publish article to dev.to and return action result."""
 	url = "https://dev.to/api/articles"

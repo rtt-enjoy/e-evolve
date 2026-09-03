@@ -58,6 +58,7 @@ from bot.earning.trending import (
 	_dedupe,
 	_extract_article_text,
 	_parse_dt,
+	is_own_post,
 	is_paywalled,
 	is_technical,
 	needs_unlock,
@@ -197,6 +198,172 @@ class TestTrendingSourcing(unittest.TestCase):
 			self.assertIsNone(_pick_source({}))
 		finally:
 			articles_module.trending.fetch_candidates = original
+
+
+class TestSelfSourceExclusion(unittest.TestCase):
+	"""The bot reads dev.to's programming tag and publishes into it, so its own
+    posts came back as "trending news". It wrote a take on its own top article
+    and credited itself in a ## Source section as if it were someone else's
+    reporting. Following up on our own work is a real feature (_generate_followup);
+    this path must not counterfeit it."""
+
+	OWN = "https://dev.to/robust_true_try/reading-twitter-without-x-1gig"
+
+	def test_own_post_detected_from_published_url(self):
+		keys = trending_module._author_keys([self.OWN])
+		self.assertTrue(is_own_post({"url": self.OWN}, keys))
+
+	def test_other_devto_authors_are_not_excluded(self):
+		keys = trending_module._author_keys([self.OWN])
+		self.assertFalse(is_own_post(
+			{"url": "https://dev.to/someone_else/a-real-story-abc"}, keys))
+
+	def test_bare_handle_and_profile_url_both_accepted(self):
+		for spelling in ("robust_true_try", "dev.to/robust_true_try",
+						 "https://dev.to/robust_true_try"):
+			keys = trending_module._author_keys([spelling])
+			self.assertTrue(is_own_post({"url": self.OWN}, keys), spelling)
+
+	def test_no_authors_excludes_nothing(self):
+		self.assertFalse(is_own_post({"url": self.OWN}, set()))
+
+	def test_fetch_candidates_drops_own_posts(self):
+		original = trending_module._fetch_feed
+		hn = trending_module._fetch_hn_front_page
+		try:
+			def fake_feed(source, url, cutoff):
+				if source != "devto-top":
+					return []
+				return [
+					{"title": "Reading Twitter Without X", "url": self.OWN,
+					 "source": "devto-top", "summary": "nitter python docker",
+					 "published_at": "2026-09-01T00:00:00+00:00", "score": 34},
+					{"title": "A Postgres Index Story", "source": "devto-top",
+					 "url": "https://dev.to/other_dev/a-postgres-index-story-x1",
+					 "summary": "postgres database index", "score": 34,
+					 "published_at": "2026-09-01T00:00:00+00:00"},
+				]
+			trending_module._fetch_feed = fake_feed
+			trending_module._fetch_hn_front_page = lambda cutoff: []
+
+			urls = [i["url"] for i in trending_module.fetch_candidates(
+				exclude_authors=[self.OWN])]
+			self.assertNotIn(self.OWN, urls)
+			self.assertEqual(len(urls), 1)
+
+			# Without the exclusion the own post is still a candidate, which is
+			# what shipped the self-sourced article.
+			self.assertIn(self.OWN,
+						  [i["url"] for i in trending_module.fetch_candidates()])
+		finally:
+			trending_module._fetch_feed = original
+			trending_module._fetch_hn_front_page = hn
+
+	def test_own_urls_shared_between_products(self):
+		status = {"article_history": {"own_urls": [self.OWN]}}
+		self.assertEqual(devto_module.own_post_urls(status), [self.OWN])
+		self.assertEqual(devto_module.own_post_urls({}), [])
+
+	def test_account_urls_derived_from_published(self):
+		posts = [{"url": self.OWN, "title": "x"}, {"url": "", "title": "y"}]
+		self.assertEqual(devto_stats.account_urls(posts), [self.OWN])
+
+
+class TestNonTechnicalTitleScreening(unittest.TestCase):
+	"""Two ways junk reached the candidate pool, both of which shipped.
+
+    is_technical poured title and summary into one bag of words and accepted a
+    single hit anywhere, so a dev.to clothing advert whose blurb said "build"
+    and "data" was published as a story in a weekly developer digest. And
+    vocabulary cannot catch promotional content at all -- "MATLAB Online
+    Training | MATLAB Training Courses Online" is full of real technical words
+    -- so intent is screened separately by is_spam. fetch_candidates applies
+    both, so these assert both.
+    """
+
+	@staticmethod
+	def accepted(item):
+		"""The screen as fetch_candidates actually applies it."""
+		return (is_technical(item)
+				and not trending_module.is_spam(item)
+				and not trending_module.is_off_topic(item))
+
+	def test_clothing_advert_rejected_despite_stray_summary_keywords(self):
+		self.assertFalse(self.accepted({
+			"source": "devto-top",
+			"title": ("Family Matching Outfits: How to Create Stylish Looks "
+					  "for Every Family Member"),
+			"summary": "Find the best data on family style. Build your look."}))
+
+	def test_technical_title_alone_is_enough(self):
+		self.assertTrue(self.accepted({
+			"source": "devto-top", "title": "Debugging a Postgres deadlock",
+			"summary": ""}))
+
+	def test_untechnical_title_needs_a_technical_summary(self):
+		item = {"source": "hacker-news", "title": "What we learned the hard way"}
+		self.assertFalse(self.accepted({**item, "summary": "It was a long year."}))
+		self.assertTrue(self.accepted(
+			{**item, "summary": "Our kubernetes deploy pipeline kept timing out."}))
+
+	def test_real_devto_posts_survive_the_screen(self):
+		# The dev.to feed ships no summaries, so the title carries the whole
+		# decision. Tightening this must not cost genuine articles -- an empty
+		# candidate pool is a worse failure than a mediocre source.
+		for title in ("What Boot adds over plain Spring",
+					  "Production Multi-Agent Systems: The Silent Failures",
+					  "Building a 200M parameter LLM from scratch in PyTorch"):
+			self.assertTrue(self.accepted(
+				{"source": "devto-top", "title": title, "summary": ""}), title)
+
+	def test_marketing_and_listicles_rejected_on_title_alone(self):
+		# Every one of these was live on dev.to's programming tag.
+		for title in ("Content Marketing Services in Noida",
+					  "Best PPC and SEO Company in Noida",
+					  "MATLAB Online Training | MATLAB Training Courses Online",
+					  "100+ ChatGPT Prompts for Developers - The Ultimate Collection",
+					  "MeetGeek vs MeetingMinutes vs Otter.ai: Collaboration Apps"):
+			self.assertFalse(self.accepted(
+				{"source": "devto-top", "title": title, "summary": ""}), title)
+
+	def test_real_ai_news_still_passes_hacker_news(self):
+		# Demoting "ai"/"model"/"release" to weak signals was tried and reverted:
+		# it dropped exactly the stories this bot exists to write about.
+		for title in ("Quasar 438B: Europe's Leading AI Model",
+					  "WebLLM: high-performance in-browser LLM inference engine"):
+			self.assertTrue(self.accepted(
+				{"source": "hacker-news", "title": title, "summary": ""}), title)
+		# A title can carry no listed term at all ("Gemini 3.8 Flash and 3.8
+		# Flash Cyber") and still be the story of the day. That is what the
+		# summary fallback is for -- it is the reason the rule is >= 1 word and
+		# not stricter, and why off-topic subjects are screened by name instead.
+		self.assertTrue(self.accepted({
+			"source": "hacker-news", "title": "Gemini 3.8 Flash and 3.8 Flash Cyber",
+			"summary": "Google's new model for cybersecurity inference."}))
+
+	def test_gambling_front_rejected_despite_a_technical_word(self):
+		# Pure ad copy that mentioned "security" once, which was enough to clear
+		# the summary rule. Subject screening is what stops it.
+		self.assertFalse(self.accepted({
+			"source": "devto-top",
+			"title": "Shree Win Game Online - How the Platform Works.",
+			"summary": ("Online gaming has become a popular form of digital "
+						"entertainment. Account access and security matter.")}))
+
+	def test_game_development_is_not_gambling(self):
+		# The gambling patterns must not swallow real game-engine work.
+		for title in ("Building a multiplayer game server in Rust",
+					  "Writing a chess engine in Go",
+					  "Deterministic physics in a game loop with fixed timesteps"):
+			self.assertTrue(self.accepted(
+				{"source": "devto-top", "title": title, "summary": ""}), title)
+
+	def test_non_software_hacker_news_stories_still_dropped(self):
+		for title in ("Biggest dark matter detector spots a single weird particle",
+					  "Wendell Berry has died",
+					  "A Selection of Los Alamos Rolodex Business Cards"):
+			self.assertFalse(self.accepted(
+				{"source": "hacker-news", "title": title, "summary": ""}), title)
 
 
 class TestSourceAuthorityRanking(unittest.TestCase):

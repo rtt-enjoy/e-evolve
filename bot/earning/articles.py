@@ -591,6 +591,12 @@ def _refresh_stats(status: dict, api_key: str) -> list:
 	# Which *kinds* of article this audience reads, not just which tags. Tags
 	# label a post; the archetype is the editorial decision that produced it.
 	status["article_interest"] = devto_stats.interest_report(published)
+	# Remember our own posts so trending sourcing can exclude them. Stored in
+	# status rather than re-fetched, so the newsletter gets the same exclusion
+	# without a second API call and it survives a cycle where dev.to is down.
+	own = devto_stats.account_urls(published)
+	if own:
+		_history(status)["own_urls"] = own[:int(_config()["history_limit"])]
 	return published
 
 
@@ -741,7 +747,9 @@ def _pick_source(status: dict) -> Optional[dict]:
 	"""Return the best trending candidate that has not been used before."""
 	try:
 		candidates = trending.fetch_candidates(
-			max_age_hours=int(_config()["source_max_age_hours"]), limit=40
+			max_age_hours=int(_config()["source_max_age_hours"]),
+			limit=40,
+			exclude_authors=devto.own_post_urls(status),
 		)
 	except Exception as exc:
 		log.warning("[articles] trending fetch failed: %s", exc)
@@ -813,6 +821,7 @@ def _prefer_proven_archetypes(candidates: list, status: dict) -> list:
 def _history(status: dict) -> dict:
 	"""Persistent record of what has already been sourced and published."""
 	return status.setdefault("article_history", {})
+
 
 
 def _record_publish(status: dict, article: dict) -> None:

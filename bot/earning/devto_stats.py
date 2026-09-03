@@ -78,6 +78,17 @@ def fetch_published(api_key: str = "") -> list[dict[str, Any]]:
 	return out
 
 
+def account_urls(articles: list[dict[str, Any]]) -> list[str]:
+	"""Return this account's own article URLs, for self-source exclusion.
+
+    The bot publishes into the same dev.to programming tag it reads as a
+    trending feed, so without this its own posts come back as other people's
+    news. Derived from the articles the key already owns -- no new secret and no
+    hardcoded handle, so it keeps working if the account is renamed.
+    """
+	return [str(a.get("url") or "") for a in articles if a.get("url")]
+
+
 def engagement_score(article: dict[str, Any]) -> float:
 	"""Rank an article by attention earned, not just raw views.
 

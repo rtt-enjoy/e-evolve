@@ -246,7 +246,9 @@ def _pick_sources(status: dict, cfg: dict) -> list[dict]:
 	"""Return the top unused trending candidates for this issue."""
 	try:
 		candidates = trending.fetch_candidates(
-			max_age_hours=int(cfg["source_max_age_hours"]), limit=40
+			max_age_hours=int(cfg["source_max_age_hours"]),
+			limit=40,
+			exclude_authors=devto.own_post_urls(status),
 		)
 	except Exception as exc:
 		log.warning("[newsletter] trending fetch failed: %s", exc)

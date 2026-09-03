@@ -9,6 +9,37 @@
 
 ---
 
+## Read Before Evolving: docs/passive-income-doctrine.md
+
+**Every evolution starts by reading [`docs/passive-income-doctrine.md`](docs/passive-income-doctrine.md).**
+It is the standing brief for what "evolve" means in this project and it outranks
+any local improvement a cycle proposes. It carries the six principles, the
+scored channel table (so each cycle stops re-deriving the same list), and the
+ordered checklist to work through.
+
+The one-line reason it exists: at cycle #1754 this bot had published 10 articles
+to **1,838 real views** and earned **$0.00**, because nothing it published ever
+gave a reader a way to pay. Reach and wallet were two working halves with a gap
+between them. The load-bearing rules that came out of that:
+
+1. **Reach without a receive path earns a structural zero.** Not a poor
+   conversion rate — a zero multiplier. Any change that improves reach must say
+   where money enters, or be logged honestly as reach work, not earning work.
+2. **Rank channels by what runs unattended**, not by upside: no new secret > no
+   owner action > within policy > verifiable on-chain > reuses existing output.
+   A small channel that compounds beats a large one that needs the owner to open
+   an account.
+3. **Never let an estimate stand in for money.** `estimated_usd` stays `0.0` on
+   a publish even though posts now carry a tip address. Real revenue is the
+   on-chain balance, only ever the on-chain balance. And `$0.00` must say *why*
+   — nobody tipped, or no footer shipped — because those need opposite fixes.
+4. **Boundaries are the design brief.** Social posting, trading, minting,
+   payouts, and cold outreach are refused in code, and that is where every
+   "obvious" income idea leads. The wallet footer sat *inside* the boundary,
+   needing no permission, for 1,754 cycles. Look there first.
+
+---
+
 ## Project Overview
 
 E-Evolve is a GitHub Actions bot that runs hourly and refreshes RAG, market research, and earning suggestions. It also proposes its own code changes: Phase 3 evolution is enabled, but every proposal lands on an `evolve/*` review branch and reaches `main` only when a human merges it. Zero server cost — runs entirely on GitHub Actions free tier.
@@ -41,6 +72,7 @@ bot/earning/         ← products own a run(llm, status); support modules do not
   devto.py           ← [support] the dev.to publish call + gates every post passes
   trending.py        ← [support] finds recent tech articles from free public feeds
   devto_stats.py     ← [support] reads own dev.to view counts (the reach feedback loop)
+  payout.py          ← [support] the reader→wallet path: validated USDT address in every post
 frontend/            ← React + Vite dashboard, built to docs/ by .github/workflows/frontend.yml
 .github/workflows/evolve.yml  ← hourly scheduler (never evolved)
 config/strategy.json ← tunable strategy parameters (the ONLY file in config/)
@@ -378,6 +410,67 @@ articles cannot drift apart on fabrication, tone, title quality, or duplicates.
 A failed follow-up falls through to the normal trending path — it never costs
 the day's article.
 
+### Reader → wallet path (bot/earning/payout.py)
+
+The link that was missing for 1,754 cycles. See
+[`docs/passive-income-doctrine.md`](docs/passive-income-doctrine.md) for the full
+reasoning; the mechanics:
+
+Every published post gains a short `## Support this work` footer carrying the
+project's validated USDT receive address. It is attached inside
+`devto.publish`, so **both products carry it from one call site** and a future
+third product cannot ship without it — the same rule that put the dev.to gates
+in `devto.py`.
+
+Policy: this is not social posting, trading, minting, or a payout. It adds text
+to an article, and article publishing is explicitly allowed. The bot never sends
+funds and never touches a key — `USDT_WALLET_ADDRESS` is a *receive* address and
+reading it is all the module does. **No new secret.**
+
+- **Deterministic, never an LLM call.** A model asked to write a payment footer
+  can transpose a character, and USDT sent to a transposed address is burned.
+  Determinism here is a correctness requirement, not a cost saving.
+- **Checksum validation, not shape validation.** A regex on
+  `^T[1-9A-HJ-NP-Za-km-z]{33}$` accepts an address with two characters swapped,
+  and that address belongs to nobody. `valid_tron_address` verifies the
+  base58check double-SHA256; `valid_eth_address` verifies EIP-55 when the
+  address is mixed-case.
+- **EIP-55 needs original Keccak-256, and `hashlib.sha3_256` is not it.** NIST
+  changed the padding byte between Keccak's submission and the SHA-3 standard,
+  so a check built on the stdlib rejects *every* valid checksummed address. That
+  bug was written here first and caught by the EIP's own four test vectors
+  before it shipped. `payout.keccak256` implements the real thing in ~40 lines
+  rather than adding `pycryptodome` to every Actions run for one address format
+  the owner does not currently use. `test_keccak_differs_from_stdlib_sha3` exists
+  to stop someone "simplifying" it back into the bug.
+- **A malformed address publishes no footer.** A post without a footer earns
+  nothing; a post with a broken address costs a reader real money. Not
+  symmetric, so the failure mode is always *omit*, logged with a masked address.
+- **Attached after every quality gate, deliberately.** The footer adds a heading
+  and an untagged fence, which would trip `articles._format_problems` and pad
+  the word count enough to carry a too-thin draft past `min_words`. Gates judge
+  what the model wrote. `TestPayoutRunsAfterQualityGates` pins this; do not move
+  the footer into `_finalize`.
+- **`add_footer` never raises and never double-appends.** A footer is an
+  enhancement — losing the day's article over it trades real reach for nothing.
+- **Off by default** (`payout.enabled: false`). It publishes under the owner's
+  byline, so they opt in.
+- **No suggested amount.** A figure reads as a price for something already given
+  away free, and caps what a generous reader would have sent.
+
+`devto.publish` still reports `estimated_usd: 0.0`, and that is not an oversight.
+The tip amount is unknowable at publish time and arrives days later, if at all;
+attributing a speculative value to a post because it carries an address would be
+the same fabricated-earnings lie this project already deleted once. **Real
+revenue is the on-chain balance.**
+
+`status["payout"]` (written by `status._snapshot_payout`) records `enabled`,
+`live`, `network`, `address_masked`, and `blocked_reason`. This exists because
+`$0.00` because nobody tipped and `$0.00` because no footer ever shipped look
+identical in the earnings figures and need opposite responses from the owner.
+Only the masked address is ever persisted — `status.json` is committed and the
+dashboard is public.
+
 ### Newsletter digest (bot/earning/newsletter.py)
 
 A weekly "what shipped in tech" digest published to dev.to. Where `articles`
@@ -620,6 +713,11 @@ module's `history_limit` so `status.json` cannot grow without end.
 the API each cycle by `articles._refresh_stats` and read by **both** products
 through `devto.own_post_urls()` so neither can source from itself.
 
+`payout` is written by `status._snapshot_payout` and is not owned by an earning
+module — it reports whether the reader→wallet path is live (`enabled`, `live`,
+`network`, `address_masked`, `blocked_reason`). It holds only the *masked*
+address, because `status.json` is committed and the dashboard is public.
+
 ---
 
 ## Strategy Config (config/strategy.json)
@@ -654,6 +752,8 @@ Tunable by owner or changed here in Codex:
   "newsletter":     { "enabled": true, "min_interval_hours": 168, "items_per_issue": 7,
                       "min_items": 4, "source_max_age_hours": 168,
                       "history_limit": 200, "min_words": 500, "niche_focus": "" },
+  "payout":         { "enabled": false, "address_env": "USDT_WALLET_ADDRESS",
+                      "heading": "Support this work", "note": "...", "show_network": true },
   "mrr_ideas":      { "enabled": true, "refresh_hours": 48, "max_ideas": 8,
                       "min_score": 50, "history_limit": 100 },
   "code_techs":     { "enabled": true, "refresh_hours": 24, "max_items": 8,

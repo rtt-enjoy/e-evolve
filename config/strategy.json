@@ -21,6 +21,14 @@
 		"min_words": 500,
 		"niche_focus": ""
 	},
+	"payout": {
+		"enabled": false,
+		"address_env": "USDT_WALLET_ADDRESS",
+		"heading": "Support this work",
+		"note": "These write-ups are researched and published with no paywall, sponsor, or tracking. If one saved you an afternoon, a small USDT tip keeps them coming.",
+		"show_network": true,
+		"note_on_config": "The only monetization channel this stack can run unattended: a receive address in the article itself. No payment processor, no new secret, no owner action between a reader deciding to give and the money landing. Off by default -- turn it on once you have read the footer text, since it publishes under your byline. The address is checksum-validated (base58check for TRC-20, EIP-55 for ERC-20) before it can reach a reader; a malformed one omits the footer rather than publishing an address that would burn a reader's funds."
+	},
 	"mrr_ideas": {
 		"enabled": true,
 		"refresh_hours": 48,

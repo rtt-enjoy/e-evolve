@@ -95,6 +95,7 @@ def snapshot(status: dict[str, Any]) -> dict[str, Any]:
 	status["secret_readiness"]  = _secret_readiness(active, inactive, configured_secrets)
 	status["llm_workflows"]     = _llm_workflows(active, configured_secrets)
 	_snapshot_wallet(status)
+	_snapshot_payout(status)
 
 	log.info("Cycle #%d | v%s | active=%s",
 			 status["total_runs"], version, active)
@@ -126,6 +127,29 @@ def _mask_address(address: str) -> str:
 	if len(address) <= 12:
 		return address
 	return f"{address[:6]}…{address[-4:]}"
+
+
+def _snapshot_payout(status: dict[str, Any]) -> None:
+	"""
+    Record whether the reader-to-wallet earning path is actually live.
+
+    The wallet snapshot above answers "how much came in". This answers the
+    question that matters when the answer to that one is $0.00: *was anyone
+    ever given a way to pay?* Those look identical in the earnings figures and
+    call for opposite responses -- one means the pitch is not converting, the
+    other means it was never shipped -- so the difference is recorded instead
+    of left to be inferred from a zero.
+
+    Failure is non-fatal: this is reporting, and a config read must not be able
+    to take down a cycle.
+    """
+	try:
+		from bot.earning import payout
+		status["payout"] = payout.status_snapshot()
+	except Exception as exc:
+		log.debug("payout snapshot unavailable: %s", exc)
+		status["payout"] = {"enabled": False, "live": False,
+							"blocked_reason": f"snapshot failed: {exc}"}
 
 
 def _snapshot_wallet(status: dict[str, Any]) -> None:

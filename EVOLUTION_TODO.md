@@ -1,6 +1,10 @@
 # Evolution TODO
 
-Bot state: v1.37.2 - cycle #1753 - active: `llm_anthropic`, `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
+Bot state: v1.37.3 - cycle #1755 - active: `llm_anthropic`, `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
+
+**Read [`docs/passive-income-doctrine.md`](docs/passive-income-doctrine.md) before
+working this list.** It ranks channels by what runs unattended and carries the
+scored candidate table, so a cycle does not re-derive the same refused ideas.
 
 ---
 
@@ -12,7 +16,16 @@ _(none open)_
 
 ## High Priority - Earning
 
-_(none open)_
+- **Put the validated wallet address on the public dashboard.** The doctrine's
+  channel table scores this as the lowest-effort remaining win: `docs/` is
+  already served publicly by GitHub Pages, the address is already
+  checksum-validated in `bot/earning/payout.py`, and `status["payout"]` already
+  carries the masked form and the live/blocked state. It needs no new secret, no
+  owner action, and no policy change - the same five rows that justified the
+  article footer. `bot/dashboard.py` regenerates `docs/index.html` each cycle, so
+  the change goes there, not in the HTML. Use `payout.resolve_address()` for the
+  full address rather than the masked one from status, and use the existing CSS
+  variables - never a hardcoded hex.
 
 ---
 
@@ -37,6 +50,31 @@ _(none open)_
 ---
 
 ## Resolved
+
+- **1,838 views and $0.00: nothing published gave a reader a way to pay** - fixed
+  2026-09-03. The system had two working halves and a gap. `devto.publish` sent
+  title, body, description and tags; `status._snapshot_wallet` polled a balance
+  nothing was going to change. The code documented its own surrender in a comment
+  - "dev.to pays nothing. Publishing is reach, not revenue" - which is half true:
+  dev.to pays nothing, but dev.to *readers* can pay and nobody had asked them.
+  This was a structural zero, not a conversion-rate problem, so no amount of
+  additional reach would have moved it.
+  New `bot/earning/payout.py` appends a validated `## Support this work` footer
+  inside `devto.publish`, so both products carry it from one call site. No new
+  secret (`USDT_WALLET_ADDRESS` is a receive address and already configured), no
+  policy change (it is article text, and article publishing is allowed), no LLM
+  call (a model can transpose an address character and burned USDT does not come
+  back). Address validation is a real checksum, not a shape check - a regex on
+  `^T[1-9A-HJ-NP-Za-km-z]{33}$` accepts a two-character transposition, verified
+  in the tests. **EIP-55 was implemented on `hashlib.sha3_256` first and it
+  rejected all four of the EIP's own test vectors**: NIST changed the padding
+  byte, so `payout.keccak256` implements original Keccak-256 rather than adding
+  a dependency for one address format. The footer attaches *after* every quality
+  gate, because its heading and fence would otherwise pad a too-thin draft past
+  `min_words`. Off by default; it publishes under the owner's byline.
+  `status["payout"]` records `blocked_reason` so `$0.00` says which kind of zero
+  it is. 24 regression tests; 268 pass; principles recorded in
+  `docs/passive-income-doctrine.md` and referenced from the top of CLAUDE.md.
 
 - **The bot sourced trending articles from its own dev.to posts** - fixed
   2026-09-03. `trending._FEEDS` reads dev.to's programming tag, which is also

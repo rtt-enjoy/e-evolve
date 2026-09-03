@@ -15,6 +15,7 @@ from bot.earning.newsletter import (
 	_record_issue,
 )
 import bot.earning.devto as devto_module
+import bot.earning.payout as payout
 import bot.earning._shared as shared
 from bot.earning._shared import hours_until_due
 from bot.earning.articles import (
@@ -2256,3 +2257,248 @@ class TestFailedActionsLogTheirReason(unittest.TestCase):
 		finally:
 			dashboard._LOG_FILE = original
 		self.assertIn("action recorded", written)
+
+
+class TestPayoutAddressValidation(unittest.TestCase):
+	"""The address is the one irreversible thing this project publishes.
+
+    USDT sent to a mistyped address is burned -- there is no support desk and no
+    reversal. So validation is not a shape check: a regex on
+    ``^T[1-9A-HJ-NP-Za-km-z]{33}$`` happily accepts an address with two
+    characters transposed, and that address belongs to nobody. These tests pin
+    the checksum behaviour that makes a typo detectable.
+    """
+
+	# The project's own configured receive address. Public by nature -- it is a
+	# receive address, and it already appears masked in status.json.
+	REAL = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
+
+	def test_real_configured_address_is_accepted(self):
+		self.assertTrue(payout.valid_tron_address(self.REAL))
+
+	def test_transposed_characters_are_rejected(self):
+		swapped = self.REAL[:10] + self.REAL[11] + self.REAL[10] + self.REAL[12:]
+		self.assertNotEqual(swapped, self.REAL)
+		# Correct length, correct alphabet, correct prefix -- only the checksum
+		# catches this one, which is exactly the point.
+		self.assertEqual(len(swapped), 34)
+		self.assertTrue(swapped.startswith("T"))
+		self.assertFalse(payout.valid_tron_address(swapped))
+
+	def test_truncated_address_is_rejected(self):
+		self.assertFalse(payout.valid_tron_address(self.REAL[:-1]))
+
+	def test_non_base58_characters_are_rejected(self):
+		# 0, O, I and l are excluded from base58 precisely to stop this.
+		self.assertFalse(payout.valid_tron_address("T0OIl" + self.REAL[5:]))
+
+	def test_empty_and_garbage_rejected(self):
+		for bad in ["", "   ", "not-an-address", "0x1234", "T" * 34]:
+			self.assertFalse(payout.valid_tron_address(bad), bad)
+
+
+class TestKeccakAndEip55(unittest.TestCase):
+	"""EIP-55 needs original Keccak-256, not hashlib's SHA3-256.
+
+    NIST changed the padding byte between Keccak's submission and the SHA-3
+    standard, so ``hashlib.sha3_256`` produces a different digest and an
+    EIP-55 check built on it rejects *every* valid checksummed address. That
+    bug was written here first and caught by these vectors before it shipped.
+    """
+
+	def test_keccak_matches_known_vectors(self):
+		self.assertEqual(
+			payout.keccak256(b"").hex(),
+			"c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470")
+		self.assertEqual(
+			payout.keccak256(b"abc").hex(),
+			"4e03657aea45a94fc7d47ba826c8d667c0d1e6e33a64a036ec44f58fa12d6c45")
+
+	def test_keccak_differs_from_stdlib_sha3(self):
+		# The whole reason this function exists. If these ever match, the
+		# implementation has been "simplified" back into the original bug.
+		import hashlib as _h
+		self.assertNotEqual(payout.keccak256(b"abc"), _h.sha3_256(b"abc").digest())
+
+	def test_keccak_spans_multiple_blocks(self):
+		# One absorb block is 136 bytes; a rate-boundary bug only shows above it.
+		self.assertEqual(len(payout.keccak256(b"a" * 200)), 32)
+		self.assertEqual(
+			payout.keccak256(b"a" * 200),
+			payout.keccak256(b"a" * 200))
+
+	def test_official_eip55_vectors_accepted(self):
+		for address in [
+			"0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed",
+			"0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359",
+			"0xdbF03B407c01E7cD3CBea99509d93f8DDDC8C6FB",
+			"0xD1220A0cf47c7B9Be7A2E6BA89F429762e7b9aDb",
+		]:
+			self.assertTrue(payout.valid_eth_address(address), address)
+
+	def test_broken_eip55_case_rejected(self):
+		self.assertFalse(
+			payout.valid_eth_address("0x5aAeb6053F3E94C9b9A09f33669435E7Ef1Beaed"))
+
+	def test_uniform_case_address_accepted_without_checksum(self):
+		# All-lower carries no checksum, so shape is all there is to check.
+		self.assertTrue(
+			payout.valid_eth_address("0xdac17f958d2ee523a2206206994597c13d831ec7"))
+		self.assertFalse(payout.valid_eth_address("0xdac17f958d2ee523a220"))
+
+
+class TestPayoutFooter(unittest.TestCase):
+	"""The footer is the only automated path from a reader to the wallet."""
+
+	REAL = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
+
+	def _cfg(self, **over):
+		cfg = dict(payout.DEFAULTS)
+		cfg.update(over)
+		return cfg
+
+	def setUp(self):
+		self._saved = os.environ.get("USDT_WALLET_ADDRESS")
+		os.environ["USDT_WALLET_ADDRESS"] = self.REAL
+
+	def tearDown(self):
+		if self._saved is None:
+			os.environ.pop("USDT_WALLET_ADDRESS", None)
+		else:
+			os.environ["USDT_WALLET_ADDRESS"] = self._saved
+
+	def test_disabled_by_default_publishes_nothing(self):
+		# Ships off: the footer goes out under the owner's byline, so they opt in.
+		self.assertFalse(payout.DEFAULTS["enabled"])
+		self.assertEqual(payout.footer(self._cfg()), "")
+
+	def test_enabled_footer_carries_the_exact_address(self):
+		block = payout.footer(self._cfg(enabled=True))
+		self.assertIn(self.REAL, block)
+		self.assertIn("## Support this work", block)
+		# Fenced, not inline: a renderer that line-wraps inline text turns an
+		# address into a mistyped address.
+		self.assertIn("\n" + self.REAL + "\n", block)
+		self.assertIn("TRC-20", block)
+
+	def test_invalid_address_omits_footer_entirely(self):
+		# Publishing a broken address costs a reader real money, so a bad env
+		# value must produce no footer -- never a partial or "best effort" one.
+		os.environ["USDT_WALLET_ADDRESS"] = self.REAL[:-2] + "xy"
+		self.assertEqual(payout.footer(self._cfg(enabled=True)), "")
+
+	def test_unset_address_omits_footer(self):
+		os.environ.pop("USDT_WALLET_ADDRESS", None)
+		self.assertEqual(payout.footer(self._cfg(enabled=True)), "")
+
+	def test_add_footer_appends_once_not_twice(self):
+		article = {"body_markdown": "## Intro\n\nBody text.\n"}
+		cfg = self._cfg(enabled=True)
+		once = payout.add_footer(dict(article), cfg)
+		twice = payout.add_footer(dict(once), cfg)
+		self.assertEqual(once["body_markdown"], twice["body_markdown"])
+		self.assertEqual(twice["body_markdown"].count("Support this work"), 1)
+
+	def test_add_footer_never_raises(self):
+		# A footer is an enhancement. Losing the day's article over it would
+		# trade real reach for nothing.
+		self.assertIsInstance(payout.add_footer({}, self._cfg(enabled=True)), dict)
+		self.assertIsInstance(
+			payout.add_footer({"body_markdown": None}, self._cfg(enabled=True)), dict)
+
+	def test_status_snapshot_distinguishes_off_from_unconfigured(self):
+		off = payout.status_snapshot(self._cfg(enabled=False))
+		self.assertFalse(off["live"])
+		self.assertIn("disabled", off["blocked_reason"])
+
+		os.environ.pop("USDT_WALLET_ADDRESS", None)
+		unset = payout.status_snapshot(self._cfg(enabled=True))
+		self.assertFalse(unset["live"])
+		self.assertIn("not set", unset["blocked_reason"])
+
+		os.environ["USDT_WALLET_ADDRESS"] = "T" + "x" * 33
+		bad = payout.status_snapshot(self._cfg(enabled=True))
+		self.assertFalse(bad["live"])
+		self.assertIn("checksum-valid", bad["blocked_reason"])
+
+		os.environ["USDT_WALLET_ADDRESS"] = self.REAL
+		live = payout.status_snapshot(self._cfg(enabled=True))
+		self.assertTrue(live["live"])
+		self.assertIsNone(live["blocked_reason"])
+		# Masked only. status.json is committed and the dashboard is public.
+		self.assertNotIn(self.REAL, str(live))
+
+	def test_snapshot_never_leaks_the_full_address(self):
+		live = payout.status_snapshot(self._cfg(enabled=True))
+		self.assertEqual(live["address_masked"], "TFTNsf…9KbY")
+
+
+class TestPayoutRunsAfterQualityGates(unittest.TestCase):
+	"""The footer must not be able to help an article pass its own gates.
+
+    It adds a heading and an untagged fence. Attached before the gates, it
+    would pad the word count and satisfy structural checks the model's own
+    draft failed -- so a too-thin article would publish on boilerplate. This is
+    why it is appended inside ``devto.publish`` and not in ``_finalize``.
+    """
+
+	REAL = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
+
+	def setUp(self):
+		self._saved = os.environ.get("USDT_WALLET_ADDRESS")
+		os.environ["USDT_WALLET_ADDRESS"] = self.REAL
+		self._cfg_on = dict(payout.DEFAULTS)
+		self._cfg_on["enabled"] = True
+
+	def tearDown(self):
+		if self._saved is None:
+			os.environ.pop("USDT_WALLET_ADDRESS", None)
+		else:
+			os.environ["USDT_WALLET_ADDRESS"] = self._saved
+
+	def test_gates_judge_the_draft_not_the_footer(self):
+		thin = {"body_markdown": "## One\n\n" + "word " * 20}
+		before = len(thin["body_markdown"].split())
+		withfooter = payout.add_footer(dict(thin), self._cfg_on)
+		# The footer does add words...
+		self.assertGreater(len(withfooter["body_markdown"].split()), before)
+		# ...which is exactly why the gate has to run on the draft. If a future
+		# refactor moves the footer into _finalize, this article gets padded
+		# toward min_words by boilerplate instead of being rejected.
+		problems = articles_module._format_problems(thin["body_markdown"])
+		self.assertTrue(any("too short" in p for p in problems))
+
+	def test_publish_attaches_footer_without_mutating_caller(self):
+		# devto.publish copies the article before appending, so a failed publish
+		# cannot leave a footer on the dict a retry re-sends.
+		sent = {}
+
+		class _Resp:
+			@staticmethod
+			def raise_for_status():
+				return None
+
+			@staticmethod
+			def json():
+				return {"url": "https://dev.to/x/y"}
+
+		def fake_post(url, headers=None, json=None, timeout=None):
+			sent["body"] = json["article"]["body_markdown"]
+			return _Resp()
+
+		original_post = devto_module.requests.post
+		original_config = payout.config
+		try:
+			devto_module.requests.post = fake_post
+			payout.config = lambda: self._cfg_on
+			article = {"title": "T", "body_markdown": "## A\n\nprose\n", "tags": ["python"]}
+			result = devto_module.publish(article, "key")
+			self.assertTrue(result["success"])
+			self.assertIn(self.REAL, sent["body"])
+			# The caller's dict is untouched.
+			self.assertNotIn(self.REAL, article["body_markdown"])
+			# Publishing a post still reports no revenue: money is on-chain only.
+			self.assertEqual(result["estimated_usd"], 0.0)
+		finally:
+			devto_module.requests.post = original_post
+			payout.config = original_config

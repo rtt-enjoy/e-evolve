@@ -1,7 +1,7 @@
 {
   "version": "1.38.0",
-  "last_run": "2026-09-03T15:02:17.618023+00:00",
-  "total_runs": 1757,
+  "last_run": "2026-09-03T18:41:25.146989+00:00",
+  "total_runs": 1758,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,12 +33,55 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.38.0",
-    "summary": "No summary provided",
-    "changes_applied": [],
-    "suggestions": [],
+    "summary": "Add USDT payout footer, code documentation earning lead, and Cerebras API key configuration",
+    "changes_applied": [
+      {
+        "file": "config/strategy.json",
+        "reason": "Enable USDT payout footer and add Cerebras API key configuration to strategy"
+      }
+    ],
+    "suggestions": [
+      {
+        "title": "Activate USDT payout footer in articles",
+        "description": "Enables the support footer in dev.to articles so readers can tip via USDT, potentially earning real on-chain revenue",
+        "secret_needed": "USDT_WALLET_ADDRESS",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Ensure USDT_WALLET_ADDRESS is set in GitHub repository Settings -> Secrets and variables -> Actions",
+          "2. Edit config/strategy.json to set payout.enabled to true",
+          "3. The next article publish will include a support footer with the USDT receive address"
+        ]
+      },
+      {
+        "title": "Add AI-powered code documentation service to code_techs queue",
+        "description": "Adds a new local-playbook earning idea for generating code documentation using free AI tiers, expanding the queue of actionable suggestions for the owner",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Add the new idea entry to the _LOCAL_LEADS list in code_techs.py following the existing pattern",
+          "2. Include title, source, body, and labels for the code documentation service",
+          "3. The next queue refresh (every 24 hours) will list the new idea for owner pursuit"
+        ]
+      },
+      {
+        "title": "Add CEREBRAS_API_KEY as a fourth free-tier LLM provider",
+        "description": "Provides roughly 1M tokens/day free with no credit card, giving a third independent fallback when OpenRouter free caps are exhausted",
+        "secret_needed": "CEREBRAS_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Go to https://cloud.cerebras.ai/ and sign up with email (no credit card)",
+          "2. In the dashboard click 'Create API Key', copy the csk-... value, and store it locally",
+          "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it CEREBRAS_API_KEY, paste the key, and save",
+          "4. The next cycle will list llm_cerebras as active in status.json and start using Cerebras as a fallback for research and post roles"
+        ]
+      }
+    ],
     "error": null,
-    "branch": null,
-    "proposed_version": "1.38.1"
+    "branch": "evolve/1.39.0-20260903-185003",
+    "proposed_version": "1.39.0"
   },
   "last_earning": {
     "actions": [],
@@ -46,34 +89,33 @@
   },
   "suggestions": [
     {
-      "title": "Add CEREBRAS_API_KEY as a fourth free-tier LLM provider",
-      "description": "Provides roughly 1M tokens/day free with no credit card, giving a third independent fallback when OpenRouter free caps are exhausted",
-      "secret_needed": "CEREBRAS_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Go to https://cloud.cerebras.ai/ and sign up with email (no credit card).",
-        "2. In the dashboard click 'Create API Key', copy the csk-... value, and store it locally.",
-        "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it CEREBRAS_API_KEY, paste the key, and save.",
-        "4. The next cycle will list llm_cerebras as active in status.json and start using Cerebras as a fallback for research and post roles."
-      ]
-    },
-    {
       "title": "Add AI-powered code documentation service to code_techs queue",
       "description": "Adds a new local-playbook earning idea for generating code documentation using free AI tiers, expanding the queue of actionable suggestions for the owner",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. This change adds a new idea to the code_techs earning module.",
-        "2. The idea will appear in the next code_techs queue refresh (every 24 hours).",
-        "3. The owner can then pursue it manually by following the outreach draft generated for the idea.",
-        "4. To implement: add the new idea entry to the _LOCAL_LEADS list in code_techs.py following the existing pattern, including title, source, body, and labels."
+        "1. Add the new idea entry to the _LOCAL_LEADS list in code_techs.py following the existing pattern",
+        "2. Include title, source, body, and labels for the code documentation service",
+        "3. The next queue refresh (every 24 hours) will list the new idea for owner pursuit"
+      ]
+    },
+    {
+      "title": "Add CEREBRAS_API_KEY as a fourth free-tier LLM provider",
+      "description": "Provides roughly 1M tokens/day free with no credit card, giving a third independent fallback when OpenRouter free caps are exhausted",
+      "secret_needed": "CEREBRAS_API_KEY",
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Go to https://cloud.cerebras.ai/ and sign up with email (no credit card)",
+        "2. In the dashboard click 'Create API Key', copy the csk-... value, and store it locally",
+        "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it CEREBRAS_API_KEY, paste the key, and save",
+        "4. The next cycle will list llm_cerebras as active in status.json and start using Cerebras as a fallback for research and post roles"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 696,
+  "last_cycle_seconds": 518,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -497,7 +539,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-03T15:02:18.189679+00:00",
+    "checked_at": "2026-09-03T18:41:25.561688+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -704,8 +746,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.39.0-20260903-185003",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 10,
     "total_views": 1838,

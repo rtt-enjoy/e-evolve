@@ -1,7 +1,7 @@
 {
-  "version": "1.37.3",
-  "last_run": "2026-09-03T12:24:42.424416+00:00",
-  "total_runs": 1755,
+  "version": "1.38.0",
+  "last_run": "2026-09-03T12:32:44.188687+00:00",
+  "total_runs": 1756,
   "active_features": [
     "llm_anthropic",
     "llm_gemini",
@@ -60,22 +60,9 @@
           "3. The owner can then pursue it manually by following the outreach draft generated for the idea.",
           "4. To implement: add the new idea entry to the _LOCAL_LEADS list in code_techs.py following the existing pattern, including title, source, body, and labels."
         ]
-      },
-      {
-        "title": "Activate Anthropic Claude as a fourth free-tier LLM provider",
-        "description": "Provides a strong reasoning model as an independent fallback when OpenRouter free caps are exhausted, with a generous free tier for research and post roles",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Go to https://console.anthropic.com/ and sign up with email (no credit card required for free tier).",
-          "2. In the dashboard create an API key and copy the sk-... value.",
-          "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it ANTHROPIC_API_KEY, paste the key, and save.",
-          "4. The next cycle will list llm_anthropic as active in status.json and start using Claude as a fallback for research and post roles."
-        ]
       }
     ],
-    "version_bumped_to": "1.37.3",
+    "version_bumped_to": "1.38.0",
     "error": null
   },
   "last_earning": {

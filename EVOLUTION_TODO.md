@@ -1,6 +1,6 @@
 # Evolution TODO
 
-Bot state: v1.37.1 - cycle #1743 - active: `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
+Bot state: v1.37.2 - cycle #1752 - active: `llm_anthropic`, `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
 
 ---
 
@@ -37,6 +37,17 @@ _(none open)_
 ---
 
 ## Resolved
+
+- **An empty LLM response was treated as a valid answer** - fixed 2026-09-03.
+  All five provider paths in `bot/llm.py` coerced a missing completion to `""`
+  and returned it *successfully*, so `complete()` never stepped down its model
+  chain and `complete_json*` re-sent the same prompt to the same dead model 3x.
+  Cycle #1751 skipped evolution with `First 200 chars: ''` after 3 wasted calls
+  to `openrouter/free` while 5 healthy fallbacks went untried; the same hole
+  caused both `empty_draft` article rejects. Responses now pass through
+  `_require_text`, an empty one steps down the chain like a 404, and the JSON
+  wrappers stop reprompting once every provider is exhausted (6 requests where
+  the old path spent 18). 4 regression tests added; they fail on the old code.
 
 - **`force articles N` ignored its own count** - fixed 2026-09-02. `commands.py`
   parsed and clamped N to 1-5 and logged it, but `articles.run()` read the

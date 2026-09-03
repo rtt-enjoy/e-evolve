@@ -493,6 +493,24 @@ actions. If such keys exist, they are treated as research context only.
 - On 429 or model-not-found, the OpenRouter call steps down through the rest of the
   role's free-model chain before abandoning the provider — a rate limit degrades
   quality (smaller/different free model), never breaks the cycle.
+- **An empty completion is a failure, not an answer.** Every provider routes its
+  response through `_require_text`, which raises when a model answers HTTP 200
+  with no content. All five API paths used to coerce that to `""` and return
+  *successfully*, which broke the chain twice over: `complete()` returned on the
+  first model so the 5 named fallbacks were never tried, and `complete_json*`
+  then re-sent the same prompt to the same dead model 3x before failing the
+  cycle with the misleading `No valid JSON object found ... First 200 chars: ''`.
+  That is what skipped evolution on cycle #1751 and produced both `empty_draft`
+  article rejects. `_call_claude_cli` already raised on empty output; the API
+  paths now match it. An empty response is treated like a 404 — **step down the
+  chain**, not retry the same model, because re-asking a model that just
+  returned nothing usually returns nothing again and each wasted call comes off
+  the 50/day free-tier ceiling.
+- **`complete_json*` stops reprompting once every provider is exhausted.** A
+  reprompt only helps when a model returned *something* unparseable. When the
+  whole chain is dead there is nothing left to ask, so the old 3 full chain
+  walks spent 3x the requests to arrive at the same error (18 calls where 6 will
+  do). Malformed-but-non-empty output still gets all 3 attempts.
 - `CEREBRAS_API_KEY` is an optional extra free-tier fallback (roughly 1M tokens/day,
   14,400 requests/day per model, no credit card) used when OpenRouter/Anthropic/Gemini
   are unavailable or exhausted. See `bot/llm.py` `_call_cerebras` / `_CEREBRAS_MODELS`.

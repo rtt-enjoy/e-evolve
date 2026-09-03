@@ -1271,6 +1271,103 @@ class TestOpenRouterModelChains(unittest.TestCase):
 		walked = self._walk("post", "model_not_found on openrouter: some/withdrawn-model")
 		self.assertEqual(walked, llm_module._OPENROUTER_MODELS_BY_ROLE["post"])
 
+	def test_empty_response_steps_through_entire_chain(self):
+		"""Regression (cycle #1751): a model answering HTTP 200 with an empty
+		body used to be returned as a *valid* completion. `complete()` then
+		returned on the first model, so the chain never stepped down, and
+		`complete_json*` re-sent the same prompt to the same dead model three
+		times before failing with `First 200 chars: ''`."""
+		import bot.llm as llm_module
+		for role in ("upgrade", "research", "post"):
+			walked = self._walk(
+				role,
+				f"{llm_module._EMPTY_RESPONSE_MARKER}: openrouter model x returned no content",
+			)
+			self.assertEqual(walked, llm_module._OPENROUTER_MODELS_BY_ROLE[role], role)
+
+	def test_empty_completion_is_not_a_valid_response(self):
+		"""No caller has a use for "" -- every provider must raise instead of
+		coercing a missing completion into a successful empty answer."""
+		import bot.llm as llm_module
+		for blank in ("", "   ", chr(10) + chr(9), None):
+			with self.assertRaises(RuntimeError):
+				llm_module._require_text(blank, "openrouter", "some/model")
+		self.assertEqual(
+			llm_module._require_text("hello", "openrouter", "some/model"), "hello"
+		)
+
+	def test_empty_response_recovers_on_the_next_model(self):
+		"""The point of the fix: a degraded lead model must cost one request and
+		then succeed, not fail the cycle."""
+		import bot.llm as llm_module
+		tried: list[str] = []
+
+		def fake(self, prompt, system, max_tokens, temperature, model):
+			tried.append(model)
+			if model == llm_module._MAIN:
+				return llm_module._require_text("", "openrouter", model)
+			return llm_module.LLMResponse(
+				text='{"ok": true}', provider="openrouter", model=model, latency_s=0.0
+			)
+
+		real_call, real_sleep = llm_module.LLMClient._call_openrouter, llm_module.time.sleep
+		keys = ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY")
+		saved = {k: os.environ.pop(k, None) for k in keys}
+		saved_or = os.environ.get("OPENROUTER_API_KEY")
+		os.environ["OPENROUTER_API_KEY"] = "test-key"
+		llm_module.LLMClient._call_openrouter = fake
+		llm_module.time.sleep = lambda *a, **kw: None
+		try:
+			result = llm_module.LLMClient().complete_json_for_role("upgrade", "hi")
+		finally:
+			llm_module.LLMClient._call_openrouter = real_call
+			llm_module.time.sleep = real_sleep
+			for k, v in saved.items():
+				if v is not None:
+					os.environ[k] = v
+			if saved_or is None:
+				os.environ.pop("OPENROUTER_API_KEY", None)
+			else:
+				os.environ["OPENROUTER_API_KEY"] = saved_or
+
+		self.assertEqual(result, {"ok": True})
+		self.assertEqual(tried, [llm_module._MAIN, llm_module._MAIN_NAMED])
+
+	def test_exhausted_chain_is_not_reprompted(self):
+		"""Reprompting only helps unparseable output. Once every provider is
+		exhausted there is nothing left to ask, and on the free tier two more
+		full chain walks cost 2x the chain against a 50/day ceiling."""
+		import bot.llm as llm_module
+		tried: list[str] = []
+
+		def fake(self, prompt, system, max_tokens, temperature, model):
+			tried.append(model)
+			return llm_module._require_text("", "openrouter", model)
+
+		real_call, real_sleep = llm_module.LLMClient._call_openrouter, llm_module.time.sleep
+		keys = ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY")
+		saved = {k: os.environ.pop(k, None) for k in keys}
+		saved_or = os.environ.get("OPENROUTER_API_KEY")
+		os.environ["OPENROUTER_API_KEY"] = "test-key"
+		llm_module.LLMClient._call_openrouter = fake
+		llm_module.time.sleep = lambda *a, **kw: None
+		try:
+			with self.assertRaises(ValueError):
+				llm_module.LLMClient().complete_json_for_role("upgrade", "hi")
+		finally:
+			llm_module.LLMClient._call_openrouter = real_call
+			llm_module.time.sleep = real_sleep
+			for k, v in saved.items():
+				if v is not None:
+					os.environ[k] = v
+			if saved_or is None:
+				os.environ.pop("OPENROUTER_API_KEY", None)
+			else:
+				os.environ["OPENROUTER_API_KEY"] = saved_or
+
+		chain = llm_module._OPENROUTER_MODELS_BY_ROLE["upgrade"]
+		self.assertEqual(len(tried), len(chain), tried)
+
 	def test_dashboard_role_model_matches_live_chain(self):
 		"""Regression: the dashboard named stealth/ox-alpha for weeks after the
 		chains moved off it, because status.py hardcoded the model separately."""

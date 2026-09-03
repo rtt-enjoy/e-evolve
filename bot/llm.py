@@ -154,6 +154,30 @@ class LLMResponse:
 	latency_s: float
 
 
+_EMPTY_RESPONSE_MARKER = "empty_response"
+_ALL_PROVIDERS_FAILED = "LLM failed on all providers"
+
+
+def _require_text(text: str | None, provider: str, model: str) -> str:
+	"""
+    Reject a completion that arrived with no content.
+
+    An HTTP 200 carrying an empty body is a *failed* call, not a valid empty
+    answer -- no caller here has a use for "". Every provider used to coerce it
+    to `""` and return successfully, which broke two things at once: `complete()`
+    returned on the first model and never stepped down its chain, and
+    `complete_json*` then re-sent the same prompt to the same dead model three
+    times before failing the cycle with `First 200 chars: ''`. Raising instead
+    puts an empty response on the same footing as a 404 -- advance to the next
+    model. `_call_claude_cli` already did this; the API paths did not.
+    """
+	if text and text.strip():
+		return text
+	raise RuntimeError(
+		f"{_EMPTY_RESPONSE_MARKER}: {provider} model {model} returned no content"
+	)
+
+
 class LLMClient:
 	"""Unified LLM client. Raises RuntimeError at init if no key is available."""
 
@@ -245,17 +269,25 @@ class LLMClient:
 						log.warning("LLM 413 attempt %d -- truncated to %d chars", attempt, len(p_prompt))
 						continue
 
-					# Model deprecated: advance to next in chain
 					# Model deprecated/withdrawn (stealth previews can vanish
-					# without notice): advance to the next entry in the chain.
-					if "model_not_found" in exc_str or "model not found" in exc_str.lower():
+					# without notice), or answering 200 with an empty body:
+					# advance to the next entry in the chain. An empty response
+					# belongs here and not with the generic retry below --
+					# re-asking a model that just returned nothing almost always
+					# returns nothing again, and on the OpenRouter free tier
+					# those three wasted calls come off a 50/day ceiling.
+					if (
+						"model_not_found" in exc_str
+						or "model not found" in exc_str.lower()
+						or _EMPTY_RESPONSE_MARKER in exc_str
+					):
 						model_list = self._model_list_for(provider)
 						if p_model in model_list:
 							idx = model_list.index(p_model)
 							if idx < len(model_list) - 1:
 								p_model = model_list[idx + 1]
-								log.warning("%s model %s unavailable -- advancing to %s",
-											provider, model_list[idx], p_model)
+								log.warning("%s model %s unusable (%s) -- advancing to %s",
+											provider, model_list[idx], exc_str[:80], p_model)
 								attempt = 0  # new model gets a fresh retry budget
 								continue
 						log.warning("%s model chain exhausted -- skipping to fallback", provider)
@@ -271,7 +303,7 @@ class LLMClient:
 			if exhausted and providers_to_try.index(provider) < len(providers_to_try) - 1:
 				log.warning("LLM provider=%s exhausted -- trying fallback", provider)
 
-		raise RuntimeError(f"LLM failed on all providers: {last_exc}") from last_exc
+		raise RuntimeError(f"{_ALL_PROVIDERS_FAILED}: {last_exc}") from last_exc
 
 	def complete_for_role(
 		self,
@@ -333,6 +365,12 @@ class LLMClient:
 			except (ValueError, RuntimeError) as exc:
 				last_exc = exc
 				log.warning("JSON attempt %d/3 failed: %s", attempt, exc)
+				# Reprompting only helps when a model answered with something
+				# unparseable. If every provider and model is already exhausted
+				# there is nothing left to ask, so two more full chain walks
+				# just spend free-tier requests to reach the same error.
+				if _ALL_PROVIDERS_FAILED in str(exc):
+					break
 				if attempt < 3:
 					time.sleep(1)
 		raise ValueError(f"Could not get valid JSON from LLM: {last_exc}") from last_exc
@@ -361,6 +399,8 @@ class LLMClient:
 			except (ValueError, RuntimeError) as exc:
 				last_exc = exc
 				log.warning("JSON[role=%s] attempt %d/3 failed: %s", role, attempt, exc)
+				if _ALL_PROVIDERS_FAILED in str(exc):
+					break
 				if attempt < 3:
 					time.sleep(1)
 		raise ValueError(f"Could not get valid JSON from LLM (role={role}): {last_exc}") from last_exc
@@ -398,7 +438,7 @@ class LLMClient:
 			temperature=temperature,
 		)
 		return LLMResponse(
-			text      = rsp.choices[0].message.content or "",
+			text      = _require_text(rsp.choices[0].message.content, "groq", model),
 			provider  = "groq",
 			model     = model,
 			latency_s = round(time.monotonic() - t0, 2),
@@ -422,7 +462,9 @@ class LLMClient:
 		t0  = time.monotonic()
 		msg = client.messages.create(**kwargs)
 		return LLMResponse(
-			text      = msg.content[0].text if msg.content else "",
+			text      = _require_text(
+				msg.content[0].text if msg.content else "", "anthropic", model
+			),
 			provider  = "anthropic",
 			model     = model,
 			latency_s = round(time.monotonic() - t0, 2),
@@ -447,7 +489,7 @@ class LLMClient:
 		client = genai.GenerativeModel(model, **kwargs)
 		rsp    = client.generate_content(prompt)
 		return LLMResponse(
-			text      = rsp.text or "",
+			text      = _require_text(rsp.text, "gemini", model),
 			provider  = "gemini",
 			model     = model,
 			latency_s = round(time.monotonic() - t0, 2),
@@ -494,7 +536,9 @@ class LLMClient:
 			raise RuntimeError(f"OpenRouter error: {data['error']}")
 		if not data.get("choices"):
 			raise RuntimeError(f"OpenRouter returned no choices for {model}: {str(data)[:200]}")
-		text = data["choices"][0]["message"]["content"] or ""
+		text = _require_text(
+			data["choices"][0]["message"]["content"], "openrouter", model
+		)
 		return LLMResponse(
 			text      = text,
 			provider  = "openrouter",
@@ -539,7 +583,9 @@ class LLMClient:
 			raise RuntimeError(f"Cerebras error: {data['error']}")
 		if not data.get("choices"):
 			raise RuntimeError(f"Cerebras returned no choices for {model}: {str(data)[:200]}")
-		text = data["choices"][0]["message"]["content"] or ""
+		text = _require_text(
+			data["choices"][0]["message"]["content"], "cerebras", model
+		)
 		return LLMResponse(
 			text      = text,
 			provider  = "cerebras",

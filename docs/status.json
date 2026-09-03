@@ -1,17 +1,17 @@
 {
   "version": "1.37.3",
-  "last_run": "2026-09-03T11:16:55.409959+00:00",
-  "total_runs": 1754,
+  "last_run": "2026-09-03T12:24:42.424416+00:00",
+  "total_runs": 1755,
   "active_features": [
+    "llm_anthropic",
     "llm_gemini",
     "llm_openrouter",
     "llm_groq",
-    "usdt_wallet",
     "code_techs"
   ],
   "inactive_features": [
-    "llm_anthropic",
-    "llm_cerebras"
+    "llm_cerebras",
+    "usdt_wallet"
   ],
   "llm_provider": "openrouter",
   "earnings": {
@@ -32,18 +32,8 @@
     "source": "on-chain USDT balance"
   },
   "last_evolution": {
-    "version_bumped_to": "1.37.3",
-    "summary": "Fix misplaced docstring in _revise_title and add unit tests for _revise_title and _revise_format",
-    "changes_applied": [
-      {
-        "file": "bot/tests.py",
-        "reason": "Added unittest.mock import and imported _revise_title and _revise_format for direct unit testing. [fix: Added 'import unittest' at the top to resolve the NameError, ensuring unittest.TestCase and unittest.mock are available.]"
-      },
-      {
-        "file": "bot/tests.py",
-        "reason": "Added unit tests for _revise_title and _revise_format, which are critical quality-gate helpers in the article pipeline but had zero test coverage. Tests cover success paths, LLM failures, empty responses, and no-improvement cases."
-      }
-    ],
+    "summary": "Skipped by owner command",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Add CEREBRAS_API_KEY as a fourth free-tier LLM provider",
@@ -85,9 +75,8 @@
         ]
       }
     ],
-    "error": null,
-    "branch": "evolve/1.37.4-20260903-112255",
-    "proposed_version": "1.37.4"
+    "version_bumped_to": "1.37.3",
+    "error": null
   },
   "last_earning": {
     "actions": [],
@@ -119,23 +108,10 @@
         "3. The owner can then pursue it manually by following the outreach draft generated for the idea.",
         "4. To implement: add the new idea entry to the _LOCAL_LEADS list in code_techs.py following the existing pattern, including title, source, body, and labels."
       ]
-    },
-    {
-      "title": "Activate Anthropic Claude as a fourth free-tier LLM provider",
-      "description": "Provides a strong reasoning model as an independent fallback when OpenRouter free caps are exhausted, with a generous free tier for research and post roles",
-      "secret_needed": "ANTHROPIC_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Go to https://console.anthropic.com/ and sign up with email (no credit card required for free tier).",
-        "2. In the dashboard create an API key and copy the sk-... value.",
-        "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it ANTHROPIC_API_KEY, paste the key, and save.",
-        "4. The next cycle will list llm_anthropic as active in status.json and start using Claude as a fallback for research and post roles."
-      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 360,
+  "last_cycle_seconds": 0,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -144,12 +120,12 @@
   "usdt_balance": 0.0,
   "secret_readiness": {
     "llm_anthropic": {
-      "active": false,
-      "present": [],
-      "missing": [
+      "active": true,
+      "present": [
         "ANTHROPIC_API_KEY"
       ],
-      "present_count": 0,
+      "missing": [],
+      "present_count": 1,
       "required_count": 1
     },
     "llm_gemini": {
@@ -189,12 +165,12 @@
       "required_count": 1
     },
     "usdt_wallet": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "USDT_WALLET_ADDRESS"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     }
   },
@@ -429,11 +405,10 @@
     ]
   },
   "configured_github_secrets": [
+    "ANTHROPIC_API_KEY",
     "GEMINI_API_KEY",
-    "GH_TOKEN",
     "GROQ_API_KEY",
-    "OPENROUTER_API_KEY",
-    "USDT_WALLET_ADDRESS"
+    "OPENROUTER_API_KEY"
   ],
   "operation_mode": "research_and_article_publishing",
   "external_action_policy": {
@@ -552,7 +527,7 @@
     ]
   },
   "wallet": {
-    "configured": true,
+    "configured": false,
     "address_masked": "TFTNsf\u20269KbY",
     "network": "TRC-20",
     "confirmed_usd": 0.0,
@@ -561,7 +536,7 @@
     "last_received_at": null,
     "checked_at": "2026-09-03T11:16:55.699991+00:00",
     "stale": false,
-    "error": null,
+    "error": "USDT_WALLET_ADDRESS not set",
     "balance_high_water_usd": 0.0
   },
   "newsletter_daily": {
@@ -766,8 +741,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.37.4-20260903-112255",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 10,
     "total_views": 1838,
@@ -828,5 +803,11 @@
     },
     "total": 2
   },
-  "github_repo": "rtt-enjoy/e-evolve"
+  "payout": {
+    "enabled": false,
+    "live": false,
+    "network": null,
+    "address_masked": null,
+    "blocked_reason": "disabled in config/strategy.json (payout.enabled)"
+  }
 }

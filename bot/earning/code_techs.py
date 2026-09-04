@@ -1,3 +1,14 @@
+"""Free AI earning queue: research and suggestions only.
+
+This module builds a ranked list of leads the owner can pursue to make
+money using free AI services and free AI APIs. It is research-only by
+policy: nothing in here contacts anyone, requests payment, or posts
+externally. Every figure quoted in the report must already exist in the
+source material or be labelled 'verify current limit'.
+
+Activates from config/strategy.json (``code_techs.enabled``). No new
+secret beyond what ``articles`` and ``newsletter`` already use.
+"""
 from __future__ import annotations
 
 import json
@@ -235,10 +246,17 @@ _LOCAL_LEADS = [
 		"source": "local-playbook",
 		"body": "Free translation and LLM tiers localize listings, menus, and help docs. Charge per thousand words. Small exporters and local restaurants need this and do not want a full agency.",
 		"labels": ["free-ai-api", "translation", "batch-job"]
+	},
+	{
+		"title": "Semantic search over a client's documents using a free embeddings API",
+		"url": "",
+		"source": "local-playbook",
+		"body": "Cohere, Voyage, and OpenRouter all expose free embeddings. Embed a client's PDFs or knowledge base once, charge a flat setup fee plus a small monthly fee for hosted semantic search. Buyers are small support teams and indie authors who want Q&A over their own content without building anything.",
+		"labels": ["free-ai-api", "embeddings", "setup-service", "recurring"]
 	}
 ]
 
-# In‑memory request counter for GitHub API throttling
+# In-memory request counter for GitHub API throttling
 _GITHUB_REQ_COUNT = 0
 _GITHUB_WINDOW_START = time.time()
 _GITHUB_MAX_PER_MIN = 10
@@ -332,7 +350,7 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 		headers["Authorization"] = f"Bearer {token}"
 
 	for query in cfg.get("github_searches", []):
-		# Simple rate‑limit handling
+		# Simple rate-limit handling
 		now = time.time()
 		if now - _GITHUB_WINDOW_START >= 60:
 			_GITHUB_WINDOW_START = now
@@ -497,7 +515,7 @@ def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_
 			continue
 		title_for_prompt = title[:140] or "untitled code-tech lead"
 		reason = _reason(text, labels, value)
-		next_step = _next_step(text)
+		next_step = _next_step(text, labels)
 		ranked.append(Opportunity(
 			title=title_for_prompt,
 			url=str(lead.get("url", "")),
@@ -695,7 +713,7 @@ def _is_free_ai_lead(text: str) -> bool:
 	"""True when the lead names an AI capability AND a free-access signal."""
 	ai_terms = (
 		"ai", "llm", "gpt", "model", "api", "whisper", "transcri", "ocr",
-		"embedding", "vision", "speech", "tts", "image generation", "inference",
+		"embedding", "embeddings", "vision", "speech", "tts", "image generation", "inference",
 	)
 	free_terms = (
 		"free", "no credit card", "no-cost", "zero cost", "open source",
@@ -738,7 +756,19 @@ def _reason(text: str, labels: list[str], value: float) -> str:
 		parts.append("low-cost AI service lead with limited competition")
 	return "; ".join(parts[:2])
 
-def _next_step(text: str) -> str:
+def _next_step(text: str, labels: Optional[list[str]] = None) -> str:
+	"""Concretely actionable next step, keyed to whatever the lead actually is.
+
+    Most branches are keyword-matched on the title/body, but a couple of
+    branches are intentionally keyed on the lead's labels: the embeddings
+    playbook was being routed to a transcription instruction because it lacks
+    the trigger words of every other branch, and a label check is the only way
+    to give the local-playbook embeddings lead a useful first step without
+    having to invent a magic keyword it does not contain.
+    """
+	label_set = {str(x).lower() for x in (labels or [])}
+	if "embedding" in label_set or any(word in text for word in ("embedding", "vector search", "semantic search", "rerank")):
+		return "Sign up for a free embeddings tier (Cohere, Voyage, or OpenRouter embed), index one sample document, and quote a flat setup fee plus a small monthly fee per indexed knowledge base."
 	if any(word in text for word in ("transcri", "speech", "whisper", "audio")):
 		return "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio."
 	if any(word in text for word in ("ocr", "receipt", "invoice", "scan", "pdf")):
@@ -881,10 +911,10 @@ def _write_report(state: dict[str, Any]) -> None:
 	lines.extend(["", "## Underserved Niches", ""])
 	for item in state.get("focus", []):
 		lines.append(f"- {item}")
-	lines.extend(["", "## Strategy Playbook", ""]) 
+	lines.extend(["", "## Strategy Playbook", ""])
 	for item in state.get("strategy_playbook", []):
 		lines.append(f"- {item}")
-	lines.extend(["", "## Avoid", ""]) 
+	lines.extend(["", "## Avoid", ""])
 	for item in state.get("avoid_patterns", []):
 		lines.append(f"- {item}")
 	lines.extend(["", "## Ranked Leads From Online Search", ""])

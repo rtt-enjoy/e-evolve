@@ -1,7 +1,7 @@
 {
   "version": "1.39.0",
-  "last_run": "2026-09-04T04:36:15.010410+00:00",
-  "total_runs": 1761,
+  "last_run": "2026-09-04T09:41:05.273698+00:00",
+  "total_runs": 1762,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,56 +33,56 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.39.0",
-    "summary": "Add attribution summary helper into the status snapshot and a status reporter so cycle output carries the attribution totals and top archetype without requiring a custom orchestrator change.",
+    "summary": "Add a docs/data-contracts.md reference so contributors can see what each module writes without reading every file.",
     "changes_applied": [
       {
-        "file": "bot/earning/__init__.py",
-        "reason": "Re-export the attribution module's record_receipt and summary helpers so the orchestrator and tests can call them without reaching into the subpackage directly, mirroring how articles_run and the other products are exported."
+        "file": "docs/data-contracts.md",
+        "reason": "Several modules read each other's status fields (articles reads article_interest, code_techs reads attribution via the wallet, backfill reads payout). New contributors can break those reads by renaming or moving a key. A single reference file lists every status key the project writes, so the failure mode is a missing doc, not a silent rename in production."
       }
     ],
     "suggestions": [
       {
-        "title": "Add OpenAI free experimentation credits via a stored credit",
-        "description": "OpenAI does not have a permanent no-card free tier, but trial credits from new accounts and partner programs can subsidise experiments. Useful only if the owner wants to add it as an optional paid-when-needed provider.",
-        "secret_needed": "OPENAI_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": false,
-        "how_to": [
-          "1. Go to https://platform.openai.com/ and create an account",
-          "2. Add a payment method and purchase at minimum $5 in credits",
-          "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it OPENAI_API_KEY, paste the key, and save",
-          "4. The orchestrator will not auto-enable OpenAI; a follow-up evolution is required to wire it into llm.py's provider map"
-        ]
-      },
-      {
-        "title": "Add Mistral La Plateforme free tier as a sixth fallback",
-        "description": "Mistral offers free inference for its chat and codestral models with rate limits, no card required for trial keys. Adds resilience when Gemini, Groq and OpenRouter free chains exhaust.",
-        "secret_needed": "MISTRAL_API_KEY",
+        "title": "Add Cohere free-tier as a fifth research LLM",
+        "description": "Cohere offers a no-card trial tier with monthly limits on Command R+ and embeddings. Useful for the research role specifically because its embeddings are free, which code_techs could use to deduplicate opportunity titles without an extra OpenRouter call.",
+        "secret_needed": "COHERE_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Go to https://console.mistral.ai/ and sign up with email (no card for trial tier)",
-          "2. Create an API key under Workspace -> API keys",
-          "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it MISTRAL_API_KEY, paste the key, and save",
-          "4. After the key is added, the next evolution will add mistral as a recognised free provider in llm.py"
+          "1. Go to https://dashboard.cohere.com/ and sign up with email",
+          "2. Create a trial API key under API keys",
+          "3. Add it as a GitHub repository secret named COHERE_API_KEY",
+          "4. A future evolution can wire it into llm.py as a research-only fallback"
         ]
       },
       {
-        "title": "Enable Amazon SES or Postmark for transactional notifications",
-        "description": "Lets the bot email the owner when a wallet receipt arrives or a sustained rejection pattern appears. Requires DNS setup at the owner domain so this is owner-only and slow to activate.",
-        "secret_needed": "SMTP_PASSWORD",
+        "title": "Add Together AI free credits as an emergency inference fallback",
+        "description": "Together AI hands out free credits on signup (no card) that cover burst inference when OpenRouter/Gemini/Groq all rate-limit simultaneously. Cheap insurance for the daily article cycle.",
+        "secret_needed": "TOGETHER_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Pick a free transactional tier (AWS SES sandbox, Postmark sandbox, or Resend free tier)",
-          "2. Verify a sending address you own",
-          "3. Add SMTP_USERNAME and SMTP_PASSWORD as GitHub repository secrets",
-          "4. A future evolution will read these secrets and send a digest email per receipt"
+          "1. Go to https://api.together.xyz/ and create an account",
+          "2. Copy the free-tier API key shown on first login",
+          "3. Add as GitHub secret TOGETHER_API_KEY",
+          "4. Wire as last-resort fallback in a later evolution"
+        ]
+      },
+      {
+        "title": "Self-host a small docs site via GitHub Pages with a custom domain",
+        "description": "The dashboard already publishes to docs/. A custom domain (Cloudflare Registrar or similar, ~$10/yr) would make the tip box easier to share without raising infrastructure cost. Owner-only action.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Buy a short domain from Cloudflare Registrar or Namecheap",
+          "2. In repo Settings -> Pages, set the custom domain and follow the DNS instructions",
+          "3. Wait for the certificate to provision",
+          "4. Update payout_public with any new heading/note if desired"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.39.1-20260904-043908",
+    "branch": "evolve/1.39.1-20260904-094649",
     "proposed_version": "1.39.1"
   },
   "last_earning": {
@@ -91,47 +91,47 @@
   },
   "suggestions": [
     {
-      "title": "Add OpenAI free experimentation credits via a stored credit",
-      "description": "OpenAI does not have a permanent no-card free tier, but trial credits from new accounts and partner programs can subsidise experiments. Useful only if the owner wants to add it as an optional paid-when-needed provider.",
-      "secret_needed": "OPENAI_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": false,
-      "how_to": [
-        "1. Go to https://platform.openai.com/ and create an account",
-        "2. Add a payment method and purchase at minimum $5 in credits",
-        "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it OPENAI_API_KEY, paste the key, and save",
-        "4. The orchestrator will not auto-enable OpenAI; a follow-up evolution is required to wire it into llm.py's provider map"
-      ]
-    },
-    {
-      "title": "Add Mistral La Plateforme free tier as a sixth fallback",
-      "description": "Mistral offers free inference for its chat and codestral models with rate limits, no card required for trial keys. Adds resilience when Gemini, Groq and OpenRouter free chains exhaust.",
-      "secret_needed": "MISTRAL_API_KEY",
+      "title": "Add Cohere free-tier as a fifth research LLM",
+      "description": "Cohere offers a no-card trial tier with monthly limits on Command R+ and embeddings. Useful for the research role specifically because its embeddings are free, which code_techs could use to deduplicate opportunity titles without an extra OpenRouter call.",
+      "secret_needed": "COHERE_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Go to https://console.mistral.ai/ and sign up with email (no card for trial tier)",
-        "2. Create an API key under Workspace -> API keys",
-        "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it MISTRAL_API_KEY, paste the key, and save",
-        "4. After the key is added, the next evolution will add mistral as a recognised free provider in llm.py"
+        "1. Go to https://dashboard.cohere.com/ and sign up with email",
+        "2. Create a trial API key under API keys",
+        "3. Add it as a GitHub repository secret named COHERE_API_KEY",
+        "4. A future evolution can wire it into llm.py as a research-only fallback"
       ]
     },
     {
-      "title": "Enable Amazon SES or Postmark for transactional notifications",
-      "description": "Lets the bot email the owner when a wallet receipt arrives or a sustained rejection pattern appears. Requires DNS setup at the owner domain so this is owner-only and slow to activate.",
-      "secret_needed": "SMTP_PASSWORD",
+      "title": "Add Together AI free credits as an emergency inference fallback",
+      "description": "Together AI hands out free credits on signup (no card) that cover burst inference when OpenRouter/Gemini/Groq all rate-limit simultaneously. Cheap insurance for the daily article cycle.",
+      "secret_needed": "TOGETHER_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Pick a free transactional tier (AWS SES sandbox, Postmark sandbox, or Resend free tier)",
-        "2. Verify a sending address you own",
-        "3. Add SMTP_USERNAME and SMTP_PASSWORD as GitHub repository secrets",
-        "4. A future evolution will read these secrets and send a digest email per receipt"
+        "1. Go to https://api.together.xyz/ and create an account",
+        "2. Copy the free-tier API key shown on first login",
+        "3. Add as GitHub secret TOGETHER_API_KEY",
+        "4. Wire as last-resort fallback in a later evolution"
+      ]
+    },
+    {
+      "title": "Self-host a small docs site via GitHub Pages with a custom domain",
+      "description": "The dashboard already publishes to docs/. A custom domain (Cloudflare Registrar or similar, ~$10/yr) would make the tip box easier to share without raising infrastructure cost. Owner-only action.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Buy a short domain from Cloudflare Registrar or Namecheap",
+        "2. In repo Settings -> Pages, set the custom domain and follow the DNS instructions",
+        "3. Wait for the certificate to provision",
+        "4. Update payout_public with any new heading/note if desired"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 174,
+  "last_cycle_seconds": 344,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -674,7 +674,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-04T04:36:15.375269+00:00",
+    "checked_at": "2026-09-04T09:41:05.443124+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -894,7 +894,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.39.1-20260904-043908",
+  "last_evolution_branch": "evolve/1.39.1-20260904-094649",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 11,
@@ -974,7 +974,7 @@
     "done_ids": [],
     "skipped": {},
     "updated_total": 0,
-    "last_run": "2026-09-04T04:39:08.961987+00:00",
+    "last_run": "2026-09-04T09:46:49.417273+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   }

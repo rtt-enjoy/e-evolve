@@ -1574,3 +1574,7 @@ Autonomous earnings generated every hourly cycle.
 
 - [ok] **code_techs**: [Code-tech queue refreshed (8 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
 - [ok] **mrr-ideas**: [MRR idea triage refreshed (2 viable, 18 refused)](docs/mrr-ideas.md) (est. $0.00)
+
+### 2026-09-04 00:11 UTC
+
+- [ok] **dev.to**: [Why Your AI Agent Pipeline Costs More Than Expected](https://dev.to/robust_true_try/why-your-ai-agent-pipeline-costs-more-than-expected-42ne) (est. $0.00)

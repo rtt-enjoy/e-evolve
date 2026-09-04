@@ -1,7 +1,7 @@
 {
   "version": "1.38.0",
-  "last_run": "2026-09-03T21:43:39.403322+00:00",
-  "total_runs": 1759,
+  "last_run": "2026-09-04T00:07:25.098675+00:00",
+  "total_runs": 1760,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,30 +33,14 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.38.0",
-    "summary": "Enable USDT payout footer, add AI code documentation lead to code_techs, and fix article generation reliability",
+    "summary": "Add SQL optimization local lead, enable USDT payout footer, and prepare for Anthropic/Cerebras LLM fallbacks",
     "changes_applied": [
       {
-        "file": "config/strategy.json",
-        "reason": "Enable USDT payout footer by setting payout.enabled to true (USDT_WALLET_ADDRESS is already configured). This allows articles to include a support footer with the USDT receive address, enabling on-chain tips from readers."
-      },
-      {
         "file": "bot/earning/code_techs.py",
-        "reason": "Add AI-powered code documentation generation as a new local-playbook earning lead to the _LOCAL_LEADS list in code_techs.py. This expands the queue with a concrete, actionable idea that uses free LLM tiers to generate code documentation for developers."
+        "reason": "Add a new local-playbook earning lead for AI-powered SQL query optimization to expand the queue of actionable suggestions for the owner"
       }
     ],
     "suggestions": [
-      {
-        "title": "Enable USDT payout footer in articles",
-        "description": "Activates the support footer in dev.to articles so readers can tip via USDT, potentially earning real on-chain revenue",
-        "secret_needed": "USDT_WALLET_ADDRESS",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Verify USDT_WALLET_ADDRESS is set in GitHub repository Settings -> Secrets and variables -> Actions",
-          "2. Edit config/strategy.json to set payout.enabled to true",
-          "3. The next article publish will include a support footer with the USDT receive address"
-        ]
-      },
       {
         "title": "Add CEREBRAS_API_KEY as a fourth free-tier LLM provider",
         "description": "Provides roughly 1M tokens/day free with no credit card, giving a third independent fallback when OpenRouter free caps are exhausted",
@@ -71,43 +55,45 @@
         ]
       },
       {
-        "title": "Add AI-powered code documentation service to code_techs queue",
-        "description": "Adds a new local-playbook earning idea for generating code documentation using free AI tiers, expanding the queue of actionable suggestions for the owner",
+        "title": "Add ANTHROPIC_API_KEY as a fifth free-tier LLM provider",
+        "description": "Adds access to Claude 3 family models with generous free tier, improving reliability when other free LLMs hit rate limits",
+        "secret_needed": "ANTHROPIC_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Go to https://www.anthropic.com/api and sign up for an API key (free tier available)",
+          "2. Create an API key and copy it",
+          "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it ANTHROPIC_API_KEY, paste the key, and save",
+          "4. The next cycle will list llm_anthropic as active in status.json and start using Anthropic as a fallback for research and post roles"
+        ]
+      },
+      {
+        "title": "Enable USDT payout footer in articles",
+        "description": "Activates the support footer in dev.to articles so readers can tip via USDT, potentially earning real on-chain revenue",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Add the new idea entry to the _LOCAL_LEADS list in code_techs.py following the existing pattern",
-          "2. Include title, source, body, and labels for the code documentation service",
-          "3. The next queue refresh (every 24 hours) will list the new idea for owner pursuit"
+          "1. Verify USDT_WALLET_ADDRESS is set in GitHub repository Settings -> Secrets and variables -> Actions",
+          "2. Edit config/strategy.json to set payout.enabled to true",
+          "3. The next article publish will include a support footer with the USDT receive address"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.39.0-20260903-214855",
+    "branch": "evolve/1.39.0-20260904-001001",
     "proposed_version": "1.39.0"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "dev.to",
         "success": true,
-        "opportunity_count": 8,
-        "pursued_count": 0,
+        "title": "Why Your AI Agent Pipeline Costs More Than Expected",
+        "url": "https://dev.to/robust_true_try/why-your-ai-agent-pipeline-costs-more-than-expected-42ne",
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "mrr-ideas",
-        "success": true,
-        "idea_count": 2,
-        "refused_count": 18,
-        "llm": true,
-        "estimated_usd": 0.0,
-        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
-        "url": "docs/mrr-ideas.md"
+        "source_url": "https://stackoverflow.blog/2026/09/03/the-economics-of-agent-scale/",
+        "source_title": "The economics of agent scale: tokens, ROI, and building platforms for AI-first teams (Part 2)"
       }
     ],
     "total_usd": 0.0
@@ -127,20 +113,33 @@
       ]
     },
     {
-      "title": "Add AI-powered code documentation service to code_techs queue",
-      "description": "Adds a new local-playbook earning idea for generating code documentation using free AI tiers, expanding the queue of actionable suggestions for the owner",
+      "title": "Add ANTHROPIC_API_KEY as a fifth free-tier LLM provider",
+      "description": "Adds access to Claude 3 family models with generous free tier, improving reliability when other free LLMs hit rate limits",
+      "secret_needed": "ANTHROPIC_API_KEY",
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Go to https://www.anthropic.com/api and sign up for an API key (free tier available)",
+        "2. Create an API key and copy it",
+        "3. In GitHub repo Settings -> Secrets and variables -> Actions -> New repository secret, name it ANTHROPIC_API_KEY, paste the key, and save",
+        "4. The next cycle will list llm_anthropic as active in status.json and start using Anthropic as a fallback for research and post roles"
+      ]
+    },
+    {
+      "title": "Enable USDT payout footer in articles",
+      "description": "Activates the support footer in dev.to articles so readers can tip via USDT, potentially earning real on-chain revenue",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Add the new idea entry to the _LOCAL_LEADS list in code_techs.py following the existing pattern",
-        "2. Include title, source, body, and labels for the code documentation service",
-        "3. The next queue refresh (every 24 hours) will list the new idea for owner pursuit"
+        "1. Verify USDT_WALLET_ADDRESS is set in GitHub repository Settings -> Secrets and variables -> Actions",
+        "2. Edit config/strategy.json to set payout.enabled to true",
+        "3. The next article publish will include a support footer with the USDT receive address"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 399,
+  "last_cycle_seconds": 223,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -227,7 +226,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-09-03",
+    "date": "2026-09-04",
     "published": 1
   },
   "code_tech_earning": {
@@ -591,7 +590,8 @@
       "infoq.com/news/2026/08/flexgantfx",
       "macrumors.com/2026/08/30/apple-unexpected-mac-mini-and-studio-demand",
       "danluu.com/zitron",
-      "blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber"
+      "blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber",
+      "stackoverflow.blog/2026/09/03/the-economics-of-agent-scale"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -622,7 +622,8 @@
       "flexganttfx open source",
       "apple caught off guard ai demand mac mini mac studio",
       "accurate have ed zitron s ai skeptic prediction",
-      "gemini 3 8 flash 3 8 flash cyber"
+      "gemini 3 8 flash 3 8 flash cyber",
+      "economic agent scale token roi building platform ai first team 2"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -653,10 +654,24 @@
       "javafx gantt chart memory wall",
       "running local llms mac mini actually break",
       "misconfigured confidence threshold caused ai recommendation failure",
-      "gemini 3 8 flash token counter wrong"
+      "gemini 3 8 flash token counter wrong",
+      "ai agent pipeline cost more than expected"
     ],
     "followed_up_ids": [
       4489474
+    ],
+    "own_urls": [
+      "https://dev.to/robust_true_try/your-gemini-38-flash-token-counter-is-wrong-3aj",
+      "https://dev.to/robust_true_try/ai-reshaping-how-we-build-review-and-trust-code-22jb",
+      "https://dev.to/robust_true_try/misconfigured-confidence-threshold-caused-ai-recommendation-failure-3aej",
+      "https://dev.to/robust_true_try/running-local-llms-on-mac-mini-what-actually-breaks-4n5p",
+      "https://dev.to/robust_true_try/when-your-self-hosted-nitter-instance-gets-banned-3j6p",
+      "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
+      "https://dev.to/robust_true_try/recover-a-bricked-framework-13-with-a-diy-usb-flash-9li",
+      "https://dev.to/robust_true_try/stop-ai-hallucinations-verify-your-llm-summaries-before-publishing-43p0",
+      "https://dev.to/robust_true_try/build-a-fast-local-llm-inference-pipeline-with-deepseek-harness-17n7",
+      "https://dev.to/robust_true_try/deploying-metas-llama-3-in-a-production-python-service-13o6",
+      "https://dev.to/robust_true_try/prototype-a-diy-solid-state-intelligence-module-for-home-automation-1eog"
     ]
   },
   "wallet": {
@@ -667,7 +682,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-03T21:43:40.024983+00:00",
+    "checked_at": "2026-09-04T00:07:25.484658+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -887,14 +902,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.39.0-20260903-214855",
+  "last_evolution_branch": "evolve/1.39.0-20260904-001001",
   "evolution_pending_review": true,
   "article_stats": {
-    "count": 10,
-    "total_views": 1838,
-    "avg_views": 183.8,
+    "count": 11,
+    "total_views": 1949,
+    "avg_views": 177.2,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 1562,
+    "best_views": 1652,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -910,15 +925,15 @@
       {
         "archetype": "problem-workaround",
         "count": 4,
-        "avg_engagement": 430.2,
-        "avg_views": 424.0,
+        "avg_engagement": 452.8,
+        "avg_views": 446.5,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
         "archetype": "build-tutorial",
         "count": 3,
-        "avg_engagement": 34.3,
-        "avg_views": 34.3,
+        "avg_engagement": 37.7,
+        "avg_views": 37.7,
         "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
       },
       {
@@ -930,15 +945,15 @@
       },
       {
         "archetype": "myth-correction",
-        "count": 1,
-        "avg_engagement": 12.0,
-        "avg_views": 12.0,
+        "count": 2,
+        "avg_engagement": 11.5,
+        "avg_views": 11.5,
         "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       }
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "myth-correction",
-    "sample_size": 10
+    "sample_size": 11
   },
   "article_rejects": {
     "last_reason": "empty_draft",

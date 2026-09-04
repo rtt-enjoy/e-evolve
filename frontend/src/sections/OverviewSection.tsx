@@ -1,6 +1,7 @@
 import { ArrowUpRight, ExternalLink } from 'lucide-react';
 import { useMemo } from 'react';
-import { Card, Empty, Phase, Pill, SectionHead, Stat, Tile } from '../components/ui';
+import { Card, Empty, KeyValue, Phase, Pill, SectionHead, Stat, Tile } from '../components/ui';
+import { CopyButton } from '../components/CopyButton';
 import { buildIssues, buildOpportunityStats, buildReadiness, sortLeads } from '../utils/dashboard';
 import { ageLabel, cleanTitle, compactMoney, evolutionTone, formatDate, money, scoreTone, sourceLabel } from '../utils/format';
 import type { Status } from '../types/status';
@@ -24,6 +25,13 @@ export default function OverviewSection({ status }: { status: Status }) {
 	const actions = status.last_earning?.actions || [];
 	const freshness = ageLabel(status.last_run);
 	const history = earnings.history || [];
+	// The receive path. `payout` is the diagnostic (masked); `payout_public` is
+	// the ask, and only exists when the same address is already printed in
+	// every published article — so this page never exposes anything the
+	// articles do not.
+	const payout = status.payout || {};
+	const tip = status.payout_public;
+	const attribution = status.attribution || {};
 
 	return (
 		<>
@@ -178,6 +186,73 @@ export default function OverviewSection({ status }: { status: Status }) {
 							nothing, so they are counted as activity only.
 						</p>
 					</Card>
+
+					{tip?.address ? (
+						<Card
+							title={tip.heading || 'Support this work'}
+							hint="The same address printed in every published article."
+						>
+							<p className="muted">{tip.note}</p>
+							<div className="tip-address mt-4">
+								<code>{tip.address}</code>
+								<CopyButton text={tip.address} label="copy address" />
+							</div>
+							<div className="mt-4">
+								<Pill tone="good">
+									{tip.asset || 'USDT'} · {tip.network || 'on-chain'}
+								</Pill>
+							</div>
+							<p className="muted mt-4">
+								Sent straight to the receive wallet, so anything given arrives
+								without a transfer step. Verify against the balance above —
+								that on-chain figure is the only number this project counts as
+								earned.
+							</p>
+						</Card>
+					) : (
+						<Card title="Receive path" hint="Reach earns nothing without a way for a reader to pay.">
+							<p className="muted">
+								No payment path is published right now, so every view is being
+								multiplied by zero.
+							</p>
+							<div className="mt-4">
+								<Pill tone="warn">{payout.blocked_reason || 'receive path not live'}</Pill>
+							</div>
+						</Card>
+					)}
+
+					{(attribution.receipt_count || 0) > 0 ? (
+						<Card
+							title="What earned it"
+							hint="Correlated context at receipt time, not proof — a transfer carries no memo."
+						>
+							<div className="stat-grid">
+								<Stat
+									label="Receipts"
+									value={String(attribution.receipt_count || 0)}
+									detail={attribution.last_receipt_at
+										? `last ${formatDate(attribution.last_receipt_at)}`
+										: 'none yet'}
+								/>
+								<Stat
+									label="Attributed"
+									value={money(attribution.total_attributed_usd || 0)}
+									detail="on-chain, correlated to live posts"
+								/>
+							</div>
+							{(attribution.by_archetype || []).length ? (
+								<div className="mt-4">
+									<KeyValue
+										rows={(attribution.by_archetype || []).slice(0, 4).map((row) => [
+											String(row.archetype || 'unknown'),
+											`${money(row.usd || 0)} · n=${row.count || 0}`,
+										])}
+									/>
+								</div>
+							) : null}
+							<p className="muted mt-4">{attribution.note}</p>
+						</Card>
+					) : null}
 
 					<Card title="Action policy" hint="What the bot's API keys are permitted to do.">
 						<div className="policy">

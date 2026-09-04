@@ -635,6 +635,18 @@ a {
 		@apply text-accent underline decoration-line underline-offset-4;
 	}
 
+	/* The tip address. Rendered whole and monospaced with the copy button
+	   beside it: a truncated or wrapped receive address is a mistyped one, and
+	   USDT sent to a mistyped address does not come back. It stays selectable
+	   on narrow screens by scrolling rather than ellipsing. */
+	.tip-address {
+		@apply flex items-center gap-3 rounded-lg border border-line bg-black/20 p-3;
+	}
+
+	.tip-address code {
+		@apply min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-xs;
+	}
+
 	.mini-kv {
 		@apply mt-3 flex flex-col gap-2;
 	}

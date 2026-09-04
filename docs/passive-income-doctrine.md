@@ -128,9 +128,71 @@ Design rules that came out of building it, all of which are load-bearing:
 - **Do not name an amount.** A figure reads as a price for something already
   given away free, and it caps what a generous reader would have sent.
 
+**Built is not the same as live, and that cost another five cycles.** The footer
+shipped complete and tested on 2026-09-03 with `payout.enabled: false`, which was
+the right default — it publishes under the owner's byline. But the doctrine's own
+checklist then read `payout.live: false` for cycles #1755–#1759, and every article
+published in that window still carried no ask. The structural zero had been
+*fixed in code and left switched off*, which looks identical in the earnings
+figures to never having built it.
+
+The lesson generalises past this feature: **an opt-in earning path is not an
+earning path until someone opts in.** `blocked_reason` existed precisely to make
+that visible, and it said so plainly the whole time. Enabled on 2026-09-04, by
+owner decision.
+
+- **Check `payout.live`, not whether the module exists.** Checklist step 1 is
+  worded that way on purpose.
+
 **This is a baseline, not a ceiling.** Tips from a developer audience are
 low-conversion by nature. The point is that the multiplier is no longer zero, so
 reach work now has somewhere to land.
+
+---
+
+## Principle 3b — A masked address on a tip surface is still a structural zero
+
+The dashboard row of the channel table was built on 2026-09-04. `docs/` is
+already served publicly by GitHub Pages, the address is already checksum-
+validated, and the page is regenerated every cycle — so it needed no new secret,
+no owner action, and no policy change, exactly like the article footer.
+
+One decision in it is worth recording, because the obvious implementation is
+wrong in a way that fails silently.
+
+`status["payout"]` deliberately carries **only the masked address**
+(`TFTNsf…9KbY`), because `status.json` is committed and public and a receive
+address has no business appearing in a log line or a research note. The tempting
+move is to reuse that field for the dashboard tip box. **A reader cannot pay a
+masked address.** A tip box built on it renders complete, looks finished, and
+takes nothing — the same structural zero as 1,838 views with no footer, rebuilt
+inside the fix for it.
+
+So there are now two fields, and the split is the point:
+
+- `status["payout"]` — the **diagnostic**. Masked. Answers "is the path live,
+  and if not why". For the owner.
+- `status["payout_public"]` — the **ask**. Full address. Exists only when
+  `payout.public_snapshot()` confirms the footer is already publishing that same
+  address to dev.to readers, so it never widens exposure beyond what every
+  published article already carries. For the reader.
+
+`TestPayoutPublicSnapshot.test_agrees_with_footer_on_whether_path_is_live` pins
+the invariant that the two surfaces can never disagree about whether the path is
+live.
+
+**The trap that nearly shipped:** `status._secret_names()` treats any env var
+whose name contains `WALLET` as a secret, which correctly catches
+`USDT_WALLET_ADDRESS` — and would have redacted the tip address to
+`[redacted]` on its way into `docs/status.json`. The page would have rendered a
+polished tip box containing the word "redacted". `_restore_public_payout`
+exempts exactly one field, and `TestPublicAddressSurvivesRedaction` pins that
+the exemption stays that narrow: the address is still redacted in `errors`, in
+`suggestions`, and everywhere else, and API keys are untouched.
+
+Generalising: **when a field's whole purpose is to be published, redaction is a
+bug, not a safeguard — and a redaction bug on a payment surface is invisible,
+because the page still looks right.**
 
 ---
 
@@ -163,16 +225,42 @@ the engagement of `build-tutorial` — and `build-tutorial` was the most common
 thing being published. That single measurement was worth more than any amount of
 prompt tuning.
 
-The same blindness now applies one stage later. Views are measured; **what
-happens after a reader reaches the footer is not.** Until a tip arrives there is
-nothing to measure, which is fine — but the moment revenue is non-zero, the next
-evolution should be able to answer: which archetype, which title, which tag
-earned it?
+The same blindness applied one stage later. Views were measured; **what happened
+after a reader reached the footer was not.** That was acceptable only while no
+footer had ever shipped. Once one did, the first tip became the first evidence
+this project has ever had about what readers actually pay for — and an
+unattributed dollar teaches nothing.
+
+`bot/earning/attribution.py` closes that gap, and the honest limit of it is
+worth stating up front: **a TRC-20 transfer carries no memo.** Nobody tips
+through a tracked link; they read a post, copy an address, and send from a
+wallet this bot cannot see. So per-post attribution is not available, and
+building something that claimed it would be Principle 4's fabrication in a new
+costume.
+
+What *is* available is the publishing context at the moment money arrived — which
+posts were live, which was performing, which archetype and tags they carried.
+That is correlation, and it is labelled as such: `confidence` is never better
+than `"correlated"`, and `count` rides along with every total so an n=1 receipt
+reads as one receipt. Across enough receipts the pattern is real evidence; the
+first one is a data point.
+
+The module follows the same rules as the rest of the earning layer:
+
+- **Triggered by the wallet, never by a publish.** A record is written only when
+  `wallet.last_received_usd > 0` — i.e. the chain confirmed money moved. Nothing
+  in it can invent revenue, because nothing in it decides revenue happened.
+- **Deterministic. No LLM call.** A model asked which post earned a tip would
+  answer confidently with nothing behind it.
+- **Never raises.** It is bookkeeping; losing a cycle over it would trade the
+  working system for a note about the working system.
 
 Order of work when revenue is still zero:
 1. Make sure a receive path exists on everything published. *(done)*
-2. Publish consistently into the shapes the audience measurably prefers.
-3. Only then tune the ask itself.
+2. **Confirm it is actually switched on** — `payout.live`, not "the code exists".
+   *(done 2026-09-04; it sat built-and-disabled for five cycles)*
+3. Publish consistently into the shapes the audience measurably prefers.
+4. Only then tune the ask itself.
 
 Tuning the wording of a footer that has had 40 impressions is noise. This project
 has already reverted one over-tightened keyword screen for exactly this reason:
@@ -209,7 +297,13 @@ Work this in order. Stop at the first honest "no".
 1. **Is a receive path live on everything published?**
    Check `status["payout"].live`. If `false`, read `blocked_reason` and fix that
    before anything else — every other improvement is being multiplied by zero.
+   *Live since 2026-09-04. It read `false` for five cycles after the code
+   shipped, because the config flag was still off — so read the flag, not the
+   filesystem.*
 2. **Is money arriving?** Check `earnings.received_total_usd`.
+   Once it is non-zero, `status["attribution"]` holds what was live when it
+   landed — ranked by archetype and tag, with sample sizes. Read `count` before
+   believing any ordering in it.
    - Still `$0.00` with a live path → the problem is reach or audience fit, not
      the ask. Go to Principle 5, step 2.
    - Non-zero → start attributing it. Which post, archetype, tag?
@@ -232,7 +326,7 @@ Principle 2.
 | --- | --- | --- | --- | --- |
 | Wallet address in published articles | none | none | allowed | **Built.** `bot/earning/payout.py` |
 | Wallet address in the newsletter digest | none | none | allowed | **Built** — same `devto.publish` path |
-| Wallet address on the public dashboard | none | none | allowed | **Open.** Lowest-effort remaining win; `docs/` is already published |
+| Wallet address on the public dashboard | none | none | allowed | **Built** 2026-09-04. `status["payout_public"]` + Overview tip card |
 | Sponsored-content slot in the newsletter | none | negotiates each deal | allowed to publish | **Deferred.** Income is real but every unit needs a human |
 | dev.to → own static site, then ads | ad network account | signup + tax details | allowed | **Deferred.** Needs an account and an audience move |
 | Affiliate links in articles | affiliate account | signup per program | allowed to publish | **Deferred.** Also risks the fabrication and tone gates |
@@ -241,9 +335,16 @@ Principle 2.
 | Scraped-lead cold email | — | — | **blocked** | **Refused.** Needs a policy change |
 | Trading, minting, yield farming | — | — | **blocked** | **Refused.** Not a content business |
 
-The dashboard row is the honest next task: `docs/` is already served publicly by
-GitHub Pages, the address is already validated in code, and it needs nothing that
-does not exist.
+Every row that needs no new secret and no owner action is now built. What remains
+on the list needs either an account the owner must open (ad network, affiliate
+program, payment processor) or a policy the owner must widen (social posting,
+cold email). Those are owner decisions with the tradeoff already stated here,
+not work a cycle may take on itself.
+
+So the next honest task is no longer a channel — it is **reach into a live
+receive path**, per Principle 5, step 2: publish consistently into the shapes
+the audience measurably prefers, and let `status["attribution"]` accumulate
+enough receipts to say which of them earned.
 
 ---
 

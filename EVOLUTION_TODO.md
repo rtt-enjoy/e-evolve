@@ -1,6 +1,7 @@
 # Evolution TODO
 
-Bot state: v1.37.3 - cycle #1755 - active: `llm_anthropic`, `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
+Bot state: v1.38.0 - cycle #1759 - active: `llm_anthropic`, `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
+Receive path: **live** (`payout.enabled: true`, TRC-20) - first receipt still pending.
 
 **Read [`docs/passive-income-doctrine.md`](docs/passive-income-doctrine.md) before
 working this list.** It ranks channels by what runs unattended and carries the
@@ -16,16 +17,25 @@ _(none open)_
 
 ## High Priority - Earning
 
-- **Put the validated wallet address on the public dashboard.** The doctrine's
-  channel table scores this as the lowest-effort remaining win: `docs/` is
-  already served publicly by GitHub Pages, the address is already
-  checksum-validated in `bot/earning/payout.py`, and `status["payout"]` already
-  carries the masked form and the live/blocked state. It needs no new secret, no
-  owner action, and no policy change - the same five rows that justified the
-  article footer. `bot/dashboard.py` regenerates `docs/index.html` each cycle, so
-  the change goes there, not in the HTML. Use `payout.resolve_address()` for the
-  full address rather than the masked one from status, and use the existing CSS
-  variables - never a hardcoded hex.
+- **Publish consistently into the shapes the audience measurably prefers.**
+  Doctrine Principle 5, step 3 - and now the *only* remaining earning work that
+  does not need an owner decision. The receive path is live on everything
+  published, so reach finally compounds into something instead of nothing.
+  `status["article_interest"]` measures that `problem-workaround` earns ~25x
+  `build-tutorial`, and `_prefer_proven_archetypes` already applies a bounded
+  bonus for it. What is not yet known is whether the current bonus is big enough
+  to change which source actually gets picked. Measure before tuning: read
+  `article_rejects.counts` and the archetype mix of the last ~10 posts first.
+  Do **not** widen the bonus into a replacement for the authority score - that
+  was tried and reverted, because a score-26 Medium post outranked a score-63
+  InfoQ story on the word "stop".
+
+- **Wait for the first receipt before tuning the ask.** `status["attribution"]`
+  now records what was live when money arrives, but it has zero receipts, so
+  there is nothing to read yet. Per Principle 5, tuning footer wording on a
+  sample of zero is noise. When `earnings.received_total_usd` goes non-zero,
+  read `attribution.by_archetype` and `by_tag` - and read the `count` beside each
+  total before believing the ordering.
 
 ---
 
@@ -50,6 +60,46 @@ _(none open)_
 ---
 
 ## Resolved
+
+- **The receive path was built and left switched off for five cycles** - fixed
+  2026-09-04. `payout.enabled` shipped `false` on 2026-09-03, which was the
+  right default (it publishes under the owner's byline), but nothing turned it
+  on. So cycles #1755-#1759 published articles with no ask while
+  `status["payout"].live` read `false` and `blocked_reason` said exactly why.
+  A structural zero fixed in code and left disabled is indistinguishable, in the
+  earnings figures, from never having built it. Enabled by owner decision.
+  The doctrine's checklist step 1 and CLAUDE.md now both say to read
+  `payout.live`, never "does the module exist".
+
+- **The wallet address is on the public dashboard** - done 2026-09-04. The last
+  row of the doctrine's channel table that needed no new secret, no owner
+  action, and no policy change. Implemented as `status["payout_public"]`
+  (`payout.public_snapshot()`) plus a tip card in `OverviewSection`, reusing the
+  existing `CopyButton` and `KeyValue` components.
+  Two things are worth remembering. **The full address is required, not the
+  masked one** - a tip box built on `TFTNsf…9KbY` renders complete and takes
+  nothing, rebuilding the structural zero inside the fix for it; so
+  `payout_public` is a separate field from the masked diagnostic and exists only
+  when the footer is already publishing that same address. And
+  `status._secret_names()` treats any env var containing `WALLET` as a secret,
+  so the address was being redacted to `[redacted]` on its way into
+  `docs/status.json` - a polished tip box containing the word "redacted",
+  failing silently because the page still looked right.
+  `status._restore_public_payout` exempts exactly that one field;
+  `TestPublicAddressSurvivesRedaction` pins that the exemption stays narrow.
+  It went in `bot/status.py` and the React frontend, not `bot/dashboard.py` -
+  that module writes `docs/status.json` and the dashboard UI is `frontend/`, so
+  the earlier note in this file pointing at `docs/index.html` was wrong.
+
+- **Revenue arrives anonymous** - fixed 2026-09-04, ahead of the first receipt.
+  New `bot/earning/attribution.py` records what was published when on-chain
+  money lands (Principle 5). The honest limit is stated in the module docstring
+  and pinned by a test: a TRC-20 transfer carries no memo, so per-post
+  attribution is unavailable and `confidence` is never better than
+  `"correlated"`. It is triggered by the wallet delta, never by a publish, so it
+  cannot invent revenue; `count` accompanies every total so an n=1 receipt does
+  not read as a trend. Writes nothing until real money arrives - 22 new tests,
+  290 pass.
 
 - **1,838 views and $0.00: nothing published gave a reader a way to pay** - fixed
   2026-09-03. The system had two working halves and a gap. `devto.publish` sent

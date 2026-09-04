@@ -96,6 +96,9 @@ def snapshot(status: dict[str, Any]) -> dict[str, Any]:
 	status["llm_workflows"]     = _llm_workflows(active, configured_secrets)
 	_snapshot_wallet(status)
 	_snapshot_payout(status)
+	# Order matters: attribution reads the wallet delta the snapshot above just
+	# computed, so it cannot run before it.
+	_snapshot_attribution(status)
 
 	log.info("Cycle #%d | v%s | active=%s",
 			 status["total_runs"], version, active)
@@ -117,7 +120,36 @@ def sanitize_for_git(status: dict[str, Any]) -> dict[str, Any]:
 		return {}
 
 	clean.pop("usdt_wallet", None)
+	clean = _restore_public_payout(status, clean)
 	return {k: v for k, v in clean.items() if not k.startswith("_")}
+
+
+def _restore_public_payout(source: dict[str, Any], clean: dict[str, Any]) -> dict[str, Any]:
+	"""Put back the one string that is *supposed* to be published.
+
+    ``_secret_names`` matches any env var containing "WALLET", which catches
+    ``USDT_WALLET_ADDRESS`` -- correct for every other field, because an
+    address has no business appearing in a log line or a research note. But the
+    dashboard tip box is the deliberate exception: redaction turns it into
+    ``[redacted]``, which renders a tip box that cannot take a tip. That
+    failure is silent, since the page still looks finished.
+
+    So exactly one field is exempted, and only when ``payout.public_snapshot``
+    already decided the address is publishable -- i.e. the same address is
+    being printed in every published article anyway. Nothing else is restored:
+    a real secret cannot reach this path, because the only value copied back is
+    the address the footer publishes.
+    """
+	public = source.get("payout_public")
+	if not isinstance(public, dict):
+		return clean
+	address = str(public.get("address") or "")
+	if not address:
+		return clean
+	restored = dict(clean.get("payout_public") or {})
+	restored["address"] = address
+	clean["payout_public"] = restored
+	return clean
 
 
 # ── Internals ───────────────────────────────────────────────────────────────
@@ -146,10 +178,46 @@ def _snapshot_payout(status: dict[str, Any]) -> None:
 	try:
 		from bot.earning import payout
 		status["payout"] = payout.status_snapshot()
+		# The full address, for the public dashboard's tip box. Deliberately a
+		# separate key from the masked diagnostic above, and deliberately the
+		# unmasked form: a reader cannot pay TFTNsf…9KbY, so a masked address
+		# on a tip surface rebuilds the structural zero this project just
+		# closed -- a receive path that looks present and cannot receive.
+		#
+		# This never widens exposure. payout.public_snapshot() returns {} unless
+		# the footer is already publishing that same address to dev.to readers,
+		# so the address only reaches docs/ when it is public anyway.
+		public = payout.public_snapshot()
+		if public:
+			status["payout_public"] = public
+		else:
+			status.pop("payout_public", None)
 	except Exception as exc:
 		log.debug("payout snapshot unavailable: %s", exc)
 		status["payout"] = {"enabled": False, "live": False,
 							"blocked_reason": f"snapshot failed: {exc}"}
+		status.pop("payout_public", None)
+
+
+def _snapshot_attribution(status: dict[str, Any]) -> None:
+	"""
+    Record what was published when on-chain money arrived.
+
+    Principle 5 of the doctrine: measure the funnel, not the last stage. Views
+    were measured and receipts were not, which was fine while no footer had
+    ever shipped. Now that one has, the first tip is also the first evidence
+    this project has about what readers pay for, and it is worth nothing if it
+    arrives anonymous.
+
+    No-ops on every cycle where nothing was received, which is nearly all of
+    them. Reporting only -- it cannot create revenue, because the wallet
+    snapshot above decides whether revenue happened.
+    """
+	try:
+		from bot.earning import attribution
+		attribution.record_receipt(status)
+	except Exception as exc:
+		log.debug("attribution snapshot unavailable: %s", exc)
 
 
 def _snapshot_wallet(status: dict[str, Any]) -> None:

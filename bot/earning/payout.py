@@ -336,3 +336,36 @@ def status_snapshot(cfg: dict[str, Any] | None = None) -> dict[str, Any]:
 		"address_masked": mask(address) if address else None,
 		"blocked_reason": reason,
 	}
+
+
+def public_snapshot(cfg: dict[str, Any] | None = None) -> dict[str, Any]:
+	"""The receive address in the form the public dashboard can actually use.
+
+    This is the one place the *full* address is deliberately published, and it
+    is separate from ``status_snapshot`` on purpose. That one is a diagnostic
+    and stays masked, because a masked address is all the owner needs to
+    recognise which wallet is configured. A dashboard tip box is not a
+    diagnostic: a reader cannot pay a masked address, so publishing
+    ``TFTNsf…9KbY`` there would rebuild the exact structural zero this module
+    exists to close -- a receive path that looks present and cannot receive.
+
+    The address is only exposed when ``footer()`` would already publish that
+    same address to dev.to readers. So this never widens exposure: it puts the
+    address where the project's own audience already sees it, on a page the
+    owner already serves. It returns ``{}`` when the footer is not shipping,
+    which keeps the two surfaces from disagreeing about whether the path is
+    live.
+    """
+	cfg = cfg or config()
+	if not cfg.get("enabled"):
+		return {}
+	address, network = resolve_address(cfg)
+	if not address:
+		return {}
+	return {
+		"address": address,
+		"network": network,
+		"heading": str(cfg.get("heading") or DEFAULTS["heading"]).strip(),
+		"note": str(cfg.get("note") or DEFAULTS["note"]).strip(),
+		"asset": "USDT",
+	}

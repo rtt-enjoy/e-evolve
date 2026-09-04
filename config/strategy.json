@@ -22,12 +22,17 @@
 		"niche_focus": ""
 	},
 	"payout": {
-		"enabled": false,
+		"enabled": true,
 		"address_env": "USDT_WALLET_ADDRESS",
 		"heading": "Support this work",
 		"note": "These write-ups are researched and published with no paywall, sponsor, or tracking. If one saved you an afternoon, a small USDT tip keeps them coming.",
 		"show_network": true,
 		"note_on_config": "The only monetization channel this stack can run unattended: a receive address in the article itself. No payment processor, no new secret, no owner action between a reader deciding to give and the money landing. Off by default -- turn it on once you have read the footer text, since it publishes under your byline. The address is checksum-validated (base58check for TRC-20, EIP-55 for ERC-20) before it can reach a reader; a malformed one omits the footer rather than publishing an address that would burn a reader's funds."
+	},
+	"attribution": {
+		"enabled": true,
+		"history_limit": 200,
+		"note_on_config": "Records what was published when on-chain money arrived. Writes nothing unless wallet.last_received_usd > 0, so it cannot invent revenue. A TRC-20 transfer carries no memo, so every record is labelled confidence: correlated -- it is which posts were live when money landed, not proof of which one earned it. Read the count beside each total before believing an ordering: one receipt is one receipt."
 	},
 	"mrr_ideas": {
 		"enabled": true,

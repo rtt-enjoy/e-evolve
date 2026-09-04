@@ -176,6 +176,57 @@ export type Status = {
 		stale?: boolean;
 		error?: string | null;
 	};
+	/**
+	 * Whether the reader-to-wallet path is live, and if not, why. Masked
+	 * address only — this is the diagnostic, not the ask.
+	 */
+	payout?: {
+		enabled?: boolean;
+		live?: boolean;
+		network?: string | null;
+		address_masked?: string | null;
+		blocked_reason?: string | null;
+	};
+	/**
+	 * The tip box. Present only when the same address is already being
+	 * published in every article footer, and carries the address in FULL —
+	 * a masked address renders a tip box nobody can pay.
+	 */
+	payout_public?: {
+		address?: string;
+		network?: string;
+		heading?: string;
+		note?: string;
+		asset?: string;
+	};
+	/**
+	 * Publishing context captured when on-chain money arrived. Correlated,
+	 * never proof: a TRC-20 transfer carries no memo.
+	 */
+	attribution?: {
+		receipts?: Array<{
+			at?: string;
+			amount_usd?: number;
+			network?: string | null;
+			confidence?: string;
+			context?: {
+				posts_live?: number;
+				total_views?: number;
+				best_title?: string | null;
+				best_url?: string | null;
+				best_views?: number;
+				winning_tags?: string[];
+				best_archetype?: string | null;
+				footer_network?: string | null;
+			};
+		}>;
+		receipt_count?: number;
+		total_attributed_usd?: number;
+		last_receipt_at?: string | null;
+		by_archetype?: Array<{ archetype?: string; count?: number; usd?: number }>;
+		by_tag?: Array<{ tag?: string; count?: number; usd?: number }>;
+		note?: string;
+	};
 	last_evolution?: {
 		summary?: string;
 		changes_applied?: Array<{ file?: string; reason?: string }>;

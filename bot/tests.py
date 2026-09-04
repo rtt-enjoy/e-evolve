@@ -16,6 +16,9 @@ from bot.earning.newsletter import (
 )
 import bot.earning.devto as devto_module
 import bot.earning.payout as payout
+import bot.earning.attribution as attribution
+import bot.status as status_mod
+from unittest import mock
 import bot.earning._shared as shared
 from bot.earning._shared import hours_until_due
 from bot.earning.articles import (
@@ -2502,3 +2505,219 @@ class TestPayoutRunsAfterQualityGates(unittest.TestCase):
 		finally:
 			devto_module.requests.post = original_post
 			payout.config = original_config
+
+
+class TestPayoutPublicSnapshot(unittest.TestCase):
+	"""The dashboard tip box needs the whole address, not the masked one.
+
+    ``status_snapshot`` is a diagnostic and stays masked -- the owner only needs
+    to recognise which wallet is configured. The tip box is not a diagnostic:
+    a reader cannot pay ``TFTNsf…9KbY``, so publishing the masked form there
+    would rebuild the exact structural zero this module closed -- a receive
+    path that looks present and cannot receive, failing silently because the
+    page still looks finished.
+    """
+
+	REAL = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
+
+	def _cfg(self, **over):
+		cfg = {"enabled": True, "address_env": "TEST_PAYOUT_ADDR",
+			   "heading": "Support this work", "note": "note", "show_network": True}
+		cfg.update(over)
+		return cfg
+
+	def test_exposes_full_address_when_footer_is_shipping(self):
+		with mock.patch.dict(os.environ, {"TEST_PAYOUT_ADDR": self.REAL}):
+			snap = payout.public_snapshot(self._cfg())
+		self.assertEqual(snap["address"], self.REAL)
+		self.assertNotIn("…", snap["address"])
+		self.assertEqual(snap["asset"], "USDT")
+		self.assertIn("Tron", snap["network"])
+
+	def test_empty_when_disabled(self):
+		"""Never advertise a path the articles are not publishing."""
+		with mock.patch.dict(os.environ, {"TEST_PAYOUT_ADDR": self.REAL}):
+			self.assertEqual(payout.public_snapshot(self._cfg(enabled=False)), {})
+
+	def test_empty_when_address_invalid(self):
+		"""A broken address omits the tip box for the same reason it omits the
+        footer: a post with no ask earns nothing, but a bad address costs a
+        reader real money.
+        """
+		with mock.patch.dict(os.environ, {"TEST_PAYOUT_ADDR": self.REAL[:-1] + "X"}):
+			self.assertEqual(payout.public_snapshot(self._cfg()), {})
+
+	def test_empty_when_address_unset(self):
+		with mock.patch.dict(os.environ, {"TEST_PAYOUT_ADDR": ""}):
+			self.assertEqual(payout.public_snapshot(self._cfg()), {})
+
+	def test_agrees_with_footer_on_whether_path_is_live(self):
+		"""The two surfaces must never disagree. If one publishes the address,
+        so does the other; if one omits it, so does the other.
+        """
+		for env, enabled in ((self.REAL, True), (self.REAL, False),
+							 ("", True), ("garbage", True)):
+			with mock.patch.dict(os.environ, {"TEST_PAYOUT_ADDR": env}):
+				cfg = self._cfg(enabled=enabled)
+				self.assertEqual(
+					bool(payout.footer(cfg)), bool(payout.public_snapshot(cfg)),
+					f"footer and tip box disagree for env={env!r} enabled={enabled}")
+
+
+class TestPublicAddressSurvivesRedaction(unittest.TestCase):
+	"""``_secret_names`` matches any env var containing "WALLET".
+
+    That is right everywhere else -- a receive address has no business in a log
+    line or a research note -- but it also catches ``USDT_WALLET_ADDRESS``, so
+    the tip box would publish ``[redacted]``. This was a real bug found before
+    shipping: the dashboard renders a finished-looking tip box that cannot take
+    a tip. These tests pin the narrow exemption and, more importantly, that it
+    stays narrow.
+    """
+
+	REAL = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
+	FAKE_KEY = "sk-ant-secretkeyvalue0123456789"
+
+	def _sanitize(self, status):
+		env = {"USDT_WALLET_ADDRESS": self.REAL, "ANTHROPIC_API_KEY": self.FAKE_KEY}
+		with mock.patch.dict(os.environ, env):
+			return status_mod.sanitize_for_git(status)
+
+	def test_tip_address_is_published_whole(self):
+		out = self._sanitize({"payout_public": {"address": self.REAL,
+												"network": "TRC-20 (Tron)"}})
+		self.assertEqual(out["payout_public"]["address"], self.REAL)
+
+	def test_address_elsewhere_is_still_redacted(self):
+		"""The exemption is one field, not the address globally."""
+		out = self._sanitize({
+			"payout_public": {"address": self.REAL},
+			"errors": [f"failed for {self.REAL}"],
+			"suggestions": [{"text": f"send to {self.REAL}"}],
+		})
+		self.assertEqual(out["payout_public"]["address"], self.REAL)
+		self.assertNotIn(self.REAL, out["errors"][0])
+		self.assertNotIn(self.REAL, out["suggestions"][0]["text"])
+
+	def test_api_keys_are_still_redacted(self):
+		out = self._sanitize({
+			"payout_public": {"address": self.REAL},
+			"note": f"key={self.FAKE_KEY}",
+		})
+		self.assertNotIn(self.FAKE_KEY, out["note"])
+
+	def test_no_tip_field_means_nothing_restored(self):
+		"""With no tip box, the address gets no special treatment anywhere."""
+		out = self._sanitize({"note": f"addr {self.REAL}"})
+		self.assertNotIn("payout_public", out)
+		self.assertNotIn(self.REAL, out["note"])
+
+	def test_masked_diagnostic_is_left_alone(self):
+		out = self._sanitize({"payout": {"address_masked": "TFTNsf…9KbY",
+										 "live": True}})
+		self.assertEqual(out["payout"]["address_masked"], "TFTNsf…9KbY")
+
+
+class TestAttribution(unittest.TestCase):
+	"""Attribution must never invent revenue.
+
+    The wallet decides whether money arrived; this module only writes down what
+    was published when it did. A TRC-20 transfer carries no memo, so the record
+    is correlation and is labelled as such -- claiming per-post attribution
+    would be the fabrication this project has already deleted twice.
+    """
+
+	def _status(self, received=0.0):
+		return {
+			"wallet": {"last_received_usd": received,
+					   "last_received_at": "2026-09-04T10:00:00+00:00",
+					   "network": "TRC-20"},
+			"article_stats": {"count": 10, "total_views": 1838,
+							  "best_title": "Nitter alternatives",
+							  "best_url": "https://dev.to/x", "best_views": 1562,
+							  "winning_tags": ["twitter", "privacy"]},
+			"article_interest": {"best_archetype": "problem-workaround"},
+			"payout": {"network": "TRC-20 (Tron)"},
+		}
+
+	def test_no_record_without_money(self):
+		"""The common case: nothing arrived, so nothing is claimed."""
+		status = self._status(received=0.0)
+		self.assertIsNone(attribution.record_receipt(status))
+		self.assertNotIn("attribution", status)
+
+	def test_negative_or_missing_amount_records_nothing(self):
+		for amount in (0.0, -5.0, None):
+			status = self._status()
+			status["wallet"]["last_received_usd"] = amount
+			self.assertIsNone(attribution.record_receipt(status))
+
+	def test_records_context_on_real_receipt(self):
+		status = self._status(received=2.5)
+		rec = attribution.record_receipt(status)
+		self.assertEqual(rec["amount_usd"], 2.5)
+		self.assertEqual(rec["context"]["best_archetype"], "problem-workaround")
+		self.assertEqual(rec["context"]["posts_live"], 10)
+
+	def test_confidence_is_never_better_than_correlated(self):
+		"""No memo exists on-chain, so nothing here may claim proof."""
+		status = self._status(received=1.0)
+		rec = attribution.record_receipt(status)
+		self.assertEqual(rec["confidence"], "correlated")
+		self.assertIn("not proof", status["attribution"]["note"])
+
+	def test_amount_comes_from_the_wallet_not_a_guess(self):
+		status = self._status(received=7.125)
+		attribution.record_receipt(status)
+		self.assertEqual(status["attribution"]["total_attributed_usd"], 7.125)
+
+	def test_totals_accumulate_across_receipts(self):
+		status = self._status(received=1.0)
+		attribution.record_receipt(status)
+		status["wallet"]["last_received_usd"] = 3.0
+		attribution.record_receipt(status)
+		book = status["attribution"]
+		self.assertEqual(book["receipt_count"], 2)
+		self.assertEqual(book["total_attributed_usd"], 4.0)
+		self.assertEqual(book["by_archetype"][0]["count"], 2)
+		self.assertEqual(book["by_archetype"][0]["usd"], 4.0)
+
+	def test_sample_size_travels_with_every_total(self):
+		"""One receipt is not a trend; count is the only thing that says so."""
+		status = self._status(received=5.0)
+		attribution.record_receipt(status)
+		for row in status["attribution"]["by_archetype"]:
+			self.assertIn("count", row)
+		for row in status["attribution"]["by_tag"]:
+			self.assertIn("count", row)
+
+	def test_history_is_bounded(self):
+		status = self._status(received=1.0)
+		with mock.patch.object(attribution, "config",
+							   lambda: {"enabled": True, "history_limit": 3}):
+			for _ in range(6):
+				attribution.record_receipt(status)
+		self.assertEqual(len(status["attribution"]["receipts"]), 3)
+
+	def test_survives_missing_reach_data(self):
+		"""A receipt during a dev.to outage is still recorded, with less around it."""
+		status = {"wallet": {"last_received_usd": 1.0}}
+		rec = attribution.record_receipt(status)
+		self.assertIsNotNone(rec)
+		self.assertEqual(rec["context"]["posts_live"], 0)
+		self.assertIsNone(rec["context"]["best_archetype"])
+
+	def test_never_raises_on_malformed_status(self):
+		"""Bookkeeping must not be able to take down a cycle."""
+		self.assertIsNone(attribution.record_receipt({"wallet": "not-a-dict"}))
+
+	def test_disabled_records_nothing(self):
+		status = self._status(received=1.0)
+		with mock.patch.object(attribution, "config", lambda: {"enabled": False}):
+			self.assertIsNone(attribution.record_receipt(status))
+
+	def test_summary_reports_the_empty_case(self):
+		summary = attribution.summary({})
+		self.assertEqual(summary["receipt_count"], 0)
+		self.assertEqual(summary["total_attributed_usd"], 0.0)
+		self.assertIsNone(summary["top_archetype"])

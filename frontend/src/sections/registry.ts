@@ -49,6 +49,12 @@ export const SECTIONS: SectionDef[] = [
 			'operation_mode',
 			'external_action_policy',
 			'last_earning',
+			// The receive path: whether a reader can pay, and the address
+			// itself when one is being published.
+			'payout',
+			'payout_public',
+			// What was live when money actually landed.
+			'attribution',
 		],
 		always: true,
 		load: () => import('./OverviewSection'),

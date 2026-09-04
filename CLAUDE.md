@@ -33,10 +33,17 @@ between them. The load-bearing rules that came out of that:
    a publish even though posts now carry a tip address. Real revenue is the
    on-chain balance, only ever the on-chain balance. And `$0.00` must say *why*
    — nobody tipped, or no footer shipped — because those need opposite fixes.
+   When money does arrive, `status["attribution"]` records what was live at the
+   time, labelled `correlated`: a TRC-20 transfer carries no memo, so per-post
+   attribution is not available and must not be claimed.
 4. **Boundaries are the design brief.** Social posting, trading, minting,
    payouts, and cold outreach are refused in code, and that is where every
    "obvious" income idea leads. The wallet footer sat *inside* the boundary,
    needing no permission, for 1,754 cycles. Look there first.
+5. **Built is not live.** The footer shipped complete and tested on 2026-09-03
+   with `payout.enabled: false`, and so published no ask for five more cycles.
+   Check `status["payout"].live` — never "does the module exist". Enabled by
+   owner decision on 2026-09-04.
 
 ---
 
@@ -73,6 +80,7 @@ bot/earning/         ← products own a run(llm, status); support modules do not
   trending.py        ← [support] finds recent tech articles from free public feeds
   devto_stats.py     ← [support] reads own dev.to view counts (the reach feedback loop)
   payout.py          ← [support] the reader→wallet path: validated USDT address in every post
+  attribution.py     ← [support] what was live when on-chain money arrived (correlated, never proof)
 frontend/            ← React + Vite dashboard, built to docs/ by .github/workflows/frontend.yml
 .github/workflows/evolve.yml  ← hourly scheduler (never evolved)
 config/strategy.json ← tunable strategy parameters (the ONLY file in config/)
@@ -453,8 +461,12 @@ reading it is all the module does. **No new secret.**
   the footer into `_finalize`.
 - **`add_footer` never raises and never double-appends.** A footer is an
   enhancement — losing the day's article over it trades real reach for nothing.
-- **Off by default** (`payout.enabled: false`). It publishes under the owner's
-  byline, so they opt in.
+- **Enabled** (`payout.enabled: true`) since 2026-09-04, by owner decision. It
+  shipped `false` on 2026-09-03 — correct, because it publishes under the
+  owner's byline — and that meant the structural zero was *fixed in code and
+  left switched off* for cycles #1755-#1759, which looks identical in the
+  earnings figures to never having built it. Read `status["payout"].live`, not
+  whether the module exists.
 - **No suggested amount.** A figure reads as a price for something already given
   away free, and caps what a generous reader would have sent.
 
@@ -468,8 +480,60 @@ revenue is the on-chain balance.**
 `live`, `network`, `address_masked`, and `blocked_reason`. This exists because
 `$0.00` because nobody tipped and `$0.00` because no footer ever shipped look
 identical in the earnings figures and need opposite responses from the owner.
-Only the masked address is ever persisted — `status.json` is committed and the
-dashboard is public.
+`status["payout"]` holds only the *masked* address — `status.json` is committed
+and the dashboard is public, and an address has no business in a log line.
+
+`status["payout_public"]` is the deliberate exception and carries the **full**
+address, because it feeds the dashboard tip box and **a reader cannot pay a
+masked address** — a tip box built on `TFTNsf…9KbY` renders complete and takes
+nothing, rebuilding the structural zero inside the fix for it.
+`payout.public_snapshot()` returns `{}` unless the footer is already publishing
+that same address to dev.to readers, so this never widens exposure beyond what
+every published article carries.
+
+**The trap:** `status._secret_names()` treats any env var containing `WALLET` as
+a secret, so `USDT_WALLET_ADDRESS` was redacted to `[redacted]` on its way into
+`docs/status.json` — a polished tip box containing the word "redacted", failing
+silently because the page still looked right. `status._restore_public_payout`
+exempts exactly that one field; `TestPublicAddressSurvivesRedaction` pins that
+the address is still redacted in `errors`, `suggestions`, and everywhere else,
+and that API keys are untouched. Do not widen that exemption.
+
+### Revenue attribution (bot/earning/attribution.py)
+
+Principle 5 of the doctrine says measure the funnel, not the last stage. Views
+were measured and receipts were not — fine while no footer had ever shipped,
+wrong the moment one did, because the first tip is the first evidence this
+project has about what readers pay for.
+
+**The honest limit, stated first: a TRC-20 transfer carries no memo.** Nobody
+tips through a tracked link — they read a post, copy an address, and send from a
+wallet this bot cannot see. Per-post attribution is therefore *not available*,
+and building something that claimed it would be the fabricated-earnings lie this
+project has already deleted twice.
+
+What is available is the publishing context at the moment money arrived, and
+that is all this module records:
+
+- **Triggered by the wallet, never by a publish.** `record_receipt` returns
+  `None` unless `wallet.last_received_usd > 0` — i.e. the chain confirmed money
+  moved. It cannot create revenue, because `status._snapshot_wallet` decides
+  whether revenue happened. Called after it, for that reason.
+- **`confidence` is never better than `"correlated"`.** Pinned by
+  `test_confidence_is_never_better_than_correlated`.
+- **`count` accompanies every total** in `by_archetype` and `by_tag`, for the
+  same reason `interest_report` does it: one receipt is not a trend, and the
+  sample size is the only thing that stops a reader treating it as one.
+- **Deterministic, no LLM call.** A model asked which post earned a tip answers
+  confidently with nothing behind it.
+- **Never raises.** Bookkeeping must not be able to take down a cycle; a receipt
+  during a dev.to outage is still recorded, just with less context around it.
+- History bounded by `attribution.history_limit` (200). Receipts are the rarest
+  event here, so that is effectively "keep everything".
+
+**This module produces no revenue.** It makes revenue legible when it arrives.
+Until `earnings.received_total_usd` is non-zero it writes nothing at all, which
+is the correct behaviour and not a bug to fix.
 
 ### Newsletter digest (bot/earning/newsletter.py)
 
@@ -718,6 +782,21 @@ module — it reports whether the reader→wallet path is live (`enabled`, `live
 `network`, `address_masked`, `blocked_reason`). It holds only the *masked*
 address, because `status.json` is committed and the dashboard is public.
 
+`payout_public` is written by the same function from `payout.public_snapshot()`
+and carries the **full** address for the dashboard tip box. It is absent
+whenever the footer is not shipping, so the two surfaces cannot disagree about
+whether the path is live. See the payout section above for why a masked address
+is wrong here and how it survives `sanitize_for_git`.
+
+`attribution` is written by `status._snapshot_attribution` (via
+`bot/earning/attribution.py`) and records what was published when on-chain money
+arrived: `receipts`, `receipt_count`, `total_attributed_usd`, `by_archetype`,
+`by_tag`. A record is written **only** when `wallet.last_received_usd > 0`, so
+nothing here can invent revenue. Every entry is `confidence: "correlated"` — a
+TRC-20 transfer carries no memo, so this is which posts were live when money
+landed, not proof of which one earned it. `count` accompanies every total so an
+n=1 receipt cannot be read as a trend.
+
 ---
 
 ## Strategy Config (config/strategy.json)
@@ -752,8 +831,9 @@ Tunable by owner or changed here in Codex:
   "newsletter":     { "enabled": true, "min_interval_hours": 168, "items_per_issue": 7,
                       "min_items": 4, "source_max_age_hours": 168,
                       "history_limit": 200, "min_words": 500, "niche_focus": "" },
-  "payout":         { "enabled": false, "address_env": "USDT_WALLET_ADDRESS",
+  "payout":         { "enabled": true, "address_env": "USDT_WALLET_ADDRESS",
                       "heading": "Support this work", "note": "...", "show_network": true },
+  "attribution":    { "enabled": true, "history_limit": 200 },
   "mrr_ideas":      { "enabled": true, "refresh_hours": 48, "max_ideas": 8,
                       "min_score": 50, "history_limit": 100 },
   "code_techs":     { "enabled": true, "refresh_hours": 24, "max_items": 8,

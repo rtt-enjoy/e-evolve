@@ -44,6 +44,11 @@ between them. The load-bearing rules that came out of that:
    with `payout.enabled: false`, and so published no ask for five more cycles.
    Check `status["payout"].live` — never "does the module exist". Enabled by
    owner decision on 2026-09-04.
+6. **Live is not everywhere.** The footer was attached in `devto.publish`, a
+   `POST`, so it reached new articles only — while 85% of all readers were on
+   the back catalogue, still being shown no way to pay. A channel is scored on
+   what it *covers*, not on what it does; check `status["backfill"].remaining`
+   alongside `payout.live`. Fixed 2026-09-04 by `bot/earning/backfill.py`.
 
 ---
 
@@ -73,6 +78,7 @@ bot/tests.py         ← unittest suite: python -m unittest bot.tests
 bot/earning/         ← products own a run(llm, status); support modules do not
   articles.py        ← [product] one dev.to article per day; follows up its own best post
   newsletter.py      ← [product] a weekly dev.to digest of several trending stories
+  backfill.py        ← [product] retrofits the tip footer onto posts published before it existed
   code_techs.py      ← [product] free-AI earning opportunity queue (research/suggestion only)
   mrr_ideas.py       ← [product] recurring-revenue idea triage (research/suggestion only)
   _shared.py         ← [support] config loading, cadence, feed parsing — used by all four
@@ -101,7 +107,8 @@ Phase 3: Evolution — LLM proposes code changes; applied to a sandbox, verified
                     then committed to an evolve/* review branch for human merge
 Phase 4: Research — refresh free-AI earning queue and MRR idea triage,
                     draft + publish one article, then draft + publish the
-                    weekly newsletter digest when due
+                    weekly newsletter digest when due, then retrofit the tip
+                    footer onto any post published before the footer existed
 Phase 5: Update   — save status.json, write dashboard, commit
 ```
 
@@ -499,6 +506,60 @@ exempts exactly that one field; `TestPublicAddressSurvivesRedaction` pins that
 the address is still redacted in `errors`, `suggestions`, and everywhere else,
 and that API keys are untouched. Do not widen that exemption.
 
+### Back-catalogue retrofit (bot/earning/backfill.py)
+
+The footer was attached inside `devto.publish`, which is a `POST` — so it ran on
+new articles and on nothing else. Every post published before it existed kept
+the ask it shipped with, which was none.
+
+That was not an edge case. It was **11 posts holding 1,949 lifetime views, 1,652
+of them (85%) on one evergreen article** — most of the readers this project has
+ever had, looking at a page with no way to pay. At ~177 views per new post,
+daily publishing needs eleven perfect consecutive days just to match reach that
+already exists and keeps growing on its own.
+
+It scores top marks on every Principle 2 row and needed no new capability:
+`PUT /api/articles/{id}` takes the same `DEV_TO_API_KEY` that already publishes
+and already reads stats (Forem scopes the lookup to the key's own articles), no
+owner action, editing our own article is the allowed action, on-chain like every
+other tip, and it reuses writing that already exists. **No new secret.**
+
+- **Never edits prose, never calls an LLM.** The only mutation is appending the
+  same deterministic footer `payout` renders. Sharper than the rule in `payout`:
+  the quality gates run on *drafts*, so nothing downstream would catch a model
+  quietly degrading a live post that already earns traffic.
+- **Front-matter posts are skipped.** A dev.to body opening with YAML front
+  matter has its title, tags and canonical_url re-read from that block on save,
+  and Forem's tag handling clears the existing list first — so a body-only
+  update can rewrite the title and wipe the tags of the account's best post.
+  Nothing this bot publishes uses front matter, but that is not a safe basis for
+  editing live posts unattended. `devto.has_front_matter` detects them.
+- **Only `body_markdown` is sent**, so title, tags and description cannot be
+  re-asserted from data this bot re-derived. Absent keys are left untouched.
+- **Idempotent, because it runs hourly forever.** `payout.has_footer` is asked
+  about the *live* body, not local history, so a hand-edited post reads as it
+  actually is. This is why `has_footer` now takes a `cfg` and matches the
+  configured heading (and the address) rather than only the hardcoded default:
+  `footer()` renders `cfg["heading"]`, so changing `payout.heading` used to make
+  the check blind to footers the module itself wrote — a stale-draft nuisance on
+  the publish path, but on this path a loop appending a second footer to every
+  post, every cycle, under the owner's byline.
+- **Highest-traffic first**, because the view distribution is top-heavy enough
+  that the ordering is most of the value.
+- **Gated on `payout.footer()`.** If no ask is shipping to new readers, this
+  must not invent one for old ones — the two surfaces cannot disagree.
+- Bounded by `max_per_cycle` (3), and it stops at the first failed update rather
+  than hammering a failing API.
+
+**Editing does not re-surface a post.** Forem preserves `published_at` on
+update, so this adds an ask to what people already read rather than pushing old
+posts back into the feed. It does not game distribution and does not counterfeit
+the follow-up path, which deliberately publishes a *new* post for that reason.
+
+Like every other publish path it reports `estimated_usd: 0.0`: an ask is not a
+receipt. State lives in `status["backfill"]` (`done_ids`, `remaining`,
+`updated_total`, `last_reason`).
+
 ### Revenue attribution (bot/earning/attribution.py)
 
 Principle 5 of the doctrine says measure the funnel, not the last stage. Views
@@ -788,6 +849,13 @@ whenever the footer is not shipping, so the two surfaces cannot disagree about
 whether the path is live. See the payout section above for why a masked address
 is wrong here and how it survives `sanitize_for_git`.
 
+`backfill` is owned by `bot/earning/backfill.py` and records the retrofit of the
+tip footer onto already-published posts: `done_ids` (posts confirmed updated),
+`remaining` (posts that still show readers no way to pay), `updated_total`,
+`skipped` (id → error), `last_run`, `last_reason`. `remaining` is the field to
+read — while it is non-zero, reach the account already has is still earning a
+structural zero.
+
 `attribution` is written by `status._snapshot_attribution` (via
 `bot/earning/attribution.py`) and records what was published when on-chain money
 arrived: `receipts`, `receipt_count`, `total_attributed_usd`, `by_archetype`,
@@ -833,6 +901,7 @@ Tunable by owner or changed here in Codex:
                       "history_limit": 200, "min_words": 500, "niche_focus": "" },
   "payout":         { "enabled": true, "address_env": "USDT_WALLET_ADDRESS",
                       "heading": "Support this work", "note": "...", "show_network": true },
+  "backfill":       { "enabled": true, "max_per_cycle": 3, "history_limit": 200 },
   "attribution":    { "enabled": true, "history_limit": 200 },
   "mrr_ideas":      { "enabled": true, "refresh_hours": 48, "max_ideas": 8,
                       "min_score": 50, "history_limit": 100 },

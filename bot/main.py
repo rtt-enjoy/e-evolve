@@ -185,6 +185,12 @@ def main() -> int:
 	# to newsletter.min_interval_hours so the hourly pulse publishes one per week.
 	actions += _module("newsletter", llm, status, errors)
 
+	# Retrofit the tip footer onto posts published before the footer existed.
+	# Runs after the publishing products so it sees this cycle's post too, and
+	# makes no LLM call. Most of this account's readers are on the back
+	# catalogue, and until this runs they are being shown no way to pay.
+	actions += _module("backfill", llm, status, errors)
+
 	if not actions:
 		log.warning(
 			"No actions ran this cycle.\n"

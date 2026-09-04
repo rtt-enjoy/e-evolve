@@ -31,7 +31,10 @@
       "Bash(git branch *)",
       "Bash(git reset *)",
       "Bash(git cherry-pick *)",
-      "Bash(python -m bot.main)"
+      "Bash(python -m bot.main)",
+      "Bash(python -m py_compile bot/earning/backfill.py bot/earning/devto.py bot/earning/payout.py)",
+      "Bash(python -m py_compile bot/main.py bot/earning/backfill.py bot/earning/devto.py bot/earning/payout.py bot/earning/__init__.py)",
+      "Bash(python -c \"import json; print\\(json.load\\(open\\('config/strategy.json'\\)\\)['backfill']['max_per_cycle']\\)\")"
     ]
   }
 }

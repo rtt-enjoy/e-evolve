@@ -238,3 +238,64 @@ def publish(article: dict, api_key: str) -> dict:
 			"error": str(exc)[:200],
 			"estimated_usd": 0.0,
 		}
+
+
+# A dev.to body may open with a YAML front-matter block, and when it does the
+# front matter wins over the JSON params on the way in: Forem re-reads title,
+# tags and canonical_url from it, and its tag handling starts by clearing the
+# existing tag list. So a body-only update on such a post can rewrite the
+# title and wipe the tags of a post that took months to earn its traffic.
+#
+# Nothing this bot publishes uses front matter -- ``publish`` sends title and
+# tags as JSON fields -- but the account may hold posts written by hand, and
+# "probably not front matter" is not a safe basis for editing a live post that
+# is the account's whole readership. Detected and skipped instead.
+_FRONT_MATTER_RE = re.compile(r"\A\s*---\s*$", re.MULTILINE)
+
+
+def has_front_matter(body: str) -> bool:
+	"""True when a body opens with a YAML front-matter block."""
+	return bool(_FRONT_MATTER_RE.match(body or ""))
+
+
+def update_body(article_id: int, body_markdown: str, api_key: str) -> dict:
+	"""Replace the body of one already-published article.
+
+    ``PUT /api/articles/{id}``, authenticated with the same ``DEV_TO_API_KEY``
+    the publish and stats calls already use -- no new secret. Forem scopes the
+    lookup to the key's own articles, so this can only ever touch this
+    account's posts.
+
+    Only ``body_markdown`` is sent. Absent keys are left alone by the update,
+    so the title, tags and description of a post that already earns its traffic
+    are not re-asserted from data this bot may have re-derived. The caller is
+    responsible for having checked ``has_front_matter`` first.
+
+    Editing does not change ``published_at``, so a post keeps its original feed
+    position -- this adds an ask to what people already read, it does not
+    re-promote anything.
+    """
+	url = f"https://dev.to/api/articles/{int(article_id)}"
+	try:
+		resp = requests.put(
+			url,
+			headers={
+				"api-key": api_key,
+				"Content-Type": "application/json",
+				"Accept": "application/vnd.forem.api-v1+json",
+			},
+			json={"article": {"body_markdown": body_markdown}},
+			timeout=30,
+		)
+		resp.raise_for_status()
+		# The write has already landed by here. A body that will not parse is a
+		# cosmetic problem, so it must not be reported as a failed update: that
+		# would abort the rest of the run over a post that was in fact fixed.
+		try:
+			data = resp.json() if resp.content else {}
+		except Exception:
+			data = {}
+		return {"success": True, "url": str(data.get("url") or "")}
+	except Exception as exc:
+		log.warning("[devto] update %s failed: %s", article_id, exc)
+		return {"success": False, "error": str(exc)[:200]}

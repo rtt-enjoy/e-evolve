@@ -196,6 +196,69 @@ because the page still looks right.**
 
 ---
 
+## Principle 3c — A receive path that only runs on new work skips the audience you already have
+
+Built 2026-09-04, `bot/earning/backfill.py`.
+
+The footer was attached inside `devto.publish`, which is a `POST`. It therefore
+ran on new articles and on nothing else. Everything already published — the
+posts that had spent months accumulating search traffic — kept exactly the ask
+it was published with, which was none.
+
+The numbers made this most of the problem, not an edge case:
+
+| Measure | Value |
+| --- | --- |
+| Published posts carrying no ask | 11 |
+| Views on them | 1,949 |
+| Share on a single evergreen post | 1,652 (**85%**) |
+| Views a new post adds | ~177 |
+
+So **85% of every reader this project has ever had** was looking at a page with
+no way to pay, and daily publishing would need eleven perfect consecutive days
+just to match reach that already exists and keeps growing on its own. The
+back catalogue is not a historical record; it is the traffic.
+
+Scored on Principle 2 it wins every row — `PUT /api/articles/{id}` takes the
+same `DEV_TO_API_KEY` that already publishes and already reads stats, no owner
+action, editing our own article is the allowed action, on-chain like every other
+tip, and it reuses writing that already exists. It needed no new capability at
+all. **It was missed because the fix was filed under "publishing" and the
+back catalogue is not published, it *was* published.** When a channel is added,
+ask what it covers as well as what it does.
+
+Four rules, each of which is the difference between this being safe to run
+unattended and it being a liability:
+
+- **It never edits prose.** The only mutation is appending the same
+  deterministic footer `payout` already renders. No LLM call, for a sharper
+  version of the reason `payout` has none: the quality gates run on drafts, so
+  nothing downstream would catch a model quietly degrading a live post that
+  earns real traffic.
+- **A body it cannot safely reproduce is skipped.** A dev.to body opening with
+  YAML front matter has its title and tags re-read from that block on save, and
+  Forem's tag handling *clears the list first*. Nothing this bot publishes uses
+  front matter, but "probably not" is not a basis for rewriting the account's
+  best post, so those are detected and left alone. Only `body_markdown` is
+  sent, so nothing else can be re-asserted from data this bot re-derived.
+- **Idempotent, because it runs every hour forever.** `has_footer` is asked
+  about the *live* body, not local history, so a hand-edited post is read as it
+  actually is. This is also why `has_footer` now matches the configured heading
+  and the address, not just the hardcoded default string: `footer()` renders
+  `cfg["heading"]` while the check tested only the stock wording, so changing
+  `payout.heading` would have made it blind to its own footers — a nuisance on
+  the publish path, and on this path a loop appending a second footer to every
+  post, every cycle, under the owner's byline.
+- **Highest-traffic first**, because the distribution is top-heavy enough that
+  the order is most of the value.
+
+**Editing does not re-surface a post.** Forem preserves `published_at` on
+update, so this adds an ask to what people already read rather than pushing old
+posts back into the feed — it does not game distribution and does not
+counterfeit the follow-up path, which deliberately publishes a *new* post.
+
+---
+
 ## Principle 4 — Never let an estimate stand in for money
 
 `devto.publish` reports `estimated_usd: 0.0` for a successful post, and it must
@@ -300,6 +363,11 @@ Work this in order. Stop at the first honest "no".
    *Live since 2026-09-04. It read `false` for five cycles after the code
    shipped, because the config flag was still off — so read the flag, not the
    filesystem.*
+   **"Everything published" includes what was published before the path
+   existed.** Check `status["backfill"].remaining` — while it is non-zero, posts
+   that already have readers are still showing them no way to pay. Note that
+   `status.json` is written at the *end* of a cycle, so a field can lag a config
+   change by one run; the config flag is the truth, the snapshot is the report.
 2. **Is money arriving?** Check `earnings.received_total_usd`.
    Once it is non-zero, `status["attribution"]` holds what was live when it
    landed — ranked by archetype and tag, with sample sizes. Read `count` before
@@ -327,6 +395,7 @@ Principle 2.
 | Wallet address in published articles | none | none | allowed | **Built.** `bot/earning/payout.py` |
 | Wallet address in the newsletter digest | none | none | allowed | **Built** — same `devto.publish` path |
 | Wallet address on the public dashboard | none | none | allowed | **Built** 2026-09-04. `status["payout_public"]` + Overview tip card |
+| Wallet address on the **back catalogue** | none | none | allowed | **Built** 2026-09-04. `bot/earning/backfill.py` |
 | Sponsored-content slot in the newsletter | none | negotiates each deal | allowed to publish | **Deferred.** Income is real but every unit needs a human |
 | dev.to → own static site, then ads | ad network account | signup + tax details | allowed | **Deferred.** Needs an account and an audience move |
 | Affiliate links in articles | affiliate account | signup per program | allowed to publish | **Deferred.** Also risks the fabrication and tone gates |
@@ -340,6 +409,14 @@ on the list needs either an account the owner must open (ad network, affiliate
 program, payment processor) or a policy the owner must widen (social posting,
 cold email). Those are owner decisions with the tradeoff already stated here,
 not work a cycle may take on itself.
+
+**This table said exactly that once before and was wrong.** On 2026-09-04 it
+claimed completeness while 85% of the audience — the back catalogue — still had
+no ask on it, because the channel had been scored as "wallet address in
+published articles" and nobody asked whether that covered posts published
+before the code existed. The row was ticked on the mechanism, not the coverage.
+Before trusting the sentence above, check `status["backfill"].remaining` and
+`status["payout"].live` against reality rather than against this table.
 
 So the next honest task is no longer a channel — it is **reach into a live
 receive path**, per Principle 5, step 2: publish consistently into the shapes

@@ -249,16 +249,46 @@ def mask(address: str) -> str:
 	return f"{address[:6]}…{address[-4:]}"
 
 
-_HEADING_RE = re.compile(r"^#{2,3}\s*support this work\s*$", re.IGNORECASE | re.MULTILINE)
+# The stock heading. Matched even when the owner has configured a different one,
+# because a post footered under the old wording still has a footer.
+_DEFAULT_HEADING_RE = re.compile(
+	r"^#{2,3}\s*support this work\s*$", re.IGNORECASE | re.MULTILINE)
 
 
-def has_footer(body: str) -> bool:
+def has_footer(body: str, cfg: dict[str, Any] | None = None) -> bool:
 	"""True when a support footer is already present.
 
     Guards against a double footer on the paths that revise a body after the
     footer was added, and against the model spontaneously writing one.
+
+    Both the *configured* heading and the stock one are matched, and that
+    matters more than it looks. ``footer()`` renders ``cfg["heading"]`` while
+    this used to test only the hardcoded default, so changing
+    ``payout.heading`` in config made this blind to footers the module had
+    itself written. On the publish path that is a stale-draft nuisance. On the
+    backfill path it is a loop that appends a second footer to every published
+    post, every cycle, under the owner's byline -- so the check is tied to the
+    config the footer is actually rendered from.
+
+    The address is a fallback signal for the same reason: a body already
+    carrying the receive address does not need another copy of it, whatever
+    heading sits above it.
     """
-	return bool(_HEADING_RE.search(body or ""))
+	text = body or ""
+	if _DEFAULT_HEADING_RE.search(text):
+		return True
+
+	cfg = cfg or config()
+	heading = str(cfg.get("heading") or DEFAULTS["heading"]).strip()
+	if heading and re.search(
+			rf"^#{{2,3}}\s*{re.escape(heading)}\s*$", text,
+			re.IGNORECASE | re.MULTILINE):
+		return True
+
+	# Last resort: the address itself. If it is already in the body, a second
+	# footer adds nothing and risks the reader seeing two conflicting asks.
+	address, _ = resolve_address(cfg)
+	return bool(address) and address in text
 
 
 def footer(cfg: dict[str, Any] | None = None) -> str:
@@ -300,7 +330,7 @@ def add_footer(article: dict, cfg: dict[str, Any] | None = None) -> dict:
 		if not block:
 			return article
 		body = str(article.get("body_markdown", ""))
-		if has_footer(body):
+		if has_footer(body, cfg):
 			return article
 		article["body_markdown"] = body.rstrip() + block
 	except Exception as exc:                       # pragma: no cover - defensive

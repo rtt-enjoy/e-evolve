@@ -16,6 +16,7 @@ from bot.earning.newsletter import (
 )
 import bot.earning.devto as devto_module
 import bot.earning.payout as payout
+import bot.earning.backfill as backfill
 import bot.earning.attribution as attribution
 import bot.status as status_mod
 from unittest import mock
@@ -2721,3 +2722,248 @@ class TestAttribution(unittest.TestCase):
 		self.assertEqual(summary["receipt_count"], 0)
 		self.assertEqual(summary["total_attributed_usd"], 0.0)
 		self.assertIsNone(summary["top_archetype"])
+
+
+class TestBackfillPutsTheAskWhereTheReadersAre(unittest.TestCase):
+	"""The footer only ever ran on POST, so it missed every existing post.
+
+    At the time this was written that was 85% of the audience: 1,949 lifetime
+    views across 11 posts, 1,652 of them on one evergreen article, none of them
+    carrying any way to pay. This suite pins the behaviour that makes editing
+    live posts safe enough to do unattended.
+    """
+
+	REAL = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
+
+	def setUp(self):
+		self._saved = os.environ.get("USDT_WALLET_ADDRESS")
+		os.environ["USDT_WALLET_ADDRESS"] = self.REAL
+		self._cfg_on = dict(payout.DEFAULTS)
+		self._cfg_on["enabled"] = True
+
+	def tearDown(self):
+		if self._saved is None:
+			os.environ.pop("USDT_WALLET_ADDRESS", None)
+		else:
+			os.environ["USDT_WALLET_ADDRESS"] = self._saved
+
+	def _post(self, **over):
+		post = {"id": 1, "title": "T", "page_views": 100,
+				"body_markdown": "# T\n\nreal prose here.\n"}
+		post.update(over)
+		return post
+
+	# ── what to touch ───────────────────────────────────────────────────────
+
+	def test_post_without_footer_needs_one(self):
+		self.assertTrue(backfill.needs_footer(self._post(), self._cfg_on))
+
+	def test_post_that_already_has_the_footer_is_left_alone(self):
+		body = payout.add_footer(
+			{"body_markdown": "# T\n\nprose\n"}, self._cfg_on)["body_markdown"]
+		self.assertFalse(
+			backfill.needs_footer(self._post(body_markdown=body), self._cfg_on))
+
+	def test_front_matter_post_is_never_touched(self):
+		"""Forem re-reads title and tags from front matter on save, and clears
+        the tag list first. Editing such a post can rewrite the title and wipe
+        the tags of the account's best article, so it is skipped instead.
+        """
+		body = "---\ntitle: Real Title\ntags: python, linux\n---\n\n# T\n\nprose\n"
+		self.assertFalse(
+			backfill.needs_footer(self._post(body_markdown=body), self._cfg_on))
+
+	def test_empty_body_is_skipped(self):
+		"""``me/published`` returning no body must never blank a live post."""
+		self.assertFalse(
+			backfill.needs_footer(self._post(body_markdown=""), self._cfg_on))
+		self.assertFalse(
+			backfill.needs_footer(self._post(body_markdown=None), self._cfg_on))
+
+	# ── what it sends ───────────────────────────────────────────────────────
+
+	def _run_with(self, posts, put=None, cfg=None):
+		sent = []
+
+		class _Resp:
+			status_code = 200
+			content = b"{}"
+
+			@staticmethod
+			def raise_for_status():
+				return None
+
+			@staticmethod
+			def json():
+				return {"url": "https://dev.to/x/y"}
+
+		def fake_put(url, headers=None, json=None, timeout=None):
+			sent.append({"url": url, "headers": headers, "json": json})
+			return (put or _Resp)()
+
+		status = {}
+		original = devto_module.requests.put
+		try:
+			devto_module.requests.put = fake_put
+			with mock.patch.object(payout, "config", lambda: self._cfg_on), \
+					mock.patch.object(backfill, "config",
+									  lambda: cfg or dict(backfill.DEFAULTS)):
+				action = backfill._run(status, "key", published=posts)
+		finally:
+			devto_module.requests.put = original
+		return action, sent, status
+
+	def test_appends_the_same_footer_and_keeps_the_original_prose(self):
+		action, sent, _ = self._run_with([self._post()])
+		self.assertTrue(action["success"])
+		self.assertEqual(action["updated"], 1)
+		body = sent[0]["json"]["article"]["body_markdown"]
+		self.assertIn(self.REAL, body)
+		# The post's own words survive untouched -- this never rewrites prose.
+		self.assertIn("real prose here.", body)
+
+	def test_sends_only_the_body_so_title_and_tags_are_not_re_asserted(self):
+		_, sent, _ = self._run_with([self._post()])
+		self.assertEqual(list(sent[0]["json"]["article"].keys()), ["body_markdown"])
+
+	def test_targets_the_right_article_with_the_existing_key(self):
+		_, sent, _ = self._run_with([self._post(id=4242)])
+		self.assertEqual(sent[0]["url"], "https://dev.to/api/articles/4242")
+		self.assertEqual(sent[0]["headers"]["api-key"], "key")
+
+	def test_highest_traffic_post_is_fixed_first(self):
+		"""The distribution is top-heavy, so the order is the whole value."""
+		posts = [self._post(id=1, page_views=10),
+				 self._post(id=2, page_views=1652),
+				 self._post(id=3, page_views=100)]
+		_, sent, _ = self._run_with(posts)
+		self.assertEqual([s["url"].rsplit("/", 1)[-1] for s in sent],
+						 ["2", "3", "1"])
+
+	def test_respects_max_per_cycle(self):
+		cfg = dict(backfill.DEFAULTS)
+		cfg["max_per_cycle"] = 1
+		_, sent, _ = self._run_with(
+			[self._post(id=1), self._post(id=2)], cfg=cfg)
+		self.assertEqual(len(sent), 1)
+
+	# ── idempotency: it must be safe to run every hour, forever ─────────────
+
+	def test_never_footers_the_same_post_twice(self):
+		"""The cycle is hourly and this runs on every one of them. A second
+        footer on a live post would be visible to every reader.
+        """
+		post = self._post()
+		_, sent, status = self._run_with([post])
+		self.assertEqual(len(sent), 1)
+		# The post now carries a footer, as dev.to would report it back.
+		updated = self._post(body_markdown=sent[0]["json"]["article"]["body_markdown"])
+		_, sent2, _ = self._run_with([updated])
+		self.assertEqual(sent2, [])
+		self.assertFalse(backfill.needs_footer(updated, self._cfg_on))
+
+	def test_completed_backlog_reports_success_and_writes_no_action(self):
+		body = payout.add_footer(
+			{"body_markdown": "# T\n\nprose\n"}, self._cfg_on)["body_markdown"]
+		with mock.patch.object(payout, "config", lambda: self._cfg_on), \
+				mock.patch.dict(os.environ, {"DEV_TO_API_KEY": "key"}), \
+				mock.patch.object(backfill.devto_stats, "fetch_published",
+								  lambda k: [self._post(body_markdown=body)]):
+			self.assertEqual(backfill.run(None, {}), [])
+
+	# ── failure must cost nothing ───────────────────────────────────────────
+
+	def test_a_failed_update_stops_rather_than_hammering_the_api(self):
+		class _Boom:
+			status_code = 429
+			content = b""
+
+			@staticmethod
+			def raise_for_status():
+				raise RuntimeError("429 rate limited")
+
+			@staticmethod
+			def json():
+				return {}
+
+		action, sent, status = self._run_with(
+			[self._post(id=1), self._post(id=2), self._post(id=3)], put=_Boom)
+		self.assertEqual(len(sent), 1)
+		self.assertFalse(action["success"])
+		self.assertEqual(action["updated"], 0)
+		self.assertIn("1", status["backfill"]["skipped"])
+
+	def test_unparseable_response_after_a_landed_write_is_not_a_failure(self):
+		"""``raise_for_status`` passed, so the edit is already live. Calling
+        that a failure would abort the rest of the run over a post that was in
+        fact fixed, and mark it for a pointless retry.
+        """
+		class _Weird:
+			status_code = 200
+			content = b"<html>not json</html>"
+
+			@staticmethod
+			def raise_for_status():
+				return None
+
+			@staticmethod
+			def json():
+				raise ValueError("no json")
+
+		action, sent, _ = self._run_with(
+			[self._post(id=1), self._post(id=2)], put=_Weird)
+		self.assertEqual(len(sent), 2)
+		self.assertTrue(action["success"])
+		self.assertEqual(action["updated"], 2)
+
+	def test_publishes_nothing_when_the_footer_is_not_live(self):
+		"""Gated on the same switch as the footer. If no ask is shipping to new
+        readers, this must not invent one for old ones.
+        """
+		off = dict(payout.DEFAULTS)
+		off["enabled"] = False
+		with mock.patch.object(payout, "config", lambda: off):
+			action = backfill._run({}, "key", published=[self._post()])
+		self.assertFalse(action["success"])
+		self.assertEqual(action["updated"], 0)
+
+	def test_never_raises(self):
+		self.assertIsInstance(backfill._run({}, "key", published="not-a-list"), dict)
+		self.assertIsInstance(backfill.run(None, None), list)
+
+	def test_reports_no_revenue_because_money_is_on_chain_only(self):
+		"""An ask is not a receipt, here exactly as on a fresh publish."""
+		action, _, _ = self._run_with([self._post()])
+		self.assertEqual(action["estimated_usd"], 0.0)
+
+	def test_makes_no_llm_call(self):
+		"""A model rewriting a post that already earns traffic can degrade it,
+        and no gate downstream runs on live posts.
+        """
+		source = Path("bot/earning/backfill.py").read_text(encoding="utf-8")
+		for banned in ("complete_json", "llm.complete", ".complete("):
+			self.assertNotIn(banned, source)
+
+	def test_matches_the_product_contract_the_orchestrator_calls(self):
+		"""``bot.main._module`` imports by name and calls ``run(llm, status)``,
+        returning a list. A signature mismatch would surface only in a live
+        cycle, and ``bot/main.py`` is protected from evolution -- so the
+        product has to fit the orchestrator, not the other way round.
+        """
+		import importlib
+		import inspect
+
+		mod = importlib.import_module("bot.earning.backfill")
+		params = list(inspect.signature(mod.run).parameters)
+		self.assertEqual(params[:2], ["llm", "status"])
+		# Callable positionally, exactly as _module does it, and list-returning.
+		with mock.patch.dict(os.environ, {"DEV_TO_API_KEY": ""}):
+			self.assertIsInstance(mod.run(None, {}), list)
+
+	def test_is_registered_in_phase_4(self):
+		"""A product the orchestrator never calls is dead code, and this one
+        looks identical to a working feature from the outside: the footer is
+        live, the module exists, and the back catalogue silently stays unasked.
+        """
+		main_src = Path("bot/main.py").read_text(encoding="utf-8")
+		self.assertIn('_module("backfill"', main_src)

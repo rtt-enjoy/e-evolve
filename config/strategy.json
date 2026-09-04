@@ -29,6 +29,12 @@
 		"show_network": true,
 		"note_on_config": "The only monetization channel this stack can run unattended: a receive address in the article itself. No payment processor, no new secret, no owner action between a reader deciding to give and the money landing. Off by default -- turn it on once you have read the footer text, since it publishes under your byline. The address is checksum-validated (base58check for TRC-20, EIP-55 for ERC-20) before it can reach a reader; a malformed one omits the footer rather than publishing an address that would burn a reader's funds."
 	},
+	"backfill": {
+		"enabled": true,
+		"max_per_cycle": 3,
+		"history_limit": 200,
+		"note_on_config": "Adds the same payout footer to articles published before the footer existed. The back catalogue is where most readers already are -- 1,949 lifetime views across 11 posts, 85% of it on a single evergreen post -- and none of it carried an ask. Reuses DEV_TO_API_KEY via PUT /api/articles/{id}: no new secret, no owner action, no LLM call, and no new writing. Editing does not change published_at, so nothing is re-surfaced in the feed. A post whose body opens with YAML front matter is skipped, because Forem re-reads title and tags from that block on save and clears the tag list first. Gated on payout.enabled: if there is no footer shipping, there is nothing to backfill."
+	},
 	"attribution": {
 		"enabled": true,
 		"history_limit": 200,

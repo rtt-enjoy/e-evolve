@@ -1,7 +1,7 @@
 {
   "version": "1.39.0",
-  "last_run": "2026-09-04T09:41:05.273698+00:00",
-  "total_runs": 1762,
+  "last_run": "2026-09-04T14:22:54.936626+00:00",
+  "total_runs": 1763,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,11 +33,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.39.0",
-    "summary": "Add a docs/data-contracts.md reference so contributors can see what each module writes without reading every file.",
+    "summary": "Add a tiny dev-only docstring typo sweep across non-protected earning modules to keep the codebase reviewable without touching orchestrator files.",
     "changes_applied": [
       {
-        "file": "docs/data-contracts.md",
-        "reason": "Several modules read each other's status fields (articles reads article_interest, code_techs reads attribution via the wallet, backfill reads payout). New contributors can break those reads by renaming or moving a key. A single reference file lists every status key the project writes, so the failure mode is a missing doc, not a silent rename in production."
+        "file": "docs/code-tech-opportunities.md",
+        "reason": "code_techs.py writes docs/code-tech-opportunities.md every refresh, but a first-time contributor reading docs/ finds no reference for what it should look like. A short stub documents the section ordering and signals that the module is the real source, so a missing or empty file is a config signal, not a code bug."
       }
     ],
     "suggestions": [
@@ -82,7 +82,7 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.39.1-20260904-094649",
+    "branch": "evolve/1.39.1-20260904-142310",
     "proposed_version": "1.39.1"
   },
   "last_earning": {
@@ -131,7 +131,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 344,
+  "last_cycle_seconds": 15,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -674,7 +674,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-04T09:41:05.443124+00:00",
+    "checked_at": "2026-09-04T14:22:55.323630+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -894,7 +894,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.39.1-20260904-094649",
+  "last_evolution_branch": "evolve/1.39.1-20260904-142310",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 11,
@@ -974,7 +974,7 @@
     "done_ids": [],
     "skipped": {},
     "updated_total": 0,
-    "last_run": "2026-09-04T09:46:49.417273+00:00",
+    "last_run": "2026-09-04T14:23:10.316497+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   }

@@ -1,7 +1,7 @@
 {
   "version": "1.39.0",
-  "last_run": "2026-09-04T18:25:17.696498+00:00",
-  "total_runs": 1764,
+  "last_run": "2026-09-04T21:30:30.313696+00:00",
+  "total_runs": 1765,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,57 +33,56 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.39.0",
-    "summary": "Add a new local lead for Cohere embeddings service and improve the next step for embeddings in the code_techs module to help the owner monetize free AI embeddings.",
+    "summary": "Fix code_techs report: when no LLM is available the online_ai_brief returns an empty easy_earning_ideas list, but the report still tries to render an empty heading and section. Add a helper that only emits the section when there is something to show, and harden next_step so the local Cohere embeddings lead gets an embeddings-specific instruction instead of a stale generic fallback.",
     "changes_applied": [
       {
         "file": "bot/earning/code_techs.py",
-        "reason": "Add a new local lead for Cohere embeddings and improve the next step function to provide more specific guidance for embeddings-based opportunities."
+        "reason": "Three small, contained fixes on one reviewable file: (1) the _LOCAL_LEADS list now includes a free embeddings lead that pairs with the Cohere work the previous evolution added; (2) _next_step now matches that lead and any other embeddings/semantic-search lead by label or keyword, so it gets a real next step instead of falling through to a generic instruction; (3) the easy_earning_ideas section in the report is only rendered when the brief actually returned ideas, so a no-LLM cycle no longer leaves an empty \"Easy Earning Ideas\" heading. The dataclass was imported via `from typing import Optional` was already present, so I added an Optional import to support the labels parameter default of None. Bumped patch version because all three are correctness/UX fixes, not new features."
       }
     ],
     "suggestions": [
       {
-        "title": "Add Cohere free-tier as a fifth research LLM",
-        "description": "Cohere offers a no-card trial tier with monthly limits on Command R+ and embeddings. Useful for the research role specifically because its embeddings are free, which code_techs could use to deduplicate opportunity titles without an extra OpenRouter call.",
-        "secret_needed": "COHERE_API_KEY",
+        "title": "Add Cerebras free-tier as a third cheap inference option",
+        "description": "Cerebras gives roughly 1M tokens/day on Llama 3.1 70B with no card. Useful as a second free-tier fallback behind Groq and Gemini so the daily article cycle never depends on a single provider staying up. Wire it into the same role-aware fallback chain as Groq.",
+        "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Go to https://dashboard.cohere.com/ and sign up with email",
-          "2. Create a trial API key under API keys",
-          "3. Add it as a GitHub repository secret named COHERE_API_KEY",
-          "4. A future evolution can wire it into llm.py as a research-only fallback"
+          "1. Go to https://cloud.cerebras.ai/ and sign up with email",
+          "2. Create an API key under API Keys",
+          "3. Add it as a GitHub repository secret named CEREBRAS_API_KEY",
+          "4. A future evolution can wire it into llm.py as a research fallback when OpenRouter and Groq are both rate-limited"
         ]
       },
       {
-        "title": "Add Together AI free credits as an emergency inference fallback",
-        "description": "Together AI hands out free credits on signup (no card) that cover burst inference when OpenRouter/Gemini/Groq all rate-limit simultaneously. Cheap insurance for the daily article cycle.",
-        "secret_needed": "TOGETHER_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Go to https://api.together.xyz/ and create an account",
-          "2. Copy the free-tier API key shown on first login",
-          "3. Add as GitHub secret TOGETHER_API_KEY",
-          "4. Wire as last-resort fallback in a later evolution"
-        ]
-      },
-      {
-        "title": "Self-host a small docs site via GitHub Pages with a custom domain",
-        "description": "The dashboard already publishes to docs/. A custom domain (Cloudflare Registrar or similar, ~$10/yr) would make the tip box easier to share without raising infrastructure cost. Owner-only action.",
+        "title": "Add a GitHub Issue template that links to the dashboard tip box",
+        "description": "A tiny ISSUE_TEMPLATE/ support.md in the repo, when posted, gets prefilled with the masked wallet address and a link to the dashboard. Readers who want to tip but cannot find the address now get a documented path that does not depend on the owner being online to answer DMs.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Buy a short domain from Cloudflare Registrar or Namecheap",
-          "2. In repo Settings -> Pages, set the custom domain and follow the DNS instructions",
-          "3. Wait for the certificate to provision",
-          "4. Update payout_public with any new heading/note if desired"
+          "1. Create .github/ISSUE_TEMPLATE/support.md with a one-paragraph prompt and the masked address",
+          "2. Reference the dashboard URL in the body so readers can confirm",
+          "3. Commit and push; GitHub picks up templates automatically"
+        ]
+      },
+      {
+        "title": "Rotate the USDT receive address on a schedule",
+        "description": "A single static receive address is fine for now but exposes every past payment to a single key-compromise event. Owners of long-lived bots eventually move to a per-quarter address and update payout_public by hand; the bot could read the address from a dated secret name (USDT_WALLET_ADDRESS_2026Q3) and fall back gracefully when it is missing.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Generate a new TRC-20 address in a wallet you control",
+          "2. Validate it via the existing payout.valid_tron_address helper",
+          "3. Add it as GitHub secret USDT_WALLET_ADDRESS_2026Q3 with the quarter in the name",
+          "4. Owner removes the old secret after the next receipt"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.40.0-20260904-182931",
-    "proposed_version": "1.40.0"
+    "branch": "evolve/1.39.1-20260904-213309",
+    "proposed_version": "1.39.1"
   },
   "last_earning": {
     "actions": [],
@@ -91,47 +90,46 @@
   },
   "suggestions": [
     {
-      "title": "Add Cohere free-tier as a fifth research LLM",
-      "description": "Cohere offers a no-card trial tier with monthly limits on Command R+ and embeddings. Useful for the research role specifically because its embeddings are free, which code_techs could use to deduplicate opportunity titles without an extra OpenRouter call.",
-      "secret_needed": "COHERE_API_KEY",
+      "title": "Add Cerebras free-tier as a third cheap inference option",
+      "description": "Cerebras gives roughly 1M tokens/day on Llama 3.1 70B with no card. Useful as a second free-tier fallback behind Groq and Gemini so the daily article cycle never depends on a single provider staying up. Wire it into the same role-aware fallback chain as Groq.",
+      "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Go to https://dashboard.cohere.com/ and sign up with email",
-        "2. Create a trial API key under API keys",
-        "3. Add it as a GitHub repository secret named COHERE_API_KEY",
-        "4. A future evolution can wire it into llm.py as a research-only fallback"
+        "1. Go to https://cloud.cerebras.ai/ and sign up with email",
+        "2. Create an API key under API Keys",
+        "3. Add it as a GitHub repository secret named CEREBRAS_API_KEY",
+        "4. A future evolution can wire it into llm.py as a research fallback when OpenRouter and Groq are both rate-limited"
       ]
     },
     {
-      "title": "Add Together AI free credits as an emergency inference fallback",
-      "description": "Together AI hands out free credits on signup (no card) that cover burst inference when OpenRouter/Gemini/Groq all rate-limit simultaneously. Cheap insurance for the daily article cycle.",
-      "secret_needed": "TOGETHER_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Go to https://api.together.xyz/ and create an account",
-        "2. Copy the free-tier API key shown on first login",
-        "3. Add as GitHub secret TOGETHER_API_KEY",
-        "4. Wire as last-resort fallback in a later evolution"
-      ]
-    },
-    {
-      "title": "Self-host a small docs site via GitHub Pages with a custom domain",
-      "description": "The dashboard already publishes to docs/. A custom domain (Cloudflare Registrar or similar, ~$10/yr) would make the tip box easier to share without raising infrastructure cost. Owner-only action.",
+      "title": "Add a GitHub Issue template that links to the dashboard tip box",
+      "description": "A tiny ISSUE_TEMPLATE/ support.md in the repo, when posted, gets prefilled with the masked wallet address and a link to the dashboard. Readers who want to tip but cannot find the address now get a documented path that does not depend on the owner being online to answer DMs.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Buy a short domain from Cloudflare Registrar or Namecheap",
-        "2. In repo Settings -> Pages, set the custom domain and follow the DNS instructions",
-        "3. Wait for the certificate to provision",
-        "4. Update payout_public with any new heading/note if desired"
+        "1. Create .github/ISSUE_TEMPLATE/support.md with a one-paragraph prompt and the masked address",
+        "2. Reference the dashboard URL in the body so readers can confirm",
+        "3. Commit and push; GitHub picks up templates automatically"
+      ]
+    },
+    {
+      "title": "Rotate the USDT receive address on a schedule",
+      "description": "A single static receive address is fine for now but exposes every past payment to a single key-compromise event. Owners of long-lived bots eventually move to a per-quarter address and update payout_public by hand; the bot could read the address from a dated secret name (USDT_WALLET_ADDRESS_2026Q3) and fall back gracefully when it is missing.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Generate a new TRC-20 address in a wallet you control",
+        "2. Validate it via the existing payout.valid_tron_address helper",
+        "3. Add it as GitHub secret USDT_WALLET_ADDRESS_2026Q3 with the quarter in the name",
+        "4. Owner removes the old secret after the next receipt"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 254,
+  "last_cycle_seconds": 159,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -674,7 +672,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-04T18:25:17.964659+00:00",
+    "checked_at": "2026-09-04T21:30:30.739845+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -894,7 +892,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.40.0-20260904-182931",
+  "last_evolution_branch": "evolve/1.39.1-20260904-213309",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 11,
@@ -974,7 +972,7 @@
     "done_ids": [],
     "skipped": {},
     "updated_total": 0,
-    "last_run": "2026-09-04T18:29:31.925859+00:00",
+    "last_run": "2026-09-04T21:33:09.724848+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   }

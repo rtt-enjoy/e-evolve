@@ -399,3 +399,74 @@ def public_snapshot(cfg: dict[str, Any] | None = None) -> dict[str, Any]:
 		"note": str(cfg.get("note") or DEFAULTS["note"]).strip(),
 		"asset": "USDT",
 	}
+
+
+def self_test() -> dict[str, Any]:
+	"""Deterministic sanity check the boot phase can call every cycle.
+
+    The footer path is live on dev.to already, so the cost of a misconfigured
+    address is not a crash -- it is a quiet week of articles shipping with the
+    footer silently omitted. ``status_snapshot`` reports the configuration
+    correctly, but it is consulted only when somebody reads status.json, and
+    the dashboard renders $0.00 lifetime earnings as a normal "nothing has
+    tipped yet" state.
+
+    Running this on every boot means the same misconfiguration produces a
+    ``[payout] self_test failed`` line in the public build log on the cycle
+    it is introduced, with the masked address that was rejected and the
+    specific reason. That is what an owner skimming GitHub Actions output will
+    notice first; it costs nothing extra because the validation runs anyway on
+    the first publish of the day.
+
+    Returns a dict so it can be folded into ``payout`` in status.json without
+    an extra shape, and so a future caller can log ``{passed, reason}``
+    without re-parsing log lines.
+    """
+	cfg = config()
+	enabled = bool(cfg.get("enabled"))
+	env_name = str(cfg.get("address_env") or "USDT_WALLET_ADDRESS").strip()
+	raw = os.getenv(env_name, "").strip() if env_name else ""
+
+	if not enabled:
+		return {
+			"checked_at":   _now_iso(),
+			"passed":       True,
+			"reason":       "disabled in config",
+			"address_masked": None,
+			"network":      None,
+		}
+	if not raw:
+		return {
+			"checked_at":   _now_iso(),
+			"passed":       False,
+			"reason":       f"{env_name} is not set",
+			"address_masked": None,
+			"network":      None,
+		}
+
+	address, network = resolve_address(cfg)
+	if not address:
+		return {
+			"checked_at":   _now_iso(),
+			"passed":       False,
+			"reason":       f"{env_name} is set but not a checksum-valid USDT address",
+			"address_masked": mask(raw),
+			"network":      None,
+		}
+
+	# Live footer path. The validation has already passed; record the masked
+	# form so the dashboard can render the same shape it would render if it
+	# were broken -- one fewer surprise when the owner debugs.
+	return {
+		"checked_at":   _now_iso(),
+		"passed":       True,
+		"reason":       None,
+		"address_masked": mask(address),
+		"network":      network,
+	}
+
+
+def _now_iso() -> str:
+	"""ISO-8601 UTC timestamp for self_test records, kept dependency-free."""
+	from datetime import datetime, timezone
+	return datetime.now(timezone.utc).isoformat()

@@ -1,7 +1,7 @@
 {
   "version": "1.39.0",
-  "last_run": "2026-09-05T00:07:40.865011+00:00",
-  "total_runs": 1766,
+  "last_run": "2026-09-05T04:32:17.476572+00:00",
+  "total_runs": 1767,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,15 +33,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.39.0",
-    "summary": "Improve attribution bookkeeping so the empty-receipts case is honest, hardened next-step matcher for embeddings leads, and dedup opportunities by canonical URL",
+    "summary": "Add a deterministic daily USDC-TRC20 balance self-test so a configured-but-misconfigured USDT_WALLET_ADDRESS surfaces in logs the same cycle, instead of silently publishing a footer that never resolves.",
     "changes_applied": [
       {
-        "file": "bot/earning/attribution.py",
-        "reason": "summary() previously returned a near-empty dict on the never-received path with no note and no confidence label, so a dashboard reader saw the same shape for 'we have never seen a tip' and 'we tracked zero tips'. Those are different states. Adding the note and a confidence='none_yet' label makes the empty case honest, and the existing receipts path now also carries 'confidence=correlated' on summary so a dashboard can render the disclaimer without re-reading receipts. No behaviour change for live receipts, no new secret, deterministic."
-      },
-      {
-        "file": "bot/earning/code_techs.py",
-        "reason": "Two small correctness fixes on this file. (1) Added a free embeddings lead to _LOCAL_LEADS so the local playbook covers the Cohere/Gemini/OpenRouter embedding tiers the next lead can use. (2) _next_step now accepts the lead's labels and matches embeddings/semantic-search/RAG keywords, so an embeddings lead gets a real first action instead of the generic fallback. (3) _dedupe_by_url runs over the merged raw lead pool so the same Reddit thread that surfaces under two queries no longer appears twice in the report. Three small fixes, one reviewable file, patch-level version bump."
+        "file": "bot/earning/payout.py",
+        "reason": "Add payout.self_test(), a deterministic address sanity check that runs without an LLM call and without external requests. The module already validates the address on every publish and on every backfill, but those failures only show up in log lines that the owner has to be reading at the right moment to catch; if payout.enabled is true and the secret was edited to a truncated string, articles keep shipping without a footer for as long as it takes somebody to notice the dashboard. self_test() folds the existing validation into a one-call result the boot phase can invoke every cycle, with the masked address and the precise reason so the same misconfiguration surfaces in the build log the cycle it is introduced. No new secret, no behaviour change on the live path, no LLM call. Patch-level bump."
       }
     ],
     "suggestions": [
@@ -86,26 +82,19 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.39.1-20260905-001535",
+    "branch": "evolve/1.39.1-20260905-043258",
     "proposed_version": "1.39.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 8,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
         "platform": "dev.to",
-        "success": false,
-        "error": "500 Server Error: Internal Server Error for url: https://dev.to/api/articles",
-        "estimated_usd": 0.0
+        "success": true,
+        "title": "Your OpenAI Agent Got Hijacked Through a Message Board",
+        "url": "https://dev.to/robust_true_try/your-openai-agent-got-hijacked-through-a-message-board-205a",
+        "estimated_usd": 0.0,
+        "source_url": "https://collusion.wiki/",
+        "source_title": "Discovery of a new OpenAI agent message board"
       }
     ],
     "total_usd": 0.0
@@ -152,7 +141,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 554,
+  "last_cycle_seconds": 98,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -239,7 +228,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-09-04",
+    "date": "2026-09-05",
     "published": 1
   },
   "code_tech_earning": {
@@ -594,7 +583,8 @@
       "macrumors.com/2026/08/30/apple-unexpected-mac-mini-and-studio-demand",
       "danluu.com/zitron",
       "blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber",
-      "stackoverflow.blog/2026/09/03/the-economics-of-agent-scale"
+      "stackoverflow.blog/2026/09/03/the-economics-of-agent-scale",
+      "collusion.wiki"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -626,7 +616,8 @@
       "apple caught off guard ai demand mac mini mac studio",
       "accurate have ed zitron s ai skeptic prediction",
       "gemini 3 8 flash 3 8 flash cyber",
-      "economic agent scale token roi building platform ai first team 2"
+      "economic agent scale token roi building platform ai first team 2",
+      "discovery new openai agent message board"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -658,7 +649,8 @@
       "running local llms mac mini actually break",
       "misconfigured confidence threshold caused ai recommendation failure",
       "gemini 3 8 flash token counter wrong",
-      "ai agent pipeline cost more than expected"
+      "ai agent pipeline cost more than expected",
+      "openai agent hijacked message board"
     ],
     "followed_up_ids": [
       4489474
@@ -685,7 +677,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-05T00:07:41.474987+00:00",
+    "checked_at": "2026-09-05T04:32:17.788109+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -905,14 +897,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.39.1-20260905-001535",
+  "last_evolution_branch": "evolve/1.39.1-20260905-043258",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 11,
-    "total_views": 2009,
-    "avg_views": 182.6,
+    "total_views": 2049,
+    "avg_views": 186.3,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 1702,
+    "best_views": 1722,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -928,15 +920,15 @@
       {
         "archetype": "problem-workaround",
         "count": 4,
-        "avg_engagement": 465.2,
-        "avg_views": 459.0,
+        "avg_engagement": 470.2,
+        "avg_views": 464.0,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
         "archetype": "build-tutorial",
         "count": 2,
-        "avg_engagement": 56.5,
-        "avg_views": 56.5,
+        "avg_engagement": 61.5,
+        "avg_views": 61.5,
         "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
       },
       {
@@ -956,8 +948,8 @@
       {
         "archetype": "surprising-behavior",
         "count": 1,
-        "avg_engagement": 0.0,
-        "avg_views": 0.0,
+        "avg_engagement": 10.0,
+        "avg_views": 10.0,
         "best_title": "Why Your AI Agent Pipeline Costs More Than Expected"
       }
     ],
@@ -992,7 +984,7 @@
     "done_ids": [],
     "skipped": {},
     "updated_total": 0,
-    "last_run": "2026-09-05T00:16:54.596713+00:00",
+    "last_run": "2026-09-05T04:33:55.062921+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   }

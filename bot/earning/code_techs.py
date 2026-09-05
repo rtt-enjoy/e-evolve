@@ -1,3 +1,19 @@
+"""
+Free-AI earning opportunity queue.
+
+Research and suggestions only. Refreshes daily (per config) by fetching free,
+public, read-only leads from GitHub, Hacker News, and Reddit, then asks the
+configured research LLM to synthesise them into a concrete online brief
+(services, easy earning ideas, next actions). The brief and the ranked leads
+are written to ``docs/code-tech-opportunities.md`` so the owner has a single
+place to look each morning.
+
+Hard rules, matching the rest of the project:
+
+- Never contacts anyone, never requests payment, never posts externally.
+- Inputs come from public feeds only -- no scraping behind logins.
+- A failing source is logged and skipped; a dead feed never breaks a cycle.
+"""
 from __future__ import annotations
 
 import json
@@ -235,6 +251,13 @@ _LOCAL_LEADS = [
 		"source": "local-playbook",
 		"body": "Free translation and LLM tiers localize listings, menus, and help docs. Charge per thousand words. Small exporters and local restaurants need this and do not want a full agency.",
 		"labels": ["free-ai-api", "translation", "batch-job"]
+	},
+	{
+		"title": "Free embeddings API for semantic search and RAG over small datasets",
+		"url": "",
+		"source": "local-playbook",
+		"body": "Cohere, Gemini, and OpenRouter free tiers all expose embeddings endpoints. Build a one-page semantic-search tool over a client's PDF or Notion export, charge a flat setup fee, and let the client keep the free key for ongoing queries.",
+		"labels": ["free-ai-api", "embeddings", "setup-service", "semantic-search"]
 	}
 ]
 
@@ -273,6 +296,14 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	max_items = max(1, int(cfg.get("max_items", 8) or 8))
 	min_score = max(0, int(cfg.get("min_score", 55) or 55))
 	raw = _fetch_online_leads(cfg) or list(_LOCAL_LEADS)
+	# The same Reddit thread or GitHub issue can come back from two different
+	# searches with different labels, which used to produce two opportunities
+	# with identical URLs in the report. A reader scanning the list sees the
+	# same link twice and assumes the bot ran the same lead through the
+	# pipeline twice; the actual failure is dedupe by URL, not by title.
+	# Title-only dedupe is wrong: two genuinely different posts can share a
+	# near-identical title ("How I built X with Y").
+	raw = _dedupe_by_url(raw)
 	opportunities = _rank(raw, cfg, max_items=max_items, min_score=min_score)
 
 	pursued_count = 0
@@ -319,6 +350,26 @@ def _enabled(cfg: dict[str, Any]) -> bool:
 	if raw in {"1", "true", "yes", "on"}:
 		return True
 	return bool(cfg.get("enabled", True))
+
+def _dedupe_by_url(leads: list[dict[str, Any]]) -> list[dict[str, Any]]:
+	"""Drop leads whose URL is already represented by an earlier entry.
+
+    Keyed on the lowercased URL. ``_dedupe`` already ran inside each fetch
+    function, but a Reddit thread that surfaces under two different queries
+    only collapses once *both* lists land in ``raw``.
+    """
+	seen: set[str] = set()
+	out: list[dict[str, Any]] = []
+	for lead in leads:
+		url = str(lead.get("url") or "").strip().lower()
+		if not url:
+			out.append(lead)
+			continue
+		if url in seen:
+			continue
+		seen.add(url)
+		out.append(lead)
+	return out
 
 def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 	global _GITHUB_REQ_COUNT, _GITHUB_WINDOW_START
@@ -497,7 +548,7 @@ def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_
 			continue
 		title_for_prompt = title[:140] or "untitled code-tech lead"
 		reason = _reason(text, labels, value)
-		next_step = _next_step(text)
+		next_step = _next_step(text, labels)
 		ranked.append(Opportunity(
 			title=title_for_prompt,
 			url=str(lead.get("url", "")),
@@ -738,20 +789,34 @@ def _reason(text: str, labels: list[str], value: float) -> str:
 		parts.append("low-cost AI service lead with limited competition")
 	return "; ".join(parts[:2])
 
-def _next_step(text: str) -> str:
-	if any(word in text for word in ("transcri", "speech", "whisper", "audio")):
+def _next_step(text: str, labels: Optional[list[str]] = None) -> str:
+	"""One specific first action for this lead.
+
+    Matches on either title/body text or on the lead's labels, so an embeddings
+    or semantic-search lead that does not contain the literal word 'embedding'
+    still gets an embeddings-specific instruction. The previous signature took
+    text alone and an embeddings lead with no body would fall through to the
+    generic 'free tier limits' line -- a real failure that left
+    ``docs/code-tech-opportunities.md`` with a vague next step for the
+    Cohere/Gemini/OpenRouter embeddings lead the previous evolution added.
+    """
+	labels = [str(x).lower() for x in (labels or [])]
+	text_and_labels = text + " " + " ".join(labels)
+	if any(word in text_and_labels for word in ("transcri", "speech", "whisper", "audio")):
 		return "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio."
-	if any(word in text for word in ("ocr", "receipt", "invoice", "scan", "pdf")):
+	if any(word in text_and_labels for word in ("ocr", "receipt", "invoice", "scan", "pdf")):
 		return "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages."
-	if any(word in text for word in ("image", "background", "photo", "logo")):
+	if any(word in text_and_labels for word in ("image", "background", "photo", "logo")):
 		return "Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate."
-	if any(word in text for word in ("translat", "localiz")):
+	if any(word in text_and_labels for word in ("translat", "localiz")):
 		return "Translate one sample page on the free tier, verify quality, and price per thousand words."
-	if any(word in text for word in ("spreadsheet", "csv", "data", "cleanup", "dedupe")):
+	if any(word in text_and_labels for word in ("spreadsheet", "csv", "data", "cleanup", "dedupe")):
 		return "Clean one messy sample export with the free LLM tier and quote a flat rate per file."
-	if any(word in text for word in ("retainer", "recurring", "report", "monthly", "digest")):
+	if any(word in text_and_labels for word in ("embedding", "semantic search", "semantic-search", "vector", "rag", "retrieval")):
+		return "Embed a sample PDF or Notion export with the free embeddings tier, build a one-page semantic-search demo, and charge a flat setup fee plus per-query."
+	if any(word in text_and_labels for word in ("retainer", "recurring", "report", "monthly", "digest")):
 		return "Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer."
-	if any(word in text for word in ("setup", "configure", "install", "onboard")):
+	if any(word in text_and_labels for word in ("setup", "configure", "install", "onboard")):
 		return "Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow."
 	if _is_free_ai_lead(text):
 		return "Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task."

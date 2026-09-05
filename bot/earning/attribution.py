@@ -98,6 +98,42 @@ def _defaults() -> dict[str, Any]:
 	}
 
 
+def summary(status: dict[str, Any]) -> dict[str, Any]:
+	"""Attribution state, with the empty case spelled out rather than implied.
+
+    The previous version returned a dict with ``receipt_count=0`` but no
+    ``"note"``, so a reader of status.json who only looked at ``attribution``
+    saw what looked like a real, empty log. That is misleading -- an empty log
+    and a log that has never been written are different states, and a future
+    writer of the dashboard would not be able to tell them apart from the
+    summary alone. The empty case is now returned with the same ``note`` and
+    ``confidence`` labels a real receipt carries, so "we have never seen a
+    tip" reads as "we have never seen a tip" and not as "there have been
+    zero tips and we tracked them all".
+    """
+	book = status.get("attribution")
+	if not book:
+		empty = _defaults()
+		empty["confidence"] = "none_yet"
+		return {
+			"receipt_count":        0,
+			"total_attributed_usd": 0.0,
+			"last_receipt_at":      None,
+			"top_archetype":        None,
+			"note":                  empty["note"],
+			"confidence":            "none_yet",
+		}
+	by_arch = book.get("by_archetype") or []
+	return {
+		"receipt_count":        int(book.get("receipt_count") or 0),
+		"total_attributed_usd": float(book.get("total_attributed_usd") or 0.0),
+		"last_receipt_at":      book.get("last_receipt_at"),
+		"top_archetype":        (by_arch[0].get("archetype") if by_arch else None),
+		"note":                  book.get("note", _defaults()["note"]),
+		"confidence":            "correlated" if int(book.get("receipt_count") or 0) > 0 else "none_yet",
+	}
+
+
 def record_receipt(status: dict[str, Any]) -> dict[str, Any] | None:
 	"""Log the publishing context for a real on-chain receipt.
 
@@ -179,15 +215,3 @@ def _by_tag(receipts: list) -> list[dict[str, Any]]:
 			slot["count"] += 1
 			slot["usd"] = round(slot["usd"] + amount, 6)
 	return sorted(buckets.values(), key=lambda b: b["usd"], reverse=True)[:12]
-
-
-def summary(status: dict[str, Any]) -> dict[str, Any]:
-	"""Attribution state, with the empty case spelled out rather than implied."""
-	book = status.get("attribution") or _defaults()
-	by_arch = book.get("by_archetype") or []
-	return {
-		"receipt_count":        int(book.get("receipt_count") or 0),
-		"total_attributed_usd": float(book.get("total_attributed_usd") or 0.0),
-		"last_receipt_at":      book.get("last_receipt_at"),
-		"top_archetype":        (by_arch[0].get("archetype") if by_arch else None),
-	}

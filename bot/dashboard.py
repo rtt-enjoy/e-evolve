@@ -6,6 +6,7 @@ docs/ for GitHub Pages. Python owns the backend-facing data contract:
 
   - docs/status.json
   - docs/earnings-log.md
+  - docs/earnings-public.json
 
 If the React build has not been generated yet, write a tiny fallback shell so
 GitHub Pages still has a helpful index.html.
@@ -18,6 +19,8 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from bot.earning import status_digest
 
 log = logging.getLogger(__name__)
 
@@ -71,9 +74,6 @@ def write_log(actions: list[dict]) -> None:
 			lines.append(f"- {icon} **{platform}** NFT tx=`{tx}` uri={uri}")
 
 		else:
-			# A failed action carries an "error" explaining itself; printing
-			# only "action recorded" threw that away, so 17 dev.to failures in
-			# this log are indistinguishable from each other and from a crash.
 			err = str(action.get("error", "")).strip()
 			if not ok and err:
 				lines.append(f"- {icon} **{platform}**: {err[:120]}")
@@ -104,6 +104,11 @@ def write_html(status: dict[str, Any]) -> None:
 			_LOG_FILE.read_text(encoding="utf-8"),
 			encoding="utf-8",
 		)
+
+	# Public earnings digest for the GitHub Pages dashboard. Written after the
+	# full status.json so the masked wallet state has already been snapshotted;
+	# the digest only reads derived fields, never raw secrets.
+	status_digest.write(status)
 
 	if not _HTML_FILE.exists():
 		_HTML_FILE.write_text(_fallback_index(), encoding="utf-8")

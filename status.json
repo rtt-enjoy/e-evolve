@@ -1,7 +1,7 @@
 {
   "version": "1.39.0",
-  "last_run": "2026-09-05T18:20:00.630240+00:00",
-  "total_runs": 1771,
+  "last_run": "2026-09-05T21:16:03.838508+00:00",
+  "total_runs": 1772,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,19 +33,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.39.0",
-    "summary": "Add a tiny status.json schema test, persist a public earnings digest for the dashboard, and fix the dev.to stats API key scoping in backfill when only stats fetch is needed",
+    "summary": "Add a scannable QR code to the USDT tip footer so readers can pay from their phones without copying an address.",
     "changes_applied": [
       {
-        "file": "bot/earning/status_digest.py",
-        "reason": "The dashboard already writes a masked wallet status to docs/status.json but no public-friendly earnings digest exists for the GitHub Pages site. This adds a deterministic, no-LLM, never-raises module that derives a small public snapshot from fields dashboard.py already has, writes it to docs/earnings-public.json, and skips the write when nothing has changed (so a quiet cycle does not invalidate any CDN cache). It deliberately exposes only fields the dashboard already needs and keeps full wallet internals out of the public file."
-      },
-      {
-        "file": "bot/earning/tests/test_status_digest.py",
-        "reason": "Adds a small smoke test for the new status_digest module so a future change that breaks the derivation path is visible at review time. Uses tmp_path + monkeypatch.chdir to avoid touching the real docs/ directory and verifies both the happy path (file is written with the right fields and unknown breakdown keys are filtered) and the no-op-when-unchanged behaviour that protects any CDN cache in front of GitHub Pages."
-      },
-      {
-        "file": "bot/dashboard.py",
-        "reason": "Wires the new status_digest module into dashboard.write_html so the public earnings file is refreshed on the same cycle as docs/status.json. Imports it at the top rather than inside write_html because it is a small, side-effect-free module and the import cost is one line; the existing lazy 'from bot.status' import stays lazy because sanitize_for_git is heavier and only one site needs it."
+        "file": "bot/earning/payout.py",
+        "reason": "Adds a scannable QR code to the existing tip footer so readers on mobile can pay without manually copying a 34-character address. Uses a free public QR-code API; no new dependency, no LLM call, and the address is already validated before the image URL is built."
       }
     ],
     "suggestions": [
@@ -90,7 +82,7 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.39.1-20260905-182029",
+    "branch": "evolve/1.39.1-20260905-211852",
     "proposed_version": "1.39.1"
   },
   "last_earning": {
@@ -139,7 +131,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 29,
+  "last_cycle_seconds": 169,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -675,7 +667,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-05T18:20:01.027581+00:00",
+    "checked_at": "2026-09-05T21:16:04.139352+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -895,7 +887,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.39.1-20260905-182029",
+  "last_evolution_branch": "evolve/1.39.1-20260905-211852",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 11,
@@ -982,7 +974,7 @@
     "done_ids": [],
     "skipped": {},
     "updated_total": 0,
-    "last_run": "2026-09-05T18:20:29.955899+00:00",
+    "last_run": "2026-09-05T21:18:52.614803+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   }

@@ -1,7 +1,7 @@
 {
   "version": "1.39.0",
-  "last_run": "2026-09-05T09:07:09.503429+00:00",
-  "total_runs": 1768,
+  "last_run": "2026-09-05T12:44:23.005902+00:00",
+  "total_runs": 1769,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,19 +33,19 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.39.0",
-    "summary": "Wire Anthropic free tier as LLM fallback, fix backfill to actually process old articles, add earnings attribution tracking, and add Cerebras support for additional free LLM capacity",
+    "summary": "Add LLM call retry with exponential backoff for rate-limit resilience, fix backfill to log remaining count even when nothing to do, and add force-backfill override",
     "changes_applied": [
       {
-        "file": "bot/earning/payout.py",
-        "reason": "Add self_test() method to payout module for deterministic address validation at boot time. This catches misconfigured USDT_WALLET_ADDRESS (truncated, wrong network, invalid checksum) in the build log the same cycle it's introduced, instead of silently publishing articles without footers. No new secret, no behavior change on live path, no LLM call. Patch-level bump from 1.39.0 to 1.40.0."
+        "file": "bot/earning/articles.py",
+        "reason": "Add _call_llm_with_retry() with exponential-backoff for rate-limit resilience. Currently 'empty_draft' rejections occur when OpenRouter returns 503 or rate-limits mid-request; the LLM call fails silently and the draft is discarded. Retrying up to 3x with 5/10/20s backoff converts many of those silent failures into published articles. Also adds 'llm_rate_limited' to the reject catalog so the status clearly shows when retries were exhausted."
       },
       {
         "file": "bot/earning/backfill.py",
-        "reason": "Add debug logging to backfill module to diagnose why 'nothing_to_do' is returned when articles likely lack footers. The log line shows has_footer result and body_changed flag for each candidate, making it visible in the build log why a post is skipped. This will help verify the top article (1,722 views) gets the footer on next run."
+        "reason": "Replace the opaque 'nothing_to_do' return with a per-post diagnostic log showing has_footer result and page_views for every article. Previously a single log line made it impossible to see why the queue was empty without reading the full build log. Now each post is logged individually as 'done', 'skip (front matter)', 'done (no footer but somehow has footer)', or 'pending: NO FOOTER, needs append', making the queue state visible at a glance. Also always sets remaining=0 when nothing to do so status.json never carries a stale count, and adds 'force_backfill' override support to clear done_ids."
       },
       {
-        "file": "config/strategy.json",
-        "reason": "Ensure payout.enabled is true in config (it was already true per status) and add attribution section for earnings tracking. The config already has payout.enabled: true but adding explicit attribution config ensures the attribution module records receipts when tips arrive. No functional change, just making config explicit for reviewability."
+        "file": "version.txt",
+        "reason": "Minor version bump for new LLM retry feature and improved backfill diagnostics. Patch 1.40.x was debug logging; 1.41.0 adds retry logic that can recover from rate-limit failures and produce an actual published article instead of an 'empty_draft' rejection."
       }
     ],
     "suggestions": [
@@ -76,32 +76,6 @@
         ]
       },
       {
-        "title": "Fix backfill to actually add footers to old high-traffic articles",
-        "description": "Backfill module exists but last run shows 'nothing_to_do' despite 11 published articles. The highest-traffic article (1,722 views) likely lacks the USDT footer. Need to verify and force backfill to process.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Check backfill logic: needs_footer() may be incorrectly detecting footers",
-          "2. Run a forced backfill cycle via 'force backfill' command",
-          "3. Verify the top article (Reading Twitter Without X) gets the footer",
-          "4. Monitor dashboard for backfill.updated count > 0"
-        ]
-      },
-      {
-        "title": "Add earnings attribution to track which articles drive tips",
-        "description": "Attribution module exists but shows 0 receipts. When first USDT tip arrives, correlate it with live articles to learn what content earns. Currently attribution.confidence is only 'correlated'.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Verify attribution.record_receipt() is called in status phase after wallet poll",
-          "2. Check that article_stats and article_interest are populated before receipt",
-          "3. First tip will populate attribution.by_archetype and by_tag",
-          "4. Use this data to steer future article topics toward earning archetypes"
-        ]
-      },
-      {
         "title": "Pursue top code_techs opportunity: Demido Studio v3 map ($4,500)",
         "description": "Highest-scored opportunity (score 100, $4,500) is a GitHub issue for Demido Studio foundation map. Runs on free AI tier, zero input cost. Owner can deliver a working OCR-to-spreadsheet demo in under 2 hours.",
         "secret_needed": null,
@@ -116,8 +90,8 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.40.0-20260905-091223",
-    "proposed_version": "1.40.0"
+    "branch": "evolve/1.41.0-20260905-124727",
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -151,32 +125,6 @@
       ]
     },
     {
-      "title": "Fix backfill to actually add footers to old high-traffic articles",
-      "description": "Backfill module exists but last run shows 'nothing_to_do' despite 11 published articles. The highest-traffic article (1,722 views) likely lacks the USDT footer. Need to verify and force backfill to process.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Check backfill logic: needs_footer() may be incorrectly detecting footers",
-        "2. Run a forced backfill cycle via 'force backfill' command",
-        "3. Verify the top article (Reading Twitter Without X) gets the footer",
-        "4. Monitor dashboard for backfill.updated count > 0"
-      ]
-    },
-    {
-      "title": "Add earnings attribution to track which articles drive tips",
-      "description": "Attribution module exists but shows 0 receipts. When first USDT tip arrives, correlate it with live articles to learn what content earns. Currently attribution.confidence is only 'correlated'.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Verify attribution.record_receipt() is called in status phase after wallet poll",
-        "2. Check that article_stats and article_interest are populated before receipt",
-        "3. First tip will populate attribution.by_archetype and by_tag",
-        "4. Use this data to steer future article topics toward earning archetypes"
-      ]
-    },
-    {
       "title": "Pursue top code_techs opportunity: Demido Studio v3 map ($4,500)",
       "description": "Highest-scored opportunity (score 100, $4,500) is a GitHub issue for Demido Studio foundation map. Runs on free AI tier, zero input cost. Owner can deliver a working OCR-to-spreadsheet demo in under 2 hours.",
       "secret_needed": null,
@@ -191,7 +139,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 314,
+  "last_cycle_seconds": 185,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -727,7 +675,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-05T09:07:10.084994+00:00",
+    "checked_at": "2026-09-05T12:44:23.380791+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -947,7 +895,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.40.0-20260905-091223",
+  "last_evolution_branch": "evolve/1.41.0-20260905-124727",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 11,
@@ -1034,7 +982,7 @@
     "done_ids": [],
     "skipped": {},
     "updated_total": 0,
-    "last_run": "2026-09-05T09:12:23.927747+00:00",
+    "last_run": "2026-09-05T12:47:27.844916+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   }

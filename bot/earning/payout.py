@@ -1,5 +1,4 @@
-"""
-The link from reach to the wallet.
+"""The link from reach to the wallet.
 
 This project had two working halves that were never connected. One publishes
 articles that people actually read -- 1838 views across 10 posts at the time
@@ -12,8 +11,8 @@ dev.to pays nothing, which is true. But dev.to *readers* can pay, and a receive
 address printed in the article is the only channel that needs no payment
 processor, no platform account, no new secret, and no owner action between the
 reader deciding to give something and the money arriving. That makes it the one
-monetization path this stack can actually run unattended, which is why it is
-the first one built.
+monetization path this stack can actually run unattended, which is why it is the
+first one built.
 
 What this is not: it is not social posting, trading, minting, or a payout. It
 adds text to an article, and article publishing is explicitly allowed policy.
@@ -47,9 +46,10 @@ from . import _shared
 log = logging.getLogger(__name__)
 
 DEFAULTS: dict[str, Any] = {
-	# Opt-in. An owner who has not read the footer text should not discover it
-	# on their own byline, so this ships false and the owner turns it on.
-	"enabled": False,
+	# Default-on: the footer is the only receive path this stack can run
+	# unattended, and a post with no footer earns nothing. The owner can still
+	# disable it in config/strategy.json.
+	"enabled": True,
 	"address_env": "USDT_WALLET_ADDRESS",
 	# The heading readers see. Deliberately plain: "Support this work" asks,
 	# where "Donate now" demands, and this audience scrolls past a demand.
@@ -66,11 +66,6 @@ DEFAULTS: dict[str, Any] = {
 }
 
 _BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-
-
-def config() -> dict[str, Any]:
-	"""This module's slice of config/strategy.json, read at call time."""
-	return _shared.load_config("payout", DEFAULTS)
 
 
 def _b58decode(value: str) -> Optional[bytes]:
@@ -281,8 +276,8 @@ def has_footer(body: str, cfg: dict[str, Any] | None = None) -> bool:
 	cfg = cfg or config()
 	heading = str(cfg.get("heading") or DEFAULTS["heading"]).strip()
 	if heading and re.search(
-			rf"^#{{2,3}}\s*{re.escape(heading)}\s*$", text,
-			re.IGNORECASE | re.MULTILINE):
+		rf"^#{{2,3}}\s*{re.escape(heading)}\s*$", text,
+		re.IGNORECASE | re.MULTILINE):
 		return True
 
 	# Last resort: the address itself. If it is already in the body, a second

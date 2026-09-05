@@ -41,6 +41,7 @@ import logging
 import os
 import re
 from typing import Any, Optional
+from urllib.parse import quote_plus
 
 from . import _shared
 
@@ -162,7 +163,7 @@ def keccak256(data: bytes) -> bytes:
 		for rc in _KECCAK_ROUND_CONSTANTS:
 			# theta
 			c = [state[x][0] ^ state[x][1] ^ state[x][2] ^ state[x][3] ^ state[x][4]
-				 for x in range(5)]
+					 for x in range(5)]
 			d = [c[(x - 1) % 5] ^ (((c[(x + 1) % 5] << 1) | (c[(x + 1) % 5] >> 63)) & mask)
 				 for x in range(5)]
 			for x in range(5):
@@ -243,7 +244,7 @@ def resolve_address(cfg: dict[str, Any] | None = None) -> tuple[str, str]:
 
 
 def mask(address: str) -> str:
-	"""``TFTNsf...9KbY``-style short form for logs and status."""
+	"""``TFTNsf…9KbY``-style short form for logs and status."""
 	if len(address) <= 10:
 		return "…"
 	return f"{address[:6]}…{address[-4:]}"
@@ -281,8 +282,8 @@ def has_footer(body: str, cfg: dict[str, Any] | None = None) -> bool:
 	cfg = cfg or config()
 	heading = str(cfg.get("heading") or DEFAULTS["heading"]).strip()
 	if heading and re.search(
-			rf"^#{{2,3}}\s*{re.escape(heading)}\s*$", text,
-			re.IGNORECASE | re.MULTILINE):
+		rf"^#{{2,3}}\s*{re.escape(heading)}\s*$", text,
+		re.IGNORECASE | re.MULTILINE):
 		return True
 
 	# Last resort: the address itself. If it is already in the body, a second
@@ -308,13 +309,19 @@ def footer(cfg: dict[str, Any] | None = None) -> str:
 	# fence untouched, while inline text can be line-wrapped or smart-quoted by
 	# a renderer, and a wrapped address is a mistyped address. A fence also
 	# gives the reader a copy button.
+	qr_url = (
+		f"https://api.qrserver.com/v1/create-qr-code/?data={quote_plus(address)}"
+		f"&size=200x200&color=000000&background=ffffff&margin=1"
+	)
 	return (
 		f"\n\n## {heading}\n\n"
 		f"{note}\n\n"
 		f"{label}\n\n"
 		"```\n"
 		f"{address}\n"
-		"```\n"
+		"```\n\n"
+		"Scan the QR code to pay:\n\n"
+		f"![USDT tip QR code]({qr_url})\n"
 	)
 
 

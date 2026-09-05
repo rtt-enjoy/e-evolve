@@ -1,7 +1,7 @@
 {
   "version": "1.39.0",
-  "last_run": "2026-09-05T12:44:23.005902+00:00",
-  "total_runs": 1769,
+  "last_run": "2026-09-05T16:05:39.222572+00:00",
+  "total_runs": 1770,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,19 +33,15 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.39.0",
-    "summary": "Add LLM call retry with exponential backoff for rate-limit resilience, fix backfill to log remaining count even when nothing to do, and add force-backfill override",
+    "summary": "Add retry-with-backoff to HN/Reddit lead fetchers, add backfill candidate diagnostic logging, and fix article format-revision failure to reject instead of publishing with unfixed format problems",
     "changes_applied": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "Add _call_llm_with_retry() with exponential-backoff for rate-limit resilience. Currently 'empty_draft' rejections occur when OpenRouter returns 503 or rate-limits mid-request; the LLM call fails silently and the draft is discarded. Retrying up to 3x with 5/10/20s backoff converts many of those silent failures into published articles. Also adds 'llm_rate_limited' to the reject catalog so the status clearly shows when retries were exhausted."
+        "file": "bot/earning/code_techs.py",
+        "reason": "Add _request_with_retry helper with exponential backoff for transient HTTP errors (429/5xx) in _fetch_hn_leads and _fetch_reddit_leads. These fetchers previously had no retry logic, so a single temporary network glitch or rate-limit response silently dropped an entire source of leads. Also add type-checking for the Algolia response dict to prevent AttributeError on non-dict responses."
       },
       {
         "file": "bot/earning/backfill.py",
-        "reason": "Replace the opaque 'nothing_to_do' return with a per-post diagnostic log showing has_footer result and page_views for every article. Previously a single log line made it impossible to see why the queue was empty without reading the full build log. Now each post is logged individually as 'done', 'skip (front matter)', 'done (no footer but somehow has footer)', or 'pending: NO FOOTER, needs append', making the queue state visible at a glance. Also always sets remaining=0 when nothing to do so status.json never carries a stale count, and adds 'force_backfill' override support to clear done_ids."
-      },
-      {
-        "file": "version.txt",
-        "reason": "Minor version bump for new LLM retry feature and improved backfill diagnostics. Patch 1.40.x was debug logging; 1.41.0 adds retry logic that can recover from rate-limit failures and produce an actual published article instead of an 'empty_draft' rejection."
+        "reason": "Add per-post diagnostic logging when the backfill candidate list is empty, showing counts of total posts, posts already having a footer, posts skipped for front matter, posts with no body, and remaining candidates. This makes the 'nothing_to_do' state explainable at a glance instead of requiring full log inspection. Also log the number of candidates found before processing and log individual skip reasons."
       }
     ],
     "suggestions": [
@@ -90,8 +86,8 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.0-20260905-124727",
-    "proposed_version": "1.41.0"
+    "branch": "evolve/1.41.1-20260905-160657",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [],
@@ -139,7 +135,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 185,
+  "last_cycle_seconds": 79,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -675,7 +671,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-05T12:44:23.380791+00:00",
+    "checked_at": "2026-09-05T16:05:39.697753+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -895,7 +891,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.0-20260905-124727",
+  "last_evolution_branch": "evolve/1.41.1-20260905-160657",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 11,
@@ -982,7 +978,7 @@
     "done_ids": [],
     "skipped": {},
     "updated_total": 0,
-    "last_run": "2026-09-05T12:47:27.844916+00:00",
+    "last_run": "2026-09-05T16:06:58.052742+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   }

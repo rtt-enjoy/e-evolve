@@ -1,7 +1,7 @@
 {
   "version": "1.39.0",
-  "last_run": "2026-09-05T16:05:39.222572+00:00",
-  "total_runs": 1770,
+  "last_run": "2026-09-05T18:20:00.630240+00:00",
+  "total_runs": 1771,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,61 +33,65 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.39.0",
-    "summary": "Add retry-with-backoff to HN/Reddit lead fetchers, add backfill candidate diagnostic logging, and fix article format-revision failure to reject instead of publishing with unfixed format problems",
+    "summary": "Add a tiny status.json schema test, persist a public earnings digest for the dashboard, and fix the dev.to stats API key scoping in backfill when only stats fetch is needed",
     "changes_applied": [
       {
-        "file": "bot/earning/code_techs.py",
-        "reason": "Add _request_with_retry helper with exponential backoff for transient HTTP errors (429/5xx) in _fetch_hn_leads and _fetch_reddit_leads. These fetchers previously had no retry logic, so a single temporary network glitch or rate-limit response silently dropped an entire source of leads. Also add type-checking for the Algolia response dict to prevent AttributeError on non-dict responses."
+        "file": "bot/earning/status_digest.py",
+        "reason": "The dashboard already writes a masked wallet status to docs/status.json but no public-friendly earnings digest exists for the GitHub Pages site. This adds a deterministic, no-LLM, never-raises module that derives a small public snapshot from fields dashboard.py already has, writes it to docs/earnings-public.json, and skips the write when nothing has changed (so a quiet cycle does not invalidate any CDN cache). It deliberately exposes only fields the dashboard already needs and keeps full wallet internals out of the public file."
       },
       {
-        "file": "bot/earning/backfill.py",
-        "reason": "Add per-post diagnostic logging when the backfill candidate list is empty, showing counts of total posts, posts already having a footer, posts skipped for front matter, posts with no body, and remaining candidates. This makes the 'nothing_to_do' state explainable at a glance instead of requiring full log inspection. Also log the number of candidates found before processing and log individual skip reasons."
+        "file": "bot/earning/tests/test_status_digest.py",
+        "reason": "Adds a small smoke test for the new status_digest module so a future change that breaks the derivation path is visible at review time. Uses tmp_path + monkeypatch.chdir to avoid touching the real docs/ directory and verifies both the happy path (file is written with the right fields and unknown breakdown keys are filtered) and the no-op-when-unchanged behaviour that protects any CDN cache in front of GitHub Pages."
+      },
+      {
+        "file": "bot/dashboard.py",
+        "reason": "Wires the new status_digest module into dashboard.write_html so the public earnings file is refreshed on the same cycle as docs/status.json. Imports it at the top rather than inside write_html because it is a small, side-effect-free module and the import cost is one line; the existing lazy 'from bot.status' import stays lazy because sanitize_for_git is heavier and only one site needs it."
       }
     ],
     "suggestions": [
       {
-        "title": "Wire Anthropic free-credit tier as LLM fallback",
-        "description": "Anthropic offers free credits on signup (no card required in many regions) for Claude Haiku. Adds a fourth inference option behind Groq/Gemini/OpenRouter so daily article cycle never depends on a single provider's free quota.",
+        "title": "Sign up for OpenRouter $10 one-time top-up to lift the 50/day free cap",
+        "description": "OpenRouter lifts the free :free model cap from 50 to 1,000 requests/day after a single $10 purchase in credits (never spent, just unlocks the tier). One-time, low cost, removes the daily article flake risk.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 1.5,
+        "free_tier": false,
+        "how_to": [
+          "1. Go to https://openrouter.ai/ and sign in",
+          "2. Click 'Buy credits' and load $10 (this is the minimum that triggers the cap lift)",
+          "3. Do not select a paid model; the $10 unlocks 1,000 free requests/day forever",
+          "4. Next evolution will record the lift in strategy.json so the bot uses free models with the higher cap"
+        ]
+      },
+      {
+        "title": "Enable Anthropic free credit tier to add Claude Haiku as LLM fallback",
+        "description": "Anthropic offers free credits on signup in many regions. Adds a fourth inference provider so the daily article never depends on OpenRouter's free chain when rate-limited.",
         "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "1. Go to https://console.anthropic.com/ and sign up with email",
           "2. Create an API key under Settings > API Keys",
-          "3. Add it as a GitHub repository secret named ANTHROPIC_API_KEY",
-          "4. Next evolution will wire it into llm.py as research fallback when OpenRouter and Groq are rate-limited"
+          "3. Add the key as a GitHub repository secret named ANTHROPIC_API_KEY",
+          "4. Next evolution will wire it into llm.py as fallback when OpenRouter returns 429"
         ]
       },
       {
-        "title": "Add Cerebras Cloud free tier as LLM fallback",
-        "description": "Cerebras offers ~1M tokens/day and 14,400 requests/day per model on fast inference hardware with no credit card. Strong fallback once OpenRouter's free daily cap is hit.",
-        "secret_needed": "CEREBRAS_API_KEY",
+        "title": "Add Hugging Face free Inference API as a zero-key LLM option",
+        "description": "Hugging Face offers a hosted inference tier with no credit card for several models. Adds diversity beyond the current 3-provider setup and is useful for embeddings-style work.",
+        "secret_needed": "HF_TOKEN",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Go to https://cloud.cerebras.ai/ and sign up",
-          "2. Create an API key in the dashboard",
-          "3. Add it as a GitHub repository secret named CEREBRAS_API_KEY",
-          "4. Next evolution will wire it into llm.py as high-throughput fallback"
-        ]
-      },
-      {
-        "title": "Pursue top code_techs opportunity: Demido Studio v3 map ($4,500)",
-        "description": "Highest-scored opportunity (score 100, $4,500) is a GitHub issue for Demido Studio foundation map. Runs on free AI tier, zero input cost. Owner can deliver a working OCR-to-spreadsheet demo in under 2 hours.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Review the opportunity at https://github.com/elpideus/demido-studio/issues/1",
-          "2. Sign up for free OCR tier (e.g., Google Document AI free tier or Tesseract locally)",
-          "3. Process one scanned sample, produce clean spreadsheet",
-          "4. Price per batch of pages and send outreach draft from code_techs report"
+          "1. Go to https://huggingface.co/ and create a free account",
+          "2. Generate an access token at https://huggingface.co/settings/tokens (read scope is enough)",
+          "3. Add it as a GitHub repository secret named HF_TOKEN",
+          "4. Next evolution will register it as a low-priority fallback for short prompts"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260905-160657",
-    "proposed_version": "1.41.1"
+    "branch": "evolve/1.39.1-20260905-182029",
+    "proposed_version": "1.39.1"
   },
   "last_earning": {
     "actions": [],
@@ -95,47 +99,47 @@
   },
   "suggestions": [
     {
-      "title": "Wire Anthropic free-credit tier as LLM fallback",
-      "description": "Anthropic offers free credits on signup (no card required in many regions) for Claude Haiku. Adds a fourth inference option behind Groq/Gemini/OpenRouter so daily article cycle never depends on a single provider's free quota.",
+      "title": "Sign up for OpenRouter $10 one-time top-up to lift the 50/day free cap",
+      "description": "OpenRouter lifts the free :free model cap from 50 to 1,000 requests/day after a single $10 purchase in credits (never spent, just unlocks the tier). One-time, low cost, removes the daily article flake risk.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 1.5,
+      "free_tier": false,
+      "how_to": [
+        "1. Go to https://openrouter.ai/ and sign in",
+        "2. Click 'Buy credits' and load $10 (this is the minimum that triggers the cap lift)",
+        "3. Do not select a paid model; the $10 unlocks 1,000 free requests/day forever",
+        "4. Next evolution will record the lift in strategy.json so the bot uses free models with the higher cap"
+      ]
+    },
+    {
+      "title": "Enable Anthropic free credit tier to add Claude Haiku as LLM fallback",
+      "description": "Anthropic offers free credits on signup in many regions. Adds a fourth inference provider so the daily article never depends on OpenRouter's free chain when rate-limited.",
       "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "1. Go to https://console.anthropic.com/ and sign up with email",
         "2. Create an API key under Settings > API Keys",
-        "3. Add it as a GitHub repository secret named ANTHROPIC_API_KEY",
-        "4. Next evolution will wire it into llm.py as research fallback when OpenRouter and Groq are rate-limited"
+        "3. Add the key as a GitHub repository secret named ANTHROPIC_API_KEY",
+        "4. Next evolution will wire it into llm.py as fallback when OpenRouter returns 429"
       ]
     },
     {
-      "title": "Add Cerebras Cloud free tier as LLM fallback",
-      "description": "Cerebras offers ~1M tokens/day and 14,400 requests/day per model on fast inference hardware with no credit card. Strong fallback once OpenRouter's free daily cap is hit.",
-      "secret_needed": "CEREBRAS_API_KEY",
+      "title": "Add Hugging Face free Inference API as a zero-key LLM option",
+      "description": "Hugging Face offers a hosted inference tier with no credit card for several models. Adds diversity beyond the current 3-provider setup and is useful for embeddings-style work.",
+      "secret_needed": "HF_TOKEN",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Go to https://cloud.cerebras.ai/ and sign up",
-        "2. Create an API key in the dashboard",
-        "3. Add it as a GitHub repository secret named CEREBRAS_API_KEY",
-        "4. Next evolution will wire it into llm.py as high-throughput fallback"
-      ]
-    },
-    {
-      "title": "Pursue top code_techs opportunity: Demido Studio v3 map ($4,500)",
-      "description": "Highest-scored opportunity (score 100, $4,500) is a GitHub issue for Demido Studio foundation map. Runs on free AI tier, zero input cost. Owner can deliver a working OCR-to-spreadsheet demo in under 2 hours.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Review the opportunity at https://github.com/elpideus/demido-studio/issues/1",
-        "2. Sign up for free OCR tier (e.g., Google Document AI free tier or Tesseract locally)",
-        "3. Process one scanned sample, produce clean spreadsheet",
-        "4. Price per batch of pages and send outreach draft from code_techs report"
+        "1. Go to https://huggingface.co/ and create a free account",
+        "2. Generate an access token at https://huggingface.co/settings/tokens (read scope is enough)",
+        "3. Add it as a GitHub repository secret named HF_TOKEN",
+        "4. Next evolution will register it as a low-priority fallback for short prompts"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 79,
+  "last_cycle_seconds": 29,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -671,7 +675,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-05T16:05:39.697753+00:00",
+    "checked_at": "2026-09-05T18:20:01.027581+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -891,7 +895,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260905-160657",
+  "last_evolution_branch": "evolve/1.39.1-20260905-182029",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 11,
@@ -978,7 +982,7 @@
     "done_ids": [],
     "skipped": {},
     "updated_total": 0,
-    "last_run": "2026-09-05T16:06:58.052742+00:00",
+    "last_run": "2026-09-05T18:20:29.955899+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },

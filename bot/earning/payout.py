@@ -164,7 +164,7 @@ def keccak256(data: bytes) -> bytes:
 			c = [state[x][0] ^ state[x][1] ^ state[x][2] ^ state[x][3] ^ state[x][4]
 				 for x in range(5)]
 			d = [c[(x - 1) % 5] ^ (((c[(x + 1) % 5] << 1) | (c[(x + 1) % 5] >> 63)) & mask)
-				 for x in range(5)]
+			 for x in range(5)]
 			for x in range(5):
 				for y in range(5):
 					state[x][y] ^= d[x]
@@ -245,8 +245,8 @@ def resolve_address(cfg: dict[str, Any] | None = None) -> tuple[str, str]:
 def mask(address: str) -> str:
 	"""``TFTNsf...9KbY``-style short form for logs and status."""
 	if len(address) <= 10:
-		return "…"
-	return f"{address[:6]}…{address[-4:]}"
+		return "..."
+	return f"{address[:6]}...{address[-4:]}"
 
 
 # The stock heading. Matched even when the owner has configured a different one,
@@ -281,8 +281,8 @@ def has_footer(body: str, cfg: dict[str, Any] | None = None) -> bool:
 	cfg = cfg or config()
 	heading = str(cfg.get("heading") or DEFAULTS["heading"]).strip()
 	if heading and re.search(
-			rf"^#{{2,3}}\s*{re.escape(heading)}\s*$", text,
-			re.IGNORECASE | re.MULTILINE):
+		rf"^#{{2,3}}\s*{re.escape(heading)}\s*$", text,
+		re.IGNORECASE | re.MULTILINE):
 		return True
 
 	# Last resort: the address itself. If it is already in the body, a second
@@ -376,7 +376,7 @@ def public_snapshot(cfg: dict[str, Any] | None = None) -> dict[str, Any]:
     and stays masked, because a masked address is all the owner needs to
     recognise which wallet is configured. A dashboard tip box is not a
     diagnostic: a reader cannot pay a masked address, so publishing
-    ``TFTNsf…9KbY`` there would rebuild the exact structural zero this module
+    ``TFTNsf...9KbY`` there would rebuild the exact structural zero this module
     exists to close -- a receive path that looks present and cannot receive.
 
     The address is only exposed when ``footer()`` would already publish that
@@ -398,4 +398,52 @@ def public_snapshot(cfg: dict[str, Any] | None = None) -> dict[str, Any]:
 		"heading": str(cfg.get("heading") or DEFAULTS["heading"]).strip(),
 		"note": str(cfg.get("note") or DEFAULTS["note"]).strip(),
 		"asset": "USDT",
+	}
+
+
+def self_test() -> dict[str, Any]:
+	"""Deterministic address sanity check for the boot phase.
+
+    Runs without an LLM call and without external requests. Returns a dict
+    with keys: ok (bool), address_masked (str|None), network (str|None),
+    reason (str|None). The same validation that runs on every publish and
+    backfill, folded into a one-call result the orchestrator can invoke every
+    cycle so a misconfigured USDT_WALLET_ADDRESS surfaces in the build log
+    the cycle it is introduced.
+    """
+	cfg = config()
+	enabled = bool(cfg.get("enabled"))
+	env_name = str(cfg.get("address_env") or "USDT_WALLET_ADDRESS").strip()
+	raw = os.getenv(env_name, "").strip() if env_name else ""
+
+	if not enabled:
+		return {
+			"ok": False,
+			"address_masked": None,
+			"network": None,
+			"reason": "payout.enabled is false in config/strategy.json",
+		}
+
+	if not raw:
+		return {
+			"ok": False,
+			"address_masked": None,
+			"network": None,
+			"reason": f"{env_name} is not set",
+		}
+
+	address, network = resolve_address(cfg)
+	if not address:
+		return {
+			"ok": False,
+			"address_masked": mask(raw),
+			"network": None,
+			"reason": f"{env_name} is not a checksum-valid USDT address (TRC-20 or ERC-20)",
+		}
+
+	return {
+		"ok": True,
+		"address_masked": mask(address),
+		"network": network,
+		"reason": None,
 	}

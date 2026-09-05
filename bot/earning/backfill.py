@@ -77,6 +77,7 @@ def _state(status: dict) -> dict:
 		"updated_total": 0,
 		"last_run": None,
 		"last_reason": None,
+		"remaining": 0,
 	})
 
 
@@ -197,6 +198,9 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 			# add_footer is a no-op when it decides the footer must be omitted.
 			# Sending an unchanged body would spend a write for nothing.
 			if new_body == body or not payout.has_footer(new_body, payout_cfg):
+				log.info("[backfill] skipping %s (id=%s) - footer not added (has_footer=%s, body_changed=%s)",
+					str(post.get("title", ""))[:60], post.get("id"),
+					payout.has_footer(new_body, payout_cfg), new_body != body)
 				continue
 
 			result = devto.update_body(int(post["id"]), new_body, key)
@@ -204,7 +208,7 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 				updated += 1
 				state.setdefault("done_ids", []).append(post["id"])
 				log.info("[backfill] footer added to %s (%s views)",
-						 str(post.get("title", ""))[:60], post.get("page_views"))
+					str(post.get("title", ""))[:60], post.get("page_views"))
 			else:
 				state.setdefault("skipped", {})[str(post["id"])] = result.get("error", "")
 				# Stop on the first failure rather than hammering a failing API.

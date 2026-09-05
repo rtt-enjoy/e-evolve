@@ -1,6 +1,6 @@
 # Recurring Revenue (MRR) Idea Triage
 
-Refreshed: 2026-09-03T21:49:58.478685+00:00
+Refreshed: 2026-09-05T23:01:12.681970+00:00
 
 Research and suggestions only. This bot does not contact anyone, collect
 payment, or host a service. Every figure quoted from the source article
@@ -16,29 +16,29 @@ is unverified — check it yourself before acting on it.
 
 ## Best Current Angle
 
-For a stack that can only research, write, and publish to dev.to, the most honest recurring-revenue angle is a paid newsletter on a single narrow technical topic where the audience already gathers on dev.to itself. The bot can publish free articles to build a byline and a niche audience; the owner has to do everything else by hand, including opening a payment account, putting a paid tier behind a link, and convincing readers to subscribe. This works only if the owner already has readers in that niche or joins a dev.to tag and posts there by hand; it cannot conjure subscribers from nothing.
+The only recurring-revenue angle that fits this exact stack is a paid newsletter whose entire funnel is an article on dev.to that converts readers into a paid Substack or Gumroad subscription. The bot can research, draft, and publish the article; the owner opens the subscription account and storefront by hand, since no automation in this stack can accept payment, accept signups via webhook, or run cold outreach. Realistic MRR depends entirely on how many readers the article reaches, and that number must be verified independently before any revenue claim is made. Narrow beats broad: pick one specific developer niche, write one specific article series, and price the subscription low enough that a single satisfied reader will pay for a year without a sales call.
 
 ## Ranked Ideas
 
-### Paid newsletter
+### Paid newsletter on dev.to, billed via a paid Substack or Gumroad the owner opens by hand
 
-- **Niche:** Weekly debugging notes for engineers stuck on flaky Playwright CI runs on GitHub Actions free tier.
-- **Who pays:** A backend or QA engineer at a seed-to-Series-B startup who runs Playwright in CI and keeps losing hours to flake on the free GitHub Actions tier.
-- **Monthly price:** 10
-- **Why this stack fits:** The dev.to publish surface is literally where developer newsletters get discovered; the bot can draft each issue, but payment and subscription mechanics are entirely the owner's manual job.
-- **First proof artifact:** Three free public dev.to articles in that exact niche, each ending with one question for readers, published on a fixed weekday so a habit forms.
-- **Runway to first dollar:** 4-8 weeks, gated entirely by how fast the owner can build a tagged following on dev.to by hand
-- **You must do by hand:** Open a paid subscription product on a platform the owner picks (Gumroad, Substack, or Stripe + a landing page the owner builds by hand), paste the subscribe link into each free article by hand, manually reply to anyone who comments, and manually promote the tag the articles live under; the bot will 
+- **Niche:** Solo developers and indie hackers debugging a specific recurring problem, for example "CI pipeline failures on GitHub Actions free tier" or "Postgres query plans for Rails developers."
+- **Who pays:** An individual developer or indie hacker who has already read free dev.to content from the byline and wants the next installment delivered weekly without having to check the site.
+- **Monthly price:** 5-10
+- **Why this stack fits:** The whole deliverable is a written article the bot can publish to dev.to; the paid tier lives on a service the owner provisions once, and no webhook, form, or always-on server is required here.
+- **First proof artifact:** One long-form dev.to article (verify length and style independently) that teaches the niche topic end-to-end and ends with a single sentence pointing to the paid Substack or Gumroad for the weekly follow-up.
+- **Runway to first dollar:** 4-8 weeks of weekly publishing before any paid subscriber is realistic; expect 0 subscribers for the first 2-3 articles.
+- **You must do by hand:** Create the Substack or Gumroad account, set the monthly price, write the landing-page copy, and paste the URL into the dev.to article by hand. The bot cannot create accounts, hold payment credentials, or accept a subscription signup.
 
-### Notion / digital template store
+### Notion or digital template library billed as a subscription the owner provisions by hand
 
-- **Niche:** Notion incident-response runbooks for SRE on-call rotations at startups without a dedicated incident tool.
-- **Who pays:** An SRE or tech lead at a 20-100 person startup whose on-call rotation still lives in a shared Google Doc.
-- **Monthly price:** 9
-- **Why this stack fits:** The bot can draft template content and supporting articles, but selling any template library requires a storefront and a payment account that the owner has to set up by hand, and templates are commodity goods with thin differentiation unless the niche is razor-sharp.
-- **First proof artifact:** One free Notion template exported as a public read-only link, plus one dev.to article walking through how to fork it for a specific stack (e.g. a Node + Postgres service).
-- **Runway to first dollar:** 6-12 weeks, because the owner must build the storefront and prove the template's value before any subscription makes sense
-- **You must do by hand:** Open a Gumroad or Lemon Squeezy subscription product by hand, upload the template files by hand, write the sales page by hand, and add the link to the dev.to article by hand; the bot cannot take payment, cannot deliver files, and cannot follow up with prospects.
+- **Niche:** One specific template family, for example "Notion bug-tracking templates for solo SaaS founders" or "GitHub Actions workflow templates for Node CLIs."
+- **Who pays:** A solo developer or small-team lead who has used one free template, wants the rest, and is willing to pay a small monthly fee for updates.
+- **Monthly price:** 5-15
+- **Why this stack fits:** The bot can draft the templates and the dev.to article that explains them; the recurring billing and gated download live on a Gumroad or Lemon Squeezy page the owner opens once.
+- **First proof artifact:** Three real templates published on dev.to as code samples, each in its own article, so a reader can judge quality before paying for the full library.
+- **Runway to first dollar:** 6-12 weeks; templates are easy to copy, so the paid angle only works if updates are visibly shipped each month.
+- **You must do by hand:** Open the Gumroad or Lemon Squeezy subscription product, upload the actual template files, set the price, and link to it from the dev.to articles. No part of payment, file hosting, or access control can be automated inside this stack.
 
 
 ## Set Up By Hand First
@@ -50,10 +50,10 @@ None of these is a blocker — but no money moves until you do them.
 
 ## How To Validate Without Outreach
 
-- Publish a free dev.to article in the exact niche and end it with one concrete question (e.g. 'What does your flaky-test triage checklist look like?') so readers reply on dev.to itself, which is inbound and does not require cold outreach.
-- Post one short comment thread by hand on three older high-traffic dev.to articles in the same tag, leaving a useful reply and the author's new article link in the bio, not as spam, so the tag community notices the byline.
-- Watch the dev.to tag's RSS feed for the niche and note which post titles consistently get comments; these are the topics the next free issues should cover, and they also reveal the actual reader vocabulary to use.
-- Join a relevant open Slack or Discord the owner already belongs to and read for two weeks without posting a pitch; the recurring complaints observed there are the validation signal, and any reply is still inbound.
+- Publish a free dev.to article on the narrow niche that ends with one direct question, for example "What is the specific CI failure you keep hitting on GitHub Actions free tier?", then read every comment by hand and reply by hand to learn what real readers are stuck on.
+- Search dev.to, the GitHub Actions docs, and public issue trackers by hand for recurring questions in the niche; compile a list of the 10 most common problems and confirm there are at least 10 people asking each one before assuming a market.
+- Post one thread by hand in one community the owner already belongs to (for example a Discord or Slack the owner is already in) asking which of the 10 problems hurts most, and tally the responses by hand. Do not post to communities the owner is not already a member of.
+- Cross-check on dev.to by hand how many existing articles already cover this niche and what they charge, if anything, so the price and angle are grounded in what is actually published, not assumed.
 
 ## Refused, And Why
 
@@ -83,8 +83,8 @@ code, or infrastructure that does not exist here and is not free.
 
 ## Next Actions
 
-1. Pick one niche from above and commit to one free dev.to article per week for eight weeks, all in the same tag, before thinking about charging anyone.
-2. After three articles are live, open a Gumroad account by hand, create one $10/mo subscription product titled exactly like the newsletter, and copy the link into each article's author bio by hand.
-3. Reply by hand, within 24 hours, to every comment on every article; this is the only audience-building motion the stack actually allows.
-4. Set up a UptimeRobot or cron-free GitHub Action ping that emails the owner if a scheduled publish job fails, because losing a weekly slot breaks the habit the model depends on.
-5. Track in a plain text file: article URL, publish date, comment count, and any inbound email; use this to decide after eight weeks whether the niche has real demand before paying for any tooling.
+1. Pick one narrow niche from the two ideas above and write down the single sentence that names the specific buyer and the specific problem, so every later article is judged against it.
+2. Open one Gumroad or Substack account by hand, set the monthly price in the 5-15 USD range, and save the public URL; this is the only paid surface the stack will ever link to.
+3. Draft and publish the first long-form dev.to article on the niche, ending with the paid URL and one question for readers, and repeat weekly by hand until at least 6 issues are live before judging whether the model works.
+4. Keep a hand-written spreadsheet of every dev.to comment, reply, and signup signal so the next article is chosen from evidence, not from guesswork.
+5. After 8-12 weeks, count actual subscribers by hand and decide whether to continue, narrow further, or stop; do not scale spend or effort before this number exists.

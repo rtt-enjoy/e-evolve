@@ -1,7 +1,7 @@
 {
-  "version": "1.39.0",
-  "last_run": "2026-09-06T00:59:40.342016+00:00",
-  "total_runs": 1774,
+  "version": "1.40.0",
+  "last_run": "2026-09-06T05:58:39.040132+00:00",
+  "total_runs": 1775,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -23,7 +23,9 @@
       "dev.to": 0.0,
       "code_techs": 0.0,
       "mrr-ideas": 0.0,
-      "dev.to-newsletter": 0.0
+      "dev.to-newsletter": 0.0,
+      "dev.to-backfill": 0.0,
+      "dev.to-receipt-check": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -32,38 +34,49 @@
     "source": "on-chain USDT balance"
   },
   "last_evolution": {
-    "version_bumped_to": "1.39.0",
-    "summary": "Improve tip visibility in dashboard and payout footer to encourage reader tips, and bump version.",
-    "changes_applied": [],
+    "version_bumped_to": "1.40.0",
+    "summary": "Add a deterministic, LLM-free verification that published dev.to posts actually carry the USDT tip footer, closing the structural zero that let 14 cycles report success while readers had no way to pay.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/receipt_check.py",
+        "reason": "New module that independently verifies published dev.to posts carry the USDT tip footer by fetching them from the unauthenticated public endpoint, comparing the observation against backfill.remaining, and failing loudly when the receive path is missing. This closes the 14-cycle outage where self-reported success masked a missing footer on the account's highest-traffic post."
+      },
+      {
+        "file": "bot/earning/__init__.py",
+        "reason": "Re-export the new receipt_check.run so the orchestrator can import it the same way it imports the other earning products, keeping the module discoverable and testable without touching protected orchestrator files."
+      },
+      {
+        "file": "docs/receipt-check.md",
+        "reason": "Document the new verification module so a reviewer understands why it exists, how it differs from backfill, and what status fields it populates -- without needing to read the full source."
+      }
+    ],
     "suggestions": [
       {
-        "title": "Set USDT_WALLET_ADDRESS secret to enable tips",
-        "description": "Enables the USDT tip footer in articles and the dashboard, allowing readers to send tips. This is the first step to monetize reach.",
+        "title": "Enable the USDT tip footer in config/strategy.json",
+        "description": "The payout module ships disabled by default. Turning payout.enabled on makes the support footer render on every new article and on every backfilled post, giving readers a real on-chain receive path. This is the single change that converts reach into a tippable address.",
         "secret_needed": "USDT_WALLET_ADDRESS",
         "estimated_weekly_usd": 0.5,
         "free_tier": true,
         "how_to": [
-          "1. Go to repository Settings > Secrets and variables > Actions",
-          "2. Click New repository secret",
-          "3. Name it USDT_WALLET_ADDRESS and paste your TRC-20 USDT wallet address",
-          "4. Wait for next evolution to activate the tip footer"
+          "1. Open config/strategy.json and set payout.enabled to true",
+          "2. Confirm USDT_WALLET_ADDRESS is set as a GitHub secret (TRC-20 address)",
+          "3. Wait for the next cycle; the footer appears on new and backfilled posts"
         ]
       },
       {
-        "title": "Sign up for OpenRouter $10 one-time top-up to lift the 50/day free cap",
-        "description": "OpenRouter lifts the free model cap from 50 to 1,000 requests/day after a single $10 purchase in credits (never spent, just unlocks the tier). One-time, low cost, removes the daily article flake risk.",
+        "title": "Run receipt_check every cycle to prove the footer is live",
+        "description": "A new bot/earning/receipt_check.py module fetches each published post from the unauthenticated dev.to endpoint and asserts the footer is present, comparing its finding against backfill.remaining. This turns a self-reported number into an independently verified one and fails loudly when the receive path is missing.",
         "secret_needed": null,
-        "estimated_weekly_usd": 1.5,
-        "free_tier": false,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
         "how_to": [
-          "1. Go to https://openrouter.ai/ and sign in",
-          "2. Click 'Buy credits' and load $10 (minimum to trigger cap lift)",
-          "3. Do not select a paid model; the $10 unlocks 1,000 free requests/day forever",
-          "4. Next evolution will record the lift in strategy.json for higher cap usage"
+          "1. No secret needed; receipt_check uses the public dev.to API",
+          "2. Ensure the module is wired into the cycle in bot/main.py (protected file, owner edits)",
+          "3. Watch docs/status.json for receipt_check.last_reason == all_verified"
         ]
       },
       {
-        "title": "Enable Anthropic free credit tier to add Claude Haiku as LLM fallback",
+        "title": "Add Anthropic free credit tier as Claude Haiku fallback",
         "description": "Anthropic offers free credits on signup in many regions. Adds a fourth inference provider so the daily article never depends on OpenRouter's free chain when rate-limited.",
         "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
@@ -77,49 +90,45 @@
       }
     ],
     "error": null,
-    "branch": null,
-    "proposed_version": "1.40.0"
+    "branch": "evolve/1.41.0-20260906-060443",
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "dev.to-backfill",
         "success": true,
-        "opportunity_count": 8,
-        "pursued_count": 0,
+        "updated": 1,
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "remaining": 10
       },
       {
-        "platform": "dev.to",
+        "platform": "dev.to-receipt-check",
         "success": true,
-        "title": "Your Multi-Agent Setup Is Burning Tokens You Cannot See",
-        "url": "https://dev.to/robust_true_try/your-multi-agent-setup-is-burning-tokens-you-cannot-see-36a0",
         "estimated_usd": 0.0,
-        "source_url": "https://www.infoq.com/presentations/ai-predictions-2030/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global",
-        "source_title": "Presentation: A Few Predicted Talks From QConAI 2030"
+        "error": "4 published post(s) show readers no way to pay",
+        "checked": 5,
+        "with_footer": 1,
+        "without_footer": 4
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Sign up for OpenRouter $10 one-time top-up to lift the 50/day free cap",
-      "description": "OpenRouter lifts the free model cap from 50 to 1,000 requests/day after a single $10 purchase in credits (never spent, just unlocks the tier). One-time, low cost, removes the daily article flake risk.",
+      "title": "Run receipt_check every cycle to prove the footer is live",
+      "description": "A new bot/earning/receipt_check.py module fetches each published post from the unauthenticated dev.to endpoint and asserts the footer is present, comparing its finding against backfill.remaining. This turns a self-reported number into an independently verified one and fails loudly when the receive path is missing.",
       "secret_needed": null,
-      "estimated_weekly_usd": 1.5,
-      "free_tier": false,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
       "how_to": [
-        "1. Go to https://openrouter.ai/ and sign in",
-        "2. Click 'Buy credits' and load $10 (minimum to trigger cap lift)",
-        "3. Do not select a paid model; the $10 unlocks 1,000 free requests/day forever",
-        "4. Next evolution will record the lift in strategy.json for higher cap usage"
+        "1. No secret needed; receipt_check uses the public dev.to API",
+        "2. Ensure the module is wired into the cycle in bot/main.py (protected file, owner edits)",
+        "3. Watch docs/status.json for receipt_check.last_reason == all_verified"
       ]
     },
     {
-      "title": "Enable Anthropic free credit tier to add Claude Haiku as LLM fallback",
+      "title": "Add Anthropic free credit tier as Claude Haiku fallback",
       "description": "Anthropic offers free credits on signup in many regions. Adds a fourth inference provider so the daily article never depends on OpenRouter's free chain when rate-limited.",
       "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
@@ -133,7 +142,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 248,
+  "last_cycle_seconds": 367,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -699,7 +708,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-06T00:59:40.543660+00:00",
+    "checked_at": "2026-09-06T05:58:39.489346+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -919,8 +928,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.0-20260906-060443",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 12,
     "total_views": 2149,
@@ -1010,11 +1019,50 @@
     "asset": "USDT"
   },
   "backfill": {
-    "done_ids": [],
-    "skipped": {},
-    "updated_total": 0,
-    "last_run": "2026-09-06T01:03:47.950346+00:00",
-    "last_reason": "nothing_to_do",
-    "remaining": 0
+    "done_ids": [
+      4489474
+    ],
+    "skipped": {
+      "4430049": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4430049"
+    },
+    "updated_total": 1,
+    "last_run": "2026-09-06T06:04:44.902626+00:00",
+    "last_reason": "updated",
+    "remaining": 10
+  },
+  "receipt_check": {
+    "checked": 5,
+    "with_footer": 1,
+    "without_footer": 4,
+    "unreachable": 0,
+    "missing": [
+      {
+        "id": 4430049,
+        "title": "Recover a Bricked Framework 13 with a DIY USB Flash",
+        "views": 92,
+        "url": "https://dev.to/robust_true_try/recover-a-bricked-framework-13-with-a-diy-usb-flash-9li"
+      },
+      {
+        "id": 4391849,
+        "title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness",
+        "views": 90,
+        "url": "https://dev.to/robust_true_try/build-a-fast-local-llm-inference-pipeline-with-deepseek-harness-17n7"
+      },
+      {
+        "id": 4368781,
+        "title": "Deploying Meta\u2019s Llama 3 in a Production Python Service",
+        "views": 33,
+        "url": "https://dev.to/robust_true_try/deploying-metas-llama-3-in-a-production-python-service-13o6"
+      },
+      {
+        "id": 4421693,
+        "title": "Stop AI Hallucinations: Verify Your LLM Summaries Before Publishing",
+        "views": 32,
+        "url": "https://dev.to/robust_true_try/stop-ai-hallucinations-verify-your-llm-summaries-before-publishing-43p0"
+      }
+    ],
+    "last_run": "2026-09-06T06:04:46.078074+00:00",
+    "last_reason": "footer_missing",
+    "agrees_with_backfill": true
   }
 }

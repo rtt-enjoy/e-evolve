@@ -29,19 +29,36 @@ scored candidate table, so a cycle does not re-derive the same refused ideas.
   had dropped `body_markdown`, so `needs_footer` saw an empty body on every post,
   hit its empty-body guard, and reported "nothing to do" for all of them. The fix
   is correct — Forem's `me.json.jbuilder` does extract `body_markdown`, confirmed
-  against source — but it landed **after** cycle #1773 ran, so **no cycle has yet
-  executed it**.
+  against source — but it was not the whole cause, as the next cycle proved.
 
-  Expected resolution: the next Actions run with `DEV_TO_API_KEY` set should
-  update up to `max_per_cycle` (3) posts, highest-traffic first, and take four
-  cycles to clear all ten. **Confirm it actually happened** by reading
-  `receipt_check.without_footer` — not `backfill.remaining`, which is the field
-  that lied for fourteen cycles. Local verification is impossible: the key exists
-  only as a GitHub Actions secret.
+  **The `body_markdown` fix did not resolve it.** Cycle #1774 ran on Actions with
+  the real key and the fix deployed, fetched 12 posts (`article_stats.count: 12`),
+  raised no errors — and still wrote `updated_total: 0, last_reason:
+  "nothing_to_do"`. So `needs_footer` returned `False` for all 12 posts even with
+  the field carried through.
 
-  If `without_footer` is still 10 after the next run, the `body_markdown` fix is
-  not the whole story and the next place to look is `devto.update_body`'s PUT
-  response, which is currently only checked for an exception.
+  Locally ruled out against the real 1,722-view post, fetched from the public API:
+  `has_front_matter` is `False`, `has_footer` is `False`, body is 8,719 chars — so
+  `needs_footer` would correctly return `True` if it were given that body. The
+  remaining suspect is therefore the one thing not verifiable without the key:
+  **whether `GET /api/articles/me/published` actually returns `body_markdown` in
+  practice.** Forem's `me.json.jbuilder` extracts it (confirmed against source),
+  but the deployed API may strip it, or serialize differently than the template
+  suggests.
+
+  `receipt_check` settles this on the next cycle, which is exactly what it is for.
+  Read `receipt_check.without_footer` — **not** `backfill.remaining`, the field
+  that has now lied for fifteen cycles. Then:
+
+  - `without_footer: 0` → the backfill worked after all and this is closed.
+  - `without_footer: 10` with `backfill.remaining: 0` → `fetch_published` is
+    still returning bodyless posts. Log one raw item from the `me` response and
+    compare its keys against `me.json.jbuilder`. If the field is genuinely absent,
+    the fix is to fetch each candidate body individually through the public
+    `GET /api/articles/{id}` — which `receipt_check.fetch_live_body` already does,
+    needs no key, and is proven to return the body.
+  - `without_footer: 10` with `backfill.remaining: 10` → the read is fine and the
+    write is failing; look at `backfill.skipped` and `devto.update_body`.
 
 ---
 

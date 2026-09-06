@@ -12,6 +12,8 @@ Support (no ``run``; imported by the products):
   ``devto``       -- the dev.to publish call and the gates every post passes
   ``trending``    -- sources fresh stories from free public feeds
   ``devto_stats`` -- reads this account's own dev.to reach numbers
+  ``attribution`` -- records publishing context the moment a tip arrives
+  ``receipts``    -- reader-facing mirror of attribution for the dashboard
 
 ``bot.main`` imports the products lazily via ``importlib``; these re-exports
 are for tests and ad-hoc use.

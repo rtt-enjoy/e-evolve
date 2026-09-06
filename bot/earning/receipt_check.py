@@ -8,12 +8,12 @@ work were wrong *together*, and agreed with each other. ``payout.live`` reports
 config, not reality. ``updated_total`` counts write attempts this process made,
 not footers a reader can see.
 
-That is not hypothetical. Between cycles #1760 and #1773 ``status["backfill"]``
-read ``remaining: 0, last_reason: "nothing_to_do"`` -- by the doctrine's own
-checklist, "every reader can pay" -- while not one of the account's 11 published
-posts carried a footer, including the 1,722-view article holding 84% of all
-lifetime reach. The failure was invisible for fourteen cycles because nothing
-ever looked at a published post.
+That is not hypothetical. Between cycles #1760 and #1773
+``status["backfill"]`` read ``remaining: 0, last_reason: "nothing_to_do"`` -- by
+the doctrine's own checklist, "every reader can pay" -- while not one of the
+account's 11 published posts carried a footer, including the 1,722-view
+article holding 84% of all lifetime reach. The failure was invisible for
+fourteen cycles because nothing ever looked at a published post.
 
 The doctrine's answer (Principle 3d) is to go and look::
 
@@ -24,11 +24,11 @@ is a step that never happens. This module is that curl, run every cycle.
 
 **It observes from outside.** ``GET /api/articles/{id}`` is unauthenticated and
 returns ``body_markdown``, so this reads what any reader sees rather than what
-the account's own authenticated view reports. It shares no serializer and no API
-key with the write it checks, which is the entire point: a verifier that reuses
-the writer's data can only ever confirm the writer's mistakes. Verified against
-Forem's ``me.json.jbuilder`` and the public article-list partial -- the two
-differ in exactly the field that caused the outage.
+the account's own authenticated view reports. It shares no serializer and no
+API key with the write it checks, which is the entire point: a verifier that
+reuses the writer's data can only ever confirm the writer's mistakes. Verified
+against Forem's ``me.json.jbuilder`` and the public article-list partial -- the
+two differ in exactly the field that caused the outage.
 
 Scored against Principle 2 it needs no new secret (it needs no key at all), no
 owner action, and no policy change, and it turns an asserted truth into a

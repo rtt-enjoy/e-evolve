@@ -118,7 +118,7 @@ def record_receipt(status: dict[str, Any]) -> dict[str, Any] | None:
 
 		record = {
 			"at":         wallet.get("last_received_at")
-						  or datetime.now(timezone.utc).isoformat(),
+							  or datetime.now(timezone.utc).isoformat(),
 			"amount_usd": round(amount, 6),
 			"network":    wallet.get("network") or None,
 			# Correlated, not proven: this is the state of the shop when the
@@ -191,3 +191,37 @@ def summary(status: dict[str, Any]) -> dict[str, Any]:
 		"last_receipt_at":      book.get("last_receipt_at"),
 		"top_archetype":        (by_arch[0].get("archetype") if by_arch else None),
 	}
+
+
+def run(llm: Any = None, status: dict | None = None) -> list[dict]:
+	"""Product entry point so the orchestrator can call us like every other module.
+
+    ``llm`` is accepted and deliberately unused: attribution is bookkeeping, and
+    asking a model to guess which post earned a tip is the exact fabrication
+    this project has already deleted twice. Returns a single quiet action when
+    nothing arrived, an observed action when a receipt was recorded, and never
+    raises -- a broken attribution loop must never break the cycle.
+    """
+	status = status if isinstance(status, dict) else {}
+	action: dict[str, Any] = {
+		"platform":     "attribution",
+		"success":      True,
+		# No estimated_usd. Money here is the chain's number, not ours.
+		"estimated_usd": 0.0,
+	}
+	try:
+		cfg = config()
+		if not cfg.get("enabled"):
+			action["_quiet"] = True
+			return []
+		record = record_receipt(status)
+		if record is None:
+			# Quiet: a cycle with no receipt is not an action, it is a state.
+			action["_quiet"] = True
+			return []
+		action["title"] = "Tip recorded against current publishing context"
+		action["amount_usd"] = record["amount_usd"]
+		return [action]
+	except Exception as exc:                       # pragma: no cover - defensive
+		log.warning("[attribution] run skipped: %s", exc)
+		return []

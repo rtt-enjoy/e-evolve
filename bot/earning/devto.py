@@ -13,7 +13,8 @@ product (essay structure, digest structure) stays in that product's module.
 from __future__ import annotations
 
 import logging
-import re
+import random
+import time
 from typing import Any
 
 import requests
@@ -21,6 +22,57 @@ import requests
 from . import payout
 
 log = logging.getLogger(__name__)
+
+# Base delay and cap for exponential backoff with jitter on rate-limit retries.
+_BACKOFF_BASE = 15          # seconds
+_BACKOFF_CAP = 300          # 5 minutes max
+_MAX_RETRIES = 3
+
+
+def _retry_on_rate_limit(func):
+    """Decorator that retries a function with exponential backoff on HTTP 429.
+
+    Dev.to's unauthenticated read endpoint (used by receipt_check) and the
+    authenticated write endpoints (publish, update) both return 429 under load.
+    The free tier's per-day and per-minute caps are undocumented and vary by
+    account age and key age, so a static sleep-before-retry is insufficient --
+    the gap must grow until the window clears. Jitter prevents thundering-herd
+    synchronisation when several cycles retry simultaneously after a shared quiet
+    window.
+
+    The decorated function must accept the same kwargs as the wrapped call and
+    return a requests.Response object, so responses that are not 429 are returned
+    immediately without retry.
+    """
+    def wrapper(*args, **kwargs):
+        last_exc: Exception | None = None
+        for attempt in range(_MAX_RETRIES + 1):
+            resp = func(*args, **kwargs)
+            if resp.status_code != 429:
+                return resp
+            # If the server sends a Retry-After header, honour it.
+            retry_after = resp.headers.get("Retry-After", "")
+            if retry_after:
+                try:
+                    delay = min(int(retry_after) + random.uniform(1, 5), _BACKOFF_CAP)
+                except ValueError:
+                    delay = _BACKOFF_BASE * (2 ** attempt) + random.uniform(1, 5)
+            else:
+                delay = min(
+                    _BACKOFF_BASE * (2 ** attempt) + random.uniform(0, 5),
+                    _BACKOFF_CAP,
+                )
+            log.warning(
+                "[devto] HTTP 429 on %s (attempt %d/%d) -- sleeping %.1fs",
+                func.__name__, attempt + 1, _MAX_RETRIES + 1, delay,
+            )
+            time.sleep(delay)
+            last_exc = None
+        # Exhausted retries; surface the last response or exception.
+        if last_exc:
+            raise last_exc
+        return resp
+    return wrapper
 
 
 TONE_PATTERNS = [
@@ -38,6 +90,7 @@ TONE_PATTERNS = [
 
 def tone_problems(body: str) -> list[str]:
 	"""Flag writing that breaks the clear, friendly, jargon-free house style."""
+	import re
 	prose = strip_code_blocks(body)
 	found: list[str] = []
 	for pattern, label in TONE_PATTERNS:
@@ -54,14 +107,14 @@ def tone_problems(body: str) -> list[str]:
 
 
 FABRICATION_PATTERNS = [
-	(r"\b\d+\s*[-‐-―~]?\s*\d*\s*ms\b", "invented latency figures (ms)"),
+	(r"\b\d+\s*[-\u2010-\u2015\u2013]?\s*\d*\s*ms\b", "invented latency figures (ms)"),
 	(r"\$\s?\d+(\.\d+)?\s*(/|per\s)", "invented pricing"),
 	(r"\b\d+(\.\d+)?\s*(tokens?/s|tok/s|req/s|requests?/(sec|second))", "invented throughput"),
 	(r"\b\d+\s*%\s*(faster|slower|cheaper|better|more accurate)", "invented benchmark deltas"),
 ]
 
 # Deliberately absent: a rule matching bare model sizes (r"\d+(\.\d+)?\s*[BTM]\b"
-# labelled "invented model parameter counts"). It was removed, not narrowed.
+# labelled "invented model parameter counts". It was removed, not narrowed.
 #
 # It rejected correct prose. "A 7B model in 4-bit sits around 4 GB" is how every
 # practitioner writes it, and 7B is a published property of a real model, not a
@@ -84,6 +137,7 @@ FABRICATION_PATTERNS = [
 
 def strip_code_blocks(body: str) -> str:
 	"""Remove fenced code and inline code so only prose claims are checked."""
+	import re
 	body = re.sub(r"```.*?```", " ", body, flags=re.DOTALL)
 	return re.sub(r"`[^`\n]*`", " ", body)
 
@@ -94,6 +148,7 @@ def fabrication_problems(body: str) -> list[str]:
     The model cannot know current latency, pricing, or throughput, and stating
     them as fact is the fastest way to lose a technical reader.
     """
+	import re
 	prose = strip_code_blocks(body)
 	found: list[str] = []
 	for pattern, label in FABRICATION_PATTERNS:
@@ -109,6 +164,7 @@ def strip_fabricated_tables(body: str) -> tuple[str, int]:
     latency, parameter counts, and prices to fill cells. Removing the table
     keeps the rest of a good article publishable, and costs no LLM call.
     """
+	import re
 	lines = body.split("\n")
 	out: list[str] = []
 	removed = 0
@@ -139,6 +195,7 @@ def strip_fabricated_tables(body: str) -> tuple[str, int]:
 
 def normalize(data: dict) -> dict:
 	"""Clean up markdown artifacts that hurt rendering on dev.to."""
+	import re
 	body = str(data.get("body_markdown", ""))
 	# Strip a stray wrapping code fence around the whole article.
 	if body.lstrip().startswith("```markdown"):
@@ -189,6 +246,10 @@ def publish(article: dict, api_key: str) -> dict:
     ``articles._format_problems`` and pad the word count enough to carry a
     too-thin draft past its minimum. Gates judge what the model wrote; the
     footer is appended to what they approved.
+
+    Rate-limit responses (HTTP 429) are retried with exponential backoff and
+    jitter, up to three attempts, so a temporary cap hit does not silently
+    lose a day's publish.
     """
 	article = payout.add_footer(dict(article))
 	url = "https://dev.to/api/articles"
@@ -205,9 +266,13 @@ def publish(article: dict, api_key: str) -> dict:
 			"tags": article.get("tags", ["python", "automation"])[:4],
 		}
 	}
-	
+
+	@_retry_on_rate_limit
+	def _do_post():
+		return requests.post(url, headers=headers, json=payload, timeout=30)
+
 	try:
-		resp = requests.post(url, headers=headers, json=payload, timeout=30)
+		resp = _do_post()
 		resp.raise_for_status()
 		data = resp.json()
 		article_url = data.get("url", "")
@@ -250,6 +315,7 @@ def publish(article: dict, api_key: str) -> dict:
 # tags as JSON fields -- but the account may hold posts written by hand, and
 # "probably not front matter" is not a safe basis for editing a live post that
 # is the account's whole readership. Detected and skipped instead.
+import re
 _FRONT_MATTER_RE = re.compile(r"\A\s*---\s*$", re.MULTILINE)
 
 
@@ -274,10 +340,15 @@ def update_body(article_id: int, body_markdown: str, api_key: str) -> dict:
     Editing does not change ``published_at``, so a post keeps its original feed
     position -- this adds an ask to what people already read, it does not
     re-promote anything.
+
+    Rate-limit responses (HTTP 429) are retried with exponential backoff and
+    jitter, up to three attempts.
     """
 	url = f"https://dev.to/api/articles/{int(article_id)}"
-	try:
-		resp = requests.put(
+
+	@_retry_on_rate_limit
+	def _do_put():
+		return requests.put(
 			url,
 			headers={
 				"api-key": api_key,
@@ -287,6 +358,9 @@ def update_body(article_id: int, body_markdown: str, api_key: str) -> dict:
 			json={"article": {"body_markdown": body_markdown}},
 			timeout=30,
 		)
+
+	try:
+		resp = _do_put()
 		resp.raise_for_status()
 		# The write has already landed by here. A body that will not parse is a
 		# cosmetic problem, so it must not be reported as a failed update: that

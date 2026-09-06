@@ -74,6 +74,13 @@ def fetch_published(api_key: str = "") -> list[dict[str, Any]]:
 			"comments": int(item.get("comments_count") or 0),
 			"published_at": str(item.get("published_at") or ""),
 			"description": str(item.get("description") or ""),
+			# The `me` endpoint uses its own serializer (me.json.jbuilder),
+			# which extracts body_markdown -- unlike the public article list,
+			# whose partial does not. Dropping it here is what blinded the
+			# backfill: `needs_footer` saw an empty body on every post, read
+			# that as "nothing to do", and reported remaining: 0 while not one
+			# published post carried an ask.
+			"body_markdown": str(item.get("body_markdown") or ""),
 		})
 	return out
 

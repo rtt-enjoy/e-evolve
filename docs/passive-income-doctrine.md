@@ -259,6 +259,63 @@ counterfeit the follow-up path, which deliberately publishes a *new* post.
 
 ---
 
+## Principle 3d — A status field that reports success is code, and code has bugs
+
+Found 2026-09-06, cycle #1773. `status["backfill"]` read:
+
+```json
+{"remaining": 0, "last_reason": "nothing_to_do", "updated_total": 0}
+```
+
+Checklist step 1 says to read exactly that field, and it said the job was done.
+`payout.live` was `true`. Every row of the channel table was ticked. By every
+indicator this document tells the owner to consult, every reader had a way to
+pay.
+
+Fetching the actual published posts said otherwise. **Not one of them carried a
+footer.** The 1,722-view evergreen article — 84% of all lifetime reach — ended
+at its `## Source` section with no ask, exactly as it had before `backfill.py`
+was written. `updated_total: 0` had been sitting there the whole time saying so,
+and it was read as "nothing needed doing".
+
+The cause was one absent dictionary key. `devto_stats.fetch_published` builds
+each post from an explicit field list, and `body_markdown` was not on it —
+copied from the public article list serializer, which genuinely does not return
+that field. The authenticated `me` endpoint uses a *different* template
+(`me.json.jbuilder`) that does return it.
+
+Nothing raised. `needs_footer` read the missing body as `""`, hit its own
+`if not body.strip(): return False` guard — a guard written for the good reason
+that an unreadable body must never be rewritten — and answered "this post is
+fine" for every post on the account. The candidate list filtered to empty, and
+an empty candidate list is indistinguishable from a finished job.
+
+Three things generalise, and the third is the one that cost the cycles:
+
+- **A guard that fails safe still fails.** Skipping a body we cannot read is
+  correct. Reporting that skip as `nothing_to_do` is not. When a safety guard
+  and a completion signal share an exit, the guard silently manufactures the
+  completion.
+- **Test the seam, not the modules.** Every backfill test passed throughout,
+  because every one of them builds its post dicts by hand *with* a body. The
+  bug lived precisely in the handoff no test crossed. `TestPublishedStatsCarryTheBody`
+  now runs `fetch_published` → `needs_footer` end to end.
+- **Verify against the artifact, not the status field.** Principle 3c already
+  said to score a channel on what it *covers*. This is the sharper version:
+  `remaining` is not the coverage, it is a **claim about** the coverage,
+  produced by the same code whose work it describes. The only ground truth is
+  the published post. One unauthenticated `GET` would have caught this at any
+  point in the preceding cycles — and that check now belongs in the checklist,
+  above reading any field this bot wrote about itself.
+
+**`updated_total: 0` on a channel that is supposedly complete is the tell.** A
+backfill that has finished its work and a backfill that never started both rest
+at `remaining: 0`; only one of them ever wrote anything. Where a counter of work
+done and a counter of work outstanding are both zero, the second is unverified,
+not confirmed.
+
+---
+
 ## Principle 4 — Never let an estimate stand in for money
 
 `devto.publish` reports `estimated_usd: 0.0` for a successful post, and it must
@@ -368,6 +425,24 @@ Work this in order. Stop at the first honest "no".
    that already have readers are still showing them no way to pay. Note that
    `status.json` is written at the *end* of a cycle, so a field can lag a config
    change by one run; the config flag is the truth, the snapshot is the report.
+
+   **Then do not believe any of it, and go look at a post.** Every field above
+   is written by the same code whose work it reports, so all of them read
+   "done" when that code silently does nothing (Principle 3d — this is exactly
+   what happened, and `remaining: 0` covered it for cycles #1760–#1773). One
+   unauthenticated request is the ground truth and needs no key:
+
+   ```bash
+   curl -s "https://dev.to/api/articles/<username>/<slug>" \
+     | grep -c "Support this work"
+   ```
+
+   `0` means no reader can pay, whatever `status.json` claims. Check the
+   **highest-traffic** post specifically — the view distribution is top-heavy
+   enough that it is most of the answer. And treat `updated_total: 0` beside
+   `remaining: 0` as unverified rather than finished: a backfill that completed
+   its work and one that never ran both rest at zero remaining, but only one of
+   them ever wrote anything.
 2. **Is money arriving?** Check `earnings.received_total_usd`.
    Once it is non-zero, `status["attribution"]` holds what was live when it
    landed — ranked by archetype and tag, with sample sizes. Read `count` before
@@ -395,7 +470,8 @@ Principle 2.
 | Wallet address in published articles | none | none | allowed | **Built.** `bot/earning/payout.py` |
 | Wallet address in the newsletter digest | none | none | allowed | **Built** — same `devto.publish` path |
 | Wallet address on the public dashboard | none | none | allowed | **Built** 2026-09-04. `status["payout_public"]` + Overview tip card |
-| Wallet address on the **back catalogue** | none | none | allowed | **Built** 2026-09-04. `bot/earning/backfill.py` |
+| Wallet address on the **back catalogue** | none | none | allowed | **Built** 2026-09-04, but it wrote nothing until 2026-09-06 — see Principle 3d |
+| Wallet address in the dev.to **profile bio** | none | one settings edit, ever | allowed | **Owner action.** Not automatable: `users` is `only: %i[show]` in Forem's API routes and the only writer (`PATCH /api/admin/users/{id}`) is super-admin gated. A single manual edit at dev.to/settings then covers every profile visitor permanently |
 | Sponsored-content slot in the newsletter | none | negotiates each deal | allowed to publish | **Deferred.** Income is real but every unit needs a human |
 | dev.to → own static site, then ads | ad network account | signup + tax details | allowed | **Deferred.** Needs an account and an audience move |
 | Affiliate links in articles | affiliate account | signup per program | allowed to publish | **Deferred.** Also risks the fabrication and tone gates |
@@ -404,11 +480,19 @@ Principle 2.
 | Scraped-lead cold email | — | — | **blocked** | **Refused.** Needs a policy change |
 | Trading, minting, yield farming | — | — | **blocked** | **Refused.** Not a content business |
 
-Every row that needs no new secret and no owner action is now built. What remains
-on the list needs either an account the owner must open (ad network, affiliate
-program, payment processor) or a policy the owner must widen (social posting,
-cold email). Those are owner decisions with the tradeoff already stated here,
-not work a cycle may take on itself.
+Every row that needs no new secret and no owner action is now built — and
+"built" has now twice meant "not actually reaching readers", so read that word
+with suspicion. What remains on the list needs either an account the owner must
+open (ad network, affiliate program, payment processor) or a policy the owner
+must widen (social posting, cold email). Those are owner decisions with the
+tradeoff already stated here, not work a cycle may take on itself.
+
+The profile-bio row is the one cheap exception and it is worth the owner's two
+minutes: unlike every other deferred row it needs no account, no processor and
+no policy change — just one edit to the Bio field at `dev.to/settings`, which
+then carries the ask on every profile visit for good. The bot cannot do it, and
+the API research confirming that is recorded above so no future cycle spends
+another run rediscovering it.
 
 **This table said exactly that once before and was wrong.** On 2026-09-04 it
 claimed completeness while 85% of the audience — the back catalogue — still had

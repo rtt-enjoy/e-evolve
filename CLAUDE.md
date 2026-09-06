@@ -353,7 +353,18 @@ cannot slip a repeat through.
 Views were low partly because the bot never looked at its own numbers — every
 post was a blind guess. `devto_stats` closes that loop by reading
 `GET /api/articles/me/published`, which returns `page_views_count`,
-`positive_reactions_count`, and `comments_count` for the key's own articles.
+`positive_reactions_count`, `comments_count` **and `body_markdown`** for the
+key's own articles.
+
+`body_markdown` is on that list for one reason and must not be dropped as
+"unused by stats": `backfill.needs_footer` reads it to decide whether a live
+post already carries a tip footer. It was originally omitted — the field list
+was modelled on the *public* article list serializer, which genuinely does not
+return it, while the authenticated `me` endpoint uses `me.json.jbuilder` and
+does. Nothing raised; `needs_footer` read the absent body as `""`, hit its
+empty-body guard, and answered "already fine" for every post, so the backfill
+reported `remaining: 0` while not one published post had an ask on it.
+`TestPublishedStatsCarryTheBody` pins the seam.
 
 - Read-only, and it reuses `DEV_TO_API_KEY`. **No new secret.**
 - `engagement_score()` weights a reaction at 25 views and a comment at 50. Raw
@@ -853,8 +864,10 @@ is wrong here and how it survives `sanitize_for_git`.
 tip footer onto already-published posts: `done_ids` (posts confirmed updated),
 `remaining` (posts that still show readers no way to pay), `updated_total`,
 `skipped` (id → error), `last_run`, `last_reason`. `remaining` is the field to
-read — while it is non-zero, reach the account already has is still earning a
-structural zero.
+read — but it is a *claim* produced by the same code whose work it reports, so
+`updated_total: 0` next to `remaining: 0` means unverified, not finished (one
+`curl` of a published post is the ground truth; see Principle 3d). While it is
+non-zero, reach the account already has is still earning a structural zero.
 
 `attribution` is written by `status._snapshot_attribution` (via
 `bot/earning/attribution.py`) and records what was published when on-chain money

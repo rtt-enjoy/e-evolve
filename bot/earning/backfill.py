@@ -169,6 +169,10 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 
 		payout_cfg = payout.config()
 		done = {i for i in state.get("done_ids", []) if i is not None}
+		# needs_footer reads post["body_markdown"], which devto_stats now
+		# carries through from the `me` endpoint. When that field was dropped
+		# every post looked bodyless, needs_footer returned False for all of
+		# them, and this reported "nothing to do" forever.
 		candidates = [
 			p for p in posts
 			if p.get("id") is not None
@@ -211,11 +215,24 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 				break
 
 		limit = int(cfg.get("history_limit", 200))
-		state["done_ids"] = state.get("done_ids", [])[-limit:]
+		# done_ids is a set in spirit; dedupe before trimming so a post cannot
+		# consume several slots of the bounded history.
+		seen: set = set()
+		deduped = []
+		for i in state.get("done_ids", []):
+			if i is not None and i not in seen:
+				seen.add(i)
+				deduped.append(i)
+		state["done_ids"] = deduped[-limit:]
 		state["updated_total"] = int(state.get("updated_total", 0)) + updated
 		state["last_run"] = datetime.now(timezone.utc).isoformat()
-		state["last_reason"] = "updated" if updated else "update_failed"
+
+		# `remaining` is the count the owner is told to read: posts that still
+		# show readers no way to pay. It is only as honest as `candidates`,
+		# which is why the body_markdown regression above mattered so much --
+		# it drove this to 0 while every post lacked a footer.
 		state["remaining"] = max(len(candidates) - updated, 0)
+		state["last_reason"] = "updated" if updated else "update_failed"
 
 		action["success"] = updated > 0
 		action["updated"] = updated

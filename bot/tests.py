@@ -2724,6 +2724,74 @@ class TestAttribution(unittest.TestCase):
 		self.assertIsNone(summary["top_archetype"])
 
 
+class TestPublishedStatsCarryTheBody(unittest.TestCase):
+	"""The backfill can only see an ask it is given the body to look for.
+
+    ``fetch_published`` builds each post dict from an explicit field list, and
+    ``body_markdown`` was not on it. Nothing raised: ``needs_footer`` read the
+    missing body as "", hit its own empty-body guard, and answered False for
+    every post on the account. So the backfill filtered its entire candidate
+    list to nothing and reported ``remaining: 0`` and ``nothing_to_do`` -- the
+    exact reading the doctrine tells the owner means "every reader can pay" --
+    while not one published post carried a footer.
+
+    Every other backfill test builds its post dicts by hand with a body, so
+    they all passed throughout. This one pins the seam between the two modules.
+    """
+
+	BODY = "# T\n\nreal prose, no ask anywhere.\n"
+
+	def _fetch(self, payload):
+		class _Resp:
+			status_code = 200
+			content = b"[]"
+
+			@staticmethod
+			def raise_for_status():
+				return None
+
+			@staticmethod
+			def json():
+				return payload
+
+		original = devto_stats.requests.get
+		try:
+			devto_stats.requests.get = lambda *a, **k: _Resp()
+			return devto_stats.fetch_published("key")
+		finally:
+			devto_stats.requests.get = original
+
+	def test_body_markdown_survives_the_fetch(self):
+		posts = self._fetch([{
+			"id": 1, "title": "T", "url": "https://dev.to/a/b",
+			"page_views_count": 10, "body_markdown": self.BODY,
+		}])
+		self.assertEqual(posts[0]["body_markdown"], self.BODY)
+
+	def test_a_footerless_post_reaches_the_backfill_as_one(self):
+		"""End to end across the seam: fetched post -> needs_footer -> True."""
+		saved = os.environ.get("USDT_WALLET_ADDRESS")
+		os.environ["USDT_WALLET_ADDRESS"] = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
+		cfg = dict(payout.DEFAULTS)
+		cfg["enabled"] = True
+		try:
+			posts = self._fetch([{
+				"id": 1, "title": "T", "url": "https://dev.to/a/b",
+				"page_views_count": 1722, "body_markdown": self.BODY,
+			}])
+			self.assertTrue(backfill.needs_footer(posts[0], cfg))
+		finally:
+			if saved is None:
+				os.environ.pop("USDT_WALLET_ADDRESS", None)
+			else:
+				os.environ["USDT_WALLET_ADDRESS"] = saved
+
+	def test_missing_body_still_degrades_safely(self):
+		"""A response genuinely lacking the field must not crash the loop."""
+		posts = self._fetch([{"id": 1, "title": "T", "page_views_count": 3}])
+		self.assertEqual(posts[0]["body_markdown"], "")
+
+
 class TestBackfillPutsTheAskWhereTheReadersAre(unittest.TestCase):
 	"""The footer only ever ran on POST, so it missed every existing post.
 

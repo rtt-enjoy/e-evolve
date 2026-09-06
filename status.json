@@ -1,7 +1,7 @@
 {
   "version": "1.40.0",
-  "last_run": "2026-09-06T10:59:31.612370+00:00",
-  "total_runs": 1776,
+  "last_run": "2026-09-06T14:11:52.412584+00:00",
+  "total_runs": 1777,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -35,15 +35,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.40.0",
-    "summary": "Add LLM retry with exponential backoff for rate limits, enable tag-filtered newsletter sourcing, and document the USDT payout config steps for owners",
+    "summary": "Add daily attribution cycle that correlates real on-chain receipts with this account's published posts, so a tip's publishing context is recorded at the moment the money arrives instead of being lost to a zero balance.",
     "changes_applied": [
       {
-        "file": "bot/earning/devto.py",
-        "reason": "rate-limit retry decorator that wraps publish and update_body with exponential backoff (15s base, 2x per retry, jitter, cap 5min, max 3 attempts). Dev.to's unauthenticated endpoint already used by receipt_check is the most likely to 429; adding retries here closes the gap without any new secret or config change."
-      },
-      {
-        "file": "docs/receipt-check.md",
-        "reason": "comprehensive documentation of the receipt_check module covering what it observes, how it differs from backfill, the status fields it writes, and when to read them. This replaces the terse inline comments with a reference a non-engineer owner can use to interpret their dashboard."
+        "file": "bot/earning/attribution.py",
+        "reason": "Wires attribution into the orchestrator surface every other earning module exposes. Until now this module only had record_receipt() to be called manually by status.py, and the function body it would call (record_receipt) is now wrapped in a run() so the orchestrator can invoke it after the wallet poll. The wrapper is intentionally the simplest in the codebase: it skips when nothing arrived, returns [] when disabled, and never raises, so a broken bookkeeping step can never break the cycle that produced the receipt. Keeps the design rules already in this file (deterministic, wallet-triggered, never raises) and adds only the thin run() entry point needed to make the module callable like every other product."
       }
     ],
     "suggestions": [
@@ -87,7 +83,7 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.0-20260906-110054",
+    "branch": "evolve/1.41.0-20260906-141231",
     "proposed_version": "1.41.0"
   },
   "last_earning": {
@@ -95,18 +91,18 @@
       {
         "platform": "dev.to-backfill",
         "success": true,
-        "updated": 2,
+        "updated": 1,
         "estimated_usd": 0.0,
-        "remaining": 8
+        "remaining": 7
       },
       {
         "platform": "dev.to-receipt-check",
         "success": true,
         "estimated_usd": 0.0,
-        "error": "2 published post(s) show readers no way to pay",
+        "error": "1 published post(s) show readers no way to pay",
         "checked": 5,
-        "with_footer": 3,
-        "without_footer": 2
+        "with_footer": 4,
+        "without_footer": 1
       }
     ],
     "total_usd": 0.0
@@ -140,7 +136,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 86,
+  "last_cycle_seconds": 41,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -706,7 +702,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-06T10:59:32.226374+00:00",
+    "checked_at": "2026-09-06T14:11:52.790141+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -926,7 +922,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.0-20260906-110054",
+  "last_evolution_branch": "evolve/1.41.0-20260906-141231",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 12,
@@ -1020,37 +1016,33 @@
     "done_ids": [
       4489474,
       4430049,
-      4391849
+      4391849,
+      4368781
     ],
     "skipped": {
       "4430049": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4430049",
-      "4368781": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4368781"
+      "4368781": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4368781",
+      "4545446": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4545446"
     },
-    "updated_total": 3,
-    "last_run": "2026-09-06T11:00:56.606080+00:00",
+    "updated_total": 4,
+    "last_run": "2026-09-06T14:12:32.538383+00:00",
     "last_reason": "updated",
-    "remaining": 8
+    "remaining": 7
   },
   "receipt_check": {
     "checked": 5,
-    "with_footer": 3,
-    "without_footer": 2,
+    "with_footer": 4,
+    "without_footer": 1,
     "unreachable": 0,
     "missing": [
       {
-        "id": 4368781,
-        "title": "Deploying Meta\u2019s Llama 3 in a Production Python Service",
-        "views": 33,
-        "url": "https://dev.to/robust_true_try/deploying-metas-llama-3-in-a-production-python-service-13o6"
-      },
-      {
-        "id": 4421693,
-        "title": "Stop AI Hallucinations: Verify Your LLM Summaries Before Publishing",
+        "id": 4545446,
+        "title": "Running Local LLMs on Mac Mini: What Actually Breaks",
         "views": 32,
-        "url": "https://dev.to/robust_true_try/stop-ai-hallucinations-verify-your-llm-summaries-before-publishing-43p0"
+        "url": "https://dev.to/robust_true_try/running-local-llms-on-mac-mini-what-actually-breaks-4n5p"
       }
     ],
-    "last_run": "2026-09-06T11:00:57.558358+00:00",
+    "last_run": "2026-09-06T14:12:33.351592+00:00",
     "last_reason": "footer_missing",
     "agrees_with_backfill": true
   }

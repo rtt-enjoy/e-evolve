@@ -1,6 +1,6 @@
 # Free AI Earning Queue
 
-Refreshed: 2026-09-05T00:15:35.033478+00:00
+Refreshed: 2026-09-06T01:02:07.634255+00:00
 Daily target: $10.00
 
 Suggestions favour free AI services and free AI APIs with zero upfront cost.
@@ -17,59 +17,55 @@ Suggestions favour free AI services and free AI APIs with zero upfront cost.
 
 ## Current Best Angle
 
-The strongest current free-AI earning angle is reselling free-tier APIs as tiny fixed-price services (transcription, summarization, image cleanup) with zero upfront spend, since providers like Groq, Hugging Face, and Google offer ongoing free allowances without mandatory credit cards.
+The strongest immediate angle is packaging free-tier LLM, transcription, and image APIs into fixed-price micro-services (e.g., $5–$20 per batch) for small businesses that need occasional AI tasks but lack technical setup. Focus on services with no credit-card gate (Groq, Hugging Face Inference, Google AI Studio, remove.bg) and use GitHub Actions or Hugging Face Spaces for zero-cost hosting and scheduling.
 
 ## Free AI Services To Use
 
 | Service | What it does | Free tier | Card? | How to earn | Price guide |
 | --- | --- | --- | --- | --- | --- |
-| Groq API | Fast LLM inference (LLaMA, Gemma, etc.) | verify current limit | no | Offer quick summarization or rewriting gigs for small businesses | $5-15 per task |
-| Hugging Face Inference API | Open-weight model hosting and inference | verify current limit | no | Build a one-page summarization tool and charge a one-time setup fee | $20-50 per setup |
-| Google Cloud Speech-to-Text | Audio transcription and voice processing | verify current limit | yes | Transcribe podcasts or interviews for content creators | $10-25 per hour of audio |
-| OpenAI TTS API | Text-to-speech voice generation | verify current limit | yes | Create voiceovers for YouTube shorts or ads | $10-30 per voiceover |
-| Remove.bg API | Automatic background removal from images | verify current limit | no | Clean product photos for Etsy sellers | $5-10 per image |
-| Hugging Face Embeddings | Text embedding generation for search and similarity | verify current limit | no | Build a simple document search tool for freelancers | $30-60 per setup |
+| Groq API | Fast LLM inference (Llama 3, Mixtral, Gemma) via REST | verify current limit (generous daily token allowance, no credit card) | no | Resell summarization, classification, or extraction as a per-document flat fee | $0.10–$0.50 per 1k words processed |
+| Hugging Face Inference API | Hosted inference for 100k+ open models (text, audio, vision) | verify current limit (rate-limited, no credit card) | no | Run batch sentiment analysis, translation, or embedding jobs for clients | $5–$15 per 1k records |
+| Google AI Studio (Gemini API) | Gemini 1.5 Flash/Pro multimodal LLM | verify current limit (60 RPM, 1,500 RPD, no credit card) | no | Offer PDF Q&A, data extraction, or image captioning as a one-off deliverable | $10–$30 per 50-page PDF batch |
+| remove.bg API | Automatic background removal for images | 50 free credits/month (1 credit = 1 image), no credit card | no | Sell bulk background-removal for e-commerce sellers (product photos) | $0.20–$0.50 per image, min $10 batch |
+| AssemblyAI Speech-to-Text API | Transcription with speaker diarization, timestamps | verify current limit (free tier includes ~100 hrs/mo, may require credit card for signup) | verify | Deliver cleaned, timestamped transcripts for podcasters or researchers | $1–$2 per audio hour |
+| Hugging Face Spaces | Free CPU hosting for Gradio/Streamlit/Docker apps, public or private | Unlimited CPU spaces, 16GB RAM, no credit card | no | Deploy a one-page tool (e.g., invoice extractor) and charge a one-time access fee | $20–$50 per tool setup + optional $5/mo retainer |
+| GitHub Actions | Free CI/CD minutes for public repos (unlimited) and 2,000 min/mo private | Unlimited public, 2,000 min/mo private, no credit card | no | Schedule nightly batch jobs (summaries, reports) and email results to clients | $15–$40 per monthly automated report |
+| LibreTranslate (public instance) | Open-source translation API (self-hosted or public rate-limited endpoint) | Public instance: verify current limit (rate-limited, no key, no credit card) | no | Bundle translation + formatting for subtitle files or product listings | $0.02–$0.05 per 100 words |
+| Sentence-Transformers via Hugging Face Inference | Text embeddings for semantic search, clustering, classification | Same as Hugging Face Inference API (rate-limited, no credit card) | no | Build a semantic deduplication or categorization script for CSV/Excel data | $10–$25 per 10k rows |
+| Google Colab | Free GPU/TPU notebooks (T4, sometimes A100) for interactive compute | verify current limit (time-limited sessions, no credit card) | no | Run heavier open-weight models (Whisper, Llama 3 8B) for one-off client jobs | $20–$60 per custom model run + output delivery |
 
 ## Easy Earning Ideas
 
-1. **Podcast episode transcriber**
-   - Who pays: Podcasters or YouTubers
-   - Deliverable: Timestamped transcript of one episode
-   - Price: 15
+1. **PDF Data Extraction Micro-Service**
+   - Who pays: Small law firms, real estate agents, or researchers with 10–50 PDFs/month
+   - Deliverable: CSV/JSON with extracted fields (dates, parties, amounts, clauses) delivered via email or shared drive
+   - Price: 15–30 per batch of 20 PDFs
    - Time to first dollar: same day
-   - Free stack: Google Cloud Speech-to-Text, Hugging Face
-2. **Resume/CV summarizer**
-   - Who pays: Job seekers or recruiters
-   - Deliverable: One-page AI summary of a resume
-   - Price: 10
+   - Free stack: Google AI Studio (Gemini 1.5 Flash) + GitHub Actions for scheduling + Hugging Face Spaces for a simple upload UI
+2. **Product Photo Background Removal**
+   - Who pays: Etsy/Shopify sellers with 50–200 new SKUs/month
+   - Deliverable: Zipped folder of transparent PNGs, original filenames preserved
+   - Price: 0.30 per image, minimum $15
    - Time to first dollar: same day
-   - Free stack: Groq API, Hugging Face
-3. **Product photo cleaner**
-   - Who pays: Etsy or Shopify sellers
-   - Deliverable: Background-removed product image
-   - Price: 5
+   - Free stack: remove.bg API (50 free credits/mo) + Python script run locally or on GitHub Actions
+3. **Weekly Competitor Blog Summaries**
+   - Who pays: Solo founders or marketing leads at B2B SaaS startups
+   - Deliverable: One-page PDF/Notion page with 3–5 bullet summaries + links, delivered every Monday
+   - Price: 25–40 per month
+   - Time to first dollar: 2–3 days
+   - Free stack: Groq API (Llama 3) for summarization + GitHub Actions cron + email via free SendGrid tier
+4. **Audio Transcript Cleanup & Timestamps**
+   - Who pays: Podcast editors, journalists, UX researchers
+   - Deliverable: Speaker-labeled, punctuation-corrected .txt/.srt with per-paragraph timestamps
+   - Price: 1.50 per audio hour
    - Time to first dollar: same day
-   - Free stack: Remove.bg API
-4. **Meeting notes summarizer**
-   - Who pays: Small business owners or consultants
-   - Deliverable: Bullet-point summary of a meeting recording
-   - Price: 20
-   - Time to first dollar: 2-3 days
-   - Free stack: Groq API, Google Speech-to-Text
-5. **One-page landing page copy generator**
-   - Who pays: Solo entrepreneurs or marketers
-   - Deliverable: Draft landing page copy based on product description
-   - Price: 25
-   - Time to first dollar: same day
-   - Free stack: Groq API
-
-## Next Actions
-
-- Sign up for Groq and Hugging Face accounts to access free-tier LLM APIs without credit card
-- Create a simple Fiverr or Upwork gig offering one of the easy earning ideas (e.g., resume summarizer)
-- Build a one-page web form using free tools (GitHub Pages + Netlify Functions) to collect files and return results
-- Set up a payment link via PayPal or Stripe to receive payments instantly
-- Deliver first 3-5 jobs manually to build reviews, then automate with scripts using the free APIs
+   - Free stack: AssemblyAI free tier (verify) or local Whisper on Google Colab + manual QC
+5. **Semantic CSV Deduplication & Tagging**
+   - Who pays: E-commerce ops, CRM admins, lead-gen agencies
+   - Deliverable: Cleaned CSV with duplicate clusters merged and auto-generated category tags
+   - Price: 20 per 10k rows
+   - Time to first dollar: 2–3 days
+   - Free stack: Sentence-Transformers via Hugging Face Inference + Python pandas + Hugging Face Space for file upload
 
 ## Monetization Patterns
 
@@ -136,7 +132,7 @@ The strongest current free-AI earning angle is reselling free-tier APIs as tiny 
    - Score: 100/100
    - Value signal: $4500.00
    - Why: visible or inferred value around $4500.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
@@ -144,7 +140,7 @@ The strongest current free-AI earning angle is reselling free-tier APIs as tiny 
      Source: github
      URL: https://github.com/elpideus/demido-studio/issues/1
      Why this is suitable: visible or inferred value around $4500.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
      
      Constraints:
      - Keep the first change narrowly scoped.
@@ -252,18 +248,18 @@ The strongest current free-AI earning angle is reselling free-tier APIs as tiny 
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
      Reference: https://github.com/xavier9802/agents-radar/issues/579
-5. [One month og chili crunch: 360 jars, 6k in revenue, shipped to 24 states, and 3 retail locations](https://www.reddit.com/r/SideProject/comments/1w7bfon/one_month_og_chili_crunch_360_jars_6k_in_revenue/)
-   - Score: 99/100
-   - Value signal: $700.00
-   - Why: visible or inferred value around $700.00; runs on a free AI tier, so input cost is zero and margin is total
+5. [Covey Finance : offline finance tracking](https://www.reddit.com/r/SideProject/comments/1w85bq6/covey_finance_offline_finance_tracking/)
+   - Score: 100/100
+   - Value signal: $10.00
+   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: One month og chili crunch: 360 jars, 6k in revenue, shipped to 24 states, and 3 retail locations
+     Lead: Covey Finance : offline finance tracking
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w7bfon/one_month_og_chili_crunch_360_jars_6k_in_revenue/
-     Why this is suitable: visible or inferred value around $700.00; runs on a free AI tier, so input cost is zero and margin is total
+     URL: https://www.reddit.com/r/SideProject/comments/1w85bq6/covey_finance_offline_finance_tracking/
+     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
      
      Constraints:
@@ -273,27 +269,57 @@ The strongest current free-AI earning angle is reselling free-tier APIs as tiny 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: Last month, I posted that my husband and I had launched EXTRA EXTRA Chili Crunch , a contemporary, Californian take on the classic spicy condiment. That means using avocado oil, tons of fried garlic slices, and primarily using peppers from North America. In the first post we made here, we talked a lot about getting started (incorporating, shelf stability lab testing, Processed Foods Registration from CDPH, etc) , but since going on sale it&#39;s been an absolute whirlwind. I wanted to share as much as I could with the community here in case it&#39;s helpful to anyone else. Numbers Recap We launched almost exactly a month ago (hosted on SquareSpace). ~360 jars sold (including preorders and wholesale) 145 sold in person, and our most profitable avenue Online, our most popular offering is Two Jars w/ Free Shipping (65%) Least popular offering is One Jar + $7.99 Flat Shipping 3 stores carry
+     Request excerpt: Covey Finance Sorry. Another one. I didn&#39;t realize finance apps were a meme. AI Electron Let&#39;s get the bad parts out of the way first. AI was used in making this app. I&#39;m a software dev of ~11 years. (mostly backend) I love UI/UX, but I&#39;m rusty in front end. In app, there are no AI/LLM calls. There is a small local model helping make your imports easier and auto-categorize strong predictions, but that stays local to you. I won&#39;t put AI features within the app. Electron. I haven&#39;t learned swift yet, so I wanted to stick with a language I know for now. It&#39;s also easier for repackaging for windows. Why I used budget spreadsheets for like 10 years, trying other apps as they came out, but got lazy with keeping them updated, so instead I spent 1.5 years on this project. I wanted something more automated than sheets, but less automated than bank linking. The big apps
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "One month og chili crunch: 360 jars, 6k in revenue, shipped to 24 states, and 3 retail locations" and can make a small working version.
+     Hi, I found your request about "Covey Finance : offline finance tracking" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $700.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1w7bfon/one_month_og_chili_crunch_360_jars_6k_in_revenue/
-6. [Paid Research: Test AI Tools | 600 Incentive | Remote | US Only](https://www.reddit.com/r/SideProject/comments/1w76caz/paid_research_test_ai_tools_600_incentive_remote/)
-   - Score: 89/100
-   - Value signal: $600.00
-   - Why: visible or inferred value around $600.00; runs on a free AI tier, so input cost is zero and margin is total
+     Reference: https://www.reddit.com/r/SideProject/comments/1w85bq6/covey_finance_offline_finance_tracking/
+6. [I got tired of not understanding my non-English teammates, so I built a real-time voice translator for gaming](https://www.reddit.com/r/SideProject/comments/1w8cqxx/i_got_tired_of_not_understanding_my_nonenglish/)
+   - Score: 96/100
+   - Value signal: $0.00
+   - Why: runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start
+   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+   - Codex request:
+     Implement a small, verifiable solution for this public request.
+     
+     Lead: I got tired of not understanding my non-English teammates, so I built a real-time voice translator for gaming
+     Source: reddit:r/SideProject
+     URL: https://www.reddit.com/r/SideProject/comments/1w8cqxx/i_got_tired_of_not_understanding_my_nonenglish/
+     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; no card and no upfront spend needed to start
+     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     
+     Constraints:
+     - Keep the first change narrowly scoped.
+     - Use free APIs or offline code paths when possible.
+     - Add or update a specific file that demonstrates the result.
+     - Include exact verification commands and output notes.
+     - Do not post externally or request payment automatically.
+     
+     Request excerpt: Hey r/SideProject , I&#39;ve been working on this for the past several months. The trigger: a gaming session where half the team spoke a language I didn&#39;t understand, and we eventually gave up on voice coordination because we just couldn&#39;t understand each other. I figured there had to be a way to fix this without stitching together 15 different tools. What it does: Real-time voice translation across 20+ languages (Deepgram Nova-2) Auto game detection in 2-3s, with automatic profile switching Voice isolation and noise reduction (Voice Focus V3) OBS overlay for streamers Optional voice cloning (your own voice, translated into another language) 300ms latency in Turbo Mode Technically, it works like a regular audio device (similar to OBS or Discord): no injection into the game, no memory reading, so it stays clear of anti-cheat concerns. Tech stack (for the curious): Python backend c
+   - Owner-reviewed outreach draft:
+     Hi, I found your request about "I got tired of not understanding my non-English teammates, so I built a real-time voice translator for gaming" and can make a small working version.
+     
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     
+     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     
+     Reference: https://www.reddit.com/r/SideProject/comments/1w8cqxx/i_got_tired_of_not_understanding_my_nonenglish/
+7. [Why does feature request software cost so much?](https://www.reddit.com/r/SideProject/comments/1w87q9u/why_does_feature_request_software_cost_so_much/)
+   - Score: 92/100
+   - Value signal: $20.00
+   - Why: visible or inferred value around $20.00; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Paid Research: Test AI Tools | 600 Incentive | Remote | US Only
+     Lead: Why does feature request software cost so much?
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w76caz/paid_research_test_ai_tools_600_incentive_remote/
-     Why this is suitable: visible or inferred value around $600.00; runs on a free AI tier, so input cost is zero and margin is total
+     URL: https://www.reddit.com/r/SideProject/comments/1w87q9u/why_does_feature_request_software_cost_so_much/
+     Why this is suitable: visible or inferred value around $20.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow.
      
      Constraints:
@@ -303,26 +329,26 @@ The strongest current free-AI earning angle is reselling free-tier APIs as tiny 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: Hi everyone! At Pulse Voices, we are running a 100% online, paid research study for people living in the US aged 18+. • Eligibility: US resident, age 18+ (No experience needed - everyone is welcome!) • Format: 100% online, test AI Tools and give honest feedback • Incentive: $600 + $15 welcome gift (if you complete the onboarding) 👉 Sign up for free at Pulse Voices and apply here: https://hubs.li/Q04wJMfq0 &#32; submitted by &#32; /u/PulseVoices [link] &#32; [comments]
+     Request excerpt: I have 2 apps, both without any good customer feedback collection mechanism. My apps are very customer focused, and so I wanted a way to figure out specifically which features to build next for my users. I first looked for existing solutions, but most were $20+/month, or self-hosted and difficult to setup. Many of these tools had tons of cool features which justified the price, but I did not want all of that. I created Simple Feature Board with the intent of being as cheap as possible (free trial, then $5/month) and as easy as possible to setup (has an AI prompt w/ code snippet to copy and paste so you can use to setup a feedback widget on your product with one prompt). I built this tool to solve my own problem here, and maybe it could be of use to you as well. I launched this product a few days ago, so if you have any feedback or would like to try it out, please comment! Thanks :) &#32;
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Paid Research: Test AI Tools | 600 Incentive | Remote | US Only" and can make a small working version.
+     Hi, I found your request about "Why does feature request software cost so much?" and can make a small working version.
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $600.00 via crypto.
+     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $20.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1w76caz/paid_research_test_ai_tools_600_incentive_remote/
-7. [Silkwave Video: paste a YouTube link, get an on-device transcript with speaker labels and free ChatGPT summaries & chat. macOS 26+ only.](https://www.reddit.com/r/SideProject/comments/1w7e0aa/silkwave_video_paste_a_youtube_link_get_an/)
-   - Score: 88/100
+     Reference: https://www.reddit.com/r/SideProject/comments/1w87q9u/why_does_feature_request_software_cost_so_much/
+8. [Built a tool that turns 100-page earnings reports into a 2-minute read (with SEC citations)](https://www.reddit.com/r/SideProject/comments/1w878mq/built_a_tool_that_turns_100page_earnings_reports/)
+   - Score: 90/100
    - Value signal: $10.00
    - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
    - Codex request:
      Implement a small, verifiable solution for this public request.
      
-     Lead: Silkwave Video: paste a YouTube link, get an on-device transcript with speaker labels and free ChatGPT summaries & chat. macOS 26+ only.
+     Lead: Built a tool that turns 100-page earnings reports into a 2-minute read (with SEC citations)
      Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w7e0aa/silkwave_video_paste_a_youtube_link_get_an/
+     URL: https://www.reddit.com/r/SideProject/comments/1w878mq/built_a_tool_that_turns_100page_earnings_reports/
      Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
      First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
      
@@ -333,42 +359,12 @@ The strongest current free-AI earning angle is reselling free-tier APIs as tiny 
      - Include exact verification commands and output notes.
      - Do not post externally or request payment automatically.
      
-     Request excerpt: Hey everyone! 👋 Introducing Silkwave Video , a free YouTube transcriber for Mac with speaker identification, AI chat and summaries, and a built-in video player. No account, no subscription, no API key needed. Website - https://www.silkwave.ai/silkwave-video Github - https://github.com/bakhshi/silkwave_video_releases Features Paste a YouTube link. Downloads and transcribes automatically. On-device transcription in 10 languages. Apple&#39;s local speech models, fully offline, nothing uploaded. Speaker identification. Panels and podcasts read like a script, processed locally. AI chat and summaries. Key topics and takeaways through Apple Intelligence&#39;s ChatGPT extension and Apple Shortcuts, no API key needed. Ask follow-up questions about any video, with history saved per video. Full-text search across everything you&#39;ve imported. Synced playback and dark theme. Free. No subscription,
+     Request excerpt: Every earnings season I&#39;d read a headline like beat expectations and still have no idea why the stock dropped. So I built TickerTrend&#39;s Earnings feature: it pulls a company&#39;s SEC filings + earnings call transcript, checks the numbers against analyst consensus, and writes a summary with highlights, risks, and guidance — each claim linked back to the original filing so you&#39;re not just trusting an AI blindly. You can also ask follow-up questions about the report. Free tier gives 5 reports/month, no signup needed for the first one. Built solo, would love feedback: tickertrend.app/earnings &#32; submitted by &#32; /u/Equal-Top2768 [link] &#32; [comments]
    - Owner-reviewed outreach draft:
-     Hi, I found your request about "Silkwave Video: paste a YouTube link, get an on-device transcript with speaker labels and free ChatGPT summaries & chat. macOS 26+ only." and can make a small working version.
+     Hi, I found your request about "Built a tool that turns 100-page earnings reports into a 2-minute read (with SEC citations)" and can make a small working version.
      
      I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
      
      Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1w7e0aa/silkwave_video_paste_a_youtube_link_get_an/
-8. [Just hit 55 downloads on my free Etsy/eBay extension! Added Image-to-SEO in v1.2.1, now working on bulk CSV generation — how should I format](https://www.reddit.com/r/SideProject/comments/1w7eyrp/just_hit_55_downloads_on_my_free_etsyebay/)
-   - Score: 86/100
-   - Value signal: $30.00
-   - Why: visible or inferred value around $30.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
-   - Codex request:
-     Implement a small, verifiable solution for this public request.
-     
-     Lead: Just hit 55 downloads on my free Etsy/eBay extension! Added Image-to-SEO in v1.2.1, now working on bulk CSV generation — how should I format
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w7eyrp/just_hit_55_downloads_on_my_free_etsyebay/
-     Why this is suitable: visible or inferred value around $30.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate.
-     
-     Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: Hey everyone! A short while back, I launched ListCraft AI —a free Chrome extension that uses a bring-your-own OpenAI key model so Etsy and eBay sellers don&#39;t have to pay $30/month for listing generators. We just crossed 55 downloads 🚀 and I recently shipped v1.2.1 : 📸 Image-to-SEO (GPT-4o Vision): Drag drop a product photo, and the AI detects color, fabric, and style to write the title, description, and 13 formatted tags automatically. 🏷️ eBay Item Specifics Auto-Fill: Generates structured Brand, Material, Department, and Size data and auto-fills eBay draft pages directly. 🎨 Tone Selector Local Caching: Choose writing tones (Casual, Sales-Focused, Professional) while caching past runs locally to keep API costs down. What&#39;s coming next: A seller recently told me: Nobody wants to generate 50 listings one by one—build a bulk CSV importer. I totally agree, so I&#39;m building a bulk
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Just hit 55 downloads on my free Etsy/eBay extension! Added Image-to-SEO in v1.2.1, now working on bulk CSV generation — how should I format" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $30.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1w7eyrp/just_hit_55_downloads_on_my_free_etsyebay/
+     Reference: https://www.reddit.com/r/SideProject/comments/1w878mq/built_a_tool_that_turns_100page_earnings_reports/

@@ -1,7 +1,7 @@
 {
   "version": "1.40.0",
-  "last_run": "2026-09-06T19:13:01.134024+00:00",
-  "total_runs": 1779,
+  "last_run": "2026-09-06T21:23:15.985924+00:00",
+  "total_runs": 1780,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -35,18 +35,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.40.0",
-    "summary": "Wire the receipts module into the earning package and surface the receipt book in the dashboard status output.",
+    "summary": "Complete the deferred receipts module: create bot/earning/receipts.py and wire receipts_run into the earning package so the dashboard can consume the receipt book.",
     "changes_applied": [
       {
-        "file": "bot/earning/__init__.py",
-        "reason": "The last evolution documented `receipts` in the package docstring but deliberately deferred the import. The module now exists and must be wired into the package so the orchestrator and tests can import `receipts_run` following the same pattern as every other product."
+        "file": "bot/earning/receipts.py",
+        "reason": "Creates the receipts module that the last evolution referenced but did not instantiate. Provides get_receipts(status) for the dashboard to consume and run(llm, status) following the product pattern. The projection is bounded to the same history limit as attribution, reads only from status['attribution']['receipts'], and never makes an LLM call."
       },
       {
-        "file": "bot/earning/receipts.py",
-        "reason": "Creates the receipts module that the last evolution referenced but did not instantiate. Provides `get_receipts(status)` for the dashboard to consume and `run(llm, status)` following the product pattern. The projection is bounded to the same history limit as `attribution`, reads only from `status[\"attribution\"][\"receipts\"]`, and never makes an LLM call."
+        "file": "bot/earning/__init__.py",
+        "reason": "The last evolution documented receipts in the package docstring but deliberately deferred the import. The module now exists and must be wired into the package so the orchestrator and tests can import receipts_run following the same pattern as every other product."
       }
     ],
     "suggestions": [
+      {
+        "title": "Enable payout in config/strategy.json",
+        "description": "The payout module is disabled by default (payout.enabled=false). Enabling it adds the support footer to new articles, giving readers a way to tip USDT. This is the single most impactful change for earning revenue.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Open config/strategy.json and set payout.enabled to true",
+          "Step 2: Verify USDT_WALLET_ADDRESS is set as a GitHub secret",
+          "Step 3: Run the next evolution cycle to apply the change",
+          "Step 4: Check docs/status.json for payout.live: true"
+        ]
+      },
       {
         "title": "Add Anthropic free credit tier as Claude Haiku fallback",
         "description": "Anthropic offers free credits on signup in many regions. Adds a fourth inference provider so the daily article never depends on OpenRouter's free chain when rate-limited.",
@@ -72,23 +85,10 @@
           "Step 3: Add the key as a GitHub repository secret named CEREBRAS_API_KEY",
           "Step 4: Next evolution will wire it into llm.py as a second fallback after Anthropic"
         ]
-      },
-      {
-        "title": "Wire USDT_TRC20_API_KEY for richer wallet polling",
-        "description": "TronGrid offers a free public endpoint that returns richer transaction history than the free TronScan scraper currently in use. Adding the key lets the wallet module surface the sender address, which would feed the attribution book with one more useful correlation.",
-        "secret_needed": "TRONGRID_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Go to https://trongrid.io/ and sign up with email (no credit card)",
-          "Step 2: Create an API key under Settings > API Keys",
-          "Step 3: Add the key as a GitHub repository secret named TRONGRID_API_KEY",
-          "Step 4: Next evolution will add an endpoint lookup path alongside the existing tron scan reader"
-        ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.40.1-20260906-191355",
+    "branch": "evolve/1.40.1-20260906-212533",
     "proposed_version": "1.40.1"
   },
   "last_earning": {
@@ -96,14 +96,27 @@
       {
         "platform": "dev.to-backfill",
         "success": true,
-        "updated": 1,
+        "updated": 3,
         "estimated_usd": 0.0,
-        "remaining": 5
+        "remaining": 2
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
+    {
+      "title": "Enable payout in config/strategy.json",
+      "description": "The payout module is disabled by default (payout.enabled=false). Enabling it adds the support footer to new articles, giving readers a way to tip USDT. This is the single most impactful change for earning revenue.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Open config/strategy.json and set payout.enabled to true",
+        "Step 2: Verify USDT_WALLET_ADDRESS is set as a GitHub secret",
+        "Step 3: Run the next evolution cycle to apply the change",
+        "Step 4: Check docs/status.json for payout.live: true"
+      ]
+    },
     {
       "title": "Add Anthropic free credit tier as Claude Haiku fallback",
       "description": "Anthropic offers free credits on signup in many regions. Adds a fourth inference provider so the daily article never depends on OpenRouter's free chain when rate-limited.",
@@ -129,23 +142,10 @@
         "Step 3: Add the key as a GitHub repository secret named CEREBRAS_API_KEY",
         "Step 4: Next evolution will wire it into llm.py as a second fallback after Anthropic"
       ]
-    },
-    {
-      "title": "Wire USDT_TRC20_API_KEY for richer wallet polling",
-      "description": "TronGrid offers a free public endpoint that returns richer transaction history than the free TronScan scraper currently in use. Adding the key lets the wallet module surface the sender address, which would feed the attribution book with one more useful correlation.",
-      "secret_needed": "TRONGRID_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Go to https://trongrid.io/ and sign up with email (no credit card)",
-        "Step 2: Create an API key under Settings > API Keys",
-        "Step 3: Add the key as a GitHub repository secret named TRONGRID_API_KEY",
-        "Step 4: Next evolution will add an endpoint lookup path alongside the existing tron scan reader"
-      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 56,
+  "last_cycle_seconds": 141,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -711,7 +711,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-06T19:13:01.671660+00:00",
+    "checked_at": "2026-09-06T21:23:16.172014+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -931,7 +931,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.40.1-20260906-191355",
+  "last_evolution_branch": "evolve/1.40.1-20260906-212533",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 12,
@@ -1028,7 +1028,10 @@
       4391849,
       4368781,
       4545446,
-      4421693
+      4421693,
+      4562180,
+      4356423,
+      4552210
     ],
     "skipped": {
       "4430049": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4430049",
@@ -1037,10 +1040,10 @@
       "4421693": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4421693",
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
-    "updated_total": 6,
-    "last_run": "2026-09-06T19:13:56.603074+00:00",
+    "updated_total": 9,
+    "last_run": "2026-09-06T21:25:36.547525+00:00",
     "last_reason": "updated",
-    "remaining": 5
+    "remaining": 2
   },
   "receipt_check": {
     "checked": 5,
@@ -1048,7 +1051,7 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-06T19:13:57.235843+00:00",
+    "last_run": "2026-09-06T21:25:37.268975+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": false
   }

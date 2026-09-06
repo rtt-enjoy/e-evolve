@@ -1,7 +1,7 @@
 {
   "version": "1.40.0",
-  "last_run": "2026-09-06T05:58:39.040132+00:00",
-  "total_runs": 1775,
+  "last_run": "2026-09-06T10:59:31.612370+00:00",
+  "total_runs": 1776,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -35,19 +35,15 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.40.0",
-    "summary": "Add a deterministic, LLM-free verification that published dev.to posts actually carry the USDT tip footer, closing the structural zero that let 14 cycles report success while readers had no way to pay.",
+    "summary": "Add LLM retry with exponential backoff for rate limits, enable tag-filtered newsletter sourcing, and document the USDT payout config steps for owners",
     "changes_applied": [
       {
-        "file": "bot/earning/receipt_check.py",
-        "reason": "New module that independently verifies published dev.to posts carry the USDT tip footer by fetching them from the unauthenticated public endpoint, comparing the observation against backfill.remaining, and failing loudly when the receive path is missing. This closes the 14-cycle outage where self-reported success masked a missing footer on the account's highest-traffic post."
-      },
-      {
-        "file": "bot/earning/__init__.py",
-        "reason": "Re-export the new receipt_check.run so the orchestrator can import it the same way it imports the other earning products, keeping the module discoverable and testable without touching protected orchestrator files."
+        "file": "bot/earning/devto.py",
+        "reason": "rate-limit retry decorator that wraps publish and update_body with exponential backoff (15s base, 2x per retry, jitter, cap 5min, max 3 attempts). Dev.to's unauthenticated endpoint already used by receipt_check is the most likely to 429; adding retries here closes the gap without any new secret or config change."
       },
       {
         "file": "docs/receipt-check.md",
-        "reason": "Document the new verification module so a reviewer understands why it exists, how it differs from backfill, and what status fields it populates -- without needing to read the full source."
+        "reason": "comprehensive documentation of the receipt_check module covering what it observes, how it differs from backfill, the status fields it writes, and when to read them. This replaces the terse inline comments with a reference a non-engineer owner can use to interpret their dashboard."
       }
     ],
     "suggestions": [
@@ -64,18 +60,6 @@
         ]
       },
       {
-        "title": "Run receipt_check every cycle to prove the footer is live",
-        "description": "A new bot/earning/receipt_check.py module fetches each published post from the unauthenticated dev.to endpoint and asserts the footer is present, comparing its finding against backfill.remaining. This turns a self-reported number into an independently verified one and fails loudly when the receive path is missing.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. No secret needed; receipt_check uses the public dev.to API",
-          "2. Ensure the module is wired into the cycle in bot/main.py (protected file, owner edits)",
-          "3. Watch docs/status.json for receipt_check.last_reason == all_verified"
-        ]
-      },
-      {
         "title": "Add Anthropic free credit tier as Claude Haiku fallback",
         "description": "Anthropic offers free credits on signup in many regions. Adds a fourth inference provider so the daily article never depends on OpenRouter's free chain when rate-limited.",
         "secret_needed": "ANTHROPIC_API_KEY",
@@ -87,10 +71,23 @@
           "3. Add the key as a GitHub repository secret named ANTHROPIC_API_KEY",
           "4. Next evolution will wire it into llm.py as fallback when OpenRouter returns 429"
         ]
+      },
+      {
+        "title": "Add Cerebras free tier as Llama 4 inference fallback",
+        "description": "Cerebras offers ~1M tokens/day on its free tier with no credit card. Adds a fifth inference provider so the bot never stalls on a 429 from OpenRouter's free chain.",
+        "secret_needed": "CEREBRAS_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Sign up at https://cloud.cerebras.ai/ with email (no credit card)",
+          "2. Generate an API key under Settings > API Keys",
+          "3. Add the key as a GitHub repository secret named CEREBRAS_API_KEY",
+          "4. Next evolution will wire it into llm.py as a second fallback after Anthropic"
+        ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.0-20260906-060443",
+    "branch": "evolve/1.41.0-20260906-110054",
     "proposed_version": "1.41.0"
   },
   "last_earning": {
@@ -98,35 +95,23 @@
       {
         "platform": "dev.to-backfill",
         "success": true,
-        "updated": 1,
+        "updated": 2,
         "estimated_usd": 0.0,
-        "remaining": 10
+        "remaining": 8
       },
       {
         "platform": "dev.to-receipt-check",
         "success": true,
         "estimated_usd": 0.0,
-        "error": "4 published post(s) show readers no way to pay",
+        "error": "2 published post(s) show readers no way to pay",
         "checked": 5,
-        "with_footer": 1,
-        "without_footer": 4
+        "with_footer": 3,
+        "without_footer": 2
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
-    {
-      "title": "Run receipt_check every cycle to prove the footer is live",
-      "description": "A new bot/earning/receipt_check.py module fetches each published post from the unauthenticated dev.to endpoint and asserts the footer is present, comparing its finding against backfill.remaining. This turns a self-reported number into an independently verified one and fails loudly when the receive path is missing.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. No secret needed; receipt_check uses the public dev.to API",
-        "2. Ensure the module is wired into the cycle in bot/main.py (protected file, owner edits)",
-        "3. Watch docs/status.json for receipt_check.last_reason == all_verified"
-      ]
-    },
     {
       "title": "Add Anthropic free credit tier as Claude Haiku fallback",
       "description": "Anthropic offers free credits on signup in many regions. Adds a fourth inference provider so the daily article never depends on OpenRouter's free chain when rate-limited.",
@@ -139,10 +124,23 @@
         "3. Add the key as a GitHub repository secret named ANTHROPIC_API_KEY",
         "4. Next evolution will wire it into llm.py as fallback when OpenRouter returns 429"
       ]
+    },
+    {
+      "title": "Add Cerebras free tier as Llama 4 inference fallback",
+      "description": "Cerebras offers ~1M tokens/day on its free tier with no credit card. Adds a fifth inference provider so the bot never stalls on a 429 from OpenRouter's free chain.",
+      "secret_needed": "CEREBRAS_API_KEY",
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Sign up at https://cloud.cerebras.ai/ with email (no credit card)",
+        "2. Generate an API key under Settings > API Keys",
+        "3. Add the key as a GitHub repository secret named CEREBRAS_API_KEY",
+        "4. Next evolution will wire it into llm.py as a second fallback after Anthropic"
+      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 367,
+  "last_cycle_seconds": 86,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -708,7 +706,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-06T05:58:39.489346+00:00",
+    "checked_at": "2026-09-06T10:59:32.226374+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -928,7 +926,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.0-20260906-060443",
+  "last_evolution_branch": "evolve/1.41.0-20260906-110054",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 12,
@@ -1020,34 +1018,25 @@
   },
   "backfill": {
     "done_ids": [
-      4489474
+      4489474,
+      4430049,
+      4391849
     ],
     "skipped": {
-      "4430049": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4430049"
+      "4430049": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4430049",
+      "4368781": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4368781"
     },
-    "updated_total": 1,
-    "last_run": "2026-09-06T06:04:44.902626+00:00",
+    "updated_total": 3,
+    "last_run": "2026-09-06T11:00:56.606080+00:00",
     "last_reason": "updated",
-    "remaining": 10
+    "remaining": 8
   },
   "receipt_check": {
     "checked": 5,
-    "with_footer": 1,
-    "without_footer": 4,
+    "with_footer": 3,
+    "without_footer": 2,
     "unreachable": 0,
     "missing": [
-      {
-        "id": 4430049,
-        "title": "Recover a Bricked Framework 13 with a DIY USB Flash",
-        "views": 92,
-        "url": "https://dev.to/robust_true_try/recover-a-bricked-framework-13-with-a-diy-usb-flash-9li"
-      },
-      {
-        "id": 4391849,
-        "title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness",
-        "views": 90,
-        "url": "https://dev.to/robust_true_try/build-a-fast-local-llm-inference-pipeline-with-deepseek-harness-17n7"
-      },
       {
         "id": 4368781,
         "title": "Deploying Meta\u2019s Llama 3 in a Production Python Service",
@@ -1061,7 +1050,7 @@
         "url": "https://dev.to/robust_true_try/stop-ai-hallucinations-verify-your-llm-summaries-before-publishing-43p0"
       }
     ],
-    "last_run": "2026-09-06T06:04:46.078074+00:00",
+    "last_run": "2026-09-06T11:00:57.558358+00:00",
     "last_reason": "footer_missing",
     "agrees_with_backfill": true
   },

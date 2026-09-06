@@ -35,6 +35,12 @@
 		"history_limit": 200,
 		"note_on_config": "Adds the same payout footer to articles published before the footer existed. The back catalogue is where most readers already are -- 1,949 lifetime views across 11 posts, 85% of it on a single evergreen post -- and none of it carried an ask. Reuses DEV_TO_API_KEY via PUT /api/articles/{id}: no new secret, no owner action, no LLM call, and no new writing. Editing does not change published_at, so nothing is re-surfaced in the feed. A post whose body opens with YAML front matter is skipped, because Forem re-reads title and tags from that block on save and clears the tag list first. Gated on payout.enabled: if there is no footer shipping, there is nothing to backfill."
 	},
+	"receipt_check": {
+		"enabled": true,
+		"max_per_cycle": 5,
+		"history_limit": 50,
+		"note_on_config": "Verifies from outside that published posts actually carry the ask. Every other signal is the bot reporting on its own work: backfill computes 'remaining' from the same fetch it acts on, so when that fetch was wrong the work and the claim were wrong together and agreed. That hid a total failure for cycles #1760-#1773, with remaining: 0 while no post on the account had a footer. This re-reads each post through the unauthenticated GET /api/articles/{id} -- no key, no shared serializer with the writer -- and records agrees_with_backfill. It never writes and never repairs: repair is backfill's job, and merging them would rebuild the same self-reporting blind spot one layer up."
+	},
 	"attribution": {
 		"enabled": true,
 		"history_limit": 200,

@@ -79,6 +79,7 @@ bot/earning/         ← products own a run(llm, status); support modules do not
   articles.py        ← [product] one dev.to article per day; follows up its own best post
   newsletter.py      ← [product] a weekly dev.to digest of several trending stories
   backfill.py        ← [product] retrofits the tip footer onto posts published before it existed
+  receipt_check.py   ← [product] reads published posts back, unauthenticated, to prove readers see an ask
   code_techs.py      ← [product] free-AI earning opportunity queue (research/suggestion only)
   mrr_ideas.py       ← [product] recurring-revenue idea triage (research/suggestion only)
   _shared.py         ← [support] config loading, cadence, feed parsing — used by all four
@@ -109,6 +110,7 @@ Phase 4: Research — refresh free-AI earning queue and MRR idea triage,
                     draft + publish one article, then draft + publish the
                     weekly newsletter digest when due, then retrofit the tip
                     footer onto any post published before the footer existed
+                    then read the published posts back to verify readers see an ask
 Phase 5: Update   — save status.json, write dashboard, commit
 ```
 
@@ -571,6 +573,70 @@ Like every other publish path it reports `estimated_usd: 0.0`: an ask is not a
 receipt. State lives in `status["backfill"]` (`done_ids`, `remaining`,
 `updated_total`, `last_reason`).
 
+### Independent verification (bot/earning/receipt_check.py)
+
+Every other signal about the receive path is the bot grading its own homework.
+`backfill` derives `remaining` from the same `fetch_published` call it acts on,
+so when that call dropped `body_markdown` the work and the claim about the work
+were wrong *together* and agreed with each other. `payout.live` reports config,
+not reality. `updated_total` counts write attempts this process made, not
+footers a reader can see.
+
+That is what hid a total failure for cycles #1760-#1773: `remaining: 0,
+last_reason: "nothing_to_do"` — by the doctrine's own checklist, "every reader
+can pay" — while not one of the account's 11 posts carried a footer, including
+the 1,722-view article holding 84% of all lifetime reach.
+
+The doctrine's answer (Principle 3d) was a manual `curl`. That check is correct
+and costs one second, and it never ran, because this is an unattended hourly
+system with no human in the loop. **A manual verification step in an unattended
+system is a step that never happens** — and it fails in the dangerous direction,
+because the checklist then reads as though the path were verified. This module
+is that curl, run every cycle.
+
+- **It re-reads the artifact, never the caller's data.** `verify()` takes the
+  post list purely for ids and view counts; the body is always re-fetched. Hand
+  it a post dict claiming a footer and it still reports the truth
+  (`test_it_never_reads_the_body_it_was_handed`).
+- **It sends no API key.** `GET /api/articles/{id}` is unauthenticated and
+  returns `body_markdown` — verified against Forem's `me.json.jbuilder` and the
+  public article-list partial, which differ in exactly the field that caused the
+  outage. Authenticating would route the read back through the serializer the
+  backfill already trusts, i.e. share its blind spot
+  (`test_it_sends_no_api_key`). **No new secret; it needs no secret at all.**
+- **It never writes and never repairs.** Repair belongs to `backfill`. A
+  verifier that also fixes things is once again reporting on its own work,
+  rebuilding the original problem one layer up.
+- **"Could not read" is a third state.** `fetch_live_body` returns `None` for an
+  unobservable post, never `""`. The original bug collapsed *unreadable* into
+  *fine*; collapsing it into *broken* would be the same error pointed the other
+  way, raising a false alarm on every post the next time a serializer changes.
+  The honest answer is `unreachable`.
+- **Deterministic, no LLM call.** The comparison is exact, and a model asked
+  whether a footer is present would make the check itself unreliable.
+- **Never raises**, and stays quiet when everything is fine — so the warning
+  stands out on the cycle where it is not.
+- Runs **after** `backfill` in Phase 4, so it observes this cycle's repairs
+  rather than the state before them.
+
+The load-bearing output is `agrees_with_backfill`, which sets this module's
+observation beside the claim `backfill` makes about itself. On the cycle it was
+built, run against the live account: 12 posts checked, **2 carrying an ask, 10
+carrying none**, busiest offender at 1,722 views, while `backfill.remaining`
+claimed `0`. The two that did carry a footer were both published after
+`payout.enabled` was switched on — so the publish path works and the back
+catalogue was never touched, which is exactly what `backfill` exists to fix and
+what its own status field denied.
+
+Generalising: **any status field that reports on a channel needs a second reader
+that does not share its inputs.** The test is not "is this field written
+carefully" but "if this code did nothing at all, would this field look any
+different". Where the answer is no, the field is decoration.
+
+The dashboard tip card shows the observed count beside the address, because a
+tip card that renders complete while readers see no ask is precisely the silent
+failure Principle 3b warns about.
+
 ### Revenue attribution (bot/earning/attribution.py)
 
 Principle 5 of the doctrine says measure the funnel, not the last stage. Views
@@ -869,6 +935,17 @@ read — but it is a *claim* produced by the same code whose work it reports, so
 `curl` of a published post is the ground truth; see Principle 3d). While it is
 non-zero, reach the account already has is still earning a structural zero.
 
+`receipt_check` is owned by `bot/earning/receipt_check.py` and is the only field
+here that is **not** self-reported: `checked`, `with_footer`, `without_footer`,
+`unreachable`, `missing` (the worst offenders, highest-traffic first),
+`agrees_with_backfill`, `last_reason`. It re-reads each published article through
+the *unauthenticated* `GET /api/articles/{id}`, so it shares no key and no
+serializer with the code that writes the footers. `without_footer > 0` means
+readers can see posts with no way to pay right now, whatever `backfill.remaining`
+says; `agrees_with_backfill: false` means one of the self-reported fields is
+wrong and the observation is the half to believe. `unreachable` counts posts it
+could not read — those are unverified, not covered.
+
 `attribution` is written by `status._snapshot_attribution` (via
 `bot/earning/attribution.py`) and records what was published when on-chain money
 arrived: `receipts`, `receipt_count`, `total_attributed_usd`, `by_archetype`,
@@ -915,6 +992,7 @@ Tunable by owner or changed here in Codex:
   "payout":         { "enabled": true, "address_env": "USDT_WALLET_ADDRESS",
                       "heading": "Support this work", "note": "...", "show_network": true },
   "backfill":       { "enabled": true, "max_per_cycle": 3, "history_limit": 200 },
+  "receipt_check":  { "enabled": true, "max_per_cycle": 5, "history_limit": 50 },
   "attribution":    { "enabled": true, "history_limit": 200 },
   "mrr_ideas":      { "enabled": true, "refresh_hours": 48, "max_ideas": 8,
                       "min_score": 50, "history_limit": 100 },

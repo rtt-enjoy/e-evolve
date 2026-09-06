@@ -32,6 +32,15 @@ export default function OverviewSection({ status }: { status: Status }) {
 	const payout = status.payout || {};
 	const tip = status.payout_public;
 	const attribution = status.attribution || {};
+	// What readers actually see, read back from the published posts. Every
+	// other field on this page is written by the code whose work it reports,
+	// and `backfill.remaining` read 0 for fourteen cycles while no published
+	// post carried an ask. A tip card that looks finished is exactly the
+	// failure mode, so the observation gets shown next to the address.
+	const check = status.receipt_check || {};
+	const verified = (check.checked || 0) > 0;
+	const gapFound = verified && (check.without_footer || 0) > 0;
+	const worstMissing = (check.missing || [])[0];
 
 	return (
 		<>
@@ -201,7 +210,24 @@ export default function OverviewSection({ status }: { status: Status }) {
 								<Pill tone="good">
 									{tip.asset || 'USDT'} · {tip.network || 'on-chain'}
 								</Pill>
+								{verified ? (
+									<Pill tone={gapFound ? 'warn' : 'good'}>
+										{gapFound
+											? `${check.without_footer} of ${check.checked} posts show no ask`
+											: `all ${check.checked} checked posts carry it`}
+									</Pill>
+								) : null}
 							</div>
+							{gapFound ? (
+								<p className="muted mt-4">
+									Checked against the published articles themselves, not against
+									this bot&apos;s own report of its work.{' '}
+									{worstMissing?.title
+										? `The busiest post still missing an ask is “${worstMissing.title}” (${worstMissing.views ?? 0} views).`
+										: null}{' '}
+									Those readers currently have no way to pay.
+								</p>
+							) : null}
 							<p className="muted mt-4">
 								Sent straight to the receive wallet, so anything given arrives
 								without a transfer step. Verify against the balance above —

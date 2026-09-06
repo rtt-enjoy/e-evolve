@@ -1,7 +1,7 @@
 # Evolution TODO
 
-Bot state: v1.38.0 - cycle #1759 - active: `llm_anthropic`, `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
-Receive path: **live** (`payout.enabled: true`, TRC-20) - first receipt still pending.
+Bot state: v1.40.0 - cycle #1774 - active: `llm_anthropic`, `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
+Receive path: **live on new posts, verified missing on 10 of 12 published** - first receipt still pending.
 
 **Read [`docs/passive-income-doctrine.md`](docs/passive-income-doctrine.md) before
 working this list.** It ranks channels by what runs unattended and carries the
@@ -11,16 +11,47 @@ scored candidate table, so a cycle does not re-derive the same refused ideas.
 
 ## Bugs (break current earning)
 
-_(none open)_
+- **The back catalogue still has no ask, and `backfill` has never written to a
+  post.** Verified 2026-09-06 against the live account by `receipt_check`, which
+  reads the published articles back through the unauthenticated API rather than
+  trusting any field this bot wrote about itself:
+
+  | Measure | Value |
+  | --- | --- |
+  | Posts checked | 12 |
+  | Carrying an ask | 2 (both published after `payout.enabled` was turned on) |
+  | **Carrying none** | **10** |
+  | Busiest post with no ask | **1,722 views** (84% of all lifetime reach) |
+  | `backfill.remaining` claimed | **0** |
+  | `backfill.updated_total` | **0** |
+
+  The cause was diagnosed at cycle #1773 and fixed in `61dd5c5`: `fetch_published`
+  had dropped `body_markdown`, so `needs_footer` saw an empty body on every post,
+  hit its empty-body guard, and reported "nothing to do" for all of them. The fix
+  is correct — Forem's `me.json.jbuilder` does extract `body_markdown`, confirmed
+  against source — but it landed **after** cycle #1773 ran, so **no cycle has yet
+  executed it**.
+
+  Expected resolution: the next Actions run with `DEV_TO_API_KEY` set should
+  update up to `max_per_cycle` (3) posts, highest-traffic first, and take four
+  cycles to clear all ten. **Confirm it actually happened** by reading
+  `receipt_check.without_footer` — not `backfill.remaining`, which is the field
+  that lied for fourteen cycles. Local verification is impossible: the key exists
+  only as a GitHub Actions secret.
+
+  If `without_footer` is still 10 after the next run, the `body_markdown` fix is
+  not the whole story and the next place to look is `devto.update_body`'s PUT
+  response, which is currently only checked for an exception.
 
 ---
 
 ## High Priority - Earning
 
 - **Publish consistently into the shapes the audience measurably prefers.**
-  Doctrine Principle 5, step 3 - and now the *only* remaining earning work that
-  does not need an owner decision. The receive path is live on everything
-  published, so reach finally compounds into something instead of nothing.
+  Doctrine Principle 5, step 3. **Blocked behind the bug above**: the receive
+  path is live on new posts only, so until the back catalogue is fixed most
+  reach is still being multiplied by zero and this work would compound into
+  nothing. Do this after `receipt_check.without_footer` reaches 0.
   `status["article_interest"]` measures that `problem-workaround` earns ~25x
   `build-tutorial`, and `_prefer_proven_archetypes` already applies a bounded
   bonus for it. What is not yet known is whether the current bonus is big enough
@@ -60,6 +91,21 @@ _(none open)_
 ---
 
 ## Resolved
+
+- **Nothing ever checked whether a reader could actually see the ask** - fixed
+  2026-09-06 by `bot/earning/receipt_check.py`. Every signal about the receive
+  path was written by the code whose work it reported: `backfill` computed
+  `remaining` from the same fetch it acted on, so when that fetch was wrong the
+  work and the claim were wrong together and agreed with each other. That is how
+  `remaining: 0` covered a total failure for cycles #1760-#1773.
+  The doctrine's answer was a manual `curl`, which was correct, cost one second,
+  and never ran - there is no human in this loop. The module is that curl, every
+  cycle, reading the published articles back through the *unauthenticated* API
+  so it shares no key and no serializer with the writer. It never writes and
+  never repairs (that is `backfill`'s job; a verifier that fixes things is again
+  reporting on itself), and `agrees_with_backfill: false` is the tell that a
+  self-reported field is wrong. Recorded as Principle 3e.
+
 
 - **The receive path was built and left switched off for five cycles** - fixed
   2026-09-04. `payout.enabled` shipped `false` on 2026-09-03, which was the

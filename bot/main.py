@@ -191,6 +191,14 @@ def main() -> int:
 	# catalogue, and until this runs they are being shown no way to pay.
 	actions += _module("backfill", llm, status, errors)
 
+	# Independent check that readers can actually see an ask. Runs last, after
+	# every path that could have added one, and reads the published posts back
+	# through the *unauthenticated* API -- it deliberately shares no data with
+	# the modules above. Every other signal about the receive path is written by
+	# the same code whose work it reports, which is why remaining: 0 covered a
+	# total failure for fourteen cycles. This one looks at the artifact.
+	actions += _module("receipt_check", llm, status, errors)
+
 	if not actions:
 		log.warning(
 			"No actions ran this cycle.\n"

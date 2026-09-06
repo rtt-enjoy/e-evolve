@@ -316,6 +316,79 @@ not confirmed.
 
 ---
 
+## Principle 3e — A manual verification step in an unattended system is a step that never happens
+
+Built 2026-09-06, `bot/earning/receipt_check.py`.
+
+Principle 3d ended with the right instruction and the wrong mechanism. It
+concluded that the only ground truth is the published post, and told the owner
+to go and fetch one by hand:
+
+```bash
+curl -s "https://dev.to/api/articles/<username>/<slug>" | grep -c "Support this work"
+```
+
+That check is correct and it costs one second. It also did not run, because
+this is an unattended hourly system and there is no owner in the loop — which
+is the entire premise of the project. A verification that depends on a human
+remembering to run it has the same reliability as no verification at all, and
+it fails in the more dangerous direction: the checklist now *reads* as though
+the path is verified.
+
+So the fix for a self-reporting blind spot is not a better instruction. It is
+a second observer, running every cycle, that does not share the first one's
+inputs.
+
+**What makes it an independent observer, and not just more of the same code:**
+
+- **It re-reads the artifact, never the caller's data.** `verify()` accepts the
+  post list purely for ids and view counts. The body is always re-fetched. Hand
+  it a post dict claiming a footer and it will still report the truth, which is
+  pinned by `test_it_never_reads_the_body_it_was_handed`.
+- **It sends no API key.** `GET /api/articles/{id}` is unauthenticated and
+  returns `body_markdown`. Authenticating would route the read back through the
+  account's own serializer — the very view the backfill already trusts, and the
+  one whose missing field caused the outage. Sharing a serializer with the code
+  under test is sharing its blind spot. Pinned by `test_it_sends_no_api_key`.
+- **It never writes and never repairs.** Repair belongs to `backfill`. A
+  verifier that also fixes things is once again reporting on its own work, which
+  rebuilds the original problem one layer up.
+- **"Could not read" is a third state.** `fetch_live_body` returns `None` for an
+  unobservable post, never `""`. The original bug collapsed *unreadable* into
+  *fine*; collapsing it into *broken* instead would be the same error pointed the
+  other way, raising a false alarm on every post the next time a serializer
+  changes. Both directions produce a confident wrong answer, so the honest
+  answer is `unreachable`.
+
+**The output that matters is `agrees_with_backfill`.** It sets the module's own
+observation beside the claim `backfill` makes about itself. `false` means a
+self-reported field is wrong — and the observation is the half to believe.
+
+On the cycle it was built, run against the live account, it read:
+
+| Measure | Value |
+| --- | --- |
+| Posts checked | 12 |
+| Carrying an ask | 2 |
+| **Carrying none** | **10** |
+| Busiest post with no ask | 1,722 views |
+| `backfill.remaining` claimed | **0** |
+
+The two posts that did carry a footer were both published after
+`payout.enabled` was turned on. That is the finding in one line: **the publish
+path works and the back catalogue was never touched** — which is what
+`backfill` exists to fix and what its own status field denied for fourteen
+cycles.
+
+**Generalising past this feature: any status field that reports on a channel
+needs a second reader that does not share its inputs.** The test is not "is
+this field written carefully" but "if this code did nothing at all, would this
+field look any different". Where the answer is no, the field is decoration.
+
+It also gets shown, not just logged. The dashboard tip card now carries the
+observed count beside the address, because a tip card that renders complete
+while readers see no ask is precisely the silent failure of Principle 3b.
+
 ## Principle 4 — Never let an estimate stand in for money
 
 `devto.publish` reports `estimated_usd: 0.0` for a successful post, and it must
@@ -426,11 +499,30 @@ Work this in order. Stop at the first honest "no".
    `status.json` is written at the *end* of a cycle, so a field can lag a config
    change by one run; the config flag is the truth, the snapshot is the report.
 
-   **Then do not believe any of it, and go look at a post.** Every field above
-   is written by the same code whose work it reports, so all of them read
-   "done" when that code silently does nothing (Principle 3d — this is exactly
-   what happened, and `remaining: 0` covered it for cycles #1760–#1773). One
-   unauthenticated request is the ground truth and needs no key:
+   **Then do not believe any of it, and read `status["receipt_check"]`.** Every
+   field above is written by the same code whose work it reports, so all of
+   them read "done" when that code silently does nothing (Principle 3d — this
+   is exactly what happened, and `remaining: 0` covered it for cycles
+   #1760–#1773).
+
+   `receipt_check` is the second observer (Principle 3e): it re-reads the
+   published articles through the *unauthenticated* dev.to API every cycle, so
+   it shares no key and no serializer with the code that writes them. Read
+   these three, in this order:
+
+   - `receipt_check.without_footer` — posts a reader can currently see with no
+     way to pay. Non-zero is the problem, whatever else claims otherwise.
+   - `receipt_check.agrees_with_backfill` — `false` means a self-reported field
+     is wrong. **The observation is the half to believe.**
+   - `receipt_check.unreachable` — posts it could not read at all. This is
+     neither good nor bad news; it means that many posts are simply unverified,
+     so do not count them as covered.
+
+   This replaces the manual `curl` that the previous version of this checklist
+   asked for, and it replaces it for a reason worth keeping: that curl was
+   correct, cost one second, and **never ran**, because there is no human in
+   this loop. If you want the manual version anyway, it is still the same call
+   the module makes:
 
    ```bash
    curl -s "https://dev.to/api/articles/<username>/<slug>" \
@@ -471,6 +563,7 @@ Principle 2.
 | Wallet address in the newsletter digest | none | none | allowed | **Built** — same `devto.publish` path |
 | Wallet address on the public dashboard | none | none | allowed | **Built** 2026-09-04. `status["payout_public"]` + Overview tip card |
 | Wallet address on the **back catalogue** | none | none | allowed | **Built** 2026-09-04, but it wrote nothing until 2026-09-06 — see Principle 3d |
+| **Verification** that any of the above reached a reader | none | none | allowed | **Built** 2026-09-06. `receipt_check.py` — not a channel, the thing that says whether the channels are real |
 | Wallet address in the dev.to **profile bio** | none | one settings edit, ever | allowed | **Owner action.** Not automatable: `users` is `only: %i[show]` in Forem's API routes and the only writer (`PATCH /api/admin/users/{id}`) is super-admin gated. A single manual edit at dev.to/settings then covers every profile visitor permanently |
 | Sponsored-content slot in the newsletter | none | negotiates each deal | allowed to publish | **Deferred.** Income is real but every unit needs a human |
 | dev.to → own static site, then ads | ad network account | signup + tax details | allowed | **Deferred.** Needs an account and an audience move |

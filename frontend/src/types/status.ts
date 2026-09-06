@@ -200,6 +200,30 @@ export type Status = {
 		asset?: string;
 	};
 	/**
+	 * What a reader actually sees on the published posts, read back through
+	 * the unauthenticated dev.to API. Every other field here is written by the
+	 * code whose work it reports — `backfill.remaining` read 0 for fourteen
+	 * cycles while no post on the account carried an ask. This one looked.
+	 *
+	 * `agrees_with_backfill: false` means a self-reported field is wrong, and
+	 * the observation is the half to believe.
+	 */
+	receipt_check?: {
+		checked?: number;
+		with_footer?: number;
+		without_footer?: number;
+		unreachable?: number;
+		missing?: Array<{
+			id?: number;
+			title?: string;
+			views?: number;
+			url?: string;
+		}>;
+		last_run?: string | null;
+		last_reason?: string | null;
+		agrees_with_backfill?: boolean | null;
+	};
+	/**
 	 * Publishing context captured when on-chain money arrived. Correlated,
 	 * never proof: a TRC-20 transfer carries no memo.
 	 */

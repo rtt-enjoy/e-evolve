@@ -17,6 +17,7 @@ from bot.earning.newsletter import (
 import bot.earning.devto as devto_module
 import bot.earning.payout as payout
 import bot.earning.backfill as backfill
+import bot.earning.receipt_check as receipt_check
 import bot.earning.attribution as attribution
 import bot.status as status_mod
 from unittest import mock
@@ -3035,3 +3036,258 @@ class TestBackfillPutsTheAskWhereTheReadersAre(unittest.TestCase):
         """
 		main_src = Path("bot/main.py").read_text(encoding="utf-8")
 		self.assertIn('_module("backfill"', main_src)
+
+
+class TestReceiptCheckObservesFromOutside(unittest.TestCase):
+	"""The verifier must not share the writer's view of the world.
+
+    Every other signal about the receive path is produced by the same code
+    whose work it reports. ``backfill`` derives ``remaining`` from the same
+    ``fetch_published`` call it acts on, so when that call dropped
+    ``body_markdown`` the work and the claim about the work were wrong together
+    and agreed with each other -- ``remaining: 0`` while no post on the account
+    carried a footer, for fourteen cycles.
+
+    These pin the property that makes this module worth having: it re-reads the
+    published article through the unauthenticated endpoint, so it cannot
+    inherit the writer's blind spot.
+    """
+
+	FOOTERED = "# T\n\nprose\n\n## Support this work\n\n```\nTADDR\n```\n"
+	BARE = "# T\n\nprose, no ask anywhere.\n"
+
+	def _patched(self, bodies):
+		"""Patch the public GET so each id returns the body mapped to it."""
+		class _Resp:
+			def __init__(self, payload, code=200):
+				self._payload = payload
+				self.status_code = code
+
+			def raise_for_status(self):
+				if self.status_code >= 400:
+					raise RuntimeError("http %d" % self.status_code)
+
+			def json(self):
+				return self._payload
+
+		def _get(url, **kwargs):
+			art_id = int(str(url).rstrip("/").split("/")[-1])
+			if art_id not in bodies:
+				return _Resp({}, 404)
+			return _Resp({"body_markdown": bodies[art_id]})
+
+		return mock.patch.object(receipt_check.requests, "get", _get)
+
+	def test_it_never_reads_the_body_it_was_handed(self):
+		"""The caller's body is ignored; only the published one counts.
+
+        This is the whole design. If the module trusted the post dict it was
+        given, it would be reading the same possibly-wrong data the backfill
+        already read, and would confirm the backfill's mistakes rather than
+        catch them.
+        """
+		# The handed-in post claims a footer. The live article has none.
+		posts = [{"id": 7, "title": "T", "page_views": 999,
+				  "body_markdown": self.FOOTERED}]
+		with self._patched({7: self.BARE}):
+			found = receipt_check.verify(posts, payout.config(), 5)
+		self.assertEqual(found["without_footer"], 1)
+		self.assertEqual(found["with_footer"], 0)
+
+	def test_it_sends_no_api_key(self):
+		"""Authenticating would read through the serializer that caused the bug.
+
+        ``GET /api/articles/{id}`` is public and returns ``body_markdown``.
+        Sending the key would route the read through the account's own
+        authenticated view -- the one the backfill already trusts.
+        """
+		seen = {}
+
+		class _Resp:
+			status_code = 200
+
+			@staticmethod
+			def raise_for_status():
+				return None
+
+			@staticmethod
+			def json():
+				return {"body_markdown": "x"}
+
+		def _get(url, **kwargs):
+			seen.update(kwargs.get("headers") or {})
+			return _Resp()
+
+		with mock.patch.object(receipt_check.requests, "get", _get):
+			receipt_check.fetch_live_body(1)
+		joined = " ".join(k.lower() for k in seen)
+		self.assertNotIn("api-key", joined)
+		self.assertNotIn("authorization", joined)
+
+	def test_unreachable_is_not_reported_as_missing(self):
+		"""An unobservable post is not a post without a footer.
+
+        Collapsing "could not read" into "has no ask" is the mirror image of
+        the original bug, which collapsed "could not read" into "is fine". Both
+        directions produce a confident wrong answer; the honest third state is
+        ``unreachable``.
+        """
+		posts = [{"id": 404, "title": "gone", "page_views": 5}]
+		with self._patched({}):
+			found = receipt_check.verify(posts, payout.config(), 5)
+		self.assertEqual(found["unreachable"], 1)
+		self.assertEqual(found["without_footer"], 0)
+		self.assertEqual(found["missing"], [])
+
+	def test_absent_body_field_is_unreachable_not_footerless(self):
+		"""A serializer that stops returning the field must not raise a false
+        alarm on every post -- exactly the failure mode that hid the real bug,
+        pointed the other way.
+        """
+		class _Resp:
+			status_code = 200
+
+			@staticmethod
+			def raise_for_status():
+				return None
+
+			@staticmethod
+			def json():
+				return {"title": "no body field here"}
+
+		with mock.patch.object(receipt_check.requests, "get",
+							   lambda *a, **k: _Resp()):
+			self.assertIsNone(receipt_check.fetch_live_body(1))
+
+	def test_highest_traffic_first(self):
+		"""The view distribution is top-heavy, so the busiest post is most of
+        the answer and must be inside the per-cycle cap.
+        """
+		posts = [
+			{"id": 1, "title": "quiet", "page_views": 3},
+			{"id": 2, "title": "evergreen", "page_views": 1722},
+		]
+		with self._patched({1: self.BARE, 2: self.BARE}):
+			found = receipt_check.verify(posts, payout.config(), 1)
+		self.assertEqual(found["checked"], 1)
+		self.assertEqual(found["missing"][0]["title"], "evergreen")
+
+
+class TestReceiptCheckContradictsABadClaim(unittest.TestCase):
+	"""The comparison that would have caught the fourteen-cycle outage."""
+
+	BARE = "# T\n\nprose, no ask.\n"
+
+	def _run(self, status, bodies):
+		class _Resp:
+			def __init__(self, payload):
+				self._payload = payload
+
+			@staticmethod
+			def raise_for_status():
+				return None
+
+			def json(self):
+				return self._payload
+
+		def _get(url, **kwargs):
+			art_id = int(str(url).rstrip("/").split("/")[-1])
+			return _Resp({"body_markdown": bodies[art_id]})
+
+		posts = [{"id": i, "title": "t%d" % i, "page_views": 100}
+				 for i in bodies]
+		with mock.patch.object(receipt_check.requests, "get", _get):
+			return receipt_check._run(status, "key", published=posts)
+
+	def test_it_disagrees_when_the_backfill_claims_completion(self):
+		"""``remaining: 0`` beside a footerless published post is the exact
+        state that read as "every reader can pay" for cycles #1760-#1773.
+        """
+		status = {"backfill": {"remaining": 0, "updated_total": 0}}
+		self._run(status, {1: self.BARE})
+		state = status["receipt_check"]
+		self.assertEqual(state["without_footer"], 1)
+		self.assertIs(state["agrees_with_backfill"], False)
+		self.assertEqual(state["last_reason"], "footer_missing")
+
+	def test_a_missing_ask_is_surfaced_as_an_action(self):
+		"""Silence on this path is what made the outage invisible; the owner
+        has to see it in the cycle log.
+        """
+		status = {"backfill": {"remaining": 0}}
+		action = self._run(status, {1: self.BARE})
+		self.assertFalse(action.get("_quiet"))
+		self.assertIn("no way to pay", action.get("error", ""))
+
+	def test_a_verified_path_stays_quiet(self):
+		"""The ordinary good state must not pad last_earning with noise every
+        hour, or the warning above stops standing out.
+        """
+		footered = "# T\n\nprose\n\n## Support this work\n\n```\nTADDR\n```\n"
+		status = {"backfill": {"remaining": 0}}
+		action = self._run(status, {1: footered})
+		self.assertTrue(action.get("_quiet"))
+		self.assertEqual(status["receipt_check"]["last_reason"], "all_verified")
+
+	def test_it_never_reports_revenue(self):
+		"""Observing an ask is not receiving money. On-chain or nothing."""
+		status = {}
+		action = self._run(status, {1: self.BARE})
+		self.assertEqual(action["estimated_usd"], 0.0)
+
+	def test_it_never_raises(self):
+		"""Measurement must not be able to take down a cycle."""
+		def _boom(*a, **k):
+			raise RuntimeError("dev.to is down")
+
+		with mock.patch.object(receipt_check.requests, "get", _boom):
+			action = receipt_check._run(
+				{}, "key",
+				published=[{"id": 1, "title": "t", "page_views": 1}])
+		self.assertIsInstance(action, dict)
+		self.assertEqual(action["estimated_usd"], 0.0)
+
+
+class TestReceiptCheckIsWiredIn(unittest.TestCase):
+	"""A verifier the orchestrator never calls verifies nothing -- and looks
+    identical from the outside to one that passes every cycle.
+    """
+
+	def test_run_matches_the_product_signature(self):
+		import importlib
+		import inspect
+
+		mod = importlib.import_module("bot.earning.receipt_check")
+		params = list(inspect.signature(mod.run).parameters)
+		self.assertEqual(params[:2], ["llm", "status"])
+		with mock.patch.dict(os.environ, {"DEV_TO_API_KEY": ""}):
+			self.assertIsInstance(mod.run(None, {}), list)
+
+	def test_is_registered_in_phase_4(self):
+		main_src = Path("bot/main.py").read_text(encoding="utf-8")
+		self.assertIn('_module("receipt_check"', main_src)
+
+	def test_it_runs_after_the_backfill(self):
+		"""It must observe the repairs this cycle made, not the state before
+        them, or it reports a stale gap the backfill just closed.
+        """
+		main_src = Path("bot/main.py").read_text(encoding="utf-8")
+		self.assertLess(main_src.index('_module("backfill"'),
+						main_src.index('_module("receipt_check"'))
+
+	def test_it_makes_no_llm_call(self):
+		"""Asking a model whether a footer is present would make the check
+        itself unreliable, and the comparison is exact.
+        """
+		src = Path("bot/earning/receipt_check.py").read_text(encoding="utf-8")
+		for banned in ("complete_json", "llm.complete", ".complete("):
+			self.assertNotIn(banned, src)
+
+	def test_it_never_writes_to_devto(self):
+		"""Repair belongs to the backfill. A verifier that also fixes things is
+        once again reporting on its own work.
+        """
+		src = Path("bot/earning/receipt_check.py").read_text(encoding="utf-8")
+		self.assertNotIn("requests.put", src)
+		self.assertNotIn("requests.post", src)
+		self.assertNotIn("update_body", src)

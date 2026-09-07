@@ -6,6 +6,7 @@ Products (each owns a ``run(llm, status)`` the orchestrator calls):
   ``backfill``    -- puts the tip footer on posts published before it existed
   ``code_techs``  -- free-AI earning opportunity queue (research only)
   ``mrr_ideas``   -- recurring-revenue idea triage (research only)
+  ``receipts``    -- projection of the on-chain receipt book for the dashboard
 
 Support (no ``run``; imported by the products):
   ``_shared``     -- config loading, cadence, and feed parsing used by all
@@ -21,11 +22,13 @@ from .backfill import run as backfill_run
 from .code_techs import run as code_techs_run
 from .mrr_ideas import run as mrr_ideas_run
 from .newsletter import run as newsletter_run
+from .receipts import run as receipts_run
 
 __all__ = [
-	"articles_run",
-	"backfill_run",
-	"code_techs_run",
-	"mrr_ideas_run",
-	"newsletter_run",
+    "articles_run",
+    "backfill_run",
+    "code_techs_run",
+    "mrr_ideas_run",
+    "newsletter_run",
+    "receipts_run",
 ]

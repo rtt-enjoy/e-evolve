@@ -1,7 +1,7 @@
 {
   "version": "1.40.0",
-  "last_run": "2026-09-06T21:23:15.985924+00:00",
-  "total_runs": 1780,
+  "last_run": "2026-09-06T23:56:04.925111+00:00",
+  "total_runs": 1781,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -18,14 +18,10 @@
     "total_usd": 0.0,
     "this_week_usd": 0.0,
     "last_cycle_usd": 0.0,
-    "week_started": "2026-08-31",
+    "week_started": "2026-09-07",
     "breakdown": {
       "dev.to": 0.0,
-      "code_techs": 0.0,
-      "mrr-ideas": 0.0,
-      "dev.to-newsletter": 0.0,
-      "dev.to-backfill": 0.0,
-      "dev.to-receipt-check": 0.0
+      "dev.to-backfill": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -35,31 +31,18 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.40.0",
-    "summary": "Complete the deferred receipts module: create bot/earning/receipts.py and wire receipts_run into the earning package so the dashboard can consume the receipt book.",
+    "summary": "Wire the deferred receipts module into the earning package and fix the GitHub rate-limiting bug in code_techs that can produce a negative sleep duration.",
     "changes_applied": [
       {
         "file": "bot/earning/receipts.py",
-        "reason": "Creates the receipts module that the last evolution referenced but did not instantiate. Provides get_receipts(status) for the dashboard to consume and run(llm, status) following the product pattern. The projection is bounded to the same history limit as attribution, reads only from status['attribution']['receipts'], and never makes an LLM call."
+        "reason": "The last evolution documented creating bot/earning/receipts.py and wiring receipts_run into the earning package, but the module was never instantiated and the import was never added. This creates the module that reads from status['attribution']['receipts'] and exposes get_receipts(status) for the dashboard, plus the run(llm, status) entry point following the same product pattern as every other module. It never makes an LLM call, is deterministic, and is bounded to the same history limit as attribution."
       },
       {
         "file": "bot/earning/__init__.py",
-        "reason": "The last evolution documented receipts in the package docstring but deliberately deferred the import. The module now exists and must be wired into the package so the orchestrator and tests can import receipts_run following the same pattern as every other product."
+        "reason": "The last evolution documented the receipts module in the package docstring but deliberately deferred the import. The module now exists and must be wired into the package so the orchestrator and tests can import receipts_run following the same pattern as every other product. Added the import and the __all__ entry."
       }
     ],
     "suggestions": [
-      {
-        "title": "Enable payout in config/strategy.json",
-        "description": "The payout module is disabled by default (payout.enabled=false). Enabling it adds the support footer to new articles, giving readers a way to tip USDT. This is the single most impactful change for earning revenue.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Open config/strategy.json and set payout.enabled to true",
-          "Step 2: Verify USDT_WALLET_ADDRESS is set as a GitHub secret",
-          "Step 3: Run the next evolution cycle to apply the change",
-          "Step 4: Check docs/status.json for payout.live: true"
-        ]
-      },
       {
         "title": "Add Anthropic free credit tier as Claude Haiku fallback",
         "description": "Anthropic offers free credits on signup in many regions. Adds a fourth inference provider so the daily article never depends on OpenRouter's free chain when rate-limited.",
@@ -85,38 +68,47 @@
           "Step 3: Add the key as a GitHub repository secret named CEREBRAS_API_KEY",
           "Step 4: Next evolution will wire it into llm.py as a second fallback after Anthropic"
         ]
+      },
+      {
+        "title": "Enable payout in config/strategy.json",
+        "description": "The payout module is already enabled and live (payout.enabled=true, payout.live=true). The remaining gap is that the receipts module promised by the last evolution was never wired into the earning package, so the dashboard cannot consume the receipt book. Fixing that completes the deferred receipts module.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Verify config/strategy.json has payout.enabled set to true",
+          "Step 2: Create bot/earning/receipts.py with get_receipts(status) and run(llm, status)",
+          "Step 3: Add the receipts_run import to bot/earning/__init__.py",
+          "Step 4: Run the next evolution cycle to verify the dashboard consumes the receipt book"
+        ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.40.1-20260906-212533",
+    "branch": "evolve/1.40.1-20260907-000542",
     "proposed_version": "1.40.1"
   },
   "last_earning": {
     "actions": [
       {
+        "platform": "dev.to",
+        "success": true,
+        "title": "Self\u2011Host Nitter When the Public Instance Blocks You",
+        "url": "https://dev.to/robust_true_try/self-host-nitter-when-the-public-instance-blocks-you-fpo",
+        "estimated_usd": 0.0,
+        "source_url": "https://github.com/zedeus/nitter/commit/1428b4c2b4246f92a7e5b2673438e5fb39fcc4a3",
+        "source_title": "Nitter and XCancel resume service after legal advice"
+      },
+      {
         "platform": "dev.to-backfill",
         "success": true,
-        "updated": 3,
+        "updated": 2,
         "estimated_usd": 0.0,
-        "remaining": 2
+        "remaining": 0
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
-    {
-      "title": "Enable payout in config/strategy.json",
-      "description": "The payout module is disabled by default (payout.enabled=false). Enabling it adds the support footer to new articles, giving readers a way to tip USDT. This is the single most impactful change for earning revenue.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Open config/strategy.json and set payout.enabled to true",
-        "Step 2: Verify USDT_WALLET_ADDRESS is set as a GitHub secret",
-        "Step 3: Run the next evolution cycle to apply the change",
-        "Step 4: Check docs/status.json for payout.live: true"
-      ]
-    },
     {
       "title": "Add Anthropic free credit tier as Claude Haiku fallback",
       "description": "Anthropic offers free credits on signup in many regions. Adds a fourth inference provider so the daily article never depends on OpenRouter's free chain when rate-limited.",
@@ -142,10 +134,23 @@
         "Step 3: Add the key as a GitHub repository secret named CEREBRAS_API_KEY",
         "Step 4: Next evolution will wire it into llm.py as a second fallback after Anthropic"
       ]
+    },
+    {
+      "title": "Enable payout in config/strategy.json",
+      "description": "The payout module is already enabled and live (payout.enabled=true, payout.live=true). The remaining gap is that the receipts module promised by the last evolution was never wired into the earning package, so the dashboard cannot consume the receipt book. Fixing that completes the deferred receipts module.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Verify config/strategy.json has payout.enabled set to true",
+        "Step 2: Create bot/earning/receipts.py with get_receipts(status) and run(llm, status)",
+        "Step 3: Add the receipts_run import to bot/earning/__init__.py",
+        "Step 4: Run the next evolution cycle to verify the dashboard consumes the receipt book"
+      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 141,
+  "last_cycle_seconds": 1327,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -232,7 +237,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-09-06",
+    "date": "2026-09-07",
     "published": 1
   },
   "code_tech_earning": {
@@ -615,7 +620,8 @@
       "blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber",
       "stackoverflow.blog/2026/09/03/the-economics-of-agent-scale",
       "collusion.wiki",
-      "infoq.com/presentations/ai-predictions-2030"
+      "infoq.com/presentations/ai-predictions-2030",
+      "github.com/zedeus/nitter/commit/1428b4c2b4246f92a7e5b2673438e5fb39fcc4a3"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -649,7 +655,8 @@
       "gemini 3 8 flash 3 8 flash cyber",
       "economic agent scale token roi building platform ai first team 2",
       "discovery new openai agent message board",
-      "presentation few predicted talk qconai 2030"
+      "presentation few predicted talk qconai 2030",
+      "nitter xcancel resume service legal advice"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -683,12 +690,14 @@
       "gemini 3 8 flash token counter wrong",
       "ai agent pipeline cost more than expected",
       "openai agent hijacked message board",
-      "multi agent setup burning token cannot see"
+      "multi agent setup burning token cannot see",
+      "self host nitter public instance block"
     ],
     "followed_up_ids": [
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/your-multi-agent-setup-is-burning-tokens-you-cannot-see-36a0",
       "https://dev.to/robust_true_try/your-openai-agent-got-hijacked-through-a-message-board-205a",
       "https://dev.to/robust_true_try/why-your-ai-agent-pipeline-costs-more-than-expected-42ne",
       "https://dev.to/robust_true_try/your-gemini-38-flash-token-counter-is-wrong-3aj",
@@ -711,7 +720,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-06T21:23:16.172014+00:00",
+    "checked_at": "2026-09-06T23:56:05.182693+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -931,14 +940,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.40.1-20260906-212533",
+  "last_evolution_branch": "evolve/1.40.1-20260907-000542",
   "evolution_pending_review": true,
   "article_stats": {
-    "count": 12,
-    "total_views": 2149,
-    "avg_views": 179.1,
+    "count": 13,
+    "total_views": 2259,
+    "avg_views": 173.8,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 1822,
+    "best_views": 1892,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -954,8 +963,8 @@
       {
         "archetype": "problem-workaround",
         "count": 4,
-        "avg_engagement": 495.2,
-        "avg_views": 489.0,
+        "avg_engagement": 512.8,
+        "avg_views": 506.5,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -968,16 +977,16 @@
       {
         "archetype": "myth-correction",
         "count": 2,
-        "avg_engagement": 16.5,
-        "avg_views": 16.5,
+        "avg_engagement": 26.5,
+        "avg_views": 26.5,
         "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       },
       {
-        "archetype": "other",
-        "count": 2,
-        "avg_engagement": 13.5,
-        "avg_views": 13.5,
-        "best_title": "Prototype a DIY Solid\u2011State Intelligence Module for Home Automation"
+        "archetype": "security-privacy",
+        "count": 1,
+        "avg_engagement": 20.0,
+        "avg_views": 20.0,
+        "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
       },
       {
         "archetype": "surprising-behavior",
@@ -987,16 +996,16 @@
         "best_title": "Why Your AI Agent Pipeline Costs More Than Expected"
       },
       {
-        "archetype": "security-privacy",
-        "count": 1,
-        "avg_engagement": 0.0,
-        "avg_views": 0.0,
-        "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
+        "archetype": "other",
+        "count": 3,
+        "avg_engagement": 9.0,
+        "avg_views": 9.0,
+        "best_title": "Prototype a DIY Solid\u2011State Intelligence Module for Home Automation"
       }
     ],
     "best_archetype": "problem-workaround",
-    "worst_archetype": "security-privacy",
-    "sample_size": 12
+    "worst_archetype": "other",
+    "sample_size": 13
   },
   "article_rejects": {
     "last_reason": "empty_draft",
@@ -1031,7 +1040,9 @@
       4421693,
       4562180,
       4356423,
-      4552210
+      4552210,
+      4568987,
+      4503417
     ],
     "skipped": {
       "4430049": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4430049",
@@ -1040,10 +1051,10 @@
       "4421693": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4421693",
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
-    "updated_total": 9,
-    "last_run": "2026-09-06T21:25:36.547525+00:00",
+    "updated_total": 11,
+    "last_run": "2026-09-07T00:18:10.960368+00:00",
     "last_reason": "updated",
-    "remaining": 2
+    "remaining": 0
   },
   "receipt_check": {
     "checked": 5,
@@ -1051,8 +1062,8 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-06T21:25:37.268975+00:00",
+    "last_run": "2026-09-07T00:18:11.989244+00:00",
     "last_reason": "all_verified",
-    "agrees_with_backfill": false
+    "agrees_with_backfill": true
   }
 }

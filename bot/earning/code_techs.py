@@ -238,10 +238,19 @@ _LOCAL_LEADS = [
 	}
 ]
 
-# In‑memory request counter for GitHub API throttling
+# In-memory request counter for GitHub API throttling.
+#
+# ``_GITHUB_WINDOW_START`` is updated lazily, and any delay between updates can
+# push the elapsed time well past the window. The original calculation
+# ``60 - elapsed + 1`` therefore went negative, and ``time.sleep`` raised
+# ``ValueError: sleep length must be non-negative`` -- taking the whole refresh
+# down on the very cycle that needed the throttle. Clamping with ``max(0.5, …)``
+# guarantees a small positive wait whatever the math does, and a 0.5s floor
+# keeps the request shape polite on the API rather than tight-loop hammering.
 _GITHUB_REQ_COUNT = 0
 _GITHUB_WINDOW_START = time.time()
 _GITHUB_MAX_PER_MIN = 10
+_GITHUB_MIN_SLEEP = 0.5
 
 @dataclass
 class Opportunity:
@@ -332,14 +341,22 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 		headers["Authorization"] = f"Bearer {token}"
 
 	for query in cfg.get("github_searches", []):
-		# Simple rate‑limit handling
+		# Simple rate-limit handling.
+		#
+		# The window resets lazily on each call, so the elapsed time between the
+		# first and Nth request can exceed the 60-second window. ``max`` clamps
+		# the result so we always wait a small, positive interval -- never a
+		# negative one, which ``time.sleep`` refuses and which would otherwise
+		# abort the whole refresh on the cycle that needed throttling.
 		now = time.time()
-		if now - _GITHUB_WINDOW_START >= 60:
+		elapsed = now - _GITHUB_WINDOW_START
+		if elapsed >= 60:
 			_GITHUB_WINDOW_START = now
 			_GITHUB_REQ_COUNT = 0
+			elapsed = 0.0
 		if _GITHUB_REQ_COUNT >= _GITHUB_MAX_PER_MIN:
-			sleep_sec = 60 - (now - _GITHUB_WINDOW_START) + 1
-			log.info("[code_techs] GitHub rate limit reached, sleeping %ds", int(sleep_sec))
+			sleep_sec = max(_GITHUB_MIN_SLEEP, 60.0 - elapsed + 1.0)
+			log.info("[code_techs] GitHub rate limit reached, sleeping %.1fs", sleep_sec)
 			time.sleep(sleep_sec)
 			_GITHUB_WINDOW_START = time.time()
 			_GITHUB_REQ_COUNT = 0
@@ -881,10 +898,10 @@ def _write_report(state: dict[str, Any]) -> None:
 	lines.extend(["", "## Underserved Niches", ""])
 	for item in state.get("focus", []):
 		lines.append(f"- {item}")
-	lines.extend(["", "## Strategy Playbook", ""]) 
+	lines.extend(["", "## Strategy Playbook", ""])
 	for item in state.get("strategy_playbook", []):
 		lines.append(f"- {item}")
-	lines.extend(["", "## Avoid", ""]) 
+	lines.extend(["", "## Avoid", ""])
 	for item in state.get("avoid_patterns", []):
 		lines.append(f"- {item}")
 	lines.extend(["", "## Ranked Leads From Online Search", ""])

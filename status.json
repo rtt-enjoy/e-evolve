@@ -1,7 +1,7 @@
 {
   "version": "1.40.0",
-  "last_run": "2026-09-07T10:20:44.277722+00:00",
-  "total_runs": 1783,
+  "last_run": "2026-09-07T16:28:27.828618+00:00",
+  "total_runs": 1784,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -32,8 +32,13 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.40.0",
-    "summary": "Wire the deferred receipts module into the earning package, add receipt_check to the package exports, and fix the GitHub rate-limiting bug in code_techs that can produce a negative sleep duration.",
-    "changes_applied": [],
+    "summary": "Fix negative sleep duration in code_techs GitHub rate limiter and clamp the value with a minimum, so time.sleep() never raises ValueError when the request budget window has already elapsed.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/code_techs.py",
+        "reason": "The original ``_fetch_github_leads`` computed ``sleep_sec = 60 - (now - _GITHUB_WINDOW_START) + 1`` and passed it straight to ``time.sleep``. Because the window is updated lazily and the very first call uses ``time.time()`` as the start, any elapsed time above 61 seconds made the result negative, which raises ``ValueError: sleep length must be non-negative`` and aborts the entire code_techs refresh. This change clamps the sleep with ``max(_GITHUB_MIN_SLEEP, 60.0 - elapsed + 1.0)`` (with a 0.5s floor so we never tight-loop the API), resets the elapsed counter after the lazy window reset so the math is consistent within the window, and logs the float with one decimal so a 0.5s wait is not reported as \"0s\"."
+      }
+    ],
     "suggestions": [
       {
         "title": "Create bot/earning/receipts.py with get_receipts and run",
@@ -62,21 +67,21 @@
         ]
       },
       {
-        "title": "Fix negative sleep duration in code_techs GitHub rate limiter",
-        "description": "In bot/earning/code_techs.py, the _fetch_github_leads function computes sleep_sec = 60 - (now - _GITHUB_WINDOW_START) + 1, which can go negative when elapsed time exceeds 61 seconds, causing time.sleep() to raise ValueError.",
-        "secret_needed": null,
+        "title": "Activate Anthropic or Cerebras as a fallback LLM provider",
+        "description": "llm_anthropic and llm_cerebras are listed as inactive but the project currently relies on openrouter for upgrade, research, and post roles. Adding either ANTHROPIC_API_KEY or CEREBRAS_API_KEY as a GitHub secret would let the orchestrator rotate providers when one chain hits its free-tier cap, reducing the chance of an empty article draft.",
+        "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: In bot/earning/code_techs.py, change the sleep calculation to use max(0.5, 60 - elapsed + 1)",
-          "Step 2: Replace int(sleep_sec) log line with %.1fs for precision",
-          "Step 3: Verify by checking that sleep_sec is always >= 0.5 even when elapsed > 61",
-          "Step 4: Run the next evolution cycle to confirm no ValueError is raised"
+          "Step 1: Visit https://console.anthropic.com/ and create a free API key (or https://cloud.cerebras.ai/ for Cerebras)",
+          "Step 2: Copy the key string",
+          "Step 3: In GitHub, go to Settings -> Secrets and variables -> Actions for this repo",
+          "Step 4: Add ANTHROPIC_API_KEY (or CEREBRAS_API_KEY) with the copied value, then trigger the next evolution cycle to confirm the provider activates"
         ]
       }
     ],
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.40.1-20260907-162955",
     "proposed_version": "1.40.1"
   },
   "last_earning": {
@@ -111,21 +116,21 @@
       ]
     },
     {
-      "title": "Fix negative sleep duration in code_techs GitHub rate limiter",
-      "description": "In bot/earning/code_techs.py, the _fetch_github_leads function computes sleep_sec = 60 - (now - _GITHUB_WINDOW_START) + 1, which can go negative when elapsed time exceeds 61 seconds, causing time.sleep() to raise ValueError.",
-      "secret_needed": null,
+      "title": "Activate Anthropic or Cerebras as a fallback LLM provider",
+      "description": "llm_anthropic and llm_cerebras are listed as inactive but the project currently relies on openrouter for upgrade, research, and post roles. Adding either ANTHROPIC_API_KEY or CEREBRAS_API_KEY as a GitHub secret would let the orchestrator rotate providers when one chain hits its free-tier cap, reducing the chance of an empty article draft.",
+      "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: In bot/earning/code_techs.py, change the sleep calculation to use max(0.5, 60 - elapsed + 1)",
-        "Step 2: Replace int(sleep_sec) log line with %.1fs for precision",
-        "Step 3: Verify by checking that sleep_sec is always >= 0.5 even when elapsed > 61",
-        "Step 4: Run the next evolution cycle to confirm no ValueError is raised"
+        "Step 1: Visit https://console.anthropic.com/ and create a free API key (or https://cloud.cerebras.ai/ for Cerebras)",
+        "Step 2: Copy the key string",
+        "Step 3: In GitHub, go to Settings -> Secrets and variables -> Actions for this repo",
+        "Step 4: Add ANTHROPIC_API_KEY (or CEREBRAS_API_KEY) with the copied value, then trigger the next evolution cycle to confirm the provider activates"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 25,
+  "last_cycle_seconds": 88,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -725,7 +730,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-07T10:20:44.756317+00:00",
+    "checked_at": "2026-09-07T16:28:28.080177+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -945,8 +950,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.40.1-20260907-162955",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 13,
     "total_views": 2259,
@@ -1057,7 +1062,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-07T10:21:08.980569+00:00",
+    "last_run": "2026-09-07T16:29:55.382711+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1067,7 +1072,7 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-07T10:21:09.627988+00:00",
+    "last_run": "2026-09-07T16:29:56.207600+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true
   }

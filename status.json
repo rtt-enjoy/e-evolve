@@ -1,7 +1,7 @@
 {
   "version": "1.40.0",
-  "last_run": "2026-09-07T04:44:40.848002+00:00",
-  "total_runs": 1782,
+  "last_run": "2026-09-07T10:20:44.277722+00:00",
+  "total_runs": 1783,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,115 +33,99 @@
   "last_evolution": {
     "version_bumped_to": "1.40.0",
     "summary": "Wire the deferred receipts module into the earning package, add receipt_check to the package exports, and fix the GitHub rate-limiting bug in code_techs that can produce a negative sleep duration.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/__init__.py",
-        "reason": "The last evolution documented the receipts module in the package docstring but deliberately deferred the import. The module now exists and must be wired into the package so the orchestrator and tests can import receipts_run following the same pattern as every other product. Added the import and the __all__ entry. Also added receipt_check_run, which exists as a product module but was never exported from the package. [fix: Added missing import of Any from typing]"
-      }
-    ],
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Add Anthropic free credit tier as Claude Haiku fallback",
-        "description": "Anthropic offers free credits on signup in many regions. Adds a fourth inference provider so the daily article never depends on OpenRouter's free chain when rate-limited.",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Go to https://console.anthropic.com/ and sign up with email",
-          "Step 2: Create an API key under Settings > API Keys",
-          "Step 3: Add the key as a GitHub repository secret named ANTHROPIC_API_KEY",
-          "Step 4: Next evolution will wire it into llm.py as fallback when OpenRouter returns 429"
-        ]
-      },
-      {
-        "title": "Add Cerebras free tier as Llama 4 inference fallback",
-        "description": "Cerebras offers ~1M tokens/day on its free tier with no credit card. Adds a fifth inference provider so the bot never stalls on a 429 from OpenRouter's free chain.",
-        "secret_needed": "CEREBRAS_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Sign up at https://cloud.cerebras.ai/ with email (no credit card)",
-          "Step 2: Generate an API key under Settings > API Keys",
-          "Step 3: Add the key as a GitHub repository secret named CEREBRAS_API_KEY",
-          "Step 4: Next evolution will wire it into llm.py as a second fallback after Anthropic"
-        ]
-      },
-      {
-        "title": "Enable payout in config/strategy.json",
-        "description": "The payout module is already enabled and live (payout.enabled=true, payout.live=true). The remaining gap is that the receipts module promised by the last evolution was never wired into the earning package, so the dashboard cannot consume the receipt book. Fixing that completes the deferred receipts module.",
+        "title": "Create bot/earning/receipts.py with get_receipts and run",
+        "description": "The last evolution promised a receipts module but never created it. This module provides get_receipts(status) to read the receipt book and run(llm, status) as the product entry point the orchestrator calls, wrapping attribution.record_receipt and attribution.summary.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Verify config/strategy.json has payout.enabled set to true",
-          "Step 2: Create bot/earning/receipts.py with get_receipts(status) and run(llm, status)",
-          "Step 3: Add the receipts_run import to bot/earning/__init__.py",
+          "Step 1: Create bot/earning/receipts.py with get_receipts(status) and run(llm, status)",
+          "Step 2: Add receipts_run to bot/earning/__init__.py imports and __all__",
+          "Step 3: Update the __init__.py docstring to list receipts as a product",
           "Step 4: Run the next evolution cycle to verify the dashboard consumes the receipt book"
+        ]
+      },
+      {
+        "title": "Add receipt_check_run to bot/earning/__init__.py exports",
+        "description": "The receipt_check module exists at bot/earning/receipt_check.py with a run(llm, status) product entry point, but it was never exported from the package. The orchestrator cannot import it, so the independent footer-verification loop never runs.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Add from .receipt_check import run as receipt_check_run to bot/earning/__init__.py",
+          "Step 2: Add receipt_check_run to the __all__ list",
+          "Step 3: Update the __init__.py docstring to list receipt_check under products",
+          "Step 4: Verify the import works by running the next evolution cycle"
+        ]
+      },
+      {
+        "title": "Fix negative sleep duration in code_techs GitHub rate limiter",
+        "description": "In bot/earning/code_techs.py, the _fetch_github_leads function computes sleep_sec = 60 - (now - _GITHUB_WINDOW_START) + 1, which can go negative when elapsed time exceeds 61 seconds, causing time.sleep() to raise ValueError.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: In bot/earning/code_techs.py, change the sleep calculation to use max(0.5, 60 - elapsed + 1)",
+          "Step 2: Replace int(sleep_sec) log line with %.1fs for precision",
+          "Step 3: Verify by checking that sleep_sec is always >= 0.5 even when elapsed > 61",
+          "Step 4: Run the next evolution cycle to confirm no ValueError is raised"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.40.1-20260907-044903",
+    "branch": null,
     "proposed_version": "1.40.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 8,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (8 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add Anthropic free credit tier as Claude Haiku fallback",
-      "description": "Anthropic offers free credits on signup in many regions. Adds a fourth inference provider so the daily article never depends on OpenRouter's free chain when rate-limited.",
-      "secret_needed": "ANTHROPIC_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Go to https://console.anthropic.com/ and sign up with email",
-        "Step 2: Create an API key under Settings > API Keys",
-        "Step 3: Add the key as a GitHub repository secret named ANTHROPIC_API_KEY",
-        "Step 4: Next evolution will wire it into llm.py as fallback when OpenRouter returns 429"
-      ]
-    },
-    {
-      "title": "Add Cerebras free tier as Llama 4 inference fallback",
-      "description": "Cerebras offers ~1M tokens/day on its free tier with no credit card. Adds a fifth inference provider so the bot never stalls on a 429 from OpenRouter's free chain.",
-      "secret_needed": "CEREBRAS_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Sign up at https://cloud.cerebras.ai/ with email (no credit card)",
-        "Step 2: Generate an API key under Settings > API Keys",
-        "Step 3: Add the key as a GitHub repository secret named CEREBRAS_API_KEY",
-        "Step 4: Next evolution will wire it into llm.py as a second fallback after Anthropic"
-      ]
-    },
-    {
-      "title": "Enable payout in config/strategy.json",
-      "description": "The payout module is already enabled and live (payout.enabled=true, payout.live=true). The remaining gap is that the receipts module promised by the last evolution was never wired into the earning package, so the dashboard cannot consume the receipt book. Fixing that completes the deferred receipts module.",
+      "title": "Create bot/earning/receipts.py with get_receipts and run",
+      "description": "The last evolution promised a receipts module but never created it. This module provides get_receipts(status) to read the receipt book and run(llm, status) as the product entry point the orchestrator calls, wrapping attribution.record_receipt and attribution.summary.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Verify config/strategy.json has payout.enabled set to true",
-        "Step 2: Create bot/earning/receipts.py with get_receipts(status) and run(llm, status)",
-        "Step 3: Add the receipts_run import to bot/earning/__init__.py",
+        "Step 1: Create bot/earning/receipts.py with get_receipts(status) and run(llm, status)",
+        "Step 2: Add receipts_run to bot/earning/__init__.py imports and __all__",
+        "Step 3: Update the __init__.py docstring to list receipts as a product",
         "Step 4: Run the next evolution cycle to verify the dashboard consumes the receipt book"
+      ]
+    },
+    {
+      "title": "Add receipt_check_run to bot/earning/__init__.py exports",
+      "description": "The receipt_check module exists at bot/earning/receipt_check.py with a run(llm, status) product entry point, but it was never exported from the package. The orchestrator cannot import it, so the independent footer-verification loop never runs.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Add from .receipt_check import run as receipt_check_run to bot/earning/__init__.py",
+        "Step 2: Add receipt_check_run to the __all__ list",
+        "Step 3: Update the __init__.py docstring to list receipt_check under products",
+        "Step 4: Verify the import works by running the next evolution cycle"
+      ]
+    },
+    {
+      "title": "Fix negative sleep duration in code_techs GitHub rate limiter",
+      "description": "In bot/earning/code_techs.py, the _fetch_github_leads function computes sleep_sec = 60 - (now - _GITHUB_WINDOW_START) + 1, which can go negative when elapsed time exceeds 61 seconds, causing time.sleep() to raise ValueError.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: In bot/earning/code_techs.py, change the sleep calculation to use max(0.5, 60 - elapsed + 1)",
+        "Step 2: Replace int(sleep_sec) log line with %.1fs for precision",
+        "Step 3: Verify by checking that sleep_sec is always >= 0.5 even when elapsed > 61",
+        "Step 4: Run the next evolution cycle to confirm no ValueError is raised"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 331,
+  "last_cycle_seconds": 25,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -741,7 +725,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-07T04:44:41.161177+00:00",
+    "checked_at": "2026-09-07T10:20:44.756317+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0
@@ -961,8 +945,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.40.1-20260907-044903",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 13,
     "total_views": 2259,
@@ -1073,7 +1057,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-07T04:50:10.573501+00:00",
+    "last_run": "2026-09-07T10:21:08.980569+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1083,7 +1067,7 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-07T04:50:11.446496+00:00",
+    "last_run": "2026-09-07T10:21:09.627988+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true
   }

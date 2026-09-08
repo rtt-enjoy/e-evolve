@@ -1,6 +1,6 @@
 # Recurring Revenue (MRR) Idea Triage
 
-Refreshed: 2026-09-07T23:31:01.089940+00:00
+Refreshed: 2026-09-08T03:34:04.699880+00:00
 
 Research and suggestions only. This bot does not contact anyone, collect
 payment, or host a service. Every figure quoted from the source article
@@ -14,22 +14,12 @@ is unverified — check it yourself before acting on it.
 - No outreach. Cold email, DMs, and social posting are refused in code.
 - Can research, analyse, draft, and publish articles to dev.to. That is the whole surface.
 
-## Best Current Angle
+## Surviving Models (no LLM brief this refresh)
 
-The single best recurring-revenue angle is a paid newsletter targeting freelance writers who want to monetize their technical expertise, leveraging dev.to as the primary discovery channel and using a simple subscription platform to collect payments manually.
-
-## Ranked Ideas
-
-### Freelance Writer Monetization Newsletter
-
-- **Niche:** Freelance writers seeking to build a secondary income stream from their technical writing skills
-- **Who pays:** Freelance writers wanting additional income from their writing expertise
-- **Monthly price:** 12-18
-- **Why this stack fits:** A newsletter aligns naturally with the dev.to author platform and allows direct monetization through subscriptions without complex product development.
-- **First proof artifact:** A 1000-word introductory issue published on dev.to with a clear CTA linking to a landing page offering $10/month or $15/month tiers
-- **Runway to first dollar:** 4-8 weeks
-- **You must do by hand:** Manually open a Gumroad or Substack subscription account, create the landing page with pricing tiers, and publish the first issue directly from dev.to
-
+| Model | MRR model | Bot can | Score |
+|---|---|---|---|
+| Paid newsletter | $10-20/mo per subscriber | publish | 65 |
+| Notion / digital template store | $500-5K/mo, library subscription | draft | 60 |
 
 ## Set Up By Hand First
 
@@ -37,12 +27,6 @@ None of these is a blocker — but no money moves until you do them.
 
 - **Paid newsletter:** owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe); owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API); needs an existing audience; the dev.to byline is the only one this stack builds
 - **Notion / digital template store:** owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe); owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API)
-
-## How To Validate Without Outreach
-
-- Write a long-form article on dev.to titled 'How Freelance Writers Can Build a Side Income Through Curated Content' ending with a question to spark discussion
-- Share that article in relevant communities (r/writing, indie hacker forums, or dev.to comment threads) where you already have visibility, tracking engagement metrics
-- Analyze the article's performance (views, comments, shares) for two weeks to identify natural interest signals before launching a paid offer
 
 ## Refused, And Why
 
@@ -69,11 +53,3 @@ code, or infrastructure that does not exist here and is not free.
 | Virtual assistant agency | $500-2K/mo per client | requires a human performing the service per client; client acquisition needs cold email/DM — blocked in code |
 | Niche job board / marketplace | $99-499 per posting, recruiter memberships | needs a server accepting requests; GitHub Actions is outbound-only |
 | Content repurposing service | $500-1.5K/mo retainer | delivery requires posting to social platforms — blocked in code; client acquisition needs cold email/DM — blocked in code |
-
-## Next Actions
-
-1. Create a simple landing page using a static site generator or structured Google Form to collect email addresses of potential subscribers
-2. Draft the first three newsletter issues covering common freelance writer challenges (pricing, client acquisition, workflow optimization)
-3. Set up a basic subscription system on Gumroad or Substack by hand, connecting it to your dev.to profile for seamless sharing
-4. Publish the first issue within seven days of starting, then dedicate thirty minutes daily to engage with comments and answer questions to build trust
-5. Track the conversion rate from reader to subscriber and refine the first deliverable based on feedback received

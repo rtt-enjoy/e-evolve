@@ -1,6 +1,6 @@
 # Free AI Earning Queue
 
-Refreshed: 2026-09-07T04:49:03.718038+00:00
+Refreshed: 2026-09-08T07:51:26.176373+00:00
 Daily target: $10.00
 
 Suggestions favour free AI services and free AI APIs with zero upfront cost.
@@ -17,81 +17,42 @@ Suggestions favour free AI services and free AI APIs with zero upfront cost.
 
 ## Current Best Angle
 
-The clearest free-AI earning path for the owner is to act as a small-batch 'done-for-you' processor: take a client's messy files (audio, PDFs, images, text) and return clean, structured outputs (transcripts, summaries, extracted tables, cleaned photos), powered by free-tier AI APIs. This is startable today on services with no credit card required (Groq, Google AI Studio/Gemini, Hugging Face Inference, OpenRouter free models, Mistral, Pollinations, removal.ai free tier, and on-device open-weight models), priced per batch at $5–$40, and needs no audience — just one or two local clients such as coaches, podcasters, real-estate agents, or e-commerce sellers.
+The strongest current angle is selling fixed-price, done-for-you micro-tasks (transcription, summarization, background removal, translation, embedding generation) that run entirely on free-tier APIs with no credit card required. Buyers are contractors, agencies, and small teams who need reliable output without managing AI infrastructure; they pay per batch or per deliverable, and the work can be started in under two hours with zero upfront cost.
 
 ## Free AI Services To Use
 
 | Service | What it does | Free tier | Card? | How to earn | Price guide |
 | --- | --- | --- | --- | --- | --- |
-| Groq Cloud (Llama, Mixtral, Whisper, Gemma free tier) | Fast LLM, speech-to-text (Whisper) and vision inference | Generous ongoing free inference for text and audio; verify current limits per model | no | Transcribe and summarize podcast/audio episodes into show notes, chapter markers and quote clips for podcasters. | $10–$30 per episode batch (up to 60 min of audio) |
-| Google AI Studio / Gemini API (free tier) | Multimodal LLM for text, long-context summarization, OCR and translation | Ongoing free requests per minute and per day for Gemini Flash/Pro; verify current limit | no | Summarize long PDFs, meeting transcripts or research into one-page briefs for consultants and students. | $5–$15 per document batch |
-| OpenRouter free models | Routes prompts across many free open-weight chat models via one API key | Free community models with per-minute caps; verify current limit per model | no | Offer 'bring-your-own-idea' prompt tuning and content rewriting packs for indie authors and creators. | $10–$25 per content pack |
-| Mistral AI (La Plateforme free tier) | Hosted Mistral open-weight chat and embedding models | Monthly free request allowance; verify current limit | no | Build custom chatbot prompts and system prompts for small businesses and package as a one-time setup. | $15–$40 per chatbot setup |
-| Hugging Face Inference API (free tier) | Hosted open-weight models for embeddings, NER, summarization, translation, OCR | Free monthly inference credits on serverless endpoints; verify current limit | no | Run embedding + clustering jobs to deduplicate and tag product listings or CVs. | $10–$20 per 500-item batch |
-| Cohere Trial (free key) | Embeddings, classification, rerank and summarization | Limited free trial key; treat as ongoing small allowance, verify current limit | no | Clean and categorize inbound support emails or job applications for small businesses. | $15–$30 per 1,000-item batch |
-| Pollinations.ai | Free no-key text-to-image generation API | Free public image generation with soft rate limits | no | Generate on-brand social images, thumbnails and ad variations for small shops. | $5–$15 per 20-image pack |
-| remove.bg free API / removal.ai free tier | Background removal and clean-up for product photos | Small ongoing monthly free allowance (remove.bg has a free tier; verify current limit) | no | Clean up e-commerce product photos for marketplace sellers. | $0.25–$0.75 per photo, $10–$25 per 100-photo batch |
-| OCR.space free OCR API | Extract text from scanned PDFs and images | Free ongoing allowance per IP/month; verify current limit | no | Convert scanned receipts, invoices and IDs into spreadsheets for bookkeepers. | $10–$20 per 100-page batch |
-| LibreTranslate (free public instances) | Open-source translation via free public endpoints | Free with rate limits and language coverage; verify current limit | no | Translate product listings, menus or short documents for local sellers. | $0.05–$0.15 per 100 words, $10 per listing batch |
+| Groq API | Fast LLM inference (Llama, Mixtral, Gemma) via REST | verify current limit (generous daily token allowance, no credit card) | no | Transcribe or summarize audio/text files in batches; charge per minute or per document | $0.10–$0.25 per audio minute; $1–$3 per 10-page document summary |
+| Hugging Face Inference API | Serverless inference for thousands of open models (Whisper, BERT, T5, Stable Diffusion, etc.) | verify current limit (rate-limited, no credit card) | no | Run speech-to-text, translation, embedding, or image generation tasks on demand; bundle into per-job fees | $0.05–$0.15 per transcription minute; $0.50–$1 per image background removal; $2–$5 per 1k embeddings |
+| Cohere API | LLM chat, embeddings, rerank, classification | verify current limit (monthly token quota, no credit card) | no | Generate embeddings for semantic search or classification; sell setup + first batch | $10–$25 for embedding a 10k-doc corpus; $5–$15 per classification batch |
+| Mistral AI API | Open-weight LLM inference (Mistral, Mixtral) and embeddings | verify current limit (free tier with rate limits, no credit card) | no | Produce high-quality summaries, translations, or structured extractions; charge per output | $1–$2 per 5-page summary; $0.02–$0.05 per translated word |
+| Remove.bg API | Automatic background removal for images | 50 free credits/month (1 credit = 1 image up to 0.25 MP), no credit card | no | Batch-remove backgrounds for e-commerce product photos; charge per image | $0.20–$0.50 per image (volume discounts) |
+| LibreTranslate API | Free, open-source machine translation (self-hosted or public instance) | Public instance rate-limited; self-host on free CPU (no credit card) | no | Translate documents or subtitles for clients; charge per word or per file | $0.01–$0.03 per word; $5–$15 per 1k-word document |
+| Hugging Face Spaces | Free hosting for Gradio/Streamlit/Docker apps on CPU (GPU paid) | Unlimited CPU spaces, no credit card | no | Deploy a one-page tool (e.g., PDF summarizer, image cleaner) and sell access or setup | $20–$50 one-time for tool deployment + handoff; $10–$30/mo for hosted maintenance |
+| GitHub Actions | Free CI/CD minutes (2,000/month on private repos, unlimited public) | 2,000 minutes/month private, no credit card | no | Schedule recurring batch jobs (daily reports, weekly data enrichment) using free APIs; sell as monthly retainer | $30–$100/mo for a weekly automated report delivery |
+| Google Colab | Free Jupyter notebooks with GPU (T4) and CPU runtimes | Time-limited sessions, no credit card | no | Run heavier open-weight models (Whisper large, Llama 3) for one-off client jobs; deliver results, not compute | $15–$40 per heavy batch job (e.g., 2-hour audio transcription with speaker diarization) |
 
 ## Easy Earning Ideas
 
-1. **Podcast episode cleanup pack**
-   - Who pays: Independent podcasters and coaches who publish audio
-   - Deliverable: Transcription, 5-sentence summary, 5 quote clips, 10 social posts, and chapter timestamps for one episode
-   - Price: $15–$30 per episode
-   - Time to first dollar: 1–3 days
-   - Free stack: Groq Whisper for transcription, Gemini or Groq Llama for summary and quotes
-2. **Scanned PDF to clean Excel**
-   - Who pays: Small bookkeepers, accountants, and admins with piles of scanned invoices/receipts
-   - Deliverable: One Excel/CSV file with structured columns (date, vendor, total, tax, line items) from a batch of scanned PDFs/images
-   - Price: $10–$20 per 100 pages
-   - Time to first dollar: 1–3 days
-   - Free stack: OCR.space for OCR, Gemini or Hugging Face for field extraction, Groq Llama for normalization
-3. **E-commerce product photo cleanup**
-   - Who pays: Marketplace sellers (Etsy, eBay, Poshmark, Shopify small shops)
-   - Deliverable: Background-removed, white-background, color-corrected product photos in 3 sizes
-   - Price: $10–$25 per 100 photos
-   - Time to first dollar: 1–2 days
-   - Free stack: remove.bg or removal.ai free tier for cutout, Pillow (free) for resize/watermark
-4. **On-brand social image pack**
-   - Who pays: Local businesses, coaches, indie authors and creators
-   - Deliverable: 20 social images (quotes, tips, promos) in their niche, ready to post
-   - Price: $5–$15 per pack
-   - Time to first dollar: Same day
-   - Free stack: Pollinations.ai for image generation, Pillow for layout/text
-5. **Bring-your-own-key prompt pack**
-   - Who pays: Indie authors, course creators, marketers who already pay for an AI key
-   - Deliverable: A custom Notion/Google Doc with 20+ tested prompts and workflows for their exact use case
-   - Price: $15–$40 per pack
-   - Time to first dollar: 1–3 days
-   - Free stack: OpenRouter free models for testing prompts, Google Docs/Notion for delivery
-6. **Resume/CV tailoring batch**
-   - Who pays: Job seekers and career coaches (you do not need a following — coach referrals are enough)
-   - Deliverable: Tailored resume + cover letter + 10 LinkedIn bullet rewrites for one target role
-   - Price: $10–$25 per candidate
-   - Time to first dollar: 1–3 days
-   - Free stack: Gemini or Groq Llama for rewriting, OCR.space if input is a scanned CV
-7. **Translation + localization of a product listing batch**
-   - Who pays: Online sellers expanding to new markets
-   - Deliverable: Translated titles, descriptions, and bullet points for 50–100 listings in 1–3 languages
-   - Price: $10–$25 per batch per language
-   - Time to first dollar: 1–2 days
-   - Free stack: LibreTranslate for bulk draft + Gemini for polishing tone
-8. **Long PDF / report one-page brief**
-   - Who pays: Consultants, analysts, students, and executives
-   - Deliverable: A one-page brief with key findings, numbers, risks, and recommendations from a long PDF
-   - Price: $5–$15 per document
-   - Time to first dollar: Same day
-   - Free stack: Gemini long-context for ingestion + Groq Llama for final summary
-
-## Next Actions
-
-- Pick ONE idea (recommended: podcast episode cleanup pack or scanned-PDF-to-Excel) and prepare a 3-line offer post for local Facebook groups, Craigslist, Fiverr and r/slavelabour — no audience needed, just clear deliverables.
-- Set up free accounts today: Groq, Google AI Studio, OpenRouter, Hugging Face, Pollinations, OCR.space, and a remove.bg free key. Save API keys in a single password manager entry.
-- Build one repeatable workflow (input → free API → output) and test it on 2 real samples so you have before/after proof to show buyers.
-- Price your first 3 jobs at a small loss-leader ($5–$10) to get 3 public before/after examples and one short testimonial from a real person.
-- Bundle the best-performing service into a recurring monthly pack (e.g., monthly competitor digest or monthly podcast cleanup subscription) to convert one-off buyers into steady income.
+1. **Audio Transcription Batch Service**
+   - Who pays: Podcast editors, researchers, journalists, remote teams
+   - Deliverable: Timestamped SRT/VTT/JSON transcripts for up to 60 minutes of audio, delivered in 24h
+   - Price: 5–12 per hour of audio
+   - Time to first dollar: same day
+   - Free stack: Groq API (Whisper) or Hugging Face Inference API (Whisper), GitHub Actions for scheduling
+2. **Document Summarization & Extraction**
+   - Who pays: Consultants, lawyers, admissions counselors, analysts
+   - Deliverable: One-page executive summary + key entities/table data in CSV from PDFs/DOCX (up to 20 pages)
+   - Price: 3–8 per document
+   - Time to first dollar: 2–3 days
+   - Free stack: Groq/Cohere/Mistral for LLM, pdfplumber (local) for extraction, Hugging Face Spaces for demo
+3. **E-commerce Background Removal**
+   - Who pays: Shopify/Etsy sellers, dropshippers, small brands
+   - Deliverable: Clean PNGs with transparent backgrounds, 1000×1000 px, delivered via zip/Drive link
+   - Price: 0.25–0.50 per image (min 20 images)
+   - Time to first dollar: same day
+   - Free stack: Remove.bg API (50 free/mo), Hugging Face Spaces for upload UI
 
 ## Monetization Patterns
 
@@ -154,260 +115,473 @@ The clearest free-AI earning path for the owner is to act as a small-batch 'done
 
 ## Ranked Leads From Online Search
 
-1. [Map: the foundation for Demido Studio v3](https://github.com/elpideus/demido-studio/issues/1)
-   - Score: 100/100
-   - Value signal: $4500.00
-   - Why: visible or inferred value around $4500.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+1. [Search Atlas | Product Engineer (Product Manager role, not a Full-stack role) | REMOTE (anywhere, EST hours) | Full-time contractor | $23-$3](https://news.ycombinator.com/item?id=49547792)
+   - Kind: demand
+   - Score: 80/100
+   - Price: $23-34/hr stated
+   - Posted: 2026-09-03T09:25:29+00:00 (118h ago)
+   - Why: $23-34/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Search Atlas actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
    - Codex request:
-     Implement a small, verifiable solution for this public request.
+     Build a small, verifiable deliverable for this real market signal.
      
-     Lead: Map: the foundation for Demido Studio v3
-     Source: github
-     URL: https://github.com/elpideus/demido-studio/issues/1
-     Why this is suitable: visible or inferred value around $4500.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     BUYER          Search Atlas (via hn-hiring)
+     DEMAND SIGNAL  Search Atlas | Product Engineer (Product Manager role, not a Full-stack role) | REMOTE (anywhere, EST hours) | Full-time contractor | $23-$3
+     POSTED         2026-09-03T09:25:29+00:00 (118h ago)
+     LINK           https://news.ycombinator.com/item?id=49547792
+     DELIVERABLE    Read what Search Atlas actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+     PRICE BASIS    $23-34/hr stated
+     FREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs
+     WHY IT RANKS   $23-34/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable
      
      Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: ## Destination
-      
-      A locked foundation for Demido Studio v3: an agreed visual design system, a decided stack and module
-      contract, a per-crate verdict on what carries over from v1/v2, a specified small-model guidance
-      system, and a v0.1 slice spec, such that build sessions can execute without further architectural
-      debate.
-      
-      The map is done when nothing architectural is left to decide. Building the features is not on this
-      map.
-      
-      ## Notes
-      
-      **Domain.** A local LLM harness. Tauri 2 + Rust + React, Windows first, cross-platform by 1.0,
-      GPL-3.0-or-later, sole-authored by Stefan Cucoranu. Two theses: small models behave properly when
-      guided well, and everything the model sees is inspectable.
-      
-      **The brief is canonical.** [`docs/brief.md`](https://github.com/elpideus/demido-studio/blob/main/docs/brief.md) is Stefan's brief copied
-      verbatim. Read it, do not summarise it, and cite it by qu
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Map: the foundation for Demido Studio v3" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $4500.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/elpideus/demido-studio/issues/1
-2. [feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)](https://github.com/ava-agent/awesome-ai-ideas/pull/1379)
-   - Score: 100/100
-   - Value signal: $960.00
-   - Why: visible or inferred value around $960.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     - Keep the first change narrowly scoped to one file or script.
+     - Use free API tiers or offline code paths only; no paid service.
+     - Include the exact commands to run it and paste the real output.
+     - Verify on at least 3 sample inputs before calling it done.
+     - Do not contact anyone, publish anything, or request payment.
+     - Do not state a price unless PRICE BASIS gives one.
+2. [Noricum | Senior Backend Engineer, Payments, Ledger & Provable Fairness | REMOTE (2h overlap with US Pacific) | Contract to permanent | $120](https://news.ycombinator.com/item?id=49523604)
+   - Kind: demand
+   - Score: 79/100
+   - Price: $120-160/hr stated
+   - Posted: 2026-09-01T15:47:09+00:00 (160h ago)
+   - Why: $120-160/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Noricum actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
    - Codex request:
-     Implement a small, verifiable solution for this public request.
+     Build a small, verifiable deliverable for this real market signal.
      
-     Lead: feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)
-     Source: github
-     URL: https://github.com/ava-agent/awesome-ai-ideas/pull/1379
-     Why this is suitable: visible or inferred value around $960.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     BUYER          Noricum (via hn-hiring)
+     DEMAND SIGNAL  Noricum | Senior Backend Engineer, Payments, Ledger & Provable Fairness | REMOTE (2h overlap with US Pacific) | Contract to permanent | $120
+     POSTED         2026-09-01T15:47:09+00:00 (160h ago)
+     LINK           https://news.ycombinator.com/item?id=49523604
+     DELIVERABLE    Read what Noricum actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+     PRICE BASIS    $120-160/hr stated
+     FREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs
+     WHY IT RANKS   $120-160/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable
      
      Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: # feat: MemoryAI - Memory-Enhanced AI Agents with Dual-Trace Architecture (Issue #1086)  > **Source**: Issue #1086 > **Status**: Executive PR Document | v1.0  ---  ## 📋 Executive Summary  MemoryAI is an open-source AI agent platform introducing a **Dual-Trace Memory Architecture** — combining episodic memory (raw interaction logs with embeddings) and semantic memory (compressed knowledge graphs) — to give AI agents persistent, evolving context. Current LLM-based agents lose all context between sessions, leading to repetitive conversations, forgotten user preferences, and inability to learn from past interactions. MemoryAI solves this by providing a plug-and-play memory layer that reduces hallucination by 40%, improves task completion rates by 35%, and enables agents to genuinely "remember" and improve over time.  ### Key Metrics - **Market**: AI agent infrastructure market projected at $
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "feat: AI Project - MemoryAI: Memory-Enhanced AI Agents Platform (Issue #1086)" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $960.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/ava-agent/awesome-ai-ideas/pull/1379
-3. [A licence granting this source away, a check that failed its own rule, and each product against its own competitors](https://github.com/famouslytrill-boop/sonara-os/pull/202)
-   - Score: 100/100
-   - Value signal: $79.00
-   - Why: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     - Keep the first change narrowly scoped to one file or script.
+     - Use free API tiers or offline code paths only; no paid service.
+     - Include the exact commands to run it and paste the real output.
+     - Verify on at least 3 sample inputs before calling it done.
+     - Do not contact anyone, publish anything, or request payment.
+     - Do not state a price unless PRICE BASIS gives one.
+3. [Language Model Analyst - Fully Remote | Upto $20/hr Part-time - mercor](https://himalayas.app/companies/mercor/jobs/language-model-analyst-fully-remote-upto-20-hr-part-time-3321791029)
+   - Kind: demand
+   - Score: 75/100
+   - Price: $15-20/hr posted
+   - Posted: 2026-09-08T07:31:29+00:00 (0h ago)
+   - Why: $15-20/hr posted by the source, not inferred; posted 0h ago, so the buyer is still looking
+   - Next: Read what mercor actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
    - Codex request:
-     Implement a small, verifiable solution for this public request.
+     Build a small, verifiable deliverable for this real market signal.
      
-     Lead: A licence granting this source away, a check that failed its own rule, and each product against its own competitors
-     Source: github
-     URL: https://github.com/famouslytrill-boop/sonara-os/pull/202
-     Why this is suitable: visible or inferred value around $79.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     BUYER          mercor (via himalayas)
+     DEMAND SIGNAL  Language Model Analyst - Fully Remote | Upto $20/hr Part-time - mercor
+     POSTED         2026-09-08T07:31:29+00:00 (0h ago)
+     LINK           https://himalayas.app/companies/mercor/jobs/language-model-analyst-fully-remote-upto-20-hr-part-time-3321791029
+     DELIVERABLE    Read what mercor actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+     PRICE BASIS    $15-20/hr posted
+     FREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs
+     WHY IT RANKS   $15-20/hr posted by the source, not inferred; posted 0h ago, so the buyer is still looking
      
      Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: `pnpm run verify:launch` green across **27 commands**. **3,478 tests** passing — 3,101 in the repository across 236 files, plus 221 (serverless CLI), 69 (agentkit), 44 (songsmith) and 43 (AWS emulator) in `tools/`. `server.js` is **3,845 lines** across 117 `lib/` modules and 39 `routes/` modules. 101 migrations, 145 canonical tables, 165 reviewed external repositories.  > **This description is kept current deliberately.** Refreshed again on 26 August 2026, and this time the refresh found the branch's own defect sitting in its own description: the table below said this application **cannot upload a file**, which stopped being true earlier the same day. A claim that quietly stopped holding is exactly what every check on this branch exists to catch, and prose in a pull request has nothing watching it. Earlier narratives are preserved in the commit history and in `docs/SPRINT_LOG.md`, which
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "A licence granting this source away, a check that failed its own rule, and each product against its own competitors" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $79.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/famouslytrill-boop/sonara-os/pull/202
-4. [[FREEMIUM] I built a self-hosted AI chatbot for WordPress — it started as my Upwork portfolio piece, now it's a real product](https://www.reddit.com/r/SideProject/comments/1w97edu/freemium_i_built_a_selfhosted_ai_chatbot_for/)
-   - Score: 100/100
-   - Value signal: $50.00
-   - Why: visible or inferred value around $50.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
+     - Keep the first change narrowly scoped to one file or script.
+     - Use free API tiers or offline code paths only; no paid service.
+     - Include the exact commands to run it and paste the real output.
+     - Verify on at least 3 sample inputs before calling it done.
+     - Do not contact anyone, publish anything, or request payment.
+     - Do not state a price unless PRICE BASIS gives one.
+4. [College Admissions Counselor/Consultant - InGenius Prep](https://himalayas.app/companies/ingenius-prep/jobs/college-admissions-counselor-consultant)
+   - Kind: demand
+   - Score: 75/100
+   - Price: $25-50/hr posted
+   - Posted: 2026-09-08T07:31:29+00:00 (0h ago)
+   - Why: $25-50/hr posted by the source, not inferred; posted 0h ago, so the buyer is still looking
+   - Next: Read what InGenius Prep actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
    - Codex request:
-     Implement a small, verifiable solution for this public request.
+     Build a small, verifiable deliverable for this real market signal.
      
-     Lead: [FREEMIUM] I built a self-hosted AI chatbot for WordPress — it started as my Upwork portfolio piece, now it's a real product
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w97edu/freemium_i_built_a_selfhosted_ai_chatbot_for/
-     Why this is suitable: visible or inferred value around $50.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
+     BUYER          InGenius Prep (via himalayas)
+     DEMAND SIGNAL  College Admissions Counselor/Consultant - InGenius Prep
+     POSTED         2026-09-08T07:31:29+00:00 (0h ago)
+     LINK           https://himalayas.app/companies/ingenius-prep/jobs/college-admissions-counselor-consultant
+     DELIVERABLE    Read what InGenius Prep actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+     PRICE BASIS    $25-50/hr posted
+     FREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs
+     WHY IT RANKS   $25-50/hr posted by the source, not inferred; posted 0h ago, so the buyer is still looking
      
      Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: I work in AI automation. n8n workflows, ComfyUI pipelines, Hermes agents — that&#39;s my day-to-day. A while back I opened an Upwork account and started crawling job listings to see what clients actually needed. (Crawling is what I do, too.) One pattern kept showing up: clients run WordPress, they want an AI chatbot on it, and every option they find is a $50-100/month SaaS that routes their visitor chats through someone else&#39;s cloud. I needed a project to show off, anyway. A portfolio page full of I can build X descriptions doesn&#39;t beat a working product you can point at. So I built one. YakWP is a self-hosted AI chatbot plugin for WordPress. You connect your own API key — Gemini (free tier ≈500 requests per day), OpenAI, OpenCode Go, or OpenRouter — and it runs on your hosting. No subscription, no vendor server in the middle of your visitor chats. It reads your site. RAG against
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "[FREEMIUM] I built a self-hosted AI chatbot for WordPress — it started as my Upwork portfolio piece, now it's a real product" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $50.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1w97edu/freemium_i_built_a_selfhosted_ai_chatbot_for/
-5. [📈 AI Open Source Trends 2026-09-02](https://github.com/xavier9802/agents-radar/issues/579)
-   - Score: 100/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     - Keep the first change narrowly scoped to one file or script.
+     - Use free API tiers or offline code paths only; no paid service.
+     - Include the exact commands to run it and paste the real output.
+     - Verify on at least 3 sample inputs before calling it done.
+     - Do not contact anyone, publish anything, or request payment.
+     - Do not state a price unless PRICE BASIS gives one.
+5. [ODK | Senior Product Manager | Remote (Worldwide) | Long-term contract, 30–40 hours/week | $90–$110/hour USD ODK is an open-source platform ](https://news.ycombinator.com/item?id=49524080)
+   - Kind: demand
+   - Score: 69/100
+   - Price: $90-110/hr stated
+   - Posted: 2026-09-01T16:17:07+00:00 (160h ago)
+   - Why: $90-110/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what ODK actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
    - Codex request:
-     Implement a small, verifiable solution for this public request.
+     Build a small, verifiable deliverable for this real market signal.
      
-     Lead: 📈 AI Open Source Trends 2026-09-02
-     Source: github
-     URL: https://github.com/xavier9802/agents-radar/issues/579
-     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio.
+     BUYER          ODK (via hn-hiring)
+     DEMAND SIGNAL  ODK | Senior Product Manager | Remote (Worldwide) | Long-term contract, 30–40 hours/week | $90–$110/hour USD ODK is an open-source platform 
+     POSTED         2026-09-01T16:17:07+00:00 (160h ago)
+     LINK           https://news.ycombinator.com/item?id=49524080
+     DELIVERABLE    Read what ODK actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+     PRICE BASIS    $90-110/hr stated
+     FREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs
+     WHY IT RANKS   $90-110/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable
      
      Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: # AI Open Source Trends 2026-09-02  > Sources: GitHub Trending + GitHub Search API | Generated: 2026-09-02 04:01 UTC  ---    # AI Open Source Trends Report — 2026-09-02  ---  ## 1. Today's Highlights  **OpenMAIC** from Tsinghua University surged to the top of today's trending with over 3,100 new stars in a single day, demonstrating massive community interest in accessible multi-agent learning platforms. **minimind** continues its remarkable rise (now 57K+ stars, +1,005 today), proving that the "train an LLM from scratch in 2 hours" niche has sustained momentum. The AI agent skills ecosystem is fragmenting rapidly — scientific research, patent analysis, and academic workflow skills all trended simultaneously, signaling a shift from generic agent frameworks toward vertical, domain-specialized agent capabilities. Vector database and agent memory tooling (Cognee, LEANN, mem0) are also accele
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "📈 AI Open Source Trends 2026-09-02" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://github.com/xavier9802/agents-radar/issues/579
-6. [I open-sourced the free local SEO tools we built for our clients and I'll build any tool you ask for free](https://www.reddit.com/r/SideProject/comments/1w8xpcy/i_opensourced_the_free_local_seo_tools_we_built/)
-   - Score: 98/100
-   - Value signal: $10.00
-   - Why: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
+     - Keep the first change narrowly scoped to one file or script.
+     - Use free API tiers or offline code paths only; no paid service.
+     - Include the exact commands to run it and paste the real output.
+     - Verify on at least 3 sample inputs before calling it done.
+     - Do not contact anyone, publish anything, or request payment.
+     - Do not state a price unless PRICE BASIS gives one.
+6. [Data Platform Engineer - Clinician Nexus](https://himalayas.app/companies/clinician-nexus/jobs/data-platform-engineer-247291503)
+   - Kind: demand
+   - Score: 61/100
+   - Price: $120,000-160,000/yr posted
+   - Posted: 2026-09-08T07:25:22+00:00 (0h ago)
+   - Why: $120,000-160,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking
+   - Next: Read what Clinician Nexus actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
    - Codex request:
-     Implement a small, verifiable solution for this public request.
+     Build a small, verifiable deliverable for this real market signal.
      
-     Lead: I open-sourced the free local SEO tools we built for our clients and I'll build any tool you ask for free
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w8xpcy/i_opensourced_the_free_local_seo_tools_we_built/
-     Why this is suitable: visible or inferred value around $10.00; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Clean one messy sample export with the free LLM tier and quote a flat rate per file.
+     BUYER          Clinician Nexus (via himalayas)
+     DEMAND SIGNAL  Data Platform Engineer - Clinician Nexus
+     POSTED         2026-09-08T07:25:22+00:00 (0h ago)
+     LINK           https://himalayas.app/companies/clinician-nexus/jobs/data-platform-engineer-247291503
+     DELIVERABLE    Read what Clinician Nexus actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+     PRICE BASIS    $120,000-160,000/yr posted
+     FREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs
+     WHY IT RANKS   $120,000-160,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking
      
      Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: After 8+ years doing local SEO for small businesses, the pattern that annoyed me most: owners paying monthly for rank trackers and GBP optimizers that just resell public Google Places data behind a subscription. So I took the checks we actually run for clients and turned them into free tools. No account, no card, no trial: Google Business Profile audit (score + AI-written fixes) Category optimizer (compares your GBP categories with the competitors that actually rank for your keyword) Local rank checker (3x3 / 5x5 Maps grid around your address) AI visibility checker (does a ChatGPT/Gemini-style assistant name your business for best X near me ?) LocalBusiness schema generator, review link + QR poster, AI review reply writer Site: https://locan.ai Code (AGPL-3.0): https://github.com/vaitko/locan-tools The experiment I&#39;m most curious about: the homepage is basically a request form. If a
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "I open-sourced the free local SEO tools we built for our clients and I'll build any tool you ask for free" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1w8xpcy/i_opensourced_the_free_local_seo_tools_we_built/
-7. [I spent a year making a Markdown editor for Windows that never touches an account, a cloud, or your files' format](https://www.reddit.com/r/SideProject/comments/1w9cc5l/i_spent_a_year_making_a_markdown_editor_for/)
-   - Score: 96/100
-   - Value signal: $14.99
-   - Why: visible or inferred value around $14.99; runs on a free AI tier, so input cost is zero and margin is total
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     - Keep the first change narrowly scoped to one file or script.
+     - Use free API tiers or offline code paths only; no paid service.
+     - Include the exact commands to run it and paste the real output.
+     - Verify on at least 3 sample inputs before calling it done.
+     - Do not contact anyone, publish anything, or request payment.
+     - Do not state a price unless PRICE BASIS gives one.
+7. [Marketing Automation & Analytics Manager - Henry Schein One](https://himalayas.app/companies/henry-schein-one/jobs/marketing-automation-analytics-manager)
+   - Kind: demand
+   - Score: 61/100
+   - Price: $90,000-119,000/yr posted
+   - Posted: 2026-09-08T07:24:23+00:00 (0h ago)
+   - Why: $90,000-119,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking
+   - Next: Read what Henry Schein One actually asked for, then clean one messy sample export and quote a flat rate per file.
    - Codex request:
-     Implement a small, verifiable solution for this public request.
+     Build a small, verifiable deliverable for this real market signal.
      
-     Lead: I spent a year making a Markdown editor for Windows that never touches an account, a cloud, or your files' format
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w9cc5l/i_spent_a_year_making_a_markdown_editor_for/
-     Why this is suitable: visible or inferred value around $14.99; runs on a free AI tier, so input cost is zero and margin is total
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     BUYER          Henry Schein One (via himalayas)
+     DEMAND SIGNAL  Marketing Automation & Analytics Manager - Henry Schein One
+     POSTED         2026-09-08T07:24:23+00:00 (0h ago)
+     LINK           https://himalayas.app/companies/henry-schein-one/jobs/marketing-automation-analytics-manager
+     DELIVERABLE    Read what Henry Schein One actually asked for, then clean one messy sample export and quote a flat rate per file.
+     PRICE BASIS    $90,000-119,000/yr posted
+     FREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs
+     WHY IT RANKS   $90,000-119,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking
      
      Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
-     
-     Request excerpt: I built ChatMD Studio. It is a Markdown workspace for Windows where notes stay ordinary .md files in ordinary folders. No ChatMD account, no sync service, no telemetry. What is in the free editor: Live Preview (Markdown renders as you type, the raw symbols come back on the line you are on), search, wiki-links with backlinks, tags, templates, local history, and viewers for the PDFs, Word, Excel, PowerPoint and SQLite files sitting next to your notes. Any of those convert to Markdown on your PC. Scanned PDFs and screenshots go through an OCR engine built into the app, offline. What is paid, $14.99 once: the vault becomes your AI&#39;s memory. It writes and keeps a Brain note about what your notes are about, what is unfinished and which notes connect; answers cite the notes they came from; a catch me up briefing covers what changed since you last opened the vault; and there is a link graph.
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "I spent a year making a Markdown editor for Windows that never touches an account, a cloud, or your files' format" and can make a small working version.
-     
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $14.99 via crypto.
-     
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
-     
-     Reference: https://www.reddit.com/r/SideProject/comments/1w9cc5l/i_spent_a_year_making_a_markdown_editor_for/
-8. [Solo dev: I got annoyed that photo calorie apps can't tell plate size, so I built one that measures it. Free, iPhone. Feedback welcome.](https://www.reddit.com/r/SideProject/comments/1w92usk/solo_dev_i_got_annoyed_that_photo_calorie_apps/)
-   - Score: 96/100
-   - Value signal: $0.00
-   - Why: runs on a free AI tier, so input cost is zero and margin is total; startable today without new skills or tools
-   - Next: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     - Keep the first change narrowly scoped to one file or script.
+     - Use free API tiers or offline code paths only; no paid service.
+     - Include the exact commands to run it and paste the real output.
+     - Verify on at least 3 sample inputs before calling it done.
+     - Do not contact anyone, publish anything, or request payment.
+     - Do not state a price unless PRICE BASIS gives one.
+8. [Channel & Product Marketing Manager - Talentuch](https://himalayas.app/companies/talentuch/jobs/channel-product-marketing-manager)
+   - Kind: demand
+   - Score: 56/100
+   - Price: $75,000-80,000/yr posted
+   - Posted: 2026-09-08T07:28:07+00:00 (0h ago)
+   - Why: $75,000-80,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking
+   - Next: Read what Talentuch actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
    - Codex request:
-     Implement a small, verifiable solution for this public request.
+     Build a small, verifiable deliverable for this real market signal.
      
-     Lead: Solo dev: I got annoyed that photo calorie apps can't tell plate size, so I built one that measures it. Free, iPhone. Feedback welcome.
-     Source: reddit:r/SideProject
-     URL: https://www.reddit.com/r/SideProject/comments/1w92usk/solo_dev_i_got_annoyed_that_photo_calorie_apps/
-     Why this is suitable: runs on a free AI tier, so input cost is zero and margin is total; startable today without new skills or tools
-     First step: Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages.
+     BUYER          Talentuch (via himalayas)
+     DEMAND SIGNAL  Channel & Product Marketing Manager - Talentuch
+     POSTED         2026-09-08T07:28:07+00:00 (0h ago)
+     LINK           https://himalayas.app/companies/talentuch/jobs/channel-product-marketing-manager
+     DELIVERABLE    Read what Talentuch actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+     PRICE BASIS    $75,000-80,000/yr posted
+     FREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs
+     WHY IT RANKS   $75,000-80,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking
      
      Constraints:
-     - Keep the first change narrowly scoped.
-     - Use free APIs or offline code paths when possible.
-     - Add or update a specific file that demonstrates the result.
-     - Include exact verification commands and output notes.
-     - Do not post externally or request payment automatically.
+     - Keep the first change narrowly scoped to one file or script.
+     - Use free API tiers or offline code paths only; no paid service.
+     - Include the exact commands to run it and paste the real output.
+     - Verify on at least 3 sample inputs before calling it done.
+     - Do not contact anyone, publish anything, or request payment.
+     - Do not state a price unless PRICE BASIS gives one.
+9. [Senior Data Engineer, Customer Engineering - Claritas Rx](https://himalayas.app/companies/claritas-rx/jobs/senior-data-engineer-customer-engineering)
+   - Kind: demand
+   - Score: 56/100
+   - Price: $150,000-170,000/yr posted
+   - Posted: 2026-09-08T07:24:25+00:00 (0h ago)
+   - Why: $150,000-170,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking
+   - Next: Read what Claritas Rx actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+   - Codex request:
+     Build a small, verifiable deliverable for this real market signal.
      
-     Request excerpt: I&#39;ve been tracking macros on and off for years and every photo-based tracker had the same flaw: it guessed the portion. Same meal, different plate, different number. So I built ProteinSnap. The one idea: measure the plate or container with a quick AR scan before the photo. The food estimate then has a real reference size instead of a guess. It shows a range rather than a fake exact number, and you can rescan the plate to log leftovers. Free plan is real: 7 AI scans a day, unlimited barcode and manual logging, no subscription. iPhone, iOS 18+. It&#39;s funded by ads and affiliate links, not a paywall. Rough edges I know about: - Sauces and oils are basically invisible to it. - Food under other food gets under-counted. - The measuring step adds a few seconds. Some people will hate that. I&#39;d like to know if you do. Next thing I&#39;m building: what can I eat near me — nearby restaur
-   - Owner-reviewed outreach draft:
-     Hi, I found your request about "Solo dev: I got annoyed that photo calorie apps can't tell plate size, so I built one that measures it. Free, iPhone. Feedback welcome." and can make a small working version.
+     BUYER          Claritas Rx (via himalayas)
+     DEMAND SIGNAL  Senior Data Engineer, Customer Engineering - Claritas Rx
+     POSTED         2026-09-08T07:24:25+00:00 (0h ago)
+     LINK           https://himalayas.app/companies/claritas-rx/jobs/senior-data-engineer-customer-engineering
+     DELIVERABLE    Read what Claritas Rx actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+     PRICE BASIS    $150,000-170,000/yr posted
+     FREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs
+     WHY IT RANKS   $150,000-170,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking
      
-     I will keep it simple: one focused file/change, a short usage note, and proof that it runs. If the result solves the request, the fixed price is $10.00 via crypto.
+     Constraints:
+     - Keep the first change narrowly scoped to one file or script.
+     - Use free API tiers or offline code paths only; no paid service.
+     - Include the exact commands to run it and paste the real output.
+     - Verify on at least 3 sample inputs before calling it done.
+     - Do not contact anyone, publish anything, or request payment.
+     - Do not state a price unless PRICE BASIS gives one.
+10. [Workday Contract and Journeys Consultant - Delan Associates](https://himalayas.app/companies/delan-associates/jobs/workday-contract-and-journeys-consultant)
+   - Kind: demand
+   - Score: 52/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:33:36+00:00 (0h ago)
+   - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Delan Associates actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+   - Codex request:
+     Build a small, verifiable deliverable for this real market signal.
      
-     Payment address (USDT_WALLET_ADDRESS): TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+     BUYER          Delan Associates (via himalayas)
+     DEMAND SIGNAL  Workday Contract and Journeys Consultant - Delan Associates
+     POSTED         2026-09-08T07:33:36+00:00 (0h ago)
+     LINK           https://himalayas.app/companies/delan-associates/jobs/workday-contract-and-journeys-consultant
+     DELIVERABLE    Read what Delan Associates actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+     PRICE BASIS    no stated price - do not quote or invent a figure
+     FREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs
+     WHY IT RANKS   posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
      
-     Reference: https://www.reddit.com/r/SideProject/comments/1w92usk/solo_dev_i_got_annoyed_that_photo_calorie_apps/
+     Constraints:
+     - Keep the first change narrowly scoped to one file or script.
+     - Use free API tiers or offline code paths only; no paid service.
+     - Include the exact commands to run it and paste the real output.
+     - Verify on at least 3 sample inputs before calling it done.
+     - Do not contact anyone, publish anything, or request payment.
+     - Do not state a price unless PRICE BASIS gives one.
+11. [Verkäufer (w/m/d) Remote - NETSHAKE GmbH](https://himalayas.app/companies/netshake-gmbh/jobs/verkaufer-w-m-d-remote-6189640426)
+   - Kind: demand
+   - Score: 52/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:22:23+00:00 (0h ago)
+   - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what NETSHAKE GmbH actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+12. [BOSS-IQ | CTO Partner | REMOTE (worldwide) | Full-time | Istanbul-based company | https://boss-iq.com BOSS-IQ is an AI strategic-planning pr](https://news.ycombinator.com/item?id=49598051)
+   - Kind: demand
+   - Score: 52/100
+   - Price: no stated price
+   - Posted: 2026-09-07T13:13:20+00:00 (19h ago)
+   - Why: posted 18h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what BOSS-IQ actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+13. [Senior Python Backend Engineer | REMOTE (EMEA/APAC) We're looking for Python backend engineers to work on a trustless supercluster of perfor](https://news.ycombinator.com/item?id=49532957)
+   - Kind: demand
+   - Score: 52/100
+   - Price: no stated price
+   - Posted: 2026-09-02T07:30:20+00:00 (144h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable; boring conversion work buyers already pay humans to do by hand
+   - Next: Read what Senior Python Backend Engineer actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+14. [Vitalize | Senior Product Manager or Staff Product Manager | San Francisco (hybrid) What we do: Hospitals run critical operations (staffing,](https://news.ycombinator.com/item?id=49528336)
+   - Kind: demand
+   - Score: 51/100
+   - Price: no stated price
+   - Posted: 2026-09-01T21:17:35+00:00 (155h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable; boring conversion work buyers already pay humans to do by hand
+   - Next: Read what Vitalize actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+15. [WorkHero https://workhero.pro | Senior SWE, AI Automation Engr, Senior PM | REMOTE (US+INTL for eng, US for product & automations) WorkHero ](https://news.ycombinator.com/item?id=49524167)
+   - Kind: demand
+   - Score: 51/100
+   - Price: no stated price
+   - Posted: 2026-09-01T16:23:18+00:00 (160h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what WorkHero https://workhero.pro actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+16. [ysr666/dsh-vision-router](https://github.com/ysr666/dsh-vision-router)
+   - Kind: supply
+   - Score: 49/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:45:07+00:00 (0h ago)
+   - Why: free tooling you can deliver paid work with; boring conversion work buyers already pay humans to do by hand
+   - Next: Confirm the free tier's real limits and terms, run one small end-to-end sample, then attach a fixed price to a single narrow task built on it.
+17. [Instructor/Facilitator - DMS International](https://himalayas.app/companies/dms-international/jobs/instructor-facilitator)
+   - Kind: demand
+   - Score: 47/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:34:04+00:00 (0h ago)
+   - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what DMS International actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+18. [Technical Writer &#x2f; Quality Assurance Specialist - Remote - Contractor in US - goPro Consultancy Group ltd.](https://himalayas.app/companies/gopro-consultancy-group-ltd/jobs/technical-writer-x2f-quality-assurance-specialist-remote-contractor-in-us-1894025139)
+   - Kind: demand
+   - Score: 47/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:30:44+00:00 (0h ago)
+   - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what goPro Consultancy Group ltd. actually asked for, then produce one sample page and quote per thousand words.
+19. [Linux Infrastructure Engineer (Bare Metal, Storage & AI Factory Infrastructure) - uvation](https://himalayas.app/companies/uvation/jobs/linux-infrastructure-engineer-bare-metal-storage-ai-factory-infrastructure-5363547987)
+   - Kind: demand
+   - Score: 47/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:29:47+00:00 (0h ago)
+   - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what uvation actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+20. [Fullstack Developer - MySCU](https://himalayas.app/companies/myscu/jobs/fullstack-developer)
+   - Kind: demand
+   - Score: 47/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:28:52+00:00 (0h ago)
+   - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what MySCU actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+21. [Freelance Video Editor & Motion Designer (Project-Based Contract) - Sourcefin](https://himalayas.app/companies/sourcefin/jobs/freelance-video-editor-motion-designer-project-based-contract)
+   - Kind: demand
+   - Score: 47/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:28:17+00:00 (0h ago)
+   - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Sourcefin actually asked for, then process a handful of sample assets and quote per image or per batch.
+22. [Online Data Analyst - Portuguese (PT) - TELUS Digital](https://himalayas.app/companies/telus-digital/jobs/online-data-analyst-portuguese-pt)
+   - Kind: demand
+   - Score: 47/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:25:34+00:00 (0h ago)
+   - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what TELUS Digital actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+23. [Innovation Funding Consultant (100%) - Adoc Talent Management](https://himalayas.app/companies/adoc-talent-management/jobs/innovation-funding-consultant-100)
+   - Kind: demand
+   - Score: 47/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:24:57+00:00 (0h ago)
+   - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Adoc Talent Management actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+24. [Bilingual Medical Receptionist (English & Spanish Proficiency) - SnappyCX](https://himalayas.app/companies/snappycx/jobs/bilingual-medical-receptionist-english-spanish-proficiency)
+   - Kind: demand
+   - Score: 47/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:24:25+00:00 (0h ago)
+   - Why: posted 0h ago, so the buyer is still looking
+   - Next: Read what SnappyCX actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+25. [Buchhaltungskraft (m/w/d), Minijob, 100% Remote - Heless](https://himalayas.app/companies/heless/jobs/buchhaltungskraft-m-w-d-minijob-100-remote)
+   - Kind: demand
+   - Score: 47/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:21:51+00:00 (0h ago)
+   - Why: posted 0h ago, so the buyer is still looking
+   - Next: Read what Heless actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+26. [Legile | Senior Full-Stack AI Engineer (CTO track) | Antwerp, Belgium | HYBRID | Full-time | Belgium-based only Legile builds OneView, a leg](https://news.ycombinator.com/item?id=49541500)
+   - Kind: demand
+   - Score: 47/100
+   - Price: no stated price
+   - Posted: 2026-09-02T19:51:50+00:00 (132h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Legile actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+27. [Release Brief - Three review-backed investigations for your next iOS update](https://www.reddit.com/r/SideProject/comments/1wa2ogy/release_brief_three_reviewbacked_investigations/)
+   - Kind: demand
+   - Score: 46/100
+   - Price: no stated price
+   - Posted: 2026-09-07T19:58:17+00:00 (12h ago)
+   - Why: posted 11h ago, so the buyer is still looking; boring conversion work buyers already pay humans to do by hand
+   - Next: Read what r/SideProject actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+28. [3C Digital Solutions | Terraform Module Developer (Infrastructure as Code) | REMOTE (US) | Full-time | https://jobs.curriculo.me/3c-digital/](https://news.ycombinator.com/item?id=49530867)
+   - Kind: demand
+   - Score: 46/100
+   - Price: no stated price
+   - Posted: 2026-09-02T02:01:38+00:00 (150h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what 3C Digital Solutions actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+29. [Clad (YC W23) | Software Engineer | NYC | withclad.com Clad is construction software for building infrastructure. We help contractors track ](https://news.ycombinator.com/item?id=49530894)
+   - Kind: demand
+   - Score: 46/100
+   - Price: no stated price
+   - Posted: 2026-09-02T02:05:35+00:00 (150h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Clad (YC W23) actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+30. [DAT | Frontline Engineering Manager, Senior Engineering Manager | Seattle, Portland, Denver | Hybrid 2-3 days/week | Full-time | $192k - $26](https://news.ycombinator.com/item?id=49525544)
+   - Kind: demand
+   - Score: 46/100
+   - Price: no stated price
+   - Posted: 2026-09-01T18:05:14+00:00 (158h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what DAT actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+31. [Solution Street | Northern Virginia / Washington DC Metro Area - HYBRID & ONSITE roles available - USA only. Candidates MUST be based in the](https://news.ycombinator.com/item?id=49525549)
+   - Kind: demand
+   - Score: 46/100
+   - Price: no stated price
+   - Posted: 2026-09-01T18:05:32+00:00 (158h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Solution Street actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+32. [Seeking US BASED Freelancer Only — Co-Founder - Equity‑only until MVP - Long Term with Follow-on Projects - Remote (US) Building CaseLight, ](https://news.ycombinator.com/item?id=49525331)
+   - Kind: demand
+   - Score: 46/100
+   - Price: no stated price
+   - Posted: 2026-09-01T17:49:15+00:00 (158h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Seeking US BASED Freelancer Only — Co-Founder - Equity‑only until MVP - Long Ter actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+33. [Vistulo | Fully REMOTE (Poland or Romanian residents only) | B2B contract | US Eastern timezone overlap required Vistulo is a boutique outso](https://news.ycombinator.com/item?id=49523978)
+   - Kind: demand
+   - Score: 46/100
+   - Price: no stated price
+   - Posted: 2026-09-01T16:09:58+00:00 (160h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Vistulo actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+34. [I built Loofah to keep meeting transcripts and notes in a Markdown vault I own](https://www.reddit.com/r/SideProject/comments/1wa149g/i_built_loofah_to_keep_meeting_transcripts_and/)
+   - Kind: demand
+   - Score: 45/100
+   - Price: no stated price
+   - Posted: 2026-09-07T19:01:10+00:00 (13h ago)
+   - Why: posted 12h ago, so the buyer is still looking; boring conversion work buyers already pay humans to do by hand
+   - Next: Read what r/SideProject actually asked for, then transcribe one sample file end to end and quote per hour of audio.
+35. [Valkyrie Aero | Software Engineer (Autonomy, Perception, Frontend) | REMOTE (US) | Contract | U.S. Citizens | https://valkyrieaero.com Valky](https://news.ycombinator.com/item?id=49578811)
+   - Kind: demand
+   - Score: 45/100
+   - Price: no stated price
+   - Posted: 2026-09-05T17:40:02+00:00 (62h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Valkyrie Aero actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+36. [slothflowlabs/duckle](https://github.com/slothflowlabs/duckle)
+   - Kind: supply
+   - Score: 44/100
+   - Price: no stated price
+   - Posted: 2026-09-08T07:39:08+00:00 (0h ago)
+   - Why: free tooling you can deliver paid work with
+   - Next: Confirm the free tier's real limits and terms, run one small end-to-end sample, then attach a fixed price to a single narrow task built on it.
+37. [I built a WordPress fleet backup + update manager where the backups live in your storage, and don't use web-server space during the backup.](https://www.reddit.com/r/SideProject/comments/1wabnpa/i_built_a_wordpress_fleet_backup_update_manager/)
+   - Kind: demand
+   - Score: 44/100
+   - Price: no stated price
+   - Posted: 2026-09-08T02:17:51+00:00 (6h ago)
+   - Why: posted 5h ago, so the buyer is still looking
+   - Next: Read what r/SideProject actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+38. [Hi, We need your upvote. 🚀 🔥](https://www.reddit.com/r/SideProject/comments/1wa6sa9/hi_we_need_your_upvote/)
+   - Kind: demand
+   - Score: 42/100
+   - Price: no stated price
+   - Posted: 2026-09-07T22:39:07+00:00 (9h ago)
+   - Why: posted 9h ago, so the buyer is still looking; runs on a free AI tier, so input cost is zero and margin is total
+   - Next: Read what r/SideProject actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+39. [I built liteagents — a dev toolkit that keeps getting smaller as the models get smarter](https://www.reddit.com/r/SideProject/comments/1wa3lvm/i_built_liteagents_a_dev_toolkit_that_keeps/)
+   - Kind: demand
+   - Score: 42/100
+   - Price: no stated price
+   - Posted: 2026-09-07T20:33:00+00:00 (11h ago)
+   - Why: posted 11h ago, so the buyer is still looking
+   - Next: Read what r/SideProject actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
+40. [Trustworthy Technology | Earth | Part Time | REMOTE | Vision, Marketing, and/or Design Hi, we are a small group trying to bring the "trustwo](https://news.ycombinator.com/item?id=49528935)
+   - Kind: demand
+   - Score: 41/100
+   - Price: no stated price
+   - Posted: 2026-09-01T22:11:01+00:00 (154h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Trustworthy Technology actually asked for, then process a handful of sample assets and quote per image or per batch.

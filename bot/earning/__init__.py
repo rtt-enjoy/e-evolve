@@ -1,17 +1,21 @@
 """Earning modules.
 
 Products (each owns a ``run(llm, status)`` the orchestrator calls):
-  ``articles``    -- one deep dev.to article per day, plus follow-ups
-  ``newsletter``  -- a weekly dev.to digest of several stories
-  ``backfill``    -- puts the tip footer on posts published before it existed
-  ``code_techs``  -- free-AI earning opportunity queue (research only)
-  ``mrr_ideas``   -- recurring-revenue idea triage (research only)
+  ``articles``       -- one deep dev.to article per day, plus follow-ups
+  ``newsletter``     -- a weekly dev.to digest of several stories
+  ``backfill``       -- puts the tip footer on posts published before it existed
+  ``code_techs``     -- free-AI earning opportunity queue (research only)
+  ``mrr_ideas``      -- recurring-revenue idea triage (research only)
+  ``receipts``       -- on-chain attribution ledger (records receipts when money arrives)
+  ``receipt_check``  -- independent verification that published posts carry the ask
 
 Support (no ``run``; imported by the products):
-  ``_shared``     -- config loading, cadence, and feed parsing used by all
-  ``devto``       -- the dev.to publish call and the gates every post passes
-  ``trending``    -- sources fresh stories from free public feeds
-  ``devto_stats`` -- reads this account's own dev.to reach numbers
+  ``_shared``        -- config loading, cadence, and feed parsing used by all
+  ``devto``          -- the dev.to publish call and the gates every post passes
+  ``trending``       -- sources fresh stories from free public feeds
+  ``devto_stats``    -- reads this account's own dev.to reach numbers
+  ``attribution``    -- correlates on-chain receipts with publishing context
+  ``payout``         -- renders the support footer and validates the receive address
 
 ``bot.main`` imports the products lazily via ``importlib``; these re-exports
 are for tests and ad-hoc use.
@@ -21,11 +25,15 @@ from .backfill import run as backfill_run
 from .code_techs import run as code_techs_run
 from .mrr_ideas import run as mrr_ideas_run
 from .newsletter import run as newsletter_run
+from .receipts import run as receipts_run
+from .receipt_check import run as receipt_check_run
 
 __all__ = [
-	"articles_run",
-	"backfill_run",
-	"code_techs_run",
-	"mrr_ideas_run",
-	"newsletter_run",
+    "articles_run",
+    "backfill_run",
+    "code_techs_run",
+    "mrr_ideas_run",
+    "newsletter_run",
+    "receipts_run",
+    "receipt_check_run",
 ]

@@ -1,7 +1,7 @@
 {
   "version": "1.40.0",
-  "last_run": "2026-09-08T03:35:19.005248+00:00",
-  "total_runs": 1787,
+  "last_run": "2026-09-08T03:41:42.843944+00:00",
+  "total_runs": 1788,
   "active_features": [
     "llm_anthropic",
     "llm_gemini",
@@ -59,19 +59,6 @@
           "Step 2: Add receipt_check_run to the __all__ list",
           "Step 3: Update the __init__.py docstring to list receipt_check under products",
           "Step 4: Verify the import works by running the next evolution cycle"
-        ]
-      },
-      {
-        "title": "Activate Anthropic or Cerebras as a fallback LLM provider",
-        "description": "llm_anthropic and llm_cerebras are listed as inactive but the project currently relies on openrouter for upgrade, research, and post roles. Adding either ANTHROPIC_API_KEY or CEREBRAS_API_KEY as a GitHub secret would let the orchestrator rotate providers when one chain hits its free-tier cap, reducing the chance of an empty article draft.",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Visit https://console.anthropic.com/ and create a free API key (or https://cloud.cerebras.ai/ for Cerebras)",
-          "Step 2: Copy the key string",
-          "Step 3: In GitHub, go to Settings -> Secrets and variables -> Actions for this repo",
-          "Step 4: Add ANTHROPIC_API_KEY (or CEREBRAS_API_KEY) with the copied value, then trigger the next evolution cycle to confirm the provider activates"
         ]
       }
     ],
@@ -711,7 +698,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-08T03:35:21.533598+00:00",
+    "checked_at": "2026-09-08T03:41:45.281094+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1010,7 +997,7 @@
     "network": "TRC-20 (Tron)",
     "heading": "Support this work",
     "note": "These write-ups are researched and published with no paywall, sponsor, or tracking. If one saved you an afternoon, a small tip keeps them coming.",
-    "asset": "USDT"
+    "asset": "USDT, USDC or USDD"
   },
   "backfill": {
     "done_ids": [

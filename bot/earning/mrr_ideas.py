@@ -53,15 +53,32 @@ def _config() -> dict:
 	return load_config("mrr_ideas", _DEFAULTS)
 
 
-# Requirements that make a model impossible here, so the idea is REFUSED.
+# Requirements that make a model impossible or unwanted here, so the idea is
+# REFUSED.
 #
-# The line is drawn at delivery, not at billing. Every recurring-revenue model
-# needs a way to charge -- that is what MRR means -- and the owner can open a
-# Gumroad or Substack account by hand in an afternoon. So "needs payments" is a
-# manual setup step, not a refusal. What genuinely disqualifies a model is
-# delivery that requires an action this project refuses in code, or
-# infrastructure that does not exist here and is not free.
+# Two separate lines are drawn here, and the second one was missing for months.
+#
+# 1. **Delivery, not billing.** Every recurring-revenue model needs a way to
+#    charge -- that is what MRR means -- and the owner can open a storefront by
+#    hand in an afternoon. So "needs payments" is a manual setup step, not a
+#    refusal. What disqualifies a model is delivery that requires an action
+#    this project refuses in code, or infrastructure that does not exist here
+#    and is not free.
+#
+# 2. **The owner's time is not the product.** `sells_owner_time` refuses any
+#    model whose revenue is a fee for hours the owner works -- retainers,
+#    per-client services, coaching. This was absent, and the omission showed:
+#    the surviving list was fine only by accident, while ten retainers sat in
+#    the refused table blamed on *cold outreach* rather than on being retainers.
+#    That is the wrong reason recorded for the right answer, which is worse than
+#    a wrong answer: unblock outreach tomorrow and the module would have started
+#    recommending SEO retainers on a passive-income dashboard. Same failure as
+#    `code_techs` ranking freelance postings -- see Principle 2b.
 _BLOCKERS: dict[str, str] = {
+	"sells_owner_time": (
+		"revenue is a fee for the owner's hours — a job, not passive income "
+		"(Principle 2 row 2)"
+	),
 	"outreach":        "client acquisition needs cold email/DM — blocked in code",
 	"social_posting":  "delivery requires posting to social platforms — blocked in code",
 	"inbound_http":    "needs a server accepting requests; GitHub Actions is outbound-only",
@@ -74,8 +91,16 @@ _BLOCKERS: dict[str, str] = {
 # are surfaced in the report as prerequisites so the plan stays honest about
 # what has to happen off-bot before a dollar arrives.
 _MANUAL_STEPS: dict[str, str] = {
-	"payments":       "owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe)",
-	"platform_setup": "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API)",
+	# Gumroad is named last and flagged, because it pays out USD via Stripe and
+	# takes no crypto -- verified 2026-09-08 and recorded in
+	# code_techs._REFUSED_CHANNELS. This module used to recommend it twice as
+	# the default payment setup, on a dashboard whose whole receive path is a
+	# Tron address. Crypto-settling options come first.
+	# Kept to one short clause each: these repeat under every surviving model,
+	# so an explanation inline made the report a wall of duplicated text. The
+	# fiat/crypto caveat is printed once, in the section header.
+	"payments": "owner opens a payout account by hand, once",
+	"platform_setup": "owner opens the storefront or channel by hand, once",
 	"audience_first": "needs an existing audience; the dev.to byline is the only one this stack builds",
 }
 
@@ -107,7 +132,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"name": "Local business AI automation agency",
 		"mrr_model": "$300-800/mo retainer per client",
 		"source_note": "niches: real estate, dental, law, wellness, gyms",
-		"blockers": ["outreach", "paid_dependency"],
+		"blockers": ["sells_owner_time", "outreach", "paid_dependency"],
 		"manual": [],
 		"bot_role": "none",
 	},
@@ -130,7 +155,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 	{
 		"name": "Notion / digital template store",
 		"mrr_model": "$500-5K/mo, library subscription",
-		"source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token — Payhip/Etsy stay manual",
+		"source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token, but its payouts are fiat USD via Stripe — for stablecoin use a crypto-settling storefront; Payhip/Etsy stay manual",
 		"blockers": [],
 		"manual": ["payments", "platform_setup"],
 		"bot_role": "draft",
@@ -139,7 +164,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"name": "Bookkeeping as a service",
 		"mrr_model": "$200-600/mo retainer",
 		"source_note": "needs a certification course",
-		"blockers": ["certification", "human_delivery", "outreach"],
+		"blockers": ["sells_owner_time", "certification", "human_delivery", "outreach"],
 		"manual": [],
 		"bot_role": "none",
 	},
@@ -147,7 +172,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"name": "Social media management retainer",
 		"mrr_model": "$500-1.5K/mo per client",
 		"source_note": "priced on measurable follower/engagement metrics",
-		"blockers": ["social_posting", "outreach"],
+		"blockers": ["sells_owner_time", "social_posting", "outreach"],
 		"manual": [],
 		"bot_role": "none",
 	},
@@ -155,7 +180,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"name": "SEO retainer",
 		"mrr_model": "$400-3K/mo per client",
 		"source_note": "results take 3-6 months; expectation-setting is the hard part",
-		"blockers": ["outreach", "human_delivery"],
+		"blockers": ["sells_owner_time", "outreach", "human_delivery"],
 		"manual": [],
 		"bot_role": "none",
 	},
@@ -163,7 +188,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"name": "Podcast production service",
 		"mrr_model": "$500-2K/mo retainer",
 		"source_note": "editing labour per episode",
-		"blockers": ["human_delivery", "outreach"],
+		"blockers": ["sells_owner_time", "human_delivery", "outreach"],
 		"manual": [],
 		"bot_role": "none",
 	},
@@ -179,7 +204,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"name": "Email marketing management retainer",
 		"mrr_model": "$400-1.2K/mo per client",
 		"source_note": "segmentation, automations, monthly reporting",
-		"blockers": ["outreach", "human_delivery"],
+		"blockers": ["sells_owner_time", "outreach", "human_delivery"],
 		"manual": [],
 		"bot_role": "none",
 	},
@@ -195,7 +220,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"name": "No-code app dev for one industry",
 		"mrr_model": "hosting + maintenance retainer",
 		"source_note": "Bubble/Glide/Softr; build once, customize per client",
-		"blockers": ["outreach", "paid_dependency"],
+		"blockers": ["sells_owner_time", "outreach", "paid_dependency"],
 		"manual": [],
 		"bot_role": "research",
 	},
@@ -211,7 +236,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"name": "Freelance writing retainer",
 		"mrr_model": "4-8 articles/mo, $1.5-8K",
 		"source_note": "B2B content, ghostwriting; 3-4 clients to buffer churn",
-		"blockers": ["outreach"],
+		"blockers": ["sells_owner_time", "outreach"],
 		"manual": [],
 		"bot_role": "draft",
 	},
@@ -219,7 +244,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"name": "Online tutoring / coaching subscription",
 		"mrr_model": "$150-500/mo per client",
 		"source_note": "group coaching scales better than one-on-one",
-		"blockers": ["human_delivery"],
+		"blockers": ["sells_owner_time", "human_delivery"],
 		"manual": ["payments"],
 		"bot_role": "none",
 	},
@@ -235,7 +260,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"name": "Virtual assistant agency",
 		"mrr_model": "$500-2K/mo per client",
 		"source_note": "scales by hiring; hiring/retention is the underestimated part",
-		"blockers": ["human_delivery", "outreach"],
+		"blockers": ["sells_owner_time", "human_delivery", "outreach"],
 		"manual": [],
 		"bot_role": "none",
 	},
@@ -251,9 +276,76 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"name": "Content repurposing service",
 		"mrr_model": "$500-1.5K/mo retainer",
 		"source_note": "one piece into many formats; needs input quality standards",
-		"blockers": ["social_posting", "outreach"],
+		"blockers": ["sells_owner_time", "social_posting", "outreach"],
 		"manual": [],
 		"bot_role": "none",
+	},
+
+	# ── Product models, added 2026-09-08 ────────────────────────────────────
+	#
+	# The 20 entries above are the source article's list, and every one of them
+	# is a *service* business: retainers, agencies, per-client work. Triaging
+	# that list could therefore only ever return a newsletter and a template
+	# store, because nothing else in it was a product.
+	#
+	# The owner's actual goal is selling their own digital products (a browser
+	# extension was the example) and being paid in crypto. None of the twenty
+	# covered that, so refusing eighteen of them was answering a question
+	# nobody asked. These are the product-shaped models, and they are the ones
+	# that fit a zero-server, outbound-only stack: an artifact is built once and
+	# sold many times, with no owner action per sale.
+	{
+		"name": "Freemium browser extension with a paid upgrade",
+		"mrr_model": "one-time or subscription upgrade; free tier drives discovery",
+		"source_note": (
+			"Chrome Web Store registration is a one-time $5 per account covering "
+			"up to 20 extensions (verified 2026-09-08); the store takes no cut of "
+			"a free listing. Client-side code means zero marginal cost per user, "
+			"so the free tier can stay free indefinitely."
+		),
+		"blockers": [],
+		"manual": ["payments", "platform_setup"],
+		"bot_role": "draft",
+	},
+	{
+		"name": "Paid desktop or CLI utility, sold as a download",
+		"mrr_model": "one-time licence, or a paid major version",
+		"source_note": (
+			"Runs on the buyer's machine, so there is no server to pay for and no "
+			"inbound HTTP. A crypto-settling storefront can pay out USDT on Tron "
+			"to the owner's own wallet, which is the address this project already "
+			"publishes."
+		),
+		"blockers": [],
+		"manual": ["payments", "platform_setup"],
+		"bot_role": "draft",
+	},
+	{
+		"name": "Developer library or plugin with sponsorship",
+		"mrr_model": "recurring sponsorship on a public repository",
+		"source_note": (
+			"The repository is the discovery channel and it keeps working after "
+			"publication. A receive address in the README needs no platform at "
+			"all; GitHub Sponsors is the fiat version and needs one manual "
+			"enablement. Income is not per-sale, so nothing needs owner action."
+		),
+		"blockers": [],
+		"manual": ["platform_setup"],
+		"bot_role": "draft",
+	},
+	{
+		"name": "Wallet ask on published work",
+		"mrr_model": "voluntary stablecoin tips, no platform and no fee",
+		"source_note": (
+			"Already live in this project since 2026-09-04: payout.py appends a "
+			"validated Tron address to every dev.to article, and receipt_check "
+			"verifies readers can see it. The only model here needing no account, "
+			"no fee and no owner action at all -- and therefore the only one "
+			"already earning-capable rather than pending a manual step."
+		),
+		"blockers": [],
+		"manual": [],
+		"bot_role": "publish",
 	},
 ]
 
@@ -388,9 +480,18 @@ def _triage(catalogue: list[dict], cfg: dict) -> tuple[list[dict], list[dict]]:
 def _score_viability(idea: dict) -> int:
 	"""0-100 fit against a zero-cost, outbound-only, research-first stack.
 
-    Rewards an unblocked model the bot can already contribute real work to.
+    Rewards an unblocked model the bot can already contribute real work to, and
+    one whose revenue does not depend on an audience the owner does not have.
     Deliberately simple: the score only orders the survivors, and every hard
     exclusion has already happened in ``_triage``.
+
+    ``audience_first`` is penalised harder than the other prerequisites because
+    it is not a step the owner can just *do*. A payout account takes an
+    afternoon; an audience takes months and may never arrive. Scoring them the
+    same put "Paid newsletter" -- which needs subscribers this project does not
+    have -- above every product model, which needs only a listing. That is the
+    same mistake as ranking work above income, one level down: it ordered by
+    what the bot can help with rather than by what can actually earn.
     """
 	score = 50   # an unblocked model starts at the threshold
 	score += _ROLE_VALUE.get(str(idea.get("bot_role", "none")), 0)
@@ -398,7 +499,11 @@ def _score_viability(idea: dict) -> int:
 	if "verify independently" in str(idea.get("source_note", "")):
 		score += 5
 	# Each off-bot prerequisite is real work the owner must do before earning.
-	score -= 5 * len([k for k in idea.get("manual", []) if k in _MANUAL_STEPS])
+	manual = [k for k in idea.get("manual", []) if k in _MANUAL_STEPS]
+	score -= 5 * len(manual)
+	# An audience cannot be opened by hand in an afternoon.
+	if "audience_first" in manual:
+		score -= 15
 	return max(0, min(100, score))
 
 
@@ -543,7 +648,17 @@ def _write_report(state: dict[str, Any]) -> None:
 	else:
 		viable = state.get("viable") or []
 		if viable:
-			lines += ["", "## Surviving Models (no LLM brief this refresh)", ""]
+			# The heading is chosen by `llm_used`, not by whether `ranked_ideas`
+			# came back. It used to key off `ranked_ideas` alone, so a brief
+			# that returned a summary but no ranked list printed "no LLM brief
+			# this refresh" directly beneath that model's own summary -- a
+			# field reporting on work it did not actually check (Principle 3d).
+			note = (
+				"the LLM brief returned no ranked list this refresh"
+				if state.get("llm_used")
+				else "no LLM brief this refresh"
+			)
+			lines += ["", f"## Surviving Models ({note})", ""]
 			lines += ["| Model | MRR model | Bot can | Score |", "|---|---|---|---|"]
 			lines += [
 				f"| {_cell(i.get('name'))} | {_cell(i.get('mrr_model'))} "
@@ -564,6 +679,11 @@ def _write_report(state: dict[str, Any]) -> None:
 			"## Set Up By Hand First",
 			"",
 			"None of these is a blocker — but no money moves until you do them.",
+			"",
+			"**On the payout account:** to be paid in stablecoin, pick a storefront",
+			"that settles to your own wallet — the Leads page lists the verified",
+			"ones. Gumroad, Substack and Stripe are fiat-only and pay out in USD,",
+			"so they do not reach the Tron address this project already publishes.",
 			"",
 		]
 		for name, steps in prereqs:

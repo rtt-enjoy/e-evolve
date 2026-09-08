@@ -1058,17 +1058,133 @@ class TestMrrIdeaTriage(unittest.TestCase):
 
 	def test_payments_alone_does_not_refuse(self):
 		# Every MRR model needs billing -- that is what MRR means. The owner can
-		# open a Gumroad account by hand, so it is a prerequisite, not a blocker.
+		# open a payout account by hand, so it is a prerequisite, not a blocker.
 		viable, _ = self._triaged()
 		names = {i["name"] for i in viable}
 		self.assertIn("Paid newsletter", names)
 		steps = next(i for i in viable if i["name"] == "Paid newsletter")["manual_steps"]
-		self.assertTrue(any("payment" in s for s in steps))
+		# Matches the step's role, not its exact wording: the guidance now leads
+		# with the stablecoin route rather than naming a fiat processor first.
+		self.assertTrue(any("payout account" in s for s in steps), steps)
 
 	def test_something_survives_triage(self):
 		# Guard against a blocker model so coarse that it refuses everything.
 		viable, _ = self._triaged()
 		self.assertTrue(viable)
+
+	# ── the passive-income guarantee (Principle 2b) ────────────────────────
+
+	def test_selling_the_owners_hours_is_refused_for_being_that(self):
+		"""A retainer must be refused for BEING a retainer, not for outreach.
+
+        This was the bug. Ten per-client retainers sat in the refused table
+        blamed on cold email, which is the wrong reason recorded for the right
+        answer -- worse than a wrong answer, because unblocking outreach would
+        have started recommending SEO retainers on a passive-income dashboard.
+        """
+		reasons = self._refused_names()
+		for name in (
+			"SEO retainer",
+			"Social media management retainer",
+			"Virtual assistant agency",
+			"Freelance writing retainer",
+			"Online tutoring / coaching subscription",
+			"Content repurposing service",
+		):
+			self.assertIn(name, reasons, f"{name} should be refused")
+			self.assertIn(
+				"owner's hours", reasons[name],
+				f"{name} is refused, but not for selling the owner's time: {reasons[name]!r}",
+			)
+
+	def test_no_time_selling_model_survives(self):
+		viable, _ = self._triaged()
+		for idea in viable:
+			entry = next(e for e in mrr_module._CATALOGUE if e["name"] == idea["name"])
+			self.assertNotIn(
+				"sells_owner_time", entry.get("blockers", []),
+				f"{idea['name']} sells the owner's time and must not be viable",
+			)
+
+	def test_a_product_model_survives_and_outranks_the_newsletter(self):
+		"""The catalogue must contain product models, not only services.
+
+        All 20 entries from the source article are service businesses, so the
+        triage could only ever return a newsletter and a template store -- and
+        the owner's goal is selling their own digital products. A newsletter
+        also needs subscribers this project does not have, so it must not
+        outrank a product that needs only a listing.
+        """
+		viable, _ = self._triaged()
+		names = [i["name"] for i in viable]
+		self.assertIn("Freemium browser extension with a paid upgrade", names)
+		self.assertIn("Paid desktop or CLI utility, sold as a download", names)
+
+		scores = {i["name"]: i["score"] for i in viable}
+		self.assertGreater(
+			scores["Freemium browser extension with a paid upgrade"],
+			scores["Paid newsletter"],
+			"an audience-dependent newsletter outranked a product model",
+		)
+
+	def test_the_report_does_not_deny_a_brief_that_ran(self):
+		"""The heading must reflect `llm_used`, not the shape of the response.
+
+        It keyed off `ranked_ideas` alone, so a brief returning a summary but
+        no ranked list printed "no LLM brief this refresh" immediately below
+        that model's own summary -- a line reporting on work it never checked.
+        Seen live: `llm_used: True`, a real summary, and the denial above it.
+        """
+		import tempfile
+
+		def _render(state):
+			original = mrr_module._REPORT_FILE
+			try:
+				mrr_module._REPORT_FILE = pathlib.Path(tempfile.mkdtemp()) / "mrr.md"
+				mrr_module._write_report(state)
+				return mrr_module._REPORT_FILE.read_text(encoding="utf-8")
+			finally:
+				mrr_module._REPORT_FILE = original
+
+		viable = [{"name": "X", "mrr_model": "$1/mo", "bot_role": "draft", "score": 60}]
+
+		ran = _render({"viable": viable, "llm_used": True, "summary": "an angle"})
+		self.assertNotIn("no LLM brief this refresh", ran)
+		self.assertIn("no ranked list", ran)
+
+		never = _render({"viable": viable, "llm_used": False})
+		self.assertIn("no LLM brief this refresh", never)
+
+	def test_the_already_live_wallet_ask_ranks_first(self):
+		# It needs no account, no fee and no owner action -- it wins every
+		# Principle 2 row, and it is the one model already earning-capable.
+		viable, _ = self._triaged()
+		self.assertEqual(viable[0]["name"], "Wallet ask on published work")
+		self.assertEqual(viable[0]["manual_steps"], [])
+
+	def test_payment_guidance_does_not_present_gumroad_as_crypto(self):
+		"""Gumroad takes no crypto: verified 2026-09-08, USD via Stripe only.
+
+        This module recommended it twice as the default payment setup, on a
+        project whose entire receive path is a Tron address.
+        """
+		# The caveat lives in the report body, not in the per-model step: the
+		# steps repeat under every surviving model, so explaining there made
+		# the page a wall of duplicated text. Assert on what the owner reads.
+		import tempfile
+		original = mrr_module._REPORT_FILE
+		try:
+			mrr_module._REPORT_FILE = pathlib.Path(tempfile.mkdtemp()) / "mrr.md"
+			mrr_module.run(None, {})
+			report = mrr_module._REPORT_FILE.read_text(encoding="utf-8").lower()
+		finally:
+			mrr_module._REPORT_FILE = original
+
+		self.assertIn("fiat-only", report, "the report never says the processors are fiat")
+		crypto_at = report.find("stablecoin")
+		gumroad_at = report.find("gumroad")
+		self.assertGreater(crypto_at, -1, "no stablecoin route offered")
+		self.assertLess(crypto_at, gumroad_at, "Gumroad is named before the crypto route")
 
 	# ── cost discipline: every gate must precede the LLM call ───────────────
 

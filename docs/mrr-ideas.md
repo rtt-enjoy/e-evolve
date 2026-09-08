@@ -1,6 +1,6 @@
 # Recurring Revenue (MRR) Idea Triage
 
-Refreshed: 2026-09-08T09:43:11.053731+00:00
+Refreshed: 2026-09-08T09:48:30.443719+00:00
 
 Research and suggestions only. This bot does not contact anyone, collect
 payment, or host a service. Every figure quoted from the source article
@@ -13,10 +13,6 @@ is unverified — check it yourself before acting on it.
 - No payment processing. Nothing can charge a card or bill a subscription.
 - No outreach. Cold email, DMs, and social posting are refused in code.
 - Can research, analyse, draft, and publish articles to dev.to. That is the whole surface.
-
-## Best Current Angle
-
-The only recurring-revenue model that fits a zero-cost, research-first, publish-to-dev.to stack with no payment processor, no inbound HTTP, and no outreach is the wallet ask on published work: embed a stablecoin address in each article and invite voluntary recurring tips from readers who value the niche technical content.
 
 ## Surviving Models (no LLM brief this refresh)
 

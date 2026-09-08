@@ -73,10 +73,26 @@ _DEFAULT_CONFIG = {
 		"List the same product on every zero-cost channel, since the artifact is already built."
 	],
 	"reference_sources": [
+		# The old first entry here was a Medium article, "15 High-Paying Remote
+		# Jobs With a 4-Hour Work Week", whose takeaway recommended
+		# "retainers, async work, and results-based delivery" -- a jobs article
+		# feeding a passive-income prompt, and it survived the redirect because
+		# a reference source is not a lead and nothing flagged it. Replaced
+		# with the channel facts this project actually verified.
 		{
-			"title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
-			"url": "https://freedium-mirror.cfd/https://medium.com/@startup_Ideas/15-high-paying-remote-jobs-with-a-4-hour-work-week-and-how-people-actually-get-them-7e8d3562ff99",
-			"takeaway": "The viable path is not easy money; it is rare skill, specialization, automation, retainers, async work, and results-based delivery."
+			"title": "Getly — stablecoin payouts for digital products",
+			"url": "https://www.getly.store/sell/crypto",
+			"takeaway": "Settles USDT on Tron (TRC-20) directly to the seller's own wallet: no KYC for crypto payout, no monthly fee, $15 minimum on Tron, twice-monthly settlement -- verified 2026-09-08."
+		},
+		{
+			"title": "Chrome Web Store developer registration",
+			"url": "https://developer.chrome.com/docs/webstore/register",
+			"takeaway": "One-time $5 per developer account, no renewal and no per-extension fee, covering up to 20 extensions -- verified 2026-09-08. The only non-zero cost on the channel table."
+		},
+		{
+			"title": "itch.io creator FAQ",
+			"url": "https://itch.io/docs/creators/faq",
+			"takeaway": "Free to publish with no approval queue; open revenue sharing lets the seller set the platform's cut (default ~10%). Lists tools and assets, not only games. Fiat payout -- verified 2026-09-08."
 		},
 		{
 			"title": "OpenRouter free model list",

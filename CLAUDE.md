@@ -817,9 +817,38 @@ survive plus, explicitly, the ones it refuses and why.
   cost no LLM call and cannot be argued away by a model.
 - The line is drawn at **delivery, not billing.** Every recurring-revenue model
   needs a way to charge — that is what MRR means — and the owner can open a
-  Gumroad or Substack account by hand. So `payments` is a `_MANUAL_STEPS`
-  prerequisite, not a blocker. Treating it as a blocker refused all 20 ideas and
-  made the report useless; that was caught and fixed during implementation.
+  payout account by hand. So `payments` is a `_MANUAL_STEPS` prerequisite, not a
+  blocker. Treating it as a blocker refused all 20 ideas and made the report
+  useless; that was caught and fixed during implementation.
+- **A second line: the owner’s time is not the product.** `sells_owner_time`
+  refuses any model whose revenue is a fee for hours the owner works. This was
+  missing until 2026-09-08, and the omission was the same failure as
+  `code_techs` ranking freelance postings (Principle 2b) — with a nastier
+  shape. The surviving list happened to be fine, while **ten per-client
+  retainers sat in the refused table blamed on cold outreach** rather than on
+  being retainers. That is the wrong reason recorded for the right answer,
+  which is worse than a wrong answer: unblock outreach tomorrow and the module
+  starts recommending SEO retainers on a passive-income dashboard.
+  `test_selling_the_owners_hours_is_refused_for_being_that` pins the reason,
+  not just the verdict.
+- **The catalogue needed product models, because the source article had none.**
+  All 20 entries are *service* businesses, so triaging them could only ever
+  return a newsletter and a template store — while the owner’s goal is selling
+  their own digital products. Four product-shaped models were added: a freemium
+  browser extension, a paid desktop/CLI utility, a sponsored library, and the
+  wallet ask already shipping. Refusing 18 of 20 correctly is still the wrong
+  answer when the question was never asked.
+- **`audience_first` costs more than the other prerequisites** (−15 on top of
+  the −5). A payout account takes an afternoon; an audience takes months and
+  may never arrive. Scoring them equally put "Paid newsletter" above every
+  product model — ordering by what the bot can help with rather than by what
+  can actually earn.
+- **Gumroad is not a crypto route**, and this module used to name it twice as
+  the default payment setup, on a project whose entire receive path is a Tron
+  address. Verified 2026-09-08: Gumroad pays out USD via Stripe and accepts no
+  crypto. `_MANUAL_STEPS["payments"]` now leads with the stablecoin option and
+  flags the fiat processors as fiat; the crypto-settling storefronts are the
+  Leads page’s verified table.
 - **One LLM call per refresh**, and `refresh_hours: 48`, so the module costs
   about 0.5 free-tier requests a day. Every cheap gate — disabled, interval not
   due, nothing viable, no LLM client — returns before that call.
@@ -833,21 +862,33 @@ survive plus, explicitly, the ones it refuses and why.
 > survive this stack's constraints, and the module records each refusal rather
 > than pretending otherwise:
 >
-> - **Blocked by policy (7):** local-business AI automation agency, social media
->   management, SEO retainer, email marketing management, paid Discord/Slack
->   community, YouTube automation, and content repurposing. Every one needs cold
->   outreach to acquire a client or social posting to deliver, and both are
->   refused in code. This is the same decision already recorded for the
->   newsletter's source article; widening those boundaries needs an explicit
->   owner decision.
-> - **Impossible on this infrastructure (9):** micro SaaS, bookkeeping, podcast
->   production, white-label SaaS reselling, no-code app dev, tutoring/coaching,
->   virtual assistant agency, a niche API/data feed, and a niche job board.
->   These need a human delivering a service, a paid platform, inbound HTTP, or a
->   credential the owner lacks. None exists here and none is free.
+> - **Sells the owner’s hours (11):** local-business AI automation agency,
+>   bookkeeping, social media management, SEO retainer, podcast production,
+>   email marketing management, no-code app dev, freelance writing, tutoring or
+>   coaching, virtual assistant agency, and content repurposing. Revenue is a
+>   fee for hours worked, so income stops when the owner does — Principle 2 row
+>   2. **This is now the first reason listed for each of them**, ahead of the
+>   incidental blockers. Before 2026-09-08 they were refused only for needing
+>   cold outreach or a human, which recorded the wrong reason for the right
+>   answer and left the module one policy change away from recommending
+>   retainers.
+> - **Blocked by policy (3):** paid Discord/Slack community and YouTube
+>   automation need social posting to deliver; white-label SaaS reselling needs
+>   cold outreach plus a paid platform. Both actions are refused in code, the
+>   same decision already recorded for the newsletter’s source article, and
+>   widening those boundaries needs an explicit owner decision.
+> - **Impossible on this infrastructure (3):** micro SaaS, a niche API/data
+>   feed, and a niche job board all need a server accepting requests, and
+>   GitHub Actions is outbound-only.
 > - **Below the fit threshold (1):** online course membership — unblocked, but it
 >   needs a pre-existing audience plus two manual setup steps, which scores
 >   under `min_score`.
+>
+> Four product models were then **added** to the catalogue, because the article
+> contained none and the owner’s goal is selling their own digital products:
+> a freemium browser extension, a paid desktop/CLI utility, a sponsored
+> developer library, and the wallet ask already shipping. The surviving list is
+> now product-led rather than newsletter-led.
 >
 > The article's own critical first step — "find 10 people with the problem, talk
 > to them, charge before building" — is outreach plus payment collection. The bot

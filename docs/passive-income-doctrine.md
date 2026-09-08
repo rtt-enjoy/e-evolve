@@ -184,6 +184,62 @@ side of that line; an hour of work per dollar is not.
 
 ---
 
+### The same bug was in a second module, and it hid better
+
+Fixing `code_techs` did not fix the problem, because the problem was not in
+`code_techs`. `mrr_ideas` had it too, and the owner had to point at
+`docs/mrr-ideas.md` and ask why they should have to say it again.
+
+Its refused table read, for ten separate models:
+
+> **SEO retainer** — client acquisition needs cold email/DM — blocked in code
+
+Correct verdict. **Wrong reason.** An SEO retainer is not unsuitable here
+because of how clients are acquired; it is unsuitable because it bills for
+hours the owner works. The module refused eleven per-client retainers without
+once noticing that they were retainers, and its surviving list was acceptable
+only by luck.
+
+That failure mode deserves naming, because it is invisible in output review:
+
+> **A wrong reason attached to a right answer is worse than a wrong answer.**
+> A wrong answer gets noticed and fixed. A right answer justified by an
+> accident survives every review, and then breaks the moment the accident
+> changes. Unblock outreach — one config decision away — and `mrr_ideas` would
+> have begun recommending SEO retainers on a passive-income dashboard, with no
+> code change and no warning.
+
+So `sells_owner_time` is now a first-class blocker, listed **first** in each
+refusal, and `test_selling_the_owners_hours_is_refused_for_being_that` asserts
+the *reason* rather than the verdict. A test that only checks "is this
+refused?" would have passed throughout the entire bug.
+
+Two further lessons came out of the same file:
+
+- **Check the catalogue, not just the filter.** All 20 models in `mrr_ideas`
+  came from a "Top 20 Side Hustle" article, and every one is a *service*
+  business. No filter over that list could ever return a product, so refusing
+  18 of 20 with perfect reasoning still answered a question nobody asked. The
+  fix was to add what was missing — a freemium extension, a paid utility, a
+  sponsored library, the live wallet ask — not to tune the triage. **When a
+  module's output is uniformly the wrong shape, suspect its inputs before its
+  logic.**
+- **Not every manual prerequisite costs the same.** Opening a payout account
+  takes an afternoon. Acquiring an audience takes months and may never happen.
+  Scoring both at −5 ranked "Paid newsletter" above every product model, which
+  is ordering by what the bot can help with rather than by what can earn.
+  `audience_first` now costs −15 more.
+
+And one embarrassment worth recording so it is not repeated: this module
+recommended **Gumroad** as the payment setup, twice, in a project whose entire
+receive path is a Tron address. Gumroad pays out USD via Stripe and accepts no
+crypto — verified the same day, in the same session, and written into
+`code_techs._REFUSED_CHANNELS` while `mrr_ideas` was left still recommending
+it. **A fact verified in one module is not verified in the codebase.** Grep for
+the other places that assert it.
+
+---
+
 ## Principle 3 — The wallet address in the artifact is the baseline channel
 
 Judged by Principle 2, an address printed in the published work wins on every

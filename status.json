@@ -1,17 +1,17 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-08T09:19:58.639042+00:00",
-  "total_runs": 1793,
+  "last_run": "2026-09-08T09:31:43.606508+00:00",
+  "total_runs": 1794,
   "active_features": [
-    "llm_anthropic",
     "llm_gemini",
     "llm_openrouter",
     "llm_groq",
+    "usdt_wallet",
     "code_techs"
   ],
   "inactive_features": [
-    "llm_cerebras",
-    "usdt_wallet"
+    "llm_anthropic",
+    "llm_cerebras"
   ],
   "llm_provider": "openrouter",
   "earnings": {
@@ -32,8 +32,18 @@
     "source": "on-chain USDT balance"
   },
   "last_evolution": {
-    "summary": "Skipped by owner command",
-    "changes_applied": [],
+    "version_bumped_to": "1.41.0",
+    "summary": "Implement missing receipts module and export receipt_check_run to enable the independent footer-verification loop and receipt book dashboard consumption",
+    "changes_applied": [
+      {
+        "file": "bot/earning/receipts.py",
+        "reason": "Create the missing receipts module that was promised in the last evolution. Provides get_receipts() to read the receipt book and run() as the product entry point wrapping attribution.record_receipt and attribution.summary."
+      },
+      {
+        "file": "bot/earning/__init__.py",
+        "reason": "Export the newly created receipts_run and the existing but unexported receipt_check_run. Update docstring to list both as products so the orchestrator can import and run them."
+      }
+    ],
     "suggestions": [
       {
         "title": "Create bot/earning/receipts.py with get_receipts and run",
@@ -60,24 +70,27 @@
           "Step 3: Update the __init__.py docstring to list receipt_check under products",
           "Step 4: Verify the import works by running the next evolution cycle"
         ]
+      },
+      {
+        "title": "Enable Cerebras free tier for higher daily request limits",
+        "description": "Cerebras Cloud offers ~1M tokens/day and 14,400 requests/day per model with no credit card required \u2014 significantly higher than OpenRouter's free tier. Adding CEREBRAS_API_KEY unlocks this for research/upgrade roles.",
+        "secret_needed": "CEREBRAS_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Go to https://cloud.cerebras.ai/ and sign up (no credit card required)",
+          "Step 2: Generate an API key from the dashboard",
+          "Step 3: Add CEREBRAS_API_KEY as a GitHub repository secret",
+          "Step 4: The next evolution cycle will detect it and activate llm_cerebras"
+        ]
       }
     ],
-    "version_bumped_to": "1.41.0",
-    "error": null
+    "error": null,
+    "branch": "evolve/1.41.1-20260908-093333",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs\\code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -106,10 +119,23 @@
         "Step 3: Update the __init__.py docstring to list receipt_check under products",
         "Step 4: Verify the import works by running the next evolution cycle"
       ]
+    },
+    {
+      "title": "Enable Cerebras free tier for higher daily request limits",
+      "description": "Cerebras Cloud offers ~1M tokens/day and 14,400 requests/day per model with no credit card required \u2014 significantly higher than OpenRouter's free tier. Adding CEREBRAS_API_KEY unlocks this for research/upgrade roles.",
+      "secret_needed": "CEREBRAS_API_KEY",
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Go to https://cloud.cerebras.ai/ and sign up (no credit card required)",
+        "Step 2: Generate an API key from the dashboard",
+        "Step 3: Add CEREBRAS_API_KEY as a GitHub repository secret",
+        "Step 4: The next evolution cycle will detect it and activate llm_cerebras"
+      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 216,
+  "last_cycle_seconds": 111,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -118,12 +144,12 @@
   "usdt_balance": 0.0,
   "secret_readiness": {
     "llm_anthropic": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "ANTHROPIC_API_KEY"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     },
     "llm_gemini": {
@@ -163,12 +189,12 @@
       "required_count": 1
     },
     "usdt_wallet": {
-      "active": false,
-      "present": [],
-      "missing": [
+      "active": true,
+      "present": [
         "USDT_WALLET_ADDRESS"
       ],
-      "present_count": 0,
+      "missing": [],
+      "present_count": 1,
       "required_count": 1
     }
   },
@@ -836,10 +862,11 @@
     ]
   },
   "configured_github_secrets": [
-    "ANTHROPIC_API_KEY",
     "GEMINI_API_KEY",
+    "GH_TOKEN",
     "GROQ_API_KEY",
-    "OPENROUTER_API_KEY"
+    "OPENROUTER_API_KEY",
+    "USDT_WALLET_ADDRESS"
   ],
   "operation_mode": "research_and_article_publishing",
   "external_action_policy": {
@@ -987,16 +1014,16 @@
     ]
   },
   "wallet": {
-    "configured": false,
+    "configured": true,
     "address_masked": "TFTNsf\u20269KbY",
     "network": "TRC-20",
     "confirmed_usd": 0.0,
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-08T08:10:35.680233+00:00",
+    "checked_at": "2026-09-08T09:31:44.276026+00:00",
     "stale": false,
-    "error": "USDT_WALLET_ADDRESS not set",
+    "error": null,
     "balance_high_water_usd": 0.0,
     "stablecoins": {},
     "other_assets": {}
@@ -1205,8 +1232,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20260908-093333",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 12,
     "total_views": 2299,
@@ -1283,10 +1310,10 @@
   },
   "payout": {
     "enabled": true,
-    "live": false,
-    "network": null,
-    "address_masked": null,
-    "blocked_reason": "USDT_WALLET_ADDRESS is not set"
+    "live": true,
+    "network": "TRC-20 (Tron)",
+    "address_masked": "TFTNsf\u20269KbY",
+    "blocked_reason": null
   },
   "backfill": {
     "done_ids": [
@@ -1310,8 +1337,8 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-08T08:11:12.044011+00:00",
-    "last_reason": "payout_not_live",
+    "last_run": "2026-09-08T09:33:34.107512+00:00",
+    "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
@@ -1320,8 +1347,48 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-08T08:11:12.692726+00:00",
-    "last_reason": "no_posts",
-    "agrees_with_backfill": true
+    "last_run": "2026-09-08T09:33:34.299376+00:00",
+    "last_reason": "partially_verified",
+    "agrees_with_backfill": null,
+    "verified_ids": [
+      {
+        "id": 4489474,
+        "at": "2026-09-08T09:33:34.299376+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-09-08T09:33:34.299376+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-09-08T09:33:34.299376+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-09-08T09:33:34.299376+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-09-08T09:33:34.299376+00:00",
+        "ok": true
+      }
+    ],
+    "published_total": 13,
+    "covered": 5,
+    "unverified": 8,
+    "coverage_complete": false,
+    "known_without_footer": 0,
+    "oldest_check_age_hours": 0.0
+  },
+  "payout_public": {
+    "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
+    "network": "TRC-20 (Tron)",
+    "heading": "Support this work",
+    "note": "These write-ups are researched and published with no paywall, sponsor, or tracking. If one saved you an afternoon, a small tip keeps them coming.",
+    "asset": "USDT, USDC or USDD"
   }
 }

@@ -43,8 +43,19 @@ export default function OverviewSection({ status }: { status: Status }) {
 	// post carried an ask. A tip card that looks finished is exactly the
 	// failure mode, so the observation gets shown next to the address.
 	const check = status.receipt_check || {};
-	const verified = (check.checked || 0) > 0;
-	const gapFound = verified && (check.without_footer || 0) > 0;
+	// `checked` is how many posts were read *this cycle*, capped by
+	// max_per_cycle — it is a sample size, and reading it as coverage is how
+	// "all 5 checked posts carry it" came to describe an account of 13. The
+	// coverage fields count the catalogue, and `known_without_footer` counts
+	// every post observed to be missing an ask, including ones the current
+	// cycle's sample rotated past.
+	const coveredCount = check.covered || 0;
+	const publishedTotal = check.published_total || 0;
+	const unverified = check.unverified || 0;
+	const fullyCovered = check.coverage_complete === true;
+	const verified = coveredCount > 0;
+	const gapFound = (check.known_without_footer ?? check.without_footer ?? 0) > 0;
+	const gapCount = check.known_without_footer ?? check.without_footer ?? 0;
 	const worstMissing = (check.missing || [])[0];
 
 	return (
@@ -226,10 +237,12 @@ export default function OverviewSection({ status }: { status: Status }) {
 									{tip.asset || 'USDT'} · {tip.network || 'on-chain'}
 								</Pill>
 								{verified ? (
-									<Pill tone={gapFound ? 'warn' : 'good'}>
+									<Pill tone={gapFound ? 'warn' : fullyCovered ? 'good' : 'info'}>
 										{gapFound
-											? `${check.without_footer} of ${check.checked} posts show no ask`
-											: `all ${check.checked} checked posts carry it`}
+											? `${gapCount} of ${publishedTotal} posts show no ask`
+											: fullyCovered
+												? `all ${publishedTotal} published posts carry it`
+												: `${coveredCount} of ${publishedTotal} verified · ${unverified} not yet checked`}
 									</Pill>
 								) : null}
 							</div>
@@ -241,6 +254,12 @@ export default function OverviewSection({ status }: { status: Status }) {
 										? `The busiest post still missing an ask is “${worstMissing.title}” (${worstMissing.views ?? 0} views).`
 										: null}{' '}
 									Those readers currently have no way to pay.
+								</p>
+							) : !fullyCovered && verified ? (
+								<p className="muted mt-4">
+									Posts are re-read a few per cycle, busiest first, so coverage
+									builds over several runs. {unverified} not yet observed —
+									unverified, which is not the same as fine.
 								</p>
 							) : null}
 							<p className="muted mt-4">

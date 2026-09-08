@@ -58,6 +58,16 @@ between them. The load-bearing rules that came out of that:
    reach problem. Ask and meter now derive from one table
    (`wallet_assets.STABLECOINS`). Fixed 2026-09-08 by
    `bot/earning/wallet_assets.py`.
+8. **A sample is not coverage — including the verifier's own.**
+   `receipt_check` read the top 5 posts by views with no rotation, so with 13
+   published posts the same five were checked every cycle and eight could never
+   be observed in any cycle — while `last_reason` said `all_verified` and
+   `agrees_with_backfill` compared a whole-catalogue claim against a 5-post
+   sample. The answer happened to be right (13/13 genuinely carried the ask),
+   which is worse than being wrong: a correct answer from a method that could
+   not have detected the error never gets revisited. Read
+   `receipt_check.covered` / `published_total` and `known_without_footer`, never
+   `checked`. Fixed 2026-09-08; see Principle 3g.
 
 ---
 
@@ -624,6 +634,28 @@ is that curl, run every cycle.
   The honest answer is `unreachable`.
 - **Deterministic, no LLM call.** The comparison is exact, and a model asked
   whether a footer is present would make the check itself unreliable.
+- **A bounded scan reports on its bound.** `max_per_cycle` (5) makes each run a
+  *sample*, and `verify()` used to sort by views and slice — no rotation, no
+  memory. With 13 published posts that is not five-per-cycle rolling coverage,
+  it is the same five forever and eight posts unobservable by construction,
+  while `last_reason` read `all_verified`. Selection now keeps the busiest post
+  every cycle (a footer lost from the evergreen post outweighs the rest of the
+  catalogue) and gives the remaining slots to the least-recently-verified, so
+  every post is reached within `ceil(n / max_per_cycle)` cycles.
+- **The verdict is remembered per post, not just the timestamp.** A gap found in
+  one cycle is not in the next cycle's sample, so a module judging on
+  `without_footer` alone would find a broken post and then report `all_verified`
+  one cycle later — erasing the finding with the rotation that produced it.
+  `known_without_footer` persists and clears only on a fresh observation of that
+  same post carrying the ask.
+- **An observation expires** (`stale_after_hours`, 168). A post read once is
+  evidence about the day it was read; a footer can be lost to a hand-edit at any
+  time, and without expiry `coverage_complete` would latch true on one old read.
+  `0` disables expiry.
+- **`agrees_with_backfill` is `None` until coverage is complete.**
+  `backfill.remaining` is a claim about every post, so checking it against a
+  5-post sample let `true` stand while eight posts had never been read —
+  agreement computed from evidence that could not have produced disagreement.
 - **Never raises**, and stays quiet when everything is fine — so the warning
   stands out on the cycle where it is not.
 - Runs **after** `backfill` in Phase 4, so it observes this cycle's repairs
@@ -1129,7 +1161,15 @@ non-zero, reach the account already has is still earning a structural zero.
 `receipt_check` is owned by `bot/earning/receipt_check.py` and is the only field
 here that is **not** self-reported: `checked`, `with_footer`, `without_footer`,
 `unreachable`, `missing` (the worst offenders, highest-traffic first),
-`agrees_with_backfill`, `last_reason`. It re-reads each published article through
+`agrees_with_backfill`, `last_reason`, plus the coverage fields `covered`,
+`published_total`, `unverified`, `coverage_complete`, `known_without_footer`,
+`oldest_check_age_hours` and the `verified_ids` ledger
+(`{id, at, ok}`, bounded by `history_limit`).
+**Read `known_without_footer`, not `without_footer`, and `covered`, not
+`checked`.** `checked` and `without_footer` describe only the posts sampled in
+the most recent cycle — the latter drops back to `0` as the rotation moves past
+a broken post, while the former read `5` on a 13-post account under
+`last_reason: "all_verified"`. It re-reads each published article through
 the *unauthenticated* `GET /api/articles/{id}`, so it shares no key and no
 serializer with the code that writes the footers. `without_footer > 0` means
 readers can see posts with no way to pay right now, whatever `backfill.remaining`
@@ -1192,7 +1232,8 @@ Tunable by owner or changed here in Codex:
   "payout":         { "enabled": true, "address_env": "USDT_WALLET_ADDRESS",
                       "heading": "Support this work", "note": "...", "show_network": true },
   "backfill":       { "enabled": true, "max_per_cycle": 3, "history_limit": 200 },
-  "receipt_check":  { "enabled": true, "max_per_cycle": 5, "history_limit": 50 },
+  "receipt_check":  { "enabled": true, "max_per_cycle": 5, "stale_after_hours": 168,
+                      "history_limit": 50 },
   "attribution":    { "enabled": true, "history_limit": 200 },
   "mrr_ideas":      { "enabled": true, "refresh_hours": 48, "max_ideas": 8,
                       "min_score": 50, "history_limit": 100 },

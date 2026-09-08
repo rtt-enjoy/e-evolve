@@ -3891,6 +3891,241 @@ class TestReceiptCheckIsWiredIn(unittest.TestCase):
 		self.assertNotIn("update_body", src)
 
 
+class TestReceiptCheckCoversTheWholeCatalogue(unittest.TestCase):
+	"""A sample is not coverage, and ``checked`` is a sample size.
+
+	``verify`` reads ``max_per_cycle`` posts sorted by views. With 13 published
+	posts and a cap of 5, that is not a rolling check -- it is the same five
+	posts every cycle and eight that can never be observed in any cycle, while
+	``last_reason`` reads ``all_verified``. Measured on the live account at
+	cycle #1791: ``checked: 5`` beside ``article_stats.count: 12``.
+
+	That is Principle 3d one layer up. The cap is correct; reporting the capped
+	result as if it described the catalogue is not -- and this is the module the
+	doctrine's checklist tells the owner to believe over every other field.
+	"""
+
+	FOOT = ("# T\n\np\n\n## Support this work\n\n```\n"
+			"TFTNsfyomKrnUutRjBTGVULp19ByW29KbY\n```\n")
+	BARE = "# T\n\nno ask anywhere.\n"
+
+	def _posts(self, n=13):
+		# Top-heavy, like the real account: one evergreen post and a long tail.
+		return [{"id": 1000 + i, "title": "t%d" % i,
+				 "page_views": 1932 if i == 0 else 100 - i, "url": ""}
+				for i in range(n)]
+
+	def _patched(self, bare_ids=()):
+		class _Resp:
+			status_code = 200
+
+			def __init__(self, payload):
+				self._payload = payload
+
+			def raise_for_status(self):
+				return None
+
+			def json(self):
+				return self._payload
+
+		def _get(url, **kwargs):
+			art_id = int(str(url).rstrip("/").split("/")[-1])
+			body = self.BARE if art_id in bare_ids else self.FOOT
+			return _Resp({"body_markdown": body})
+
+		return mock.patch.object(receipt_check.requests, "get", _get)
+
+	def test_a_partial_scan_is_not_reported_as_all_verified(self):
+		"""The exact live state: 5 of 13 read, and the field said "all"."""
+		status = {"backfill": {"remaining": 0}}
+		with self._patched():
+			receipt_check._run(status, "key", published=self._posts())
+		state = status["receipt_check"]
+		self.assertEqual(state["covered"], 5)
+		self.assertEqual(state["published_total"], 13)
+		self.assertEqual(state["unverified"], 8)
+		self.assertFalse(state["coverage_complete"])
+		self.assertEqual(state["last_reason"], "partially_verified")
+
+	def test_every_post_is_reached_within_a_bounded_number_of_cycles(self):
+		"""Sorting by views alone left the tail unobservable forever."""
+		posts = self._posts()
+		status = {"backfill": {"remaining": 0}}
+		with self._patched():
+			for _ in range(3):          # ceil(13 / 5)
+				receipt_check._run(status, "key", published=posts)
+		state = status["receipt_check"]
+		self.assertEqual(state["covered"], 13)
+		self.assertTrue(state["coverage_complete"])
+		self.assertEqual(state["last_reason"], "all_verified")
+
+	def test_the_busiest_post_is_re_checked_every_cycle(self):
+		"""Rotation must not cost the evergreen post its per-cycle check.
+
+		The view distribution is top-heavy enough that a footer silently lost
+		from the busiest post outweighs the rest of the catalogue combined.
+		"""
+		posts = self._posts()
+		seen = {}
+		for _ in range(4):
+			chosen = [p["id"] for p in receipt_check.select(posts, 5, seen)]
+			self.assertIn(1000, chosen)     # id 1000 holds 1,932 views
+			for i in chosen:
+				seen[i] = "2026-09-08T00:00:00+00:00"
+
+	def test_a_quiet_footerless_post_is_eventually_found(self):
+		"""The finding the old ordering could not produce.
+
+		The quietest post ranks last, so a views-only sample with a cap of 5
+		never reads it. That is exactly where an unnoticed gap survives.
+		"""
+		posts = self._posts()
+		quiet = posts[-1]["id"]
+		status = {"backfill": {"remaining": 0}}
+		with self._patched(bare_ids={quiet}):
+			for _ in range(3):
+				receipt_check._run(status, "key", published=posts)
+		state = status["receipt_check"]
+		self.assertEqual(state["known_without_footer"], 1)
+		self.assertEqual(state["last_reason"], "footer_missing")
+
+	def test_a_known_gap_survives_the_rotation_that_found_it(self):
+		"""Rotating past a broken post must not clear the alarm.
+
+		``without_footer`` describes this cycle's sample. A module that judged
+		on it alone would find the gap, rotate on, and report ``all_verified``
+		the very next cycle -- erasing the finding with the mechanism that
+		produced it, which is the memoryless version of the original bug.
+		"""
+		posts = self._posts()
+		quiet = posts[-1]["id"]
+		status = {"backfill": {"remaining": 0}}
+		with self._patched(bare_ids={quiet}):
+			for _ in range(4):          # cycle 3 finds it, cycle 4 rotates past
+				receipt_check._run(status, "key", published=posts)
+		state = status["receipt_check"]
+		self.assertEqual(state["without_footer"], 0)        # not in the sample
+		self.assertEqual(state["known_without_footer"], 1)  # still broken
+		self.assertEqual(state["last_reason"], "footer_missing")
+
+	def test_the_alarm_clears_only_on_a_fresh_observation(self):
+		"""It must clear when repaired -- but on evidence, not assumption."""
+		posts = self._posts()
+		quiet = posts[-1]["id"]
+		status = {"backfill": {"remaining": 0}}
+		with self._patched(bare_ids={quiet}):
+			for _ in range(3):
+				receipt_check._run(status, "key", published=posts)
+		self.assertEqual(status["receipt_check"]["known_without_footer"], 1)
+		with self._patched():               # backfill repaired it
+			for _ in range(3):
+				receipt_check._run(status, "key", published=posts)
+		state = status["receipt_check"]
+		self.assertEqual(state["known_without_footer"], 0)
+		self.assertEqual(state["last_reason"], "all_verified")
+
+	def test_agreement_is_unknown_until_coverage_is_complete(self):
+		"""``backfill.remaining`` is a claim about every post.
+
+		Checking it against a 5-post sample let ``agrees_with_backfill: true``
+		stand while eight posts had never been read -- agreement computed from
+		evidence that could not have produced disagreement.
+		"""
+		status = {"backfill": {"remaining": 0}}
+		with self._patched():
+			receipt_check._run(status, "key", published=self._posts())
+		self.assertIsNone(status["receipt_check"]["agrees_with_backfill"])
+		with self._patched():
+			for _ in range(2):
+				receipt_check._run(status, "key", published=self._posts())
+		self.assertIs(status["receipt_check"]["agrees_with_backfill"], True)
+
+	def test_an_unreachable_post_is_never_aged_as_verified(self):
+		"""Third state, held across cycles.
+
+		A post that cannot be read was not verified. Stamping it anyway would
+		let a permanently-404ing post drift out of the rotation and quietly
+		stop being asked about -- "could not read" collapsing into "fine"
+		again, just slowly.
+		"""
+		posts = self._posts(2)
+
+		class _Resp:
+			status_code = 200
+
+			@staticmethod
+			def raise_for_status():
+				return None
+
+			@staticmethod
+			def json():
+				return {"title": "no body field"}
+
+		status = {"backfill": {"remaining": 0}}
+		with mock.patch.object(receipt_check.requests, "get",
+							   lambda *a, **k: _Resp()):
+			receipt_check._run(status, "key", published=posts)
+		state = status["receipt_check"]
+		self.assertEqual(state["covered"], 0)
+		self.assertEqual(state["unverified"], 2)
+		self.assertEqual(state["verified_ids"], [])
+
+	def test_a_stale_verification_stops_counting_as_coverage(self):
+		"""A post read once and never again is evidence about that day.
+
+		A footer can be lost to a hand-edit at any time, so an observation has
+		a shelf life. Without expiry, ``coverage_complete`` would latch true
+		forever on the strength of one old read.
+		"""
+		posts = self._posts(2)
+		status = {"backfill": {"remaining": 0}}
+		with self._patched():
+			receipt_check._run(status, "key", published=posts)
+		self.assertTrue(status["receipt_check"]["coverage_complete"])
+
+		old = "2026-01-01T00:00:00+00:00"
+		for row in status["receipt_check"]["verified_ids"]:
+			row["at"] = old
+		with self._patched():
+			with mock.patch.object(
+					receipt_check, "config",
+					lambda: dict(receipt_check.DEFAULTS,
+								 max_per_cycle=1, stale_after_hours=168)):
+				receipt_check._run(status, "key", published=posts)
+		state = status["receipt_check"]
+		# One re-read this cycle; the other is stale, so coverage is incomplete.
+		self.assertEqual(state["covered"], 1)
+		self.assertFalse(state["coverage_complete"])
+
+	def test_a_deleted_post_leaves_the_ledger(self):
+		"""Otherwise a removed post inflates ``covered`` permanently."""
+		posts = self._posts(3)
+		status = {"backfill": {"remaining": 0}}
+		with self._patched():
+			receipt_check._run(status, "key", published=posts)
+		self.assertEqual(status["receipt_check"]["covered"], 3)
+		with self._patched():
+			receipt_check._run(status, "key", published=posts[:2])
+		state = status["receipt_check"]
+		self.assertEqual(state["published_total"], 2)
+		self.assertEqual(state["covered"], 2)
+		self.assertEqual({r["id"] for r in state["verified_ids"]},
+						 {p["id"] for p in posts[:2]})
+
+	def test_coverage_fields_stay_bounded(self):
+		"""status.json is committed hourly; the ledger must not grow forever."""
+		posts = self._posts(60)
+		status = {"backfill": {"remaining": 0}}
+		with self._patched():
+			with mock.patch.object(
+					receipt_check, "config",
+					lambda: dict(receipt_check.DEFAULTS,
+								 max_per_cycle=30, history_limit=50)):
+				for _ in range(3):
+					receipt_check._run(status, "key", published=posts)
+		self.assertLessEqual(len(status["receipt_check"]["verified_ids"]), 50)
+
+
 class TestWalletReadsEveryStablecoin(unittest.TestCase):
 	"""The footer publishes a Tron *address*, which accepts any TRC-20.
 

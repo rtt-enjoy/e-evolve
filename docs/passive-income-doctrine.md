@@ -461,6 +461,87 @@ silently, because each stage looks correct on its own.
 
 ---
 
+## Principle 3g — A sample is not coverage, and the verifier needed one too
+
+Built 2026-09-08, extending `bot/earning/receipt_check.py`.
+
+Principle 3e built the second observer and closed the self-reporting blind spot.
+It then acquired a narrower version of the same bug, in the one module this
+document tells the owner to believe over every other field.
+
+At cycle #1791 `status["receipt_check"]` read:
+
+```json
+{"checked": 5, "with_footer": 5, "without_footer": 0,
+ "last_reason": "all_verified", "agrees_with_backfill": true}
+```
+
+Beside it, `article_stats.count: 12` — and the live account had **13** published
+posts. So `all_verified` described 5 of 13, and the word doing the damage is
+`all`.
+
+`verify()` sorted by views and sliced `max_per_cycle`. There was no rotation and
+no memory, so it was not five posts checked per cycle on a rolling basis — it
+was **the same five posts, every cycle, forever**, and eight posts that could
+not be observed in any cycle. A footer missing from post number nine was
+undetectable by construction, not merely undetected.
+
+Three things were wrong, and they compound:
+
+- **`checked` is a sample size and was being read as coverage.** The cap is
+  correct — it is what keeps this cheap and rate-limit-safe. Reporting the
+  capped result as though it described the catalogue is what is not.
+- **`agrees_with_backfill` compared incommensurable things.** `backfill.remaining`
+  is a claim about *every* published post; the observation covered five. So
+  `true` could stand while eight posts had never been read — agreement computed
+  from evidence that could not have produced disagreement. It is now `None`
+  until coverage is complete, because "not yet checkable" is the honest answer.
+- **A gap would not have survived being found.** `without_footer` describes the
+  current sample. Judging on it alone, the module would flag a broken post, then
+  rotate on and report `all_verified` the next cycle — erasing the finding with
+  the very mechanism that produced it.
+
+What the checked-and-verified state actually rested on was luck. An independent
+fetch of all 13 posts confirmed 13/13 genuinely carried the ask, so the answer
+was right; it was simply not evidence. **A correct answer from a method that
+could not have detected the error is indistinguishable from a wrong one, and it
+is the more dangerous of the two, because it is never revisited.**
+
+The fix keeps the cap and adds a denominator:
+
+- **The busiest post is re-checked every cycle**, unconditionally. The
+  distribution is top-heavy enough that a footer silently lost from the
+  evergreen post outweighs the rest of the catalogue combined.
+- **Remaining slots go to the least-recently-verified**, so every post is
+  reached within `ceil(n / max_per_cycle)` cycles instead of never.
+- **The verdict is stored per post, not just the timestamp.**
+  `known_without_footer` counts every post observed to be missing an ask,
+  whether or not it is in this cycle's sample, and clears only when that post is
+  re-observed as repaired. Not on assumption, and not on rotation.
+- **An observation expires** (`stale_after_hours`, 168). A post read once and
+  never again is evidence about the day it was read; a footer can be lost to a
+  hand-edit at any time. Without expiry `coverage_complete` would latch true
+  forever on the strength of one old read.
+- **Unreachable is still never aged as verified**, held across cycles now rather
+  than within one. Stamping an unreadable post would let a permanently-404ing
+  article drift out of the rotation and quietly stop being asked about — "could
+  not read" collapsing into "fine" again, just slowly.
+
+The dashboard carried the same defect and got the same fix: the tip card read
+`all N checked posts carry it` from the sample, so it would have rendered a
+finished-looking receive path on 38% coverage — Principle 3b's silent failure,
+inside the card built to prevent it.
+
+**The generalisation: any bounded scan reports on its bound, and the field name
+must say so.** `checked` and `covered` are different questions whenever the cap
+is smaller than the population, and the cap is always smaller by design. Where a
+completion word (`all`, `complete`, `verified`, `nothing_to_do`) is computed from
+a sample, it is Principle 3d wearing the verifier's clothes. Ask of any status
+field: *what population does this number describe, and is that the population
+the reader will assume?*
+
+---
+
 ## Principle 4 — Never let an estimate stand in for money
 
 `devto.publish` reports `estimated_usd: 0.0` for a successful post, and it must
@@ -582,10 +663,19 @@ Work this in order. Stop at the first honest "no".
    it shares no key and no serializer with the code that writes them. Read
    these three, in this order:
 
-   - `receipt_check.without_footer` — posts a reader can currently see with no
-     way to pay. Non-zero is the problem, whatever else claims otherwise.
+   - `receipt_check.known_without_footer` — posts observed to show a reader no
+     way to pay. Non-zero is the problem, whatever else claims otherwise. Read
+     this rather than `without_footer`, which describes only the posts sampled
+     in the most recent cycle and returns to `0` as the rotation moves on.
+   - `receipt_check.covered` / `published_total` — how much of the catalogue has
+     actually been observed. **`checked` is a per-cycle sample size, not
+     coverage** (Principle 3g): it read `5` beside a 13-post account while
+     `last_reason` said `all_verified`. Coverage builds over
+     `ceil(n / max_per_cycle)` cycles; until `coverage_complete` is `true`, the
+     unverified remainder is unverified, not fine.
    - `receipt_check.agrees_with_backfill` — `false` means a self-reported field
-     is wrong. **The observation is the half to believe.**
+     is wrong. **The observation is the half to believe.** `None` means coverage
+     is not yet complete, so the comparison cannot honestly be made.
    - `receipt_check.unreachable` — posts it could not read at all. This is
      neither good nor bad news; it means that many posts are simply unverified,
      so do not count them as covered.
@@ -644,7 +734,7 @@ Principle 2.
 | Wallet address in the newsletter digest | none | none | allowed | **Built** — same `devto.publish` path |
 | Wallet address on the public dashboard | none | none | allowed | **Built** 2026-09-04. `status["payout_public"]` + Overview tip card |
 | Wallet address on the **back catalogue** | none | none | allowed | **Built** 2026-09-04, but it wrote nothing until 2026-09-06 — see Principle 3d |
-| **Verification** that any of the above reached a reader | none | none | allowed | **Built** 2026-09-06. `receipt_check.py` — not a channel, the thing that says whether the channels are real |
+| **Verification** that any of the above reached a reader | none | none | allowed | **Built** 2026-09-06, given real coverage 2026-09-08. `receipt_check.py` — not a channel, the thing that says whether the channels are real. It checked 5 of 13 posts and said `all_verified` until Principle 3g |
 | **Reading every asset** the published address can receive | none | none | allowed | **Built** 2026-09-08. `wallet_assets.py` — USDC/USDD tips were arriving as `$0.00`; the ask now names what the meter reads |
 | Wallet address in the dev.to **profile bio** | none | one settings edit, ever | allowed | **Owner action.** Not automatable: `users` is `only: %i[show]` in Forem's API routes and the only writer (`PATCH /api/admin/users/{id}`) is super-admin gated. A single manual edit at dev.to/settings then covers every profile visitor permanently |
 | Sponsored-content slot in the newsletter | none | negotiates each deal | allowed to publish | **Deferred.** Income is real but every unit needs a human |

@@ -242,10 +242,25 @@ export type Status = {
 	 * the observation is the half to believe.
 	 */
 	receipt_check?: {
+		/** Posts read this cycle. A sample size, capped by max_per_cycle — not coverage. */
 		checked?: number;
 		with_footer?: number;
+		/** Missing an ask *within this cycle's sample*. Use known_without_footer for the catalogue. */
 		without_footer?: number;
 		unreachable?: number;
+		/** Published posts with a fresh observation on record. */
+		covered?: number;
+		published_total?: number;
+		unverified?: number;
+		coverage_complete?: boolean | null;
+		/**
+		 * Posts observed to carry no ask, whether or not they were in this
+		 * cycle's sample. A gap must not disappear because the rotation moved
+		 * on — that would erase the finding with the mechanism that found it.
+		 */
+		known_without_footer?: number;
+		oldest_check_age_hours?: number | null;
+		verified_ids?: Array<{ id?: number; at?: string; ok?: boolean }>;
 		missing?: Array<{
 			id?: number;
 			title?: string;

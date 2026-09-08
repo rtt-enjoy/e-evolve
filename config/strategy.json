@@ -38,8 +38,9 @@
 	"receipt_check": {
 		"enabled": true,
 		"max_per_cycle": 5,
+		"stale_after_hours": 168,
 		"history_limit": 50,
-		"note_on_config": "Verifies from outside that published posts actually carry the ask. Every other signal is the bot reporting on its own work: backfill computes 'remaining' from the same fetch it acts on, so when that fetch was wrong the work and the claim were wrong together and agreed. That hid a total failure for cycles #1760-#1773, with remaining: 0 while no post on the account had a footer. This re-reads each post through the unauthenticated GET /api/articles/{id} -- no key, no shared serializer with the writer -- and records agrees_with_backfill. It never writes and never repairs: repair is backfill's job, and merging them would rebuild the same self-reporting blind spot one layer up."
+		"note_on_config": "Verifies from outside that published posts actually carry the ask. Every other signal is the bot reporting on its own work: backfill computes 'remaining' from the same fetch it acts on, so when that fetch was wrong the work and the claim were wrong together and agreed. That hid a total failure for cycles #1760-#1773, with remaining: 0 while no post on the account had a footer. This re-reads each post through the unauthenticated GET /api/articles/{id} -- no key, no shared serializer with the writer. It never writes and never repairs: repair is backfill's job, and merging them would rebuild the same self-reporting blind spot one layer up. max_per_cycle is a SAMPLE size, not coverage: with 13 posts and a cap of 5 sorted by views, eight posts could never be read in any cycle while last_reason said 'all_verified'. Selection now rotates -- busiest post every cycle, remaining slots to the least-recently-verified -- so read covered/published_total and known_without_footer, not checked. known_without_footer persists across cycles: a gap found once must not vanish because the rotation moved past it. stale_after_hours expires an observation so coverage_complete cannot latch true on one old read; set 0 to disable expiry."
 	},
 	"attribution": {
 		"enabled": true,

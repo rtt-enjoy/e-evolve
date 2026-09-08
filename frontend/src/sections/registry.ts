@@ -53,6 +53,11 @@ export const SECTIONS: SectionDef[] = [
 			// itself when one is being published.
 			'payout',
 			'payout_public',
+			// The independent observation of whether readers can actually see
+			// an ask. Claimed here because the tip card renders it beside the
+			// address -- every other receive-path field is written by the code
+			// whose work it reports.
+			'receipt_check',
 			// What was live when money actually landed.
 			'attribution',
 		],

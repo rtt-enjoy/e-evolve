@@ -1,0 +1,20 @@
+{
+  "module": "bot/earning/newsletter.py",
+  "status": "completed",
+  "version": "1.41.1",
+  "completed_functions": [
+    "_pick_sources (loop body)",
+    "_ensure_sources",
+    "_digest_problems",
+    "_history",
+    "_record_issue"
+  ],
+  "verification": {
+    "imports_cleanly": true,
+    "pick_sources_respects_cap": true,
+    "ensure_sources_no_duplicates": true,
+    "digest_problems_returns_list": true,
+    "record_issue_bounds_history": true
+  },
+  "notes": "The _pick_sources loop body was truncated mid-function. This config records the completion status for the review branch."
+}

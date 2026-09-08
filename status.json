@@ -1,17 +1,17 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-08T07:51:26.039816+00:00",
-  "total_runs": 1790,
+  "last_run": "2026-09-08T08:10:35.316562+00:00",
+  "total_runs": 1791,
   "active_features": [
-    "llm_anthropic",
     "llm_gemini",
     "llm_openrouter",
     "llm_groq",
+    "usdt_wallet",
     "code_techs"
   ],
   "inactive_features": [
-    "llm_cerebras",
-    "usdt_wallet"
+    "llm_anthropic",
+    "llm_cerebras"
   ],
   "llm_provider": "openrouter",
   "earnings": {
@@ -32,8 +32,18 @@
     "source": "on-chain USDT balance"
   },
   "last_evolution": {
-    "summary": "Skipped by owner command",
-    "changes_applied": [],
+    "version_bumped_to": "1.41.0",
+    "summary": "Create missing receipts module and export receipt_check from earning package to enable attribution dashboard and footer verification loop",
+    "changes_applied": [
+      {
+        "file": "bot/earning/receipts.py",
+        "reason": "Create the missing receipts module that was promised in the last evolution. This provides get_receipts() for dashboard consumption and run() as the product entry point for the orchestrator, wrapping attribution.record_receipt and attribution.summary."
+      },
+      {
+        "file": "bot/earning/__init__.py",
+        "reason": "Export receipt_check_run and receipts_run from the earning package so the orchestrator can import and call them. Also update the docstring to document both new products."
+      }
+    ],
     "suggestions": [
       {
         "title": "Create bot/earning/receipts.py with get_receipts and run",
@@ -62,35 +72,25 @@
         ]
       },
       {
-        "title": "Enable payout footer by setting payout.enabled=true in config/strategy.json",
-        "description": "The payout footer (USDT receive address) is configured but disabled in strategy config. Enabling it adds a 'Support this work' footer to every published article, creating the first viable monetization path. The wallet address is already configured and valid.",
-        "secret_needed": null,
+        "title": "Add Anthropic API key to enable llm_anthropic feature",
+        "description": "Anthropic Claude models are available but inactive due to missing ANTHROPIC_API_KEY secret. Adding this key would provide access to Claude 3.5 Sonnet and other models for research and article writing.",
+        "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
-        "free_tier": true,
+        "free_tier": false,
         "how_to": [
-          "Step 1: Edit config/strategy.json and set payout.enabled to true",
-          "Step 2: Verify USDT_WALLET_ADDRESS secret is set (already configured)",
-          "Step 3: Run the next cycle — articles will publish with the footer",
-          "Step 4: Check docs/status.json for payout.live=true and address_masked"
+          "Step 1: Go to https://console.anthropic.com/ and create an API key",
+          "Step 2: Copy the API key (starts with sk-ant-)",
+          "Step 3: Add as GitHub secret named ANTHROPIC_API_KEY in repository settings",
+          "Step 4: Run the next evolution cycle to activate llm_anthropic"
         ]
       }
     ],
-    "version_bumped_to": "1.41.0",
-    "error": null
+    "error": null,
+    "branch": "evolve/1.41.1-20260908-081111",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs\\code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -121,21 +121,21 @@
       ]
     },
     {
-      "title": "Enable payout footer by setting payout.enabled=true in config/strategy.json",
-      "description": "The payout footer (USDT receive address) is configured but disabled in strategy config. Enabling it adds a 'Support this work' footer to every published article, creating the first viable monetization path. The wallet address is already configured and valid.",
-      "secret_needed": null,
+      "title": "Add Anthropic API key to enable llm_anthropic feature",
+      "description": "Anthropic Claude models are available but inactive due to missing ANTHROPIC_API_KEY secret. Adding this key would provide access to Claude 3.5 Sonnet and other models for research and article writing.",
+      "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
-      "free_tier": true,
+      "free_tier": false,
       "how_to": [
-        "Step 1: Edit config/strategy.json and set payout.enabled to true",
-        "Step 2: Verify USDT_WALLET_ADDRESS secret is set (already configured)",
-        "Step 3: Run the next cycle — articles will publish with the footer",
-        "Step 4: Check docs/status.json for payout.live=true and address_masked"
+        "Step 1: Go to https://console.anthropic.com/ and create an API key",
+        "Step 2: Copy the API key (starts with sk-ant-)",
+        "Step 3: Add as GitHub secret named ANTHROPIC_API_KEY in repository settings",
+        "Step 4: Run the next evolution cycle to activate llm_anthropic"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 155,
+  "last_cycle_seconds": 37,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -144,12 +144,12 @@
   "usdt_balance": 0.0,
   "secret_readiness": {
     "llm_anthropic": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "ANTHROPIC_API_KEY"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     },
     "llm_gemini": {
@@ -189,12 +189,12 @@
       "required_count": 1
     },
     "usdt_wallet": {
-      "active": false,
-      "present": [],
-      "missing": [
+      "active": true,
+      "present": [
         "USDT_WALLET_ADDRESS"
       ],
-      "present_count": 0,
+      "missing": [],
+      "present_count": 1,
       "required_count": 1
     }
   },
@@ -331,7 +331,7 @@
         "pursued": false
       },
       {
-        "title": "ODK | Senior Product Manager | Remote (Worldwide) | Long-term contract, 30–40 hours/week | $90–$110/hour USD ODK is an open-source platform ",
+        "title": "ODK | Senior Product Manager | Remote (Worldwide) | Long-term contract, 30\u201340 hours/week | $90\u2013$110/hour USD ODK is an open-source platform ",
         "url": "https://news.ycombinator.com/item?id=49524080",
         "source": "hn-hiring",
         "buyer": "ODK",
@@ -352,7 +352,7 @@
         "age_hours": 159.7,
         "reason": "$90-110/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable",
         "next_step": "Read what ODK actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.",
-        "codex_prompt": "Build a small, verifiable deliverable for this real market signal.\n\nBUYER          ODK (via hn-hiring)\nDEMAND SIGNAL  ODK | Senior Product Manager | Remote (Worldwide) | Long-term contract, 30–40 hours/week | $90–$110/hour USD ODK is an open-source platform \nPOSTED         2026-09-01T16:17:07+00:00 (160h ago)\nLINK           https://news.ycombinator.com/item?id=49524080\nDELIVERABLE    Read what ODK actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.\nPRICE BASIS    $90-110/hr stated\nFREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs\nWHY IT RANKS   $90-110/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable\n\nConstraints:\n- Keep the first change narrowly scoped to one file or script.\n- Use free API tiers or offline code paths only; no paid service.\n- Include the exact commands to run it and paste the real output.\n- Verify on at least 3 sample inputs before calling it done.\n- Do not contact anyone, publish anything, or request payment.\n- Do not state a price unless PRICE BASIS gives one.",
+        "codex_prompt": "Build a small, verifiable deliverable for this real market signal.\n\nBUYER          ODK (via hn-hiring)\nDEMAND SIGNAL  ODK | Senior Product Manager | Remote (Worldwide) | Long-term contract, 30\u201340 hours/week | $90\u2013$110/hour USD ODK is an open-source platform \nPOSTED         2026-09-01T16:17:07+00:00 (160h ago)\nLINK           https://news.ycombinator.com/item?id=49524080\nDELIVERABLE    Read what ODK actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.\nPRICE BASIS    $90-110/hr stated\nFREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs\nWHY IT RANKS   $90-110/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable\n\nConstraints:\n- Keep the first change narrowly scoped to one file or script.\n- Use free API tiers or offline code paths only; no paid service.\n- Include the exact commands to run it and paste the real output.\n- Verify on at least 3 sample inputs before calling it done.\n- Do not contact anyone, publish anything, or request payment.\n- Do not state a price unless PRICE BASIS gives one.",
         "pursued": false
       },
       {
@@ -481,7 +481,7 @@
         "pursued": false
       },
       {
-        "title": "Verkäufer (w/m/d) Remote - NETSHAKE GmbH",
+        "title": "Verk\u00e4ufer (w/m/d) Remote - NETSHAKE GmbH",
         "url": "https://himalayas.app/companies/netshake-gmbh/jobs/verkaufer-w-m-d-remote-6189640426",
         "source": "himalayas",
         "buyer": "NETSHAKE GmbH",
@@ -759,7 +759,7 @@
         {
           "theme": "Remote contract roles requiring AI-assisted data processing, technical writing, and analysis",
           "evidence": "Language Model Analyst, Technical Writer/QA Specialist, Online Data Analyst, Linux Infrastructure Engineer (AI Factory)",
-          "offer": "Fixed-price batch jobs: transcribe meeting recordings, summarize technical docs, clean/extract data from PDFs, generate embeddings for search — delivered via free APIs"
+          "offer": "Fixed-price batch jobs: transcribe meeting recordings, summarize technical docs, clean/extract data from PDFs, generate embeddings for search \u2014 delivered via free APIs"
         },
         {
           "theme": "Content and marketing teams needing rapid asset preparation",
@@ -769,7 +769,7 @@
         {
           "theme": "Education and admissions consultants handling document-heavy workflows",
           "evidence": "College Admissions Counselor/Consultant, Instructor/Facilitator, Fullstack Developer (AI EdTech)",
-          "offer": "Document pipeline: OCR + summarization + translation for student essays, transcripts, recommendation letters — fixed price per application packet"
+          "offer": "Document pipeline: OCR + summarization + translation for student essays, transcripts, recommendation letters \u2014 fixed price per application packet"
         }
       ],
       "free_ai_services": [
@@ -779,7 +779,7 @@
           "free_tier": "verify current limit (generous daily token allowance, no credit card)",
           "credit_card_required": "no",
           "earn_with_it": "Transcribe or summarize audio/text files in batches; charge per minute or per document",
-          "price_guide": "$0.10–$0.25 per audio minute; $1–$3 per 10-page document summary"
+          "price_guide": "$0.10\u2013$0.25 per audio minute; $1\u2013$3 per 10-page document summary"
         },
         {
           "name": "Hugging Face Inference API",
@@ -787,7 +787,7 @@
           "free_tier": "verify current limit (rate-limited, no credit card)",
           "credit_card_required": "no",
           "earn_with_it": "Run speech-to-text, translation, embedding, or image generation tasks on demand; bundle into per-job fees",
-          "price_guide": "$0.05–$0.15 per transcription minute; $0.50–$1 per image background removal; $2–$5 per 1k embeddings"
+          "price_guide": "$0.05\u2013$0.15 per transcription minute; $0.50\u2013$1 per image background removal; $2\u2013$5 per 1k embeddings"
         },
         {
           "name": "Cohere API",
@@ -795,7 +795,7 @@
           "free_tier": "verify current limit (monthly token quota, no credit card)",
           "credit_card_required": "no",
           "earn_with_it": "Generate embeddings for semantic search or classification; sell setup + first batch",
-          "price_guide": "$10–$25 for embedding a 10k-doc corpus; $5–$15 per classification batch"
+          "price_guide": "$10\u2013$25 for embedding a 10k-doc corpus; $5\u2013$15 per classification batch"
         },
         {
           "name": "Mistral AI API",
@@ -803,7 +803,7 @@
           "free_tier": "verify current limit (free tier with rate limits, no credit card)",
           "credit_card_required": "no",
           "earn_with_it": "Produce high-quality summaries, translations, or structured extractions; charge per output",
-          "price_guide": "$1–$2 per 5-page summary; $0.02–$0.05 per translated word"
+          "price_guide": "$1\u2013$2 per 5-page summary; $0.02\u2013$0.05 per translated word"
         },
         {
           "name": "Remove.bg API",
@@ -811,7 +811,7 @@
           "free_tier": "50 free credits/month (1 credit = 1 image up to 0.25 MP), no credit card",
           "credit_card_required": "no",
           "earn_with_it": "Batch-remove backgrounds for e-commerce product photos; charge per image",
-          "price_guide": "$0.20–$0.50 per image (volume discounts)"
+          "price_guide": "$0.20\u2013$0.50 per image (volume discounts)"
         },
         {
           "name": "LibreTranslate API",
@@ -819,7 +819,7 @@
           "free_tier": "Public instance rate-limited; self-host on free CPU (no credit card)",
           "credit_card_required": "no",
           "earn_with_it": "Translate documents or subtitles for clients; charge per word or per file",
-          "price_guide": "$0.01–$0.03 per word; $5–$15 per 1k-word document"
+          "price_guide": "$0.01\u2013$0.03 per word; $5\u2013$15 per 1k-word document"
         },
         {
           "name": "Hugging Face Spaces",
@@ -827,7 +827,7 @@
           "free_tier": "Unlimited CPU spaces, no credit card",
           "credit_card_required": "no",
           "earn_with_it": "Deploy a one-page tool (e.g., PDF summarizer, image cleaner) and sell access or setup",
-          "price_guide": "$20–$50 one-time for tool deployment + handoff; $10–$30/mo for hosted maintenance"
+          "price_guide": "$20\u2013$50 one-time for tool deployment + handoff; $10\u2013$30/mo for hosted maintenance"
         },
         {
           "name": "GitHub Actions",
@@ -835,7 +835,7 @@
           "free_tier": "2,000 minutes/month private, no credit card",
           "credit_card_required": "no",
           "earn_with_it": "Schedule recurring batch jobs (daily reports, weekly data enrichment) using free APIs; sell as monthly retainer",
-          "price_guide": "$30–$100/mo for a weekly automated report delivery"
+          "price_guide": "$30\u2013$100/mo for a weekly automated report delivery"
         },
         {
           "name": "Google Colab",
@@ -843,7 +843,7 @@
           "free_tier": "Time-limited sessions, no credit card",
           "credit_card_required": "no",
           "earn_with_it": "Run heavier open-weight models (Whisper large, Llama 3) for one-off client jobs; deliver results, not compute",
-          "price_guide": "$15–$40 per heavy batch job (e.g., 2-hour audio transcription with speaker diarization)"
+          "price_guide": "$15\u2013$40 per heavy batch job (e.g., 2-hour audio transcription with speaker diarization)"
         }
       ],
       "easy_earning_ideas": [
@@ -851,7 +851,7 @@
           "idea": "Audio Transcription Batch Service",
           "who_pays": "Podcast editors, researchers, journalists, remote teams",
           "deliverable": "Timestamped SRT/VTT/JSON transcripts for up to 60 minutes of audio, delivered in 24h",
-          "price_usd": "5–12 per hour of audio",
+          "price_usd": "5\u201312 per hour of audio",
           "time_to_first_dollar": "same day",
           "free_stack": "Groq API (Whisper) or Hugging Face Inference API (Whisper), GitHub Actions for scheduling"
         },
@@ -859,15 +859,15 @@
           "idea": "Document Summarization & Extraction",
           "who_pays": "Consultants, lawyers, admissions counselors, analysts",
           "deliverable": "One-page executive summary + key entities/table data in CSV from PDFs/DOCX (up to 20 pages)",
-          "price_usd": "3–8 per document",
-          "time_to_first_dollar": "2–3 days",
+          "price_usd": "3\u20138 per document",
+          "time_to_first_dollar": "2\u20133 days",
           "free_stack": "Groq/Cohere/Mistral for LLM, pdfplumber (local) for extraction, Hugging Face Spaces for demo"
         },
         {
           "idea": "E-commerce Background Removal",
           "who_pays": "Shopify/Etsy sellers, dropshippers, small brands",
-          "deliverable": "Clean PNGs with transparent backgrounds, 1000×1000 px, delivered via zip/Drive link",
-          "price_usd": "0.25–0.50 per image (min 20 images)",
+          "deliverable": "Clean PNGs with transparent backgrounds, 1000\u00d71000 px, delivered via zip/Drive link",
+          "price_usd": "0.25\u20130.50 per image (min 20 images)",
           "time_to_first_dollar": "same day",
           "free_stack": "Remove.bg API (50 free/mo), Hugging Face Spaces for upload UI"
         }
@@ -898,10 +898,11 @@
     "priced_count": 9
   },
   "configured_github_secrets": [
-    "ANTHROPIC_API_KEY",
     "GEMINI_API_KEY",
+    "GH_TOKEN",
     "GROQ_API_KEY",
-    "OPENROUTER_API_KEY"
+    "OPENROUTER_API_KEY",
+    "USDT_WALLET_ADDRESS"
   ],
   "operation_mode": "research_and_article_publishing",
   "external_action_policy": {
@@ -1049,16 +1050,16 @@
     ]
   },
   "wallet": {
-    "configured": false,
-    "address_masked": "TFTNsf…9KbY",
+    "configured": true,
+    "address_masked": "TFTNsf\u20269KbY",
     "network": "TRC-20",
     "confirmed_usd": 0.0,
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-08T04:39:11.409643+00:00",
+    "checked_at": "2026-09-08T08:10:35.680233+00:00",
     "stale": false,
-    "error": "USDT_WALLET_ADDRESS not set",
+    "error": null,
     "balance_high_water_usd": 0.0,
     "stablecoins": {},
     "other_assets": {}
@@ -1158,7 +1159,7 @@
       {
         "name": "Notion / digital template store",
         "mrr_model": "$500-5K/mo, library subscription",
-        "source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token — Payhip/Etsy stay manual",
+        "source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token \u2014 Payhip/Etsy stay manual",
         "bot_role": "draft",
         "score": 60,
         "manual_steps": [
@@ -1176,7 +1177,7 @@
       {
         "name": "Local business AI automation agency",
         "mrr_model": "$300-800/mo retainer per client",
-        "reason": "client acquisition needs cold email/DM — blocked in code; requires a paid third-party platform"
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform"
       },
       {
         "name": "Online course membership",
@@ -1186,52 +1187,52 @@
       {
         "name": "Bookkeeping as a service",
         "mrr_model": "$200-600/mo retainer",
-        "reason": "requires a professional credential the owner does not hold; requires a human performing the service per client; client acquisition needs cold email/DM — blocked in code"
+        "reason": "requires a professional credential the owner does not hold; requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
       },
       {
         "name": "Social media management retainer",
         "mrr_model": "$500-1.5K/mo per client",
-        "reason": "delivery requires posting to social platforms — blocked in code; client acquisition needs cold email/DM — blocked in code"
+        "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
       },
       {
         "name": "SEO retainer",
         "mrr_model": "$400-3K/mo per client",
-        "reason": "client acquisition needs cold email/DM — blocked in code; requires a human performing the service per client"
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client"
       },
       {
         "name": "Podcast production service",
         "mrr_model": "$500-2K/mo retainer",
-        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM — blocked in code"
+        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
       },
       {
         "name": "White-label SaaS reselling",
         "mrr_model": "platform markup, $1-6K/mo",
-        "reason": "requires a paid third-party platform; client acquisition needs cold email/DM — blocked in code"
+        "reason": "requires a paid third-party platform; client acquisition needs cold email/DM \u2014 blocked in code"
       },
       {
         "name": "Email marketing management retainer",
         "mrr_model": "$400-1.2K/mo per client",
-        "reason": "client acquisition needs cold email/DM — blocked in code; requires a human performing the service per client"
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client"
       },
       {
         "name": "Paid Discord / Slack community",
         "mrr_model": "$15-50/mo per member",
-        "reason": "delivery requires posting to social platforms — blocked in code"
+        "reason": "delivery requires posting to social platforms \u2014 blocked in code"
       },
       {
         "name": "No-code app dev for one industry",
         "mrr_model": "hosting + maintenance retainer",
-        "reason": "client acquisition needs cold email/DM — blocked in code; requires a paid third-party platform"
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform"
       },
       {
         "name": "YouTube automation channel",
         "mrr_model": "AdSense + affiliate + memberships",
-        "reason": "delivery requires posting to social platforms — blocked in code"
+        "reason": "delivery requires posting to social platforms \u2014 blocked in code"
       },
       {
         "name": "Freelance writing retainer",
         "mrr_model": "4-8 articles/mo, $1.5-8K",
-        "reason": "client acquisition needs cold email/DM — blocked in code"
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code"
       },
       {
         "name": "Online tutoring / coaching subscription",
@@ -1246,7 +1247,7 @@
       {
         "name": "Virtual assistant agency",
         "mrr_model": "$500-2K/mo per client",
-        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM — blocked in code"
+        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
       },
       {
         "name": "Niche job board / marketplace",
@@ -1256,7 +1257,7 @@
       {
         "name": "Content repurposing service",
         "mrr_model": "$500-1.5K/mo retainer",
-        "reason": "delivery requires posting to social platforms — blocked in code; client acquisition needs cold email/DM — blocked in code"
+        "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
       }
     ],
     "llm_used": true
@@ -1267,8 +1268,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20260908-081111",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 12,
     "total_views": 2299,
@@ -1320,7 +1321,7 @@
         "count": 2,
         "avg_engagement": 13.5,
         "avg_views": 13.5,
-        "best_title": "Prototype a DIY Solid‑State Intelligence Module for Home Automation"
+        "best_title": "Prototype a DIY Solid\u2011State Intelligence Module for Home Automation"
       },
       {
         "archetype": "surprising-behavior",
@@ -1345,10 +1346,10 @@
   },
   "payout": {
     "enabled": true,
-    "live": false,
-    "network": null,
-    "address_masked": null,
-    "blocked_reason": "USDT_WALLET_ADDRESS is not set"
+    "live": true,
+    "network": "TRC-20 (Tron)",
+    "address_masked": "TFTNsf\u20269KbY",
+    "blocked_reason": null
   },
   "backfill": {
     "done_ids": [
@@ -1372,8 +1373,8 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-08T04:42:18.657439+00:00",
-    "last_reason": "payout_not_live",
+    "last_run": "2026-09-08T08:11:12.044011+00:00",
+    "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
@@ -1382,8 +1383,15 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-08T04:42:20.049055+00:00",
-    "last_reason": "no_posts",
+    "last_run": "2026-09-08T08:11:12.692726+00:00",
+    "last_reason": "all_verified",
     "agrees_with_backfill": true
+  },
+  "payout_public": {
+    "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
+    "network": "TRC-20 (Tron)",
+    "heading": "Support this work",
+    "note": "These write-ups are researched and published with no paywall, sponsor, or tracking. If one saved you an afternoon, a small tip keeps them coming.",
+    "asset": "USDT, USDC or USDD"
   }
 }

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-08T09:19:58.639042+00:00",
-  "total_runs": 1793,
+  "last_run": "2026-09-08T09:43:10.938552+00:00",
+  "total_runs": 1794,
   "active_features": [
     "llm_anthropic",
     "llm_gemini",
@@ -68,14 +68,14 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "mrr-ideas",
         "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
+        "idea_count": 6,
+        "refused_count": 18,
+        "llm": true,
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs\\code-tech-opportunities.md"
+        "title": "MRR idea triage refreshed (6 viable, 18 refused)",
+        "url": "docs\\mrr-ideas.md"
       }
     ],
     "total_usd": 0.0
@@ -109,7 +109,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 216,
+  "last_cycle_seconds": 81,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1046,7 +1046,6 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-09-07T23:31:01.089940+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -1055,53 +1054,72 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The single best recurring-revenue angle is a paid newsletter targeting freelance writers who want to monetize their technical expertise, leveraging dev.to as the primary discovery channel and using a simple subscription platform to collect payments manually.",
-    "ranked_ideas": [
-      {
-        "name": "Freelance Writer Monetization Newsletter",
-        "why_this_stack_fits": "A newsletter aligns naturally with the dev.to author platform and allows direct monetization through subscriptions without complex product development.",
-        "narrow_niche": "Freelance writers seeking to build a secondary income stream from their technical writing skills",
-        "first_proof_artifact": "A 1000-word introductory issue published on dev.to with a clear CTA linking to a landing page offering $10/month or $15/month tiers",
-        "who_pays": "Freelance writers wanting additional income from their writing expertise",
-        "monthly_price_usd": "12-18",
-        "runway_to_first_dollar": "4-8 weeks",
-        "owner_must_do_by_hand": "Manually open a Gumroad or Substack subscription account, create the landing page with pricing tiers, and publish the first issue directly from dev.to"
-      }
-    ],
-    "validation_steps": [
-      "Write a long-form article on dev.to titled 'How Freelance Writers Can Build a Side Income Through Curated Content' ending with a question to spark discussion",
-      "Share that article in relevant communities (r/writing, indie hacker forums, or dev.to comment threads) where you already have visibility, tracking engagement metrics",
-      "Analyze the article's performance (views, comments, shares) for two weeks to identify natural interest signals before launching a paid offer"
-    ],
-    "owner_actions": [
-      "Create a simple landing page using a static site generator or structured Google Form to collect email addresses of potential subscribers",
-      "Draft the first three newsletter issues covering common freelance writer challenges (pricing, client acquisition, workflow optimization)",
-      "Set up a basic subscription system on Gumroad or Substack by hand, connecting it to your dev.to profile for seamless sharing",
-      "Publish the first issue within seven days of starting, then dedicate thirty minutes daily to engage with comments and answer questions to build trust",
-      "Track the conversion rate from reader to subscriber and refine the first deliverable based on feedback received"
-    ],
+    "summary": "The only recurring-revenue model that fits a zero-cost, research-first, publish-to-dev.to stack with no payment processor, no inbound HTTP, and no outreach is the wallet ask on published work: embed a stablecoin address in each article and invite voluntary recurring tips from readers who value the niche technical content.",
+    "ranked_ideas": [],
+    "validation_steps": [],
+    "owner_actions": [],
     "viable": [
       {
-        "name": "Paid newsletter",
-        "mrr_model": "$10-20/mo per subscriber",
-        "source_note": "narrow niche beats broad; audience must exist first",
+        "name": "Wallet ask on published work",
+        "mrr_model": "voluntary stablecoin tips, no platform and no fee",
+        "source_note": "Already live in this project since 2026-09-04: payout.py appends a validated Tron address to every dev.to article, and receipt_check verifies readers can see it. The only model here needing no account, no fee and no owner action at all -- and therefore the only one already earning-capable rather than pending a manual step.",
         "bot_role": "publish",
+        "score": 80,
+        "manual_steps": []
+      },
+      {
+        "name": "Developer library or plugin with sponsorship",
+        "mrr_model": "recurring sponsorship on a public repository",
+        "source_note": "The repository is the discovery channel and it keeps working after publication. A receive address in the README needs no platform at all; GitHub Sponsors is the fiat version and needs one manual enablement. Income is not per-sale, so nothing needs owner action.",
+        "bot_role": "draft",
         "score": 65,
         "manual_steps": [
-          "owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe)",
-          "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API)",
-          "needs an existing audience; the dev.to byline is the only one this stack builds"
+          "owner opens the storefront or channel by hand, once"
         ]
       },
       {
         "name": "Notion / digital template store",
         "mrr_model": "$500-5K/mo, library subscription",
-        "source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token \u2014 Payhip/Etsy stay manual",
+        "source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token, but its payouts are fiat USD via Stripe \u2014 for stablecoin use a crypto-settling storefront; Payhip/Etsy stay manual",
         "bot_role": "draft",
         "score": 60,
         "manual_steps": [
-          "owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe)",
-          "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API)"
+          "owner opens a payout account by hand, once",
+          "owner opens the storefront or channel by hand, once"
+        ]
+      },
+      {
+        "name": "Freemium browser extension with a paid upgrade",
+        "mrr_model": "one-time or subscription upgrade; free tier drives discovery",
+        "source_note": "Chrome Web Store registration is a one-time $5 per account covering up to 20 extensions (verified 2026-09-08); the store takes no cut of a free listing. Client-side code means zero marginal cost per user, so the free tier can stay free indefinitely.",
+        "bot_role": "draft",
+        "score": 60,
+        "manual_steps": [
+          "owner opens a payout account by hand, once",
+          "owner opens the storefront or channel by hand, once"
+        ]
+      },
+      {
+        "name": "Paid desktop or CLI utility, sold as a download",
+        "mrr_model": "one-time licence, or a paid major version",
+        "source_note": "Runs on the buyer's machine, so there is no server to pay for and no inbound HTTP. A crypto-settling storefront can pay out USDT on Tron to the owner's own wallet, which is the address this project already publishes.",
+        "bot_role": "draft",
+        "score": 60,
+        "manual_steps": [
+          "owner opens a payout account by hand, once",
+          "owner opens the storefront or channel by hand, once"
+        ]
+      },
+      {
+        "name": "Paid newsletter",
+        "mrr_model": "$10-20/mo per subscriber",
+        "source_note": "narrow niche beats broad; audience must exist first",
+        "bot_role": "publish",
+        "score": 50,
+        "manual_steps": [
+          "owner opens a payout account by hand, once",
+          "owner opens the storefront or channel by hand, once",
+          "needs an existing audience; the dev.to byline is the only one this stack builds"
         ]
       }
     ],
@@ -1114,32 +1132,32 @@
       {
         "name": "Local business AI automation agency",
         "mrr_model": "$300-800/mo retainer per client",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform"
+        "reason": "revenue is a fee for the owner's hours \u2014 a job, not passive income (Principle 2 row 2); client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform"
       },
       {
         "name": "Online course membership",
         "mrr_model": "$49/mo; ~204 members = $10K MRR",
-        "reason": "fit score 45 is below the 50 threshold for this stack"
+        "reason": "fit score 30 is below the 50 threshold for this stack"
       },
       {
         "name": "Bookkeeping as a service",
         "mrr_model": "$200-600/mo retainer",
-        "reason": "requires a professional credential the owner does not hold; requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "revenue is a fee for the owner's hours \u2014 a job, not passive income (Principle 2 row 2); requires a professional credential the owner does not hold; requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
       },
       {
         "name": "Social media management retainer",
         "mrr_model": "$500-1.5K/mo per client",
-        "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "revenue is a fee for the owner's hours \u2014 a job, not passive income (Principle 2 row 2); delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
       },
       {
         "name": "SEO retainer",
         "mrr_model": "$400-3K/mo per client",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client"
+        "reason": "revenue is a fee for the owner's hours \u2014 a job, not passive income (Principle 2 row 2); client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client"
       },
       {
         "name": "Podcast production service",
         "mrr_model": "$500-2K/mo retainer",
-        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "revenue is a fee for the owner's hours \u2014 a job, not passive income (Principle 2 row 2); requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
       },
       {
         "name": "White-label SaaS reselling",
@@ -1149,7 +1167,7 @@
       {
         "name": "Email marketing management retainer",
         "mrr_model": "$400-1.2K/mo per client",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client"
+        "reason": "revenue is a fee for the owner's hours \u2014 a job, not passive income (Principle 2 row 2); client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client"
       },
       {
         "name": "Paid Discord / Slack community",
@@ -1159,7 +1177,7 @@
       {
         "name": "No-code app dev for one industry",
         "mrr_model": "hosting + maintenance retainer",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform"
+        "reason": "revenue is a fee for the owner's hours \u2014 a job, not passive income (Principle 2 row 2); client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform"
       },
       {
         "name": "YouTube automation channel",
@@ -1169,12 +1187,12 @@
       {
         "name": "Freelance writing retainer",
         "mrr_model": "4-8 articles/mo, $1.5-8K",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "revenue is a fee for the owner's hours \u2014 a job, not passive income (Principle 2 row 2); client acquisition needs cold email/DM \u2014 blocked in code"
       },
       {
         "name": "Online tutoring / coaching subscription",
         "mrr_model": "$150-500/mo per client",
-        "reason": "requires a human performing the service per client"
+        "reason": "revenue is a fee for the owner's hours \u2014 a job, not passive income (Principle 2 row 2); requires a human performing the service per client"
       },
       {
         "name": "API or data feed for a niche",
@@ -1184,7 +1202,7 @@
       {
         "name": "Virtual assistant agency",
         "mrr_model": "$500-2K/mo per client",
-        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "revenue is a fee for the owner's hours \u2014 a job, not passive income (Principle 2 row 2); requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
       },
       {
         "name": "Niche job board / marketplace",
@@ -1194,15 +1212,20 @@
       {
         "name": "Content repurposing service",
         "mrr_model": "$500-1.5K/mo retainer",
-        "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "revenue is a fee for the owner's hours \u2014 a job, not passive income (Principle 2 row 2); delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
       }
     ],
-    "llm_used": true
+    "llm_used": true,
+    "last_refresh_at": "2026-09-08T09:43:11.053731+00:00"
   },
   "mrr_ideas_history": {
     "names": [
       "Paid newsletter",
-      "Notion / digital template store"
+      "Notion / digital template store",
+      "Wallet ask on published work",
+      "Developer library or plugin with sponsorship",
+      "Freemium browser extension with a paid upgrade",
+      "Paid desktop or CLI utility, sold as a download"
     ]
   },
   "last_evolution_branch": null,

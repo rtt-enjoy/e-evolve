@@ -1638,3 +1638,7 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-09-07 23:31 UTC
 
 - [ok] **mrr-ideas**: [MRR idea triage refreshed (2 viable, 18 refused)](docs/mrr-ideas.md) (est. $0.00)
+
+### 2026-09-08 04:42 UTC
+
+- [ok] **dev.to**: [The npm Install Script That Silently Ran Your Build](https://dev.to/robust_true_try/the-npm-install-script-that-silently-ran-your-build-31g7) (est. $0.00)

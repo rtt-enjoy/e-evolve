@@ -1,9 +1,8 @@
 {
-  "version": "1.40.0",
-  "last_run": "2026-09-08T03:41:42.843944+00:00",
-  "total_runs": 1788,
+  "version": "1.41.0",
+  "last_run": "2026-09-08T04:39:10.631107+00:00",
+  "total_runs": 1789,
   "active_features": [
-    "llm_anthropic",
     "llm_gemini",
     "llm_openrouter",
     "llm_groq",
@@ -11,6 +10,7 @@
     "code_techs"
   ],
   "inactive_features": [
+    "llm_anthropic",
     "llm_cerebras"
   ],
   "llm_provider": "openrouter",
@@ -32,8 +32,18 @@
     "source": "on-chain USDT balance"
   },
   "last_evolution": {
-    "summary": "Skipped by owner command",
-    "changes_applied": [],
+    "version_bumped_to": "1.41.0",
+    "summary": "Implement missing receipts module and export receipt_check product so the orchestrator can run both earning products",
+    "changes_applied": [
+      {
+        "file": "bot/earning/receipts.py",
+        "reason": "Create the missing receipts product module that wraps attribution.record_receipt and attribution.summary, providing both a query function (get_receipts) and the orchestrator entry point (run)."
+      },
+      {
+        "file": "bot/earning/__init__.py",
+        "reason": "Export the two missing products (receipts_run and receipt_check_run) so the orchestrator can import and run them. Also update the docstring to document all seven products."
+      }
+    ],
     "suggestions": [
       {
         "title": "Create bot/earning/receipts.py with get_receipts and run",
@@ -60,13 +70,37 @@
           "Step 3: Update the __init__.py docstring to list receipt_check under products",
           "Step 4: Verify the import works by running the next evolution cycle"
         ]
+      },
+      {
+        "title": "Enable payout footer by setting payout.enabled=true in config/strategy.json",
+        "description": "The payout footer (USDT receive address) is configured but disabled in strategy config. Enabling it adds a 'Support this work' footer to every published article, creating the first viable monetization path. The wallet address is already configured and valid.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Edit config/strategy.json and set payout.enabled to true",
+          "Step 2: Verify USDT_WALLET_ADDRESS secret is set (already configured)",
+          "Step 3: Run the next cycle \u2014 articles will publish with the footer",
+          "Step 4: Check docs/status.json for payout.live=true and address_masked"
+        ]
       }
     ],
-    "version_bumped_to": "1.40.0",
-    "error": null
+    "error": null,
+    "branch": "evolve/1.42.0-20260908-044049",
+    "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "The npm Install Script That Silently Ran Your Build",
+        "url": "https://dev.to/robust_true_try/the-npm-install-script-that-silently-ran-your-build-31g7",
+        "estimated_usd": 0.0,
+        "source_url": "https://www.infoq.com/news/2026/09/vlt-npm-replacement/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global",
+        "source_title": "vlt 1.0 Ships as a Drop-in npm Replacement with Phased Installs, Graph Queries, and Malware-Blocking"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -95,10 +129,23 @@
         "Step 3: Update the __init__.py docstring to list receipt_check under products",
         "Step 4: Verify the import works by running the next evolution cycle"
       ]
+    },
+    {
+      "title": "Enable payout footer by setting payout.enabled=true in config/strategy.json",
+      "description": "The payout footer (USDT receive address) is configured but disabled in strategy config. Enabling it adds a 'Support this work' footer to every published article, creating the first viable monetization path. The wallet address is already configured and valid.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Edit config/strategy.json and set payout.enabled to true",
+        "Step 2: Verify USDT_WALLET_ADDRESS secret is set (already configured)",
+        "Step 3: Run the next cycle \u2014 articles will publish with the footer",
+        "Step 4: Check docs/status.json for payout.live=true and address_masked"
+      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 3,
+  "last_cycle_seconds": 189,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -107,12 +154,12 @@
   "usdt_balance": 0.0,
   "secret_readiness": {
     "llm_anthropic": {
-      "active": true,
-      "present": [
+      "active": false,
+      "present": [],
+      "missing": [
         "ANTHROPIC_API_KEY"
       ],
-      "missing": [],
-      "present_count": 1,
+      "present_count": 0,
       "required_count": 1
     },
     "llm_gemini": {
@@ -185,7 +232,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-09-07",
+    "date": "2026-09-08",
     "published": 1
   },
   "code_tech_earning": {
@@ -541,8 +588,8 @@
     ]
   },
   "configured_github_secrets": [
-    "ANTHROPIC_API_KEY",
     "GEMINI_API_KEY",
+    "GH_TOKEN",
     "GROQ_API_KEY",
     "OPENROUTER_API_KEY",
     "USDT_WALLET_ADDRESS"
@@ -599,7 +646,8 @@
       "stackoverflow.blog/2026/09/03/the-economics-of-agent-scale",
       "collusion.wiki",
       "infoq.com/presentations/ai-predictions-2030",
-      "github.com/zedeus/nitter/commit/1428b4c2b4246f92a7e5b2673438e5fb39fcc4a3"
+      "github.com/zedeus/nitter/commit/1428b4c2b4246f92a7e5b2673438e5fb39fcc4a3",
+      "infoq.com/news/2026/09/vlt-npm-replacement"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -634,7 +682,8 @@
       "economic agent scale token roi building platform ai first team 2",
       "discovery new openai agent message board",
       "presentation few predicted talk qconai 2030",
-      "nitter xcancel resume service legal advice"
+      "nitter xcancel resume service legal advice",
+      "vlt 1 0 ship drop npm replacement phased install graph query malware blocking"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -669,13 +718,13 @@
       "ai agent pipeline cost more than expected",
       "openai agent hijacked message board",
       "multi agent setup burning token cannot see",
-      "self host nitter public instance block"
+      "self host nitter public instance block",
+      "npm install script silently ran build"
     ],
     "followed_up_ids": [
       4489474
     ],
     "own_urls": [
-      "https://dev.to/robust_true_try/your-multi-agent-setup-is-burning-tokens-you-cannot-see-36a0",
       "https://dev.to/robust_true_try/your-openai-agent-got-hijacked-through-a-message-board-205a",
       "https://dev.to/robust_true_try/why-your-ai-agent-pipeline-costs-more-than-expected-42ne",
       "https://dev.to/robust_true_try/your-gemini-38-flash-token-counter-is-wrong-3aj",
@@ -698,7 +747,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-08T03:41:45.281094+00:00",
+    "checked_at": "2026-09-08T04:39:11.409643+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -909,14 +958,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.42.0-20260908-044049",
+  "evolution_pending_review": true,
   "article_stats": {
-    "count": 13,
-    "total_views": 2259,
-    "avg_views": 173.8,
+    "count": 12,
+    "total_views": 2299,
+    "avg_views": 191.6,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 1892,
+    "best_views": 1932,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -932,8 +981,8 @@
       {
         "archetype": "problem-workaround",
         "count": 4,
-        "avg_engagement": 512.8,
-        "avg_views": 506.5,
+        "avg_engagement": 522.8,
+        "avg_views": 516.5,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -958,23 +1007,23 @@
         "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
       },
       {
+        "archetype": "other",
+        "count": 2,
+        "avg_engagement": 13.5,
+        "avg_views": 13.5,
+        "best_title": "Prototype a DIY Solid\u2011State Intelligence Module for Home Automation"
+      },
+      {
         "archetype": "surprising-behavior",
         "count": 1,
         "avg_engagement": 10.0,
         "avg_views": 10.0,
         "best_title": "Why Your AI Agent Pipeline Costs More Than Expected"
-      },
-      {
-        "archetype": "other",
-        "count": 3,
-        "avg_engagement": 9.0,
-        "avg_views": 9.0,
-        "best_title": "Prototype a DIY Solid\u2011State Intelligence Module for Home Automation"
       }
     ],
     "best_archetype": "problem-workaround",
-    "worst_archetype": "other",
-    "sample_size": 13
+    "worst_archetype": "surprising-behavior",
+    "sample_size": 12
   },
   "article_rejects": {
     "last_reason": "empty_draft",
@@ -1021,8 +1070,8 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-07T23:31:13.285213+00:00",
-    "last_reason": "no_key",
+    "last_run": "2026-09-08T04:42:18.657439+00:00",
+    "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
@@ -1031,8 +1080,9 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-07T23:31:13.923532+00:00",
-    "last_reason": "no_posts",
+    "last_run": "2026-09-08T04:42:20.049055+00:00",
+    "last_reason": "all_verified",
     "agrees_with_backfill": true
-  }
+  },
+  "github_repo": "rtt-enjoy/e-evolve"
 }

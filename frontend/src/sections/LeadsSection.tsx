@@ -54,7 +54,14 @@ function LeadList({ status, opportunities }: { status: Status; opportunities: Co
 		<>
 			<SectionHead
 				title="Leads"
-				blurb={`Live market signals and the free tooling to serve them. Refreshed every ${codeTech.refresh_hours || 6}h — last ${formatDate(codeTech.last_refresh_at)}.`}
+				blurb={
+					`Live market signals and the free tooling to serve them. Refreshed every ${codeTech.refresh_hours || 6}h — last ${formatDate(codeTech.last_refresh_at)}.` +
+					// Say so when the queue ranked more than this page carries,
+					// rather than letting the count quietly under-report.
+					(codeTech.ranked_total && codeTech.ranked_total > opportunities.length
+						? ` ${codeTech.ranked_total} ranked this cycle; the top ${opportunities.length} are kept here.`
+						: '')
+				}
 			/>
 
 			{/* No money aggregate here on purpose. See buildOpportunityStats. */}

@@ -98,9 +98,12 @@ export type CodeTechEarning = {
 	daily_target_usd?: number;
 	refresh_hours?: number;
 	opportunities?: CodeTechOpportunity[];
+	/** Counts describe the leads in this snapshot, not the full ranked list. */
 	demand_count?: number;
 	supply_count?: number;
 	priced_count?: number;
+	/** How many leads ranked in total; the rest are in the markdown report. */
+	ranked_total?: number;
 	requirements?: string[];
 	focus?: string[];
 	free_ai_focus?: string[];

@@ -1097,8 +1097,11 @@ history limit, because it is a live queue and not a log. Each lead carries
 `value_basis` before believing any figure: `none` means nobody published a
 price, and `value_usd` is then `None` rather than `0.0`. There is deliberately
 no total — the prices mix hourly, monthly and annual periods and are not
-additive. `demand_count` / `supply_count` / `priced_count` are counts of the
-full ranked list, which is longer than the snapshot.
+additive. `demand_count` / `supply_count` / `priced_count` describe **the leads
+in the snapshot**, not the longer ranked list — a count that exceeds what the
+page can show is a claim the page cannot back up. `ranked_total` carries how
+many ranked in total, and the remainder live in
+`docs/code-tech-opportunities.md`.
 `article_history.own_urls` is the account's own dev.to post URLs, refreshed from
 the API each cycle by `articles._refresh_stats` and read by **both** products
 through `devto.own_post_urls()` so neither can source from itself.

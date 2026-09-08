@@ -1777,6 +1777,46 @@ class TestLeadStatusPayloadStaysBounded(unittest.TestCase):
 		self.assertEqual(sum(1 for op in ranked if op.codex_prompt), 10)
 
 
+class TestLeadCountsDescribeWhatIsShown(unittest.TestCase):
+	"""A count must not claim more than the snapshot can show.
+
+    The counts were taken over the full ranked list while the snapshot holds
+    only the top `status_max_items`, so the dashboard read "40 demand leads"
+    above a page listing 18 -- a field reporting on more than it covers, which
+    is the failure `receipt_check` exists to catch elsewhere in this project.
+    """
+
+	def test_counts_match_the_snapshot_and_total_is_separate(self):
+		leads = [{
+			"title": f"Freelance contract role {i}", "url": f"https://example.com/{i}",
+			"source": "himalayas", "kind": "demand", "body": "contract work",
+			"labels": [], "posted_at": _hours_ago_iso(i),
+		} for i in range(30)]
+		status: dict = {}
+
+		original = code_techs_module._fetch_online_leads
+		# run() writes the markdown report and calls the LLM. Stub both: a test
+		# must not overwrite a real docs/ artifact or reach the network.
+		original_report = code_techs_module._write_report
+		original_brief = code_techs_module._online_ai_brief
+		try:
+			code_techs_module._fetch_online_leads = lambda cfg: leads
+			code_techs_module._write_report = lambda state, leads=None: None
+			code_techs_module._online_ai_brief = lambda llm, leads, cfg: {}
+			code_techs_module.run(None, status)
+		finally:
+			code_techs_module._fetch_online_leads = original
+			code_techs_module._write_report = original_report
+			code_techs_module._online_ai_brief = original_brief
+
+		state = status["code_tech_earning"]
+		shown = state["opportunities"]
+		self.assertEqual(state["demand_count"] + state["supply_count"], len(shown))
+		self.assertLessEqual(state["priced_count"], len(shown))
+		# The leads that did not fit are still reported, just not as page counts.
+		self.assertGreaterEqual(state["ranked_total"], len(shown))
+
+
 class TestFreeAiClassifierNeedsProximity(unittest.TestCase):
 	"""An AI word and a "free" word in the same document prove nothing.
 

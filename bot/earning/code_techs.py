@@ -364,8 +364,13 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	if cfg.get("auto_pursue"):
 		log.warning("[code_techs] auto_pursue ignored: research-only policy forbids posting comments")
 
-	demand = sum(1 for op in opportunities if op.kind == _DEMAND)
-	priced = sum(1 for op in opportunities if op.value_basis != "none")
+	# These counts describe the leads actually in the snapshot, not the longer
+	# ranked list. A count that exceeds what the page can show is a claim the
+	# page cannot back up -- the same "field reports on more than it covers"
+	# problem `receipt_check` exists to catch. `ranked_total` carries the rest.
+	shown = opportunities[:status_max_items]
+	demand = sum(1 for op in shown if op.kind == _DEMAND)
+	priced = sum(1 for op in shown if op.value_basis != "none")
 	state.update({
 		"enabled": True,
 		"last_refresh_at": now.isoformat(),
@@ -373,10 +378,11 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		"refresh_hours": refresh_hours,
 		# The report may be long; the snapshot is committed hourly, so it is
 		# the one that gets trimmed.
-		"opportunities": [op.__dict__ for op in opportunities[:status_max_items]],
+		"opportunities": [op.__dict__ for op in shown],
 		"demand_count": demand,
-		"supply_count": len(opportunities) - demand,
+		"supply_count": len(shown) - demand,
 		"priced_count": priced,
+		"ranked_total": len(opportunities),
 		"requirements": _clean_list(cfg.get("requirements", [])),
 		"reference_sources": _reference_sources(cfg),
 		"remote_service_niches": _clean_list(cfg.get("remote_service_niches", [])),

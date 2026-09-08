@@ -55,10 +55,10 @@
 	},
 	"code_techs": {
 		"enabled": true,
-		"refresh_hours": 24,
+		"refresh_hours": 6,
 		"daily_target_usd": 10.0,
-		"max_items": 8,
-		"min_score": 55,
+		"max_items": 40,
+		"min_score": 40,
 		"auto_pursue": false,
 		"pursue_score_threshold": 75,
 		"requirements": [
@@ -111,7 +111,7 @@
 			}
 		],
 		"github_searches": [
-			"free AI API list no credit card in:readme stars:>200",
+			"free AI API list no credit card in:name,description,readme stars:>200",
 			"awesome free LLM API in:name,readme stars:>100",
 			"free tier AI services awesome list in:readme stars:>150",
 			"free OCR API python in:readme stars:>100",
@@ -159,14 +159,54 @@
 			"is there a free tool",
 			"how much to charge automation"
 		],
-		"max_reddit_requests": 24,
-		"outreach": {
-			"enabled": true,
-			"default_price_usd": 10.0,
-			"payment_label": "crypto",
-			"crypto_address_env": "USDT_WALLET_ADDRESS",
-			"fallback_payment_note": "Payment address is configured privately; add it manually before sending."
-		}
+		"max_reddit_requests": 3,
+		"status_max_items": 18,
+		"prompt_top_n": 10,
+		"min_demand_share": 0.5,
+		"demand_max_age_hours": 72,
+		"hn_hiring_max_age_hours": 744,
+		"supply_max_age_days": 120,
+		"himalayas_pages": 3,
+		"reddit_backoff_seconds": 5,
+		"hn_contract_terms": [
+			"contract",
+			"contractor",
+			"freelance",
+			"part-time",
+			"part time"
+		],
+		"job_employment_types": [
+			"Contractor",
+			"Part Time",
+			"Freelance"
+		],
+		"job_categories": [
+			"Software Development",
+			"Data Science",
+			"Design",
+			"Writing",
+			"Marketing",
+			"Customer Support",
+			"Product"
+		],
+		"deliverable_terms": [
+			"transcri",
+			"ocr",
+			"extract",
+			"convert",
+			"summari",
+			"translat",
+			"cleanup",
+			"clean up",
+			"automat",
+			"scrape",
+			"scraper",
+			"dashboard",
+			"report",
+			"integration",
+			"migration",
+			"pipeline"
+		]
 	},
 	"llm": {
 		"main_engine": "openrouter/free",

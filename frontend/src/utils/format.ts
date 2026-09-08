@@ -1,4 +1,5 @@
-import type { Status } from '../types/status';
+import type { CodeTechOpportunity, LeadValueBasis, Status } from '../types/status';
+import type { Tone } from '../components/ui';
 
 export function money(value = 0, digits = 2): string {
 	return new Intl.NumberFormat('en-US', {
@@ -36,6 +37,43 @@ export function ageLabel(value?: string): { label: string; tone: 'good' | 'warn'
 	if (minutes < 75) return { label: `${minutes}m ago`, tone: 'good' };
 	if (minutes < 180) return { label: `${Math.floor(minutes / 60)}h ${minutes % 60}m ago`, tone: 'warn' };
 	return { label: `${Math.floor(minutes / 60)}h ago`, tone: 'bad' };
+}
+
+/**
+ * A lead's age, on a scale that suits leads.
+ *
+ * `ageLabel` above is tuned for cycle freshness -- anything over 75 minutes is
+ * already `warn` -- which would paint every posting on the page red. A job
+ * posted this morning is fresh; one from last week is not.
+ */
+export function leadAge(hours?: number | null): { label: string; tone: Tone } {
+	if (hours === null || hours === undefined || Number.isNaN(hours)) {
+		return { label: '—', tone: 'neutral' };
+	}
+	const label = hours < 1 ? '<1h' : hours < 48 ? `${Math.round(hours)}h` : `${Math.round(hours / 24)}d`;
+	if (hours <= 24) return { label, tone: 'good' };
+	if (hours <= 72) return { label, tone: 'info' };
+	return { label, tone: 'warn' };
+}
+
+/**
+ * The one place a lead's price becomes text.
+ *
+ * Returns an em dash when no price was published. The previous UI called
+ * `compactMoney(lead.estimated_value_usd || 0)`, which rendered an invented
+ * figure as "$4,500" and a missing one as "$0" -- two different lies in the
+ * same column.
+ */
+export function formatLeadValue(lead: CodeTechOpportunity): string {
+	if (!lead.value_basis || lead.value_basis === 'none') return '—';
+	return lead.value_note || (lead.value_usd ? compactMoney(lead.value_usd) : '—');
+}
+
+/** Where a price came from, spelled out so a figure never travels alone. */
+export function valueBasisLabel(basis?: LeadValueBasis): string {
+	if (basis === 'posted_salary') return 'salary posted by the source';
+	if (basis === 'stated_rate') return 'rate stated by the poster';
+	return 'no price published';
 }
 
 export function featureLabel(feature: string): string {

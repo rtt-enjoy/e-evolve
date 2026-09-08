@@ -70,7 +70,7 @@
         "how_to": [
           "Step 1: Edit config/strategy.json and set payout.enabled to true",
           "Step 2: Verify USDT_WALLET_ADDRESS secret is set (already configured)",
-          "Step 3: Run the next cycle \u2014 articles will publish with the footer",
+          "Step 3: Run the next cycle — articles will publish with the footer",
           "Step 4: Check docs/status.json for payout.live=true and address_masked"
         ]
       }
@@ -129,7 +129,7 @@
       "how_to": [
         "Step 1: Edit config/strategy.json and set payout.enabled to true",
         "Step 2: Verify USDT_WALLET_ADDRESS secret is set (already configured)",
-        "Step 3: Run the next cycle \u2014 articles will publish with the footer",
+        "Step 3: Run the next cycle — articles will publish with the footer",
         "Step 4: Check docs/status.json for payout.live=true and address_masked"
       ]
     }
@@ -248,7 +248,7 @@
         "value_basis": "stated_rate",
         "value_note": "$23-34/hr stated",
         "posted_at": "2026-09-03T09:25:29+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
         "age_hours": 118.5,
         "reason": "$23-34/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable",
         "next_step": "Read what Search Atlas actually asked for, then build the smallest working slice of the stated problem and quote per milestone.",
@@ -273,8 +273,8 @@
         "value_basis": "stated_rate",
         "value_note": "$120-160/hr stated",
         "posted_at": "2026-09-01T15:47:09+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
-        "age_hours": 160.1,
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
+        "age_hours": 160.2,
         "reason": "$120-160/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable",
         "next_step": "Read what Noricum actually asked for, then build the smallest working slice of the stated problem and quote per milestone.",
         "codex_prompt": "Build a small, verifiable deliverable for this real market signal.\n\nBUYER          Noricum (via hn-hiring)\nDEMAND SIGNAL  Noricum | Senior Backend Engineer, Payments, Ledger & Provable Fairness | REMOTE (2h overlap with US Pacific) | Contract to permanent | $120\nPOSTED         2026-09-01T15:47:09+00:00 (160h ago)\nLINK           https://news.ycombinator.com/item?id=49523604\nDELIVERABLE    Read what Noricum actually asked for, then build the smallest working slice of the stated problem and quote per milestone.\nPRICE BASIS    $120-160/hr stated\nFREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs\nWHY IT RANKS   $120-160/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable\n\nConstraints:\n- Keep the first change narrowly scoped to one file or script.\n- Use free API tiers or offline code paths only; no paid service.\n- Include the exact commands to run it and paste the real output.\n- Verify on at least 3 sample inputs before calling it done.\n- Do not contact anyone, publish anything, or request payment.\n- Do not state a price unless PRICE BASIS gives one.",
@@ -298,7 +298,7 @@
         "value_basis": "posted_salary",
         "value_note": "$15-20/hr posted",
         "posted_at": "2026-09-08T07:31:29+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
         "age_hours": 0.4,
         "reason": "$15-20/hr posted by the source, not inferred; posted 0h ago, so the buyer is still looking",
         "next_step": "Read what mercor actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.",
@@ -323,7 +323,7 @@
         "value_basis": "posted_salary",
         "value_note": "$25-50/hr posted",
         "posted_at": "2026-09-08T07:31:29+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
         "age_hours": 0.4,
         "reason": "$25-50/hr posted by the source, not inferred; posted 0h ago, so the buyer is still looking",
         "next_step": "Read what InGenius Prep actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.",
@@ -331,7 +331,7 @@
         "pursued": false
       },
       {
-        "title": "ODK | Senior Product Manager | Remote (Worldwide) | Long-term contract, 30\u201340 hours/week | $90\u2013$110/hour USD ODK is an open-source platform ",
+        "title": "ODK | Senior Product Manager | Remote (Worldwide) | Long-term contract, 30–40 hours/week | $90–$110/hour USD ODK is an open-source platform ",
         "url": "https://news.ycombinator.com/item?id=49524080",
         "source": "hn-hiring",
         "buyer": "ODK",
@@ -348,11 +348,11 @@
         "value_basis": "stated_rate",
         "value_note": "$90-110/hr stated",
         "posted_at": "2026-09-01T16:17:07+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
-        "age_hours": 159.6,
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
+        "age_hours": 159.7,
         "reason": "$90-110/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable",
         "next_step": "Read what ODK actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.",
-        "codex_prompt": "Build a small, verifiable deliverable for this real market signal.\n\nBUYER          ODK (via hn-hiring)\nDEMAND SIGNAL  ODK | Senior Product Manager | Remote (Worldwide) | Long-term contract, 30\u201340 hours/week | $90\u2013$110/hour USD ODK is an open-source platform \nPOSTED         2026-09-01T16:17:07+00:00 (160h ago)\nLINK           https://news.ycombinator.com/item?id=49524080\nDELIVERABLE    Read what ODK actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.\nPRICE BASIS    $90-110/hr stated\nFREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs\nWHY IT RANKS   $90-110/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable\n\nConstraints:\n- Keep the first change narrowly scoped to one file or script.\n- Use free API tiers or offline code paths only; no paid service.\n- Include the exact commands to run it and paste the real output.\n- Verify on at least 3 sample inputs before calling it done.\n- Do not contact anyone, publish anything, or request payment.\n- Do not state a price unless PRICE BASIS gives one.",
+        "codex_prompt": "Build a small, verifiable deliverable for this real market signal.\n\nBUYER          ODK (via hn-hiring)\nDEMAND SIGNAL  ODK | Senior Product Manager | Remote (Worldwide) | Long-term contract, 30–40 hours/week | $90–$110/hour USD ODK is an open-source platform \nPOSTED         2026-09-01T16:17:07+00:00 (160h ago)\nLINK           https://news.ycombinator.com/item?id=49524080\nDELIVERABLE    Read what ODK actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.\nPRICE BASIS    $90-110/hr stated\nFREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs\nWHY IT RANKS   $90-110/hr stated by the source, not inferred; scoped as contract or part-time work, which suits one narrow deliverable\n\nConstraints:\n- Keep the first change narrowly scoped to one file or script.\n- Use free API tiers or offline code paths only; no paid service.\n- Include the exact commands to run it and paste the real output.\n- Verify on at least 3 sample inputs before calling it done.\n- Do not contact anyone, publish anything, or request payment.\n- Do not state a price unless PRICE BASIS gives one.",
         "pursued": false
       },
       {
@@ -373,7 +373,7 @@
         "value_basis": "posted_salary",
         "value_note": "$120,000-160,000/yr posted",
         "posted_at": "2026-09-08T07:25:22+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
         "age_hours": 0.5,
         "reason": "$120,000-160,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking",
         "next_step": "Read what Clinician Nexus actually asked for, then build the smallest working slice of the stated problem and quote per milestone.",
@@ -398,7 +398,7 @@
         "value_basis": "posted_salary",
         "value_note": "$90,000-119,000/yr posted",
         "posted_at": "2026-09-08T07:24:23+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
         "age_hours": 0.5,
         "reason": "$90,000-119,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking",
         "next_step": "Read what Henry Schein One actually asked for, then clean one messy sample export and quote a flat rate per file.",
@@ -413,7 +413,7 @@
         "kind": "demand",
         "score": 56,
         "score_parts": {
-          "recency": 0.994,
+          "recency": 0.993,
           "demand_intent": 0.25,
           "value_clarity": 1.0,
           "deliverability": 0.0,
@@ -423,8 +423,8 @@
         "value_basis": "posted_salary",
         "value_note": "$75,000-80,000/yr posted",
         "posted_at": "2026-09-08T07:28:07+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
-        "age_hours": 0.4,
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
+        "age_hours": 0.5,
         "reason": "$75,000-80,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking",
         "next_step": "Read what Talentuch actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.",
         "codex_prompt": "Build a small, verifiable deliverable for this real market signal.\n\nBUYER          Talentuch (via himalayas)\nDEMAND SIGNAL  Channel & Product Marketing Manager - Talentuch\nPOSTED         2026-09-08T07:28:07+00:00 (0h ago)\nLINK           https://himalayas.app/companies/talentuch/jobs/channel-product-marketing-manager\nDELIVERABLE    Read what Talentuch actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.\nPRICE BASIS    $75,000-80,000/yr posted\nFREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs\nWHY IT RANKS   $75,000-80,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking\n\nConstraints:\n- Keep the first change narrowly scoped to one file or script.\n- Use free API tiers or offline code paths only; no paid service.\n- Include the exact commands to run it and paste the real output.\n- Verify on at least 3 sample inputs before calling it done.\n- Do not contact anyone, publish anything, or request payment.\n- Do not state a price unless PRICE BASIS gives one.",
@@ -448,7 +448,7 @@
         "value_basis": "posted_salary",
         "value_note": "$150,000-170,000/yr posted",
         "posted_at": "2026-09-08T07:24:25+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
         "age_hours": 0.5,
         "reason": "$150,000-170,000/yr posted by the source, not inferred; posted 0h ago, so the buyer is still looking",
         "next_step": "Read what Claritas Rx actually asked for, then build the smallest working slice of the stated problem and quote per milestone.",
@@ -463,7 +463,7 @@
         "kind": "demand",
         "score": 52,
         "score_parts": {
-          "recency": 0.996,
+          "recency": 0.994,
           "demand_intent": 0.7,
           "value_clarity": 0.0,
           "deliverability": 0.333,
@@ -473,22 +473,22 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-08T07:33:36+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
-        "age_hours": 0.3,
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
+        "age_hours": 0.4,
         "reason": "posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable",
         "next_step": "Read what Delan Associates actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.",
         "codex_prompt": "Build a small, verifiable deliverable for this real market signal.\n\nBUYER          Delan Associates (via himalayas)\nDEMAND SIGNAL  Workday Contract and Journeys Consultant - Delan Associates\nPOSTED         2026-09-08T07:33:36+00:00 (0h ago)\nLINK           https://himalayas.app/companies/delan-associates/jobs/workday-contract-and-journeys-consultant\nDELIVERABLE    Read what Delan Associates actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.\nPRICE BASIS    no stated price - do not quote or invent a figure\nFREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs\nWHY IT RANKS   posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable\n\nConstraints:\n- Keep the first change narrowly scoped to one file or script.\n- Use free API tiers or offline code paths only; no paid service.\n- Include the exact commands to run it and paste the real output.\n- Verify on at least 3 sample inputs before calling it done.\n- Do not contact anyone, publish anything, or request payment.\n- Do not state a price unless PRICE BASIS gives one.",
         "pursued": false
       },
       {
-        "title": "Verk\u00e4ufer (w/m/d) Remote - NETSHAKE GmbH",
+        "title": "Verkäufer (w/m/d) Remote - NETSHAKE GmbH",
         "url": "https://himalayas.app/companies/netshake-gmbh/jobs/verkaufer-w-m-d-remote-6189640426",
         "source": "himalayas",
         "buyer": "NETSHAKE GmbH",
         "kind": "demand",
         "score": 52,
         "score_parts": {
-          "recency": 0.993,
+          "recency": 0.992,
           "demand_intent": 0.7,
           "value_clarity": 0.0,
           "deliverability": 0.333,
@@ -498,8 +498,8 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-08T07:22:23+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
-        "age_hours": 0.5,
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
+        "age_hours": 0.6,
         "reason": "posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable",
         "next_step": "Read what NETSHAKE GmbH actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.",
         "codex_prompt": "",
@@ -523,7 +523,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-07T13:13:20+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
         "age_hours": 18.7,
         "reason": "posted 18h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable",
         "next_step": "Read what BOSS-IQ actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.",
@@ -548,7 +548,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-02T07:30:20+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
         "age_hours": 144.4,
         "reason": "scoped as contract or part-time work, which suits one narrow deliverable; boring conversion work buyers already pay humans to do by hand",
         "next_step": "Read what Senior Python Backend Engineer actually asked for, then build the smallest working slice of the stated problem and quote per milestone.",
@@ -573,8 +573,8 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-01T21:17:35+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
-        "age_hours": 154.6,
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
+        "age_hours": 154.7,
         "reason": "scoped as contract or part-time work, which suits one narrow deliverable; boring conversion work buyers already pay humans to do by hand",
         "next_step": "Read what Vitalize actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.",
         "codex_prompt": "",
@@ -588,7 +588,7 @@
         "kind": "demand",
         "score": 51,
         "score_parts": {
-          "recency": 0.786,
+          "recency": 0.785,
           "demand_intent": 0.7,
           "value_clarity": 0.0,
           "deliverability": 0.667,
@@ -598,35 +598,10 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-01T16:23:18+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
-        "age_hours": 159.5,
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
+        "age_hours": 159.6,
         "reason": "scoped as contract or part-time work, which suits one narrow deliverable",
         "next_step": "Read what WorkHero https://workhero.pro actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.",
-        "codex_prompt": "",
-        "pursued": false
-      },
-      {
-        "title": "ysr666/dsh-vision-router",
-        "url": "https://github.com/ysr666/dsh-vision-router",
-        "source": "github",
-        "buyer": "tooling, no buyer",
-        "kind": "supply",
-        "score": 49,
-        "score_parts": {
-          "recency": 1.0,
-          "demand_intent": 0.15,
-          "value_clarity": 0.0,
-          "deliverability": 0.333,
-          "free_stack_fit": 1.0
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-09-08T07:45:07+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
-        "age_hours": 0.1,
-        "reason": "free tooling you can deliver paid work with; boring conversion work buyers already pay humans to do by hand",
-        "next_step": "Confirm the free tier's real limits and terms, run one small end-to-end sample, then attach a fixed price to a single narrow task built on it.",
         "codex_prompt": "",
         "pursued": false
       },
@@ -638,7 +613,7 @@
         "kind": "demand",
         "score": 47,
         "score_parts": {
-          "recency": 0.996,
+          "recency": 0.994,
           "demand_intent": 0.7,
           "value_clarity": 0.0,
           "deliverability": 0.0,
@@ -648,8 +623,8 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-08T07:34:04+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
-        "age_hours": 0.3,
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
+        "age_hours": 0.4,
         "reason": "posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable",
         "next_step": "Read what DMS International actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.",
         "codex_prompt": "",
@@ -673,7 +648,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-08T07:30:44+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
         "age_hours": 0.4,
         "reason": "posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable",
         "next_step": "Read what goPro Consultancy Group ltd. actually asked for, then produce one sample page and quote per thousand words.",
@@ -698,85 +673,10 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-08T07:29:47+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
+        "discovered_at": "2026-09-08T07:56:36.515551+00:00",
         "age_hours": 0.4,
         "reason": "posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable",
         "next_step": "Read what uvation actually asked for, then build the smallest working slice of the stated problem and quote per milestone.",
-        "codex_prompt": "",
-        "pursued": false
-      },
-      {
-        "title": "Fullstack Developer - MySCU",
-        "url": "https://himalayas.app/companies/myscu/jobs/fullstack-developer",
-        "source": "himalayas",
-        "buyer": "MySCU",
-        "kind": "demand",
-        "score": 47,
-        "score_parts": {
-          "recency": 0.994,
-          "demand_intent": 0.7,
-          "value_clarity": 0.0,
-          "deliverability": 0.0,
-          "free_stack_fit": 0.0
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-09-08T07:28:52+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
-        "age_hours": 0.4,
-        "reason": "posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable",
-        "next_step": "Read what MySCU actually asked for, then build the smallest working slice of the stated problem and quote per milestone.",
-        "codex_prompt": "",
-        "pursued": false
-      },
-      {
-        "title": "Freelance Video Editor & Motion Designer (Project-Based Contract) - Sourcefin",
-        "url": "https://himalayas.app/companies/sourcefin/jobs/freelance-video-editor-motion-designer-project-based-contract",
-        "source": "himalayas",
-        "buyer": "Sourcefin",
-        "kind": "demand",
-        "score": 47,
-        "score_parts": {
-          "recency": 0.994,
-          "demand_intent": 0.7,
-          "value_clarity": 0.0,
-          "deliverability": 0.0,
-          "free_stack_fit": 0.0
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-09-08T07:28:17+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
-        "age_hours": 0.4,
-        "reason": "posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable",
-        "next_step": "Read what Sourcefin actually asked for, then process a handful of sample assets and quote per image or per batch.",
-        "codex_prompt": "",
-        "pursued": false
-      },
-      {
-        "title": "Online Data Analyst - Portuguese (PT) - TELUS Digital",
-        "url": "https://himalayas.app/companies/telus-digital/jobs/online-data-analyst-portuguese-pt",
-        "source": "himalayas",
-        "buyer": "TELUS Digital",
-        "kind": "demand",
-        "score": 47,
-        "score_parts": {
-          "recency": 0.994,
-          "demand_intent": 0.7,
-          "value_clarity": 0.0,
-          "deliverability": 0.0,
-          "free_stack_fit": 0.0
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-09-08T07:25:34+00:00",
-        "discovered_at": "2026-09-08T07:52:32.330140+00:00",
-        "age_hours": 0.4,
-        "reason": "posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable",
-        "next_step": "Read what TELUS Digital actually asked for, then build the smallest working slice of the stated problem and quote per milestone.",
         "codex_prompt": "",
         "pursued": false
       }
@@ -859,7 +759,7 @@
         {
           "theme": "Remote contract roles requiring AI-assisted data processing, technical writing, and analysis",
           "evidence": "Language Model Analyst, Technical Writer/QA Specialist, Online Data Analyst, Linux Infrastructure Engineer (AI Factory)",
-          "offer": "Fixed-price batch jobs: transcribe meeting recordings, summarize technical docs, clean/extract data from PDFs, generate embeddings for search \u2014 delivered via free APIs"
+          "offer": "Fixed-price batch jobs: transcribe meeting recordings, summarize technical docs, clean/extract data from PDFs, generate embeddings for search — delivered via free APIs"
         },
         {
           "theme": "Content and marketing teams needing rapid asset preparation",
@@ -869,7 +769,7 @@
         {
           "theme": "Education and admissions consultants handling document-heavy workflows",
           "evidence": "College Admissions Counselor/Consultant, Instructor/Facilitator, Fullstack Developer (AI EdTech)",
-          "offer": "Document pipeline: OCR + summarization + translation for student essays, transcripts, recommendation letters \u2014 fixed price per application packet"
+          "offer": "Document pipeline: OCR + summarization + translation for student essays, transcripts, recommendation letters — fixed price per application packet"
         }
       ],
       "free_ai_services": [
@@ -879,7 +779,7 @@
           "free_tier": "verify current limit (generous daily token allowance, no credit card)",
           "credit_card_required": "no",
           "earn_with_it": "Transcribe or summarize audio/text files in batches; charge per minute or per document",
-          "price_guide": "$0.10\u2013$0.25 per audio minute; $1\u2013$3 per 10-page document summary"
+          "price_guide": "$0.10–$0.25 per audio minute; $1–$3 per 10-page document summary"
         },
         {
           "name": "Hugging Face Inference API",
@@ -887,7 +787,7 @@
           "free_tier": "verify current limit (rate-limited, no credit card)",
           "credit_card_required": "no",
           "earn_with_it": "Run speech-to-text, translation, embedding, or image generation tasks on demand; bundle into per-job fees",
-          "price_guide": "$0.05\u2013$0.15 per transcription minute; $0.50\u2013$1 per image background removal; $2\u2013$5 per 1k embeddings"
+          "price_guide": "$0.05–$0.15 per transcription minute; $0.50–$1 per image background removal; $2–$5 per 1k embeddings"
         },
         {
           "name": "Cohere API",
@@ -895,7 +795,7 @@
           "free_tier": "verify current limit (monthly token quota, no credit card)",
           "credit_card_required": "no",
           "earn_with_it": "Generate embeddings for semantic search or classification; sell setup + first batch",
-          "price_guide": "$10\u2013$25 for embedding a 10k-doc corpus; $5\u2013$15 per classification batch"
+          "price_guide": "$10–$25 for embedding a 10k-doc corpus; $5–$15 per classification batch"
         },
         {
           "name": "Mistral AI API",
@@ -903,7 +803,7 @@
           "free_tier": "verify current limit (free tier with rate limits, no credit card)",
           "credit_card_required": "no",
           "earn_with_it": "Produce high-quality summaries, translations, or structured extractions; charge per output",
-          "price_guide": "$1\u2013$2 per 5-page summary; $0.02\u2013$0.05 per translated word"
+          "price_guide": "$1–$2 per 5-page summary; $0.02–$0.05 per translated word"
         },
         {
           "name": "Remove.bg API",
@@ -911,7 +811,7 @@
           "free_tier": "50 free credits/month (1 credit = 1 image up to 0.25 MP), no credit card",
           "credit_card_required": "no",
           "earn_with_it": "Batch-remove backgrounds for e-commerce product photos; charge per image",
-          "price_guide": "$0.20\u2013$0.50 per image (volume discounts)"
+          "price_guide": "$0.20–$0.50 per image (volume discounts)"
         },
         {
           "name": "LibreTranslate API",
@@ -919,7 +819,7 @@
           "free_tier": "Public instance rate-limited; self-host on free CPU (no credit card)",
           "credit_card_required": "no",
           "earn_with_it": "Translate documents or subtitles for clients; charge per word or per file",
-          "price_guide": "$0.01\u2013$0.03 per word; $5\u2013$15 per 1k-word document"
+          "price_guide": "$0.01–$0.03 per word; $5–$15 per 1k-word document"
         },
         {
           "name": "Hugging Face Spaces",
@@ -927,7 +827,7 @@
           "free_tier": "Unlimited CPU spaces, no credit card",
           "credit_card_required": "no",
           "earn_with_it": "Deploy a one-page tool (e.g., PDF summarizer, image cleaner) and sell access or setup",
-          "price_guide": "$20\u2013$50 one-time for tool deployment + handoff; $10\u2013$30/mo for hosted maintenance"
+          "price_guide": "$20–$50 one-time for tool deployment + handoff; $10–$30/mo for hosted maintenance"
         },
         {
           "name": "GitHub Actions",
@@ -935,7 +835,7 @@
           "free_tier": "2,000 minutes/month private, no credit card",
           "credit_card_required": "no",
           "earn_with_it": "Schedule recurring batch jobs (daily reports, weekly data enrichment) using free APIs; sell as monthly retainer",
-          "price_guide": "$30\u2013$100/mo for a weekly automated report delivery"
+          "price_guide": "$30–$100/mo for a weekly automated report delivery"
         },
         {
           "name": "Google Colab",
@@ -943,7 +843,7 @@
           "free_tier": "Time-limited sessions, no credit card",
           "credit_card_required": "no",
           "earn_with_it": "Run heavier open-weight models (Whisper large, Llama 3) for one-off client jobs; deliver results, not compute",
-          "price_guide": "$15\u2013$40 per heavy batch job (e.g., 2-hour audio transcription with speaker diarization)"
+          "price_guide": "$15–$40 per heavy batch job (e.g., 2-hour audio transcription with speaker diarization)"
         }
       ],
       "easy_earning_ideas": [
@@ -951,7 +851,7 @@
           "idea": "Audio Transcription Batch Service",
           "who_pays": "Podcast editors, researchers, journalists, remote teams",
           "deliverable": "Timestamped SRT/VTT/JSON transcripts for up to 60 minutes of audio, delivered in 24h",
-          "price_usd": "5\u201312 per hour of audio",
+          "price_usd": "5–12 per hour of audio",
           "time_to_first_dollar": "same day",
           "free_stack": "Groq API (Whisper) or Hugging Face Inference API (Whisper), GitHub Actions for scheduling"
         },
@@ -959,15 +859,15 @@
           "idea": "Document Summarization & Extraction",
           "who_pays": "Consultants, lawyers, admissions counselors, analysts",
           "deliverable": "One-page executive summary + key entities/table data in CSV from PDFs/DOCX (up to 20 pages)",
-          "price_usd": "3\u20138 per document",
-          "time_to_first_dollar": "2\u20133 days",
+          "price_usd": "3–8 per document",
+          "time_to_first_dollar": "2–3 days",
           "free_stack": "Groq/Cohere/Mistral for LLM, pdfplumber (local) for extraction, Hugging Face Spaces for demo"
         },
         {
           "idea": "E-commerce Background Removal",
           "who_pays": "Shopify/Etsy sellers, dropshippers, small brands",
-          "deliverable": "Clean PNGs with transparent backgrounds, 1000\u00d71000 px, delivered via zip/Drive link",
-          "price_usd": "0.25\u20130.50 per image (min 20 images)",
+          "deliverable": "Clean PNGs with transparent backgrounds, 1000×1000 px, delivered via zip/Drive link",
+          "price_usd": "0.25–0.50 per image (min 20 images)",
           "time_to_first_dollar": "same day",
           "free_stack": "Remove.bg API (50 free/mo), Hugging Face Spaces for upload UI"
         }
@@ -993,8 +893,8 @@
       "Charge for the prompt library and workflow, and let the client bring their own free key.",
       "Package a recurring report built on free-tier APIs as a low-cost monthly retainer."
     ],
-    "demand_count": 38,
-    "supply_count": 2,
+    "demand_count": 40,
+    "supply_count": 0,
     "priced_count": 9
   },
   "configured_github_secrets": [
@@ -1150,7 +1050,7 @@
   },
   "wallet": {
     "configured": false,
-    "address_masked": "TFTNsf\u20269KbY",
+    "address_masked": "TFTNsf…9KbY",
     "network": "TRC-20",
     "confirmed_usd": 0.0,
     "received_total_usd": 0.0,
@@ -1258,7 +1158,7 @@
       {
         "name": "Notion / digital template store",
         "mrr_model": "$500-5K/mo, library subscription",
-        "source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token \u2014 Payhip/Etsy stay manual",
+        "source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token — Payhip/Etsy stay manual",
         "bot_role": "draft",
         "score": 60,
         "manual_steps": [
@@ -1276,7 +1176,7 @@
       {
         "name": "Local business AI automation agency",
         "mrr_model": "$300-800/mo retainer per client",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform"
+        "reason": "client acquisition needs cold email/DM — blocked in code; requires a paid third-party platform"
       },
       {
         "name": "Online course membership",
@@ -1286,52 +1186,52 @@
       {
         "name": "Bookkeeping as a service",
         "mrr_model": "$200-600/mo retainer",
-        "reason": "requires a professional credential the owner does not hold; requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "requires a professional credential the owner does not hold; requires a human performing the service per client; client acquisition needs cold email/DM — blocked in code"
       },
       {
         "name": "Social media management retainer",
         "mrr_model": "$500-1.5K/mo per client",
-        "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "delivery requires posting to social platforms — blocked in code; client acquisition needs cold email/DM — blocked in code"
       },
       {
         "name": "SEO retainer",
         "mrr_model": "$400-3K/mo per client",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client"
+        "reason": "client acquisition needs cold email/DM — blocked in code; requires a human performing the service per client"
       },
       {
         "name": "Podcast production service",
         "mrr_model": "$500-2K/mo retainer",
-        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM — blocked in code"
       },
       {
         "name": "White-label SaaS reselling",
         "mrr_model": "platform markup, $1-6K/mo",
-        "reason": "requires a paid third-party platform; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "requires a paid third-party platform; client acquisition needs cold email/DM — blocked in code"
       },
       {
         "name": "Email marketing management retainer",
         "mrr_model": "$400-1.2K/mo per client",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client"
+        "reason": "client acquisition needs cold email/DM — blocked in code; requires a human performing the service per client"
       },
       {
         "name": "Paid Discord / Slack community",
         "mrr_model": "$15-50/mo per member",
-        "reason": "delivery requires posting to social platforms \u2014 blocked in code"
+        "reason": "delivery requires posting to social platforms — blocked in code"
       },
       {
         "name": "No-code app dev for one industry",
         "mrr_model": "hosting + maintenance retainer",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform"
+        "reason": "client acquisition needs cold email/DM — blocked in code; requires a paid third-party platform"
       },
       {
         "name": "YouTube automation channel",
         "mrr_model": "AdSense + affiliate + memberships",
-        "reason": "delivery requires posting to social platforms \u2014 blocked in code"
+        "reason": "delivery requires posting to social platforms — blocked in code"
       },
       {
         "name": "Freelance writing retainer",
         "mrr_model": "4-8 articles/mo, $1.5-8K",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "client acquisition needs cold email/DM — blocked in code"
       },
       {
         "name": "Online tutoring / coaching subscription",
@@ -1346,7 +1246,7 @@
       {
         "name": "Virtual assistant agency",
         "mrr_model": "$500-2K/mo per client",
-        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM — blocked in code"
       },
       {
         "name": "Niche job board / marketplace",
@@ -1356,7 +1256,7 @@
       {
         "name": "Content repurposing service",
         "mrr_model": "$500-1.5K/mo retainer",
-        "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "delivery requires posting to social platforms — blocked in code; client acquisition needs cold email/DM — blocked in code"
       }
     ],
     "llm_used": true
@@ -1420,7 +1320,7 @@
         "count": 2,
         "avg_engagement": 13.5,
         "avg_views": 13.5,
-        "best_title": "Prototype a DIY Solid\u2011State Intelligence Module for Home Automation"
+        "best_title": "Prototype a DIY Solid‑State Intelligence Module for Home Automation"
       },
       {
         "archetype": "surprising-behavior",

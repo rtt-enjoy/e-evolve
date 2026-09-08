@@ -379,7 +379,7 @@ The strongest current angle is selling fixed-price, done-for-you micro-tasks (tr
    - Kind: demand
    - Score: 52/100
    - Price: no stated price
-   - Posted: 2026-09-08T07:22:23+00:00 (0h ago)
+   - Posted: 2026-09-08T07:22:23+00:00 (1h ago)
    - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what NETSHAKE GmbH actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
 12. [BOSS-IQ | CTO Partner | REMOTE (worldwide) | Full-time | Istanbul-based company | https://boss-iq.com BOSS-IQ is an AI strategic-planning pr](https://news.ycombinator.com/item?id=49598051)
@@ -410,178 +410,178 @@ The strongest current angle is selling fixed-price, done-for-you micro-tasks (tr
    - Posted: 2026-09-01T16:23:18+00:00 (160h ago)
    - Why: scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what WorkHero https://workhero.pro actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
-16. [ysr666/dsh-vision-router](https://github.com/ysr666/dsh-vision-router)
-   - Kind: supply
-   - Score: 49/100
-   - Price: no stated price
-   - Posted: 2026-09-08T07:45:07+00:00 (0h ago)
-   - Why: free tooling you can deliver paid work with; boring conversion work buyers already pay humans to do by hand
-   - Next: Confirm the free tier's real limits and terms, run one small end-to-end sample, then attach a fixed price to a single narrow task built on it.
-17. [Instructor/Facilitator - DMS International](https://himalayas.app/companies/dms-international/jobs/instructor-facilitator)
+16. [Instructor/Facilitator - DMS International](https://himalayas.app/companies/dms-international/jobs/instructor-facilitator)
    - Kind: demand
    - Score: 47/100
    - Price: no stated price
    - Posted: 2026-09-08T07:34:04+00:00 (0h ago)
    - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what DMS International actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
-18. [Technical Writer &#x2f; Quality Assurance Specialist - Remote - Contractor in US - goPro Consultancy Group ltd.](https://himalayas.app/companies/gopro-consultancy-group-ltd/jobs/technical-writer-x2f-quality-assurance-specialist-remote-contractor-in-us-1894025139)
+17. [Technical Writer &#x2f; Quality Assurance Specialist - Remote - Contractor in US - goPro Consultancy Group ltd.](https://himalayas.app/companies/gopro-consultancy-group-ltd/jobs/technical-writer-x2f-quality-assurance-specialist-remote-contractor-in-us-1894025139)
    - Kind: demand
    - Score: 47/100
    - Price: no stated price
    - Posted: 2026-09-08T07:30:44+00:00 (0h ago)
    - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what goPro Consultancy Group ltd. actually asked for, then produce one sample page and quote per thousand words.
-19. [Linux Infrastructure Engineer (Bare Metal, Storage & AI Factory Infrastructure) - uvation](https://himalayas.app/companies/uvation/jobs/linux-infrastructure-engineer-bare-metal-storage-ai-factory-infrastructure-5363547987)
+18. [Linux Infrastructure Engineer (Bare Metal, Storage & AI Factory Infrastructure) - uvation](https://himalayas.app/companies/uvation/jobs/linux-infrastructure-engineer-bare-metal-storage-ai-factory-infrastructure-5363547987)
    - Kind: demand
    - Score: 47/100
    - Price: no stated price
    - Posted: 2026-09-08T07:29:47+00:00 (0h ago)
    - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what uvation actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
-20. [Fullstack Developer - MySCU](https://himalayas.app/companies/myscu/jobs/fullstack-developer)
+19. [Fullstack Developer - MySCU](https://himalayas.app/companies/myscu/jobs/fullstack-developer)
    - Kind: demand
    - Score: 47/100
    - Price: no stated price
    - Posted: 2026-09-08T07:28:52+00:00 (0h ago)
    - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what MySCU actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
-21. [Freelance Video Editor & Motion Designer (Project-Based Contract) - Sourcefin](https://himalayas.app/companies/sourcefin/jobs/freelance-video-editor-motion-designer-project-based-contract)
+20. [Freelance Video Editor & Motion Designer (Project-Based Contract) - Sourcefin](https://himalayas.app/companies/sourcefin/jobs/freelance-video-editor-motion-designer-project-based-contract)
    - Kind: demand
    - Score: 47/100
    - Price: no stated price
    - Posted: 2026-09-08T07:28:17+00:00 (0h ago)
    - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what Sourcefin actually asked for, then process a handful of sample assets and quote per image or per batch.
-22. [Online Data Analyst - Portuguese (PT) - TELUS Digital](https://himalayas.app/companies/telus-digital/jobs/online-data-analyst-portuguese-pt)
+21. [Online Data Analyst - Portuguese (PT) - TELUS Digital](https://himalayas.app/companies/telus-digital/jobs/online-data-analyst-portuguese-pt)
    - Kind: demand
    - Score: 47/100
    - Price: no stated price
    - Posted: 2026-09-08T07:25:34+00:00 (0h ago)
    - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what TELUS Digital actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
-23. [Innovation Funding Consultant (100%) - Adoc Talent Management](https://himalayas.app/companies/adoc-talent-management/jobs/innovation-funding-consultant-100)
+22. [Innovation Funding Consultant (100%) - Adoc Talent Management](https://himalayas.app/companies/adoc-talent-management/jobs/innovation-funding-consultant-100)
    - Kind: demand
    - Score: 47/100
    - Price: no stated price
    - Posted: 2026-09-08T07:24:57+00:00 (0h ago)
    - Why: posted 0h ago, so the buyer is still looking; scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what Adoc Talent Management actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
-24. [Bilingual Medical Receptionist (English & Spanish Proficiency) - SnappyCX](https://himalayas.app/companies/snappycx/jobs/bilingual-medical-receptionist-english-spanish-proficiency)
+23. [Bilingual Medical Receptionist (English & Spanish Proficiency) - SnappyCX](https://himalayas.app/companies/snappycx/jobs/bilingual-medical-receptionist-english-spanish-proficiency)
    - Kind: demand
    - Score: 47/100
    - Price: no stated price
    - Posted: 2026-09-08T07:24:25+00:00 (0h ago)
    - Why: posted 0h ago, so the buyer is still looking
    - Next: Read what SnappyCX actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
-25. [Buchhaltungskraft (m/w/d), Minijob, 100% Remote - Heless](https://himalayas.app/companies/heless/jobs/buchhaltungskraft-m-w-d-minijob-100-remote)
+24. [Buchhaltungskraft (m/w/d), Minijob, 100% Remote - Heless](https://himalayas.app/companies/heless/jobs/buchhaltungskraft-m-w-d-minijob-100-remote)
    - Kind: demand
    - Score: 47/100
    - Price: no stated price
-   - Posted: 2026-09-08T07:21:51+00:00 (0h ago)
+   - Posted: 2026-09-08T07:21:51+00:00 (1h ago)
    - Why: posted 0h ago, so the buyer is still looking
    - Next: Read what Heless actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
-26. [Legile | Senior Full-Stack AI Engineer (CTO track) | Antwerp, Belgium | HYBRID | Full-time | Belgium-based only Legile builds OneView, a leg](https://news.ycombinator.com/item?id=49541500)
+25. [Legile | Senior Full-Stack AI Engineer (CTO track) | Antwerp, Belgium | HYBRID | Full-time | Belgium-based only Legile builds OneView, a leg](https://news.ycombinator.com/item?id=49541500)
    - Kind: demand
    - Score: 47/100
    - Price: no stated price
    - Posted: 2026-09-02T19:51:50+00:00 (132h ago)
    - Why: scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what Legile actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
-27. [Release Brief - Three review-backed investigations for your next iOS update](https://www.reddit.com/r/SideProject/comments/1wa2ogy/release_brief_three_reviewbacked_investigations/)
+26. [Release Brief - Three review-backed investigations for your next iOS update](https://www.reddit.com/r/SideProject/comments/1wa2ogy/release_brief_three_reviewbacked_investigations/)
    - Kind: demand
    - Score: 46/100
    - Price: no stated price
    - Posted: 2026-09-07T19:58:17+00:00 (12h ago)
-   - Why: posted 11h ago, so the buyer is still looking; boring conversion work buyers already pay humans to do by hand
+   - Why: posted 12h ago, so the buyer is still looking; boring conversion work buyers already pay humans to do by hand
    - Next: Read what r/SideProject actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
-28. [3C Digital Solutions | Terraform Module Developer (Infrastructure as Code) | REMOTE (US) | Full-time | https://jobs.curriculo.me/3c-digital/](https://news.ycombinator.com/item?id=49530867)
+27. [3C Digital Solutions | Terraform Module Developer (Infrastructure as Code) | REMOTE (US) | Full-time | https://jobs.curriculo.me/3c-digital/](https://news.ycombinator.com/item?id=49530867)
    - Kind: demand
    - Score: 46/100
    - Price: no stated price
    - Posted: 2026-09-02T02:01:38+00:00 (150h ago)
    - Why: scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what 3C Digital Solutions actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
-29. [Clad (YC W23) | Software Engineer | NYC | withclad.com Clad is construction software for building infrastructure. We help contractors track ](https://news.ycombinator.com/item?id=49530894)
+28. [Clad (YC W23) | Software Engineer | NYC | withclad.com Clad is construction software for building infrastructure. We help contractors track ](https://news.ycombinator.com/item?id=49530894)
    - Kind: demand
    - Score: 46/100
    - Price: no stated price
    - Posted: 2026-09-02T02:05:35+00:00 (150h ago)
    - Why: scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what Clad (YC W23) actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
-30. [DAT | Frontline Engineering Manager, Senior Engineering Manager | Seattle, Portland, Denver | Hybrid 2-3 days/week | Full-time | $192k - $26](https://news.ycombinator.com/item?id=49525544)
+29. [DAT | Frontline Engineering Manager, Senior Engineering Manager | Seattle, Portland, Denver | Hybrid 2-3 days/week | Full-time | $192k - $26](https://news.ycombinator.com/item?id=49525544)
    - Kind: demand
    - Score: 46/100
    - Price: no stated price
    - Posted: 2026-09-01T18:05:14+00:00 (158h ago)
    - Why: scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what DAT actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
-31. [Solution Street | Northern Virginia / Washington DC Metro Area - HYBRID & ONSITE roles available - USA only. Candidates MUST be based in the](https://news.ycombinator.com/item?id=49525549)
+30. [Solution Street | Northern Virginia / Washington DC Metro Area - HYBRID & ONSITE roles available - USA only. Candidates MUST be based in the](https://news.ycombinator.com/item?id=49525549)
    - Kind: demand
    - Score: 46/100
    - Price: no stated price
    - Posted: 2026-09-01T18:05:32+00:00 (158h ago)
    - Why: scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what Solution Street actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
-32. [Seeking US BASED Freelancer Only — Co-Founder - Equity‑only until MVP - Long Term with Follow-on Projects - Remote (US) Building CaseLight, ](https://news.ycombinator.com/item?id=49525331)
+31. [Seeking US BASED Freelancer Only — Co-Founder - Equity‑only until MVP - Long Term with Follow-on Projects - Remote (US) Building CaseLight, ](https://news.ycombinator.com/item?id=49525331)
    - Kind: demand
    - Score: 46/100
    - Price: no stated price
    - Posted: 2026-09-01T17:49:15+00:00 (158h ago)
    - Why: scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what Seeking US BASED Freelancer Only — Co-Founder - Equity‑only until MVP - Long Ter actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
-33. [Vistulo | Fully REMOTE (Poland or Romanian residents only) | B2B contract | US Eastern timezone overlap required Vistulo is a boutique outso](https://news.ycombinator.com/item?id=49523978)
+32. [Vistulo | Fully REMOTE (Poland or Romanian residents only) | B2B contract | US Eastern timezone overlap required Vistulo is a boutique outso](https://news.ycombinator.com/item?id=49523978)
    - Kind: demand
    - Score: 46/100
    - Price: no stated price
    - Posted: 2026-09-01T16:09:58+00:00 (160h ago)
    - Why: scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what Vistulo actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
-34. [I built Loofah to keep meeting transcripts and notes in a Markdown vault I own](https://www.reddit.com/r/SideProject/comments/1wa149g/i_built_loofah_to_keep_meeting_transcripts_and/)
+33. [I built Loofah to keep meeting transcripts and notes in a Markdown vault I own](https://www.reddit.com/r/SideProject/comments/1wa149g/i_built_loofah_to_keep_meeting_transcripts_and/)
    - Kind: demand
    - Score: 45/100
    - Price: no stated price
    - Posted: 2026-09-07T19:01:10+00:00 (13h ago)
    - Why: posted 12h ago, so the buyer is still looking; boring conversion work buyers already pay humans to do by hand
    - Next: Read what r/SideProject actually asked for, then transcribe one sample file end to end and quote per hour of audio.
-35. [Valkyrie Aero | Software Engineer (Autonomy, Perception, Frontend) | REMOTE (US) | Contract | U.S. Citizens | https://valkyrieaero.com Valky](https://news.ycombinator.com/item?id=49578811)
+34. [Valkyrie Aero | Software Engineer (Autonomy, Perception, Frontend) | REMOTE (US) | Contract | U.S. Citizens | https://valkyrieaero.com Valky](https://news.ycombinator.com/item?id=49578811)
    - Kind: demand
    - Score: 45/100
    - Price: no stated price
    - Posted: 2026-09-05T17:40:02+00:00 (62h ago)
    - Why: scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what Valkyrie Aero actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
-36. [slothflowlabs/duckle](https://github.com/slothflowlabs/duckle)
-   - Kind: supply
-   - Score: 44/100
-   - Price: no stated price
-   - Posted: 2026-09-08T07:39:08+00:00 (0h ago)
-   - Why: free tooling you can deliver paid work with
-   - Next: Confirm the free tier's real limits and terms, run one small end-to-end sample, then attach a fixed price to a single narrow task built on it.
-37. [I built a WordPress fleet backup + update manager where the backups live in your storage, and don't use web-server space during the backup.](https://www.reddit.com/r/SideProject/comments/1wabnpa/i_built_a_wordpress_fleet_backup_update_manager/)
+35. [I built a WordPress fleet backup + update manager where the backups live in your storage, and don't use web-server space during the backup.](https://www.reddit.com/r/SideProject/comments/1wabnpa/i_built_a_wordpress_fleet_backup_update_manager/)
    - Kind: demand
    - Score: 44/100
    - Price: no stated price
    - Posted: 2026-09-08T02:17:51+00:00 (6h ago)
    - Why: posted 5h ago, so the buyer is still looking
    - Next: Read what r/SideProject actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
-38. [Hi, We need your upvote. 🚀 🔥](https://www.reddit.com/r/SideProject/comments/1wa6sa9/hi_we_need_your_upvote/)
+36. [Hi, We need your upvote. 🚀 🔥](https://www.reddit.com/r/SideProject/comments/1wa6sa9/hi_we_need_your_upvote/)
    - Kind: demand
    - Score: 42/100
    - Price: no stated price
    - Posted: 2026-09-07T22:39:07+00:00 (9h ago)
    - Why: posted 9h ago, so the buyer is still looking; runs on a free AI tier, so input cost is zero and margin is total
    - Next: Read what r/SideProject actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
-39. [I built liteagents — a dev toolkit that keeps getting smaller as the models get smarter](https://www.reddit.com/r/SideProject/comments/1wa3lvm/i_built_liteagents_a_dev_toolkit_that_keeps/)
+37. [I built liteagents — a dev toolkit that keeps getting smaller as the models get smarter](https://www.reddit.com/r/SideProject/comments/1wa3lvm/i_built_liteagents_a_dev_toolkit_that_keeps/)
    - Kind: demand
    - Score: 42/100
    - Price: no stated price
    - Posted: 2026-09-07T20:33:00+00:00 (11h ago)
    - Why: posted 11h ago, so the buyer is still looking
    - Next: Read what r/SideProject actually asked for, then build the smallest working slice of what they asked for and quote a fixed price.
-40. [Trustworthy Technology | Earth | Part Time | REMOTE | Vision, Marketing, and/or Design Hi, we are a small group trying to bring the "trustwo](https://news.ycombinator.com/item?id=49528935)
+38. [Trustworthy Technology | Earth | Part Time | REMOTE | Vision, Marketing, and/or Design Hi, we are a small group trying to bring the "trustwo](https://news.ycombinator.com/item?id=49528935)
    - Kind: demand
    - Score: 41/100
    - Price: no stated price
    - Posted: 2026-09-01T22:11:01+00:00 (154h ago)
    - Why: scoped as contract or part-time work, which suits one narrow deliverable
    - Next: Read what Trustworthy Technology actually asked for, then process a handful of sample assets and quote per image or per batch.
+39. [Jawa.gg | Software Engineer | Boulder, CO or remote | Contract or Full Time Jawa is the marketplace for gamers - think gaming PCs, GPUs, con](https://news.ycombinator.com/item?id=49527374)
+   - Kind: demand
+   - Score: 41/100
+   - Price: no stated price
+   - Posted: 2026-09-01T20:06:02+00:00 (156h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what Jawa.gg actually asked for, then build the smallest working slice of the stated problem and quote per milestone.
+40. [AREO | Remote (EU) / on-site in Bremen, Germany | Full-Time | Equity | Roles: [Engineering Manager (Ruby on Rails), Lead Product Engineer (R](https://news.ycombinator.com/item?id=49527344)
+   - Kind: demand
+   - Score: 41/100
+   - Price: no stated price
+   - Posted: 2026-09-01T20:03:19+00:00 (156h ago)
+   - Why: scoped as contract or part-time work, which suits one narrow deliverable
+   - Next: Read what AREO actually asked for, then build the smallest working slice of the stated problem and quote per milestone.

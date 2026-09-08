@@ -89,7 +89,7 @@ bot/earning/         ← products own a run(llm, status); support modules do not
   newsletter.py      ← [product] a weekly dev.to digest of several trending stories
   backfill.py        ← [product] retrofits the tip footer onto posts published before it existed
   receipt_check.py   ← [product] reads published posts back, unauthenticated, to prove readers see an ask
-  code_techs.py      ← [product] free-AI earning opportunity queue (research/suggestion only)
+  code_techs.py      ← [product] ranked market leads: demand (who pays) vs supply (free tooling)
   mrr_ideas.py       ← [product] recurring-revenue idea triage (research/suggestion only)
   _shared.py         ← [support] config loading, cadence, feed parsing — used by all four
   devto.py           ← [support] the dev.to publish call + gates every post passes
@@ -833,6 +833,129 @@ survive plus, explicitly, the ones it refuses and why.
 > automation here — the article says as much: "none of these will work on
 > autopilot in month one."
 
+### Market lead queue (bot/earning/code_techs.py)
+
+Ranked earning leads, rendered by the dashboard's Leads page. Research and
+suggestion only: it never contacts anyone, and every source is keyless.
+
+**Every lead is `demand` or `supply`, and conflating them is what broke this.**
+`demand` means somebody is paying for work right now; `supply` means free
+tooling to deliver that work with. The page was half GitHub issues presented as
+earning opportunities, which is why the owner reported it as "not effective".
+
+- **GitHub is a supply source, and its queries were hitting the wrong
+  endpoint.** `github_searches` are *repository* queries (`in:readme`,
+  `stars:>200`) and were being sent to `search/issues`, which ignores both
+  qualifiers. The identical query string returns **12 junk issues** there and
+  **511 real repositories** on `search/repositories` — which is how a studio's
+  roadmap, an "awesome ideas" PR and a bot's own trend digest became the top
+  three earning leads. GitHub as a *demand* source was tested too
+  (`label:"help wanted"`, `label:bounty`, `"willing to pay"`, all with
+  `created:>` windows) and every variant returned noise; the doctrine refuses
+  bounty hunting anyway. So GitHub answers "what can I build with", and the job
+  boards answer "who is paying".
+- **Himalayas is the freshness fix.** Keyless JSON, cursor-paginated, and every
+  sampled job was posted within 24h — some minutes before the fetch. It is also
+  the only source with a *structured* salary field, so it is where an honest
+  `value_usd` can come from.
+- **The HN "Who is hiring" thread is the highest-intent source.** Two keyless
+  requests: find the monthly thread by `author_whoishiring` (the title query
+  also matches unrelated "Show HN: I filtered Who is Hiring" posts), then read
+  its `children`. A live thread carried 242 replies, **26 offering contract
+  work**, some quoting a real hourly rate. Its window is
+  `hn_hiring_max_age_hours` (744), not the 72h demand window — the thread is
+  *monthly*, so judging its replies by a job-feed clock would discard the only
+  leads that quote a rate.
+- **Reddit is rate-limited to near-zero and that is now a normal outcome.**
+  Measured: 10 sequential `search.rss` calls returned **1×200 and 9×429**, and
+  2s spacing returned **0/5**; no `Retry-After` is sent. The old nested loop
+  spent all 24 requests on the first two subreddits, which is the direct cause
+  of the page showing nothing but `r/SideProject`. Now: one query per
+  subreddit, `max_reddit_requests: 3`, and a 429 **breaks** the loop instead of
+  continuing — Reddit throttles the IP, not the query, so continuing only burns
+  the budget on certain failures. Reddit yielding nothing never fails the cycle.
+- **Refused sources, recorded so a later cycle does not re-derive them:**
+  *Jobicy* is fresh but publishes no salary field at all; *RemoteOK* had 1 of
+  100 jobs posted within three days (the staleness this rewrite exists to fix)
+  and its terms require a permanent follow-backlink on the consuming page.
+
+**`value_usd` is a published price or `None` — never an estimate.**
+`_extract_value` took `max()` of every `$N` regex match in the lead text and,
+failing that, invented `daily_target_usd` because the body contained the word
+"need". So every lead carried a figure: the live queue's top lead read
+**$4,500**, scraped out of an unrelated repository roadmap, and the dashboard
+summed those into a **"Pipeline value $5.6k"** tile displayed beside the real
+on-chain balance of **$0.00** — Principle 3, rendered as a KPI. `_lead_value`
+admits exactly two origins:
+
+- `posted_salary` — a job board's salary field, `USD` only (CAD appears live,
+  and rendering it with a `$` is a wrong number, not an approximation), with
+  `salaryPeriod` kept verbatim. **Hourly is never normalised to annual**; the
+  multiplier would itself be the estimate.
+- `stated_rate` — a rate the poster typed, from HN hiring replies only, via a
+  regex requiring an explicit `/hr` unit. It fires on ~2 of 242 comments and
+  both are genuine; the old code's 100% hit rate was the tell that it was
+  inventing. `$NNNk` annual salaries and `$37M raised` are deliberately **not**
+  matched.
+
+Everything else is `value_basis: "none"` with `value_usd: None` — **not `0.0`**,
+because a zero sums into totals and sorts as the cheapest lead, while `None`
+forces the UI to render an em dash. There is no summed money KPI anywhere: the
+figures mix hourly, monthly and annual periods, so they are not additive even
+when every input is real.
+
+**Scores are weighted, not additive.** The old `_score` started at 30 and added
+~140 of overlapping bonuses before clamping to 100, so the live queue read
+`100, 100, 100, 100, 100, 98, 96, 96` and `min_score: 55` filtered nothing.
+Now five components normalised to 0..1 (recency 30, demand intent 25, value
+clarity 20, deliverability 15, free-stack fit 10, minus penalties), with
+`score_parts` persisted so the dashboard can show *why* a lead ranks. Recency
+is judged against the lead's own source window. `min_demand_share` (0.5)
+reserves half the page for demand, so plentiful high-scoring tooling can never
+crowd out the postings where somebody is paying.
+
+**`_is_free_ai_lead` needs proximity, not co-occurrence.** Both halves were
+substring checks over the whole blob, and bare `"ai"` matches *contain*,
+*available* and *email* — which is how "I spent a year making a Markdown editor
+for Windows" became a free-AI earning lead. Now word-boundary matching on the
+capability, with the free signal required within ±60 characters.
+
+**Prompts are deterministic and lead-specific.** `_codex_prompt` fills six
+labelled slots (BUYER, DEMAND SIGNAL, POSTED, DELIVERABLE, PRICE BASIS, FREE
+STACK) from the lead's real fields. The PRICE BASIS slot states the *absence*
+of a price out loud, because a prompt that merely omits it invites the reading
+model to invent one — rebuilding the fabrication inside the field the owner acts
+on. `_next_step` matches the title and labels only, never the concatenated
+body: it used to keyword-match everything at once, so all three GitHub leads
+were told to "transcribe one sample file" and none involved audio. No per-lead
+LLM call — 40 leads would consume most of the ~50/day free-tier ceiling and
+starve the publishing modules.
+
+**Two caps, because `status.json` is committed hourly.** Leads were already
+**36 KB of a 63 KB file (57%)** for only 8 leads, at ~2.8 KB each. `max_items`
+(40) sizes the markdown report, `status_max_items` (18) sizes the committed
+snapshot, and `prompt_top_n` (10) means only the leads worth acting on carry a
+~0.5 KB prompt. `TestLeadStatusPayloadStaysBounded` pins the budget.
+
+> **`_outreach_draft` was removed, not repaired.** It generated a ready-to-send
+> cold-outreach email per lead — for a channel this project refuses in code.
+> All 8 live drafts quoted the fabricated price (*"the fixed price is
+> $4500.00"*) and ended *"Payment address (USDT_WALLET_ADDRESS):
+> [redacted]"*, because `status._secret_names()` redacts any env name
+> containing `WALLET` and only `payout_public` is exempt: a polished draft whose
+> payment line was the word "redacted", which is the silent failure Principle 3b
+> names. Repairing it would mean widening that exemption to publish the receive
+> address inside research notes for a blocked channel.
+> `TestOutreachDraftIsGone` stops a later cycle reintroducing it.
+
+**A note on `strip_html` (`_shared.py`).** It replaced HTML entities with a
+space and never matched numeric ones, so HN's `$120-160&#x2F;hr` became
+`$120-160 hr` and a rate a human actually typed was unrecognisable as a price.
+It now *decodes* entities. This is shared by every earning module, so the fix
+is a general improvement, not a leads-only one. `parse_dt` likewise gained a
+unix-epoch branch, because the job feeds report `pubDate` as an integer and
+without it a fresh posting read as having no date at all.
+
 Social posting, trading, minting, and payout secrets do not activate runtime
 actions. If such keys exist, they are treated as research context only.
 
@@ -966,6 +1089,16 @@ Earning modules own their own sub-trees alongside the above: `article_daily` /
 (newsletter), `code_tech_earning` (code_techs), and `mrr_ideas` /
 `mrr_ideas_history` (mrr_ideas). Every list stored in these is bounded by the
 module's `history_limit` so `status.json` cannot grow without end.
+
+`code_tech_earning.opportunities` is bounded by `status_max_items` rather than a
+history limit, because it is a live queue and not a log. Each lead carries
+`kind` (`demand`/`supply`), `value_usd` + `value_basis` + `value_note`,
+`posted_at` + `discovered_at` + `age_hours`, and `score_parts`. Read
+`value_basis` before believing any figure: `none` means nobody published a
+price, and `value_usd` is then `None` rather than `0.0`. There is deliberately
+no total — the prices mix hourly, monthly and annual periods and are not
+additive. `demand_count` / `supply_count` / `priced_count` are counts of the
+full ranked list, which is longer than the snapshot.
 `article_history.own_urls` is the account's own dev.to post URLs, refreshed from
 the API each cycle by `articles._refresh_stats` and read by **both** products
 through `devto.own_post_urls()` so neither can source from itself.
@@ -1060,8 +1193,12 @@ Tunable by owner or changed here in Codex:
   "attribution":    { "enabled": true, "history_limit": 200 },
   "mrr_ideas":      { "enabled": true, "refresh_hours": 48, "max_ideas": 8,
                       "min_score": 50, "history_limit": 100 },
-  "code_techs":     { "enabled": true, "refresh_hours": 24, "max_items": 8,
-                      "min_score": 55, "auto_pursue": false, "...": "searches, sources, outreach" },
+  "code_techs":     { "enabled": true, "refresh_hours": 6, "max_items": 40,
+                      "status_max_items": 24, "prompt_top_n": 10, "min_score": 40,
+                      "min_demand_share": 0.5, "demand_max_age_hours": 72,
+                      "hn_hiring_max_age_hours": 744, "supply_max_age_days": 120,
+                      "himalayas_pages": 3, "max_reddit_requests": 3,
+                      "auto_pursue": false, "...": "searches, sources, terms" },
   "evolution":      { "enabled": true, "branch_prefix": "evolve", "max_changes": 3 },
   "llm":            { "main_engine": "minimax/minimax-m3:free", "provider": "openrouter" },
   "research_policy":{ "allowed_actions": ["research", "suggestions", "drafts", "article publishing"],

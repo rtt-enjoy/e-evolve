@@ -76,8 +76,9 @@ export const SECTIONS: SectionDef[] = [
 			const brief = status.code_tech_earning?.online_ai_brief;
 			const services = brief?.free_ai_services?.length || 0;
 			const ideas = brief?.easy_earning_ideas?.length || 0;
+			const themes = brief?.market_themes?.length || 0;
 			const mrr = status.mrr_ideas?.viable?.length || 0;
-			return services + ideas + mrr || null;
+			return services + ideas + themes + mrr || null;
 		},
 		load: () => import('./ResearchSection'),
 	},

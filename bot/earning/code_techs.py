@@ -22,10 +22,25 @@ _REPORT_FILE = Path("docs/code-tech-opportunities.md")
 
 _DEFAULT_CONFIG = {
 	"enabled": True,
-	"refresh_hours": 24,
+	"refresh_hours": 6,
 	"daily_target_usd": 10.0,
-	"max_items": 8,
-	"min_score": 55,
+	# max_items sizes the markdown report; status_max_items sizes the snapshot
+	# that is committed every hour. One cap would force a choice between a thin
+	# page and a repo that grows hourly, so there are two.
+	"max_items": 40,
+	"status_max_items": 18,
+	"prompt_top_n": 10,
+	"min_score": 40,
+	"min_demand_share": 0.5,
+	"demand_max_age_hours": 72,
+	# The HN hiring post is a *monthly* thread, so its replies are up to ~30
+	# days old by design and the best of them quote a real hourly rate. Judging
+	# them by the 72h window built for a job feed would throw away the
+	# highest-intent leads on the page for being what they are.
+	"hn_hiring_max_age_hours": 744,
+	"supply_max_age_days": 120,
+	"himalayas_pages": 3,
+	"reddit_backoff_seconds": 5,
 	"auto_pursue": False,
 	"pursue_score_threshold": 75,
 	"requirements": [
@@ -89,14 +104,35 @@ _DEFAULT_CONFIG = {
 		"productized audit/checklist services",
 		"micro-SaaS setup, migration, and operations help"
 	],
+	# These are *repository* queries and they run against search/repositories.
+	# They used to be sent to search/issues, which ignores `in:readme` and
+	# `stars:` -- the same query string returned 12 junk issues there versus
+	# 511 real repositories here.
 	"github_searches": [
-		"free AI API list no credit card in:readme stars:>200",
+		"free AI API list no credit card in:name,description,readme stars:>200",
 		"awesome free LLM API in:name,readme stars:>100",
 		"free tier AI services awesome list in:readme stars:>150",
 		"free OCR API python in:readme stars:>100",
 		"free speech to text API in:readme stars:>100",
 		"free image generation API wrapper in:readme stars:>100",
 		"free embeddings API tier in:readme stars:>50"
+	],
+	# Contract-shaped terms in an HN "Who is hiring" reply. A reply that says
+	# none of these is a full-time posting, which this project cannot sell into.
+	"hn_contract_terms": [
+		"contract", "contractor", "freelance", "part-time", "part time"
+	],
+	# Himalayas returns every remote job on the site, so employment type or
+	# category has to narrow it or unrelated roles bury the technical ones.
+	"job_employment_types": ["Contractor", "Part Time", "Freelance"],
+	"job_categories": [
+		"Software Development", "Data Science", "Design", "Writing",
+		"Marketing", "Customer Support", "Product"
+	],
+	"deliverable_terms": [
+		"transcri", "ocr", "extract", "convert", "summari", "translat",
+		"cleanup", "clean up", "automat", "scrape", "scraper", "dashboard",
+		"report", "integration", "migration", "pipeline"
 	],
 	"community_searches": [
 		"free AI API no credit card",
@@ -140,7 +176,11 @@ _DEFAULT_CONFIG = {
 		"is there a free tool",
 		"how much to charge automation"
 	],
-	"max_reddit_requests": 24,
+	# Measured, not guessed: 10 sequential search.rss calls returned 1x200 and
+	# 9x429, and 2s spacing returned 0/5. Reddit blocks the IP, not the query,
+	# so a large budget just burns the whole cycle on the first subreddit --
+	# which is why the live page only ever showed r/SideProject.
+	"max_reddit_requests": 3,
 	"underserved_focus": [
 		"free AI APIs with real free tiers that most people have not heard of yet",
 		"boring conversions people pay for: audio to text, image to text, PDF to data",
@@ -169,15 +209,16 @@ _DEFAULT_CONFIG = {
 		"Reselling an API in a way its terms of service forbid.",
 		"Bounty and prize hunting where many contributors compete for low-value visibility.",
 		"Crypto/NFT hype work and anything promising passive income without delivery."
-	],
-	"outreach": {
-		"enabled": True,
-		"default_price_usd": 10.0,
-		"payment_label": "crypto",
-		"crypto_address_env": "USDT_WALLET_ADDRESS",
-		"fallback_payment_note": "Payment address is configured privately; add it manually before sending."
-	}
+	]
 }
+
+# There is deliberately no `outreach` block. This module used to render a
+# ready-to-send cold-outreach email per lead, and cold outreach is refused in
+# code. Every live draft also quoted a fabricated price and ended with
+# "Payment address (USDT_WALLET_ADDRESS): [redacted]", because status.py
+# redacts any env name containing WALLET. Repairing it would mean widening that
+# redaction exemption to expose the receive address inside research notes for a
+# channel the bot may not use. Removed 2026-09-08 by owner decision.
 
 _LOCAL_LEADS = [
 	{
@@ -238,22 +279,65 @@ _LOCAL_LEADS = [
 	}
 ]
 
-# In‑memory request counter for GitHub API throttling
-_GITHUB_REQ_COUNT = 0
-_GITHUB_WINDOW_START = time.time()
 _GITHUB_MAX_PER_MIN = 10
+
+# Word-boundary AI capability terms. Bare "ai" as a substring matched
+# *contain*, *available* and *email*, so it is anchored here instead.
+_AI_TERM_RE = re.compile(
+	r"\b(ai|llm|gpt|whisper|ocr|embedding|embeddings|tts|"
+	r"transcription|inference|vision|speech)\b"
+)
+# How near a "free" signal has to sit to an AI term to count as related.
+_FREE_WINDOW = 60
+
+# An hourly rate a human typed: the unit is mandatory, so "$4,500 in funding"
+# cannot match. Deliberately does not accept "$120k" -- a full-time annual
+# salary is not a price for a deliverable this project can sell.
+_RATE_RE = re.compile(
+	r"\$\s?(\d{2,4})(?:\s*(?:-|--|to|–|—)\s*\$?\s?(\d{2,4}))?"
+	# "USD" often sits between the figure and the unit ("$23-$34 USD/hour").
+	r"\s*(?:usd)?\s*(?:/|\s+per\s+)?\s*(?:hr|hour)\b",
+	re.IGNORECASE,
+)
+_PERIOD_LABELS = {
+	"hourly": "/hr", "daily": "/day", "weekly": "/wk",
+	"monthly": "/mo", "annual": "/yr", "yearly": "/yr",
+}
+
+# A lead is one of two things, and conflating them is what made the page
+# useless: "demand" means somebody is paying for work right now, "supply"
+# means free tooling to deliver that work with. GitHub answers the second
+# question well and the first one badly.
+_DEMAND = "demand"
+_SUPPLY = "supply"
+
 
 @dataclass
 class Opportunity:
 	title: str
 	url: str
 	source: str
+	# Who is actually paying, when the source names them. The feed name
+	# ("himalayas") is not a buyer, and a prompt that says it is gives the
+	# reading model nothing to write to.
+	buyer: str
+	kind: str
 	score: int
-	estimated_value_usd: float
+	score_parts: dict[str, float]
+	# None, never 0.0, when no price was published. 0.0 sums silently into a
+	# total and sorts as the worst lead; None forces the UI to render an em
+	# dash. Same reasoning as `receipt_check`'s third "unreachable" state.
+	value_usd: float | None
+	value_basis: str
+	value_note: str
+	# posted_at is when the market said it; discovered_at is when we saw it.
+	# Collapsing the two lets an old post masquerade as fresh.
+	posted_at: str | None
+	discovered_at: str
+	age_hours: float | None
 	reason: str
 	next_step: str
 	codex_prompt: str
-	outreach_draft: str
 	pursued: bool = False
 
 def run(llm: Any, status: dict[str, Any]) -> list[dict]:
@@ -270,8 +354,9 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		log.info("[code_techs] queue is fresh; next refresh after %sh", refresh_hours)
 		return []
 
-	max_items = max(1, int(cfg.get("max_items", 8) or 8))
-	min_score = max(0, int(cfg.get("min_score", 55) or 55))
+	max_items = max(1, int(cfg.get("max_items", 40) or 40))
+	status_max_items = max(1, int(cfg.get("status_max_items", max_items) or max_items))
+	min_score = max(0, int(cfg.get("min_score", 40) or 40))
 	raw = _fetch_online_leads(cfg) or list(_LOCAL_LEADS)
 	opportunities = _rank(raw, cfg, max_items=max_items, min_score=min_score)
 
@@ -279,12 +364,19 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	if cfg.get("auto_pursue"):
 		log.warning("[code_techs] auto_pursue ignored: research-only policy forbids posting comments")
 
+	demand = sum(1 for op in opportunities if op.kind == _DEMAND)
+	priced = sum(1 for op in opportunities if op.value_basis != "none")
 	state.update({
 		"enabled": True,
 		"last_refresh_at": now.isoformat(),
 		"daily_target_usd": float(cfg.get("daily_target_usd", 10.0) or 10.0),
 		"refresh_hours": refresh_hours,
-		"opportunities": [op.__dict__ for op in opportunities],
+		# The report may be long; the snapshot is committed hourly, so it is
+		# the one that gets trimmed.
+		"opportunities": [op.__dict__ for op in opportunities[:status_max_items]],
+		"demand_count": demand,
+		"supply_count": len(opportunities) - demand,
+		"priced_count": priced,
 		"requirements": _clean_list(cfg.get("requirements", [])),
 		"reference_sources": _reference_sources(cfg),
 		"remote_service_niches": _clean_list(cfg.get("remote_service_niches", [])),
@@ -295,7 +387,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		"strategy_playbook": _clean_list(cfg.get("strategy_playbook", [])),
 		"avoid_patterns": _clean_list(cfg.get("avoid_patterns", []))
 	})
-	_write_report(state)
+	_write_report(state, [op.__dict__ for op in opportunities])
 
 	log.info("[code_techs] refreshed %d opportunities, pursued %d", len(opportunities), pursued_count)
 	return [{
@@ -321,32 +413,53 @@ def _enabled(cfg: dict[str, Any]) -> bool:
 	return bool(cfg.get("enabled", True))
 
 def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
-	global _GITHUB_REQ_COUNT, _GITHUB_WINDOW_START
+	"""Free AI tooling to deliver with -- a SUPPLY source, not a demand one.
+
+    This used to query ``search/issues`` with repository qualifiers
+    (``in:readme``, ``stars:>200``) that endpoint ignores, so it returned
+    whatever issue happened to match the loose text: a studio's roadmap, an
+    "awesome ideas" PR, a bot's own trend digest. The identical query string
+    returns 12 junk issues on ``search/issues`` and 511 real repositories here.
+
+    Asking GitHub *who will pay* was also tried -- ``label:"help wanted"``,
+    ``label:bounty``, ``"willing to pay"``, all with ``created:>`` windows --
+    and every variant returned noise. The doctrine refuses bounty hunting
+    anyway. So GitHub answers "what can I build with" and the job boards
+    answer "who is paying".
+    """
 	leads: list[dict[str, Any]] = []
 	token = os.getenv("GITHUB_TOKEN", "").strip()
 	headers = {
 		"Accept": "application/vnd.github+json",
 		"User-Agent": "e-evolve-code-techs"
 	}
+	# Optional. The search endpoints are keyless; a token only raises the rate
+	# limit, so this module still needs no secret of its own.
 	if token:
 		headers["Authorization"] = f"Bearer {token}"
 
+	max_age_days = max(1, int(cfg.get("supply_max_age_days", 120) or 120))
+	cutoff = datetime.now(timezone.utc) - timedelta(days=max_age_days)
+	# Local, not module-global: module-level mutable counters make the
+	# rate-limit test depend on which test ran first.
+	sent = 0
+	window_start = time.time()
+
 	for query in cfg.get("github_searches", []):
-		# Simple rate‑limit handling
 		now = time.time()
-		if now - _GITHUB_WINDOW_START >= 60:
-			_GITHUB_WINDOW_START = now
-			_GITHUB_REQ_COUNT = 0
-		if _GITHUB_REQ_COUNT >= _GITHUB_MAX_PER_MIN:
-			sleep_sec = 60 - (now - _GITHUB_WINDOW_START) + 1
+		if now - window_start >= 60:
+			window_start = now
+			sent = 0
+		if sent >= _GITHUB_MAX_PER_MIN:
+			sleep_sec = 60 - (now - window_start) + 1
 			log.info("[code_techs] GitHub rate limit reached, sleeping %ds", int(sleep_sec))
 			time.sleep(sleep_sec)
-			_GITHUB_WINDOW_START = time.time()
-			_GITHUB_REQ_COUNT = 0
-		_GITHUB_REQ_COUNT += 1
+			window_start = time.time()
+			sent = 0
+		sent += 1
 		try:
 			resp = requests.get(
-				"https://api.github.com/search/issues",
+				"https://api.github.com/search/repositories",
 				params={"q": str(query), "sort": "updated", "order": "desc", "per_page": 8},
 				headers=headers,
 				timeout=20
@@ -356,28 +469,206 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 				continue
 			resp.raise_for_status()
 			for item in resp.json().get("items", []):
+				pushed = str(item.get("pushed_at") or "")
+				stamp = parse_dt(pushed)
+				if stamp and stamp < cutoff:
+					continue
+				stars = item.get("stargazers_count") or 0
+				topics = [str(t) for t in (item.get("topics") or [])]
 				leads.append({
-					"title": item.get("title", ""),
-					"url": item.get("html_url", ""),
+					"title": str(item.get("full_name") or ""),
+					"url": str(item.get("html_url") or ""),
 					"source": "github",
-					"body": item.get("body", "") or "",
-					"labels": [label.get("name", "") for label in item.get("labels", [])]
+					"kind": _SUPPLY,
+					"body": str(item.get("description") or ""),
+					"labels": topics,
+					"posted_at": pushed,
+					"stars": stars,
+					"buyer": "tooling, no buyer",
 				})
 		except Exception as exc:
 			log.warning("[code_techs] GitHub search failed for %r: %s", query, exc)
 	return _dedupe(leads)
 
 def _fetch_online_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
-	"""Fetch public, read-only leads from free sources."""
-	leads = []
-	leads.extend(_fetch_github_leads(cfg))
+	"""Fetch public, read-only leads from free, keyless sources.
+
+    Ordered demand-first so that if a later source fails, what survives is
+    still market signal rather than a page of tooling.
+
+    Two sources were probed and refused, recorded here so a later cycle does
+    not re-derive them: **Jobicy** is fresh but publishes no salary field at
+    all, and **RemoteOK** had 1 of 100 jobs posted within three days (the
+    staleness this module exists to fix) and its terms require a permanent
+    follow-backlink on the consuming page.
+    """
+	leads: list[dict[str, Any]] = []
+	leads.extend(_fetch_remote_job_leads(cfg))
+	leads.extend(_fetch_hn_hiring_leads(cfg))
 	leads.extend(_fetch_hn_leads(cfg))
 	leads.extend(_fetch_reddit_leads(cfg))
+	leads.extend(_fetch_github_leads(cfg))
 	return _dedupe(leads)
+
+def _fetch_remote_job_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
+	"""Remote contract postings from Himalayas -- keyless, and genuinely current.
+
+    This is the fix for "too old": every sampled job was posted within 24h,
+    some minutes before the fetch. It is also the only source with a
+    *structured* salary field, so it is where an honest `value_usd` can come
+    from at all (see `_lead_value`).
+    """
+	leads: list[dict[str, Any]] = []
+	pages = max(1, int(cfg.get("himalayas_pages", 3) or 3))
+	max_age_hours = max(1, int(cfg.get("demand_max_age_hours", 72) or 72))
+	cutoff = datetime.now(timezone.utc) - timedelta(hours=max_age_hours)
+	wanted_types = {str(t).lower() for t in cfg.get("job_employment_types", [])}
+	wanted_cats = {str(c).lower() for c in cfg.get("job_categories", [])}
+	headers = {"User-Agent": "e-evolve-code-techs", "Accept": "application/json"}
+	cursor = ""
+
+	for _ in range(pages):
+		params: dict[str, Any] = {"limit": 50}
+		if cursor:
+			params["cursor"] = cursor
+		try:
+			resp = requests.get(
+				"https://himalayas.app/jobs/api",
+				params=params,
+				headers=headers,
+				timeout=25,
+			)
+			if resp.status_code in (403, 429):
+				log.warning("[code_techs] Himalayas skipped (%s)", resp.status_code)
+				return leads
+			resp.raise_for_status()
+			payload = resp.json()
+		except Exception as exc:
+			log.warning("[code_techs] Himalayas fetch failed: %s", exc)
+			return leads
+
+		jobs = payload.get("jobs") or []
+		if not jobs:
+			break
+		for job in jobs:
+			stamp = parse_dt(job.get("pubDate"))
+			if stamp and stamp < cutoff:
+				continue
+			emp = str(job.get("employmentType") or "")
+			cats = [str(c) for c in (job.get("parentCategories") or [])]
+			# Himalayas lists every remote job on the site. Without this the
+			# technical postings are buried under unrelated roles.
+			type_match = emp.lower() in wanted_types
+			cat_match = any(c.lower() in wanted_cats for c in cats)
+			if wanted_types and wanted_cats and not (type_match or cat_match):
+				continue
+			company = str(job.get("companyName") or "")
+			title = str(job.get("title") or "")
+			leads.append({
+				"title": f"{title} - {company}" if company else title,
+				"url": str(job.get("applicationLink") or job.get("guid") or ""),
+				"source": "himalayas",
+				"kind": _DEMAND,
+				"body": strip_html(str(job.get("excerpt") or job.get("description") or "")),
+				"labels": [c.lower() for c in cats] + ([emp.lower()] if emp else []),
+				"posted_at": job.get("pubDate"),
+				"buyer": company,
+				"employment_type": emp,
+				"seniority": str(job.get("seniority") or ""),
+				"min_salary": job.get("minSalary"),
+				"max_salary": job.get("maxSalary"),
+				"salary_period": str(job.get("salaryPeriod") or ""),
+				"currency": str(job.get("currency") or ""),
+			})
+		cursor = str(payload.get("nextCursor") or "")
+		if not cursor:
+			break
+	return leads
+
+def _fetch_hn_hiring_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
+	"""Contract offers inside the monthly HN "Who is hiring" thread.
+
+    The highest-intent free source available: a live thread carried 242 replies
+    of which 26 offered contract, freelance or part-time work, some quoting a
+    real hourly rate. Two requests total, both keyless.
+
+    The thread is found by ``author_whoishiring`` rather than by title. The
+    title query also matches unrelated "Show HN: I filtered Who is Hiring..."
+    posts; the account name is the reliable selector. An empty result is a
+    normal outcome here, never an error -- if HN ever renames that account
+    this source simply yields nothing.
+    """
+	headers = {"User-Agent": "e-evolve-code-techs", "Accept": "application/json"}
+	terms = [str(t).lower() for t in cfg.get("hn_contract_terms", []) if str(t).strip()]
+	if not terms:
+		return []
+	try:
+		resp = requests.get(
+			"https://hn.algolia.com/api/v1/search_by_date",
+			params={"tags": "story,author_whoishiring", "hitsPerPage": 5},
+			headers=headers,
+			timeout=20,
+		)
+		resp.raise_for_status()
+		hits = [h for h in resp.json().get("hits", []) if "hiring" in str(h.get("title") or "").lower()]
+		# "Who wants to be hired?" is posted by the same account in the same
+		# hour; those replies are people seeking work, not buyers.
+		hits = [h for h in hits if "wants to be hired" not in str(h.get("title") or "").lower()]
+		if not hits:
+			log.info("[code_techs] no HN hiring thread found this cycle")
+			return []
+		thread_id = str(hits[0].get("objectID") or "")
+		if not thread_id:
+			return []
+		item = requests.get(
+			f"https://hn.algolia.com/api/v1/items/{thread_id}",
+			headers=headers,
+			timeout=30,
+		)
+		item.raise_for_status()
+		children = item.json().get("children") or []
+	except Exception as exc:
+		log.warning("[code_techs] HN hiring thread fetch failed: %s", exc)
+		return []
+
+	max_age_hours = max(1, int(cfg.get("hn_hiring_max_age_hours", 744) or 744))
+	cutoff = datetime.now(timezone.utc) - timedelta(hours=max_age_hours)
+	leads: list[dict[str, Any]] = []
+	for child in children:
+		raw = str(child.get("text") or "")
+		if not raw:
+			continue
+		stamp = parse_dt(child.get("created_at"))
+		if stamp and stamp < cutoff:
+			continue
+		body = strip_html(raw)
+		if not any(term in body.lower() for term in terms):
+			continue
+		# HN hiring replies open with "Company | Role | REMOTE | Contract",
+		# so the first segment is the buyer and the head is the headline.
+		head = body.split("\n")[0]
+		buyer = head.split("|")[0].strip()[:80]
+		child_id = str(child.get("id") or "")
+		leads.append({
+			"title": head[:180] or "Hacker News contract offer",
+			"url": f"https://news.ycombinator.com/item?id={child_id}" if child_id else "",
+			"source": "hn-hiring",
+			"kind": _DEMAND,
+			"body": body,
+			"labels": ["hn-hiring", "contract"],
+			"posted_at": child.get("created_at"),
+			"buyer": buyer,
+			"allow_rate_extraction": True,
+		})
+	return leads
 
 def _fetch_hn_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 	leads: list[dict[str, Any]] = []
 	headers = {"User-Agent": "e-evolve-code-techs"}
+	max_age_hours = max(1, int(cfg.get("demand_max_age_hours", 72) or 72))
+	# Algolia can filter by age server-side, so a stale thread with one recent
+	# comment never arrives in the first place.
+	since = int((datetime.now(timezone.utc) - timedelta(hours=max_age_hours)).timestamp())
 	for query in cfg.get("community_searches", []):
 		try:
 			resp = requests.get(
@@ -386,6 +677,7 @@ def _fetch_hn_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 					"query": str(query),
 					"tags": "story,comment",
 					"hitsPerPage": 6,
+					"numericFilters": f"created_at_i>{since}",
 				},
 				headers=headers,
 				timeout=20,
@@ -406,8 +698,10 @@ def _fetch_hn_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 					"title": title,
 					"url": url,
 					"source": "hacker-news",
+					"kind": _DEMAND,
 					"body": strip_html(str(body)),
 					"labels": ["community-request", "free-api"],
+					"posted_at": item.get("created_at"),
 				})
 		except Exception as exc:
 			log.warning("[code_techs] HN search failed for %r: %s", query, exc)
@@ -425,25 +719,37 @@ def _fetch_reddit_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 		"Accept": "application/atom+xml, application/rss+xml, text/xml;q=0.9",
 		"User-Agent": "e-evolve-code-techs/1.0 read-only lead research",
 	}
+	backoff = max(0, int(cfg.get("reddit_backoff_seconds", 5) or 0))
 	request_count = 0
-	for subreddit in subreddits:
-		for query in queries:
-			if request_count >= max_requests:
-				return leads
-			request_count += 1
-			url = (
-				f"https://www.reddit.com/r/{quote_plus(subreddit)}/search.rss"
-				f"?q={quote_plus(query)}&restrict_sr=1&sort=new"
-			)
-			try:
-				resp = requests.get(url, headers=headers, timeout=20)
-				if resp.status_code in (403, 429):
-					log.warning("[code_techs] Reddit search skipped (%s): r/%s %s", resp.status_code, subreddit, query)
-					continue
-				resp.raise_for_status()
-				leads.extend(_parse_reddit_rss(resp.text, subreddit))
-			except Exception as exc:
-				log.warning("[code_techs] Reddit search failed for r/%s %r: %s", subreddit, query, exc)
+	# One query per subreddit, so a tiny budget still spans several
+	# communities. The old nested loop spent all 24 requests on the first two
+	# subreddits, which is why the live page showed nothing but r/SideProject.
+	for index, subreddit in enumerate(subreddits):
+		if request_count >= max_requests:
+			break
+		query = queries[index % len(queries)]
+		request_count += 1
+		url = (
+			f"https://www.reddit.com/r/{quote_plus(subreddit)}/search.rss"
+			f"?q={quote_plus(query)}&restrict_sr=1&sort=new"
+		)
+		try:
+			resp = requests.get(url, headers=headers, timeout=20)
+			if resp.status_code in (403, 429):
+				# Reddit throttles the IP, not the query, so continuing would
+				# burn the rest of the budget on certain failures. Stopping is
+				# not an error: this source is a bonus, never required.
+				log.info(
+					"[code_techs] Reddit throttled (%s) at r/%s; stopping Reddit for this cycle",
+					resp.status_code, subreddit
+				)
+				if backoff:
+					time.sleep(backoff)
+				break
+			resp.raise_for_status()
+			leads.extend(_parse_reddit_rss(resp.text, subreddit))
+		except Exception as exc:
+			log.warning("[code_techs] Reddit search failed for r/%s %r: %s", subreddit, query, exc)
 	return leads
 
 def _parse_reddit_rss(feed_text: str, subreddit: str) -> list[dict[str, Any]]:
@@ -468,8 +774,11 @@ def _parse_reddit_rss(feed_text: str, subreddit: str) -> list[dict[str, Any]]:
 			"title": title,
 			"url": url,
 			"source": f"reddit:r/{subreddit}",
+			"kind": _DEMAND,
 			"body": strip_html(body),
 			"labels": ["reddit", "community-request", "free-rss"],
+			"posted_at": xml_text(entry, "updated") or xml_text(entry, "published"),
+			"buyer": f"r/{subreddit}",
 		})
 	return leads
 
@@ -485,33 +794,87 @@ def _dedupe(leads: list[dict[str, Any]]) -> list[dict[str, Any]]:
 	return out
 
 def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_score: int) -> list[Opportunity]:
+	now = datetime.now(timezone.utc)
+	discovered_at = now.isoformat()
+	max_age_hours = max(1, int(cfg.get("demand_max_age_hours", 72) or 72))
+	prompt_top_n = max(0, int(cfg.get("prompt_top_n", 12) or 0))
 	ranked: list[Opportunity] = []
+
 	for lead in leads:
 		title = str(lead.get("title", "")).strip()
 		body = str(lead.get("body", "")).strip()
 		labels = [str(x).lower() for x in lead.get("labels", [])]
 		text = " ".join([title, body, " ".join(labels)]).lower()
-		value = _extract_value(text, cfg)
-		score = _score(text, labels, value)
-		if score < min_score and lead.get("source") != "local-playbook":
+		is_local = lead.get("source") == "local-playbook"
+		# A playbook entry is a written-down offer, not a market signal: it has
+		# no timestamp and must never carry a price.
+		kind = str(lead.get("kind") or (_SUPPLY if is_local else _DEMAND))
+
+		posted = parse_dt(lead.get("posted_at"))
+		age_hours = round((now - posted).total_seconds() / 3600, 1) if posted else None
+		value_usd, value_basis, value_note = _lead_value(lead)
+		score, parts = _score(lead, text, labels, kind, age_hours, value_basis, cfg)
+		if score < min_score and not is_local:
 			continue
+
 		title_for_prompt = title[:140] or "untitled code-tech lead"
-		reason = _reason(text, labels, value)
-		next_step = _next_step(text)
+		reason = _reason(lead, text, labels, kind, value_note, age_hours)
+		next_step = _next_step(lead, kind, cfg)
 		ranked.append(Opportunity(
 			title=title_for_prompt,
 			url=str(lead.get("url", "")),
 			source=str(lead.get("source", "unknown")),
+			buyer=str(lead.get("buyer") or "")[:80],
+			kind=kind,
 			score=score,
-			estimated_value_usd=value,
+			score_parts=parts,
+			value_usd=value_usd,
+			value_basis=value_basis,
+			value_note=value_note,
+			posted_at=posted.isoformat() if posted else None,
+			discovered_at=discovered_at,
+			age_hours=age_hours,
 			reason=reason,
 			next_step=next_step,
-			codex_prompt=_codex_prompt(title_for_prompt, lead, reason, next_step),
-			outreach_draft=_outreach_draft(title_for_prompt, lead, value, cfg),
+			codex_prompt="",
 			pursued=False
 		))
-	ranked.sort(key=lambda op: (op.score, op.estimated_value_usd), reverse=True)
-	return ranked[:max_items]
+
+	# Sort by score, then freshness. Value is deliberately not a sort key here:
+	# most leads have none, so it would rank on its own absence.
+	ranked.sort(key=lambda op: (op.score, -(op.age_hours if op.age_hours is not None else 1e9)), reverse=True)
+	selected = _apply_demand_share(ranked, cfg, max_items)
+
+	# Prompts are the expensive field (~1.7 KB each) and status.json is
+	# committed hourly, so only the leads worth acting on carry one.
+	for position, op in enumerate(selected):
+		if position < prompt_top_n:
+			op.codex_prompt = _codex_prompt(op, cfg)
+	return selected
+
+def _apply_demand_share(
+	ranked: list[Opportunity], cfg: dict[str, Any], max_items: int
+) -> list[Opportunity]:
+	"""Reserve part of the page for demand leads.
+
+    Supply leads are plentiful and score well on tooling signals, so without a
+    floor a good crop of repositories can crowd out every posting where
+    somebody is actually paying -- the exact failure the owner reported.
+    """
+	share = float(cfg.get("min_demand_share", 0.5) or 0.0)
+	demand = [op for op in ranked if op.kind == _DEMAND]
+	if share <= 0 or not demand:
+		return ranked[:max_items]
+	reserved = min(len(demand), int(max_items * min(1.0, share)))
+	keep = demand[:reserved]
+	kept = {id(op) for op in keep}
+	for op in ranked:
+		if len(keep) >= max_items:
+			break
+		if id(op) not in kept:
+			keep.append(op)
+	keep.sort(key=lambda op: op.score, reverse=True)
+	return keep[:max_items]
 
 def _clean_list(value: Any) -> list[str]:
 	if not isinstance(value, list):
@@ -544,11 +907,19 @@ def _online_ai_brief(llm: Any, leads: list[dict[str, Any]], cfg: dict[str, Any])
 			],
 		}
 
+	# Demand leads first. This used to take leads[:12] in fetch order, so the
+	# brief could be written entirely from tooling repositories and say
+	# nothing about what anyone is currently paying for.
+	ordered = (
+		[x for x in leads if x.get("kind") == _DEMAND]
+		+ [x for x in leads if x.get("kind") != _DEMAND]
+	)
 	samples = []
-	for lead in leads[:12]:
+	for lead in ordered[:12]:
 		samples.append({
 			"title": str(lead.get("title", ""))[:180],
 			"source": str(lead.get("source", ""))[:80],
+			"kind": str(lead.get("kind") or ""),
 			"url": str(lead.get("url", ""))[:220],
 			"excerpt": str(lead.get("body", ""))[:500],
 			"labels": lead.get("labels", [])[:6] if isinstance(lead.get("labels"), list) else [],
@@ -575,6 +946,13 @@ def _online_ai_brief(llm: Any, leads: list[dict[str, Any]], cfg: dict[str, Any])
 		"lead_samples": samples,
 		"required_json_shape": {
 			"summary": "one concise paragraph on the best current free-AI earning angle",
+			"market_themes": [
+				{
+					"theme": "what the demand leads above have in common",
+					"evidence": "which lead titles show it",
+					"offer": "the specific service to sell into that theme",
+				}
+			],
 			"free_ai_services": [
 				{
 					"name": "service or API name",
@@ -617,6 +995,7 @@ def _online_ai_brief(llm: Any, leads: list[dict[str, Any]], cfg: dict[str, Any])
 
 	return {
 		"summary": str(data.get("summary", "")).strip()[:900],
+		"market_themes": _dicts(data.get("market_themes"), ["theme", "evidence", "offer"], limit=5),
 		"free_ai_services": _dicts(data.get("free_ai_services"), [
 			"name", "what_it_does", "free_tier", "credit_card_required",
 			"earn_with_it", "price_guide",
@@ -645,168 +1024,284 @@ def _dicts(value: Any, fields: list[str], limit: int) -> list[dict[str, str]]:
 			break
 	return out
 
-def _score(text: str, labels: list[str], value: float) -> int:
-	"""Rank leads by: free AI service signal, ease of earning, and payout clarity."""
-	score = 30
-	if value:
-		score += min(25, int(value / 5))
+def _score(
+	lead: dict[str, Any],
+	text: str,
+	labels: list[str],
+	kind: str,
+	age_hours: float | None,
+	value_basis: str,
+	cfg: dict[str, Any],
+) -> tuple[int, dict[str, float]]:
+	"""Weighted 0-100 score that actually discriminates between leads.
 
-	# Core signal: a genuinely free AI service or API.
-	if _is_free_ai_lead(text):
-		score += 26
-	if any(word in text for word in ("no credit card", "no card", "without credit card")):
-		score += 14
-	if any(word in text for word in ("free tier", "free api", "free plan", "free quota", "free allowance")):
-		score += 12
-	if any(word in text for word in ("open source", "open-weight", "self-host", "local model")):
-		score += 6
+    The old version started at 30 and added up to ~140 of overlapping bonuses
+    before clamping to 100, so anything half-decent saturated: the live queue
+    scored 100, 100, 100, 100, 100, 98, 96, 96 and ``min_score: 55`` filtered
+    nothing at all.
 
-	# Ease of earning: fast to start, clear buyer, clear price.
-	if any(word in text for word in ("fixed price", "per batch", "per hour", "per file", "flat fee", "one-time")):
-		score += 12
-	if any(word in text for word in ("easy", "simple", "quick", "same day", "under an hour", "no setup")):
-		score += 10
-	if any(word in text for word in ("retainer", "recurring", "monthly", "subscription")):
-		score += 10
-	if any(word in text for word in ("productized", "template", "repeatable", "batch")):
-		score += 8
+    Each component is normalised to 0..1 and multiplied by a weight, so a
+    lead's rank is a blend rather than a race to the clamp. ``score_parts`` is
+    returned alongside so the dashboard can show *why* a lead ranks, and so a
+    later cycle can see which component is doing the work.
+    """
+	# Recency is judged against the window the lead's own source works on. A
+	# reply in the monthly HN hiring thread is not stale at 100h the way a job
+	# feed posting would be, and scoring both on one scale would bury the
+	# highest-intent leads for being what they are.
+	if str(lead.get("source") or "") == "hn-hiring":
+		max_age = max(1.0, float(cfg.get("hn_hiring_max_age_hours", 744) or 744))
+	elif kind == _SUPPLY:
+		max_age = max(1.0, float(cfg.get("supply_max_age_days", 120) or 120) * 24)
+	else:
+		max_age = max(1.0, float(cfg.get("demand_max_age_hours", 72) or 72))
 
-	# Concrete, boring, well-paid conversion work.
-	if any(word in text for word in ("transcri", "ocr", "extract", "convert", "summari", "translat", "clean up", "cleanup")):
-		score += 12
-	if any(word in text for word in ("small business", "client", "customer", "seller", "freelance")):
-		score += 8
-	if "community-request" in labels or "free-ai-api" in labels:
-		score += 8
+	# Linear decay over that window. An unknown age is not free -- it scores
+	# below anything confirmed fresh, above anything stale.
+	if age_hours is None:
+		recency = 0.3
+	else:
+		recency = max(0.0, 1.0 - (max(0.0, age_hours) / max_age))
 
-	# Penalties: cost, competition, vagueness.
-	if any(word in text for word in ("bounty", "reward", "prize", "contest")):
-		score -= 20
-	if any(word in text for word in ("credit card required", "paid plan", "trial expires", "14-day trial", "30-day trial")):
-		score -= 20
+	has_rate = value_basis in ("posted_salary", "stated_rate")
+	contract_terms = ("contract", "freelance", "part-time", "part time", "contractor")
+	request_terms = ("looking for", "need help", "does anyone", "anyone know", "hiring", "wanted")
+	if kind == _SUPPLY:
+		intent = 0.15
+	elif any(term in text for term in contract_terms) and has_rate:
+		intent = 1.0
+	elif any(term in text for term in contract_terms):
+		intent = 0.7
+	elif any(term in text for term in request_terms):
+		intent = 0.4
+	else:
+		intent = 0.25
+
+	deliverables = [str(t).lower() for t in cfg.get("deliverable_terms", [])]
+	hits = sum(1 for term in deliverables if term and term in text)
+	deliverability = min(1.0, hits / 3.0)
+
+	parts = {
+		"recency": round(recency, 3),
+		"demand_intent": round(intent, 3),
+		"value_clarity": 1.0 if has_rate else 0.0,
+		"deliverability": round(deliverability, 3),
+		"free_stack_fit": 1.0 if _is_free_ai_lead(text) else 0.0,
+	}
+	score = (
+		30 * parts["recency"]
+		+ 25 * parts["demand_intent"]
+		+ 20 * parts["value_clarity"]
+		+ 15 * parts["deliverability"]
+		+ 10 * parts["free_stack_fit"]
+	)
+
+	penalty = 0
+	if any(word in text for word in ("bounty", "prize", "contest")):
+		penalty += 15
+	if any(word in text for word in ("credit card required", "paid plan", "trial expires")):
+		penalty += 10
 	if any(word in text for word in ("passive income", "get rich", "guaranteed income", "6-figure")):
-		score -= 25
+		penalty += 15
 	if any(word in text for word in ("need an audience", "followers", "ad spend", "go viral")):
-		score -= 15
-	return max(0, min(100, score))
+		penalty += 10
+	if penalty:
+		parts["penalty"] = float(-penalty)
+
+	return max(0, min(100, round(score - penalty))), parts
 
 
 def _is_free_ai_lead(text: str) -> bool:
-	"""True when the lead names an AI capability AND a free-access signal."""
-	ai_terms = (
-		"ai", "llm", "gpt", "model", "api", "whisper", "transcri", "ocr",
-		"embedding", "vision", "speech", "tts", "image generation", "inference",
-	)
+	"""True when the lead names an AI capability AND a nearby free-access signal.
+
+    Both halves used to be substring checks over the whole blob, which is how
+    "I spent a year making a Markdown editor for Windows ... free" was
+    classified as a free-AI earning lead: bare ``"ai"`` matches *contain*,
+    *available* and *email*, and the free term could sit paragraphs away.
+
+    So: word-boundary matching on the capability, and the free signal has to
+    appear within ``_FREE_WINDOW`` characters of it. Proximity is what carries
+    the claim that the two words are actually about each other.
+    """
 	free_terms = (
 		"free", "no credit card", "no-cost", "zero cost", "open source",
 		"open-weight", "free tier", "free api", "generous",
 	)
-	return any(t in text for t in ai_terms) and any(t in text for t in free_terms)
+	for match in _AI_TERM_RE.finditer(text):
+		lo = max(0, match.start() - _FREE_WINDOW)
+		window = text[lo:match.end() + _FREE_WINDOW]
+		if any(term in window for term in free_terms):
+			return True
+	return False
 
-def _extract_value(text: str, cfg: dict) -> float:
-	amounts = [float(m.group(1).replace(",", "")) for m in re.finditer(r"\$(\d[\d,]*(?:\.\d+)?)", text)]
-	if amounts:
-		return round(max(amounts), 2)
-	target = float(cfg.get("daily_target_usd", 10.0) or 10.0)
-	if any(word in text for word in ("retainer", "consultant", "consulting", "audit", "productized")):
-		return max(target, float(cfg.get("outreach", {}).get("default_price_usd", target) or target))
-	if any(word in text for word in ("paid", "fixed-price", "service")):
-		return target
-	if any(word in text for word in ("need", "looking for", "does anyone have", "anyone know")):
-		return float(cfg.get("outreach", {}).get("default_price_usd", target) or target)
-	return 0.0
 
-def _reason(text: str, labels: list[str], value: float) -> str:
+def _lead_value(lead: dict[str, Any]) -> tuple[float | None, str, str]:
+	"""Return ``(value_usd, value_basis, value_note)`` -- published prices only.
+
+    This replaces ``_extract_value``, which took ``max()`` of every ``$N``
+    regex match in the lead text and, failing that, invented
+    ``daily_target_usd`` because the body contained the word "need". Every
+    lead therefore carried a figure: the live queue's top lead read **$4,500**,
+    scraped out of an unrelated repository roadmap, and the dashboard summed
+    those into a "$5.6k pipeline value" shown beside a real on-chain balance
+    of $0.00.
+
+    Only two things count as a price here: a salary field the job board
+    published, or a rate the poster themselves typed. Everything else returns
+    ``None`` -- not ``0.0``, because 0.0 sums silently into totals and sorts as
+    the cheapest lead, while None forces the UI to admit it does not know.
+    """
+	low = _money(lead.get("min_salary"))
+	high = _money(lead.get("max_salary"))
+	if low or high:
+		currency = str(lead.get("currency") or "").upper()
+		# A CAD figure rendered with a "$" is simply a wrong number, and
+		# converting it would need a rate -- i.e. an estimate.
+		if currency in ("", "USD"):
+			amount = low or high
+			period = str(lead.get("salary_period") or "").lower()
+			suffix = _PERIOD_LABELS.get(period, "")
+			if low and high and high != low:
+				note = f"${low:,.0f}-{high:,.0f}{suffix} posted"
+			else:
+				note = f"${amount:,.0f}{suffix} posted"
+			# Never normalise hourly to annual: the multiplier (2080? 1000?)
+			# would itself be the estimate this function exists to refuse.
+			return amount, "posted_salary", note
+
+	# A rate the poster wrote, and only from sources where that text is the
+	# offer itself. Requires an explicit unit, so "$4,500 of funding" cannot
+	# match. On a live thread this fired on 2 of 242 comments -- both real.
+	if lead.get("allow_rate_extraction"):
+		match = _RATE_RE.search(str(lead.get("body") or ""))
+		if match:
+			first = _money(match.group(1))
+			second = _money(match.group(2))
+			if first:
+				note = f"${first:,.0f}-{second:,.0f}/hr stated" if second else f"${first:,.0f}/hr stated"
+				return first, "stated_rate", note
+
+	return None, "none", ""
+
+
+def _money(value: Any) -> float | None:
+	"""Positive float or None. Zero is not a price, it is a missing price."""
+	try:
+		amount = float(str(value).replace(",", "").strip())
+	except (TypeError, ValueError):
+		return None
+	return amount if amount > 0 else None
+
+
+def _reason(
+	lead: dict[str, Any],
+	text: str,
+	labels: list[str],
+	kind: str,
+	value_note: str,
+	age_hours: float | None,
+) -> str:
 	parts: list[str] = []
-	if value:
-		parts.append(f"visible or inferred value around ${value:.2f}")
-	if _is_free_ai_lead(text):
-		parts.append("runs on a free AI tier, so input cost is zero and margin is total")
-	if any(word in text for word in ("no credit card", "no card", "free tier", "free api")):
-		parts.append("no card and no upfront spend needed to start")
+	if value_note:
+		parts.append(f"{value_note} by the source, not inferred")
+	if kind == _DEMAND and age_hours is not None and age_hours <= 24:
+		parts.append(f"posted {int(age_hours)}h ago, so the buyer is still looking")
+	if kind == _SUPPLY:
+		parts.append("free tooling you can deliver paid work with")
+	if any(word in text for word in ("contract", "freelance", "part-time", "contractor")):
+		parts.append("scoped as contract or part-time work, which suits one narrow deliverable")
 	if any(word in text for word in ("transcri", "ocr", "extract", "convert", "summari", "translat", "cleanup")):
 		parts.append("boring conversion work buyers already pay humans to do by hand")
-	if any(word in text for word in ("fixed price", "per batch", "per hour", "per file", "flat fee")):
-		parts.append("priceable per unit, so scope and payout are unambiguous")
-	if any(word in text for word in ("retainer", "recurring", "monthly")):
-		parts.append("recurring revenue from one setup effort")
-	if any(word in text for word in ("easy", "simple", "quick", "same day")):
-		parts.append("startable today without new skills or tools")
-	if any(word in text for word in ("small business", "client", "seller", "customer")):
-		parts.append("buyer values the output and never asks which model made it")
+	if _is_free_ai_lead(text):
+		parts.append("runs on a free AI tier, so input cost is zero and margin is total")
 	if not parts:
-		parts.append("low-cost AI service lead with limited competition")
+		parts.append("matches the free-AI service niche with no upfront spend")
 	return "; ".join(parts[:2])
 
-def _next_step(text: str) -> str:
-	if any(word in text for word in ("transcri", "speech", "whisper", "audio")):
-		return "Sign up for the free speech-to-text tier, transcribe one sample file end to end, and publish a fixed price per hour of audio."
-	if any(word in text for word in ("ocr", "receipt", "invoice", "scan", "pdf")):
-		return "Run one scanned sample through the free OCR tier, produce a clean spreadsheet, and price per batch of pages."
-	if any(word in text for word in ("image", "background", "photo", "logo")):
-		return "Process a handful of sample photos on the free image tier and offer a per-image or per-batch rate."
-	if any(word in text for word in ("translat", "localiz")):
-		return "Translate one sample page on the free tier, verify quality, and price per thousand words."
-	if any(word in text for word in ("spreadsheet", "csv", "data", "cleanup", "dedupe")):
-		return "Clean one messy sample export with the free LLM tier and quote a flat rate per file."
-	if any(word in text for word in ("retainer", "recurring", "report", "monthly", "digest")):
-		return "Build the recurring report once on free scheduled compute, then sell it as a low monthly retainer."
-	if any(word in text for word in ("setup", "configure", "install", "onboard")):
-		return "Document the exact free-tier setup steps once, then charge a flat fee to perform it inside a client's workflow."
-	if _is_free_ai_lead(text):
-		return "Confirm the free tier limits and terms, build one small working demo, then attach a fixed price to a single narrow task."
-	return "Verify the service is genuinely free to use, produce one sample output as proof, and quote a fixed price for one narrow task."
 
-def _codex_prompt(title: str, lead: dict[str, Any], reason: str, next_step: str) -> str:
-	url = str(lead.get("url", "")).strip()
-	body = str(lead.get("body", "")).strip()
-	excerpt = body[:900].replace("\n", " ")
-	return (
-		"Implement a small, verifiable solution for this public request.\n\n"
-		f"Lead: {title}\n"
-		f"Source: {lead.get('source', 'unknown')}\n"
-		f"URL: {url or 'no public URL'}\n"
-		f"Why this is suitable: {reason}\n"
-		f"First step: {next_step}\n\n"
-		"Constraints:\n"
-		"- Keep the first change narrowly scoped.\n"
-		"- Use free APIs or offline code paths when possible.\n"
-		"- Add or update a specific file that demonstrates the result.\n"
-		"- Include exact verification commands and output notes.\n"
-		"- Do not post externally or request payment automatically.\n\n"
-		f"Request excerpt: {excerpt or 'No excerpt available.'}"
-	)
+def _next_step(lead: dict[str, Any], kind: str, cfg: dict[str, Any]) -> str:
+	"""One concrete move, chosen from the lead's OWN subject.
 
-def _outreach_draft(title: str, lead: dict[str, Any], value: float, cfg: dict[str, Any]) -> str:
-	outreach_cfg = cfg.get("outreach", {}) or {}
-	if not outreach_cfg.get("enabled", True):
-		return ""
-	price = value or float(outreach_cfg.get("default_price_usd", 10.0) or 10.0)
-	payment_label = str(outreach_cfg.get("payment_label", "crypto")).strip() or "crypto"
-	payment_note = _payment_note(outreach_cfg)
-	url = str(lead.get("url", "")).strip()
-	return (
-		f"Hi, I found your request about \"{title}\" and can make a small working version.\n\n"
-		"I will keep it simple: one focused file/change, a short usage note, and proof that it runs. "
-		"If the result solves the request, the fixed price is "
-		f"${price:.2f} via {payment_label}.\n\n"
-		f"{payment_note}\n\n"
-		f"Reference: {url or 'add the original thread URL before sending'}"
-	)
+    This used to keyword-match the title, body and labels concatenated
+    together, so a single stray word anywhere decided the advice: all three
+    GitHub leads in the live queue were told to "transcribe one sample file"
+    and none of them involved audio. Matching the title and labels only keeps
+    the recommendation about what the lead is actually for.
+    """
+	subject = " ".join([
+		str(lead.get("title") or ""),
+		" ".join(str(x) for x in lead.get("labels") or []),
+	]).lower()
+	buyer = str(lead.get("buyer") or "").strip()
 
-def _payment_note(outreach_cfg: dict[str, Any]) -> str:
-	env_name = str(outreach_cfg.get("crypto_address_env", "USDT_WALLET_ADDRESS")).strip()
-	address = os.getenv(env_name, "").strip() if env_name else ""
-	if address:
-		return f"Payment address ({env_name}): {address}"
-	return str(
-		outreach_cfg.get(
-			"fallback_payment_note",
-			"Payment address is configured privately; add it manually before sending.",
+	if kind == _SUPPLY:
+		return (
+			"Confirm the free tier's real limits and terms, run one small end-to-end sample, "
+			"then attach a fixed price to a single narrow task built on it."
 		)
+	who = buyer or "the poster"
+	if any(word in subject for word in ("transcri", "speech", "whisper", "audio", "podcast")):
+		deliverable = "transcribe one sample file end to end and quote per hour of audio"
+	elif any(word in subject for word in ("ocr", "receipt", "invoice", "scan", "pdf", "document")):
+		deliverable = "run one scanned sample to a clean spreadsheet and quote per batch of pages"
+	elif any(word in subject for word in ("image", "photo", "design", "logo", "video")):
+		deliverable = "process a handful of sample assets and quote per image or per batch"
+	elif any(word in subject for word in ("translat", "localiz", "content", "writing", "copy")):
+		deliverable = "produce one sample page and quote per thousand words"
+	elif any(word in subject for word in ("csv", "spreadsheet", "analytics", "etl", "scrap")):
+		deliverable = "clean one messy sample export and quote a flat rate per file"
+	elif any(word in subject for word in ("engineer", "developer", "programming", "backend", "frontend", "software")):
+		deliverable = "build the smallest working slice of the stated problem and quote per milestone"
+	elif any(word in subject for word in ("support", "customer", "success")):
+		deliverable = "draft one worked reply set from their own docs and quote per month"
+	else:
+		deliverable = "build the smallest working slice of what they asked for and quote a fixed price"
+	return f"Read what {who} actually asked for, then {deliverable}."
+
+
+def _codex_prompt(op: Opportunity, cfg: dict[str, Any]) -> str:
+	"""A prompt built from this lead's real fields, not a fixed template.
+
+    Six labelled slots so the reading model gets the market context it needs:
+    who the buyer is, what they signalled, what to deliver, what the price
+    basis is, which free stack to use, and how to verify.
+
+    The PRICE BASIS slot states the *absence* of a price out loud when there
+    is none. A prompt that simply omitted it invited the model to invent a
+    figure, which would rebuild the fabrication this module just removed
+    inside the one field the owner reads most.
+    """
+	free_stack = _clean_list(cfg.get("free_ai_focus", []))[:2]
+	price = op.value_note or "no stated price - do not quote or invent a figure"
+	age = f"{op.age_hours:.0f}h ago" if op.age_hours is not None else "age unknown"
+	why = " ".join(str(op.reason or "").split())
+	return (
+		"Build a small, verifiable deliverable for this real market signal.\n\n"
+		f"BUYER          {op.buyer or 'not named'} (via {op.source})\n"
+		f"DEMAND SIGNAL  {op.title}\n"
+		f"POSTED         {op.posted_at or 'unknown'} ({age})\n"
+		f"LINK           {op.url or 'no public URL'}\n"
+		f"DELIVERABLE    {op.next_step}\n"
+		f"PRICE BASIS    {price}\n"
+		f"FREE STACK     {'; '.join(free_stack) or 'any zero-cost AI tier'}\n"
+		f"WHY IT RANKS   {why}\n\n"
+		"Constraints:\n"
+		"- Keep the first change narrowly scoped to one file or script.\n"
+		"- Use free API tiers or offline code paths only; no paid service.\n"
+		"- Include the exact commands to run it and paste the real output.\n"
+		"- Verify on at least 3 sample inputs before calling it done.\n"
+		"- Do not contact anyone, publish anything, or request payment.\n"
+		"- Do not state a price unless PRICE BASIS gives one."
 	)
 
-def _write_report(state: dict[str, Any]) -> None:
+
+def _write_report(state: dict[str, Any], leads: list[dict[str, Any]] | None = None) -> None:
+	"""Write the markdown report.
+
+    ``leads`` carries the full ranked list, which is longer than the copy kept
+    in ``state`` -- a static page can be long, while status.json is committed
+    every hour. Falls back to the snapshot when not supplied.
+    """
 	_REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
 	lines = [
 		"# Free AI Earning Queue",
@@ -888,22 +1383,29 @@ def _write_report(state: dict[str, Any]) -> None:
 	for item in state.get("avoid_patterns", []):
 		lines.append(f"- {item}")
 	lines.extend(["", "## Ranked Leads From Online Search", ""])
-	for index, op in enumerate(state.get("opportunities", []), start=1):
+	for index, op in enumerate(leads if leads is not None else state.get("opportunities", []), start=1):
 		title = op.get("title", "untitled")
 		url = op.get("url", "")
 		pursued_tag = " [PURSUED]" if op.get("pursued") else ""
 		heading = f"{index}. [{title}]({url}){pursued_tag}" if url else f"{index}. {title}{pursued_tag}"
+		age = op.get("age_hours")
 		lines.extend([
 			heading,
+			f"   - Kind: {op.get('kind', 'unknown')}",
 			f"   - Score: {op.get('score', 0)}/100",
-			f"   - Value signal: ${float(op.get('estimated_value_usd', 0) or 0):.2f}",
+			# The published price or nothing. A figure with no basis is what
+			# this module used to print, and it was invented.
+			f"   - Price: {op.get('value_note') or 'no stated price'}",
+			f"   - Posted: {op.get('posted_at') or 'unknown'}"
+			+ (f" ({age:.0f}h ago)" if isinstance(age, (int, float)) else ""),
 			f"   - Why: {op.get('reason', '')}",
 			f"   - Next: {op.get('next_step', '')}",
-			"   - Codex request:",
-			_indent_block(str(op.get("codex_prompt", "")), "     "),
-			"   - Owner-reviewed outreach draft:",
-			_indent_block(str(op.get("outreach_draft", "")), "     "),
 		])
+		if op.get("codex_prompt"):
+			lines.extend([
+				"   - Codex request:",
+				_indent_block(str(op.get("codex_prompt", "")), "     "),
+			])
 	_REPORT_FILE.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 def _indent_block(text: str, prefix: str) -> str:

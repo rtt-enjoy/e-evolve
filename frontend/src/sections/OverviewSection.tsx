@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { Card, Empty, KeyValue, Phase, Pill, SectionHead, Stat, Tile } from '../components/ui';
 import { CopyButton } from '../components/CopyButton';
 import { buildIssues, buildOpportunityStats, buildReadiness, sortLeads } from '../utils/dashboard';
-import { ageLabel, cleanTitle, compactMoney, evolutionTone, formatDate, money, scoreTone, sourceLabel } from '../utils/format';
+import { ageLabel, cleanTitle, compactMoney, evolutionTone, formatDate, formatLeadValue, leadAge, money, scoreTone, sourceLabel } from '../utils/format';
 import type { Status } from '../types/status';
 
 export default function OverviewSection({ status }: { status: Status }) {
@@ -19,7 +19,12 @@ export default function OverviewSection({ status }: { status: Status }) {
 	const stats = useMemo(() => buildOpportunityStats(opportunities), [opportunities]);
 	const readiness = useMemo(() => buildReadiness(status), [status]);
 	const issues = useMemo(() => buildIssues(status), [status]);
-	const topLeads = useMemo(() => sortLeads(opportunities, 'value').slice(0, 4), [opportunities]);
+	// Newest, not "highest value": most leads have no published price, so
+	// sorting by value would rank them on the absence of one.
+	const topLeads = useMemo(
+		() => sortLeads(opportunities.filter((lead) => (lead.kind || 'demand') === 'demand'), 'newest').slice(0, 4),
+		[opportunities],
+	);
 	const evolution = status.last_evolution || {};
 	const errors = status.errors || [];
 	const actions = status.last_earning?.actions || [];
@@ -66,11 +71,15 @@ export default function OverviewSection({ status }: { status: Status }) {
 					spark={history}
 					to="#/health"
 				/>
+				{/* Deliberately a count, not money. This tile used to read
+				    "Pipeline value $5.6k" directly beside the on-chain figure
+				    above, from values regex-scraped out of unrelated text — two
+				    dollar amounts side by side, one of them invented. */}
 				<Tile
-					label="Pipeline value"
-					value={compactMoney(stats.estimatedValue)}
-					detail={`${stats.total} leads · top ${compactMoney(stats.topValue)}`}
-					tone="info"
+					label="Fresh demand leads"
+					value={String(stats.demandCount)}
+					detail={`${stats.freshCount} posted in last 24h · ${stats.withValue} with a stated price`}
+					tone={stats.freshCount ? 'info' : 'warn'}
 					to="#/leads"
 				/>
 				<Tile
@@ -92,22 +101,24 @@ export default function OverviewSection({ status }: { status: Status }) {
 			<div className="split">
 				<div className="stack">
 					<Card
-						title="Top leads by value"
-						hint="Highest-value opportunities from the current research queue."
+						title="Newest demand leads"
+						hint="Most recent postings where somebody is paying for work."
 						action={<a className="btn" href="#/leads">all {stats.total} leads <ArrowUpRight size={14} /></a>}
 					>
 						{topLeads.length ? (
 							<ol className="lead-list">
 								{topLeads.map((lead) => {
 									const index = opportunities.indexOf(lead);
+									const age = leadAge(lead.age_hours);
 									return (
 										<li key={`${lead.url}-${index}`}>
 											<a href={`#/leads/${index}`}>
-												<span className="lead-value">{compactMoney(lead.estimated_value_usd || 0)}</span>
+												<span className="lead-value">{age.label}</span>
 												<span className="lead-body">
 													<strong>{cleanTitle(lead.title) || 'Untitled lead'}</strong>
-													<em>{sourceLabel(lead.source)}</em>
+													<em>{lead.buyer || sourceLabel(lead.source)}</em>
 												</span>
+												{formatLeadValue(lead) !== '—' ? <Pill tone="good">{formatLeadValue(lead)}</Pill> : null}
 												<Pill tone={scoreTone(lead.score)}>{lead.score || 0}</Pill>
 											</a>
 										</li>
@@ -183,10 +194,14 @@ export default function OverviewSection({ status }: { status: Status }) {
 								value={String(status.article_daily?.published || 0)}
 								detail="reach, not revenue — pays $0"
 							/>
+							{/* Was "Pipeline (unrealised) $5.6k · leads awaiting
+							    payment" — a scraped figure, in an earnings card,
+							    described as money owed. Nobody had agreed to pay
+							    any of it. A lead count carries no such claim. */}
 							<Stat
-								label="Pipeline (unrealised)"
-								value={compactMoney(stats.estimatedValue)}
-								detail={`${stats.total} leads awaiting payment`}
+								label="Leads with a price"
+								value={`${stats.withValue} of ${stats.total}`}
+								detail="published rates — not money owed"
 							/>
 						</div>
 						<p className="muted mt-4">

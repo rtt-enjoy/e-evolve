@@ -8,6 +8,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 	const codeTech = status.code_tech_earning || {};
 	const brief = codeTech.online_ai_brief || {};
 	const services = brief.free_ai_services || [];
+	const themes = brief.market_themes || [];
 	const ideas = brief.easy_earning_ideas || [];
 	const ownerActions = brief.owner_actions || [];
 	const suggestions = (status.suggestions || []).filter((suggestion) => !isAvoidedSuggestion(suggestion));
@@ -37,6 +38,25 @@ export default function ResearchSection({ status }: { status: Status }) {
 				<Card title="Current thesis" hint="The strongest angle the research cycle identified.">
 					<p className="prose lead-in">{brief.summary}</p>
 				</Card>
+			) : null}
+
+			{themes.length ? (
+				<>
+					{/* What the *current* demand leads have in common. The rest of
+					    this page is about supply — which free tools exist — and
+					    this is the half that says what people are paying for. */}
+					<Subhead>What the market is asking for</Subhead>
+					<div className="grid-2">
+						{themes.map((theme, index) => (
+							<Card key={`${theme.theme}-${index}`} title={theme.theme || 'Theme'}>
+								<div className="stack">
+									{theme.offer ? <p className="prose lead-in">{theme.offer}</p> : null}
+									{theme.evidence ? <p className="muted">Seen in: {theme.evidence}</p> : null}
+								</div>
+							</Card>
+						))}
+					</div>
+				</>
 			) : null}
 
 			<Subhead>Free AI services</Subhead>

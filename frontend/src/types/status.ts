@@ -21,16 +21,35 @@ export type Suggestion = {
 	how_to?: string[];
 };
 
+/** How a lead's price was established. `none` means nobody published one. */
+export type LeadValueBasis = 'posted_salary' | 'stated_rate' | 'none';
+
+/** `demand` = somebody is paying now. `supply` = free tooling to deliver with. */
+export type LeadKind = 'demand' | 'supply';
+
 export type CodeTechOpportunity = {
 	title?: string;
 	url?: string;
 	source?: string;
+	/** Who is paying, when the source names them. */
+	buyer?: string;
+	kind?: LeadKind;
 	score?: number;
-	estimated_value_usd?: number;
+	score_parts?: Record<string, number>;
+	/**
+	 * null when no price was published -- never 0. A zero sums into totals and
+	 * sorts as the cheapest lead; null forces the UI to render an em dash.
+	 */
+	value_usd?: number | null;
+	value_basis?: LeadValueBasis;
+	value_note?: string;
+	/** When the market posted it, vs when this bot saw it. */
+	posted_at?: string | null;
+	discovered_at?: string;
+	age_hours?: number | null;
 	reason?: string;
 	next_step?: string;
 	codex_prompt?: string;
-	outreach_draft?: string;
 	pursued?: boolean;
 };
 
@@ -52,8 +71,16 @@ export type EarningIdea = {
 	free_stack?: string;
 };
 
+/** What the current demand leads have in common, and what to sell into it. */
+export type MarketTheme = {
+	theme?: string;
+	evidence?: string;
+	offer?: string;
+};
+
 export type OnlineAiBrief = {
 	summary?: string;
+	market_themes?: MarketTheme[];
 	free_ai_services?: FreeAiService[];
 	easy_earning_ideas?: EarningIdea[];
 	owner_actions?: string[];
@@ -71,6 +98,9 @@ export type CodeTechEarning = {
 	daily_target_usd?: number;
 	refresh_hours?: number;
 	opportunities?: CodeTechOpportunity[];
+	demand_count?: number;
+	supply_count?: number;
+	priced_count?: number;
 	requirements?: string[];
 	focus?: string[];
 	free_ai_focus?: string[];

@@ -14,6 +14,7 @@ is free and it can be exercised directly in tests.
 """
 from __future__ import annotations
 
+import html
 import json
 import re
 import xml.etree.ElementTree as ET
@@ -61,14 +62,23 @@ def hours_until_due(state: Mapping[str, Any], key: str, interval_hours: int) -> 
 
 
 def parse_dt(value: Any) -> Optional[datetime]:
-	"""Parse ISO-8601 or RFC-822 (RSS ``pubDate``) into an aware UTC datetime.
+	"""Parse ISO-8601, RFC-822 (RSS ``pubDate``) or a unix epoch into aware UTC.
 
-    Feeds serve both formats, so both are tried. A naive result is assumed UTC,
-    which is what every source here publishes.
+    Feeds serve all three, so all three are tried. A naive result is assumed
+    UTC, which is what every source here publishes. The epoch branch exists
+    because the remote-job APIs report ``pubDate`` as an integer, and without
+    it a fresh posting reads as having no date at all.
     """
 	if not value:
 		return None
 	raw = str(value).strip()
+	# Epoch seconds. Bounded below so a bare year like "2026" cannot parse as
+	# a timestamp in 1970, and above so milliseconds are not read as seconds.
+	if re.fullmatch(r"\d{9,11}", raw):
+		try:
+			return datetime.fromtimestamp(int(raw), timezone.utc)
+		except (OverflowError, OSError, ValueError):
+			return None
 	try:
 		dt = datetime.fromisoformat(raw.replace("Z", "+00:00"))
 		return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
@@ -87,10 +97,16 @@ def strip_html(value: str) -> str:
 
     ``<script>`` bodies are dropped whole -- tag-stripping alone would leave
     the JavaScript source behind as if it were prose.
+
+    Entities are *decoded*, not deleted. Replacing them with a space used to
+    corrupt the text it was meant to clean: Hacker News serves "$120-160/hr"
+    as ``$120-160&#x2F;hr``, so a rate a human actually typed came out as
+    "$120-160 hr" and no downstream reader could recognise it as a price.
+    Numeric entities were not matched at all, leaving raw ``&#x2F;`` in place.
     """
 	value = re.sub(r"<script.*?</script>", " ", value, flags=re.DOTALL | re.IGNORECASE)
 	value = re.sub(r"<[^>]+>", " ", value)
-	value = re.sub(r"&[a-z]+;", " ", value)
+	value = html.unescape(value)
 	return re.sub(r"\s+", " ", value).strip()
 
 

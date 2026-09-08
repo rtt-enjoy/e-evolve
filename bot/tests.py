@@ -60,7 +60,18 @@ from bot.earning.mrr_ideas import (
 	_triage,
 	_viability_brief,
 )
-from bot.earning.code_techs import _online_ai_brief, _outreach_draft, _parse_reddit_rss, _rank, _reference_sources
+from bot.earning import code_techs as code_techs_module
+from bot.earning.code_techs import (
+	_fetch_github_leads,
+	_fetch_hn_hiring_leads,
+	_fetch_reddit_leads,
+	_is_free_ai_lead,
+	_lead_value,
+	_online_ai_brief,
+	_parse_reddit_rss,
+	_rank,
+	_reference_sources,
+)
 from bot.earning.trending import (
 	_dedupe,
 	_extract_article_text,
@@ -1190,52 +1201,26 @@ class TestEarningsUpdate(unittest.TestCase):
 			earnings_module._append_weekly_history = append_backup
 
 class TestCodeTechOpportunities(unittest.TestCase):
-	def test_rank_builds_codex_prompt_and_outreach_draft(self):
-		cfg = {
-			"daily_target_usd": 10.0,
-			"outreach": {
-				"enabled": True,
-				"default_price_usd": 12.0,
-				"payment_label": "crypto",
-				"crypto_address_env": "NO_SUCH_TEST_ADDRESS",
-				"fallback_payment_note": "Add payment address before sending.",
-			},
-		}
+	def test_rank_builds_a_market_specific_codex_prompt(self):
+		cfg = {"daily_target_usd": 10.0, "prompt_top_n": 5}
 		leads = [{
 			"title": "Need a script to automate CSV export",
 			"url": "https://example.com/request",
 			"source": "community",
+			"kind": "demand",
+			"buyer": "Acme Books",
 			"body": "Looking for a simple tool to export and convert a CSV every week.",
 			"labels": ["community-request"],
+			"posted_at": _hours_ago_iso(3),
 		}]
 
 		ranked = _rank(leads, cfg, max_items=1, min_score=0)
 
 		self.assertEqual(len(ranked), 1)
-		self.assertIn("Implement a small, verifiable solution", ranked[0].codex_prompt)
-		self.assertIn("fixed price is $12.00", ranked[0].outreach_draft)
-		self.assertIn("Do not post externally", ranked[0].codex_prompt)
-
-	def test_outreach_uses_configured_public_payment_address(self):
-		os.environ["TEST_PUBLIC_WALLET"] = "0xabc123"
-		try:
-			draft = _outreach_draft(
-				"Small app request",
-				{"url": "https://example.com", "source": "community"},
-				15.0,
-				{
-					"outreach": {
-						"enabled": True,
-						"payment_label": "crypto",
-						"crypto_address_env": "TEST_PUBLIC_WALLET",
-					}
-				},
-			)
-		finally:
-			os.environ.pop("TEST_PUBLIC_WALLET", None)
-
-		self.assertIn("0xabc123", draft)
-		self.assertIn("$15.00", draft)
+		prompt = ranked[0].codex_prompt
+		self.assertIn("Acme Books", prompt)
+		self.assertIn("Need a script to automate CSV export", prompt)
+		self.assertIn("Do not contact anyone", prompt)
 
 	def test_parse_reddit_rss_builds_community_lead(self):
 		feed = """<?xml version="1.0" encoding="UTF-8"?>
@@ -1243,6 +1228,7 @@ class TestCodeTechOpportunities(unittest.TestCase):
           <entry>
             <title>Need a script to automate invoices</title>
             <link href="https://www.reddit.com/r/smallbusiness/comments/abc/request/" />
+            <updated>2026-09-07T10:00:00+00:00</updated>
             <content type="html">&lt;p&gt;Looking for a simple export tool.&lt;/p&gt;</content>
           </entry>
         </feed>"""
@@ -1253,6 +1239,9 @@ class TestCodeTechOpportunities(unittest.TestCase):
 		self.assertEqual(leads[0]["source"], "reddit:r/smallbusiness")
 		self.assertIn("reddit", leads[0]["labels"])
 		self.assertIn("simple export tool", leads[0]["body"])
+		# Without a timestamp the UI cannot show or sort by age, which is the
+		# whole reason stale leads went unnoticed.
+		self.assertEqual(leads[0]["posted_at"], "2026-09-07T10:00:00+00:00")
 
 	def test_online_ai_brief_has_local_fallback_without_llm(self):
 		brief = _online_ai_brief(None, [], {"remote_service_niches": ["AI workflow consulting"]})
@@ -1271,6 +1260,556 @@ class TestCodeTechOpportunities(unittest.TestCase):
 
 		self.assertEqual(len(refs), 1)
 		self.assertIn("leverage", refs[0]["takeaway"])
+
+def _hours_ago_iso(hours: float) -> str:
+	"""ISO stamp `hours` in the past, for lead-freshness fixtures."""
+	from datetime import datetime, timedelta, timezone
+	return (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+
+
+class _StubResp:
+	"""Minimal stand-in for a requests Response."""
+
+	def __init__(self, payload=None, status_code=200, text=""):
+		self._payload = payload if payload is not None else {}
+		self.status_code = status_code
+		self.text = text
+
+	def json(self):
+		return self._payload
+
+	def raise_for_status(self):
+		if self.status_code >= 400:
+			raise AssertionError(f"HTTP {self.status_code}")
+
+
+class TestLeadValueIsNeverFabricated(unittest.TestCase):
+	"""A lead may only show a price its source actually published.
+
+    `_extract_value` used to take max() of every "$N" in the lead text, so the
+    live queue's top lead read $4,500 -- a figure lifted from an unrelated
+    repository roadmap -- and the dashboard summed those into a "$5.6k
+    pipeline value" displayed beside a real on-chain balance of $0.00.
+    """
+
+	def test_a_dollar_figure_in_body_text_is_not_a_value(self):
+		value, basis, note = _lead_value({
+			"title": "Map: the foundation for Demido Studio v3",
+			"body": "the budget was $4,500 for the redesign",
+		})
+
+		self.assertIsNone(value)
+		self.assertEqual(basis, "none")
+		self.assertEqual(note, "")
+
+	def test_posted_salary_survives_and_records_its_period(self):
+		value, basis, note = _lead_value({
+			"min_salary": 40, "max_salary": 40,
+			"currency": "USD", "salary_period": "hourly",
+		})
+
+		self.assertEqual(value, 40.0)
+		self.assertEqual(basis, "posted_salary")
+		# The period has to travel with the figure. An hourly rate reported as
+		# a bare number reads as an annual salary.
+		self.assertIn("/hr", note)
+
+	def test_non_usd_salary_is_refused(self):
+		# Real: Himalayas serves CAD ranges. Rendering one with a "$" is not
+		# an approximation, it is a different number.
+		value, basis, _ = _lead_value({
+			"min_salary": 100000, "max_salary": 115000,
+			"currency": "CAD", "salary_period": "annual",
+		})
+
+		self.assertIsNone(value)
+		self.assertEqual(basis, "none")
+
+	def test_a_rate_the_poster_typed_is_kept(self):
+		value, basis, note = _lead_value({
+			"allow_rate_extraction": True,
+			"body": "Noricum | Senior Backend Engineer | REMOTE | Contract | $120-160/hr",
+		})
+
+		self.assertEqual(value, 120.0)
+		self.assertEqual(basis, "stated_rate")
+		self.assertIn("$120-160/hr", note)
+
+	def test_funding_and_valuation_figures_are_not_rates(self):
+		# Same thread carries "~$37M raised" and "$2.7M" of runway. Requiring
+		# an explicit /hr unit is what keeps those out.
+		for body in ("we raised $4,500 in funding", "~$37M raised", "Comp: $215K-$260K + equity"):
+			value, basis, _ = _lead_value({"allow_rate_extraction": True, "body": body})
+			self.assertIsNone(value, body)
+			self.assertEqual(basis, "none", body)
+
+	def test_unknown_value_is_none_not_zero(self):
+		leads = [{
+			"title": "Someone wants a CSV cleanup script",
+			"source": "community", "kind": "demand", "body": "no price mentioned",
+			"labels": [], "posted_at": _hours_ago_iso(2),
+		}]
+
+		ranked = _rank(leads, {"prompt_top_n": 1}, max_items=5, min_score=0)
+
+		self.assertEqual(ranked[0].value_usd, None)
+		# 0.0 would sum into a total and sort as the cheapest lead. None
+		# forces the UI to admit it does not know.
+		self.assertFalse(any(op.value_usd == 0.0 for op in ranked))
+
+
+class TestLeadScoreDiscriminates(unittest.TestCase):
+	"""Scores have to separate leads, not pile up on the clamp.
+
+    The live queue scored 100, 100, 100, 100, 100, 98, 96, 96 because the old
+    function started at 30 and added ~140 of overlapping bonuses before
+    clamping to 100 -- so `min_score: 55` filtered nothing at all.
+    """
+
+	def _varied_leads(self):
+		leads = []
+		for index in range(10):
+			leads.append({
+				"title": f"Contract data pipeline work {index}",
+				"url": f"https://example.com/{index}",
+				"source": "himalayas" if index % 2 else "github",
+				"kind": "demand" if index % 2 else "supply",
+				"body": ("freelance contract to transcribe and extract data" if index % 3
+				         else "a free llm api with a generous free tier"),
+				"labels": [],
+				"posted_at": _hours_ago_iso(index * 9),
+				"min_salary": 50 + index if index % 4 == 0 else None,
+				"currency": "USD",
+				"salary_period": "hourly",
+			})
+		return leads
+
+	def test_scores_spread_out_instead_of_saturating(self):
+		ranked = _rank(self._varied_leads(), {"deliverable_terms": ["transcri", "extract", "data"]},
+		               max_items=20, min_score=0)
+		scores = [op.score for op in ranked]
+
+		self.assertGreaterEqual(len(set(scores)), 6, scores)
+		self.assertGreaterEqual(max(scores) - min(scores), 30, scores)
+		# The specific live symptom: five leads tied at the ceiling.
+		self.assertLessEqual(scores.count(100), 1, scores)
+
+	def test_score_parts_explain_the_rank(self):
+		ranked = _rank(self._varied_leads(), {}, max_items=3, min_score=0)
+
+		parts = ranked[0].score_parts
+		self.assertIn("recency", parts)
+		self.assertIn("demand_intent", parts)
+		self.assertIn("value_clarity", parts)
+
+
+class TestLeadRecencyIsEnforced(unittest.TestCase):
+	"""Stale leads must not reach the page, and age must be visible."""
+
+	def _lead(self, hours, source="himalayas"):
+		return {
+			"title": "Contract data cleanup", "url": f"https://example.com/{hours}",
+			"source": source, "kind": "demand", "body": "freelance contract work",
+			"labels": [], "posted_at": _hours_ago_iso(hours),
+		}
+
+	def test_age_hours_is_recorded(self):
+		ranked = _rank([self._lead(2)], {}, max_items=5, min_score=0)
+
+		self.assertAlmostEqual(ranked[0].age_hours, 2.0, delta=0.5)
+		self.assertIsNotNone(ranked[0].posted_at)
+
+	def test_fresher_leads_outrank_older_twins(self):
+		ranked = _rank([self._lead(1), self._lead(60)], {}, max_items=5, min_score=0)
+
+		self.assertGreater(ranked[0].score, ranked[-1].score)
+		self.assertLess(ranked[0].age_hours, ranked[-1].age_hours)
+
+	def test_unknown_age_scores_below_a_confirmed_fresh_lead(self):
+		undated = dict(self._lead(1))
+		undated["posted_at"] = None
+		undated["url"] = "https://example.com/undated"
+
+		ranked = _rank([self._lead(1), undated], {}, max_items=5, min_score=0)
+		by_url = {op.url: op for op in ranked}
+
+		self.assertIsNone(by_url["https://example.com/undated"].age_hours)
+		self.assertGreater(
+			by_url["https://example.com/1"].score,
+			by_url["https://example.com/undated"].score,
+		)
+
+	def test_the_monthly_hn_thread_is_not_judged_as_stale(self):
+		# HN's hiring thread is monthly, so its best replies are days old by
+		# design. Judging them on a 72h job-feed window would drop the only
+		# leads that quote a real hourly rate.
+		cfg = {"demand_max_age_hours": 72, "hn_hiring_max_age_hours": 744}
+		hn = self._lead(150, source="hn-hiring")
+		feed = self._lead(150, source="himalayas")
+
+		ranked = _rank([hn, feed], cfg, max_items=5, min_score=0)
+		by_source = {op.source: op for op in ranked}
+
+		self.assertGreater(by_source["hn-hiring"].score, by_source["himalayas"].score)
+
+
+class TestGithubSearchHitsTheRepositoryEndpoint(unittest.TestCase):
+	"""The GitHub queries are repository queries and must be sent as such.
+
+    They were sent to search/issues, which silently ignores `in:readme` and
+    `stars:`. The identical query string returns 12 junk issues there and 511
+    real repositories on search/repositories -- which is why the live page
+    listed a studio roadmap and a bot's own trend digest as earning leads.
+    """
+
+	def test_it_queries_repositories_not_issues(self):
+		seen = []
+
+		def fake_get(url, **kwargs):
+			seen.append(url)
+			return _StubResp({"items": []})
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = fake_get
+			_fetch_github_leads({"github_searches": ["free AI API stars:>200"]})
+		finally:
+			code_techs_module.requests.get = original
+
+		self.assertTrue(seen)
+		self.assertTrue(all("search/repositories" in url for url in seen), seen)
+		self.assertFalse(any("search/issues" in url for url in seen), seen)
+
+	def test_repositories_are_labelled_supply_not_demand(self):
+		payload = {"items": [{
+			"full_name": "public-apis/public-apis",
+			"html_url": "https://github.com/public-apis/public-apis",
+			"description": "A collective list of free APIs",
+			"pushed_at": _hours_ago_iso(24),
+			"stargazers_count": 477220,
+			"topics": ["api", "free"],
+		}]}
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = lambda *a, **k: _StubResp(payload)
+			leads = _fetch_github_leads({"github_searches": ["free api"]})
+		finally:
+			code_techs_module.requests.get = original
+
+		self.assertEqual(len(leads), 1)
+		# GitHub answers "what can I build with", never "who is paying".
+		self.assertEqual(leads[0]["kind"], "supply")
+
+	def test_long_abandoned_repositories_are_dropped(self):
+		payload = {"items": [{
+			"full_name": "someone/abandoned",
+			"html_url": "https://github.com/someone/abandoned",
+			"description": "free ai api wrapper",
+			"pushed_at": "2019-01-01T00:00:00Z",
+			"stargazers_count": 900,
+			"topics": [],
+		}]}
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = lambda *a, **k: _StubResp(payload)
+			leads = _fetch_github_leads({"github_searches": ["free api"], "supply_max_age_days": 120})
+		finally:
+			code_techs_module.requests.get = original
+
+		self.assertEqual(leads, [])
+
+
+class TestRedditRateLimitIsNotAFailure(unittest.TestCase):
+	"""Reddit answers 429 to almost everything, and that must stay harmless.
+
+    Measured: 10 sequential search.rss calls returned 1x200 and 9x429, and 2s
+    spacing returned 0/5. Reddit throttles the IP, not the query, so the old
+    `continue` spent the whole budget on certain failures -- which is why only
+    r/SideProject ever appeared on the page.
+    """
+
+	def test_it_stops_asking_after_a_429(self):
+		calls = []
+
+		def fake_get(url, **kwargs):
+			calls.append(url)
+			if len(calls) == 1:
+				return _StubResp(text=_REDDIT_FEED)
+			return _StubResp(status_code=429)
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = fake_get
+			leads = _fetch_reddit_leads({
+				"reddit_subreddits": ["SideProject", "Entrepreneur", "smallbusiness"],
+				"reddit_searches": ["free AI API"],
+				"max_reddit_requests": 3,
+				"reddit_backoff_seconds": 0,
+			})
+		finally:
+			code_techs_module.requests.get = original
+
+		self.assertEqual(len(calls), 2, calls)
+		# The successful page still counts; a throttle is not a lost cycle.
+		self.assertEqual(len(leads), 1)
+
+	def test_one_query_per_subreddit_so_a_small_budget_spans_several(self):
+		seen = []
+
+		def fake_get(url, **kwargs):
+			seen.append(url)
+			return _StubResp(text=_REDDIT_FEED)
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = fake_get
+			_fetch_reddit_leads({
+				"reddit_subreddits": ["SideProject", "Entrepreneur", "freelance"],
+				"reddit_searches": ["a", "b", "c", "d"],
+				"max_reddit_requests": 3,
+				"reddit_backoff_seconds": 0,
+			})
+		finally:
+			code_techs_module.requests.get = original
+
+		subreddits = {url.split("/r/")[1].split("/")[0] for url in seen}
+		self.assertEqual(len(subreddits), 3, seen)
+
+
+class TestHnHiringThreadYieldsContractLeads(unittest.TestCase):
+	"""The monthly HN hiring thread is the highest-intent free source."""
+
+	_THREAD = {"hits": [{"objectID": "49522897", "title": "Ask HN: Who is hiring? (September 2026)"}]}
+	_CHILDREN = {"children": [
+		{
+			"id": 1,
+			"created_at": _hours_ago_iso(20),
+			"text": "Noricum | Senior Backend Engineer | REMOTE | Contract | $120-160&#x2F;hr",
+		},
+		{
+			"id": 2,
+			"created_at": _hours_ago_iso(20),
+			"text": "BigCo | Staff Engineer | ONSITE | Full-time only | $250k",
+		},
+	]}
+
+	def _fetch(self):
+		def fake_get(url, **kwargs):
+			return _StubResp(self._CHILDREN if "items/" in url else self._THREAD)
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = fake_get
+			return _fetch_hn_hiring_leads({
+				"hn_contract_terms": ["contract", "freelance", "part-time"],
+				"hn_hiring_max_age_hours": 744,
+			})
+		finally:
+			code_techs_module.requests.get = original
+
+	def test_only_contract_replies_become_leads(self):
+		leads = self._fetch()
+
+		self.assertEqual(len(leads), 1)
+		self.assertEqual(leads[0]["kind"], "demand")
+		self.assertIn("Noricum", leads[0]["buyer"])
+
+	def test_the_stated_rate_survives_html_entities(self):
+		# HN serves "$120-160/hr" as "$120-160&#x2F;hr". strip_html used to
+		# replace entities with a space, so the rate a human typed came out as
+		# "$120-160 hr" and no reader could recognise it as a price.
+		lead = self._fetch()[0]
+		value, basis, note = _lead_value(lead)
+
+		self.assertEqual(basis, "stated_rate")
+		self.assertEqual(value, 120.0)
+		self.assertIn("$120-160/hr", note)
+
+
+class TestLeadsNeedNoNewSecret(unittest.TestCase):
+	"""Every lead source is keyless. GITHUB_TOKEN only raises a rate limit."""
+
+	def test_github_search_works_and_sends_no_auth_without_a_token(self):
+		headers_seen = []
+
+		def fake_get(url, **kwargs):
+			headers_seen.append(kwargs.get("headers") or {})
+			return _StubResp({"items": []})
+
+		saved = os.environ.pop("GITHUB_TOKEN", None)
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = fake_get
+			_fetch_github_leads({"github_searches": ["free api"]})
+		finally:
+			code_techs_module.requests.get = original
+			if saved is not None:
+				os.environ["GITHUB_TOKEN"] = saved
+
+		self.assertTrue(headers_seen)
+		self.assertFalse(any("Authorization" in h for h in headers_seen))
+
+	def test_the_hn_hiring_thread_needs_no_key(self):
+		headers_seen = []
+
+		def fake_get(url, **kwargs):
+			headers_seen.append(kwargs.get("headers") or {})
+			return _StubResp({"hits": []})
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = fake_get
+			_fetch_hn_hiring_leads({"hn_contract_terms": ["contract"]})
+		finally:
+			code_techs_module.requests.get = original
+
+		self.assertFalse(any("Authorization" in h for h in headers_seen))
+
+
+class TestCodexPromptIsMarketSpecific(unittest.TestCase):
+	"""The prompt is the field the owner acts on, so it must not invent a price."""
+
+	def _rank_one(self, lead):
+		return _rank([lead], {"prompt_top_n": 5, "free_ai_focus": ["free OCR APIs"]},
+		             max_items=1, min_score=0)[0]
+
+	def test_it_names_the_real_buyer_and_signal(self):
+		op = self._rank_one({
+			"title": "Senior Python Data Scraping Engineer (Freelance)",
+			"url": "https://example.com/job", "source": "himalayas", "kind": "demand",
+			"buyer": "Mindrift", "body": "freelance contract, scraping and data extraction",
+			"labels": [], "posted_at": _hours_ago_iso(4),
+			"min_salary": 40, "currency": "USD", "salary_period": "hourly",
+		})
+
+		self.assertIn("Mindrift", op.codex_prompt)
+		self.assertIn("Senior Python Data Scraping Engineer", op.codex_prompt)
+		self.assertIn("$40/hr posted", op.codex_prompt)
+
+	def test_with_no_stated_price_it_quotes_no_figure(self):
+		op = self._rank_one({
+			"title": "Anyone know a tool to convert scanned invoices?",
+			"url": "https://example.com/thread", "source": "hacker-news", "kind": "demand",
+			"buyer": "", "body": "looking for something to extract invoice data",
+			"labels": [], "posted_at": _hours_ago_iso(6),
+		})
+
+		self.assertEqual(op.value_basis, "none")
+		self.assertIn("no stated price", op.codex_prompt)
+		# A prompt that merely omits the price invites the reading model to
+		# invent one, rebuilding the fabrication this module just removed.
+		self.assertNotIn("$", op.codex_prompt)
+
+
+class TestDemandLeadsKeepTheirShare(unittest.TestCase):
+	"""Tooling must not crowd out the postings where somebody is paying."""
+
+	def test_demand_survives_a_flood_of_higher_scoring_supply(self):
+		supply = [{
+			"title": f"awesome/free-ai-list-{i}", "url": f"https://github.com/x/{i}",
+			"source": "github", "kind": "supply",
+			"body": "a free llm api list with a generous free tier, ocr and transcription",
+			"labels": [], "posted_at": _hours_ago_iso(1),
+		} for i in range(30)]
+		demand = [{
+			"title": f"Freelance contract role {i}", "url": f"https://example.com/{i}",
+			"source": "himalayas", "kind": "demand", "body": "contract work",
+			"labels": [], "posted_at": _hours_ago_iso(70),
+		} for i in range(5)]
+
+		ranked = _rank(supply + demand, {"min_demand_share": 0.5}, max_items=10, min_score=0)
+		kept_demand = [op for op in ranked if op.kind == "demand"]
+
+		self.assertEqual(len(kept_demand), 5)
+
+
+class TestOutreachDraftIsGone(unittest.TestCase):
+	"""Cold outreach is refused in code, so the generator for it must not exist.
+
+    Every live draft quoted a fabricated price ("the fixed price is $4500.00")
+    and ended "Payment address (USDT_WALLET_ADDRESS): [redacted]", because
+    status.py redacts any env name containing WALLET. Repairing it would mean
+    widening that exemption to publish the receive address inside research
+    notes for a channel the bot may not use.
+    """
+
+	def test_no_lead_carries_an_outreach_draft(self):
+		ranked = _rank([{
+			"title": "Need a CSV cleanup script", "url": "https://example.com/r",
+			"source": "community", "kind": "demand", "body": "looking for help",
+			"labels": [], "posted_at": _hours_ago_iso(2),
+		}], {"prompt_top_n": 1}, max_items=1, min_score=0)
+
+		self.assertNotIn("outreach_draft", ranked[0].__dict__)
+
+	def test_the_module_exposes_no_draft_builder(self):
+		self.assertFalse(hasattr(code_techs_module, "_outreach_draft"))
+		self.assertFalse(hasattr(code_techs_module, "_payment_note"))
+		# The config block that fed it is gone too, so a later cycle cannot
+		# read it back and rebuild the generator around it.
+		self.assertNotIn("outreach", code_techs_module._DEFAULT_CONFIG)
+
+
+class TestLeadStatusPayloadStaysBounded(unittest.TestCase):
+	"""status.json is committed hourly, so the lead slice has a size budget.
+
+    Leads were already 36 KB of a 63 KB file (57%) for only 8 leads, because
+    each carried a 1.7 KB prompt and a 470 B outreach draft.
+    """
+
+	def test_forty_leads_stay_under_thirty_kilobytes(self):
+		leads = [{
+			"title": f"Freelance contract data engineering role number {i}",
+			"url": f"https://example.com/some/reasonably/long/job/url/{i}",
+			"source": "himalayas", "kind": "demand", "buyer": f"Company {i}",
+			"body": "contract work to transcribe, extract and convert data " * 20,
+			"labels": ["data", "contract"], "posted_at": _hours_ago_iso(i),
+			"min_salary": 40 + i, "currency": "USD", "salary_period": "hourly",
+		} for i in range(40)]
+
+		ranked = _rank(leads, {"prompt_top_n": 10}, max_items=22, min_score=0)
+		payload = len(json.dumps([op.__dict__ for op in ranked]))
+
+		self.assertLess(payload, 30_000, f"{payload} bytes")
+		# Only the leads worth acting on pay for a prompt.
+		self.assertEqual(sum(1 for op in ranked if op.codex_prompt), 10)
+
+
+class TestFreeAiClassifierNeedsProximity(unittest.TestCase):
+	"""An AI word and a "free" word in the same document prove nothing.
+
+    Both halves were substring checks over the whole blob, so bare "ai"
+    matched *contain*, *available* and *email*. That is how "I spent a year
+    making a Markdown editor for Windows" became a free-AI earning lead.
+    """
+
+	def test_an_unrelated_free_product_is_not_a_free_ai_lead(self):
+		self.assertFalse(_is_free_ai_lead(
+			"i spent a year making a markdown editor for windows and it is free"
+		))
+
+	def test_incidental_substrings_do_not_count_as_ai(self):
+		self.assertFalse(_is_free_ai_lead(
+			"free chair repair available by email in the domain of retail"
+		))
+
+	def test_a_real_free_ai_service_still_matches(self):
+		self.assertTrue(_is_free_ai_lead("a free llm api with a generous free tier"))
+		self.assertTrue(_is_free_ai_lead("free ocr api, no credit card required"))
+
+
+_REDDIT_FEED = """<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <entry>
+    <title>Looking for a free AI API to convert invoices</title>
+    <link href="https://www.reddit.com/r/SideProject/comments/abc/x/" />
+    <updated>2026-09-08T06:00:00+00:00</updated>
+    <content type="html">&lt;p&gt;Need to extract data from scans.&lt;/p&gt;</content>
+  </entry>
+</feed>"""
+
 
 class TestWalletEarnings(unittest.TestCase):
 	"""Only confirmed on-chain stablecoin holdings count as earned money.

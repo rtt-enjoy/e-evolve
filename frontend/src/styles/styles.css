@@ -450,8 +450,23 @@ a {
 		@apply flex flex-wrap items-start gap-3 border-t border-line py-3 transition first:border-t-0 hover:bg-panel2;
 	}
 
-	.lead-row-value {
-		@apply w-16 shrink-0 pt-0.5 text-right text-sm font-semibold tabular-nums text-green;
+	/* Replaces .lead-row-value. A price is variable-width ("$120-160/hr" does
+	   not fit 64px) and often absent, so it moved into .lead-row-meta as a
+	   Pill; age is short, always comparable, and the thing that was broken. */
+	.lead-row-age {
+		@apply w-16 shrink-0 pt-0.5 text-right text-xs font-semibold tabular-nums text-soft;
+	}
+
+	.lead-row-age.tone-good {
+		@apply text-green;
+	}
+
+	.lead-row-age.tone-info {
+		@apply text-accent;
+	}
+
+	.lead-row-age.tone-warn {
+		@apply text-yellow;
 	}
 
 	.lead-row-body {

@@ -95,13 +95,30 @@ export function buildReadiness(status: Status) {
 	return { ready, total: entries.length, percent: Math.round((ready / entries.length) * 100) };
 }
 
+/**
+ * Lead counts for the KPI row.
+ *
+ * Deliberately returns no money aggregate. It used to sum
+ * `estimated_value_usd` into an `estimatedValue` shown as "Pipeline value
+ * $5.6k" beside the real on-chain balance of $0.00 -- and those inputs were
+ * regex-scraped from unrelated text. Even with only genuine figures a sum
+ * would be meaningless: the leads mix hourly, monthly and annual rates, so
+ * they are not additive.
+ */
 export function buildOpportunityStats(opportunities: CodeTechOpportunity[]) {
-	const values = opportunities.map((opportunity) => opportunity.estimated_value_usd || 0);
+	const priced = opportunities.filter(
+		(opportunity) => opportunity.value_basis && opportunity.value_basis !== 'none',
+	);
+	const fresh = opportunities.filter(
+		(opportunity) => typeof opportunity.age_hours === 'number' && opportunity.age_hours <= 24,
+	);
+	const demand = opportunities.filter((opportunity) => opportunity.kind === 'demand');
 	return {
 		total: opportunities.length,
-		paidCount: values.filter((value) => value > 0).length,
-		estimatedValue: values.reduce((sum, value) => sum + value, 0),
-		topValue: values.reduce((top, value) => Math.max(top, value), 0),
+		withValue: priced.length,
+		freshCount: fresh.length,
+		demandCount: demand.length,
+		supplyCount: opportunities.length - demand.length,
 		topScore: opportunities.reduce((top, opportunity) => Math.max(top, opportunity.score || 0), 0),
 		pursued: opportunities.filter((opportunity) => opportunity.pursued).length,
 	};
@@ -133,19 +150,25 @@ export function leadSources(opportunities: CodeTechOpportunity[]): Array<{ key: 
 		.sort((a, b) => b.count - a.count);
 }
 
-export type LeadSort = 'value' | 'score';
+export type LeadSort = 'newest' | 'score' | 'value';
+
+/** Older-is-larger, so an unknown age sorts as the oldest thing on the page. */
+function ageOf(lead: CodeTechOpportunity): number {
+	return typeof lead.age_hours === 'number' ? lead.age_hours : Number.POSITIVE_INFINITY;
+}
 
 export function sortLeads(opportunities: CodeTechOpportunity[], sort: LeadSort): CodeTechOpportunity[] {
 	const copy = [...opportunities];
-	if (sort === 'value') {
-		copy.sort((a, b) => (b.estimated_value_usd || 0) - (a.estimated_value_usd || 0) || (b.score || 0) - (a.score || 0));
+	if (sort === 'newest') {
+		copy.sort((a, b) => ageOf(a) - ageOf(b) || (b.score || 0) - (a.score || 0));
+	} else if (sort === 'value') {
+		// Unpriced leads sort last, never as $0 at the top: a missing price is
+		// not a cheap one.
+		const valueOf = (lead: CodeTechOpportunity) =>
+			lead.value_basis && lead.value_basis !== 'none' ? lead.value_usd || 0 : Number.NEGATIVE_INFINITY;
+		copy.sort((a, b) => valueOf(b) - valueOf(a) || (b.score || 0) - (a.score || 0));
 	} else {
-		copy.sort((a, b) => (b.score || 0) - (a.score || 0) || (b.estimated_value_usd || 0) - (a.estimated_value_usd || 0));
+		copy.sort((a, b) => (b.score || 0) - (a.score || 0) || ageOf(a) - ageOf(b));
 	}
 	return copy;
-}
-
-/** Stable id for deep-linking a lead: its index in the unsorted queue. */
-export function leadId(opportunities: CodeTechOpportunity[], opportunity: CodeTechOpportunity): string {
-	return String(opportunities.indexOf(opportunity));
 }

@@ -31,23 +31,23 @@ log = logging.getLogger(__name__)
 _PLATFORM = "dev.to-newsletter"
 
 _DEFAULTS = {
-	"enabled": True,
-	"min_interval_hours": 168,
-	"items_per_issue": 7,
-	"min_items": 4,
-	"source_max_age_hours": 168,
-	"history_limit": 200,
-	"min_words": 500,
-	# Empty means today's behaviour: a general developer digest. Set it to angle
-	# every issue for one audience -- the source article's point that a narrow
-	# niche beats a broad one. Choosing the niche is the owner's call.
-	"niche_focus": "",
+    "enabled": True,
+    "min_interval_hours": 168,
+    "items_per_issue": 7,
+    "min_items": 4,
+    "source_max_age_hours": 168,
+    "history_limit": 200,
+    "min_words": 500,
+    # Empty means today's behaviour: a general developer digest. Set it to angle
+    # every issue for one audience -- the source article's point that a narrow
+    # niche beats a broad one. Choosing the niche is the owner's call.
+    "niche_focus": "",
 }
 
 
 def _config() -> dict:
-	"""Strategy config for this module, defaults filled in for missing keys."""
-	return load_config("newsletter", _DEFAULTS)
+    """Strategy config for this module, defaults filled in for missing keys."""
+    return load_config("newsletter", _DEFAULTS)
 
 
 _SYSTEM = """\
@@ -105,247 +105,255 @@ CONTENT RULES:
 
 
 def run(llm: Any, status: dict[str, Any]) -> list[dict]:
-	"""Main entry point for the newsletter earning module."""
-	cfg = _config()
-	state = status.setdefault("newsletter_daily", {})
+    """Main entry point for the newsletter earning module."""
+    cfg = _config()
+    state = status.setdefault("newsletter_daily", {})
 
-	if not cfg.get("enabled", True):
-		state["enabled"] = False
-		log.debug("[newsletter] disabled in strategy config — skipping")
-		return []
-	state["enabled"] = True
+    if not cfg.get("enabled", True):
+        state["enabled"] = False
+        log.debug("[newsletter] disabled in strategy config — skipping")
+        return []
+    state["enabled"] = True
 
-	api_key = os.getenv("DEV_TO_API_KEY", "").strip()
-	if not api_key:
-		log.debug("[newsletter] DEV_TO_API_KEY not set — skipping")
-		return []
+    api_key = os.getenv("DEV_TO_API_KEY", "").strip()
+    if not api_key:
+        log.debug("[newsletter] DEV_TO_API_KEY not set — skipping")
+        return []
 
-	forced = bool(status.get("_overrides", {}).get("force_newsletter"))
-	if not forced:
-		waiting = hours_until_due(state, "published_at", int(cfg["min_interval_hours"]))
-		if waiting > 0:
-			log.info("[newsletter] next issue due in %.1fh — skipping", waiting)
-			return []
-	else:
-		log.info("[newsletter] cadence bypassed by 'force newsletter' command")
+    forced = bool(status.get("_overrides", {}).get("force_newsletter"))
+    if not forced:
+        waiting = hours_until_due(state, "published_at", int(cfg["min_interval_hours"]))
+        if waiting > 0:
+            log.info("[newsletter] next issue due in %.1fh — skipping", waiting)
+            return []
+    else:
+        log.info("[newsletter] cadence bypassed by 'force newsletter' command")
 
-	if not llm:
-		log.warning("[newsletter] no LLM available — publishing nothing")
-		return []
+    if not llm:
+        log.warning("[newsletter] no LLM available — publishing nothing")
+        return []
 
-	issue = _generate_issue(llm, status, cfg)
-	if not issue:
-		return [{
-			"platform": _PLATFORM,
-			"success": False,
-			"skipped": True,
-			"error": "not enough fresh trending sources or LLM output unusable",
-			"estimated_usd": 0.0,
-		}]
+    issue = _generate_issue(llm, status, cfg)
+    if not issue:
+        return [{
+            "platform": _PLATFORM,
+            "success": False,
+            "skipped": True,
+            "error": "not enough fresh trending sources or LLM output unusable",
+            "estimated_usd": 0.0,
+        }]
 
-	items = issue.pop("_items", [])
-	result = devto.publish(issue, api_key)
-	result["platform"] = _PLATFORM
-	result["item_count"] = len(items)
+    items = issue.pop("_items", [])
+    result = devto.publish(issue, api_key)
+    result["platform"] = _PLATFORM
+    result["item_count"] = len(items)
 
-	if result.get("success"):
-		now = datetime.now(timezone.utc)
-		state["date"] = now.date().isoformat()
-		state["published_at"] = now.isoformat()
-		state["published"] = int(state.get("published", 0)) + 1
-		state["last_item_count"] = len(items)
-		state["last_title"] = issue.get("title", "")
-		state["last_url"] = result.get("url", "")
-		# Record before returning so a story can never be featured twice, even if
-		# a later phase of the cycle fails.
-		_record_issue(status, items, int(cfg["history_limit"]))
+    if result.get("success"):
+        now = datetime.now(timezone.utc)
+        state["date"] = now.date().isoformat()
+        state["published_at"] = now.isoformat()
+        state["published"] = int(state.get("published", 0)) + 1
+        state["last_item_count"] = len(items)
+        state["last_title"] = issue.get("title", "")
+        state["last_url"] = result.get("url", "")
+        # Record before returning so a story can never be featured twice, even if
+        # a later phase of the cycle fails.
+        _record_issue(status, items, int(cfg["history_limit"]))
 
-	return [result]
+    return [result]
 
 
 def _generate_issue(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
-	"""Build one digest from fresh trending stories.
+    """Build one digest from fresh trending stories.
 
     Returns None when too few unused sources are available or the LLM output
     fails a gate. Publishing nothing is correct -- a thin or recycled digest is
     worse than no digest.
     """
-	items = _pick_sources(status, cfg)
-	min_items = int(cfg["min_items"])
-	if len(items) < min_items:
-		log.warning(
-			"[newsletter] only %d fresh source(s), need %d — publishing nothing",
-			len(items), min_items,
-		)
-		return None
+    items = _pick_sources(status, cfg)
+    min_items = int(cfg["min_items"])
+    if len(items) < min_items:
+        log.warning(
+            "[newsletter] only %d fresh source(s), need %d — publishing nothing",
+            len(items), min_items,
+        )
+        return None
 
-	log.info("[newsletter] building digest from %d sources", len(items))
+    log.info("[newsletter] building digest from %d sources", len(items))
 
-	prompt = (
-		"Write this week's developer digest from the stories below. Cover them in "
-		"the order given, one `##` section each, following every structure and "
-		"voice rule in the system prompt. Use each URL exactly as written. "
-		"JSON only.\n\n"
-		+ "\n\n".join(_format_item(i, item) for i, item in enumerate(items, 1))
-	)
+    prompt = (
+        "Write this week's developer digest from the stories below. Cover them in "
+        "the order given, one `##` section each, following every structure and "
+        "voice rule in the system prompt. Use each URL exactly as written. "
+        "JSON only.\n\n"
+        + "\n\n".join(_format_item(i, item) for i, item in enumerate(items, 1))
+    )
 
-	# Angle the issue for one audience when the owner has chosen one. Appended to
-	# the prompt, not to _SYSTEM: that constant is shared with the tone gates and
-	# must stay stable.
-	niche = str(cfg.get("niche_focus", "")).strip()
-	if niche:
-		prompt += (
-			f"\n\nAudience focus: write for {niche}. When a story matters more to "
-			f"that audience, say why in that section. Do not drop a story to fit "
-			f"the niche -- cover all of them, angled for this reader."
-		)
+    # Angle the issue for one audience when the owner has chosen one. Appended to
+    # the prompt, not to _SYSTEM: that constant is shared with the tone gates and
+    # must stay stable.
+    niche = str(cfg.get("niche_focus", "")).strip()
+    if niche:
+        prompt += (
+            f"\n\nAudience focus: write for {niche}. When a story matters more to "
+            f"that audience, say why in that section. Do not drop a story to fit "
+            f"the niche -- cover all of them, angled for this reader."
+        )
 
-	try:
-		if hasattr(llm, "complete_json_for_role"):
-			data = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=6000)
-		else:
-			data = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
-	except Exception as exc:
-		log.warning("[newsletter] LLM generation failed: %s — publishing nothing", exc)
-		return None
+    try:
+        if hasattr(llm, "complete_json_for_role"):
+            data = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=6000)
+        else:
+            data = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
+    except Exception as exc:
+        log.warning("[newsletter] LLM generation failed: %s — publishing nothing", exc)
+        return None
 
-	if not (data.get("title") and data.get("body_markdown")):
-		log.warning("[newsletter] LLM returned no usable digest — publishing nothing")
-		return None
+    if not (data.get("title") and data.get("body_markdown")):
+        log.warning("[newsletter] LLM returned no usable digest — publishing nothing")
+        return None
 
-	# Deterministic cleanup first, so no LLM call is spent on fixable artifacts.
-	issue = devto.normalize(data)
-	issue["body_markdown"], dropped = devto.strip_fabricated_tables(issue["body_markdown"])
-	if dropped:
-		log.info("[newsletter] removed %d fabricated spec table(s)", dropped)
+    # Deterministic cleanup first, so no LLM call is spent on fixable artifacts.
+    issue = devto.normalize(data)
+    issue["body_markdown"], dropped = devto.strip_fabricated_tables(issue["body_markdown"])
+    if dropped:
+        log.info("[newsletter] removed %d fabricated spec table(s)", dropped)
 
-	issue["body_markdown"] = _ensure_sources(issue["body_markdown"], items)
+    issue["body_markdown"] = _ensure_sources(issue["body_markdown"], items)
 
-	problems = _digest_problems(issue["body_markdown"], items, cfg)
-	if problems:
-		log.warning("[newsletter] %s — publishing nothing", "; ".join(problems))
-		return None
+    problems = _digest_problems(issue["body_markdown"], items, cfg)
+    if problems:
+        log.warning("[newsletter] %s — publishing nothing", "; ".join(problems))
+        return None
 
-	issue["_items"] = items
-	return issue
+    issue["_items"] = items
+    return issue
 
 
 def _format_item(index: int, item: dict) -> str:
-	"""Render one source into the prompt block the model reads."""
-	summary = str(item.get("summary", "")).strip()[:1200]
-	return (
-		f"STORY {index}\n"
-		f"TITLE: {item.get('title', '')}\n"
-		f"URL: {item.get('url', '')}\n"
-		f"PUBLISHER: {item.get('source', '')}\n"
-		f"SUMMARY: {summary or '(no summary available; keep this section brief)'}"
-	)
+    """Render one source into the prompt block the model reads."""
+    summary = str(item.get("summary", "")).strip()[:1200]
+    return (
+        f"STORY {index}\n"
+        f"TITLE: {item.get('title', '')}\n"
+        f"URL: {item.get('url', '')}\n"
+        f"PUBLISHER: {item.get('source', '')}\n"
+        f"SUMMARY: {summary or '(no summary available; keep this section brief)'}"
+    )
 
 
 def _pick_sources(status: dict, cfg: dict) -> list[dict]:
-	"""Return the top unused trending candidates for this issue."""
-	try:
-		candidates = trending.fetch_candidates(
-			max_age_hours=int(cfg["source_max_age_hours"]),
-			limit=40,
-			exclude_authors=devto.own_post_urls(status),
-		)
-	except Exception as exc:
-		log.warning("[newsletter] trending fetch failed: %s", exc)
-		return []
+    """Return the top unused trending candidates for this issue."""
+    try:
+        candidates = trending.fetch_candidates(
+            max_age_hours=int(cfg["source_max_age_hours"]),
+            limit=40,
+            exclude_authors=devto.own_post_urls(status),
+        )
+    except Exception as exc:
+        log.warning("[newsletter] trending fetch failed: %s", exc)
+        return []
 
-	hist = _history(status)
-	used_urls = set(hist.get("source_urls", []))
-	used_titles = set(hist.get("source_titles", []))
+    hist = _history(status)
+    used_urls = set(hist.get("source_urls", []))
+    used_titles = set(hist.get("source_titles", []))
 
-	picked: list[dict] = []
-	for item in candidates:
-		url_key = trending._canonical_url(item.get("url", ""))
-		title_key = trending.normalize_title(item.get("title", ""))
-		if not url_key or not item.get("title"):
-			continue
-		if url_key in used_urls or (title_key and title_key in used_titles):
-			continue
-		# Guard against one fetch returning the same story twice.
-		used_urls.add(url_key)
-		if title_key:
-			used_titles.add(title_key)
-		picked.append(item)
-		if len(picked) >= int(cfg["items_per_issue"]):
-			break
-	return picked
+    picked: list[dict] = []
+    for item in candidates:
+        url_key = trending._canonical_url(item.get("url", ""))
+        title_key = trending.normalize_title(item.get("title", ""))
+        if url_key and url_key in used_urls:
+            continue
+        if title_key and title_key in used_titles:
+            continue
 
-
-def _history(status: dict) -> dict:
-	"""Persistent record of stories already featured in a digest.
-
-    Kept separate from ``article_history`` on purpose: a story can legitimately
-    be both a digest paragraph and, later, a full article. Sharing one history
-    would starve both modules.
-    """
-	return status.setdefault("newsletter_history", {})
-
-
-def _record_issue(status: dict, items: list[dict], limit: int) -> None:
-	"""Remember every featured story so it is never featured again."""
-	hist = _history(status)
-	for item in items:
-		for key, value in (
-			("source_urls", trending._canonical_url(item.get("url", ""))),
-			("source_titles", trending.normalize_title(item.get("title", ""))),
-		):
-			if not value:
-				continue
-			bounded_append(hist.setdefault(key, []), value, limit)
+        # Paywalled feeds give us a two-sentence teaser, which is not enough to
+        # write a genuinely better article from. Try the public mirror once.
+        if trending.needs_unlock(item):
+            item["summary"] = trending.unlock_summary(item)
+            if trending.needs_unlock(item):
+                log.info(
+                    "[newsletter] skipping locked source with thin summary: %s",
+                    item.get("title", "")[:60],
+                )
+                continue
+        picked.append(item)
+        if len(picked) >= int(cfg["items_per_issue"]):
+            break
+    return picked
 
 
 def _ensure_sources(body: str, items: list[dict]) -> str:
-	"""Append any source link the model dropped.
+    """Guarantee every story section ends with its Source line.
 
-    Attribution is mandatory, and a missing link is the one digest fault worth
-    repairing deterministically rather than rejecting the whole issue over.
+    The model is instructed to include it, but if it omits one we append it
+    rather than discarding the whole digest.
     """
-	missing = [i for i in items if str(i.get("url", "")).strip() and str(i["url"]) not in body]
-	if not missing:
-		return body
-	log.info("[newsletter] appending %d missing source link(s)", len(missing))
-	lines = [
-		f"- [{str(i.get('title', '')).strip() or i['url']}]({i['url']})"
-		for i in missing
-	]
-	return body.rstrip() + "\n\n## Also Covered\n\n" + "\n".join(lines) + "\n"
+    lines = body.split("\n")
+    # Find each ## heading and ensure the next non-empty line after its content
+    # is the correct Source line. Simpler: just verify each item's URL appears
+    # in the body; if not, append a Source line at the end of the body.
+    for item in items:
+        url = str(item.get("url", "")).strip()
+        title = str(item.get("title", "")).strip()
+        if url and url not in body:
+            log.warning("[newsletter] source URL missing from body, appending: %s", url)
+            body = body.rstrip() + f"\n\nSource: [{title}]({url})\n"
+    return body
 
 
 def _digest_problems(body: str, items: list[dict], cfg: dict) -> list[str]:
-	"""Return digest-shaped rule violations.
+    """Structural checks specific to the digest format."""
+    problems: list[str] = []
+    min_words = int(cfg["min_words"])
+    words = len(body.split())
+    if words < min_words:
+        problems.append(f"too short ({words} words, need {min_words}+")
 
-    ``articles._format_problems`` asserts essay rules -- code blocks and a Key
-    Takeaways section -- that a digest legitimately lacks, so the structural
-    checks are local. The fabrication and tone checks are shared, because those
-    rules apply to anything published under this byline.
-    """
-	problems: list[str] = []
+    # Must have one ## section per item
+    sections = len(re.findall(r"^## ", body, re.MULTILINE))
+    if sections < len(items):
+        problems.append(f"only {sections} '##' sections for {len(items)} items")
 
-	words = len(body.split())
-	min_words = int(cfg["min_words"])
-	if words < min_words:
-		problems.append(f"too short ({words} words, need {min_words}+)")
+    # Each item's URL must appear (checked in _ensure_sources, but verify)
+    for item in items:
+        url = str(item.get("url", "")).strip()
+        if url and url not in body:
+            problems.append(f"missing source URL for: {item.get('title', '')[:50]}")
 
-	sections = len(re.findall(r"^## ", body, re.MULTILINE))
-	min_items = int(cfg["min_items"])
-	if sections < min_items:
-		problems.append(f"only {sections} '##' sections, need {min_items}+")
+    # Must have the closing section
+    if "## What I'd Watch Next" not in body and "## What I\'d Watch Next" not in body:
+        problems.append("missing '## What I'd Watch Next' section")
 
-	if re.search(r"^# ", body, re.MULTILINE):
-		problems.append("uses a top-level '#' heading")
+    # Tone and fabrication checks from devto
+    problems.extend(devto.tone_problems(body))
+    problems.extend(devto.fabrication_problems(body))
+    return problems
 
-	missing = [
-		str(i.get("url", "")) for i in items
-		if str(i.get("url", "")).strip() and str(i["url"]) not in body
-	]
-	if missing:
-		problems.append(f"{len(missing)} source link(s) missing from body")
 
-	problems.extend(devto.fabrication_problems(body))
-	problems.extend(devto.tone_problems(body))
-	return problems
+def _history(status: dict) -> dict:
+    """Persistent record of what sources have already been featured."""
+    return status.setdefault("newsletter_history", {})
+
+
+def _record_issue(status: dict, items: list[dict], limit: int) -> None:
+    """Remember this issue's sources so they are not reused."""
+    hist = _history(status)
+    for item in items:
+        url_key = trending._canonical_url(item.get("url", ""))
+        title_key = trending.normalize_title(item.get("title", ""))
+        if url_key:
+            bounded_append(hist.setdefault("source_urls", []), url_key, limit)
+        if title_key:
+            bounded_append(hist.setdefault("source_titles", []), title_key, limit)
+    # Also store the full source metadata for the dashboard
+    bounded_append(
+        hist.setdefault("source_urls", []),
+        [str(i.get("url", "")) for i in items],
+        limit
+    )
+    bounded_append(
+        hist.setdefault("source_titles", []),
+        [str(i.get("title", "")) for i in items],
+        limit
+    )

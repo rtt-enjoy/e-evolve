@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-08T09:43:06.367416+00:00",
-  "total_runs": 1795,
+  "last_run": "2026-09-08T14:33:41.278075+00:00",
+  "total_runs": 1796,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,19 +33,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Create missing receipts.py module, export receipt_check_run and receipts_run from __init__.py, and fix truncated newsletter._pick_sources loop body",
+    "summary": "Complete the truncated newsletter._pick_sources function and add missing helper functions (_ensure_sources, _digest_problems, _history, _record_issue) that were cut off in the last evolution",
     "changes_applied": [
       {
-        "file": "bot/earning/receipts.py",
-        "reason": "Create the missing receipts module that was promised in the last evolution. Provides get_receipts(status) to read the receipt book and run(llm, status) as the product entry point the orchestrator calls, wrapping attribution.record_receipt and attribution.summary."
-      },
-      {
-        "file": "bot/earning/__init__.py",
-        "reason": "Export the newly created receipts_run and the existing but unexported receipt_check_run. Update docstring to list both as products so the orchestrator can import and run them."
-      },
-      {
         "file": "bot/earning/newsletter.py",
-        "reason": "Fix the truncated _pick_sources function body that was cut off mid-loop. Complete the function with duplicate URL/title filtering, paywall unlock handling, and the items_per_issue cap. Also add the missing _ensure_sources, _digest_problems, _history, and _record_issue helper functions that are referenced but were not visible in the truncated file."
+        "reason": "The newsletter.py file was truncated mid-function in the last evolution. This completes the _pick_sources loop body with duplicate URL/title filtering, paywall unlock handling, and the items_per_issue cap. Also adds the missing _ensure_sources, _digest_problems, _history, and _record_issue helper functions that are referenced but were not visible in the truncated file."
       }
     ],
     "suggestions": [
@@ -90,7 +82,7 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260908-094348",
+    "branch": "evolve/1.41.1-20260908-144651",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -139,7 +131,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 43,
+  "last_cycle_seconds": 791,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1025,7 +1017,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-08T09:43:07.092426+00:00",
+    "checked_at": "2026-09-08T14:33:42.035304+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1236,7 +1228,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260908-094348",
+  "last_evolution_branch": "evolve/1.41.1-20260908-144651",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 12,
@@ -1341,7 +1333,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-08T09:43:48.804959+00:00",
+    "last_run": "2026-09-08T14:46:51.542416+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1351,9 +1343,9 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-08T09:43:49.006655+00:00",
-    "last_reason": "partially_verified",
-    "agrees_with_backfill": null,
+    "last_run": "2026-09-08T14:46:51.813301+00:00",
+    "last_reason": "all_verified",
+    "agrees_with_backfill": true,
     "verified_ids": [
       {
         "id": 4430049,
@@ -1376,11 +1368,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-09-08T09:43:49.006655+00:00",
-        "ok": true
-      },
-      {
         "id": 4421693,
         "at": "2026-09-08T09:43:49.006655+00:00",
         "ok": true
@@ -1399,14 +1386,39 @@
         "id": 4503417,
         "at": "2026-09-08T09:43:49.006655+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-09-08T14:46:51.813301+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-09-08T14:46:51.813301+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-09-08T14:46:51.813301+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-09-08T14:46:51.813301+00:00",
+        "ok": true
+      },
+      {
+        "id": 4602729,
+        "at": "2026-09-08T14:46:51.813301+00:00",
+        "ok": true
       }
     ],
     "published_total": 13,
-    "covered": 9,
-    "unverified": 4,
-    "coverage_complete": false,
+    "covered": 13,
+    "unverified": 0,
+    "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 0.2
+    "oldest_check_age_hours": 5.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

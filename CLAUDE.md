@@ -49,6 +49,15 @@ between them. The load-bearing rules that came out of that:
    the back catalogue, still being shown no way to pay. A channel is scored on
    what it *covers*, not on what it does; check `status["backfill"].remaining`
    alongside `payout.live`. Fixed 2026-09-04 by `bot/earning/backfill.py`.
+7. **A channel is only as wide as its narrowest stage.** Ask, address, and
+   meter are three stages. The footer said "USDT" and the balance reader
+   checked the USDT contract only -- while the published address is a *Tron*
+   address that accepts any TRC-20. A USDC tip therefore arrived on-chain and
+   read `$0.00` forever, and because `attribution` triggers on that same
+   figure, the receipt went unattributed too, making the funnel look like a
+   reach problem. Ask and meter now derive from one table
+   (`wallet_assets.STABLECOINS`). Fixed 2026-09-08 by
+   `bot/earning/wallet_assets.py`.
 
 ---
 
@@ -88,6 +97,7 @@ bot/earning/         ← products own a run(llm, status); support modules do not
   devto_stats.py     ← [support] reads own dev.to view counts (the reach feedback loop)
   payout.py          ← [support] the reader→wallet path: validated USDT address in every post
   attribution.py     ← [support] what was live when on-chain money arrived (correlated, never proof)
+  wallet_assets.py   ← [support] every stablecoin the address can receive, not just USDT
 frontend/            ← React + Vite dashboard, built to docs/ by .github/workflows/frontend.yml
 .github/workflows/evolve.yml  ← hourly scheduler (never evolved)
 config/strategy.json ← tunable strategy parameters (the ONLY file in config/)
@@ -637,6 +647,51 @@ The dashboard tip card shows the observed count beside the address, because a
 tip card that renders complete while readers see no ask is precisely the silent
 failure Principle 3b warns about.
 
+### Multi-asset wallet reading (bot/earning/wallet_assets.py)
+
+The footer publishes a **Tron address**, and a Tron address accepts TRX and
+every TRC-20 token ever deployed. `status._fetch_usdt_balance` called
+`balanceOf()` against the USDT contract and nothing else, so a reader who tipped
+USDC or USDD on that exact address sent money that arrived on-chain and was
+reported as `$0.00`, permanently.
+
+That fails in the dangerous direction. `attribution.record_receipt` triggers on
+`wallet.last_received_usd > 0`, so an unseen tip was also an unattributed one --
+and the doctrine's checklist then reads "still $0.00 with a live path, so the
+problem is reach", sending the next cycle to optimise the one stage that was
+already working.
+
+- **Ask and meter derive from one table.** `payout.accepted_assets()` builds the
+  footer label from `wallet_assets.STABLECOINS`, so the published ask can never
+  name an asset the balance reader does not count. The two failure directions
+  are not symmetric: naming **fewer** assets turns away money the address would
+  have taken (the footer said "USDT" and "a small USDT tip", so USDC holders
+  read it as the wrong token); naming **more** is worse, because the tip arrives
+  and reads as `$0.00`. `TestAskMatchesWhatTheWalletCounts` pins both.
+- **Stablecoins only, and no price feed, ever.** Valuing TRX or an arbitrary
+  TRC-20 needs a USD price, and a price is an estimate -- Principle 4. It also
+  fails continuously: a 100 TRX tip repriced each cycle would make
+  `received_total_usd` drift while no money moved. A USD-pegged stablecoin needs
+  no feed, because 1 USDC is 1 USD by construction.
+- **Non-stable assets are reported, never valued.** TRX lands in
+  `wallet.other_assets` so the owner can see a tip arrived and convert it by
+  hand, and contributes nothing to the dollar figure.
+- **Decimals are per token.** USDD carries 18 where USDT and USDC carry 6; the
+  old `/1e6` would have reported a 1 USDD tip as one trillion dollars. Symbols
+  and decimals were read from each contract on-chain (`symbol()`/`decimals()`),
+  not copied from a listing site.
+- **"Unreadable" is a third state**, as in `receipt_check`. A never-activated
+  address is a real zero; a chain outage returns `None` and holds the last known
+  figure, so an outage cannot look like a withdrawal.
+- **One chain read per cycle.** `status._read_wallet_balance` takes the balance
+  and the breakdown from a single fetch, so the two cannot come from different
+  reads and TronGrid is not called twice an hour for the same data.
+- Keyless (TronGrid's `GET /v1/accounts/{address}`), so **no new secret**.
+
+ERC-20 still reads USDT only via `_fetch_erc20_usdt`, and `accepted_assets()`
+returns plain `"USDT"` for that network -- the ask matches the meter on both
+chains.
+
 ### Revenue attribution (bot/earning/attribution.py)
 
 Principle 5 of the doctrine says measure the funnel, not the last stage. Views
@@ -945,6 +1000,15 @@ readers can see posts with no way to pay right now, whatever `backfill.remaining
 says; `agrees_with_backfill: false` means one of the self-reported fields is
 wrong and the observation is the half to believe. `unreachable` counts posts it
 could not read — those are unverified, not covered.
+
+`wallet` is written by `status._snapshot_wallet` and holds the on-chain truth:
+`confirmed_usd` (live balance), `received_total_usd` (lifetime, survives a manual
+withdrawal via `balance_high_water_usd`), plus `stablecoins` and `other_assets`.
+`confirmed_usd` sums **only** USD-pegged stablecoins at face value.
+`other_assets` records what arrived in an asset this project refuses to price
+(TRX) -- read it before concluding from a `$0.00` balance that nobody paid, since
+a receipt there is real money that the dollar figure declines to guess at. See
+`bot/earning/wallet_assets.py`.
 
 `attribution` is written by `status._snapshot_attribution` (via
 `bot/earning/attribution.py`) and records what was published when on-chain money

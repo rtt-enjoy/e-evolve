@@ -162,7 +162,7 @@ export default function OverviewSection({ status }: { status: Status }) {
 						</div>
 					</Card>
 
-					<Card title="Where earnings come from" hint="Only confirmed on-chain USDT counts as earned.">
+					<Card title="Where earnings come from" hint="Only confirmed on-chain stablecoins count as earned.">
 						<div className="stat-grid">
 							<Stat
 								label="Wallet balance"

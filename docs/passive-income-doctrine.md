@@ -389,6 +389,78 @@ It also gets shown, not just logged. The dashboard tip card now carries the
 observed count beside the address, because a tip card that renders complete
 while readers see no ask is precisely the silent failure of Principle 3b.
 
+## Principle 3f — A receive path is only as wide as the meter that reads it
+
+Built 2026-09-08, `bot/earning/wallet_assets.py`.
+
+Every principle so far asked whether the *reader* was given a way to pay. This
+one asks whether the money would have been **seen** if they used it.
+
+The footer publishes a Tron address. A Tron address is not a USDT account — it
+accepts TRX and every TRC-20 token ever deployed. But the balance reader called
+`balanceOf()` against the USDT contract and nothing else. So a reader who tipped
+USDC or USDD — on the exact address printed in the article — sent money that
+arrived on-chain and was reported as `$0.00`, permanently.
+
+That is Principle 1's structural zero rebuilt one stage further in, and it fails
+in the same dangerous direction as Principle 3d: nothing raises, nothing looks
+wrong, and the failure *reinforces the wrong conclusion*. Because
+`attribution.record_receipt` triggers on `wallet.last_received_usd > 0`, an
+unseen tip is also an unattributed one — so checklist step 2 reads "still $0.00
+with a live path → the problem is reach", and the next evolution goes off to
+optimise the one stage that was already working.
+
+**The ask was narrower than the address, too.** The footer said `USDT` and "a
+small USDT tip", so a reader holding USDC on that same address read it as "wrong
+token" and closed the tab. The channel was losing money at the ask *and* at the
+meter, for the same reason: both had been written as though the address only
+took one asset.
+
+Both now derive from one table (`wallet_assets.STABLECOINS`), which is the load-
+bearing part. The two failure modes are not symmetric:
+
+- **Naming fewer assets than the wallet counts** turns away money that would
+  have been accepted.
+- **Naming more assets than the wallet counts** is worse — the tip arrives and
+  reads as `$0.00`, which is exactly the silent loss this closes.
+
+So the ask can never name an asset the meter does not read, because neither is
+written by hand. Pinned by `TestAskMatchesWhatTheWalletCounts`.
+
+**Stablecoins only, and deliberately no price feed.** Valuing TRX or an
+arbitrary TRC-20 needs a USD price, and a price is an *estimate* — Principle 4.
+It also fails continuously rather than once: a 100 TRX tip repriced every cycle
+would make `received_total_usd` drift up and down while no money moved at all,
+corrupting the single number this project trusts. A USD-pegged stablecoin needs
+no feed, because 1 USDC is 1 USD by construction — that is face value, not an
+estimate. Non-stable assets are therefore **observed and reported, never
+valued**: TRX shows up in `wallet.other_assets` so the owner can see a tip
+landed and convert it by hand, and contributes nothing to the dollar figure.
+Reporting a receipt without inventing a number for it is the honest half of
+Principle 4.
+
+Two details worth keeping:
+
+- **Decimals are per token.** USDD carries 18 where USDT and USDC carry 6. The
+  single-asset reader's `/1e6` would have reported a 1 USDD tip as one trillion
+  dollars. Symbols and decimals were read from each contract on-chain
+  (`symbol()` / `decimals()`), not copied from a listing site.
+- **"Unreadable" stays a third state**, as in `receipt_check`. An address that
+  has never been activated is a real zero; a chain outage is `None` and holds
+  the last known figure. Collapsing those would turn an outage into a phantom
+  withdrawal.
+
+Scored on Principle 2 it wins every row: TronGrid's account endpoint is keyless
+(**no new secret**), no owner action, no policy change, verified on-chain by
+construction, and it reuses the address already being published.
+
+**The generalisation: a channel is only as wide as its narrowest stage.** The
+doctrine had been scoring channels on whether the *ask* shipped. Ask, address,
+and meter are three stages, and money is lost at whichever is narrowest —
+silently, because each stage looks correct on its own.
+
+---
+
 ## Principle 4 — Never let an estimate stand in for money
 
 `devto.publish` reports `estimated_usd: 0.0` for a successful post, and it must
@@ -539,8 +611,17 @@ Work this in order. Stop at the first honest "no".
    Once it is non-zero, `status["attribution"]` holds what was live when it
    landed — ranked by archetype and tag, with sample sizes. Read `count` before
    believing any ordering in it.
-   - Still `$0.00` with a live path → the problem is reach or audience fit, not
-     the ask. Go to Principle 5, step 2.
+   **First check the meter, not the funnel.** `received_total_usd` counts only
+   what the balance reader can see, and a stage that cannot see a tip reports
+   the same `$0.00` as a reader who never tipped (Principle 3f — USDC and USDD
+   tips read as zero until 2026-09-08). Look at `wallet.other_assets`: a
+   non-empty entry there means money *did* arrive in an asset that is
+   deliberately never valued, so the balance is not the whole story.
+
+   - Still `$0.00`, `wallet.other_assets` empty, live path → the problem is
+     reach or audience fit, not the ask. Go to Principle 5, step 2.
+   - `wallet.other_assets` non-empty → someone paid in an unvalued asset. That
+     is a real receipt; the dollar figure just refuses to guess at it.
    - Non-zero → start attributing it. Which post, archetype, tag?
 3. **Is there an unbuilt channel that wins on Principle 2?**
    Score candidates on the five-row table. Build the one that needs no new
@@ -564,6 +645,7 @@ Principle 2.
 | Wallet address on the public dashboard | none | none | allowed | **Built** 2026-09-04. `status["payout_public"]` + Overview tip card |
 | Wallet address on the **back catalogue** | none | none | allowed | **Built** 2026-09-04, but it wrote nothing until 2026-09-06 — see Principle 3d |
 | **Verification** that any of the above reached a reader | none | none | allowed | **Built** 2026-09-06. `receipt_check.py` — not a channel, the thing that says whether the channels are real |
+| **Reading every asset** the published address can receive | none | none | allowed | **Built** 2026-09-08. `wallet_assets.py` — USDC/USDD tips were arriving as `$0.00`; the ask now names what the meter reads |
 | Wallet address in the dev.to **profile bio** | none | one settings edit, ever | allowed | **Owner action.** Not automatable: `users` is `only: %i[show]` in Forem's API routes and the only writer (`PATCH /api/admin/users/{id}`) is super-admin gated. A single manual edit at dev.to/settings then covers every profile visitor permanently |
 | Sponsored-content slot in the newsletter | none | negotiates each deal | allowed to publish | **Deferred.** Income is real but every unit needs a human |
 | dev.to → own static site, then ads | ad network account | signup + tax details | allowed | **Deferred.** Needs an account and an audience move |

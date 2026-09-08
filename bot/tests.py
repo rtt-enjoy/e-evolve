@@ -1,5 +1,6 @@
 import unittest
 import os
+import re
 import time
 import json
 import bot.llm as llm_module
@@ -1272,16 +1273,30 @@ class TestCodeTechOpportunities(unittest.TestCase):
 		self.assertIn("leverage", refs[0]["takeaway"])
 
 class TestWalletEarnings(unittest.TestCase):
-	"""Only confirmed on-chain USDT counts as earned money."""
+	"""Only confirmed on-chain stablecoin holdings count as earned money.
+
+    These cover the *accounting* -- count a deposit once, survive a manual
+    withdrawal, hold the last figure through an outage -- so the stub sits at
+    the chain read and everything above it is the real code path.
+    """
 
 	def _run(self, balances):
 		import os
 		import bot.status as status_module
-		original_fetch = status_module._fetch_usdt_balance
+		from bot.earning import wallet_assets
+		original_fetch = wallet_assets.read_balances
 		original_env = os.environ.get("USDT_WALLET_ADDRESS")
 		os.environ["USDT_WALLET_ADDRESS"] = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
 		queue = list(balances)
-		status_module._fetch_usdt_balance = lambda addr: queue.pop(0)
+
+		def stub(addr, timeout=20):
+			usd = queue.pop(0)
+			# None stays None: an unreadable chain, not a balance of zero.
+			if usd is None:
+				return None
+			return {"usd": usd, "stablecoins": {"USDT": usd}, "other_assets": {}}
+
+		wallet_assets.read_balances = stub
 		try:
 			status = status_module._defaults()
 			for _ in balances:
@@ -1289,7 +1304,7 @@ class TestWalletEarnings(unittest.TestCase):
 				update(status, [])
 			return status
 		finally:
-			status_module._fetch_usdt_balance = original_fetch
+			wallet_assets.read_balances = original_fetch
 			if original_env is None:
 				os.environ.pop("USDT_WALLET_ADDRESS", None)
 			else:
@@ -2533,7 +2548,11 @@ class TestPayoutPublicSnapshot(unittest.TestCase):
 			snap = payout.public_snapshot(self._cfg())
 		self.assertEqual(snap["address"], self.REAL)
 		self.assertNotIn("…", snap["address"])
-		self.assertEqual(snap["asset"], "USDT")
+		# The asset label is derived from the balance reader's table, so the tip
+		# box cannot name a token the wallet would report as $0.00. Asserted
+		# against that table rather than a frozen string.
+		self.assertEqual(snap["asset"], payout.accepted_assets(snap["network"]))
+		self.assertIn("USDT", snap["asset"])
 		self.assertIn("Tron", snap["network"])
 
 	def test_empty_when_disabled(self):
@@ -3291,3 +3310,295 @@ class TestReceiptCheckIsWiredIn(unittest.TestCase):
 		self.assertNotIn("requests.put", src)
 		self.assertNotIn("requests.post", src)
 		self.assertNotIn("update_body", src)
+
+
+class TestWalletReadsEveryStablecoin(unittest.TestCase):
+	"""The footer publishes a Tron *address*, which accepts any TRC-20.
+
+    Reading only the USDT contract reported a USDC or USDD tip as $0.00 --
+    Principle 1's structural zero rebuilt at the measurement stage, and failing
+    in the dangerous direction: with `received_total_usd` stuck at zero,
+    `attribution.record_receipt` never fires and the doctrine's checklist says
+    "the problem is reach" while money is actually sitting in the wallet.
+    """
+
+	def _account(self, trc20, trx_sun=0):
+		return {"balance": trx_sun, "trc20": trc20}
+
+	def _read(self, account):
+		from bot.earning import wallet_assets
+		original = wallet_assets._fetch_account
+		wallet_assets._fetch_account = lambda addr, timeout=20: account
+		try:
+			return wallet_assets.read_balances("TFTNsfyomKrnUutRjBTGVULp19ByW29KbY")
+		finally:
+			wallet_assets._fetch_account = original
+
+	def test_usdc_tip_is_counted(self):
+		"""The exact loss this module was written for: a non-USDT stablecoin."""
+		result = self._read(self._account([
+			{"TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8": "5000000"},   # 5 USDC
+		]))
+		self.assertEqual(result["usd"], 5.0)
+		self.assertEqual(result["stablecoins"], {"USDC": 5.0})
+
+	def test_stablecoins_are_summed_together(self):
+		result = self._read(self._account([
+			{"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t": "2000000"},   # 2 USDT
+			{"TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8": "3000000"},   # 3 USDC
+		]))
+		self.assertEqual(result["usd"], 5.0)
+
+	def test_usdd_uses_its_own_18_decimals(self):
+		"""USDD has 18 decimals, USDT and USDC have 6. The single-asset reader
+        divided everything by 1e6, which would report a 1 USDD tip as one
+        trillion dollars.
+        """
+		result = self._read(self._account([
+			{"TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn": "1" + "0" * 18},  # 1 USDD
+		]))
+		self.assertEqual(result["usd"], 1.0)
+		self.assertEqual(result["stablecoins"], {"USDD": 1.0})
+
+	def test_trx_is_reported_but_never_valued(self):
+		"""Pricing TRX needs a feed, and a feed is an estimate -- Principle 4.
+        A priced TRX balance would also drift every cycle while no money moved.
+        """
+		result = self._read(self._account([], trx_sun=100_000_000))  # 100 TRX
+		self.assertEqual(result["usd"], 0.0)
+		self.assertEqual(result["other_assets"], {"TRX": 100.0})
+
+	def test_unknown_token_is_never_valued(self):
+		"""An unpriced TRC-20 must not be counted as a dollar."""
+		result = self._read(self._account([
+			{"TXYZunknowncontractaddressthatisnotastable": "9000000"},
+		]))
+		self.assertEqual(result["usd"], 0.0)
+
+	def test_unreadable_chain_is_none_not_zero(self):
+		"""A chain outage reported as $0.00 would look like a withdrawal."""
+		self.assertIsNone(self._read(None))
+
+	def test_never_activated_address_is_zero_not_unreadable(self):
+		"""An address nobody has ever paid is a real zero, not an outage."""
+		from bot.earning import wallet_assets
+		original = wallet_assets._fetch_account
+		wallet_assets._fetch_account = lambda addr, timeout=20: {}
+		try:
+			result = wallet_assets.read_balances("TFTNsfyomKrnUutRjBTGVULp19ByW29KbY")
+		finally:
+			wallet_assets._fetch_account = original
+		self.assertEqual(result["usd"], 0.0)
+
+	def test_it_uses_no_price_feed_and_no_llm(self):
+		"""Both would turn a measured balance into an estimate.
+
+        Asserted on the code's reachable hosts and calls rather than on prose,
+        because the docstring legitimately discusses prices at length in order
+        to explain why none is fetched.
+        """
+		src = Path("bot/earning/wallet_assets.py").read_text(encoding="utf-8")
+		urls = re.findall(r"https?://([^/\"\s]+)", src)
+		self.assertEqual(set(urls), {"api.trongrid.io"})
+		for banned in ("coingecko", "binance", "complete_json", "llm.", "cmc"):
+			self.assertNotIn(banned, src.lower())
+
+	def test_it_needs_no_new_secret(self):
+		"""Principle 2 row 1: TronGrid's account endpoint is keyless."""
+		src = Path("bot/earning/wallet_assets.py").read_text(encoding="utf-8")
+		self.assertNotIn("API_KEY", src)
+		self.assertNotIn("getenv", src)
+
+	def test_stablecoin_decimals_are_per_token(self):
+		"""Pins that no future edit collapses these back to a shared constant."""
+		from bot.earning import wallet_assets
+		decimals = {t["symbol"]: t["decimals"]
+					for t in wallet_assets.STABLECOINS.values()}
+		self.assertEqual(decimals["USDT"], 6)
+		self.assertEqual(decimals["USDC"], 6)
+		self.assertEqual(decimals["USDD"], 18)
+
+
+class TestStablecoinTipReachesEarnings(unittest.TestCase):
+	"""The seam, not the modules (Principle 3d).
+
+    Every unit above can pass while the wallet snapshot still calls the old
+    single-asset reader -- which is precisely the class of bug that hid for
+    fourteen cycles. This drives the real `_snapshot_wallet` and asserts a USDC
+    tip arrives as revenue *and* triggers attribution.
+    """
+
+	def _cycle(self, accounts):
+		import bot.status as status_module
+		from bot.earning import wallet_assets
+		original = wallet_assets._fetch_account
+		original_env = os.environ.get("USDT_WALLET_ADDRESS")
+		os.environ["USDT_WALLET_ADDRESS"] = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
+		queue = list(accounts)
+		wallet_assets._fetch_account = lambda addr, timeout=20: queue.pop(0)
+		try:
+			status = status_module._defaults()
+			for _ in accounts:
+				status_module._snapshot_wallet(status)
+			return status
+		finally:
+			wallet_assets._fetch_account = original
+			if original_env is None:
+				os.environ.pop("USDT_WALLET_ADDRESS", None)
+			else:
+				os.environ["USDT_WALLET_ADDRESS"] = original_env
+
+	def test_usdc_tip_becomes_recorded_revenue(self):
+		"""Before this change the same tip left received_total_usd at 0.0."""
+		empty = {"balance": 0, "trc20": []}
+		paid = {"balance": 0,
+				"trc20": [{"TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8": "7000000"}]}
+		status = self._cycle([empty, paid])
+		wallet = status["wallet"]
+		self.assertEqual(wallet["confirmed_usd"], 7.0)
+		self.assertEqual(wallet["received_total_usd"], 7.0)
+		self.assertEqual(wallet["last_received_usd"], 7.0)
+
+	def test_a_recorded_receipt_triggers_attribution(self):
+		"""attribution fires on wallet.last_received_usd, so a tip invisible to
+        the balance reader was also invisible to the funnel measurement.
+        """
+		from bot.earning import attribution
+		empty = {"balance": 0, "trc20": []}
+		paid = {"balance": 0,
+				"trc20": [{"TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8": "4000000"}]}
+		status = self._cycle([empty, paid])
+		record = attribution.record_receipt(status)
+		self.assertIsNotNone(record)
+		self.assertEqual(record["amount_usd"], 4.0)
+		self.assertEqual(record["confidence"], "correlated")
+
+	def test_trx_only_tip_does_not_invent_revenue(self):
+		"""A TRX tip is visible, but never as a dollar figure."""
+		empty = {"balance": 0, "trc20": []}
+		trx = {"balance": 100_000_000, "trc20": []}
+		status = self._cycle([empty, trx])
+		wallet = status["wallet"]
+		self.assertEqual(wallet["received_total_usd"], 0.0)
+		self.assertEqual(wallet["other_assets"], {"TRX": 100.0})
+
+	def test_asset_breakdown_reaches_status(self):
+		paid = {"balance": 0,
+				"trc20": [{"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t": "3000000"}]}
+		status = self._cycle([paid])
+		self.assertEqual(status["wallet"]["stablecoins"], {"USDT": 3.0})
+
+	def test_address_still_never_persisted(self):
+		"""The receive address must stay masked in the committed status.json."""
+		import bot.status as status_module
+		paid = {"balance": 0,
+				"trc20": [{"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t": "1000000"}]}
+		status = self._cycle([paid])
+		blob = json.dumps(status_module.sanitize_for_git(status))
+		self.assertNotIn("TFTNsfyomKrnUutRjBTGVULp19ByW29KbY", blob)
+
+	def test_one_chain_read_per_cycle(self):
+		"""Balance and breakdown come from a single fetch.
+
+        Two fetches would send identical hourly requests to TronGrid, and could
+        report a balance and a breakdown taken from different reads.
+        """
+		import bot.status as status_module
+		from bot.earning import wallet_assets
+		calls = []
+		original = wallet_assets._fetch_account
+		original_env = os.environ.get("USDT_WALLET_ADDRESS")
+		os.environ["USDT_WALLET_ADDRESS"] = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
+
+		def counted(addr, timeout=20):
+			calls.append(addr)
+			return {"balance": 0, "trc20": []}
+
+		wallet_assets._fetch_account = counted
+		try:
+			status_module._snapshot_wallet(status_module._defaults())
+		finally:
+			wallet_assets._fetch_account = original
+			if original_env is None:
+				os.environ.pop("USDT_WALLET_ADDRESS", None)
+			else:
+				os.environ["USDT_WALLET_ADDRESS"] = original_env
+		self.assertEqual(len(calls), 1)
+
+
+class TestAskMatchesWhatTheWalletCounts(unittest.TestCase):
+	"""The footer must name exactly the assets the balance reader counts.
+
+    Naming too few turns away money the address would have accepted -- the
+    footer said "USDT" while sitting on a Tron address that takes any TRC-20,
+    so a reader holding USDC read it as "wrong token" and left.
+
+    Naming too many is worse: the tip arrives and is reported as $0.00, which
+    is the silent loss this whole change exists to close. So the two are
+    derived from one table rather than maintained in two places.
+    """
+
+	def _footer(self):
+		import os
+		from bot.earning import payout
+		original = os.environ.get("USDT_WALLET_ADDRESS")
+		os.environ["USDT_WALLET_ADDRESS"] = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
+		try:
+			return payout.footer({"enabled": True,
+								  "address_env": "USDT_WALLET_ADDRESS",
+								  "heading": "Support this work",
+								  "note": "n", "show_network": True})
+		finally:
+			if original is None:
+				os.environ.pop("USDT_WALLET_ADDRESS", None)
+			else:
+				os.environ["USDT_WALLET_ADDRESS"] = original
+
+	def test_every_counted_asset_is_named_in_the_ask(self):
+		from bot.earning import wallet_assets
+		footer = self._footer()
+		for token in wallet_assets.STABLECOINS.values():
+			self.assertIn(token["symbol"], footer)
+
+	def test_the_ask_names_no_asset_the_wallet_ignores(self):
+		"""A named-but-uncounted token would arrive and read as $0.00."""
+		from bot.earning import payout, wallet_assets
+		counted = {t["symbol"] for t in wallet_assets.STABLECOINS.values()}
+		label = payout.accepted_assets("TRC-20 (Tron)")
+		named = {p.strip() for p in label.replace(" or ", ",").split(",")}
+		self.assertEqual(named, counted)
+
+	def test_erc20_ask_stays_usdt_only(self):
+		"""_fetch_erc20_usdt reads only the USDT contract on that chain, so the
+        ask must not promise more than the meter reads.
+        """
+		from bot.earning import payout
+		self.assertEqual(payout.accepted_assets("ERC-20 (Ethereum)"), "USDT")
+
+	def test_note_names_no_single_asset(self):
+		"""The label states the tokens; a second mention only goes stale."""
+		from bot.earning import payout
+		self.assertNotIn("USDT", payout.DEFAULTS["note"])
+
+	def test_address_is_still_the_only_thing_in_the_fence(self):
+		"""A wrapped or annotated address is a mistyped address."""
+		footer = self._footer()
+		fenced = footer.split("```")[1].strip()
+		self.assertEqual(fenced, "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY")
+
+	def test_dashboard_tip_box_names_the_same_assets(self):
+		"""The tip card and the published footer must not disagree."""
+		import os
+		from bot.earning import payout
+		original = os.environ.get("USDT_WALLET_ADDRESS")
+		os.environ["USDT_WALLET_ADDRESS"] = "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"
+		try:
+			public = payout.public_snapshot({
+				"enabled": True, "address_env": "USDT_WALLET_ADDRESS",
+				"heading": "Support this work", "note": "n"})
+		finally:
+			if original is None:
+				os.environ.pop("USDT_WALLET_ADDRESS", None)
+			else:
+				os.environ["USDT_WALLET_ADDRESS"] = original
+		self.assertEqual(public["asset"], payout.accepted_assets("TRC-20 (Tron)"))

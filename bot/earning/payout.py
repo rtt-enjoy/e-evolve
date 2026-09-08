@@ -54,9 +54,14 @@ DEFAULTS: dict[str, Any] = {
 	# The heading readers see. Deliberately plain: "Support this work" asks,
 	# where "Donate now" demands, and this audience scrolls past a demand.
 	"heading": "Support this work",
+	# Asset-neutral on purpose. The label line directly below the note states
+	# the exact tokens accepted, derived from the balance reader, so naming one
+	# here as well would be a second place to go stale -- and the version that
+	# said "a small USDT tip" turned away readers holding USDC on the very same
+	# address.
 	"note": (
 		"These write-ups are researched and published with no paywall, "
-		"sponsor, or tracking. If one saved you an afternoon, a small USDT tip "
+		"sponsor, or tracking. If one saved you an afternoon, a small tip "
 		"keeps them coming."
 	),
 	# No suggested amount. Naming a figure reads as a price for something the
@@ -291,6 +296,35 @@ def has_footer(body: str, cfg: dict[str, Any] | None = None) -> bool:
 	return bool(address) and address in text
 
 
+def accepted_assets(network: str) -> str:
+	"""The tokens the ask should name, e.g. ``"USDT, USDC or USDD"``.
+
+    The footer used to say "USDT" and nothing else, which understated what the
+    address can take: a Tron address receives *any* TRC-20. A reader holding
+    USDC on Tron -- an extremely common case -- read the ask as "wrong token"
+    and left, so the footer was turning away money the wallet would have
+    accepted. That is a conversion loss sitting at the ask itself.
+
+    The list is derived from ``wallet_assets.STABLECOINS`` rather than written
+    out here, so the ask can never name an asset the balance reader does not
+    count. Naming an uncounted token would be worse than naming too few: the
+    tip would arrive and be reported as $0.00, which is the exact silent loss
+    this whole change exists to close.
+
+    ERC-20 keeps the plain "USDT" label, because ``_fetch_erc20_usdt`` still
+    reads only the USDT contract on that chain. The ask matches the meter.
+    """
+	if not network.startswith("TRC-20"):
+		return "USDT"
+	from . import wallet_assets
+	symbols = sorted({t["symbol"] for t in wallet_assets.STABLECOINS.values()})
+	# Keep USDT first: it is what the address was published as for months.
+	symbols.sort(key=lambda s: (s != "USDT", s))
+	if len(symbols) == 1:
+		return symbols[0]
+	return f"{', '.join(symbols[:-1])} or {symbols[-1]}"
+
+
 def footer(cfg: dict[str, Any] | None = None) -> str:
 	"""The markdown footer, or '' when it must not be published."""
 	cfg = cfg or config()
@@ -302,7 +336,8 @@ def footer(cfg: dict[str, Any] | None = None) -> str:
 
 	heading = str(cfg.get("heading") or DEFAULTS["heading"]).strip()
 	note = str(cfg.get("note") or DEFAULTS["note"]).strip()
-	label = f"USDT · {network}" if cfg.get("show_network", True) else "USDT"
+	assets = accepted_assets(network)
+	label = f"{assets} · {network}" if cfg.get("show_network", True) else assets
 
 	# The address goes in a fenced block, not inline prose. dev.to leaves a
 	# fence untouched, while inline text can be line-wrapped or smart-quoted by
@@ -397,5 +432,7 @@ def public_snapshot(cfg: dict[str, Any] | None = None) -> dict[str, Any]:
 		"network": network,
 		"heading": str(cfg.get("heading") or DEFAULTS["heading"]).strip(),
 		"note": str(cfg.get("note") or DEFAULTS["note"]).strip(),
-		"asset": "USDT",
+		# Same derived list the article footer prints, so the dashboard tip box
+		# and the published ask can never disagree about what is accepted.
+		"asset": accepted_assets(network),
 	}

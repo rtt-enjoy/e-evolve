@@ -246,7 +246,7 @@ def _snapshot_wallet(status: dict[str, Any]) -> None:
 	wallet["network"] = "TRC-20" if address.startswith("T") else "ERC-20"
 
 	prev_balance = float(wallet.get("confirmed_usd") or 0.0)
-	balance = _fetch_usdt_balance(address)
+	balance = _read_wallet_balance(wallet, address)
 
 	if balance is None:
 		# Chain lookup failed or the address format is unrecognised. Keep the
@@ -289,6 +289,35 @@ def _snapshot_wallet(status: dict[str, Any]) -> None:
 	status["usdt_balance"] = wallet["confirmed_usd"]
 
 
+def _read_wallet_balance(wallet: dict[str, Any], address: str) -> float | None:
+	"""The spendable USD balance, recording the per-asset breakdown on the way.
+
+    One chain read serves both. Fetching the balance and the breakdown
+    separately would send two identical requests to TronGrid every hour for the
+    same data, and could report a balance and a breakdown from different reads.
+
+    The breakdown matters because `confirmed_usd` is a single number: it cannot
+    distinguish "$4 of USDC" from "$4 of USDT", and it cannot show a TRX tip at
+    all, since TRX is deliberately never valued (no price feed -- see
+    bot/earning/wallet_assets.py). Without `other_assets` a TRX tip would arrive
+    with nothing anywhere saying money had come in. Reporting the receipt
+    without inventing a dollar value for it is the honest half of Principle 4.
+    """
+	if address.startswith("T"):
+		try:
+			from .earning import wallet_assets
+			balances = wallet_assets.read_balances(address)
+		except Exception as exc:                   # pragma: no cover - defensive
+			log.debug("wallet read failed: %s", exc)
+			return None
+		if balances is None:
+			return None
+		wallet["stablecoins"] = balances["stablecoins"]
+		wallet["other_assets"] = balances["other_assets"]
+		return float(balances["usd"])
+	return _fetch_usdt_balance(address)
+
+
 def _wallet_defaults() -> dict[str, Any]:
 	return {
 		"configured":         False,
@@ -304,6 +333,10 @@ def _wallet_defaults() -> dict[str, Any]:
 		# Highest balance ever observed, so income is never counted twice after
 		# the owner withdraws by hand.
 		"balance_high_water_usd": 0.0,
+		# Per-asset detail. `confirmed_usd` sums only USD-pegged stablecoins;
+		# `other_assets` (e.g. TRX) records what arrived without valuing it.
+		"stablecoins":   {},
+		"other_assets":  {},
 	}
 
 
@@ -318,7 +351,11 @@ def _fetch_usdt_balance(address: str) -> float | None:
     can show the last known figure instead of a false $0.
     """
 	if address.startswith("T"):
-		return _fetch_trc20_usdt(address)
+		# Every USD-pegged stablecoin the address can receive, not only USDT.
+		# A Tron address accepts any TRC-20, so reading one contract reported a
+		# USDC or USDD tip as $0.00 -- see bot/earning/wallet_assets.py.
+		from .earning import wallet_assets
+		return wallet_assets.fetch_usd_balance(address)
 	if address.startswith("0x"):
 		return _fetch_erc20_usdt(address)
 	log.warning("Unrecognised USDT address format: %s…", address[:6])

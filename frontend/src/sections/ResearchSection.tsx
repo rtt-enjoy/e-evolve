@@ -211,11 +211,11 @@ export default function ResearchSection({ status }: { status: Status }) {
 				<Disclosure title="Free-AI focus" hint="Service categories being tracked" count={codeTech.free_ai_focus?.length}>
 					<Bullets items={codeTech.free_ai_focus || []} />
 				</Disclosure>
-				<Disclosure title="Monetization patterns" hint="Repeatable ways to charge" count={codeTech.monetization_patterns?.length}>
+				<Disclosure title="Monetization patterns" hint="Ways a product earns unattended" count={codeTech.monetization_patterns?.length}>
 					<Bullets items={codeTech.monetization_patterns || []} />
 				</Disclosure>
-				<Disclosure title="Service niches" hint="Remote work categories in scope" count={codeTech.remote_service_niches?.length}>
-					<Bullets items={codeTech.remote_service_niches || []} />
+				<Disclosure title="Product shapes" hint="What a solo dev can build and sell" count={codeTech.product_shapes?.length}>
+					<Bullets items={codeTech.product_shapes || []} />
 				</Disclosure>
 				<Disclosure title="Lead requirements" hint="What a lead must satisfy" count={codeTech.requirements?.length}>
 					<Bullets items={codeTech.requirements || []} />

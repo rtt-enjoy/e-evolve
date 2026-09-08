@@ -1,6 +1,7 @@
 import unittest
 import os
 import re
+import pathlib
 import time
 import json
 import bot.llm as llm_module
@@ -63,7 +64,6 @@ from bot.earning.mrr_ideas import (
 from bot.earning import code_techs as code_techs_module
 from bot.earning.code_techs import (
 	_fetch_github_leads,
-	_fetch_hn_hiring_leads,
 	_fetch_reddit_leads,
 	_is_free_ai_lead,
 	_lead_value,
@@ -1201,25 +1201,25 @@ class TestEarningsUpdate(unittest.TestCase):
 			earnings_module._append_weekly_history = append_backup
 
 class TestCodeTechOpportunities(unittest.TestCase):
-	def test_rank_builds_a_market_specific_codex_prompt(self):
-		cfg = {"daily_target_usd": 10.0, "prompt_top_n": 5}
+	def test_rank_builds_a_lead_specific_codex_prompt(self):
+		cfg = {"prompt_top_n": 5}
 		leads = [{
-			"title": "Need a script to automate CSV export",
-			"url": "https://example.com/request",
-			"source": "community",
-			"kind": "demand",
-			"buyer": "Acme Books",
-			"body": "Looking for a simple tool to export and convert a CSV every week.",
-			"labels": ["community-request"],
-			"posted_at": _hours_ago_iso(3),
+			"title": "Sell the extension as a one-time licence download",
+			"url": "https://example.com/storefront",
+			"source": "channel-table",
+			"kind": "channel",
+			"body": "Storefront that lists a digital download and pays out USDT.",
+			"labels": ["storefront"],
+			"cost_usd": 0.0,
+			"manual_setup": "Owner opens the account once.",
 		}]
 
 		ranked = _rank(leads, cfg, max_items=1, min_score=0)
 
 		self.assertEqual(len(ranked), 1)
 		prompt = ranked[0].codex_prompt
-		self.assertIn("Acme Books", prompt)
-		self.assertIn("Need a script to automate CSV export", prompt)
+		self.assertIn("Sell the extension as a one-time licence download", prompt)
+		self.assertIn("Owner opens the account once.", prompt)
 		self.assertIn("Do not contact anyone", prompt)
 
 	def test_parse_reddit_rss_builds_community_lead(self):
@@ -1361,46 +1361,81 @@ class TestLeadValueIsNeverFabricated(unittest.TestCase):
 class TestLeadScoreDiscriminates(unittest.TestCase):
 	"""Scores have to separate leads, not pile up on the clamp.
 
-    The live queue scored 100, 100, 100, 100, 100, 98, 96, 96 because the old
-    function started at 30 and added ~140 of overlapping bonuses before
-    clamping to 100 -- so `min_score: 55` filtered nothing at all.
+    The live queue scored 100, 100, 100, 100, 100, 98, 96, 96 because an even
+    older function started at 30 and added ~140 of overlapping bonuses before
+    clamping -- so `min_score: 55` filtered nothing at all. The property still
+    matters after the components changed from demand-intent to passive-income
+    ones, so the fixtures now vary along the new axes instead.
     """
 
 	def _varied_leads(self):
 		leads = []
 		for index in range(10):
+			channel = index % 2 == 0
 			leads.append({
-				"title": f"Contract data pipeline work {index}",
+				"title": f"Zero-budget route to selling a digital product {index}",
 				"url": f"https://example.com/{index}",
-				"source": "himalayas" if index % 2 else "github",
-				"kind": "demand" if index % 2 else "supply",
-				"body": ("freelance contract to transcribe and extract data" if index % 3
-				         else "a free llm api with a generous free tier"),
-				"labels": [],
-				"posted_at": _hours_ago_iso(index * 9),
-				"min_salary": 50 + index if index % 4 == 0 else None,
-				"currency": "USD",
-				"salary_period": "hourly",
+				"source": "channel-table" if channel else "github",
+				"kind": "channel" if channel else "asset",
+				"body": (
+					"storefront pays USDT on Tron to your own wallet address"
+					if index % 3 == 0 else
+					"free tier tooling to build the product with"
+				),
+				"labels": ["own-wallet"] if index % 4 == 0 else [],
+				"posted_at": _hours_ago_iso(index * 90),
+				"cost_usd": 0.0 if index % 3 == 0 else float(index * 12),
+				"manual_setup": "" if index % 5 == 0 else "owner opens an account and passes KYC review",
 			})
 		return leads
 
 	def test_scores_spread_out_instead_of_saturating(self):
-		ranked = _rank(self._varied_leads(), {"deliverable_terms": ["transcri", "extract", "data"]},
-		               max_items=20, min_score=0)
+		ranked = _rank(self._varied_leads(), {}, max_items=20, min_score=0)
 		scores = [op.score for op in ranked]
 
 		self.assertGreaterEqual(len(set(scores)), 6, scores)
 		self.assertGreaterEqual(max(scores) - min(scores), 30, scores)
-		# The specific live symptom: five leads tied at the ceiling.
+		# The specific live symptom: several leads tied at the ceiling.
 		self.assertLessEqual(scores.count(100), 1, scores)
 
 	def test_score_parts_explain_the_rank(self):
 		ranked = _rank(self._varied_leads(), {}, max_items=3, min_score=0)
 
 		parts = ranked[0].score_parts
-		self.assertIn("recency", parts)
-		self.assertIn("demand_intent", parts)
-		self.assertIn("value_clarity", parts)
+		# The components follow Principle 2's ordering, so the dashboard can
+		# show *why* a lead ranks in terms the owner cares about.
+		self.assertIn("owner_action", parts)
+		self.assertIn("receive_path", parts)
+		self.assertIn("zero_budget", parts)
+		self.assertIn("setup_burden", parts)
+
+	def test_owner_action_outweighs_every_other_component(self):
+		"""Principle 2 row 2 is the row that separates income from a job.
+
+        Something that earns with nobody in the loop has to beat something
+        that merely looks attractive on the other components, or the page
+        drifts back toward recommending work.
+        """
+		passive = {
+			"title": "Storefront that sells while nobody is working",
+			"body": "listed once, sells on its own",
+			"labels": ["no-owner-action"],
+			"source": "channel-table",
+			"kind": "channel",
+			"cost_usd": 25.0,
+		}
+		hands_on = {
+			"title": "Paid per project, quoted per client",
+			"body": "hourly work billed per client and per project, free to start",
+			"labels": [],
+			"source": "channel-table",
+			"kind": "channel",
+			"cost_usd": 0.0,
+		}
+
+		ranked = _rank([hands_on, passive], {}, max_items=5, min_score=0)
+
+		self.assertIn("nobody is working", ranked[0].title)
 
 
 class TestLeadRecencyIsEnforced(unittest.TestCase):
@@ -1439,18 +1474,28 @@ class TestLeadRecencyIsEnforced(unittest.TestCase):
 			by_url["https://example.com/undated"].score,
 		)
 
-	def test_the_monthly_hn_thread_is_not_judged_as_stale(self):
-		# HN's hiring thread is monthly, so its best replies are days old by
-		# design. Judging them on a 72h job-feed window would drop the only
-		# leads that quote a real hourly rate.
-		cfg = {"demand_max_age_hours": 72, "hn_hiring_max_age_hours": 744}
-		hn = self._lead(150, source="hn-hiring")
-		feed = self._lead(150, source="himalayas")
+	def test_a_curated_channel_is_not_judged_on_feed_age(self):
+		# A storefront is not less useful for having been verified last week,
+		# and it carries no `posted_at` at all. Scoring it on a feed clock
+		# would penalise the hand-checked rows -- the trustworthy half of this
+		# page -- for not being a feed. (This replaced a test for the monthly
+		# HN hiring thread, which was deleted with the job sources.)
+		curated = {
+			"title": "Storefront that settles USDT to your own wallet",
+			"url": "", "source": "channel-table", "kind": "channel",
+			"body": "no monthly fee", "labels": ["own-wallet"], "cost_usd": 0.0,
+		}
+		stale_feed = {
+			"title": "Some tooling repository", "url": "",
+			"source": "github", "kind": "asset", "body": "free tooling",
+			"labels": [], "posted_at": _hours_ago_iso(2600), "cost_usd": 0.0,
+		}
 
-		ranked = _rank([hn, feed], cfg, max_items=5, min_score=0)
-		by_source = {op.source: op for op in ranked}
+		ranked = _rank([stale_feed, curated], {}, max_items=5, min_score=0)
+		parts = {op.source: op.score_parts for op in ranked}
 
-		self.assertGreater(by_source["hn-hiring"].score, by_source["himalayas"].score)
+		self.assertEqual(parts["channel-table"]["recency"], 1.0)
+		self.assertLess(parts["github"]["recency"], 1.0)
 
 
 class TestGithubSearchHitsTheRepositoryEndpoint(unittest.TestCase):
@@ -1498,8 +1543,10 @@ class TestGithubSearchHitsTheRepositoryEndpoint(unittest.TestCase):
 			code_techs_module.requests.get = original
 
 		self.assertEqual(len(leads), 1)
-		# GitHub answers "what can I build with", never "who is paying".
-		self.assertEqual(leads[0]["kind"], "supply")
+		# GitHub answers "what can I build with", never "where does it get
+		# paid" -- so a repository is an asset, never a channel. Labelling it
+		# a channel would tell the owner to list the product on a repo.
+		self.assertEqual(leads[0]["kind"], "asset")
 
 	def test_long_abandoned_repositories_are_dropped(self):
 		payload = {"items": [{
@@ -1578,54 +1625,98 @@ class TestRedditRateLimitIsNotAFailure(unittest.TestCase):
 		self.assertEqual(len(subreddits), 3, seen)
 
 
-class TestHnHiringThreadYieldsContractLeads(unittest.TestCase):
-	"""The monthly HN hiring thread is the highest-intent free source."""
+class TestFreelanceSourcesAreGone(unittest.TestCase):
+	"""The job feeds are removed, and must not come back.
 
-	_THREAD = {"hits": [{"objectID": "49522897", "title": "Ask HN: Who is hiring? (September 2026)"}]}
-	_CHILDREN = {"children": [
-		{
-			"id": 1,
-			"created_at": _hours_ago_iso(20),
-			"text": "Noricum | Senior Backend Engineer | REMOTE | Contract | $120-160&#x2F;hr",
-		},
-		{
-			"id": 2,
-			"created_at": _hours_ago_iso(20),
-			"text": "BigCo | Staff Engineer | ONSITE | Full-time only | $250k",
-		},
-	]}
+    This module used to fetch Himalayas postings and the monthly HN "Who is
+    hiring" thread, and rank them at the top of the Leads page. Selling the
+    owner's hours is not passive income -- it fails Principle 2 row 2, because
+    every unit of income needs the owner to do the work -- and the live queue
+    had become 17 job postings to 1 tooling lead, including a college
+    admissions counsellor and a German retail role.
 
-	def _fetch(self):
-		def fake_get(url, **kwargs):
-			return _StubResp(self._CHILDREN if "items/" in url else self._THREAD)
+    They were deleted rather than demoted behind a filter, so this test guards
+    the deletion: a later cycle reading "demand leads are valuable" in old
+    comments must not reintroduce them.
+    """
 
-		original = code_techs_module.requests.get
-		try:
-			code_techs_module.requests.get = fake_get
-			return _fetch_hn_hiring_leads({
-				"hn_contract_terms": ["contract", "freelance", "part-time"],
-				"hn_hiring_max_age_hours": 744,
-			})
-		finally:
-			code_techs_module.requests.get = original
+	def test_the_job_fetchers_no_longer_exist(self):
+		for gone in ("_fetch_remote_job_leads", "_fetch_hn_hiring_leads"):
+			self.assertFalse(
+				hasattr(code_techs_module, gone),
+				f"{gone} is back; freelance postings are not passive income",
+			)
 
-	def test_only_contract_replies_become_leads(self):
-		leads = self._fetch()
+	def test_no_source_fetches_a_job_board(self):
+		source = pathlib.Path("bot/earning/code_techs.py").read_text(encoding="utf-8")
+		for host in ("himalayas.app", "jobicy", "remoteok", "remoteOK"):
+			self.assertNotIn(host, source, f"{host} is a job board")
 
-		self.assertEqual(len(leads), 1)
-		self.assertEqual(leads[0]["kind"], "demand")
-		self.assertIn("Noricum", leads[0]["buyer"])
+	def test_selling_hours_can_never_outrank_a_passive_channel(self):
+		"""An hourly lead is scored, but it cannot reach the top of the page."""
+		hourly = {
+			"title": "Contract backend engineer needed, $150/hr",
+			"body": "Hiring a contractor for a 3 month engagement. Full-time preferred.",
+			"labels": ["contract"],
+			"source": "hacker-news",
+			"kind": "asset",
+			"posted_at": _hours_ago_iso(1),
+		}
+		passive = {
+			"title": "Sell the product and settle USDT to your own wallet",
+			"body": "Storefront with no monthly fee; payout goes to your own wallet address.",
+			"labels": ["storefront", "own-wallet"],
+			"source": "channel-table",
+			"kind": "channel",
+			"cost_usd": 0.0,
+		}
 
-	def test_the_stated_rate_survives_html_entities(self):
-		# HN serves "$120-160/hr" as "$120-160&#x2F;hr". strip_html used to
-		# replace entities with a space, so the rate a human typed came out as
-		# "$120-160 hr" and no reader could recognise it as a price.
-		lead = self._fetch()[0]
-		value, basis, note = _lead_value(lead)
+		ranked = _rank([hourly, passive], {}, max_items=5, min_score=0)
+		scores = {
+			"passive" if "USDT" in op.title else "hourly": op.score
+			for op in ranked
+		}
 
-		self.assertEqual(basis, "stated_rate")
-		self.assertEqual(value, 120.0)
-		self.assertIn("$120-160/hr", note)
+		self.assertIn("hourly", scores, "the hourly lead was dropped, not scored")
+		self.assertGreater(
+			scores["passive"],
+			scores["hourly"],
+			"an hourly contract lead outranked a passive channel",
+		)
+
+
+class TestSubscriptionCheckReadsNegations(unittest.TestCase):
+	"""A cost scan that cannot see "no" reads a disclaimer as a charge.
+
+    Found live: Getly's row says "no monthly fee", and the naive substring
+    check docked it for having a monthly fee -- penalising the one channel
+    that settles USDT to the owner's own wallet for disclosing that it is
+    free. An earlier version had the same bug with "per month", which caught
+    the note that it settles twice a month.
+    """
+
+	def test_a_disclaimer_is_not_a_charge(self):
+		for text in (
+			"no monthly fee, keep 100%",
+			"without monthly subscription",
+			"zero monthly fee",
+			"settles twice a month, $15 minimum payout",
+		):
+			self.assertFalse(
+				code_techs_module._charges_a_subscription(text),
+				f"read a disclaimer as a charge: {text!r}",
+			)
+
+	def test_a_real_recurring_charge_is_caught(self):
+		for text in (
+			"a $29 monthly fee applies",
+			"billed monthly at $10",
+			"paid plan required to sell",
+		):
+			self.assertTrue(
+				code_techs_module._charges_a_subscription(text),
+				f"missed a real recurring charge: {text!r}",
+			)
 
 
 class TestLeadsNeedNoNewSecret(unittest.TestCase):
@@ -1651,7 +1742,7 @@ class TestLeadsNeedNoNewSecret(unittest.TestCase):
 		self.assertTrue(headers_seen)
 		self.assertFalse(any("Authorization" in h for h in headers_seen))
 
-	def test_the_hn_hiring_thread_needs_no_key(self):
+	def test_the_hn_search_needs_no_key(self):
 		headers_seen = []
 
 		def fake_get(url, **kwargs):
@@ -1661,68 +1752,157 @@ class TestLeadsNeedNoNewSecret(unittest.TestCase):
 		original = code_techs_module.requests.get
 		try:
 			code_techs_module.requests.get = fake_get
-			_fetch_hn_hiring_leads({"hn_contract_terms": ["contract"]})
+			code_techs_module._fetch_hn_leads({"community_searches": ["selling a chrome extension"]})
 		finally:
 			code_techs_module.requests.get = original
 
 		self.assertFalse(any("Authorization" in h for h in headers_seen))
 
+	def test_the_channel_table_needs_no_request_at_all(self):
+		"""The trustworthy half of this page costs zero requests and zero keys.
+
+        The verified storefront rows are curated rather than fetched, which is
+        also why a seized platform cannot appear on the page: a scraped "best
+        crypto storefront" list would have ranked Sellix, seized in 2024.
+        """
+		def explode(*a, **k):
+			raise AssertionError("the channel table must not make a request")
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = explode
+			rows = list(code_techs_module._PRODUCT_CHANNELS)
+		finally:
+			code_techs_module.requests.get = original
+
+		self.assertTrue(rows)
+		for row in rows:
+			self.assertEqual(row["kind"], "channel")
+			# Every row states its cost and its one-time manual step, so the
+			# owner is never surprised by a fee on the signup page.
+			self.assertIn("cost_usd", row)
+			self.assertTrue(str(row.get("manual_setup", "")).strip())
+			self.assertTrue(str(row.get("verified_note", "")).strip())
+
 
 class TestCodexPromptIsMarketSpecific(unittest.TestCase):
-	"""The prompt is the field the owner acts on, so it must not invent a price."""
+	"""The prompt is the field the owner acts on, so it must not invent a figure.
+
+    The COST slot is the one that used to fabricate. `_extract_value` took
+    max() of every "$N" in the lead text, so a figure scraped from an unrelated
+    roadmap reached this prompt as a price, and the dashboard summed those into
+    a "$5.6k pipeline value" beside a real balance of $0.00 (Principle 4).
+    """
 
 	def _rank_one(self, lead):
 		return _rank([lead], {"prompt_top_n": 5, "free_ai_focus": ["free OCR APIs"]},
 		             max_items=1, min_score=0)[0]
 
-	def test_it_names_the_real_buyer_and_signal(self):
+	def test_it_names_the_channel_the_cost_and_the_manual_step(self):
 		op = self._rank_one({
-			"title": "Senior Python Data Scraping Engineer (Freelance)",
-			"url": "https://example.com/job", "source": "himalayas", "kind": "demand",
-			"buyer": "Mindrift", "body": "freelance contract, scraping and data extraction",
-			"labels": [], "posted_at": _hours_ago_iso(4),
-			"min_salary": 40, "currency": "USD", "salary_period": "hourly",
+			"title": "Getly - settle USDT on Tron to your own wallet",
+			"url": "https://www.getly.store/sell/crypto",
+			"source": "channel-table",
+			"kind": "channel",
+			"body": "storefront with no monthly fee; payout to your own wallet address",
+			"labels": ["storefront", "own-wallet"],
+			"cost_usd": 0.0,
+			"manual_setup": "Owner signs up and adds the Tron receive address.",
 		})
 
-		self.assertIn("Mindrift", op.codex_prompt)
-		self.assertIn("Senior Python Data Scraping Engineer", op.codex_prompt)
-		self.assertIn("$40/hr posted", op.codex_prompt)
+		self.assertIn("Getly", op.codex_prompt)
+		self.assertIn("$0.00 (free to list)", op.codex_prompt)
+		# The manual step is the honest cost of a channel and must reach the
+		# prompt, so the reading model cannot present it as fully automatic.
+		self.assertIn("Tron receive address", op.codex_prompt)
+		# Policy travels with the prompt.
+		self.assertIn("Do not open an account", op.codex_prompt)
 
-	def test_with_no_stated_price_it_quotes_no_figure(self):
+	def test_a_published_one_time_fee_is_stated_not_hidden(self):
 		op = self._rank_one({
-			"title": "Anyone know a tool to convert scanned invoices?",
-			"url": "https://example.com/thread", "source": "hacker-news", "kind": "demand",
-			"buyer": "", "body": "looking for something to extract invoice data",
-			"labels": [], "posted_at": _hours_ago_iso(6),
+			"title": "Chrome Web Store registration",
+			"url": "https://developer.chrome.com/docs/webstore/register",
+			"source": "channel-table",
+			"kind": "channel",
+			"body": "one-time developer registration fee, covers up to 20 extensions",
+			"labels": ["distribution"],
+			"cost_usd": 5.0,
+			"manual_setup": "Owner pays the one-time fee and submits for review.",
+		})
+
+		self.assertIn("$5.00 one-time", op.codex_prompt)
+
+	def test_with_no_published_cost_it_quotes_no_figure(self):
+		op = self._rank_one({
+			"title": "Open-source the tool and put the address in the README",
+			"url": "", "source": "local-playbook", "kind": "asset",
+			"body": "a public repository is discovery that keeps working",
+			"labels": ["open-source"],
 		})
 
 		self.assertEqual(op.value_basis, "none")
-		self.assertIn("no stated price", op.codex_prompt)
-		# A prompt that merely omits the price invites the reading model to
-		# invent one, rebuilding the fabrication this module just removed.
+		self.assertIsNone(op.cost_usd)
+		self.assertIn("not published", op.codex_prompt)
+		# A prompt that merely omits the figure invites the reading model to
+		# invent one, rebuilding the fabrication this module removed.
 		self.assertNotIn("$", op.codex_prompt)
 
+	def test_it_never_asks_for_an_earnings_estimate(self):
+		op = self._rank_one({
+			"title": "itch.io listing", "url": "", "source": "channel-table",
+			"kind": "channel", "body": "free to publish", "labels": [],
+			"cost_usd": 0.0,
+		})
 
-class TestDemandLeadsKeepTheirShare(unittest.TestCase):
-	"""Tooling must not crowd out the postings where somebody is paying."""
+		self.assertIn("never estimate it", op.codex_prompt)
 
-	def test_demand_survives_a_flood_of_higher_scoring_supply(self):
-		supply = [{
-			"title": f"awesome/free-ai-list-{i}", "url": f"https://github.com/x/{i}",
-			"source": "github", "kind": "supply",
-			"body": "a free llm api list with a generous free tier, ocr and transcription",
+
+class TestChannelsKeepTheirShare(unittest.TestCase):
+	"""Free tooling must not crowd out the rows where the product gets paid.
+
+    Assets are plentiful -- GitHub, HN and Reddit return tooling all day -- so
+    without a floor a good crop of repositories fills the page with things that
+    are adjacent to income rather than income.
+    """
+
+	def test_channels_survive_a_flood_of_higher_scoring_assets(self):
+		assets = [{
+			"title": f"awesome/free-tooling-{i}", "url": f"https://github.com/x/{i}",
+			"source": "github", "kind": "asset",
+			"body": "free tier tooling to build a product with, no cost",
 			"labels": [], "posted_at": _hours_ago_iso(1),
+			"cost_usd": 0.0,
 		} for i in range(30)]
-		demand = [{
-			"title": f"Freelance contract role {i}", "url": f"https://example.com/{i}",
-			"source": "himalayas", "kind": "demand", "body": "contract work",
-			"labels": [], "posted_at": _hours_ago_iso(70),
+		channels = [{
+			"title": f"Storefront {i} that settles USDT to your own wallet",
+			"url": f"https://example.com/{i}",
+			"source": "channel-table", "kind": "channel",
+			"body": "listing platform, owner opens the account and passes KYC review",
+			"labels": [], "manual_setup": "owner opens the account and passes KYC review",
+			"cost_usd": 30.0,
 		} for i in range(5)]
 
-		ranked = _rank(supply + demand, {"min_demand_share": 0.5}, max_items=10, min_score=0)
-		kept_demand = [op for op in ranked if op.kind == "demand"]
+		ranked = _rank(assets + channels, {"min_channel_share": 0.5}, max_items=10, min_score=0)
+		kept = [op for op in ranked if op.kind == "channel"]
 
-		self.assertEqual(len(kept_demand), 5)
+		self.assertEqual(len(kept), 5)
+
+	def test_the_old_config_key_still_works(self):
+		"""An owner's existing `min_demand_share` must not silently stop working."""
+		assets = [{
+			"title": f"tool-{i}", "url": "", "source": "github", "kind": "asset",
+			"body": "free tooling", "labels": [], "cost_usd": 0.0,
+		} for i in range(20)]
+		channels = [{
+			"title": f"Storefront {i}", "url": "", "source": "channel-table",
+			"kind": "channel", "body": "listing platform with KYC review",
+			"labels": [], "manual_setup": "owner opens the account, KYC review",
+			"cost_usd": 40.0,
+		} for i in range(4)]
+
+		ranked = _rank(assets + channels, {"min_demand_share": 0.5}, max_items=8, min_score=0)
+
+		self.assertEqual(len([op for op in ranked if op.kind == "channel"]), 4)
 
 
 class TestOutreachDraftIsGone(unittest.TestCase):
@@ -1760,21 +1940,29 @@ class TestLeadStatusPayloadStaysBounded(unittest.TestCase):
     """
 
 	def test_forty_leads_stay_under_thirty_kilobytes(self):
+		# Fixtures mirror what the live queue actually holds now: channel rows
+		# carrying a manual_setup and verified_note, plus community assets.
+		# The old fixtures were job postings, so after the redirect they no
+		# longer exercised the fields that take up the room.
 		leads = [{
-			"title": f"Freelance contract data engineering role number {i}",
-			"url": f"https://example.com/some/reasonably/long/job/url/{i}",
-			"source": "himalayas", "kind": "demand", "buyer": f"Company {i}",
-			"body": "contract work to transcribe, extract and convert data " * 20,
-			"labels": ["data", "contract"], "posted_at": _hours_ago_iso(i),
-			"min_salary": 40 + i, "currency": "USD", "salary_period": "hourly",
+			"title": f"Storefront number {i} that lists a digital download",
+			"url": f"https://example.com/some/reasonably/long/platform/url/{i}",
+			"source": "channel-table" if i % 2 else "reddit:r/SideProject",
+			"kind": "channel" if i % 2 else "asset",
+			"body": "listing platform that settles stablecoin to your own wallet " * 20,
+			"labels": ["storefront", "usdt"],
+			"posted_at": _hours_ago_iso(i),
+			"cost_usd": 0.0,
+			"manual_setup": "Owner signs up, adds the receive address, and uploads the product once.",
+			"verified_note": "Fees, networks and payout terms confirmed on the platform's own pricing page.",
 		} for i in range(40)]
 
-		ranked = _rank(leads, {"prompt_top_n": 10}, max_items=22, min_score=0)
+		ranked = _rank(leads, {"prompt_top_n": 6}, max_items=16, min_score=0)
 		payload = len(json.dumps([op.__dict__ for op in ranked]))
 
 		self.assertLess(payload, 30_000, f"{payload} bytes")
 		# Only the leads worth acting on pay for a prompt.
-		self.assertEqual(sum(1 for op in ranked if op.codex_prompt), 10)
+		self.assertEqual(sum(1 for op in ranked if op.codex_prompt), 6)
 
 
 class TestLeadCountsDescribeWhatIsShown(unittest.TestCase):
@@ -2614,6 +2802,16 @@ class TestSharedPrimitives(unittest.TestCase):
 	def test_parse_dt_returns_none_on_junk(self):
 		for junk in ("", None, "not-a-date", 0):
 			self.assertIsNone(shared.parse_dt(junk), junk)
+
+	def test_strip_html_decodes_entities_not_just_tags(self):
+		# HN serves "$120-160/hr" as "$120-160&#x2F;hr". strip_html used to
+		# replace entities with a space, so a rate a human typed came out as
+		# "$120-160 hr" and was unrecognisable as a price. Numeric entities
+		# were never matched at all. This assertion moved here when the HN
+		# hiring fetcher was deleted -- the fix is shared, so it outlives the
+		# one caller that exposed it.
+		self.assertIn("$120-160/hr", shared.strip_html("<p>$120-160&#x2F;hr</p>"))
+		self.assertIn("a&b", shared.strip_html("a&amp;b"))
 
 	def test_strip_html_drops_script_bodies(self):
 		# code_techs' old _strip_html removed the tags but kept the JS source,

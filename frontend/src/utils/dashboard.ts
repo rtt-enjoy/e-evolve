@@ -106,19 +106,30 @@ export function buildReadiness(status: Status) {
  * they are not additive.
  */
 export function buildOpportunityStats(opportunities: CodeTechOpportunity[]) {
-	const priced = opportunities.filter(
-		(opportunity) => opportunity.value_basis && opportunity.value_basis !== 'none',
-	);
 	const fresh = opportunities.filter(
 		(opportunity) => typeof opportunity.age_hours === 'number' && opportunity.age_hours <= 24,
 	);
-	const demand = opportunities.filter((opportunity) => opportunity.kind === 'demand');
+	// `demand`/`supply` are the pre-rename aliases; a committed snapshot from
+	// before the rename still carries them, so both are counted as one thing.
+	const channels = opportunities.filter(
+		(opportunity) => opportunity.kind === 'channel' || opportunity.kind === 'demand',
+	);
+	// Free to list. `0` is a real value for a cost, so it is compared
+	// explicitly rather than being caught by a falsy check.
+	const free = opportunities.filter((opportunity) => opportunity.cost_usd === 0);
+	// The honest cost of this page: a channel is not live until the owner has
+	// done its one-time step, so the count is shown rather than implied.
+	const needsSetup = opportunities.filter((opportunity) => {
+		const setup = (opportunity.manual_setup || '').trim();
+		return setup !== '' && !setup.toLowerCase().startsWith('none');
+	});
 	return {
 		total: opportunities.length,
-		withValue: priced.length,
 		freshCount: fresh.length,
-		demandCount: demand.length,
-		supplyCount: opportunities.length - demand.length,
+		channelCount: channels.length,
+		assetCount: opportunities.length - channels.length,
+		freeCount: free.length,
+		needsSetupCount: needsSetup.length,
 		topScore: opportunities.reduce((top, opportunity) => Math.max(top, opportunity.score || 0), 0),
 		pursued: opportunities.filter((opportunity) => opportunity.pursued).length,
 	};
@@ -150,7 +161,7 @@ export function leadSources(opportunities: CodeTechOpportunity[]): Array<{ key: 
 		.sort((a, b) => b.count - a.count);
 }
 
-export type LeadSort = 'newest' | 'score' | 'value';
+export type LeadSort = 'newest' | 'score' | 'cost';
 
 /** Older-is-larger, so an unknown age sorts as the oldest thing on the page. */
 function ageOf(lead: CodeTechOpportunity): number {
@@ -161,12 +172,14 @@ export function sortLeads(opportunities: CodeTechOpportunity[], sort: LeadSort):
 	const copy = [...opportunities];
 	if (sort === 'newest') {
 		copy.sort((a, b) => ageOf(a) - ageOf(b) || (b.score || 0) - (a.score || 0));
-	} else if (sort === 'value') {
-		// Unpriced leads sort last, never as $0 at the top: a missing price is
-		// not a cheap one.
-		const valueOf = (lead: CodeTechOpportunity) =>
-			lead.value_basis && lead.value_basis !== 'none' ? lead.value_usd || 0 : Number.NEGATIVE_INFINITY;
-		copy.sort((a, b) => valueOf(b) - valueOf(a) || (b.score || 0) - (a.score || 0));
+	} else if (sort === 'cost') {
+		// Cheapest first, because zero budget is the constraint. A lead with
+		// no published cost sorts last rather than as free -- unknown is not
+		// the same as $0, the same distinction `_cost` vs `_money` makes in
+		// the Python.
+		const costOf = (lead: CodeTechOpportunity) =>
+			typeof lead.cost_usd === 'number' ? lead.cost_usd : Number.POSITIVE_INFINITY;
+		copy.sort((a, b) => costOf(a) - costOf(b) || (b.score || 0) - (a.score || 0));
 	} else {
 		copy.sort((a, b) => (b.score || 0) - (a.score || 0) || ageOf(a) - ageOf(b));
 	}

@@ -87,10 +87,10 @@ export default function OverviewSection({ status }: { status: Status }) {
 				    above, from values regex-scraped out of unrelated text — two
 				    dollar amounts side by side, one of them invented. */}
 				<Tile
-					label="Fresh demand leads"
-					value={String(stats.demandCount)}
-					detail={`${stats.freshCount} posted in last 24h · ${stats.withValue} with a stated price`}
-					tone={stats.freshCount ? 'info' : 'warn'}
+					label="Ways to get paid"
+					value={String(stats.channelCount)}
+					detail={`${stats.freeCount} free to start · ${stats.needsSetupCount} need a one-time setup`}
+					tone={stats.channelCount ? 'info' : 'warn'}
 					to="#/leads"
 				/>
 				<Tile
@@ -208,11 +208,11 @@ export default function OverviewSection({ status }: { status: Status }) {
 							{/* Was "Pipeline (unrealised) $5.6k · leads awaiting
 							    payment" — a scraped figure, in an earnings card,
 							    described as money owed. Nobody had agreed to pay
-							    any of it. A lead count carries no such claim. */}
+							    any of it. A route count carries no such claim. */}
 							<Stat
-								label="Leads with a price"
-								value={`${stats.withValue} of ${stats.total}`}
-								detail="published rates — not money owed"
+								label="Routes free to start"
+								value={`${stats.freeCount} of ${stats.total}`}
+								detail="no listing fee — not money earned"
 							/>
 						</div>
 						<p className="muted mt-4">

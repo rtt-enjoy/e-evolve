@@ -24,14 +24,23 @@ export type Suggestion = {
 /** How a lead's price was established. `none` means nobody published one. */
 export type LeadValueBasis = 'posted_salary' | 'stated_rate' | 'none';
 
-/** `demand` = somebody is paying now. `supply` = free tooling to deliver with. */
-export type LeadKind = 'demand' | 'supply';
+/**
+ * `channel` = a place the product gets listed and paid for. `asset` = free
+ * tooling or reach to build and market it with.
+ *
+ * These replaced `demand`/`supply`. That pair described a freelance queue:
+ * `demand` meant somebody is hiring, which is not passive income -- income per
+ * unit of the owner's work is a job. The old names are still accepted because
+ * `status.json` is committed and a snapshot written before the rename carries
+ * them.
+ */
+export type LeadKind = 'channel' | 'asset' | 'demand' | 'supply';
 
 export type CodeTechOpportunity = {
 	title?: string;
 	url?: string;
 	source?: string;
-	/** Who is paying, when the source names them. */
+	/** Who is paying, when the source names them. Rarely set for a channel. */
 	buyer?: string;
 	kind?: LeadKind;
 	score?: number;
@@ -50,6 +59,16 @@ export type CodeTechOpportunity = {
 	reason?: string;
 	next_step?: string;
 	codex_prompt?: string;
+	/**
+	 * What the owner pays to use this channel. Unlike `value_usd`, `0` is
+	 * meaningful here and means free to list -- so this renders as "Free",
+	 * never as an em dash. null means no cost was published.
+	 */
+	cost_usd?: number | null;
+	/** The one-time step the owner must do by hand. Empty means none. */
+	manual_setup?: string;
+	/** When and where this row's terms were last checked by hand. */
+	verified_note?: string;
 	pursued?: boolean;
 };
 
@@ -99,6 +118,11 @@ export type CodeTechEarning = {
 	refresh_hours?: number;
 	opportunities?: CodeTechOpportunity[];
 	/** Counts describe the leads in this snapshot, not the full ranked list. */
+	channel_count?: number;
+	asset_count?: number;
+	/** Rows needing a one-time signup or fee before they can earn anything. */
+	needs_setup_count?: number;
+	/** Pre-rename aliases; still written so an older build reads something true. */
 	demand_count?: number;
 	supply_count?: number;
 	priced_count?: number;
@@ -110,7 +134,9 @@ export type CodeTechEarning = {
 	strategy_playbook?: string[];
 	avoid_patterns?: string[];
 	monetization_patterns?: string[];
-	remote_service_niches?: string[];
+	product_shapes?: string[];
+	/** Platforms refused, and why -- so a dead one cannot return to the page. */
+	refused_channels?: { name?: string; why?: string }[];
 	reference_sources?: ReferenceSource[];
 	online_ai_brief?: OnlineAiBrief;
 };

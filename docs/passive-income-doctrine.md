@@ -95,6 +95,95 @@ second is a TODO.
 
 ---
 
+## Principle 2b — A page that ranks work is not a page that ranks income
+
+Principle 2's table is scored per *channel*. It does not, on its own, stop a
+module from ranking the wrong **kind of thing** — and one did, for months.
+
+`code_techs` rendered the dashboard's Leads page. It was built to answer *"who
+is paying for work right now"*, so it fetched remote contract postings from
+Himalayas and replies from the monthly Hacker News "Who is hiring" thread, and
+ranked them by recency, demand intent, and whether a rate was quoted. On
+2026-09-08 the live queue held:
+
+| Measure | Value |
+| --- | --- |
+| Leads shown | 18 |
+| Job postings (`demand`) | 17 |
+| Free tooling (`supply`) | 1 |
+| Top lead | a Product Engineer role at a marketing SaaS |
+| Also present | "College Admissions Counselor", "Verkäufer (w/m/d) Remote" |
+
+Every one of those is real, current, and correctly parsed. The module was
+working. **The owner reported the page as pointing the wrong way**, and was
+right: this is a passive-income system, and a freelance posting is the one
+thing on the table that can never be passive.
+
+Score it honestly on Principle 2 and it fails at row 2 — *needs no owner action
+per unit of income*. A contract pays because the owner does the work; the
+income stops the moment they stop. That is a job. It can be good, well-paid
+work and still be the wrong answer to the question this project exists to ask.
+
+The tell was in the scoring function, and it had been there all along:
+
+```python
+if any(word in text for word in ("passive income", "get rich", ...)):
+    penalty += 15
+```
+
+The module **docked 15 points for the phrase "passive income"** — lumping the
+project's own goal in with get-rich-quick spam. It was not mistuned. It was
+aimed at a different target, and every cycle it faithfully hit that target.
+
+The rules that came out of it:
+
+1. **State the income shape, not just the channel.** Before ranking anything,
+   say whether each row earns *while nobody works* or *because somebody works*.
+   `code_techs` now splits every lead into `channel` (where the product gets
+   paid) and `asset` (what builds or markets it), and weights `owner_action`
+   highest of the five components.
+2. **Detect sold-by-the-hour before any category default.** A lead tagged as a
+   channel but describing work "billed per client, per project" scored 0.85 on
+   `owner_action` purely from its category and beat a genuinely passive row.
+   A test caught it. Category is a guess; what the lead *says* outranks it.
+3. **Delete a wrong lane, do not demote it.** The obvious fix was to keep the
+   job feeds behind a filter, scored last. That keeps two fetchers alive, keeps
+   the wrong thing on screen, and leaves a later cycle a comment saying demand
+   leads are valuable — an invitation to rebalance it back up. Both fetchers
+   were removed and `TestFreelanceSourcesAreGone` guards the deletion.
+4. **A channel that takes money must be verified, never scraped.** The
+   replacement is a hand-checked static table, not a search. **Sellix was
+   seized and shut down in 2024 and is still recommended across the web as the
+   crypto storefront to use** — a scraped "best platform to sell with crypto"
+   list would have put a dead payment processor at the top of the page. Every
+   refusal is recorded in `_REFUSED_CHANNELS` with its reason.
+5. **A cost of $0.00 is a fact; a missing cost is not.** `value_usd` suppresses
+   zero to `None`, because a lead paying $0 has no published price. A *cost* of
+   $0.00 is the opposite — free to list is the most useful value on a
+   zero-budget page — so `_cost` and `_money` stay two functions with opposite
+   defaults. Collapsing them would make an unverified platform read as free.
+6. **A keyword scan that cannot read "no" reports a disclaimer as a charge.**
+   The cost check docked the one storefront that pays USDT to the owner's own
+   wallet, because its row honestly says **"no monthly fee"**. Before that,
+   `"per month"` had caught its note that it settles *twice a month*. A
+   substring is not a claim.
+
+The generalisation, and the reason this sits beside Principle 2 rather than
+inside it: **a module can pass every row of the channel table and still be
+answering a question nobody asked.** The table checks whether a channel can run
+unattended. It does not check that the thing being ranked is income at all.
+When a page has been "working correctly" for months and the owner still says it
+is not useful, suspect the question before the implementation.
+
+The corollary for what replaced it: the storefront rows all need **one manual
+signup, ever**. By Principle 2 that is a real cost and it is stated per row in
+`manual_setup` rather than hidden — but it is a one-time step, not a
+per-transaction one, which is exactly the distinction row 2 is drawing. A
+signup the owner does once and then earns from indefinitely is on the right
+side of that line; an hour of work per dollar is not.
+
+---
+
 ## Principle 3 — The wallet address in the artifact is the baseline channel
 
 Judged by Principle 2, an address printed in the published work wins on every
@@ -744,6 +833,8 @@ Principle 2.
 | Auto-posting affiliate content to social | — | — | **blocked** | **Refused.** Needs a policy change |
 | Scraped-lead cold email | — | — | **blocked** | **Refused.** Needs a policy change |
 | Trading, minting, yield farming | — | — | **blocked** | **Refused.** Not a content business |
+| Freelance / contract job postings | none | **every unit of income** | allowed | **Refused and removed 2026-09-08.** See Principle 2b |
+| Digital product on a crypto-settling storefront | none | one signup, ever | allowed | **Researched 2026-09-08.** `_PRODUCT_CHANNELS` in `code_techs.py`. Owner decision: needs one account |
 
 Every row that needs no new secret and no owner action is now built — and
 "built" has now twice meant "not actually reaching readers", so read that word

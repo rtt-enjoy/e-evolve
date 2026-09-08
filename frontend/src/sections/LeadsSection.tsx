@@ -3,9 +3,33 @@ import { useMemo, useState } from 'react';
 import { CopyButton } from '../components/CopyButton';
 import { Card, Disclosure, Empty, KeyValue, Pill, SectionHead, Subhead, Tile } from '../components/ui';
 import { buildOpportunityStats, leadSources, sortLeads, type LeadSort } from '../utils/dashboard';
-import { cleanTitle, formatDate, formatLeadValue, leadAge, scoreTone, sourceLabel, valueBasisLabel } from '../utils/format';
+import { cleanTitle, formatDate, leadAge, scoreTone, sourceLabel } from '../utils/format';
 import { useRoute } from '../utils/route';
 import type { CodeTechOpportunity, LeadKind, Status } from '../types/status';
+
+/**
+ * Fold the pre-rename `demand`/`supply` names onto `channel`/`asset`.
+ *
+ * `status.json` is committed, so a snapshot written before the rename is still
+ * what the page loads after a deploy. Without this the kind filter silently
+ * matches nothing for one cycle.
+ */
+function normalizeKind(kind: string | undefined): 'channel' | 'asset' {
+	return kind === 'asset' || kind === 'supply' ? 'asset' : 'channel';
+}
+
+/**
+ * Cost of a route, where `0` is real and means free to list.
+ *
+ * Deliberately not `formatLeadValue`, which renders an em dash for a missing
+ * *price*. A missing cost and a zero cost are different claims, and collapsing
+ * them would let an unverified platform look free.
+ */
+function formatCost(cost: number | null | undefined): string {
+	if (typeof cost !== 'number') return '—';
+	if (cost === 0) return 'Free';
+	return `$${cost.toFixed(2)}`;
+}
 
 export default function LeadsSection({ status }: { status: Status }) {
 	const route = useRoute();
@@ -41,10 +65,10 @@ function LeadList({ status, opportunities }: { status: Status; opportunities: Co
 	const visible = useMemo(() => {
 		const needle = query.trim().toLowerCase();
 		const filtered = opportunities.filter((lead) => {
-			if (kind !== 'all' && (lead.kind || 'demand') !== kind) return false;
+			if (kind !== 'all' && normalizeKind(lead.kind) !== kind) return false;
 			if (source !== 'all' && (lead.source || 'unknown') !== source) return false;
 			if (!needle) return true;
-			return [lead.title, lead.reason, lead.next_step, lead.source, lead.buyer, lead.value_note]
+			return [lead.title, lead.reason, lead.next_step, lead.source, lead.manual_setup, lead.verified_note]
 				.some((field) => (field || '').toLowerCase().includes(needle));
 		});
 		return sortLeads(filtered, sort);
@@ -55,7 +79,7 @@ function LeadList({ status, opportunities }: { status: Status; opportunities: Co
 			<SectionHead
 				title="Leads"
 				blurb={
-					`Live market signals and the free tooling to serve them. Refreshed every ${codeTech.refresh_hours || 6}h — last ${formatDate(codeTech.last_refresh_at)}.` +
+					`Routes to passive income from a digital product on a zero budget: where it gets paid, and what builds and markets it. Freelance postings are deliberately absent — income per hour of your time is a job, not passive income. Refreshed every ${codeTech.refresh_hours || 6}h — last ${formatDate(codeTech.last_refresh_at)}.` +
 					// Say so when the queue ranked more than this page carries,
 					// rather than letting the count quietly under-report.
 					(codeTech.ranked_total && codeTech.ranked_total > opportunities.length
@@ -67,22 +91,22 @@ function LeadList({ status, opportunities }: { status: Status; opportunities: Co
 			{/* No money aggregate here on purpose. See buildOpportunityStats. */}
 			<div className="tile-row">
 				<Tile
-					label="Leads tracked"
+					label="Routes tracked"
 					value={String(stats.total)}
-					detail={`${stats.demandCount} demand · ${stats.supplyCount} tooling`}
+					detail={`${stats.channelCount} channels · ${stats.assetCount} assets`}
 					tone="info"
 				/>
 				<Tile
-					label="Posted today"
-					value={String(stats.freshCount)}
-					detail="within the last 24h"
-					tone={stats.freshCount ? 'good' : 'warn'}
+					label="Free to start"
+					value={String(stats.freeCount)}
+					detail="no listing fee, cost published by the platform"
+					tone={stats.freeCount ? 'good' : 'neutral'}
 				/>
 				<Tile
-					label="With a stated price"
-					value={String(stats.withValue)}
-					detail="published by the source, not inferred"
-					tone={stats.withValue ? 'good' : 'neutral'}
+					label="Needs a one-time setup"
+					value={String(stats.needsSetupCount)}
+					detail="owner opens the account before it can earn"
+					tone={stats.needsSetupCount ? 'warn' : 'good'}
 				/>
 				<Tile label="Top score" value={String(stats.topScore)} detail="out of 100" tone={scoreTone(stats.topScore)} />
 			</div>
@@ -103,17 +127,17 @@ function LeadList({ status, opportunities }: { status: Status; opportunities: Co
 						<button type="button" className={kind === 'all' ? 'active' : ''} onClick={() => setKind('all')}>
 							all <em>{opportunities.length}</em>
 						</button>
-						<button type="button" className={kind === 'demand' ? 'active' : ''} onClick={() => setKind('demand')}>
-							demand <em>{stats.demandCount}</em>
+						<button type="button" className={kind === 'channel' ? 'active' : ''} onClick={() => setKind('channel')}>
+							gets paid <em>{stats.channelCount}</em>
 						</button>
-						<button type="button" className={kind === 'supply' ? 'active' : ''} onClick={() => setKind('supply')}>
-							tooling <em>{stats.supplyCount}</em>
+						<button type="button" className={kind === 'asset' ? 'active' : ''} onClick={() => setKind('asset')}>
+							build &amp; market <em>{stats.assetCount}</em>
 						</button>
 					</div>
 					<div className="segmented" role="group" aria-label="Sort leads">
 						<button type="button" className={sort === 'newest' ? 'active' : ''} onClick={() => setSort('newest')}>newest</button>
 						<button type="button" className={sort === 'score' ? 'active' : ''} onClick={() => setSort('score')}>score</button>
-						<button type="button" className={sort === 'value' ? 'active' : ''} onClick={() => setSort('value')}>price</button>
+						<button type="button" className={sort === 'cost' ? 'active' : ''} onClick={() => setSort('cost')}>cheapest</button>
 					</div>
 				</div>
 
@@ -139,21 +163,24 @@ function LeadList({ status, opportunities }: { status: Status; opportunities: Co
 					<div className="lead-table">
 						{visible.map((lead) => {
 							const index = opportunities.indexOf(lead);
-							const age = leadAge(lead.age_hours);
-							const price = formatLeadValue(lead);
+							const isChannel = normalizeKind(lead.kind) === 'channel';
 							return (
 								<a className="lead-row" href={`#/leads/${index}`} key={`${lead.url}-${index}`}>
-									{/* Age leads the row, because freshness is what was broken. */}
-									<span className={`lead-row-age tone-${age.tone}`}>{age.label}</span>
+									{/* Score leads the row: it ranks by how passive the income is. */}
+									<span className={`lead-row-age tone-${scoreTone(lead.score)}`}>{lead.score || 0}</span>
 									<span className="lead-row-body">
 										<strong>{cleanTitle(lead.title) || 'Untitled lead'}</strong>
 										<p>{lead.reason || 'No reason recorded.'}</p>
 									</span>
 									<span className="lead-row-meta">
-										{/* A price Pill only when one exists: an em dash is honest, "$0" is not. */}
-										{price !== '—' ? <Pill tone="good">{price}</Pill> : null}
-										<Pill tone={(lead.kind || 'demand') === 'demand' ? 'info' : 'neutral'}>
-											{(lead.kind || 'demand') === 'demand' ? 'demand' : 'tooling'}
+										{/* "Free" only when the platform published $0. An unknown
+										    cost renders nothing rather than implying free. */}
+										{lead.cost_usd === 0 ? <Pill tone="good">free</Pill> : null}
+										{typeof lead.cost_usd === 'number' && lead.cost_usd > 0 ? (
+											<Pill tone="warn">{formatCost(lead.cost_usd)}</Pill>
+										) : null}
+										<Pill tone={isChannel ? 'info' : 'neutral'}>
+											{isChannel ? 'gets paid' : 'build & market'}
 										</Pill>
 										<Pill tone="neutral">{sourceLabel(lead.source)}</Pill>
 										<Pill tone={scoreTone(lead.score)}>{lead.score || 0}</Pill>
@@ -174,8 +201,9 @@ function LeadList({ status, opportunities }: { status: Status; opportunities: Co
 
 function LeadDetail({ lead, index, total }: { lead: CodeTechOpportunity; index: number; total: number }) {
 	const age = leadAge(lead.age_hours);
-	const price = formatLeadValue(lead);
-	const isDemand = (lead.kind || 'demand') === 'demand';
+	const isChannel = normalizeKind(lead.kind) === 'channel';
+	const setup = (lead.manual_setup || '').trim();
+	const needsSetup = setup !== '' && !setup.toLowerCase().startsWith('none');
 	const parts = Object.entries(lead.score_parts || {});
 
 	return (
@@ -189,21 +217,32 @@ function LeadDetail({ lead, index, total }: { lead: CodeTechOpportunity; index: 
 			/>
 
 			<div className="tile-row">
-				{/* Never toned 'good' when unpriced -- green next to an em dash
-				    reads as a confirmed zero. */}
+				{/* Never toned 'good' when the cost is unknown -- green beside an
+				    em dash reads as a confirmed free, which is a claim. */}
 				<Tile
-					label="Stated price"
-					value={price}
-					detail={valueBasisLabel(lead.value_basis)}
-					tone={price === '—' ? 'neutral' : 'good'}
+					label="Cost to start"
+					value={formatCost(lead.cost_usd)}
+					detail={
+						lead.cost_usd === 0
+							? 'free to list'
+							: typeof lead.cost_usd === 'number'
+								? 'one-time, published by the platform'
+								: 'no cost published'
+					}
+					tone={lead.cost_usd === 0 ? 'good' : typeof lead.cost_usd === 'number' ? 'warn' : 'neutral'}
 				/>
-				<Tile label="Fit score" value={String(lead.score || 0)} detail="out of 100" tone={scoreTone(lead.score)} />
-				<Tile label="Posted" value={age.label} detail={isDemand ? 'buyer may still be looking' : 'last repo activity'} tone={age.tone} />
+				<Tile label="Passive score" value={String(lead.score || 0)} detail="out of 100" tone={scoreTone(lead.score)} />
+				<Tile
+					label="Owner setup"
+					value={needsSetup ? 'one-time' : 'none'}
+					detail={needsSetup ? 'before it can earn anything' : 'nothing to do'}
+					tone={needsSetup ? 'warn' : 'good'}
+				/>
 				<Tile
 					label="Kind"
-					value={isDemand ? 'demand' : 'tooling'}
-					detail={isDemand ? 'somebody is paying' : 'what you deliver with'}
-					tone={isDemand ? 'info' : 'neutral'}
+					value={isChannel ? 'gets paid' : 'build & market'}
+					detail={isChannel ? 'where money arrives' : 'what makes or promotes it'}
+					tone={isChannel ? 'info' : 'neutral'}
 				/>
 			</div>
 
@@ -230,15 +269,16 @@ function LeadDetail({ lead, index, total }: { lead: CodeTechOpportunity; index: 
 
 				<div className="stack">
 					<Card title="Lead facts">
-						{/* Price and provenance always travel together. */}
+						{/* Cost and its provenance always travel together, so a
+						    figure on this page can always be traced to who published it. */}
 						<KeyValue
 							rows={[
-								['Buyer', lead.buyer || 'not named'],
-								['Price', price],
-								['Price basis', valueBasisLabel(lead.value_basis)],
+								['Cost to start', formatCost(lead.cost_usd)],
+								['Owner must do', setup || 'nothing'],
 								['Score', `${lead.score || 0}/100`],
 								['Source', sourceLabel(lead.source)],
-								['Posted', lead.posted_at ? formatDate(lead.posted_at) : 'unknown'],
+								['Verified', lead.verified_note || 'not recorded'],
+								['Posted', lead.posted_at ? formatDate(lead.posted_at) : 'not applicable'],
 								['Seen by bot', lead.discovered_at ? formatDate(lead.discovered_at) : '—'],
 								['Link', lead.url ? <a href={lead.url} target="_blank" rel="noreferrer">open ↗</a> : '—'],
 							]}

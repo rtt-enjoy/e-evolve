@@ -28,29 +28,28 @@ _DEFAULT_CONFIG = {
 	# that is committed every hour. One cap would force a choice between a thin
 	# page and a repo that grows hourly, so there are two.
 	"max_items": 40,
-	"status_max_items": 18,
-	"prompt_top_n": 10,
+	"status_max_items": 16,
+	# Prompts are the expensive field (~1.3 KB each) and status.json is
+	# committed hourly. Lowered from 10 when the payload measured 36.7 KB
+	# against a 30 KB budget: the top rows are a stable, hand-checked table,
+	# so a prompt for each of the first six covers everything actionable.
+	"prompt_top_n": 6,
 	"min_score": 40,
-	"min_demand_share": 0.5,
-	"demand_max_age_hours": 72,
-	# The HN hiring post is a *monthly* thread, so its replies are up to ~30
-	# days old by design and the best of them quote a real hourly rate. Judging
-	# them by the 72h window built for a job feed would throw away the
-	# highest-intent leads on the page for being what they are.
-	"hn_hiring_max_age_hours": 744,
+	# Reserve half the page for channels -- rows where the product actually
+	# gets paid -- so plentiful free tooling cannot crowd them out.
+	"min_channel_share": 0.5,
 	"supply_max_age_days": 120,
-	"himalayas_pages": 3,
 	"reddit_backoff_seconds": 5,
 	"auto_pursue": False,
 	"pursue_score_threshold": 75,
 	"requirements": [
-		"Lead with free AI services and free AI APIs: no credit card, generous free tier, usable today.",
-		"Every suggestion must name the free service, its real limits, and one concrete way to earn with it.",
-		"Prefer easy money: something the owner can start in under 2 hours with no upfront spend.",
-		"Prefer repeatable offers over one-off tasks, and same-week payout over deferred upside.",
-		"State the earning path in plain language: who pays, for what, and roughly how much.",
-		"Skip anything needing paid infrastructure, approval queues, or an audience the owner lacks.",
-		"Do not count discovery or speculative upside as earnings."
+		"Every lead must move a digital product toward earning without the owner in the loop.",
+		"Rank by how little owner action each unit of income needs, not by headline upside.",
+		"Name where the money lands, and prefer stablecoin to the address this project already publishes.",
+		"State every cost and every manual setup step out loud; zero budget is the constraint.",
+		"Never suggest selling the owner's hours: a rate per hour is a job, not passive income.",
+		"Stay inside policy: no social posting, no trading, no minting, no cold outreach.",
+		"Do not count discovery, pipeline, or speculative upside as earnings. On-chain or nothing."
 	],
 	"free_ai_focus": [
 		"free-tier LLM APIs with no credit card requirement",
@@ -62,13 +61,16 @@ _DEFAULT_CONFIG = {
 		"free AI hosting, inference, and scheduled-compute tiers",
 		"open-weight models that run on free CPU/GPU allowances"
 	],
+	# How a *product* earns without the owner in the loop. Every one of these
+	# is a sale that can happen while nobody is working, which is the whole
+	# distinction from the service offers that used to be listed here.
 	"monetization_patterns": [
-		"Resell a free API as a tiny fixed-price service (transcribe, summarize, clean, convert).",
-		"Sell the setup, not the compute: charge to configure a free AI tool inside someone's workflow.",
-		"Bundle a free API into a one-page tool and charge a small one-time fee.",
-		"Offer a done-for-you batch job: send files, get results back, fixed price per batch.",
-		"Charge for the prompt library and workflow, and let the client bring their own free key.",
-		"Package a recurring report built on free-tier APIs as a low-cost monthly retainer."
+		"Ship the tool free and sell the upgrade: the free tier buys discovery the owner cannot.",
+		"One-time licence for a digital download, delivered by the storefront with no owner action.",
+		"Put the published receive address on the product page and in the README, so a user can pay with no platform at all.",
+		"Sell a template, preset, or asset pack built once and downloaded many times.",
+		"Charge for the paid tier of a tool whose free tier costs nothing per user to run.",
+		"List the same product on every zero-cost channel, since the artifact is already built."
 	],
 	"reference_sources": [
 		{
@@ -92,89 +94,66 @@ _DEFAULT_CONFIG = {
 			"takeaway": "No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model -- verify current limit."
 		}
 	],
-	"remote_service_niches": [
-		"AI prompt and workflow consulting",
-		"No-code or low-code automation setup",
-		"AI customer-support knowledge base cleanup",
-		"analytics dashboard and reporting automation",
-		"SEO/content operations systems",
-		"CRM, spreadsheet, and data import/export automation",
-		"developer productivity and CI maintenance retainers",
-		"async technical documentation fixes",
-		"productized audit/checklist services",
-		"micro-SaaS setup, migration, and operations help"
+	# Product shapes a solo developer can build and sell with no server and no
+	# per-user cost. These replaced a list of consulting niches: consulting is
+	# the owner's hours, which is the one thing this page must stop suggesting.
+	"product_shapes": [
+		"browser extension solving one specific annoyance",
+		"single-purpose desktop or CLI utility",
+		"static web tool that runs entirely client-side",
+		"template, preset, or asset pack for a tool people already use",
+		"developer library or plugin for an existing ecosystem",
+		"self-hostable script the buyer runs on their own machine",
+		"data set or reference compiled once and sold as a download"
 	],
 	# These are *repository* queries and they run against search/repositories.
 	# They used to be sent to search/issues, which ignores `in:readme` and
 	# `stars:` -- the same query string returned 12 junk issues there versus
 	# 511 real repositories here.
 	"github_searches": [
-		"free AI API list no credit card in:name,description,readme stars:>200",
-		"awesome free LLM API in:name,readme stars:>100",
-		"free tier AI services awesome list in:readme stars:>150",
-		"free OCR API python in:readme stars:>100",
-		"free speech to text API in:readme stars:>100",
-		"free image generation API wrapper in:readme stars:>100",
-		"free embeddings API tier in:readme stars:>50"
+		"awesome browser extensions in:name,readme stars:>200",
+		"chrome extension boilerplate manifest v3 in:name,readme stars:>200",
+		"indie hackers open source saas alternatives in:readme stars:>200",
+		"awesome self-hosted single file tool in:name,readme stars:>150",
+		"crypto payment button static site in:readme stars:>100",
+		"awesome digital products templates in:readme stars:>100",
+		"license key generator offline validation in:readme stars:>100"
 	],
-	# Contract-shaped terms in an HN "Who is hiring" reply. A reply that says
-	# none of these is a full-time posting, which this project cannot sell into.
-	"hn_contract_terms": [
-		"contract", "contractor", "freelance", "part-time", "part time"
-	],
-	# Himalayas returns every remote job on the site, so employment type or
-	# category has to narrow it or unrelated roles bury the technical ones.
-	"job_employment_types": ["Contractor", "Part Time", "Freelance"],
-	"job_categories": [
-		"Software Development", "Data Science", "Design", "Writing",
-		"Marketing", "Customer Support", "Product"
-	],
-	"deliverable_terms": [
-		"transcri", "ocr", "extract", "convert", "summari", "translat",
-		"cleanup", "clean up", "automat", "scrape", "scraper", "dashboard",
-		"report", "integration", "migration", "pipeline"
-	],
+	# What sells and how it gets paid, not who is hiring. These feed HN's
+	# Algolia search and, as a fallback, Reddit.
 	"community_searches": [
-		"free AI API no credit card",
-		"free LLM API free tier",
-		"best free AI API for",
-		"free tier AI service generous",
-		"free transcription API",
-		"free OCR API",
-		"free image generation API free",
-		"how I make money with AI free tools",
-		"side income AI automation no upfront cost",
-		"easiest way to make money with AI",
-		"charge clients for AI automation",
-		"productized AI service small",
-		"free API to build a paid tool",
-		"is there a free tool for"
+		"selling a chrome extension revenue",
+		"how much my browser extension makes",
+		"indie developer selling digital products revenue",
+		"accept crypto payments digital product",
+		"USDT payment for software licence",
+		"sold my side project first sale",
+		"open source project sponsorship income",
+		"pay what you want pricing results",
+		"freemium conversion rate indie",
+		"where to sell a small utility app"
 	],
+	# r/freelance and r/WorkOnline were dropped with the job feeds: both are
+	# about selling hours, which is what this page no longer suggests.
 	"reddit_subreddits": [
 		"SideProject",
 		"sideproject",
+		"indiehackers",
+		"microsaas",
 		"Entrepreneur",
-		"smallbusiness",
+		"chrome_extensions",
 		"SaaS",
-		"LocalLLaMA",
-		"artificial",
-		"automation",
-		"freelance",
-		"WorkOnline"
+		"opensource"
 	],
 	"reddit_searches": [
-		"free AI API",
-		"free LLM API no credit card",
-		"free tier AI service",
-		"free transcription API",
-		"free OCR API",
-		"make money with AI tools",
-		"easy side income automation",
-		"charge for AI automation setup",
-		"productized service AI",
-		"built a tool with free API",
-		"is there a free tool",
-		"how much to charge automation"
+		"sold my digital product",
+		"chrome extension revenue",
+		"accept crypto payment product",
+		"USDT payout platform",
+		"launched my tool first sale",
+		"pay what you want pricing",
+		"where to list my digital product",
+		"free tier paid upgrade conversion"
 	],
 	# Measured, not guessed: 10 sequential search.rss calls returned 1x200 and
 	# 9x429, and 2s spacing returned 0/5. Reddit blocks the IP, not the query,
@@ -182,33 +161,31 @@ _DEFAULT_CONFIG = {
 	# which is why the live page only ever showed r/SideProject.
 	"max_reddit_requests": 3,
 	"underserved_focus": [
-		"free AI APIs with real free tiers that most people have not heard of yet",
-		"boring conversions people pay for: audio to text, image to text, PDF to data",
-		"one-task tools that wrap a single free API and solve one annoyance well",
-		"AI setup help for non-technical owners who cannot configure a key themselves",
-		"batch jobs where the client sends files and gets clean output back",
-		"recurring reports assembled from free-tier APIs on a schedule",
-		"prompt libraries and workflows sold as a template, client brings their own free key",
-		"small-business tasks still done by hand that a free AI API removes entirely",
-		"niches where the buyer values the result and never asks what model produced it"
+		"storefronts that settle stablecoin straight to the seller's own wallet, no custodian",
+		"one-task tools that solve a single annoyance well enough to be worth paying for",
+		"products with zero marginal cost per user, so the free tier can stay free forever",
+		"channels that are free to list on and have no approval queue to fail",
+		"paying users who never open a storefront and would rather send stablecoin directly",
+		"distribution with real organic discovery, so reach does not need ad spend",
+		"products whose buyers are developers, since that is the audience already reached"
 	],
 	"strategy_playbook": [
-		"Search online for currently-free AI services first, then have the LLM turn them into concrete earning offers.",
-		"Sell the outcome, not the technology. Buyers pay for clean output, not for an API name.",
-		"Keep input cost at zero: free API, free hosting, free scheduler. Every dollar in is margin.",
-		"Prefer offers the owner can deliver the same day with no upfront spend.",
-		"Start with one narrow task and a fixed price. Expand scope only after the first payment.",
-		"Let the free tier set the batch size, and price per batch so limits are never a problem.",
-		"Reuse each delivery as a public example that brings the next buyer."
+		"Build the product once, then spend every later cycle on distribution rather than on more product.",
+		"Keep marginal cost per user at zero: client-side code, free hosting, free scheduler. Every dollar in is margin.",
+		"Put the receive path on the artifact itself -- product page, README, article footer -- not only on a storefront.",
+		"List on the free channels first; pay a listing fee only where discovery is worth it, and say what it cost.",
+		"Let the articles this bot already publishes do the marketing: the problem is the post, the product is the fix.",
+		"Price once and leave it. A price that needs renegotiating per buyer is a service in disguise.",
+		"Measure only what arrives on-chain. Listings, views and pipeline are not revenue."
 	],
 	"avoid_patterns": [
-		"Anything requiring paid infrastructure, credit-card-gated tiers, or upfront spend.",
-		"Services whose free tier is a short trial rather than an ongoing allowance.",
+		"Selling the owner's hours: freelance postings, contract work, retainers, consulting. Income per unit of work is a job.",
+		"Anything requiring paid infrastructure, a monthly fee, or a credit-card-gated tier.",
+		"Custodial payment processors that hold the money before the owner does, and anything demanding KYC to receive.",
+		"Platforms that are dead, seized, or unverifiable. Sellix was seized in 2024 and is still widely recommended.",
+		"Trading, minting, yield farming, staking and airdrops: refused in code, and not a product business.",
 		"Offers needing a large audience, ad spend, or a following the owner does not have.",
-		"Vague 'AI consulting' with no specific deliverable, fixed price, or named buyer.",
-		"Reselling an API in a way its terms of service forbid.",
-		"Bounty and prize hunting where many contributors compete for low-value visibility.",
-		"Crypto/NFT hype work and anything promising passive income without delivery."
+		"Anything promising passive income without a product that delivers something."
 	]
 }
 
@@ -220,63 +197,211 @@ _DEFAULT_CONFIG = {
 # redaction exemption to expose the receive address inside research notes for a
 # channel the bot may not use. Removed 2026-09-08 by owner decision.
 
+# A lead is one of two things. This module used to answer "who is paying for
+# work right now" -- job postings -- and that is the wrong question for this
+# project. Selling the owner's hours fails Principle 2 row 2 outright: income
+# per unit needs owner action, so it is a job, not passive income. The live
+# queue was 17 job postings to 1 tooling lead, including "College Admissions
+# Counselor", and the owner reported the page as pointing the wrong way.
+#
+# So the two kinds are now:
+#   channel -- a place a digital product can be listed and paid for, ideally
+#              in crypto to the address this project already publishes. Earns
+#              while the owner sleeps, which is the entire point.
+#   asset   -- free tooling or reach to build and market that product with.
+#
+# The old names are kept as aliases below because `status.json` is committed
+# and the dashboard reads it; a rename with no alias blanks the live page for
+# one cycle.
+_CHANNEL = "channel"
+_ASSET = "asset"
+# Back-compat: a snapshot written before this change carries these.
+_DEMAND = _CHANNEL
+_SUPPLY = _ASSET
+
+# Verified crypto-settling storefronts for a digital product, checked against
+# each platform's own pages on 2026-09-08. This is a *static, curated* table on
+# purpose: a storefront is a place the owner lists a product once, and it does
+# not change hourly the way a job feed does, so fetching it every cycle would
+# spend requests to re-derive a constant.
+#
+# It is curated rather than searched for a sharper reason too: **Sellix was
+# seized and shut down in 2024** while still being recommended across the web
+# as the go-to crypto storefront. A scraped "best platform to sell with crypto"
+# list would have put a dead, seized payment processor at the top of the
+# owner's page. A channel that takes money is not a lead to be guessed at.
+#
+# `manual_setup` is the honest half. Every one of these needs the owner to open
+# an account by hand -- that is a Principle 2 row-1/row-2 cost and it is stated
+# per row instead of buried. `cost_usd` is a real published figure or 0.0; it
+# is never estimated (Principle 4).
+_PRODUCT_CHANNELS = [
+	{
+		"title": "Getly — sell a digital product, settle USDT on Tron to your own wallet",
+		"url": "https://www.getly.store/sell/crypto",
+		"source": "channel-table",
+		"kind": _CHANNEL,
+		"body": (
+			"Digital-goods storefront with native stablecoin payouts. Buyers pay by card "
+			"(Stripe) or crypto; the seller is paid out in USDT/USDC. Payouts go directly "
+			"to your own wallet address -- no KYC for crypto settlement, no monthly fee. "
+			"Tron (TRC-20) USDT is supported, which is the same network and asset this "
+			"project already publishes a receive address for, so a sale lands in the "
+			"wallet the dashboard already reads. Minimum payout is $15 on Tron ($5 on BNB "
+			"Smart Chain) and the network fee (~$0.50-1 on Tron) comes out of the payout. "
+			"Settlement is twice a month, not per sale."
+		),
+		"labels": ["storefront", "usdt", "tron", "no-kyc", "own-wallet", "digital-product"],
+		"cost_usd": 0.0,
+		"manual_setup": "Owner signs up, adds the Tron receive address, and uploads the product once.",
+		"verified_note": "Fees, networks, no-KYC and own-wallet payout confirmed on getly.store 2026-09-08.",
+	},
+	{
+		"title": "itch.io — free to publish, you set the platform cut (0-100%)",
+		"url": "https://itch.io/docs/creators/faq",
+		"source": "channel-table",
+		"kind": _CHANNEL,
+		"body": (
+			"Free to upload, no approval queue and no upfront fee, and it lists tools and "
+			"assets rather than only games. Open revenue sharing lets the seller choose the "
+			"platform's cut, default around 10%. Pay-what-you-want pricing is supported and "
+			"is reported as the highest-earning model there. Payment is fiat, so this is a "
+			"reach-and-revenue channel rather than a crypto one -- the crypto leg stays the "
+			"wallet footer this project already ships."
+		),
+		"labels": ["storefront", "free-to-publish", "pay-what-you-want", "no-approval"],
+		"cost_usd": 0.0,
+		"manual_setup": "Owner creates an account and uploads the product; payment details for fiat payout.",
+		"verified_note": "Free publishing and open revenue share confirmed on itch.io 2026-09-08.",
+	},
+	{
+		"title": "Chrome Web Store — one-time $5, covers up to 20 extensions",
+		"url": "https://developer.chrome.com/docs/webstore/register",
+		"source": "channel-table",
+		"kind": _CHANNEL,
+		"body": (
+			"For a browser extension this is the distribution channel with real organic "
+			"discovery. The developer registration fee is a one-time $5 per account, with "
+			"no annual renewal and no per-extension fee, and it covers up to 20 extensions. "
+			"It is stated here rather than hidden because it is the only non-zero cost on "
+			"this table: the store itself takes no cut of a free extension, so monetisation "
+			"is the wallet ask or a paid upgrade sold through a storefront row above."
+		),
+		"labels": ["distribution", "browser-extension", "one-time-fee", "discovery"],
+		"cost_usd": 5.0,
+		"manual_setup": "Owner pays the one-time $5 registration and submits the extension for review.",
+		"verified_note": "One-time $5, no renewal, 20-extension limit confirmed on developer.chrome.com 2026-09-08.",
+	},
+	{
+		"title": "Wallet ask on the product page and in every article (already live)",
+		"url": "",
+		"source": "channel-table",
+		"kind": _CHANNEL,
+		"body": (
+			"The channel that needs no account at all, and the only one already running: "
+			"the validated receive address that bot/earning/payout.py appends to every "
+			"published post. For a digital product the same address belongs on the product "
+			"page and in the README, so a user who never opens a storefront can still pay. "
+			"Scores top marks on every Principle 2 row -- no new secret, no owner action "
+			"per unit, within policy, verifiable on-chain, reuses output already produced."
+		),
+		"labels": ["wallet", "usdt", "tron", "no-account", "already-live"],
+		"cost_usd": 0.0,
+		"manual_setup": "None. Already publishing.",
+		"verified_note": "Live since 2026-09-04; coverage observed by receipt_check each cycle.",
+	},
+]
+
+# Recorded refusals, so a later cycle does not re-derive them and so a dead
+# platform cannot come back onto the page.
+_REFUSED_CHANNELS = [
+	{
+		"name": "Sellix",
+		"why": "Seized and shut down in 2024. Still widely recommended as the crypto storefront, which is exactly why it is written down here as refused.",
+	},
+	{
+		"name": "Gumroad (for crypto)",
+		"why": "Does not natively accept crypto and pays out USD via Stripe only. Fine as a fiat storefront; it is not a crypto receive path, and mrr_ideas should not imply it is.",
+	},
+	{
+		"name": "Buy Me a Coffee / Ko-fi (main platforms)",
+		"why": "No native stablecoin field for a supporter's own wallet. Ko-fi Web3 is a separate product on BEP-20 only, so the wallet footer already covers this better.",
+	},
+	{
+		"name": "Any custodial crypto payment processor",
+		"why": "Holds the money before the owner does. The published Tron address is non-custodial and already works; adding a custodian adds KYC risk for no gain.",
+	},
+]
+
 _LOCAL_LEADS = [
 	{
-		"title": "Meeting and podcast transcription with a free speech-to-text API",
+		"title": "Ship the product free, sell the upgrade, ask in the README",
 		"url": "",
 		"source": "local-playbook",
-		"body": "Free tiers from Groq Whisper, Deepgram, and AssemblyAI transcribe hours of audio at no cost. Sell a fixed price per hour of audio: clean transcript, speaker labels, and a short summary returned the same day. Buyers are podcasters, coaches, and small agencies who currently type it themselves.",
-		"labels": ["free-ai-api", "speech-to-text", "easy-money", "same-day"]
+		"kind": _CHANNEL,
+		"body": (
+			"A free tool with a paid upgrade earns while nobody is working. The free tier "
+			"does the discovery the owner cannot afford to buy, the upgrade is the price, "
+			"and the wallet address in the README and on the product page takes money from "
+			"users who never open a storefront. No per-sale owner action, so it passes "
+			"Principle 2 row 2."
+		),
+		"labels": ["digital-product", "freemium", "wallet", "no-owner-action"],
 	},
 	{
-		"title": "Scanned document and receipt data extraction with a free OCR API",
+		"title": "One product, listed on every free channel at once",
 		"url": "",
 		"source": "local-playbook",
-		"body": "Free OCR tiers plus a free vision LLM turn scans, receipts, and invoices into a clean spreadsheet. Charge per batch of pages. Bookkeepers and small shops pay for this because the alternative is manual retyping.",
-		"labels": ["free-ai-api", "ocr", "batch-job", "easy-money"]
+		"kind": _CHANNEL,
+		"body": (
+			"The same digital product listed on each zero-cost storefront multiplies reach "
+			"without multiplying work, because the artifact is already built. Reuse of "
+			"existing output is Principle 2 row 5. The cost is one manual signup per "
+			"channel, which is a one-time step rather than a per-sale one."
+		),
+		"labels": ["digital-product", "distribution", "reuse", "one-time-setup"],
 	},
 	{
-		"title": "Free-tier AI setup service for non-technical business owners",
+		"title": "Write the article that the product is the answer to",
 		"url": "",
 		"source": "local-playbook",
-		"body": "Most owners cannot get an API key, pick a model, or write a prompt. Charge a flat fee to configure one free AI tool inside the workflow they already use, hand over a short prompt library, and let them keep the free key. Zero input cost, all the value is in the setup.",
-		"labels": ["free-ai-api", "setup-service", "no-cost", "repeatable"]
+		"kind": _ASSET,
+		"body": (
+			"This bot already publishes to dev.to daily and measures which shapes earn "
+			"engagement -- problem-workaround outperforms build-tutorial by roughly 25x on "
+			"this account. An article about the problem, where the product is the fix and "
+			"the footer is the ask, is marketing that runs on infrastructure already paid "
+			"for. It needs no new secret and no owner action."
+		),
+		"labels": ["reach", "devto", "already-running", "content-marketing"],
 	},
 	{
-		"title": "Product description and listing generation on a free LLM tier",
+		"title": "Free-tier stack so the product costs nothing to run",
 		"url": "",
 		"source": "local-playbook",
-		"body": "Free tiers from Groq, Gemini, and OpenRouter generate hundreds of listings per day at no cost. Sell per-batch copy for Etsy, Shopify, and marketplace sellers who have inventory but no time to write. Price per 50 listings.",
-		"labels": ["free-ai-api", "content", "batch-job", "easy-money"]
+		"kind": _ASSET,
+		"body": (
+			"A product that costs nothing per user can stay free at the top of the funnel "
+			"forever. Client-side work needs no server at all; GitHub Pages hosts a static "
+			"page and GitHub Actions runs scheduled work, both on the free tier this project "
+			"already runs on. Every dollar in is margin because there is no dollar out."
+		),
+		"labels": ["free-stack", "zero-budget", "no-server", "margin"],
 	},
 	{
-		"title": "Recurring AI summary report built on free scheduled compute",
+		"title": "Open-source the tool and take sponsorship on the repo",
 		"url": "",
 		"source": "local-playbook",
-		"body": "GitHub Actions plus a free LLM tier produces a weekly digest of competitor pricing, review sentiment, or industry news. Sell it as a low-cost monthly retainer. The whole stack runs on free allowances, so margin is near total.",
-		"labels": ["free-ai-api", "retainer", "recurring", "free-compute"]
+		"kind": _ASSET,
+		"body": (
+			"A public repository is discovery that keeps working after it is published, and "
+			"the wallet address in the README is a receive path that needs no platform at "
+			"all. GitHub Sponsors is the fiat version and needs the owner to enable it by "
+			"hand once; the address needs nothing. Recorded as an asset rather than a "
+			"channel because sponsorship income is not a product sale."
+		),
+		"labels": ["open-source", "discovery", "wallet", "sponsors"],
 	},
-	{
-		"title": "Spreadsheet and CSV cleanup with a free LLM",
-		"url": "",
-		"source": "local-playbook",
-		"body": "Messy exports need categorizing, deduping, and normalizing. A free LLM tier handles this in bulk. Charge per file. Buyers are small businesses migrating CRMs or preparing data for an accountant.",
-		"labels": ["free-ai-api", "data-cleanup", "batch-job", "easy-money"]
-	},
-	{
-		"title": "Image background removal and product photo cleanup on free tiers",
-		"url": "",
-		"source": "local-playbook",
-		"body": "Free background-removal and image APIs clean up product photos at no cost. Sell per-image or per-batch to marketplace sellers who need consistent white-background shots.",
-		"labels": ["free-ai-api", "image", "batch-job", "easy-money"]
-	},
-	{
-		"title": "Translation and localization batches on a free API tier",
-		"url": "",
-		"source": "local-playbook",
-		"body": "Free translation and LLM tiers localize listings, menus, and help docs. Charge per thousand words. Small exporters and local restaurants need this and do not want a full agency.",
-		"labels": ["free-ai-api", "translation", "batch-job"]
-	}
 ]
 
 _GITHUB_MAX_PER_MIN = 10
@@ -304,12 +429,6 @@ _PERIOD_LABELS = {
 	"monthly": "/mo", "annual": "/yr", "yearly": "/yr",
 }
 
-# A lead is one of two things, and conflating them is what made the page
-# useless: "demand" means somebody is paying for work right now, "supply"
-# means free tooling to deliver that work with. GitHub answers the second
-# question well and the first one badly.
-_DEMAND = "demand"
-_SUPPLY = "supply"
 
 
 @dataclass
@@ -338,6 +457,13 @@ class Opportunity:
 	reason: str
 	next_step: str
 	codex_prompt: str
+	# What the owner must pay and do by hand. Both are Principle 2 costs, and
+	# both are stated per lead rather than left for the owner to discover on
+	# the signup page. `cost_usd` is a published figure or None -- never an
+	# estimate, same rule as `value_usd`.
+	cost_usd: float | None = None
+	manual_setup: str = ""
+	verified_note: str = ""
 	pursued: bool = False
 
 def run(llm: Any, status: dict[str, Any]) -> list[dict]:
@@ -357,7 +483,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	max_items = max(1, int(cfg.get("max_items", 40) or 40))
 	status_max_items = max(1, int(cfg.get("status_max_items", max_items) or max_items))
 	min_score = max(0, int(cfg.get("min_score", 40) or 40))
-	raw = _fetch_online_leads(cfg) or list(_LOCAL_LEADS)
+	raw = _fetch_online_leads(cfg)
 	opportunities = _rank(raw, cfg, max_items=max_items, min_score=min_score)
 
 	pursued_count = 0
@@ -369,8 +495,16 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	# page cannot back up -- the same "field reports on more than it covers"
 	# problem `receipt_check` exists to catch. `ranked_total` carries the rest.
 	shown = opportunities[:status_max_items]
-	demand = sum(1 for op in shown if op.kind == _DEMAND)
+	channels = sum(1 for op in shown if op.kind == _CHANNEL)
 	priced = sum(1 for op in shown if op.value_basis != "none")
+	# Rows that need the owner to open an account or pay a fee before they can
+	# earn anything. Stated as a count because it is the honest cost of this
+	# page: a channel is not live until the owner has done its one-time step.
+	needs_setup = sum(
+		1 for op in shown
+		if str(getattr(op, "manual_setup", "")).strip()
+		and not str(getattr(op, "manual_setup", "")).strip().lower().startswith("none")
+	)
 	state.update({
 		"enabled": True,
 		"last_refresh_at": now.isoformat(),
@@ -379,13 +513,19 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		# The report may be long; the snapshot is committed hourly, so it is
 		# the one that gets trimmed.
 		"opportunities": [op.__dict__ for op in shown],
-		"demand_count": demand,
-		"supply_count": len(shown) - demand,
+		"channel_count": channels,
+		"asset_count": len(shown) - channels,
+		# Old names, kept so a dashboard build that has not shipped yet reads
+		# something true rather than blanking the page for a cycle.
+		"demand_count": channels,
+		"supply_count": len(shown) - channels,
 		"priced_count": priced,
+		"needs_setup_count": needs_setup,
+		"refused_channels": [dict(x) for x in _REFUSED_CHANNELS],
 		"ranked_total": len(opportunities),
 		"requirements": _clean_list(cfg.get("requirements", [])),
 		"reference_sources": _reference_sources(cfg),
-		"remote_service_niches": _clean_list(cfg.get("remote_service_niches", [])),
+		"product_shapes": _clean_list(cfg.get("product_shapes", [])),
 		"free_ai_focus": _clean_list(cfg.get("free_ai_focus", [])),
 		"monetization_patterns": _clean_list(cfg.get("monetization_patterns", [])),
 		"online_ai_brief": _online_ai_brief(llm, raw, cfg),
@@ -485,7 +625,7 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 					"title": str(item.get("full_name") or ""),
 					"url": str(item.get("html_url") or ""),
 					"source": "github",
-					"kind": _SUPPLY,
+					"kind": _ASSET,
 					"body": str(item.get("description") or ""),
 					"labels": topics,
 					"posted_at": pushed,
@@ -499,174 +639,41 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 def _fetch_online_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 	"""Fetch public, read-only leads from free, keyless sources.
 
-    Ordered demand-first so that if a later source fails, what survives is
-    still market signal rather than a page of tooling.
+    **The job feeds are gone, and their removal is the point of this module's
+    redirect.** ``_fetch_remote_job_leads`` (Himalayas) and
+    ``_fetch_hn_hiring_leads`` (the monthly HN "Who is hiring" thread) were the
+    two biggest suppliers here, and they supplied the wrong thing: contract and
+    part-time postings. Selling the owner's hours is not passive income -- it
+    fails Principle 2 row 2, because every unit of income needs the owner to do
+    the work -- and the live queue had become 17 job postings to 1 tooling lead,
+    among them "College Admissions Counselor" and a German retail role.
 
-    Two sources were probed and refused, recorded here so a later cycle does
-    not re-derive them: **Jobicy** is fresh but publishes no salary field at
-    all, and **RemoteOK** had 1 of 100 jobs posted within three days (the
-    staleness this module exists to fix) and its terms require a permanent
-    follow-backlink on the consuming page.
+    Deleted rather than demoted behind a filter: a lane that scores below every
+    other lead still occupies the page, still costs two HTTP fetchers to
+    maintain, and still invites a later cycle to "rebalance" it back up. The
+    research on those two sources is kept in the doctrine so it is not
+    re-derived, and ``hn_contract_terms`` / ``job_employment_types`` are gone
+    from the config with them.
+
+    What is left answers the two questions that matter for a product business:
+    where can it be listed and paid for (channels, from the verified static
+    table -- see ``_PRODUCT_CHANNELS`` for why that one is not fetched), and
+    what free tooling and reach can build and market it (assets).
+
+    Two demand sources were probed and refused before this redirect, recorded
+    so a later cycle does not re-derive them: **Jobicy** publishes no salary
+    field, and **RemoteOK** had 1 of 100 jobs posted within three days and its
+    terms require a permanent follow-backlink. Both are moot now.
     """
-	leads: list[dict[str, Any]] = []
-	leads.extend(_fetch_remote_job_leads(cfg))
-	leads.extend(_fetch_hn_hiring_leads(cfg))
+	# Both curated tables are always present. `_LOCAL_LEADS` used to be a
+	# fallback for "the fetchers returned nothing", but the asset rows are not
+	# a substitute for market data -- they are how the product gets built and
+	# marketed, so a page without them is missing half the answer.
+	leads: list[dict[str, Any]] = list(_PRODUCT_CHANNELS) + list(_LOCAL_LEADS)
 	leads.extend(_fetch_hn_leads(cfg))
 	leads.extend(_fetch_reddit_leads(cfg))
 	leads.extend(_fetch_github_leads(cfg))
 	return _dedupe(leads)
-
-def _fetch_remote_job_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
-	"""Remote contract postings from Himalayas -- keyless, and genuinely current.
-
-    This is the fix for "too old": every sampled job was posted within 24h,
-    some minutes before the fetch. It is also the only source with a
-    *structured* salary field, so it is where an honest `value_usd` can come
-    from at all (see `_lead_value`).
-    """
-	leads: list[dict[str, Any]] = []
-	pages = max(1, int(cfg.get("himalayas_pages", 3) or 3))
-	max_age_hours = max(1, int(cfg.get("demand_max_age_hours", 72) or 72))
-	cutoff = datetime.now(timezone.utc) - timedelta(hours=max_age_hours)
-	wanted_types = {str(t).lower() for t in cfg.get("job_employment_types", [])}
-	wanted_cats = {str(c).lower() for c in cfg.get("job_categories", [])}
-	headers = {"User-Agent": "e-evolve-code-techs", "Accept": "application/json"}
-	cursor = ""
-
-	for _ in range(pages):
-		params: dict[str, Any] = {"limit": 50}
-		if cursor:
-			params["cursor"] = cursor
-		try:
-			resp = requests.get(
-				"https://himalayas.app/jobs/api",
-				params=params,
-				headers=headers,
-				timeout=25,
-			)
-			if resp.status_code in (403, 429):
-				log.warning("[code_techs] Himalayas skipped (%s)", resp.status_code)
-				return leads
-			resp.raise_for_status()
-			payload = resp.json()
-		except Exception as exc:
-			log.warning("[code_techs] Himalayas fetch failed: %s", exc)
-			return leads
-
-		jobs = payload.get("jobs") or []
-		if not jobs:
-			break
-		for job in jobs:
-			stamp = parse_dt(job.get("pubDate"))
-			if stamp and stamp < cutoff:
-				continue
-			emp = str(job.get("employmentType") or "")
-			cats = [str(c) for c in (job.get("parentCategories") or [])]
-			# Himalayas lists every remote job on the site. Without this the
-			# technical postings are buried under unrelated roles.
-			type_match = emp.lower() in wanted_types
-			cat_match = any(c.lower() in wanted_cats for c in cats)
-			if wanted_types and wanted_cats and not (type_match or cat_match):
-				continue
-			company = str(job.get("companyName") or "")
-			title = str(job.get("title") or "")
-			leads.append({
-				"title": f"{title} - {company}" if company else title,
-				"url": str(job.get("applicationLink") or job.get("guid") or ""),
-				"source": "himalayas",
-				"kind": _DEMAND,
-				"body": strip_html(str(job.get("excerpt") or job.get("description") or "")),
-				"labels": [c.lower() for c in cats] + ([emp.lower()] if emp else []),
-				"posted_at": job.get("pubDate"),
-				"buyer": company,
-				"employment_type": emp,
-				"seniority": str(job.get("seniority") or ""),
-				"min_salary": job.get("minSalary"),
-				"max_salary": job.get("maxSalary"),
-				"salary_period": str(job.get("salaryPeriod") or ""),
-				"currency": str(job.get("currency") or ""),
-			})
-		cursor = str(payload.get("nextCursor") or "")
-		if not cursor:
-			break
-	return leads
-
-def _fetch_hn_hiring_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
-	"""Contract offers inside the monthly HN "Who is hiring" thread.
-
-    The highest-intent free source available: a live thread carried 242 replies
-    of which 26 offered contract, freelance or part-time work, some quoting a
-    real hourly rate. Two requests total, both keyless.
-
-    The thread is found by ``author_whoishiring`` rather than by title. The
-    title query also matches unrelated "Show HN: I filtered Who is Hiring..."
-    posts; the account name is the reliable selector. An empty result is a
-    normal outcome here, never an error -- if HN ever renames that account
-    this source simply yields nothing.
-    """
-	headers = {"User-Agent": "e-evolve-code-techs", "Accept": "application/json"}
-	terms = [str(t).lower() for t in cfg.get("hn_contract_terms", []) if str(t).strip()]
-	if not terms:
-		return []
-	try:
-		resp = requests.get(
-			"https://hn.algolia.com/api/v1/search_by_date",
-			params={"tags": "story,author_whoishiring", "hitsPerPage": 5},
-			headers=headers,
-			timeout=20,
-		)
-		resp.raise_for_status()
-		hits = [h for h in resp.json().get("hits", []) if "hiring" in str(h.get("title") or "").lower()]
-		# "Who wants to be hired?" is posted by the same account in the same
-		# hour; those replies are people seeking work, not buyers.
-		hits = [h for h in hits if "wants to be hired" not in str(h.get("title") or "").lower()]
-		if not hits:
-			log.info("[code_techs] no HN hiring thread found this cycle")
-			return []
-		thread_id = str(hits[0].get("objectID") or "")
-		if not thread_id:
-			return []
-		item = requests.get(
-			f"https://hn.algolia.com/api/v1/items/{thread_id}",
-			headers=headers,
-			timeout=30,
-		)
-		item.raise_for_status()
-		children = item.json().get("children") or []
-	except Exception as exc:
-		log.warning("[code_techs] HN hiring thread fetch failed: %s", exc)
-		return []
-
-	max_age_hours = max(1, int(cfg.get("hn_hiring_max_age_hours", 744) or 744))
-	cutoff = datetime.now(timezone.utc) - timedelta(hours=max_age_hours)
-	leads: list[dict[str, Any]] = []
-	for child in children:
-		raw = str(child.get("text") or "")
-		if not raw:
-			continue
-		stamp = parse_dt(child.get("created_at"))
-		if stamp and stamp < cutoff:
-			continue
-		body = strip_html(raw)
-		if not any(term in body.lower() for term in terms):
-			continue
-		# HN hiring replies open with "Company | Role | REMOTE | Contract",
-		# so the first segment is the buyer and the head is the headline.
-		head = body.split("\n")[0]
-		buyer = head.split("|")[0].strip()[:80]
-		child_id = str(child.get("id") or "")
-		leads.append({
-			"title": head[:180] or "Hacker News contract offer",
-			"url": f"https://news.ycombinator.com/item?id={child_id}" if child_id else "",
-			"source": "hn-hiring",
-			"kind": _DEMAND,
-			"body": body,
-			"labels": ["hn-hiring", "contract"],
-			"posted_at": child.get("created_at"),
-			"buyer": buyer,
-			"allow_rate_extraction": True,
-		})
-	return leads
 
 def _fetch_hn_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 	leads: list[dict[str, Any]] = []
@@ -704,9 +711,13 @@ def _fetch_hn_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 					"title": title,
 					"url": url,
 					"source": "hacker-news",
-					"kind": _DEMAND,
+					# An HN thread is evidence about how products get sold and
+					# paid for; it is not itself a place to get paid, so it is
+					# an asset. Mislabelling it as a channel would tell the
+					# owner to "list the product" on a discussion thread.
+					"kind": _ASSET,
 					"body": strip_html(str(body)),
-					"labels": ["community-request", "free-api"],
+					"labels": ["community", "market-evidence"],
 					"posted_at": item.get("created_at"),
 				})
 		except Exception as exc:
@@ -780,9 +791,10 @@ def _parse_reddit_rss(feed_text: str, subreddit: str) -> list[dict[str, Any]]:
 			"title": title,
 			"url": url,
 			"source": f"reddit:r/{subreddit}",
-			"kind": _DEMAND,
+			# Same reasoning as the HN rows: market evidence, not a till.
+			"kind": _ASSET,
 			"body": strip_html(body),
-			"labels": ["reddit", "community-request", "free-rss"],
+			"labels": ["reddit", "community", "market-evidence"],
 			"posted_at": xml_text(entry, "updated") or xml_text(entry, "published"),
 			"buyer": f"r/{subreddit}",
 		})
@@ -811,10 +823,12 @@ def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_
 		body = str(lead.get("body", "")).strip()
 		labels = [str(x).lower() for x in lead.get("labels", [])]
 		text = " ".join([title, body, " ".join(labels)]).lower()
-		is_local = lead.get("source") == "local-playbook"
+		# Curated rows are written by hand, not fetched, so they are never
+		# filtered out by a score threshold tuned for feed noise.
+		is_local = lead.get("source") in ("local-playbook", "channel-table")
 		# A playbook entry is a written-down offer, not a market signal: it has
 		# no timestamp and must never carry a price.
-		kind = str(lead.get("kind") or (_SUPPLY if is_local else _DEMAND))
+		kind = str(lead.get("kind") or (_ASSET if is_local else _CHANNEL))
 
 		posted = parse_dt(lead.get("posted_at"))
 		age_hours = round((now - posted).total_seconds() / 3600, 1) if posted else None
@@ -843,13 +857,16 @@ def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_
 			reason=reason,
 			next_step=next_step,
 			codex_prompt="",
+			cost_usd=_cost(lead.get("cost_usd")),
+			manual_setup=str(lead.get("manual_setup") or "")[:200],
+			verified_note=str(lead.get("verified_note") or "")[:200],
 			pursued=False
 		))
 
 	# Sort by score, then freshness. Value is deliberately not a sort key here:
 	# most leads have none, so it would rank on its own absence.
 	ranked.sort(key=lambda op: (op.score, -(op.age_hours if op.age_hours is not None else 1e9)), reverse=True)
-	selected = _apply_demand_share(ranked, cfg, max_items)
+	selected = _apply_channel_share(ranked, cfg, max_items)
 
 	# Prompts are the expensive field (~1.7 KB each) and status.json is
 	# committed hourly, so only the leads worth acting on carry one.
@@ -858,17 +875,23 @@ def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_
 			op.codex_prompt = _codex_prompt(op, cfg)
 	return selected
 
-def _apply_demand_share(
+def _apply_channel_share(
 	ranked: list[Opportunity], cfg: dict[str, Any], max_items: int
 ) -> list[Opportunity]:
-	"""Reserve part of the page for demand leads.
+	"""Reserve part of the page for channels -- places the product gets paid.
 
-    Supply leads are plentiful and score well on tooling signals, so without a
-    floor a good crop of repositories can crowd out every posting where
-    somebody is actually paying -- the exact failure the owner reported.
+    Assets are plentiful: GitHub, HN and Reddit return tooling all day, and it
+    scores well on the free-stack components. Without a floor, a good crop of
+    repositories crowds out every row that actually takes money, which is the
+    same shape as the failure the owner reported -- a page full of things that
+    are adjacent to income rather than income.
+
+    Reads ``min_channel_share``, falling back to the old ``min_demand_share``
+    so an owner's existing config keeps working after the rename.
     """
-	share = float(cfg.get("min_demand_share", 0.5) or 0.0)
-	demand = [op for op in ranked if op.kind == _DEMAND]
+	share = cfg.get("min_channel_share", cfg.get("min_demand_share", 0.5))
+	share = float(share or 0.0)
+	demand = [op for op in ranked if op.kind == _CHANNEL]
 	if share <= 0 or not demand:
 		return ranked[:max_items]
 	reserved = min(len(demand), int(max_items * min(1.0, share)))
@@ -903,22 +926,29 @@ def _reference_sources(cfg: dict[str, Any]) -> list[dict[str, str]]:
 	return out
 
 def _online_ai_brief(llm: Any, leads: list[dict[str, Any]], cfg: dict[str, Any]) -> dict[str, Any]:
-	"""Use the configured research LLM to synthesize online lead signals."""
+	"""Ask the research LLM how to sell a digital product on a zero budget.
+
+    The verified channel table (``_PRODUCT_CHANNELS``) is the part of this page
+    that does not depend on a model being available or honest. This brief adds
+    the product angle around it, and degrades to the table alone when the LLM
+    is missing or fails -- the same shape as ``mrr_ideas``, where the
+    deterministic half is the trustworthy half.
+    """
 	if llm is None:
 		return {
-			"summary": "No LLM client was available; queue used online searches plus local fallback heuristics.",
+			"summary": "No LLM client was available; the queue used the verified channel table plus local scoring.",
 			"owner_actions": [
-				"Review the ranked leads manually before doing local implementation work.",
-				"Add or refresh a free research LLM key to improve lead synthesis.",
+				"Work the verified channel rows manually; they need no model to be useful.",
+				"Add or refresh a free research LLM key to improve the product angle.",
 			],
 		}
 
-	# Demand leads first. This used to take leads[:12] in fetch order, so the
-	# brief could be written entirely from tooling repositories and say
-	# nothing about what anyone is currently paying for.
+	# Channels first. This used to order demand leads first, i.e. job postings,
+	# so the brief was written from what employers wanted rather than from
+	# where a product can be listed and paid for.
 	ordered = (
-		[x for x in leads if x.get("kind") == _DEMAND]
-		+ [x for x in leads if x.get("kind") != _DEMAND]
+		[x for x in leads if x.get("kind") == _CHANNEL]
+		+ [x for x in leads if x.get("kind") != _CHANNEL]
 	)
 	samples = []
 	for lead in ordered[:12]:
@@ -933,50 +963,65 @@ def _online_ai_brief(llm: Any, leads: list[dict[str, Any]], cfg: dict[str, Any])
 
 	prompt = {
 		"task": (
-			"Find FREE AI services and FREE AI APIs the owner can use to earn money, "
-			"and turn them into easy, concrete earning suggestions."
+			"The owner is building PASSIVE income from a digital product (for example a "
+			"browser extension or a small utility) on a zero budget, and wants to be paid "
+			"in crypto. Suggest how to sell and distribute such a product so that it earns "
+			"without the owner working per sale."
 		),
 		"hard_rules": [
-			"Every free_ai_service entry must be a real service you are confident exists.",
-			"Prefer services with an ongoing free tier, not a time-limited trial.",
-			"Say plainly whether a credit card is required.",
-			"If unsure about a specific limit, write 'verify current limit' instead of inventing a number.",
-			"Each earning idea must state who pays, for what, and a realistic price in USD.",
-			"Prefer ideas startable in under 2 hours with zero upfront spend.",
-			"No passive-income promises, no get-rich framing, no audience-dependent plans.",
+			"PASSIVE INCOME ONLY. Never suggest freelancing, contract work, consulting, "
+			"agency work or retainers: income per hour of the owner's time is a job.",
+			"Every service or platform must be one you are confident exists right now. "
+			"Sellix was seized in 2024 and is still widely recommended, so a dead platform "
+			"is a real failure mode here.",
+			"Prefer platforms that are free to list on and settle stablecoin (USDT/USDC) "
+			"directly to the seller's own wallet address, with no custodian and no KYC.",
+			"State every cost and every manual setup step out loud. Zero budget is the "
+			"binding constraint, so a monthly fee usually disqualifies a platform.",
+			"If unsure about a fee, limit or payout rule, write 'verify current terms' "
+			"instead of inventing a number.",
+			"Never estimate revenue or promise an amount. Real revenue is the on-chain "
+			"balance only.",
+			"Stay inside policy: no social posting, no cold outreach, no trading, no "
+			"minting, no yield farming or staking.",
 		],
 		"policy": "Research and suggestions only. Do not contact anyone, request payment, trade, or mint.",
-		"focus_areas": _clean_list(cfg.get("free_ai_focus", [])),
+		"product_shapes": _clean_list(cfg.get("product_shapes", [])),
 		"monetization_patterns": _clean_list(cfg.get("monetization_patterns", [])),
 		"avoid": _clean_list(cfg.get("avoid_patterns", [])),
+		"already_running": (
+			"A validated Tron (TRC-20) receive address is already appended to every "
+			"article this project publishes to dev.to, and the same address can go on a "
+			"product page and in a README at no cost. Prefer suggestions that reuse it."
+		),
 		"lead_samples": samples,
 		"required_json_shape": {
-			"summary": "one concise paragraph on the best current free-AI earning angle",
+			"summary": "one concise paragraph on the best current route to passive product income on zero budget",
 			"market_themes": [
 				{
-					"theme": "what the demand leads above have in common",
-					"evidence": "which lead titles show it",
-					"offer": "the specific service to sell into that theme",
+					"theme": "a pattern in how products like this actually get paid",
+					"evidence": "which lead titles or platforms show it",
+					"offer": "what the owner should sell, and on which channel",
 				}
 			],
-			"free_ai_services": [
+			"sales_channels": [
 				{
-					"name": "service or API name",
-					"what_it_does": "capability in one short phrase",
-					"free_tier": "what you get free, or 'verify current limit'",
-					"credit_card_required": "no | yes | verify",
-					"earn_with_it": "one concrete way to make money using it",
-					"price_guide": "realistic price the owner could charge, in USD",
+					"name": "platform or channel name",
+					"what_it_does": "what it lists or distributes, in one short phrase",
+					"cost": "listing/monthly fee and revenue cut, or 'verify current terms'",
+					"crypto_payout": "which stablecoins and networks, to own wallet or custodial, or 'verify'",
+					"owner_setup": "what the owner must do by hand, once",
+					"why_passive": "why income from it needs no owner action per sale",
 				}
 			],
-			"easy_earning_ideas": [
+			"product_ideas": [
 				{
-					"idea": "short name for the offer",
-					"who_pays": "the specific buyer",
-					"deliverable": "exactly what the buyer receives",
-					"price_usd": "number or small range",
-					"time_to_first_dollar": "e.g. 'same day', '2-3 days'",
-					"free_stack": "the free services this runs on",
+					"idea": "short name for the product",
+					"who_buys": "the specific user who would pay",
+					"deliverable": "exactly what the buyer downloads or unlocks",
+					"pricing_model": "free tier plus paid upgrade, one-time licence, pay-what-you-want",
+					"marginal_cost": "what each additional user costs the owner to serve",
+					"free_stack": "the zero-cost stack it runs on",
 				}
 			],
 			"owner_actions": ["3-5 concrete next actions, most valuable first"],
@@ -990,25 +1035,25 @@ def _online_ai_brief(llm: Any, leads: list[dict[str, Any]], cfg: dict[str, Any])
 	except Exception as exc:
 		log.warning("[code_techs] online AI brief failed: %s", exc)
 		return {
-			"summary": f"Online AI brief failed; used online search and local scoring only. Error: {str(exc)[:160]}",
-			"free_ai_services": [],
-			"easy_earning_ideas": [],
+			"summary": f"Channel brief failed; used the verified channel table and local scoring only. Error: {str(exc)[:160]}",
+			"sales_channels": [],
+			"product_ideas": [],
 			"owner_actions": [
-				"Review the ranked free-AI leads below and pick the one with the clearest buyer.",
-				"Verify the free tier limits yourself before quoting a price.",
+				"Work the verified channel rows below: they are checked by hand and need no LLM.",
+				"Verify each platform's current fees and payout terms yourself before listing.",
 			],
 		}
 
 	return {
 		"summary": str(data.get("summary", "")).strip()[:900],
 		"market_themes": _dicts(data.get("market_themes"), ["theme", "evidence", "offer"], limit=5),
-		"free_ai_services": _dicts(data.get("free_ai_services"), [
-			"name", "what_it_does", "free_tier", "credit_card_required",
-			"earn_with_it", "price_guide",
+		"sales_channels": _dicts(data.get("sales_channels"), [
+			"name", "what_it_does", "cost", "crypto_payout",
+			"owner_setup", "why_passive",
 		], limit=10),
-		"easy_earning_ideas": _dicts(data.get("easy_earning_ideas"), [
-			"idea", "who_pays", "deliverable", "price_usd",
-			"time_to_first_dollar", "free_stack",
+		"product_ideas": _dicts(data.get("product_ideas"), [
+			"idea", "who_buys", "deliverable", "pricing_model",
+			"marginal_cost", "free_stack",
 		], limit=8),
 		"owner_actions": _clean_list(data.get("owner_actions", []))[:5],
 	}
@@ -1039,82 +1084,178 @@ def _score(
 	value_basis: str,
 	cfg: dict[str, Any],
 ) -> tuple[int, dict[str, float]]:
-	"""Weighted 0-100 score that actually discriminates between leads.
+	"""Weighted 0-100 score ranking leads by how *passive* the income is.
 
-    The old version started at 30 and added up to ~140 of overlapping bonuses
-    before clamping to 100, so anything half-decent saturated: the live queue
-    scored 100, 100, 100, 100, 100, 98, 96, 96 and ``min_score: 55`` filtered
-    nothing at all.
+    Two rewrites are worth knowing about.
 
-    Each component is normalised to 0..1 and multiplied by a weight, so a
-    lead's rank is a blend rather than a race to the clamp. ``score_parts`` is
-    returned alongside so the dashboard can show *why* a lead ranks, and so a
-    later cycle can see which component is doing the work.
+    The first fixed saturation: the version before it started at 30 and added
+    ~140 of overlapping bonuses before clamping, so the live queue read 100,
+    100, 100, 100, 100, 98, 96, 96 and ``min_score`` filtered nothing. Each
+    component is still normalised to 0..1 and weighted, so a rank is a blend
+    rather than a race to the clamp.
+
+    The second is this one, and it changed *what* is rewarded. The weights used
+    to be recency + demand intent + value clarity, which is the scoring of a
+    freelance job board: a fresh posting quoting an hourly rate scored highest.
+    That is the opposite of the goal. It even docked 15 points for the phrase
+    "passive income" -- so the module was actively demoting the thing the owner
+    is building.
+
+    The components now follow Principle 2's ordering. ``owner_action`` is
+    weighted highest because it is the row that separates income from a job:
+    something that earns per sale with nobody in the loop beats something that
+    pays more per hour of the owner's time. ``recency`` is deliberately absent
+    for channels -- a storefront is not more valuable for having been checked
+    an hour ago -- and applies only to the fetched asset leads, where a dead
+    tool is a real risk.
     """
-	# Recency is judged against the window the lead's own source works on. A
-	# reply in the monthly HN hiring thread is not stale at 100h the way a job
-	# feed posting would be, and scoring both on one scale would bury the
-	# highest-intent leads for being what they are.
-	if str(lead.get("source") or "") == "hn-hiring":
-		max_age = max(1.0, float(cfg.get("hn_hiring_max_age_hours", 744) or 744))
-	elif kind == _SUPPLY:
+	labels_set = {str(l).lower() for l in labels}
+
+	# 1. Does income need the owner, per unit? The Principle 2 row-2 test.
+	#
+	# Order matters here, and getting it wrong was caught by
+	# `test_owner_action_outweighs_every_other_component`: the `kind ==
+	# _CHANNEL` default used to sit above the hourly check, so a lead that
+	# said "billed per client, per project" scored 0.85 for being tagged a
+	# channel and beat a genuinely passive row. Sold-by-the-hour is now
+	# detected *first*, because it is a statement about the lead that no
+	# category default should be able to overrule.
+	sells_hours = any(
+		t in text for t in
+		("per client", "per project", "hourly", "/hr", "per hour", "retainer",
+		 "consult", "freelance", "contractor")
+	)
+	if sells_hours and "no-owner-action" not in labels_set:
+		# Not refused outright -- it can still be useful market evidence --
+		# but it can never outrank something that runs unattended.
+		owner_action = 0.1
+	elif "already-live" in labels_set or "no-owner-action" in labels_set:
+		owner_action = 1.0
+	elif kind == _CHANNEL:
+		# A storefront sells while the owner sleeps; the signup is one-time.
+		owner_action = 0.85
+	elif any(t in labels_set for t in ("reuse", "one-time-setup", "already-running")):
+		owner_action = 0.7
+	elif any(t in text for t in ("subscription", "recurring", "licence", "license", "royalt")):
+		owner_action = 0.6
+	else:
+		owner_action = 0.4
+
+	# 2. Can money actually arrive, and in the asset already published?
+	crypto_terms = ("usdt", "usdc", "trc-20", "trc20", "tron", "stablecoin", "crypto", "wallet")
+	if "own-wallet" in labels_set or "wallet" in labels_set:
+		receive_path = 1.0
+	elif any(t in text for t in crypto_terms):
+		receive_path = 0.8
+	elif kind == _CHANNEL:
+		receive_path = 0.5  # fiat storefront: real money, wrong rail
+	else:
+		receive_path = 0.2
+
+	# 3. Zero budget. A published cost is honest; it is still a cost.
+	cost = _cost(lead.get("cost_usd"))
+	if cost is None:
+		zero_budget = 0.5 if kind == _CHANNEL else 0.6
+	elif cost <= 0:
+		zero_budget = 1.0
+	elif cost <= 10:
+		zero_budget = 0.7   # the Chrome Web Store's one-time $5 lives here
+	elif cost <= 50:
+		zero_budget = 0.3
+	else:
+		zero_budget = 0.0
+	# Only a *recurring charge to the owner* caps this, and the check has to
+	# read negations. Two false hits were found before this was right:
+	# "per month" caught Getly's note that it settles twice a month, and then
+	# "monthly fee" caught the words **"no monthly fee"** -- so the row that
+	# pays USDT to the owner's own wallet was docked for disclosing that it is
+	# free. A keyword scan that cannot see "no" in front of a term reads a
+	# disclaimer as a charge, which is exactly backwards.
+	if _charges_a_subscription(text):
+		zero_budget = min(zero_budget, 0.2)
+
+	# 4. How much owner work before the first dollar can arrive at all?
+	setup = str(lead.get("manual_setup") or "").strip().lower()
+	if not setup or setup.startswith("none"):
+		setup_burden = 1.0
+	elif "kyc" in setup or "approval" in setup or "review" in setup:
+		setup_burden = 0.3
+	else:
+		setup_burden = 0.6
+
+	# 5. Freshness, for fetched leads only. A curated channel row is checked by
+	# hand and dated in `verified_note`, so scoring it on feed age would just
+	# punish it for not being a feed.
+	if lead.get("source") == "channel-table":
+		recency = 1.0
+	elif kind == _ASSET:
 		max_age = max(1.0, float(cfg.get("supply_max_age_days", 120) or 120) * 24)
+		recency = 0.3 if age_hours is None else max(0.0, 1.0 - (max(0.0, age_hours) / max_age))
 	else:
-		max_age = max(1.0, float(cfg.get("demand_max_age_hours", 72) or 72))
-
-	# Linear decay over that window. An unknown age is not free -- it scores
-	# below anything confirmed fresh, above anything stale.
-	if age_hours is None:
-		recency = 0.3
-	else:
-		recency = max(0.0, 1.0 - (max(0.0, age_hours) / max_age))
-
-	has_rate = value_basis in ("posted_salary", "stated_rate")
-	contract_terms = ("contract", "freelance", "part-time", "part time", "contractor")
-	request_terms = ("looking for", "need help", "does anyone", "anyone know", "hiring", "wanted")
-	if kind == _SUPPLY:
-		intent = 0.15
-	elif any(term in text for term in contract_terms) and has_rate:
-		intent = 1.0
-	elif any(term in text for term in contract_terms):
-		intent = 0.7
-	elif any(term in text for term in request_terms):
-		intent = 0.4
-	else:
-		intent = 0.25
-
-	deliverables = [str(t).lower() for t in cfg.get("deliverable_terms", [])]
-	hits = sum(1 for term in deliverables if term and term in text)
-	deliverability = min(1.0, hits / 3.0)
+		recency = 0.3 if age_hours is None else max(0.0, 1.0 - (max(0.0, age_hours) / 720.0))
 
 	parts = {
+		"owner_action": round(owner_action, 3),
+		"receive_path": round(receive_path, 3),
+		"zero_budget": round(zero_budget, 3),
+		"setup_burden": round(setup_burden, 3),
 		"recency": round(recency, 3),
-		"demand_intent": round(intent, 3),
-		"value_clarity": 1.0 if has_rate else 0.0,
-		"deliverability": round(deliverability, 3),
-		"free_stack_fit": 1.0 if _is_free_ai_lead(text) else 0.0,
 	}
 	score = (
-		30 * parts["recency"]
-		+ 25 * parts["demand_intent"]
-		+ 20 * parts["value_clarity"]
-		+ 15 * parts["deliverability"]
-		+ 10 * parts["free_stack_fit"]
+		32 * parts["owner_action"]
+		+ 25 * parts["receive_path"]
+		+ 18 * parts["zero_budget"]
+		+ 15 * parts["setup_burden"]
+		+ 10 * parts["recency"]
 	)
 
 	penalty = 0
+	# Job-shaped leads. The feeds that produced them are gone, but Reddit and
+	# HN still surface "hiring" posts and they must not climb the page.
+	if any(word in text for word in ("hiring", "apply now", "job description", "full-time", "salary")):
+		penalty += 20
 	if any(word in text for word in ("bounty", "prize", "contest")):
 		penalty += 15
-	if any(word in text for word in ("credit card required", "paid plan", "trial expires")):
+	if any(word in text for word in ("credit card required", "trial expires", "upgrade to unlock")):
 		penalty += 10
-	if any(word in text for word in ("passive income", "get rich", "guaranteed income", "6-figure")):
-		penalty += 15
+	# Scams, not ambition. Note this no longer includes "passive income"
+	# itself: penalising the project's own goal is what this rewrite removed.
+	if any(word in text for word in ("get rich", "guaranteed income", "6-figure", "double your money")):
+		penalty += 20
+	# Trading, minting and yield are refused in code (Principle 6), so a lead
+	# recommending them is unusable however well it scores elsewhere.
+	if any(word in text for word in ("yield farm", "staking rewards", "airdrop", "nft mint", "presale")):
+		penalty += 25
 	if any(word in text for word in ("need an audience", "followers", "ad spend", "go viral")):
 		penalty += 10
 	if penalty:
 		parts["penalty"] = float(-penalty)
 
 	return max(0, min(100, round(score - penalty))), parts
+
+
+def _charges_a_subscription(text: str) -> bool:
+	"""True when the text says the OWNER pays a recurring fee.
+
+    Split out from ``_score`` because it needs to be tested on its own: the
+    naive version scored "no monthly fee" as a monthly fee. A negator directly
+    before the term flips the meaning, so the window before each match is
+    checked for one.
+    """
+	terms = ("monthly fee", "per month subscription", "subscription required",
+	         "paid plan required", "monthly subscription", "billed monthly")
+	negators = ("no ", "not ", "never ", "without ", "zero ", "free of ", "0 ")
+	for term in terms:
+		start = 0
+		while True:
+			at = text.find(term, start)
+			if at < 0:
+				break
+			before = text[max(0, at - 14):at]
+			if not any(before.rstrip().endswith(n.strip()) for n in negators):
+				return True
+			start = at + len(term)
+	return False
 
 
 def _is_free_ai_lead(text: str) -> bool:
@@ -1199,6 +1340,25 @@ def _money(value: Any) -> float | None:
 	return amount if amount > 0 else None
 
 
+def _cost(value: Any) -> float | None:
+	"""Non-negative float or None -- for a *cost*, where 0.0 is real.
+
+    Deliberately not ``_money``. That function maps 0 to None because a lead
+    paying $0 is a lead with no published price, and blurring that is what put
+    a fabricated "$5.6k pipeline" on the dashboard. A **cost** of $0.00 is the
+    opposite: it is the single most useful value on this page, because free to
+    list is the whole constraint. Same distinction, opposite default, so they
+    stay two functions.
+    """
+	if value is None:
+		return None
+	try:
+		amount = float(str(value).replace(",", "").replace("$", "").strip())
+	except (TypeError, ValueError):
+		return None
+	return amount if amount >= 0 else None
+
+
 def _reason(
 	lead: dict[str, Any],
 	text: str,
@@ -1207,97 +1367,125 @@ def _reason(
 	value_note: str,
 	age_hours: float | None,
 ) -> str:
+	"""Why this lead ranks, in the owner's terms: does it earn unattended?"""
+	labels_set = {str(l).lower() for l in labels}
 	parts: list[str] = []
-	if value_note:
-		parts.append(f"{value_note} by the source, not inferred")
-	if kind == _DEMAND and age_hours is not None and age_hours <= 24:
-		parts.append(f"posted {int(age_hours)}h ago, so the buyer is still looking")
-	if kind == _SUPPLY:
-		parts.append("free tooling you can deliver paid work with")
-	if any(word in text for word in ("contract", "freelance", "part-time", "contractor")):
-		parts.append("scoped as contract or part-time work, which suits one narrow deliverable")
-	if any(word in text for word in ("transcri", "ocr", "extract", "convert", "summari", "translat", "cleanup")):
-		parts.append("boring conversion work buyers already pay humans to do by hand")
-	if _is_free_ai_lead(text):
-		parts.append("runs on a free AI tier, so input cost is zero and margin is total")
+
+	if "already-live" in labels_set:
+		parts.append("already running, so it needs no account and no owner action")
+	if "own-wallet" in labels_set:
+		parts.append("settles to the wallet address this project already publishes")
+	elif any(t in text for t in ("usdt", "usdc", "tron", "trc-20", "stablecoin")):
+		parts.append("pays in stablecoin, so the receive path is on-chain and verifiable")
+	if kind == _CHANNEL and "already-live" not in labels_set:
+		parts.append("sells the product while nobody is working; the signup is one-time")
+	if "free-to-publish" in labels_set or "no-approval" in labels_set:
+		parts.append("free to list with no approval queue, so a refusal cannot block it")
+	cost = _cost(lead.get("cost_usd"))
+	if cost is not None and cost > 0:
+		parts.append(f"costs ${cost:,.2f} once, stated rather than hidden")
+	if kind == _ASSET:
+		parts.append("free tooling or reach to build and market the product with")
+	if any(t in text for t in ("hourly", "/hr", "per client", "retainer")):
+		parts.append("priced per hour of the owner's time, which is a job and not passive income")
+
 	if not parts:
-		parts.append("matches the free-AI service niche with no upfront spend")
+		parts.append("zero-budget route to listing or promoting a digital product")
 	return "; ".join(parts[:2])
 
 
 def _next_step(lead: dict[str, Any], kind: str, cfg: dict[str, Any]) -> str:
-	"""One concrete move, chosen from the lead's OWN subject.
+	"""One concrete move toward a product earning money, not toward a client.
 
-    This used to keyword-match the title, body and labels concatenated
-    together, so a single stray word anywhere decided the advice: all three
-    GitHub leads in the live queue were told to "transcribe one sample file"
-    and none of them involved audio. Matching the title and labels only keeps
-    the recommendation about what the lead is actually for.
+    The previous version told the owner to "read what the buyer asked for, then
+    quote per hour of audio" -- correct advice for the freelance queue this
+    module used to be, and useless for selling a product. It also used to
+    keyword-match the title, body and labels concatenated, so one stray word
+    decided the advice and all three GitHub leads were told to transcribe audio
+    when none involved audio. Matching the title and labels only is kept.
     """
 	subject = " ".join([
 		str(lead.get("title") or ""),
 		" ".join(str(x) for x in lead.get("labels") or []),
 	]).lower()
-	buyer = str(lead.get("buyer") or "").strip()
+	setup = str(lead.get("manual_setup") or "").strip()
 
-	if kind == _SUPPLY:
-		return (
-			"Confirm the free tier's real limits and terms, run one small end-to-end sample, "
-			"then attach a fixed price to a single narrow task built on it."
+	if kind == _CHANNEL:
+		if "already-live" in subject or (setup.lower().startswith("none")):
+			return (
+				"Put the same published receive address on the product page and in the "
+				"README, then confirm a reader can see it -- receipt_check already proves "
+				"this for the articles."
+			)
+		first = (
+			"List the product once, set the price, and point the payout at the "
+			"published Tron address"
+			if any(t in subject for t in ("usdt", "tron", "own-wallet"))
+			else "List the product once and set the price"
 		)
-	who = buyer or "the poster"
-	if any(word in subject for word in ("transcri", "speech", "whisper", "audio", "podcast")):
-		deliverable = "transcribe one sample file end to end and quote per hour of audio"
-	elif any(word in subject for word in ("ocr", "receipt", "invoice", "scan", "pdf", "document")):
-		deliverable = "run one scanned sample to a clean spreadsheet and quote per batch of pages"
-	elif any(word in subject for word in ("image", "photo", "design", "logo", "video")):
-		deliverable = "process a handful of sample assets and quote per image or per batch"
-	elif any(word in subject for word in ("translat", "localiz", "content", "writing", "copy")):
-		deliverable = "produce one sample page and quote per thousand words"
-	elif any(word in subject for word in ("csv", "spreadsheet", "analytics", "etl", "scrap")):
-		deliverable = "clean one messy sample export and quote a flat rate per file"
-	elif any(word in subject for word in ("engineer", "developer", "programming", "backend", "frontend", "software")):
-		deliverable = "build the smallest working slice of the stated problem and quote per milestone"
-	elif any(word in subject for word in ("support", "customer", "success")):
-		deliverable = "draft one worked reply set from their own docs and quote per month"
-	else:
-		deliverable = "build the smallest working slice of what they asked for and quote a fixed price"
-	return f"Read what {who} actually asked for, then {deliverable}."
+		return f"{first}. Owner does this by hand: {setup or 'open the account'}"
+
+	if any(t in subject for t in ("devto", "reach", "content-marketing")):
+		return (
+			"Write the problem-shaped article this product answers and let the existing "
+			"footer carry the ask -- no new channel, and the publishing path already runs."
+		)
+	if any(t in subject for t in ("free-stack", "zero-budget", "no-server")):
+		return (
+			"Confirm the free tier's real limits and terms, then keep the product's "
+			"per-user cost at zero so the free tier can stay free indefinitely."
+		)
+	if any(t in subject for t in ("open-source", "discovery", "sponsors")):
+		return (
+			"Publish the repository with the receive address in the README, so discovery "
+			"and the ask live in the same artifact."
+		)
+	return (
+		"Check the free tier's real limits, then use it to build or promote the product "
+		"without adding a per-user cost."
+	)
 
 
 def _codex_prompt(op: Opportunity, cfg: dict[str, Any]) -> str:
 	"""A prompt built from this lead's real fields, not a fixed template.
 
-    Six labelled slots so the reading model gets the market context it needs:
-    who the buyer is, what they signalled, what to deliver, what the price
-    basis is, which free stack to use, and how to verify.
-
-    The PRICE BASIS slot states the *absence* of a price out loud when there
-    is none. A prompt that simply omitted it invited the model to invent a
-    figure, which would rebuild the fabrication this module just removed
-    inside the one field the owner reads most.
+    Slots so the reading model gets the context it needs: what the channel or
+    asset is, what it costs, what the owner must do by hand, and where money
+    lands. The COST slot states a cost out loud -- and the absence of a price
+    out loud when there is none -- because a prompt that merely omits it invites
+    the model to invent a figure, rebuilding the fabrication this module
+    removed inside the field the owner acts on (Principle 4).
     """
 	free_stack = _clean_list(cfg.get("free_ai_focus", []))[:2]
-	price = op.value_note or "no stated price - do not quote or invent a figure"
-	age = f"{op.age_hours:.0f}h ago" if op.age_hours is not None else "age unknown"
+	cost = _cost(getattr(op, "cost_usd", None))
+	if cost is None:
+		cost_line = "not published - do not quote or invent a figure"
+	elif cost <= 0:
+		cost_line = "$0.00 (free to list)"
+	else:
+		cost_line = f"${cost:,.2f} one-time, published by the platform"
 	why = " ".join(str(op.reason or "").split())
+	paid = "where it gets paid" if op.kind == _CHANNEL else "what builds or promotes it"
+	stack = "; ".join(free_stack) or "any zero-cost tier"
 	return (
-		"Build a small, verifiable deliverable for this real market signal.\n\n"
-		f"BUYER          {op.buyer or 'not named'} (via {op.source})\n"
-		f"DEMAND SIGNAL  {op.title}\n"
-		f"POSTED         {op.posted_at or 'unknown'} ({age})\n"
+		"Move a digital product one step closer to earning without owner involvement.\n\n"
+		f"KIND           {op.kind} ({paid})\n"
+		f"LEAD           {op.title}\n"
+		f"SOURCE         {op.source}\n"
 		f"LINK           {op.url or 'no public URL'}\n"
-		f"DELIVERABLE    {op.next_step}\n"
-		f"PRICE BASIS    {price}\n"
-		f"FREE STACK     {'; '.join(free_stack) or 'any zero-cost AI tier'}\n"
+		f"COST           {cost_line}\n"
+		f"OWNER MUST DO  {getattr(op, 'manual_setup', '') or 'nothing'}\n"
+		f"NEXT STEP      {op.next_step}\n"
+		f"FREE STACK     {stack}\n"
 		f"WHY IT RANKS   {why}\n\n"
 		"Constraints:\n"
 		"- Keep the first change narrowly scoped to one file or script.\n"
-		"- Use free API tiers or offline code paths only; no paid service.\n"
+		"- Use free tiers or offline code paths only; no paid service.\n"
 		"- Include the exact commands to run it and paste the real output.\n"
-		"- Verify on at least 3 sample inputs before calling it done.\n"
-		"- Do not contact anyone, publish anything, or request payment.\n"
-		"- Do not state a price unless PRICE BASIS gives one."
+		"- Do not contact anyone, post to social media, trade, or mint anything.\n"
+		"- Do not open an account or accept terms on the owner's behalf.\n"
+		"- Do not state a price or an earnings figure that COST does not give.\n"
+		"- Revenue is the on-chain balance only; never estimate it."
 	)
 
 
@@ -1310,12 +1498,19 @@ def _write_report(state: dict[str, Any], leads: list[dict[str, Any]] | None = No
     """
 	_REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
 	lines = [
-		"# Free AI Earning Queue",
+		"# Passive Product Income Queue",
 		"",
 		f"Refreshed: {state.get('last_refresh_at')}",
-		f"Daily target: ${float(state.get('daily_target_usd', 10.0) or 10.0):.2f}",
 		"",
-		"Suggestions favour free AI services and free AI APIs with zero upfront cost.",
+		"Routes to passive income from a digital product on a zero budget: where it can",
+		"be listed and paid for (channels) and what can build or market it (assets).",
+		"",
+		"**Freelance and contract postings are deliberately absent.** Income per hour of",
+		"the owner's time is a job, not passive income, so those sources were removed",
+		"rather than demoted.",
+		"",
+		"No revenue figure appears on this page. Real revenue is the on-chain wallet",
+		"balance, and a listing is not a receipt.",
 		"",
 		"## Requirements",
 		"",
@@ -1328,32 +1523,32 @@ def _write_report(state: dict[str, Any], leads: list[dict[str, Any]] | None = No
 	if summary:
 		lines.extend(["", "## Current Best Angle", "", summary])
 
-	services = brief.get("free_ai_services") or []
+	services = brief.get("sales_channels") or []
 	if services:
 		lines.extend([
-			"", "## Free AI Services To Use", "",
-			"| Service | What it does | Free tier | Card? | How to earn | Price guide |",
+			"", "## Sales Channels", "",
+			"| Channel | What it lists | Cost | Crypto payout | Owner setup | Why passive |",
 			"| --- | --- | --- | --- | --- | --- |",
 		])
 		for svc in services:
 			lines.append(
 				"| {} | {} | {} | {} | {} | {} |".format(
 					_cell(svc.get("name")), _cell(svc.get("what_it_does")),
-					_cell(svc.get("free_tier")), _cell(svc.get("credit_card_required")),
-					_cell(svc.get("earn_with_it")), _cell(svc.get("price_guide")),
+					_cell(svc.get("cost")), _cell(svc.get("crypto_payout")),
+					_cell(svc.get("owner_setup")), _cell(svc.get("why_passive")),
 				)
 			)
 
-	ideas = brief.get("easy_earning_ideas") or []
+	ideas = brief.get("product_ideas") or []
 	if ideas:
-		lines.extend(["", "## Easy Earning Ideas", ""])
+		lines.extend(["", "## Product Ideas", ""])
 		for index, idea in enumerate(ideas, start=1):
 			lines.extend([
 				f"{index}. **{idea.get('idea', 'untitled')}**",
-				f"   - Who pays: {idea.get('who_pays', '')}",
+				f"   - Who buys: {idea.get('who_buys', '')}",
 				f"   - Deliverable: {idea.get('deliverable', '')}",
-				f"   - Price: {idea.get('price_usd', '')}",
-				f"   - Time to first dollar: {idea.get('time_to_first_dollar', '')}",
+				f"   - Pricing model: {idea.get('pricing_model', '')}",
+				f"   - Cost per extra user: {idea.get('marginal_cost', '')}",
 				f"   - Free stack: {idea.get('free_stack', '')}",
 			])
 
@@ -1388,25 +1583,47 @@ def _write_report(state: dict[str, Any], leads: list[dict[str, Any]] | None = No
 	lines.extend(["", "## Avoid", ""]) 
 	for item in state.get("avoid_patterns", []):
 		lines.append(f"- {item}")
-	lines.extend(["", "## Ranked Leads From Online Search", ""])
+	refused = state.get("refused_channels") or []
+	if refused:
+		lines.extend([
+			"", "## Refused Channels", "",
+			"Written down so a later cycle does not re-derive them, and so a dead",
+			"platform cannot climb back onto this page.",
+			"",
+		])
+		for item in refused:
+			lines.append(f"- **{item.get('name', 'unnamed')}:** {item.get('why', '')}")
+
+	lines.extend(["", "## Ranked Leads", ""])
 	for index, op in enumerate(leads if leads is not None else state.get("opportunities", []), start=1):
 		title = op.get("title", "untitled")
 		url = op.get("url", "")
 		pursued_tag = " [PURSUED]" if op.get("pursued") else ""
 		heading = f"{index}. [{title}]({url}){pursued_tag}" if url else f"{index}. {title}{pursued_tag}"
 		age = op.get("age_hours")
+		cost = op.get("cost_usd")
+		# A published figure or nothing. An invented one is what this module
+		# used to print, summed into a "pipeline value" KPI (Principle 4).
+		if isinstance(cost, (int, float)):
+			cost_text = "free to list" if cost <= 0 else f"${cost:,.2f} one-time"
+		else:
+			cost_text = "not published"
 		lines.extend([
 			heading,
 			f"   - Kind: {op.get('kind', 'unknown')}",
 			f"   - Score: {op.get('score', 0)}/100",
-			# The published price or nothing. A figure with no basis is what
-			# this module used to print, and it was invented.
-			f"   - Price: {op.get('value_note') or 'no stated price'}",
-			f"   - Posted: {op.get('posted_at') or 'unknown'}"
-			+ (f" ({age:.0f}h ago)" if isinstance(age, (int, float)) else ""),
+			f"   - Cost: {cost_text}",
+			f"   - Owner must do: {op.get('manual_setup') or 'nothing'}",
 			f"   - Why: {op.get('reason', '')}",
 			f"   - Next: {op.get('next_step', '')}",
 		])
+		if op.get("verified_note"):
+			lines.append(f"   - Verified: {op.get('verified_note')}")
+		if op.get("posted_at"):
+			lines.append(
+				f"   - Posted: {op.get('posted_at')}"
+				+ (f" ({age:.0f}h ago)" if isinstance(age, (int, float)) else "")
+			)
 		if op.get("codex_prompt"):
 			lines.extend([
 				"   - Codex request:",

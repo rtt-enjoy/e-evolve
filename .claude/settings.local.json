@@ -34,7 +34,10 @@
       "Bash(python -m bot.main)",
       "Bash(python -m py_compile bot/earning/backfill.py bot/earning/devto.py bot/earning/payout.py)",
       "Bash(python -m py_compile bot/main.py bot/earning/backfill.py bot/earning/devto.py bot/earning/payout.py bot/earning/__init__.py)",
-      "Bash(python -c \"import json; print\\(json.load\\(open\\('config/strategy.json'\\)\\)['backfill']['max_per_cycle']\\)\")"
+      "Bash(python -c \"import json; print\\(json.load\\(open\\('config/strategy.json'\\)\\)['backfill']['max_per_cycle']\\)\")",
+      "Bash(python -X utf8 -c ' *)",
+      "Bash(ls \"C:/Users/RTT/.claude/projects/d--Work-Enjoy-Source-e-evolve/memory/\" | head -30)",
+      "Read(//c/Users/RTT/.claude/projects/d--Work-Enjoy-Source-e-evolve/memory/**)"
     ]
   }
 }

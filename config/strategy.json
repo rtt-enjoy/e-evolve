@@ -57,19 +57,130 @@
 	"code_techs": {
 		"enabled": true,
 		"refresh_hours": 6,
-		"daily_target_usd": 10.0,
 		"max_items": 40,
 		"min_score": 40,
 		"auto_pursue": false,
-		"pursue_score_threshold": 75,
+		"status_max_items": 16,
+		"prompt_top_n": 6,
+		"min_channel_share": 0.5,
+		"supply_max_age_days": 120,
+		"max_reddit_requests": 3,
+		"reddit_backoff_seconds": 5,
 		"requirements": [
-			"Lead with free AI services and free AI APIs: no credit card, generous free tier, usable today.",
-			"Every suggestion must name the free service, its real limits, and one concrete way to earn with it.",
-			"Prefer easy money: something the owner can start in under 2 hours with no upfront spend.",
-			"Prefer repeatable offers over one-off tasks, and same-week payout over deferred upside.",
-			"State the earning path in plain language: who pays, for what, and roughly how much.",
-			"Skip anything needing paid infrastructure, approval queues, or an audience the owner lacks.",
-			"Do not count discovery or speculative upside as earnings."
+			"Every lead must move a digital product toward earning without the owner in the loop.",
+			"Rank by how little owner action each unit of income needs, not by headline upside.",
+			"Name where the money lands, and prefer stablecoin to the address this project already publishes.",
+			"State every cost and every manual setup step out loud; zero budget is the constraint.",
+			"Never suggest selling the owner's hours: a rate per hour is a job, not passive income.",
+			"Stay inside policy: no social posting, no trading, no minting, no cold outreach.",
+			"Do not count discovery, pipeline, or speculative upside as earnings. On-chain or nothing."
+		],
+		"product_shapes": [
+			"browser extension solving one specific annoyance",
+			"single-purpose desktop or CLI utility",
+			"static web tool that runs entirely client-side",
+			"template, preset, or asset pack for a tool people already use",
+			"developer library or plugin for an existing ecosystem",
+			"self-hostable script the buyer runs on their own machine",
+			"data set or reference compiled once and sold as a download"
+		],
+		"monetization_patterns": [
+			"Ship the tool free and sell the upgrade: the free tier buys discovery the owner cannot.",
+			"One-time licence for a digital download, delivered by the storefront with no owner action.",
+			"Put the published receive address on the product page and in the README, so a user can pay with no platform at all.",
+			"Sell a template, preset, or asset pack built once and downloaded many times.",
+			"Charge for the paid tier of a tool whose free tier costs nothing per user to run.",
+			"List the same product on every zero-cost channel, since the artifact is already built."
+		],
+		"underserved_focus": [
+			"storefronts that settle stablecoin straight to the seller's own wallet, no custodian",
+			"one-task tools that solve a single annoyance well enough to be worth paying for",
+			"products with zero marginal cost per user, so the free tier can stay free forever",
+			"channels that are free to list on and have no approval queue to fail",
+			"paying users who never open a storefront and would rather send stablecoin directly",
+			"distribution with real organic discovery, so reach does not need ad spend",
+			"products whose buyers are developers, since that is the audience already reached"
+		],
+		"strategy_playbook": [
+			"Build the product once, then spend every later cycle on distribution rather than on more product.",
+			"Keep marginal cost per user at zero: client-side code, free hosting, free scheduler. Every dollar in is margin.",
+			"Put the receive path on the artifact itself -- product page, README, article footer -- not only on a storefront.",
+			"List on the free channels first; pay a listing fee only where discovery is worth it, and say what it cost.",
+			"Let the articles this bot already publishes do the marketing: the problem is the post, the product is the fix.",
+			"Price once and leave it. A price that needs renegotiating per buyer is a service in disguise.",
+			"Measure only what arrives on-chain. Listings, views and pipeline are not revenue."
+		],
+		"avoid_patterns": [
+			"Selling the owner's hours: freelance postings, contract work, retainers, consulting. Income per unit of work is a job.",
+			"Anything requiring paid infrastructure, a monthly fee, or a credit-card-gated tier.",
+			"Custodial payment processors that hold the money before the owner does, and anything demanding KYC to receive.",
+			"Platforms that are dead, seized, or unverifiable. Sellix was seized in 2024 and is still widely recommended.",
+			"Trading, minting, yield farming, staking and airdrops: refused in code, and not a product business.",
+			"Offers needing a large audience, ad spend, or a following the owner does not have.",
+			"Anything promising passive income without a product that delivers something."
+		],
+		"github_searches": [
+			"awesome browser extensions in:name,readme stars:>200",
+			"chrome extension boilerplate manifest v3 in:name,readme stars:>200",
+			"indie hackers open source saas alternatives in:readme stars:>200",
+			"awesome self-hosted single file tool in:name,readme stars:>150",
+			"crypto payment button static site in:readme stars:>100",
+			"awesome digital products templates in:readme stars:>100",
+			"license key generator offline validation in:readme stars:>100"
+		],
+		"community_searches": [
+			"selling a chrome extension revenue",
+			"how much my browser extension makes",
+			"indie developer selling digital products revenue",
+			"accept crypto payments digital product",
+			"USDT payment for software licence",
+			"sold my side project first sale",
+			"open source project sponsorship income",
+			"pay what you want pricing results",
+			"freemium conversion rate indie",
+			"where to sell a small utility app"
+		],
+		"reddit_subreddits": [
+			"SideProject",
+			"sideproject",
+			"indiehackers",
+			"microsaas",
+			"Entrepreneur",
+			"chrome_extensions",
+			"SaaS",
+			"opensource"
+		],
+		"reddit_searches": [
+			"sold my digital product",
+			"chrome extension revenue",
+			"accept crypto payment product",
+			"USDT payout platform",
+			"launched my tool first sale",
+			"pay what you want pricing",
+			"where to list my digital product",
+			"free tier paid upgrade conversion"
+		],
+		"reference_sources": [
+			{
+				"title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
+				"url": "https://freedium-mirror.cfd/https://medium.com/@startup_Ideas/15-high-paying-remote-jobs-with-a-4-hour-work-week-and-how-people-actually-get-them-7e8d3562ff99",
+				"takeaway": "The viable path is not easy money; it is rare skill, specialization, automation, retainers, async work, and results-based delivery."
+			},
+			{
+				"title": "OpenRouter free model list",
+				"url": "https://openrouter.ai/models?max_price=0",
+				"takeaway": "Free (:free) models are capped at 20 req/min and only 50 req/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit before relying on volume."
+			},
+			{
+				"title": "Google AI Studio (Gemini API)",
+				"url": "https://aistudio.google.com/app/apikey",
+				"takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day; much higher daily ceiling than OpenRouter's free chain -- verify current limit."
+			},
+			{
+				"title": "Cerebras Cloud free tier",
+				"url": "https://cloud.cerebras.ai/",
+				"takeaway": "No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model -- verify current limit."
+			}
 		],
 		"free_ai_focus": [
 			"free-tier LLM APIs with no credit card requirement",
@@ -80,133 +191,6 @@
 			"free translation and summarization APIs",
 			"free AI hosting, inference, and scheduled-compute tiers",
 			"open-weight models that run on free CPU/GPU allowances"
-		],
-		"monetization_patterns": [
-			"Resell a free API as a tiny fixed-price service (transcribe, summarize, clean, convert).",
-			"Sell the setup, not the compute: charge to configure a free AI tool inside someone's workflow.",
-			"Bundle a free API into a one-page tool and charge a small one-time fee.",
-			"Offer a done-for-you batch job: send files, get results back, fixed price per batch.",
-			"Charge for the prompt library and workflow, and let the client bring their own free key.",
-			"Package a recurring report built on free-tier APIs as a low-cost monthly retainer."
-		],
-		"reference_sources": [
-			{
-				"title": "OpenRouter free model list",
-				"url": "https://openrouter.ai/models?max_price=0",
-				"takeaway": "Live list of zero-cost models usable through a single API key. Free (:free) models are capped at 20 req/min and only 50 req/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit before relying on volume."
-			},
-			{
-				"title": "Google AI Studio (Gemini API)",
-				"url": "https://aistudio.google.com/app/apikey",
-				"takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day (10 RPM, 250K TPM); Gemini 2.0 Flash is roughly 15 RPM / 1M TPM. Much higher daily ceiling than OpenRouter's free chain -- verify current limit."
-			},
-			{
-				"title": "Cerebras Cloud free tier",
-				"url": "https://cloud.cerebras.ai/",
-				"takeaway": "No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model on fast inference hardware. Strong fallback once OpenRouter's free daily cap is hit -- verify current limit."
-			},
-			{
-				"title": "Groq Cloud free tier",
-				"url": "https://console.groq.com/",
-				"takeaway": "No credit card required. Generous daily request allowance (roughly 14K/day depending on model) with very low latency -- verify current limit."
-			}
-		],
-		"github_searches": [
-			"free AI API list no credit card in:name,description,readme stars:>200",
-			"awesome free LLM API in:name,readme stars:>100",
-			"free tier AI services awesome list in:readme stars:>150",
-			"free OCR API python in:readme stars:>100",
-			"free speech to text API in:readme stars:>100",
-			"free image generation API wrapper in:readme stars:>100",
-			"free embeddings API tier in:readme stars:>50"
-		],
-		"community_searches": [
-			"free AI API no credit card",
-			"free LLM API free tier",
-			"best free AI API for",
-			"free tier AI service generous",
-			"free transcription API",
-			"free OCR API",
-			"free image generation API free",
-			"how I make money with AI free tools",
-			"side income AI automation no upfront cost",
-			"easiest way to make money with AI",
-			"charge clients for AI automation",
-			"productized AI service small",
-			"free API to build a paid tool",
-			"is there a free tool for"
-		],
-		"reddit_subreddits": [
-			"SideProject",
-			"Entrepreneur",
-			"smallbusiness",
-			"SaaS",
-			"LocalLLaMA",
-			"automation",
-			"freelance",
-			"WorkOnline"
-		],
-		"reddit_searches": [
-			"free AI API",
-			"free LLM API no credit card",
-			"free tier AI service",
-			"free transcription API",
-			"free OCR API",
-			"make money with AI tools",
-			"easy side income automation",
-			"charge for AI automation setup",
-			"productized service AI",
-			"built a tool with free API",
-			"is there a free tool",
-			"how much to charge automation"
-		],
-		"max_reddit_requests": 3,
-		"status_max_items": 18,
-		"prompt_top_n": 10,
-		"min_demand_share": 0.5,
-		"demand_max_age_hours": 72,
-		"hn_hiring_max_age_hours": 744,
-		"supply_max_age_days": 120,
-		"himalayas_pages": 3,
-		"reddit_backoff_seconds": 5,
-		"hn_contract_terms": [
-			"contract",
-			"contractor",
-			"freelance",
-			"part-time",
-			"part time"
-		],
-		"job_employment_types": [
-			"Contractor",
-			"Part Time",
-			"Freelance"
-		],
-		"job_categories": [
-			"Software Development",
-			"Data Science",
-			"Design",
-			"Writing",
-			"Marketing",
-			"Customer Support",
-			"Product"
-		],
-		"deliverable_terms": [
-			"transcri",
-			"ocr",
-			"extract",
-			"convert",
-			"summari",
-			"translat",
-			"cleanup",
-			"clean up",
-			"automat",
-			"scrape",
-			"scraper",
-			"dashboard",
-			"report",
-			"integration",
-			"migration",
-			"pipeline"
 		]
 	},
 	"llm": {

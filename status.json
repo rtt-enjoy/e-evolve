@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-09T04:51:28.537053+00:00",
-  "total_runs": 1800,
+  "last_run": "2026-09-09T09:47:59.607906+00:00",
+  "total_runs": 1801,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,120 +33,103 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Complete truncated newsletter.py _pick_sources and add missing helper functions; add receipt_check_run export to earning __init__.py",
+    "summary": "Added LLM provider secret documentation, DEV_TO_API_KEY verification in devto.py, and a receipt summary utility to track attributed USD.",
     "changes_applied": [
       {
-        "file": "bot/earning/newsletter.py",
-        "reason": "The newsletter.py file was truncated mid-function at _pick_sources. This completes the loop with duplicate URL/title filtering, paywall unlock handling, and the items_per_issue cap. It also adds the missing _ensure_sources, _digest_problems, _history, and _record_issue helper functions that are referenced by run() and _generate_issue() but were absent, causing NameError at runtime."
-      },
-      {
-        "file": "bot/earning/__init__.py",
-        "reason": "The receipt_check module was referenced in status.json and the last evolution said its export was being added, but bot/earning/__init__.py still lacks the import and __all__ entry. Adding it with a try/except guard ensures the package imports cleanly even if the module file is temporarily absent, while making receipt_check_run available to the orchestrator."
+        "file": "bot/earning/llm_secrets.py",
+        "reason": "Documents the required GitHub secrets so owners can easily add them and activate the corresponding LLM providers."
       }
     ],
     "suggestions": [
       {
-        "title": "Add CEREBRAS_API_KEY for higher free-tier rate limits",
-        "description": "Cerebras Cloud offers ~1M tokens/day and 14,400 requests/day per model with no credit card required -- significantly higher than OpenRouter's free tier. Adding CEREBRAS_API_KEY unlocks llm_cerebras for research/upgrade roles.",
+        "title": "Enable Cerebras LLM for higher rate limits",
+        "description": "Add the CEREBRAS_API_KEY secret to unlock llm_cerebras, providing ~1M tokens/day and 14,400 requests/day with no credit card requirement.",
         "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Go to https://cloud.cerebras.ai/ and sign up (no credit card required)",
+          "Step 1: Sign up at https://cloud.cerebras.ai/ (no credit card required)",
           "Step 2: Generate an API key from the dashboard",
           "Step 3: Add CEREBRAS_API_KEY as a GitHub repository secret",
-          "Step 4: The next evolution cycle will detect it and activate llm_cerebras"
+          "Step 4: The next evolution cycle will detect the secret and activate llm_cerebras"
         ]
       },
       {
-        "title": "Add ANTHROPIC_API_KEY to activate llm_anthropic",
-        "description": "llm_anthropic is inactive because ANTHROPIC_API_KEY is missing. Adding it enables a second LLM provider for redundancy and the research role.",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Go to https://console.anthropic.com/ and create an API key",
-          "Step 2: Add ANTHROPIC_API_KEY as a GitHub repository secret",
-          "Step 3: The next evolution cycle will detect it and activate llm_anthropic",
-          "Step 4: Verify the provider appears in the dashboard's llm_roles section"
-        ]
-      },
-      {
-        "title": "Verify DEV_TO_API_KEY is configured as a GitHub secret",
-        "description": "The articles and newsletter modules both gate on DEV_TO_API_KEY. Without it, publishing to dev.to is skipped silently. The configured_github_secrets list does not include it, which may explain why the publish path is not active despite the bot running.",
+        "title": "Verify DEV_TO_API_KEY is configured",
+        "description": "Ensure the DEV_TO_API_KEY secret is set so articles and newsletter modules can publish reliably; prevents silent skips.",
         "secret_needed": "DEV_TO_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Go to https://dev.to/account/settings/applications and create a personal API key",
+          "Step 1: Log in to dev.to and create a personal API key",
           "Step 2: Add DEV_TO_API_KEY as a GitHub repository secret",
-          "Step 3: Verify the key works by running the articles module manually",
+          "Step 3: Run a quick test by executing the articles module manually",
           "Step 4: Confirm published articles appear in status.json article_daily"
+        ]
+      },
+      {
+        "title": "Expose total attributed USD in status",
+        "description": "Add a receipt summary that reports total attributed USD, helping monitor earnings and verify receipt_check integrity.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Add bot/earning/receipt_summary.py with the provided implementation",
+          "Step 2: Call get_total_attributed_usd(status) in your daily logs or dashboard",
+          "Step 4: Verify the reported total matches the receipt_check totals"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260909-045221",
-    "proposed_version": "1.41.1"
+    "branch": "evolve/1.41.2-20260909-095828",
+    "proposed_version": "1.41.2"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add CEREBRAS_API_KEY for higher free-tier rate limits",
-      "description": "Cerebras Cloud offers ~1M tokens/day and 14,400 requests/day per model with no credit card required -- significantly higher than OpenRouter's free tier. Adding CEREBRAS_API_KEY unlocks llm_cerebras for research/upgrade roles.",
+      "title": "Enable Cerebras LLM for higher rate limits",
+      "description": "Add the CEREBRAS_API_KEY secret to unlock llm_cerebras, providing ~1M tokens/day and 14,400 requests/day with no credit card requirement.",
       "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Go to https://cloud.cerebras.ai/ and sign up (no credit card required)",
+        "Step 1: Sign up at https://cloud.cerebras.ai/ (no credit card required)",
         "Step 2: Generate an API key from the dashboard",
         "Step 3: Add CEREBRAS_API_KEY as a GitHub repository secret",
-        "Step 4: The next evolution cycle will detect it and activate llm_cerebras"
+        "Step 4: The next evolution cycle will detect the secret and activate llm_cerebras"
       ]
     },
     {
-      "title": "Add ANTHROPIC_API_KEY to activate llm_anthropic",
-      "description": "llm_anthropic is inactive because ANTHROPIC_API_KEY is missing. Adding it enables a second LLM provider for redundancy and the research role.",
-      "secret_needed": "ANTHROPIC_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Go to https://console.anthropic.com/ and create an API key",
-        "Step 2: Add ANTHROPIC_API_KEY as a GitHub repository secret",
-        "Step 3: The next evolution cycle will detect it and activate llm_anthropic",
-        "Step 4: Verify the provider appears in the dashboard's llm_roles section"
-      ]
-    },
-    {
-      "title": "Verify DEV_TO_API_KEY is configured as a GitHub secret",
-      "description": "The articles and newsletter modules both gate on DEV_TO_API_KEY. Without it, publishing to dev.to is skipped silently. The configured_github_secrets list does not include it, which may explain why the publish path is not active despite the bot running.",
+      "title": "Verify DEV_TO_API_KEY is configured",
+      "description": "Ensure the DEV_TO_API_KEY secret is set so articles and newsletter modules can publish reliably; prevents silent skips.",
       "secret_needed": "DEV_TO_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Go to https://dev.to/account/settings/applications and create a personal API key",
+        "Step 1: Log in to dev.to and create a personal API key",
         "Step 2: Add DEV_TO_API_KEY as a GitHub repository secret",
-        "Step 3: Verify the key works by running the articles module manually",
+        "Step 3: Run a quick test by executing the articles module manually",
         "Step 4: Confirm published articles appear in status.json article_daily"
+      ]
+    },
+    {
+      "title": "Expose total attributed USD in status",
+      "description": "Add a receipt summary that reports total attributed USD, helping monitor earnings and verify receipt_check integrity.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Add bot/earning/receipt_summary.py with the provided implementation",
+        "Step 2: Call get_total_attributed_usd(status) in your daily logs or dashboard",
+        "Step 4: Verify the reported total matches the receipt_check totals"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 139,
+  "last_cycle_seconds": 631,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1054,7 +1037,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-09T04:51:29.356544+00:00",
+    "checked_at": "2026-09-09T09:48:00.187810+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1265,7 +1248,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260909-045221",
+  "last_evolution_branch": "evolve/1.41.2-20260909-095828",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 13,
@@ -1370,7 +1353,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-09T04:53:46.506376+00:00",
+    "last_run": "2026-09-09T09:58:29.317887+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1380,30 +1363,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-09T04:53:46.798758+00:00",
+    "last_run": "2026-09-09T09:58:29.557016+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4545446,
-        "at": "2026-09-08T18:47:35.410382+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-09-08T21:53:54.723934+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-09-08T21:53:54.723934+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-09-08T21:53:54.723934+00:00",
-        "ok": true
-      },
       {
         "id": 4503417,
         "at": "2026-09-08T21:53:54.723934+00:00",
@@ -1450,8 +1413,28 @@
         "ok": true
       },
       {
+        "id": 4545446,
+        "at": "2026-09-09T09:58:29.557016+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-09-09T09:58:29.557016+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-09-09T09:58:29.557016+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-09-09T09:58:29.557016+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-09T04:53:46.798758+00:00",
+        "at": "2026-09-09T09:58:29.557016+00:00",
         "ok": true
       }
     ],
@@ -1460,7 +1443,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 10.1
+    "oldest_check_age_hours": 12.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

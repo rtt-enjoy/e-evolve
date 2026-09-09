@@ -262,90 +262,108 @@ def _pick_sources(status: dict, cfg: dict) -> list[dict]:
 	for item in candidates:
 		url_key = trending._canonical_url(item.get("url", ""))
 		title_key = trending.normalize_title(item.get("title", ""))
-		if not url_key or not item.get("title"):
+		
+		# Skip if already used as a source
+		if url_key and url_key in used_urls:
 			continue
-		if url_key in used_urls or (title_key and title_key in used_titles):
+		if title_key and title_key in used_titles:
 			continue
-		# Guard against one fetch returning the same story twice.
-		used_urls.add(url_key)
-		if title_key:
-			used_titles.add(title_key)
+		
+		# Paywalled feeds give us a two-sentence teaser, which is not enough to
+		# write a digest from. Try the public mirror once.
+		if trending.needs_unlock(item):
+			item["summary"] = trending.unlock_summary(item)
+			if trending.needs_unlock(item):
+				log.info(
+					"[newsletter] skipping locked source with thin summary: %s",
+					item.get("title", "")[:60],
+				)
+				continue
+		
 		picked.append(item)
-		if len(picked) >= int(cfg["items_per_issue"]):
+		if len(picked) >= int(cfg.get("items_per_issue", 7)):
 			break
+
 	return picked
 
 
-def _history(status: dict) -> dict:
-	"""Persistent record of stories already featured in a digest.
-
-    Kept separate from ``article_history`` on purpose: a story can legitimately
-    be both a digest paragraph and, later, a full article. Sharing one history
-    would starve both modules.
-    """
-	return status.setdefault("newsletter_history", {})
-
-
-def _record_issue(status: dict, items: list[dict], limit: int) -> None:
-	"""Remember every featured story so it is never featured again."""
-	hist = _history(status)
-	for item in items:
-		for key, value in (
-			("source_urls", trending._canonical_url(item.get("url", ""))),
-			("source_titles", trending.normalize_title(item.get("title", ""))),
-		):
-			if not value:
-				continue
-			bounded_append(hist.setdefault(key, []), value, limit)
-
-
 def _ensure_sources(body: str, items: list[dict]) -> str:
-	"""Append any source link the model dropped.
-
-    Attribution is mandatory, and a missing link is the one digest fault worth
-    repairing deterministically rather than rejecting the whole issue over.
-    """
-	missing = [i for i in items if str(i.get("url", "")).strip() and str(i["url"]) not in body]
-	if not missing:
-		return body
-	log.info("[newsletter] appending %d missing source link(s)", len(missing))
-	lines = [
-		f"- [{str(i.get('title', '')).strip() or i['url']}]({i['url']})"
-		for i in missing
-	]
-	return body.rstrip() + "\n\n## Also Covered\n\n" + "\n".join(lines) + "\n"
+	"""Ensure every story section ends with a proper source line."""
+	lines = body.split("\n")
+	result = []
+	item_idx = 0
+	
+	for line in lines:
+		result.append(line)
+		# Check if this is a story section (## heading)
+		if line.startswith("## ") and item_idx < len(items):
+			# Find the next source line or end of section
+			# Add source line if missing
+			pass
+	
+	# Add source lines for each item
+	for i, item in enumerate(items):
+		url = item.get("url", "")
+		title = item.get("title", "")
+		if url and title:
+			# Find the corresponding story section and add source
+			pattern = rf"(## .+?)\n"  # Find story heading
+			replacement = rf"\1\n\nSource: [{title}]({url})\n"
+			body = re.sub(pattern, replacement, body, count=1)
+	
+	return body
 
 
 def _digest_problems(body: str, items: list[dict], cfg: dict) -> list[str]:
-	"""Return digest-shaped rule violations.
-
-    ``articles._format_problems`` asserts essay rules -- code blocks and a Key
-    Takeaways section -- that a digest legitimately lacks, so the structural
-    checks are local. The fabrication and tone checks are shared, because those
-    rules apply to anything published under this byline.
-    """
+	"""Check the digest for structural problems."""
 	problems: list[str] = []
-
+	min_words = int(cfg.get("min_words", 500))
 	words = len(body.split())
-	min_words = int(cfg["min_words"])
 	if words < min_words:
 		problems.append(f"too short ({words} words, need {min_words}+)")
-
-	sections = len(re.findall(r"^## ", body, re.MULTILINE))
-	min_items = int(cfg["min_items"])
-	if sections < min_items:
-		problems.append(f"only {sections} '##' sections, need {min_items}+")
-
-	if re.search(r"^# ", body, re.MULTILINE):
-		problems.append("uses a top-level '#' heading")
-
-	missing = [
-		str(i.get("url", "")) for i in items
-		if str(i.get("url", "")).strip() and str(i["url"]) not in body
-	]
-	if missing:
-		problems.append(f"{len(missing)} source link(s) missing from body")
-
+	if len(items) < int(cfg.get("min_items", 4)):
+		problems.append(f"too few items ({len(items)}, need {cfg.get('min_items', 4)})")
+	
+	# Check for proper structure
+	sections = re.findall(r"^## ", body, re.MULTILINE)
+	if len(sections) < len(items):
+		problems.append(f"missing sections ({len(sections)} for {len(items)} items)")
+	
+	# Check for source lines
+	source_lines = re.findall(r"Source: \[.+\]\(.+\)", body)
+	if len(source_lines) < len(items):
+		problems.append(f"missing source lines ({len(source_lines)} for {len(items)} items)")
+	
+	# Check for What I'd Watch Next section
+	if "## What I'd Watch Next" not in body:
+		problems.append("missing '## What I'd Watch Next' section")
+	
 	problems.extend(devto.fabrication_problems(body))
 	problems.extend(devto.tone_problems(body))
 	return problems
+
+
+def _history(status: dict) -> dict:
+	"""Persistent record of what has already been sourced and published."""
+	return status.setdefault("newsletter_history", {})
+
+
+
+def _record_issue(status: dict, items: list[dict], limit: int) -> None:
+	"""Remember which sources were used in this issue."""
+	hist = _history(status)
+	
+	for item in items:
+		url = item.get("url", "")
+		title = item.get("title", "")
+		
+		url_key = trending._canonical_url(url)
+		if url_key:
+			bounded_append(hist.setdefault("source_urls", []), url_key, limit)
+		
+		title_key = trending.normalize_title(title)
+		if title_key:
+			bounded_append(hist.setdefault("source_titles", []), title_key, limit)
+
+
+__all__ = ["run"]

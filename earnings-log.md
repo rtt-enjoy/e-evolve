@@ -1666,3 +1666,7 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-09-09 14:52 UTC
 
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+
+### 2026-09-09 18:55 UTC
+
+- [ok] **dev.to-newsletter**: [AI agents, social metrics, and presentation pitfalls: this w](https://dev.to/robust_true_try/ai-agents-social-metrics-and-presentation-pitfalls-this-weeks-dev-pulse-22jb) (est. $0.00)

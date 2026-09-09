@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-09T14:37:20.004796+00:00",
-  "total_runs": 1802,
+  "last_run": "2026-09-09T18:38:22.353330+00:00",
+  "total_runs": 1803,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -23,7 +23,8 @@
       "dev.to": 0.0,
       "dev.to-backfill": 0.0,
       "code_techs": 0.0,
-      "mrr-ideas": 0.0
+      "mrr-ideas": 0.0,
+      "dev.to-newsletter": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -33,27 +34,14 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Prevent repeated wallet snapshots from inflating attributed receipt counts and totals across evolution cycles.",
+    "summary": "Fix Reddit rate limiting in code_techs, add product-promotion angle to articles, and improve newsletter cadence logging.",
     "changes_applied": [
       {
-        "file": "bot/earning/attribution.py",
-        "reason": "The wallet's last-received fields persist between hourly polls, so the current attribution path can append the same transfer on every cycle. This change identifies receipts by transaction hash or canonical timestamp/amount/network/block, suppresses repeat snapshots, compacts any historical duplicates, and recomputes the bounded totals and breakdowns."
+        "file": "bot/earning/code_techs.py",
+        "reason": "Fix Reddit rate limiting: add exponential backoff (5s, 10s, 20s) and continue to next subreddit on 429 instead of stopping the entire Reddit fetch. This prevents a single rate-limited subreddit from blocking all Reddit leads for the cycle."
       }
     ],
     "suggestions": [
-      {
-        "title": "Verify the dev.to publishing secret",
-        "description": "Confirm DEV_TO_API_KEY is present because articles and newsletters depend on it, even though it is absent from the configured-secret snapshot.",
-        "secret_needed": "DEV_TO_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Create or rotate a personal API key at https://dev.to/settings/extensions",
-          "Step 2: Open the repository Settings, then Secrets and variables > Actions",
-          "Step 3: Add the key as the repository secret DEV_TO_API_KEY",
-          "Step 4: Let the next scheduled cycle run and confirm article_daily or newsletter_daily advances"
-        ]
-      },
       {
         "title": "Activate Cerebras as free inference capacity",
         "description": "Add CEREBRAS_API_KEY to unlock a no-credit-card inference fallback and reduce pressure on the OpenRouter free-model quota.",
@@ -65,6 +53,19 @@
           "Step 2: Generate an API key from the dashboard",
           "Step 3: Add it as the GitHub repository secret CEREBRAS_API_KEY",
           "Step 4: Confirm llm_cerebras becomes active on the next status cycle"
+        ]
+      },
+      {
+        "title": "Verify the dev.to publishing secret",
+        "description": "Confirm DEV_TO_API_KEY is present because articles and newsletters depend on it, even though it is absent from the configured-secret snapshot.",
+        "secret_needed": "DEV_TO_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Create or rotate a personal API key at https://dev.to/settings/extensions",
+          "Step 2: Open the repository Settings, then Secrets and variables > Actions",
+          "Step 3: Add the key as the repository secret DEV_TO_API_KEY",
+          "Step 4: Let the next scheduled cycle run and confirm article_daily or newsletter_daily advances"
         ]
       },
       {
@@ -82,38 +83,23 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260909-145137",
+    "branch": "evolve/1.41.1-20260909-185531",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "dev.to-newsletter",
         "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
+        "title": "AI agents, social metrics, and presentation pitfalls: this week's dev pulse",
+        "url": "https://dev.to/robust_true_try/ai-agents-social-metrics-and-presentation-pitfalls-this-weeks-dev-pulse-22jb",
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "item_count": 7
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
-    {
-      "title": "Verify the dev.to publishing secret",
-      "description": "Confirm DEV_TO_API_KEY is present because articles and newsletters depend on it, even though it is absent from the configured-secret snapshot.",
-      "secret_needed": "DEV_TO_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Create or rotate a personal API key at https://dev.to/settings/extensions",
-        "Step 2: Open the repository Settings, then Secrets and variables > Actions",
-        "Step 3: Add the key as the repository secret DEV_TO_API_KEY",
-        "Step 4: Let the next scheduled cycle run and confirm article_daily or newsletter_daily advances"
-      ]
-    },
     {
       "title": "Activate Cerebras as free inference capacity",
       "description": "Add CEREBRAS_API_KEY to unlock a no-credit-card inference fallback and reduce pressure on the OpenRouter free-model quota.",
@@ -125,6 +111,19 @@
         "Step 2: Generate an API key from the dashboard",
         "Step 3: Add it as the GitHub repository secret CEREBRAS_API_KEY",
         "Step 4: Confirm llm_cerebras becomes active on the next status cycle"
+      ]
+    },
+    {
+      "title": "Verify the dev.to publishing secret",
+      "description": "Confirm DEV_TO_API_KEY is present because articles and newsletters depend on it, even though it is absent from the configured-secret snapshot.",
+      "secret_needed": "DEV_TO_API_KEY",
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Create or rotate a personal API key at https://dev.to/settings/extensions",
+        "Step 2: Open the repository Settings, then Secrets and variables > Actions",
+        "Step 3: Add the key as the repository secret DEV_TO_API_KEY",
+        "Step 4: Let the next scheduled cycle run and confirm article_daily or newsletter_daily advances"
       ]
     },
     {
@@ -142,7 +141,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 901,
+  "last_cycle_seconds": 1052,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1061,7 +1060,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-09T14:37:20.845407+00:00",
+    "checked_at": "2026-09-09T18:38:22.798112+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1070,12 +1069,12 @@
   },
   "newsletter_daily": {
     "enabled": true,
-    "date": "2026-09-02",
-    "published_at": "2026-09-02T18:54:13.018823+00:00",
-    "published": 2,
+    "date": "2026-09-09",
+    "published_at": "2026-09-09T18:55:52.940636+00:00",
+    "published": 3,
     "last_item_count": 7,
-    "last_title": "AI reshaping how we build, review, and trust code",
-    "last_url": "https://dev.to/robust_true_try/ai-reshaping-how-we-build-review-and-trust-code-22jb"
+    "last_title": "AI agents, social metrics, and presentation pitfalls: this week's dev pulse",
+    "last_url": "https://dev.to/robust_true_try/ai-agents-social-metrics-and-presentation-pitfalls-this-weeks-dev-pulse-22jb"
   },
   "newsletter_history": {
     "source_urls": [
@@ -1092,7 +1091,14 @@
       "martinfowler.com/rachels-ramblings/code-review.html",
       "martinfowler.com/fragments/2026-09-01.html",
       "github.blog/open-source/maintainers/openclaw-went-viral-meet-the-maintainers-building-and-securing-it",
-      "martinfowler.com/articles/making-data-ready-for-agentic-ai.html"
+      "martinfowler.com/articles/making-data-ready-for-agentic-ai.html",
+      "ai.meta.com/muse",
+      "martinfowler.com/articles/2026-social-traffic.html",
+      "martinfowler.com/fragments/2026-09-08.html",
+      "martinfowler.com/articles/never-send-slides/need-presentation.html",
+      "github.blog/ai-and-ml/github-copilot/project-hydrafusion-frontier-quality-via-multi-model-orchestration",
+      "github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-run-several-agents-at-once",
+      "github.blog/ai-and-ml/decoding-the-new-ai-lingo-loops-harnesses-squads-hill-climbing-oh-my"
     ],
     "source_titles": [
       "nitter xcancel receive cease desist notic",
@@ -1108,7 +1114,14 @@
       "maybe shouldn t reviewing all code",
       "fragment september 1",
       "openclaw went viral meet maintainer building securing",
-      "making data ready agentic ai"
+      "making data ready agentic ai",
+      "muse meta s personal ai agent",
+      "social media engagement summer 2026",
+      "fragment september 8",
+      "even need presentation",
+      "project hydrafusion frontier quality multi model orchestration",
+      "github copilot app run several agent once",
+      "decoding new ai lingo loop harness squad hill climbing oh"
     ]
   },
   "mrr_ideas": {
@@ -1272,7 +1285,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260909-145137",
+  "last_evolution_branch": "evolve/1.41.1-20260909-185531",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 13,
@@ -1377,37 +1390,22 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-09T14:52:19.950299+00:00",
+    "last_run": "2026-09-09T18:55:53.244992+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 5,
-    "with_footer": 5,
+    "checked": 4,
+    "with_footer": 4,
     "without_footer": 0,
-    "unreachable": 0,
+    "unreachable": 1,
     "missing": [],
-    "last_run": "2026-09-09T14:52:20.513388+00:00",
-    "last_reason": "all_verified",
-    "agrees_with_backfill": true,
+    "last_run": "2026-09-09T18:55:53.443098+00:00",
+    "last_reason": "partially_verified",
+    "agrees_with_backfill": null,
     "verified_ids": [
       {
-        "id": 4610036,
-        "at": "2026-09-09T00:20:56.364970+00:00",
-        "ok": true
-      },
-      {
         "id": 4602729,
-        "at": "2026-09-09T04:53:46.798758+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
-        "at": "2026-09-09T04:53:46.798758+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-09-09T04:53:46.798758+00:00",
         "ok": true
       },
@@ -1457,17 +1455,32 @@
         "ok": true
       },
       {
+        "id": 4610036,
+        "at": "2026-09-09T18:55:53.443098+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-09-09T18:55:53.443098+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-09-09T18:55:53.443098+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-09T14:52:20.513388+00:00",
+        "at": "2026-09-09T18:55:53.443098+00:00",
         "ok": true
       }
     ],
-    "published_total": 14,
+    "published_total": 15,
     "covered": 14,
-    "unverified": 0,
-    "coverage_complete": true,
+    "unverified": 1,
+    "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 14.5
+    "oldest_check_age_hours": 14.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

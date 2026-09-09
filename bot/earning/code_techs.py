@@ -199,10 +199,10 @@ _DEFAULT_CONFIG = {
 
 # A lead is one of two things. This module used to answer "who is paying for
 # work right now" -- job postings -- and that is the wrong question for this
-# project. Selling the owner's hours fails Principle 2 row 2 outright: income
-# per unit needs owner action, so it is a job, not passive income. The live
-# queue was 17 job postings to 1 tooling lead, including "College Admissions
-# Counselor", and the owner reported the page as pointing the wrong way.
+# project. Selling the owner's hours is not passive income -- it fails
+# Principle 2 row 2, because every unit of income needs the owner to do the
+# work -- and the live queue had become 17 job postings to 1 tooling lead,
+# among them "College Admissions Counselor" and a German retail role.
 #
 # So the two kinds are now:
 #   channel -- a place a digital product can be listed and paid for, ideally
@@ -430,7 +430,6 @@ _PERIOD_LABELS = {
 }
 
 
-
 @dataclass
 class Opportunity:
 	title: str
@@ -561,18 +560,18 @@ def _enabled(cfg: dict[str, Any]) -> bool:
 def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 	"""Free AI tooling to deliver with -- a SUPPLY source, not a demand one.
 
-    This used to query ``search/issues`` with repository qualifiers
-    (``in:readme``, ``stars:>200``) that endpoint ignores, so it returned
-    whatever issue happened to match the loose text: a studio's roadmap, an
-    "awesome ideas" PR, a bot's own trend digest. The identical query string
-    returns 12 junk issues on ``search/issues`` and 511 real repositories here.
+	This used to query ``search/issues`` with repository qualifiers
+	(``in:readme``, ``stars:>200``) that endpoint ignores, so it returned
+	whatever issue happened to match the loose text: a studio's roadmap, an
+	"awesome ideas" PR, a bot's own trend digest. The identical query string
+	returns 12 junk issues on ``search/issues`` and 511 real repositories here.
 
-    Asking GitHub *who will pay* was also tried -- ``label:"help wanted"``,
-    ``label:bounty``, ``"willing to pay"``, all with ``created:>`` windows --
-    and every variant returned noise. The doctrine refuses bounty hunting
-    anyway. So GitHub answers "what can I build with" and the job boards
-    answer "who is paying".
-    """
+	Asking GitHub *who will pay* was also tried -- ``label:"help wanted"``,
+	``label:bounty``, ``"willing to pay"``, all with ``created:>`` windows --
+	and every variant returned noise. The doctrine refuses bounty hunting
+	anyway. So GitHub answers "what can I build with" and the job boards
+	answer "who is paying".
+	"""
 	leads: list[dict[str, Any]] = []
 	token = os.getenv("GITHUB_TOKEN", "").strip()
 	headers = {
@@ -639,32 +638,32 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 def _fetch_online_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 	"""Fetch public, read-only leads from free, keyless sources.
 
-    **The job feeds are gone, and their removal is the point of this module's
-    redirect.** ``_fetch_remote_job_leads`` (Himalayas) and
-    ``_fetch_hn_hiring_leads`` (the monthly HN "Who is hiring" thread) were the
-    two biggest suppliers here, and they supplied the wrong thing: contract and
-    part-time postings. Selling the owner's hours is not passive income -- it
-    fails Principle 2 row 2, because every unit of income needs the owner to do
-    the work -- and the live queue had become 17 job postings to 1 tooling lead,
-    among them "College Admissions Counselor" and a German retail role.
+	**The job feeds are gone, and their removal is the point of this module's
+	redirect.** ``_fetch_remote_job_leads`` (Himalayas) and
+	``_fetch_hn_hiring_leads`` (the monthly HN "Who is hiring" thread) were the
+	two biggest suppliers here, and they supplied the wrong thing: contract and
+	part-time postings. Selling the owner's hours is not passive income -- it
+	fails Principle 2 row 2, because every unit of income needs the owner to do
+	the work -- and the live queue had become 17 job postings to 1 tooling lead,
+	among them "College Admissions Counselor" and a German retail role.
 
-    Deleted rather than demoted behind a filter: a lane that scores below every
-    other lead still occupies the page, still costs two HTTP fetchers to
-    maintain, and still invites a later cycle to "rebalance" it back up. The
-    research on those two sources is kept in the doctrine so it is not
-    re-derived, and ``hn_contract_terms`` / ``job_employment_types`` are gone
-    from the config with them.
+	Deleted rather than demoted behind a filter: a lane that scores below every
+	other lead still occupies the page, still costs two HTTP fetchers to
+	maintain, and still invites a later cycle to "rebalance" it back up. The
+	research on those two sources is kept in the doctrine so it is not
+	re-derived, and ``hn_contract_terms`` / ``job_employment_types`` are gone
+	from the config with them.
 
-    What is left answers the two questions that matter for a product business:
-    where can it be listed and paid for (channels, from the verified static
-    table -- see ``_PRODUCT_CHANNELS`` for why that one is not fetched), and
-    what free tooling and reach can build and market it (assets).
+	What is left answers the two questions that matter for a product business:
+	where can it be listed and paid for (channels, from the verified static
+	table -- see ``_PRODUCT_CHANNELS`` for why that one is not fetched), and
+	what free tooling and reach can build and market it (assets).
 
-    Two demand sources were probed and refused before this redirect, recorded
-    so a later cycle does not re-derive them: **Jobicy** publishes no salary
-    field, and **RemoteOK** had 1 of 100 jobs posted within three days and its
-    terms require a permanent follow-backlink. Both are moot now.
-    """
+	Two demand sources were probed and refused before this redirect, recorded
+	so a later cycle does not re-derive them: **Jobicy** publishes no salary
+	field, and **RemoteOK** had 1 of 100 jobs posted within three days and its
+	terms require a permanent follow-backlink. Both are moot now.
+	"""
 	# Both curated tables are always present. `_LOCAL_LEADS` used to be a
 	# fallback for "the fetchers returned nothing", but the asset rows are not
 	# a substitute for market data -- they are how the product gets built and
@@ -880,15 +879,15 @@ def _apply_channel_share(
 ) -> list[Opportunity]:
 	"""Reserve part of the page for channels -- places the product gets paid.
 
-    Assets are plentiful: GitHub, HN and Reddit return tooling all day, and it
-    scores well on the free-stack components. Without a floor, a good crop of
-    repositories crowds out every row that actually takes money, which is the
-    same shape as the failure the owner reported -- a page full of things that
-    are adjacent to income rather than income.
+	Assets are plentiful: GitHub, HN and Reddit return tooling all day, and it
+	scores well on the free-stack components. Without a floor, a good crop of
+	repositories crowds out every row that actually takes money, which is the
+	same shape as the failure the owner reported -- a page full of things that
+	are adjacent to income rather than income.
 
-    Reads ``min_channel_share``, falling back to the old ``min_demand_share``
-    so an owner's existing config keeps working after the rename.
-    """
+	Reads ``min_channel_share``, falling back to the old ``min_demand_share``
+	so an owner's existing config keeps working after the rename.
+	"""
 	share = cfg.get("min_channel_share", cfg.get("min_demand_share", 0.5))
 	share = float(share or 0.0)
 	demand = [op for op in ranked if op.kind == _CHANNEL]
@@ -928,12 +927,12 @@ def _reference_sources(cfg: dict[str, Any]) -> list[dict[str, str]]:
 def _online_ai_brief(llm: Any, leads: list[dict[str, Any]], cfg: dict[str, Any]) -> dict[str, Any]:
 	"""Ask the research LLM how to sell a digital product on a zero budget.
 
-    The verified channel table (``_PRODUCT_CHANNELS``) is the part of this page
-    that does not depend on a model being available or honest. This brief adds
-    the product angle around it, and degrades to the table alone when the LLM
-    is missing or fails -- the same shape as ``mrr_ideas``, where the
-    deterministic half is the trustworthy half.
-    """
+	The verified channel table (``_PRODUCT_CHANNELS``) is the part of this page
+	that does not depend on a model being available or honest. This brief adds
+	the product angle around it, and degrades to the table alone when the LLM
+	is missing or fails -- the same shape as ``mrr_ideas``, where the
+	deterministic half is the trustworthy half.
+	"""
 	if llm is None:
 		return {
 			"summary": "No LLM client was available; the queue used the verified channel table plus local scoring.",
@@ -1086,29 +1085,27 @@ def _score(
 ) -> tuple[int, dict[str, float]]:
 	"""Weighted 0-100 score ranking leads by how *passive* the income is.
 
-    Two rewrites are worth knowing about.
+	Two rewrites are worth knowing about.
 
-    The first fixed saturation: the version before it started at 30 and added
-    ~140 of overlapping bonuses before clamping, so the live queue read 100,
-    100, 100, 100, 100, 98, 96, 96 and ``min_score`` filtered nothing. Each
-    component is still normalised to 0..1 and weighted, so a rank is a blend
-    rather than a race to the clamp.
+	The first fixed saturation: the version before it started at 30 and added
+	~140 of overlapping bonuses before clamping, so the live queue read 100,
+	100, 100, 100, 100, 98, 96, 96 and ``min_score`` filtered nothing. Each
+	component is still normalised to 0..1 and weighted, so a rank is a blend
+	rather than a race to the clamp.
 
-    The second is this one, and it changed *what* is rewarded. The weights used
-    to be recency + demand intent + value clarity, which is the scoring of a
-    freelance job board: a fresh posting quoting an hourly rate scored highest.
-    That is the opposite of the goal. It even docked 15 points for the phrase
-    "passive income" -- so the module was actively demoting the thing the owner
-    is building.
-
-    The components now follow Principle 2's ordering. ``owner_action`` is
-    weighted highest because it is the row that separates income from a job:
-    something that earns per sale with nobody in the loop beats something that
-    pays more per hour of the owner's time. ``recency`` is deliberately absent
-    for channels -- a storefront is not more valuable for having been checked
-    an hour ago -- and applies only to the fetched asset leads, where a dead
-    tool is a real risk.
-    """
+	The second is this one, and it changed *what* is rewarded. The weights used
+	to be recency + demand intent + value clarity, which is the scoring of a
+	freelance job board: a fresh posting quoting an hourly rate scored highest.
+	That is the opposite of the goal. It even docked 15 points for the phrase
+	"passive income" -- so the module was actively demoting the thing the owner
+	is building. The components now follow Principle 2's ordering. ``owner_action``
+	is weighted highest because it is the row that separates income from a job:
+	something that earns per sale with nobody in the loop beats something that
+	pays more per hour of the owner's time. ``recency`` is deliberately absent
+	for channels -- a storefront is not more valuable for having been checked
+	an hour ago -- and applies only to the fetched asset leads, where a dead
+	tool is a real risk.
+	"""
 	labels_set = {str(l).lower() for l in labels}
 
 	# 1. Does income need the owner, per unit? The Principle 2 row-2 test.
@@ -1233,15 +1230,14 @@ def _score(
 
 	return max(0, min(100, round(score - penalty))), parts
 
-
 def _charges_a_subscription(text: str) -> bool:
 	"""True when the text says the OWNER pays a recurring fee.
 
-    Split out from ``_score`` because it needs to be tested on its own: the
-    naive version scored "no monthly fee" as a monthly fee. A negator directly
-    before the term flips the meaning, so the window before each match is
-    checked for one.
-    """
+	Split out from ``_score`` because it needs to be tested on its own: the
+	naive version scored "no monthly fee" as a monthly fee. A negator directly
+	before the term flips the meaning, so the window before each match is
+	checked for one.
+	"""
 	terms = ("monthly fee", "per month subscription", "subscription required",
 	         "paid plan required", "monthly subscription", "billed monthly")
 	negators = ("no ", "not ", "never ", "without ", "zero ", "free of ", "0 ")
@@ -1257,19 +1253,18 @@ def _charges_a_subscription(text: str) -> bool:
 			start = at + len(term)
 	return False
 
-
 def _is_free_ai_lead(text: str) -> bool:
 	"""True when the lead names an AI capability AND a nearby free-access signal.
 
-    Both halves used to be substring checks over the whole blob, which is how
-    "I spent a year making a Markdown editor for Windows ... free" was
-    classified as a free-AI earning lead: bare ``"ai"`` matches *contain*,
-    *available* and *email*, and the free term could sit paragraphs away.
+	Both halves used to be substring checks over the whole blob, which is how
+	"I spent a year making a Markdown editor for Windows ... free" was
+	classified as a free-AI earning lead: bare ``"ai"`` matches *contain*,
+	*available* and *email*, and the free term could sit paragraphs away.
 
-    So: word-boundary matching on the capability, and the free signal has to
-    appear within ``_FREE_WINDOW`` characters of it. Proximity is what carries
-    the claim that the two words are actually about each other.
-    """
+	So: word-boundary matching on the capability, and the free signal has to
+	appear within ``_FREE_WINDOW`` characters of it. Proximity is what carries
+	the claim that the two words are actually about each other.
+	"""
 	free_terms = (
 		"free", "no credit card", "no-cost", "zero cost", "open source",
 		"open-weight", "free tier", "free api", "generous",
@@ -1281,35 +1276,34 @@ def _is_free_ai_lead(text: str) -> bool:
 			return True
 	return False
 
-
 def _lead_value(lead: dict[str, Any]) -> tuple[float | None, str, str]:
 	"""Return ``(value_usd, value_basis, value_note)`` -- published prices only.
 
-    This replaces ``_extract_value``, which took ``max()`` of every ``$N``
-    regex match in the lead text and, failing that, invented
-    ``daily_target_usd`` because the body contained the word "need". Every
-    lead therefore carried a figure: the live queue's top lead read **$4,500**,
-    scraped out of an unrelated repository roadmap, and the dashboard summed
-    those into a "$5.6k pipeline value" shown beside a real on-chain balance
-    of $0.00.
+	This replaces ``_extract_value``, which took ``max()`` of every ``$N`` regex
+	match in the lead text and, failing that, invented ``daily_target_usd``
+	because the body contained the word "need". Every lead therefore carried a
+	figure: the live queue's top lead read **$4,500**, scraped out of an
+	unrelated repository roadmap, and the dashboard summed those into a
+	"$5.6k pipeline value" shown beside a real on-chain balance of $0.00.
 
-    Only two things count as a price here: a salary field the job board
-    published, or a rate the poster themselves typed. Everything else returns
-    ``None`` -- not ``0.0``, because 0.0 sums silently into totals and sorts as
-    the cheapest lead, while None forces the UI to admit it does not know.
-    """
+	Only two things count as a price here: a salary field the job board
+	published, or a rate the poster themselves typed. Everything else returns
+	``None`` -- not ``0.0``, because 0.0 sums silently into totals and sorts as
+	the cheapest lead, while None forces the UI to admit it does not know.
+	"""
 	low = _money(lead.get("min_salary"))
 	high = _money(lead.get("max_salary"))
 	if low or high:
 		currency = str(lead.get("currency") or "").upper()
 		# A CAD figure rendered with a "$" is simply a wrong number, and
-		# converting it would need a rate -- i.e. an estimate.
+		# converting it would need a rate -- i.e. an estimate. So only USD or
+		# unspecified currency is accepted.
 		if currency in ("", "USD"):
 			amount = low or high
 			period = str(lead.get("salary_period") or "").lower()
 			suffix = _PERIOD_LABELS.get(period, "")
 			if low and high and high != low:
-				note = f"${low:,.0f}-{high:,.0f}{suffix} posted"
+				note = f"${low:,.0f}-${high:,.0f}{suffix} posted"
 			else:
 				note = f"${amount:,.0f}{suffix} posted"
 			# Never normalise hourly to annual: the multiplier (2080? 1000?)
@@ -1317,7 +1311,7 @@ def _lead_value(lead: dict[str, Any]) -> tuple[float | None, str, str]:
 			return amount, "posted_salary", note
 
 	# A rate the poster wrote, and only from sources where that text is the
-	# offer itself. Requires an explicit unit, so "$4,500 of funding" cannot
+	# offer itself. Requires an explicit unit, so "$4,500 in funding" cannot
 	# match. On a live thread this fired on 2 of 242 comments -- both real.
 	if lead.get("allow_rate_extraction"):
 		match = _RATE_RE.search(str(lead.get("body") or ""))
@@ -1325,11 +1319,10 @@ def _lead_value(lead: dict[str, Any]) -> tuple[float | None, str, str]:
 			first = _money(match.group(1))
 			second = _money(match.group(2))
 			if first:
-				note = f"${first:,.0f}-{second:,.0f}/hr stated" if second else f"${first:,.0f}/hr stated"
+				note = f"${first:,.0f}-${second:,.0f}/hr stated" if second else f"${first:,.0f}/hr stated"
 				return first, "stated_rate", note
 
 	return None, "none", ""
-
 
 def _money(value: Any) -> float | None:
 	"""Positive float or None. Zero is not a price, it is a missing price."""
@@ -1339,17 +1332,16 @@ def _money(value: Any) -> float | None:
 		return None
 	return amount if amount > 0 else None
 
-
 def _cost(value: Any) -> float | None:
 	"""Non-negative float or None -- for a *cost*, where 0.0 is real.
 
-    Deliberately not ``_money``. That function maps 0 to None because a lead
-    paying $0 is a lead with no published price, and blurring that is what put
-    a fabricated "$5.6k pipeline" on the dashboard. A **cost** of $0.00 is the
-    opposite: it is the single most useful value on this page, because free to
-    list is the whole constraint. Same distinction, opposite default, so they
-    stay two functions.
-    """
+	Deliberately not ``_money``. That function maps 0 to None because a lead
+	paying $0 is a lead with no published price, and blurring that is what put
+	a fabricated "$5.6k pipeline" on the dashboard. A **cost** of $0.00 is the
+	opposite: it is the single most useful value on this page, because free to
+	list is the whole constraint. Same distinction, opposite default, so they
+	stay two functions.
+	"""
 	if value is None:
 		return None
 	try:
@@ -1357,7 +1349,6 @@ def _cost(value: Any) -> float | None:
 	except (TypeError, ValueError):
 		return None
 	return amount if amount >= 0 else None
-
 
 def _reason(
 	lead: dict[str, Any],
@@ -1393,17 +1384,16 @@ def _reason(
 		parts.append("zero-budget route to listing or promoting a digital product")
 	return "; ".join(parts[:2])
 
-
 def _next_step(lead: dict[str, Any], kind: str, cfg: dict[str, Any]) -> str:
 	"""One concrete move toward a product earning money, not toward a client.
 
-    The previous version told the owner to "read what the buyer asked for, then
-    quote per hour of audio" -- correct advice for the freelance queue this
-    module used to be, and useless for selling a product. It also used to
-    keyword-match the title, body and labels concatenated, so one stray word
-    decided the advice and all three GitHub leads were told to transcribe audio
-    when none involved audio. Matching the title and labels only is kept.
-    """
+	The previous version told the owner to "read what the buyer asked for, then
+	quote per hour of audio" -- correct advice for the freelance queue this
+	module used to be, and useless for selling a product. It also used to
+	keyword-match the title, body and labels concatenated, so one stray word
+	decided the advice and all three GitHub leads were told to transcribe audio
+	when none involved audio. Matching the title and labels only is kept.
+	"""
 	subject = " ".join([
 		str(lead.get("title") or ""),
 		" ".join(str(x) for x in lead.get("labels") or []),
@@ -1418,11 +1408,11 @@ def _next_step(lead: dict[str, Any], kind: str, cfg: dict[str, Any]) -> str:
 				"this for the articles."
 			)
 		first = (
-			"List the product once, set the price, and point the payout at the "
-			"published Tron address"
-			if any(t in subject for t in ("usdt", "tron", "own-wallet"))
-			else "List the product once and set the price"
-		)
+				"List the product once, set the price, and point the payout at the "
+				"published Tron address"
+				if any(t in subject for t in ("usdt", "tron", "own-wallet"))
+				else "List the product once and set the price"
+			)
 		return f"{first}. Owner does this by hand: {setup or 'open the account'}"
 
 	if any(t in subject for t in ("devto", "reach", "content-marketing")):
@@ -1445,17 +1435,16 @@ def _next_step(lead: dict[str, Any], kind: str, cfg: dict[str, Any]) -> str:
 		"without adding a per-user cost."
 	)
 
-
 def _codex_prompt(op: Opportunity, cfg: dict[str, Any]) -> str:
 	"""A prompt built from this lead's real fields, not a fixed template.
 
-    Slots so the reading model gets the context it needs: what the channel or
-    asset is, what it costs, what the owner must do by hand, and where money
-    lands. The COST slot states a cost out loud -- and the absence of a price
-    out loud when there is none -- because a prompt that merely omits it invites
-    the model to invent a figure, rebuilding the fabrication this module
-    removed inside the field the owner acts on (Principle 4).
-    """
+	Slots so the reading model gets the context it needs: what the channel or
+	asset is, what it costs, what the owner must do by hand, and where money
+	lands. The COST slot states a cost out loud -- and the absence of a price
+	out loud when there is none -- because a prompt that merely omits it invites
+	the model to invent a figure, rebuilding the fabrication this module
+	removed inside the field the owner acts on (Principle 4).
+	"""
 	free_stack = _clean_list(cfg.get("free_ai_focus", []))[:2]
 	cost = _cost(getattr(op, "cost_usd", None))
 	if cost is None:
@@ -1488,14 +1477,13 @@ def _codex_prompt(op: Opportunity, cfg: dict[str, Any]) -> str:
 		"- Revenue is the on-chain balance only; never estimate it."
 	)
 
-
 def _write_report(state: dict[str, Any], leads: list[dict[str, Any]] | None = None) -> None:
 	"""Write the markdown report.
 
-    ``leads`` carries the full ranked list, which is longer than the copy kept
-    in ``state`` -- a static page can be long, while status.json is committed
-    every hour. Falls back to the snapshot when not supplied.
-    """
+	``leads`` carries the full ranked list, which is longer than the copy kept
+	in ``state`` -- a static page can be long, while status.json is committed
+	every hour. Falls back to the snapshot when not supplied.
+	"""
 	_REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
 	lines = [
 		"# Passive Product Income Queue",
@@ -1577,10 +1565,10 @@ def _write_report(state: dict[str, Any], leads: list[dict[str, Any]] | None = No
 	lines.extend(["", "## Underserved Niches", ""])
 	for item in state.get("focus", []):
 		lines.append(f"- {item}")
-	lines.extend(["", "## Strategy Playbook", ""]) 
+	lines.extend(["", "## Strategy Playbook", ""])
 	for item in state.get("strategy_playbook", []):
 		lines.append(f"- {item}")
-	lines.extend(["", "## Avoid", ""]) 
+	lines.extend(["", "## Avoid", ""])
 	for item in state.get("avoid_patterns", []):
 		lines.append(f"- {item}")
 	refused = state.get("refused_channels") or []

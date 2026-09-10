@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-09T21:42:51.532850+00:00",
-  "total_runs": 1804,
+  "last_run": "2026-09-10T00:16:16.301750+00:00",
+  "total_runs": 1805,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -34,11 +34,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Fix code_techs Reddit fetch to use exponential backoff and continue to the next subreddit on 429 instead of stopping the entire Reddit fetch, preventing a single rate-limited subreddit from blocking all Reddit leads for the cycle.",
+    "summary": "Add a static product landing page that displays the Tron wallet address and links to the published articles, and point the code-techs 'wallet ask' channel at it so the receive path has a real product page.",
     "changes_applied": [
       {
-        "file": "bot/earning/code_techs.py",
-        "reason": "The Reddit fetcher stopped the entire Reddit fetch on the first 429, so a single rate-limited subreddit blocked all Reddit leads for the cycle. The fix adds exponential backoff (5s, 10s, 20s) and continues to the next subreddit on 429 instead of stopping, matching the pattern already used for GitHub and HN rate limiting."
+        "file": "docs/product.html",
+        "reason": "Creates the product page that the 'Wallet ask on the product page' channel has referenced since 2026-09-04 with an empty URL. The page shows the live Tron address, network, and links to the published articles and the code-tech opportunities report, giving the receive path a real artifact that a visitor can reach without reading an article footer."
       }
     ],
     "suggestions": [
@@ -69,6 +69,19 @@
         ]
       },
       {
+        "title": "Publish the product landing page on the repository README",
+        "description": "Add a link to docs/product.html in the repository README so visitors can find the wallet address without digging through articles.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Open the repository README in the GitHub web UI",
+          "Step 2: Add a line such as 'Support this work: [docs/product.html](docs/product.html)' near the top",
+          "Step 3: Commit the change",
+          "Step 4: Confirm the link is visible on the repository front page"
+        ]
+      },
+      {
         "title": "Add Anthropic as a provider fallback",
         "description": "Add ANTHROPIC_API_KEY to broaden LLM failover options when OpenRouter, Gemini, Groq, or Cerebras are unavailable.",
         "secret_needed": "ANTHROPIC_API_KEY",
@@ -83,20 +96,28 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260909-215445",
-    "proposed_version": "1.41.1"
+    "branch": "evolve/1.42.0-20260910-002055",
+    "proposed_version": "1.42.0"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "mrr-ideas",
         "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "docs/mrr-ideas.md"
+      },
+      {
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "fabricated",
+        "error": "unverifiable figures in prose",
+        "estimated_usd": 0.0
       }
     ],
     "total_usd": 0.0
@@ -129,6 +150,19 @@
       ]
     },
     {
+      "title": "Publish the product landing page on the repository README",
+      "description": "Add a link to docs/product.html in the repository README so visitors can find the wallet address without digging through articles.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Open the repository README in the GitHub web UI",
+        "Step 2: Add a line such as 'Support this work: [docs/product.html](docs/product.html)' near the top",
+        "Step 3: Commit the change",
+        "Step 4: Confirm the link is visible on the repository front page"
+      ]
+    },
+    {
       "title": "Add Anthropic as a provider fallback",
       "description": "Add ANTHROPIC_API_KEY to broaden LLM failover options when OpenRouter, Gemini, Groq, or Cerebras are unavailable.",
       "secret_needed": "ANTHROPIC_API_KEY",
@@ -143,7 +177,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 901,
+  "last_cycle_seconds": 553,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1008,6 +1042,8 @@
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/ai-agents-social-metrics-and-presentation-pitfalls-this-weeks-dev-pulse-22jb",
+      "https://dev.to/robust_true_try/why-your-ai-pair-programmer-buries-the-answer-153h",
       "https://dev.to/robust_true_try/the-npm-install-script-that-silently-ran-your-build-31g7",
       "https://dev.to/robust_true_try/your-openai-agent-got-hijacked-through-a-message-board-205a",
       "https://dev.to/robust_true_try/why-your-ai-agent-pipeline-costs-more-than-expected-42ne",
@@ -1031,7 +1067,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-09T21:42:52.019653+00:00",
+    "checked_at": "2026-09-10T00:16:16.833200+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1097,7 +1133,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-09-07T23:31:01.089940+00:00",
+    "last_refresh_at": "2026-09-10T00:20:55.641183+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -1106,30 +1142,30 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The single best recurring-revenue angle is a paid newsletter targeting freelance writers who want to monetize their technical expertise, leveraging dev.to as the primary discovery channel and using a simple subscription platform to collect payments manually.",
+    "summary": "The only recurring-revenue model that fits a zero\u2011cost, research\u2011first stack that can only publish to dev.to is a narrow\u2011focus paid newsletter: the bot writes and publishes deep\u2011dive articles, each ending with a call\u2011to\u2011action that drives interested readers to a manually created newsletter on a subscription platform; the owner handles the one\u2011time account setup and payment linkage, then the article stream becomes the sole acquisition funnel.",
     "ranked_ideas": [
       {
-        "name": "Freelance Writer Monetization Newsletter",
-        "why_this_stack_fits": "A newsletter aligns naturally with the dev.to author platform and allows direct monetization through subscriptions without complex product development.",
-        "narrow_niche": "Freelance writers seeking to build a secondary income stream from their technical writing skills",
-        "first_proof_artifact": "A 1000-word introductory issue published on dev.to with a clear CTA linking to a landing page offering $10/month or $15/month tiers",
-        "who_pays": "Freelance writers wanting additional income from their writing expertise",
-        "monthly_price_usd": "12-18",
+        "name": "Paid newsletter",
+        "why_this_stack_fits": "The bot can research, draft, and publish long\u2011form technical articles to dev.to; each article can end with an inbound\u2011only prompt that funnels readers to a newsletter the owner controls, requiring no outbound outreach or payment automation.",
+        "narrow_niche": "Mid\u2011level backend engineers at Series\u2011A SaaS startups who are designing resilient, observable microservice APIs in Go",
+        "first_proof_artifact": "A free 5\u2011part email mini\u2011course (one lesson per week) that walks through designing a production\u2011ready API gateway, delivered via the newsletter after the first dev.to article",
+        "who_pays": "Engineering leads or senior developers at early\u2011stage SaaS companies who own API architecture decisions",
+        "monthly_price_usd": "10-15",
         "runway_to_first_dollar": "4-8 weeks",
-        "owner_must_do_by_hand": "Manually open a Gumroad or Substack subscription account, create the landing page with pricing tiers, and publish the first issue directly from dev.to"
+        "owner_must_do_by_hand": "Open a subscription platform account (e.g., Substack) and connect a payment processor (e.g., Stripe) manually; create the newsletter, import the first subscriber list, and publish the welcome email"
       }
     ],
     "validation_steps": [
-      "Write a long-form article on dev.to titled 'How Freelance Writers Can Build a Side Income Through Curated Content' ending with a question to spark discussion",
-      "Share that article in relevant communities (r/writing, indie hacker forums, or dev.to comment threads) where you already have visibility, tracking engagement metrics",
-      "Analyze the article's performance (views, comments, shares) for two weeks to identify natural interest signals before launching a paid offer"
+      "Publish a dev.to article titled \"5 Hard Lessons Building Observable Go Microservices\" that ends with the question: \"Which of these pain points hits your team hardest? Reply in the comments.\"",
+      "Manually post the same question in the \"Go Microservices\" Discord channel the owner already belongs to, inviting members to share their struggles.",
+      "Collect the comment threads and Discord replies (inbound only) to confirm at least 10 distinct engineers describe the same API\u2011gateway design challenges."
     ],
     "owner_actions": [
-      "Create a simple landing page using a static site generator or structured Google Form to collect email addresses of potential subscribers",
-      "Draft the first three newsletter issues covering common freelance writer challenges (pricing, client acquisition, workflow optimization)",
-      "Set up a basic subscription system on Gumroad or Substack by hand, connecting it to your dev.to profile for seamless sharing",
-      "Publish the first issue within seven days of starting, then dedicate thirty minutes daily to engage with comments and answer questions to build trust",
-      "Track the conversion rate from reader to subscriber and refine the first deliverable based on feedback received"
+      "Define the 5\u2011lesson mini\u2011course outline and write the first dev.to article with the inbound question.",
+      "Set up the newsletter on a subscription platform and link a payment processor by hand.",
+      "Publish the first article on dev.to, share the link in the owner\u2019s existing Discord/Slack communities, and capture comment responses.",
+      "Deliver the first mini\u2011course lesson to anyone who subscribes via the newsletter sign\u2011up form.",
+      "Iterate: write and publish the next 4 articles, each referencing the previous lesson and ending with a new inbound question to grow the subscriber base."
     ],
     "viable": [
       {
@@ -1256,14 +1292,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260909-215445",
+  "last_evolution_branch": "evolve/1.42.0-20260910-002055",
   "evolution_pending_review": true,
   "article_stats": {
-    "count": 13,
-    "total_views": 2371,
-    "avg_views": 182.4,
+    "count": 15,
+    "total_views": 2454,
+    "avg_views": 163.6,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 1992,
+    "best_views": 2074,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1279,8 +1315,8 @@
       {
         "archetype": "problem-workaround",
         "count": 4,
-        "avg_engagement": 540.2,
-        "avg_views": 534.0,
+        "avg_engagement": 560.8,
+        "avg_views": 554.5,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1306,31 +1342,32 @@
       },
       {
         "archetype": "other",
-        "count": 2,
-        "avg_engagement": 13.5,
-        "avg_views": 13.5,
+        "count": 3,
+        "avg_engagement": 9.0,
+        "avg_views": 9.0,
         "best_title": "Prototype a DIY Solid\u2011State Intelligence Module for Home Automation"
       },
       {
         "archetype": "surprising-behavior",
-        "count": 2,
-        "avg_engagement": 6.0,
-        "avg_views": 6.0,
+        "count": 3,
+        "avg_engagement": 4.3,
+        "avg_views": 4.3,
         "best_title": "Why Your AI Agent Pipeline Costs More Than Expected"
       }
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "surprising-behavior",
-    "sample_size": 13
+    "sample_size": 15
   },
   "article_rejects": {
-    "last_reason": "empty_draft",
-    "last_detail": "LLM returned no usable title/body",
-    "last_at": "2026-09-03T00:32:02.979902+00:00",
+    "last_reason": "fabricated",
+    "last_detail": "unverifiable figures in prose",
+    "last_at": "2026-09-10T00:25:27.731068+00:00",
     "counts": {
-      "empty_draft": 2
+      "empty_draft": 2,
+      "fabricated": 1
     },
-    "total": 2
+    "total": 3
   },
   "payout": {
     "enabled": true,
@@ -1361,7 +1398,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-09T21:57:51.497489+00:00",
+    "last_run": "2026-09-10T00:25:28.022048+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1371,30 +1408,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-09T21:57:51.786868+00:00",
+    "last_run": "2026-09-10T00:25:28.306993+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4421693,
-        "at": "2026-09-09T09:58:29.557016+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-09-09T09:58:29.557016+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-09-09T09:58:29.557016+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-09-09T14:52:20.513388+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-09-09T14:52:20.513388+00:00",
@@ -1441,13 +1458,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4617346,
         "at": "2026-09-09T21:57:51.786868+00:00",
         "ok": true
       },
       {
-        "id": 4617346,
-        "at": "2026-09-09T21:57:51.786868+00:00",
+        "id": 4421693,
+        "at": "2026-09-10T00:25:28.306993+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-09-10T00:25:28.306993+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-09-10T00:25:28.306993+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-09-10T00:25:28.306993+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-09-10T00:25:28.306993+00:00",
         "ok": true
       }
     ],
@@ -1456,7 +1493,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 12.0
+    "oldest_check_age_hours": 9.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

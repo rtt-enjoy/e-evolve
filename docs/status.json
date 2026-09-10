@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-10T14:27:51.359101+00:00",
-  "total_runs": 1808,
+  "last_run": "2026-09-10T18:30:00.930824+00:00",
+  "total_runs": 1809,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -34,21 +34,12 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add Cerebras integration, publish product landing page, and automate wallet address visibility in README.",
-    "changes_applied": [
-      {
-        "file": "docs/product.md",
-        "reason": ""
-      },
-      {
-        "file": "config/cerebras.json",
-        "reason": ""
-      }
-    ],
+    "summary": "Enable Cerebras LLM fallback, enhance wallet footer tracking, and publish product landing page",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Enable Cerebras free inference tier",
-        "description": "Add CEREBRAS_API_KEY to unlock a no\u2011credit\u2011card LLM fallback, reducing load on OpenRouter free tier and increasing daily article quota.",
+        "description": "Add CEREBRAS_API_KEY to unlock a no-credit-card LLM fallback, reducing load on OpenRouter free tier and increasing daily article quota.",
         "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -69,7 +60,7 @@
           "Step 1: Open the repository README in the GitHub web UI",
           "Step 2: Add a line such as 'Support this work: [docs/product.html](docs/product.html)' near the top",
           "Step 3: Commit the change",
-          "Step 5: Confirm the link is visible on the repository front page"
+          "Step 4: Confirm the link is visible on the repository front page"
         ]
       },
       {
@@ -86,28 +77,17 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20260910-144242",
-    "proposed_version": "1.42.0"
+    "branch": null,
+    "proposed_version": "1.43.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Enable Cerebras free inference tier",
-      "description": "Add CEREBRAS_API_KEY to unlock a no\u2011credit\u2011card LLM fallback, reducing load on OpenRouter free tier and increasing daily article quota.",
+      "description": "Add CEREBRAS_API_KEY to unlock a no-credit-card LLM fallback, reducing load on OpenRouter free tier and increasing daily article quota.",
       "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -128,7 +108,7 @@
         "Step 1: Open the repository README in the GitHub web UI",
         "Step 2: Add a line such as 'Support this work: [docs/product.html](docs/product.html)' near the top",
         "Step 3: Commit the change",
-        "Step 5: Confirm the link is visible on the repository front page"
+        "Step 4: Confirm the link is visible on the repository front page"
       ]
     },
     {
@@ -145,7 +125,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1338,
+  "last_cycle_seconds": 605,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1089,7 +1069,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-10T14:27:53.157129+00:00",
+    "checked_at": "2026-09-10T18:30:01.945397+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1314,8 +1294,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20260910-144242",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 14,
     "total_views": 2464,
@@ -1420,40 +1400,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-10T14:50:07.990730+00:00",
+    "last_run": "2026-09-10T18:40:04.302770+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 3,
-    "with_footer": 3,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 2,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-10T14:50:08.232937+00:00",
+    "last_run": "2026-09-10T18:40:04.550751+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4421693,
-        "at": "2026-09-10T00:25:28.306993+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-09-10T00:25:28.306993+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-09-10T00:25:28.306993+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-09-10T00:25:28.306993+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-09-10T05:05:42.765126+00:00",
@@ -1505,8 +1465,28 @@
         "ok": true
       },
       {
+        "id": 4421693,
+        "at": "2026-09-10T18:40:04.550751+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-09-10T18:40:04.550751+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-09-10T18:40:04.550751+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-09-10T18:40:04.550751+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-10T14:50:08.232937+00:00",
+        "at": "2026-09-10T18:40:04.550751+00:00",
         "ok": true
       }
     ],
@@ -1515,7 +1495,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 14.4
+    "oldest_check_age_hours": 13.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

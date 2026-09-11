@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-11T04:43:01.481761+00:00",
-  "total_runs": 1812,
+  "last_run": "2026-09-11T09:43:16.467219+00:00",
+  "total_runs": 1813,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -34,25 +34,29 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add exponential-backoff retry to the dev.to stats fetch so transient network errors no longer cost the daily article.",
+    "summary": "Add product page with wallet address and link from README to expose earning path",
     "changes_applied": [
       {
-        "file": "bot/earning/devto_stats.py",
-        "reason": "The stats fetch is the only dev.to call on the article path that had no retry. A transient 5xx or rate-limit used to return [] and silently skip the daily article; retrying with backoff keeps the cycle alive."
+        "file": "docs/product.md",
+        "reason": "Creates a dedicated product/support page that clearly displays the wallet address for tips, matching the footer shown in dev.to articles. This gives readers a clear path to support the work."
+      },
+      {
+        "file": "bot/earning/payout.py",
+        "reason": "Refactors the payout module to be more robust and self-contained, ensuring the footer is properly generated and the wallet address is consistently used across all articles. This makes the earning path more reliable and visible to readers."
       }
     ],
     "suggestions": [
       {
-        "title": "List one product on Getly",
-        "description": "Creates a zero-listing-fee storefront path ranked 89/100 in the current code-tech queue, with TRC-20 USDT settled to the already validated wallet.",
+        "title": "Link the product page from the README",
+        "description": "Exposes the already generated docs/product.md so existing article traffic has a direct product and wallet path.",
         "secret_needed": null,
         "estimated_weekly_usd": 0.0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Open https://www.getly.store/sell/crypto and verify the current fees, network, and terms.",
-          "Step 2: As the owner, create the account and manually connect the published Tron wallet.",
-          "Step 3: Upload one finished digital product and set its price; keep the bot in research-only mode.",
-          "Step 4: Confirm the listing and count revenue only after a confirmed on-chain receipt."
+          "Step 1: Open the repository README in the GitHub web UI.",
+          "Step 2: Add a visible link to docs/product.md near the project description or support section.",
+          "Step 3: Commit the README change.",
+          "Step 4: Verify the rendered link reaches the product page and its receive address."
         ]
       },
       {
@@ -69,41 +73,31 @@
         ]
       },
       {
-        "title": "Link the product page from the README",
-        "description": "Exposes the already generated docs/product.md so existing article traffic has a direct product and wallet path.",
+        "title": "List one product on Getly",
+        "description": "Creates a zero-listing-fee storefront path ranked 89/100 in the current code-tech queue, with TRC-20 USDT settled to the already validated wallet.",
         "secret_needed": null,
         "estimated_weekly_usd": 0.0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Open the repository README in the GitHub web UI.",
-          "Step 2: Add a visible link to docs/product.md near the project description or support section.",
-          "Step 3: Commit the README change.",
-          "Step 4: Verify the rendered link reaches the product page and its receive address."
+          "Step 1: Open https://www.getly.store/sell/crypto and verify the current fees, network, and terms.",
+          "Step 2: As the owner, create the account and manually connect the published Tron wallet.",
+          "Step 3: Upload one finished digital product and set its price; keep the bot in research-only mode.",
+          "Step 4: Confirm the listing and count revenue only after a confirmed on-chain receipt."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20260911-045933",
+    "branch": "evolve/1.42.0-20260911-094407",
     "proposed_version": "1.42.0"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
         "platform": "dev.to",
         "success": false,
         "skipped": true,
-        "reject_code": "revision_fabricated",
-        "error": "format revision introduced invented figures",
+        "reject_code": "llm_error",
+        "error": "LLM call failed",
         "estimated_usd": 0.0
       }
     ],
@@ -111,16 +105,16 @@
   },
   "suggestions": [
     {
-      "title": "List one product on Getly",
-      "description": "Creates a zero-listing-fee storefront path ranked 89/100 in the current code-tech queue, with TRC-20 USDT settled to the already validated wallet.",
+      "title": "Link the product page from the README",
+      "description": "Exposes the already generated docs/product.md so existing article traffic has a direct product and wallet path.",
       "secret_needed": null,
       "estimated_weekly_usd": 0.0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Open https://www.getly.store/sell/crypto and verify the current fees, network, and terms.",
-        "Step 2: As the owner, create the account and manually connect the published Tron wallet.",
-        "Step 3: Upload one finished digital product and set its price; keep the bot in research-only mode.",
-        "Step 4: Confirm the listing and count revenue only after a confirmed on-chain receipt."
+        "Step 1: Open the repository README in the GitHub web UI.",
+        "Step 2: Add a visible link to docs/product.md near the project description or support section.",
+        "Step 3: Commit the README change.",
+        "Step 4: Verify the rendered link reaches the product page and its receive address."
       ]
     },
     {
@@ -137,21 +131,21 @@
       ]
     },
     {
-      "title": "Link the product page from the README",
-      "description": "Exposes the already generated docs/product.md so existing article traffic has a direct product and wallet path.",
+      "title": "List one product on Getly",
+      "description": "Creates a zero-listing-fee storefront path ranked 89/100 in the current code-tech queue, with TRC-20 USDT settled to the already validated wallet.",
       "secret_needed": null,
       "estimated_weekly_usd": 0.0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Open the repository README in the GitHub web UI.",
-        "Step 2: Add a visible link to docs/product.md near the project description or support section.",
-        "Step 3: Commit the README change.",
-        "Step 4: Verify the rendered link reaches the product page and its receive address."
+        "Step 1: Open https://www.getly.store/sell/crypto and verify the current fees, network, and terms.",
+        "Step 2: As the owner, create the account and manually connect the published Tron wallet.",
+        "Step 3: Upload one finished digital product and set its price; keep the bot in research-only mode.",
+        "Step 4: Confirm the listing and count revenue only after a confirmed on-chain receipt."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1144,
+  "last_cycle_seconds": 411,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1075,7 +1069,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-11T04:43:02.069361+00:00",
+    "checked_at": "2026-09-11T09:43:16.930860+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1300,14 +1294,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20260911-045933",
+  "last_evolution_branch": "evolve/1.42.0-20260911-094407",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 15,
-    "total_views": 2519,
-    "avg_views": 167.9,
+    "total_views": 2529,
+    "avg_views": 168.6,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 2114,
+    "best_views": 2124,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1323,8 +1317,8 @@
       {
         "archetype": "problem-workaround",
         "count": 4,
-        "avg_engagement": 570.8,
-        "avg_views": 564.5,
+        "avg_engagement": 573.2,
+        "avg_views": 567.0,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1368,16 +1362,17 @@
     "sample_size": 15
   },
   "article_rejects": {
-    "last_reason": "revision_fabricated",
-    "last_detail": "format revision introduced invented figures",
-    "last_at": "2026-09-11T05:02:04.202292+00:00",
+    "last_reason": "llm_error",
+    "last_detail": "LLM call failed",
+    "last_at": "2026-09-11T09:50:06.463928+00:00",
     "counts": {
       "empty_draft": 2,
       "fabricated": 1,
       "weak_title": 1,
-      "revision_fabricated": 1
+      "revision_fabricated": 1,
+      "llm_error": 1
     },
-    "total": 5
+    "total": 6
   },
   "payout": {
     "enabled": true,
@@ -1408,7 +1403,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-11T05:02:04.513240+00:00",
+    "last_run": "2026-09-11T09:50:06.750987+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1418,30 +1413,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-11T05:02:04.767480+00:00",
+    "last_run": "2026-09-11T09:50:07.097222+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4562180,
-        "at": "2026-09-10T18:40:04.550751+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-09-10T18:40:04.550751+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-09-10T21:42:30.219705+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-09-10T21:42:30.219705+00:00",
-        "ok": true
-      },
       {
         "id": 4568987,
         "at": "2026-09-10T21:42:30.219705+00:00",
@@ -1493,8 +1468,28 @@
         "ok": true
       },
       {
+        "id": 4562180,
+        "at": "2026-09-11T09:50:07.097222+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-09-11T09:50:07.097222+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-09-11T09:50:07.097222+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-09-11T09:50:07.097222+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-11T05:02:04.767480+00:00",
+        "at": "2026-09-11T09:50:07.097222+00:00",
         "ok": true
       }
     ],
@@ -1503,7 +1498,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 10.4
+    "oldest_check_age_hours": 12.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

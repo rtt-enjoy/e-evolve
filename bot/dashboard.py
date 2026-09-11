@@ -94,6 +94,8 @@ def write_html(status: dict[str, Any]) -> None:
 	github_repo = os.getenv("GITHUB_REPO", "").strip()
 	if github_repo:
 		public_status["github_repo"] = github_repo
+	# Expose product page URL for the React frontend and fallback UI
+	public_status["product_page_url"] = "product.md"
 	_PUBLIC_STATUS_FILE.write_text(
 		json.dumps(public_status, indent=2, default=str),
 		encoding="utf-8",
@@ -124,6 +126,9 @@ def _fallback_index() -> str:
     main{max-width:760px;margin:12vh auto;padding:0 24px}
     a{color:#6aa6ff}
     code{background:#17202c;padding:2px 6px;border-radius:6px}
+    .links{margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap}
+    .links a{padding:0.5rem 1rem;border:1px solid #2a3a4a;border-radius:6px;text-decoration:none}
+    .links a:hover{background:#17202c}
   </style>
 </head>
 <body>
@@ -132,6 +137,10 @@ def _fallback_index() -> str:
     <p>The React dashboard has not been built yet.</p>
     <p>Run <code>npm install</code> and <code>npm run build</code> in
     <code>frontend/</code>, or inspect <a href="status.json">status.json</a>.</p>
+    <div class="links">
+      <a href="product.md">Support This Work</a>
+      <a href="earnings-log.md">Earnings Log</a>
+    </div>
   </main>
 </body>
 </html>

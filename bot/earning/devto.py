@@ -58,6 +58,12 @@ FABRICATION_PATTERNS = [
 	(r"\$\s?\d+(\.\d+)?\s*(/|per\s)", "invented pricing"),
 	(r"\b\d+(\.\d+)?\s*(tokens?/s|tok/s|req/s|requests?/(sec|second))", "invented throughput"),
 	(r"\b\d+\s*%\s*(faster|slower|cheaper|better|more accurate)", "invented benchmark deltas"),
+	# Catch invented token prices like "$0.0001 per 1K tokens" or "$2.50 per million tokens"
+	(r"\$\s?\d+(\.\d+)?\s*per\s+(1k|1000|million|m)\s+tokens?", "invented token pricing"),
+	# Catch invented context window claims like "128K context" or "200k tokens"
+	(r"\b\d+(\.\d+)?\s*[kK]\s*(context|tokens?)\b", "invented context window"),
+	# Catch invented model parameter claims like "7B parameters" or "70B model"
+	(r"\b\d+(\.\d+)?\s*[Bb]\s*(params?|parameters?|model)\b", "invented model size"),
 ]
 
 # Deliberately absent: a rule matching bare model sizes (r"\d+(\.\d+)?\s*[BTM]\b"
@@ -77,7 +83,7 @@ FABRICATION_PATTERNS = [
 # words decides that. Every attempt either kept rejecting correct prose or
 # reduced to a check that could never fire -- dead code wearing a gate's name.
 #
-# The other four rules are unaffected and still catch invented latency, pricing,
+# The other rules are unaffected and still catch invented latency, pricing,
 # throughput and benchmark deltas. Fabricated parameter counts are now the one
 # claim this gate does not police; the writing prompt still forbids them.
 

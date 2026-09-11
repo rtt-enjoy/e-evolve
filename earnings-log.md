@@ -1692,3 +1692,7 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-09-10 21:42 UTC
 
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+
+### 2026-09-11 00:41 UTC
+
+- [fail] **dev.to**: title too weak to earn a click, and the rewrite failed

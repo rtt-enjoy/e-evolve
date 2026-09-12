@@ -16,11 +16,14 @@ from __future__ import annotations
 
 import html
 import json
+import logging
 import re
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Mapping, Optional
+
+log = logging.getLogger(__name__)
 
 CONFIG_FILE = Path("config/strategy.json")
 
@@ -37,7 +40,8 @@ def load_config(section: str, defaults: Mapping[str, Any] | None = None) -> dict
     """
 	try:
 		raw = json.loads(CONFIG_FILE.read_text(encoding="utf-8")).get(section, {})
-	except Exception:
+	except Exception as exc:
+		log.debug("[_shared] config read failed for section %r: %s", section, exc)
 		raw = {}
 	cfg = dict(defaults or {})
 	if isinstance(raw, dict):
@@ -56,6 +60,7 @@ def hours_until_due(state: Mapping[str, Any], key: str, interval_hours: int) -> 
 		return 0.0
 	last = parse_dt(stamp)
 	if last is None:
+		log.debug("[_shared] invalid timestamp %r for key %s", stamp, key)
 		return 0.0
 	due = last + timedelta(hours=max(1, interval_hours))
 	return max(0.0, (due - datetime.now(timezone.utc)).total_seconds() / 3600)
@@ -77,7 +82,8 @@ def parse_dt(value: Any) -> Optional[datetime]:
 	if re.fullmatch(r"\d{9,11}", raw):
 		try:
 			return datetime.fromtimestamp(int(raw), timezone.utc)
-		except (OverflowError, OSError, ValueError):
+		except (OverflowError, OSError, ValueError) as exc:
+			log.debug("[_shared] epoch parse failed for %r: %s", raw, exc)
 			return None
 	try:
 		dt = datetime.fromisoformat(raw.replace("Z", "+00:00"))
@@ -88,7 +94,8 @@ def parse_dt(value: Any) -> Optional[datetime]:
 		from email.utils import parsedate_to_datetime
 		dt = parsedate_to_datetime(raw)
 		return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
-	except Exception:
+	except Exception as exc:
+		log.debug("[_shared] RFC-822 parse failed for %r: %s", raw, exc)
 		return None
 
 
@@ -126,4 +133,6 @@ def bounded_append(entries: list, value: Any, limit: int) -> None:
     """
 	if value and value not in entries:
 		entries.append(value)
-	del entries[: -max(1, limit)]
+	# Ensure we never have fewer than 1 entry
+	if len(entries) > limit:
+		del entries[: -max(1, limit)]

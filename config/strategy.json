@@ -1,222 +1,182 @@
 {
-	"articles": {
-		"max_articles_per_cycle": 1,
-		"min_interval_hours": 6,
-		"source_max_age_hours": 24,
-		"history_limit": 200,
-		"min_words": 700,
-		"followup_enabled": true,
-		"followup_window_hours": 48,
-		"followup_min_views": 40,
-		"title_min_chars": 25,
-		"title_max_chars": 70
-	},
-	"newsletter": {
-		"enabled": true,
-		"min_interval_hours": 168,
-		"items_per_issue": 7,
-		"min_items": 4,
-		"source_max_age_hours": 168,
-		"history_limit": 200,
-		"min_words": 500,
-		"niche_focus": ""
-	},
-	"payout": {
-		"enabled": true,
-		"address_env": "USDT_WALLET_ADDRESS",
-		"heading": "Support this work",
-		"note": "These write-ups are researched and published with no paywall, sponsor, or tracking. If one saved you an afternoon, a small tip keeps them coming.",
-		"show_network": true,
-		"note_on_config": "The only monetization channel this stack can run unattended: a receive address in the article itself. No payment processor, no new secret, no owner action between a reader deciding to give and the money landing. Off by default -- turn it on once you have read the footer text, since it publishes under your byline. The address is checksum-validated (base58check for TRC-20, EIP-55 for ERC-20) before it can reach a reader; a malformed one omits the footer rather than publishing an address that would burn a reader's funds."
-	},
-	"backfill": {
-		"enabled": true,
-		"max_per_cycle": 3,
-		"history_limit": 200,
-		"note_on_config": "Adds the same payout footer to articles published before the footer existed. The back catalogue is where most readers already are -- 1,949 lifetime views across 11 posts, 85% of it on a single evergreen post -- and none of it carried an ask. Reuses DEV_TO_API_KEY via PUT /api/articles/{id}: no new secret, no owner action, no LLM call, and no new writing. Editing does not change published_at, so nothing is re-surfaced in the feed. A post whose body opens with YAML front matter is skipped, because Forem re-reads title and tags from that block on save and clears the tag list first. Gated on payout.enabled: if there is no footer shipping, there is nothing to backfill."
-	},
-	"receipt_check": {
-		"enabled": true,
-		"max_per_cycle": 5,
-		"stale_after_hours": 168,
-		"history_limit": 50,
-		"note_on_config": "Verifies from outside that published posts actually carry the ask. Every other signal is the bot reporting on its own work: backfill computes 'remaining' from the same fetch it acts on, so when that fetch was wrong the work and the claim were wrong together and agreed. That hid a total failure for cycles #1760-#1773, with remaining: 0 while no post on the account had a footer. This re-reads each post through the unauthenticated GET /api/articles/{id} -- no key, no shared serializer with the writer. It never writes and never repairs: repair is backfill's job, and merging them would rebuild the same self-reporting blind spot one layer up. max_per_cycle is a SAMPLE size, not coverage: with 13 posts and a cap of 5 sorted by views, eight posts could never be read in any cycle while last_reason said 'all_verified'. Selection now rotates -- busiest post every cycle, remaining slots to the least-recently-verified -- so read covered/published_total and known_without_footer, not checked. known_without_footer persists across cycles: a gap found once must not vanish because the rotation moved past it. stale_after_hours expires an observation so coverage_complete cannot latch true on one old read; set 0 to disable expiry."
-	},
-	"attribution": {
-		"enabled": true,
-		"history_limit": 200,
-		"note_on_config": "Records what was published when on-chain money arrived. Writes nothing unless wallet.last_received_usd > 0, so it cannot invent revenue. A TRC-20 transfer carries no memo, so every record is labelled confidence: correlated -- it is which posts were live when money landed, not proof of which one earned it. Read the count beside each total before believing an ordering: one receipt is one receipt."
-	},
-	"mrr_ideas": {
-		"enabled": true,
-		"refresh_hours": 48,
-		"max_ideas": 8,
-		"min_score": 50,
-		"history_limit": 100
-	},
-	"code_techs": {
-		"enabled": true,
-		"refresh_hours": 6,
-		"max_items": 40,
-		"min_score": 40,
-		"auto_pursue": false,
-		"status_max_items": 16,
-		"prompt_top_n": 6,
-		"min_channel_share": 0.5,
-		"supply_max_age_days": 120,
-		"max_reddit_requests": 3,
-		"reddit_backoff_seconds": 5,
-		"requirements": [
-			"Every lead must move a digital product toward earning without the owner in the loop.",
-			"Rank by how little owner action each unit of income needs, not by headline upside.",
-			"Name where the money lands, and prefer stablecoin to the address this project already publishes.",
-			"State every cost and every manual setup step out loud; zero budget is the constraint.",
-			"Never suggest selling the owner's hours: a rate per hour is a job, not passive income.",
-			"Stay inside policy: no social posting, no trading, no minting, no cold outreach.",
-			"Do not count discovery, pipeline, or speculative upside as earnings. On-chain or nothing."
-		],
-		"product_shapes": [
-			"browser extension solving one specific annoyance",
-			"single-purpose desktop or CLI utility",
-			"static web tool that runs entirely client-side",
-			"template, preset, or asset pack for a tool people already use",
-			"developer library or plugin for an existing ecosystem",
-			"self-hostable script the buyer runs on their own machine",
-			"data set or reference compiled once and sold as a download"
-		],
-		"monetization_patterns": [
-			"Ship the tool free and sell the upgrade: the free tier buys discovery the owner cannot.",
-			"One-time licence for a digital download, delivered by the storefront with no owner action.",
-			"Put the published receive address on the product page and in the README, so a user can pay with no platform at all.",
-			"Sell a template, preset, or asset pack built once and downloaded many times.",
-			"Charge for the paid tier of a tool whose free tier costs nothing per user to run.",
-			"List the same product on every zero-cost channel, since the artifact is already built."
-		],
-		"underserved_focus": [
-			"storefronts that settle stablecoin straight to the seller's own wallet, no custodian",
-			"one-task tools that solve a single annoyance well enough to be worth paying for",
-			"products with zero marginal cost per user, so the free tier can stay free forever",
-			"channels that are free to list on and have no approval queue to fail",
-			"paying users who never open a storefront and would rather send stablecoin directly",
-			"distribution with real organic discovery, so reach does not need ad spend",
-			"products whose buyers are developers, since that is the audience already reached"
-		],
-		"strategy_playbook": [
-			"Build the product once, then spend every later cycle on distribution rather than on more product.",
-			"Keep marginal cost per user at zero: client-side code, free hosting, free scheduler. Every dollar in is margin.",
-			"Put the receive path on the artifact itself -- product page, README, article footer -- not only on a storefront.",
-			"List on the free channels first; pay a listing fee only where discovery is worth it, and say what it cost.",
-			"Let the articles this bot already publishes do the marketing: the problem is the post, the product is the fix.",
-			"Price once and leave it. A price that needs renegotiating per buyer is a service in disguise.",
-			"Measure only what arrives on-chain. Listings, views and pipeline are not revenue."
-		],
-		"avoid_patterns": [
-			"Selling the owner's hours: freelance postings, contract work, retainers, consulting. Income per unit of work is a job.",
-			"Anything requiring paid infrastructure, a monthly fee, or a credit-card-gated tier.",
-			"Custodial payment processors that hold the money before the owner does, and anything demanding KYC to receive.",
-			"Platforms that are dead, seized, or unverifiable. Sellix was seized in 2024 and is still widely recommended.",
-			"Trading, minting, yield farming, staking and airdrops: refused in code, and not a product business.",
-			"Offers needing a large audience, ad spend, or a following the owner does not have.",
-			"Anything promising passive income without a product that delivers something."
-		],
-		"github_searches": [
-			"awesome browser extensions in:name,readme stars:>200",
-			"chrome extension boilerplate manifest v3 in:name,readme stars:>200",
-			"indie hackers open source saas alternatives in:readme stars:>200",
-			"awesome self-hosted single file tool in:name,readme stars:>150",
-			"crypto payment button static site in:readme stars:>100",
-			"awesome digital products templates in:readme stars:>100",
-			"license key generator offline validation in:readme stars:>100"
-		],
-		"community_searches": [
-			"selling a chrome extension revenue",
-			"how much my browser extension makes",
-			"indie developer selling digital products revenue",
-			"accept crypto payments digital product",
-			"USDT payment for software licence",
-			"sold my side project first sale",
-			"open source project sponsorship income",
-			"pay what you want pricing results",
-			"freemium conversion rate indie",
-			"where to sell a small utility app"
-		],
-		"reddit_subreddits": [
-			"SideProject",
-			"sideproject",
-			"indiehackers",
-			"microsaas",
-			"Entrepreneur",
-			"chrome_extensions",
-			"SaaS",
-			"opensource"
-		],
-		"reddit_searches": [
-			"sold my digital product",
-			"chrome extension revenue",
-			"accept crypto payment product",
-			"USDT payout platform",
-			"launched my tool first sale",
-			"pay what you want pricing",
-			"where to list my digital product",
-			"free tier paid upgrade conversion"
-		],
-		"reference_sources": [
-			{
-				"title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
-				"url": "https://freedium-mirror.cfd/https://medium.com/@startup_Ideas/15-high-paying-remote-jobs-with-a-4-hour-work-week-and-how-people-actually-get-them-7e8d3562ff99",
-				"takeaway": "The viable path is not easy money; it is rare skill, specialization, automation, retainers, async work, and results-based delivery."
-			},
-			{
-				"title": "OpenRouter free model list",
-				"url": "https://openrouter.ai/models?max_price=0",
-				"takeaway": "Free (:free) models are capped at 20 req/min and only 50 req/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit before relying on volume."
-			},
-			{
-				"title": "Google AI Studio (Gemini API)",
-				"url": "https://aistudio.google.com/app/apikey",
-				"takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day; much higher daily ceiling than OpenRouter's free chain -- verify current limit."
-			},
-			{
-				"title": "Cerebras Cloud free tier",
-				"url": "https://cloud.cerebras.ai/",
-				"takeaway": "No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model -- verify current limit."
-			}
-		],
-		"free_ai_focus": [
-			"free-tier LLM APIs with no credit card requirement",
-			"free speech-to-text, TTS, and transcription APIs",
-			"free image generation and background-removal APIs",
-			"free OCR, document parsing, and PDF extraction APIs",
-			"free embedding and vector-search tiers",
-			"free translation and summarization APIs",
-			"free AI hosting, inference, and scheduled-compute tiers",
-			"open-weight models that run on free CPU/GPU allowances"
-		]
-	},
-	"llm": {
-		"main_engine": "openrouter/free",
-		"provider": "openrouter",
-		"note": "All-free model chain, ordered per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. openrouter/free -- the free auto-router -- leads every chain: it picks the best zero-cost model per request and filters for the features the request needs, so model choice tracks the live catalogue. openrouter/auto is deliberately NOT used: its candidate set includes paid models and it bills at the routed model's rate. Named free models (led by minimax/minimax-m3:free, 1M ctx, native response_format + tools) follow as fallback for when the router is rate-limited; on 402/429/404 the client steps down the rest of the role's free chain before changing provider."
-	},
-	"research_policy": {
-		"mode": "research_and_article_publishing",
-		"allowed_actions": [
-			"research",
-			"suggestions",
-			"drafts",
-			"article publishing"
-		],
-		"blocked_actions": [
-			"social posting",
-			"trading",
-			"minting",
-			"payouts"
-		]
-	},
-	"evolution": {
-		"enabled": true,
-		"branch_prefix": "evolve",
-		"max_changes": 3,
-		"note": "LLM code proposals are committed to a review branch (branch_prefix/<version>-<utc>) and never to main. Merge the branch to apply. Writes are restricted to bot/, docs/, config/, requirements.txt, version.txt; bot/main.py, bot/llm.py, bot/status.py, bot/commands.py, bot/evolution.py, bot/git_utils.py and .github/ can never be written. Engine is the free OpenRouter 'upgrade' chain led by the openrouter/free auto-router; no paid model."
-	}
+  "product_scaffold": {
+    "enabled": true,
+    "auto_scaffold_top_channel": false,
+    "default_name": "My Digital Product",
+    "default_description": "A useful digital product that solves one specific annoyance."
+  },
+  "code_techs": {
+    "enabled": true,
+    "refresh_hours": 6,
+    "daily_target_usd": 10.0,
+    "max_items": 40,
+    "status_max_items": 16,
+    "prompt_top_n": 6,
+    "min_score": 40,
+    "min_channel_share": 0.5,
+    "supply_max_age_days": 120,
+    "reddit_backoff_seconds": 5,
+    "auto_pursue": false,
+    "pursue_score_threshold": 75,
+    "requirements": [
+      "Every lead must move a digital product toward earning without the owner in the loop.",
+      "Rank by how little owner action each unit of income needs, not by headline upside.",
+      "Name where the money lands, and prefer stablecoin to the address this project already publishes.",
+      "State every cost and every manual setup step out loud; zero budget is the constraint.",
+      "Never suggest selling the owner's hours: a rate per hour is a job, not passive income.",
+      "Stay inside policy: no social posting, no trading, no minting, no cold outreach.",
+      "Do not count discovery, pipeline, or speculative upside as earnings. On-chain or nothing."
+    ],
+    "free_ai_focus": [
+      "free-tier LLM APIs with no credit card requirement",
+      "free speech-to-text, TTS, and transcription APIs",
+      "free image generation and background-removal APIs",
+      "free OCR, document parsing, and PDF extraction APIs",
+      "free embedding and vector-search tiers",
+      "free translation and summarization APIs",
+      "free AI hosting, inference, and scheduled-compute tiers",
+      "open-weight models that run on free CPU/GPU allowances"
+    ],
+    "monetization_patterns": [
+      "Ship the tool free and sell the upgrade: the free tier buys discovery the owner cannot.",
+      "One-time licence for a digital download, delivered by the storefront with no owner action.",
+      "Put the published receive address on the product page and in the README, so a user can pay with no platform at all.",
+      "Sell a template, preset, or asset pack built once and downloaded many times.",
+      "Charge for the paid tier of a tool whose free tier costs nothing per user to run.",
+      "List the same product on every zero-cost channel, since the artifact is already built."
+    ],
+    "reference_sources": [
+      {
+        "title": "15 High-Paying Remote Jobs With a 4-Hour Work Week",
+        "url": "https://freedium-mirror.cfd/https://medium.com/@startup_Ideas/15-high-paying-remote-jobs-with-a-4-hour-work-week-and-how-people-actually-get-them-7e8d3562ff99",
+        "takeaway": "The viable path is not easy money; it is rare skill, specialization, automation, retainers, async work, and results-based delivery."
+      },
+      {
+        "title": "OpenRouter free model list",
+        "url": "https://openrouter.ai/models?max_price=0",
+        "takeaway": "Free (:free) models are capped at 20 req/min and only 50 req/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit before relying on volume."
+      },
+      {
+        "title": "Google AI Studio (Gemini API)",
+        "url": "https://aistudio.google.com/app/apikey",
+        "takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day; much higher daily ceiling than OpenRouter's free chain -- verify current limit."
+      },
+      {
+        "title": "Cerebras Cloud free tier",
+        "url": "https://cloud.cerebras.ai/",
+        "takeaway": "No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model -- verify current limit."
+      }
+    ],
+    "product_shapes": [
+      "browser extension solving one specific annoyance",
+      "single-purpose desktop or CLI utility",
+      "static web tool that runs entirely client-side",
+      "template, preset, or asset pack for a tool people already use",
+      "developer library or plugin for an existing ecosystem",
+      "self-hostable script the buyer runs on their own machine",
+      "data set or reference compiled once and sold as a download"
+    ],
+    "github_searches": [
+      "awesome browser extensions in:name,readme stars:>200",
+      "chrome extension boilerplate manifest v3 in:name,readme stars:>200",
+      "indie hackers open source saas alternatives in:readme stars:>200",
+      "awesome self-hosted single file tool in:name,readme stars:>150",
+      "crypto payment button static site in:readme stars:>100",
+      "awesome digital products templates in:readme stars:>100",
+      "license key generator offline validation in:readme stars:>100"
+    ],
+    "community_searches": [
+      "selling a chrome extension revenue",
+      "how much my browser extension makes",
+      "indie developer selling digital products revenue",
+      "accept crypto payments digital product",
+      "USDT payment for software licence",
+      "sold my side project first sale",
+      "open source project sponsorship income",
+      "pay what you want pricing results",
+      "freemium conversion rate indie",
+      "where to sell a small utility app"
+    ],
+    "reddit_subreddits": [
+      "SideProject",
+      "sideproject",
+      "indiehackers",
+      "microsaas",
+      "Entrepreneur",
+      "chrome_extensions",
+      "SaaS",
+      "opensource"
+    ],
+    "reddit_searches": [
+      "sold my digital product",
+      "chrome extension revenue",
+      "accept crypto payment product",
+      "USDT payout platform",
+      "launched my tool first sale",
+      "pay what you want pricing",
+      "where to list my digital product",
+      "free tier paid upgrade conversion"
+    ],
+    "max_reddit_requests": 3,
+    "underserved_focus": [
+      "storefronts that settle stablecoin straight to the seller's own wallet, no custodian",
+      "one-task tools that solve a single annoyance well enough to be worth paying for",
+      "products with zero marginal cost per user, so the free tier can stay free forever",
+      "channels that are free to list on and have no approval queue to fail",
+      "paying users who never open a storefront and would rather send stablecoin directly",
+      "distribution with real organic discovery, so reach does not need ad spend",
+      "products whose buyers are developers, since that is the audience already reached"
+    ],
+    "strategy_playbook": [
+      "Build the product once, then spend every later cycle on distribution rather than on more product.",
+      "Keep marginal cost per user at zero: client-side code, free hosting, free scheduler. Every dollar in is margin.",
+      "Put the receive path on the artifact itself -- product page, README, article footer -- not only on a storefront.",
+      "List on the free channels first; pay a listing fee only where discovery is worth it, and say what it cost.",
+      "Let the articles this bot already publishes do the marketing: the problem is the post, the product is the fix.",
+      "Price once and leave it. A price that needs renegotiating per buyer is a service in disguise.",
+      "Measure only what arrives on-chain. Listings, views and pipeline are not revenue."
+    ],
+    "avoid_patterns": [
+      "Selling the owner's hours: freelance postings, contract work, retainers, consulting. Income per unit of work is a job.",
+      "Anything requiring paid infrastructure, a monthly fee, or a credit-card-gated tier.",
+      "Custodial payment processors that hold the money before the owner does, and anything demanding KYC to receive.",
+      "Platforms that are dead, seized, or unverifiable. Sellix was seized in 2024 and is still widely recommended.",
+      "Trading, minting, yield farming, staking and airdrops: refused in code, and not a product business.",
+      "Offers needing a large audience, ad spend, or a following the owner does not have.",
+      "Anything promising passive income without a product that delivers something."
+    ]
+  },
+  "backfill": {
+    "enabled": true,
+    "max_per_cycle": 5,
+    "history_limit": 200
+  },
+  "articles": {
+    "max_articles_per_cycle": 1,
+    "source_max_age_hours": 24,
+    "history_limit": 200,
+    "min_words": 700,
+    "followup_enabled": True,
+    "followup_window_hours": 48,
+    "followup_min_views": 40,
+    "title_min_chars": 25,
+    "title_max_chars": 70
+  },
+  "newsletter": {
+    "enabled": true,
+    "min_interval_hours": 168,
+    "items_per_issue": 7,
+    "min_items": 4,
+    "source_max_age_hours": 168,
+    "history_limit": 200,
+    "min_words": 500,
+    "niche_focus": ""
+  },
+  "mrr_ideas": {
+    "enabled": true,
+    "refresh_hours": 48,
+    "max_ideas": 8,
+    "min_score": 50,
+    "history_limit": 100
+  }
 }

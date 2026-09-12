@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import logging
 import re
+import time
 from typing import Any
 
 import requests
@@ -54,7 +55,7 @@ def tone_problems(body: str) -> list[str]:
 
 
 FABRICATION_PATTERNS = [
-	(r"\b\d+\s*[-‐-―~]?\s*\d*\s*ms\b", "invented latency figures (ms)"),
+	(r"\d+\s*[-‐-―~]?\s*\d*\s*ms\b", "invented latency figures (ms)"),
 	(r"\$\s?\d+(\.\d+)?\s*(/|per\s)", "invented pricing"),
 	(r"\b\d+(\.\d+)?\s*(tokens?/s|tok/s|req/s|requests?/(sec|second))", "invented throughput"),
 	(r"\b\d+\s*%\s*(faster|slower|cheaper|better|more accurate)", "invented benchmark deltas"),
@@ -155,7 +156,7 @@ def normalize(data: dict) -> dict:
 	# into the heading.
 	body = re.sub(r"\n{4,}", "\n\n\n", body)
 	body = re.sub(r"(?<!\n)\n(#{2,3} )", r"\n\n\1", body)
-	body = re.sub(r"^(#{2,3} .*)\n(?!\n)(?=\S)", r"\1\n\n", body, flags=re.MULTILINE)
+	body = re.sub(r"^(#{2,3} .*)(?=\n)(?=\S)", r"\1\n\n", body, flags=re.MULTILINE)
 	data["body_markdown"] = body.strip()
 
 	tags = [
@@ -205,7 +206,7 @@ def publish(article: dict, api_key: str) -> dict:
 			"tags": article.get("tags", ["python", "automation"])[:4],
 		}
 	}
-	
+
 	try:
 		resp = requests.post(url, headers=headers, json=payload, timeout=30)
 		resp.raise_for_status()
@@ -261,41 +262,53 @@ def has_front_matter(body: str) -> bool:
 def update_body(article_id: int, body_markdown: str, api_key: str) -> dict:
 	"""Replace the body of one already-published article.
 
-    ``PUT /api/articles/{id}``, authenticated with the same ``DEV_TO_API_KEY``
-    the publish and stats calls already use -- no new secret. Forem scopes the
-    lookup to the key's own articles, so this can only ever touch this
-    account's posts.
-
-    Only ``body_markdown`` is sent. Absent keys are left alone by the update,
-    so the title, tags and description of a post that already earns its traffic
-    are not re-asserted from data this bot may have re-derived. The caller is
-    responsible for having checked ``has_front_matter`` first.
-
-    Editing does not change ``published_at``, so a post keeps its original feed
-    position -- this adds an ask to what people already read, it does not
-    re-promote anything.
+    Retries on HTTP 429 with exponential backoff and respects the
+    Retry-After header. Other transient errors (5xx, connection
+    failures) are retried with 1s/2s backoff. Client errors (4xx
+    other than 429) are not retried.
     """
 	url = f"https://dev.to/api/articles/{int(article_id)}"
-	try:
-		resp = requests.put(
-			url,
-			headers={
-				"api-key": api_key,
-				"Content-Type": "application/json",
-				"Accept": "application/vnd.forem.api-v1+json",
-			},
-			json={"article": {"body_markdown": body_markdown}},
-			timeout=30,
-		)
-		resp.raise_for_status()
-		# The write has already landed by here. A body that will not parse is a
-		# cosmetic problem, so it must not be reported as a failed update: that
-		# would abort the rest of the run over a post that was in fact fixed.
+	headers = {
+		"api-key": api_key,
+		"Content-Type": "application/json",
+		"Accept": "application/vnd.forem.api-v1+json",
+	}
+	payload = {"article": {"body_markdown": body_markdown}}
+
+	last_error = ""
+	for attempt in range(3):
 		try:
-			data = resp.json() if resp.content else {}
-		except Exception:
-			data = {}
-		return {"success": True, "url": str(data.get("url") or "")}
-	except Exception as exc:
-		log.warning("[devto] update %s failed: %s", article_id, exc)
-		return {"success": False, "error": str(exc)[:200]}
+			resp = requests.put(
+				url,
+				headers=headers,
+				json=payload,
+				timeout=30,
+			)
+			if resp.status_code == 429:
+				retry_after = int(resp.headers.get("Retry-After", 5))
+				log.warning(
+					"[devto] update %s rate-limited (429), retrying in %ds (attempt %d/3)",
+					article_id, retry_after, attempt + 1,
+				)
+				time.sleep(retry_after)
+				last_error = "429 rate limit"
+				continue
+			resp.raise_for_status()
+			# The write has already landed by here. A body that will not parse is a
+			# cosmetic problem, so it must not be reported as a failed update: that
+			# would abort the rest of the run over a post that was in fact fixed.
+			try:
+				data = resp.json() if resp.content else {}
+			except Exception:
+				data = {}
+			return {"success": True, "url": str(data.get("url") or "")}
+		except Exception as exc:
+			last_error = str(exc)[:200]
+			log.warning(
+				"[devto] update %s failed (attempt %d/3): %s",
+				article_id, attempt + 1, last_error,
+			)
+			if attempt < 2:
+				time.sleep(2 ** attempt)
+
+	return {"success": False, "error": f"update failed after 3 attempts: {last_error}"}

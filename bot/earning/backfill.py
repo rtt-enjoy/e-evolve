@@ -207,12 +207,18 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 			if result.get("success"):
 				updated += 1
 				state.setdefault("done_ids", []).append(post["id"])
+				# If this post was previously skipped (e.g. rate-limited), clear
+				# the stale entry so it stops inflating the skip count.
+				state.get("skipped", {}).pop(str(post["id"]), None)
 				log.info("[backfill] footer added to %s (%s views)",
-						 str(post.get("title", ""))[:60], post.get("page_views"))
+					 str(post.get("title", ""))[:60], post.get("page_views"))
 			else:
 				state.setdefault("skipped", {})[str(post["id"])] = result.get("error", "")
-				# Stop on the first failure rather than hammering a failing API.
-				break
+				# Retry on the next cycle rather than stopping: devto.update_body
+				# now retries 429s with backoff, so a transient rate limit will
+				# likely clear by the next run, and stopping forfeits the remaining
+				# candidates in this batch.
+				continue
 
 		limit = int(cfg.get("history_limit", 200))
 		# done_ids is a set in spirit; dedupe before trimming so a post cannot
@@ -222,17 +228,23 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 		for i in state.get("done_ids", []):
 			if i is not None and i not in seen:
 				seen.add(i)
-				deduped.append(i)
+			deduped.append(i)
 		state["done_ids"] = deduped[-limit:]
 		state["updated_total"] = int(state.get("updated_total", 0)) + updated
 		state["last_run"] = datetime.now(timezone.utc).isoformat()
 
 		# `remaining` is the count the owner is told to read: posts that still
-		# show readers no way to pay. It is only as honest as `candidates`,
-		# which is why the body_markdown regression above mattered so much --
-		# it drove this to 0 while every post lacked a footer.
+		# show readers no way to pay. It is honest about partial success:
+		# candidates already includes skipped posts (they are not in done_ids),
+		# so len(candidates) - updated counts every post still owed a footer.
+		attempted = candidates[:int(cfg.get("max_per_cycle", 3))]
+		if updated == len(attempted):
+			state["last_reason"] = "updated"
+		elif updated > 0:
+			state["last_reason"] = "partial"
+		else:
+			state["last_reason"] = "update_failed"
 		state["remaining"] = max(len(candidates) - updated, 0)
-		state["last_reason"] = "updated" if updated else "update_failed"
 
 		action["success"] = updated > 0
 		action["updated"] = updated

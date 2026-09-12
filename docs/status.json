@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-12T05:48:50.979880+00:00",
-  "total_runs": 1818,
+  "last_run": "2026-09-12T10:49:23.596150+00:00",
+  "total_runs": 1819,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -88,31 +88,11 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260912-055402",
+    "branch": "evolve/1.41.1-20260912-110335",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "How AI-Generated Gems Can Sneak Into Your RubyGems Dependencies",
-        "url": "https://dev.to/robust_true_try/how-ai-generated-gems-can-sneak-into-your-rubygems-dependencies-54io",
-        "estimated_usd": 0.0,
-        "source_url": "https://www.rubyhack.ai/",
-        "source_title": "OpenAI agents carried out an undisclosed attack on RubyGems"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -154,7 +134,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 534,
+  "last_cycle_seconds": 853,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1064,7 +1044,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-12T05:48:51.813147+00:00",
+    "checked_at": "2026-09-12T10:49:24.148315+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1299,7 +1279,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260912-055402",
+  "last_evolution_branch": "evolve/1.41.1-20260912-110335",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 16,
@@ -1408,7 +1388,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-12T05:57:43.453647+00:00",
+    "last_run": "2026-09-12T11:03:36.088584+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1418,30 +1398,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-12T05:57:43.849569+00:00",
+    "last_run": "2026-09-12T11:03:36.327094+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4391849,
-        "at": "2026-09-11T18:40:58.911230+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-09-11T18:40:58.911230+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
-        "at": "2026-09-11T18:40:58.911230+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-09-11T18:40:58.911230+00:00",
-        "ok": true
-      },
       {
         "id": 4602729,
         "at": "2026-09-11T21:56:35.566158+00:00",
@@ -1498,13 +1458,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4636715,
         "at": "2026-09-12T05:57:43.849569+00:00",
         "ok": true
       },
       {
-        "id": 4636715,
-        "at": "2026-09-12T05:57:43.849569+00:00",
+        "id": 4391849,
+        "at": "2026-09-12T11:03:36.327094+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-09-12T11:03:36.327094+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-09-12T11:03:36.327094+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-09-12T11:03:36.327094+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-09-12T11:03:36.327094+00:00",
         "ok": true
       }
     ],
@@ -1513,7 +1493,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.3
+    "oldest_check_age_hours": 13.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

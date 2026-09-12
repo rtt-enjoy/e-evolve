@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-12T14:09:27.171805+00:00",
-  "total_runs": 1820,
+  "last_run": "2026-09-12T17:12:02.239283+00:00",
+  "total_runs": 1821,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -34,110 +34,105 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Improve backfill retry logic, enhance article audience guidance, and prioritize channels in code-techs ranking.",
+    "summary": "Add 429 retry with exponential backoff and Retry-After handling to devto.update_body; change backfill to continue on failure instead of breaking, so 5 skipped posts can recover and remaining count is honest.",
     "changes_applied": [
       {
+        "file": "bot/earning/devto.py",
+        "reason": "update_body had no retry logic, so a single 429 rate-limit response permanently failed the backfill of 5 posts (4430049, 4368781, 4545446, 4421693, 4562180). Adding exponential backoff with Retry-After header respect lets the module recover from transient rate limits without hammering the API. This is the same API call publish uses, so the fix benefits both paths."
+      },
+      {
         "file": "bot/earning/backfill.py",
-        "reason": "Add exponential backoff and Retry-After handling to dev.to API calls in backfill. The module now retries up to three times on 429 errors with exponential backoff, respects rate limits, and stops the batch on other failures to avoid hammering a broken API. This ensures the support footer reaches more existing posts."
+        "reason": "Two related fixes in the backfill loop. (1) Changed `break` to `continue` on update failure so one rate-limited post no longer blocks the rest of the batch -- with 429 retries now in devto.update_body, transient failures clear on the next cycle instead of permanently stalling the queue. (2) Stale skip entries are now removed when a previously-skipped post succeeds, keeping the skip count and remaining count honest. (3) last_reason now distinguishes 'updated' (all attempted succeeded) from 'partial' (some succeeded, some skipped) so the dashboard reflects reality instead of always saying 'updated' when 1 of 3 succeeded."
       }
     ],
     "suggestions": [
       {
-        "title": "Add exponential backoff and Retry-After handling to dev.to API calls in backfill",
-        "description": "The backfill module currently stops on the first 429 rate limit error, leaving many posts without the support footer. Adding retry logic with exponential backoff and respect for Retry-After headers ensures the module completes its work even under rate limiting.",
-        "secret_needed": null,
+        "title": "Add ANTHROPIC_API_KEY for Claude model access",
+        "description": "Unlocks Claude models (claude-3-haiku at ~$0.25/M tokens, free-tier eligible) for article generation and research. The current stack only uses OpenRouter/Gemini/Groq; adding Anthropic gives the LLM router a cheaper high-quality option for research roles and a fallback if OpenRouter degrades, improving article quality and research depth.",
+        "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Review the updated bot/earning/backfill.py diff on the review branch.",
-          "Step 2: Run python -m py_compile bot/earning/backfill.py to verify syntax.",
-          "Step 3: Trigger a backfill run to verify 429 handling works and all posts receive the footer."
+          "Step 1: Go to https://console.anthropic.com and sign up for a free account",
+          "Step 2: Create an API key (Settings > API Keys > Create Key)",
+          "Step 3: Copy the key (starts with sk-ant-...) and add it as a GitHub secret named ANTHROPIC_API_KEY"
         ]
       },
       {
-        "title": "Enhance article generation audience guidance to explicitly prioritize the proven problem-workaround archetype",
-        "description": "The bot already prefers the problem-workaround archetype, but the prompt to the LLM could be more explicit. Adding a dedicated bullet in the audience guidance tells the model to frame articles as concrete failures with working escape routes, increasing the likelihood of high\u2011engagement posts.",
-        "secret_needed": null,
+        "title": "Add CEREBRAS_API_KEY for fast free inference",
+        "description": "Unlocks Cerebras Cloud free tier (~1M tokens/day, ~14,400 requests/day per model, no credit card required). Cerebras serves open-weight models at near-native speed, which speeds up research briefs and code-techs market analysis that currently wait on OpenRouter's free chain (capped at 50 req/day).",
+        "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Review the updated bot/earning/articles.py diff on the review branch.",
-          "Step 2: Run python -m py_compile bot/earning/articles.py to verify syntax.",
-          "Step 3: Monitor article_interest.best_archetype in status.json over the next cycles to confirm problem-workaround dominance."
+          "Step 1: Go to https://cloud.cerebras.ai and create a free account",
+          "Step 2: Generate an API key in the dashboard (API Keys section)",
+          "Step 3: Add it as a GitHub secret named CEREBRAS_API_KEY"
         ]
       },
       {
-        "title": "Improve code\u2011techs ranking to prioritize channels and reduce low\u2011value assets",
-        "description": "The queue currently mixes channels (where a product can be sold) with assets (free tooling). By increasing the channel share reservation and sorting channels by score before assets, the page surfaces more actionable leads that actually earn money, reducing noise from purely informational entries.",
+        "title": "Configure a periodic backfill retry schedule",
+        "description": "5 posts (4430049, 4368781, 4545446, 4421693, 4562180) are stuck in backfill.skipped due to 429 errors. With the new retry logic in devto.update_body, running the backfill module every 2 hours via a separate GitHub Actions cron would recover these posts faster than waiting for the full hourly cycle, since rate limits clear quickly with Retry-After respect.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Review the updated bot/earning/code_techs.py diff on the review branch.",
-          "Step 2: Run python -m py_compile bot/earning/code_techs.py to verify syntax.",
-          "Step 3: Refresh the code\u2011techs queue (e.g., run the module) and observe that channels now occupy a larger, higher\u2011scoring portion of the report."
+          "Step 1: Locate the backfill GitHub Actions workflow in .github/workflows/",
+          "Step 2: Add a second cron trigger: '0 */2 * * *' (every 2 hours) alongside the existing schedule",
+          "Step 3: Ensure the workflow runs bot/earning/backfill.py's run() function",
+          "Step 4: Push to the review branch and verify the first backfill run processes skipped posts"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260912-141448",
+    "branch": "evolve/1.41.1-20260912-172118",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add exponential backoff and Retry-After handling to dev.to API calls in backfill",
-      "description": "The backfill module currently stops on the first 429 rate limit error, leaving many posts without the support footer. Adding retry logic with exponential backoff and respect for Retry-After headers ensures the module completes its work even under rate limiting.",
-      "secret_needed": null,
+      "title": "Add ANTHROPIC_API_KEY for Claude model access",
+      "description": "Unlocks Claude models (claude-3-haiku at ~$0.25/M tokens, free-tier eligible) for article generation and research. The current stack only uses OpenRouter/Gemini/Groq; adding Anthropic gives the LLM router a cheaper high-quality option for research roles and a fallback if OpenRouter degrades, improving article quality and research depth.",
+      "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Review the updated bot/earning/backfill.py diff on the review branch.",
-        "Step 2: Run python -m py_compile bot/earning/backfill.py to verify syntax.",
-        "Step 3: Trigger a backfill run to verify 429 handling works and all posts receive the footer."
+        "Step 1: Go to https://console.anthropic.com and sign up for a free account",
+        "Step 2: Create an API key (Settings > API Keys > Create Key)",
+        "Step 3: Copy the key (starts with sk-ant-...) and add it as a GitHub secret named ANTHROPIC_API_KEY"
       ]
     },
     {
-      "title": "Enhance article generation audience guidance to explicitly prioritize the proven problem-workaround archetype",
-      "description": "The bot already prefers the problem-workaround archetype, but the prompt to the LLM could be more explicit. Adding a dedicated bullet in the audience guidance tells the model to frame articles as concrete failures with working escape routes, increasing the likelihood of high\u2011engagement posts.",
-      "secret_needed": null,
+      "title": "Add CEREBRAS_API_KEY for fast free inference",
+      "description": "Unlocks Cerebras Cloud free tier (~1M tokens/day, ~14,400 requests/day per model, no credit card required). Cerebras serves open-weight models at near-native speed, which speeds up research briefs and code-techs market analysis that currently wait on OpenRouter's free chain (capped at 50 req/day).",
+      "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Review the updated bot/earning/articles.py diff on the review branch.",
-        "Step 2: Run python -m py_compile bot/earning/articles.py to verify syntax.",
-        "Step 3: Monitor article_interest.best_archetype in status.json over the next cycles to confirm problem-workaround dominance."
+        "Step 1: Go to https://cloud.cerebras.ai and create a free account",
+        "Step 2: Generate an API key in the dashboard (API Keys section)",
+        "Step 3: Add it as a GitHub secret named CEREBRAS_API_KEY"
       ]
     },
     {
-      "title": "Improve code\u2011techs ranking to prioritize channels and reduce low\u2011value assets",
-      "description": "The queue currently mixes channels (where a product can be sold) with assets (free tooling). By increasing the channel share reservation and sorting channels by score before assets, the page surfaces more actionable leads that actually earn money, reducing noise from purely informational entries.",
+      "title": "Configure a periodic backfill retry schedule",
+      "description": "5 posts (4430049, 4368781, 4545446, 4421693, 4562180) are stuck in backfill.skipped due to 429 errors. With the new retry logic in devto.update_body, running the backfill module every 2 hours via a separate GitHub Actions cron would recover these posts faster than waiting for the full hourly cycle, since rate limits clear quickly with Retry-After respect.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Review the updated bot/earning/code_techs.py diff on the review branch.",
-        "Step 2: Run python -m py_compile bot/earning/code_techs.py to verify syntax.",
-        "Step 3: Refresh the code\u2011techs queue (e.g., run the module) and observe that channels now occupy a larger, higher\u2011scoring portion of the report."
+        "Step 1: Locate the backfill GitHub Actions workflow in .github/workflows/",
+        "Step 2: Add a second cron trigger: '0 */2 * * *' (every 2 hours) alongside the existing schedule",
+        "Step 3: Ensure the workflow runs bot/earning/backfill.py's run() function",
+        "Step 4: Push to the review branch and verify the first backfill run processes skipped posts"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 457,
+  "last_cycle_seconds": 557,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1004,7 +999,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-12T14:09:27.804214+00:00",
+    "checked_at": "2026-09-12T17:12:03.673002+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1239,7 +1234,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260912-141448",
+  "last_evolution_branch": "evolve/1.41.1-20260912-172118",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 16,
@@ -1348,7 +1343,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-12T14:17:03.828621+00:00",
+    "last_run": "2026-09-12T17:21:18.415096+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1358,30 +1353,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-12T14:17:04.110807+00:00",
+    "last_run": "2026-09-12T17:21:18.746824+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4503417,
-        "at": "2026-09-12T00:24:06.723613+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-09-12T00:24:06.723613+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-09-12T00:24:06.723613+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
-        "at": "2026-09-12T00:24:06.723613+00:00",
-        "ok": true
-      },
       {
         "id": 4568987,
         "at": "2026-09-12T05:57:43.849569+00:00",
@@ -1443,8 +1418,28 @@
         "ok": true
       },
       {
+        "id": 4503417,
+        "at": "2026-09-12T17:21:18.746824+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-09-12T17:21:18.746824+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-09-12T17:21:18.746824+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-09-12T17:21:18.746824+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-12T14:17:04.110807+00:00",
+        "at": "2026-09-12T17:21:18.746824+00:00",
         "ok": true
       }
     ],
@@ -1453,7 +1448,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 13.9
+    "oldest_check_age_hours": 11.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -1,6 +1,6 @@
 # Recurring Revenue (MRR) Idea Triage
 
-Refreshed: 2026-09-10T00:20:55.641183+00:00
+Refreshed: 2026-09-12T00:21:16.462448+00:00
 
 Research and suggestions only. This bot does not contact anyone, collect
 payment, or host a service. Every figure quoted from the source article
@@ -16,19 +16,29 @@ is unverified — check it yourself before acting on it.
 
 ## Best Current Angle
 
-The only recurring-revenue model that fits a zero‑cost, research‑first stack that can only publish to dev.to is a narrow‑focus paid newsletter: the bot writes and publishes deep‑dive articles, each ending with a call‑to‑action that drives interested readers to a manually created newsletter on a subscription platform; the owner handles the one‑time account setup and payment linkage, then the article stream becomes the sole acquisition funnel.
+The best recurring-revenue angle for a zero-cost, research-first, publish-to-dev.to stack is a paid newsletter targeting mid-level backend engineers who are migrating from monoliths to microservices on AWS. The owner can research and write deep-dive technical migration guides, publish them on dev.to to build credibility, and then offer a subscription newsletter with hands-on code walkthroughs, architecture diagrams, and battle-tested deployment checklists. No automation can replace the owner's technical judgment, writing, or relationship-building with readers.
 
 ## Ranked Ideas
 
 ### Paid newsletter
 
-- **Niche:** Mid‑level backend engineers at Series‑A SaaS startups who are designing resilient, observable microservice APIs in Go
-- **Who pays:** Engineering leads or senior developers at early‑stage SaaS companies who own API architecture decisions
-- **Monthly price:** 10-15
-- **Why this stack fits:** The bot can research, draft, and publish long‑form technical articles to dev.to; each article can end with an inbound‑only prompt that funnels readers to a newsletter the owner controls, requiring no outbound outreach or payment automation.
-- **First proof artifact:** A free 5‑part email mini‑course (one lesson per week) that walks through designing a production‑ready API gateway, delivered via the newsletter after the first dev.to article
-- **Runway to first dollar:** 4-8 weeks
-- **You must do by hand:** Open a subscription platform account (e.g., Substack) and connect a payment processor (e.g., Stripe) manually; create the newsletter, import the first subscriber list, and publish the welcome email
+- **Niche:** Mid-level backend engineers migrating from monoliths to microservices on AWS
+- **Who pays:** Mid-level backend engineers at startups or small companies making migration decisions
+- **Monthly price:** 10-20
+- **Why this stack fits:** The owner can publish technical articles on dev.to to build authority, then funnel readers to a paid newsletter with deeper content.
+- **First proof artifact:** A 1,500-word dev.to article titled 'How I Migrated a Rails Monolith to ECS Without Downtime' with code snippets and architecture diagrams
+- **Runway to first dollar:** 6-10 weeks
+- **You must do by hand:** Write and publish the initial dev.to article, engage with commenters, and manually set up a Substack or Gumroad subscription page
+
+### Notion / digital template store
+
+- **Niche:** Engineering team leads managing microservices documentation and onboarding
+- **Who pays:** Engineering team leads at Series A/B startups
+- **Monthly price:** 50-100
+- **Why this stack fits:** The owner can draft detailed Notion templates for engineering teams and publish supporting articles on dev.to to drive organic traffic.
+- **First proof artifact:** A free Notion template for 'Microservices Architecture Decision Records' published alongside a dev.to article explaining its use
+- **Runway to first dollar:** 8-12 weeks
+- **You must do by hand:** Design the Notion template by hand, write the dev.to article, and manually create a Gumroad product page
 
 
 ## Set Up By Hand First
@@ -40,9 +50,9 @@ None of these is a blocker — but no money moves until you do them.
 
 ## How To Validate Without Outreach
 
-- Publish a dev.to article titled "5 Hard Lessons Building Observable Go Microservices" that ends with the question: "Which of these pain points hits your team hardest? Reply in the comments."
-- Manually post the same question in the "Go Microservices" Discord channel the owner already belongs to, inviting members to share their struggles.
-- Collect the comment threads and Discord replies (inbound only) to confirm at least 10 distinct engineers describe the same API‑gateway design challenges.
+- Publish a dev.to article on monolith-to-microservices migration challenges and end it with: 'What's the biggest blocker you've hit during migration? Let me know in the comments.'
+- Join the 'r/devops' subreddit and the 'Backend Engineering' Slack community, then participate in migration-related threads by sharing insights (no self-promotion).
+- Write a second dev.to article specifically addressing a common pain point mentioned in the first article's comments, proving the owner can solve real problems.
 
 ## Refused, And Why
 
@@ -72,8 +82,8 @@ code, or infrastructure that does not exist here and is not free.
 
 ## Next Actions
 
-1. Define the 5‑lesson mini‑course outline and write the first dev.to article with the inbound question.
-2. Set up the newsletter on a subscription platform and link a payment processor by hand.
-3. Publish the first article on dev.to, share the link in the owner’s existing Discord/Slack communities, and capture comment responses.
-4. Deliver the first mini‑course lesson to anyone who subscribes via the newsletter sign‑up form.
-5. Iterate: write and publish the next 4 articles, each referencing the previous lesson and ending with a new inbound question to grow the subscriber base.
+1. Research and outline a 1,500-word dev.to article on 'Common Pitfalls When Migrating from Monolith to Microservices on AWS' — due in 3 days.
+2. Write and publish that article on dev.to, ending with a question to readers about their migration blockers.
+3. Read and respond to every comment on the article within 48 hours to build rapport with potential subscribers.
+4. Based on comment feedback, draft a second article that solves one specific problem mentioned, and include a call-to-action for a future newsletter.
+5. Manually create a Substack or Gumroad account and set up a basic landing page describing the newsletter's value — no payment processing needed yet.

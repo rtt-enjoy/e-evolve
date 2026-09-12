@@ -1714,3 +1714,8 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-09-11 21:56 UTC
 
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+
+### 2026-09-12 00:24 UTC
+
+- [ok] **mrr-ideas**: [MRR idea triage refreshed (2 viable, 18 refused)](docs/mrr-ideas.md) (est. $0.00)
+- [fail] **dev.to**: title too weak to earn a click, and the rewrite failed

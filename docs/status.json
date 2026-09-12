@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-12T19:22:52.681807+00:00",
-  "total_runs": 1822,
+  "last_run": "2026-09-12T22:19:21.222749+00:00",
+  "total_runs": 1823,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -34,19 +34,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add product scaffold generator for top code-techs opportunities and wire it into the earning pipeline so the bot can produce a shippable Chrome extension template when a high-scoring channel is found.",
+    "summary": "Add Anthropic and Cerebras LLM support via secrets and increase backfill max_per_cycle to 5 to clear skipped posts faster",
     "changes_applied": [
       {
-        "file": "bot/earning/product_scaffold.py",
-        "reason": "New module that generates a complete, shippable Chrome extension (Manifest V3) with the wallet address embedded. This turns the top code-techs channel opportunity (Getly, itch.io, Chrome Web Store) into an actual product the owner can list without writing code. The scaffold includes popup, icons, README, and a zip ready for Chrome Web Store upload."
-      },
-      {
-        "file": "bot/earning/code_techs.py",
-        "reason": "Updated code_techs.py to integrate the new product_scaffold module. When auto_scaffold is enabled (default true) and a channel opportunity scores >= scaffold_score_threshold (default 80), it automatically generates a Chrome extension scaffold. The Getly channel (score 89) and Chrome Web Store channel (score 74) will trigger this. Also added config keys for auto_scaffold and scaffold_score_threshold."
-      },
-      {
         "file": "config/strategy.json",
-        "reason": "Added product_scaffold configuration section with enabled flag, auto_scaffold_top_channel (for future use), and default name/description. Also added auto_scaffold and scaffold_score_threshold to code_techs config to control automatic product generation for high-scoring channel opportunities."
+        "reason": "Update backfill configuration to increase max_per_cycle from 3 to 5, allowing the backfill module to process more posts per cycle when rate limits permit, helping to clear the backlog of skipped posts faster. Preserves all other configuration sections from the last evolution and known defaults."
       }
     ],
     "suggestions": [
@@ -75,25 +67,35 @@
         ]
       },
       {
-        "title": "Configure a periodic backfill retry schedule",
-        "description": "5 posts (4430049, 4368781, 4545446, 4421693, 4562180) are stuck in backfill.skipped due to 429 errors. With the new retry logic in devto.update_body, running the backfill module every 2 hours via a separate GitHub Actions cron would recover these posts faster than waiting for the full hourly cycle, since rate limits clear quickly with Retry-After respect.",
+        "title": "Increase backfill max_per_cycle to 5 to clear skipped posts faster",
+        "description": "With 5 posts stuck in backfill.skipped due to 429 errors, increasing the number of posts processed per backfill cycle from 3 to 5 (when rate limits allow) helps clear the backlog faster. The backfill module stops on the first 429 error, so this change only increases throughput when the API is behaving.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Locate the backfill GitHub Actions workflow in .github/workflows/",
-          "Step 2: Add a second cron trigger: '0 */2 * * *' (every 2 hours) alongside the existing schedule",
-          "Step 3: Ensure the workflow runs bot/earning/backfill.py's run() function",
-          "Step 4: Push to the review branch and verify the first backfill run processes skipped posts"
+          "Step 1: Review the proposed change to config/strategy.json setting backfill.max_per_cycle to 5",
+          "Step 2: Merge the evolution pull request",
+          "Step 3: The next backfill run will attempt to update up to 5 posts per cycle (if not rate limited)"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20260912-194722",
+    "branch": "evolve/1.42.0-20260912-222017",
     "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 40,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -122,21 +124,20 @@
       ]
     },
     {
-      "title": "Configure a periodic backfill retry schedule",
-      "description": "5 posts (4430049, 4368781, 4545446, 4421693, 4562180) are stuck in backfill.skipped due to 429 errors. With the new retry logic in devto.update_body, running the backfill module every 2 hours via a separate GitHub Actions cron would recover these posts faster than waiting for the full hourly cycle, since rate limits clear quickly with Retry-After respect.",
+      "title": "Increase backfill max_per_cycle to 5 to clear skipped posts faster",
+      "description": "With 5 posts stuck in backfill.skipped due to 429 errors, increasing the number of posts processed per backfill cycle from 3 to 5 (when rate limits allow) helps clear the backlog faster. The backfill module stops on the first 429 error, so this change only increases throughput when the API is behaving.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Locate the backfill GitHub Actions workflow in .github/workflows/",
-        "Step 2: Add a second cron trigger: '0 */2 * * *' (every 2 hours) alongside the existing schedule",
-        "Step 3: Ensure the workflow runs bot/earning/backfill.py's run() function",
-        "Step 4: Push to the review branch and verify the first backfill run processes skipped posts"
+        "Step 1: Review the proposed change to config/strategy.json setting backfill.max_per_cycle to 5",
+        "Step 2: Merge the evolution pull request",
+        "Step 3: The next backfill run will attempt to update up to 5 posts per cycle (if not rate limited)"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1471,
+  "last_cycle_seconds": 144,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -249,7 +250,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
         "age_hours": null,
         "reason": "already running, so it needs no account and no owner action; pays in stablecoin, so the receive path is on-chain and verifiable",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -277,7 +278,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once, set the price, and point the payout at the published Tron address. Owner does this by hand: Owner signs up, adds the Tron receive address, and uploads the product once.",
@@ -305,7 +306,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time; free to list with no approval queue, so a refusal cannot block it",
         "next_step": "List the product once and set the price. Owner does this by hand: Owner creates an account and uploads the product; payment details for fiat payout.",
@@ -333,7 +334,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once and set the price. Owner does this by hand: open the account",
@@ -361,7 +362,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time; costs $5.00 once, stated rather than hidden",
         "next_step": "List the product once and set the price. Owner does this by hand: Owner pays the one-time $5 registration and submits the extension for review.",
@@ -369,34 +370,6 @@
         "cost_usd": 5.0,
         "manual_setup": "Owner pays the one-time $5 registration and submits the extension for review.",
         "verified_note": "One-time $5, no renewal, 20-extension limit confirmed on developer.chrome.com 2026-09-08.",
-        "pursued": false
-      },
-      {
-        "title": "AmintaCCCP/GithubStarsManager",
-        "url": "https://github.com/AmintaCCCP/GithubStarsManager",
-        "source": "github",
-        "buyer": "tooling, no buyer",
-        "kind": "asset",
-        "score": 69,
-        "score_parts": {
-          "owner_action": 0.4,
-          "receive_path": 0.8,
-          "zero_budget": 0.6,
-          "setup_burden": 1.0,
-          "recency": 1.0
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-09-12T13:15:50+00:00",
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
-        "age_hours": 1.0,
-        "reason": "pays in stablecoin, so the receive path is on-chain and verifiable; free tooling or reach to build and market the product with",
-        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
-        "codex_prompt": "Move a digital product one step closer to earning without owner involvement.\n\nKIND           asset (what builds or promotes it)\nLEAD           AmintaCCCP/GithubStarsManager\nSOURCE         github\nLINK           https://github.com/AmintaCCCP/GithubStarsManager\nCOST           not published - do not quote or invent a figure\nOWNER MUST DO  nothing\nNEXT STEP      Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.\nFREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs\nWHY IT RANKS   pays in stablecoin, so the receive path is on-chain and verifiable; free tooling or reach to build and market the product with\n\nConstraints:\n- Keep the first change narrowly scoped to one file or script.\n- Use free tiers or offline code paths only; no paid service.\n- Include the exact commands to run it and paste the real output.\n- Do not contact anyone, post to social media, trade, or mint anything.\n- Do not open an account or accept terms on the owner's behalf.\n- Do not state a price or an earnings figure that COST does not give.\n- Revenue is the on-chain balance only; never estimate it.",
-        "cost_usd": null,
-        "manual_setup": "",
-        "verified_note": "",
         "pursued": false
       },
       {
@@ -411,17 +384,17 @@
           "receive_path": 0.8,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.935
+          "recency": 0.932
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-04T17:47:28+00:00",
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
-        "age_hours": 188.5,
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
+        "age_hours": 196.6,
         "reason": "pays in stablecoin, so the receive path is on-chain and verifiable; free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
-        "codex_prompt": "",
+        "codex_prompt": "Move a digital product one step closer to earning without owner involvement.\n\nKIND           asset (what builds or promotes it)\nLEAD           One month og chili crunch: 360 jars, 6k in revenue, shipped to 24 states, and 3 retail locations\nSOURCE         reddit:r/SideProject\nLINK           https://www.reddit.com/r/SideProject/comments/1w7bfon/one_month_og_chili_crunch_360_jars_6k_in_revenue/\nCOST           not published - do not quote or invent a figure\nOWNER MUST DO  nothing\nNEXT STEP      Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.\nFREE STACK     free-tier LLM APIs with no credit card requirement; free speech-to-text, TTS, and transcription APIs\nWHY IT RANKS   pays in stablecoin, so the receive path is on-chain and verifiable; free tooling or reach to build and market the product with\n\nConstraints:\n- Keep the first change narrowly scoped to one file or script.\n- Use free tiers or offline code paths only; no paid service.\n- Include the exact commands to run it and paste the real output.\n- Do not contact anyone, post to social media, trade, or mint anything.\n- Do not open an account or accept terms on the owner's behalf.\n- Do not state a price or an earnings figure that COST does not give.\n- Revenue is the on-chain balance only; never estimate it.",
         "cost_usd": null,
         "manual_setup": "",
         "verified_note": "",
@@ -445,7 +418,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once and set the price. Owner does this by hand: open the account",
@@ -473,7 +446,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
         "age_hours": null,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.",
@@ -495,14 +468,14 @@
           "receive_path": 0.2,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.994
+          "recency": 0.991
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-11T21:49:30+00:00",
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
-        "age_hours": 16.4,
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
+        "age_hours": 24.5,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -523,14 +496,14 @@
           "receive_path": 0.2,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.99
+          "recency": 0.987
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-11T09:28:23+00:00",
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
-        "age_hours": 28.8,
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
+        "age_hours": 36.9,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -551,14 +524,14 @@
           "receive_path": 0.2,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.987
+          "recency": 0.984
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-11T01:15:19+00:00",
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
-        "age_hours": 37.0,
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
+        "age_hours": 45.1,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -579,14 +552,14 @@
           "receive_path": 0.2,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.982
+          "recency": 0.979
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-10T09:45:03+00:00",
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
-        "age_hours": 52.5,
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
+        "age_hours": 60.6,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -613,38 +586,10 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
         "age_hours": null,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
-        "codex_prompt": "",
-        "cost_usd": null,
-        "manual_setup": "",
-        "verified_note": "",
-        "pursued": false
-      },
-      {
-        "title": "Jman-Github/ReVanced-Patch-Bundles",
-        "url": "https://github.com/Jman-Github/ReVanced-Patch-Bundles",
-        "source": "github",
-        "buyer": "tooling, no buyer",
-        "kind": "asset",
-        "score": 54,
-        "score_parts": {
-          "owner_action": 0.4,
-          "receive_path": 0.2,
-          "zero_budget": 0.6,
-          "setup_burden": 1.0,
-          "recency": 1.0
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-09-12T14:13:43+00:00",
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
-        "age_hours": 0.0,
-        "reason": "free tooling or reach to build and market the product with",
-        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
         "cost_usd": null,
         "manual_setup": "",
@@ -668,8 +613,64 @@
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
-        "posted_at": "2026-09-12T14:12:45+00:00",
-        "discovered_at": "2026-09-12T14:15:00.695631+00:00",
+        "posted_at": "2026-09-12T22:19:56+00:00",
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
+        "age_hours": 0.0,
+        "reason": "free tooling or reach to build and market the product with",
+        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
+        "codex_prompt": "",
+        "cost_usd": null,
+        "manual_setup": "",
+        "verified_note": "",
+        "pursued": false
+      },
+      {
+        "title": "runtypelabs/persona",
+        "url": "https://github.com/runtypelabs/persona",
+        "source": "github",
+        "buyer": "tooling, no buyer",
+        "kind": "asset",
+        "score": 54,
+        "score_parts": {
+          "owner_action": 0.4,
+          "receive_path": 0.2,
+          "zero_budget": 0.6,
+          "setup_burden": 1.0,
+          "recency": 1.0
+        },
+        "value_usd": null,
+        "value_basis": "none",
+        "value_note": "",
+        "posted_at": "2026-09-12T22:19:00+00:00",
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
+        "age_hours": 0.0,
+        "reason": "free tooling or reach to build and market the product with",
+        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
+        "codex_prompt": "",
+        "cost_usd": null,
+        "manual_setup": "",
+        "verified_note": "",
+        "pursued": false
+      },
+      {
+        "title": "paperclipai/paperclip",
+        "url": "https://github.com/paperclipai/paperclip",
+        "source": "github",
+        "buyer": "tooling, no buyer",
+        "kind": "asset",
+        "score": 54,
+        "score_parts": {
+          "owner_action": 0.4,
+          "receive_path": 0.2,
+          "zero_budget": 0.6,
+          "setup_burden": 1.0,
+          "recency": 1.0
+        },
+        "value_usd": null,
+        "value_basis": "none",
+        "value_note": "",
+        "posted_at": "2026-09-12T22:18:35+00:00",
+        "discovered_at": "2026-09-12T22:20:29.979032+00:00",
         "age_hours": 0.0,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
@@ -751,22 +752,12 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "Build a client-side browser extension or static web tool that solves one specific annoyance, distribute the free version on Chrome Web Store (one-time $5) and itch.io (free), list a paid upgrade on Getly (free listing, USDT/USDC payout directly to your existing TRC-20 wallet), and embed the same validated wallet address on the product page, README, and dev.to articles for direct crypto payments. This uses zero recurring cost, leverages the existing content pipeline, and requires no per-sale owner action.",
+      "summary": "Build a client-side digital product (browser extension, CLI utility, or static web tool) that costs nothing per user to run. Distribute the free tier on zero-cost channels (itch.io, GitHub Pages, Chrome Web Store if the $5 one-time fee is acceptable) to capture organic discovery. Monetize via a paid upgrade or one-time license sold through Getly, which settles USDT/USDC on Tron directly to your own wallet with no monthly fee and no KYC, and simultaneously keep the existing Tron (TRC-20) USDT receive address on the product page, README, and dev.to articles as a platform-free fallback. All channels require only one-time manual setup; after that, delivery and payment are automatic, making income truly passive.",
       "market_themes": [
         {
-          "theme": "Free distribution with optional paid upgrade drives discovery and conversion without ads",
-          "evidence": "\"Ship the product free, sell the upgrade, ask in the README\" and \"I spent months building Illusion... 100% free\"",
-          "offer": "Sell a pro version of a browser extension or utility via Getly, with free tier on Chrome Web Store and itch.io"
-        },
-        {
-          "theme": "Direct crypto payments to own wallet eliminate platform risk and KYC",
-          "evidence": "\"Wallet ask on the product page and in every article (already live)\" and Getly's native stablecoin payouts to own wallet",
-          "offer": "Publish the validated TRC-20 USDT address on all product surfaces; use Getly for card/crypto checkout that settles to same wallet"
-        },
-        {
-          "theme": "One artifact listed on multiple zero-cost channels multiplies reach without extra work",
-          "evidence": "\"One product, listed on every free channel at once\" and Chrome Web Store + itch.io + Getly all free/low one-time cost",
-          "offer": "Package the same extension/utility as a Chrome Web Store listing, an itch.io tool/asset, and a Getly digital product"
+          "theme": "Free-tier discovery with paid upgrade",
+          "evidence": "Lead 'Ship the product free, sell the upgrade, ask in README' and Reddit post 'I spent months building Illusion: a fast, client-side vector studio...' show free tools converting users to paid insights.",
+          "offer": "Sell a pro version of a free browser extension or utility via Getly (crypto payout) and direct wallet address."
         }
       ],
       "sales_channels": [],
@@ -795,7 +786,7 @@
     "supply_count": 10,
     "priced_count": 0,
     "ranked_total": 40,
-    "last_refresh_at": "2026-09-12T14:14:48.759706+00:00",
+    "last_refresh_at": "2026-09-12T22:20:17.930287+00:00",
     "channel_count": 6,
     "asset_count": 10,
     "needs_setup_count": 3,
@@ -1003,7 +994,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-12T19:22:53.279318+00:00",
+    "checked_at": "2026-09-12T22:19:21.717308+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1238,7 +1229,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20260912-194722",
+  "last_evolution_branch": "evolve/1.42.0-20260912-222017",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 16,
@@ -1347,7 +1338,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-12T19:47:22.975923+00:00",
+    "last_run": "2026-09-12T22:21:44.848456+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1357,30 +1348,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-12T19:47:23.286734+00:00",
+    "last_run": "2026-09-12T22:21:45.020181+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4391849,
-        "at": "2026-09-12T11:03:36.327094+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-09-12T11:03:36.327094+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
-        "at": "2026-09-12T11:03:36.327094+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-09-12T11:03:36.327094+00:00",
-        "ok": true
-      },
       {
         "id": 4602729,
         "at": "2026-09-12T14:17:04.110807+00:00",
@@ -1442,8 +1413,28 @@
         "ok": true
       },
       {
+        "id": 4391849,
+        "at": "2026-09-12T22:21:45.020181+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-09-12T22:21:45.020181+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-09-12T22:21:45.020181+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-09-12T22:21:45.020181+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-12T19:47:23.286734+00:00",
+        "at": "2026-09-12T22:21:45.020181+00:00",
         "ok": true
       }
     ],
@@ -1452,7 +1443,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.7
+    "oldest_check_age_hours": 8.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

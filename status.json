@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-12T22:19:21.222749+00:00",
-  "total_runs": 1823,
+  "last_run": "2026-09-13T01:01:57.078577+00:00",
+  "total_runs": 1824,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -34,13 +34,8 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add Anthropic and Cerebras LLM support via secrets and increase backfill max_per_cycle to 5 to clear skipped posts faster",
-    "changes_applied": [
-      {
-        "file": "config/strategy.json",
-        "reason": "Update backfill configuration to increase max_per_cycle from 3 to 5, allowing the backfill module to process more posts per cycle when rate limits permit, helping to clear the backlog of skipped posts faster. Preserves all other configuration sections from the last evolution and known defaults."
-      }
-    ],
+    "summary": "Fix misplaced docstring in _revise_title (bug: docstring after executable code, never recognized), increase backfill max_per_cycle 3\u21925 to clear 429-stuck posts faster, and add GITHUB_TOKEN suggestion for higher-rate GitHub searches.",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Add ANTHROPIC_API_KEY for Claude model access",
@@ -67,33 +62,32 @@
         ]
       },
       {
-        "title": "Increase backfill max_per_cycle to 5 to clear skipped posts faster",
-        "description": "With 5 posts stuck in backfill.skipped due to 429 errors, increasing the number of posts processed per backfill cycle from 3 to 5 (when rate limits allow) helps clear the backlog faster. The backfill module stops on the first 429 error, so this change only increases throughput when the API is behaving.",
-        "secret_needed": null,
+        "title": "Add GITHUB_TOKEN for higher-rate GitHub searches",
+        "description": "code_techs queries GitHub search/repositories up to 10 times per minute. A GITHUB_TOKEN raises the rate limit from 10 to 30 requests/minute and enables authenticated search, which returns more relevant results. The module already supports the token \u2014 it just reads it from the environment if present.",
+        "secret_needed": "GITHUB_TOKEN",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Review the proposed change to config/strategy.json setting backfill.max_per_cycle to 5",
-          "Step 2: Merge the evolution pull request",
-          "Step 3: The next backfill run will attempt to update up to 5 posts per cycle (if not rate limited)"
+          "Step 1: Go to GitHub Settings > Developer settings > Personal access tokens",
+          "Step 2: Generate a new token with no scopes (public repos only need none)",
+          "Step 3: Copy the token and add it as a GitHub secret named GITHUB_TOKEN"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20260912-222017",
+    "branch": null,
     "proposed_version": "1.42.0"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "dev.to",
         "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
+        "title": "Your GPU Quota Is Silently Starving Your Training Jobs",
+        "url": "https://dev.to/robust_true_try/your-gpu-quota-is-silently-starving-your-training-jobs-2poj",
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "source_url": "https://www.economist.com/interactive/briefing/2026/09/03/nvidia-is-the-central-bank-of-ai",
+        "source_title": "Nvidia is the central bank of AI"
       }
     ],
     "total_usd": 0.0
@@ -124,20 +118,20 @@
       ]
     },
     {
-      "title": "Increase backfill max_per_cycle to 5 to clear skipped posts faster",
-      "description": "With 5 posts stuck in backfill.skipped due to 429 errors, increasing the number of posts processed per backfill cycle from 3 to 5 (when rate limits allow) helps clear the backlog faster. The backfill module stops on the first 429 error, so this change only increases throughput when the API is behaving.",
-      "secret_needed": null,
+      "title": "Add GITHUB_TOKEN for higher-rate GitHub searches",
+      "description": "code_techs queries GitHub search/repositories up to 10 times per minute. A GITHUB_TOKEN raises the rate limit from 10 to 30 requests/minute and enables authenticated search, which returns more relevant results. The module already supports the token \u2014 it just reads it from the environment if present.",
+      "secret_needed": "GITHUB_TOKEN",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Review the proposed change to config/strategy.json setting backfill.max_per_cycle to 5",
-        "Step 2: Merge the evolution pull request",
-        "Step 3: The next backfill run will attempt to update up to 5 posts per cycle (if not rate limited)"
+        "Step 1: Go to GitHub Settings > Developer settings > Personal access tokens",
+        "Step 2: Generate a new token with no scopes (public repos only need none)",
+        "Step 3: Copy the token and add it as a GitHub secret named GITHUB_TOKEN"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 144,
+  "last_cycle_seconds": 445,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -224,7 +218,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-09-12",
+    "date": "2026-09-13",
     "published": 1
   },
   "code_tech_earning": {
@@ -882,7 +876,8 @@
       "github.com/ayghri/i-have-adhd",
       "xlii.space/eng/malicious-software-on-google-ads",
       "cognition.com/blog/swe-2",
-      "rubyhack.ai"
+      "rubyhack.ai",
+      "economist.com/interactive/briefing/2026/09/03/nvidia-is-the-central-bank-of-ai"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -922,7 +917,8 @@
       "have adhd skill stop coding agent burying answer",
       "advertise maliciou software google ads",
       "cognition launch new swe 2 model rivaling fable 5 1 gpt astra",
-      "openai agent carried out undisclosed attack rubygem"
+      "openai agent carried out undisclosed attack rubygem",
+      "nvidia central bank ai"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -962,12 +958,14 @@
       "ai pair programmer bury answer",
       "redirect chain bypass ad blocker",
       "multi file refactor ai agent miss every time",
-      "ai generated gems sneak rubygem dependency"
+      "ai generated gems sneak rubygem dependency",
+      "gpu quota silently starving training jobs"
     ],
     "followed_up_ids": [
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/how-ai-generated-gems-can-sneak-into-your-rubygems-dependencies-54io",
       "https://dev.to/robust_true_try/the-multi-file-refactor-your-ai-agent-misses-every-time-obb",
       "https://dev.to/robust_true_try/the-redirect-chain-that-bypasses-your-ad-blocker-1n9o",
       "https://dev.to/robust_true_try/ai-agents-social-metrics-and-presentation-pitfalls-this-weeks-dev-pulse-22jb",
@@ -994,7 +992,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-12T22:19:21.717308+00:00",
+    "checked_at": "2026-09-13T01:01:57.773468+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1229,12 +1227,12 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20260912-222017",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
-    "count": 16,
-    "total_views": 2579,
-    "avg_views": 161.2,
+    "count": 17,
+    "total_views": 2599,
+    "avg_views": 152.9,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 2154,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -1266,15 +1264,15 @@
       {
         "archetype": "myth-correction",
         "count": 2,
-        "avg_engagement": 31.5,
-        "avg_views": 31.5,
-        "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
+        "avg_engagement": 36.5,
+        "avg_views": 36.5,
+        "best_title": "Your Gemini 3.8 Flash Token Counter Is Wrong"
       },
       {
         "archetype": "security-privacy",
-        "count": 1,
-        "avg_engagement": 30.0,
-        "avg_views": 30.0,
+        "count": 2,
+        "avg_engagement": 20.0,
+        "avg_views": 20.0,
         "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
       },
       {
@@ -1294,7 +1292,7 @@
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "surprising-behavior",
-    "sample_size": 16
+    "sample_size": 17
   },
   "article_rejects": {
     "last_reason": "weak_title",
@@ -1338,7 +1336,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-12T22:21:44.848456+00:00",
+    "last_run": "2026-09-13T01:09:20.330854+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1348,27 +1346,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-12T22:21:45.020181+00:00",
+    "last_run": "2026-09-13T01:09:20.859675+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4602729,
-        "at": "2026-09-12T14:17:04.110807+00:00",
-        "ok": true
-      },
-      {
         "id": 4617346,
-        "at": "2026-09-12T14:17:04.110807+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-09-12T14:17:04.110807+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-09-12T14:17:04.110807+00:00",
         "ok": true
       },
@@ -1433,17 +1416,37 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-09-13T01:09:20.859675+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-09-13T01:09:20.859675+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-09-13T01:09:20.859675+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-12T22:21:45.020181+00:00",
+        "at": "2026-09-13T01:09:20.859675+00:00",
+        "ok": true
+      },
+      {
+        "id": 4641536,
+        "at": "2026-09-13T01:09:20.859675+00:00",
         "ok": true
       }
     ],
-    "published_total": 17,
-    "covered": 17,
+    "published_total": 18,
+    "covered": 18,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.1
+    "oldest_check_age_hours": 10.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

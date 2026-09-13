@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-13T06:12:05.407092+00:00",
-  "total_runs": 1825,
+  "last_run": "2026-09-13T11:54:57.672212+00:00",
+  "total_runs": 1826,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -34,21 +34,8 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Fix backfill 429 rate-limit handling with exponential backoff, enable code_techs auto_pursue to save actionable Codex prompts for high-scoring leads, and add LLM role routing config to strategy.json for cheaper provider assignment.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/backfill.py",
-        "reason": "Add exponential backoff retry logic for 429 rate limit errors in backfill. Currently 5 posts are stuck at 429 errors. The fix adds configurable max_retries (default 3) and base_retry_delay_seconds (default 30s) with exponential backoff. Also increases max_per_cycle from 3 to 5 to clear the backlog faster."
-      },
-      {
-        "file": "bot/earning/code_techs.py",
-        "reason": "Enable auto_pursue functionality in code_techs. Previously it only logged a warning and did nothing. Now it writes actionable Codex prompts for high-scoring channel leads (score >= pursue_score_threshold, default 75) to docs/code-tech-pursuits.md. The owner can copy-paste these prompts into their AI assistant to get concrete first steps. Also changed auto_pursue default to true in config."
-      },
-      {
-        "file": "config/strategy.json",
-        "reason": "Add LLM role routing configuration to strategy.json. Currently all roles (upgrade, research, post) use openrouter. This change routes 'research' role to gemini (which has higher free tier limits: ~1,500 req/day vs OpenRouter's 50 req/day) while keeping upgrade and post on openrouter. Also adds backfill retry config (max_retries=3, base_retry_delay_seconds=30) and increases backfill max_per_cycle from 3 to 5. Sets code_techs auto_pursue to true with pursue_score_threshold=75."
-      }
-    ],
+    "summary": "Fix GitHub token lookup and enable auto_pursue in code_techs, and suggest adding Anthropic and Cerebras API keys plus updating LLM role routing to use Gemini for research.",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Add ANTHROPIC_API_KEY for Claude model access",
@@ -75,35 +62,24 @@
         ]
       },
       {
-        "title": "Add GITHUB_TOKEN for higher-rate GitHub searches",
-        "description": "code_techs queries GitHub search/repositories up to 10 times per minute. A GITHUB_TOKEN raises the rate limit from 10 to 30 requests/minute and enables authenticated search, which returns more relevant results. The module already supports the token \u2014 it just reads it from the environment if present.",
-        "secret_needed": "GITHUB_TOKEN",
-        "estimated_weekly_usd": 0,
+        "title": "Update config/strategy.json to set research role to gemini",
+        "description": "This routes the research role to gemini which has higher free tier limits (~1,500 req/day) compared to openrouter's 50 req/day, allowing for more research briefs and market analysis without hitting rate limits.",
+        "secret_needed": null,
         "free_tier": true,
+        "estimated_weekly_usd": 0,
         "how_to": [
-          "Step 1: Go to GitHub Settings > Developer settings > Personal access tokens",
-          "Step 2: Generate a new token with no scopes (public repos only need none)",
-          "Step 3: Copy the token and add it as a GitHub secret named GITHUB_TOKEN"
+          "Step 1: Go to the config/strategy.json file in the repository.",
+          "Step 2: Change the \"research\" role under \"llm_roles\" from \"openrouter\" to \"gemini\".",
+          "Step 3: Commit the change to the repository."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20260913-062238",
+    "branch": null,
     "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -132,20 +108,20 @@
       ]
     },
     {
-      "title": "Add GITHUB_TOKEN for higher-rate GitHub searches",
-      "description": "code_techs queries GitHub search/repositories up to 10 times per minute. A GITHUB_TOKEN raises the rate limit from 10 to 30 requests/minute and enables authenticated search, which returns more relevant results. The module already supports the token \u2014 it just reads it from the environment if present.",
-      "secret_needed": "GITHUB_TOKEN",
-      "estimated_weekly_usd": 0,
+      "title": "Update config/strategy.json to set research role to gemini",
+      "description": "This routes the research role to gemini which has higher free tier limits (~1,500 req/day) compared to openrouter's 50 req/day, allowing for more research briefs and market analysis without hitting rate limits.",
+      "secret_needed": null,
       "free_tier": true,
+      "estimated_weekly_usd": 0,
       "how_to": [
-        "Step 1: Go to GitHub Settings > Developer settings > Personal access tokens",
-        "Step 2: Generate a new token with no scopes (public repos only need none)",
-        "Step 3: Copy the token and add it as a GitHub secret named GITHUB_TOKEN"
+        "Step 1: Go to the config/strategy.json file in the repository.",
+        "Step 2: Change the \"research\" role under \"llm_roles\" from \"openrouter\" to \"gemini\".",
+        "Step 3: Commit the change to the repository."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 689,
+  "last_cycle_seconds": 1288,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1096,7 +1072,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-13T06:12:05.763101+00:00",
+    "checked_at": "2026-09-13T11:54:58.378884+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1331,8 +1307,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20260913-062238",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 17,
     "total_views": 2599,
@@ -1440,30 +1416,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-13T06:23:33.298310+00:00",
+    "last_run": "2026-09-13T12:16:24.677650+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-13T06:23:33.474322+00:00",
+    "last_run": "2026-09-13T12:16:24.868747+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4552210,
-        "at": "2026-09-12T17:21:18.746824+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
-        "at": "2026-09-12T17:21:18.746824+00:00",
-        "ok": true
-      },
       {
         "id": 4568987,
         "at": "2026-09-12T19:47:23.286734+00:00",
@@ -1471,16 +1437,6 @@
       },
       {
         "id": 4619528,
-        "at": "2026-09-12T19:47:23.286734+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-09-12T19:47:23.286734+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
         "at": "2026-09-12T19:47:23.286734+00:00",
         "ok": true
       },
@@ -1540,8 +1496,28 @@
         "ok": true
       },
       {
+        "id": 4552210,
+        "at": "2026-09-13T12:16:24.868747+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-09-13T12:16:24.868747+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-09-13T12:16:24.868747+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-09-13T12:16:24.868747+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-13T06:23:33.474322+00:00",
+        "at": "2026-09-13T12:16:24.868747+00:00",
         "ok": true
       }
     ],
@@ -1550,7 +1526,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 13.0
+    "oldest_check_age_hours": 16.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -1,6 +1,6 @@
 # Recurring Revenue (MRR) Idea Triage
 
-Refreshed: 2026-09-12T00:21:16.462448+00:00
+Refreshed: 2026-09-14T01:16:28.541222+00:00
 
 Research and suggestions only. This bot does not contact anyone, collect
 payment, or host a service. Every figure quoted from the source article
@@ -16,29 +16,29 @@ is unverified — check it yourself before acting on it.
 
 ## Best Current Angle
 
-The best recurring-revenue angle for a zero-cost, research-first, publish-to-dev.to stack is a paid newsletter targeting mid-level backend engineers who are migrating from monoliths to microservices on AWS. The owner can research and write deep-dive technical migration guides, publish them on dev.to to build credibility, and then offer a subscription newsletter with hands-on code walkthroughs, architecture diagrams, and battle-tested deployment checklists. No automation can replace the owner's technical judgment, writing, or relationship-building with readers.
+The only recurring-revenue path that fits a zero‑cost, research‑first, publish‑to‑dev.to stack is a paid newsletter that monetises a tightly defined technical niche; the owner writes deep‑dive articles on dev.to, uses them as proof of expertise, and then manually sets up a subscription page (e.g., Gumroad or Substack) to collect $10‑20 per month from solo developers who need curated, actionable guidance on that niche.
 
 ## Ranked Ideas
 
 ### Paid newsletter
 
-- **Niche:** Mid-level backend engineers migrating from monoliths to microservices on AWS
-- **Who pays:** Mid-level backend engineers at startups or small companies making migration decisions
+- **Niche:** Solo developers who maintain CI/CD pipelines with GitHub Actions and need weekly, copy‑paste‑ready workflow patterns for Node.js, Python, and Docker projects
+- **Who pays:** Individual solo developers or freelance engineers who ship code to production at least weekly and spend >5 hours/week debugging CI
 - **Monthly price:** 10-20
-- **Why this stack fits:** The owner can publish technical articles on dev.to to build authority, then funnel readers to a paid newsletter with deeper content.
-- **First proof artifact:** A 1,500-word dev.to article titled 'How I Migrated a Rails Monolith to ECS Without Downtime' with code snippets and architecture diagrams
-- **Runway to first dollar:** 6-10 weeks
-- **You must do by hand:** Write and publish the initial dev.to article, engage with commenters, and manually set up a Substack or Gumroad subscription page
+- **Why this stack fits:** Articles on dev.to serve as free samples that demonstrate authority; the owner can hand‑craft a subscription landing page without any inbound HTTP or automation.
+- **First proof artifact:** A 12‑article series on dev.to titled "GitHub Actions Patterns for Solo Devs" each ending with a one‑question poll about the reader's biggest pipeline pain point
+- **Runway to first dollar:** 4-8 weeks
+- **You must do by hand:** Create a Gumroad/Substack account, configure a $10‑20 monthly subscription product, and manually copy the subscription link into each dev.to article and the newsletter sign‑up page
 
 ### Notion / digital template store
 
-- **Niche:** Engineering team leads managing microservices documentation and onboarding
-- **Who pays:** Engineering team leads at Series A/B startups
-- **Monthly price:** 50-100
-- **Why this stack fits:** The owner can draft detailed Notion templates for engineering teams and publish supporting articles on dev.to to drive organic traffic.
-- **First proof artifact:** A free Notion template for 'Microservices Architecture Decision Records' published alongside a dev.to article explaining its use
-- **Runway to first dollar:** 8-12 weeks
-- **You must do by hand:** Design the Notion template by hand, write the dev.to article, and manually create a Gumroad product page
+- **Niche:** Freelance frontend developers who need ready‑to‑use Notion project‑tracking dashboards tailored to React/Next.js client work
+- **Who pays:** Freelance frontend developers billing $75‑150/hr who manage 3+ concurrent client projects and want a reusable tracking system
+- **Monthly price:** 15-30
+- **Why this stack fits:** Dev.to articles can showcase template walkthroughs; the owner can later list a Notion template pack on Gumroad, but the storefront and payment must be set up manually.
+- **First proof artifact:** A single dev.to article that publishes a complete Notion dashboard template (exported as a public duplicate link) with a step‑by‑step setup guide
+- **Runway to first dollar:** 6-10 weeks
+- **You must do by hand:** Open a Gumroad account, create a product for the Notion template pack, set a monthly subscription price, and manually embed the purchase link in the dev.to article and any follow‑up posts
 
 
 ## Set Up By Hand First
@@ -50,9 +50,11 @@ None of these is a blocker — but no money moves until you do them.
 
 ## How To Validate Without Outreach
 
-- Publish a dev.to article on monolith-to-microservices migration challenges and end it with: 'What's the biggest blocker you've hit during migration? Let me know in the comments.'
-- Join the 'r/devops' subreddit and the 'Backend Engineering' Slack community, then participate in migration-related threads by sharing insights (no self-promotion).
-- Write a second dev.to article specifically addressing a common pain point mentioned in the first article's comments, proving the owner can solve real problems.
+- Publish the first proof article on dev.to and end it with a specific question (e.g., "What GitHub Actions pattern wastes the most of your time?")
+- Reply to every comment on that article by hand, asking commenters if they would pay for a weekly curated pattern email
+- Join the existing dev.to community tags "github-actions" and "ci-cd" and monitor discussions for recurring pain points
+- Post a short follow‑up article summarising the top 5 pain points you observed and ask readers to vote on which they’d pay to solve
+- Track the number of unique commenters who express willingness to pay; aim for at least 10 distinct voices before building the paid product
 
 ## Refused, And Why
 
@@ -82,8 +84,8 @@ code, or infrastructure that does not exist here and is not free.
 
 ## Next Actions
 
-1. Research and outline a 1,500-word dev.to article on 'Common Pitfalls When Migrating from Monolith to Microservices on AWS' — due in 3 days.
-2. Write and publish that article on dev.to, ending with a question to readers about their migration blockers.
-3. Read and respond to every comment on the article within 48 hours to build rapport with potential subscribers.
-4. Based on comment feedback, draft a second article that solves one specific problem mentioned, and include a call-to-action for a future newsletter.
-5. Manually create a Substack or Gumroad account and set up a basic landing page describing the newsletter's value — no payment processing needed yet.
+1. Write and publish the 12‑article "GitHub Actions Patterns for Solo Devs" series on dev.to, each ending with the same targeted question
+2. Manually create a Gumroad (or Substack) account and a $15/month subscription product for the newsletter
+3. Add the subscription link to the bio and to the bottom of every article in the series
+4. Respond to every comment on the series by hand, noting names of developers who signal purchase intent
+5. After 4 weeks, compile the top‑voted pain points into a one‑page PDF and send it manually (via email address collected in Gumroad) to the first 10 interested commenters as a free preview

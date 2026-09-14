@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-13T22:25:35.426696+00:00",
-  "total_runs": 1829,
+  "last_run": "2026-09-14T01:06:25.872779+00:00",
+  "total_runs": 1830,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -18,13 +18,10 @@
     "total_usd": 0.0,
     "this_week_usd": 0.0,
     "last_cycle_usd": 0.0,
-    "week_started": "2026-09-07",
+    "week_started": "2026-09-14",
     "breakdown": {
-      "dev.to": 0.0,
-      "dev.to-backfill": 0.0,
-      "code_techs": 0.0,
       "mrr-ideas": 0.0,
-      "dev.to-newsletter": 0.0
+      "dev.to": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -34,17 +31,17 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a support page to surface the wallet address, lower follow-up thresholds and add an evergreen path to compound reach, and introduce a product builder that turns research into a listable digital product.",
+    "summary": "Add Anthropic Claude and Cerebras Cloud LLM provider support with free-tier access, and improve code-tech opportunity scoring for passive product income",
     "changes_applied": [
       {
-        "file": "bot/dashboard.py",
-        "reason": "Adds a dedicated support page that surfaces the published Tron address with a copy button and links to Getly/itch.io. Readers currently must scroll to the footer of an article to send a tip; a standalone page makes the receive path visible from the repo root and from the dashboard, increasing the chance of a first on-chain receipt."
+        "file": "bot/earning/_shared.py",
+        "reason": "Adds get_optional_llm_keys() function that checking for ANTHROPIC_API_KEY and CEREBRAS_API_KEY availability, enabling earning modules to select between LLM providers when multiple free-tier keys are configured"
       }
     ],
     "suggestions": [
       {
         "title": "Add ANTHROPIC_API_KEY for Claude model access",
-        "description": "Unlocks Claude models (claude-3-haiku at ~$0.25/M tokens, free-tier eligible) for article generation and research. Adds a cheaper high-quality option for research roles and a fallback if OpenRouter degrades.",
+        "description": "Unlocks Claude 3 Haiku (~$0.25/M tokens, free-tier eligible) for article generation and research, providing a cheaper high-quality option and fallback if OpenRouter degrades",
         "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -56,7 +53,7 @@
       },
       {
         "title": "Add CEREBRAS_API_KEY for fast free inference",
-        "description": "Unlocks Cerebras Cloud free tier (~1M tokens/day, ~14,400 requests/day per model, no credit card required). Speeds up research briefs and code-techs market analysis that currently wait on OpenRouter's free chain (capped at 50 req/day).",
+        "description": "Unlocks Cerebras Cloud free tier (~1M tokens/day, ~14,400 requests/day per model, no credit card required), speeds up research briefs and code-techs market analysis that currently wait on OpenRouter's free chain (capped at 50 req/day)",
         "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -68,32 +65,41 @@
       },
       {
         "title": "Review and list the auto-generated product in docs/products/",
-        "description": "The product builder now generates a minimal digital product from the top code-techs idea. Review the files, improve them, and list the product on Getly or itch.io to start earning while you sleep.",
+        "description": "The product builder generates a minimal digital product from the top code-techs idea; reviewing and listing it on Getly/itch.io enables earning while the owner sleeps via the published Tron receive address",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "Step 1: Check the generated files in docs/products/<product-name>/",
           "Step 2: Create a free seller account on Getly (https://www.getly.store/sell/crypto) or itch.io",
-          "Step 3: Upload the product files, set a price, and point payouts at the published Tron address"
+          "Step 3: Upload the product files, set a price, and point payouts at the published Tron address [redacted]"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20260913-224532",
+    "branch": "evolve/1.42.0-20260914-011628",
     "proposed_version": "1.42.0"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "mrr-ideas",
         "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "docs/mrr-ideas.md"
+      },
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "Your Distilled Model Performs Worse Than the Teacher",
+        "url": "https://dev.to/robust_true_try/your-distilled-model-performs-worse-than-the-teacher-2ii7",
+        "estimated_usd": 0.0,
+        "source_url": "https://techcrunch.com/2026/09/11/y-combinators-garry-tan-wants-u-s-open-weight-ai-labs-to-distill-frontier-models-too/",
+        "source_title": "Garry Tan wants US open-weight AI labs to 'distill' frontier models, too"
       }
     ],
     "total_usd": 0.0
@@ -101,7 +107,7 @@
   "suggestions": [
     {
       "title": "Add ANTHROPIC_API_KEY for Claude model access",
-      "description": "Unlocks Claude models (claude-3-haiku at ~$0.25/M tokens, free-tier eligible) for article generation and research. Adds a cheaper high-quality option for research roles and a fallback if OpenRouter degrades.",
+      "description": "Unlocks Claude 3 Haiku (~$0.25/M tokens, free-tier eligible) for article generation and research, providing a cheaper high-quality option and fallback if OpenRouter degrades",
       "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -113,7 +119,7 @@
     },
     {
       "title": "Add CEREBRAS_API_KEY for fast free inference",
-      "description": "Unlocks Cerebras Cloud free tier (~1M tokens/day, ~14,400 requests/day per model, no credit card required). Speeds up research briefs and code-techs market analysis that currently wait on OpenRouter's free chain (capped at 50 req/day).",
+      "description": "Unlocks Cerebras Cloud free tier (~1M tokens/day, ~14,400 requests/day per model, no credit card required), speeds up research briefs and code-techs market analysis that currently wait on OpenRouter's free chain (capped at 50 req/day)",
       "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -125,19 +131,19 @@
     },
     {
       "title": "Review and list the auto-generated product in docs/products/",
-      "description": "The product builder now generates a minimal digital product from the top code-techs idea. Review the files, improve them, and list the product on Getly or itch.io to start earning while you sleep.",
+      "description": "The product builder generates a minimal digital product from the top code-techs idea; reviewing and listing it on Getly/itch.io enables earning while the owner sleeps via the published Tron receive address",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "Step 1: Check the generated files in docs/products/<product-name>/",
         "Step 2: Create a free seller account on Getly (https://www.getly.store/sell/crypto) or itch.io",
-        "Step 3: Upload the product files, set a price, and point payouts at the published Tron address"
+        "Step 3: Upload the product files, set a price, and point payouts at the published Tron address [redacted]"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1229,
+  "last_cycle_seconds": 681,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -224,7 +230,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-09-13",
+    "date": "2026-09-14",
     "published": 1
   },
   "code_tech_earning": {
@@ -941,7 +947,8 @@
       "xlii.space/eng/malicious-software-on-google-ads",
       "cognition.com/blog/swe-2",
       "rubyhack.ai",
-      "economist.com/interactive/briefing/2026/09/03/nvidia-is-the-central-bank-of-ai"
+      "economist.com/interactive/briefing/2026/09/03/nvidia-is-the-central-bank-of-ai",
+      "techcrunch.com/2026/09/11/y-combinators-garry-tan-wants-u-s-open-weight-ai-labs-to-distill-frontier-models-too"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -982,7 +989,8 @@
       "advertise maliciou software google ads",
       "cognition launch new swe 2 model rivaling fable 5 1 gpt astra",
       "openai agent carried out undisclosed attack rubygem",
-      "nvidia central bank ai"
+      "nvidia central bank ai",
+      "garry tan want us open weight ai labs distill frontier model too"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1023,12 +1031,14 @@
       "redirect chain bypass ad blocker",
       "multi file refactor ai agent miss every time",
       "ai generated gems sneak rubygem dependency",
-      "gpu quota silently starving training jobs"
+      "gpu quota silently starving training jobs",
+      "distilled model perform worse than teacher"
     ],
     "followed_up_ids": [
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/your-gpu-quota-is-silently-starving-your-training-jobs-2poj",
       "https://dev.to/robust_true_try/how-ai-generated-gems-can-sneak-into-your-rubygems-dependencies-54io",
       "https://dev.to/robust_true_try/the-multi-file-refactor-your-ai-agent-misses-every-time-obb",
       "https://dev.to/robust_true_try/the-redirect-chain-that-bypasses-your-ad-blocker-1n9o",
@@ -1056,7 +1066,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-13T22:25:36.026453+00:00",
+    "checked_at": "2026-09-14T01:06:26.365252+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1122,7 +1132,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-09-12T00:21:16.462448+00:00",
+    "last_refresh_at": "2026-09-14T01:16:28.541222+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -1131,40 +1141,42 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The best recurring-revenue angle for a zero-cost, research-first, publish-to-dev.to stack is a paid newsletter targeting mid-level backend engineers who are migrating from monoliths to microservices on AWS. The owner can research and write deep-dive technical migration guides, publish them on dev.to to build credibility, and then offer a subscription newsletter with hands-on code walkthroughs, architecture diagrams, and battle-tested deployment checklists. No automation can replace the owner's technical judgment, writing, or relationship-building with readers.",
+    "summary": "The only recurring-revenue path that fits a zero\u2011cost, research\u2011first, publish\u2011to\u2011dev.to stack is a paid newsletter that monetises a tightly defined technical niche; the owner writes deep\u2011dive articles on dev.to, uses them as proof of expertise, and then manually sets up a subscription page (e.g., Gumroad or Substack) to collect $10\u201120 per month from solo developers who need curated, actionable guidance on that niche.",
     "ranked_ideas": [
       {
         "name": "Paid newsletter",
-        "why_this_stack_fits": "The owner can publish technical articles on dev.to to build authority, then funnel readers to a paid newsletter with deeper content.",
-        "narrow_niche": "Mid-level backend engineers migrating from monoliths to microservices on AWS",
-        "first_proof_artifact": "A 1,500-word dev.to article titled 'How I Migrated a Rails Monolith to ECS Without Downtime' with code snippets and architecture diagrams",
-        "who_pays": "Mid-level backend engineers at startups or small companies making migration decisions",
+        "why_this_stack_fits": "Articles on dev.to serve as free samples that demonstrate authority; the owner can hand\u2011craft a subscription landing page without any inbound HTTP or automation.",
+        "narrow_niche": "Solo developers who maintain CI/CD pipelines with GitHub Actions and need weekly, copy\u2011paste\u2011ready workflow patterns for Node.js, Python, and Docker projects",
+        "first_proof_artifact": "A 12\u2011article series on dev.to titled \"GitHub Actions Patterns for Solo Devs\" each ending with a one\u2011question poll about the reader's biggest pipeline pain point",
+        "who_pays": "Individual solo developers or freelance engineers who ship code to production at least weekly and spend >5\u202fhours/week debugging CI",
         "monthly_price_usd": "10-20",
-        "runway_to_first_dollar": "6-10 weeks",
-        "owner_must_do_by_hand": "Write and publish the initial dev.to article, engage with commenters, and manually set up a Substack or Gumroad subscription page"
+        "runway_to_first_dollar": "4-8 weeks",
+        "owner_must_do_by_hand": "Create a Gumroad/Substack account, configure a $10\u201120 monthly subscription product, and manually copy the subscription link into each dev.to article and the newsletter sign\u2011up page"
       },
       {
         "name": "Notion / digital template store",
-        "why_this_stack_fits": "The owner can draft detailed Notion templates for engineering teams and publish supporting articles on dev.to to drive organic traffic.",
-        "narrow_niche": "Engineering team leads managing microservices documentation and onboarding",
-        "first_proof_artifact": "A free Notion template for 'Microservices Architecture Decision Records' published alongside a dev.to article explaining its use",
-        "who_pays": "Engineering team leads at Series A/B startups",
-        "monthly_price_usd": "50-100",
-        "runway_to_first_dollar": "8-12 weeks",
-        "owner_must_do_by_hand": "Design the Notion template by hand, write the dev.to article, and manually create a Gumroad product page"
+        "why_this_stack_fits": "Dev.to articles can showcase template walkthroughs; the owner can later list a Notion template pack on Gumroad, but the storefront and payment must be set up manually.",
+        "narrow_niche": "Freelance frontend developers who need ready\u2011to\u2011use Notion project\u2011tracking dashboards tailored to React/Next.js client work",
+        "first_proof_artifact": "A single dev.to article that publishes a complete Notion dashboard template (exported as a public duplicate link) with a step\u2011by\u2011step setup guide",
+        "who_pays": "Freelance frontend developers billing $75\u2011150/hr who manage 3+ concurrent client projects and want a reusable tracking system",
+        "monthly_price_usd": "15-30",
+        "runway_to_first_dollar": "6-10 weeks",
+        "owner_must_do_by_hand": "Open a Gumroad account, create a product for the Notion template pack, set a monthly subscription price, and manually embed the purchase link in the dev.to article and any follow\u2011up posts"
       }
     ],
     "validation_steps": [
-      "Publish a dev.to article on monolith-to-microservices migration challenges and end it with: 'What's the biggest blocker you've hit during migration? Let me know in the comments.'",
-      "Join the 'r/devops' subreddit and the 'Backend Engineering' Slack community, then participate in migration-related threads by sharing insights (no self-promotion).",
-      "Write a second dev.to article specifically addressing a common pain point mentioned in the first article's comments, proving the owner can solve real problems."
+      "Publish the first proof article on dev.to and end it with a specific question (e.g., \"What GitHub Actions pattern wastes the most of your time?\")",
+      "Reply to every comment on that article by hand, asking commenters if they would pay for a weekly curated pattern email",
+      "Join the existing dev.to community tags \"github-actions\" and \"ci-cd\" and monitor discussions for recurring pain points",
+      "Post a short follow\u2011up article summarising the top 5 pain points you observed and ask readers to vote on which they\u2019d pay to solve",
+      "Track the number of unique commenters who express willingness to pay; aim for at least 10 distinct voices before building the paid product"
     ],
     "owner_actions": [
-      "Research and outline a 1,500-word dev.to article on 'Common Pitfalls When Migrating from Monolith to Microservices on AWS' \u2014 due in 3 days.",
-      "Write and publish that article on dev.to, ending with a question to readers about their migration blockers.",
-      "Read and respond to every comment on the article within 48 hours to build rapport with potential subscribers.",
-      "Based on comment feedback, draft a second article that solves one specific problem mentioned, and include a call-to-action for a future newsletter.",
-      "Manually create a Substack or Gumroad account and set up a basic landing page describing the newsletter's value \u2014 no payment processing needed yet."
+      "Write and publish the 12\u2011article \"GitHub Actions Patterns for Solo Devs\" series on dev.to, each ending with the same targeted question",
+      "Manually create a Gumroad (or Substack) account and a $15/month subscription product for the newsletter",
+      "Add the subscription link to the bio and to the bottom of every article in the series",
+      "Respond to every comment on the series by hand, noting names of developers who signal purchase intent",
+      "After 4 weeks, compile the top\u2011voted pain points into a one\u2011page PDF and send it manually (via email address collected in Gumroad) to the first 10 interested commenters as a free preview"
     ],
     "viable": [
       {
@@ -1291,12 +1303,12 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20260913-224532",
+  "last_evolution_branch": "evolve/1.42.0-20260914-011628",
   "evolution_pending_review": true,
   "article_stats": {
-    "count": 17,
-    "total_views": 2599,
-    "avg_views": 152.9,
+    "count": 18,
+    "total_views": 2631,
+    "avg_views": 146.2,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 2154,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -1314,8 +1326,8 @@
       {
         "archetype": "problem-workaround",
         "count": 4,
-        "avg_engagement": 580.8,
-        "avg_views": 574.5,
+        "avg_engagement": 583.2,
+        "avg_views": 577.0,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1328,15 +1340,22 @@
       {
         "archetype": "myth-correction",
         "count": 2,
-        "avg_engagement": 36.5,
-        "avg_views": 36.5,
-        "best_title": "Your Gemini 3.8 Flash Token Counter Is Wrong"
+        "avg_engagement": 41.5,
+        "avg_views": 41.5,
+        "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
+      },
+      {
+        "archetype": "surprising-behavior",
+        "count": 3,
+        "avg_engagement": 33.7,
+        "avg_views": 8.7,
+        "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
       },
       {
         "archetype": "security-privacy",
         "count": 2,
-        "avg_engagement": 20.0,
-        "avg_views": 20.0,
+        "avg_engagement": 25.0,
+        "avg_views": 25.0,
         "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
       },
       {
@@ -1345,18 +1364,11 @@
         "avg_engagement": 18.2,
         "avg_views": 8.2,
         "best_title": "The Redirect Chain That Bypasses Your Ad Blocker"
-      },
-      {
-        "archetype": "surprising-behavior",
-        "count": 2,
-        "avg_engagement": 12.0,
-        "avg_views": 12.0,
-        "best_title": "The npm Install Script That Silently Ran Your Build"
       }
     ],
     "best_archetype": "problem-workaround",
-    "worst_archetype": "surprising-behavior",
-    "sample_size": 17
+    "worst_archetype": "other",
+    "sample_size": 18
   },
   "article_rejects": {
     "last_reason": "weak_title",
@@ -1400,7 +1412,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-13T22:46:03.828130+00:00",
+    "last_run": "2026-09-14T01:17:46.084167+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1410,32 +1422,17 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-13T22:46:04.116282+00:00",
+    "last_run": "2026-09-14T01:17:46.353374+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4617346,
-        "at": "2026-09-13T06:23:33.474322+00:00",
-        "ok": true
-      },
       {
         "id": 4552210,
         "at": "2026-09-13T12:16:24.868747+00:00",
         "ok": true
       },
       {
-        "id": 4430049,
-        "at": "2026-09-13T12:16:24.868747+00:00",
-        "ok": true
-      },
-      {
         "id": 4633220,
-        "at": "2026-09-13T12:16:24.868747+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
         "at": "2026-09-13T12:16:24.868747+00:00",
         "ok": true
       },
@@ -1500,17 +1497,37 @@
         "ok": true
       },
       {
+        "id": 4617346,
+        "at": "2026-09-14T01:17:46.353374+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-09-14T01:17:46.353374+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-09-14T01:17:46.353374+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-13T22:46:04.116282+00:00",
+        "at": "2026-09-14T01:17:46.353374+00:00",
+        "ok": true
+      },
+      {
+        "id": 4646243,
+        "at": "2026-09-14T01:17:46.353374+00:00",
         "ok": true
       }
     ],
-    "published_total": 18,
-    "covered": 18,
+    "published_total": 19,
+    "covered": 19,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 16.4
+    "oldest_check_age_hours": 13.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

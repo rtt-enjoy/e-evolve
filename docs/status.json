@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-14T14:05:26.008814+00:00",
-  "total_runs": 1832,
+  "last_run": "2026-09-14T19:23:13.839115+00:00",
+  "total_runs": 1833,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -32,19 +32,15 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Enhance attribution summary with tag-level breakdown, normalize line endings in dev.to publishing, and bump version for the new feature.",
+    "summary": "Fix attribution summary to surface top_tag and by_tag so the dashboard can show which tags correlate with receipts, matching the by_archetype breakdown already returned.",
     "changes_applied": [
       {
         "file": "bot/earning/attribution.py",
-        "reason": "Surfaces tag-level attribution in the summary. `by_tag` was already computed in `record_receipt` but never returned by `summary()`, so the dashboard could show which archetypes correlated with receipts but not which tags -- the more granular signal that tells the owner whether a specific topic's audience is the one tipping. Adding `top_tag`, `by_archetype`, and `by_tag` to the return dict makes the funnel measurement complete."
-      },
-      {
-        "file": "bot/earning/devto.py",
-        "reason": "Normalizes CRLF line endings to LF at the start of `normalize()`. LLM outputs and Windows-edited markdown can carry `\\r\\n` separators; dev.to renders stray `\\r` as literal text, and the downstream regexes in the same function assume `\\n`. This is a zero-cost, deterministic fix applied before any other transformation so all subsequent pattern matching sees consistent separators."
+        "reason": "summary() already returned by_archetype but omitted by_tag and top_tag, so the dashboard could show which archetypes correlated with receipts but not which tags -- the more granular signal that tells the owner whether a specific topic's audience is the one tipping. Adding top_tag and by_tag to the return dict makes the funnel measurement complete and matches the by_archetype breakdown already persisted by record_receipt."
       },
       {
         "file": "version.txt",
-        "reason": "Bump from 1.41.0 to 1.42.0 (minor) for the new attribution summary fields surfaced to the dashboard."
+        "reason": "Bump patch from 1.42.0 to 1.42.1 for the attribution summary fix that surfaces top_tag and by_tag to the dashboard."
       }
     ],
     "suggestions": [
@@ -86,22 +82,11 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20260914-140742",
-    "proposed_version": "1.42.0"
+    "branch": "evolve/1.42.1-20260914-193230",
+    "proposed_version": "1.42.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -143,7 +128,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 213,
+  "last_cycle_seconds": 558,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1035,7 +1020,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-14T14:05:26.317568+00:00",
+    "checked_at": "2026-09-14T19:23:14.617103+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1272,7 +1257,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20260914-140742",
+  "last_evolution_branch": "evolve/1.42.1-20260914-193230",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 18,
@@ -1381,7 +1366,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-14T14:08:57.665654+00:00",
+    "last_run": "2026-09-14T19:32:31.304248+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1391,32 +1376,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-14T14:08:57.933838+00:00",
+    "last_run": "2026-09-14T19:32:31.603939+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4421693,
-        "at": "2026-09-13T19:33:12.651026+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-09-13T19:33:12.651026+00:00",
-        "ok": true
-      },
-      {
-        "id": 4602729,
-        "at": "2026-09-13T22:46:04.116282+00:00",
-        "ok": true
-      },
-      {
         "id": 4641536,
-        "at": "2026-09-13T22:46:04.116282+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
         "at": "2026-09-13T22:46:04.116282+00:00",
         "ok": true
       },
@@ -1486,8 +1451,28 @@
         "ok": true
       },
       {
+        "id": 4421693,
+        "at": "2026-09-14T19:32:31.603939+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-09-14T19:32:31.603939+00:00",
+        "ok": true
+      },
+      {
+        "id": 4602729,
+        "at": "2026-09-14T19:32:31.603939+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-09-14T19:32:31.603939+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-14T14:08:57.933838+00:00",
+        "at": "2026-09-14T19:32:31.603939+00:00",
         "ok": true
       }
     ],
@@ -1496,7 +1481,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 18.6
+    "oldest_check_age_hours": 20.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

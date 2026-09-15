@@ -343,6 +343,64 @@ def _coverage(state: dict, posts: list[dict[str, Any]],
 	}
 
 
+def _age_only(state: dict, now: datetime) -> dict[str, Any]:
+	"""Re-age the ledger when the published catalogue could not be fetched.
+
+    A cycle that reads nothing must not leave last cycle's coverage standing as
+    though it had. `_coverage` cannot be used here: it takes the published list
+    as its denominator, and an *unavailable* list is not an empty one -- passing
+    `[]` would report `published_total: 0, known_without_footer: 0`, erasing a
+    real finding that a post shows readers no ask. That is the module's own
+    third-state rule (`fetch_live_body` returns `None`, never `""`) applied to
+    the catalogue instead of to one body.
+
+    So the verdicts are kept and only the clock moves. Observations still expire
+    at `stale_after_hours`, which is the half the early return used to skip: the
+    freshness countdown stopped instead of running down, so a dev.to outage
+    froze `coverage_complete: True` and `oldest_check_age_hours` at whatever the
+    last good cycle wrote, indefinitely.
+
+    `coverage_complete` is never `True` here. Nothing was observed this cycle,
+    and `published_total` is unknown -- a catalogue that grew by a post while the
+    API was failing would make yesterday's complete count incomplete without
+    anything recording that. Unknown is reported as unknown (`None`), never as
+    done.
+    """
+	stale_after = float(config().get("stale_after_hours", 168) or 0)
+
+	fresh = 0
+	known_bad = 0
+	oldest: Optional[float] = None
+	for row in _ledger(state).values():
+		age = _age_hours(row["at"], now)
+		if age is None:
+			continue
+		if stale_after > 0 and age > stale_after:
+			continue
+		fresh += 1
+		if not row["ok"]:
+			known_bad += 1
+		oldest = age if oldest is None else max(oldest, age)
+
+	return {
+		# Retained observations that have not yet expired. The denominator is
+		# deliberately left alone: `published_total` is a fact about dev.to, and
+		# this cycle learned nothing about dev.to.
+		"covered": fresh,
+		"coverage_complete": None,
+		# Survives the outage. A post seen carrying no ask is still carrying no
+		# ask while the API that would confirm it is down, and this is the field
+		# the doctrine's checklist reads first.
+		"known_without_footer": known_bad,
+		"oldest_check_age_hours": None if oldest is None else round(oldest, 1),
+		# The comparison needs complete coverage to be honest, and coverage is
+		# now unknown -- so the agreement is unknown too. Leaving the previous
+		# `True` standing would have this module vouch for `backfill.remaining`
+		# on the strength of a cycle that read nothing.
+		"agrees_with_backfill": None,
+	}
+
+
 def _age_hours(at: str, now: datetime) -> Optional[float]:
 	"""Hours since an ISO timestamp, or ``None`` if it cannot be read."""
 	parsed = _shared.parse_dt(at)
@@ -396,13 +454,22 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 		if posts is None:
 			from . import devto_stats
 			posts = devto_stats.fetch_published(api_key)
+		now = datetime.now(timezone.utc)
 		if not posts:
+			# Nothing was observed, so nothing may be asserted. The coverage
+			# fields are what the doctrine's checklist trusts over every
+			# self-reported field, and leaving them untouched here published
+			# last cycle's `coverage_complete: True` as though this cycle had
+			# confirmed it -- a verifier reporting "verified" from a cycle in
+			# which it read nothing, which is this module's own founding bug one
+			# layer up. Re-age the ledger instead: verdicts are kept, expiry
+			# still runs, and completeness reverts to unknown.
+			state.update(_age_only(state, now))
 			action["error"] = "no published posts to verify"
 			action["_quiet"] = True
 			state["last_reason"] = "no_posts"
 			return action
 
-		now = datetime.now(timezone.utc)
 		history = _seen_map(state)
 		found = verify(posts, payout.config(),
 					   int(cfg.get("max_per_cycle", 5)), history)

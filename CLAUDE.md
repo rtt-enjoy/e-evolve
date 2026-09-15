@@ -680,6 +680,16 @@ is that curl, run every cycle.
   evidence about the day it was read; a footer can be lost to a hand-edit at any
   time, and without expiry `coverage_complete` would latch true on one old read.
   `0` disables expiry.
+- **An early exit downgrades its own outputs.** When dev.to returns no catalogue
+  the `no_posts` path used to `return` before `_coverage` ran, so every coverage
+  field survived untouched from the previous cycle — cycle #1837 committed
+  `coverage_complete: true, covered: 20/20` from a cycle that read nothing, and
+  because expiry is computed *inside* `_coverage`, the staleness clock stopped
+  rather than running down. `_age_only` now re-ages the ledger on that path:
+  verdicts and `known_without_footer` are kept (an *unavailable* catalogue is
+  not an empty one — passing `[]` to `_coverage` would erase a real finding),
+  while `coverage_complete` and `agrees_with_backfill` revert to `None`. See
+  Principle 3k.
 - **`agrees_with_backfill` is `None` until coverage is complete.**
   `backfill.remaining` is a claim about every post, so checking it against a
   5-post sample let `true` stand while eight posts had never been read —
@@ -1244,7 +1254,8 @@ here that is **not** self-reported: `checked`, `with_footer`, `without_footer`,
 `oldest_check_age_hours` and the `verified_ids` ledger
 (`{id, at, ok}`, bounded by `history_limit`).
 **Read `known_without_footer`, not `without_footer`, and `covered`, not
-`checked`.** `checked` and `without_footer` describe only the posts sampled in
+`checked`** — and treat `coverage_complete: None` as "this cycle saw nothing",
+with `covered` retained from an earlier one and ageing out. `checked` and `without_footer` describe only the posts sampled in
 the most recent cycle — the latter drops back to `0` as the rotation moves past
 a broken post, while the former read `5` on a 13-post account under
 `last_reason: "all_verified"`. It re-reads each published article through

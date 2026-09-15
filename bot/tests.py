@@ -4349,6 +4349,93 @@ class TestReceiptCheckIsWiredIn(unittest.TestCase):
 		self.assertNotIn("update_body", src)
 
 
+class TestReceiptCheckOutageDoesNotAssertCoverage(unittest.TestCase):
+	"""A cycle that observed nothing must not republish last cycle's verdict.
+
+	Live at cycle #1837: dev.to returned no published list (the same 429s
+	recorded in ``backfill.skipped``), so ``_run`` took the ``no_posts`` exit --
+	which set ``last_reason`` and returned *before* ``_coverage``. Every field
+	the doctrine's checklist tells the owner to trust over the self-reported
+	ones survived untouched from cycle #1836: ``covered: 20/20``,
+	``coverage_complete: True``, ``agrees_with_backfill: True``,
+	``oldest_check_age_hours: 17.7``.
+
+	That is this module's founding bug one layer up -- a verifier reporting
+	"verified" from a cycle in which it read nothing. Worse, the expiry that
+	exists to stop exactly this latching lives inside ``_coverage``, so the
+	freshness clock *stopped* instead of running down: a sustained outage would
+	hold ``coverage_complete: True`` at 17.7 hours old indefinitely.
+	"""
+
+	def _ledger(self, hours, ok=True, n=2):
+		at = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+		return {"receipt_check": {
+			"verified_ids": [{"id": i, "at": at, "ok": ok} for i in range(n)],
+			"covered": n, "published_total": n, "unverified": 0,
+			"coverage_complete": True, "known_without_footer": 0,
+			"oldest_check_age_hours": float(hours), "missing": [],
+			"agrees_with_backfill": True,
+		}, "backfill": {"remaining": 0}}
+
+	def test_completeness_reverts_to_unknown(self):
+		"""Nothing was observed, so completeness is unknown -- not True."""
+		status = self._ledger(17.7)
+		receipt_check._run(status, "key", published=[])
+		state = status["receipt_check"]
+		self.assertIsNone(state["coverage_complete"])
+		self.assertEqual(state["last_reason"], "no_posts")
+
+	def test_the_freshness_clock_keeps_running(self):
+		"""The bug was a stopped clock, not merely a stale number.
+
+		The stored figure is what cycle #1836 wrote; the reported figure must
+		be recomputed from the ledger timestamp, so it advances every cycle the
+		outage continues instead of freezing at the last good reading.
+		"""
+		status = self._ledger(40)
+		# What the previous cycle wrote, deliberately inconsistent with the
+		# ledger: if the field is republished rather than recomputed, this is
+		# the value that survives.
+		status["receipt_check"]["oldest_check_age_hours"] = 17.7
+		receipt_check._run(status, "key", published=[])
+		self.assertAlmostEqual(
+			status["receipt_check"]["oldest_check_age_hours"], 40, delta=0.2)
+
+	def test_a_long_outage_drains_coverage(self):
+		"""Past ``stale_after_hours`` the retained reads stop being evidence."""
+		status = self._ledger(200)
+		receipt_check._run(status, "key", published=[])
+		self.assertEqual(status["receipt_check"]["covered"], 0)
+
+	def test_a_known_gap_survives_the_outage(self):
+		"""The opposite error, and the worse one.
+
+		``_coverage`` cannot simply be called with ``[]``: an *unavailable*
+		catalogue is not an empty one, and the empty denominator would report
+		``known_without_footer: 0`` -- erasing a post observed to show readers
+		no way to pay, which is the one field the checklist reads first. Same
+		third-state rule ``fetch_live_body`` applies to a body, applied to the
+		catalogue.
+		"""
+		status = self._ledger(2, ok=False, n=1)
+		receipt_check._run(status, "key", published=[])
+		self.assertEqual(status["receipt_check"]["known_without_footer"], 1)
+
+	def test_it_stops_vouching_for_the_backfill(self):
+		"""Agreement needs complete coverage, and coverage is now unknown."""
+		status = self._ledger(17.7)
+		receipt_check._run(status, "key", published=[])
+		self.assertIsNone(status["receipt_check"]["agrees_with_backfill"])
+
+	def test_last_run_does_not_advance(self):
+		"""``last_run`` means "last observation", and there was none."""
+		status = self._ledger(17.7)
+		status["receipt_check"]["last_run"] = "2026-09-15T07:50:43+00:00"
+		receipt_check._run(status, "key", published=[])
+		self.assertEqual(status["receipt_check"]["last_run"],
+						 "2026-09-15T07:50:43+00:00")
+
+
 class TestReceiptCheckCoversTheWholeCatalogue(unittest.TestCase):
 	"""A sample is not coverage, and ``checked`` is a sample size.
 

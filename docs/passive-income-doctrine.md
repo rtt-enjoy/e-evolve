@@ -875,6 +875,67 @@ number describe, and is it the population the caller will assume?**
 
 ---
 
+## Principle 3k — A cycle that observed nothing must not republish the last verdict
+
+`receipt_check` is the second observer the three principles above built, and the
+checklist tells the owner to believe it over every self-reported field. At cycle
+#1837 it reported this, in the committed `status.json`:
+
+| Field | Value |
+| --- | --- |
+| `last_reason` | `no_posts` |
+| `covered` / `published_total` | `20 / 20` |
+| `coverage_complete` | `true` |
+| `known_without_footer` | `0` |
+| `agrees_with_backfill` | `true` |
+| `oldest_check_age_hours` | `17.7` |
+
+Every figure below the first line is from cycle **#1836**. dev.to returned no
+published list that cycle — the same 429s already visible in
+`backfill.skipped` — so `_run` took its `no_posts` exit, which set `last_reason`
+and returned *before* `_coverage` ran. The coverage fields were not recomputed;
+they were simply left where the previous cycle put them, and committed again
+under a new cycle number.
+
+**This is the module's own founding bug, one layer up.** `receipt_check` exists
+because `backfill` reported `remaining: 0` while doing nothing. Here the
+verifier reports `coverage_complete: true` while observing nothing — and it is
+the field the checklist says to trust when the self-reported ones disagree.
+
+The sharper half is what it did to expiry. Observations are supposed to go stale
+after `stale_after_hours`, precisely so one old read cannot latch
+`coverage_complete` true forever (Principle 3g). That expiry is computed inside
+`_coverage` — the function the early return skipped. So the freshness clock did
+not merely report a stale number, it **stopped**: a sustained dev.to outage would
+hold `coverage_complete: true` at "17.7 hours old" indefinitely, and the one
+mechanism designed to notice would never run.
+
+The fix cannot be "call `_coverage` with an empty list". **An unavailable
+catalogue is not an empty one**, and the empty denominator reports
+`published_total: 0, known_without_footer: 0` — erasing a post already observed
+to show readers no way to pay. That is the same third-state discipline
+`fetch_live_body` applies to a single body (`None`, never `""`), owed to the
+catalogue as well. The failure directions are not symmetric: a false
+`coverage_complete` hides a broken receive path, and a false
+`known_without_footer: 0` deletes a finding that was already correct.
+
+So `_age_only` keeps the verdicts and moves only the clock. Retained
+observations still expire on schedule, `known_without_footer` survives the
+outage, and `coverage_complete` and `agrees_with_backfill` revert to `None` —
+unknown, which is what they are. Fixed 2026-09-15.
+
+**The generalisation: an early return is a code path that reports, and every
+field it leaves untouched it implicitly re-asserts.** A status field is written
+once per cycle and read as describing that cycle, so a guard clause that skips
+the computation silently republishes the last successful answer under a fresh
+timestamp. Principle 3d asks whether a field would look different if the code
+did nothing; this asks the narrower version — **would this field look different
+if the code bailed out early?** Where the answer is no, the bail-out is making a
+claim it did not check. That applies to every guard in this codebase, not only
+this one: the honest exit downgrades its own outputs to unknown on the way out.
+
+---
+
 ## Principle 4 — Never let an estimate stand in for money
 
 `devto.publish` reports `estimated_usd: 0.0` for a successful post, and it must
@@ -1016,6 +1077,14 @@ Work this in order. Stop at the first honest "no".
    - `receipt_check.unreachable` — posts it could not read at all. This is
      neither good nor bad news; it means that many posts are simply unverified,
      so do not count them as covered.
+   - **`coverage_complete: None` means this cycle observed nothing at all**
+     (Principle 3k) — dev.to returned no catalogue, so `covered` and
+     `known_without_footer` are retained from the last cycle that could see,
+     ageing toward `stale_after_hours` rather than being re-confirmed. Treat it
+     as unknown, not as the previous `true`. `oldest_check_age_hours` keeps
+     counting up through an outage and is the field that says how old the
+     retained evidence now is; a large value beside `last_reason: no_posts`
+     means the receive path has been unobserved for that long.
 
    This replaces the manual `curl` that the previous version of this checklist
    asked for, and it replaces it for a reason worth keeping: that curl was

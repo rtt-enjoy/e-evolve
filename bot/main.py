@@ -235,7 +235,6 @@ def main() -> int:
 			"status.json", "earnings-log.md", "docs/index.html",
 			"docs/status.json", "docs/earnings-log.md", "command.txt",
 			"docs/code-tech-opportunities.md",
-			"docs/mrr-ideas.md",
 		],
 	)
 	if not git_result["success"]:

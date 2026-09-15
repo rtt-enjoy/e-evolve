@@ -4,8 +4,13 @@ Earning Module — Recurring-Revenue (MRR) Idea Triage
 Research and suggestions only. Takes a catalogue of recurring-revenue business
 models and scores each one against THIS project's hard constraints -- zero
 server cost, no payment processing, no inbound HTTP, no outreach channel -- then
-writes docs/mrr-ideas.md with the few that survive and the concrete first proof
-artifact for each.
+records the few that survive in ``status["mrr_ideas"]``, with the concrete
+first proof artifact for each.
+
+No markdown report is rendered. It used to write docs/mrr-ideas.md, which
+restated state that status.json already persists and rewrote its own timestamp
+every refresh -- so the file showed as modified on every cycle and the owner
+had to keep asking about it. The state is the artifact.
 
 It never contacts anyone, never processes a payment, and never hosts a service.
 Ideas whose delivery requires a blocked action are recorded as REFUSED with the
@@ -25,15 +30,12 @@ import json
 import logging
 import os
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import Any
 
 from ._shared import bounded_append, hours_until_due, load_config
 from .code_techs import _cell, _clean_list, _dicts
 
 log = logging.getLogger(__name__)
-
-_REPORT_FILE = Path("docs/mrr-ideas.md")
 
 # Earnings breakdown key. Distinct from the other modules so this product stays
 # separately visible. It always reports 0.0 -- research earns nothing directly.
@@ -331,7 +333,6 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		"llm_used": bool(brief),
 	})
 	_record_refresh(status, viable, int(cfg["history_limit"]))
-	_write_report(state)
 
 	return [{
 		"platform": _PLATFORM,
@@ -341,7 +342,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		"llm": bool(brief),
 		"estimated_usd": 0.0,   # research only; nothing here pays
 		"title": f"MRR idea triage refreshed ({len(viable)} viable, {len(refused)} refused)",
-		"url": str(_REPORT_FILE),
+		"url": "status.json#mrr_ideas",
 	}]
 
 
@@ -349,9 +350,9 @@ def _triage(catalogue: list[dict], cfg: dict) -> tuple[list[dict], list[dict]]:
 	"""Split the catalogue into (viable, refused). Deterministic, no LLM.
 
     An idea is refused when any of its blockers is in ``_BLOCKERS``. The refusal
-    carries the human-readable reason, so docs/mrr-ideas.md explains WHY an idea
-    the owner read about is not being pursued. Survivors are scored and cut to
-    max_ideas, so the report stays a shortlist rather than a dump.
+    carries the human-readable reason, so ``status["mrr_ideas"].refused``
+    explains WHY an idea the owner read about is not being pursued. Survivors
+    are scored and cut to max_ideas, so it stays a shortlist rather than a dump.
     """
 	viable: list[dict] = []
 	refused: list[dict] = []
@@ -518,99 +519,3 @@ def _record_refresh(status: dict, ideas: list[dict], limit: int) -> None:
 	entries = hist.setdefault("names", [])
 	for idea in ideas:
 		bounded_append(entries, str(idea.get("name", "")).strip(), limit)
-
-
-def _write_report(state: dict[str, Any]) -> None:
-	"""Write docs/mrr-ideas.md. The refusal section is the point of the file."""
-	lines: list[str] = [
-		"# Recurring Revenue (MRR) Idea Triage",
-		"",
-		f"Refreshed: {state.get('last_refresh_at', '')}",
-		"",
-		"Research and suggestions only. This bot does not contact anyone, collect",
-		"payment, or host a service. Every figure quoted from the source article",
-		"is unverified — check it yourself before acting on it.",
-		"",
-		"## What This Stack Can Actually Support",
-		"",
-	]
-	lines += [f"- {c}" for c in state.get("constraints", [])]
-
-	summary = str(state.get("summary", "")).strip()
-	if summary:
-		lines += ["", "## Best Current Angle", "", summary]
-
-	ranked = state.get("ranked_ideas") or []
-	if ranked:
-		lines += ["", "## Ranked Ideas", ""]
-		for idea in ranked:
-			lines += [
-				f"### {idea.get('name', 'Unnamed')}",
-				"",
-				f"- **Niche:** {idea.get('narrow_niche', '')}",
-				f"- **Who pays:** {idea.get('who_pays', '')}",
-				f"- **Monthly price:** {idea.get('monthly_price_usd', '')}",
-				f"- **Why this stack fits:** {idea.get('why_this_stack_fits', '')}",
-				f"- **First proof artifact:** {idea.get('first_proof_artifact', '')}",
-				f"- **Runway to first dollar:** {idea.get('runway_to_first_dollar', '')}",
-				f"- **You must do by hand:** {idea.get('owner_must_do_by_hand', '')}",
-				"",
-			]
-	else:
-		viable = state.get("viable") or []
-		if viable:
-			lines += ["", "## Surviving Models (no LLM brief this refresh)", ""]
-			lines += ["| Model | MRR model | Bot can | Score |", "|---|---|---|---|"]
-			lines += [
-				f"| {_cell(i.get('name'))} | {_cell(i.get('mrr_model'))} "
-				f"| {_cell(i.get('bot_role'))} | {_cell(i.get('score'))} |"
-				for i in viable
-			]
-
-	# Prerequisites always come from the deterministic triage, never the model,
-	# so this section is present whether or not the LLM brief succeeded.
-	prereqs = [
-		(i.get("name", ""), i.get("manual_steps", []))
-		for i in (state.get("viable") or [])
-		if i.get("manual_steps")
-	]
-	if prereqs:
-		lines += [
-			"",
-			"## Set Up By Hand First",
-			"",
-			"None of these is a blocker — but no money moves until you do them.",
-			"",
-		]
-		for name, steps in prereqs:
-			lines.append(f"- **{name}:** " + "; ".join(steps))
-
-	steps = state.get("validation_steps") or []
-	if steps:
-		lines += ["", "## How To Validate Without Outreach", ""]
-		lines += [f"- {s}" for s in steps]
-
-	refused = state.get("refused") or []
-	lines += [
-		"",
-		"## Refused, And Why",
-		"",
-		"These are not oversights. Each one needs an action this project refuses in",
-		"code, or infrastructure that does not exist here and is not free.",
-		"",
-		"| Model | MRR model | Why not |",
-		"|---|---|---|",
-	]
-	lines += [
-		f"| {_cell(r.get('name'))} | {_cell(r.get('mrr_model'))} | {_cell(r.get('reason'))} |"
-		for r in refused
-	]
-
-	actions = state.get("owner_actions") or []
-	if actions:
-		lines += ["", "## Next Actions", ""]
-		lines += [f"{n}. {a}" for n, a in enumerate(actions, 1)]
-
-	lines.append("")
-	_REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
-	_REPORT_FILE.write_text("\n".join(lines), encoding="utf-8")

@@ -1173,7 +1173,7 @@ class TestMrrIdeaTriage(unittest.TestCase):
 								"breakdown": {}}}
 		updated = update(status, [{
 			"platform": "mrr-ideas", "success": True,
-			"title": "MRR idea triage refreshed", "url": "docs/mrr-ideas.md",
+			"title": "MRR idea triage refreshed", "url": "status.json#mrr_ideas",
 			"idea_count": 2, "refused_count": 18, "estimated_usd": 0.0,
 		}])
 		self.assertEqual(updated["earnings"]["total_usd"], 0.0)
@@ -2039,6 +2039,34 @@ class TestChannelsKeepTheirShare(unittest.TestCase):
 		ranked = _rank(assets + channels, {"min_demand_share": 0.5}, max_items=8, min_score=0)
 
 		self.assertEqual(len([op for op in ranked if op.kind == "channel"]), 4)
+
+
+class TestMrrReportFileIsGone(unittest.TestCase):
+	"""mrr_ideas must not render a markdown report.
+
+    docs/mrr-ideas.md restated state that status.json already persists, and
+    rewrote its own "Refreshed:" timestamp on every refresh -- so the file
+    showed as modified on every cycle whether the triage had changed or not,
+    and the owner had to keep asking why. The state is the artifact.
+    """
+
+	def test_module_has_no_report_writer(self):
+		self.assertFalse(hasattr(mrr_module, "_write_report"))
+		self.assertFalse(hasattr(mrr_module, "_REPORT_FILE"))
+
+	def test_run_writes_no_markdown_file(self):
+		target = Path("docs/mrr-ideas.md")
+		existed = target.exists()
+		status = {}
+		mrr_module.run(None, status)
+		self.assertEqual(target.exists(), existed,
+						 "mrr_ideas.run() must not create docs/mrr-ideas.md")
+		# The data still has to land somewhere the owner can read.
+		self.assertTrue(status["mrr_ideas"]["refused"])
+
+	def test_cycle_commit_does_not_track_the_report(self):
+		src = Path("bot/main.py").read_text(encoding="utf-8")
+		self.assertNotIn("docs/mrr-ideas.md", src)
 
 
 class TestOutreachDraftIsGone(unittest.TestCase):

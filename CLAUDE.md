@@ -822,8 +822,15 @@ Newsletter history and cadence live in `status["newsletter_history"]` and
 
 A recurring-revenue reality check. It scores business models against this
 project's real constraints — zero server, no payment processing, no inbound
-HTTP, no outreach channel — and writes `docs/mrr-ideas.md` with the few that
-survive plus, explicitly, the ones it refuses and why.
+HTTP, no outreach channel — and records the few that survive in
+`status["mrr_ideas"]` plus, explicitly, the ones it refuses and why.
+
+**It renders no markdown report.** `docs/mrr-ideas.md` was removed 2026-09-15:
+it restated state `status.json` already persists, and rewrote its own
+`Refreshed:` timestamp on every refresh, so the file showed as modified on
+every cycle whether or not the triage had changed. That is a committed artifact
+churning for no reader. Do not reintroduce it — read `status["mrr_ideas"]`
+(`viable`, `refused`, `ranked_ideas`, `owner_actions`).
 
 - Suggestion-only. It never contacts anyone, processes a payment, or hosts a
   service. No new secret; it gates on `mrr_ideas.enabled` in strategy config.

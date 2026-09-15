@@ -63,8 +63,10 @@ from bot.earning.mrr_ideas import (
 )
 from bot.earning import code_techs as code_techs_module
 from bot.earning.code_techs import (
+	_demands_identity,
 	_fetch_github_leads,
 	_fetch_reddit_leads,
+	_identity_cost,
 	_is_free_ai_lead,
 	_lead_value,
 	_online_ai_brief,
@@ -1855,6 +1857,140 @@ class TestCodexPromptIsMarketSpecific(unittest.TestCase):
 		})
 
 		self.assertIn("never estimate it", op.codex_prompt)
+
+
+class TestIdentityCostIsScored(unittest.TestCase):
+	"""The owner tried to open Gumroad and Substack and could not: both demand
+    ID verification and neither pays crypto. The page ranked them anyway,
+    because nothing in the score asked whether a channel can actually be
+    opened. A channel the owner cannot open earns a structural zero one stage
+    earlier than the ask -- the money cannot enter because the door does not.
+    """
+
+	def test_a_no_kyc_crypto_channel_outranks_an_id_gated_fiat_one(self):
+		no_kyc = {
+			"title": "Storefront settling USDT to your own wallet",
+			"url": "https://example.com/a", "source": "channel-table", "kind": "channel",
+			"body": "no KYC process, there are no ID documents to upload; USDT on Tron to your own address",
+			"labels": ["no-kyc", "own-wallet"], "cost_usd": 0.0,
+			"manual_setup": "Owner signs up and adds a wallet address.",
+		}
+		id_gated = {
+			"title": "Storefront requiring a tax interview",
+			"url": "https://example.com/b", "source": "channel-table", "kind": "channel",
+			"body": "payouts require identity verification and a government id; fiat only",
+			"labels": ["kyc-required"], "cost_usd": 0.0,
+			"manual_setup": "Owner completes a tax interview with an SSN.",
+		}
+
+		ranked = _rank([id_gated, no_kyc], {}, max_items=5, min_score=0)
+
+		self.assertIn("own wallet", ranked[0].title)
+		self.assertEqual(ranked[0].score_parts["identity_cost"], 1.0)
+		self.assertEqual(ranked[1].score_parts["identity_cost"], 0.0)
+
+	def test_no_kyc_wording_is_not_read_as_requiring_kyc(self):
+		"""The negation bug, third occurrence. "per month" caught a settlement
+        schedule and "monthly fee" caught the words "no monthly fee"; here the
+        highest-ranked real channel says "no KYC process". A scan that cannot
+        read "no" would dock the one row that takes money without asking who
+        the owner is -- inverting the exact ranking this component produces.
+        """
+		self.assertFalse(_demands_identity(
+			"getly has no kyc process -- there are no id documents to upload", set()))
+		self.assertFalse(_demands_identity(
+			"payouts without identity verification of any kind", set()))
+		self.assertTrue(_demands_identity(
+			"payouts require identity verification before the first withdrawal", set()))
+		self.assertTrue(_demands_identity(
+			"you must complete the tax interview and provide a ssn", set()))
+
+	def test_unknown_identity_status_scores_below_a_stated_no(self):
+		"""Silence is not a free pass. An unverified platform that turns out to
+        demand a passport is precisely the case that wasted the owner's time,
+        so "says nothing" must rank under "says no KYC out loud" -- the same
+        reasoning that makes `_cost` treat None as worse than a published 0.0.
+        """
+		stated = _identity_cost("settles usdt to your own wallet", {"no-kyc"}, "owner signs up")
+		silent = _identity_cost("a storefront for digital goods", set(), "owner opens an account")
+		gated = _identity_cost("requires kyc verification", set(), "owner verifies identity")
+
+		self.assertEqual(stated, 1.0)
+		self.assertLess(silent, stated)
+		self.assertGreater(silent, gated)
+
+	def test_the_live_table_ranks_account_free_routes_first(self):
+		"""End-to-end over the real curated rows, because the owner reads this
+        page and not this test. The top rows must be ones that need no identity.
+        """
+		ranked = _rank(
+			list(code_techs_module._PRODUCT_CHANNELS) + list(code_techs_module._LOCAL_LEADS),
+			{}, max_items=6, min_score=0,
+		)
+
+		for op in ranked[:3]:
+			self.assertEqual(
+				op.score_parts["identity_cost"], 1.0,
+				f"{op.title} ranks in the top 3 but needs identity verification",
+			)
+
+
+class TestDeadAndImpostorChannelsStayRefused(unittest.TestCase):
+	"""Sellix was seized in 2024 and is still recommended across the web. The
+    2026-09-15 verification found three more of the same shape, so they are
+    written down rather than left to be rediscovered by a later cycle.
+    """
+
+	def test_defunct_and_impostor_platforms_are_recorded(self):
+		refused = {r["name"].lower(): r["why"].lower()
+		           for r in code_techs_module._REFUSED_CHANNELS}
+		blob = " ".join(f"{k} {v}" for k, v in refused.items())
+
+		for name in ("coinbase commerce", "coinpayments", "kofi.network"):
+			self.assertIn(name, blob, f"{name} must stay recorded as refused")
+		# Each refusal states *why*, so a later cycle cannot re-derive it as a
+		# fresh idea. The kofi.network row is the dangerous one: it advertises
+		# wallet-to-wallet USDT, which is the property that would rank it top.
+		self.assertIn("not affiliated", refused["kofi.network"])
+
+	def test_no_refused_platform_appears_as_a_live_channel(self):
+		live = " ".join(
+			f"{c['title']} {c.get('url', '')}".lower()
+			for c in code_techs_module._PRODUCT_CHANNELS
+		)
+		for dead in ("sellix", "coinbase commerce", "coinpayments", "kofi.network"):
+			self.assertNotIn(dead, live)
+
+
+class TestItchIoRecordsItsIdentityGate(unittest.TestCase):
+	"""The row said "free to publish, no approval queue" with cost_usd 0.0.
+    That was true of publishing and false of getting paid: a payout needs a
+    tax interview, a TIN/SSN, and a one-time $3 identity fee. Publishing for
+    free into a payout you cannot collect is a structural zero with a
+    storefront in front of it.
+    """
+
+	def _row(self):
+		for c in code_techs_module._PRODUCT_CHANNELS:
+			if "itch.io" in c["title"].lower():
+				return c
+		self.fail("itch.io row missing")
+
+	def test_the_identity_gate_and_its_fee_are_stated(self):
+		row = self._row()
+		blob = f"{row['body']} {row['manual_setup']}".lower()
+
+		self.assertIn("tax interview", blob)
+		self.assertEqual(row["cost_usd"], 3.0)
+		self.assertIn("kyc-required", row["labels"])
+
+	def test_it_cannot_outrank_a_no_kyc_crypto_channel(self):
+		ranked = _rank(list(code_techs_module._PRODUCT_CHANNELS), {}, max_items=10, min_score=0)
+		titles = [op.title.lower() for op in ranked]
+		itch = next(i for i, t in enumerate(titles) if "itch.io" in t)
+		getly = next(i for i, t in enumerate(titles) if "getly" in t)
+
+		self.assertLess(getly, itch)
 
 
 class TestChannelsKeepTheirShare(unittest.TestCase):

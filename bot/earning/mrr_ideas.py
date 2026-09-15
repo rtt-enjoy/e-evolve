@@ -56,9 +56,11 @@ def _config() -> dict:
 # Requirements that make a model impossible here, so the idea is REFUSED.
 #
 # The line is drawn at delivery, not at billing. Every recurring-revenue model
-# needs a way to charge -- that is what MRR means -- and the owner can open a
-# Gumroad or Substack account by hand in an afternoon. So "needs payments" is a
-# manual setup step, not a refusal. What genuinely disqualifies a model is
+# needs a way to charge -- that is what MRR means -- and an owner willing to
+# complete ID verification can open an account by hand. So "needs payments" is a
+# manual setup step, not a refusal. It is NOT the trivial step this comment once
+# claimed: see _MANUAL_STEPS["payments"], rewritten after the owner found that
+# every suggested platform demanded government ID and none paid out in crypto. What genuinely disqualifies a model is
 # delivery that requires an action this project refuses in code, or
 # infrastructure that does not exist here and is not free.
 _BLOCKERS: dict[str, str] = {
@@ -73,9 +75,23 @@ _BLOCKERS: dict[str, str] = {
 # Requirements the owner can satisfy by hand. These do NOT refuse an idea; they
 # are surfaced in the report as prerequisites so the plan stays honest about
 # what has to happen off-bot before a dollar arrives.
+#
+# The wording here used to call this "an afternoon". On 2026-09-15 the owner
+# tried it and reported back: **Gumroad and Substack both require government ID
+# verification, and neither settles crypto to a wallet the owner controls.**
+# Verified the same day against each platform's own docs, along with Polar,
+# GitHub Sponsors, Ko-fi, Buy Me a Coffee, Payhip, Liberapay, Lemon Squeezy and
+# Paddle -- every one gates payout behind identity verification, directly or
+# through Stripe/PayPal onboarding.
+#
+# So "owner opens an account" is not a neutral prerequisite; it is an identity
+# gate that may not open at all, and a step that never completes is a
+# structural zero (doctrine Principle 3h). The step is still not a *blocker* --
+# an owner who will complete KYC has a working channel -- but the report must
+# say what is actually being asked instead of implying a signup form.
 _MANUAL_STEPS: dict[str, str] = {
-	"payments":       "owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe)",
-	"platform_setup": "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API)",
+	"payments":       "owner opens a payment account by hand AND passes its ID verification -- Gumroad, Substack, Polar and Stripe all require government ID and none pays out in crypto (verified 2026-09-15). For a crypto payout to the owner's own Tron address with no ID check, see the channel table in code_techs (Getly), or take tips on the published wallet address, which needs no account at all.",
+	"platform_setup": "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API, once the account exists and its ID verification has passed)",
 	"audience_first": "needs an existing audience; the dev.to byline is the only one this stack builds",
 }
 
@@ -130,7 +146,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 	{
 		"name": "Notion / digital template store",
 		"mrr_model": "$500-5K/mo, library subscription",
-		"source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token — Payhip/Etsy stay manual",
+		"source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) but only after the owner has passed Gumroad ID verification, which pays out fiat via Stripe and never crypto (verified 2026-09-15) — Payhip/Etsy stay manual",
 		"blockers": [],
 		"manual": ["payments", "platform_setup"],
 		"bot_role": "draft",

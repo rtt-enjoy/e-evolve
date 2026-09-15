@@ -253,26 +253,36 @@ _PRODUCT_CHANNELS = [
 		),
 		"labels": ["storefront", "usdt", "tron", "no-kyc", "own-wallet", "digital-product"],
 		"cost_usd": 0.0,
-		"manual_setup": "Owner signs up, adds the Tron receive address, and uploads the product once.",
-		"verified_note": "Fees, networks, no-KYC and own-wallet payout confirmed on getly.store 2026-09-08.",
+		"manual_setup": "Owner signs up (no ID upload), adds the Tron receive address, and uploads the product once.",
+		"verified_note": (
+			"Re-verified on getly.store/sell/crypto 2026-09-15: \"Getly has no KYC process -- "
+			"there are no ID documents to upload and nobody reviews them\"; the only inputs are "
+			"a wallet address and its network. Tron min payout $15, 1st and 15th at 03:00 UTC. "
+			"Two caveats recorded so a later cycle does not over-rank this: crypto settlement is "
+			"dispatched via the NOWPayments Mass Payouts API, and Getly's own marketplace volume "
+			"is small -- listing here is a receive path, not a distribution channel."
+		),
 	},
 	{
-		"title": "itch.io — free to publish, you set the platform cut (0-100%)",
-		"url": "https://itch.io/docs/creators/faq",
+		"title": "itch.io — free to publish, but a payout needs a tax interview and a TIN",
+		"url": "https://itch.io/docs/creators/payments",
 		"source": "channel-table",
 		"kind": _CHANNEL,
 		"body": (
 			"Free to upload, no approval queue and no upfront fee, and it lists tools and "
 			"assets rather than only games. Open revenue sharing lets the seller choose the "
-			"platform's cut, default around 10%. Pay-what-you-want pricing is supported and "
-			"is reported as the highest-earning model there. Payment is fiat, so this is a "
-			"reach-and-revenue channel rather than a crypto one -- the crypto leg stays the "
-			"wallet footer this project already ships."
+			"platform's cut, default around 10%. Pay-what-you-want pricing is supported. "
+			"**Publishing is free; being paid is not identity-free.** A payout requires a "
+			"completed tax interview with a Tax Identification Number (SSN/EIN/ITIN or a "
+			"local equivalent), and a one-time $3.00 'Tax Identity' fee is charged to the "
+			"account for third-party identity verification. Minimum payout is $5 and "
+			"settlement is fiat via PayPal/Payoneer -- no crypto, and nothing reaches the "
+			"Tron address this project publishes."
 		),
-		"labels": ["storefront", "free-to-publish", "pay-what-you-want", "no-approval"],
-		"cost_usd": 0.0,
-		"manual_setup": "Owner creates an account and uploads the product; payment details for fiat payout.",
-		"verified_note": "Free publishing and open revenue share confirmed on itch.io 2026-09-08.",
+		"labels": ["storefront", "free-to-publish", "pay-what-you-want", "kyc-required", "fiat-only"],
+		"cost_usd": 3.0,
+		"manual_setup": "Owner creates an account, completes the tax interview with a TIN/SSN, pays the one-time $3 identity fee, and adds fiat payout details.",
+		"verified_note": "Tax interview, TIN requirement and the one-time $3.00 identity fee confirmed on itch.io/docs/creators/payments 2026-09-15. The earlier row said 'free to publish, no approval queue' and recorded cost_usd 0.0, which was true of publishing and false of getting paid.",
 	},
 	{
 		"title": "Chrome Web Store — one-time $5, covers up to 20 extensions",
@@ -331,9 +341,109 @@ _REFUSED_CHANNELS = [
 		"name": "Any custodial crypto payment processor",
 		"why": "Holds the money before the owner does. The published Tron address is non-custodial and already works; adding a custodian adds KYC risk for no gain.",
 	},
+	# --- Verified 2026-09-15, after the owner reported that every suggested
+	# platform demanded ID verification and none took crypto. That report was
+	# correct, and the three rows below are the Sellix failure mode repeating:
+	# platforms still recommended across the web that are dead, geo-dead, or
+	# not who they appear to be.
+	{
+		"name": "Coinbase Commerce",
+		"why": "DEFUNCT. Permanently shut down 2026-03-31 for merchants outside the US/Singapore, with no extensions offered. Its replacement (Coinbase Business) is fully custodial and US/Singapore only. Still recommended in current listicles -- a Sellix-class trap.",
+	},
+	{
+		"name": "CoinPayments",
+		"why": "Geo-dead and KYC-mandatory. EU/EEA service discontinued after 2026-07-01 under MiCA, and the current platform requires identity verification for all users, not just above a threshold.",
+	},
+	{
+		"name": "kofi.network",
+		"why": "IMPOSTOR RISK -- not affiliated with ko-fi.com despite the name and a '(c) 2026 Ko-fi' footer. No operator disclosure. It advertises wallet-to-wallet USDT on BEP-20, which is exactly the property that would rank it highly here, which is why it is written down as refused rather than left to be rediscovered.",
+	},
+	{
+		"name": "NOWPayments (as a direct channel)",
+		"why": "Marketed as non-custodial, but the default flow routes funds through their wallet and KYC triggers at volume and always for fiat. Reached indirectly anyway: it is the rail Getly uses to dispatch payouts, so using it directly adds a custodian without adding a storefront.",
+	},
+	{
+		"name": "Gitcoin / Allo",
+		"why": "Wound down. Grants Lab and Grants Stack reached end-of-life 2025-05-31 and Allo is in maintenance mode. KYC applies above $15k matching regardless.",
+	},
+	{
+		"name": "Drips Network",
+		"why": "Genuinely non-custodial and plausibly identity-free, but Ethereum ERC-20 only. It cannot reach the Tron address this project publishes, so it would need a second address and a second meter (Principle 3f) to earn a cent.",
+	},
+	{
+		"name": "BTCPay Server",
+		"why": "The only fully non-custodial, fee-free, no-KYC option on the table -- and it needs a server. This project has none (GitHub Actions is outbound-only), and third-party hosting reintroduces the dependency it exists to avoid. Refused on infrastructure, not on merit.",
+	},
+	{
+		"name": "Gumroad, Substack, Polar, GitHub Sponsors, Ko-fi, Buy Me a Coffee, Payhip, Liberapay, Lemon Squeezy, Paddle, Open Collective",
+		"why": "All require identity verification, directly or through Stripe/PayPal onboarding, and none settles crypto to a seller-controlled address. Verified 2026-09-15 after the owner hit exactly this wall on Gumroad and Substack. Buy Me a Coffee is the specific trap: it accepts crypto from buyers but converts to USD and pays out via Stripe, US accounts only.",
+	},
 ]
 
 _LOCAL_LEADS = [
+	# --- Account-free routes. Added 2026-09-15 after the owner reported that
+	# every storefront suggested on the Research page demanded ID verification
+	# and none took crypto. Each row below moves money to the address this
+	# project already publishes, needs no signup, no identity, and no platform
+	# that can seize or close an account -- the same properties that make the
+	# wallet footer the top-ranked channel, applied to surfaces the footer does
+	# not currently reach.
+	{
+		"title": "Put the receive address in the GitHub repo itself — FUNDING.yml, README, and releases",
+		"url": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository",
+		"source": "local-playbook",
+		"kind": _CHANNEL,
+		"body": (
+			"GitHub renders a Sponsor button from .github/FUNDING.yml, and its custom: field "
+			"takes arbitrary URLs -- no GitHub Sponsors enrolment, no Stripe Connect, no W-9. "
+			"The README and each release body are plain markdown that can carry the same "
+			"validated Tron address the articles already carry. This needs no account beyond "
+			"the one that already hosts the code, no identity verification, and no platform "
+			"holding the money. It is the wallet ask (the top-ranked channel here) applied to "
+			"the surface where developers actually arrive looking for the tool."
+		),
+		"labels": ["wallet", "usdt", "tron", "no-kyc", "no-account", "own-wallet",
+		           "no-owner-action", "reuse"],
+		"cost_usd": 0.0,
+		"manual_setup": "None beyond committing a file to the repo the owner already controls.",
+		"verified_note": "FUNDING.yml custom: field accepts arbitrary URLs and requires no Sponsors enrolment.",
+	},
+	{
+		"title": "Publish the product as a downloadable file, priced by an honest ask, hosted on GitHub Releases",
+		"url": "",
+		"source": "local-playbook",
+		"kind": _CHANNEL,
+		"body": (
+			"GitHub Releases hosts binaries and archives free, with no storefront, no listing "
+			"fee, no approval queue and no identity check, because it is the same account that "
+			"hosts the code. The product ships free and the release notes carry the ask. This "
+			"trades enforcement for reach deliberately: an unenforced ask converts worse than a "
+			"paywall, and it is the only variant that needs no processor, no KYC, and no "
+			"platform that can freeze a payout. Nothing here can be seized or geo-blocked."
+		),
+		"labels": ["digital-product", "wallet", "no-kyc", "no-account", "own-wallet",
+		           "no-owner-action", "reuse"],
+		"cost_usd": 0.0,
+		"manual_setup": "None. Uses the repo the owner already has.",
+	},
+	{
+		"title": "Ask in the artifact, not only beside it — README, --help output, and docs footer",
+		"url": "",
+		"source": "local-playbook",
+		"kind": _CHANNEL,
+		"body": (
+			"Principle 3c found that a receive path attached only at publish time missed 85% of "
+			"readers, who were on the back catalogue. The same gap exists for a product: a tip "
+			"line in the README is seen once, while the address printed in --help, in a docs "
+			"footer, or in the tool's own about output travels with every copy and every fork. "
+			"No account, no identity, no platform -- and it reaches users who never open the "
+			"page the product was listed on."
+		),
+		"labels": ["wallet", "no-kyc", "no-account", "own-wallet", "no-owner-action",
+		           "reuse", "coverage"],
+		"cost_usd": 0.0,
+		"manual_setup": "None.",
+	},
 	{
 		"title": "Ship the product free, sell the upgrade, ask in the README",
 		"url": "",
@@ -1178,8 +1288,10 @@ def _score(
 	setup = str(lead.get("manual_setup") or "").strip().lower()
 	if not setup or setup.startswith("none"):
 		setup_burden = 1.0
-	elif "kyc" in setup or "approval" in setup or "review" in setup:
+	elif _demands_identity(text, labels_set):
 		setup_burden = 0.3
+	elif "approval" in setup or "review" in setup:
+		setup_burden = 0.5
 	else:
 		setup_burden = 0.6
 
@@ -1194,19 +1306,37 @@ def _score(
 	else:
 		recency = 0.3 if age_hours is None else max(0.0, 1.0 - (max(0.0, age_hours) / 720.0))
 
+	# 6. Does earning here require handing over a government identity?
+	#
+	# This is its own component rather than a phrase inside `setup_burden`
+	# because the owner reported the real-world failure it describes: Gumroad
+	# and Substack both looked like one-time signups on this page and both
+	# turned out to demand ID verification, so neither was ever opened. A
+	# channel the owner cannot or will not complete earns exactly zero, which
+	# makes this a Principle 1 structural zero one stage earlier than the ask
+	# -- the money cannot enter because the door does not open.
+	#
+	# It is weighted above `setup_burden` because the two are different in
+	# kind: setup is work, and identity verification is a gate that can be
+	# refused outright by the platform or declined by the owner. Work scales
+	# with effort; a gate is binary.
+	identity_cost = _identity_cost(text, labels_set, setup)
+
 	parts = {
 		"owner_action": round(owner_action, 3),
 		"receive_path": round(receive_path, 3),
+		"identity_cost": round(identity_cost, 3),
 		"zero_budget": round(zero_budget, 3),
 		"setup_burden": round(setup_burden, 3),
 		"recency": round(recency, 3),
 	}
 	score = (
-		32 * parts["owner_action"]
-		+ 25 * parts["receive_path"]
-		+ 18 * parts["zero_budget"]
-		+ 15 * parts["setup_burden"]
-		+ 10 * parts["recency"]
+		28 * parts["owner_action"]
+		+ 22 * parts["receive_path"]
+		+ 20 * parts["identity_cost"]
+		+ 13 * parts["zero_budget"]
+		+ 10 * parts["setup_burden"]
+		+ 7 * parts["recency"]
 	)
 
 	penalty = 0
@@ -1256,6 +1386,84 @@ def _charges_a_subscription(text: str) -> bool:
 				return True
 			start = at + len(term)
 	return False
+
+
+_IDENTITY_TERMS = (
+	"kyc", "id verification", "identity verification", "verify your identity",
+	"government id", "gov id", "photo id", "passport", "selfie",
+	"tax interview", "tax identity", "ssn", "social security number",
+	"tin", "ein", "itin", "w-9", "w-8ben", "proof of address",
+	"stripe identity", "id documents", "id document",
+)
+
+# A negator immediately before an identity term inverts it. This is not
+# hypothetical: the highest-ranked channel on this page says "no KYC process --
+# there are no ID documents to upload", and the two previous negation bugs
+# recorded in this module ("per month", then "no monthly fee") were both a
+# substring being read as a claim. A scan that cannot see "no" would dock the
+# one row that takes money without asking who the owner is -- inverting the
+# exact ranking this component exists to produce.
+_IDENTITY_NEGATORS = (
+	"no ", "not ", "never ", "without ", "zero ", "free of ", "skip ",
+	"no need for ", "doesn't need ", "does not need ", "isn't required",
+	"is not required", "not required for ",
+)
+
+
+def _mentions_unnegated(text: str, terms: tuple[str, ...],
+                        negators: tuple[str, ...], window: int = 24) -> bool:
+	"""True when any term appears without a negator in the window before it.
+
+    Shared shape with ``_charges_a_subscription``, kept as its own function
+    because the term lists and window differ and because collapsing them would
+    make one caller's tuning silently change the other's verdict.
+    """
+	for term in terms:
+		start = 0
+		while True:
+			at = text.find(term, start)
+			if at < 0:
+				break
+			before = text[max(0, at - window):at]
+			stripped = before.rstrip()
+			if not any(stripped.endswith(n.strip()) for n in negators):
+				return True
+			start = at + len(term)
+	return False
+
+
+def _demands_identity(text: str, labels: set[str]) -> bool:
+	"""True when earning through this lead requires proving who the owner is.
+
+    An explicit label always wins over the prose scan, because the curated
+    table states the fact and the body is discussion around it.
+    """
+	if "no-kyc" in labels:
+		return False
+	if "kyc-required" in labels:
+		return True
+	return _mentions_unnegated(text, _IDENTITY_TERMS, _IDENTITY_NEGATORS)
+
+
+def _identity_cost(text: str, labels: set[str], setup: str) -> float:
+	"""0..1, higher is better: 1.0 means no identity is ever handed over.
+
+    The owner tried to open Gumroad and Substack and could not: both demanded
+    ID verification, and neither pays crypto. A page that ranked them highly
+    was, for this owner, ranking two channels that can never open -- so this
+    asks the question the page was not asking.
+    """
+	if "no-kyc" in labels or "no-account" in labels or "already-live" in labels:
+		return 1.0
+	if _demands_identity(text, labels):
+		return 0.0
+	# Nothing either way. Unknown is not free: an unverified platform that
+	# turns out to demand a passport is the case that wasted the owner's time,
+	# so silence scores below a row that states "no KYC" out loud. Same
+	# reasoning as `_cost` treating None as worse than a published 0.0.
+	if setup and not setup.startswith("none"):
+		return 0.45
+	return 0.6
 
 
 def _is_free_ai_lead(text: str) -> bool:

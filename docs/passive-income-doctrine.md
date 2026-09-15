@@ -631,6 +631,73 @@ the reader will assume?*
 
 ---
 
+## Principle 3h — A channel the owner cannot open is a structural zero with a storefront in front of it
+
+Found 2026-09-15, by the owner, not by the code.
+
+The Research page recommended Gumroad and Substack. The owner went to sign up
+for both and could not: **each demands government ID verification, and neither
+settles crypto to a wallet the owner controls.** The report said "owner opens a
+payment/subscription account by hand (Gumroad, Substack, Stripe)" and
+`mrr_ideas` called that "an afternoon". It was not an afternoon. It was a door
+that does not open.
+
+Every scoring component was working. `owner_action` correctly saw a one-time
+signup rather than per-sale labour. `cost_usd` correctly read $0.00, because
+neither platform charges a listing fee. `setup_burden` grepped `manual_setup`
+for the literal string `"kyc"` — which the rows did not contain, because nobody
+had checked. So the page ranked two channels that, for this owner, could never
+earn a cent, and ranked them on the strength of being free and one-time.
+
+This is Principle 1's structural zero moved one stage earlier. Principle 1 asks
+whether the reader was given a way to pay. Principle 3f asks whether the money
+would have been seen. This asks a question before both: **can the owner open
+the door at all?** A channel behind an identity gate the owner will not or
+cannot pass has a zero multiplier for the same reason a post with no footer
+does — and it fails in the familiar dangerous direction, because it looks
+*better* than the alternatives on every other axis. Free, one-time, no
+per-sale work. Perfect score, permanently zero.
+
+What came out of it:
+
+- **`identity_cost` is its own scored component (weight 20), not a phrase
+  inside `setup_burden`.** Setup is work and identity is a gate; work scales
+  with effort, a gate is binary. Blending them let a $0, one-time, ID-gated row
+  outrank a no-KYC one.
+- **Unknown scores below a stated "no".** An unverified platform that turns out
+  to want a passport is exactly what cost the owner the afternoon, so silence
+  scores 0.45 while a row that says "no KYC" out loud scores 1.0. Same
+  convention as `_cost`: `None` is worse than a published `0.0`.
+- **The negation bug, third occurrence.** `"per month"` once caught a
+  settlement schedule; `"monthly fee"` then caught the words **"no monthly
+  fee"**. Here the best channel on the table says **"no KYC process — there are
+  no ID documents to upload"**, so a scan that cannot read "no" would have
+  docked the single row that takes money without asking who the owner is,
+  inverting the ranking this component exists to produce. Pinned by
+  `test_no_kyc_wording_is_not_read_as_requiring_kyc`.
+- **A stale row is a lie with a date on it.** The table listed itch.io as "free
+  to publish, no approval queue", `cost_usd: 0.0`. Still true of *publishing*;
+  false of *being paid*. A payout there needs a tax interview, a TIN/SSN, and a
+  one-time $3 identity fee. Verified against itch.io's own payments doc. The
+  row now says so and has fallen from the top of the page to below every
+  account-free route.
+
+**Three more Sellix-class platforms were found and recorded as refused**, all
+still recommended in current listicles: **Coinbase Commerce** (permanently shut
+down 2026-03-31 outside US/Singapore, no extensions), **CoinPayments** (exited
+the EU/EEA 2026-07-01 under MiCA, now KYC for all users), and
+**`kofi.network`** — which is *not* ko-fi.com, carries a "© 2026 Ko-fi" footer,
+discloses no operator, and advertises wallet-to-wallet USDT. That last property
+is exactly what would rank it near the top here, which is why it is written
+down as refused rather than left to be rediscovered.
+
+**The generalisation: score the door, not just the room.** Before ranking a
+channel on what it pays, ask what it demands before it pays anything — and
+verify that from the platform's own words, because "sign up" is what every one
+of them says on the outside.
+
+---
+
 ## Principle 4 — Never let an estimate stand in for money
 
 `devto.publish` reports `estimated_usd: 0.0` for a successful post, and it must

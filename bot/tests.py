@@ -462,18 +462,114 @@ class TestReaderInterestAnalysis(unittest.TestCase):
 		self.assertEqual(devto_stats.preferred_archetypes(devto_stats.interest_report(posts)), [])
 
 	def test_steers_once_evidence_exists(self):
+		# Three earning posts, not one. A single post is a coincidence by this
+		# module's own stated rule, so a fixture proving "steering turns on"
+		# must not rest on the thinnest evidence the gates are built to reject.
 		posts = self._posts(
-			[("Recover a Bricked Laptop", 600, 5)] + [(f"Building Thing {i}", 0, 0) for i in range(7)]
+			[("Recover a Bricked Laptop", 600, 5),
+			 ("Fix a Broken Boot Loader", 500, 4),
+			 ("Recover Data Without the Vendor Tool", 550, 3)]
+			+ [(f"Building Thing {i}", 0, 0) for i in range(7)]
 		)
 		self.assertIn(
 			"problem-workaround",
 			devto_stats.preferred_archetypes(devto_stats.interest_report(posts)),
 		)
 
+	def test_a_single_post_is_not_evidence(self):
+		# The counterpart, stated explicitly so a later cycle cannot "restore"
+		# the old fixture without seeing what it was asserting.
+		posts = self._posts(
+			[("Recover a Bricked Laptop", 600, 5)]
+			+ [(f"Building Thing {i}", 0, 0) for i in range(7)]
+		)
+		self.assertEqual(
+			devto_stats.preferred_archetypes(devto_stats.interest_report(posts)), [])
+
 	def test_empty_input_is_safe(self):
 		report = devto_stats.interest_report([])
 		self.assertEqual(report["sample_size"], 0)
 		self.assertEqual(devto_stats.preferred_archetypes(report), [])
+
+	def test_thin_archetype_is_not_promoted_on_the_accounts_sample(self):
+		# The live defect (cycle #1836): the account-level gate passed on 19
+		# posts, so a 2-post build-tutorial row rode in on a sample it did not
+		# contribute to, and the writing prompt told the model that shape
+		# "also performs well here". build-tutorial is the archetype this loop
+		# exists to steer away from.
+		report = {
+			"archetypes": [
+				{"archetype": "problem-workaround", "count": 4, "avg_engagement": 615.8},
+				{"archetype": "build-tutorial", "count": 2, "avg_engagement": 66.5},
+			],
+			"best_archetype": "problem-workaround",
+			"worst_archetype": "build-tutorial",
+			"sample_size": 19,
+		}
+		self.assertEqual(
+			devto_stats.preferred_archetypes(report), ["problem-workaround"])
+
+	def test_runner_up_must_be_near_the_leader_not_merely_second(self):
+		# Five archetypes inside a noise band: being second in that band is an
+		# ordering, not evidence. Both rows clear the per-archetype count here,
+		# so only the margin rule can reject the runner-up.
+		report = {
+			"archetypes": [
+				{"archetype": "problem-workaround", "count": 5, "avg_engagement": 600.0},
+				{"archetype": "surprising-behavior", "count": 5, "avg_engagement": 33.7},
+			],
+			"best_archetype": "problem-workaround",
+			"worst_archetype": "surprising-behavior",
+			"sample_size": 19,
+		}
+		self.assertEqual(
+			devto_stats.preferred_archetypes(report), ["problem-workaround"])
+
+	def test_a_genuine_runner_up_still_steers(self):
+		# The gates must not collapse into "only ever one archetype" -- a row
+		# with its own posts and comparable engagement is real evidence.
+		report = {
+			"archetypes": [
+				{"archetype": "problem-workaround", "count": 5, "avg_engagement": 600.0},
+				{"archetype": "myth-correction", "count": 4, "avg_engagement": 400.0},
+			],
+			"best_archetype": "problem-workaround",
+			"worst_archetype": "myth-correction",
+			"sample_size": 19,
+		}
+		self.assertEqual(
+			devto_stats.preferred_archetypes(report),
+			["problem-workaround", "myth-correction"])
+
+	def test_ordering_is_not_taken_from_the_callers_row_order(self):
+		# The margin rule is a claim about which row leads. Reading that off a
+		# list position would invert the gate on an unsorted report: the weak
+		# row sets the floor and every noisy row clears it.
+		report = {
+			"archetypes": [
+				{"archetype": "build-tutorial", "count": 4, "avg_engagement": 66.5},
+				{"archetype": "problem-workaround", "count": 4, "avg_engagement": 615.8},
+			],
+			"sample_size": 19,
+		}
+		self.assertEqual(
+			devto_stats.preferred_archetypes(report), ["problem-workaround"])
+
+	def test_prompt_never_claims_a_thin_shape_performs_well(self):
+		# The seam that mattered: the gate is in devto_stats, the damage was
+		# done in the articles prompt. Cross it end to end.
+		status = {"article_interest": {
+			"archetypes": [
+				{"archetype": "problem-workaround", "count": 4, "avg_engagement": 615.8},
+				{"archetype": "build-tutorial", "count": 2, "avg_engagement": 66.5},
+			],
+			"best_archetype": "problem-workaround",
+			"worst_archetype": "build-tutorial",
+			"sample_size": 19,
+		}}
+		guidance = articles_module._audience_guidance(status)
+		self.assertIn("problem-workaround", guidance)
+		self.assertNotIn("also performs well", guidance)
 
 
 class TestAudienceSteering(unittest.TestCase):

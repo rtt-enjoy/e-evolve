@@ -437,10 +437,24 @@ The result feeds two places, and only once it is trustworthy:
   prompt, so the article's angle and title are shaped by it. The prompt
   explicitly forbids mentioning the account or its statistics in the article.
 
-`preferred_archetypes()` returns `[]` — no steering at all — until the account
-has at least `_MIN_CONFIDENT_SAMPLE` (6) posts **and** some archetype has
-actually earned engagement. Steering on an all-zero history would just entrench
-whatever happened to be published first.
+`preferred_archetypes()` gates on three things, because each catches what the
+others cannot. The account needs `_MIN_CONFIDENT_SAMPLE` (6) posts and some
+archetype must have earned engagement — steering on an all-zero history would
+entrench whatever was published first. **Each returned row then needs
+`_MIN_ARCHETYPE_SAMPLE` (3) posts of its own**, and **a runner-up needs
+`_RUNNER_UP_SHARE` (25%) of the leader's engagement**.
+
+Those last two are not belt-and-braces. The account-level gate is a check on
+whether the *report* is worth reading; it says nothing about the row being
+steered toward, so a 2-post row rode in on a 19-post sample and the function
+returned `["problem-workaround", "build-tutorial"]` — promoting
+`build-tutorial`, this account's weakest shape, on n=2 / avg 66.5 against
+n=4 / avg 615.8. That fed a `+8.0` source-ranking bonus **and** put
+*"The 'build-tutorial' kind also performs well here"* into the writing prompt
+under a header claiming it was measured. `interest_report` computes `count` for
+exactly this reason and the caller ignored it. The margin rule catches what
+count alone cannot: `surprising-behavior` clears n=3 at 33.7, which is noise
+next to 615.8. Fixed 2026-09-15; see Principle 3j.
 
 `status["article_interest"]` holds the report. Stats now refresh on **every**
 path via `articles._refresh_stats()`, not just the follow-up path: the guards

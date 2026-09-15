@@ -785,6 +785,96 @@ The rules:
 
 ---
 
+## Principle 3j — The steering signal needs the same sample discipline as the verifier
+
+Found 2026-09-15, cycle #1836, by working checklist step 1 to its end.
+
+Steps 1 and 2 were clean for the first time: `receipt_check` reported
+`covered: 20 / published_total: 20`, `coverage_complete: true`,
+`known_without_footer: 0`, `agrees_with_backfill: true`. Every post on the
+account carries an ask, and the wallet is a real `$0.00` with `other_assets`
+empty. The doctrine's own answer to that state is Principle 5 step 3 —
+**publish into the shapes the audience measurably prefers** — so the steering
+loop is now load-bearing in a way it was not while the receive path was broken.
+
+It was steering toward the wrong shape.
+
+```
+preferred_archetypes(status["article_interest"]) == ["problem-workaround", "build-tutorial"]
+```
+
+| Archetype | Count | Avg engagement |
+| --- | --- | --- |
+| `problem-workaround` | 4 | **615.8** |
+| `build-tutorial` | **2** | **66.5** |
+| `myth-correction` | 2 | 51.5 |
+| `surprising-behavior` | 3 | 33.7 |
+| `security-privacy` | 2 | 25.0 |
+
+`build-tutorial` is promoted on **two posts averaging 66.5** — 9.3x below the
+leader, and inside a noise band with three archetypes it "beats" at 51.5, 33.7
+and 25.0, every one of them n≤3. It is also, by this file's own words, *"the
+account's most common output and its weakest"*: the exact shape Principle 5
+says the measurement exists to steer **away** from. Principle 3i refused an
+entire source proposal on the strength of this table. The table was being
+misread at its own call site the whole time.
+
+Two mechanisms carried it, and the second is the damaging one:
+
+- `_prefer_proven_archetypes` gave build-tutorial sources a `+8.0` ranking
+  bonus over every other candidate.
+- `_audience_guidance` put this in the writing prompt, verbatim:
+  **"The 'build-tutorial' kind also performs well here."** A fabricated claim
+  about the account's own readers, presented to the model under the header
+  *"measured from this account's own published posts, not a guess"* — and
+  weighted, by that same header, above the model's instinct.
+
+**The cause is Principle 3g one module over.** `interest_report` computes
+`count` for every row *specifically* so a caller can discount a thin one, and
+this document says to read `count` first. `preferred_archetypes` sorted on
+`avg_engagement` and never looked at `count` at all. The gate it did have
+(`_MIN_CONFIDENT_SAMPLE`, 6) is an **account-level** check: it asks whether the
+report is worth reading, not whether the row being steered toward has any posts
+behind it. So a 2-post row rode in on a 19-post sample it contributed almost
+nothing to — a denominator from one population answering a question about
+another, which is exactly what `checked: 5` beside a 13-post account was doing.
+
+And the tests all passed, for Principle 3d's reason: every fixture happened to
+have the winner dominating a single rival, so no test ever crossed the seam
+where a thin row outranks a thick one. One fixture was worse than neutral —
+`test_steers_once_evidence_exists` asserted that steering turns on from **one**
+post, against this module's own comment that a single post is a coincidence.
+It has been strengthened to three earning posts, and
+`test_a_single_post_is_not_evidence` now pins the opposite case so the old
+fixture cannot come back without someone seeing what it claimed.
+
+Three gates now, each catching what the others cannot:
+
+- **The account needs `_MIN_CONFIDENT_SAMPLE` (6) posts** — is the report worth
+  reading at all. Unchanged.
+- **Each row needs `_MIN_ARCHETYPE_SAMPLE` (3) posts of its own** — a row
+  cannot borrow the account's sample to look proven.
+- **A runner-up needs `_RUNNER_UP_SHARE` (25%) of the leader's engagement** —
+  because with five archetypes between 16.8 and 66.5, ordering inside that band
+  is noise, and naming the top of a noise band "performs well here" is a claim
+  the data cannot support. Count alone would not catch this: `surprising-behavior`
+  clears n=3 and is still noise.
+
+Live result: `["problem-workaround"]` alone, and the false sentence is gone from
+the prompt. The `+12.0` bonus now concentrates on the one shape that earned it
+instead of being split with the shape it should be avoiding.
+
+**The generalisation: a number that steers production is a claim, and it needs
+the same sample discipline this document already demands of numbers that report
+on production.** Principles 3d–3g built second observers for every field that
+says the channel is working. This is the mirror image — a field that says what
+to *do next*, computed from a sample too thin to say it, and wrong in the
+direction that quietly degrades the thing being optimised. Ask of any steering
+signal what Principle 3g asks of any status field: **what population does this
+number describe, and is it the population the caller will assume?**
+
+---
+
 ## Principle 4 — Never let an estimate stand in for money
 
 `devto.publish` reports `estimated_usd: 0.0` for a successful post, and it must
@@ -848,7 +938,11 @@ Order of work when revenue is still zero:
 1. Make sure a receive path exists on everything published. *(done)*
 2. **Confirm it is actually switched on** — `payout.live`, not "the code exists".
    *(done 2026-09-04; it sat built-and-disabled for five cycles)*
-3. Publish consistently into the shapes the audience measurably prefers.
+3. Publish consistently into the shapes the audience measurably prefers —
+   and **check what `preferred_archetypes()` actually returns** before trusting
+   that it is steering there. It named `build-tutorial`, this account's weakest
+   shape, on n=2 until 2026-09-15 (Principle 3j). Read `count` per row, not
+   just the ordering.
 4. Only then tune the ask itself.
 
 Tuning the wording of a footer that has had 40 impressions is noise. This project
@@ -962,6 +1056,17 @@ Work this in order. Stop at the first honest "no".
 4. **Did this cycle improve reach without touching the receive path?**
    That is allowed, but say so plainly in the summary. Do not log it as earning
    work.
+
+   **And check the signal the reach work is steering on.** Once the receive
+   path is verified end to end (step 1 clean), reach *is* the remaining work,
+   so `article_interest` stops being a report and becomes a control input.
+   Read `devto_stats.preferred_archetypes(status["article_interest"])` and
+   check every row it returns against that row's own `count` — an archetype
+   with fewer than 3 posts is riding on the account's sample, not its own
+   (Principle 3j). The failure is silent and self-reinforcing: a thin row gets
+   a source-ranking bonus *and* an "also performs well here" line in the
+   writing prompt, so the bot publishes more of the shape, which keeps the row
+   populated.
 5. **Did anything start estimating revenue?** Delete it. On-chain or nothing.
 
 ---

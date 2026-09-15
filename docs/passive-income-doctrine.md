@@ -698,6 +698,93 @@ of them says on the outside.
 
 ---
 
+## Principle 3i — A source proposal is a reach proposal, and reach is measured here
+
+Found 2026-09-15, from an owner request: use the link collection at
+`github.com/fastfire/deepdarkCTI` to "build a more formidable passive income
+system", one step per evolution cycle.
+
+The request names a real, well-maintained repository — ~6k stars, 22 files of
+curated cyber-threat-intelligence sources. It was refused, and the reasoning is
+recorded here because the *shape* of the proposal will recur: someone points at
+a large, high-quality source of material and asks for it to be turned into
+income. Almost every such proposal is a **reach** proposal wearing an income
+label, and this project already knows how to score reach.
+
+What the repo actually contains, enumerated rather than assumed:
+
+| File | Size | Contents |
+| --- | --- | --- |
+| `ransomware_gang.md` | 76 KB | Live ransomware leak-site `.onion` URLs |
+| `forum.md` | 70 KB | Criminal forum `.onion` URLs |
+| `telegram_threat_actors.md` | 59 KB | Threat-actor Telegram channels |
+| `markets.md`, `telegram_infostealer.md` | 20 KB | Darknet markets, stolen-credential channels |
+| `search_engines.md` | 6 KB | Tor search engines, all `.onion` |
+| `cve_most_exploited.md` | 9 KB | CVE → public PoC exploit links |
+| `commercial_services.md` | 0.7 KB | 7 paid CTI vendors |
+
+Four independent disqualifiers, each sufficient on its own:
+
+1. **The runtime cannot reach it.** GitHub Actions has no Tor daemon, so every
+   `.onion` link is unreachable from the only environment this bot runs in.
+   Adding one means editing `.github/workflows/evolve.yml` — the heartbeat, which
+   is never evolved.
+2. **It is reach-only.** Principle 1: it adds no place money enters. The tip
+   footer already covers every published article, so this multiplies a channel
+   that is already live rather than opening one.
+3. **Sourcing from leak sites means republishing victim data.** This bot
+   publishes unattended, hourly, under the owner's byline. Its gates check
+   fabrication and tone; **no gate asks whether a paragraph names a breach
+   victim**, and building one is a larger job than the feature it would guard.
+4. **The legitimate slice is the smallest and is identity-gated.**
+   `commercial_services.md` is 7 paid CTI vendors — subscriptions behind KYC,
+   which Principle 3h scored as a structural zero the same day.
+
+**The decisive argument was none of those four.** They are all *a priori*, and a
+determined cycle could argue around each one — proxy the feeds, screen the
+prose, buy one vendor seat. The measurement layer settles it without any
+argument:
+
+| Archetype | Count | Avg engagement |
+| --- | --- | --- |
+| `problem-workaround` | 4 | **615.8** |
+| `build-tutorial` | 2 | 66.5 |
+| `myth-correction` | 2 | 51.5 |
+| `surprising-behavior` | 3 | 33.7 |
+| **`security-privacy`** | **2** | **25.0** |
+| `other` | 6 | 16.8 |
+
+`security-privacy` is this account's **second-worst** archetype, earning roughly
+**1/25th** of `problem-workaround` — the shape that produced the 2,284-view post
+holding 82% of all lifetime reach. A CTI pivot steers the publishing engine
+toward the losing archetype, against the account's own measured evidence.
+
+The same test was then applied to the steelman, which is the part worth keeping.
+Mainstream security feeds — Krebs, BleepingComputer, The Hacker News — are
+keyless, policy-clean, and were probed live at `200 OK`. Every *a priori*
+objection above dissolves. **They were refused anyway**, on the archetype
+evidence alone: available and harmless is not the same as worth publishing.
+
+The rules:
+
+- **Score a source proposal as reach, then check reach against
+  `article_interest`.** `interest_report()` already ranks what this audience
+  pays attention to. A proposal that steers toward a low-mean archetype is
+  refused on measurement, not on taste — and `count` is read first, because n=2
+  is a weak signal and must be labelled one.
+- **Refuse the steelman explicitly, or the refusal will not hold.** Recording
+  only the `.onion` objection invites a later cycle to "fix" it with clean feeds
+  and rebuild the same mistake, since the fix answers the stated objection
+  perfectly. The reachable version is listed as refused beside it, for the same
+  reason `kofi.network` is written down rather than left to be rediscovered.
+- **"Step by step, one per cycle" does not make a wrong direction right.** The
+  request asked for incremental delivery, which is a good default and the reason
+  this file exists. But incrementalism applied to a channel that scores zero
+  builds the zero more carefully. The cadence is not the thing to check first;
+  the direction is.
+
+---
+
 ## Principle 4 — Never let an estimate stand in for money
 
 `devto.publish` reports `estimated_usd: 0.0` for a successful post, and it must
@@ -902,6 +989,8 @@ Principle 2.
 | Trading, minting, yield farming | — | — | **blocked** | **Refused.** Not a content business |
 | Freelance / contract job postings | none | **every unit of income** | allowed | **Refused and removed 2026-09-08.** See Principle 2b |
 | Digital product on a crypto-settling storefront | none | one signup, ever | allowed | **Researched 2026-09-08.** `_PRODUCT_CHANNELS` in `code_techs.py`. Owner decision: needs one account |
+| Dark-web CTI feeds (`deepdarkCTI`) as an article source | none | none | **partly blocked** | **Refused 2026-09-15.** ~95% of its links are `.onion`, unreachable from Actions without editing the heartbeat workflow; sourcing from ransomware leak sites means republishing victim data through gates that check tone, not harm. It is also reach-only, into `security-privacy` — this account's **second-worst** archetype (25.0 avg engagement, n=2) against `problem-workaround`'s 615.8 (n=4). See Principle 3i |
+| Keyless mainstream security feeds (Krebs, BleepingComputer, THN) | none | none | allowed | **Refused 2026-09-15.** Reachable and policy-clean (probed 200 OK), but pure reach work into the same losing archetype, with no new place money enters. Rejected on evidence, not on availability |
 
 Every row that needs no new secret and no owner action is now built — and
 "built" has now twice meant "not actually reaching readers", so read that word

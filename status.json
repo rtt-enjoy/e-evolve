@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-15T18:13:06.024902+00:00",
-  "total_runs": 1840,
+  "last_run": "2026-09-15T21:23:30.883416+00:00",
+  "total_runs": 1841,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -32,71 +32,15 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Bump version to reflect unlocking of anthropic and cerebras LLMs and promoting DEV_TO_API_KEY to a proper GitHub secret",
-    "changes_applied": [
-      {
-        "file": "version.txt",
-        "reason": "Bump version to reflect unlocking of anthropic and cerebras LLMs and promoting DEV_TO_API_KEY to a proper GitHub secret"
-      }
-    ],
-    "suggestions": [
-      {
-        "title": "Add DEV_TO_API_KEY to GitHub secrets and update workflow to use it",
-        "description": "DEV_TO_API_KEY is currently set as a plain text environment variable in the workflow, which is less secure. Moving it to a GitHub secret improves security and ensures the key is available to all workflows. The workflow must be updated to use the secret and remove the plain text variable.",
-        "secret_needed": "DEV_TO_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Open https://dev.to/settings/extensions and create an article read/write API token.",
-          "Step 2: Copy the token once and store it securely.",
-          "Step 3: Add it as the GitHub repository secret DEV_TO_API_KEY.",
-          "Step 4: Update the workflow file (e.g., .github/workflows/main.yml) to use the secret for DEV_TO_API_KEY and remove the plain text environment variable."
-        ]
-      },
-      {
-        "title": "Add CEREBRAS_API_KEY to GitHub secrets",
-        "description": "llm_cerebras is inactive because CEREBRAS_API_KEY is missing. Unlocks a no-credit-card inference fallback with a large free allowance for research and article drafting if OpenRouter quota is constrained.",
-        "secret_needed": "CEREBRAS_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Open https://cloud.cerebras.ai and create an account.",
-          "Step 2: Generate an API key from the dashboard API Keys section.",
-          "Step 3: Add it as the GitHub repository secret CEREBRAS_API_KEY.",
-          "Step 4: Run a reviewed research cycle and confirm llm_cerebras reports the secret as present."
-        ]
-      },
-      {
-        "title": "Add ANTHROPIC_API_KEY to GitHub secrets",
-        "description": "llm_anthropic is inactive because ANTHROPIC_API_KEY is missing. Unlocks Claude model access as an additional inference option alongside Gemini, OpenRouter, and Groq.",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Open https://console.anthropic.com and create an account.",
-          "Step 2: Generate an API key from the Project Settings page.",
-          "Step 3: Add it as the GitHub repository secret ANTHROPIC_API_KEY.",
-          "Step 4: Run a reviewed cycle and confirm llm_anthropic reports the secret as present."
-        ]
-      }
-    ],
+    "summary": "No summary provided",
+    "changes_applied": [],
+    "suggestions": [],
     "error": null,
-    "branch": "evolve/1.42.0-20260915-181529",
-    "proposed_version": "1.42.0"
+    "branch": null,
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -141,7 +85,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 392,
+  "last_cycle_seconds": 333,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1136,7 +1080,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-15T18:13:07.148803+00:00",
+    "checked_at": "2026-09-15T21:23:31.536900+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1373,8 +1317,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20260915-181529",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 19,
     "total_views": 2801,
@@ -1482,7 +1426,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-15T18:19:37.127131+00:00",
+    "last_run": "2026-09-15T21:29:02.462951+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1492,25 +1436,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-15T18:19:37.420878+00:00",
+    "last_run": "2026-09-15T21:29:02.803896+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4641536,
-        "at": "2026-09-14T23:11:22.539127+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-09-14T23:11:22.539127+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-09-14T23:11:22.539127+00:00",
-        "ok": true
-      },
       {
         "id": 4617346,
         "at": "2026-09-15T01:38:21.040750+00:00",
@@ -1518,11 +1447,6 @@
       },
       {
         "id": 4646243,
-        "at": "2026-09-15T01:38:21.040750+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-09-15T01:38:21.040750+00:00",
         "ok": true
       },
@@ -1592,8 +1516,28 @@
         "ok": true
       },
       {
+        "id": 4641536,
+        "at": "2026-09-15T21:29:02.803896+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-09-15T21:29:02.803896+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-09-15T21:29:02.803896+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-09-15T21:29:02.803896+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-15T18:19:37.420878+00:00",
+        "at": "2026-09-15T21:29:02.803896+00:00",
         "ok": true
       }
     ],
@@ -1602,7 +1546,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 19.1
+    "oldest_check_age_hours": 19.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

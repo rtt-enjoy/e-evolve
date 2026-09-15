@@ -161,8 +161,22 @@ The gate, in order:
    the working branch. The workflow pushes the branch but **never merges it**.
    `main` is unchanged until a human merges.
 
+7. **Pruned, because nothing merges them.** One proposal an hour is one branch
+   an hour, and by 2026-09-15 that was **69 open `evolve/*` branches, none
+   merged** — `git branch -r --merged origin/main` returned empty. Their
+   version numbers matched `main` purely because the bot bumps `version.txt`
+   on the branch; the code never landed. All 69 were deleted, and the
+   `Prune review branches` step in `evolve.yml` now runs each cycle on two
+   rules: **merged into `main`** (the proposal landed, the branch is a
+   leftover) and **older than `RETENTION_DAYS` (14)** — an unreviewed diff
+   against a fortnight-old tree is not reviewable. `KEEP_NEWEST` (5) exempts
+   the newest branches from the age rule, so a quiet fortnight still leaves
+   something to review. It touches nothing outside `evolve/*`.
+
 `version.txt` is bumped **on the review branch only**; the running version
-changes when you merge, not when the bot proposes.
+changes when you merge, not when the bot proposes. A branch that is never
+merged is therefore deleted at 14 days along with its version bump — review
+is opt-in, and unreviewed proposals expire rather than accumulate.
 
 The engine is the free OpenRouter `upgrade` chain led by the `openrouter/free`
 auto-router — no paid model and no credits, so a cost error can never break a

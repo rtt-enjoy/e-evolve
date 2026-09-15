@@ -82,3 +82,56 @@ jobs:
             git pull --rebase origin main &&
             git push origin HEAD:main
           ) || echo "Push failed after retry. Changes will be pushed next cycle."
+
+      - name: Prune review branches
+        # Review branches accumulate forever otherwise: one per evolution
+        # proposal, hourly. Two rules, because merging is optional —
+        #   1. merged into main  → the proposal landed, the branch is a leftover
+        #   2. older than RETENTION_DAYS → nobody reviewed it and the code it
+        #      proposes has drifted; a stale diff is not a reviewable one
+        # Never touches anything outside evolve/*, and keeps the newest
+        # KEEP_NEWEST branches regardless of age so there is always something
+        # to review after a quiet fortnight.
+        env:
+          RETENTION_DAYS: "14"
+          KEEP_NEWEST: "5"
+        run: |
+          git fetch --prune origin '+refs/heads/evolve/*:refs/remotes/origin/evolve/*' || true
+
+          cutoff=$(( $(date -u +%s) - RETENTION_DAYS * 86400 ))
+          # Newest-first by commit date; the first KEEP_NEWEST are exempt from the age rule.
+          mapfile -t branches < <(
+            git for-each-ref --sort=-committerdate \
+              --format='%(refname:short) %(committerdate:unix)' \
+              'refs/remotes/origin/evolve/*'
+          )
+
+          doomed=()
+          idx=0
+          for entry in "${branches[@]}"; do
+            ref="${entry%% *}"; ts="${entry##* }"
+            short="${ref#origin/}"
+            idx=$(( idx + 1 ))
+
+            if git merge-base --is-ancestor "$ref" origin/main; then
+              echo "merged, pruning: $short"
+              doomed+=(":refs/heads/$short")
+              continue
+            fi
+
+            if [ "$idx" -le "$KEEP_NEWEST" ]; then
+              echo "keeping (newest $KEEP_NEWEST): $short"
+            elif [ "$ts" -lt "$cutoff" ]; then
+              echo "stale (>${RETENTION_DAYS}d), pruning: $short"
+              doomed+=(":refs/heads/$short")
+            else
+              echo "keeping (recent): $short"
+            fi
+          done
+
+          if [ "${#doomed[@]}" -eq 0 ]; then
+            echo "Nothing to prune."
+          else
+            git push origin "${doomed[@]}" \
+              || echo "Prune push failed — will retry next cycle."
+          fi

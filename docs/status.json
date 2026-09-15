@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-15T10:19:26.843972+00:00",
-  "total_runs": 1837,
+  "last_run": "2026-09-15T10:34:34.202227+00:00",
+  "total_runs": 1838,
   "active_features": [
     "llm_anthropic",
     "llm_gemini",
@@ -58,19 +58,6 @@
           "Step 2: Generate an API key from the dashboard API Keys section.",
           "Step 3: Add it as the GitHub repository secret CEREBRAS_API_KEY.",
           "Step 4: Run a reviewed research cycle and confirm llm_cerebras reports the secret as present."
-        ]
-      },
-      {
-        "title": "Add ANTHROPIC_API_KEY",
-        "description": "Unlocks Claude as an additional research and drafting fallback, increasing resilience when the current provider degrades or exhausts free quota.",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Open https://console.anthropic.com and create an account.",
-          "Step 2: Generate an API key from Settings and copy it once.",
-          "Step 3: Add it as the GitHub repository secret ANTHROPIC_API_KEY.",
-          "Step 4: Run one reviewed cycle and verify llm_anthropic changes from missing to ready."
         ]
       }
     ],
@@ -1434,7 +1421,7 @@
     "missing": [],
     "last_run": "2026-09-15T07:50:43.321211+00:00",
     "last_reason": "no_posts",
-    "agrees_with_backfill": true,
+    "agrees_with_backfill": null,
     "verified_ids": [
       {
         "id": 4568987,
@@ -1540,8 +1527,8 @@
     "published_total": 20,
     "covered": 20,
     "unverified": 0,
-    "coverage_complete": true,
+    "coverage_complete": null,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 17.7
+    "oldest_check_age_hours": 20.4
   }
 }

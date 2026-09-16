@@ -34,6 +34,9 @@ _DEFAULTS = {
 	"followup_min_views": 40,
 	"title_min_chars": 25,
 	"title_max_chars": 70,
+	# Cross-pollination: use high-scoring code_tech opportunities as sources.
+	"use_code_tech_sources": False,
+	"code_tech_min_score": 80,
 }
 
 
@@ -89,7 +92,7 @@ def _reject(code: str, detail: str = "") -> None:
 	global _LAST_REJECT
 	_LAST_REJECT = code
 	log.warning("[articles] rejected (%s): %s%s", code, _REJECTS.get(code, code),
-				f" -- {detail}" if detail else "")
+			f" -- {detail}" if detail else "")
 	return None
 
 _SYSTEM = """\
@@ -233,6 +236,29 @@ actually turned up for. The subject is proven; do not re-explain it.
 _FOLLOWUP_SYSTEM = _SYSTEM + _FOLLOWUP_EXTRA
 
 
+# System prompt for code_tech opportunity articles: problem-workaround shape.
+_CODE_TECH_SYSTEM = _SYSTEM + """\
+
+CODE-TECH OPPORTUNITY MODE -- you are writing a problem-workaround article
+based on a passive-income opportunity discovered by this project's research.
+The opportunity describes a real channel or tool where a digital product can
+be listed and paid for (often in stablecoin to the owner's own wallet).
+
+- Frame it as a concrete problem developers face: "You built a tool, now how
+does anyone pay you?" or "You want to sell a digital product without KYC,
+monthly fees, or a server."
+- The opportunity IS the workaround. Name it, explain how it works, show the
+  setup steps, and be honest about costs and limitations.
+- Your title must follow the TITLE rules: concrete, names the mechanism,
+  no clickbait. Example: "Getly: Sell a Digital Product and Settle USDT
+  to Your Own Tron Wallet"
+- Include at least two fenced code blocks: one showing the product config
+  (e.g., FUNDING.yml, GitHub Release upload script), one showing the wallet
+  address placement (README, CLI --help, article footer).
+- End with `## Source` crediting the opportunity's verified_note and URL.
+- Do NOT promise earnings. The only revenue is on-chain balance."""
+
+
 def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	"""Main entry point for the articles earning module."""
 	devto_api_key = os.getenv("DEV_TO_API_KEY", "").strip()
@@ -346,12 +372,20 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 	target = _followup_target(status, os.getenv("DEV_TO_API_KEY", "").strip())
 	if target:
 		log.info("[articles] following up %r (%d views)",
-				 target.get("title", "")[:60], target.get("page_views", 0))
+			 target.get("title", "")[:60], target.get("page_views", 0))
 		followup = _generate_followup(llm, status, target)
 		if followup:
 			return followup
 		# A failed follow-up must not cost the day's article.
 		log.info("[articles] follow-up unusable -- falling back to a fresh source")
+
+	# Try code_tech opportunities as sources if enabled
+	cfg = _config()
+	if cfg.get("use_code_tech_sources"):
+		code_tech_article = _try_code_tech_source(llm, status, cfg)
+		if code_tech_article:
+			return code_tech_article
+		log.info("[articles] no usable code_tech source -- falling back to trending")
 
 	source = _pick_source(status)
 	if not source:
@@ -392,6 +426,102 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 		return _reject("too_similar")
 
 	article["_source"] = source
+	return article
+
+
+def _try_code_tech_source(llm: Any, status: dict, cfg: dict) -> Optional[dict]:
+	"""Attempt to write an article from a high-scoring code_tech opportunity.
+
+    Only considers opportunities that:
+    - Are kind='channel' (places where a product gets paid)
+    - Score >= code_tech_min_score
+    - Have not been used as a source before
+    - Match the problem-workaround archetype (highest engagement)
+    """
+	code_tech_state = status.get("code_tech_earning", {})
+	opportunities = code_tech_state.get("opportunities", [])
+	if not opportunities:
+		return None
+
+	min_score = int(cfg.get("code_tech_min_score", 80))
+	hist = _history(status)
+	used_urls = set(hist.get("source_urls", []))
+	used_titles = set(hist.get("source_titles", []))
+
+	# Filter for high-scoring channels that haven't been used
+	candidates = []
+	for op in opportunities:
+		if op.get("kind") != "channel":
+			continue
+		if op.get("score", 0) < min_score:
+			continue
+		url_key = trending._canonical_url(op.get("url", ""))
+		title_key = trending.normalize_title(op.get("title", ""))
+		if url_key and url_key in used_urls:
+			continue
+		if title_key and title_key in used_titles:
+			continue
+		candidates.append(op)
+
+	if not candidates:
+		return None
+
+	# Sort by score descending
+	candidates.sort(key=lambda x: x.get("score", 0), reverse=True)
+	source = candidates[0]
+	log.info("[articles] code_tech source: %s (score %d)", source.get("title", "")[:70], source.get("score", 0))
+
+	# Build prompt from the opportunity's codex_prompt and fields
+	prompt = (
+		"Write a problem-workaround article for developers who have built a digital "
+		"product and need a way to get paid. The workaround is a real channel/tool "
+		"discovered by automated research.\n\n"
+		f"OPPORTUNITY TITLE: {source.get('title', '')}\n"
+		f"OPPORTUNITY URL: {source.get('url', '')}\n"
+		f"SOURCE: {source.get('source', '')}\n"
+		f"WHY IT RANKS: {source.get('reason', '')}\n"
+		f"NEXT STEP: {source.get('next_step', '')}\n"
+		f"COST: {source.get('cost_usd', 'free')}\n"
+		f"OWNER MUST DO: {source.get('manual_setup', 'nothing')}\n"
+		f"VERIFIED: {source.get('verified_note', '')}\n\n"
+		"Follow the CODE-TECH OPPORTUNITY MODE rules in the system prompt. "
+		"Your title must be concrete and name the channel/mechanism. "
+		"Include working config examples (FUNDING.yml, GitHub Release, README). "
+		"JSON only."
+		+ _audience_guidance(status)
+	)
+
+	try:
+		if hasattr(llm, "complete_json_for_role"):
+			data = llm.complete_json_for_role("post", prompt, system=_CODE_TECH_SYSTEM, max_tokens=6000)
+		else:
+			data = llm.complete_json(prompt, system=_CODE_TECH_SYSTEM, max_tokens=6000)
+	except Exception as exc:
+		log.warning("[articles] code_tech article generation failed: %s", exc)
+		return None
+
+	if not (data.get("title") and data.get("body_markdown")):
+		log.warning("[articles] code_tech article returned no usable title/body")
+		return None
+
+	# Convert opportunity to source-like dict for _finalize
+	source_dict = {
+		"title": source.get("title", ""),
+		"url": source.get("url", ""),
+		"source": source.get("source", "code_techs"),
+		"summary": source.get("reason", ""),
+	}
+
+	article = _finalize(llm, data, source_dict, status)
+	if not article:
+		return None
+
+	if _too_similar_to_source(article, source_dict):
+		log.warning("[articles] code_tech article title too close to source -- discarding")
+		return None
+
+	article["_source"] = source_dict
+	article["_code_tech_opportunity"] = True
 	return article
 
 
@@ -638,7 +768,7 @@ def _followup_target(status: dict, api_key: str) -> Optional[dict]:
 	)
 	if not best:
 		log.info("[articles] no post cleared %d views in %dh -- writing a fresh take",
-				 cfg["followup_min_views"], cfg["followup_window_hours"])
+			 cfg["followup_min_views"], cfg["followup_window_hours"])
 		return None
 	return best
 
@@ -807,7 +937,7 @@ def _prefer_proven_archetypes(candidates: list, status: dict) -> list:
 		return candidates
 
 	bonus = {name: _ARCHETYPE_BONUS - i * _ARCHETYPE_BONUS_STEP
-			 for i, name in enumerate(preferred)}
+		     for i, name in enumerate(preferred)}
 
 	def key(item):
 		kind = devto_stats.classify(item.get("title", ""))
@@ -821,7 +951,6 @@ def _prefer_proven_archetypes(candidates: list, status: dict) -> list:
 def _history(status: dict) -> dict:
 	"""Persistent record of what has already been sourced and published."""
 	return status.setdefault("article_history", {})
-
 
 
 def _record_publish(status: dict, article: dict) -> None:
@@ -1074,13 +1203,9 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
 # Numbers the model has no way to know and reliably invents: latency figures,
 # parameter counts, prices per token, context windows. Prose outside code blocks
 # only -- real numbers inside code (timeouts, retries) are fine.
-
-
-
 
 
 
@@ -1115,7 +1240,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

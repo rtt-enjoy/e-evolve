@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-16T00:22:34.422661+00:00",
-  "total_runs": 1842,
+  "last_run": "2026-09-16T06:03:27.530957+00:00",
+  "total_runs": 1843,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -32,155 +32,116 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Enable articles module to write problem-solution posts from high-scoring code_tech opportunities, creating content that naturally funnels readers to the wallet footer.",
+    "summary": "Make shared timestamp parsing robust to both Unix-second and Unix-millisecond feed values.",
     "changes_applied": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "Add support for using high-scoring code_tech opportunities as article sources. New config keys 'use_code_tech_sources' and 'code_tech_min_score' control this. When enabled, the module will attempt to write problem-workaround articles about passive-income channels (like Getly, GitHub FUNDING.yml, wallet-in-README) before falling back to trending sources. This turns research into publishable content that naturally funnels readers to the wallet footer."
-      },
-      {
-        "file": "config/strategy.json",
-        "reason": "Enable cross-pollination between code_techs and articles modules by adding 'use_code_tech_sources: true' and 'code_tech_min_score: 80' to the articles config. This allows the articles module to write problem-workaround posts about high-scoring passive-income opportunities (channels like Getly, GitHub FUNDING.yml, wallet-in-README) discovered by code_techs, embedding the wallet footer in each post."
+        "file": "bot/earning/_shared.py",
+        "reason": "Several public feeds can emit Unix timestamps in milliseconds. The previous 9\u201311-digit branch treated a 13-digit 2026 value as seconds, pushing freshness and cadence checks into the year 2286. The new branch preserves the year guard while correctly handling both formats."
       }
     ],
     "suggestions": [
       {
-        "title": "Add ANTHROPIC_API_KEY to GitHub secrets",
-        "description": "Unlocks Claude model access as an additional inference option alongside Gemini, OpenRouter, and Groq. Provides diversity in LLM outputs for article drafting and research.",
+        "title": "Add DEV_TO_API_KEY as a GitHub secret",
+        "description": "The configured-secret list does not include DEV_TO_API_KEY even though dev.to publishing is active. A repository secret makes publishing more reliable and keeps the credential out of workflow logs.",
+        "secret_needed": "DEV_TO_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Open https://dev.to/settings/extensions and create an article read/write token.",
+          "Step 2: Copy the token once and store it securely.",
+          "Step 3: Add it as the GitHub repository secret DEV_TO_API_KEY.",
+          "Step 4: Run a reviewed cycle and confirm the dev.to publish action succeeds without printing the token."
+        ]
+      },
+      {
+        "title": "Add ANTHROPIC_API_KEY as a GitHub secret",
+        "description": "Unlocks Claude as a fallback and research source alongside Gemini, OpenRouter, and Groq, improving answer diversity without adding a paid dependency.",
         "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Open https://console.anthropic.com and create an account.",
-          "Step 2: Generate an API key from the Project Settings page.",
+          "Step 1: Open https://console.anthropic.com and create a project.",
+          "Step 2: Generate an API key from the project settings.",
           "Step 3: Add it as the GitHub repository secret ANTHROPIC_API_KEY.",
-          "Step 4: Run a reviewed cycle and confirm llm_anthropic reports the secret as present."
+          "Step 4: Run a reviewed research cycle and confirm the Anthropic readiness check passes."
         ]
       },
       {
-        "title": "Add CEREBRAS_API_KEY to GitHub secrets",
-        "description": "Unlocks a no-credit-card inference fallback with a large free allowance (1M tokens/day, 14,400 req/day) for research and article drafting if OpenRouter quota is constrained.",
+        "title": "Add CEREBRAS_API_KEY as a GitHub secret",
+        "description": "Adds a high-volume free inference fallback for research and article drafting when OpenRouter quota is constrained.",
         "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "Step 1: Open https://cloud.cerebras.ai and create an account.",
-          "Step 2: Generate an API key from the dashboard API Keys section.",
+          "Step 2: Generate an API key from the dashboard.",
           "Step 3: Add it as the GitHub repository secret CEREBRAS_API_KEY.",
-          "Step 4: Run a reviewed research cycle and confirm llm_cerebras reports the secret as present."
-        ]
-      },
-      {
-        "title": "Move DEV_TO_API_KEY from workflow env to GitHub secret",
-        "description": "DEV_TO_API_KEY is currently set as a plain text environment variable in the workflow, which is less secure. Moving it to a GitHub secret improves security and ensures the key is available to all workflows.",
-        "secret_needed": "DEV_TO_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Open https://dev.to/settings/extensions and create an article read/write API token.",
-          "Step 2: Copy the token once and store it securely.",
-          "Step 3: Add it as the GitHub repository secret DEV_TO_API_KEY.",
-          "Step 4: Update the workflow file (e.g., .github/workflows/main.yml) to use the secret for DEV_TO_API_KEY and remove the plain text environment variable."
-        ]
-      },
-      {
-        "title": "Enable cross-pollination: articles from code_tech opportunities",
-        "description": "The code_techs module discovers high-scoring passive-income opportunities (channels/assets). The articles module can now write problem-workaround posts about these, embedding the wallet footer. This turns research into publishable content that funnels readers to the receive address.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Review the config/strategy.json change adding articles.use_code_tech_sources.",
-          "Step 2: Set it to true in your fork or wait for this PR to merge.",
-          "Step 3: Next cycle, articles will consider top code_tech opportunities as sources when they match the problem-workaround archetype.",
-          "Step 4: Monitor article_interest.best_archetype \u2014 it should stay problem-workaround."
+          "Step 4: Run a reviewed cycle and confirm llm_cerebras reports the secret as present."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20260916-004238",
-    "proposed_version": "1.42.0"
+    "branch": "evolve/1.41.1-20260916-060925",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "mrr-ideas",
         "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Your LLM Structured Output Parser Is Lying To You",
-        "url": "https://dev.to/robust_true_try/your-llm-structured-output-parser-is-lying-to-you-3bog",
-        "estimated_usd": 0.0,
-        "source_url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
-        "source_title": "Introducing System One Models and Jev"
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "status.json#mrr_ideas"
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add ANTHROPIC_API_KEY to GitHub secrets",
-      "description": "Unlocks Claude model access as an additional inference option alongside Gemini, OpenRouter, and Groq. Provides diversity in LLM outputs for article drafting and research.",
+      "title": "Add DEV_TO_API_KEY as a GitHub secret",
+      "description": "The configured-secret list does not include DEV_TO_API_KEY even though dev.to publishing is active. A repository secret makes publishing more reliable and keeps the credential out of workflow logs.",
+      "secret_needed": "DEV_TO_API_KEY",
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Open https://dev.to/settings/extensions and create an article read/write token.",
+        "Step 2: Copy the token once and store it securely.",
+        "Step 3: Add it as the GitHub repository secret DEV_TO_API_KEY.",
+        "Step 4: Run a reviewed cycle and confirm the dev.to publish action succeeds without printing the token."
+      ]
+    },
+    {
+      "title": "Add ANTHROPIC_API_KEY as a GitHub secret",
+      "description": "Unlocks Claude as a fallback and research source alongside Gemini, OpenRouter, and Groq, improving answer diversity without adding a paid dependency.",
       "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Open https://console.anthropic.com and create an account.",
-        "Step 2: Generate an API key from the Project Settings page.",
+        "Step 1: Open https://console.anthropic.com and create a project.",
+        "Step 2: Generate an API key from the project settings.",
         "Step 3: Add it as the GitHub repository secret ANTHROPIC_API_KEY.",
-        "Step 4: Run a reviewed cycle and confirm llm_anthropic reports the secret as present."
+        "Step 4: Run a reviewed research cycle and confirm the Anthropic readiness check passes."
       ]
     },
     {
-      "title": "Add CEREBRAS_API_KEY to GitHub secrets",
-      "description": "Unlocks a no-credit-card inference fallback with a large free allowance (1M tokens/day, 14,400 req/day) for research and article drafting if OpenRouter quota is constrained.",
+      "title": "Add CEREBRAS_API_KEY as a GitHub secret",
+      "description": "Adds a high-volume free inference fallback for research and article drafting when OpenRouter quota is constrained.",
       "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "Step 1: Open https://cloud.cerebras.ai and create an account.",
-        "Step 2: Generate an API key from the dashboard API Keys section.",
+        "Step 2: Generate an API key from the dashboard.",
         "Step 3: Add it as the GitHub repository secret CEREBRAS_API_KEY.",
-        "Step 4: Run a reviewed research cycle and confirm llm_cerebras reports the secret as present."
-      ]
-    },
-    {
-      "title": "Move DEV_TO_API_KEY from workflow env to GitHub secret",
-      "description": "DEV_TO_API_KEY is currently set as a plain text environment variable in the workflow, which is less secure. Moving it to a GitHub secret improves security and ensures the key is available to all workflows.",
-      "secret_needed": "DEV_TO_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Open https://dev.to/settings/extensions and create an article read/write API token.",
-        "Step 2: Copy the token once and store it securely.",
-        "Step 3: Add it as the GitHub repository secret DEV_TO_API_KEY.",
-        "Step 4: Update the workflow file (e.g., .github/workflows/main.yml) to use the secret for DEV_TO_API_KEY and remove the plain text environment variable."
-      ]
-    },
-    {
-      "title": "Enable cross-pollination: articles from code_tech opportunities",
-      "description": "The code_techs module discovers high-scoring passive-income opportunities (channels/assets). The articles module can now write problem-workaround posts about these, embedding the wallet footer. This turns research into publishable content that funnels readers to the receive address.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Review the config/strategy.json change adding articles.use_code_tech_sources.",
-        "Step 2: Set it to true in your fork or wait for this PR to merge.",
-        "Step 3: Next cycle, articles will consider top code_tech opportunities as sources when they match the problem-workaround archetype.",
-        "Step 4: Monitor article_interest.best_archetype \u2014 it should stay problem-workaround."
+        "Step 4: Run a reviewed cycle and confirm llm_cerebras reports the secret as present."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1369,
+  "last_cycle_seconds": 456,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1188,7 +1149,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-16T00:22:35.089909+00:00",
+    "checked_at": "2026-09-16T06:03:28.014393+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1254,7 +1215,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-09-14T01:16:28.541222+00:00",
+    "last_refresh_at": "2026-09-16T06:09:25.481993+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -1263,42 +1224,42 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The only recurring-revenue path that fits a zero\u2011cost, research\u2011first, publish\u2011to\u2011dev.to stack is a paid newsletter that monetises a tightly defined technical niche; the owner writes deep\u2011dive articles on dev.to, uses them as proof of expertise, and then manually sets up a subscription page (e.g., Gumroad or Substack) to collect $10\u201120 per month from solo developers who need curated, actionable guidance on that niche.",
+    "summary": "The only recurring\u2011revenue path that fits a zero\u2011cost, research\u2011first, publish\u2011to\u2011dev.to stack is a paid technical newsletter aimed at a narrow developer niche, because the bot can produce the weekly article and the owner can manually set up a Substack (or similar) account to collect subscriptions; a template store would require a storefront and payment processing that the current stack cannot support.",
     "ranked_ideas": [
       {
         "name": "Paid newsletter",
-        "why_this_stack_fits": "Articles on dev.to serve as free samples that demonstrate authority; the owner can hand\u2011craft a subscription landing page without any inbound HTTP or automation.",
-        "narrow_niche": "Solo developers who maintain CI/CD pipelines with GitHub Actions and need weekly, copy\u2011paste\u2011ready workflow patterns for Node.js, Python, and Docker projects",
-        "first_proof_artifact": "A 12\u2011article series on dev.to titled \"GitHub Actions Patterns for Solo Devs\" each ending with a one\u2011question poll about the reader's biggest pipeline pain point",
-        "who_pays": "Individual solo developers or freelance engineers who ship code to production at least weekly and spend >5\u202fhours/week debugging CI",
-        "monthly_price_usd": "10-20",
-        "runway_to_first_dollar": "4-8 weeks",
-        "owner_must_do_by_hand": "Create a Gumroad/Substack account, configure a $10\u201120 monthly subscription product, and manually copy the subscription link into each dev.to article and the newsletter sign\u2011up page"
+        "why_this_stack_fits": "The bot can research, draft, and publish each issue as a dev.to article, and the owner can manually gate the full issue behind a Substack subscription.",
+        "narrow_niche": "Solo developers who maintain GitHub Actions workflows for Node.js CI pipelines",
+        "first_proof_artifact": "A free dev.to article series (3 posts) demonstrating a complete, production\u2011ready GitHub Actions workflow for Node.js monorepos",
+        "who_pays": "Solo Node.js developers or small teams who need reliable CI patterns and are willing to pay for a weekly deep\u2011dive",
+        "monthly_price_usd": "10",
+        "runway_to_first_dollar": "6-10 weeks",
+        "owner_must_do_by_hand": "Create a Substack (or Ghost) account, complete identity verification, connect a Stripe payout method, and manually import each dev.to article as a paid post; the bot cannot handle any payment or subscription logic."
       },
       {
         "name": "Notion / digital template store",
-        "why_this_stack_fits": "Dev.to articles can showcase template walkthroughs; the owner can later list a Notion template pack on Gumroad, but the storefront and payment must be set up manually.",
-        "narrow_niche": "Freelance frontend developers who need ready\u2011to\u2011use Notion project\u2011tracking dashboards tailored to React/Next.js client work",
-        "first_proof_artifact": "A single dev.to article that publishes a complete Notion dashboard template (exported as a public duplicate link) with a step\u2011by\u2011step setup guide",
-        "who_pays": "Freelance frontend developers billing $75\u2011150/hr who manage 3+ concurrent client projects and want a reusable tracking system",
-        "monthly_price_usd": "15-30",
-        "runway_to_first_dollar": "6-10 weeks",
-        "owner_must_do_by_hand": "Open a Gumroad account, create a product for the Notion template pack, set a monthly subscription price, and manually embed the purchase link in the dev.to article and any follow\u2011up posts"
+        "why_this_stack_fits": "The bot can draft template documentation and publish teaser articles on dev.to, but the owner must manually set up a Gumroad storefront and handle all payment setup.",
+        "narrow_niche": "Freelance technical writers who need ready\u2011to\u2011use Notion content\u2011planning templates for developer\u2011focused blogs",
+        "first_proof_artifact": "A single Notion template (content calendar + SEO checklist) shared publicly via a dev.to article with a download link",
+        "who_pays": "Freelance technical writers and content marketers targeting developer audiences",
+        "monthly_price_usd": "15",
+        "runway_to_first_dollar": "8-12 weeks",
+        "owner_must_do_by_hand": "Open a Gumroad account, pass ID verification, create a product listing, and manually deliver the Notion duplicate link after each purchase; the bot cannot process payments or deliver files."
       }
     ],
     "validation_steps": [
-      "Publish the first proof article on dev.to and end it with a specific question (e.g., \"What GitHub Actions pattern wastes the most of your time?\")",
-      "Reply to every comment on that article by hand, asking commenters if they would pay for a weekly curated pattern email",
-      "Join the existing dev.to community tags \"github-actions\" and \"ci-cd\" and monitor discussions for recurring pain points",
-      "Post a short follow\u2011up article summarising the top 5 pain points you observed and ask readers to vote on which they\u2019d pay to solve",
-      "Track the number of unique commenters who express willingness to pay; aim for at least 10 distinct voices before building the paid product"
+      "Publish a dev.to article that ends with a specific question asking readers to comment if they struggle with GitHub Actions caching for Node.js monorepos.",
+      "In the article comments, invite interested readers to reply with their biggest CI pain point; collect at least 10 distinct responses.",
+      "Join the existing dev.to community tag #githubactions and participate in discussions by hand, noting recurring problems.",
+      "Create a short Google Form (shared only in the article) for readers to volunteer a 15\u2011minute video call; the owner conducts calls manually.",
+      "Summarize the top 3 problems in a follow\u2011up dev.to post and confirm willingness to pay for a weekly solution."
     ],
     "owner_actions": [
-      "Write and publish the 12\u2011article \"GitHub Actions Patterns for Solo Devs\" series on dev.to, each ending with the same targeted question",
-      "Manually create a Gumroad (or Substack) account and a $15/month subscription product for the newsletter",
-      "Add the subscription link to the bio and to the bottom of every article in the series",
-      "Respond to every comment on the series by hand, noting names of developers who signal purchase intent",
-      "After 4 weeks, compile the top\u2011voted pain points into a one\u2011page PDF and send it manually (via email address collected in Gumroad) to the first 10 interested commenters as a free preview"
+      "Write and publish the first free dev.to article in the GitHub Actions Node.js series (target 1500 words, include a complete workflow YAML).",
+      "Add a clear call\u2011to\u2011action at the end asking readers to comment their biggest CI challenge.",
+      "Manually create a Substack account, complete ID verification, and link a Stripe payout method.",
+      "After 3 articles, convert the series into a paid Substack newsletter and announce it in the fourth dev.to post.",
+      "Track subscriber count weekly and iterate content based on comment feedback."
     ],
     "viable": [
       {
@@ -1308,20 +1269,20 @@
         "bot_role": "publish",
         "score": 65,
         "manual_steps": [
-          "owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe)",
-          "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API)",
+          "owner opens a payment account by hand AND passes its ID verification -- Gumroad, Substack, Polar and Stripe all require government ID and none pays out in crypto (verified 2026-09-15). For a crypto payout to the owner's own Tron address with no ID check, see the channel table in code_techs (Getly), or take tips on the published wallet address, which needs no account at all.",
+          "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API, once the account exists and its ID verification has passed)",
           "needs an existing audience; the dev.to byline is the only one this stack builds"
         ]
       },
       {
         "name": "Notion / digital template store",
         "mrr_model": "$500-5K/mo, library subscription",
-        "source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) once the owner has an account and OAuth token \u2014 Payhip/Etsy stay manual",
+        "source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) but only after the owner has passed Gumroad ID verification, which pays out fiat via Stripe and never crypto (verified 2026-09-15) \u2014 Payhip/Etsy stay manual",
         "bot_role": "draft",
         "score": 60,
         "manual_steps": [
-          "owner opens a payment/subscription account by hand (Gumroad, Substack, Stripe)",
-          "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API)"
+          "owner opens a payment account by hand AND passes its ID verification -- Gumroad, Substack, Polar and Stripe all require government ID and none pays out in crypto (verified 2026-09-15). For a crypto payout to the owner's own Tron address with no ID check, see the channel table in code_techs (Getly), or take tips on the published wallet address, which needs no account at all.",
+          "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API, once the account exists and its ID verification has passed)"
         ]
       }
     ],
@@ -1425,7 +1386,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20260916-004238",
+  "last_evolution_branch": "evolve/1.41.1-20260916-060925",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 17,
@@ -1534,7 +1495,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-16T00:45:21.853841+00:00",
+    "last_run": "2026-09-16T06:11:02.590279+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1544,32 +1505,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-16T00:45:22.355675+00:00",
+    "last_run": "2026-09-16T06:11:02.826259+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4552210,
-        "at": "2026-09-15T07:50:43.321211+00:00",
-        "ok": true
-      },
-      {
-        "id": 4568987,
-        "at": "2026-09-15T13:36:36.518084+00:00",
-        "ok": true
-      },
-      {
         "id": 4619528,
-        "at": "2026-09-15T13:36:36.518084+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-09-15T13:36:36.518084+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-09-15T13:36:36.518084+00:00",
         "ok": true
       },
@@ -1629,13 +1570,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4662663,
         "at": "2026-09-16T00:45:22.355675+00:00",
         "ok": true
       },
       {
-        "id": 4662663,
-        "at": "2026-09-16T00:45:22.355675+00:00",
+        "id": 4552210,
+        "at": "2026-09-16T06:11:02.826259+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-09-16T06:11:02.826259+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-09-16T06:11:02.826259+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-09-16T06:11:02.826259+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-09-16T06:11:02.826259+00:00",
         "ok": true
       }
     ],
@@ -1644,7 +1605,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 16.9
+    "oldest_check_age_hours": 16.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

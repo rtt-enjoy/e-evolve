@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-16T20:08:51.355515+00:00",
-  "total_runs": 1846,
+  "last_run": "2026-09-16T22:57:19.167451+00:00",
+  "total_runs": 1847,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -85,30 +85,11 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260916-201331",
+    "branch": "evolve/1.41.1-20260916-225820",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to-newsletter",
-        "success": true,
-        "title": "AI Browsing, Agentic Security, and Better Go Allocations",
-        "url": "https://dev.to/robust_true_try/ai-browsing-agentic-security-and-better-go-allocations-43lc",
-        "estimated_usd": 0.0,
-        "item_count": 7
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -152,7 +133,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 337,
+  "last_cycle_seconds": 62,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1144,7 +1125,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-16T20:08:52.218119+00:00",
+    "checked_at": "2026-09-16T22:57:19.819772+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1395,7 +1376,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260916-201331",
+  "last_evolution_branch": "evolve/1.41.1-20260916-225820",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 17,
@@ -1504,7 +1485,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-16T20:14:27.145257+00:00",
+    "last_run": "2026-09-16T22:58:20.299589+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1514,20 +1495,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-16T20:14:27.513712+00:00",
+    "last_run": "2026-09-16T22:58:20.700244+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4633220,
-        "at": "2026-09-16T00:45:22.355675+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-09-16T00:45:22.355675+00:00",
-        "ok": true
-      },
       {
         "id": 4552210,
         "at": "2026-09-16T06:11:02.826259+00:00",
@@ -1535,16 +1506,6 @@
       },
       {
         "id": 4568987,
-        "at": "2026-09-16T06:11:02.826259+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-09-16T06:11:02.826259+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-09-16T06:11:02.826259+00:00",
         "ok": true
       },
@@ -1604,13 +1565,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4670417,
         "at": "2026-09-16T20:14:27.513712+00:00",
         "ok": true
       },
       {
-        "id": 4670417,
-        "at": "2026-09-16T20:14:27.513712+00:00",
+        "id": 4633220,
+        "at": "2026-09-16T22:58:20.700244+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-09-16T22:58:20.700244+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-09-16T22:58:20.700244+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-09-16T22:58:20.700244+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-09-16T22:58:20.700244+00:00",
         "ok": true
       }
     ],
@@ -1619,7 +1600,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 19.5
+    "oldest_check_age_hours": 16.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

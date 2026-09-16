@@ -89,7 +89,7 @@ def _reject(code: str, detail: str = "") -> None:
 	global _LAST_REJECT
 	_LAST_REJECT = code
 	log.warning("[articles] rejected (%s): %s%s", code, _REJECTS.get(code, code),
-				f" -- {detail}" if detail else "")
+			f" -- {detail}" if detail else "")
 	return None
 
 _SYSTEM = """\
@@ -346,7 +346,7 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 	target = _followup_target(status, os.getenv("DEV_TO_API_KEY", "").strip())
 	if target:
 		log.info("[articles] following up %r (%d views)",
-				 target.get("title", "")[:60], target.get("page_views", 0))
+			 target.get("title", "")[:60], target.get("page_views", 0))
 		followup = _generate_followup(llm, status, target)
 		if followup:
 			return followup
@@ -359,6 +359,18 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 
 	log.info("[articles] source: %s (%s)", source.get("title", "")[:70], source.get("source"))
 
+	# Build archetype-aware prompt using audience evidence
+	audience_guidance = _audience_guidance(status)
+	archetype_hint = ""
+	if audience_guidance:
+		# Extract the top archetype for a focused hint
+		import re
+		match = re.search(r"The '([^']+)' kind earns the most engagement here", audience_guidance)
+		if match:
+			top_archetype = match.group(1)
+			archetype_hint = f"\n\nARCHETYPE HINT: This account's readers engage most with '{top_archetype}' articles. " \
+				   f"Shape your angle and title accordingly. {_ARCHETYPE_ANGLES.get(top_archetype, '')}"
+
 	prompt = (
 		"Write your own substantially better article on the subject of this trending piece.\n\n"
 		f"SOURCE TITLE: {source.get('title', '')}\n"
@@ -370,7 +382,8 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 		"source. Your title must differ from the source title. Follow every "
 		"formatting and source-handling rule in the system prompt, including the "
 		"TITLE and TAGS rules. JSON only."
-		+ _audience_guidance(status)
+		+ archetype_hint
+		+ audience_guidance
 	)
 
 	try:
@@ -638,7 +651,7 @@ def _followup_target(status: dict, api_key: str) -> Optional[dict]:
 	)
 	if not best:
 		log.info("[articles] no post cleared %d views in %dh -- writing a fresh take",
-				 cfg["followup_min_views"], cfg["followup_window_hours"])
+			 cfg["followup_min_views"], cfg["followup_window_hours"])
 		return None
 	return best
 
@@ -807,7 +820,7 @@ def _prefer_proven_archetypes(candidates: list, status: dict) -> list:
 		return candidates
 
 	bonus = {name: _ARCHETYPE_BONUS - i * _ARCHETYPE_BONUS_STEP
-			 for i, name in enumerate(preferred)}
+		     for i, name in enumerate(preferred)}
 
 	def key(item):
 		kind = devto_stats.classify(item.get("title", ""))
@@ -1074,13 +1087,9 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
 # Numbers the model has no way to know and reliably invents: latency figures,
 # parameter counts, prices per token, context windows. Prose outside code blocks
 # only -- real numbers inside code (timeouts, retries) are fine.
-
-
-
 
 
 
@@ -1115,7 +1124,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

@@ -1779,3 +1779,8 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-09-15 18:19 UTC
 
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+
+### 2026-09-16 00:45 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+- [ok] **dev.to**: [Your LLM Structured Output Parser Is Lying To You](https://dev.to/robust_true_try/your-llm-structured-output-parser-is-lying-to-you-3bog) (est. $0.00)

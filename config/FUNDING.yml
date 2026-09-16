@@ -1,0 +1,18 @@
+# GitHub Sponsors / funding configuration.
+#
+# The custom: field accepts an arbitrary URL and requires NO GitHub Sponsors
+# enrolment, NO Stripe Connect, and NO W-9. It is used here to point at the
+# project's own docs page that lists the validated Tron (TRC-20) USDT receive
+# address, so the Sponsor button is live without embedding the raw address in
+# the repository root.
+#
+# The address is already published in every article this bot writes to dev.to
+# (see bot/earning/payout.py) and is verified each cycle by receipt_check.
+#
+github:
+  # The owner's GitHub Sponsors profile, if enabled later.
+  # url: https://github.com/sponsors/robust_true_try
+
+custom:
+  - name: "Tip via Tron USDT (TRC-20)"
+    url: "https://dev.to/robust_true_try/support"

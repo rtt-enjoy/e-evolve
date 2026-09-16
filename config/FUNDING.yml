@@ -1,0 +1,9 @@
+github: [robust_true_try]
+custom: https://dev.to/robust_true_try
+# The project's validated receive path. This is the same TRC-20 USDT
+# address appended to every dev.to article by bot/earning/payout.py,
+# surfaced here so a reader who arrives on the repo can pay with no
+# storefront, no account, and no identity check. No GitHub Sponsors
+# enrolment is required: the custom: field accepts arbitrary URLs.
+# Network: Tron (TRC-20). Assets accepted: USDT, USDC, USDD.
+# Verified live 2026-09-16; coverage observed by receipt_check each cycle.

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-16T22:57:19.167451+00:00",
-  "total_runs": 1847,
+  "last_run": "2026-09-17T01:26:50.155979+00:00",
+  "total_runs": 1848,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,63 +33,24 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a zero-cost FUNDING.yml with the project's Tron USDT address to surface the existing wallet ask on the GitHub repo itself, and add a docs page recording the verified passive-income channel table so the research is reviewable without touching protected files.",
-    "changes_applied": [
-      {
-        "file": "config/FUNDING.yml",
-        "reason": "Puts the existing wallet ask onto the GitHub repo itself, the highest-traffic surface the project controls, with zero cost and zero owner action per tip. Uses the custom: field so no GitHub Sponsors enrolment or Stripe Connect is required, and points at the dev.to profile where the full address is already published rather than embedding the raw address in the repo root."
-      },
-      {
-        "file": "docs/passive-income-channels.md",
-        "reason": "Records the verified channel table from bot/earning/code_techs.py as a standalone, reviewable doc so the owner can confirm the receive path and refused channels without reading the full module. No code changes, no secrets, zero cost."
-      }
-    ],
-    "suggestions": [
-      {
-        "title": "Add FUNDING.yml with the project's Tron USDT address",
-        "description": "GitHub renders a Sponsor button from .github/FUNDING.yml, and its custom: field accepts arbitrary URLs with no GitHub Sponsors enrolment, no Stripe Connect, and no W-9. Adding the existing TRC-20 USDT address here puts the same receive path the articles already carry onto the repo where developers actually arrive, with zero cost and zero owner action per tip.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Confirm the Tron USDT address in bot/earning/payout.py matches the one in status.json (payout_public.address).",
-          "Step 2: Commit .github/FUNDING.yml with a custom: entry pointing at a docs page that lists the address, so the button is live without exposing the raw address in the repo root.",
-          "Step 3: Verify the Sponsor button renders on the repository page and links to the address."
-        ]
-      },
-      {
-        "title": "Add ANTHROPIC_API_KEY as a GitHub secret",
-        "description": "Unlocks Claude as a fallback and research source alongside Gemini, OpenRouter, and Groq, improving answer diversity without adding a paid dependency.",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Open https://console.anthropic.com and create a project.",
-          "Step 2: Generate an API key from the project settings.",
-          "Step 3: Add it as the GitHub repository secret ANTHROPIC_API_KEY.",
-          "Step 4: Run a reviewed research cycle and confirm the Anthropic readiness check passes."
-        ]
-      },
-      {
-        "title": "Add CEREBRAS_API_KEY as a GitHub secret",
-        "description": "Adds a high-volume free inference fallback for research and article drafting when OpenRouter quota is constrained.",
-        "secret_needed": "CEREBRAS_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Open https://cloud.cerebras.ai and create an account.",
-          "Step 2: Generate an API key from the dashboard.",
-          "Step 3: Add it as the GitHub repository secret CEREBRAS_API_KEY.",
-          "Step 4: Run a reviewed cycle and confirm llm_cerebras reports the secret as present."
-        ]
-      }
-    ],
-    "error": null,
-    "branch": "evolve/1.41.1-20260916-225820",
-    "proposed_version": "1.41.1"
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.', 'type': 'invalid_request_error', 'code': 'model_decommissioned'}}",
+    "changes_applied": [],
+    "suggestions": [],
+    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.', 'type': 'invalid_request_error', 'code': 'model_decommissioned'}}",
+    "error_type": "json"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "The Silent Failure That Cost Us Hours",
+        "url": "https://dev.to/robust_true_try/the-silent-failure-that-cost-us-hours-3jea",
+        "estimated_usd": 0.0,
+        "source_url": "https://will-keleher.com/posts/small-programming-tricks-matter/",
+        "source_title": "Small programming tricks"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -132,8 +93,10 @@
       ]
     }
   ],
-  "errors": [],
-  "last_cycle_seconds": 62,
+  "errors": [
+    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.', 'type': 'invalid_request_error', 'code': 'model_decommissioned'}}"
+  ],
+  "last_cycle_seconds": 751,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -220,7 +183,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-09-16",
+    "date": "2026-09-17",
     "published": 1
   },
   "code_tech_earning": {
@@ -1004,7 +967,8 @@
       "economist.com/interactive/briefing/2026/09/03/nvidia-is-the-central-bank-of-ai",
       "techcrunch.com/2026/09/11/y-combinators-garry-tan-wants-u-s-open-weight-ai-labs-to-distill-frontier-models-too",
       "tenderlovemaking.com/2026/09/11/what-a-time-to-be-alive",
-      "typesafe.ai/blog/introducing-system-one-models-and-jev"
+      "typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "will-keleher.com/posts/small-programming-tricks-matter"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -1048,7 +1012,8 @@
       "nvidia central bank ai",
       "garry tan want us open weight ai labs distill frontier model too",
       "openai bots knew rubygem caching vulnerability",
-      "introducing system one model jev"
+      "introducing system one model jev",
+      "small programming trick"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1092,12 +1057,15 @@
       "gpu quota silently starving training jobs",
       "distilled model perform worse than teacher",
       "gemfile cache lying integrity",
-      "llm structured output parser lying"
+      "llm structured output parser lying",
+      "silent failure cost us hour"
     ],
     "followed_up_ids": [
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/ai-browsing-agentic-security-and-better-go-allocations-43lc",
+      "https://dev.to/robust_true_try/your-llm-structured-output-parser-is-lying-to-you-3bog",
       "https://dev.to/robust_true_try/your-gpu-quota-is-silently-starving-your-training-jobs-2poj",
       "https://dev.to/robust_true_try/how-ai-generated-gems-can-sneak-into-your-rubygems-dependencies-54io",
       "https://dev.to/robust_true_try/the-multi-file-refactor-your-ai-agent-misses-every-time-obb",
@@ -1125,7 +1093,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-16T22:57:19.819772+00:00",
+    "checked_at": "2026-09-17T01:26:50.887629+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1376,14 +1344,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260916-225820",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
-    "count": 17,
-    "total_views": 2901,
-    "avg_views": 170.6,
+    "count": 19,
+    "total_views": 2971,
+    "avg_views": 156.4,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 2364,
+    "best_views": 2424,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1399,8 +1367,8 @@
       {
         "archetype": "problem-workaround",
         "count": 4,
-        "avg_engagement": 635.8,
-        "avg_views": 629.5,
+        "avg_engagement": 650.8,
+        "avg_views": 644.5,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1412,9 +1380,9 @@
       },
       {
         "archetype": "myth-correction",
-        "count": 2,
-        "avg_engagement": 61.5,
-        "avg_views": 61.5,
+        "count": 3,
+        "avg_engagement": 44.3,
+        "avg_views": 44.3,
         "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       },
       {
@@ -1433,15 +1401,15 @@
       },
       {
         "archetype": "security-privacy",
-        "count": 2,
-        "avg_engagement": 25.0,
-        "avg_views": 25.0,
+        "count": 3,
+        "avg_engagement": 16.7,
+        "avg_views": 16.7,
         "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
       }
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "security-privacy",
-    "sample_size": 17
+    "sample_size": 19
   },
   "article_rejects": {
     "last_reason": "weak_title",
@@ -1485,7 +1453,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-16T22:58:20.299589+00:00",
+    "last_run": "2026-09-17T01:39:20.411640+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1495,20 +1463,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-16T22:58:20.700244+00:00",
+    "last_run": "2026-09-17T01:39:20.608690+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4552210,
-        "at": "2026-09-16T06:11:02.826259+00:00",
-        "ok": true
-      },
-      {
-        "id": 4568987,
-        "at": "2026-09-16T06:11:02.826259+00:00",
-        "ok": true
-      },
       {
         "id": 4619528,
         "at": "2026-09-16T11:59:30.481766+00:00",
@@ -1521,11 +1479,6 @@
       },
       {
         "id": 4503417,
-        "at": "2026-09-16T11:59:30.481766+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
         "at": "2026-09-16T11:59:30.481766+00:00",
         "ok": true
       },
@@ -1590,17 +1543,37 @@
         "ok": true
       },
       {
+        "id": 4552210,
+        "at": "2026-09-17T01:39:20.608690+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-09-17T01:39:20.608690+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-09-17T01:39:20.608690+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-16T22:58:20.700244+00:00",
+        "at": "2026-09-17T01:39:20.608690+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-09-17T01:39:20.608690+00:00",
         "ok": true
       }
     ],
-    "published_total": 19,
-    "covered": 19,
+    "published_total": 20,
+    "covered": 20,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 16.8
+    "oldest_check_age_hours": 13.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

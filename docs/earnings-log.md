@@ -1797,3 +1797,7 @@ Autonomous earnings generated every hourly cycle.
 
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
 - [ok] **dev.to-newsletter**: [AI Browsing, Agentic Security, and Better Go Allocations](https://dev.to/robust_true_try/ai-browsing-agentic-security-and-better-go-allocations-43lc) (est. $0.00)
+
+### 2026-09-17 01:39 UTC
+
+- [ok] **dev.to**: [The Silent Failure That Cost Us Hours](https://dev.to/robust_true_try/the-silent-failure-that-cost-us-hours-3jea) (est. $0.00)

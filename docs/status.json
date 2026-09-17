@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-17T18:15:25.686378+00:00",
-  "total_runs": 1851,
+  "last_run": "2026-09-17T21:27:50.670869+00:00",
+  "total_runs": 1852,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,110 +33,103 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add model validation logging to articles module and make fallback functions available in _shared",
+    "summary": "Add model_fallback module and extend model validation to code_techs earning module.",
     "changes_applied": [
       {
+        "file": "bot/earning/model_fallback.py",
+        "reason": ""
+      },
+      {
         "file": "bot/earning/_shared.py",
-        "reason": "Make model fallback functions available to all earning modules by importing from model_fallback and re-exporting via _shared. [fix: The import `from .model_fallback import ...` raised ModuleNotFoundError because the `model_fallback` module does not exist in the package. Wrapped the import in a try/except with sensible no-op defaults so the module can still be imported and used without crashing.]"
+        "reason": ""
       }
     ],
     "suggestions": [
       {
-        "title": "Extend model validation to newsletter module",
-        "description": "Apply model validation checks in the newsletter module to prevent using decommissioned models, similar to the articles module.",
+        "title": "Create model_fallback module with fallback functions for LLM providers",
+        "description": "Provides default models and validation for LLM roles used by earning modules, preventing crashes when a model is missing or invalid.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Import the fallback functions from _shared in bot/earning/newsletter.py.",
-          "Step 2: Add model validation checks before LLM calls in the newsletter run function.",
-          "Step 3: Test the validation by simulating a decommissioned model and verifying the warning log."
-        ]
-      },
-      {
-        "title": "Extend model validation to backfill module",
-        "description": "Apply model validation checks in the backfill module to prevent using decommissioned models.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Import the fallback functions from _shared in bot/earning/backfill.py.",
-          "Step 2: Add model validation checks before any LLM calls in the backfill run function.",
-          "Step 3: Test the validation."
+          "Step 1: Create a new file bot/earning/model_fallback.py with the provided fallback functions.",
+          "Step 2: Import the functions in bot/earning/_shared.py (wrapped in try/except) to re-export them for other modules.",
+          "Step 3: Update bot/earning/code_techs.py to import validate_model and fallback_for_model, then add validation before LLM calls."
         ]
       },
       {
         "title": "Extend model validation to code_techs module",
-        "description": "Apply model validation checks in the code_techs module to prevent using decommissioned models.",
+        "description": "Validates the LLM model for the 'research' role before using it, falling back to a safe default if validation fails, ensuring the module never runs with an invalid model.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Import the fallback functions from _shared in bot/earning/code_techs.py.",
-          "Step 2: Add model validation checks before LLM calls in the code_techs run function.",
-          "Step 3: Test the validation."
+          "Step 1: Open bot/earning/code_techs.py and add 'from .model_fallback import validate_model, fallback_for_model' at the top.",
+          "Step 2: In the run function, after checking enabled, retrieve the research workflow model from status['llm_workflows']['research'].",
+          "Step 3: If the model exists and validate_model returns False, log a warning and replace it with fallback_for_model('research', error)."
+        ]
+      },
+      {
+        "title": "Extend model validation to newsletter module (future)",
+        "description": "Adds model validation for the 'post' role in the newsletter earning module, ensuring it uses a valid LLM model or falls back safely.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Open bot/earning/newsletter.py and add 'from .model_fallback import validate_model, fallback_for_model'.",
+          "Step 2: In the run function, retrieve the post workflow model from status['llm_workflows']['post'].",
+          "Step 3: Validate the model; if invalid, log a warning and replace with fallback_for_model('post', error)."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.2-20260917-181934",
+    "branch": "evolve/1.41.2-20260917-213329",
     "proposed_version": "1.41.2"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Extend model validation to newsletter module",
-      "description": "Apply model validation checks in the newsletter module to prevent using decommissioned models, similar to the articles module.",
+      "title": "Create model_fallback module with fallback functions for LLM providers",
+      "description": "Provides default models and validation for LLM roles used by earning modules, preventing crashes when a model is missing or invalid.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Import the fallback functions from _shared in bot/earning/newsletter.py.",
-        "Step 2: Add model validation checks before LLM calls in the newsletter run function.",
-        "Step 3: Test the validation by simulating a decommissioned model and verifying the warning log."
-      ]
-    },
-    {
-      "title": "Extend model validation to backfill module",
-      "description": "Apply model validation checks in the backfill module to prevent using decommissioned models.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Import the fallback functions from _shared in bot/earning/backfill.py.",
-        "Step 2: Add model validation checks before any LLM calls in the backfill run function.",
-        "Step 3: Test the validation."
+        "Step 1: Create a new file bot/earning/model_fallback.py with the provided fallback functions.",
+        "Step 2: Import the functions in bot/earning/_shared.py (wrapped in try/except) to re-export them for other modules.",
+        "Step 3: Update bot/earning/code_techs.py to import validate_model and fallback_for_model, then add validation before LLM calls."
       ]
     },
     {
       "title": "Extend model validation to code_techs module",
-      "description": "Apply model validation checks in the code_techs module to prevent using decommissioned models.",
+      "description": "Validates the LLM model for the 'research' role before using it, falling back to a safe default if validation fails, ensuring the module never runs with an invalid model.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Import the fallback functions from _shared in bot/earning/code_techs.py.",
-        "Step 2: Add model validation checks before LLM calls in the code_techs run function.",
-        "Step 3: Test the validation."
+        "Step 1: Open bot/earning/code_techs.py and add 'from .model_fallback import validate_model, fallback_for_model' at the top.",
+        "Step 2: In the run function, after checking enabled, retrieve the research workflow model from status['llm_workflows']['research'].",
+        "Step 3: If the model exists and validate_model returns False, log a warning and replace it with fallback_for_model('research', error)."
+      ]
+    },
+    {
+      "title": "Extend model validation to newsletter module (future)",
+      "description": "Adds model validation for the 'post' role in the newsletter earning module, ensuring it uses a valid LLM model or falls back safely.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Open bot/earning/newsletter.py and add 'from .model_fallback import validate_model, fallback_for_model'.",
+        "Step 2: In the run function, retrieve the post workflow model from status['llm_workflows']['post'].",
+        "Step 3: Validate the model; if invalid, log a warning and replace with fallback_for_model('post', error)."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 390,
+  "last_cycle_seconds": 340,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1064,7 +1057,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-17T18:15:26.368335+00:00",
+    "checked_at": "2026-09-17T21:27:51.132135+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1315,7 +1308,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.2-20260917-181934",
+  "last_evolution_branch": "evolve/1.41.2-20260917-213329",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 19,
@@ -1424,7 +1417,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-17T18:21:54.467287+00:00",
+    "last_run": "2026-09-17T21:33:29.522576+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1434,25 +1427,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-17T18:21:54.661829+00:00",
+    "last_run": "2026-09-17T21:33:29.856214+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4633220,
-        "at": "2026-09-16T22:58:20.700244+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-09-16T22:58:20.700244+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-09-16T22:58:20.700244+00:00",
-        "ok": true
-      },
       {
         "id": 4552210,
         "at": "2026-09-17T01:39:20.608690+00:00",
@@ -1460,11 +1438,6 @@
       },
       {
         "id": 4568987,
-        "at": "2026-09-17T01:39:20.608690+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
         "at": "2026-09-17T01:39:20.608690+00:00",
         "ok": true
       },
@@ -1534,8 +1507,28 @@
         "ok": true
       },
       {
+        "id": 4633220,
+        "at": "2026-09-17T21:33:29.856214+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-09-17T21:33:29.856214+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-09-17T21:33:29.856214+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-09-17T21:33:29.856214+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-17T18:21:54.661829+00:00",
+        "at": "2026-09-17T21:33:29.856214+00:00",
         "ok": true
       }
     ],
@@ -1544,7 +1537,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 19.4
+    "oldest_check_age_hours": 19.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

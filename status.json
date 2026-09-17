@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-17T07:41:46.809317+00:00",
-  "total_runs": 1849,
+  "last_run": "2026-09-17T13:29:25.153048+00:00",
+  "total_runs": 1850,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,120 +33,107 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add model validation/fallback to prevent decommissioned-model evolution failures, document the Tron receive address in docs, and create a standalone model-fallback module.",
+    "summary": "Add model validation/fallback mechanism, document Tron receive address, and prepare version bump for applied improvements",
     "changes_applied": [
       {
-        "file": "bot/earning/_shared.py",
-        "reason": "Adds model validation and fallback functions to the shared module so all earning modules can detect decommissioned models before calling the LLM and fall back to a known-good alternative. This directly prevents the evolution failure caused by Groq's decommissioned llama-3.1-70b-versatile model."
+        "file": "bot/earning/model_fallback.py",
+        "reason": "Creates a standalone model-fallback module that can be imported by any earning module or the evolution engine. Provides validate_model(), get_fallback_model(), check_provider_health(), and suggest_fallback() to catch decommissioned models before they cause JSON parse errors, directly preventing the Groq llama-3.1-70b-versatile decommissioning failure from blocking the upgrade path again."
       },
       {
         "file": "docs/wallet.md",
-        "reason": "Creates a discoverable docs page for the Tron USDT receive address. Currently the address is only visible in code and status.json; a docs page makes it findable from the repo root, which is the same receive path the articles already carry."
+        "reason": "Creates a discoverable docs page for the Tron USDT receive address. Currently the address is only visible in code and status.json; a docs page makes it findable from the repo root, which is the same receive path the articles already carry and the one FUNDING.yml would point to."
       },
       {
-        "file": "bot/earning/model_fallback.py",
-        "reason": "Creates a standalone model-fallback module that can be imported by any earning module or the evolution engine. It provides validate_model(), get_fallback_model(), and check_provider_health() to catch decommissioned models before they cause JSON parse errors."
+        "file": "version.txt",
+        "reason": "Bump version to 1.41.1 to reflect the applied improvements from this evolution cycle: model fallback module and wallet documentation."
       }
     ],
     "suggestions": [
       {
         "title": "Add model validation and fallback mechanism",
-        "description": "The last evolution failed because Groq's llama-3.1-70b-versatile was decommissioned, causing a JSON parse error across all providers. Adding model validation before LLM calls catches decommissioned models early and falls back to known-good alternatives, preventing the same failure from blocking the upgrade path again.",
+        "description": "Prevents evolution failures from decommissioned models by validating models before LLM calls and falling back to known-good alternatives, directly preventing the Groq llama-3.1-70b-versatile decommissioning failure from blocking the upgrade path again.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "Step 1: Create bot/earning/model_fallback.py with the MODEL_FALLBACKS config and validate_model/get_fallback_model/check_provider_health functions.",
-          "Step 2: Add the same validation functions to bot/earning/_shared.py so all earning modules can call them without a new import.",
-          "Step 3: In any module that calls llm.complete_json*, add a check like: if not validate_model(provider, model): model = get_fallback_model(provider, model) before the LLM call."
+          "Step 2: Import and use these functions in earning modules before LLM calls to detect decommissioned models early.",
+          "Step 3: Add model validation checks to bot/earning/_shared.py so all earning modules can call them without a new import."
         ]
       },
       {
-        "title": "Add ANTHROPIC_API_KEY and CEREBRAS_API_KEY as GitHub secrets",
-        "description": "Both llm_anthropic and llm_cerebras are inactive because their API keys are missing. Adding them unlocks Claude and Cerebras as fallback and research sources, improving answer diversity and providing a rescue path when OpenRouter quota is constrained.",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Open https://console.anthropic.com and create a project, then generate an API key.",
-          "Step 2: Add it as the GitHub repository secret ANTHROPIC_API_KEY.",
-          "Step 3: Open https://cloud.cerebras.ai and create an account, then generate an API key.",
-          "Step 4: Add it as the GitHub repository secret CEREBRAS_API_KEY."
-        ]
-      },
-      {
-        "title": "Add wallet address documentation to docs/",
-        "description": "The Tron USDT receive address is currently only visible in code and status.json. A docs page makes it discoverable from the repo root, which is the same receive path the articles already carry and the one FUNDING.yml would point to.",
+        "title": "Create docs/wallet.md with Tron receive address documentation",
+        "description": "Makes the Tron USDT receive address discoverable from the repo root, which is the same receive path the articles already carry and the one FUNDING.yml would point to.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Create docs/wallet.md with the Tron address, network, accepted stablecoins, and verification link.",
+          "Step 1: Create docs/wallet.md with the Tron address, network (TRC-20), accepted stablecoins, and verification link.",
           "Step 2: Add a link to it from the README so readers can find it without searching the codebase.",
           "Step 3: Verify the page renders correctly on GitHub Pages."
+        ]
+      },
+      {
+        "title": "Update version.txt to 1.41.1",
+        "description": "Bump version to reflect the applied improvements from this evolution cycle.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Update version.txt to '1.41.1'.",
+          "Step 2: Commit the version change alongside the other improvements.",
+          "Step 3: Ensure the changelog or release notes reflect the new version."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260917-074311",
+    "branch": "evolve/1.41.1-20260917-133237",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Add model validation and fallback mechanism",
-      "description": "The last evolution failed because Groq's llama-3.1-70b-versatile was decommissioned, causing a JSON parse error across all providers. Adding model validation before LLM calls catches decommissioned models early and falls back to known-good alternatives, preventing the same failure from blocking the upgrade path again.",
+      "description": "Prevents evolution failures from decommissioned models by validating models before LLM calls and falling back to known-good alternatives, directly preventing the Groq llama-3.1-70b-versatile decommissioning failure from blocking the upgrade path again.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "Step 1: Create bot/earning/model_fallback.py with the MODEL_FALLBACKS config and validate_model/get_fallback_model/check_provider_health functions.",
-        "Step 2: Add the same validation functions to bot/earning/_shared.py so all earning modules can call them without a new import.",
-        "Step 3: In any module that calls llm.complete_json*, add a check like: if not validate_model(provider, model): model = get_fallback_model(provider, model) before the LLM call."
+        "Step 2: Import and use these functions in earning modules before LLM calls to detect decommissioned models early.",
+        "Step 3: Add model validation checks to bot/earning/_shared.py so all earning modules can call them without a new import."
       ]
     },
     {
-      "title": "Add ANTHROPIC_API_KEY and CEREBRAS_API_KEY as GitHub secrets",
-      "description": "Both llm_anthropic and llm_cerebras are inactive because their API keys are missing. Adding them unlocks Claude and Cerebras as fallback and research sources, improving answer diversity and providing a rescue path when OpenRouter quota is constrained.",
-      "secret_needed": "ANTHROPIC_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Open https://console.anthropic.com and create a project, then generate an API key.",
-        "Step 2: Add it as the GitHub repository secret ANTHROPIC_API_KEY.",
-        "Step 3: Open https://cloud.cerebras.ai and create an account, then generate an API key.",
-        "Step 4: Add it as the GitHub repository secret CEREBRAS_API_KEY."
-      ]
-    },
-    {
-      "title": "Add wallet address documentation to docs/",
-      "description": "The Tron USDT receive address is currently only visible in code and status.json. A docs page makes it discoverable from the repo root, which is the same receive path the articles already carry and the one FUNDING.yml would point to.",
+      "title": "Create docs/wallet.md with Tron receive address documentation",
+      "description": "Makes the Tron USDT receive address discoverable from the repo root, which is the same receive path the articles already carry and the one FUNDING.yml would point to.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Create docs/wallet.md with the Tron address, network, accepted stablecoins, and verification link.",
+        "Step 1: Create docs/wallet.md with the Tron address, network (TRC-20), accepted stablecoins, and verification link.",
         "Step 2: Add a link to it from the README so readers can find it without searching the codebase.",
         "Step 3: Verify the page renders correctly on GitHub Pages."
+      ]
+    },
+    {
+      "title": "Update version.txt to 1.41.1",
+      "description": "Bump version to reflect the applied improvements from this evolution cycle.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Update version.txt to '1.41.1'.",
+        "Step 2: Commit the version change alongside the other improvements.",
+        "Step 3: Ensure the changelog or release notes reflect the new version."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 180,
+  "last_cycle_seconds": 194,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1112,7 +1099,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-17T07:41:47.301461+00:00",
+    "checked_at": "2026-09-17T13:29:25.773383+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1363,7 +1350,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260917-074311",
+  "last_evolution_branch": "evolve/1.41.1-20260917-133237",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 19,
@@ -1472,7 +1459,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-17T07:44:45.193887+00:00",
+    "last_run": "2026-09-17T13:32:37.589142+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1482,32 +1469,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-17T07:44:45.525576+00:00",
+    "last_run": "2026-09-17T13:32:38.045893+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4602729,
-        "at": "2026-09-16T17:03:44.814555+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-09-16T17:03:44.814555+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-09-16T17:03:44.814555+00:00",
-        "ok": true
-      },
-      {
         "id": 4641536,
-        "at": "2026-09-16T20:14:27.513712+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-09-16T20:14:27.513712+00:00",
         "ok": true
       },
@@ -1582,8 +1549,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-09-17T13:32:38.045893+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-09-17T13:32:38.045893+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-09-17T13:32:38.045893+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-09-17T13:32:38.045893+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-17T07:44:45.525576+00:00",
+        "at": "2026-09-17T13:32:38.045893+00:00",
         "ok": true
       }
     ],
@@ -1592,7 +1579,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 14.7
+    "oldest_check_age_hours": 17.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

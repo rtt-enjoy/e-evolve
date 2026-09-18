@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-18T00:21:13.580216+00:00",
-  "total_runs": 1853,
+  "last_run": "2026-09-18T05:56:33.269124+00:00",
+  "total_runs": 1854,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,11 +33,15 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Integrate model_fallback into code_techs for robust LLM model validation and add Anthropic as a free-tier LLM option",
+    "summary": "Bump version and add documentation for Anthropic and Cerebras API keys to unlock additional LLM providers",
     "changes_applied": [
       {
-        "file": "bot/earning/code_techs.py",
-        "reason": "Integrate model_fallback validation into code_techs module. Added try/except import for validate_model and fallback_for_model, and use them before the research LLM call in _online_ai_brief to ensure the model is valid and fall back safely if not. This prevents crashes when the configured model is missing or invalid."
+        "file": "version.txt",
+        "reason": "Bump version to prepare for enabling Anthropic and Cerebras LLM providers via secrets"
+      },
+      {
+        "file": "docs/SECRETS.md",
+        "reason": "Add documentation guiding users to add Anthropic and Cerebras API keys to unlock additional LLM providers"
       }
     ],
     "suggestions": [
@@ -50,7 +54,8 @@
         "how_to": [
           "Step 1: Go to https://console.anthropic.com/ and sign in or create an account",
           "Step 2: Navigate to API Keys and create a new key",
-          "Step 3: Copy the key and add it as a GitHub secret named ANTHROPIC_API_KEY in this repository"
+          "Step 3: Copy the key and add it as a GitHub secret named ANTHROPIC_API_KEY",
+          "Step 4: Refer to docs/SECRETS.md for a summary of the process"
         ]
       },
       {
@@ -74,33 +79,25 @@
         "how_to": [
           "Step 1: Go to https://cloud.cerebras.ai/ and sign up for a free account",
           "Step 2: Generate an API key from the dashboard",
-          "Step 3: Add it as a GitHub secret named CEREBRAS_API_KEY in this repository"
+          "Step 3: Add it as a GitHub secret named CEREBRAS_API_KEY",
+          "Step 4: Refer to docs/SECRETS.md for a summary of the process"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260918-004807",
+    "branch": "evolve/1.41.1-20260918-055741",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
         "platform": "dev.to",
-        "success": false,
-        "skipped": true,
-        "reject_code": "weak_title",
-        "error": "title too weak to earn a click, and the rewrite failed",
-        "estimated_usd": 0.0
+        "success": true,
+        "title": "Your Browser History Search Is Broken\u2014Here's a Local Fix",
+        "url": "https://dev.to/robust_true_try/your-browser-history-search-is-broken-heres-a-local-fix-3pl3",
+        "estimated_usd": 0.0,
+        "source_url": "https://github.com/asciimoo/hister",
+        "source_title": "Hister: A private search engine for the pages you visit and the files you keep"
       }
     ],
     "total_usd": 0.0
@@ -115,7 +112,8 @@
       "how_to": [
         "Step 1: Go to https://console.anthropic.com/ and sign in or create an account",
         "Step 2: Navigate to API Keys and create a new key",
-        "Step 3: Copy the key and add it as a GitHub secret named ANTHROPIC_API_KEY in this repository"
+        "Step 3: Copy the key and add it as a GitHub secret named ANTHROPIC_API_KEY",
+        "Step 4: Refer to docs/SECRETS.md for a summary of the process"
       ]
     },
     {
@@ -139,12 +137,13 @@
       "how_to": [
         "Step 1: Go to https://cloud.cerebras.ai/ and sign up for a free account",
         "Step 2: Generate an API key from the dashboard",
-        "Step 3: Add it as a GitHub secret named CEREBRAS_API_KEY in this repository"
+        "Step 3: Add it as a GitHub secret named CEREBRAS_API_KEY",
+        "Step 4: Refer to docs/SECRETS.md for a summary of the process"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 2595,
+  "last_cycle_seconds": 268,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -231,7 +230,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-09-17",
+    "date": "2026-09-18",
     "published": 1
   },
   "code_tech_earning": {
@@ -995,7 +994,8 @@
       "techcrunch.com/2026/09/11/y-combinators-garry-tan-wants-u-s-open-weight-ai-labs-to-distill-frontier-models-too",
       "tenderlovemaking.com/2026/09/11/what-a-time-to-be-alive",
       "typesafe.ai/blog/introducing-system-one-models-and-jev",
-      "will-keleher.com/posts/small-programming-tricks-matter"
+      "will-keleher.com/posts/small-programming-tricks-matter",
+      "github.com/asciimoo/hister"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -1040,7 +1040,8 @@
       "garry tan want us open weight ai labs distill frontier model too",
       "openai bots knew rubygem caching vulnerability",
       "introducing system one model jev",
-      "small programming trick"
+      "small programming trick",
+      "hister private search engine pag visit fil keep"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1085,7 +1086,8 @@
       "distilled model perform worse than teacher",
       "gemfile cache lying integrity",
       "llm structured output parser lying",
-      "silent failure cost us hour"
+      "silent failure cost us hour",
+      "browser history search broken here s local fix"
     ],
     "followed_up_ids": [
       4489474
@@ -1120,7 +1122,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-18T00:21:14.392960+00:00",
+    "checked_at": "2026-09-18T05:56:34.075677+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1371,7 +1373,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260918-004807",
+  "last_evolution_branch": "evolve/1.41.1-20260918-055741",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 19,
@@ -1480,30 +1482,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-18T01:04:27.826990+00:00",
+    "last_run": "2026-09-18T06:01:00.277296+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 5,
-    "with_footer": 5,
+    "checked": 4,
+    "with_footer": 4,
     "without_footer": 0,
-    "unreachable": 0,
+    "unreachable": 1,
     "missing": [],
-    "last_run": "2026-09-18T01:04:28.157044+00:00",
+    "last_run": "2026-09-18T06:01:00.492855+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4619528,
-        "at": "2026-09-17T07:44:45.525576+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-09-17T07:44:45.525576+00:00",
-        "ok": true
-      },
       {
         "id": 4503417,
         "at": "2026-09-17T07:44:45.525576+00:00",
@@ -1585,17 +1577,32 @@
         "ok": true
       },
       {
+        "id": 4619528,
+        "at": "2026-09-18T06:01:00.492855+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-09-18T06:01:00.492855+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-18T01:04:28.157044+00:00",
+        "at": "2026-09-18T06:01:00.492855+00:00",
+        "ok": true
+      },
+      {
+        "id": 4681657,
+        "at": "2026-09-18T06:01:00.492855+00:00",
         "ok": true
       }
     ],
-    "published_total": 19,
-    "covered": 19,
+    "published_total": 20,
+    "covered": 20,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 17.3
+    "oldest_check_age_hours": 22.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

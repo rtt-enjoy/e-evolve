@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-17T21:27:50.670869+00:00",
-  "total_runs": 1852,
+  "last_run": "2026-09-18T00:21:13.580216+00:00",
+  "total_runs": 1853,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,103 +33,118 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add model_fallback module and extend model validation to code_techs earning module.",
+    "summary": "Integrate model_fallback into code_techs for robust LLM model validation and add Anthropic as a free-tier LLM option",
     "changes_applied": [
       {
-        "file": "bot/earning/model_fallback.py",
-        "reason": ""
-      },
-      {
-        "file": "bot/earning/_shared.py",
-        "reason": ""
+        "file": "bot/earning/code_techs.py",
+        "reason": "Integrate model_fallback validation into code_techs module. Added try/except import for validate_model and fallback_for_model, and use them before the research LLM call in _online_ai_brief to ensure the model is valid and fall back safely if not. This prevents crashes when the configured model is missing or invalid."
       }
     ],
     "suggestions": [
       {
-        "title": "Create model_fallback module with fallback functions for LLM providers",
-        "description": "Provides default models and validation for LLM roles used by earning modules, preventing crashes when a model is missing or invalid.",
-        "secret_needed": null,
+        "title": "Add Anthropic API key for free-tier Claude access",
+        "description": "Anthropic offers a free tier for Claude models. Adding this key activates a fourth LLM provider, increasing resilience and free daily request budget.",
+        "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Create a new file bot/earning/model_fallback.py with the provided fallback functions.",
-          "Step 2: Import the functions in bot/earning/_shared.py (wrapped in try/except) to re-export them for other modules.",
-          "Step 3: Update bot/earning/code_techs.py to import validate_model and fallback_for_model, then add validation before LLM calls."
+          "Step 1: Go to https://console.anthropic.com/ and sign in or create an account",
+          "Step 2: Navigate to API Keys and create a new key",
+          "Step 3: Copy the key and add it as a GitHub secret named ANTHROPIC_API_KEY in this repository"
         ]
       },
       {
-        "title": "Extend model validation to code_techs module",
-        "description": "Validates the LLM model for the 'research' role before using it, falling back to a safe default if validation fails, ensuring the module never runs with an invalid model.",
+        "title": "Enable model validation in code_techs using model_fallback",
+        "description": "The model_fallback module was created in v1.41.0 but code_techs doesn't use it yet. This change adds validation before LLM calls, preventing crashes from invalid models.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Open bot/earning/code_techs.py and add 'from .model_fallback import validate_model, fallback_for_model' at the top.",
-          "Step 2: In the run function, after checking enabled, retrieve the research workflow model from status['llm_workflows']['research'].",
-          "Step 3: If the model exists and validate_model returns False, log a warning and replace it with fallback_for_model('research', error)."
+          "Step 1: Apply the code change to bot/earning/code_techs.py to import and use validate_model/fallback_for_model",
+          "Step 2: The change wraps the research LLM call with model validation and automatic fallback",
+          "Step 3: No secrets needed - uses existing OPENROUTER_API_KEY"
         ]
       },
       {
-        "title": "Extend model validation to newsletter module (future)",
-        "description": "Adds model validation for the 'post' role in the newsletter earning module, ensuring it uses a valid LLM model or falls back safely.",
-        "secret_needed": null,
+        "title": "Add Cerebras API key for high-throughput free tier",
+        "description": "Cerebras Cloud offers ~1M tokens/day and 14,400 requests/day free with no credit card. Adds a fifth LLM provider for research-heavy workloads.",
+        "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Open bot/earning/newsletter.py and add 'from .model_fallback import validate_model, fallback_for_model'.",
-          "Step 2: In the run function, retrieve the post workflow model from status['llm_workflows']['post'].",
-          "Step 3: Validate the model; if invalid, log a warning and replace with fallback_for_model('post', error)."
+          "Step 1: Go to https://cloud.cerebras.ai/ and sign up for a free account",
+          "Step 2: Generate an API key from the dashboard",
+          "Step 3: Add it as a GitHub secret named CEREBRAS_API_KEY in this repository"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.2-20260917-213329",
-    "proposed_version": "1.41.2"
+    "branch": "evolve/1.41.1-20260918-004807",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 40,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      },
+      {
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "weak_title",
+        "error": "title too weak to earn a click, and the rewrite failed",
+        "estimated_usd": 0.0
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Create model_fallback module with fallback functions for LLM providers",
-      "description": "Provides default models and validation for LLM roles used by earning modules, preventing crashes when a model is missing or invalid.",
-      "secret_needed": null,
+      "title": "Add Anthropic API key for free-tier Claude access",
+      "description": "Anthropic offers a free tier for Claude models. Adding this key activates a fourth LLM provider, increasing resilience and free daily request budget.",
+      "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Create a new file bot/earning/model_fallback.py with the provided fallback functions.",
-        "Step 2: Import the functions in bot/earning/_shared.py (wrapped in try/except) to re-export them for other modules.",
-        "Step 3: Update bot/earning/code_techs.py to import validate_model and fallback_for_model, then add validation before LLM calls."
+        "Step 1: Go to https://console.anthropic.com/ and sign in or create an account",
+        "Step 2: Navigate to API Keys and create a new key",
+        "Step 3: Copy the key and add it as a GitHub secret named ANTHROPIC_API_KEY in this repository"
       ]
     },
     {
-      "title": "Extend model validation to code_techs module",
-      "description": "Validates the LLM model for the 'research' role before using it, falling back to a safe default if validation fails, ensuring the module never runs with an invalid model.",
+      "title": "Enable model validation in code_techs using model_fallback",
+      "description": "The model_fallback module was created in v1.41.0 but code_techs doesn't use it yet. This change adds validation before LLM calls, preventing crashes from invalid models.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Open bot/earning/code_techs.py and add 'from .model_fallback import validate_model, fallback_for_model' at the top.",
-        "Step 2: In the run function, after checking enabled, retrieve the research workflow model from status['llm_workflows']['research'].",
-        "Step 3: If the model exists and validate_model returns False, log a warning and replace it with fallback_for_model('research', error)."
+        "Step 1: Apply the code change to bot/earning/code_techs.py to import and use validate_model/fallback_for_model",
+        "Step 2: The change wraps the research LLM call with model validation and automatic fallback",
+        "Step 3: No secrets needed - uses existing OPENROUTER_API_KEY"
       ]
     },
     {
-      "title": "Extend model validation to newsletter module (future)",
-      "description": "Adds model validation for the 'post' role in the newsletter earning module, ensuring it uses a valid LLM model or falls back safely.",
-      "secret_needed": null,
+      "title": "Add Cerebras API key for high-throughput free tier",
+      "description": "Cerebras Cloud offers ~1M tokens/day and 14,400 requests/day free with no credit card. Adds a fifth LLM provider for research-heavy workloads.",
+      "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Open bot/earning/newsletter.py and add 'from .model_fallback import validate_model, fallback_for_model'.",
-        "Step 2: In the run function, retrieve the post workflow model from status['llm_workflows']['post'].",
-        "Step 3: Validate the model; if invalid, log a warning and replace with fallback_for_model('post', error)."
+        "Step 1: Go to https://cloud.cerebras.ai/ and sign up for a free account",
+        "Step 2: Generate an API key from the dashboard",
+        "Step 3: Add it as a GitHub secret named CEREBRAS_API_KEY in this repository"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 340,
+  "last_cycle_seconds": 2595,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -243,7 +258,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": null,
         "reason": "already running, so it needs no account and no owner action; pays in stablecoin, so the receive path is on-chain and verifiable",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -272,7 +287,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -301,7 +316,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -330,7 +345,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -359,7 +374,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once, set the price, and point the payout at the published Tron address. Owner does this by hand: Owner signs up (no ID upload), adds the Tron receive address, and uploads the product once.",
@@ -388,7 +403,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once and set the price. Owner does this by hand: open the account",
@@ -417,7 +432,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time; costs $5.00 once, stated rather than hidden",
         "next_step": "List the product once and set the price. Owner does this by hand: Owner pays the one-time $5 registration and submits the extension for review.",
@@ -425,35 +440,6 @@
         "cost_usd": 5.0,
         "manual_setup": "Owner pays the one-time $5 registration and submits the extension for review.",
         "verified_note": "One-time $5, no renewal, 20-extension limit confirmed on developer.chrome.com 2026-09-08.",
-        "pursued": false
-      },
-      {
-        "title": "OneKeyHQ/app-monorepo",
-        "url": "https://github.com/OneKeyHQ/app-monorepo",
-        "source": "github",
-        "buyer": "tooling, no buyer",
-        "kind": "asset",
-        "score": 70,
-        "score_parts": {
-          "owner_action": 0.4,
-          "receive_path": 1.0,
-          "identity_cost": 0.6,
-          "zero_budget": 0.6,
-          "setup_burden": 1.0,
-          "recency": 1.0
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-09-17T18:09:47+00:00",
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
-        "age_hours": 0.2,
-        "reason": "pays in stablecoin, so the receive path is on-chain and verifiable; free tooling or reach to build and market the product with",
-        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
-        "codex_prompt": "",
-        "cost_usd": null,
-        "manual_setup": "",
-        "verified_note": "",
         "pursued": false
       },
       {
@@ -475,7 +461,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": null,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.",
@@ -504,7 +490,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": null,
         "reason": "pays in stablecoin, so the receive path is on-chain and verifiable; sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once and set the price. Owner does this by hand: Owner creates an account, completes the tax interview with a TIN/SSN, pays the one-time $3 identity fee, and adds fiat payout details.",
@@ -527,14 +513,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.951
+          "recency": 0.949
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-11T21:49:30+00:00",
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
-        "age_hours": 140.5,
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
+        "age_hours": 147.0,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -562,7 +548,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once and set the price. Owner does this by hand: open the account",
@@ -585,14 +571,14 @@
           "identity_cost": 0.0,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.891
+          "recency": 0.889
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-04T17:47:28+00:00",
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
-        "age_hours": 312.5,
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
+        "age_hours": 319.0,
         "reason": "pays in stablecoin, so the receive path is on-chain and verifiable; free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -602,8 +588,8 @@
         "pursued": false
       },
       {
-        "title": "nexu-io/open-design",
-        "url": "https://github.com/nexu-io/open-design",
+        "title": "gmh5225/awesome-game-security",
+        "url": "https://github.com/gmh5225/awesome-game-security",
         "source": "github",
         "buyer": "tooling, no buyer",
         "kind": "asset",
@@ -619,8 +605,8 @@
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
-        "posted_at": "2026-09-17T18:19:08+00:00",
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "posted_at": "2026-09-18T00:46:54+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": 0.0,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
@@ -631,8 +617,8 @@
         "pursued": false
       },
       {
-        "title": "dgtlmoon/changedetection.io",
-        "url": "https://github.com/dgtlmoon/changedetection.io",
+        "title": "jamesonl/awesome-pydantic",
+        "url": "https://github.com/jamesonl/awesome-pydantic",
         "source": "github",
         "buyer": "tooling, no buyer",
         "kind": "asset",
@@ -648,8 +634,8 @@
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
-        "posted_at": "2026-09-17T18:15:38+00:00",
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "posted_at": "2026-09-18T00:43:48+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": 0.1,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
@@ -660,8 +646,8 @@
         "pursued": false
       },
       {
-        "title": "tursodatabase/turso",
-        "url": "https://github.com/tursodatabase/turso",
+        "title": "kzhrknt/awesome-design-md-jp",
+        "url": "https://github.com/kzhrknt/awesome-design-md-jp",
         "source": "github",
         "buyer": "tooling, no buyer",
         "kind": "asset",
@@ -677,9 +663,38 @@
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
-        "posted_at": "2026-09-17T18:15:28+00:00",
-        "discovered_at": "2026-09-17T18:19:48.546090+00:00",
+        "posted_at": "2026-09-18T00:43:06+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
         "age_hours": 0.1,
+        "reason": "free tooling or reach to build and market the product with",
+        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
+        "codex_prompt": "",
+        "cost_usd": null,
+        "manual_setup": "",
+        "verified_note": "",
+        "pursued": false
+      },
+      {
+        "title": "RongleCat/awesome-grok-bot",
+        "url": "https://github.com/RongleCat/awesome-grok-bot",
+        "source": "github",
+        "buyer": "tooling, no buyer",
+        "kind": "asset",
+        "score": 52,
+        "score_parts": {
+          "owner_action": 0.4,
+          "receive_path": 0.2,
+          "identity_cost": 0.6,
+          "zero_budget": 0.6,
+          "setup_burden": 1.0,
+          "recency": 1.0
+        },
+        "value_usd": null,
+        "value_basis": "none",
+        "value_note": "",
+        "posted_at": "2026-09-18T00:38:00+00:00",
+        "discovered_at": "2026-09-18T00:48:17.902102+00:00",
+        "age_hours": 0.2,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -760,22 +775,70 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "The owner already has a validated Tron (TRC-20) USDT receive address published on dev.to and can embed it in every product artifact. The lowest-friction path is to build a single-purpose digital product (browser extension, CLI utility, or asset pack), host it free on GitHub Releases, list it on Getly for crypto-native checkout (no KYC, direct USDT payout to own wallet), and also distribute via Chrome Web Store (one-time $5 fee) for organic discovery. The same wallet address goes in the README, FUNDING.yml, --help output, and dev.to articles so every copy becomes a payment endpoint. No monthly fees, no custodial processors, and no per-sale owner action.",
+      "summary": "Create a simple browser extension or utility that solves one specific daily annoyance, ship it free to drive discovery, and monetize through a freemium model where buyers pay for advanced features via direct USDT/USDC wallets using verified zero-knowledge platforms like Getly or GitHub Releases.",
       "market_themes": [
         {
-          "theme": "Direct wallet ask embedded in the artifact converts without a storefront",
-          "evidence": "Wallet ask on the product page and in every article (already live); Put the receive address in the GitHub repo itself; Ask in the artifact, not only beside it",
-          "offer": "Sell a one-time licence or freemium upgrade for a browser extension or CLI utility, with the Tron address in README, --help, and release notes"
+          "theme": "Freemium product with direct crypto payouts",
+          "evidence": "Getly storefront supports Tron (TRC-20) USDT payouts with no KYC, no monthly fees, and direct settlement to the seller's own wallet address.",
+          "offer": "Build a lightweight browser extension that blocks distracting websites during focus sessions; offer a free tier with limited blockages and a paid upgrade for unlimited site blocking and custom schedules."
         },
         {
-          "theme": "Zero-cost storefronts that settle stablecoin to own wallet multiply reach",
-          "evidence": "Getly \u2014 sell a digital product, settle USDT on Tron to your own wallet",
-          "offer": "List the same product on Getly (free listing, crypto payout to own wallet) and Chrome Web Store (one-time $5) for discovery"
+          "theme": "Zero-infrastructure distribution",
+          "evidence": "GitHub Releases provides free hosting for binaries and allows direct USDT/USDC payouts to the owner's wallet without any platform taking a cut or requiring KYC.",
+          "offer": "Package the product as a standalone executable or web app, host it on GitHub Releases, and include a clear wallet ask in the README and product page for instant crypto transactions."
         }
       ],
-      "sales_channels": [],
-      "product_ideas": [],
-      "owner_actions": []
+      "sales_channels": [
+        {
+          "name": "Getly",
+          "what_it_does": "Storefront for digital goods with native Tron (TRC-20) USDT support and direct wallet payouts",
+          "cost": "No monthly listing fee; minimum payout $15 on Tron ($5 on BSC); no KYC required",
+          "crypto_payout": "USDT/USDC settled directly to your own wallet address",
+          "owner_setup": "Create a Getly account, verify email, add your Tron (TRC-20) receive address to the dashboard, and configure the product listing with your price and description.",
+          "why_passive": "Once the product is listed, sales generate USDT/USDC directly to your wallet with no per-transaction fees or ongoing management."
+        },
+        {
+          "name": "GitHub Releases",
+          "what_it_does": "Host the final binary or archive for free with no listing fee and direct crypto payouts",
+          "cost": "Free to create and upload releases; no per-item listing fee",
+          "crypto_payout": "USDT/USDC paid directly to your own wallet address",
+          "owner_setup": "Push the packaged product to a GitHub repository, create a release with the binary/zip file, and embed the Tron (TRC-20) receive address in the README and release notes.",
+          "why_passive": "Users download the free version and can opt-in to pay for upgrades via the wallet ask in the README\u2014no platform intervention needed."
+        },
+        {
+          "name": "Dev.to (article + wallet ask)",
+          "what_it_does": "Publish educational content about the problem your product solves, embedding the wallet address for direct crypto donations",
+          "cost": "Free publishing; no listing fee",
+          "crypto_payout": "USDT/USDC sent directly to your wallet",
+          "owner_setup": "Write a blog post explaining the annoyance and solution, append your validated Tron (TRC-20) receive address in the footer and README, and link to the GitHub Release for purchase.",
+          "why_passive": "Content continues to attract traffic over time; each reader who decides to pay does so directly from their wallet without any platform taking a cut."
+        }
+      ],
+      "product_ideas": [
+        {
+          "idea": "FocusBlock",
+          "who_buys": "Remote workers, students, and knowledge workers who struggle with distraction",
+          "deliverable": "A browser extension that automatically blocks selected distracting websites (e.g., social media, news) when a timer starts, with optional custom schedule settings",
+          "pricing_model": "Free tier includes blocking 2 sites for 30-minute intervals; paid upgrade ($8/month or one-time $12) adds unlimited site blocking and personalized schedule templates",
+          "marginal_cost": "Near zero\u2014once the code is written, serving additional users requires only hosting storage on GitHub Releases (free).",
+          "free_stack": "Browser extension built with Manifest V3, hosted on GitHub Pages; binary distributed via GitHub Releases; documentation and wallet ask in README."
+        },
+        {
+          "idea": "QuickClean",
+          "who_buys": "Small business owners and individual developers who need fast file organization",
+          "deliverable": "A command-line utility (CLI) that scans a folder and organizes files into folders by type (images, documents, scripts) with a single command",
+          "pricing_model": "Free CLI version that moves files locally; paid subscription ($5/month or one-time $20) adds cloud sync and automated cleanup jobs",
+          "marginal_cost": "Minimal\u2014runs locally on the user's machine, no server costs; hosted source code on GitHub for discoverability.",
+          "free_stack": "Python-based CLI package, released as source on GitHub, installed via pip or shell script."
+        }
+      ],
+      "owner_actions": [
+        "Write the core product code (browser extension or CLI tool) \u2014 this is a one-time development effort with no recurring cost.",
+        "Create a simple landing page with a README that includes your validated Tron (TRC-20) receive address (already used in previous articles) and explains the problem your product solves.",
+        "Set up a Getly account, add your Tron (TRC-20) receive address to the dashboard, and create a product listing with your free tier description and paid upgrade pricing.",
+        "Package the finished product as a standalone binary or zip file and upload it to GitHub Releases, linking the release to the Getly storefront.",
+        "Add a prominent wallet ask in the README and on the product page directing users to send USDT/USDC directly to your wallet for the paid upgrade."
+      ]
     },
     "free_ai_focus": [
       "free-tier LLM APIs with no credit card requirement",
@@ -799,7 +862,7 @@
     "supply_count": 7,
     "priced_count": 0,
     "ranked_total": 40,
-    "last_refresh_at": "2026-09-17T18:19:34.553847+00:00",
+    "last_refresh_at": "2026-09-18T00:48:07.157994+00:00",
     "channel_count": 9,
     "asset_count": 7,
     "needs_setup_count": 3,
@@ -1028,7 +1091,7 @@
       4489474
     ],
     "own_urls": [
-      "https://dev.to/robust_true_try/ai-browsing-agentic-security-and-better-go-allocations-43lc",
+      "https://dev.to/robust_true_try/the-silent-failure-that-cost-us-hours-3jea",
       "https://dev.to/robust_true_try/your-llm-structured-output-parser-is-lying-to-you-3bog",
       "https://dev.to/robust_true_try/your-gpu-quota-is-silently-starving-your-training-jobs-2poj",
       "https://dev.to/robust_true_try/how-ai-generated-gems-can-sneak-into-your-rubygems-dependencies-54io",
@@ -1057,7 +1120,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-17T21:27:51.132135+00:00",
+    "checked_at": "2026-09-18T00:21:14.392960+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1308,14 +1371,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.2-20260917-213329",
+  "last_evolution_branch": "evolve/1.41.1-20260918-004807",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 19,
-    "total_views": 2971,
-    "avg_views": 156.4,
+    "total_views": 3061,
+    "avg_views": 161.1,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 2424,
+    "best_views": 2484,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1331,8 +1394,8 @@
       {
         "archetype": "problem-workaround",
         "count": 4,
-        "avg_engagement": 650.8,
-        "avg_views": 644.5,
+        "avg_engagement": 665.8,
+        "avg_views": 659.5,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1357,36 +1420,36 @@
         "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
       },
       {
-        "archetype": "other",
-        "count": 4,
-        "avg_engagement": 25.2,
-        "avg_views": 12.8,
-        "best_title": "The Redirect Chain That Bypasses Your Ad Blocker"
+        "archetype": "security-privacy",
+        "count": 2,
+        "avg_engagement": 30.0,
+        "avg_views": 30.0,
+        "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
       },
       {
-        "archetype": "security-privacy",
-        "count": 3,
-        "avg_engagement": 16.7,
-        "avg_views": 16.7,
-        "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
+        "archetype": "other",
+        "count": 5,
+        "avg_engagement": 24.2,
+        "avg_views": 14.2,
+        "best_title": "The Redirect Chain That Bypasses Your Ad Blocker"
       }
     ],
     "best_archetype": "problem-workaround",
-    "worst_archetype": "security-privacy",
+    "worst_archetype": "other",
     "sample_size": 19
   },
   "article_rejects": {
     "last_reason": "weak_title",
     "last_detail": "title too weak to earn a click, and the rewrite failed",
-    "last_at": "2026-09-12T00:24:05.925764+00:00",
+    "last_at": "2026-09-18T01:04:27.521651+00:00",
     "counts": {
       "empty_draft": 2,
       "fabricated": 1,
-      "weak_title": 2,
+      "weak_title": 3,
       "revision_fabricated": 1,
       "llm_error": 1
     },
-    "total": 7
+    "total": 8
   },
   "payout": {
     "enabled": true,
@@ -1417,7 +1480,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-17T21:33:29.522576+00:00",
+    "last_run": "2026-09-18T01:04:27.826990+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1427,25 +1490,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-17T21:33:29.856214+00:00",
+    "last_run": "2026-09-18T01:04:28.157044+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4552210,
-        "at": "2026-09-17T01:39:20.608690+00:00",
-        "ok": true
-      },
-      {
-        "id": 4568987,
-        "at": "2026-09-17T01:39:20.608690+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-09-17T01:39:20.608690+00:00",
-        "ok": true
-      },
       {
         "id": 4619528,
         "at": "2026-09-17T07:44:45.525576+00:00",
@@ -1458,11 +1506,6 @@
       },
       {
         "id": 4503417,
-        "at": "2026-09-17T07:44:45.525576+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-09-17T07:44:45.525576+00:00",
         "ok": true
       },
@@ -1497,11 +1540,6 @@
         "ok": true
       },
       {
-        "id": 4670417,
-        "at": "2026-09-17T18:21:54.661829+00:00",
-        "ok": true
-      },
-      {
         "id": 4368781,
         "at": "2026-09-17T18:21:54.661829+00:00",
         "ok": true
@@ -1527,17 +1565,37 @@
         "ok": true
       },
       {
+        "id": 4552210,
+        "at": "2026-09-18T01:04:28.157044+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-09-18T01:04:28.157044+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-09-18T01:04:28.157044+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-09-18T01:04:28.157044+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-17T21:33:29.856214+00:00",
+        "at": "2026-09-18T01:04:28.157044+00:00",
         "ok": true
       }
     ],
-    "published_total": 20,
-    "covered": 20,
+    "published_total": 19,
+    "covered": 19,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 19.9
+    "oldest_check_age_hours": 17.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

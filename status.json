@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-19T05:55:30.630218+00:00",
-  "total_runs": 1860,
+  "last_run": "2026-09-19T11:01:49.857692+00:00",
+  "total_runs": 1861,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,26 +33,22 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a regression test asserting attribution idempotency and receipt deduplication so repeated wallet polls never double-count a USDT receipt.",
+    "summary": "Add Anthropic and Cerebras API key support and documentation.",
     "changes_applied": [
       {
-        "file": "bot/test_attribution.py",
-        "reason": "Locks the idempotency behavior in place and proves that repeated same-time and same-transaction polls remain one receipt, preventing inflated receipt_count and total_attributed_usd."
+        "file": "version.txt",
+        "reason": "Bump patch version to reflect addition of Anthropic and Cerebras API key support."
+      },
+      {
+        "file": "bot/github_secrets.py",
+        "reason": "Add Anthropic and Cerebras API keys to the list of configured secrets so secret_readiness can detect them."
+      },
+      {
+        "file": "docs/SECRETS.md",
+        "reason": "Provide a single, up\u2011to\u2011date reference for all GitHub secrets, making it easy for the owner to add missing Anthropic and Cerebras keys and keep the bot's providers active."
       }
     ],
     "suggestions": [
-      {
-        "title": "Prevent duplicate wallet receipts in attribution",
-        "description": "Repeated wallet polls can otherwise append the same USDT transfer more than once, inflating receipt_count and total_attributed_usd.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Review the attribution idempotency fix and its regression tests on the review branch",
-          "Step 2: Run python -m unittest bot.test_attribution from the repository root",
-          "Step 3: Approve the review branch so repeated wallet polls remain single-counted"
-        ]
-      },
       {
         "title": "Add Anthropic API key for free-tier Claude access",
         "description": "Anthropic offers a free tier for Claude models. Adding this key activates a fourth LLM provider, increasing resilience and free daily request budget.",
@@ -78,49 +74,29 @@
           "Step 3: Add it as a GitHub secret named CEREBRAS_API_KEY",
           "Step 4: Refer to docs/SECRETS.md for a summary of the process"
         ]
+      },
+      {
+        "title": "Centralize secret documentation in docs/SECRETS.md",
+        "description": "Create a single source of truth for adding and managing GitHub secrets used by the bot, reducing confusion and ensuring all required keys are present.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Create docs/SECRETS.md with sections for each secret (Anthropic, Cerebras, Gemini, Groq, OpenRouter, USDT wallet, GitHub token)",
+          "Step 2: Populate each section with step-by-step instructions, including links to the provider console and the exact secret name to use",
+          "Step 3: Commit the file to the repository so future contributors can follow the same process"
+        ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260919-055831",
+    "branch": "evolve/1.41.1-20260919-110409",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Your SDK_INT Check Won't Save You on Android 17",
-        "url": "https://dev.to/robust_true_try/your-sdkint-check-wont-save-you-on-android-17-a11",
-        "estimated_usd": 0.0,
-        "source_url": "https://grapheneos.social/@GrapheneOS/117282080803799576",
-        "source_title": "Android 17 is the first since 3.x to add new APIs without releasing to the AOSP"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
-    {
-      "title": "Prevent duplicate wallet receipts in attribution",
-      "description": "Repeated wallet polls can otherwise append the same USDT transfer more than once, inflating receipt_count and total_attributed_usd.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Review the attribution idempotency fix and its regression tests on the review branch",
-        "Step 2: Run python -m unittest bot.test_attribution from the repository root",
-        "Step 3: Approve the review branch so repeated wallet polls remain single-counted"
-      ]
-    },
     {
       "title": "Add Anthropic API key for free-tier Claude access",
       "description": "Anthropic offers a free tier for Claude models. Adding this key activates a fourth LLM provider, increasing resilience and free daily request budget.",
@@ -146,10 +122,22 @@
         "Step 3: Add it as a GitHub secret named CEREBRAS_API_KEY",
         "Step 4: Refer to docs/SECRETS.md for a summary of the process"
       ]
+    },
+    {
+      "title": "Centralize secret documentation in docs/SECRETS.md",
+      "description": "Create a single source of truth for adding and managing GitHub secrets used by the bot, reducing confusion and ensuring all required keys are present.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Create docs/SECRETS.md with sections for each secret (Anthropic, Cerebras, Gemini, Groq, OpenRouter, USDT wallet, GitHub token)",
+        "Step 2: Populate each section with step-by-step instructions, including links to the provider console and the exact secret name to use",
+        "Step 3: Commit the file to the repository so future contributors can follow the same process"
+      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 501,
+  "last_cycle_seconds": 141,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1119,7 +1107,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-19T05:55:30.997793+00:00",
+    "checked_at": "2026-09-19T11:01:50.384339+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1368,7 +1356,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260919-055831",
+  "last_evolution_branch": "evolve/1.41.1-20260919-110409",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 20,
@@ -1477,7 +1465,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-19T06:03:51.167396+00:00",
+    "last_run": "2026-09-19T11:04:10.187221+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1487,30 +1475,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-19T06:03:51.406500+00:00",
+    "last_run": "2026-09-19T11:04:10.343132+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4356423,
-        "at": "2026-09-18T16:28:13.821264+00:00",
-        "ok": true
-      },
-      {
-        "id": 4641536,
-        "at": "2026-09-18T16:28:13.821264+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-09-18T16:28:13.821264+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-09-18T16:28:13.821264+00:00",
-        "ok": true
-      },
       {
         "id": 4633220,
         "at": "2026-09-18T19:42:50.149860+00:00",
@@ -1587,13 +1555,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4691023,
         "at": "2026-09-19T06:03:51.406500+00:00",
         "ok": true
       },
       {
-        "id": 4691023,
-        "at": "2026-09-19T06:03:51.406500+00:00",
+        "id": 4356423,
+        "at": "2026-09-19T11:04:10.343132+00:00",
+        "ok": true
+      },
+      {
+        "id": 4641536,
+        "at": "2026-09-19T11:04:10.343132+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-09-19T11:04:10.343132+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-09-19T11:04:10.343132+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-09-19T11:04:10.343132+00:00",
         "ok": true
       }
     ],
@@ -1602,7 +1590,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 13.6
+    "oldest_check_age_hours": 15.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

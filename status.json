@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-18T22:35:16.001115+00:00",
-  "total_runs": 1858,
+  "last_run": "2026-09-19T01:11:32.534260+00:00",
+  "total_runs": 1859,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,19 +33,35 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add model_fallback module for LLM model validation, wire it into code_techs._online_ai_brief to prevent crashes from invalid model names, and fix _revise_title docstring placement in articles.py.",
+    "summary": "Patch attribution to make repeated wallet polls idempotent and add regression coverage for receipt deduplication.",
     "changes_applied": [
       {
-        "file": "bot/earning/model_fallback.py",
-        "reason": "New module: validates LLM model identifiers before calls and falls back to a known-good default. Prevents crashes from invalid/deprecated model names and reduces wasted free-tier calls."
+        "file": "bot/earning/attribution.py",
+        "reason": "Wallet polling can present the same last receipt more than once. A stable transaction key, with a timestamp/amount/network fallback, prevents duplicate accounting without changing the existing public attribution schema."
+      },
+      {
+        "file": "bot/test_attribution.py",
+        "reason": "Locks the idempotency behavior in place and proves that repeated same-time and same-transaction polls remain one receipt."
       }
     ],
     "suggestions": [
       {
+        "title": "Prevent duplicate wallet receipts in attribution",
+        "description": "Repeated wallet polls can otherwise append the same USDT transfer more than once, inflating receipt_count and total_attributed_usd.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0.0,
+        "free_tier": true,
+        "how_to": [
+          "Step 1: Review the attribution idempotency fix and its regression tests on the review branch",
+          "Step 2: Run python -m unittest bot.test_attribution from the repository root",
+          "Step 3: Approve the review branch so repeated wallet polls remain single-counted"
+        ]
+      },
+      {
         "title": "Add Anthropic API key for free-tier Claude access",
         "description": "Anthropic offers a free tier for Claude models. Adding this key activates a fourth LLM provider, increasing resilience and free daily request budget.",
         "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
+        "estimated_weekly_usd": 0.0,
         "free_tier": true,
         "how_to": [
           "Step 1: Go to https://console.anthropic.com/ and sign in or create an account",
@@ -56,9 +72,9 @@
       },
       {
         "title": "Add Cerebras API key for high-throughput free tier",
-        "description": "Cerebras Cloud offers ~1M tokens/day and 14,400 requests/day free with no credit card. Adds a fifth LLM provider for research-heavy workloads.",
+        "description": "Cerebras Cloud offers a high free-tier request allowance with no credit card and adds another provider for research-heavy workloads.",
         "secret_needed": "CEREBRAS_API_KEY",
-        "estimated_weekly_usd": 0,
+        "estimated_weekly_usd": 0.0,
         "free_tier": true,
         "how_to": [
           "Step 1: Go to https://cloud.cerebras.ai/ and sign up for a free account",
@@ -66,34 +82,43 @@
           "Step 3: Add it as a GitHub secret named CEREBRAS_API_KEY",
           "Step 4: Refer to docs/SECRETS.md for a summary of the process"
         ]
-      },
-      {
-        "title": "Enable model validation in code_techs using model_fallback",
-        "description": "The model_fallback module validates model identifiers before LLM calls and falls back to a stable default when a model is invalid. This change wires it into code_techs._online_ai_brief, preventing crashes from invalid or deprecated model names.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Step 1: Apply the code change to bot/earning/code_techs.py to import and use validate_model/fallback_for_model",
-          "Step 2: The change wraps the research LLM call with model validation and automatic fallback",
-          "Step 3: No secrets needed - uses existing OPENROUTER_API_KEY"
-        ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260918-223745",
+    "branch": "evolve/1.41.1-20260919-011355",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "weak_title",
+        "error": "title too weak to earn a click, and the rewrite failed",
+        "estimated_usd": 0.0
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
+      "title": "Prevent duplicate wallet receipts in attribution",
+      "description": "Repeated wallet polls can otherwise append the same USDT transfer more than once, inflating receipt_count and total_attributed_usd.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0.0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Review the attribution idempotency fix and its regression tests on the review branch",
+        "Step 2: Run python -m unittest bot.test_attribution from the repository root",
+        "Step 3: Approve the review branch so repeated wallet polls remain single-counted"
+      ]
+    },
+    {
       "title": "Add Anthropic API key for free-tier Claude access",
       "description": "Anthropic offers a free tier for Claude models. Adding this key activates a fourth LLM provider, increasing resilience and free daily request budget.",
       "secret_needed": "ANTHROPIC_API_KEY",
-      "estimated_weekly_usd": 0,
+      "estimated_weekly_usd": 0.0,
       "free_tier": true,
       "how_to": [
         "Step 1: Go to https://console.anthropic.com/ and sign in or create an account",
@@ -104,9 +129,9 @@
     },
     {
       "title": "Add Cerebras API key for high-throughput free tier",
-      "description": "Cerebras Cloud offers ~1M tokens/day and 14,400 requests/day free with no credit card. Adds a fifth LLM provider for research-heavy workloads.",
+      "description": "Cerebras Cloud offers a high free-tier request allowance with no credit card and adds another provider for research-heavy workloads.",
       "secret_needed": "CEREBRAS_API_KEY",
-      "estimated_weekly_usd": 0,
+      "estimated_weekly_usd": 0.0,
       "free_tier": true,
       "how_to": [
         "Step 1: Go to https://cloud.cerebras.ai/ and sign up for a free account",
@@ -114,22 +139,10 @@
         "Step 3: Add it as a GitHub secret named CEREBRAS_API_KEY",
         "Step 4: Refer to docs/SECRETS.md for a summary of the process"
       ]
-    },
-    {
-      "title": "Enable model validation in code_techs using model_fallback",
-      "description": "The model_fallback module validates model identifiers before LLM calls and falls back to a stable default when a model is invalid. This change wires it into code_techs._online_ai_brief, preventing crashes from invalid or deprecated model names.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Apply the code change to bot/earning/code_techs.py to import and use validate_model/fallback_for_model",
-        "Step 2: The change wraps the research LLM call with model validation and automatic fallback",
-        "Step 3: No secrets needed - uses existing OPENROUTER_API_KEY"
-      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 150,
+  "last_cycle_seconds": 481,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1095,6 +1108,7 @@
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/your-browser-history-search-is-broken-heres-a-local-fix-3pl3",
       "https://dev.to/robust_true_try/the-silent-failure-that-cost-us-hours-3jea",
       "https://dev.to/robust_true_try/your-llm-structured-output-parser-is-lying-to-you-3bog",
       "https://dev.to/robust_true_try/your-gpu-quota-is-silently-starving-your-training-jobs-2poj",
@@ -1124,7 +1138,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-18T22:35:16.764333+00:00",
+    "checked_at": "2026-09-19T01:11:33.245759+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1373,14 +1387,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260918-223745",
+  "last_evolution_branch": "evolve/1.41.1-20260919-011355",
   "evolution_pending_review": true,
   "article_stats": {
-    "count": 19,
-    "total_views": 3061,
-    "avg_views": 161.1,
+    "count": 20,
+    "total_views": 3111,
+    "avg_views": 155.6,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 2484,
+    "best_views": 2524,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1395,9 +1409,9 @@
     "archetypes": [
       {
         "archetype": "problem-workaround",
-        "count": 4,
-        "avg_engagement": 665.8,
-        "avg_views": 659.5,
+        "count": 5,
+        "avg_engagement": 542.6,
+        "avg_views": 537.6,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1438,20 +1452,20 @@
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "other",
-    "sample_size": 19
+    "sample_size": 20
   },
   "article_rejects": {
     "last_reason": "weak_title",
     "last_detail": "title too weak to earn a click, and the rewrite failed",
-    "last_at": "2026-09-18T01:04:27.521651+00:00",
+    "last_at": "2026-09-19T01:19:32.585321+00:00",
     "counts": {
       "empty_draft": 2,
       "fabricated": 1,
-      "weak_title": 3,
+      "weak_title": 4,
       "revision_fabricated": 1,
       "llm_error": 1
     },
-    "total": 8
+    "total": 9
   },
   "payout": {
     "enabled": true,
@@ -1482,7 +1496,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-18T22:37:45.476046+00:00",
+    "last_run": "2026-09-19T01:19:32.800747+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1492,25 +1506,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-18T22:37:45.734390+00:00",
+    "last_run": "2026-09-19T01:19:33.111999+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4619528,
-        "at": "2026-09-18T06:01:00.492855+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-09-18T06:01:00.492855+00:00",
-        "ok": true
-      },
-      {
-        "id": 4681657,
-        "at": "2026-09-18T06:01:00.492855+00:00",
-        "ok": true
-      },
       {
         "id": 4503417,
         "at": "2026-09-18T11:24:39.745037+00:00",
@@ -1523,11 +1522,6 @@
       },
       {
         "id": 4636715,
-        "at": "2026-09-18T11:24:39.745037+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-09-18T11:24:39.745037+00:00",
         "ok": true
       },
@@ -1592,8 +1586,28 @@
         "ok": true
       },
       {
+        "id": 4619528,
+        "at": "2026-09-19T01:19:33.111999+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-09-19T01:19:33.111999+00:00",
+        "ok": true
+      },
+      {
+        "id": 4681657,
+        "at": "2026-09-19T01:19:33.111999+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-09-19T01:19:33.111999+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-18T22:37:45.734390+00:00",
+        "at": "2026-09-19T01:19:33.111999+00:00",
         "ok": true
       }
     ],
@@ -1602,7 +1616,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 16.6
+    "oldest_check_age_hours": 13.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

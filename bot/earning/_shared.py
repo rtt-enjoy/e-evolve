@@ -45,6 +45,28 @@ def load_config(section: str, defaults: Mapping[str, Any] | None = None) -> dict
 	return cfg
 
 
+def save_config(section: str, data: Mapping[str, Any]) -> None:
+	"""Persist ``section`` back to config/strategy.json.
+
+    Merges ``data`` into the existing section, preserving all other
+    keys and sections. Called by modules that need to write config
+    changes (e.g. recording run results or refresh timestamps) without
+    external tooling.
+    """
+	try:
+		raw = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
+	except Exception:
+		raw = {}
+	if not isinstance(raw, dict):
+		raw = {}
+	if isinstance(data, dict):
+		raw[section] = dict(data)
+	CONFIG_FILE.write_text(
+		json.dumps(raw, indent=2),
+		encoding="utf-8",
+	)
+
+
 def hours_until_due(state: Mapping[str, Any], key: str, interval_hours: int) -> float:
 	"""Hours remaining before ``key``'s cadence is due again. 0.0 when due now.
 

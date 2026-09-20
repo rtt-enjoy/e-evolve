@@ -16,7 +16,7 @@ from typing import Any, Optional
 
 import requests
 
-from ._shared import parse_dt as _parse_dt
+from ._shared import load_config, parse_dt as _parse_dt
 
 log = logging.getLogger(__name__)
 
@@ -26,6 +26,17 @@ _API = "https://dev.to/api/articles/me/published"
 # follow-up window needs.
 _PER_PAGE = 100
 _TIMEOUT = 20
+
+_DEVTO_STATS_DEFAULTS = {
+	"min_confident_sample": 6,
+	"min_archetype_sample": 3,
+	"runner_up_share": 0.25,
+}
+
+
+def _config() -> dict[str, Any]:
+	"""This module's slice of config/strategy.json, read at call time."""
+	return load_config("devto_stats", _DEVTO_STATS_DEFAULTS)
 
 
 def fetch_published(api_key: str = "") -> list[dict[str, Any]]:
@@ -291,25 +302,9 @@ def interest_report(articles: list[dict[str, Any]]) -> dict[str, Any]:
 # An archetype backed by a single post is a coincidence, not a pattern. Below
 # this many posts the report is still written (it is the raw material for the
 # next one) but callers must not steer article selection by it.
-_MIN_CONFIDENT_SAMPLE = 6
-
-# ...and the same question has to be asked of each archetype separately. The
-# account-level gate above only says the *report* is worth reading; it says
-# nothing about the row being steered toward. ``interest_report`` computes
-# ``count`` precisely so a caller can discount a thin row, and this function
-# used to ignore it -- so on the live account it returned
-# ``['problem-workaround', 'build-tutorial']``, promoting build-tutorial on
-# n=2 / avg 66.5 against problem-workaround's n=4 / avg 615.8. That is the
-# archetype the reach loop exists to steer *away* from (the account's most
-# common output and its weakest), and the prompt was telling the writer it
-# "also performs well here".
-_MIN_ARCHETYPE_SAMPLE = 3
-
-# A row also has to be meaningfully ahead of the field, not merely ordered
-# ahead of it. With five archetypes between 16.8 and 66.5 on n<=3, the ordering
-# among them is noise, and picking the top of a noisy band reads as evidence.
-# A runner-up must earn at least this share of the leader to count as proven.
-_RUNNER_UP_SHARE = 0.25
+# These thresholds are read from config/strategy.json (devto_stats section) so
+# the owner can tune sensitivity without editing code. Defaults match the
+# historical values.
 
 
 def preferred_archetypes(report: dict[str, Any], limit: int = 2) -> list[str]:
@@ -317,24 +312,25 @@ def preferred_archetypes(report: dict[str, Any], limit: int = 2) -> list[str]:
 
     Three gates, because each catches something the others cannot:
 
-    - the account needs ``_MIN_CONFIDENT_SAMPLE`` posts overall, or the report
+    - the account needs ``min_confident_sample`` posts overall, or the report
       itself is a coincidence;
-    - each row needs ``_MIN_ARCHETYPE_SAMPLE`` posts of its own, because a
+    - each row needs ``min_archetype_sample`` posts of its own, because a
       thin row rides in on an account-level sample it did not contribute to;
-    - a runner-up needs ``_RUNNER_UP_SHARE`` of the leader's engagement, because
+    - a runner-up needs ``runner_up_share`` of the leader's engagement, because
       ordering within a noise band is not evidence of anything.
 
     Steering on an all-zero history would just lock in whatever was published
     first, and steering on a thin row promotes the shape this loop exists to
     steer away from -- which is what it did on the live account.
     """
+	cfg = _config()
 	rows = report.get("archetypes") or []
-	if int(report.get("sample_size", 0)) < _MIN_CONFIDENT_SAMPLE:
+	if int(report.get("sample_size", 0)) < int(cfg.get("min_confident_sample", 6)):
 		return []
 	earning = [
 		r for r in rows
 		if float(r.get("avg_engagement", 0)) > 0
-		and int(r.get("count", 0)) >= _MIN_ARCHETYPE_SAMPLE
+		and int(r.get("count", 0)) >= int(cfg.get("min_archetype_sample", 3))
 	]
 	if not earning:
 		return []
@@ -350,7 +346,7 @@ def preferred_archetypes(report: dict[str, Any], limit: int = 2) -> list[str]:
 	# otherwise it is the top of the noise band, and naming it "performs well
 	# here" tells the writer something the data does not support.
 	leader = float(earning[0].get("avg_engagement", 0))
-	floor = leader * _RUNNER_UP_SHARE
+	floor = leader * float(cfg.get("runner_up_share", 0.25))
 	proven = [earning[0]] + [
 		r for r in earning[1:] if float(r.get("avg_engagement", 0)) >= floor
 	]

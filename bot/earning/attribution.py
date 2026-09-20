@@ -1,4 +1,4 @@
-"""
+'''
 Which published work earned the money.
 
 Principle 5 of ``docs/passive-income-doctrine.md`` says to measure the funnel,
@@ -31,13 +31,17 @@ Design rules, matching the rest of the earning layer:
   when ``wallet.last_received_usd`` is above zero -- i.e. real money moved
   on-chain. Nothing here can invent revenue, because nothing here decides that
   revenue happened.
+- **Idempotent across polls.** ``last_received_usd`` describes the latest
+  receipt, not a per-cycle delta. The same positive value can therefore remain
+  in status across many wallet checks; timestamp and transaction identity
+  guards prevent that one receipt from being booked repeatedly.
 - **Never raises.** Attribution is bookkeeping. Losing a cycle over it would
   trade the working system for a note about the working system.
-"""
+'''
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
+import math
 from typing import Any
 
 from . import _shared
@@ -50,6 +54,8 @@ DEFAULTS: dict[str, Any] = {
 	# the only evidence it ever collects. 200 is small in bytes and long in
 	# time -- at the observed tip rate it is effectively "keep everything".
 	"history_limit": 200,
+	"seen_receipt_ids": [],
+	"duplicates_skipped": 0,
 }
 
 
@@ -67,27 +73,27 @@ def _live_context(status: dict[str, Any]) -> dict[str, Any]:
     """
 	stats = status.get("article_stats") or {}
 	interest = status.get("article_interest") or {}
-	payout = status.get("payout") or {}
 	return {
-		"posts_live":     int(stats.get("count") or 0),
-		"total_views":    int(stats.get("total_views") or 0),
-		"best_title":     str(stats.get("best_title") or "") or None,
-		"best_url":       str(stats.get("best_url") or "") or None,
-		"best_views":     int(stats.get("best_views") or 0),
-		"winning_tags":   [str(t) for t in (stats.get("winning_tags") or [])][:6],
+		"posts_live": int(stats.get("count") or 0),
+		"total_views": int(stats.get("total_views") or 0),
+		"best_title": str(stats.get("best_title") or "") or None,
+		"best_url": str(stats.get("best_url") or "") or None,
+		"best_views": int(stats.get("best_views") or 0),
+		"winning_tags": [str(t) for t in (stats.get("winning_tags") or [])][:6],
 		"best_archetype": interest.get("best_archetype") or None,
-		"footer_network": payout.get("network") or None,
 	}
 
 
 def _defaults() -> dict[str, Any]:
 	return {
-		"receipts":             [],
-		"receipt_count":        0,
+		"receipts": [],
+		"receipt_count": 0,
 		"total_attributed_usd": 0.0,
-		"last_receipt_at":      None,
-		"by_archetype":         [],
-		"by_tag":               [],
+		"last_receipt_at": None,
+		"by_archetype": [],
+		"by_tag": [],
+		"seen_receipt_ids": [],
+		"duplicates_skipped": 0,
 		# Says what this record is, so a later reader does not mistake it for
 		# per-post tracking the chain cannot provide.
 		"note": (
@@ -98,13 +104,39 @@ def _defaults() -> dict[str, Any]:
 	}
 
 
-def record_receipt(status: dict[str, Any]) -> dict[str, Any] | None:
-	"""Log the publishing context for a real on-chain receipt.
+def _transaction_hash(wallet: dict[str, Any]) -> str:
+	"""Return a public chain identifier when the wallet snapshot exposes one."""
+	for key in (
+		"last_received_tx_hash",
+		"last_received_hash",
+		"last_received_tx",
+		"transaction_hash",
+		"tx_hash",
+	):
+		value = str(wallet.get(key) or "").strip()
+		if value:
+			return value
+	return ""
 
-    Returns the new record, or None when no money arrived this cycle (the
-    normal case). Called from the status phase after the wallet is polled, so
-    the amount it reports is the one the chain confirmed -- this function never
-    computes a dollar figure of its own.
+
+def _known_receipt_ids(book: dict[str, Any]) -> list[str]:
+	"""Rebuild identity state when upgrading a pre-idempotency status file."""
+	ids: list[str] = []
+	for record in book.get("receipts") or []:
+		if not isinstance(record, dict):
+			continue
+		value = str(record.get("transaction_hash") or record.get("at") or "").strip()
+		if value and value not in ids:
+			ids.append(value)
+	return ids
+
+
+def record_receipt(status: dict[str, Any]) -> dict[str, Any] | None:
+	"""Log publishing context once for a real on-chain receipt.
+
+    Returns the new record, or None when no new money arrived. Wallet polling
+    exposes the latest receipt rather than a cycle delta, so both the chain
+    identifier and receipt time are checked before writing.
     """
 	try:
 		cfg = config()
@@ -112,31 +144,70 @@ def record_receipt(status: dict[str, Any]) -> dict[str, Any] | None:
 			return None
 
 		wallet = status.get("wallet") or {}
-		amount = float(wallet.get("last_received_usd") or 0.0)
-		if amount <= 0:
+		try:
+			amount = float(wallet.get("last_received_usd") or 0.0)
+		except (TypeError, ValueError):
+			log.warning("[attribution] invalid last_received_usd; receipt not recorded")
+			return None
+		if not math.isfinite(amount) or amount <= 0:
+			return None
+
+		receipt_time = _shared.parse_dt(wallet.get("last_received_at"))
+		if receipt_time is None:
+			# checked_at is poll time, not receipt time; using it would invent
+			# attribution context for an unidentified transfer.
+			log.warning("[attribution] receipt has no usable timestamp; not recorded")
+			return None
+
+		transaction_hash = _transaction_hash(wallet)
+		receipt_id = transaction_hash or receipt_time.isoformat()
+		book = status.setdefault("attribution", _defaults())
+		receipts: list[dict[str, Any]] = book.setdefault("receipts", [])
+
+		seen_ids = book.get("seen_receipt_ids")
+		if not isinstance(seen_ids, list):
+			seen_ids = _known_receipt_ids(book)
+			book["seen_receipt_ids"] = seen_ids
+
+		last_receipt_time = _shared.parse_dt(book.get("last_receipt_at"))
+		if last_receipt_time is None:
+			known_times = [
+				_parsed
+				for record in receipts
+				if (_parsed := _shared.parse_dt(record.get("at"))) is not None
+			]
+			last_receipt_time = max(known_times) if known_times else None
+
+		if receipt_id in set(seen_ids) or (
+			last_receipt_time is not None and receipt_time <= last_receipt_time
+		):
+			book["duplicates_skipped"] = int(book.get("duplicates_skipped") or 0) + 1
+			log.info("[attribution] skipped duplicate receipt %s", receipt_id)
 			return None
 
 		record = {
-			"at":         wallet.get("last_received_at")
-						  or datetime.now(timezone.utc).isoformat(),
+			"at": receipt_time.isoformat(),
 			"amount_usd": round(amount, 6),
-			"network":    wallet.get("network") or None,
+			"network": wallet.get("network") or None,
+			"transaction_hash": transaction_hash or None,
 			# Correlated, not proven: this is the state of the shop when the
 			# till moved, not a receipt naming the item.
 			"confidence": "correlated",
-			"context":    _live_context(status),
+			"context": _live_context(status),
 		}
 
-		book = status.setdefault("attribution", _defaults())
-		receipts: list = book.setdefault("receipts", [])
 		receipts.append(record)
-		limit = int(cfg.get("history_limit") or DEFAULTS["history_limit"])
+		seen_ids.append(receipt_id)
+		limit = max(1, int(cfg.get("history_limit") or DEFAULTS["history_limit"]))
 		if len(receipts) > limit:
 			receipts[:] = receipts[-limit:]
+		if len(seen_ids) > limit:
+			seen_ids[:] = seen_ids[-limit:]
 
 		book["receipt_count"] = len(receipts)
 		book["total_attributed_usd"] = round(
-			sum(float(r.get("amount_usd") or 0.0) for r in receipts), 6)
+			sum(float(r.get("amount_usd") or 0.0) for r in receipts), 6
+		)
 		book["last_receipt_at"] = record["at"]
 		book["by_archetype"] = _by_archetype(receipts)
 		book["by_tag"] = _by_tag(receipts)
@@ -144,16 +215,17 @@ def record_receipt(status: dict[str, Any]) -> dict[str, Any] | None:
 
 		log.info(
 			"[attribution] recorded +$%.6f against %d live posts (best: %s)",
-			amount, record["context"]["posts_live"],
+			amount,
+			record["context"]["posts_live"],
 			record["context"]["best_title"] or "unknown",
 		)
 		return record
-	except Exception as exc:                       # pragma: no cover - defensive
+	except Exception as exc:  # pragma: no cover - defensive
 		log.warning("[attribution] receipt not recorded: %s", exc)
 		return None
 
 
-def _by_archetype(receipts: list) -> list[dict[str, Any]]:
+def _by_archetype(receipts: list[dict[str, Any]]) -> list[dict[str, Any]]:
 	"""Total received while each archetype was the account's top performer.
 
     ``count`` rides along with every total for the reason the interest report
@@ -169,7 +241,7 @@ def _by_archetype(receipts: list) -> list[dict[str, Any]]:
 	return sorted(buckets.values(), key=lambda b: b["usd"], reverse=True)
 
 
-def _by_tag(receipts: list) -> list[dict[str, Any]]:
+def _by_tag(receipts: list[dict[str, Any]]) -> list[dict[str, Any]]:
 	"""Same, per winning tag. A tag counts once per receipt it was live for."""
 	buckets: dict[str, dict[str, Any]] = {}
 	for rec in receipts:
@@ -186,8 +258,9 @@ def summary(status: dict[str, Any]) -> dict[str, Any]:
 	book = status.get("attribution") or _defaults()
 	by_arch = book.get("by_archetype") or []
 	return {
-		"receipt_count":        int(book.get("receipt_count") or 0),
+		"receipt_count": int(book.get("receipt_count") or 0),
 		"total_attributed_usd": float(book.get("total_attributed_usd") or 0.0),
-		"last_receipt_at":      book.get("last_receipt_at"),
-		"top_archetype":        (by_arch[0].get("archetype") if by_arch else None),
+		"last_receipt_at": book.get("last_receipt_at"),
+		"top_archetype": (by_arch[0].get("archetype") if by_arch else None),
+		"duplicates_skipped": int(book.get("duplicates_skipped") or 0),
 	}

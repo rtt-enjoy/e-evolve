@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-20T06:19:03.479326+00:00",
-  "total_runs": 1867,
+  "last_run": "2026-09-20T12:23:48.906212+00:00",
+  "total_runs": 1868,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,11 +33,15 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add save_config() to _shared and make archetype sensitivity thresholds and article-ranking bonuses configurable via strategy.json, completing the 1.41.0 evolution promise.",
+    "summary": "Add secret setup documentation, dashboard warning for missing secrets, and better LLM missing provider reporting.",
     "changes_applied": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "Add archetype_bonus and archetype_bonus_step to _DEFAULTS so they are read from config/strategy.json via load_config(). These were previously hardcoded module constants (_ARCHETYPE_BONUS and _ARCHETYPE_BONUS_STEP) that could not be tuned without editing code. The defaults preserve the existing behaviour. [fix: The module was missing the 'run' function that bot/earning/__init__.py tries to import. Added a run() function with proper signature and basic structure while preserving the existing _DEFAULTS dictionary.]"
+        "file": "docs/secrets-setup.md",
+        "reason": "Provide a single source of truth for missing secrets (Anthropic, Cerebras) and guide the owner through setup, reducing friction and improving visibility."
+      },
+      {
+        "file": "bot/dashboard.py",
+        "reason": "Expose missing secrets in the public status so the dashboard can warn the owner, improving visibility and reducing friction for secret setup."
       }
     ],
     "suggestions": [
@@ -79,20 +83,20 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260920-063527",
+    "branch": "evolve/1.41.1-20260920-123214",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "mrr-ideas",
         "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "status.json#mrr_ideas"
       }
     ],
     "total_usd": 0.0
@@ -136,7 +140,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1152,
+  "last_cycle_seconds": 545,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1113,7 +1117,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-20T06:19:03.973943+00:00",
+    "checked_at": "2026-09-20T12:23:49.742594+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1193,7 +1197,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-09-18T11:24:24.431146+00:00",
+    "last_refresh_at": "2026-09-20T12:32:14.417518+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -1202,41 +1206,21 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The strongest recurring-revenue angle for a zero-cost, research-first, publish-to-dev.to stack is a paid newsletter aimed at a narrow technical audience the owner can grow entirely through dev.to articles. Writing to dev.to is the only channel the stack has, and a newsletter is the one recurring-revenue model where the act of publishing IS the audience-building. The owner writes articles on a specific niche, ends each with a subscribe call, and converts readers into subscribers over 4-8 weeks. Everything else (payment account, storefront, ID verification) is hand-setup before the first charge; the bot's entire job is research and drafting.",
+    "summary": "The strongest recurring\u2011revenue path for a zero\u2011cost, research\u2011first stack is a niche\u2011focused paid newsletter. By researching the exact pain points of junior backend developers, writing a single proof article, and publishing it to dev.to, the owner can attract subscribers directly and monetize their ongoing need for curated tips.",
     "ranked_ideas": [
       {
         "name": "Paid newsletter",
-        "why_this_stack_fits": "",
-        "narrow_niche": "CI/CD and build-debugging for JavaScript full-stack solo devs",
-        "first_proof_artifact": "A series of 3 dev.to articles debugging real GitHub Actions failure patterns, each ending in a subscribe question",
-        "who_pays": "Solo JavaScript full-stack devs who maintain their own CI and hate debugging flaky builds",
-        "monthly_price_usd": "$10-20/mo (verify independently against current dev.to reader willingness)",
-        "runway_to_first_dollar": "4-8 weeks from first article publish",
-        "owner_must_do_by_hand": "Open a payment account by hand and pass its ID verification (Gumroad/Substack/Polar/Stripe all require government ID and none pays out in crypto; verified 2026-09-15). Open the newsletter channel by hand. After that, Gumroad products can be created/updated via its API. No automation can replace open"
-      },
-      {
-        "name": "Notion / digital template store",
-        "why_this_stack_fits": "",
-        "narrow_niche": "CI/CD pipeline templates for JavaScript full-stack projects",
-        "first_proof_artifact": "One Notion template published free as a resource link in the owner's first dev.to article, to test whether readers want more",
-        "who_pays": "Solo devs and small dev shops setting up CI for the first time",
-        "monthly_price_usd": "$5-15/mo per template library (verify independently)",
-        "runway_to_first_dollar": "6-12 weeks",
-        "owner_must_do_by_hand": "Open a payment account by hand and pass its ID verification (same ID requirement and no-crypto-payout constraint as above). Open the storefront by hand. After account existence and ID verification, Gumroad products can be created/updated via its API. No automation can replace account opening, ID ver"
+        "why_this_stack_fits": "Dev.to readers are developers who will recognize the value of a weekly newsletter and subscribe directly.",
+        "narrow_niche": "Junior backend developers who need practical, production\u2011ready tips to scale their projects.",
+        "first_proof_artifact": "First newsletter issue containing five actionable tips and a clear CTA to subscribe via Gumroad.",
+        "who_pays": "Junior backend developers",
+        "monthly_price_usd": "$10-20/mo per subscriber",
+        "runway_to_first_dollar": "4-6 weeks",
+        "owner_must_do_by_hand": "Open a Gumroad account, complete ID verification, create a $10\u201120/mo subscription product, and publish the first newsletter issue to dev.to with a checkout link."
       }
     ],
-    "validation_steps": [
-      "Search dev.to for the niche keywords and read the top 20 comments to find the 10 recurring pain points readers complain about; these are the people with the problem, found entirely inbound.",
-      "Publish one dev.to article in the niche ending in a specific question (e.g. 'What's the CI failure you waste the most time on?') and collect replies on your own article thread.",
-      "Join the dev.to community and any GitHub Discussions or README-level communities the owner already belongs to, and note which threads surface the same problem; no cold outreach, only participation in places the owner is already present."
-    ],
-    "owner_actions": [
-      "Pick the narrow niche from the dev.to comment research and lock it before writing anything else.",
-      "Write and publish the first dev.to article debugging a real CI failure pattern, ending in a subscribe question.",
-      "Open the payment account by hand and complete ID verification (this gates everything; do it first so it clears while you write).",
-      "Draft the second and third articles in the series while the first is live and collecting reader replies.",
-      "Launch the newsletter channel by hand once the account is verified and at least one article has reader engagement."
-    ],
+    "validation_steps": [],
+    "owner_actions": [],
     "viable": [
       {
         "name": "Paid newsletter",
@@ -1362,7 +1346,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260920-063527",
+  "last_evolution_branch": "evolve/1.41.1-20260920-123214",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 21,
@@ -1471,7 +1455,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-20T06:38:14.055283+00:00",
+    "last_run": "2026-09-20T12:32:52.889319+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1481,32 +1465,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-20T06:38:14.395906+00:00",
+    "last_run": "2026-09-20T12:32:53.294694+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4662663,
-        "at": "2026-09-19T14:31:53.641004+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-09-19T18:14:47.229051+00:00",
-        "ok": true
-      },
-      {
         "id": 4568987,
-        "at": "2026-09-19T18:14:47.229051+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-09-19T18:14:47.229051+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-09-19T18:14:47.229051+00:00",
         "ok": true
       },
@@ -1591,8 +1555,28 @@
         "ok": true
       },
       {
+        "id": 4662663,
+        "at": "2026-09-20T12:32:53.294694+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-09-20T12:32:53.294694+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-09-20T12:32:53.294694+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-09-20T12:32:53.294694+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-20T06:38:14.395906+00:00",
+        "at": "2026-09-20T12:32:53.294694+00:00",
         "ok": true
       }
     ],
@@ -1601,7 +1585,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 16.1
+    "oldest_check_age_hours": 18.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

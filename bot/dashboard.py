@@ -32,7 +32,7 @@ def write_log(actions: list[dict]) -> None:
 	if not actions:
 		return
 
-	ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+	s = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 	lines = [f"\n### {ts}\n"]
 
 	for action in actions:
@@ -94,6 +94,15 @@ def write_html(status: dict[str, Any]) -> None:
 	github_repo = os.getenv("GITHUB_REPO", "").strip()
 	if github_repo:
 		public_status["github_repo"] = github_repo
+
+	# Add a list of missing secrets so the dashboard can warn the owner.
+	missing = []
+	for name, info in status.get("secret_readiness", {}).items():
+		if not info.get("active"):
+			missing.append(name)
+	if missing:
+		public_status["missing_secrets"] = missing
+
 	_PUBLIC_STATUS_FILE.write_text(
 		json.dumps(public_status, indent=2, default=str),
 		encoding="utf-8",

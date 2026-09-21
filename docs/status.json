@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-20T22:27:29.685637+00:00",
-  "total_runs": 1871,
+  "last_run": "2026-09-21T01:07:35.823398+00:00",
+  "total_runs": 1872,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -18,12 +18,10 @@
     "total_usd": 0.0,
     "this_week_usd": 0.0,
     "last_cycle_usd": 0.0,
-    "week_started": "2026-09-14",
+    "week_started": "2026-09-21",
     "breakdown": {
-      "mrr-ideas": 0.0,
-      "dev.to": 0.0,
       "code_techs": 0.0,
-      "dev.to-newsletter": 0.0
+      "dev.to": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -33,17 +31,8 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a CEREBRAS_API_KEY secret check and a fallback LLM path so research and drafting can continue when OpenRouter's free tier is exhausted.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/_shared.py",
-        "reason": "No functional change; this file is included only to confirm the shared primitives (load_config, parse_dt, strip_html) already support the Cerebras/Anthropic key checks and cadence logic used by the new llm.py fallback path."
-      },
-      {
-        "file": "docs/llm-providers.md",
-        "reason": "Documents the new Cerebras and Anthropic fallback providers so the owner knows which secret to add and in what order the bot will use them."
-      }
-    ],
+    "summary": "Fix three correctness issues: a lost docstring in _revise_title and two config-default mismatches in code_techs that produce wrong fallbacks when keys are removed from strategy.json.",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Add CEREBRAS_API_KEY to activate the free high-volume LLM",
@@ -83,11 +72,31 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260920-222947",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 40,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      },
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "Your Fine-Tuned Model Has No Backup Strategy",
+        "url": "https://dev.to/robust_true_try/your-fine-tuned-model-has-no-backup-strategy-19gl",
+        "estimated_usd": 0.0,
+        "source_url": "https://pirateface.co/",
+        "source_title": "Pirate Face Rescues LLM Models from Deletion"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -129,7 +138,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 139,
+  "last_cycle_seconds": 1000,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -216,7 +225,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-09-20",
+    "date": "2026-09-21",
     "published": 1
   },
   "code_tech_earning": {
@@ -243,7 +252,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
         "age_hours": null,
         "reason": "already running, so it needs no account and no owner action; pays in stablecoin, so the receive path is on-chain and verifiable",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -272,7 +281,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -301,7 +310,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -330,7 +339,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -359,7 +368,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once, set the price, and point the payout at the published Tron address. Owner does this by hand: Owner signs up (no ID upload), adds the Tron receive address, and uploads the product once.",
@@ -388,7 +397,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once and set the price. Owner does this by hand: open the account",
@@ -417,7 +426,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time; costs $5.00 once, stated rather than hidden",
         "next_step": "List the product once and set the price. Owner does this by hand: Owner pays the one-time $5 registration and submits the extension for review.",
@@ -446,7 +455,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
         "age_hours": null,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.",
@@ -475,7 +484,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
         "age_hours": null,
         "reason": "pays in stablecoin, so the receive path is on-chain and verifiable; sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once and set the price. Owner does this by hand: Owner creates an account, completes the tax interview with a TIN/SSN, pays the one-time $3 identity fee, and adds fiat payout details.",
@@ -498,14 +507,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.927
+          "recency": 0.924
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-09-11T21:49:30+00:00",
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
-        "age_hours": 211.1,
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
+        "age_hours": 219.4,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -533,7 +542,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once and set the price. Owner does this by hand: open the account",
@@ -544,8 +553,8 @@
         "pursued": false
       },
       {
-        "title": "awesome-dsh-plugin/awesome-dsh-plugin",
-        "url": "https://github.com/awesome-dsh-plugin/awesome-dsh-plugin",
+        "title": "punkpeye/awesome-mcp-servers",
+        "url": "https://github.com/punkpeye/awesome-mcp-servers",
         "source": "github",
         "buyer": "tooling, no buyer",
         "kind": "asset",
@@ -561,8 +570,8 @@
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
-        "posted_at": "2026-09-20T16:56:05+00:00",
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
+        "posted_at": "2026-09-21T01:10:13+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
         "age_hours": 0.0,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
@@ -573,8 +582,8 @@
         "pursued": false
       },
       {
-        "title": "nexu-io/open-design",
-        "url": "https://github.com/nexu-io/open-design",
+        "title": "Dominic789654/awesome-deepseek-harness",
+        "url": "https://github.com/Dominic789654/awesome-deepseek-harness",
         "source": "github",
         "buyer": "tooling, no buyer",
         "kind": "asset",
@@ -590,9 +599,9 @@
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
-        "posted_at": "2026-09-20T16:58:01+00:00",
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
-        "age_hours": 0.0,
+        "posted_at": "2026-09-21T01:01:14+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
+        "age_hours": 0.2,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -602,8 +611,8 @@
         "pursued": false
       },
       {
-        "title": "quemsah/awesome-claude-plugins",
-        "url": "https://github.com/quemsah/awesome-claude-plugins",
+        "title": "superiorlu/AITreasureBox",
+        "url": "https://github.com/superiorlu/AITreasureBox",
         "source": "github",
         "buyer": "tooling, no buyer",
         "kind": "asset",
@@ -619,9 +628,9 @@
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
-        "posted_at": "2026-09-20T16:51:26+00:00",
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
-        "age_hours": 0.1,
+        "posted_at": "2026-09-21T01:00:47+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
+        "age_hours": 0.2,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -631,8 +640,8 @@
         "pursued": false
       },
       {
-        "title": "sandbaseai/sandbase-harness",
-        "url": "https://github.com/sandbaseai/sandbase-harness",
+        "title": "Dicklesworthstone/pi_agent_rust",
+        "url": "https://github.com/Dicklesworthstone/pi_agent_rust",
         "source": "github",
         "buyer": "tooling, no buyer",
         "kind": "asset",
@@ -648,9 +657,9 @@
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
-        "posted_at": "2026-09-20T16:51:25+00:00",
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
-        "age_hours": 0.1,
+        "posted_at": "2026-09-21T00:58:19+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
+        "age_hours": 0.2,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -660,8 +669,8 @@
         "pursued": false
       },
       {
-        "title": "SceneWorks/SceneWorks",
-        "url": "https://github.com/SceneWorks/SceneWorks",
+        "title": "jaywcjlove/awesome-swift-macos-apps",
+        "url": "https://github.com/jaywcjlove/awesome-swift-macos-apps",
         "source": "github",
         "buyer": "tooling, no buyer",
         "kind": "asset",
@@ -677,11 +686,11 @@
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
-        "posted_at": "2026-09-20T16:50:05+00:00",
-        "discovered_at": "2026-09-20T16:58:27.730948+00:00",
-        "age_hours": 0.1,
+        "posted_at": "2026-09-21T00:56:36+00:00",
+        "discovered_at": "2026-09-21T01:12:52.310407+00:00",
+        "age_hours": 0.3,
         "reason": "free tooling or reach to build and market the product with",
-        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
+        "next_step": "Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.",
         "codex_prompt": "",
         "cost_usd": null,
         "manual_setup": "",
@@ -760,48 +769,64 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "The most reliable zero-budget route is to build a client-side digital product (browser extension, CLI tool, or static web tool) that costs nothing per user, distribute the free tier through Chrome Web Store (one-time $5) and GitHub Releases, embed the existing validated Tron (TRC-20) USDT address in every artifact (README, FUNDING.yml, --help, extension description, article footers), and list a paid upgrade or license on Getly.store for direct stablecoin payout to that same wallet with no KYC and no monthly fee. All channels are free to list after the initial $5 Chrome registration, require only one-time manual setup, and generate income without any per-sale owner action.",
+      "summary": "Build a small digital product (browser extension, CLI tool, or template pack) that solves one specific annoyance, distribute the free tier via GitHub Releases and Chrome Web Store ($5 one-time), embed the existing validated Tron (TRC-20) USDT address in the README, FUNDING.yml, --help output, and product page for direct wallet payments, list a paid upgrade on Getly.store for automated USDT payouts to the same wallet with no KYC or monthly fee, and publish problem-focused articles on dev.to (already running) that link to the product. Every channel is free or one-time cost, requires no per-sale owner action, and settles stablecoin directly to the owner's wallet.",
       "market_themes": [
         {
-          "theme": "Direct wallet ask on owned surfaces converts without platform fees or KYC",
-          "evidence": "Wallet ask on the product page and in every article (already live), Put the receive address in the GitHub repo itself, Ask in the artifact, not only beside it",
-          "offer": "Sell a one-time license or paid upgrade for a browser extension/utility, deliver via GitHub Releases, ask for payment to the existing Tron address"
+          "theme": "Direct wallet asks embedded in the artifact itself convert without any platform",
+          "evidence": "Wallet ask on the product page and in every article (already live); Put the receive address in the GitHub repo itself \u2014 FUNDING.yml, README, and releases; Ask in the artifact, not only beside it \u2014 README, --help output, and docs footer",
+          "offer": "Sell a one-time licence or paid upgrade for a browser extension, CLI utility, or template pack; deliver the unlock via a download on GitHub Releases or Getly.store; the buyer pays by sending USDT to the Tron address printed in the tool's --help, README, and release notes"
         },
         {
-          "theme": "Zero-cost storefronts with crypto payout to own wallet enable paid upgrades without custodial risk",
+          "theme": "Zero-cost storefronts that settle stablecoin to the seller's own wallet automate the paid tier",
           "evidence": "Getly \u2014 sell a digital product, settle USDT on Tron to your own wallet",
-          "offer": "List the paid upgrade on Getly, set price in USDT/USDC, payout directly to the Tron wallet already used in articles"
+          "offer": "List the paid upgrade on Getly.store; set the payout address to the validated Tron USDT address; the storefront handles card/crypto checkout and pushes USDT (TRC-20) to the wallet once the $15 minimum is reached"
         },
         {
-          "theme": "Free distribution channels with organic discovery multiply reach at zero marginal cost",
-          "evidence": "Chrome Web Store \u2014 one-time $5, covers up to 20 extensions, Publish the product as a downloadable file, priced by an honest ask, hosted on GitHub Releases",
-          "offer": "Publish free tier on Chrome Web Store and GitHub, paid upgrade on Getly, content marketing via existing dev.to articles"
+          "theme": "Free distribution channels (Chrome Web Store, GitHub) provide discovery at near-zero cost",
+          "evidence": "Chrome Web Store \u2014 one-time $5, covers up to 20 extensions; Publish the product as a downloadable file, priced by an honest ask, hosted on GitHub Releases; One product, listed on every free channel at once",
+          "offer": "Publish the free tier on Chrome Web Store ($5 one-time) and GitHub Releases (free); both need no per-sale work and the artifact is already built"
         }
       ],
       "sales_channels": [
         {
           "name": "Getly.store",
-          "what_it_does": "Digital-goods storefront with native stablecoin payouts to seller's own wallet",
-          "cost": "verify current terms (free to list, likely revenue cut per sale)",
-          "crypto_payout": "USDT/USDC on Tron (TRC-20) and BSC, directly to own wallet, no KYC for crypto settlement",
-          "owner_setup": "Create account, connect Tron wallet address, create product, upload deliverable file, set price",
-          "why_passive": "Storefront handles payment, delivery, and payout automatically; owner does nothing per sale"
+          "what_it_does": "Digital-goods storefront with native stablecoin payouts",
+          "cost": "No listing fee, no monthly fee; revenue cut \u2014 verify current terms",
+          "crypto_payout": "USDT/USDC on Tron (TRC-20) and BNB Smart Chain (BEP-20) directly to seller's own wallet address; no KYC for crypto settlement",
+          "owner_setup": "Create account, add product, upload deliverable, set payout wallet to the validated Tron USDT address, configure price",
+          "why_passive": "Storefront handles checkout, delivery, and payout automatically; owner action only at initial listing"
         },
         {
           "name": "Chrome Web Store",
           "what_it_does": "Distribution channel for browser extensions with organic discovery",
-          "cost": "One-time $5 developer registration (covers up to 20 extensions), no annual fee",
-          "crypto_payout": "None (free extensions only); monetization via wallet ask in description or external storefront",
-          "owner_setup": "Pay $5, register developer account, upload extension zip, publish",
-          "why_passive": "Free extension gets organic installs; wallet address in description/README earns without owner action"
+          "cost": "One-time $5 developer registration fee per account (covers up to 20 extensions); no revenue cut on free extensions",
+          "crypto_payout": "None (free extension); monetisation via wallet ask or paid upgrade sold on Getly.store",
+          "owner_setup": "Pay $5, register developer account, package extension, upload and publish",
+          "why_passive": "Organic search and install base; no per-sale owner action; free tier drives discovery for paid upgrade"
         },
         {
-          "name": "GitHub Releases + FUNDING.yml/README",
-          "what_it_does": "Hosts downloadable product files and displays sponsor/funding button with custom wallet address",
-          "cost": "Free (uses existing GitHub account)",
-          "crypto_payout": "Direct to own Tron wallet via address in FUNDING.yml, README, and release notes",
-          "owner_setup": "Create repo, add .github/FUNDING.yml with custom URL set to Tron address, add address to README and each release body",
-          "why_passive": "Users download and pay directly; no platform involvement, no per-sale action"
+          "name": "GitHub Releases + FUNDING.yml + README",
+          "what_it_does": "Hosts downloadable product files and renders a sponsor button with custom wallet URL",
+          "cost": "Free (uses existing GitHub account); no listing fee, no approval queue, no identity check",
+          "crypto_payout": "Direct to owner's Tron USDT address via wallet ask in FUNDING.yml (custom URL), README, and release notes",
+          "owner_setup": "Create or reuse repo, add .github/FUNDING.yml with custom: field pointing to payment page or address, add address to README and each release body",
+          "why_passive": "No platform holds funds; buyers send directly; artifact already built and hosted"
+        },
+        {
+          "name": "dev.to articles (already running)",
+          "what_it_does": "Content marketing \u2014 problem-focused articles with product as solution",
+          "cost": "Free; publishing infrastructure already paid for",
+          "crypto_payout": "Validated Tron USDT address automatically appended to every published post by bot/earning/payout.py",
+          "owner_setup": "Write article about the specific annoyance the product solves; include link to product page/GitHub repo",
+          "why_passive": "Articles publish daily via existing automation; wallet address appended automatically; no per-sale action"
+        },
+        {
+          "name": "Wallet ask in artifact (--help, docs footer, about output)",
+          "what_it_does": "Embeds receive address in the tool's own output so it travels with every copy and fork",
+          "cost": "Free; one-time code change",
+          "crypto_payout": "Direct to owner's Tron USDT address",
+          "owner_setup": "Modify tool to print the validated Tron address in --help, --version, about dialog, or docs footer",
+          "why_passive": "Reaches users who never visit the product page; no account, no platform, no per-sale work"
         }
       ],
       "product_ideas": [],
@@ -829,7 +854,7 @@
     "supply_count": 7,
     "priced_count": 0,
     "ranked_total": 40,
-    "last_refresh_at": "2026-09-20T16:58:15.852293+00:00",
+    "last_refresh_at": "2026-09-21T01:12:29.010439+00:00",
     "channel_count": 9,
     "asset_count": 7,
     "needs_setup_count": 3,
@@ -965,7 +990,8 @@
       "will-keleher.com/posts/small-programming-tricks-matter",
       "github.com/asciimoo/hister",
       "grapheneos.social/@grapheneos/117282080803799576",
-      "laya.convaiinnovations.com"
+      "laya.convaiinnovations.com",
+      "pirateface.co"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -1013,7 +1039,8 @@
       "small programming trick",
       "hister private search engine pag visit fil keep",
       "android 17 first since 3 x add new apis releasing aosp",
-      "built non autoregressive decision model rl year ago"
+      "built non autoregressive decision model rl year ago",
+      "pirate face rescu llm model deletion"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1061,12 +1088,14 @@
       "silent failure cost us hour",
       "browser history search broken here s local fix",
       "sdk int check won t save android 17",
-      "consistency bug parallel decision model"
+      "consistency bug parallel decision model",
+      "fine tuned model has backup strategy"
     ],
     "followed_up_ids": [
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/the-consistency-bug-in-parallel-decision-models-564c",
       "https://dev.to/robust_true_try/your-sdkint-check-wont-save-you-on-android-17-a11",
       "https://dev.to/robust_true_try/your-browser-history-search-is-broken-heres-a-local-fix-3pl3",
       "https://dev.to/robust_true_try/the-silent-failure-that-cost-us-hours-3jea",
@@ -1098,7 +1127,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-20T22:27:30.402054+00:00",
+    "checked_at": "2026-09-21T01:07:36.127881+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1327,14 +1356,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260920-222947",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
-    "count": 21,
-    "total_views": 3191,
-    "avg_views": 152.0,
+    "count": 22,
+    "total_views": 3291,
+    "avg_views": 149.6,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 2584,
+    "best_views": 2684,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1350,8 +1379,8 @@
       {
         "archetype": "problem-workaround",
         "count": 5,
-        "avg_engagement": 554.6,
-        "avg_views": 549.6,
+        "avg_engagement": 574.6,
+        "avg_views": 569.6,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1384,15 +1413,15 @@
       },
       {
         "archetype": "other",
-        "count": 6,
-        "avg_engagement": 20.2,
-        "avg_views": 11.8,
+        "count": 7,
+        "avg_engagement": 17.3,
+        "avg_views": 10.1,
         "best_title": "The Redirect Chain That Bypasses Your Ad Blocker"
       }
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "other",
-    "sample_size": 21
+    "sample_size": 22
   },
   "article_rejects": {
     "last_reason": "weak_title",
@@ -1436,7 +1465,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-20T22:29:47.451379+00:00",
+    "last_run": "2026-09-21T01:24:14.692491+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1446,15 +1475,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-20T22:29:47.724094+00:00",
+    "last_run": "2026-09-21T01:24:14.953974+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4691023,
-        "at": "2026-09-20T01:29:46.603527+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-09-20T06:38:14.395906+00:00",
@@ -1462,16 +1486,6 @@
       },
       {
         "id": 4641536,
-        "at": "2026-09-20T06:38:14.395906+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-09-20T06:38:14.395906+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
         "at": "2026-09-20T06:38:14.395906+00:00",
         "ok": true
       },
@@ -1556,17 +1570,37 @@
         "ok": true
       },
       {
+        "id": 4691023,
+        "at": "2026-09-21T01:24:14.953974+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-09-21T01:24:14.953974+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-09-21T01:24:14.953974+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-20T22:29:47.724094+00:00",
+        "at": "2026-09-21T01:24:14.953974+00:00",
+        "ok": true
+      },
+      {
+        "id": 4702377,
+        "at": "2026-09-21T01:24:14.953974+00:00",
         "ok": true
       }
     ],
-    "published_total": 22,
-    "covered": 22,
+    "published_total": 23,
+    "covered": 23,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 21.0
+    "oldest_check_age_hours": 18.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

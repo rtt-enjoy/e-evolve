@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-22T09:59:06.416913+00:00",
-  "total_runs": 1877,
+  "last_run": "2026-09-22T14:56:07.670973+00:00",
+  "total_runs": 1878,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -21,7 +21,8 @@
     "week_started": "2026-09-21",
     "breakdown": {
       "code_techs": 0.0,
-      "dev.to": 0.0
+      "dev.to": 0.0,
+      "mrr-ideas": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -31,11 +32,19 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Integrate LLM response cache into articles module to reduce OpenRouter free-tier consumption, and add Cerebras/Anthropic provider support.",
+    "summary": "Add file-based LLM response cache to reduce OpenRouter free-tier consumption across article generation, and add exponential-backoff retry logic for dev.to API 429 rate-limit errors seen during backfill.",
     "changes_applied": [
       {
+        "file": "bot/earning/cache.py",
+        "reason": "Creates the file-based LLM response cache proposed in v1.41 but never merged from the review branch. The cache is additive and transparent: a miss falls through to the real LLM call, so behaviour never changes -- only the number of API calls does. At ~50 OpenRouter requests/day today, caching turns repeated prompts (format revision, title revision on similar sources) into free hits after the first cycle, directly addressing the free-tier bottleneck."
+      },
+      {
         "file": "bot/earning/articles.py",
-        "reason": "Integrate the file-based LLM response cache (bot/earning/cache.py) into article generation by wrapping all LLM calls (main article, follow-up, title revision, format revision) with cached_json(). This directly reduces OpenRouter free-tier consumption from ~50 req/day to only unique prompts, addressing the current bottleneck. The cache is additive and never changes behaviour \u2014 a miss transparently falls through to the real LLM call. [fix: Missing 'run' function required by bot/earning/__init__.py import statement]"
+        "reason": "Integrates the file-based LLM cache into all four LLM call sites in articles.py (article generation, follow-up generation, title revision, format revision). Each call now routes through _cached_json() which transparently serves cached responses for identical prompts, cutting OpenRouter free-tier consumption from ~50 req/day to only unique prompts. The cache is additive -- a miss falls through to the real LLM call, so behaviour never changes. Also fixes a docstring placement bug in _revise_title where the docstring was placed after the first line of code, making it not a docstring."
+      },
+      {
+        "file": "bot/earning/devto.py",
+        "reason": "Adds exponential-backoff retry logic for dev.to API calls that hit HTTP 429 rate limits. The backfill pass on 2026-09-22 lost 5 of 16 article updates to 429 errors, each reported as a hard failure. The retry is bounded (3 attempts, 1-4s backoff) so a persistent rate limit is still reported as a failure rather than silently swallowed, but transient bursts during the hourly cycle now succeed. Only the two functions that write to dev.to (publish and update_body) are affected; reads are untouched."
       }
     ],
     "suggestions": [
@@ -64,33 +73,33 @@
         ]
       },
       {
-        "title": "Wire the local LLM cache into article generation",
-        "description": "The cache module (bot/earning/cache.py) was added in v1.41 but not yet used. Wrapping LLM calls in cached_json() will turn repeated prompts into cache hits, cutting OpenRouter free-tier consumption from ~50 req/day to only unique prompts.",
+        "title": "Extend the LLM cache to code_techs and mrr_ideas",
+        "description": "The cache module created in v1.42 covers articles.py. code_techs._online_ai_brief and mrr_ideas._viability_brief also make one LLM call per cycle each -- wrapping them in cached_json() cuts those to one unique call per prompt per day, further reducing OpenRouter free-tier consumption.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Review the proposed changes to bot/earning/articles.py on the review branch",
-          "Step 2: Merge the branch so the cache integration is active",
-          "Step 3: Monitor the next few cycles \u2014 cache hits will appear in logs as '[cache] HIT' and reduce OpenRouter usage"
+          "Step 1: Review the cache module (bot/earning/cache.py) and the articles.py integration on the review branch",
+          "Step 2: Import cached_json into code_techs.py and mrr_ideas.py, replacing the direct llm.complete_json_for_role calls",
+          "Step 3: Merge the branch and monitor logs for '[cache] HIT' lines in subsequent cycles"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20260922-104221",
+    "branch": "evolve/1.42.0-20260922-150051",
     "proposed_version": "1.42.0"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "mrr-ideas",
         "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "status.json#mrr_ideas"
       }
     ],
     "total_usd": 0.0
@@ -121,20 +130,20 @@
       ]
     },
     {
-      "title": "Wire the local LLM cache into article generation",
-      "description": "The cache module (bot/earning/cache.py) was added in v1.41 but not yet used. Wrapping LLM calls in cached_json() will turn repeated prompts into cache hits, cutting OpenRouter free-tier consumption from ~50 req/day to only unique prompts.",
+      "title": "Extend the LLM cache to code_techs and mrr_ideas",
+      "description": "The cache module created in v1.42 covers articles.py. code_techs._online_ai_brief and mrr_ideas._viability_brief also make one LLM call per cycle each -- wrapping them in cached_json() cuts those to one unique call per prompt per day, further reducing OpenRouter free-tier consumption.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Review the proposed changes to bot/earning/articles.py on the review branch",
-        "Step 2: Merge the branch so the cache integration is active",
-        "Step 3: Monitor the next few cycles \u2014 cache hits will appear in logs as '[cache] HIT' and reduce OpenRouter usage"
+        "Step 1: Review the cache module (bot/earning/cache.py) and the articles.py integration on the review branch",
+        "Step 2: Import cached_json into code_techs.py and mrr_ideas.py, replacing the direct llm.complete_json_for_role calls",
+        "Step 3: Merge the branch and monitor logs for '[cache] HIT' lines in subsequent cycles"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 2637,
+  "last_cycle_seconds": 535,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1119,7 +1128,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-22T09:59:06.996233+00:00",
+    "checked_at": "2026-09-22T14:56:08.955296+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1199,7 +1208,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-09-20T12:32:14.417518+00:00",
+    "last_refresh_at": "2026-09-22T15:00:51.891490+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -1208,21 +1217,41 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The strongest recurring\u2011revenue path for a zero\u2011cost, research\u2011first stack is a niche\u2011focused paid newsletter. By researching the exact pain points of junior backend developers, writing a single proof article, and publishing it to dev.to, the owner can attract subscribers directly and monetize their ongoing need for curated tips.",
+    "summary": "The single best angle is a paid newsletter on a hyper-niche dev.to topic (e.g. 'Rust async runtime debugging' or 'TypeScript type-level programming') where the owner publishes free articles to dev.to to prove expertise, then converts readers to a $10-20/mo newsletter hosted on Substack or Gumroad \u2014 both set up by hand with government-ID verification, no crypto payout option without ID. The bot drafts every issue; the owner only writes, publishes, and handles the storefront by hand.",
     "ranked_ideas": [
       {
         "name": "Paid newsletter",
-        "why_this_stack_fits": "Dev.to readers are developers who will recognize the value of a weekly newsletter and subscribe directly.",
-        "narrow_niche": "Junior backend developers who need practical, production\u2011ready tips to scale their projects.",
-        "first_proof_artifact": "First newsletter issue containing five actionable tips and a clear CTA to subscribe via Gumroad.",
-        "who_pays": "Junior backend developers",
-        "monthly_price_usd": "$10-20/mo per subscriber",
-        "runway_to_first_dollar": "4-6 weeks",
-        "owner_must_do_by_hand": "Open a Gumroad account, complete ID verification, create a $10\u201120/mo subscription product, and publish the first newsletter issue to dev.to with a checkout link."
+        "why_this_stack_fits": "dev.to byline builds credibility inbound; bot drafts every issue; owner only opens the storefront by hand",
+        "narrow_niche": "Rust async runtime debugging (or TypeScript type-level programming \u2014 pick one, go deep)",
+        "first_proof_artifact": "a 5-part free series on dev.to ending with 'I draft a paid weekly on this \u2014 reply if interested'",
+        "who_pays": "mid-level Rust or TypeScript devs hitting async/type-level bugs weekly",
+        "monthly_price_usd": "10-20",
+        "runway_to_first_dollar": "6-12 weeks",
+        "owner_must_do_by_hand": "open Substack/Gumroad account, pass government-ID verification, create product page, collect subscriber emails manually from dev.to replies"
+      },
+      {
+        "name": "Notion / digital template store",
+        "why_this_stack_fits": "articles demonstrate the workflow; templates sell once; bot drafts the article that drives traffic",
+        "narrow_niche": "SRE incident post-mortem Notion templates for teams of 5-20",
+        "first_proof_artifact": "one free Notion template published on dev.to with a 'paid full kit' link",
+        "who_pays": "junior SREs or engineering managers building an incident process from scratch",
+        "monthly_price_usd": "15-30 one-time or 5-10/mo library",
+        "runway_to_first_dollar": "8-16 weeks",
+        "owner_must_do_by_hand": "open Gumroad account, pass government-ID verification, upload template, manage updates"
       }
     ],
-    "validation_steps": [],
-    "owner_actions": [],
+    "validation_steps": [
+      "publish 3 articles on the niche and watch which ones get claps/comments \u2014 if none land, the niche is wrong",
+      "end each article with a question and reply to every comment \u2014 those are your 10 prospects, no cold outreach needed",
+      "join 1-2 dev.to-adjacent Discords or forums you already belong to and ask the question there"
+    ],
+    "owner_actions": [
+      "pick one niche, write 3 free dev.to articles in 2 weeks",
+      "end each article with an honest question and reply to every comment",
+      "after 50+ claps on one post, draft a 'paid version' landing page on Gumroad/Substack by hand",
+      "open the payment account by hand, pass ID verification, publish the first paid issue/template",
+      "repeat: article \u2192 comment thread \u2192 paid conversion"
+    ],
     "viable": [
       {
         "name": "Paid newsletter",
@@ -1348,7 +1377,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20260922-104221",
+  "last_evolution_branch": "evolve/1.42.0-20260922-150051",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 21,
@@ -1457,7 +1486,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-22T10:43:02.220053+00:00",
+    "last_run": "2026-09-22T15:05:01.168119+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1467,20 +1496,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-22T10:43:02.601760+00:00",
+    "last_run": "2026-09-22T15:05:01.445107+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4421693,
-        "at": "2026-09-21T01:24:14.953974+00:00",
-        "ok": true
-      },
-      {
-        "id": 4702377,
-        "at": "2026-09-21T01:24:14.953974+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-09-21T06:28:25.626607+00:00",
@@ -1488,16 +1507,6 @@
       },
       {
         "id": 4641536,
-        "at": "2026-09-21T06:28:25.626607+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-09-21T06:28:25.626607+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-09-21T06:28:25.626607+00:00",
         "ok": true
       },
@@ -1577,8 +1586,28 @@
         "ok": true
       },
       {
+        "id": 4421693,
+        "at": "2026-09-22T15:05:01.445107+00:00",
+        "ok": true
+      },
+      {
+        "id": 4702377,
+        "at": "2026-09-22T15:05:01.445107+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-09-22T15:05:01.445107+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-09-22T15:05:01.445107+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-22T10:43:02.601760+00:00",
+        "at": "2026-09-22T15:05:01.445107+00:00",
         "ok": true
       }
     ],
@@ -1587,7 +1616,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 33.3
+    "oldest_check_age_hours": 32.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

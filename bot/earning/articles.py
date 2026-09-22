@@ -12,7 +12,7 @@ import os
 import re
 from typing import Any, Optional
 
-from . import devto, devto_stats, trending
+from . import cache, devto, devto_stats, trending
 from ._shared import bounded_append, load_config
 
 log = logging.getLogger(__name__)
@@ -89,8 +89,19 @@ def _reject(code: str, detail: str = "") -> None:
 	global _LAST_REJECT
 	_LAST_REJECT = code
 	log.warning("[articles] rejected (%s): %s%s", code, _REJECTS.get(code, code),
-				f" -- {detail}" if detail else "")
+			f" -- {detail}" if detail else "")
 	return None
+
+
+def _cached_json(llm: Any, role: str, prompt: str, system: str, max_tokens: int) -> dict:
+	"""Wrap an LLM call with the file-based cache. See bot/earning/cache.py.
+
+    All four LLM call sites in this module (article generation, follow-up,
+    title revision, format revision) route through this helper so repeated
+    prompts hit the cache instead of the OpenRouter free tier.
+    """
+	return cache.cached_json(llm, role, prompt, system=system, max_tokens=max_tokens)
+
 
 _SYSTEM = """\
 You are a senior engineer writing for a developer audience on dev.to.
@@ -374,10 +385,7 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 	)
 
 	try:
-		if hasattr(llm, "complete_json_for_role"):
-			data = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=6000)
-		else:
-			data = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
+		data = _cached_json(llm, "post", prompt, _SYSTEM, 6000)
 	except Exception as exc:
 		return _reject("llm_error", str(exc))
 
@@ -458,12 +466,12 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 
 
 def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
-	cfg = _config()
 	"""Ask for a stronger headline only. Returns the new title, or None.
 
     Body-only retries are wasteful when the headline is the problem, so this
     sends just the title and the article's opening for context.
     """
+	cfg = _config()
 	body = str(data.get("body_markdown", ""))
 	opening = " ".join(body.split()[:120])
 	prompt = (
@@ -478,10 +486,7 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		'Respond with ONLY this JSON: {"title": "..."}'
 	)
 	try:
-		if hasattr(llm, "complete_json_for_role"):
-			out = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=300)
-		else:
-			out = llm.complete_json(prompt, system=_SYSTEM, max_tokens=300)
+		out = _cached_json(llm, "post", prompt, _SYSTEM, 300)
 	except Exception as exc:
 		log.warning("[articles] title revision failed: %s", exc)
 		return None
@@ -663,11 +668,7 @@ def _generate_followup(llm: Any, status: dict, target: dict) -> Optional[dict]:
 	)
 
 	try:
-		if hasattr(llm, "complete_json_for_role"):
-			data = llm.complete_json_for_role(
-				"post", prompt, system=_FOLLOWUP_SYSTEM, max_tokens=6000)
-		else:
-			data = llm.complete_json(prompt, system=_FOLLOWUP_SYSTEM, max_tokens=6000)
+		data = _cached_json(llm, "post", prompt, _FOLLOWUP_SYSTEM, 6000)
 	except Exception as exc:
 		log.warning("[articles] follow-up generation failed: %s", exc)
 		return None
@@ -1051,7 +1052,7 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 	min_words = int((cfg or _config())["min_words"])
 	words = len(body.split())
 	if words < min_words:
-		problems.append(f"too short ({words} words, need {min_words}+)")
+		problems.append(f"too short ({words} words, need {min_words}+")
 	if len(re.findall(r"^## ", body, re.MULTILINE)) < 4:
 		problems.append("fewer than 4 '##' sections")
 	if len(re.findall(r"^```\w+", body, re.MULTILINE)) < 2:
@@ -1073,15 +1074,9 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 # clear, clean, friendly tone, and these are the specific tics that break it.
 
 
-
-
 # Numbers the model has no way to know and reliably invents: latency figures,
 # parameter counts, prices per token, context windows. Prose outside code blocks
 # only -- real numbers inside code (timeouts, retries) are fine.
-
-
-
-
 
 
 
@@ -1097,10 +1092,7 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		"Return the same JSON schema with the corrected body_markdown."
 	)
 	try:
-		if hasattr(llm, "complete_json_for_role"):
-			revised = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=6000)
-		else:
-			revised = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
+		revised = _cached_json(llm, "post", prompt, _SYSTEM, 6000)
 	except Exception as exc:
 		log.warning("[articles] format revision failed: %s", exc)
 		return None
@@ -1115,7 +1107,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

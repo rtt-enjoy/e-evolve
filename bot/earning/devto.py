@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import logging
 import re
+import time
 from typing import Any
 
 import requests
@@ -179,6 +180,54 @@ def own_post_urls(status: dict) -> list[str]:
 	return [str(u) for u in hist.get("own_urls", []) if u]
 
 
+# --- Retry logic for dev.to API rate limiting -------------------------------
+#
+# The backfill pass on 2026-09-22 hit 429 on 5 of 16 article-update calls, and
+# each one was reported as a hard failure. Forem's rate limit is per-minute
+# and bursts are normal during the hourly cycle, so a retry with backoff turns
+# transient 429s into successes without changing anything about the caller.
+#
+# The backoff is short and capped: the worst case is ~7 extra seconds spread
+# across three attempts, which is negligible against a 2600-second cycle and
+# far cheaper than losing a backfill opportunity.
+_MAX_RETRIES = 3
+_RETRY_BACKOFFS = (1, 2, 4)  # seconds
+
+
+def _request_with_retry(method: str, url: str, **kwargs) -> requests.Response:
+	"""Make an HTTP request, retrying on HTTP 429 with exponential backoff.
+
+    Only 429 triggers a retry. All other statuses are returned as-is so the
+    caller's ``raise_for_status`` handles them. A 429 on the final attempt is
+    returned to the caller, so a persistent rate limit is still reported as a
+    failure rather than silently swallowed.
+    """
+	last_exc: Exception | None = None
+	for attempt in range(_MAX_RETRIES):
+		try:
+			resp = requests.request(method, url, **kwargs)
+		except requests.RequestException as exc:
+			last_exc = exc
+			if attempt < _MAX_RETRIES - 1:
+				wait = _RETRY_BACKOFFS[attempt]
+				log.warning("[devto] request error, retrying in %ds: %s", wait, exc)
+				time.sleep(wait)
+				continue
+			raise
+
+		if resp.status_code == 429 and attempt < _MAX_RETRIES - 1:
+			wait = _RETRY_BACKOFFS[attempt]
+			log.warning("[devto] 429 rate limited, retrying in %ds (attempt %d/%d)",
+					wait, attempt + 1, _MAX_RETRIES)
+			time.sleep(wait)
+			continue
+		return resp
+
+	if last_exc is not None:
+		raise last_exc
+	raise RuntimeError("_request_with_retry exhausted retries without a response")
+
+
 def publish(article: dict, api_key: str) -> dict:
 	"""Publish article to dev.to and return action result.
 
@@ -207,7 +256,7 @@ def publish(article: dict, api_key: str) -> dict:
 	}
 	
 	try:
-		resp = requests.post(url, headers=headers, json=payload, timeout=30)
+		resp = _request_with_retry("POST", url, headers=headers, json=payload, timeout=30)
 		resp.raise_for_status()
 		data = resp.json()
 		article_url = data.get("url", "")
@@ -277,8 +326,7 @@ def update_body(article_id: int, body_markdown: str, api_key: str) -> dict:
     """
 	url = f"https://dev.to/api/articles/{int(article_id)}"
 	try:
-		resp = requests.put(
-			url,
+		resp = _request_with_retry("PUT", url,
 			headers={
 				"api-key": api_key,
 				"Content-Type": "application/json",

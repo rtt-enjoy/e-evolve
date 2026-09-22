@@ -1,48 +1,16 @@
 """
 Put the receive path onto the articles that already have the readers.
 
-``payout`` closed the structural zero for everything published *from now on*.
-It did nothing for what was already out there, because the footer is attached
-inside ``devto.publish`` and that is a POST -- it only ever runs on a new post.
+``payout`` covers new posts, while this module appends the same deterministic
+footer to older posts. It never edits prose or invokes an LLM: live articles
+already earned their reach, and rewriting them would create an unnecessary
+quality risk.
 
-At the time this was written that omission was most of the audience. The
-account held 11 published articles carrying 1,949 lifetime views, and one of
-them alone held 1,652 of them -- 85% of every reader this project has ever had
-was looking at a post with no way to pay. New publishing adds roughly 177 views
-per article, so it would take eleven consecutive perfect publishing days just to
-match the reach that already exists and keeps accruing: those posts are
-evergreen search traffic, which is why one of them is eight times the size of
-anything published since.
-
-Scored against Principle 2 of the doctrine this is the strongest channel left:
-
-- **No new secret.** ``DEV_TO_API_KEY`` already publishes and already reads
-  stats. ``PUT /api/articles/{id}`` takes the same key, and Forem scopes the
-  lookup to the key's own articles.
-- **No owner action**, per post or at all.
-- **Within policy.** Editing our own article is publishing, which is the one
-  outward action this project explicitly allows. Nothing is sent to anybody.
-- **Verifiable on-chain**, like every other tip.
-- **Reuses output already produced** -- no new writing, no new LLM call, no new
-  maintenance surface.
-
-Three rules hold it together.
-
-**It never edits prose.** The only mutation is appending the same deterministic
-footer ``payout`` already renders. There is no LLM call here, for the same
-reason there is none in ``payout``: a model rewriting a post that earns real
-traffic can silently degrade it, and no gate downstream would catch it, because
-the gates run on drafts and these are live posts.
-
-**A post whose body it cannot safely reproduce is skipped.** A dev.to body that
-opens with YAML front matter has its title and tags re-read from that block on
-save, and Forem's tag handling clears the existing list first. Nothing this bot
-publishes uses front matter, but "probably not" is not a safe basis for
-rewriting the account's best post, so those are detected and left alone.
-
-**Editing does not re-surface a post.** Forem preserves ``published_at`` on
-update, so this does not push old posts back into the feed and does not
-counterfeit the follow-up path. It adds an ask to what people already read.
+The state file records both completed IDs and unresolved update failures. A
+post that has since been updated, or that no longer needs a footer, must not
+keep an old 429 note forever. This module therefore clears only resolved skip
+records; failures for posts that still need work remain visible for the next
+cycle.
 """
 from __future__ import annotations
 
@@ -57,16 +25,15 @@ log = logging.getLogger(__name__)
 
 DEFAULTS: dict[str, Any] = {
 	"enabled": True,
-	# Per cycle, not total. The back catalogue is small and this is bounded
-	# work, but a cap keeps one bad cycle from touching every post at once and
-	# stays well clear of Forem's article-update rate limit.
+	# Per cycle, not total. The cap keeps one bad cycle from touching the whole
+	# catalogue and stays comfortably below Forem's article-update limit.
 	"max_per_cycle": 3,
 	"history_limit": 200,
 }
 
 
 def config() -> dict[str, Any]:
-	"""This module's slice of config/strategy.json, read at call time."""
+	"""This module's strategy configuration, read at call time."""
 	return _shared.load_config("backfill", DEFAULTS)
 
 
@@ -80,12 +47,26 @@ def _state(status: dict) -> dict:
 	})
 
 
-def needs_footer(post: dict, cfg: dict[str, Any] | None = None) -> bool:
-	"""True when this published post has a usable body and carries no ask yet.
+def _clear_resolved_skips(state: dict[str, Any], candidate_ids: set[str]) -> None:
+	"""Remove failure notes for posts that are complete or no longer editable."""
+	skipped = state.get("skipped")
+	if not isinstance(skipped, dict):
+		skipped = {}
+		state["skipped"] = skipped
 
-    ``has_footer`` is asked about the *live* body rather than trusting local
-    history, so a post edited by hand on dev.to is read as it actually is.
-    """
+	done = {
+		str(article_id)
+		for article_id in (state.get("done_ids") or [])
+		if article_id is not None
+	}
+	for article_id in list(skipped):
+		key = str(article_id)
+		if key in done or key not in candidate_ids:
+			skipped.pop(article_id, None)
+
+
+def needs_footer(post: dict, cfg: dict[str, Any] | None = None) -> bool:
+	"""Return whether a live post has a usable body without the payout footer."""
 	body = str(post.get("body_markdown") or "")
 	if not body.strip():
 		return False
@@ -95,21 +76,13 @@ def needs_footer(post: dict, cfg: dict[str, Any] | None = None) -> bool:
 
 
 def run(llm: Any = None, status: dict | None = None) -> list[dict]:
-	"""Product entry point: ``run(llm, status)``, like every other product.
+	"""Append the payout footer to a bounded batch of older articles.
 
-    ``llm`` is accepted and deliberately unused. This module must never make a
-    model call -- the footer is a template, and a model rewriting a post that
-    already earns real traffic can degrade it with nothing downstream to catch
-    it. The parameter exists only so the orchestrator can call this module the
-    same way it calls the others.
-
-    Returns a list of action dicts, or ``[]`` when there was nothing to do, so
-    an idle cycle does not pad ``last_earning`` with noise.
-    """
+	``llm`` is intentionally unused: this operation is deterministic and must
+	never spend an LLM request rewriting live prose.
+	"""
 	status = status if isinstance(status, dict) else {}
 	action = _run(status, os.getenv("DEV_TO_API_KEY", ""))
-	# Nothing to report when the path is simply already complete or switched
-	# off; those are states, not actions.
 	if action.get("_quiet"):
 		return []
 	action.pop("_quiet", None)
@@ -117,26 +90,19 @@ def run(llm: Any = None, status: dict | None = None) -> list[dict]:
 
 
 def _run(status: dict, api_key: str = "", published: list | None = None) -> dict:
-	"""Append the support footer to already-published posts that lack one.
-
-    ``published`` is the article list ``articles._refresh_stats`` already
-    fetched this cycle; passing it in avoids a second identical API call. When
-    omitted the list is fetched here, so the module also works standalone.
-
-    Returns an action dict. Never raises: these posts are already live and
-    already earning their reach, so a failure here must cost nothing but itself.
-    """
+	"""Update eligible posts and return a bounded action result."""
 	action: dict[str, Any] = {
 		"platform": "dev.to-backfill",
 		"success": False,
 		"updated": 0,
-		# Money is on-chain only. A footer added to an old post is an ask, not
-		# a receipt, exactly as it is on a fresh publish.
+		# Adding an ask is not revenue; only an on-chain receipt can be counted.
 		"estimated_usd": 0.0,
 	}
 	try:
 		cfg = config()
 		state = _state(status)
+		if not isinstance(state.get("skipped"), dict):
+			state["skipped"] = {}
 
 		if not cfg.get("enabled"):
 			action["error"] = "disabled in config"
@@ -144,9 +110,6 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 			state["last_reason"] = "disabled"
 			return action
 
-		# The footer decides whether there is an ask to add at all. If payout is
-		# off, unconfigured, or holding an invalid address, there is nothing to
-		# backfill and this must not invent one.
 		if not payout.footer():
 			action["error"] = "payout footer not live"
 			action["_quiet"] = True
@@ -168,16 +131,24 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 			return action
 
 		payout_cfg = payout.config()
-		done = {i for i in state.get("done_ids", []) if i is not None}
-		# needs_footer reads post["body_markdown"], which devto_stats now
-		# carries through from the `me` endpoint. When that field was dropped
-		# every post looked bodyless, needs_footer returned False for all of
-		# them, and this reported "nothing to do" forever.
+		done = {
+			str(article_id)
+			for article_id in (state.get("done_ids") or [])
+			if article_id is not None
+		}
+		# Build the unresolved set once. It is used both for selection and for
+		# deciding which historical skip notes are still meaningful.
+		candidate_ids = {
+			str(post["id"])
+			for post in posts
+			if post.get("id") is not None
+			and str(post["id"]) not in done
+			and needs_footer(post, payout_cfg)
+		}
+		_clear_resolved_skips(state, candidate_ids)
 		candidates = [
-			p for p in posts
-			if p.get("id") is not None
-			and p.get("id") not in done
-			and needs_footer(p, payout_cfg)
+			post for post in posts
+			if str(post.get("id")) in candidate_ids
 		]
 
 		if not candidates:
@@ -186,20 +157,19 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 			state["last_reason"] = "nothing_to_do"
 			state["last_run"] = datetime.now(timezone.utc).isoformat()
 			state["remaining"] = 0
+			state["skipped"] = {}
 			log.info("[backfill] every published post already carries the footer")
 			return action
 
-		# Highest-traffic first: the whole point is the readers who are already
-		# there, and the view distribution is extremely top-heavy.
-		candidates.sort(key=lambda p: int(p.get("page_views") or 0), reverse=True)
+		# The oldest and most-viewed posts get the first bounded write batch.
+		candidates.sort(key=lambda post: int(post.get("page_views") or 0), reverse=True)
 
 		updated = 0
-		for post in candidates[:int(cfg.get("max_per_cycle", 3))]:
+		batch_size = max(1, int(cfg.get("max_per_cycle", 3)))
+		for post in candidates[:batch_size]:
 			body = str(post.get("body_markdown") or "")
 			footered = payout.add_footer({"body_markdown": body}, payout_cfg)
 			new_body = str(footered.get("body_markdown") or "")
-			# add_footer is a no-op when it decides the footer must be omitted.
-			# Sending an unchanged body would spend a write for nothing.
 			if new_body == body or not payout.has_footer(new_body, payout_cfg):
 				continue
 
@@ -207,30 +177,34 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 			if result.get("success"):
 				updated += 1
 				state.setdefault("done_ids", []).append(post["id"])
-				log.info("[backfill] footer added to %s (%s views)",
-						 str(post.get("title", ""))[:60], post.get("page_views"))
+				# A previous 429 is no longer an unresolved failure once this
+				# PUT succeeds. Keeping it would make a completed backfill look
+				# permanently broken in status.json.
+				state.setdefault("skipped", {}).pop(str(post["id"]), None)
+				log.info(
+					"[backfill] footer added to %s (%s views)",
+					str(post.get("title", ""))[:60], post.get("page_views"),
+				)
 			else:
 				state.setdefault("skipped", {})[str(post["id"])] = result.get("error", "")
-				# Stop on the first failure rather than hammering a failing API.
+				# A rate-limit or server failure is a reason to stop rather than
+				# hammer the API with the rest of the batch.
 				break
 
-		limit = int(cfg.get("history_limit", 200))
-		# done_ids is a set in spirit; dedupe before trimming so a post cannot
-		# consume several slots of the bounded history.
+		limit = max(1, int(cfg.get("history_limit", 200)))
 		seen: set = set()
 		deduped = []
-		for i in state.get("done_ids", []):
-			if i is not None and i not in seen:
-				seen.add(i)
-				deduped.append(i)
+		for article_id in state.get("done_ids", []):
+			if article_id is None:
+				continue
+			key = str(article_id)
+			if key not in seen:
+				seen.add(key)
+				deduped.append(article_id)
 		state["done_ids"] = deduped[-limit:]
+		state["skipped"] = dict(list(state["skipped"].items())[-limit:])
 		state["updated_total"] = int(state.get("updated_total", 0)) + updated
 		state["last_run"] = datetime.now(timezone.utc).isoformat()
-
-		# `remaining` is the count the owner is told to read: posts that still
-		# show readers no way to pay. It is only as honest as `candidates`,
-		# which is why the body_markdown regression above mattered so much --
-		# it drove this to 0 while every post lacked a footer.
 		state["remaining"] = max(len(candidates) - updated, 0)
 		state["last_reason"] = "updated" if updated else "update_failed"
 
@@ -240,7 +214,7 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 		if not updated:
 			action["error"] = "no post could be updated"
 		return action
-	except Exception as exc:                       # pragma: no cover - defensive
+	except Exception as exc:  # pragma: no cover - defensive boundary
 		log.warning("[backfill] skipped: %s", exc)
 		action["error"] = str(exc)[:200]
 		return action

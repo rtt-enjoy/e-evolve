@@ -138,6 +138,17 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 		cfg = config()
 		state = _state(status)
 
+		# Remove stale 429 entries for posts already marked done. Without this,
+		# backfill.skipped retains errors for posts that have since been
+		# updated, so the status snapshot lists failures that are no longer
+		# real and can mislead dashboards and reviewers.
+		done_ids_set = {str(i) for i in state.get("done_ids", []) if i is not None}
+		skipped = state.get("skipped", {})
+		if skipped:
+			state["skipped"] = {
+				k: v for k, v in skipped.items() if k not in done_ids_set
+			}
+
 		if not cfg.get("enabled"):
 			action["error"] = "disabled in config"
 			action["_quiet"] = True
@@ -208,7 +219,7 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 				updated += 1
 				state.setdefault("done_ids", []).append(post["id"])
 				log.info("[backfill] footer added to %s (%s views)",
-						 str(post.get("title", ""))[:60], post.get("page_views"))
+					 str(post.get("title", ""))[:60], post.get("page_views"))
 			else:
 				state.setdefault("skipped", {})[str(post["id"])] = result.get("error", "")
 				# Stop on the first failure rather than hammering a failing API.

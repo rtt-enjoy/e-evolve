@@ -224,6 +224,15 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 				seen.add(i)
 				deduped.append(i)
 		state["done_ids"] = deduped[-limit:]
+
+		# Clear stale 429 errors from backfill.skipped when their article IDs
+		# are already in done_ids. This prevents resolved rate-limit failures
+		# from persisting in the status snapshot after a successful retry in a
+		# later cycle.
+		stale = [k for k in state.get("skipped", {}) if k in seen]
+		for k in stale:
+			del state["skipped"][k]
+
 		state["updated_total"] = int(state.get("updated_total", 0)) + updated
 		state["last_run"] = datetime.now(timezone.utc).isoformat()
 

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-22T22:10:48.788350+00:00",
-  "total_runs": 1880,
+  "last_run": "2026-09-23T00:35:22.707129+00:00",
+  "total_runs": 1881,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -32,8 +32,17 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Fix backfill.skipped retaining stale 429 entries for posts already in done_ids, so the status snapshot distinguishes completed updates from genuinely unresolved rate-limit errors.",
-    "changes_applied": [],
+    "summary": "Clear stale 429 entries from backfill.skipped so the status snapshot reflects only unresolved failures.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/backfill.py",
+        "reason": "Remove stale 429 entries from backfill.skipped whose IDs are already in done_ids, so the status snapshot distinguishes completed updates from genuinely unresolved rate-limit errors."
+      },
+      {
+        "file": "version.txt",
+        "reason": "Bump version to reflect the backfill fix."
+      }
+    ],
     "suggestions": [
       {
         "title": "Clear resolved dev.to backfill failures",
@@ -73,11 +82,21 @@
       }
     ],
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.41.1-20260923-003902",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "LLMs Misread Historical Ciphers \u2014 A Verification Workflow",
+        "url": "https://dev.to/robust_true_try/llms-misread-historical-ciphers-a-verification-workflow-52oa",
+        "estimated_usd": 0.0,
+        "source_url": "https://www.cryptocellar.org/bgac/the-mvueh-break.html",
+        "source_title": "OpenAI GPT\u20136 Astra breaks Enigma message that has resisted solution since 2005"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -119,7 +138,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 263,
+  "last_cycle_seconds": 547,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -206,7 +225,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-09-22",
+    "date": "2026-09-23",
     "published": 1
   },
   "code_tech_earning": {
@@ -998,7 +1017,8 @@
       "grapheneos.social/@grapheneos/117282080803799576",
       "laya.convaiinnovations.com",
       "pirateface.co",
-      "github.com/jaredpalmer/kev/tree/main"
+      "github.com/jaredpalmer/kev/tree/main",
+      "cryptocellar.org/bgac/the-mvueh-break.html"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -1048,7 +1068,8 @@
       "android 17 first since 3 x add new apis releasing aosp",
       "built non autoregressive decision model rl year ago",
       "pirate face rescu llm model deletion",
-      "kev tiny jev like family decision model built top qwen3 5"
+      "kev tiny jev like family decision model built top qwen3 5",
+      "openai gpt 6 astra break enigma message has resisted solution since 2005"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1098,12 +1119,14 @@
       "sdk int check won t save android 17",
       "consistency bug parallel decision model",
       "fine tuned model has backup strategy",
-      "kev decision model fail production"
+      "kev decision model fail production",
+      "llms misread historical cipher verification workflow"
     ],
     "followed_up_ids": [
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/why-your-kev-decision-models-fail-in-production-2ipj",
       "https://dev.to/robust_true_try/your-fine-tuned-model-has-no-backup-strategy-19gl",
       "https://dev.to/robust_true_try/your-browser-history-search-is-broken-heres-a-local-fix-3pl3",
       "https://dev.to/robust_true_try/the-silent-failure-that-cost-us-hours-3jea",
@@ -1135,7 +1158,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-22T22:10:49.421645+00:00",
+    "checked_at": "2026-09-23T00:35:23.597123+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1384,14 +1407,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20260923-003902",
+  "evolution_pending_review": true,
   "article_stats": {
-    "count": 21,
-    "total_views": 3351,
-    "avg_views": 159.6,
+    "count": 22,
+    "total_views": 3403,
+    "avg_views": 154.7,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 2724,
+    "best_views": 2776,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1407,8 +1430,8 @@
       {
         "archetype": "problem-workaround",
         "count": 5,
-        "avg_engagement": 582.6,
-        "avg_views": 577.6,
+        "avg_engagement": 593.0,
+        "avg_views": 588.0,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1426,18 +1449,18 @@
         "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       },
       {
-        "archetype": "surprising-behavior",
-        "count": 3,
-        "avg_engagement": 37.0,
-        "avg_views": 12.0,
-        "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
-      },
-      {
         "archetype": "security-privacy",
         "count": 2,
         "avg_engagement": 35.0,
         "avg_views": 35.0,
         "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
+      },
+      {
+        "archetype": "surprising-behavior",
+        "count": 4,
+        "avg_engagement": 27.8,
+        "avg_views": 9.0,
+        "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
       },
       {
         "archetype": "other",
@@ -1449,7 +1472,7 @@
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "other",
-    "sample_size": 21
+    "sample_size": 22
   },
   "article_rejects": {
     "last_reason": "weak_title",
@@ -1493,7 +1516,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-22T22:15:10.684040+00:00",
+    "last_run": "2026-09-23T00:44:28.816623+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1503,32 +1526,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-22T22:15:11.005147+00:00",
+    "last_run": "2026-09-23T00:44:29.138598+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4552210,
-        "at": "2026-09-21T23:24:39.205558+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-09-21T23:24:39.205558+00:00",
-        "ok": true
-      },
-      {
         "id": 4681657,
-        "at": "2026-09-22T05:02:58.999125+00:00",
-        "ok": true
-      },
-      {
-        "id": 4602729,
-        "at": "2026-09-22T05:02:58.999125+00:00",
-        "ok": true
-      },
-      {
-        "id": 4712162,
         "at": "2026-09-22T05:02:58.999125+00:00",
         "ok": true
       },
@@ -1554,11 +1557,6 @@
       },
       {
         "id": 4421693,
-        "at": "2026-09-22T15:05:01.445107+00:00",
-        "ok": true
-      },
-      {
-        "id": 4702377,
         "at": "2026-09-22T15:05:01.445107+00:00",
         "ok": true
       },
@@ -1613,17 +1611,37 @@
         "ok": true
       },
       {
+        "id": 4552210,
+        "at": "2026-09-23T00:44:29.138598+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-09-23T00:44:29.138598+00:00",
+        "ok": true
+      },
+      {
+        "id": 4602729,
+        "at": "2026-09-23T00:44:29.138598+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-22T22:15:11.005147+00:00",
+        "at": "2026-09-23T00:44:29.138598+00:00",
+        "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-09-23T00:44:29.138598+00:00",
         "ok": true
       }
     ],
-    "published_total": 22,
-    "covered": 22,
+    "published_total": 21,
+    "covered": 21,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 22.8
+    "oldest_check_age_hours": 19.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

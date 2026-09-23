@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-23T05:59:59.930954+00:00",
-  "total_runs": 1882,
+  "last_run": "2026-09-23T11:39:43.048845+00:00",
+  "total_runs": 1883,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -32,8 +32,13 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a file-backed LLM response cache to save free-tier requests on repeated research cycles, and clear stale 429 entries from backfill.skipped so the status snapshot reflects only unresolved failures.",
-    "changes_applied": [],
+    "summary": "Clear resolved 429 errors from backfill.skipped when their article IDs are already in done_ids, so the status snapshot reflects only unresolved failures.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/backfill.py",
+        "reason": "Clear stale 429 errors from backfill.skipped when their article IDs are already in done_ids. This prevents resolved rate-limit failures from persisting in the status snapshot after a successful retry in a later cycle. The fix adds a cleanup pass after processing candidates that removes any skipped entry whose ID now appears in done_ids."
+      }
+    ],
     "suggestions": [
       {
         "title": "Add CEREBRAS_API_KEY for a free LLM fallback",
@@ -60,35 +65,24 @@
         ]
       },
       {
-        "title": "Merge the backfill stale-entry fix and verify coverage",
-        "description": "The backfill.py change clears resolved 429 entries from backfill.skipped whose IDs are already in done_ids. After merging, run one normal backfill cycle and confirm that backfill.skipped no longer contains IDs already listed under done_ids.",
+        "title": "Add dev.to article engagement webhook via GitHub Actions workflow_dispatch",
+        "description": "Enables manual triggering of article stats refresh and follow-up detection without waiting for the hourly schedule, useful for testing and immediate feedback after publishing.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Review the bot/earning/backfill.py change on the review branch and confirm unresolved candidate failures remain recorded.",
-          "Step 2: Merge the branch after the existing dev.to retry change is included.",
-          "Step 3: Run one normal backfill cycle and verify that backfill.skipped no longer contains IDs already listed under done_ids."
+          "Step 1: Add a workflow_dispatch trigger to the main GitHub Actions workflow with inputs for 'force_articles' and 'force_mrr'.",
+          "Step 2: Ensure the workflow passes these inputs to the bot via the _overrides mechanism.",
+          "Step 3: Test by manually triggering the workflow with force_articles=1 and verify a follow-up article is generated if eligible."
         ]
       }
     ],
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.42.0-20260923-114727",
     "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -117,20 +111,20 @@
       ]
     },
     {
-      "title": "Merge the backfill stale-entry fix and verify coverage",
-      "description": "The backfill.py change clears resolved 429 entries from backfill.skipped whose IDs are already in done_ids. After merging, run one normal backfill cycle and confirm that backfill.skipped no longer contains IDs already listed under done_ids.",
+      "title": "Add dev.to article engagement webhook via GitHub Actions workflow_dispatch",
+      "description": "Enables manual triggering of article stats refresh and follow-up detection without waiting for the hourly schedule, useful for testing and immediate feedback after publishing.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Review the bot/earning/backfill.py change on the review branch and confirm unresolved candidate failures remain recorded.",
-        "Step 2: Merge the branch after the existing dev.to retry change is included.",
-        "Step 3: Run one normal backfill cycle and verify that backfill.skipped no longer contains IDs already listed under done_ids."
+        "Step 1: Add a workflow_dispatch trigger to the main GitHub Actions workflow with inputs for 'force_articles' and 'force_mrr'.",
+        "Step 2: Ensure the workflow passes these inputs to the bot via the _overrides mechanism.",
+        "Step 3: Test by manually triggering the workflow with force_articles=1 and verify a follow-up article is generated if eligible."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 705,
+  "last_cycle_seconds": 465,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1169,7 +1163,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-23T06:00:00.245763+00:00",
+    "checked_at": "2026-09-23T11:39:43.872946+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1418,8 +1412,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.42.0-20260923-114727",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 22,
     "total_views": 3403,
@@ -1527,7 +1521,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-23T06:11:44.299395+00:00",
+    "last_run": "2026-09-23T11:47:27.881569+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1537,30 +1531,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-23T06:11:44.556561+00:00",
+    "last_run": "2026-09-23T11:47:28.218731+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4619528,
-        "at": "2026-09-22T10:43:02.601760+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-09-22T15:05:01.445107+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-09-22T15:05:01.445107+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
-        "at": "2026-09-22T15:05:01.445107+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-09-22T19:08:45.895884+00:00",
@@ -1642,8 +1616,28 @@
         "ok": true
       },
       {
+        "id": 4619528,
+        "at": "2026-09-23T11:47:28.218731+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-09-23T11:47:28.218731+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-09-23T11:47:28.218731+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-09-23T11:47:28.218731+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-23T06:11:44.556561+00:00",
+        "at": "2026-09-23T11:47:28.218731+00:00",
         "ok": true
       }
     ],
@@ -1652,7 +1646,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 19.5
+    "oldest_check_age_hours": 16.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -208,11 +208,20 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 				updated += 1
 				state.setdefault("done_ids", []).append(post["id"])
 				log.info("[backfill] footer added to %s (%s views)",
-						 str(post.get("title", ""))[:60], post.get("page_views"))
+						str(post.get("title", ""))[:60], post.get("page_views"))
 			else:
 				state.setdefault("skipped", {})[str(post["id"])] = result.get("error", "")
 				# Stop on the first failure rather than hammering a failing API.
 				break
+
+		# Clear stale 429 errors from backfill.skipped when their article IDs
+		# are already in done_ids. This prevents resolved rate-limit failures
+		# from persisting in the status snapshot after a successful retry in a
+		# later cycle.
+		done_set = {i for i in state.get("done_ids", []) if i is not None}
+		stale = [sid for sid in list(state.get("skipped", {})) if int(sid) in done_set]
+		for sid in stale:
+			del state["skipped"][sid]
 
 		limit = int(cfg.get("history_limit", 200))
 		# done_ids is a set in spirit; dedupe before trimming so a post cannot

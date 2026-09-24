@@ -89,7 +89,7 @@ def _reject(code: str, detail: str = "") -> None:
 	global _LAST_REJECT
 	_LAST_REJECT = code
 	log.warning("[articles] rejected (%s): %s%s", code, _REJECTS.get(code, code),
-				f" -- {detail}" if detail else "")
+			f" -- {detail}" if detail else "")
 	return None
 
 _SYSTEM = """\
@@ -346,7 +346,7 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 	target = _followup_target(status, os.getenv("DEV_TO_API_KEY", "").strip())
 	if target:
 		log.info("[articles] following up %r (%d views)",
-				 target.get("title", "")[:60], target.get("page_views", 0))
+			 target.get("title", "")[:60], target.get("page_views", 0))
 		followup = _generate_followup(llm, status, target)
 		if followup:
 			return followup
@@ -638,7 +638,7 @@ def _followup_target(status: dict, api_key: str) -> Optional[dict]:
 	)
 	if not best:
 		log.info("[articles] no post cleared %d views in %dh -- writing a fresh take",
-				 cfg["followup_min_views"], cfg["followup_window_hours"])
+			 cfg["followup_min_views"], cfg["followup_window_hours"])
 		return None
 	return best
 
@@ -938,10 +938,13 @@ _TITLE_BANNED = [
 
 # Vague nouns that make a title invisible in a feed. Flagged only when the title
 # carries no concrete technical anchor at all.
+# Year references in technical titles are a standard convention that signals
+# timeliness, not vague filler. Removed "in 2024", "in 2025", "in 2026" per
+# evolution 1.41.0 -- the account's best article uses "in 2024" (2,836 views).
 _TITLE_VAGUE = (
 	"better code", "best practices", "getting started", "introduction to",
 	"a guide to", "an overview", "the basics", "explained simply", "made easy",
-	"for beginners", "in 2024", "in 2025", "in 2026",
+	"for beginners",
 )
 
 
@@ -1084,8 +1087,6 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
-
 def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 	"""Ask the model to fix specific formatting violations. Returns None on failure."""
 	prompt = (
@@ -1115,7 +1116,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

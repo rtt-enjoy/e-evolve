@@ -1904,3 +1904,8 @@ Autonomous earnings generated every hourly cycle.
 
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
 - [ok] **dev.to-newsletter**: [This Week in Dev: Cryptographic Breakthroughs, Copilot Rewri](https://dev.to/robust_true_try/this-week-in-dev-cryptographic-breakthroughs-copilot-rewrites-and-ai-tooling-5alc) (est. $0.00)
+
+### 2026-09-24 05:03 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+- [ok] **dev.to**: [How AI Pull Requests Slip Past Code Review](https://dev.to/robust_true_try/how-ai-pull-requests-slip-past-code-review-1m24) (est. $0.00)

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-24T04:54:02.591097+00:00",
-  "total_runs": 1886,
+  "last_run": "2026-09-24T10:02:54.232308+00:00",
+  "total_runs": 1887,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,43 +33,43 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add LLM response cache to reduce API calls for code_techs and mrr_ideas modules.",
+    "summary": "Add idempotent on-chain receipt accounting so repeated wallet polls cannot inflate attribution totals.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Add CEREBRAS_API_KEY for a free LLM fallback",
-        "description": "Activates the no-cost Cerebras route for research and drafting, reducing pressure on the OpenRouter free-request ceiling while preserving the current provider as the default.",
+        "description": "Activates the inactive Cerebras route for research and drafting, diversifying free-tier usage while preserving OpenRouter as the current provider.",
         "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "Step 1: Open https://cloud.cerebras.ai/ and create or access a Cerebras account.",
-          "Step 2: Generate an API key in the dashboard and verify the current free-tier limits.",
-          "Step 3: Add the key as a GitHub secret named CEREBRAS_API_KEY and run a non-forced research cycle to test fallback behavior."
+          "Step 2: Generate an API key in the dashboard and confirm the current free-tier limits.",
+          "Step 3: Add the key as a GitHub secret named CEREBRAS_API_KEY, then run a non-forced research cycle to verify fallback behavior."
         ]
       },
       {
         "title": "Add ANTHROPIC_API_KEY for a free LLM fallback",
-        "description": "Activates the Anthropic Claude route for research and drafting, providing another free-tier option to diversify LLM usage and reduce reliance on OpenRouter.",
+        "description": "Activates the inactive Anthropic route for research and drafting, adding another no-cost provider without changing the current OpenRouter default.",
         "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Visit https://console.anthropic.com/ and sign up for an account.",
-          "Step 2: Generate an API key from the Account Settings page.",
-          "Step 3: Add the key as a GitHub secret named ANTHROPIC_API_KEY and verify the model is accessible via a test research cycle."
+          "Step 1: Open https://console.anthropic.com/ and create or access an Anthropic account.",
+          "Step 2: Generate an API key from the account settings page.",
+          "Step 3: Add the key as a GitHub secret named ANTHROPIC_API_KEY and run a non-forced research cycle to verify the route."
         ]
       },
       {
-        "title": "Add manual workflow trigger for article and newsletter generation",
-        "description": "Enables on-demand triggering of content cycles via GitHub Actions workflow_dispatch for immediate testing and publishing outside the hourly schedule.",
-        "secret_needed": null,
+        "title": "Verify DEV_TO_API_KEY secret readiness",
+        "description": "The status shows successful publishing history, but DEV_TO_API_KEY is absent from configured_github_secrets; confirming the actual secret name prevents silent article skips after a rotation.",
+        "secret_needed": "DEV_TO_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Edit .github/workflows/main.yml to add a workflow_dispatch trigger with inputs 'force_articles' and 'force_mrr'.",
-          "Step 2: Ensure the workflow passes these inputs to the bot via environment variables or the _overrides mechanism.",
-          "Step 3: Test by manually triggering the workflow with force_articles=1 and force_mrr=1 to verify both cycles run on demand."
+          "Step 1: Open https://dev.to/api in the owner's dev.to account and locate the API key.",
+          "Step 2: Copy the key, or create a new one if the existing key is unavailable, and add it as a GitHub secret named DEV_TO_API_KEY.",
+          "Step 3: Run one non-forced article cycle and verify that article_daily.published increases and the new URL appears in article_history.own_urls."
         ]
       }
     ],
@@ -78,69 +78,49 @@
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "How AI Pull Requests Slip Past Code Review",
-        "url": "https://dev.to/robust_true_try/how-ai-pull-requests-slip-past-code-review-1m24",
-        "estimated_usd": 0.0,
-        "source_url": "https://www.infoq.com/news/2026/09/andrew-kelley-zig-no-ai/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global",
-        "source_title": "Andrew Kelley Interview: Why He Built Zig, Banned AI Contributions, and Moved Zig off GitHub"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Add CEREBRAS_API_KEY for a free LLM fallback",
-      "description": "Activates the no-cost Cerebras route for research and drafting, reducing pressure on the OpenRouter free-request ceiling while preserving the current provider as the default.",
+      "description": "Activates the inactive Cerebras route for research and drafting, diversifying free-tier usage while preserving OpenRouter as the current provider.",
       "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "Step 1: Open https://cloud.cerebras.ai/ and create or access a Cerebras account.",
-        "Step 2: Generate an API key in the dashboard and verify the current free-tier limits.",
-        "Step 3: Add the key as a GitHub secret named CEREBRAS_API_KEY and run a non-forced research cycle to test fallback behavior."
+        "Step 2: Generate an API key in the dashboard and confirm the current free-tier limits.",
+        "Step 3: Add the key as a GitHub secret named CEREBRAS_API_KEY, then run a non-forced research cycle to verify fallback behavior."
       ]
     },
     {
       "title": "Add ANTHROPIC_API_KEY for a free LLM fallback",
-      "description": "Activates the Anthropic Claude route for research and drafting, providing another free-tier option to diversify LLM usage and reduce reliance on OpenRouter.",
+      "description": "Activates the inactive Anthropic route for research and drafting, adding another no-cost provider without changing the current OpenRouter default.",
       "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Visit https://console.anthropic.com/ and sign up for an account.",
-        "Step 2: Generate an API key from the Account Settings page.",
-        "Step 3: Add the key as a GitHub secret named ANTHROPIC_API_KEY and verify the model is accessible via a test research cycle."
+        "Step 1: Open https://console.anthropic.com/ and create or access an Anthropic account.",
+        "Step 2: Generate an API key from the account settings page.",
+        "Step 3: Add the key as a GitHub secret named ANTHROPIC_API_KEY and run a non-forced research cycle to verify the route."
       ]
     },
     {
-      "title": "Add manual workflow trigger for article and newsletter generation",
-      "description": "Enables on-demand triggering of content cycles via GitHub Actions workflow_dispatch for immediate testing and publishing outside the hourly schedule.",
-      "secret_needed": null,
+      "title": "Verify DEV_TO_API_KEY secret readiness",
+      "description": "The status shows successful publishing history, but DEV_TO_API_KEY is absent from configured_github_secrets; confirming the actual secret name prevents silent article skips after a rotation.",
+      "secret_needed": "DEV_TO_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Edit .github/workflows/main.yml to add a workflow_dispatch trigger with inputs 'force_articles' and 'force_mrr'.",
-        "Step 2: Ensure the workflow passes these inputs to the bot via environment variables or the _overrides mechanism.",
-        "Step 3: Test by manually triggering the workflow with force_articles=1 and force_mrr=1 to verify both cycles run on demand."
+        "Step 1: Open https://dev.to/api in the owner's dev.to account and locate the API key.",
+        "Step 2: Copy the key, or create a new one if the existing key is unavailable, and add it as a GitHub secret named DEV_TO_API_KEY.",
+        "Step 3: Run one non-forced article cycle and verify that article_daily.published increases and the new URL appears in article_history.own_urls."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 592,
+  "last_cycle_seconds": 588,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1140,7 +1120,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-24T04:54:03.280226+00:00",
+    "checked_at": "2026-09-24T10:02:54.735200+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1512,7 +1492,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-24T05:03:52.862486+00:00",
+    "last_run": "2026-09-24T10:12:41.456266+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1522,37 +1502,17 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-24T05:03:53.180328+00:00",
+    "last_run": "2026-09-24T10:12:41.764090+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4552210,
-        "at": "2026-09-23T00:44:29.138598+00:00",
-        "ok": true
-      },
-      {
-        "id": 4720062,
-        "at": "2026-09-23T00:44:29.138598+00:00",
-        "ok": true
-      },
       {
         "id": 4681657,
         "at": "2026-09-23T06:11:44.556561+00:00",
         "ok": true
       },
       {
-        "id": 4562180,
-        "at": "2026-09-23T06:11:44.556561+00:00",
-        "ok": true
-      },
-      {
         "id": 4368781,
-        "at": "2026-09-23T06:11:44.556561+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
         "at": "2026-09-23T06:11:44.556561+00:00",
         "ok": true
       },
@@ -1632,13 +1592,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4729472,
         "at": "2026-09-24T05:03:53.180328+00:00",
         "ok": true
       },
       {
-        "id": 4729472,
-        "at": "2026-09-24T05:03:53.180328+00:00",
+        "id": 4552210,
+        "at": "2026-09-24T10:12:41.764090+00:00",
+        "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-09-24T10:12:41.764090+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-09-24T10:12:41.764090+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-09-24T10:12:41.764090+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-09-24T10:12:41.764090+00:00",
         "ok": true
       }
     ],
@@ -1647,7 +1627,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 28.3
+    "oldest_check_age_hours": 28.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

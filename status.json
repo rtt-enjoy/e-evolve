@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-24T22:25:54.037145+00:00",
-  "total_runs": 1890,
+  "last_run": "2026-09-25T01:32:07.828121+00:00",
+  "total_runs": 1891,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,7 +33,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Fix _TITLE_VAGUE to remove year patterns blocking the best-performing article title, and fix _revise_title docstring placement.",
+    "summary": "Fix _TITLE_VAGUE to remove year patterns blocking high-performing titles, fix _revise_title docstring placement, and increase backfill max_per_cycle to clear footer backlog faster.",
     "changes_applied": [],
     "suggestions": [
       {
@@ -80,14 +80,12 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "weak_title",
+        "error": "title too weak to earn a click, and the rewrite failed",
+        "estimated_usd": 0.0
       }
     ],
     "total_usd": 0.0
@@ -131,7 +129,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 219,
+  "last_cycle_seconds": 834,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1073,6 +1071,7 @@
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/how-ai-pull-requests-slip-past-code-review-1m24",
       "https://dev.to/robust_true_try/this-week-in-dev-cryptographic-breakthroughs-copilot-rewrites-and-ai-tooling-5alc",
       "https://dev.to/robust_true_try/llms-misread-historical-ciphers-a-verification-workflow-52oa",
       "https://dev.to/robust_true_try/your-browser-history-search-is-broken-heres-a-local-fix-3pl3",
@@ -1105,7 +1104,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-24T22:25:54.883932+00:00",
+    "checked_at": "2026-09-25T01:32:08.187121+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1371,11 +1370,11 @@
   "last_evolution_branch": null,
   "evolution_pending_review": false,
   "article_stats": {
-    "count": 22,
-    "total_views": 3493,
-    "avg_views": 158.8,
+    "count": 23,
+    "total_views": 3563,
+    "avg_views": 154.9,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 2836,
+    "best_views": 2876,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1391,8 +1390,8 @@
       {
         "archetype": "problem-workaround",
         "count": 5,
-        "avg_engagement": 607.0,
-        "avg_views": 602.0,
+        "avg_engagement": 615.0,
+        "avg_views": 610.0,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1405,8 +1404,8 @@
       {
         "archetype": "myth-correction",
         "count": 3,
-        "avg_engagement": 44.3,
-        "avg_views": 44.3,
+        "avg_engagement": 47.7,
+        "avg_views": 47.7,
         "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       },
       {
@@ -1426,27 +1425,34 @@
       {
         "archetype": "other",
         "count": 7,
-        "avg_engagement": 21.6,
-        "avg_views": 14.4,
+        "avg_engagement": 24.4,
+        "avg_views": 17.3,
         "best_title": "The Redirect Chain That Bypasses Your Ad Blocker"
+      },
+      {
+        "archetype": "engineering-culture",
+        "count": 1,
+        "avg_engagement": 0.0,
+        "avg_views": 0.0,
+        "best_title": "How AI Pull Requests Slip Past Code Review"
       }
     ],
     "best_archetype": "problem-workaround",
-    "worst_archetype": "other",
-    "sample_size": 22
+    "worst_archetype": "engineering-culture",
+    "sample_size": 23
   },
   "article_rejects": {
     "last_reason": "weak_title",
     "last_detail": "title too weak to earn a click, and the rewrite failed",
-    "last_at": "2026-09-19T01:19:32.585321+00:00",
+    "last_at": "2026-09-25T01:46:00.409156+00:00",
     "counts": {
       "empty_draft": 2,
       "fabricated": 1,
-      "weak_title": 4,
+      "weak_title": 5,
       "revision_fabricated": 1,
       "llm_error": 1
     },
-    "total": 9
+    "total": 10
   },
   "payout": {
     "enabled": true,
@@ -1477,7 +1483,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-24T22:29:31.776994+00:00",
+    "last_run": "2026-09-25T01:46:00.683869+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1487,30 +1493,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-24T22:29:32.103986+00:00",
+    "last_run": "2026-09-25T01:46:00.967482+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4641536,
-        "at": "2026-09-23T23:45:46.835686+00:00",
-        "ok": true
-      },
-      {
-        "id": 4568987,
-        "at": "2026-09-23T23:45:46.835686+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-09-24T05:03:53.180328+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-09-24T05:03:53.180328+00:00",
-        "ok": true
-      },
       {
         "id": 4602729,
         "at": "2026-09-24T05:03:53.180328+00:00",
@@ -1602,8 +1588,28 @@
         "ok": true
       },
       {
+        "id": 4641536,
+        "at": "2026-09-25T01:46:00.967482+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-09-25T01:46:00.967482+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-09-25T01:46:00.967482+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-09-25T01:46:00.967482+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-24T22:29:32.103986+00:00",
+        "at": "2026-09-25T01:46:00.967482+00:00",
         "ok": true
       }
     ],
@@ -1612,7 +1618,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 22.7
+    "oldest_check_age_hours": 20.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

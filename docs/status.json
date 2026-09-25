@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-25T07:50:58.157660+00:00",
-  "total_runs": 1892,
+  "last_run": "2026-09-25T13:49:20.605582+00:00",
+  "total_runs": 1893,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -83,31 +83,11 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20260925-080340",
-    "proposed_version": "1.41.1"
+    "branch": "evolve/1.42.0-20260925-140115",
+    "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "The Two-Tier Encryption Bug That Leaks Your Keys",
-        "url": "https://dev.to/robust_true_try/the-two-tier-encryption-bug-that-leaks-your-keys-33b",
-        "estimated_usd": 0.0,
-        "source_url": "https://macanorak.com/two-tier-encryption-in-the-uk/",
-        "source_title": "Two-tier encryption in the UK"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -149,7 +129,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1039,
+  "last_cycle_seconds": 720,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1110,7 +1090,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-25T07:50:58.583690+00:00",
+    "checked_at": "2026-09-25T13:49:21.191269+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1373,7 +1353,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20260925-080340",
+  "last_evolution_branch": "evolve/1.42.0-20260925-140115",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 23,
@@ -1489,7 +1469,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-25T08:08:16.472764+00:00",
+    "last_run": "2026-09-25T14:01:16.182959+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1499,25 +1479,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-25T08:08:16.746736+00:00",
+    "last_run": "2026-09-25T14:01:18.576431+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4552210,
-        "at": "2026-09-24T10:12:41.764090+00:00",
-        "ok": true
-      },
-      {
-        "id": 4720062,
-        "at": "2026-09-24T10:12:41.764090+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-09-24T10:12:41.764090+00:00",
-        "ok": true
-      },
       {
         "id": 4681657,
         "at": "2026-09-24T15:22:58.099653+00:00",
@@ -1530,11 +1495,6 @@
       },
       {
         "id": 4421693,
-        "at": "2026-09-24T15:22:58.099653+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-09-24T15:22:58.099653+00:00",
         "ok": true
       },
@@ -1614,13 +1574,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4740283,
         "at": "2026-09-25T08:08:16.746736+00:00",
         "ok": true
       },
       {
-        "id": 4740283,
-        "at": "2026-09-25T08:08:16.746736+00:00",
+        "id": 4552210,
+        "at": "2026-09-25T14:01:18.576431+00:00",
+        "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-09-25T14:01:18.576431+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-09-25T14:01:18.576431+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-09-25T14:01:18.576431+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-09-25T14:01:18.576431+00:00",
         "ok": true
       }
     ],
@@ -1629,7 +1609,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 21.9
+    "oldest_check_age_hours": 22.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

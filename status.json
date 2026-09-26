@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-26T17:11:42.777613+00:00",
-  "total_runs": 1899,
+  "last_run": "2026-09-26T19:52:49.470049+00:00",
+  "total_runs": 1900,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,115 +33,97 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Fix three bugs the evolution claimed to resolve but left unfixed: year patterns in _TITLE_VAGUE, backfill max_per_cycle still at 3, and prompt_top_n fallback mismatch at 12 instead of 6",
-    "changes_applied": [],
+    "summary": "Add auto-backfill script, wallet injector, and lead-article generator to improve coverage, visibility, and content pipeline.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/auto_backfill.py",
+        "reason": "Adds a self\u2011contained backfill script that can run independently, fetches live article bodies via the dev.to API, and adds the wallet footer to posts missing it, thereby increasing the number of monetizable posts."
+      },
+      {
+        "file": "bot/earning/wallet_injector.py",
+        "reason": "Ensures the project's validated Tron USDT wallet address is always present in the README, making the payment path visible to users without manual intervention."
+      },
+      {
+        "file": "bot/earning/generate_lead_articles.py",
+        "reason": "Generates markdown article drafts for high\u2011scoring code\u2011tech leads, saving the owner time and increasing the chance that the product will be discovered and paid for."
+      }
+    ],
     "suggestions": [
       {
-        "title": "Add CEREBRAS_API_KEY for a free LLM fallback",
-        "description": "Activates the inactive Cerebras route for research and drafting, diversifying free-tier usage while preserving OpenRouter as the current provider.",
-        "secret_needed": "CEREBRAS_API_KEY",
+        "title": "Auto\u2011fetch missing article body for backfill",
+        "description": "Enables the backfill process to add the wallet footer to posts that lack a local body copy by retrieving the live markdown via the dev.to API, increasing coverage and potential earnings.",
+        "secret_needed": "DEV_TO_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Open https://cloud.cerebras.ai/ and create or access a Cerebras account.",
-          "Step 2: Generate an API key in the dashboard and confirm the current free-tier limits.",
-          "Step 3: Add the key as a GitHub secret named CEREBRAS_API_KEY, then run a non-forced research cycle to verify fallback behavior."
+          "Step 1: Add DEV_TO_API_KEY as a GitHub secret (if not already present).",
+          "Step 2: Replace the existing backfill.py with the provided auto_backfill.py script.",
+          "Step 3: Run a backfill cycle and verify that previously empty\u2011body posts now receive the footer."
         ]
       },
       {
-        "title": "Add ANTHROPIC_API_KEY for a free LLM fallback",
-        "description": "Activates the inactive Anthropic route for research and drafting, adding another no-cost provider without changing the current OpenRouter default.",
-        "secret_needed": "ANTHROPIC_API_KEY",
+        "title": "Wallet injector script",
+        "description": "Automatically appends the validated Tron USDT wallet address to README.md, ensuring the receive path is always visible without manual edits.",
+        "secret_needed": "USDT_WALLET_ADDRESS",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Open https://console.anthropic.com/ and create or access an Anthropic account.",
-          "Step 2: Generate an API key from the account settings page.",
-          "Step 3: Add the key as a GitHub secret named ANTHROPIC_API_KEY and run a non-forced research cycle to verify the route."
+          "Step 1: Set the USDT_WALLET_ADDRESS GitHub secret with your Tron wallet address.",
+          "Step 2: Add the wallet_injector.py script to the bot/earning directory.",
+          "Step 4: Run the script (e.g., via `python wallet_injector.py`) or include it in a CI step to update README.md."
         ]
       },
       {
-        "title": "Verify dev.to article footer wallet address is visible on all published posts",
-        "description": "The receipt_check shows 25/25 articles have the footer, but confirming the address renders correctly on dev.to ensures the receive path is actually usable by readers.",
-        "secret_needed": null,
+        "title": "Automatic dev.to article draft generation for high\u2011score leads",
+        "description": "Uses the LLM to turn high\u2011scoring code\u2011tech leads into ready\u2011to\u2011publish dev.to article drafts, boosting organic traffic and earnings without extra owner effort.",
+        "secret_needed": "DEV_TO_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Open https://dev.to/robust_true_try and click any recent article.",
-          "Step 2: Scroll to the bottom and verify the 'Support this work' section shows the Tron address [redacted].",
-          "Step 3: Confirm the address is copyable and the network (TRC-20) is stated."
+          "Step 1: Ensure DEV_TO_API_KEY secret is set (required for publishing drafts).",
+          "Step 2: Add the generate_lead_articles.py script to bot/earning/.",
+          "Step 3: After a code_techs refresh, run the script; it will create markdown drafts in docs/ for leads scoring \u226570.",
+          "Step 4: Review the drafts and publish the ones you wish to post."
         ]
       }
     ],
     "error": null,
-    "branch": null,
-    "proposed_version": "1.41.1"
+    "branch": "evolve/1.42.0-20260926-195820",
+    "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "mrr-ideas",
-        "success": true,
-        "idea_count": 2,
-        "refused_count": 18,
-        "llm": true,
-        "estimated_usd": 0.0,
-        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
-        "url": "status.json#mrr_ideas"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add CEREBRAS_API_KEY for a free LLM fallback",
-      "description": "Activates the inactive Cerebras route for research and drafting, diversifying free-tier usage while preserving OpenRouter as the current provider.",
-      "secret_needed": "CEREBRAS_API_KEY",
+      "title": "Auto\u2011fetch missing article body for backfill",
+      "description": "Enables the backfill process to add the wallet footer to posts that lack a local body copy by retrieving the live markdown via the dev.to API, increasing coverage and potential earnings.",
+      "secret_needed": "DEV_TO_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Open https://cloud.cerebras.ai/ and create or access a Cerebras account.",
-        "Step 2: Generate an API key in the dashboard and confirm the current free-tier limits.",
-        "Step 3: Add the key as a GitHub secret named CEREBRAS_API_KEY, then run a non-forced research cycle to verify fallback behavior."
+        "Step 1: Add DEV_TO_API_KEY as a GitHub secret (if not already present).",
+        "Step 2: Replace the existing backfill.py with the provided auto_backfill.py script.",
+        "Step 3: Run a backfill cycle and verify that previously empty\u2011body posts now receive the footer."
       ]
     },
     {
-      "title": "Add ANTHROPIC_API_KEY for a free LLM fallback",
-      "description": "Activates the inactive Anthropic route for research and drafting, adding another no-cost provider without changing the current OpenRouter default.",
-      "secret_needed": "ANTHROPIC_API_KEY",
+      "title": "Automatic dev.to article draft generation for high\u2011score leads",
+      "description": "Uses the LLM to turn high\u2011scoring code\u2011tech leads into ready\u2011to\u2011publish dev.to article drafts, boosting organic traffic and earnings without extra owner effort.",
+      "secret_needed": "DEV_TO_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Open https://console.anthropic.com/ and create or access an Anthropic account.",
-        "Step 2: Generate an API key from the account settings page.",
-        "Step 3: Add the key as a GitHub secret named ANTHROPIC_API_KEY and run a non-forced research cycle to verify the route."
-      ]
-    },
-    {
-      "title": "Verify dev.to article footer wallet address is visible on all published posts",
-      "description": "The receipt_check shows 25/25 articles have the footer, but confirming the address renders correctly on dev.to ensures the receive path is actually usable by readers.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Step 1: Open https://dev.to/robust_true_try and click any recent article.",
-        "Step 2: Scroll to the bottom and verify the 'Support this work' section shows the Tron address [redacted].",
-        "Step 3: Confirm the address is copyable and the network (TRC-20) is stated."
+        "Step 1: Ensure DEV_TO_API_KEY secret is set (required for publishing drafts).",
+        "Step 2: Add the generate_lead_articles.py script to bot/earning/.",
+        "Step 3: After a code_techs refresh, run the script; it will create markdown drafts in docs/ for leads scoring \u226570.",
+        "Step 4: Review the drafts and publish the ones you wish to post."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 369,
+  "last_cycle_seconds": 333,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1147,7 +1129,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-26T17:11:43.233435+00:00",
+    "checked_at": "2026-09-26T19:52:50.385419+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1410,8 +1392,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.42.0-20260926-195820",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 24,
     "total_views": 3625,
@@ -1526,7 +1508,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-26T17:17:51.172924+00:00",
+    "last_run": "2026-09-26T19:58:21.164364+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1536,32 +1518,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-26T17:17:51.468333+00:00",
+    "last_run": "2026-09-26T19:58:21.450782+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4720062,
-        "at": "2026-09-25T14:01:18.576431+00:00",
-        "ok": true
-      },
-      {
         "id": 4681657,
-        "at": "2026-09-25T18:44:53.289321+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-09-25T18:44:53.289321+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-09-25T18:44:53.289321+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-09-25T18:44:53.289321+00:00",
         "ok": true
       },
@@ -1661,8 +1623,28 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-09-26T19:58:21.450782+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-09-26T19:58:21.450782+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-09-26T19:58:21.450782+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-09-26T19:58:21.450782+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-26T17:17:51.468333+00:00",
+        "at": "2026-09-26T19:58:21.450782+00:00",
         "ok": true
       }
     ],
@@ -1671,7 +1653,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 27.3
+    "oldest_check_age_hours": 25.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

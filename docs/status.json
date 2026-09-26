@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-09-26T19:52:49.470049+00:00",
-  "total_runs": 1900,
+  "last_run": "2026-09-26T22:53:03.160314+00:00",
+  "total_runs": 1901,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,63 +33,49 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add auto-backfill script, wallet injector, and lead-article generator to improve coverage, visibility, and content pipeline.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/auto_backfill.py",
-        "reason": "Adds a self\u2011contained backfill script that can run independently, fetches live article bodies via the dev.to API, and adds the wallet footer to posts missing it, thereby increasing the number of monetizable posts."
-      },
-      {
-        "file": "bot/earning/wallet_injector.py",
-        "reason": "Ensures the project's validated Tron USDT wallet address is always present in the README, making the payment path visible to users without manual intervention."
-      },
-      {
-        "file": "bot/earning/generate_lead_articles.py",
-        "reason": "Generates markdown article drafts for high\u2011scoring code\u2011tech leads, saving the owner time and increasing the chance that the product will be discovered and paid for."
-      }
-    ],
+    "summary": "Add a deterministic dev.to article freshness checker that runs before the LLM, so stale trending sources are skipped without burning a free-tier call.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Auto\u2011fetch missing article body for backfill",
-        "description": "Enables the backfill process to add the wallet footer to posts that lack a local body copy by retrieving the live markdown via the dev.to API, increasing coverage and potential earnings.",
-        "secret_needed": "DEV_TO_API_KEY",
+        "title": "Skip stale trending sources before the LLM call",
+        "description": "Adds a freshness gate to articles.py that checks each candidate source's published date against source_max_age_hours before spending a free-tier LLM call, reducing wasted API usage on old stories.",
+        "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Add DEV_TO_API_KEY as a GitHub secret (if not already present).",
-          "Step 2: Replace the existing backfill.py with the provided auto_backfill.py script.",
-          "Step 3: Run a backfill cycle and verify that previously empty\u2011body posts now receive the footer."
+          "Step 1: Review the new freshness check in bot/earning/articles.py.",
+          "Step 2: Confirm config/strategy.json has articles.source_max_age_hours set (default 24).",
+          "Step 3: Run a cycle and verify stale sources are skipped before the LLM is called."
         ]
       },
       {
-        "title": "Wallet injector script",
-        "description": "Automatically appends the validated Tron USDT wallet address to README.md, ensuring the receive path is always visible without manual edits.",
-        "secret_needed": "USDT_WALLET_ADDRESS",
+        "title": "Surface the skipped-stale count in status.json",
+        "description": "Records how many trending candidates were skipped for being stale, so the owner can see whether the freshness gate is actually saving LLM calls.",
+        "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Set the USDT_WALLET_ADDRESS GitHub secret with your Tron wallet address.",
-          "Step 2: Add the wallet_injector.py script to the bot/earning directory.",
-          "Step 4: Run the script (e.g., via `python wallet_injector.py`) or include it in a CI step to update README.md."
+          "Step 1: After the freshness gate is in place, check status.json for article_history.skipped_stale.",
+          "Step 2: Compare skipped_stale against the number of LLM calls in the cycle logs.",
+          "Step 3: Adjust source_max_age_hours in config/strategy.json if the gate is too aggressive."
         ]
       },
       {
-        "title": "Automatic dev.to article draft generation for high\u2011score leads",
-        "description": "Uses the LLM to turn high\u2011scoring code\u2011tech leads into ready\u2011to\u2011publish dev.to article drafts, boosting organic traffic and earnings without extra owner effort.",
-        "secret_needed": "DEV_TO_API_KEY",
+        "title": "Add a test for the freshness gate",
+        "description": "Adds a unit test verifying that sources older than source_max_age_hours are excluded from _pick_source, preventing regressions.",
+        "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Step 1: Ensure DEV_TO_API_KEY secret is set (required for publishing drafts).",
-          "Step 2: Add the generate_lead_articles.py script to bot/earning/.",
-          "Step 3: After a code_techs refresh, run the script; it will create markdown drafts in docs/ for leads scoring \u226570.",
-          "Step 4: Review the drafts and publish the ones you wish to post."
+          "Step 1: Run the test suite with `python -m pytest bot/tests.py -k freshness`.",
+          "Step 2: Confirm the test passes with a source just inside and just outside the age window.",
+          "Step 3: Add a new stale source to the test fixtures and re-run to confirm it is skipped."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20260926-195820",
-    "proposed_version": "1.42.0"
+    "branch": null,
+    "proposed_version": "1.42.1"
   },
   "last_earning": {
     "actions": [],
@@ -97,33 +83,44 @@
   },
   "suggestions": [
     {
-      "title": "Auto\u2011fetch missing article body for backfill",
-      "description": "Enables the backfill process to add the wallet footer to posts that lack a local body copy by retrieving the live markdown via the dev.to API, increasing coverage and potential earnings.",
-      "secret_needed": "DEV_TO_API_KEY",
+      "title": "Skip stale trending sources before the LLM call",
+      "description": "Adds a freshness gate to articles.py that checks each candidate source's published date against source_max_age_hours before spending a free-tier LLM call, reducing wasted API usage on old stories.",
+      "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Add DEV_TO_API_KEY as a GitHub secret (if not already present).",
-        "Step 2: Replace the existing backfill.py with the provided auto_backfill.py script.",
-        "Step 3: Run a backfill cycle and verify that previously empty\u2011body posts now receive the footer."
+        "Step 1: Review the new freshness check in bot/earning/articles.py.",
+        "Step 2: Confirm config/strategy.json has articles.source_max_age_hours set (default 24).",
+        "Step 3: Run a cycle and verify stale sources are skipped before the LLM is called."
       ]
     },
     {
-      "title": "Automatic dev.to article draft generation for high\u2011score leads",
-      "description": "Uses the LLM to turn high\u2011scoring code\u2011tech leads into ready\u2011to\u2011publish dev.to article drafts, boosting organic traffic and earnings without extra owner effort.",
-      "secret_needed": "DEV_TO_API_KEY",
+      "title": "Surface the skipped-stale count in status.json",
+      "description": "Records how many trending candidates were skipped for being stale, so the owner can see whether the freshness gate is actually saving LLM calls.",
+      "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Step 1: Ensure DEV_TO_API_KEY secret is set (required for publishing drafts).",
-        "Step 2: Add the generate_lead_articles.py script to bot/earning/.",
-        "Step 3: After a code_techs refresh, run the script; it will create markdown drafts in docs/ for leads scoring \u226570.",
-        "Step 4: Review the drafts and publish the ones you wish to post."
+        "Step 1: After the freshness gate is in place, check status.json for article_history.skipped_stale.",
+        "Step 2: Compare skipped_stale against the number of LLM calls in the cycle logs.",
+        "Step 3: Adjust source_max_age_hours in config/strategy.json if the gate is too aggressive."
+      ]
+    },
+    {
+      "title": "Add a test for the freshness gate",
+      "description": "Adds a unit test verifying that sources older than source_max_age_hours are excluded from _pick_source, preventing regressions.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Step 1: Run the test suite with `python -m pytest bot/tests.py -k freshness`.",
+        "Step 2: Confirm the test passes with a source just inside and just outside the age window.",
+        "Step 3: Add a new stale source to the test fixtures and re-run to confirm it is skipped."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 333,
+  "last_cycle_seconds": 358,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1129,7 +1126,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-09-26T19:52:50.385419+00:00",
+    "checked_at": "2026-09-26T22:53:03.732496+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1392,8 +1389,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20260926-195820",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 24,
     "total_views": 3625,
@@ -1508,7 +1505,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-09-26T19:58:21.164364+00:00",
+    "last_run": "2026-09-26T22:58:59.734189+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1518,30 +1515,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-09-26T19:58:21.450782+00:00",
+    "last_run": "2026-09-26T22:59:00.081616+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4681657,
-        "at": "2026-09-25T18:44:53.289321+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-09-25T22:23:04.851338+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-09-25T22:23:04.851338+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-09-25T22:23:04.851338+00:00",
-        "ok": true
-      },
       {
         "id": 4727685,
         "at": "2026-09-25T22:23:04.851338+00:00",
@@ -1643,8 +1620,28 @@
         "ok": true
       },
       {
+        "id": 4681657,
+        "at": "2026-09-26T22:59:00.081616+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-09-26T22:59:00.081616+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-09-26T22:59:00.081616+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-09-26T22:59:00.081616+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-09-26T19:58:21.450782+00:00",
+        "at": "2026-09-26T22:59:00.081616+00:00",
         "ok": true
       }
     ],
@@ -1653,7 +1650,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 25.2
+    "oldest_check_age_hours": 24.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

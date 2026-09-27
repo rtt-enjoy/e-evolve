@@ -12,11 +12,15 @@ Support (no ``run``; imported by the products):
   ``devto``       -- the dev.to publish call and the gates every post passes
   ``trending``    -- sources fresh stories from free public feeds
   ``devto_stats`` -- reads this account's own dev.to reach numbers
+  ``attribution`` -- correlates on-chain receipts with publishing context
+  ``payout``      -- footer rendering and wallet-address helpers
+  ``receipt_check`` -- verifies footer coverage on published articles
 
 ``bot.main`` imports the products lazily via ``importlib``; these re-exports
 are for tests and ad-hoc use.
 """
 from .articles import run as articles_run
+from .attribution import record_receipt, summary as attribution_summary
 from .backfill import run as backfill_run
 from .code_techs import run as code_techs_run
 from .mrr_ideas import run as mrr_ideas_run
@@ -24,8 +28,10 @@ from .newsletter import run as newsletter_run
 
 __all__ = [
 	"articles_run",
+	"attribution_summary",
 	"backfill_run",
 	"code_techs_run",
 	"mrr_ideas_run",
 	"newsletter_run",
+	"record_receipt",
 ]

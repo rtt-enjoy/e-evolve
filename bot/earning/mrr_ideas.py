@@ -443,79 +443,48 @@ def _viability_brief(llm: Any, viable: list[dict], cfg: dict) -> dict:
 			"Narrow beats broad. Name the actual niche, not the category.",
 			"No passive-income framing, no get-rich framing, no autopilot claims.",
 		],
-		"policy": (
-			"Research and suggestions only. Do not propose contacting anyone, "
-			"posting to social platforms, collecting payment, trading, or minting."
-		),
-		"owner_constraints": list(_CONSTRAINTS),
-		"surviving_models": [
-			{
-				"name": i["name"],
-				"mrr_model": i["mrr_model"],
-				"what_the_bot_can_do": i["bot_role"],
-				"owner_must_set_up_by_hand": i.get("manual_steps", []),
-			}
-			for i in viable
-		],
+		"policy": "Research and suggestions only. Do not contact anyone, request payment, trade, or mint.",
+		"viable_ideas": viable,
 		"required_json_shape": {
-			"summary": (
-				"one paragraph: the single best recurring-revenue angle for a "
-				"zero-cost, research-first, publish-to-dev.to stack"
-			),
+			"summary": "one concise paragraph on the best current route to recurring revenue on this stack",
 			"ranked_ideas": [
 				{
-					"name": "the model name",
-					"why_this_stack_fits": "one short reason",
-					"narrow_niche": "the specific niche, not the category",
-					"first_proof_artifact": "the one thing to make before charging anyone",
-					"who_pays": "the specific buyer",
-					"monthly_price_usd": "number or small range",
-					"runway_to_first_dollar": "e.g. '4-8 weeks'",
-					"owner_must_do_by_hand": "the part no automation here can cover",
+					"name": "idea name",
+					"narrow_niche": "specific audience + problem",
+					"first_proof_artifact": "one free dev.to article or template that proves value",
+					"who_pays": "specific buyer persona",
+					"monthly_price_usd": "$X-YY",
+					"runway_to_first_dollar": "N weeks",
+					"owner_must_do_by_hand": "exact manual steps before any money moves"
 				}
 			],
-			"validation_steps": [
-				"how to find 10 people with the problem and talk to them WITHOUT "
-				"cold outreach — inbound only: an article that ends in a question, "
-				"a thread the owner posts by hand, a community they already belong to"
-			],
-			"owner_actions": ["3-5 concrete next actions, most valuable first"],
+			"validation_steps": ["3-5 concrete steps to test demand before building"],
+			"owner_actions": ["3-5 concrete next actions, most valuable first"]
 		},
 	}
-
 	try:
 		if hasattr(llm, "complete_json_for_role"):
 			data = llm.complete_json_for_role("research", json.dumps(prompt), max_tokens=3000)
 		else:
 			data = llm.complete_json(json.dumps(prompt), max_tokens=3000)
 	except Exception as exc:
-		log.warning("[mrr_ideas] viability brief failed: %s — keeping deterministic triage", exc)
-		return {}
-
-	if not isinstance(data, dict):
-		log.warning("[mrr_ideas] viability brief returned no object — keeping deterministic triage")
+		log.warning("[mrr_ideas] viability brief failed: %s", exc)
 		return {}
 
 	return {
 		"summary": str(data.get("summary", "")).strip()[:900],
 		"ranked_ideas": _dicts(data.get("ranked_ideas"), [
-			"name", "why_this_stack_fits", "narrow_niche", "first_proof_artifact",
+			"name", "narrow_niche", "first_proof_artifact",
 			"who_pays", "monthly_price_usd", "runway_to_first_dollar",
-			"owner_must_do_by_hand",
-		], limit=int(cfg.get("max_ideas", 8))),
-		"validation_steps": _clean_list(data.get("validation_steps", []))[:6],
+			"owner_must_do_by_hand"
+		], limit=5),
+		"validation_steps": _clean_list(data.get("validation_steps", []))[:5],
 		"owner_actions": _clean_list(data.get("owner_actions", []))[:5],
 	}
 
 
-def _history(status: dict) -> dict:
-	"""Names already surfaced, so a later report can tell new from repeated."""
-	return status.setdefault("mrr_ideas_history", {})
-
-
-def _record_refresh(status: dict, ideas: list[dict], limit: int) -> None:
-	"""Remember which models have been surfaced, bounded by history_limit."""
-	hist = _history(status)
-	entries = hist.setdefault("names", [])
-	for idea in ideas:
-		bounded_append(entries, str(idea.get("name", "")).strip(), limit)
+def _record_refresh(status: dict, viable: list[dict], limit: int) -> None:
+	"""Remember which ideas have been surfaced so we don't re-present the same list."""
+	hist = status.setdefault("mrr_ideas_history", {"names": []})
+	for idea in viable:
+		bounded_append(hist["names"], idea["name"], limit)

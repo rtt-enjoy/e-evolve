@@ -106,24 +106,42 @@ def write_html(status: dict[str, Any]) -> None:
 		)
 
 	if not _HTML_FILE.exists():
-		_HTML_FILE.write_text(_fallback_index(), encoding="utf-8")
+		_HTML_FILE.write_text(_fallback_index(status), encoding="utf-8")
 
 	log.info("Dashboard data written -> docs/status.json")
 
 
-def _fallback_index() -> str:
+def _fallback_index(status: dict[str, Any]) -> str:
 	"""Minimal page shown only before the frontend bundle is built."""
-	return """<!doctype html>
+	payout_public = status.get("payout_public", {})
+	address = payout_public.get("address", "")
+	network = payout_public.get("network", "")
+	heading = payout_public.get("heading", "Support this work")
+	note = payout_public.get("note", "")
+	asset = payout_public.get("asset", "USDT, USDC or USDD")
+
+	address_html = ""
+	if address:
+		address_html = f"""
+		<div style="margin:24px 0;padding:16px;background:#17202c;border-radius:8px;border:1px solid #2a3a4a">
+		  <p style="margin:0 0 8px;font-size:14px;color:#94a3b8">{heading}</p>
+		  <p style="margin:0 0 8px;font-family:monospace;font-size:16px;color:#e5edf7;word-break:break-all">{address}</p>
+		  <p style="margin:0;font-size:13px;color:#64748b">Network: {network} | Asset: {asset}</p>
+		  <p style="margin:12px 0 0;font-size:13px;color:#94a3b8">{note}</p>
+		</div>
+		"""
+
+	return f"""<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>E-Evolve Dashboard</title>
   <style>
-    body{margin:0;font-family:system-ui,sans-serif;background:#0b0f14;color:#e5edf7}
-    main{max-width:760px;margin:12vh auto;padding:0 24px}
-    a{color:#6aa6ff}
-    code{background:#17202c;padding:2px 6px;border-radius:6px}
+    body{{margin:0;font-family:system-ui,sans-serif;background:#0b0f14;color:#e5edf7}}
+    main{{max-width:760px;margin:12vh auto;padding:0 24px}}
+    a{{color:#6aa6ff}}
+    code{{background:#17202c;padding:2px 6px;border-radius:6px}}
   </style>
 </head>
 <body>
@@ -132,7 +150,7 @@ def _fallback_index() -> str:
     <p>The React dashboard has not been built yet.</p>
     <p>Run <code>npm install</code> and <code>npm run build</code> in
     <code>frontend/</code>, or inspect <a href="status.json">status.json</a>.</p>
+    {address_html}
   </main>
 </body>
-</html>
-"""
+</html>"""

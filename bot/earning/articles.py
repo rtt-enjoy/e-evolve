@@ -89,7 +89,7 @@ def _reject(code: str, detail: str = "") -> None:
 	global _LAST_REJECT
 	_LAST_REJECT = code
 	log.warning("[articles] rejected (%s): %s%s", code, _REJECTS.get(code, code),
-				f" -- {detail}" if detail else "")
+			f" -- {detail}" if detail else "")
 	return None
 
 _SYSTEM = """\
@@ -346,12 +346,12 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 	target = _followup_target(status, os.getenv("DEV_TO_API_KEY", "").strip())
 	if target:
 		log.info("[articles] following up %r (%d views)",
-				 target.get("title", "")[:60], target.get("page_views", 0))
+			 target.get("title", "")[:60], target.get("page_views", 0))
 		followup = _generate_followup(llm, status, target)
 		if followup:
 			return followup
 		# A failed follow-up must not cost the day's article.
-		log.info("[articles] follow-up unusable -- falling back to a fresh source")
+		log.info("[articles] follow-up unusable — falling back to a fresh source")
 
 	source = _pick_source(status)
 	if not source:
@@ -638,7 +638,7 @@ def _followup_target(status: dict, api_key: str) -> Optional[dict]:
 	)
 	if not best:
 		log.info("[articles] no post cleared %d views in %dh -- writing a fresh take",
-				 cfg["followup_min_views"], cfg["followup_window_hours"])
+			 cfg["followup_min_views"], cfg["followup_window_hours"])
 		return None
 	return best
 
@@ -919,6 +919,17 @@ def _ensure_attribution(article: dict, source: dict) -> dict:
 	return article
 
 
+def _title_vague() -> tuple[str, ...]:
+	"""Return vague title patterns with dynamic year handling."""
+	from datetime import datetime
+	current_year = datetime.now().year
+	return (
+		"better code", "best practices", "getting started", "introduction to",
+		"a guide to", "an overview", "the basics", "explained simply", "made easy",
+		"for beginners",
+		f"in {current_year - 1}", f"in {current_year}", f"in {current_year + 1}",
+	)
+
 # Title patterns that suppress clicks on dev.to. These are not merely hype -- the
 # audience here reads them as low-effort content-farm output and scrolls past.
 _TITLE_BANNED = [
@@ -938,11 +949,7 @@ _TITLE_BANNED = [
 
 # Vague nouns that make a title invisible in a feed. Flagged only when the title
 # carries no concrete technical anchor at all.
-_TITLE_VAGUE = (
-	"better code", "best practices", "getting started", "introduction to",
-	"a guide to", "an overview", "the basics", "explained simply", "made easy",
-	"for beginners", "in 2024", "in 2025", "in 2026",
-)
+_TITLE_VAGUE = _title_vague()
 
 
 # Acronyms that are normal in a technical title. Blocking these would reject
@@ -1074,13 +1081,9 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
 # Numbers the model has no way to know and reliably invents: latency figures,
 # parameter counts, prices per token, context windows. Prose outside code blocks
 # only -- real numbers inside code (timeouts, retries) are fine.
-
-
-
 
 
 
@@ -1115,7 +1118,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

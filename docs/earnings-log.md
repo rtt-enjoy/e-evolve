@@ -1971,3 +1971,8 @@ Autonomous earnings generated every hourly cycle.
 
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
 - [fail] **dev.to**: title too weak to earn a click, and the rewrite failed
+
+### 2026-09-28 15:51 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+- [ok] **dev.to**: [Why Your AI Pair Programming Fails Without Psychological Saf](https://dev.to/robust_true_try/why-your-ai-pair-programming-fails-without-psychological-safety-3m4f) (est. $0.00)

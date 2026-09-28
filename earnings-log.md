@@ -1966,3 +1966,8 @@ Autonomous earnings generated every hourly cycle.
 
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
 - [fail] **dev.to**: LLM returned no usable title/body
+
+### 2026-09-28 07:10 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+- [fail] **dev.to**: title too weak to earn a click, and the rewrite failed

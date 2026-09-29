@@ -89,7 +89,7 @@ def _reject(code: str, detail: str = "") -> None:
 	global _LAST_REJECT
 	_LAST_REJECT = code
 	log.warning("[articles] rejected (%s): %s%s", code, _REJECTS.get(code, code),
-				f" -- {detail}" if detail else "")
+			f" -- {detail}" if detail else "")
 	return None
 
 _SYSTEM = """\
@@ -346,7 +346,7 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 	target = _followup_target(status, os.getenv("DEV_TO_API_KEY", "").strip())
 	if target:
 		log.info("[articles] following up %r (%d views)",
-				 target.get("title", "")[:60], target.get("page_views", 0))
+			 target.get("title", "")[:60], target.get("page_views", 0))
 		followup = _generate_followup(llm, status, target)
 		if followup:
 			return followup
@@ -458,12 +458,12 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 
 
 def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
-	cfg = _config()
 	"""Ask for a stronger headline only. Returns the new title, or None.
 
     Body-only retries are wasteful when the headline is the problem, so this
     sends just the title and the article's opening for context.
     """
+	cfg = _config()
 	body = str(data.get("body_markdown", ""))
 	opening = " ".join(body.split()[:120])
 	prompt = (
@@ -638,7 +638,7 @@ def _followup_target(status: dict, api_key: str) -> Optional[dict]:
 	)
 	if not best:
 		log.info("[articles] no post cleared %d views in %dh -- writing a fresh take",
-				 cfg["followup_min_views"], cfg["followup_window_hours"])
+			 cfg["followup_min_views"], cfg["followup_window_hours"])
 		return None
 	return best
 
@@ -807,7 +807,7 @@ def _prefer_proven_archetypes(candidates: list, status: dict) -> list:
 		return candidates
 
 	bonus = {name: _ARCHETYPE_BONUS - i * _ARCHETYPE_BONUS_STEP
-			 for i, name in enumerate(preferred)}
+		     for i, name in enumerate(preferred)}
 
 	def key(item):
 		kind = devto_stats.classify(item.get("title", ""))
@@ -821,7 +821,6 @@ def _prefer_proven_archetypes(candidates: list, status: dict) -> list:
 def _history(status: dict) -> dict:
 	"""Persistent record of what has already been sourced and published."""
 	return status.setdefault("article_history", {})
-
 
 
 def _record_publish(status: dict, article: dict) -> None:
@@ -1074,13 +1073,9 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
 # Numbers the model has no way to know and reliably invents: latency figures,
 # parameter counts, prices per token, context windows. Prose outside code blocks
 # only -- real numbers inside code (timeouts, retries) are fine.
-
-
-
 
 
 
@@ -1115,7 +1110,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

@@ -2013,3 +2013,8 @@ Autonomous earnings generated every hourly cycle.
 - [ok] **mrr-ideas**: [MRR idea triage refreshed (2 viable, 18 refused)](status.json#mrr_ideas) (est. $0.00)
 - [fail] **dev.to**: LLM call failed
 - [fail] **dev.to-newsletter**: not enough fresh trending sources or LLM output unusable
+
+### 2026-10-01 06:09 UTC
+
+- [ok] **dev.to**: [When Auto-Generated Slides Outpace Your Talk](https://dev.to/robust_true_try/when-auto-generated-slides-outpace-your-talk-2b2h) (est. $0.00)
+- [ok] **dev.to-newsletter**: [Slides, Defaults, Agents, and Git: A Week of Developer Shift](https://dev.to/robust_true_try/slides-defaults-agents-and-git-a-week-of-developer-shifts-pb4) (est. $0.00)

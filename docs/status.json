@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-01T19:32:49.599031+00:00",
-  "total_runs": 1922,
+  "last_run": "2026-10-01T23:53:39.498954+00:00",
+  "total_runs": 1923,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,120 +33,102 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Improve code quality and fix minor bugs in earning modules, add missing dependencies, and enhance reporting.",
-    "changes_applied": [
-      {
-        "file": "requirements.txt",
-        "reason": "Add missing HTTP library used by code_techs module."
-      },
-      {
-        "file": "config/strategy.json",
-        "reason": "Update config/strategy.json to enable auto_pursue and ensure all sections are present with correct defaults."
-      },
-      {
-        "file": "bot/earning/code_techs.py",
-        "reason": "Improve Reddit lead fetching with better logging and respect for rate limits. [fix: Added missing helper functions _cell and _dicts that mrr_ideas.py imports from code_techs.py]"
-      }
-    ],
+    "summary": "Propose adding ANTHROPIC_API_KEY and CEREBRAS_API_KEY secrets for additional LLM providers and enhancing the payout footer to increase earning potential.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Add requests library to requirements.txt",
-        "description": "The code_techs module uses requests for HTTP calls; ensure it's listed as a dependency.",
-        "secret_needed": null,
+        "title": "Add ANTHROPIC_API_KEY secret for Anthropic LLM access",
+        "description": "Unlock the Anthropic LLM provider to improve diversity and avoid rate limits in LLM-dependent modules.",
+        "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Open requirements.txt in the repo root.",
-          "2. Add 'requests>=2.31.0' on a new line.",
-          "3. Commit the change and run 'pip install -r requirements.txt' if needed."
-        ]
-      },
-      {
-        "title": "Enable auto_pursue in config/strategy.json",
-        "description": "Set code_techs.auto_pursue to true to activate automatic pursuit of top-ranked opportunities (currently ignored).",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Open config/strategy.json.",
-          "2. Find the code_techs section and set auto_pursue to true.",
-          "3. Commit and push the change."
-        ]
-      },
-      {
-        "title": "Add DEV_TO_API_KEY secret for article publishing",
-        "description": "The articles module requires DEV_TO_API_KEY to publish to dev.to; without it, all article publishing is skipped.",
-        "secret_needed": "DEV_TO_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Go to https://dev.to/settings/extensions and create a new API key.",
+          "1. Go to https://console.anthropic.com/settings/keys and create a new API key.",
           "2. Copy the generated API key.",
           "3. In GitHub repo settings, go to Secrets and variables > Actions.",
-          "4. Add a new repository secret named DEV_TO_API_KEY with the key value."
+          "4. Add a new repository secret named ANTHROPIC_API_KEY with the key value."
+        ]
+      },
+      {
+        "title": "Add CEREBRAS_API_KEY secret for Cerebras LLM access",
+        "description": "Unlock the Cerebras LLM provider to improve diversity and avoid rate limits in LLM-dependent modules.",
+        "secret_needed": "CEREBRAS_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Go to https://cloud.cerebras.ai/maps and create a new API key.",
+          "2. Copy the generated API key.",
+          "3. In GitHub repo settings, go to Secrets and variables > Actions.",
+          "4. Add a new repository secret named CEREBRAS_API_KEY with the key value."
+        ]
+      },
+      {
+        "title": "Enhance the payout footer in bot/earning/payout.py to increase tip likelihood",
+        "description": "Modify the footer appended to articles to be more prominent and include a clear call-to-action, encouraging readers to send tips.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Open bot/earning/payout.py in the repository.",
+          "2. Locate the function that generates the footer (e.g., `add_footer` or similar).",
+          "3. Update the footer text to be more visible and include a direct request for tips (e.g., 'If this article provided value, consider sending a tip to the wallet address below.').",
+          "4. Ensure the footer remains compliant with dev.to policies and the bot's tone guidelines.",
+          "5. Commit the change and push to trigger a new cycle with the updated footer."
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20261001-195407",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add requests library to requirements.txt",
-      "description": "The code_techs module uses requests for HTTP calls; ensure it's listed as a dependency.",
-      "secret_needed": null,
+      "title": "Add ANTHROPIC_API_KEY secret for Anthropic LLM access",
+      "description": "Unlock the Anthropic LLM provider to improve diversity and avoid rate limits in LLM-dependent modules.",
+      "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Open requirements.txt in the repo root.",
-        "2. Add 'requests>=2.31.0' on a new line.",
-        "3. Commit the change and run 'pip install -r requirements.txt' if needed."
-      ]
-    },
-    {
-      "title": "Enable auto_pursue in config/strategy.json",
-      "description": "Set code_techs.auto_pursue to true to activate automatic pursuit of top-ranked opportunities (currently ignored).",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Open config/strategy.json.",
-        "2. Find the code_techs section and set auto_pursue to true.",
-        "3. Commit and push the change."
-      ]
-    },
-    {
-      "title": "Add DEV_TO_API_KEY secret for article publishing",
-      "description": "The articles module requires DEV_TO_API_KEY to publish to dev.to; without it, all article publishing is skipped.",
-      "secret_needed": "DEV_TO_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Go to https://dev.to/settings/extensions and create a new API key.",
+        "1. Go to https://console.anthropic.com/settings/keys and create a new API key.",
         "2. Copy the generated API key.",
         "3. In GitHub repo settings, go to Secrets and variables > Actions.",
-        "4. Add a new repository secret named DEV_TO_API_KEY with the key value."
+        "4. Add a new repository secret named ANTHROPIC_API_KEY with the key value."
+      ]
+    },
+    {
+      "title": "Add CEREBRAS_API_KEY secret for Cerebras LLM access",
+      "description": "Unlock the Cerebras LLM provider to improve diversity and avoid rate limits in LLM-dependent modules.",
+      "secret_needed": "CEREBRAS_API_KEY",
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Go to https://cloud.cerebras.ai/maps and create a new API key.",
+        "2. Copy the generated API key.",
+        "3. In GitHub repo settings, go to Secrets and variables > Actions.",
+        "4. Add a new repository secret named CEREBRAS_API_KEY with the key value."
+      ]
+    },
+    {
+      "title": "Enhance the payout footer in bot/earning/payout.py to increase tip likelihood",
+      "description": "Modify the footer appended to articles to be more prominent and include a clear call-to-action, encouraging readers to send tips.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Open bot/earning/payout.py in the repository.",
+        "2. Locate the function that generates the footer (e.g., `add_footer` or similar).",
+        "3. Update the footer text to be more visible and include a direct request for tips (e.g., 'If this article provided value, consider sending a tip to the wallet address below.').",
+        "4. Ensure the footer remains compliant with dev.to policies and the bot's tone guidelines.",
+        "5. Commit the change and push to trigger a new cycle with the updated footer."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1499,
+  "last_cycle_seconds": 55,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1163,7 +1145,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-01T19:32:49.960314+00:00",
+    "checked_at": "2026-10-01T23:53:39.943202+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1421,8 +1403,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261001-195407",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 26,
     "total_views": 3925,
@@ -1537,7 +1519,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-01T19:57:47.823798+00:00",
+    "last_run": "2026-10-01T23:54:32.789024+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1547,30 +1529,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-01T19:57:48.158278+00:00",
+    "last_run": "2026-10-01T23:54:33.183814+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4681657,
-        "at": "2026-09-30T00:39:08.960458+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-09-30T07:06:47.967810+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-09-30T07:06:47.967810+00:00",
-        "ok": true
-      },
-      {
-        "id": 4765372,
-        "at": "2026-09-30T07:06:47.967810+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-09-30T13:59:18.260553+00:00",
@@ -1687,8 +1649,28 @@
         "ok": true
       },
       {
+        "id": 4681657,
+        "at": "2026-10-01T23:54:33.183814+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-01T23:54:33.183814+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-10-01T23:54:33.183814+00:00",
+        "ok": true
+      },
+      {
+        "id": 4765372,
+        "at": "2026-10-01T23:54:33.183814+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-01T19:57:48.158278+00:00",
+        "at": "2026-10-01T23:54:33.183814+00:00",
         "ok": true
       }
     ],
@@ -1697,7 +1679,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 43.3
+    "oldest_check_age_hours": 33.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

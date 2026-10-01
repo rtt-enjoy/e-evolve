@@ -2018,3 +2018,7 @@ Autonomous earnings generated every hourly cycle.
 
 - [ok] **dev.to**: [When Auto-Generated Slides Outpace Your Talk](https://dev.to/robust_true_try/when-auto-generated-slides-outpace-your-talk-2b2h) (est. $0.00)
 - [ok] **dev.to-newsletter**: [Slides, Defaults, Agents, and Git: A Week of Developer Shift](https://dev.to/robust_true_try/slides-defaults-agents-and-git-a-week-of-developer-shifts-pb4) (est. $0.00)
+
+### 2026-10-01 13:27 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)

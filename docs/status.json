@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-02T12:38:14.088036+00:00",
-  "total_runs": 1925,
+  "last_run": "2026-10-02T18:25:54.018238+00:00",
+  "total_runs": 1926,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,8 +33,13 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Fix a title-revision regression where the retitling prompt was placed after the docstring, making it unreachable and causing weak titles to publish instead of being revised.",
-    "changes_applied": [],
+    "summary": "Enhance the payout footer with a more prominent call-to-action to encourage reader tips.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/payout.py",
+        "reason": "The footer is the only receive path a reader sees, and its current form is a plain line of text that is easy to scroll past. Making it a blockquote with a bold heading, a short note, and the address in a code span increases visibility and explicitly asks for tips, which is the difference between a passive address and an active call-to-action. The footer remains compliant with dev.to policies and the bot's tone guidelines."
+      }
+    ],
     "suggestions": [
       {
         "title": "Add ANTHROPIC_API_KEY secret for Anthropic LLM access",
@@ -63,43 +68,34 @@
         ]
       },
       {
-        "title": "Enhance the payout footer in bot/earning/payout.py to increase tip likelihood",
-        "description": "Modify the footer appended to articles to be more prominent and include a clear call-to-action, encouraging readers to send tips.",
+        "title": "List the digital product on Getly for USDT payouts",
+        "description": "Getly is a free-to-list storefront that settles USDT on Tron to the owner's own wallet with no KYC. Listing the product there adds a second receive path alongside the article footer.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Open bot/earning/payout.py in the repository.",
-          "2. Locate the function that generates the footer (e.g., `add_footer` or similar).",
-          "3. Update the footer text to be more visible and include a direct request for tips (e.g., 'If this article provided value, consider sending a tip to the wallet address below.').",
-          "4. Ensure the footer remains compliant with dev.to policies and the bot's tone guidelines.",
-          "5. Commit the change and push to trigger a new cycle with the updated footer."
+          "1. Go to https://www.getly.store/sell/crypto and create an account (no ID upload).",
+          "2. Add the Tron (TRC-20) receive address published on the dashboard.",
+          "3. Upload the digital product file and set an honest price.",
+          "4. Confirm the payout settings point to the same wallet address.",
+          "5. Verify current terms for revenue cut and minimum payout before relying on it."
         ]
       }
     ],
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.41.1-20261002-183738",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
         "platform": "dev.to",
-        "success": false,
-        "skipped": true,
-        "reject_code": "weak_title",
-        "error": "title too weak to earn a click, and the rewrite failed",
-        "estimated_usd": 0.0
+        "success": true,
+        "title": "Hardening Linux Against Kernel Heap Corruption Attacks",
+        "url": "https://dev.to/robust_true_try/hardening-linux-against-kernel-heap-corruption-attacks-4gk8",
+        "estimated_usd": 0.0,
+        "source_url": "https://lwn.net/Articles/1097401/",
+        "source_title": "Several vulnerabilities have been discovered in the Linux kernel"
       }
     ],
     "total_usd": 0.0
@@ -132,22 +128,22 @@
       ]
     },
     {
-      "title": "Enhance the payout footer in bot/earning/payout.py to increase tip likelihood",
-      "description": "Modify the footer appended to articles to be more prominent and include a clear call-to-action, encouraging readers to send tips.",
+      "title": "List the digital product on Getly for USDT payouts",
+      "description": "Getly is a free-to-list storefront that settles USDT on Tron to the owner's own wallet with no KYC. Listing the product there adds a second receive path alongside the article footer.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Open bot/earning/payout.py in the repository.",
-        "2. Locate the function that generates the footer (e.g., `add_footer` or similar).",
-        "3. Update the footer text to be more visible and include a direct request for tips (e.g., 'If this article provided value, consider sending a tip to the wallet address below.').",
-        "4. Ensure the footer remains compliant with dev.to policies and the bot's tone guidelines.",
-        "5. Commit the change and push to trigger a new cycle with the updated footer."
+        "1. Go to https://www.getly.store/sell/crypto and create an account (no ID upload).",
+        "2. Add the Tron (TRC-20) receive address published on the dashboard.",
+        "3. Upload the digital product file and set an honest price.",
+        "4. Confirm the payout settings point to the same wallet address.",
+        "5. Verify current terms for revenue cut and minimum payout before relying on it."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 525,
+  "last_cycle_seconds": 1126,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -234,7 +230,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-10-01",
+    "date": "2026-10-02",
     "published": 1
   },
   "code_tech_earning": {
@@ -1027,7 +1023,8 @@
       "infoq.com/podcasts/ai-revolution-psychological-safety",
       "blog.alexewerlof.com/p/coding-is-not-solved",
       "openai.com/index/introducing-gpt-6-1-sol",
-      "martinfowler.com/articles/never-send-slides/slide-principles.html"
+      "martinfowler.com/articles/never-send-slides/slide-principles.html",
+      "lwn.net/articles/1097401"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -1086,7 +1083,8 @@
       "podcast ai revolution fail psychological safety developer conversation erin doyle",
       "coding solved",
       "gpt 6 1 sol near astra intelligence fifth price",
-      "principl effective slid"
+      "principl effective slid",
+      "several vulnerability have discovered linux kernel"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1145,7 +1143,8 @@
       "ai pair programming fail psychological safety",
       "python retry loop lying",
       "gpt 6 1 sol s pricing model sav 80 ai cost",
-      "auto generated slid outpace talk"
+      "auto generated slid outpace talk",
+      "hardening linux kernel heap corruption attack"
     ],
     "followed_up_ids": [
       4489474
@@ -1189,7 +1188,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-02T12:38:14.923975+00:00",
+    "checked_at": "2026-10-02T18:25:54.771644+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1447,12 +1446,12 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261002-183738",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 28,
-    "total_views": 4007,
-    "avg_views": 143.1,
+    "total_views": 4027,
+    "avg_views": 143.8,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 3046,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -1470,8 +1469,8 @@
       {
         "archetype": "problem-workaround",
         "count": 7,
-        "avg_engagement": 485.0,
-        "avg_views": 481.4,
+        "avg_engagement": 487.9,
+        "avg_views": 484.3,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1563,7 +1562,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-02T12:46:57.886121+00:00",
+    "last_run": "2026-10-02T18:44:38.530360+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1573,25 +1572,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-02T12:46:58.303247+00:00",
+    "last_run": "2026-10-02T18:44:38.974934+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4740283,
-        "at": "2026-10-01T00:20:33.100171+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-10-01T00:20:33.100171+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-10-01T00:20:33.100171+00:00",
-        "ok": true
-      },
       {
         "id": 4545446,
         "at": "2026-10-01T06:09:12.804093+00:00",
@@ -1713,17 +1697,37 @@
         "ok": true
       },
       {
+        "id": 4740283,
+        "at": "2026-10-02T18:44:38.974934+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-10-02T18:44:38.974934+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-10-02T18:44:38.974934+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-02T12:46:58.303247+00:00",
+        "at": "2026-10-02T18:44:38.974934+00:00",
+        "ok": true
+      },
+      {
+        "id": 4788684,
+        "at": "2026-10-02T18:44:38.974934+00:00",
         "ok": true
       }
     ],
-    "published_total": 28,
-    "covered": 28,
+    "published_total": 29,
+    "covered": 29,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 36.4
+    "oldest_check_age_hours": 36.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

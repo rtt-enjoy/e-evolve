@@ -2036,3 +2036,7 @@ Autonomous earnings generated every hourly cycle.
 
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
 - [fail] **dev.to**: title too weak to earn a click, and the rewrite failed
+
+### 2026-10-02 18:44 UTC
+
+- [ok] **dev.to**: [Hardening Linux Against Kernel Heap Corruption Attacks](https://dev.to/robust_true_try/hardening-linux-against-kernel-heap-corruption-attacks-4gk8) (est. $0.00)

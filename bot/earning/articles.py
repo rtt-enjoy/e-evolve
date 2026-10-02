@@ -89,7 +89,7 @@ def _reject(code: str, detail: str = "") -> None:
 	global _LAST_REJECT
 	_LAST_REJECT = code
 	log.warning("[articles] rejected (%s): %s%s", code, _REJECTS.get(code, code),
-				f" -- {detail}" if detail else "")
+			f" -- {detail}" if detail else "")
 	return None
 
 _SYSTEM = """\
@@ -346,7 +346,7 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 	target = _followup_target(status, os.getenv("DEV_TO_API_KEY", "").strip())
 	if target:
 		log.info("[articles] following up %r (%d views)",
-				 target.get("title", "")[:60], target.get("page_views", 0))
+			 target.get("title", "")[:60], target.get("page_views", 0))
 		followup = _generate_followup(llm, status, target)
 		if followup:
 			return followup
@@ -501,11 +501,11 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 # builder because this is editorial direction, not analysis -- the analysis
 # lives in devto_stats.
 # How much a proven archetype is worth when ranking sources, in trending-score
-# points. Deliberately smaller than the authority gap between an edited
-# publisher and an open tag feed (see trending._AUTHORITY), so interest breaks
-# ties between comparable sources rather than promoting a weak one.
-_ARCHETYPE_BONUS = 12.0
-_ARCHETYPE_BONUS_STEP = 4.0
+# points. Increased significantly because problem-workaround outperforms
+# build-tutorial by ~25x on this account (487.9 vs 72.5 avg engagement).
+# The bonus must be large enough to overcome publisher authority differences.
+_ARCHETYPE_BONUS = 50.0
+_ARCHETYPE_BONUS_STEP = 15.0
 
 _ARCHETYPE_ANGLES = {
 	"problem-workaround": (
@@ -638,7 +638,7 @@ def _followup_target(status: dict, api_key: str) -> Optional[dict]:
 	)
 	if not best:
 		log.info("[articles] no post cleared %d views in %dh -- writing a fresh take",
-				 cfg["followup_min_views"], cfg["followup_window_hours"])
+			 cfg["followup_min_views"], cfg["followup_window_hours"])
 		return None
 	return best
 
@@ -1084,8 +1084,6 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
-
 def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 	"""Ask the model to fix specific formatting violations. Returns None on failure."""
 	prompt = (
@@ -1115,7 +1113,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

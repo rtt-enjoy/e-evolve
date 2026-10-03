@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-02T22:58:35.885479+00:00",
-  "total_runs": 1927,
+  "last_run": "2026-10-03T01:59:47.792653+00:00",
+  "total_runs": 1928,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,14 +33,42 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Increase archetype steering weight to favor high-performing problem-workaround articles, accelerate backfill of wallet footers on existing posts, and auto-mark top channel opportunities as pursued in code_techs.",
+    "summary": "Add a passive-income doctrine document and a wallet footer helper so the receive path is documented and reusable across product, README, and release surfaces.",
     "changes_applied": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "Increase _ARCHETYPE_BONUS from 12.0 to 50.0 and _ARCHETYPE_BONUS_STEP from 4.0 to 15.0 to make proven archetype preference a dominant factor in source selection. The problem-workaround archetype earns 25x more engagement (487.9 vs 72.5 avg) than build-tutorial, but the previous bonus was too small to overcome publisher authority differences in trending scores."
+        "file": "docs/passive-income-doctrine.md",
+        "reason": "Provides a single auditable standard for what counts as passive income on this zero-budget, outbound-only stack, so future refusals and rankings are consistent rather than re-derived each cycle."
+      },
+      {
+        "file": "bot/earning/wallet_footer.py",
+        "reason": "Centralizes the USDT/USDC receive-path footer so payout, backfill, and future product surfaces share one deterministic template instead of duplicating the address text, which is the gap the doctrine and code_techs playbook both call out."
       }
     ],
     "suggestions": [
+      {
+        "title": "Add a passive-income doctrine document",
+        "description": "Documents the project's zero-budget, on-chain-only income rules so future evolution cycles and contributors share one consistent standard instead of rediscovering refusals.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Review docs/passive-income-doctrine.md after it lands on the review branch.",
+          "2. Confirm the rules match the owner's intent; no action is required to activate it.",
+          "3. Reference it from code_techs and mrr_ideas refusals so the reasoning is auditable in one place."
+        ]
+      },
+      {
+        "title": "Add a wallet footer helper module",
+        "description": "Centralizes the USDT/USDC receive-path footer so payout, backfill, and future product surfaces share one deterministic template instead of duplicating the address text.",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Read bot/earning/wallet_footer.py on the review branch.",
+          "2. Confirm the rendered footer matches the existing payout footer text.",
+          "3. No secret or config change is needed; the helper reads USDT_WALLET_ADDRESS like payout does."
+        ]
+      },
       {
         "title": "Add ANTHROPIC_API_KEY secret for Anthropic LLM access",
         "description": "Unlock the Anthropic LLM provider to improve diversity and avoid rate limits in LLM-dependent modules.",
@@ -53,53 +81,61 @@
           "3. In GitHub repo settings, go to Secrets and variables > Actions.",
           "4. Add a new repository secret named ANTHROPIC_API_KEY with the key value."
         ]
-      },
-      {
-        "title": "Add CEREBRAS_API_KEY secret for Cerebras LLM access",
-        "description": "Unlock the Cerebras LLM provider to improve diversity and avoid rate limits in LLM-dependent modules.",
-        "secret_needed": "CEREBRAS_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Go to https://cloud.cerebras.ai/maps and create a new API key.",
-          "2. Copy the generated API key.",
-          "3. In GitHub repo settings, go to Secrets and variables > Actions.",
-          "4. Add a new repository secret named CEREBRAS_API_KEY with the key value."
-        ]
-      },
-      {
-        "title": "Add .github/FUNDING.yml with custom URL pointing to the published USDT address",
-        "description": "GitHub renders a Sponsor button from FUNDING.yml's custom: field with no Sponsors enrolment, no Stripe, no KYC. This puts the receive address on the repo itself where developers arrive.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Create .github/FUNDING.yml in the repo with content: custom: ['https://tronscan.org/#/address/[redacted]']",
-          "2. Commit and push to main branch.",
-          "3. Verify the Sponsor button appears on the repo page and links to the Tronscan address page."
-        ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20261002-232320",
+    "branch": "evolve/1.42.0-20261003-020712",
     "proposed_version": "1.42.0"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "mrr-ideas",
         "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "status.json#mrr_ideas"
+      },
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "Your AI Code Review Is Missing These Bugs",
+        "url": "https://dev.to/robust_true_try/your-ai-code-review-is-missing-these-bugs-3l7p",
+        "estimated_usd": 0.0,
+        "source_url": "https://github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out/",
+        "source_title": "AI is changing developer work. Here are three skills to strengthen."
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
+    {
+      "title": "Add a passive-income doctrine document",
+      "description": "Documents the project's zero-budget, on-chain-only income rules so future evolution cycles and contributors share one consistent standard instead of rediscovering refusals.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Review docs/passive-income-doctrine.md after it lands on the review branch.",
+        "2. Confirm the rules match the owner's intent; no action is required to activate it.",
+        "3. Reference it from code_techs and mrr_ideas refusals so the reasoning is auditable in one place."
+      ]
+    },
+    {
+      "title": "Add a wallet footer helper module",
+      "description": "Centralizes the USDT/USDC receive-path footer so payout, backfill, and future product surfaces share one deterministic template instead of duplicating the address text.",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Read bot/earning/wallet_footer.py on the review branch.",
+        "2. Confirm the rendered footer matches the existing payout footer text.",
+        "3. No secret or config change is needed; the helper reads USDT_WALLET_ADDRESS like payout does."
+      ]
+    },
     {
       "title": "Add ANTHROPIC_API_KEY secret for Anthropic LLM access",
       "description": "Unlock the Anthropic LLM provider to improve diversity and avoid rate limits in LLM-dependent modules.",
@@ -112,35 +148,10 @@
         "3. In GitHub repo settings, go to Secrets and variables > Actions.",
         "4. Add a new repository secret named ANTHROPIC_API_KEY with the key value."
       ]
-    },
-    {
-      "title": "Add CEREBRAS_API_KEY secret for Cerebras LLM access",
-      "description": "Unlock the Cerebras LLM provider to improve diversity and avoid rate limits in LLM-dependent modules.",
-      "secret_needed": "CEREBRAS_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Go to https://cloud.cerebras.ai/maps and create a new API key.",
-        "2. Copy the generated API key.",
-        "3. In GitHub repo settings, go to Secrets and variables > Actions.",
-        "4. Add a new repository secret named CEREBRAS_API_KEY with the key value."
-      ]
-    },
-    {
-      "title": "Add .github/FUNDING.yml with custom URL pointing to the published USDT address",
-      "description": "GitHub renders a Sponsor button from FUNDING.yml's custom: field with no Sponsors enrolment, no Stripe, no KYC. This puts the receive address on the repo itself where developers arrive.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Create .github/FUNDING.yml in the repo with content: custom: ['https://tronscan.org/#/address/[redacted]']",
-        "2. Commit and push to main branch.",
-        "3. Verify the Sponsor button appears on the repo page and links to the Tronscan address page."
-      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1587,
+  "last_cycle_seconds": 561,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -227,7 +238,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-10-02",
+    "date": "2026-10-03",
     "published": 1
   },
   "code_tech_earning": {
@@ -993,7 +1004,8 @@
       "blog.alexewerlof.com/p/coding-is-not-solved",
       "openai.com/index/introducing-gpt-6-1-sol",
       "martinfowler.com/articles/never-send-slides/slide-principles.html",
-      "lwn.net/articles/1097401"
+      "lwn.net/articles/1097401",
+      "github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -1053,7 +1065,8 @@
       "coding solved",
       "gpt 6 1 sol near astra intelligence fifth price",
       "principl effective slid",
-      "several vulnerability have discovered linux kernel"
+      "several vulnerability have discovered linux kernel",
+      "ai changing developer work here three skill strengthen"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1113,12 +1126,14 @@
       "python retry loop lying",
       "gpt 6 1 sol s pricing model sav 80 ai cost",
       "auto generated slid outpace talk",
-      "hardening linux kernel heap corruption attack"
+      "hardening linux kernel heap corruption attack",
+      "ai code review missing these bugs"
     ],
     "followed_up_ids": [
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/hardening-linux-against-kernel-heap-corruption-attacks-4gk8",
       "https://dev.to/robust_true_try/slides-defaults-agents-and-git-a-week-of-developer-shifts-pb4",
       "https://dev.to/robust_true_try/when-auto-generated-slides-outpace-your-talk-2b2h",
       "https://dev.to/robust_true_try/why-your-ai-pair-programming-fails-without-psychological-safety-3m4f",
@@ -1157,7 +1172,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-02T22:58:36.404399+00:00",
+    "checked_at": "2026-10-03T01:59:48.405347+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1265,7 +1280,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-10-01T00:06:59.034765+00:00",
+    "last_refresh_at": "2026-10-03T02:07:12.833790+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -1274,21 +1289,30 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "Given the owner's limited capabilities to only research, write, and publish on dev.to, and the absence of any payment processor or outreach channel, none of the surviving recurring\u2011revenue models can be turned into a functional revenue stream without external steps that the bot cannot perform; the only honest path is to use dev.to to build credibility and audience, then later set up a payment method manually outside of the automated stack.",
-    "ranked_ideas": [],
+    "summary": "The only recurring-revenue model that fits a zero\u2011cost, research\u2011first stack that can only publish to dev.to is a narrowly focused paid newsletter; the owner writes deep\u2011dive articles, publishes free teasers on dev.to to attract inbound interest, then manually sets up a Substack (or Gumroad) account, verifies identity, and charges a modest monthly fee for a weekly curated technical digest.",
+    "ranked_ideas": [
+      {
+        "name": "Paid newsletter",
+        "why_this_stack_fits": "The bot can research, draft, and publish articles to dev.to, which serves as the sole inbound channel to build a subscriber base without any outreach or payment automation.",
+        "narrow_niche": "Senior backend engineers who are migrating legacy monoliths to serverless architectures on AWS",
+        "first_proof_artifact": "A free, 2,000\u2011word dev.to article that walks through the first migration step (API Gateway + Lambda) and ends with a single question asking readers if they would pay for a weekly migration\u2011playbook digest",
+        "who_pays": "Individual senior backend engineers (5+ years experience) who are tasked with leading a monolith\u2011to\u2011serverless migration at their company",
+        "monthly_price_usd": "12",
+        "runway_to_first_dollar": "4-8 weeks",
+        "owner_must_do_by_hand": "Open a Substack (or Gumroad) account, complete government\u2011ID verification, create the paid newsletter product, and manually copy each new issue into the platform after drafting it in the GitHub Actions workflow"
+      }
+    ],
     "validation_steps": [
-      "Write a dev.to article that deeply explores a specific problem faced by a narrow group of developers and ends with an open question inviting readers to share their experiences in the comments.",
-      "Publish the article and, by hand, monitor the comment thread, responding to each reply to gather detailed insights and verify that at least ten distinct individuals describe the same pain point.",
-      "Participate in an existing developer community (e.g., a relevant subreddit, Discord server, or Stack Overflow tag) where the owner already has an account, share the article link only when asked, and use the ensuing discussion to further validate the problem.",
-      "Compile the collected feedback into a private notes document that outlines the exact wording of the problem, the desired outcome, and any suggested solutions mentioned by the respondents.",
-      "Use the validated problem definition to plan a future deliverable (e.g., a guide, template, or checklist) that could later be offered for payment once the owner manually sets up a payment processor outside of the bot's capabilities."
+      "Publish the first free dev.to article with the ending question and monitor comments for at least 10 distinct engineers expressing willingness to pay.",
+      "Reply to each comment by hand, asking for their email address (via dev.to direct message or public comment) to build a manual waitlist.",
+      "If fewer than 10 positive responses appear after two weeks, refine the niche or article angle and repeat the article\u2011question cycle."
     ],
     "owner_actions": [
-      "Research dev.to tags and recent articles to pinpoint a narrow, underserved niche (e.g., 'optimizing ColdFusion legacy builds for modern CI pipelines').",
-      "Draft a long\u2011form article that explains the niche problem, includes concrete examples, and concludes with a question that encourages readers to comment with their own experiences.",
-      "Publish the article on dev.to and, by hand, engage with every commenter to extract detailed use\u2011cases and validate the problem with at least ten distinct respondents.",
-      "Iterate on the article series based on feedback, publishing follow\u2011up pieces that dive deeper into the most\u2011requested aspects of the problem.",
-      "Document all validated insights in a shareable format (e.g., a GitHub Markdown file) to serve as the foundation for a future manual product or service once the owner can independently establish a payment channel."
+      "Define 10 concrete migration\u2011playbook topics (e.g., cold\u2011start latency, CI/CD for Lambda, observability) and outline the first free article.",
+      "Write, edit, and publish the first free dev.to article with the validation question.",
+      "Manually collect email addresses from commenters who say they would pay, storing them in a local spreadsheet.",
+      "Create a Substack account, complete ID verification, and set up a $12/month paid newsletter product.",
+      "Draft the first paid issue (weekly digest of one playbook topic), publish it on Substack, and notify the waitlist by hand."
     ],
     "viable": [
       {
@@ -1415,14 +1439,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20261002-232320",
+  "last_evolution_branch": "evolve/1.42.0-20261003-020712",
   "evolution_pending_review": true,
   "article_stats": {
-    "count": 28,
-    "total_views": 4027,
-    "avg_views": 143.8,
+    "count": 29,
+    "total_views": 4047,
+    "avg_views": 139.6,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 3046,
+    "best_views": 3056,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1438,8 +1462,8 @@
       {
         "archetype": "problem-workaround",
         "count": 7,
-        "avg_engagement": 487.9,
-        "avg_views": 484.3,
+        "avg_engagement": 490.7,
+        "avg_views": 487.1,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1457,13 +1481,6 @@
         "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       },
       {
-        "archetype": "security-privacy",
-        "count": 2,
-        "avg_engagement": 40.0,
-        "avg_views": 40.0,
-        "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
-      },
-      {
         "archetype": "surprising-behavior",
         "count": 4,
         "avg_engagement": 32.8,
@@ -1478,6 +1495,13 @@
         "best_title": "The Redirect Chain That Bypasses Your Ad Blocker"
       },
       {
+        "archetype": "security-privacy",
+        "count": 3,
+        "avg_engagement": 26.7,
+        "avg_views": 26.7,
+        "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
+      },
+      {
         "archetype": "engineering-culture",
         "count": 1,
         "avg_engagement": 10.0,
@@ -1487,7 +1511,7 @@
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "engineering-culture",
-    "sample_size": 28
+    "sample_size": 29
   },
   "article_rejects": {
     "last_reason": "weak_title",
@@ -1531,7 +1555,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-02T23:25:02.163175+00:00",
+    "last_run": "2026-10-03T02:09:07.992149+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1541,27 +1565,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-02T23:25:02.507236+00:00",
+    "last_run": "2026-10-03T02:09:08.254602+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
         "id": 4729472,
-        "at": "2026-10-01T13:27:31.190943+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-10-01T13:27:31.190943+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-10-01T13:27:31.190943+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
         "at": "2026-10-01T13:27:31.190943+00:00",
         "ok": true
       },
@@ -1686,17 +1695,37 @@
         "ok": true
       },
       {
+        "id": 4368781,
+        "at": "2026-10-03T02:09:08.254602+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-10-03T02:09:08.254602+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-10-03T02:09:08.254602+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-02T23:25:02.507236+00:00",
+        "at": "2026-10-03T02:09:08.254602+00:00",
+        "ok": true
+      },
+      {
+        "id": 4789765,
+        "at": "2026-10-03T02:09:08.254602+00:00",
         "ok": true
       }
     ],
-    "published_total": 29,
-    "covered": 29,
+    "published_total": 30,
+    "covered": 30,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 34.0
+    "oldest_check_age_hours": 36.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

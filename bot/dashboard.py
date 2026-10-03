@@ -131,7 +131,12 @@ def _fallback_index() -> str:
     <h1>E-Evolve Dashboard</h1>
     <p>The React dashboard has not been built yet.</p>
     <p>Run <code>npm install</code> and <code>npm run build</code> in
-    <code>frontend/</code>, or inspect <a href="status.json">status.json</a>.</p>
+    <code>frontend/</code>, or inspect the following:</p>
+    <ul>
+      <li><a href="status.json">status.json</a> — full machine-readable status</li>
+      <li><a href="earnings-log.md">earnings-log.md</a> — chronological earning actions</li>
+      <li><a href="daily-summary.md">daily-summary.md</a> — daily earnings summary</li>
+    </ul>
   </main>
 </body>
 </html>

@@ -95,18 +95,25 @@ def parse_dt(value: Any) -> Optional[datetime]:
 def strip_html(value: str) -> str:
 	"""Flatten feed HTML to plain text.
 
-    ``<script>`` bodies are dropped whole -- tag-stripping alone would leave
-    the JavaScript source behind as if it were prose.
+    ``<script>`` and ``<style>`` bodies are dropped whole -- tag-stripping alone would leave
+    the JavaScript or CSS source behind as if it were prose.
 
-    Entities are *decoded*, not deleted. Replacing them with a space used to
-    corrupt the text it was meant to clean: Hacker News serves "$120-160/hr"
-    as ``$120-160&#x2F;hr``, so a rate a human actually typed came out as
-    "$120-160 hr" and no downstream reader could recognise it as a price.
-    Numeric entities were not matched at all, leaving raw ``&#x2F;`` in place.
+    HTML comments ``<!-- ... -->`` are also removed. Entities are *decoded*, not deleted.
+    Replacing them with a space used to corrupt the text it was meant to clean: Hacker News
+    serves "$120-160/hr" as ``$120-160&#x2F;hr``, so a rate a human actually typed came out as
+    "$120-160 hr" and no downstream reader could recognise it as a price. Numeric entities
+    were not matched at all, leaving raw ``&#x2F;`` in place.
     """
+	# Drop script and style blocks entirely
 	value = re.sub(r"<script.*?</script>", " ", value, flags=re.DOTALL | re.IGNORECASE)
+	value = re.sub(r"<style.*?</style>", " ", value, flags=re.DOTALL | re.IGNORECASE)
+	# Remove HTML comments
+	value = re.sub(r"<!--.*?-->", " ", value, flags=re.DOTALL)
+	# Strip remaining tags
 	value = re.sub(r"<[^>]+>", " ", value)
+	# Decode HTML entities
 	value = html.unescape(value)
+	# Collapse whitespace
 	return re.sub(r"\s+", " ", value).strip()
 
 

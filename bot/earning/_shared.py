@@ -95,8 +95,10 @@ def parse_dt(value: Any) -> Optional[datetime]:
 def strip_html(value: str) -> str:
 	"""Flatten feed HTML to plain text.
 
-    ``<script>`` bodies are dropped whole -- tag-stripping alone would leave
-    the JavaScript source behind as if it were prose.
+    ``<script>`` and ``<style>`` bodies are dropped whole -- tag-stripping alone
+    would leave the JavaScript or CSS source behind as if it were prose.
+    HTML comments are removed too, so ``<!-- ad -->`` does not leak into the
+    extracted text.
 
     Entities are *decoded*, not deleted. Replacing them with a space used to
     corrupt the text it was meant to clean: Hacker News serves "$120-160/hr"
@@ -105,6 +107,8 @@ def strip_html(value: str) -> str:
     Numeric entities were not matched at all, leaving raw ``&#x2F;`` in place.
     """
 	value = re.sub(r"<script.*?</script>", " ", value, flags=re.DOTALL | re.IGNORECASE)
+	value = re.sub(r"<style.*?</style>", " ", value, flags=re.DOTALL | re.IGNORECASE)
+	value = re.sub(r"<!--.*?-->", " ", value, flags=re.DOTALL)
 	value = re.sub(r"<[^>]+>", " ", value)
 	value = html.unescape(value)
 	return re.sub(r"\s+", " ", value).strip()

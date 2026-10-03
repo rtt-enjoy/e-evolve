@@ -6,6 +6,7 @@ docs/ for GitHub Pages. Python owns the backend-facing data contract:
 
   - docs/status.json
   - docs/earnings-log.md
+  - docs/daily-summary.md
 
 If the React build has not been generated yet, write a tiny fallback shell so
 GitHub Pages still has a helpful index.html.
@@ -25,6 +26,7 @@ _LOG_FILE = Path("earnings-log.md")
 _HTML_FILE = Path("docs/index.html")
 _PUBLIC_STATUS_FILE = Path("docs/status.json")
 _PUBLIC_LOG_FILE = Path("docs/earnings-log.md")
+_DAILY_SUMMARY_FILE = Path("docs/daily-summary.md")
 
 
 def write_log(actions: list[dict]) -> None:
@@ -105,10 +107,93 @@ def write_html(status: dict[str, Any]) -> None:
 			encoding="utf-8",
 		)
 
+	_write_daily_summary(status)
+
 	if not _HTML_FILE.exists():
 		_HTML_FILE.write_text(_fallback_index(), encoding="utf-8")
 
 	log.info("Dashboard data written -> docs/status.json")
+
+
+def _write_daily_summary(status: dict[str, Any]) -> None:
+	"""Write a concise markdown summary of today's earnings and activity."""
+	earnings = status.get("earnings", {})
+	wallet = status.get("wallet", {})
+	article_daily = status.get("article_daily", {})
+	backfill = status.get("backfill", {})
+	receipt_check = status.get("receipt_check", {})
+	attribution = status.get("attribution", {})
+	code_techs = status.get("code_tech_earning", {})
+	mrr_ideas = status.get("mrr_ideas", {})
+	llm_provider = status.get("llm_provider", "unknown")
+
+	lines = [
+		"# Daily Earnings Summary",
+		"",
+		f"Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
+		"",
+		"## Earnings",
+		"",
+		f"- Total USD: ${float(earnings.get('total_usd', 0.0) or 0.0):.2f}",
+		f"- This week USD: ${float(earnings.get('this_week_usd', 0.0) or 0.0):.2f}",
+		f"- Last cycle USD: ${float(earnings.get('last_cycle_usd', 0.0) or 0.0):.2f}",
+		f"- Confirmed USD: ${float(earnings.get('confirmed_usd', 0.0) or 0.0):.2f}",
+		f"- Received total USD: ${float(earnings.get('received_total_usd', 0.0) or 0.0):.2f}",
+		"",
+		"## Wallet",
+		"",
+		f"- Network: {wallet.get('network', 'unknown')}",
+		f"- USDT balance: ${float(wallet.get('usdt_balance', 0.0) or 0.0):.2f}",
+		f"- Confirmed USD: ${float(wallet.get('confirmed_usd', 0.0) or 0.0):.2f}",
+		f"- Received total USD: ${float(wallet.get('received_total_usd', 0.0) or 0.0):.2f}",
+		"",
+		"## Articles",
+		"",
+		f"- Date: {article_daily.get('date', 'unknown')}",
+		f"- Published today: {article_daily.get('published', 0)}",
+		"",
+		"## Backfill",
+		"",
+		f"- Updated total: {backfill.get('updated_total', 0)}",
+		f"- Remaining: {backfill.get('remaining', 0)}",
+		f"- Last run: {backfill.get('last_run', 'never')}",
+		f"- Last reason: {backfill.get('last_reason', 'unknown')}",
+		"",
+		"## Receipt Check",
+		"",
+		f"- Checked: {receipt_check.get('checked', 0)}",
+		f"- With footer: {receipt_check.get('with_footer', 0)}",
+		f"- Published total: {receipt_check.get('published_total', 0)}",
+		f"- Coverage complete: {receipt_check.get('coverage_complete', False)}",
+		"",
+		"## Attribution",
+		"",
+		f"- Receipt count: {attribution.get('receipt_count', 0)}",
+		f"- Total attributed USD: ${float(attribution.get('total_attributed_usd', 0.0) or 0.0):.2f}",
+		f"- Last receipt at: {attribution.get('last_receipt_at', 'never')}",
+		"",
+		"## Code Techs",
+		"",
+		f"- Enabled: {code_techs.get('enabled', False)}",
+		f"- Opportunity count: {len(code_techs.get('opportunities', []))}",
+		f"- Channel count: {code_techs.get('channel_count', 0)}",
+		f"- Asset count: {code_techs.get('asset_count', 0)}",
+		f"- Daily target USD: ${float(code_techs.get('daily_target_usd', 0.0) or 0.0):.2f}",
+		"",
+		"## MRR Ideas",
+		"",
+		f"- Enabled: {mrr_ideas.get('enabled', False)}",
+		f"- Viable idea count: {len(mrr_ideas.get('viable', []))}",
+		f"- Refused idea count: {len(mrr_ideas.get('refused', []))}",
+		"",
+		"## LLM",
+		"",
+		f"- Provider: {llm_provider}",
+		"",
+	]
+
+	_DAILY_SUMMARY_FILE.write_text("\n".join(lines) + "\n", encoding="utf-8")
+	log.info("Daily summary written -> docs/daily-summary.md")
 
 
 def _fallback_index() -> str:
@@ -124,6 +209,7 @@ def _fallback_index() -> str:
     main{max-width:760px;margin:12vh auto;padding:0 24px}
     a{color:#6aa6ff}
     code{background:#17202c;padding:2px 6px;border-radius:6px}
+    ul{margin-top:0.5em}
   </style>
 </head>
 <body>
@@ -131,7 +217,13 @@ def _fallback_index() -> str:
     <h1>E-Evolve Dashboard</h1>
     <p>The React dashboard has not been built yet.</p>
     <p>Run <code>npm install</code> and <code>npm run build</code> in
-    <code>frontend/</code>, or inspect <a href="status.json">status.json</a>.</p>
+    <code>frontend/</code>, or inspect the data files below.</p>
+    <h2>Quick Links</h2>
+    <ul>
+      <li><a href="status.json">status.json</a> — full bot status</li>
+      <li><a href="earnings-log.md">earnings-log.md</a> — cycle action log</li>
+      <li><a href="daily-summary.md">daily-summary.md</a> — today's earnings summary</li>
+    </ul>
   </main>
 </body>
 </html>

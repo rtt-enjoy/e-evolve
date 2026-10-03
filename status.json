@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-03T08:08:23.033852+00:00",
-  "total_runs": 1929,
+  "last_run": "2026-10-03T13:24:40.432029+00:00",
+  "total_runs": 1930,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,21 +33,21 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add daily earnings summary and improve fallback dashboard; clean HTML stripping for better feed parsing.",
+    "summary": "Add a daily earnings summary report and improve the fallback dashboard with quick links and daily summary.",
     "changes_applied": [
       {
         "file": "bot/dashboard.py",
-        "reason": "Improve fallback dashboard with daily summary and better messaging; adds a concise daily summary for quick scanning and enhances the fallback index with quick links."
+        "reason": "Adds a daily earnings summary report (docs/daily-summary.md) with earnings, wallet, articles, backfill, receipt check, attribution, code techs, MRR ideas, and LLM provider status, and improves the fallback index.html with quick links to status.json, earnings-log.md, and daily-summary.md for better dashboard scanning when the React frontend is not built."
       },
       {
         "file": "bot/earning/_shared.py",
-        "reason": "Improve HTML stripping to also remove style tags and comments, leading to cleaner text extraction from feeds."
+        "reason": "Improves HTML stripping to also remove <style> tags and HTML comments, leading to cleaner text extraction from feeds. Previously only <script> tags were removed, leaving CSS source and comment artifacts in the extracted text."
       }
     ],
     "suggestions": [
       {
         "title": "Add a daily earnings summary report (docs/daily-summary.md)",
-        "description": "Generate a concise markdown summary of today's earnings, articles, code\u2011tech leads, wallet balance, backfill progress, attribution receipts, and LLM provider status for quick dashboard scanning.",
+        "description": "Generate a concise markdown summary of today's earnings, articles, code-tech leads, wallet balance, backfill progress, attribution receipts, and LLM provider status for quick dashboard scanning.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -59,7 +59,7 @@
       },
       {
         "title": "Improve the fallback index.html with better messaging and links",
-        "description": "Enhance the minimal fallback page to include a quick\u2011links section pointing to status.json, earnings-log.md, and the new daily-summary.md, making it easier to inspect dashboard data when the React build is missing.",
+        "description": "Enhance the minimal fallback page to include a quick-links section pointing to status.json, earnings-log.md, and the new daily-summary.md, making it easier to inspect dashboard data when the React build is missing.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -71,7 +71,7 @@
       },
       {
         "title": "Add ANTHROPIC_API_KEY secret for Anthropic LLM access",
-        "description": "Unlock the Anthropic LLM provider to improve diversity and avoid rate limits in LLM\u2011dependent modules.",
+        "description": "Unlock the Anthropic LLM provider to improve diversity and avoid rate limits in LLM-dependent modules.",
         "secret_needed": "ANTHROPIC_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -84,28 +84,17 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20261003-081014",
+    "branch": "evolve/1.42.0-20261003-132934",
     "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Add a daily earnings summary report (docs/daily-summary.md)",
-      "description": "Generate a concise markdown summary of today's earnings, articles, code\u2011tech leads, wallet balance, backfill progress, attribution receipts, and LLM provider status for quick dashboard scanning.",
+      "description": "Generate a concise markdown summary of today's earnings, articles, code-tech leads, wallet balance, backfill progress, attribution receipts, and LLM provider status for quick dashboard scanning.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -117,7 +106,7 @@
     },
     {
       "title": "Improve the fallback index.html with better messaging and links",
-      "description": "Enhance the minimal fallback page to include a quick\u2011links section pointing to status.json, earnings-log.md, and the new daily-summary.md, making it easier to inspect dashboard data when the React build is missing.",
+      "description": "Enhance the minimal fallback page to include a quick-links section pointing to status.json, earnings-log.md, and the new daily-summary.md, making it easier to inspect dashboard data when the React build is missing.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -129,7 +118,7 @@
     },
     {
       "title": "Add ANTHROPIC_API_KEY secret for Anthropic LLM access",
-      "description": "Unlock the Anthropic LLM provider to improve diversity and avoid rate limits in LLM\u2011dependent modules.",
+      "description": "Unlock the Anthropic LLM provider to improve diversity and avoid rate limits in LLM-dependent modules.",
       "secret_needed": "ANTHROPIC_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -142,7 +131,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 222,
+  "last_cycle_seconds": 296,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1142,7 +1131,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-03T08:08:23.755296+00:00",
+    "checked_at": "2026-10-03T13:24:41.033592+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1409,7 +1398,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20261003-081014",
+  "last_evolution_branch": "evolve/1.42.0-20261003-132934",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 29,
@@ -1525,47 +1514,27 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-03T08:12:03.566017+00:00",
+    "last_run": "2026-10-03T13:29:35.195501+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-03T08:12:03.870203+00:00",
+    "last_run": "2026-10-03T13:29:35.436127+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-10-01T19:57:48.158278+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
-        "at": "2026-10-01T19:57:48.158278+00:00",
-        "ok": true
-      },
       {
         "id": 4681657,
         "at": "2026-10-01T23:54:33.183814+00:00",
         "ok": true
       },
       {
-        "id": 4633220,
-        "at": "2026-10-01T23:54:33.183814+00:00",
-        "ok": true
-      },
-      {
         "id": 4662663,
-        "at": "2026-10-01T23:54:33.183814+00:00",
-        "ok": true
-      },
-      {
-        "id": 4765372,
         "at": "2026-10-01T23:54:33.183814+00:00",
         "ok": true
       },
@@ -1685,8 +1654,28 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-10-03T13:29:35.436127+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-10-03T13:29:35.436127+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-03T13:29:35.436127+00:00",
+        "ok": true
+      },
+      {
+        "id": 4765372,
+        "at": "2026-10-03T13:29:35.436127+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-03T08:12:03.870203+00:00",
+        "at": "2026-10-03T13:29:35.436127+00:00",
         "ok": true
       }
     ],
@@ -1695,7 +1684,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 36.2
+    "oldest_check_age_hours": 37.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

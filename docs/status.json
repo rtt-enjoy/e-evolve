@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-04T13:12:37.144388+00:00",
-  "total_runs": 1935,
+  "last_run": "2026-10-04T17:35:51.815695+00:00",
+  "total_runs": 1936,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,30 +33,9 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Fix backfill max_per_cycle regression and add explicit demand_max_age_hours default to make backfill throughput and freshness visible in config defaults.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/backfill.py",
-        "reason": "Raise max_per_cycle from 3 to 10 so the back catalogue is covered faster. The work is bounded by Forem's rate limit, which is well above 10, and this change makes the limit visible in the defaults rather than relying on the owner to edit config."
-      },
-      {
-        "file": "bot/earning/code_techs.py",
-        "reason": "Add explicit demand_max_age_hours default of 72 hours to the code_techs config so the HN search freshness window is visible in the defaults rather than relying on a hardcoded fallback. This makes the behaviour configurable and reviewable."
-      }
-    ],
+    "summary": "Fix _revise_title docstring placement bug, add demand_max_age_hours to code_techs defaults, raise backfill max_per_cycle 3\u219210, clean empty comment blocks in articles.py.",
+    "changes_applied": [],
     "suggestions": [
-      {
-        "title": "Review backfill and code_techs defaults changes",
-        "description": "The proposed patch raises backfill max_per_cycle from 3 to 10 and adds an explicit demand_max_age_hours default of 72 hours. Both are free, require no secrets, and make the code's behaviour visible in the defaults rather than relying on hardcoded fallbacks.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Review the diff on the review branch.",
-          "2. If the changes are correct, merge to main.",
-          "3. The next cycle picks up the new limits automatically."
-        ]
-      },
       {
         "title": "Add ANTHROPIC_API_KEY secret",
         "description": "Unlock Anthropic LLM provider for diversity and rate limit avoidance",
@@ -82,48 +61,40 @@
           "3. In GitHub repo settings, go to Secrets and variables > Actions.",
           "4. Add a new repository secret named CEREBRAS_API_KEY with the key value."
         ]
+      },
+      {
+        "title": "Add DEV_TO_API_KEY secret",
+        "description": "Unlock dev.to publishing for articles, newsletter, and backfill modules",
+        "secret_needed": "DEV_TO_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Go to https://dev.to/settings/keys and create a new API key.",
+          "2. Copy the generated API key.",
+          "3. In GitHub repo settings, go to Secrets and variables > Actions.",
+          "4. Add a new repository secret named DEV_TO_API_KEY with the key value."
+        ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20261004-135102",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
         "platform": "dev.to",
-        "success": false,
-        "skipped": true,
-        "reject_code": "llm_error",
-        "error": "LLM call failed",
-        "estimated_usd": 0.0
+        "success": true,
+        "title": "The Generative AI Output That Escaped Your Guardrails",
+        "url": "https://dev.to/robust_true_try/the-generative-ai-output-that-escaped-your-guardrails-b40",
+        "estimated_usd": 0.0,
+        "source_url": "https://fortune.com/2026/10/01/ai-godfather-yann-lecun-has-zero-concerns-about-human-extinction-says-anthropic-ceo-dario-amodei-is-deuded/",
+        "source_title": "LeCun has \"zero concerns\" about AI wiping out humanity, recent \"rogue\" incidents"
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
-    {
-      "title": "Review backfill and code_techs defaults changes",
-      "description": "The proposed patch raises backfill max_per_cycle from 3 to 10 and adds an explicit demand_max_age_hours default of 72 hours. Both are free, require no secrets, and make the code's behaviour visible in the defaults rather than relying on hardcoded fallbacks.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Review the diff on the review branch.",
-        "2. If the changes are correct, merge to main.",
-        "3. The next cycle picks up the new limits automatically."
-      ]
-    },
     {
       "title": "Add ANTHROPIC_API_KEY secret",
       "description": "Unlock Anthropic LLM provider for diversity and rate limit avoidance",
@@ -149,10 +120,23 @@
         "3. In GitHub repo settings, go to Secrets and variables > Actions.",
         "4. Add a new repository secret named CEREBRAS_API_KEY with the key value."
       ]
+    },
+    {
+      "title": "Add DEV_TO_API_KEY secret",
+      "description": "Unlock dev.to publishing for articles, newsletter, and backfill modules",
+      "secret_needed": "DEV_TO_API_KEY",
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Go to https://dev.to/settings/keys and create a new API key.",
+        "2. Copy the generated API key.",
+        "3. In GitHub repo settings, go to Secrets and variables > Actions.",
+        "4. Add a new repository secret named DEV_TO_API_KEY with the key value."
+      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 2592,
+  "last_cycle_seconds": 288,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -239,7 +223,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-10-03",
+    "date": "2026-10-04",
     "published": 1
   },
   "code_tech_earning": {
@@ -1026,7 +1010,8 @@
       "openai.com/index/introducing-gpt-6-1-sol",
       "martinfowler.com/articles/never-send-slides/slide-principles.html",
       "lwn.net/articles/1097401",
-      "github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out"
+      "github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out",
+      "fortune.com/2026/10/01/ai-godfather-yann-lecun-has-zero-concerns-about-human-extinction-says-anthropic-ceo-dario-amodei-is-deuded"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -1087,7 +1072,8 @@
       "gpt 6 1 sol near astra intelligence fifth price",
       "principl effective slid",
       "several vulnerability have discovered linux kernel",
-      "ai changing developer work here three skill strengthen"
+      "ai changing developer work here three skill strengthen",
+      "lecun has zero concern ai wiping out humanity recent rogue incident"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1148,7 +1134,8 @@
       "gpt 6 1 sol s pricing model sav 80 ai cost",
       "auto generated slid outpace talk",
       "hardening linux kernel heap corruption attack",
-      "ai code review missing these bugs"
+      "ai code review missing these bugs",
+      "generative ai output escaped guardrail"
     ],
     "followed_up_ids": [
       4489474
@@ -1194,7 +1181,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-04T13:12:37.937576+00:00",
+    "checked_at": "2026-10-04T17:35:52.373145+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1461,8 +1448,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261004-135102",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 30,
     "total_views": 4177,
@@ -1577,7 +1564,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-04T13:55:48.512481+00:00",
+    "last_run": "2026-10-04T17:40:38.284611+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1587,27 +1574,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-04T13:55:48.818123+00:00",
+    "last_run": "2026-10-04T17:40:38.910470+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4671278,
-        "at": "2026-10-03T02:09:08.254602+00:00",
-        "ok": true
-      },
-      {
-        "id": 4789765,
-        "at": "2026-10-03T02:09:08.254602+00:00",
-        "ok": true
-      },
-      {
         "id": 4729472,
-        "at": "2026-10-03T08:12:03.870203+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
         "at": "2026-10-03T08:12:03.870203+00:00",
         "ok": true
       },
@@ -1737,17 +1709,37 @@
         "ok": true
       },
       {
+        "id": 4671278,
+        "at": "2026-10-04T17:40:38.910470+00:00",
+        "ok": true
+      },
+      {
+        "id": 4789765,
+        "at": "2026-10-04T17:40:38.910470+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-10-04T17:40:38.910470+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-04T13:55:48.818123+00:00",
+        "at": "2026-10-04T17:40:38.910470+00:00",
+        "ok": true
+      },
+      {
+        "id": 4796875,
+        "at": "2026-10-04T17:40:38.910470+00:00",
         "ok": true
       }
     ],
-    "published_total": 30,
-    "covered": 30,
+    "published_total": 31,
+    "covered": 31,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 35.8
+    "oldest_check_age_hours": 33.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -31,14 +31,15 @@ _DEFAULT_CONFIG = {
 	"status_max_items": 16,
 	# Prompts are the expensive field (~1.3 KB each) and status.json is
 	# committed hourly. Lowered from 10 when the payload measured 36.7 KB
-	# against a 30 KB budget: the top rows are a stable, hand-checked table,
-	# so a prompt for each of the first six covers everything actionable.
+	# against a 30 KB budget: the top rows are a stable, hand-checked table, so
+	# a prompt for each of the first six covers everything actionable.
 	"prompt_top_n": 6,
 	"min_score": 40,
 	# Reserve half the page for channels -- rows where the product actually
 	# gets paid -- so plentiful free tooling cannot crowd them out.
 	"min_channel_share": 0.5,
 	"supply_max_age_days": 120,
+	"demand_max_age_hours": 72,
 	"reddit_backoff_seconds": 5,
 	"auto_pursue": False,
 	"pursue_score_threshold": 75,
@@ -199,10 +200,10 @@ _DEFAULT_CONFIG = {
 
 # A lead is one of two things. This module used to answer "who is paying for
 # work right now" -- job postings -- and that is the wrong question for this
-# project. Selling the owner's hours fails Principle 2 row 2 outright: income
-# per unit needs owner action, so it is a job, not passive income. The live
-# queue was 17 job postings to 1 tooling lead, including "College Admissions
-# Counselor", and the owner reported the page as pointing the wrong way.
+# project. Selling the owner's hours fails Principle 2 row 2 outright: every
+# unit of income needs the owner to do the work, so it is a job, not passive
+# income. The live queue had become 17 job postings to 1 tooling lead, among
+# them "College Admissions Counselor" and a German retail role.
 #
 # So the two kinds are now:
 #   channel -- a place a digital product can be listed and paid for, ideally
@@ -229,7 +230,7 @@ _SUPPLY = _ASSET
 # seized and shut down in 2024** while still being recommended across the web
 # as the go-to crypto storefront. A scraped "best platform to sell with crypto"
 # list would have put a dead, seized payment processor at the top of the
-# owner's page. A channel that takes money is not a lead to be guessed at.
+# owner's page.
 #
 # `manual_setup` is the honest half. Every one of these needs the owner to open
 # an account by hand -- that is a Principle 2 row-1/row-2 cost and it is stated
@@ -315,7 +316,7 @@ _PRODUCT_CHANNELS = [
 			"Scores top marks on every Principle 2 row -- no new secret, no owner action "
 			"per unit, within policy, verifiable on-chain, reuses output already produced."
 		),
-		"labels": ["wallet", "usdt", "tron", "no-account", "already-live"],
+		"labels": ["wallet", "usdt", "tron", "no-kyc", "no-account", "own-wallet", "no-owner-action", "reuse"],
 		"cost_usd": 0.0,
 		"manual_setup": "None. Already publishing.",
 		"verified_note": "Live since 2026-09-04; coverage observed by receipt_check each cycle.",
@@ -323,7 +324,7 @@ _PRODUCT_CHANNELS = [
 ]
 
 # Recorded refusals, so a later cycle does not re-derive them and so a dead
-# platform cannot come back onto the page.
+# platform cannot climb back onto this page.
 _REFUSED_CHANNELS = [
 	{
 		"name": "Sellix",
@@ -402,8 +403,7 @@ _LOCAL_LEADS = [
 			"holding the money. It is the wallet ask (the top-ranked channel here) applied to "
 			"the surface where developers actually arrive looking for the tool."
 		),
-		"labels": ["wallet", "usdt", "tron", "no-kyc", "no-account", "own-wallet",
-		           "no-owner-action", "reuse"],
+		"labels": ["wallet", "usdt", "tron", "no-kyc", "no-account", "own-wallet", "no-owner-action", "reuse"],
 		"cost_usd": 0.0,
 		"manual_setup": "None beyond committing a file to the repo the owner already controls.",
 		"verified_note": "FUNDING.yml custom: field accepts arbitrary URLs and requires no Sponsors enrolment.",
@@ -421,8 +421,7 @@ _LOCAL_LEADS = [
 			"paywall, and it is the only variant that needs no processor, no KYC, and no "
 			"platform that can freeze a payout. Nothing here can be seized or geo-blocked."
 		),
-		"labels": ["digital-product", "wallet", "no-kyc", "no-account", "own-wallet",
-		           "no-owner-action", "reuse"],
+		"labels": ["digital-product", "wallet", "no-kyc", "no-account", "own-wallet", "no-owner-action", "reuse"],
 		"cost_usd": 0.0,
 		"manual_setup": "None. Uses the repo the owner already has.",
 	},
@@ -439,8 +438,7 @@ _LOCAL_LEADS = [
 			"No account, no identity, no platform -- and it reaches users who never open the "
 			"page the product was listed on."
 		),
-		"labels": ["wallet", "no-kyc", "no-account", "own-wallet", "no-owner-action",
-		           "reuse", "coverage"],
+		"labels": ["wallet", "no-kyc", "no-account", "own-wallet", "no-owner-action", "reuse", "coverage"],
 		"cost_usd": 0.0,
 		"manual_setup": "None.",
 	},
@@ -540,7 +538,6 @@ _PERIOD_LABELS = {
 }
 
 
-
 @dataclass
 class Opportunity:
 	title: str
@@ -603,7 +600,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	# These counts describe the leads actually in the snapshot, not the longer
 	# ranked list. A count that exceeds what the page can show is a claim the
 	# page cannot back up -- the same "field reports on more than it covers"
-	# problem `receipt_check` exists to catch. `ranked_total` carries the rest.
+	# problem `receipt_check` exists to catch.
 	shown = opportunities[:status_max_items]
 	channels = sum(1 for op in shown if op.kind == _CHANNEL)
 	priced = sum(1 for op in shown if op.value_basis != "none")
@@ -754,9 +751,9 @@ def _fetch_online_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
     ``_fetch_hn_hiring_leads`` (the monthly HN "Who is hiring" thread) were the
     two biggest suppliers here, and they supplied the wrong thing: contract and
     part-time postings. Selling the owner's hours is not passive income -- it
-    fails Principle 2 row 2, because every unit of income needs the owner to do
-    the work -- and the live queue had become 17 job postings to 1 tooling lead,
-    among them "College Admissions Counselor" and a German retail role.
+    fails Principle 2 row 2, because every unit of income needs the owner to
+    do the work -- and the live queue had become 17 job postings to 1 tooling
+    lead, among them "College Admissions Counselor" and a German retail role.
 
     Deleted rather than demoted behind a filter: a lane that scores below every
     other lead still occupies the page, still costs two HTTP fetchers to
@@ -1363,7 +1360,6 @@ def _score(
 
 	return max(0, min(100, round(score - penalty))), parts
 
-
 def _charges_a_subscription(text: str) -> bool:
 	"""True when the text says the OWNER pays a recurring fee.
 
@@ -1390,8 +1386,8 @@ def _charges_a_subscription(text: str) -> bool:
 
 _IDENTITY_TERMS = (
 	"kyc", "id verification", "identity verification", "verify your identity",
-	"government id", "gov id", "photo id", "passport", "selfie",
-	"tax interview", "tax identity", "ssn", "social security number",
+	"government id", "gov id", "photo id", "passport",
+	"selfie", "tax interview", "tax identity", "ssn", "social security number",
 	"tin", "ein", "itin", "w-9", "w-8ben", "proof of address",
 	"stripe identity", "id documents", "id document",
 )
@@ -1400,9 +1396,8 @@ _IDENTITY_TERMS = (
 # hypothetical: the highest-ranked channel on this page says "no KYC process --
 # there are no ID documents to upload", and the two previous negation bugs
 # recorded in this module ("per month", then "no monthly fee") were both a
-# substring being read as a claim. A scan that cannot see "no" would dock the
-# one row that takes money without asking who the owner is -- inverting the
-# exact ranking this component exists to produce.
+# substring being read as a claim. A scan that cannot see "no" in front of a
+# term reads a disclaimer as a claim, which is exactly backwards.
 _IDENTITY_NEGATORS = (
 	"no ", "not ", "never ", "without ", "zero ", "free of ", "skip ",
 	"no need for ", "doesn't need ", "does not need ", "isn't required",
@@ -1451,8 +1446,7 @@ def _identity_cost(text: str, labels: set[str], setup: str) -> float:
     The owner tried to open Gumroad and Substack and could not: both demanded
     ID verification, and neither pays crypto. A page that ranked them highly
     was, for this owner, ranking two channels that can never open -- so this
-    asks the question the page was not asking.
-    """
+    asks the question the page was not asking. """
 	if "no-kyc" in labels or "no-account" in labels or "already-live" in labels:
 		return 1.0
 	if _demands_identity(text, labels):
@@ -1493,8 +1487,8 @@ def _is_free_ai_lead(text: str) -> bool:
 def _lead_value(lead: dict[str, Any]) -> tuple[float | None, str, str]:
 	"""Return ``(value_usd, value_basis, value_note)`` -- published prices only.
 
-    This replaces ``_extract_value``, which took ``max()`` of every ``$N``
-    regex match in the lead text and, failing that, invented
+    This replaces ``_extract_value``, which took ``max()`` of every ``$N`` regex
+    match in the lead text and, failing that, invented
     ``daily_target_usd`` because the body contained the word "need". Every
     lead therefore carried a figure: the live queue's top lead read **$4,500**,
     scraped out of an unrelated repository roadmap, and the dashboard summed
@@ -1504,28 +1498,30 @@ def _lead_value(lead: dict[str, Any]) -> tuple[float | None, str, str]:
     Only two things count as a price here: a salary field the job board
     published, or a rate the poster themselves typed. Everything else returns
     ``None`` -- not ``0.0``, because 0.0 sums silently into totals and sorts as
-    the cheapest lead, while None forces the UI to admit it does not know.
+    the worst lead; None forces the UI to render an em dash. Same reasoning as
+    ``receipt_check``'s third "unreachable" state.
     """
 	low = _money(lead.get("min_salary"))
 	high = _money(lead.get("max_salary"))
 	if low or high:
 		currency = str(lead.get("currency") or "").upper()
 		# A CAD figure rendered with a "$" is simply a wrong number, and
-		# converting it would need a rate -- i.e. an estimate.
+		# converting it would need a rate -- i.e. an estimate. Only USD (or
+		# unmarked "$") is trusted.
 		if currency in ("", "USD"):
 			amount = low or high
 			period = str(lead.get("salary_period") or "").lower()
 			suffix = _PERIOD_LABELS.get(period, "")
 			if low and high and high != low:
-				note = f"${low:,.0f}-{high:,.0f}{suffix} posted"
+				note = f"${low:,.0f}-${high:,.0f}{suffix} posted"
 			else:
 				note = f"${amount:,.0f}{suffix} posted"
-			# Never normalise hourly to annual: the multiplier (2080? 1000?)
-			# would itself be the estimate this function exists to refuse.
+			# Never normalise hourly to annual: the multiplier (2080? 1000?) would
+			# itself be the estimate this function exists to refuse.
 			return amount, "posted_salary", note
 
 	# A rate the poster wrote, and only from sources where that text is the
-	# offer itself. Requires an explicit unit, so "$4,500 of funding" cannot
+	# offer itself. Requires an explicit unit, so "$4,500 in funding" cannot
 	# match. On a live thread this fired on 2 of 242 comments -- both real.
 	if lead.get("allow_rate_extraction"):
 		match = _RATE_RE.search(str(lead.get("body") or ""))
@@ -1533,7 +1529,7 @@ def _lead_value(lead: dict[str, Any]) -> tuple[float | None, str, str]:
 			first = _money(match.group(1))
 			second = _money(match.group(2))
 			if first:
-				note = f"${first:,.0f}-{second:,.0f}/hr stated" if second else f"${first:,.0f}/hr stated"
+				note = f"${first:,.0f}-${second:,.0f}/hr stated" if second else f"${first:,.0f}/hr stated"
 				return first, "stated_rate", note
 
 	return None, "none", ""
@@ -1626,11 +1622,11 @@ def _next_step(lead: dict[str, Any], kind: str, cfg: dict[str, Any]) -> str:
 				"this for the articles."
 			)
 		first = (
-			"List the product once, set the price, and point the payout at the "
-			"published Tron address"
-			if any(t in subject for t in ("usdt", "tron", "own-wallet"))
-			else "List the product once and set the price"
-		)
+				"List the product once, set the price, and point the payout at the "
+				"published Tron address"
+				if any(t in subject for t in ("usdt", "tron", "own-wallet"))
+				else "List the product once and set the price"
+			)
 		return f"{first}. Owner does this by hand: {setup or 'open the account'}"
 
 	if any(t in subject for t in ("devto", "reach", "content-marketing")):
@@ -1652,7 +1648,6 @@ def _next_step(lead: dict[str, Any], kind: str, cfg: dict[str, Any]) -> str:
 		"Check the free tier's real limits, then use it to build or promote the product "
 		"without adding a per-user cost."
 	)
-
 
 def _codex_prompt(op: Opportunity, cfg: dict[str, Any]) -> str:
 	"""A prompt built from this lead's real fields, not a fixed template.
@@ -1696,7 +1691,6 @@ def _codex_prompt(op: Opportunity, cfg: dict[str, Any]) -> str:
 		"- Revenue is the on-chain balance only; never estimate it."
 	)
 
-
 def _write_report(state: dict[str, Any], leads: list[dict[str, Any]] | None = None) -> None:
 	"""Write the markdown report.
 
@@ -1711,7 +1705,7 @@ def _write_report(state: dict[str, Any], leads: list[dict[str, Any]] | None = No
 		f"Refreshed: {state.get('last_refresh_at')}",
 		"",
 		"Routes to passive income from a digital product on a zero budget: where it can",
-		"be listed and paid for (channels) and what can build or market it (assets).",
+		"be listed and paid for (channels) and what can build and market it (assets).",
 		"",
 		"**Freelance and contract postings are deliberately absent.** Income per hour of",
 		"the owner's time is a job, not passive income, so those sources were removed",
@@ -1785,10 +1779,10 @@ def _write_report(state: dict[str, Any], leads: list[dict[str, Any]] | None = No
 	lines.extend(["", "## Underserved Niches", ""])
 	for item in state.get("focus", []):
 		lines.append(f"- {item}")
-	lines.extend(["", "## Strategy Playbook", ""]) 
+	lines.extend(["", "## Strategy Playbook", ""])
 	for item in state.get("strategy_playbook", []):
 		lines.append(f"- {item}")
-	lines.extend(["", "## Avoid", ""]) 
+	lines.extend(["", "## Avoid", ""])
 	for item in state.get("avoid_patterns", []):
 		lines.append(f"- {item}")
 	refused = state.get("refused_channels") or []

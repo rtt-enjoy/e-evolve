@@ -1,49 +1,3 @@
-"""
-Put the receive path onto the articles that already have the readers.
-
-``payout`` closed the structural zero for everything published *from now on*.
-It did nothing for what was already out there, because the footer is attached
-inside ``devto.publish`` and that is a POST -- it only ever runs on a new post.
-
-At the time this was written that omission was most of the audience. The
-account held 11 published articles carrying 1,949 lifetime views, and one of
-them alone held 1,652 of them -- 85% of every reader this project has ever had
-was looking at a post with no way to pay. New publishing adds roughly 177 views
-per article, so it would take eleven consecutive perfect publishing days just to
-match the reach that already exists and keeps accruing: those posts are
-evergreen search traffic, which is why one of them is eight times the size of
-anything published since.
-
-Scored against Principle 2 of the doctrine this is the strongest channel left:
-
-- **No new secret.** ``DEV_TO_API_KEY`` already publishes and already reads
-  stats. ``PUT /api/articles/{id}`` takes the same key, and Forem scopes the
-  lookup to the key's own articles.
-- **No owner action**, per post or at all.
-- **Within policy.** Editing our own article is publishing, which is the one
-  outward action this project explicitly allows. Nothing is sent to anybody.
-- **Verifiable on-chain**, like every other tip.
-- **Reuses output already produced** -- no new writing, no new LLM call, no new
-  maintenance surface.
-
-Three rules hold it together.
-
-**It never edits prose.** The only mutation is appending the same deterministic
-footer ``payout`` already renders. There is no LLM call here, for the same
-reason there is none in ``payout``: a model rewriting a post that earns real
-traffic can silently degrade it, and no gate downstream would catch it, because
-the gates run on drafts and these are live posts.
-
-**A post whose body it cannot safely reproduce is skipped.** A dev.to body that
-opens with YAML front matter has its title and tags re-read from that block on
-save, and Forem's tag handling clears the existing list first. Nothing this bot
-publishes uses front matter, but "probably not" is not a safe basis for
-rewriting the account's best post, so those are detected and left alone.
-
-**Editing does not re-surface a post.** Forem preserves ``published_at`` on
-update, so this does not push old posts back into the feed and does not
-counterfeit the follow-up path. It adds an ask to what people already read.
-"""
 from __future__ import annotations
 
 import logging
@@ -60,7 +14,7 @@ DEFAULTS: dict[str, Any] = {
 	# Per cycle, not total. The back catalogue is small and this is bounded
 	# work, but a cap keeps one bad cycle from touching every post at once and
 	# stays well clear of Forem's article-update rate limit.
-	"max_per_cycle": 3,
+	"max_per_cycle": 10,
 	"history_limit": 200,
 }
 
@@ -208,7 +162,7 @@ def _run(status: dict, api_key: str = "", published: list | None = None) -> dict
 				updated += 1
 				state.setdefault("done_ids", []).append(post["id"])
 				log.info("[backfill] footer added to %s (%s views)",
-						 str(post.get("title", ""))[:60], post.get("page_views"))
+					 str(post.get("title", ""))[:60], post.get("page_views"))
 			else:
 				state.setdefault("skipped", {})[str(post["id"])] = result.get("error", "")
 				# Stop on the first failure rather than hammering a failing API.

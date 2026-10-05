@@ -1,0 +1,1 @@
+#!/usr/bin/env python3\nimport sys,re,os\na=os.getenv('USDT_WALLET_ADDRESS','').strip()\nif not a:print('set USDT_WALLET_ADDRESS');sys.exit(1)\nprint('valid' if re.match(r'^T[A-Za-z0-9]{33}$',a)else'invalid');sys.exit(0 if re.match(r'^T[A-Za-z0-9]{33}$',a)else 1)

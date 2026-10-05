@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-04T21:27:53.717720+00:00",
-  "total_runs": 1937,
+  "last_run": "2026-10-05T00:56:52.163326+00:00",
+  "total_runs": 1938,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -18,13 +18,8 @@
     "total_usd": 0.0,
     "this_week_usd": 0.0,
     "last_cycle_usd": 0.0,
-    "week_started": "2026-09-28",
-    "breakdown": {
-      "code_techs": 0.0,
-      "dev.to": 0.0,
-      "mrr-ideas": 0.0,
-      "dev.to-newsletter": 0.0
-    },
+    "week_started": "2026-10-05",
+    "breakdown": {},
     "history": [],
     "confirmed_usd": 0.0,
     "received_total_usd": 0.0,
@@ -33,19 +28,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Added wallet validation, daily summary, and automated backfill scripts to improve reliability and reduce manual effort.",
+    "summary": "Add a deterministic USDT wallet validation script and a daily earnings summary report to harden payout reliability and reduce manual inspection.",
     "changes_applied": [
       {
         "file": "bot/earning/wallet_verification.py",
         "reason": "Provides a quick sanity check for the wallet address, preventing payout failures due to misconfiguration."
-      },
-      {
-        "file": "bot/earning/automated_summary.py",
-        "reason": "Creates a readable daily report that can be reviewed without digging through logs."
-      },
-      {
-        "file": "bot/earning/automated_backfill.py",
-        "reason": "Enables fully automated backfill of all posts needing the receive footer, reducing manual steps."
       }
     ],
     "suggestions": [
@@ -87,20 +74,18 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20261004-213140",
-    "proposed_version": "1.42.0"
+    "branch": "evolve/1.41.1-20261005-011417",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "llm_error",
+        "error": "LLM call failed",
+        "estimated_usd": 0.0
       }
     ],
     "total_usd": 0.0
@@ -144,7 +129,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 300,
+  "last_cycle_seconds": 1186,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1200,6 +1185,7 @@
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/the-generative-ai-output-that-escaped-your-guardrails-b40",
       "https://dev.to/robust_true_try/your-ai-code-review-is-missing-these-bugs-3l7p",
       "https://dev.to/robust_true_try/hardening-linux-against-kernel-heap-corruption-attacks-4gk8",
       "https://dev.to/robust_true_try/slides-defaults-agents-and-git-a-week-of-developer-shifts-pb4",
@@ -1240,7 +1226,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-04T21:27:54.501830+00:00",
+    "checked_at": "2026-10-05T00:56:52.717748+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1507,14 +1493,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20261004-213140",
+  "last_evolution_branch": "evolve/1.41.1-20261005-011417",
   "evolution_pending_review": true,
   "article_stats": {
-    "count": 30,
-    "total_views": 4177,
-    "avg_views": 139.2,
+    "count": 31,
+    "total_views": 4197,
+    "avg_views": 135.4,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 3056,
+    "best_views": 3076,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1529,9 +1515,9 @@
     "archetypes": [
       {
         "archetype": "problem-workaround",
-        "count": 7,
-        "avg_engagement": 500.7,
-        "avg_views": 497.1,
+        "count": 8,
+        "avg_engagement": 440.6,
+        "avg_views": 437.5,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1579,20 +1565,20 @@
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "engineering-culture",
-    "sample_size": 30
+    "sample_size": 31
   },
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-10-04T13:55:48.230122+00:00",
+    "last_at": "2026-10-05T01:16:37.065148+00:00",
     "counts": {
       "empty_draft": 3,
       "fabricated": 2,
       "weak_title": 7,
       "revision_fabricated": 1,
-      "llm_error": 6
+      "llm_error": 7
     },
-    "total": 19
+    "total": 20
   },
   "payout": {
     "enabled": true,
@@ -1623,27 +1609,22 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-04T21:32:52.948015+00:00",
+    "last_run": "2026-10-05T01:16:37.380825+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 5,
-    "with_footer": 5,
+    "checked": 4,
+    "with_footer": 4,
     "without_footer": 0,
-    "unreachable": 0,
+    "unreachable": 1,
     "missing": [],
-    "last_run": "2026-10-04T21:32:53.226542+00:00",
+    "last_run": "2026-10-05T01:16:37.660198+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
         "id": 4720062,
-        "at": "2026-10-03T13:29:35.436127+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
         "at": "2026-10-03T13:29:35.436127+00:00",
         "ok": true
       },
@@ -1654,16 +1635,6 @@
       },
       {
         "id": 4662663,
-        "at": "2026-10-03T18:04:36.135885+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-10-03T18:04:36.135885+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
         "at": "2026-10-03T18:04:36.135885+00:00",
         "ok": true
       },
@@ -1788,8 +1759,23 @@
         "ok": true
       },
       {
+        "id": 4727685,
+        "at": "2026-10-05T01:16:37.660198+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-10-05T01:16:37.660198+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-10-05T01:16:37.660198+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-04T21:32:53.226542+00:00",
+        "at": "2026-10-05T01:16:37.660198+00:00",
         "ok": true
       }
     ],
@@ -1798,7 +1784,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 32.1
+    "oldest_check_age_hours": 35.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-05T22:39:00.060838+00:00",
-  "total_runs": 1941,
+  "last_run": "2026-10-06T02:59:48.127521+00:00",
+  "total_runs": 1942,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -32,7 +32,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add title candidate pre-generation to cut weak_title rejections, add LLM retry/fallback to cut llm_error rejections, and implement code_techs auto-pursue as local codex prompt generation",
+    "summary": "Fix _revise_title docstring placement bug, add second revision attempt for weak titles, and improve prompt guidance with specific banned patterns and vague fillers to cut the most common rejection path.",
     "changes_applied": [],
     "suggestions": [
       {
@@ -60,16 +60,15 @@
         ]
       },
       {
-        "title": "Activate Getly.store channel for direct USDT payouts",
-        "description": "List a digital product on Getly to receive USDT on Tron with no KYC",
-        "secret_needed": null,
+        "title": "Add GITHUB_TOKEN for code_techs GitHub searches",
+        "description": "Increase GitHub search rate limit from 10 to 30 requests per minute for richer lead discovery",
+        "secret_needed": "GITHUB_TOKEN",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "1. Visit https://www.getly.store/sell/crypto and create an account (no ID required)",
-          "2. Add your Tron wallet address (TFTNsf...9KbY) as the payout destination",
-          "3. Upload a digital product (extension, template, or tool) and set a price",
-          "4. Share the product link in your dev.to articles and README"
+          "1. Go to https://github.com/settings/tokens and generate a classic token with 'public_repo' scope",
+          "2. Copy the token value",
+          "3. Add GITHUB_TOKEN as a GitHub repository secret"
         ]
       }
     ],
@@ -80,14 +79,12 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "llm_error",
+        "error": "LLM call failed",
+        "estimated_usd": 0.0
       }
     ],
     "total_usd": 0.0
@@ -118,21 +115,20 @@
       ]
     },
     {
-      "title": "Activate Getly.store channel for direct USDT payouts",
-      "description": "List a digital product on Getly to receive USDT on Tron with no KYC",
-      "secret_needed": null,
+      "title": "Add GITHUB_TOKEN for code_techs GitHub searches",
+      "description": "Increase GitHub search rate limit from 10 to 30 requests per minute for richer lead discovery",
+      "secret_needed": "GITHUB_TOKEN",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "1. Visit https://www.getly.store/sell/crypto and create an account (no ID required)",
-        "2. Add your Tron wallet address (TFTNsf...9KbY) as the payout destination",
-        "3. Upload a digital product (extension, template, or tool) and set a price",
-        "4. Share the product link in your dev.to articles and README"
+        "1. Go to https://github.com/settings/tokens and generate a classic token with 'public_repo' scope",
+        "2. Copy the token value",
+        "3. Add GITHUB_TOKEN as a GitHub repository secret"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1118,
+  "last_cycle_seconds": 434,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1132,9 +1128,7 @@
       4489474
     ],
     "own_urls": [
-      "https://dev.to/robust_true_try/the-generative-ai-output-that-escaped-your-guardrails-b40",
-      "https://dev.to/robust_true_try/your-ai-code-review-is-missing-these-bugs-3l7p",
-      "https://dev.to/robust_true_try/hardening-linux-against-kernel-heap-corruption-attacks-4gk8",
+      "https://dev.to/robust_true_try/the-redaction-bug-that-leaks-data-center-power-usage-2el7",
       "https://dev.to/robust_true_try/slides-defaults-agents-and-git-a-week-of-developer-shifts-pb4",
       "https://dev.to/robust_true_try/when-auto-generated-slides-outpace-your-talk-2b2h",
       "https://dev.to/robust_true_try/why-your-ai-pair-programming-fails-without-psychological-safety-3m4f",
@@ -1173,7 +1167,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-05T22:39:01.144504+00:00",
+    "checked_at": "2026-10-06T02:59:48.696579+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1441,11 +1435,11 @@
   "last_evolution_branch": null,
   "evolution_pending_review": false,
   "article_stats": {
-    "count": 31,
-    "total_views": 4207,
-    "avg_views": 135.7,
+    "count": 29,
+    "total_views": 4247,
+    "avg_views": 146.4,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 3086,
+    "best_views": 3106,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1460,9 +1454,9 @@
     "archetypes": [
       {
         "archetype": "problem-workaround",
-        "count": 8,
-        "avg_engagement": 441.9,
-        "avg_views": 438.8,
+        "count": 7,
+        "avg_engagement": 510.7,
+        "avg_views": 507.1,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1480,11 +1474,11 @@
         "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       },
       {
-        "archetype": "surprising-behavior",
-        "count": 4,
-        "avg_engagement": 35.2,
-        "avg_views": 16.5,
-        "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
+        "archetype": "security-privacy",
+        "count": 2,
+        "avg_engagement": 40.0,
+        "avg_views": 40.0,
+        "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
       },
       {
         "archetype": "other",
@@ -1494,36 +1488,36 @@
         "best_title": "The Redirect Chain That Bypasses Your Ad Blocker"
       },
       {
-        "archetype": "security-privacy",
-        "count": 3,
-        "avg_engagement": 26.7,
-        "avg_views": 26.7,
-        "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
+        "archetype": "surprising-behavior",
+        "count": 5,
+        "avg_engagement": 28.2,
+        "avg_views": 13.2,
+        "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
       },
       {
         "archetype": "engineering-culture",
-        "count": 2,
-        "avg_engagement": 5.0,
-        "avg_views": 5.0,
+        "count": 1,
+        "avg_engagement": 10.0,
+        "avg_views": 10.0,
         "best_title": "How AI Pull Requests Slip Past Code Review"
       }
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "engineering-culture",
-    "sample_size": 31
+    "sample_size": 29
   },
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-10-05T01:16:37.065148+00:00",
+    "last_at": "2026-10-06T03:06:58.281878+00:00",
     "counts": {
       "empty_draft": 3,
       "fabricated": 2,
       "weak_title": 7,
       "revision_fabricated": 1,
-      "llm_error": 7
+      "llm_error": 8
     },
-    "total": 20
+    "total": 21
   },
   "payout": {
     "enabled": true,
@@ -1554,7 +1548,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-05T22:57:36.819999+00:00",
+    "last_run": "2026-10-06T03:06:59.183269+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1564,30 +1558,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-05T22:57:37.227754+00:00",
+    "last_run": "2026-10-06T03:06:59.437361+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4641536,
-        "at": "2026-10-04T00:46:07.762418+00:00",
-        "ok": true
-      },
-      {
-        "id": 4602729,
-        "at": "2026-10-04T00:46:07.762418+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-10-04T00:46:07.762418+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-10-04T00:46:07.762418+00:00",
-        "ok": true
-      },
       {
         "id": 4740283,
         "at": "2026-10-04T07:07:50.133269+00:00",
@@ -1709,8 +1683,28 @@
         "ok": true
       },
       {
+        "id": 4641536,
+        "at": "2026-10-06T03:06:59.437361+00:00",
+        "ok": true
+      },
+      {
+        "id": 4602729,
+        "at": "2026-10-06T03:06:59.437361+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-10-06T03:06:59.437361+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-10-06T03:06:59.437361+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-05T22:57:37.227754+00:00",
+        "at": "2026-10-06T03:06:59.437361+00:00",
         "ok": true
       }
     ],
@@ -1719,7 +1713,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 46.2
+    "oldest_check_age_hours": 44.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -93,8 +93,9 @@ _BLOCKERS: dict[str, str] = {
 # say what is actually being asked instead of implying a signup form.
 _MANUAL_STEPS: dict[str, str] = {
 	"payments":       "owner opens a payment account by hand AND passes its ID verification -- Gumroad, Substack, Polar and Stripe all require government ID and none pays out in crypto (verified 2026-09-15). For a crypto payout to the owner's own Tron address with no ID check, see the channel table in code_techs (Getly), or take tips on the published wallet address, which needs no account at all.",
-	"platform_setup": "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API, once the account exists and its ID verification has passed)",
-	"audience_first": "needs an existing audience; the dev.to byline is the only one this stack builds",
+	"payments_crypto": "owner adds the published Tron (TRC-20) USDT address to a crypto-native storefront (Getly) or directly on the product page/README -- no KYC, no account approval, settles on-chain. Verified 2026-09-15 on getly.store/sell/crypto.",
+	"platform_setup":  "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API, once the account exists and its ID verification has passed)",
+	"audience_first":  "needs an existing audience; the dev.to byline is the only one this stack builds",
 }
 
 # What this stack actually is, printed in the report so it explains itself.
@@ -134,7 +135,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"mrr_model": "$10-20/mo per subscriber",
 		"source_note": "narrow niche beats broad; audience must exist first",
 		"blockers": [],
-		"manual": ["payments", "platform_setup", "audience_first"],
+		"manual": ["payments_crypto", "platform_setup", "audience_first"],
 		"bot_role": "publish",
 	},
 	{
@@ -142,7 +143,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"mrr_model": "$49/mo; ~204 members = $10K MRR",
 		"source_note": "article advises building an audience before making content",
 		"blockers": [],
-		"manual": ["payments", "platform_setup", "audience_first"],
+		"manual": ["payments_crypto", "platform_setup", "audience_first"],
 		"bot_role": "research",
 	},
 	{
@@ -150,7 +151,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"mrr_model": "$500-5K/mo, library subscription",
 		"source_note": "specificity wins; Gumroad listing/updating is API-automatable (POST /v2/products, edit_products scope) but only after the owner has passed Gumroad ID verification, which pays out fiat via Stripe and never crypto (verified 2026-09-15) — Payhip/Etsy stay manual",
 		"blockers": [],
-		"manual": ["payments", "platform_setup"],
+		"manual": ["payments_crypto", "platform_setup"],
 		"bot_role": "draft",
 	},
 	{
@@ -206,7 +207,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"mrr_model": "$15-50/mo per member",
 		"source_note": "needs active facilitation; churn spikes when engagement drops",
 		"blockers": ["social_posting"],
-		"manual": ["payments"],
+		"manual": ["payments_crypto"],
 		"bot_role": "none",
 	},
 	{
@@ -238,7 +239,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"mrr_model": "$150-500/mo per client",
 		"source_note": "group coaching scales better than one-on-one",
 		"blockers": ["human_delivery"],
-		"manual": ["payments"],
+		"manual": ["payments_crypto"],
 		"bot_role": "none",
 	},
 	{
@@ -246,7 +247,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"mrr_model": "recurring API access fee",
 		"source_note": "article cites AirTrackBot, StageTimer, SheetBest; verify independently",
 		"blockers": ["inbound_http"],
-		"manual": ["payments"],
+		"manual": ["payments_crypto"],
 		"bot_role": "research",
 	},
 	{
@@ -262,7 +263,7 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"mrr_model": "$99-499 per posting, recruiter memberships",
 		"source_note": "cold-start problem: must seed supply and demand together",
 		"blockers": ["inbound_http"],
-		"manual": ["payments", "platform_setup"],
+		"manual": ["payments_crypto", "platform_setup"],
 		"bot_role": "none",
 	},
 	{
@@ -272,6 +273,22 @@ _CATALOGUE: list[dict[str, Any]] = [
 		"blockers": ["social_posting", "outreach"],
 		"manual": [],
 		"bot_role": "none",
+	},
+	{
+		"name": "Digital product with crypto storefront (Getly)",
+		"mrr_model": "one-time licence $10-50, zero marginal cost",
+		"source_note": "Getly settles USDT/USDC on Tron (TRC-20) directly to seller's wallet, no KYC, no monthly fee, free to list. Verified 2026-09-15.",
+		"blockers": [],
+		"manual": ["payments_crypto", "platform_setup"],
+		"bot_role": "draft",
+	},
+	{
+		"name": "Browser extension with wallet ask (Chrome Web Store)",
+		"mrr_model": "free extension + paid upgrade via wallet address in README/--help",
+		"source_note": "Chrome Web Store: one-time $5 registration (covers 20 extensions), free distribution, monetisation via embedded wallet address. Verified 2026-09-08.",
+		"blockers": [],
+		"manual": ["payments_crypto", "platform_setup"],
+		"bot_role": "draft",
 	},
 ]
 
@@ -444,78 +461,51 @@ def _viability_brief(llm: Any, viable: list[dict], cfg: dict) -> dict:
 			"No passive-income framing, no get-rich framing, no autopilot claims.",
 		],
 		"policy": (
-			"Research and suggestions only. Do not propose contacting anyone, "
-			"posting to social platforms, collecting payment, trading, or minting."
+			"Research and suggestions only. Do not contact anyone, request payment, trade, or mint."
 		),
-		"owner_constraints": list(_CONSTRAINTS),
-		"surviving_models": [
-			{
-				"name": i["name"],
-				"mrr_model": i["mrr_model"],
-				"what_the_bot_can_do": i["bot_role"],
-				"owner_must_set_up_by_hand": i.get("manual_steps", []),
-			}
-			for i in viable
-		],
+		"catalogue": viable,
 		"required_json_shape": {
-			"summary": (
-				"one paragraph: the single best recurring-revenue angle for a "
-				"zero-cost, research-first, publish-to-dev.to stack"
-			),
+			"summary": "one concise paragraph on the best current route to recurring product revenue on zero budget",
 			"ranked_ideas": [
 				{
-					"name": "the model name",
-					"why_this_stack_fits": "one short reason",
-					"narrow_niche": "the specific niche, not the category",
-					"first_proof_artifact": "the one thing to make before charging anyone",
-					"who_pays": "the specific buyer",
-					"monthly_price_usd": "number or small range",
-					"runway_to_first_dollar": "e.g. '4-8 weeks'",
-					"owner_must_do_by_hand": "the part no automation here can cover",
+					"name": "model name",
+					"narrow_niche": "specific buyer persona",
+					"first_proof_artifact": "what the owner ships first (article, template, extension)",
+					"who_pays": "exact buyer",
+					"monthly_price_usd": "price string",
+					"runway_to_first_dollar": "weeks/months",
+					"owner_must_do_by_hand": "concrete steps, most valuable first",
+					"crypto_payout_path": "how USDT/USDC reaches the owner's Tron wallet without KYC",
 				}
 			],
-			"validation_steps": [
-				"how to find 10 people with the problem and talk to them WITHOUT "
-				"cold outreach — inbound only: an article that ends in a question, "
-				"a thread the owner posts by hand, a community they already belong to"
-			],
+			"validation_steps": ["3-5 concrete validation steps, no outreach"],
 			"owner_actions": ["3-5 concrete next actions, most valuable first"],
 		},
 	}
-
 	try:
 		if hasattr(llm, "complete_json_for_role"):
 			data = llm.complete_json_for_role("research", json.dumps(prompt), max_tokens=3000)
 		else:
 			data = llm.complete_json(json.dumps(prompt), max_tokens=3000)
 	except Exception as exc:
-		log.warning("[mrr_ideas] viability brief failed: %s — keeping deterministic triage", exc)
-		return {}
-
-	if not isinstance(data, dict):
-		log.warning("[mrr_ideas] viability brief returned no object — keeping deterministic triage")
+		log.warning("[mrr_ideas] viability brief failed: %s", exc)
 		return {}
 
 	return {
 		"summary": str(data.get("summary", "")).strip()[:900],
 		"ranked_ideas": _dicts(data.get("ranked_ideas"), [
-			"name", "why_this_stack_fits", "narrow_niche", "first_proof_artifact",
-			"who_pays", "monthly_price_usd", "runway_to_first_dollar",
-			"owner_must_do_by_hand",
-		], limit=int(cfg.get("max_ideas", 8))),
-		"validation_steps": _clean_list(data.get("validation_steps", []))[:6],
+			"name", "narrow_niche", "first_proof_artifact", "who_pays",
+			"monthly_price_usd", "runway_to_first_dollar", "owner_must_do_by_hand",
+			"crypto_payout_path"
+		], limit=5),
+		"validation_steps": _clean_list(data.get("validation_steps", []))[:5],
 		"owner_actions": _clean_list(data.get("owner_actions", []))[:5],
 	}
 
 
-def _history(status: dict) -> dict:
-	"""Names already surfaced, so a later report can tell new from repeated."""
-	return status.setdefault("mrr_ideas_history", {})
-
-
-def _record_refresh(status: dict, ideas: list[dict], limit: int) -> None:
-	"""Remember which models have been surfaced, bounded by history_limit."""
-	hist = _history(status)
-	entries = hist.setdefault("names", [])
-	for idea in ideas:
-		bounded_append(entries, str(idea.get("name", "")).strip(), limit)
+def _record_refresh(status: dict, viable: list[dict], limit: int) -> None:
+	"""Remember which ideas have been surfaced so the owner sees progress."""
+	hist = status.setdefault("mrr_ideas_history", {})
+	names = [str(v.get("name", "")) for v in viable if v.get("name")]
+	if names:
+		bounded_append(hist.setdefault("names", []), names[0], limit)

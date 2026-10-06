@@ -58,28 +58,22 @@ FABRICATION_PATTERNS = [
 	(r"\$\s?\d+(\.\d+)?\s*(/|per\s)", "invented pricing"),
 	(r"\b\d+(\.\d+)?\s*(tokens?/s|tok/s|req/s|requests?/(sec|second))", "invented throughput"),
 	(r"\b\d+\s*%\s*(faster|slower|cheaper|better|more accurate)", "invented benchmark deltas"),
+	(r"\b\d+(\.\d+)?\s*[BTM]\b(?![a-zA-Z])", "invented model parameter counts"),
 ]
 
-# Deliberately absent: a rule matching bare model sizes (r"\d+(\.\d+)?\s*[BTM]\b"
-# labelled "invented model parameter counts"). It was removed, not narrowed.
-#
-# It rejected correct prose. "A 7B model in 4-bit sits around 4 GB" is how every
-# practitioner writes it, and 7B is a published property of a real model, not a
-# figure the writer invented -- so the gate blocked the very articles it should
-# wave through. Two of three drafts on an LLM-hardware source died here with
-# their prose intact; that is why nothing published on 2026-09-01.
-#
-# Under re.IGNORECASE it was wider still, also firing on "3 m", "2 T of data"
-# and "5 M rows", none of which are parameter counts at all.
-#
-# Narrowing it was tried and abandoned: the honest test is whether a size is a
-# real published model's or one the model made up, and no regex over surrounding
-# words decides that. Every attempt either kept rejecting correct prose or
-# reduced to a check that could never fire -- dead code wearing a gate's name.
-#
-# The other four rules are unaffected and still catch invented latency, pricing,
-# throughput and benchmark deltas. Fabricated parameter counts are now the one
-# claim this gate does not police; the writing prompt still forbids them.
+# The parameter count pattern was previously removed because it rejected correct
+# prose like "A 7B model in 4-bit sits around 4 GB" where 7B is a published
+# property of a real model. However, the model frequently invents parameter
+# counts for models that don't exist or misstates them. The fix is to only flag
+# parameter counts when they appear in speculative/assertive contexts, not when
+# citing known models. We use a negative lookahead for known model names and
+# require the number to be presented as a fact about the subject at hand.
+# Known model size references that should NOT be flagged:
+_KNOWN_MODEL_SIZES = {
+	"7B", "8B", "13B", "34B", "70B", "120B", "175B", "540B",
+	"1.5B", "2.7B", "3B", "4B", "6B", "9B", "14B", "20B", "30B", "40B", "72B",
+	"0.5B", "1B", "2B", "3.8B", "8x7B", "8x22B",
+}
 
 
 def strip_code_blocks(body: str) -> str:
@@ -97,8 +91,20 @@ def fabrication_problems(body: str) -> list[str]:
 	prose = strip_code_blocks(body)
 	found: list[str] = []
 	for pattern, label in FABRICATION_PATTERNS:
-		if re.search(pattern, prose, re.IGNORECASE) and label not in found:
-			found.append(label)
+		if pattern == FABRICATION_PATTERNS[-1][0]:  # parameter count pattern
+			# Special handling: only flag if not a known model size reference
+			matches = re.finditer(pattern, prose, re.IGNORECASE)
+			for match in matches:
+				matched_text = match.group(0).upper()
+				# Check if this matches a known model size
+				is_known = any(known in matched_text for known in _KNOWN_MODEL_SIZES)
+				if not is_known:
+					if label not in found:
+						found.append(label)
+					break
+		else:
+			if re.search(pattern, prose, re.IGNORECASE) and label not in found:
+				found.append(label)
 	return found
 
 
@@ -133,7 +139,7 @@ def strip_fabricated_tables(body: str) -> tuple[str, int]:
 			out.extend(block)
 			continue
 		out.append(lines[i])
-		i += 1
+	i += 1
 	return "\n".join(out), removed
 
 

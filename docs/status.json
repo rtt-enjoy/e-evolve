@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-06T17:12:17.800806+00:00",
-  "total_runs": 1944,
+  "last_run": "2026-10-06T21:38:39.605565+00:00",
+  "total_runs": 1945,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -32,13 +32,8 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add second title revision attempt for weak titles, surface crypto-native payment paths in MRR ideas, and fix fabrication detection to catch invented parameter counts in prose",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "Add second title revision attempt with full article context when first revision fails, reducing weak_title rejections which are the 2nd highest rejection cause (7 occurrences)"
-      }
-    ],
+    "summary": "Improve article title generation, GitHub lead discovery, and backfill efficiency to increase earnings potential.",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Add Anthropic API key for Claude models",
@@ -78,28 +73,19 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20261006-172737",
-    "proposed_version": "1.42.0"
+    "branch": null,
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
         "platform": "dev.to",
-        "success": false,
-        "skipped": true,
-        "reject_code": "llm_error",
-        "error": "LLM call failed",
-        "estimated_usd": 0.0
+        "success": true,
+        "title": "How IceCube's Sensor Stream Drops Events and How to Recover Them",
+        "url": "https://dev.to/robust_true_try/how-icecubes-sensor-stream-drops-events-and-how-to-recover-them-3688",
+        "estimated_usd": 0.0,
+        "source_url": "https://www.nobelprize.org/prizes/physics/2026/",
+        "source_title": "Nobel Prize in Physics 2026: Francis Halzen"
       }
     ],
     "total_usd": 0.0
@@ -143,7 +129,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1368,
+  "last_cycle_seconds": 556,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -230,7 +216,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-10-05",
+    "date": "2026-10-06",
     "published": 1
   },
   "code_tech_earning": {
@@ -1027,7 +1013,8 @@
       "lwn.net/articles/1097401",
       "github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out",
       "fortune.com/2026/10/01/ai-godfather-yann-lecun-has-zero-concerns-about-human-extinction-says-anthropic-ceo-dario-amodei-is-deuded",
-      "1011now.com/2026/09/30/more-questions-than-answers-about-lincolns-google-data-center-water-electricity-usage"
+      "1011now.com/2026/09/30/more-questions-than-answers-about-lincolns-google-data-center-water-electricity-usage",
+      "nobelprize.org/prizes/physics/2026"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -1090,7 +1077,8 @@
       "several vulnerability have discovered linux kernel",
       "ai changing developer work here three skill strengthen",
       "lecun has zero concern ai wiping out humanity recent rogue incident",
-      "improper redaction reveal google data center water electricity usage"
+      "improper redaction reveal google data center water electricity usage",
+      "nobel prize physic 2026 franci halzen"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1153,7 +1141,8 @@
       "hardening linux kernel heap corruption attack",
       "ai code review missing these bugs",
       "generative ai output escaped guardrail",
-      "redaction bug leak data center power usage"
+      "redaction bug leak data center power usage",
+      "icecube s sensor stream drop event recover them"
     ],
     "followed_up_ids": [
       4489474
@@ -1198,7 +1187,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-06T17:12:18.724244+00:00",
+    "checked_at": "2026-10-06T21:38:40.130945+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1463,8 +1452,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20261006-172737",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 29,
     "total_views": 4279,
@@ -1579,7 +1568,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-06T17:35:03.340054+00:00",
+    "last_run": "2026-10-06T21:47:54.269573+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1589,27 +1578,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-06T17:35:03.756896+00:00",
+    "last_run": "2026-10-06T21:47:54.598153+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4636715,
-        "at": "2026-10-04T17:40:38.910470+00:00",
-        "ok": true
-      },
-      {
         "id": 4729472,
-        "at": "2026-10-04T21:32:53.226542+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-10-04T21:32:53.226542+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
         "at": "2026-10-04T21:32:53.226542+00:00",
         "ok": true
       },
@@ -1734,17 +1708,37 @@
         "ok": true
       },
       {
+        "id": 4636715,
+        "at": "2026-10-06T21:47:54.598153+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-10-06T21:47:54.598153+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-06T21:47:54.598153+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-06T17:35:03.756896+00:00",
+        "at": "2026-10-06T21:47:54.598153+00:00",
+        "ok": true
+      },
+      {
+        "id": 4809040,
+        "at": "2026-10-06T21:47:54.598153+00:00",
         "ok": true
       }
     ],
-    "published_total": 29,
-    "covered": 29,
+    "published_total": 30,
+    "covered": 30,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 47.9
+    "oldest_check_age_hours": 48.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

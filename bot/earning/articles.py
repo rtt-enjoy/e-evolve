@@ -89,7 +89,7 @@ def _reject(code: str, detail: str = "") -> None:
 	global _LAST_REJECT
 	_LAST_REJECT = code
 	log.warning("[articles] rejected (%s): %s%s", code, _REJECTS.get(code, code),
-				f" -- {detail}" if detail else "")
+			f" -- {detail}" if detail else "")
 	return None
 
 _SYSTEM = """\
@@ -346,7 +346,7 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 	target = _followup_target(status, os.getenv("DEV_TO_API_KEY", "").strip())
 	if target:
 		log.info("[articles] following up %r (%d views)",
-				 target.get("title", "")[:60], target.get("page_views", 0))
+			 target.get("title", "")[:60], target.get("page_views", 0))
 		followup = _generate_followup(llm, status, target)
 		if followup:
 			return followup
@@ -429,7 +429,13 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 		if better:
 			article["title"] = better
 		else:
-			return _reject("weak_title", ", ".join(title_issues))
+			# Second revision attempt with more context
+			log.info("[articles] first title revision failed -- attempting second revision with full article context")
+			better = _revise_title(llm, article, title_issues, attempt=2)
+			if better:
+				article["title"] = better
+			else:
+				return _reject("weak_title", ", ".join(title_issues))
 
 	problems = _format_problems(article["body_markdown"])
 	if problems:
@@ -457,7 +463,7 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 	return article
 
 
-def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
+def _revise_title(llm: Any, data: dict, problems: list[str], attempt: int = 1) -> Optional[str]:
 	cfg = _config()
 	"""Ask for a stronger headline only. Returns the new title, or None.
 
@@ -466,17 +472,33 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
     """
 	body = str(data.get("body_markdown", ""))
 	opening = " ".join(body.split()[:120])
-	prompt = (
-		"Rewrite ONLY the title of this article so it earns clicks in the dev.to feed.\n\n"
-		f"Current title: {data.get('title', '')}\n"
-		f"Problems with it: {'; '.join(problems)}\n\n"
-		f"Article opening for context:\n{opening}\n\n"
-		"Follow the TITLE rules in the system prompt exactly: "
-		f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
-		"technology or failure, no clickbait words, no exclamation marks, no "
-		"ALL-CAPS, no colon-subtitle padding.\n\n"
-		'Respond with ONLY this JSON: {"title": "..."}'
-	)
+	
+	if attempt == 1:
+		prompt = (
+			"Rewrite ONLY the title of this article so it earns clicks in the dev.to feed.\n\n"
+			f"Current title: {data.get('title', '')}\n"
+			f"Problems with it: {'; '.join(problems)}\n\n"
+			f"Article opening for context:\n{opening}\n\n"
+			"Follow the TITLE rules in the system prompt exactly: "
+			f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
+			"technology or failure, no clickbait words, no exclamation marks, no "
+			"ALL-CAPS, no colon-subtitle padding.\n\n"
+			'Respond with ONLY this JSON: {"title": "..."}'
+		)
+	else:
+		# Second attempt: include full article body for more context
+		prompt = (
+			"Rewrite ONLY the title of this article so it earns clicks in the dev.to feed.\n\n"
+			f"Current title: {data.get('title', '')}\n"
+			f"Problems with it: {'; '.join(problems)}\n\n"
+			f"Full article for context:\n{body}\n\n"
+			"Follow the TITLE rules in the system prompt exactly: "
+			f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
+			"technology or failure, no clickbait words, no exclamation marks, no "
+			"ALL-CAPS, no colon-subtitle padding.\n\n"
+			'Respond with ONLY this JSON: {"title": "..."}'
+		)
+
 	try:
 		if hasattr(llm, "complete_json_for_role"):
 			out = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=300)
@@ -638,7 +660,7 @@ def _followup_target(status: dict, api_key: str) -> Optional[dict]:
 	)
 	if not best:
 		log.info("[articles] no post cleared %d views in %dh -- writing a fresh take",
-				 cfg["followup_min_views"], cfg["followup_window_hours"])
+			 cfg["followup_min_views"], cfg["followup_window_hours"])
 		return None
 	return best
 
@@ -1074,13 +1096,9 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
 # Numbers the model has no way to know and reliably invents: latency figures,
 # parameter counts, prices per token, context windows. Prose outside code blocks
 # only -- real numbers inside code (timeouts, retries) are fine.
-
-
-
 
 
 
@@ -1115,7 +1133,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

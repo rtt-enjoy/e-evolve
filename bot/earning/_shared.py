@@ -1,17 +1,3 @@
-"""
-Shared primitives for the earning modules.
-
-Every earning module needs the same four things: its slice of
-``config/strategy.json``, a cadence check against a stored timestamp, and
-tolerant parsers for the feed data it scrapes. Each module used to carry its
-own copy, and the copies had drifted -- ``code_techs`` held a ``_parse_dt``
-that could not read RFC-822 RSS dates and a ``_strip_html`` that left
-``<script>`` bodies intact, while ``trending`` handled both. Consolidating on
-the stronger implementation is what this module is for.
-
-No module state and no I/O beyond reading the strategy file, so importing it
-is free and it can be exercised directly in tests.
-"""
 from __future__ import annotations
 
 import html
@@ -101,11 +87,11 @@ def strip_html(value: str) -> str:
     Entities are *decoded*, not deleted. Replacing them with a space used to
     corrupt the text it was meant to clean: Hacker News serves "$120-160/hr"
     as ``$120-160&#x2F;hr``, so a rate a human actually typed came out as
-    "$120-160 hr" and no downstream reader could recognise it as a price.
+    "$120-160 hr`` and no downstream reader could recognise it as a price.
     Numeric entities were not matched at all, leaving raw ``&#x2F;`` in place.
     """
 	value = re.sub(r"<script.*?</script>", " ", value, flags=re.DOTALL | re.IGNORECASE)
-	value = re.sub(r"<[^>]+>", " ", value)
+	value = re.sub(r"<[^>]+", " ", value)
 	value = html.unescape(value)
 	return re.sub(r"\s+", " ", value).strip()
 
@@ -126,4 +112,35 @@ def bounded_append(entries: list, value: Any, limit: int) -> None:
     """
 	if value and value not in entries:
 		entries.append(value)
-	del entries[: -max(1, limit)]
+		del entries[: -max(1, limit)]
+
+
+def safe_parse_iso(value: Any) -> Optional[datetime]:
+	"""Parse a date string with multiple format fallback, returning None on failure.
+
+    Tries ISO-8601 with Z suffix, ISO-8601 without timezone (assumed UTC),
+    and RFC-822 (email.utils.parsedate_to_datetime). This is more robust than
+    parse_dt for feed parsing where date formats can vary unpredictably.
+    """
+	if not value:
+		return None
+	raw = str(value).strip()
+	# Try ISO-8601 with Z
+	try:
+		dt = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+		return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+	except Exception:
+		pass
+	# Try ISO-8601 without timezone
+	try:
+		dt = datetime.fromisoformat(raw)
+		return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+	except Exception:
+		pass
+	# Try RFC-822
+	try:
+		from email.utils import parsedate_to_datetime
+		dt = parsedate_to_datetime(raw)
+		return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+	except Exception:
+		return None

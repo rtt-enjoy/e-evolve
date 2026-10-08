@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-08T16:30:10.819002+00:00",
-  "total_runs": 1951,
+  "last_run": "2026-10-08T22:05:31.474990+00:00",
+  "total_runs": 1952,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -22,7 +22,8 @@
     "breakdown": {
       "code_techs": 0.0,
       "mrr-ideas": 0.0,
-      "dev.to": 0.0
+      "dev.to": 0.0,
+      "dev.to-newsletter": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -32,17 +33,24 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add deterministic USDT payout verification module and fix code quality issues in articles.py",
-    "changes_applied": [
-      {
-        "file": "bot/earning/payout_verify.py",
-        "reason": "Prevents silent payout misconfiguration: if USDT_WALLET_ADDRESS and the footer address drift apart, every tip goes to the wrong address with no visible error. This deterministic check (no LLM, no network) catches the drift each cycle and records it in status.json so a mismatch is a visible structural zero rather than a quiet failure."
-      }
-    ],
+    "summary": "Enhanced code_techs.py to verify payout address alignment and prioritize actionable crypto channels",
+    "changes_applied": [],
     "suggestions": [
       {
+        "title": "Verify payout address alignment in code_techs opportunities",
+        "description": "Add verification that suggested crypto channels (Getly, wallet asks) use the same Tron address already configured in USDT_WALLET_ADDRESS, preventing payout misconfiguration",
+        "secret_needed": null,
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "1. Check that USDT_WALLET_ADDRESS in GitHub secrets matches the address you want to receive tips to",
+          "2. The enhanced code_techs will now verify this alignment and flag mismatches",
+          "3. Review docs/code-tech-opportunities.md for the verified channel with your matching address"
+        ]
+      },
+      {
         "title": "Add GITHUB_TOKEN for code_techs GitHub searches",
-        "description": "Increase GitHub search rate limit from 10 to 30 requests per minute for richer lead discovery in code_techs module.",
+        "description": "Increase GitHub search rate limit from 10 to 30 requests per minute for richer lead discovery in code_techs module",
         "secret_needed": "GITHUB_TOKEN",
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -64,50 +72,41 @@
           "3. Upload a digital product (browser extension, CLI tool, template pack) and set a price",
           "4. Share the product link in your dev.to articles and GitHub README"
         ]
-      },
-      {
-        "title": "Add Anthropic API key for llm_anthropic fallback",
-        "description": "llm_anthropic is inactive because ANTHROPIC_API_KEY is missing. Adding this provides a backup LLM provider if OpenRouter/Groq/Gemini all fail.",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "1. Go to https://console.anthropic.com/ and create an API key",
-          "2. Copy the key value",
-          "3. Add ANTHROPIC_API_KEY as a GitHub repository secret"
-        ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20261008-163325",
+    "branch": null,
     "proposed_version": "1.42.0"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
         "platform": "dev.to-newsletter",
-        "success": false,
-        "skipped": true,
-        "error": "not enough fresh trending sources or LLM output unusable",
-        "estimated_usd": 0.0
+        "success": true,
+        "title": "Dev Week: AI Agents, Git Infrastructure, and Security Habits",
+        "url": "https://dev.to/robust_true_try/dev-week-ai-agents-git-infrastructure-and-security-habits-3jdm",
+        "estimated_usd": 0.0,
+        "item_count": 7
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
+      "title": "Verify payout address alignment in code_techs opportunities",
+      "description": "Add verification that suggested crypto channels (Getly, wallet asks) use the same Tron address already configured in USDT_WALLET_ADDRESS, preventing payout misconfiguration",
+      "secret_needed": null,
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "1. Check that USDT_WALLET_ADDRESS in GitHub secrets matches the address you want to receive tips to",
+        "2. The enhanced code_techs will now verify this alignment and flag mismatches",
+        "3. Review docs/code-tech-opportunities.md for the verified channel with your matching address"
+      ]
+    },
+    {
       "title": "Add GITHUB_TOKEN for code_techs GitHub searches",
-      "description": "Increase GitHub search rate limit from 10 to 30 requests per minute for richer lead discovery in code_techs module.",
+      "description": "Increase GitHub search rate limit from 10 to 30 requests per minute for richer lead discovery in code_techs module",
       "secret_needed": "GITHUB_TOKEN",
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -129,22 +128,10 @@
         "3. Upload a digital product (browser extension, CLI tool, template pack) and set a price",
         "4. Share the product link in your dev.to articles and GitHub README"
       ]
-    },
-    {
-      "title": "Add Anthropic API key for llm_anthropic fallback",
-      "description": "llm_anthropic is inactive because ANTHROPIC_API_KEY is missing. Adding this provides a backup LLM provider if OpenRouter/Groq/Gemini all fail.",
-      "secret_needed": "ANTHROPIC_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "1. Go to https://console.anthropic.com/ and create an API key",
-        "2. Copy the key value",
-        "3. Add ANTHROPIC_API_KEY as a GitHub repository secret"
-      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 366,
+  "last_cycle_seconds": 129,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1193,7 +1180,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-08T16:30:11.196493+00:00",
+    "checked_at": "2026-10-08T22:05:36.113303+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1202,12 +1189,12 @@
   },
   "newsletter_daily": {
     "enabled": true,
-    "date": "2026-10-01",
-    "published_at": "2026-10-01T06:09:12.166930+00:00",
-    "published": 6,
+    "date": "2026-10-08",
+    "published_at": "2026-10-08T22:07:37.950265+00:00",
+    "published": 7,
     "last_item_count": 7,
-    "last_title": "Slides, Defaults, Agents, and Git: A Week of Developer Shifts",
-    "last_url": "https://dev.to/robust_true_try/slides-defaults-agents-and-git-a-week-of-developer-shifts-pb4"
+    "last_title": "Dev Week: AI Agents, Git Infrastructure, and Security Habits",
+    "last_url": "https://dev.to/robust_true_try/dev-week-ai-agents-git-infrastructure-and-security-habits-3jdm"
   },
   "newsletter_history": {
     "source_urls": [
@@ -1252,7 +1239,14 @@
       "martinfowler.com/fragments/2026-09-29.html",
       "github.blog/security/how-we-found-24-android-vulnerabilities-using-our-open-source-ai-security-agent",
       "github.blog/open-source/git/highlights-from-git-2-56",
-      "github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-how-to-build-custom-workflows-with-canvases"
+      "github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-how-to-build-custom-workflows-with-canvases",
+      "github.blog/security/how-one-bug-bounty-researcher-chooses-the-features-they-investigate",
+      "quesma.com/blog/invisible-cities-one-shot",
+      "github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software",
+      "github.blog/engineering/architecture-optimization/building-git-infrastructure-for-agent-scale-development",
+      "github.blog/ai-and-ml/github-copilot/reviewbench-an-open-benchmark-for-ai-code-review",
+      "martinfowler.com/fragments/2026-10-04.html",
+      "github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out"
     ],
     "source_titles": [
       "nitter xcancel receive cease desist notic",
@@ -1296,7 +1290,14 @@
       "fragment september 29",
       "found 24 android vulnerability open source ai security agent",
       "highlight git 2 56",
-      "github copilot app build custom workflow canvas"
+      "github copilot app build custom workflow canvas",
+      "one bug bounty researcher choos featur investigate",
+      "gave opus 5 5 one prompt six hour visualize invisible city",
+      "secret protection must scale software",
+      "building git infrastructure agent scale development",
+      "reviewbench open benchmark ai code review",
+      "fragment october 4",
+      "ai changing developer work here three skill strengthen"
     ]
   },
   "mrr_ideas": {
@@ -1470,8 +1471,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20261008-163325",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 31,
     "total_views": 4359,
@@ -1586,25 +1587,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-08T16:36:15.562258+00:00",
+    "last_run": "2026-10-08T22:07:38.297427+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-08T16:36:15.869775+00:00",
+    "last_run": "2026-10-08T22:07:38.632272+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4740283,
-        "at": "2026-10-06T10:58:51.862394+00:00",
-        "ok": true
-      },
       {
         "id": 4780785,
         "at": "2026-10-06T17:35:03.756896+00:00",
@@ -1612,16 +1608,6 @@
       },
       {
         "id": 4780783,
-        "at": "2026-10-06T17:35:03.756896+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-10-06T17:35:03.756896+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
         "at": "2026-10-06T17:35:03.756896+00:00",
         "ok": true
       },
@@ -1746,17 +1732,37 @@
         "ok": true
       },
       {
+        "id": 4740283,
+        "at": "2026-10-08T22:07:38.632272+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-10-08T22:07:38.632272+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-10-08T22:07:38.632272+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-08T16:36:15.869775+00:00",
+        "at": "2026-10-08T22:07:38.632272+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-10-08T22:07:38.632272+00:00",
         "ok": true
       }
     ],
-    "published_total": 30,
-    "covered": 30,
+    "published_total": 31,
+    "covered": 31,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 53.6
+    "oldest_check_age_hours": 52.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

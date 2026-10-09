@@ -2156,3 +2156,8 @@ Autonomous earnings generated every hourly cycle.
 
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
 - [ok] **dev.to**: [Why Your LLM City Map Collapses Without Spatial Constraints](https://dev.to/robust_true_try/why-your-llm-city-map-collapses-without-spatial-constraints-3cf6) (est. $0.00)
+
+### 2026-10-09 09:21 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+- [ok] **mrr-ideas**: [MRR idea triage refreshed (2 viable, 18 refused)](status.json#mrr_ideas) (est. $0.00)

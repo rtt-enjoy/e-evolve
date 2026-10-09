@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-09T16:14:27.276890+00:00",
-  "total_runs": 1955,
+  "last_run": "2026-10-09T20:57:40.757396+00:00",
+  "total_runs": 1956,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -34,12 +34,7 @@
   "last_evolution": {
     "version_bumped_to": "1.41.0",
     "summary": "Add payout address verification to code_techs to confirm suggested crypto channels settle to the configured USDT_WALLET_ADDRESS, preventing payout misconfiguration.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/code_techs.py",
-        "reason": "Add payout_address_verified and payout_address_note fields to the Opportunity dataclass and the _PRODUCT_CHANNELS/_LOCAL_LEADS tables, plus a _verify_payout_address function that compares each channel's expected_wallet_address against the configured USDT_WALLET_ADDRESS. This prevents payout misconfiguration where the owner lists a product on a channel that pays to an address the bot cannot see. The report now renders the verification result per lead."
-      }
-    ],
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Add ANTHROPIC_API_KEY to enable llm_anthropic",
@@ -79,22 +74,11 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20261009-163644",
+    "branch": null,
     "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -136,7 +120,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1542,
+  "last_cycle_seconds": 16,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1206,7 +1190,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-09T16:14:27.962605+00:00",
+    "checked_at": "2026-10-09T20:57:41.402372+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1497,8 +1481,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20261009-163644",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 31,
     "total_views": 4401,
@@ -1613,7 +1597,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-09T16:40:07.830761+00:00",
+    "last_run": "2026-10-09T20:57:55.161281+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1623,32 +1607,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-09T16:40:08.172999+00:00",
+    "last_run": "2026-10-09T20:57:55.455279+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4720062,
-        "at": "2026-10-07T09:13:43.972762+00:00",
-        "ok": true
-      },
-      {
         "id": 4681657,
-        "at": "2026-10-07T22:03:11.608117+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-10-07T22:03:11.608117+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-10-07T22:03:11.608117+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-10-07T22:03:11.608117+00:00",
         "ok": true
       },
@@ -1783,8 +1747,28 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-10-09T20:57:55.455279+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-10-09T20:57:55.455279+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-10-09T20:57:55.455279+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-10-09T20:57:55.455279+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-09T16:40:08.172999+00:00",
+        "at": "2026-10-09T20:57:55.455279+00:00",
         "ok": true
       }
     ],
@@ -1793,7 +1777,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 55.4
+    "oldest_check_age_hours": 46.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

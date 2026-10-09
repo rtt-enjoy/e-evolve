@@ -2151,3 +2151,8 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-10-08 22:07 UTC
 
 - [ok] **dev.to-newsletter**: [Dev Week: AI Agents, Git Infrastructure, and Security Habits](https://dev.to/robust_true_try/dev-week-ai-agents-git-infrastructure-and-security-habits-3jdm) (est. $0.00)
+
+### 2026-10-09 02:19 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+- [ok] **dev.to**: [Why Your LLM City Map Collapses Without Spatial Constraints](https://dev.to/robust_true_try/why-your-llm-city-map-collapses-without-spatial-constraints-3cf6) (est. $0.00)

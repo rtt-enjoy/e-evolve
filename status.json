@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-10T13:44:34.984087+00:00",
-  "total_runs": 1959,
+  "last_run": "2026-10-10T18:37:45.220900+00:00",
+  "total_runs": 1960,
   "active_features": [
     "llm_gemini",
     "llm_openrouter",
@@ -33,11 +33,15 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Use GH_TOKEN for GitHub API calls in code_techs to increase rate limit without requiring a new secret, improve dashboard fallback, and bump version",
+    "summary": "Fix backfill rate-limit skips with exponential-backoff retry, and make title revision and LLM calls retry once on transient failure to reduce the high weak_title and llm_error rejection rates.",
     "changes_applied": [
       {
-        "file": "bot/earning/code_techs.py",
-        "reason": "Use GH_TOKEN as a fallback for GITHUB_TOKEN in GitHub API calls to increase rate limit without requiring a new secret."
+        "file": "bot/earning/devto.py",
+        "reason": "Backfill skipped 5 posts with dev.to 429 rate-limit errors and never retried. update_body now retries up to 3 times with exponential backoff (1s, 2s, 4s) on 429 and on transient request failures, so the backfill path can complete instead of leaving posts without the receive footer."
+      },
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "Two rejection reasons dominate the reject tally: weak_title (8) and llm_error (10). _revise_title now retries once with a fresh prompt before giving up, and _generate_article retries the LLM call once (2s delay) on transient failure and only rejects after both attempts fail. This turns single transient failures into published articles instead of rejects."
       }
     ],
     "suggestions": [
@@ -66,33 +70,25 @@
         ]
       },
       {
-        "title": "Use existing GH_TOKEN for GitHub API calls in code_techs",
-        "description": "Increase GitHub search rate limit from 10 to 50 requests per minute (or higher) by using the existing GH_TOKEN secret, eliminating the need for a separate GITHUB_TOKEN secret.",
+        "title": "Build the interactive frontend dashboard",
+        "description": "The dashboard currently falls back to a static index page; building frontend/ with Vite produces the interactive status UI that reads docs/status.json.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "No action required. The bot now uses the existing GH_TOKEN secret for GitHub API calls to increase the rate limit."
+          "1. Open frontend/ in your terminal",
+          "2. Run npm install to install dependencies",
+          "3. Run npm run build to generate the Vite bundle into docs/",
+          "4. Push the build so GitHub Pages serves the interactive dashboard"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20261010-134805",
-    "proposed_version": "1.42.0"
+    "branch": "evolve/1.42.1-20261010-183927",
+    "proposed_version": "1.42.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -121,18 +117,21 @@
       ]
     },
     {
-      "title": "Use existing GH_TOKEN for GitHub API calls in code_techs",
-      "description": "Increase GitHub search rate limit from 10 to 50 requests per minute (or higher) by using the existing GH_TOKEN secret, eliminating the need for a separate GITHUB_TOKEN secret.",
+      "title": "Build the interactive frontend dashboard",
+      "description": "The dashboard currently falls back to a static index page; building frontend/ with Vite produces the interactive status UI that reads docs/status.json.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "No action required. The bot now uses the existing GH_TOKEN secret for GitHub API calls to increase the rate limit."
+        "1. Open frontend/ in your terminal",
+        "2. Run npm install to install dependencies",
+        "3. Run npm run build to generate the Vite bundle into docs/",
+        "4. Push the build so GitHub Pages serves the interactive dashboard"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 300,
+  "last_cycle_seconds": 104,
   "llm_roles": {
     "upgrade": "openrouter",
     "research": "openrouter",
@@ -1197,7 +1196,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-10T13:44:35.678460+00:00",
+    "checked_at": "2026-10-10T18:37:45.816659+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1488,7 +1487,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20261010-134805",
+  "last_evolution_branch": "evolve/1.42.1-20261010-183927",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 32,
@@ -1604,42 +1603,22 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-10T13:49:34.215084+00:00",
+    "last_run": "2026-10-10T18:39:28.025059+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-10T13:49:34.567783+00:00",
+    "last_run": "2026-10-10T18:39:28.497149+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4641536,
-        "at": "2026-10-08T09:09:32.724854+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-10-08T16:36:15.869775+00:00",
-        "ok": true
-      },
-      {
         "id": 4740283,
-        "at": "2026-10-08T22:07:38.632272+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-10-08T22:07:38.632272+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
         "at": "2026-10-08T22:07:38.632272+00:00",
         "ok": true
       },
@@ -1779,8 +1758,28 @@
         "ok": true
       },
       {
+        "id": 4641536,
+        "at": "2026-10-10T18:39:28.497149+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-10-10T18:39:28.497149+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-10-10T18:39:28.497149+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-10-10T18:39:28.497149+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-10T13:49:34.567783+00:00",
+        "at": "2026-10-10T18:39:28.497149+00:00",
         "ok": true
       }
     ],
@@ -1789,7 +1788,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 52.7
+    "oldest_check_age_hours": 44.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

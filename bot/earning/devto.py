@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import logging
 import re
+import time
 from typing import Any
 
 import requests
@@ -54,7 +55,7 @@ def tone_problems(body: str) -> list[str]:
 
 
 FABRICATION_PATTERNS = [
-	(r"\b\d+\s*[-‐-―~]?\s*\d*\s*ms\b", "invented latency figures (ms)"),
+	(r"\b\d+\s*[-\u2010‑-\u2013\u2014~]?\s*\d*\s*ms\b", "invented latency figures (ms)"),
 	(r"\$\s?\d+(\.\d+)?\s*(/|per\s)", "invented pricing"),
 	(r"\b\d+(\.\d+)?\s*(tokens?/s|tok/s|req/s|requests?/(sec|second))", "invented throughput"),
 	(r"\b\d+\s*%\s*(faster|slower|cheaper|better|more accurate)", "invented benchmark deltas"),
@@ -147,7 +148,7 @@ def normalize(data: dict) -> dict:
 	# dev.to renders the title itself, so a top-level '#' heading shows up as a
 	# duplicate title. Demote any '# ' to '## '.
 	body = re.sub(r"^# (?!#)", "## ", body, flags=re.MULTILINE)
-	# Strip "1. "/"2) " numbering the model adds to headings. dev.to renders a
+	# Strip "1. ""2) " numbering the model adds to headings. dev.to renders a
 	# clean outline without it, and the numbers go stale if sections are reordered.
 	body = re.sub(r"^(#{2,3} )\d+[.)]\s+", r"\1", body, flags=re.MULTILINE)
 	# Collapse 3+ blank lines to 2, then guarantee one blank line on both sides of
@@ -276,26 +277,45 @@ def update_body(article_id: int, body_markdown: str, api_key: str) -> dict:
     re-promote anything.
     """
 	url = f"https://dev.to/api/articles/{int(article_id)}"
-	try:
-		resp = requests.put(
-			url,
-			headers={
-				"api-key": api_key,
-				"Content-Type": "application/json",
-				"Accept": "application/vnd.forem.api-v1+json",
-			},
-			json={"article": {"body_markdown": body_markdown}},
-			timeout=30,
-		)
-		resp.raise_for_status()
-		# The write has already landed by here. A body that will not parse is a
-		# cosmetic problem, so it must not be reported as a failed update: that
-		# would abort the rest of the run over a post that was in fact fixed.
+	max_retries = 3
+	for attempt in range(max_retries):
 		try:
-			data = resp.json() if resp.content else {}
-		except Exception:
-			data = {}
-		return {"success": True, "url": str(data.get("url") or "")}
-	except Exception as exc:
-		log.warning("[devto] update %s failed: %s", article_id, exc)
-		return {"success": False, "error": str(exc)[:200]}
+			resp = requests.put(
+				url,
+				headers={
+					"api-key": api_key,
+					"Content-Type": "application/json",
+					"Accept": "application/vnd.forem.api-v1+json",
+				},
+				json={"article": {"body_markdown": body_markdown}},
+				timeout=30,
+			)
+			if resp.status_code == 429:
+				wait = 2 ** attempt
+				log.warning(
+					"[devto] update %s hit rate limit (attempt %d/%d), retrying in %ds",
+					article_id, attempt + 1, max_retries, wait
+				)
+				time.sleep(wait)
+				continue
+			resp.raise_for_status()
+			# The write has already landed by here. A body that will not parse is a
+			# cosmetic problem, so it must not be reported as a failed update: that
+			# would abort the rest of the run over a post that was in fact fixed.
+			try:
+				data = resp.json() if resp.content else {}
+			except Exception:
+				data = {}
+			return {"success": True, "url": str(data.get("url") or "")}
+		except requests.exceptions.RequestException as exc:
+			if attempt < max_retries - 1:
+				wait = 2 ** attempt
+				log.warning(
+					"[devto] update %s failed (attempt %d/%d): %s, retrying in %ds",
+					article_id, attempt + 1, max_retries, exc, wait
+				)
+				time.sleep(wait)
+				continue
+			log.warning("[devto] update %s failed after %d attempts: %s", article_id, max_retries, exc)
+			return {"success": False, "error": str(exc)[:200]}
+	return {"success": False, "error": "max retries exceeded"}

@@ -10,6 +10,7 @@ from __future__ import annotations
 import logging
 import os
 import re
+import time
 from typing import Any, Optional
 
 from . import devto, devto_stats, trending
@@ -373,13 +374,23 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 		+ _audience_guidance(status)
 	)
 
-	try:
-		if hasattr(llm, "complete_json_for_role"):
-			data = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=6000)
-		else:
-			data = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
-	except Exception as exc:
-		return _reject("llm_error", str(exc))
+	for attempt in range(2):
+		try:
+			if hasattr(llm, "complete_json_for_role"):
+				data = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=6000)
+			else:
+				data = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
+		except Exception as exc:
+			if attempt == 0:
+				log.warning("[articles] LLM call failed (attempt 1/2): %s, retrying", exc)
+				time.sleep(2)
+				continue
+			return _reject("llm_error", str(exc))
+
+		if data and data.get("title") and data.get("body_markdown"):
+			break
+	else:
+		return _reject("llm_error", "LLM returned no usable output after 2 attempts")
 
 	if not (data.get("title") and data.get("body_markdown")):
 		return _reject("empty_draft")
@@ -464,38 +475,46 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
     Body-only retries are wasteful when the headline is the problem, so this
     sends just the title and the article's opening for context.
     """
-	body = str(data.get("body_markdown", ""))
+	body = str(data.get("body_markdown", "")).strip()
 	opening = " ".join(body.split()[:120])
-	prompt = (
-		"Rewrite ONLY the title of this article so it earns clicks in the dev.to feed.\n\n"
-		f"Current title: {data.get('title', '')}\n"
-		f"Problems with it: {'; '.join(problems)}\n\n"
-		f"Article opening for context:\n{opening}\n\n"
-		"Follow the TITLE rules in the system prompt exactly: "
-		f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
-		"technology or failure, no clickbait words, no exclamation marks, no "
-		"ALL-CAPS, no colon-subtitle padding.\n\n"
-		'Respond with ONLY this JSON: {"title": "..."}'
-	)
-	try:
-		if hasattr(llm, "complete_json_for_role"):
-			out = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=300)
-		else:
-			out = llm.complete_json(prompt, system=_SYSTEM, max_tokens=300)
-	except Exception as exc:
-		log.warning("[articles] title revision failed: %s", exc)
-		return None
+	title = str(data.get("title", "")).strip()
 
-	candidate = str((out or {}).get("title", "")).strip()
-	if not candidate:
-		return None
-	remaining = _title_problems(candidate)
-	if remaining:
-		log.info("[articles] revised title still weak %s", remaining)
-		return None
-	log.info("[articles] title improved: %r", candidate)
-	return candidate
+	for attempt in range(2):
+		prompt = (
+			"Rewrite ONLY the title of this article so it earns clicks in the dev.to feed.\n\n"
+			f"Current title: {title}\n"
+			f"Problems with it: {'; '.join(problems)}\n\n"
+			f"Article opening for context:\n{opening}\n\n"
+			"Follow the TITLE rules in the system prompt exactly: "
+			f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
+			"technology or failure, no clickbait words, no exclamation marks, no "
+			"ALL-CAPS, no colon-subtitle padding.\n\n"
+			'Respond with ONLY this JSON: {"title": "..."}'
+		)
+		try:
+			if hasattr(llm, "complete_json_for_role"):
+				out = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=300)
+			else:
+				out = llm.complete_json(prompt, system=_SYSTEM, max_tokens=300)
+		except Exception as exc:
+			log.warning("[articles] title revision attempt %d failed: %s", attempt + 1, exc)
+			out = None
+			if attempt == 0:
+				continue
+			return None
 
+		candidate = str((out or {}).get("title", "")).strip()
+		if candidate:
+			remaining = _title_problems(candidate)
+			if not remaining:
+				log.info("[articles] title improved: %r", candidate)
+				return candidate
+			log.info("[articles] revised title still weak %s", remaining)
+			if attempt == 0:
+				continue
+			return None
+
+	return None
 
 # What each archetype means as a writing instruction. Kept next to the prompt
 # builder because this is editorial direction, not analysis -- the analysis
@@ -594,7 +613,7 @@ def _refresh_stats(status: dict, api_key: str) -> list:
 	# Remember our own posts so trending sourcing can exclude them. Stored in
 	# status rather than re-fetched, so the newsletter gets the same exclusion
 	# without a second API call and it survives a cycle where dev.to is down.
-	own = devto_stats.account_urls(published)
+	onw = devto_stats.account_urls(published)
 	if own:
 		_history(status)["own_urls"] = own[:int(_config()["history_limit"])]
 	return published
@@ -716,7 +735,7 @@ def _titles_overlap(new_title: str, old_title: str, threshold: float = 0.7) -> b
 		return False
 	if new_key == old_key:
 		return True
-	new_words, old_words = set(new_key.split()), set(old_key.split())
+	new_words, old_words = set(new_key.split()), set(old_words.split())
 	if not new_words or not old_words:
 		return False
 	return len(new_words & old_words) / len(new_words | old_words) >= threshold
@@ -807,7 +826,7 @@ def _prefer_proven_archetypes(candidates: list, status: dict) -> list:
 		return candidates
 
 	bonus = {name: _ARCHETYPE_BONUS - i * _ARCHETYPE_BONUS_STEP
-			 for i, name in enumerate(preferred)}
+				 for i, name in enumerate(preferred)}
 
 	def key(item):
 		kind = devto_stats.classify(item.get("title", ""))
@@ -1083,9 +1102,6 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
-
-
 def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 	"""Ask the model to fix specific formatting violations. Returns None on failure."""
 	prompt = (
@@ -1115,7 +1131,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

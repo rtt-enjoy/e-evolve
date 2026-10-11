@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import logging
 import re
+import time
 from typing import Any
 
 import requests
@@ -179,6 +180,56 @@ def own_post_urls(status: dict) -> list[str]:
 	return [str(u) for u in hist.get("own_urls", []) if u]
 
 
+def _request_with_retry(
+	method: str,
+	url: str,
+	headers: dict[str, str] | None = None,
+	json: dict[str, Any] | None = None,
+	timeout: float = 30,
+	max_retries: int = 5,
+) -> requests.Response:
+	"""Perform an HTTP request with exponential backoff on HTTP 429.
+
+    dev.to rate-limits the API, and the backfill path used to fail permanently
+    on a 429, which silently skipped posts forever. This retries with a
+    capped exponential delay (1s, 2s, 4s, 8s, 16s) and a small jitter, so a
+    temporary limit costs a few seconds instead of a lost cycle.
+
+    Non-429 responses are returned unchanged; other exceptions propagate.
+    """
+	backoff = 1.0
+	for attempt in range(max_retries + 1):
+		try:
+			resp = requests.request(
+				method, url, headers=headers or {}, json=json, timeout=timeout
+			)
+		except requests.exceptions.RequestException:
+			if attempt == max_retries:
+				raise
+			log.warning("[devto] network error, retrying in %.1fs (%d/%d)",
+					backoff, attempt + 1, max_retries)
+			time.sleep(backoff + attempt * 0.1)
+			backoff = min(backoff * 2, 30)
+			continue
+
+		if resp.status_code == 429 and attempt < max_retries:
+			# Respect the Retry-After header when present, else exponential backoff.
+			try:
+				wait = float(resp.headers.get("Retry-After", backoff))
+				wait = min(wait, 60)
+			except (TypeError, ValueError):
+				wait = backoff
+			log.warning("[devto] 429 rate limit, retrying in %.1fs (%d/%d)",
+					wait, attempt + 1, max_retries)
+			time.sleep(wait)
+			backoff = min(backoff * 2, 30)
+			continue
+
+		return resp
+	# Should be unreachable: the loop always returns or raises.
+	raise RuntimeError("request loop exhausted without response")
+
+
 def publish(article: dict, api_key: str) -> dict:
 	"""Publish article to dev.to and return action result.
 
@@ -205,9 +256,9 @@ def publish(article: dict, api_key: str) -> dict:
 			"tags": article.get("tags", ["python", "automation"])[:4],
 		}
 	}
-	
+
 	try:
-		resp = requests.post(url, headers=headers, json=payload, timeout=30)
+		resp = _request_with_retry("POST", url, headers=headers, json=payload)
 		resp.raise_for_status()
 		data = resp.json()
 		article_url = data.get("url", "")
@@ -277,7 +328,8 @@ def update_body(article_id: int, body_markdown: str, api_key: str) -> dict:
     """
 	url = f"https://dev.to/api/articles/{int(article_id)}"
 	try:
-		resp = requests.put(
+		resp = _request_with_retry(
+			"PUT",
 			url,
 			headers={
 				"api-key": api_key,
@@ -285,7 +337,6 @@ def update_body(article_id: int, body_markdown: str, api_key: str) -> dict:
 				"Accept": "application/vnd.forem.api-v1+json",
 			},
 			json={"article": {"body_markdown": body_markdown}},
-			timeout=30,
 		)
 		resp.raise_for_status()
 		# The write has already landed by here. A body that will not parse is a

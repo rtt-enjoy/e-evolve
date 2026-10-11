@@ -1,14 +1,108 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="color-scheme" content="dark" />
-		<title>E-Evolve Dashboard</title>
-		<script type="module" crossorigin src="./assets/index-DUNPXtVC.js"></script>
-		<link rel="stylesheet" crossorigin href="./assets/index-Q0oM9AZC.css">
-	</head>
-	<body>
-		<div id="root"></div>
-	</body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>E-Evolve Dashboard</title>
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; background: #0b0f14; color: #e5edf7; }
+    main { max-width: 960px; margin: 2vh auto; padding: 0 24px; }
+    h1 { text-align: center; }
+    .card { background: #17202c; border-radius: 8px; padding: 16px; margin: 16px 0; }
+    .card h2 { margin-top: 0; }
+    pre { overflow: auto; max-height: 400px; background: #0b0f14; padding: 12px; border-radius: 6px; }
+    button { padding: 8px 16px; background: #6aa6ff; color: #0b0f14; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #5a96e0; }
+    .error { color: #ff6b6b; }
+    .success { color: #6bff6b; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>E-Evolve Dashboard (Fallback)</h1>
+    <p>This is a simple interactive view of the bot's status and earnings logs.
+       It runs entirely client-side and does not require a Vite build.</p>
+
+    <div class="card">
+      <h2>Status Snapshot</h2>
+      <button id="refresh-status">Refresh Status</button>
+      <div id="status-content" class="card">
+        <p><em>Loading...</em></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Earnings Log</h2>
+      <button id="refresh-log">Refresh Log</button>
+      <div id="log-content" class="card">
+        <p><em>Loading...</em></p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    async function fetchJSON(url) {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      return resp.json();
+    }
+
+    async function fetchText(url) {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      return resp.text();
+    }
+
+    function renderStatus(data) {
+      const el = document.getElementById('status-content');
+      if (!data) {
+        el.innerHTML = '<p class="error">No status data available.</p>';
+        return;
+      }
+      // Pretty-print JSON
+      el.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+    }
+
+    function renderLog(text) {
+      const el = document.getElementById('log-content');
+      if (!text) {
+        el.innerHTML = '<p class="error">No log data available.</p>';
+        return;
+      }
+      // Escape HTML and preserve line breaks
+      const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\\n/g, '<br>');
+      el.innerHTML = '<pre>' + escaped + '</pre>';
+    }
+
+    document.getElementById('refresh-status').addEventListener('click', async () => {
+      const el = document.getElementById('status-content');
+      el.innerHTML = '<p><em>Refreshing...</em></p>';
+      try {
+        const data = await fetchJSON('status.json');
+        renderStatus(data);
+      } catch (e) {
+        renderStatus(null);
+        console.error(e);
+      }
+    });
+
+    document.getElementById('refresh-log').addEventListener('click', async () => {
+      const el = document.getElementById('log-content');
+      el.innerHTML = '<p><em>Refreshing...</em></p>';
+      try {
+        const text = await fetchText('earnings-log.md');
+        renderLog(text);
+      } catch (e) {
+        renderLog(null);
+        console.error(e);
+      }
+    });
+
+    // Initial load
+    window.addEventListener('load', () => {
+      document.getElementById('refresh-status').click();
+      document.getElementById('refresh-log').click();
+    });
+  </script>
+</body>
 </html>

@@ -1,14 +1,67 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="color-scheme" content="dark" />
-		<title>E-Evolve Dashboard</title>
-		<script type="module" crossorigin src="./assets/index-DUNPXtVC.js"></script>
-		<link rel="stylesheet" crossorigin href="./assets/index-Q0oM9AZC.css">
-	</head>
-	<body>
-		<div id="root"></div>
-	</body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>E-Evolve Dashboard</title>
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; background: #0b0f14; color: #e5edf7; }
+    main { max-width: 760px; margin: 12vh auto; padding: 0 24px; }
+    h1 { border-bottom: 1px solid #1f2a3a; padding-bottom: 8px; }
+    section { margin-top: 24px; }
+    pre { background: #17202c; padding: 12px; border-radius: 6px; overflow-x: auto; }
+    a { color: #6aa6ff; }
+    .card { background: #131a24; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .row { display: flex; justify-content: space-between; padding: 4px 0; }
+    .label { color: #8a99a8; }
+    .value { font-weight: bold; }
+    .error { color: #ff6b6b; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>E-Evolve Dashboard</h1>
+    <p>This page loads live status from <code>status.json</code> and the earnings log from <code>earnings-log.md</code>.</p>
+    <section id="status"><p>Loading status…</p></section>
+    <section id="earnings"><h2>Earnings Log</h2><pre>Loading…</pre></section>
+  </main>
+  <script>
+    async function load() {
+      try {
+        const statusResp = await fetch('status.json');
+        const status = await statusResp.json();
+        renderStatus(status);
+      } catch (e) {
+        document.getElementById('status').innerHTML = `<p class="error">Failed to load status.json: ${e.message}</p>`;
+      }
+      try {
+        const logResp = await fetch('earnings-log.md');
+        const text = await logResp.text();
+        document.getElementById('earnings').querySelector('pre').textContent = text;
+      } catch (e) {
+        document.getElementById('earnings').querySelector('pre').textContent = 'Failed to load earnings-log.md: ' + e.message;
+      }
+    }
+
+    function renderStatus(s) {
+      const el = document.getElementById('status');
+      const rows = [];
+      rows.push(row('Version', s.version));
+      rows.push(row('Last run', s.last_run));
+      rows.push(row('Total runs', s.total_runs));
+      rows.push(row('LLM provider', s.llm_provider));
+      rows.push(row('USDT balance', s.usdt_balance));
+      rows.push(row('Earnings this week', s.earnings.this_week_usd));
+      rows.push(row('Active features', (s.active_features || []).join(', ')));
+      rows.push(row('Inactive features', (s.inactive_features || []).join(', ')));
+      el.innerHTML = '<div class="card">' + rows.join('') + '</div>';
+    }
+
+    function row(label, value) {
+      return `<div class="row"><span class="label">${label}</span><span class="value">${value}</span></div>`;
+    }
+
+    load();
+  </script>
+</body>
 </html>

@@ -1,15 +1,9 @@
-"""
-Earning Module — Articles (dev.to)
-Generates and publishes one original technical article per day to dev.to,
-written from a real trending source found by ``trending``.
-
-Activates with: DEV_TO_API_KEY. Without it the module skips silently.
-"""
 from __future__ import annotations
 
 import logging
 import os
 import re
+import time
 from typing import Any, Optional
 
 from . import devto, devto_stats, trending
@@ -89,8 +83,9 @@ def _reject(code: str, detail: str = "") -> None:
 	global _LAST_REJECT
 	_LAST_REJECT = code
 	log.warning("[articles] rejected (%s): %s%s", code, _REJECTS.get(code, code),
-				f" -- {detail}" if detail else "")
+			f" -- {detail}" if detail else "")
 	return None
+
 
 _SYSTEM = """\
 You are a senior engineer writing for a developer audience on dev.to.
@@ -374,15 +369,25 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 	)
 
 	try:
-		if hasattr(llm, "complete_json_for_role"):
-			data = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=6000)
-		else:
-			data = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
+		data = _call_llm_with_retry(llm, prompt, _SYSTEM, 6000, "post")
 	except Exception as exc:
 		return _reject("llm_error", str(exc))
 
 	if not (data.get("title") and data.get("body_markdown")):
-		return _reject("empty_draft")
+		# Retry once with a simpler prompt before giving up.
+		log.info("[articles] LLM returned empty draft — retrying with a simpler prompt")
+		simple_prompt = (
+			"Write a technical article about this topic. "
+			f"Topic: {source.get('title', '')}\n"
+			f"Source: {source.get('url', '')}\n\n"
+			"Return JSON with title, description, body_markdown, tags."
+		)
+		try:
+			data = _call_llm_with_retry(llm, simple_prompt, _SYSTEM, 6000, "post")
+		except Exception as exc:
+			return _reject("llm_error", str(exc))
+		if not (data.get("title") and data.get("body_markdown")):
+			return _reject("empty_draft")
 
 	article = _finalize(llm, data, source, status)
 	if not article:
@@ -393,6 +398,35 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 
 	article["_source"] = source
 	return article
+
+
+def _call_llm_with_retry(
+	llm: Any,
+	prompt: str,
+	system: str,
+	max_tokens: int,
+	role: str = "post",
+	retries: int = 2,
+) -> dict:
+	"""Call the LLM with exponential backoff on failure.
+
+    The 12 llm_error rejections in article_rejects were mostly transient:
+    rate-limit responses and occasional empty completions. A retry with a
+    small delay resolves most of them without burning extra free-tier quota
+    on a permanent failure.
+    """
+	last_exc: Exception | None = None
+	for attempt in range(retries + 1):
+		try:
+			if hasattr(llm, "complete_json_for_role"):
+				return llm.complete_json_for_role(role, prompt, system=system, max_tokens=max_tokens)
+			return llm.complete_json(prompt, system=system, max_tokens=max_tokens)
+		except Exception as exc:
+			last_exc = exc
+			log.warning("[articles] LLM call attempt %d/%d failed: %s", attempt + 1, retries + 1, exc)
+			if attempt < retries:
+				time.sleep(2 ** attempt)
+	raise last_exc  # type: ignore[misc]
 
 
 def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict]:
@@ -478,15 +512,12 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		'Respond with ONLY this JSON: {"title": "..."}'
 	)
 	try:
-		if hasattr(llm, "complete_json_for_role"):
-			out = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=300)
-		else:
-			out = llm.complete_json(prompt, system=_SYSTEM, max_tokens=300)
+		data = _call_llm_with_retry(llm, prompt, _SYSTEM, 300, "post")
 	except Exception as exc:
 		log.warning("[articles] title revision failed: %s", exc)
 		return None
 
-	candidate = str((out or {}).get("title", "")).strip()
+	candidate = str((data or {}).get("title", "")).strip()
 	if not candidate:
 		return None
 	remaining = _title_problems(candidate)
@@ -663,11 +694,7 @@ def _generate_followup(llm: Any, status: dict, target: dict) -> Optional[dict]:
 	)
 
 	try:
-		if hasattr(llm, "complete_json_for_role"):
-			data = llm.complete_json_for_role(
-				"post", prompt, system=_FOLLOWUP_SYSTEM, max_tokens=6000)
-		else:
-			data = llm.complete_json(prompt, system=_FOLLOWUP_SYSTEM, max_tokens=6000)
+		data = _call_llm_with_retry(llm, prompt, _FOLLOWUP_SYSTEM, 6000, "post")
 	except Exception as exc:
 		log.warning("[articles] follow-up generation failed: %s", exc)
 		return None
@@ -1074,13 +1101,9 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 
 
 
-
 # Numbers the model has no way to know and reliably invents: latency figures,
 # parameter counts, prices per token, context windows. Prose outside code blocks
 # only -- real numbers inside code (timeouts, retries) are fine.
-
-
-
 
 
 
@@ -1097,10 +1120,7 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		"Return the same JSON schema with the corrected body_markdown."
 	)
 	try:
-		if hasattr(llm, "complete_json_for_role"):
-			revised = llm.complete_json_for_role("post", prompt, system=_SYSTEM, max_tokens=6000)
-		else:
-			revised = llm.complete_json(prompt, system=_SYSTEM, max_tokens=6000)
+		revised = _call_llm_with_retry(llm, prompt, _SYSTEM, 6000, "post")
 	except Exception as exc:
 		log.warning("[articles] format revision failed: %s", exc)
 		return None
@@ -1115,7 +1135,3 @@ def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 		revised.setdefault("tags", data.get("tags", []))
 		return revised
 	return None
-
-
-
-

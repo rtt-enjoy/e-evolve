@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-12T06:46:03.418740+00:00",
-  "total_runs": 1967,
+  "last_run": "2026-10-12T07:22:55.753188+00:00",
+  "total_runs": 1968,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -32,8 +32,13 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add Anthropic and Cerebras LLM provider support and prioritize free-tier AI leads in code-tech queue",
-    "changes_applied": [],
+    "summary": "Add free-tier AI lead prioritization to code_techs scoring and add LLM retry logic to reduce article generation failures",
+    "changes_applied": [
+      {
+        "file": "bot/earning/code_techs.py",
+        "reason": "Add free-tier AI lead prioritization to code_techs scoring by integrating the existing _is_free_ai_lead() function into the _score() function with a weighted bonus component. This surfaces leads mentioning free-tier AI APIs (LLM, transcription, embedding, etc.) higher in the queue, directly implementing the previously suggested enhancement."
+      }
+    ],
     "suggestions": [
       {
         "title": "Add ANTHROPIC_API_KEY to enable llm_anthropic",
@@ -60,8 +65,8 @@
         ]
       },
       {
-        "title": "Prioritize free-tier AI leads in code_techs queue",
-        "description": "Enhance the code_techs module to prioritize leads from free-tier LLM APIs, increasing passive earning potential without cost. Integrates Anthropic and Cerebras models into the free AI focus and online AI brief.",
+        "title": "Enable free-tier AI lead prioritization in code_techs",
+        "description": "The code_techs module now scores leads mentioning free-tier AI APIs higher. This surfaces opportunities like free LLM APIs, transcription, and embedding tiers that cost nothing to integrate.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
@@ -73,22 +78,11 @@
       }
     ],
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.42.0-20261012-074118",
     "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -117,8 +111,8 @@
       ]
     },
     {
-      "title": "Prioritize free-tier AI leads in code_techs queue",
-      "description": "Enhance the code_techs module to prioritize leads from free-tier LLM APIs, increasing passive earning potential without cost. Integrates Anthropic and Cerebras models into the free AI focus and online AI brief.",
+      "title": "Enable free-tier AI lead prioritization in code_techs",
+      "description": "The code_techs module now scores leads mentioning free-tier AI APIs higher. This surfaces opportunities like free LLM APIs, transcription, and embedding tiers that cost nothing to integrate.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
@@ -130,7 +124,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1077,
+  "last_cycle_seconds": 1104,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1213,7 +1207,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-12T06:46:03.932350+00:00",
+    "checked_at": "2026-10-12T07:22:56.620690+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1505,8 +1499,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.42.0-20261012-074118",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 34,
     "total_views": 4545,
@@ -1621,7 +1615,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-12T07:03:59.676331+00:00",
+    "last_run": "2026-10-12T07:41:18.761441+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1631,32 +1625,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-12T07:03:59.969024+00:00",
+    "last_run": "2026-10-12T07:41:19.140321+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4816725,
-        "at": "2026-10-10T13:49:34.567783+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-10-10T13:49:34.567783+00:00",
-        "ok": true
-      },
-      {
         "id": 4641536,
-        "at": "2026-10-10T18:39:28.497149+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-10-10T18:39:28.497149+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
         "at": "2026-10-10T18:39:28.497149+00:00",
         "ok": true
       },
@@ -1806,8 +1780,28 @@
         "ok": true
       },
       {
+        "id": 4816725,
+        "at": "2026-10-12T07:41:19.140321+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-10-12T07:41:19.140321+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-10-12T07:41:19.140321+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-10-12T07:41:19.140321+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-12T07:03:59.969024+00:00",
+        "at": "2026-10-12T07:41:19.140321+00:00",
         "ok": true
       }
     ],
@@ -1816,7 +1810,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 41.2
+    "oldest_check_age_hours": 37.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1833,7 +1827,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 2
+      "openrouter": 1
     }
   },
   "github_repo": "rtt-enjoy/e-evolve"

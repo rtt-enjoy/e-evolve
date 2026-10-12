@@ -8,6 +8,7 @@ const REASONS: Record<string, string> = {
 	auth_failed: 'Atria rejected the key (401/403)',
 	quota_spent: 'Atria free quota spent this cycle',
 	model_not_found: 'Atria model withdrawn (404)',
+	timeout: 'Atria timed out twice this cycle',
 };
 
 export type AtriaState = {

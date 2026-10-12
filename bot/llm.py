@@ -26,6 +26,14 @@ _GROQ_MODELS = [
 _ATRIA_MODELS = [
 	"Atria-Dawn-Preview",
 ]
+# Atria is slow to answer, so it gets far more patience than OpenRouter's 90s:
+# (connect, read) seconds. A timeout after that wait falls through to OpenRouter
+# for that call -- it is not retried, since three 5-minute waits on one prompt
+# would eat most of the 55-minute job cap. After _ATRIA_MAX_TIMEOUTS in one run
+# Atria is latched off, so a stalled Atria costs at most ~10 minutes a cycle.
+_ATRIA_TIMEOUT = (15, 300)
+_ATRIA_MAX_TIMEOUTS = 2
+_ATRIA_TIMEOUT_MARKER = "atria_timeout"
 # Cerebras free tier: 1M tokens/day + 14,400 req/day per model, no credit card.
 # Far higher daily ceiling than OpenRouter's free 50 req/day, so it is a strong
 # fallback once OpenRouter's free chain is exhausted for the day.
@@ -202,6 +210,7 @@ class LLMClient:
 		# model_not_found), and which provider actually answered each call.
 		# Both feed engine_report(): a preference is not a live engine.
 		self._atria_disabled_reason: str | None = None
+		self._atria_timeouts = 0
 		self._served: dict[str, int] = {}
 		self.provider        = self._pick_provider()
 		self._current_role: str | None = None
@@ -257,6 +266,13 @@ class LLMClient:
 					# Auth errors: no point retrying same provider
 					if any(code in exc_str for code in ("401", "403", "authentication_error", "invalid x-api-key", "invalid_api_key", "API_KEY_INVALID")):
 						log.warning("LLM auth error on provider=%s -- skipping to fallback: %s", provider, exc)
+						exhausted = True
+						break
+
+					# Atria already had its full patience window; another wait
+					# on the same prompt is not worth the cycle time.
+					if _ATRIA_TIMEOUT_MARKER in exc_str:
+						log.warning("atria gave no answer in time -- using fallback for this call: %s", exc)
 						exhausted = True
 						break
 
@@ -668,20 +684,30 @@ class LLMClient:
 			messages.append({"role": "system", "content": system})
 		messages.append({"role": "user", "content": prompt})
 		t0  = time.monotonic()
-		rsp = requests.post(
-			"https://api.atria-asi.ai/v1/chat/completions",
-			headers={
-				"Authorization": f"Bearer {self._atria_key}",
-				"Content-Type":  "application/json",
-			},
-			json={
-				"model":       model,
-				"messages":    messages,
-				"max_tokens":  max_tokens,
-				"temperature": temperature,
-			},
-			timeout=90,
-		)
+		try:
+			rsp = requests.post(
+				"https://api.atria-asi.ai/v1/chat/completions",
+				headers={
+					"Authorization": f"Bearer {self._atria_key}",
+					"Content-Type":  "application/json",
+				},
+				json={
+					"model":       model,
+					"messages":    messages,
+					"max_tokens":  max_tokens,
+					"temperature": temperature,
+				},
+				timeout=_ATRIA_TIMEOUT,
+			)
+		except requests.Timeout as exc:
+			self._atria_timeouts += 1
+			if self._atria_timeouts >= _ATRIA_MAX_TIMEOUTS:
+				self._latch_atria_off("timeout")
+				log.warning("atria timed out %d times -- routing the rest of this run to openrouter",
+							self._atria_timeouts)
+			raise RuntimeError(
+				f"{_ATRIA_TIMEOUT_MARKER}: no answer from atria within {_ATRIA_TIMEOUT[1]}s"
+			) from exc
 		if rsp.status_code in (401, 403):
 			self._latch_atria_off("auth_failed")
 			raise RuntimeError(f"401 authentication_error from atria: {rsp.text[:200]}")

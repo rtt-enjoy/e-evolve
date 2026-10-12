@@ -1075,6 +1075,7 @@ actions. If such keys exist, they are treated as research context only.
 
 - Provider priority: `ATRIA_API_KEY` → `OPENROUTER_API_KEY` → `ANTHROPIC_API_KEY` → `GEMINI_API_KEY` → `CEREBRAS_API_KEY` → `GROQ_API_KEY`
 - **Main engine: Atria (`Atria-Dawn-Preview`, ~1B free tokens) for every role in `ROLE_PROVIDER`.** On a 401, a quota-spent 429 (no `Retry-After`), or a 404, Atria is disabled for the rest of the run and each role falls through to its free OpenRouter chain. A per-minute 429 with `Retry-After` only falls through for that call. No paid model, no credits needed.
+- **Atria is slow — give it patience.** `_ATRIA_TIMEOUT` is `(15, 300)`: five minutes to answer, against OpenRouter's 90s. With the old shared 90s timeout a slow but working Atria was abandoned mid-answer, and a timeout then burned 3 retries. Now a timeout falls through to OpenRouter **for that call only**, with no retry, and after `_ATRIA_MAX_TIMEOUTS` (2) in one run Atria is latched off (`disabled_reason: "timeout"`). That bound is what keeps a stalled Atria inside the 55-minute job cap: at most ~10 minutes lost per cycle. Do not shorten the timeout to "speed up" a cycle — that turns Atria's slowness into a silent permanent fallback.
 - **OpenRouter free-tier ceiling:** `:free` models are capped at 20 req/min and only
   50 requests/day unless the account has ever bought $10 in credits (then 1,000/day).
   An hourly bot with multiple LLM calls per cycle can approach that ceiling — verify
@@ -1112,7 +1113,7 @@ actions. If such keys exist, they are treated as research context only.
   every LLM call, so an Atria quota spent mid-cycle is reported. Fields:
   `main_model`, `key_set` (was `ATRIA_API_KEY` present), `live`, `serving`,
   `disabled_reason` (`key_missing` / `auth_failed` / `quota_spent` /
-  `model_not_found`) and `calls` — responses each provider actually returned,
+  `model_not_found` / `timeout`) and `calls` — responses each provider actually returned,
   counted in `complete()`. It exists because the dashboard once showed
   `openrouter/free` as "Main engine — live on every role" on a snapshot
   written before Atria was wired in: the panel read a *missing*

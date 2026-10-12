@@ -5109,6 +5109,55 @@ class TestAtriaPrimaryWithOpenRouterFallback(unittest.TestCase):
 		self.assertEqual(len(calls["atria"]), 1)
 		self.assertTrue(client._atria_disabled)
 
+	def test_atria_gets_more_patience_than_openrouter(self):
+		client = self._client(atria=True)
+		seen = {}
+
+		def fake_post(url, **kwargs):
+			seen[url] = kwargs["timeout"]
+			return self._resp()
+
+		with mock.patch("requests.post", side_effect=fake_post):
+			client.complete_for_role("post", "hi")
+		(timeout,) = seen.values()
+		self.assertGreaterEqual(timeout[1], 300)
+
+	def test_timeout_falls_through_without_retrying_atria(self):
+		import requests
+		client = self._client(atria=True)
+		fake, calls = self._post([requests.Timeout("read timed out")])
+
+		def raising(url, **kwargs):
+			out = fake(url, **kwargs)
+			if isinstance(out, Exception):
+				raise out
+			return out
+
+		with mock.patch("requests.post", side_effect=raising), mock.patch("time.sleep"):
+			resp = client.complete_for_role("research", "hi")
+		self.assertEqual(resp.provider, "openrouter")
+		self.assertEqual(len(calls["atria"]), 1)
+		# One slow answer is not a dead engine: the next call tries Atria again.
+		self.assertFalse(client._atria_disabled)
+
+	def test_second_timeout_latches_atria_off_for_the_run(self):
+		import requests
+		client = self._client(atria=True)
+		fake, calls = self._post([requests.Timeout("t1"), requests.Timeout("t2")])
+
+		def raising(url, **kwargs):
+			out = fake(url, **kwargs)
+			if isinstance(out, Exception):
+				raise out
+			return out
+
+		with mock.patch("requests.post", side_effect=raising), mock.patch("time.sleep"):
+			for _ in range(3):
+				client.complete_for_role("upgrade", "hi")
+		self.assertEqual(len(calls["atria"]), 2)
+		self.assertTrue(client._atria_disabled)
+		self.assertEqual(client.engine_report()["disabled_reason"], "timeout")
+
 	def test_engine_report_counts_calls_atria_actually_answered(self):
 		client = self._client(atria=True)
 		fake, _ = self._post([self._resp(), self._resp()])

@@ -10,6 +10,7 @@
  *      starts emitting later are unclaimed, and the Data section renders them
  *      generically — new backend fields appear without a frontend change.
  */
+import { Activity, Braces, Cpu, LayoutDashboard, Lightbulb, Target, type LucideIcon } from 'lucide-react';
 import type { ComponentType } from 'react';
 import type { Status } from '../types/status';
 
@@ -24,6 +25,8 @@ export type SectionId =
 export type SectionDef = {
 	id: SectionId;
 	label: string;
+	/** Nav icon. */
+	icon: LucideIcon;
 	/** Sub-caption shown at the top of the section page. */
 	blurb: string;
 	/** Dotted status.json paths this section reads. First segment claims the key. */
@@ -39,6 +42,7 @@ export const SECTIONS: SectionDef[] = [
 	{
 		id: 'overview',
 		label: 'Overview',
+		icon: LayoutDashboard,
 		blurb: 'The five things worth knowing right now.',
 		keys: [
 			'earnings',
@@ -67,6 +71,7 @@ export const SECTIONS: SectionDef[] = [
 	{
 		id: 'leads',
 		label: 'Leads',
+		icon: Target,
 		blurb: 'Ranked earning opportunities the research cycle found.',
 		keys: ['code_tech_earning'],
 		badge: (status) => status.code_tech_earning?.opportunities?.length || null,
@@ -75,6 +80,7 @@ export const SECTIONS: SectionDef[] = [
 	{
 		id: 'research',
 		label: 'Research',
+		icon: Lightbulb,
 		blurb: 'Free-tier AI services, earning playbooks, MRR idea triage, and the strategy guardrails.',
 		keys: ['suggestions', 'mrr_ideas'],
 		badge: (status) => {
@@ -90,6 +96,7 @@ export const SECTIONS: SectionDef[] = [
 	{
 		id: 'engine',
 		label: 'Engine',
+		icon: Cpu,
 		blurb: 'Which model handles which role, and what the last cycle changed.',
 		keys: ['llm_provider', 'llm_roles', 'llm_workflows', 'last_evolution', 'article_daily'],
 		badge: (status) => Object.keys(status.llm_workflows || {}).length || null,
@@ -98,6 +105,7 @@ export const SECTIONS: SectionDef[] = [
 	{
 		id: 'health',
 		label: 'Health',
+		icon: Activity,
 		blurb: 'Freshness, integration readiness, and anything currently broken.',
 		keys: [
 			'secret_readiness',
@@ -116,6 +124,7 @@ export const SECTIONS: SectionDef[] = [
 	{
 		id: 'data',
 		label: 'Data',
+		icon: Braces,
 		blurb: 'Every field in the snapshot, including keys no section claims yet.',
 		keys: [],
 		always: true,

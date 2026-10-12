@@ -96,6 +96,7 @@ export function Tile({
 	tone = 'neutral',
 	spark,
 	to,
+	icon,
 }: {
 	label: string;
 	value: string;
@@ -103,17 +104,25 @@ export function Tile({
 	tone?: Tone;
 	spark?: number[];
 	to?: string;
+	icon?: ReactNode;
 }) {
 	const body = (
 		<>
-			<span className="tile-label">{label}</span>
-			<strong className={`tile-value ${tone}`}>{value}</strong>
+			<span className="tile-label">
+				{icon ? <span className={`tile-icon ${tone}`} aria-hidden="true">{icon}</span> : null}
+				{label}
+			</span>
+			{/* Model names and phrases are far wider than a number; size them down
+			    rather than letting a two-column phone grid break them mid-word. */}
+			<strong className={`tile-value ${tone} ${value.length > 9 ? 'is-long' : ''}`}>{value}</strong>
 			{spark && spark.length > 1 ? <Sparkline values={spark} tone={tone} /> : null}
 			{detail ? <p className="tile-detail">{detail}</p> : null}
 			{to ? <ArrowRight className="tile-arrow" size={15} /> : null}
 		</>
 	);
-	return to ? <a className="tile is-link" href={to}>{body}</a> : <article className="tile">{body}</article>;
+	return to
+		? <a className={`tile is-link tone-${tone}`} href={to}>{body}</a>
+		: <article className={`tile tone-${tone}`}>{body}</article>;
 }
 
 export function Stat({ label, value, detail }: { label: string; value: string; detail?: string }) {

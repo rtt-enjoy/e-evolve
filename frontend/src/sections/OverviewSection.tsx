@@ -1,9 +1,9 @@
-import { ArrowUpRight, ExternalLink } from 'lucide-react';
+import { ArrowUpRight, Clock3, ExternalLink, Gauge, Signpost, Wallet } from 'lucide-react';
 import { useMemo } from 'react';
 import { Card, Empty, KeyValue, Phase, Pill, SectionHead, Stat, Tile } from '../components/ui';
 import { CopyButton } from '../components/CopyButton';
 import { buildIssues, buildOpportunityStats, buildReadiness, sortLeads } from '../utils/dashboard';
-import { ageLabel, cleanTitle, compactMoney, evolutionTone, formatDate, formatLeadValue, leadAge, money, scoreTone, sourceLabel } from '../utils/format';
+import { ageLabel, cleanTitle, evolutionTone, formatDate, money, scoreTone, sourceLabel } from '../utils/format';
 import type { Status } from '../types/status';
 
 export default function OverviewSection({ status }: { status: Status }) {
@@ -19,10 +19,15 @@ export default function OverviewSection({ status }: { status: Status }) {
 	const stats = useMemo(() => buildOpportunityStats(opportunities), [opportunities]);
 	const readiness = useMemo(() => buildReadiness(status), [status]);
 	const issues = useMemo(() => buildIssues(status), [status]);
-	// Newest, not "highest value": most leads have no published price, so
-	// sorting by value would rank them on the absence of one.
+	// Channels -- where money arrives -- ranked by score, which ranks by how
+	// passive the income is. This filtered on `kind === 'demand'` and showed
+	// an empty card after the rename to channel/asset; `demand` is kept as the
+	// pre-rename alias, the same fold buildOpportunityStats makes.
 	const topLeads = useMemo(
-		() => sortLeads(opportunities.filter((lead) => (lead.kind || 'demand') === 'demand'), 'newest').slice(0, 4),
+		() => sortLeads(
+			opportunities.filter((lead) => lead.kind === 'channel' || lead.kind === 'demand' || !lead.kind),
+			'score',
+		).slice(0, 4),
 		[opportunities],
 	);
 	const evolution = status.last_evolution || {};
@@ -81,6 +86,7 @@ export default function OverviewSection({ status }: { status: Status }) {
 					tone={confirmed > 0 ? 'good' : 'neutral'}
 					spark={history}
 					to="#/health"
+					icon={<Wallet size={15} />}
 				/>
 				{/* Deliberately a count, not money. This tile used to read
 				    "Pipeline value $5.6k" directly beside the on-chain figure
@@ -92,6 +98,7 @@ export default function OverviewSection({ status }: { status: Status }) {
 					detail={`${stats.freeCount} free to start · ${stats.needsSetupCount} need a one-time setup`}
 					tone={stats.channelCount ? 'info' : 'warn'}
 					to="#/leads"
+					icon={<Signpost size={15} />}
 				/>
 				<Tile
 					label="Readiness"
@@ -99,6 +106,7 @@ export default function OverviewSection({ status }: { status: Status }) {
 					detail={`${readiness.ready}/${readiness.total} integrations`}
 					tone={readiness.percent >= 60 ? 'good' : 'warn'}
 					to="#/health"
+					icon={<Gauge size={15} />}
 				/>
 				<Tile
 					label="Last cycle"
@@ -106,52 +114,11 @@ export default function OverviewSection({ status }: { status: Status }) {
 					detail={`#${status.total_runs || 0} · ${status.last_cycle_seconds || 0}s`}
 					tone={freshness.tone}
 					to="#/health"
+					icon={<Clock3 size={15} />}
 				/>
 			</div>
 
 			<div className="split">
-				<div className="stack">
-					<Card
-						title="Newest demand leads"
-						hint="Most recent postings where somebody is paying for work."
-						action={<a className="btn" href="#/leads">all {stats.total} leads <ArrowUpRight size={14} /></a>}
-					>
-						{topLeads.length ? (
-							<ol className="lead-list">
-								{topLeads.map((lead) => {
-									const index = opportunities.indexOf(lead);
-									const age = leadAge(lead.age_hours);
-									return (
-										<li key={`${lead.url}-${index}`}>
-											<a href={`#/leads/${index}`}>
-												<span className="lead-value">{age.label}</span>
-												<span className="lead-body">
-													<strong>{cleanTitle(lead.title) || 'Untitled lead'}</strong>
-													<em>{lead.buyer || sourceLabel(lead.source)}</em>
-												</span>
-												{formatLeadValue(lead) !== '—' ? <Pill tone="good">{formatLeadValue(lead)}</Pill> : null}
-												<Pill tone={scoreTone(lead.score)}>{lead.score || 0}</Pill>
-											</a>
-										</li>
-									);
-								})}
-							</ol>
-						) : (
-							<Empty text="No research leads in the queue yet." />
-						)}
-					</Card>
-
-					<Card title="Cycle phases" hint="Where the last run spent its five phases.">
-						<div className="phase-row">
-							<Phase name="Status" ok={Boolean(status.last_run)} detail={formatDate(status.last_run)} />
-							<Phase name="Commands" ok detail="queue ready" />
-							<Phase name="Evolution" ok={!evolution.error} detail={evolution.error ? 'failed' : 'Codex-owned'} tone={evolutionTone(status)} />
-							<Phase name="Research" ok={actions.every((action) => action.success !== false)} detail={`${stats.total} leads`} />
-							<Phase name="Update" ok={!errors.length} detail={errors.length ? `${errors.length} errors` : 'saved'} />
-						</div>
-					</Card>
-				</div>
-
 				<div className="stack">
 					<Card title="Needs attention" hint="Ranked by urgency; click through to act.">
 						<div className="issue-list">
@@ -175,6 +142,46 @@ export default function OverviewSection({ status }: { status: Status }) {
 						</div>
 					</Card>
 
+					<Card
+						title="Top ways to get paid"
+						hint="Channels where money arrives, ranked by how passive the income is."
+						action={<a className="btn" href="#/leads">all {stats.total} <ArrowUpRight size={14} /></a>}
+					>
+						{topLeads.length ? (
+							<ol className="lead-list">
+								{topLeads.map((lead) => {
+									const index = opportunities.indexOf(lead);
+									return (
+										<li key={`${lead.url}-${index}`}>
+											<a href={`#/leads/${index}`}>
+												<span className={`score-chip ${scoreTone(lead.score)}`}>{lead.score || 0}</span>
+												<span className="lead-body">
+													<strong>{cleanTitle(lead.title) || 'Untitled lead'}</strong>
+													<em>{sourceLabel(lead.source)}</em>
+												</span>
+												{/* Free only when the platform published $0; unknown shows nothing. */}
+												{lead.cost_usd === 0 ? <Pill tone="good">free</Pill> : null}
+												<ArrowUpRight className="lead-arrow" size={15} />
+											</a>
+										</li>
+									);
+								})}
+							</ol>
+						) : (
+							<Empty text="No research leads in the queue yet." />
+						)}
+					</Card>
+
+					<Card title="Cycle phases" hint="Where the last run spent its five phases.">
+						<div className="phase-row">
+							<Phase name="Status" ok={Boolean(status.last_run)} detail={formatDate(status.last_run)} />
+							<Phase name="Commands" ok detail="queue ready" />
+							<Phase name="Evolution" ok={!evolution.error} detail={evolution.error ? 'failed' : 'Codex-owned'} tone={evolutionTone(status)} />
+							<Phase name="Research" ok={actions.every((action) => action.success !== false)} detail={`${stats.total} leads`} />
+							<Phase name="Update" ok={!errors.length} detail={errors.length ? `${errors.length} errors` : 'saved'} />
+						</div>
+					</Card>
+
 					<Card title="At a glance">
 						<div className="stat-grid">
 							<Stat label="Cycles run" value={String(status.total_runs || 0)} detail={`${status.last_cycle_seconds || 0}s last`} />
@@ -183,7 +190,9 @@ export default function OverviewSection({ status }: { status: Status }) {
 							<Stat label="LLM roles" value={String(Object.keys(status.llm_workflows || status.llm_roles || {}).length)} detail={status.llm_provider || 'none'} />
 						</div>
 					</Card>
+				</div>
 
+				<div className="stack">
 					<Card title="Where earnings come from" hint="Only confirmed on-chain stablecoins count as earned.">
 						<div className="stat-grid">
 							<Stat
@@ -232,7 +241,7 @@ export default function OverviewSection({ status }: { status: Status }) {
 								<code>{tip.address}</code>
 								<CopyButton text={tip.address} label="copy address" />
 							</div>
-							<div className="mt-4">
+							<div className="chips mt-4">
 								<Pill tone="good">
 									{tip.asset || 'USDT'} · {tip.network || 'on-chain'}
 								</Pill>

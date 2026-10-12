@@ -29,10 +29,11 @@ export default {
 			},
 			fontFamily: {
 				sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
-				mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
+				mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
 			},
 			boxShadow: {
-				panel: '0 1px 0 rgb(255 255 255 / .03) inset, 0 12px 40px -12px rgb(0 0 0 / .45)',
+				// Per-theme: a heavy black drop shadow reads as dirt on a light page.
+				panel: 'var(--shadow-card)',
 				glow: '0 0 0 1px rgb(var(--c-accent) / .35), 0 8px 30px -8px rgb(var(--c-accent) / .45)',
 			},
 		},

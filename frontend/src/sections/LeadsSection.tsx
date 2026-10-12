@@ -167,7 +167,7 @@ function LeadList({ status, opportunities }: { status: Status; opportunities: Co
 							return (
 								<a className="lead-row" href={`#/leads/${index}`} key={`${lead.url}-${index}`}>
 									{/* Score leads the row: it ranks by how passive the income is. */}
-									<span className={`lead-row-age tone-${scoreTone(lead.score)}`}>{lead.score || 0}</span>
+									<span className={`score-chip ${scoreTone(lead.score)}`} title="passive score, out of 100">{lead.score || 0}</span>
 									<span className="lead-row-body">
 										<strong>{cleanTitle(lead.title) || 'Untitled lead'}</strong>
 										<p>{lead.reason || 'No reason recorded.'}</p>
@@ -183,7 +183,6 @@ function LeadList({ status, opportunities }: { status: Status; opportunities: Co
 											{isChannel ? 'gets paid' : 'build & market'}
 										</Pill>
 										<Pill tone="neutral">{sourceLabel(lead.source)}</Pill>
-										<Pill tone={scoreTone(lead.score)}>{lead.score || 0}</Pill>
 									</span>
 								</a>
 							);

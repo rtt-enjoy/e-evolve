@@ -12,62 +12,65 @@
 
 :root {
 	color-scheme: dark;
-	--c-bg: 7 10 15;
-	--c-surface: 13 18 26;
-	--c-surface-2: 19 26 36;
-	--c-surface-3: 27 36 49;
-	--c-border: 38 49 64;
-	--c-text: 231 237 245;
-	--c-muted: 143 158 178;
-	--c-faint: 98 113 133;
-	--c-accent: 110 168 255;
-	--c-good: 66 214 132;
-	--c-warn: 245 196 90;
-	--c-bad: 255 110 110;
-	--c-info: 92 214 210;
+	--c-bg: 9 10 14;
+	--c-surface: 16 17 23;
+	--c-surface-2: 22 24 31;
+	--c-surface-3: 31 34 43;
+	--c-border: 39 42 54;
+	--c-text: 237 238 243;
+	--c-muted: 152 157 173;
+	--c-faint: 104 109 126;
+	--c-accent: 129 140 248;
+	--c-good: 52 211 153;
+	--c-warn: 251 191 36;
+	--c-bad: 248 113 113;
+	--c-info: 34 211 238;
+	--shadow-card: 0 1px 0 rgb(255 255 255 / .04) inset, 0 1px 2px rgb(0 0 0 / .4), 0 12px 32px -16px rgb(0 0 0 / .6);
 
-	--sidebar-w: 248px;
+	--sidebar-w: 256px;
 	--radius-sm: 8px;
 	--radius: 12px;
 	--radius-lg: 16px;
 	--ease: cubic-bezier(.2, .7, .2, 1);
-	--mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	--mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 @media (prefers-color-scheme: light) {
 	:root:not([data-theme="dark"]) {
 		color-scheme: light;
-		--c-bg: 244 246 250;
+		--c-bg: 247 247 250;
 		--c-surface: 255 255 255;
-		--c-surface-2: 246 248 252;
-		--c-surface-3: 234 239 246;
-		--c-border: 222 228 237;
-		--c-text: 17 24 39;
-		--c-muted: 88 102 122;
-		--c-faint: 130 143 161;
-		--c-accent: 37 99 235;
-		--c-good: 22 135 72;
-		--c-warn: 158 102 0;
-		--c-bad: 200 40 40;
-		--c-info: 13 128 130;
+		--c-surface-2: 249 250 251;
+		--c-surface-3: 240 241 245;
+		--c-border: 228 229 236;
+		--c-text: 15 17 26;
+		--c-muted: 82 88 106;
+		--c-faint: 134 139 156;
+		--c-accent: 79 70 229;
+		--c-good: 4 140 98;
+		--c-warn: 176 82 8;
+		--c-bad: 214 38 38;
+		--c-info: 8 140 172;
+		--shadow-card: 0 1px 2px rgb(15 17 26 / .04), 0 8px 24px -12px rgb(15 17 26 / .10);
 	}
 }
 
 :root[data-theme="light"] {
 	color-scheme: light;
-	--c-bg: 244 246 250;
+	--c-bg: 247 247 250;
 	--c-surface: 255 255 255;
-	--c-surface-2: 246 248 252;
-	--c-surface-3: 234 239 246;
-	--c-border: 222 228 237;
-	--c-text: 17 24 39;
-	--c-muted: 88 102 122;
-	--c-faint: 130 143 161;
-	--c-accent: 37 99 235;
-	--c-good: 22 135 72;
-	--c-warn: 158 102 0;
-	--c-bad: 200 40 40;
-	--c-info: 13 128 130;
+	--c-surface-2: 249 250 251;
+	--c-surface-3: 240 241 245;
+	--c-border: 228 229 236;
+	--c-text: 15 17 26;
+	--c-muted: 82 88 106;
+	--c-faint: 134 139 156;
+	--c-accent: 79 70 229;
+	--c-good: 4 140 98;
+	--c-warn: 176 82 8;
+	--c-bad: 214 38 38;
+	--c-info: 8 140 172;
+	--shadow-card: 0 1px 2px rgb(15 17 26 / .04), 0 8px 24px -12px rgb(15 17 26 / .10);
 }
 
 *, *::before, *::after {
@@ -88,10 +91,24 @@ body {
 	text-rendering: optimizeLegibility;
 	/* Ambient light behind the page: a soft accent wash, not a flat fill. */
 	background:
-		radial-gradient(900px 480px at 85% -8%, rgb(var(--c-accent) / .12), transparent 70%),
-		radial-gradient(700px 400px at -10% 110%, rgb(var(--c-info) / .07), transparent 70%),
+		radial-gradient(1000px 520px at 80% -12%, rgb(var(--c-accent) / .13), transparent 70%),
+		radial-gradient(800px 420px at -10% 110%, rgb(var(--c-info) / .06), transparent 70%),
 		rgb(var(--c-bg));
 	background-attachment: fixed;
+}
+
+/* A faint dot grid behind the top of the page, masked so it fades out. */
+body::before {
+	content: '';
+	position: fixed;
+	inset: 0 0 auto 0;
+	height: 420px;
+	z-index: -1;
+	pointer-events: none;
+	background-image: radial-gradient(rgb(var(--c-muted) / .16) 1px, transparent 1px);
+	background-size: 22px 22px;
+	mask-image: radial-gradient(ellipse 70% 100% at 70% 0%, #000 10%, transparent 75%);
+	-webkit-mask-image: radial-gradient(ellipse 70% 100% at 70% 0%, #000 10%, transparent 75%);
 }
 
 button, input, textarea, select {
@@ -118,8 +135,8 @@ a {
 	/* Declared before the shell so the responsive hide rules below (`lg:hidden`
 	   on .nav-close and .nav-open-btn) can override display. */
 	.icon-btn {
-		@apply grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-line bg-panel2 text-soft transition;
-		@apply hover:border-accent/50 hover:text-text;
+		@apply grid h-9 w-9 shrink-0 place-items-center rounded-[10px] border border-line bg-panel text-soft transition;
+		@apply hover:bg-panel2 hover:text-text active:scale-95;
 	}
 
 	/* ============================================================== shell */
@@ -133,7 +150,7 @@ a {
 	}
 
 	.sidebar {
-		@apply fixed inset-y-0 left-0 z-40 flex w-[var(--sidebar-w)] shrink-0 flex-col gap-6 border-r border-line bg-panel/85 px-4 py-6 backdrop-blur-xl;
+		@apply fixed inset-y-0 left-0 z-40 flex w-[var(--sidebar-w)] shrink-0 flex-col gap-5 border-r border-line bg-panel/80 px-3.5 py-5 backdrop-blur-xl;
 		@apply -translate-x-full transition-transform duration-300 lg:translate-x-0;
 		transition-timing-function: var(--ease);
 	}
@@ -147,9 +164,10 @@ a {
 	}
 
 	.brand-mark {
-		@apply grid h-10 w-10 shrink-0 place-items-center rounded-xl text-lg font-bold text-white;
+		@apply grid h-9 w-9 shrink-0 place-items-center rounded-[10px] text-base font-bold text-white;
 		background: linear-gradient(135deg, rgb(var(--c-accent)), rgb(var(--c-info)));
-		box-shadow: 0 6px 20px -6px rgb(var(--c-accent) / .6), inset 0 1px 0 rgb(255 255 255 / .25);
+		box-shadow: 0 6px 18px -6px rgb(var(--c-accent) / .7), inset 0 1px 0 rgb(255 255 255 / .3);
+		text-shadow: 0 1px 2px rgb(0 0 0 / .25);
 	}
 
 	.brand strong {
@@ -165,7 +183,7 @@ a {
 	}
 
 	.live {
-		@apply flex flex-wrap items-center gap-x-2 gap-y-1 rounded-xl border border-line bg-panel2 px-3.5 py-2.5 text-xs;
+		@apply flex flex-wrap items-center gap-x-2 gap-y-0.5 rounded-xl border border-line bg-panel2/70 px-3 py-2.5 text-xs;
 	}
 
 	.live span {
@@ -181,17 +199,25 @@ a {
 	}
 
 	.sidebar nav a {
-		@apply relative flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-soft transition;
+		@apply relative flex items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-sm font-medium text-soft transition;
 		@apply hover:bg-panel2 hover:text-text;
 	}
 
-	.sidebar nav a.active {
-		@apply bg-accent/10 font-semibold text-text;
+	.sidebar nav a .nav-icon {
+		@apply shrink-0 text-faint transition;
 	}
 
-	.sidebar nav a.active::before {
-		content: '';
-		@apply absolute inset-y-2 left-0 w-[3px] rounded-full bg-accent;
+	.sidebar nav a:hover .nav-icon {
+		@apply text-soft;
+	}
+
+	.sidebar nav a.active {
+		@apply bg-panel2 text-text;
+		box-shadow: inset 0 0 0 1px rgb(var(--c-border)), 0 1px 2px rgb(0 0 0 / .08);
+	}
+
+	.sidebar nav a.active .nav-icon {
+		@apply text-accent;
 	}
 
 	.sidebar nav a span {
@@ -199,11 +225,11 @@ a {
 	}
 
 	.badge {
-		@apply shrink-0 rounded-md border border-line bg-panel2 px-1.5 py-0.5 text-[11px] font-semibold not-italic tabular-nums text-soft;
+		@apply shrink-0 rounded-md bg-panel3 px-1.5 py-px text-[11px] font-semibold not-italic tabular-nums text-soft;
 	}
 
 	.badge.new {
-		@apply border-yellow/40 bg-yellow/10 text-yellow;
+		@apply bg-yellow/15 text-yellow;
 	}
 
 	.sidebar-foot {
@@ -233,7 +259,7 @@ a {
 	/* ============================================================= topbar */
 
 	.topbar {
-		@apply sticky top-0 z-20 flex items-center gap-3 border-b border-line bg-ink/75 px-4 py-3 backdrop-blur-xl sm:px-6;
+		@apply sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-line/70 bg-ink/70 px-4 backdrop-blur-xl backdrop-saturate-150 sm:px-6;
 	}
 
 	.nav-open-btn {
@@ -241,23 +267,27 @@ a {
 	}
 
 	.crumb {
-		@apply flex min-w-0 items-baseline gap-2;
+		@apply flex min-w-0 items-center gap-1.5 text-sm;
+	}
+
+	.crumb a {
+		@apply hidden shrink-0 text-soft transition hover:text-text sm:inline;
+	}
+
+	.crumb svg {
+		@apply hidden shrink-0 text-faint sm:block;
 	}
 
 	.crumb span {
-		@apply truncate text-sm font-semibold tracking-tight;
-	}
-
-	.crumb em {
-		@apply rounded-full border border-line px-2 py-0.5 text-[11px] not-italic text-soft;
+		@apply truncate font-semibold tracking-tight;
 	}
 
 	.topbar-actions {
-		@apply ml-auto flex items-center gap-3;
+		@apply ml-auto flex items-center gap-2;
 	}
 
 	.poll {
-		@apply hidden text-xs tabular-nums text-soft sm:block;
+		@apply mr-1 hidden text-xs tabular-nums text-faint sm:block;
 	}
 
 	.content {
@@ -280,11 +310,12 @@ a {
 	}
 
 	.section-head h1 {
-		@apply text-2xl font-semibold tracking-tight sm:text-[30px] sm:leading-tight;
+		@apply text-[26px] font-semibold leading-tight sm:text-[30px];
+		letter-spacing: -0.025em;
 	}
 
 	.section-head p {
-		@apply mt-2 max-w-3xl text-[15px] leading-relaxed text-soft;
+		@apply mt-2 max-w-3xl text-[14.5px] leading-relaxed text-soft;
 	}
 
 	.subhead {
@@ -292,7 +323,7 @@ a {
 	}
 
 	.subhead h3 {
-		@apply text-[11px] font-semibold uppercase tracking-[.12em] text-soft;
+		@apply text-[11px] font-semibold uppercase tracking-[.12em] text-faint;
 	}
 
 	/* ============================================================ layout */
@@ -324,7 +355,8 @@ a {
 	}
 
 	.card-head h2 {
-		@apply text-[15px] font-semibold tracking-tight;
+		@apply text-[15px] font-semibold;
+		letter-spacing: -0.011em;
 	}
 
 	.card-head p {
@@ -334,23 +366,49 @@ a {
 	/* ============================================================== tiles */
 
 	.tile-row {
-		@apply grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4;
+		@apply grid min-w-0 grid-cols-2 gap-3 xl:grid-cols-4;
 	}
 
 	.tile {
-		@apply relative flex min-w-0 flex-col gap-1 overflow-hidden rounded-[var(--radius-lg)] border border-line p-5;
-		background: linear-gradient(180deg, rgb(var(--c-surface-2)) 0%, rgb(var(--c-surface)) 100%);
-		box-shadow: 0 1px 0 rgb(255 255 255 / .03) inset;
+		@apply relative isolate flex min-w-0 flex-col gap-1 overflow-hidden rounded-[var(--radius-lg)] border border-line bg-panel p-4 shadow-panel sm:p-5;
+		--tone: var(--c-muted);
 		transition: transform .2s var(--ease), border-color .2s, box-shadow .2s;
 	}
 
-	.tile-label {
-		@apply text-[11px] font-semibold uppercase tracking-[.12em] text-soft;
+	/* A soft wash of the tile's tone in the top corner. */
+	.tile::after {
+		content: '';
+		@apply pointer-events-none absolute -right-10 -top-12 -z-10 h-32 w-32 rounded-full;
+		background: radial-gradient(closest-side, rgb(var(--tone) / .16), transparent);
 	}
 
+	.tile.tone-good { --tone: var(--c-good); }
+	.tile.tone-info { --tone: var(--c-accent); }
+	.tile.tone-warn { --tone: var(--c-warn); }
+	.tile.tone-bad { --tone: var(--c-bad); }
+	.tile.tone-neutral::after { opacity: .5; }
+
+	.tile-label {
+		@apply flex min-w-0 items-center gap-2 text-[13px] font-medium text-soft;
+	}
+
+	.tile-icon {
+		@apply grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-panel3 text-soft;
+	}
+
+	.tile-icon.good { @apply bg-green/10 text-green; }
+	.tile-icon.info { @apply bg-accent/10 text-accent; }
+	.tile-icon.warn { @apply bg-yellow/10 text-yellow; }
+	.tile-icon.bad { @apply bg-red/10 text-red; }
+
 	.tile-value {
-		@apply mt-1 text-[30px] font-semibold leading-none tracking-tight tabular-nums;
-		font-variant-numeric: tabular-nums;
+		@apply mt-2 text-[24px] font-semibold leading-none tabular-nums sm:text-[30px];
+		letter-spacing: -0.03em;
+		overflow-wrap: anywhere;
+	}
+
+	.tile-value.is-long {
+		@apply text-[18px] leading-tight sm:text-[22px];
 	}
 
 	.tile-value.good { @apply text-green; }
@@ -359,16 +417,22 @@ a {
 	.tile-value.bad { @apply text-red; }
 
 	.tile-detail {
-		@apply mt-2 text-[13px] leading-snug text-soft;
+		@apply mt-1.5 text-xs leading-snug text-soft sm:text-[13px];
 	}
 
 	.tile-arrow {
-		@apply absolute right-4 top-4 text-faint transition;
+		@apply absolute right-4 top-4 text-faint opacity-0 transition sm:right-5 sm:top-5;
 	}
 
 	.tile.is-link:hover {
-		@apply -translate-y-0.5 border-accent/50;
-		box-shadow: 0 16px 40px -18px rgb(var(--c-accent) / .45);
+		@apply -translate-y-0.5;
+		border-color: rgb(var(--tone) / .45);
+		box-shadow: var(--shadow-card), 0 16px 40px -20px rgb(var(--tone) / .5);
+	}
+
+	.tile.is-link:hover .tile-arrow,
+	.tile.is-link:focus-visible .tile-arrow {
+		@apply opacity-100;
 	}
 
 	.tile.is-link:hover .tile-arrow {
@@ -402,15 +466,17 @@ a {
 	}
 
 	.stat {
-		@apply min-w-0 rounded-[var(--radius)] border border-line bg-panel2 p-4;
+		@apply min-w-0 rounded-[var(--radius)] bg-panel2 p-4;
+		box-shadow: inset 0 0 0 1px rgb(var(--c-border) / .6);
 	}
 
 	.stat span {
-		@apply block truncate text-[11px] font-semibold uppercase tracking-[.1em] text-soft;
+		@apply block truncate text-[12.5px] font-medium text-soft;
 	}
 
 	.stat strong {
-		@apply mt-1.5 block truncate text-xl font-semibold tabular-nums tracking-tight;
+		@apply mt-1 block truncate text-xl font-semibold tabular-nums;
+		letter-spacing: -0.02em;
 	}
 
 	.stat p {
@@ -451,7 +517,8 @@ a {
 	/* ============================================================ pills */
 
 	.pill {
-		@apply inline-flex max-w-full items-center gap-1.5 rounded-full border border-line bg-panel2 px-2.5 py-0.5 text-xs font-medium text-soft;
+		@apply inline-flex max-w-full items-center gap-1.5 rounded-full bg-panel3 px-2.5 py-0.5 text-xs font-medium text-soft;
+		box-shadow: inset 0 0 0 1px rgb(var(--c-border) / .7);
 		@apply whitespace-nowrap;
 	}
 
@@ -459,17 +526,17 @@ a {
 		@apply shrink-0;
 	}
 
-	.pill.good { @apply border-green/25 bg-green/10 text-green; }
-	.pill.warn { @apply border-yellow/30 bg-yellow/10 text-yellow; }
-	.pill.bad { @apply border-red/30 bg-red/10 text-red; }
-	.pill.info { @apply border-accent/30 bg-accent/10 text-accent; }
+	.pill.good { @apply bg-green/10 text-green; box-shadow: inset 0 0 0 1px rgb(var(--c-good) / .2); }
+	.pill.warn { @apply bg-yellow/10 text-yellow; box-shadow: inset 0 0 0 1px rgb(var(--c-warn) / .22); }
+	.pill.bad { @apply bg-red/10 text-red; box-shadow: inset 0 0 0 1px rgb(var(--c-bad) / .22); }
+	.pill.info { @apply bg-accent/10 text-accent; box-shadow: inset 0 0 0 1px rgb(var(--c-accent) / .22); }
 	.pill.neutral { @apply text-soft; }
 
 	.dot {
 		@apply inline-block h-2 w-2 shrink-0 rounded-full bg-faint;
 	}
 
-	.dot.good { @apply bg-green; box-shadow: 0 0 0 3px rgb(var(--c-good) / .18); }
+	.dot.good { @apply bg-green; box-shadow: 0 0 0 3px rgb(var(--c-good) / .18); animation: pulse 2.4s ease-in-out infinite; }
 	.dot.warn { @apply bg-yellow; box-shadow: 0 0 0 3px rgb(var(--c-warn) / .18); }
 	.dot.bad { @apply bg-red; box-shadow: 0 0 0 3px rgb(var(--c-bad) / .18); }
 	.dot.info { @apply bg-accent; box-shadow: 0 0 0 3px rgb(var(--c-accent) / .18); }
@@ -481,12 +548,16 @@ a {
 	/* ========================================================== buttons */
 
 	.btn {
-		@apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border border-line bg-panel2 px-3 py-1.5 text-[13px] font-medium text-text transition;
-		@apply hover:border-accent/50 hover:bg-panel3;
+		@apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-[10px] border border-line bg-panel px-3 py-1.5 text-[13px] font-medium text-text transition;
+		@apply hover:bg-panel2 active:scale-[.98];
+		box-shadow: 0 1px 2px rgb(0 0 0 / .06);
 	}
 
+	/* `text-ink` is the page background: dark on the bright dark-mode accent,
+	   light on the deep light-mode one, so the label keeps contrast in both. */
 	.btn.primary {
-		@apply border-accent bg-accent text-white hover:bg-accent hover:brightness-110;
+		@apply border-transparent bg-accent text-ink hover:bg-accent hover:brightness-110;
+		box-shadow: 0 6px 18px -8px rgb(var(--c-accent) / .8);
 	}
 
 	.btn.back {
@@ -500,8 +571,16 @@ a {
 	}
 
 	.search {
-		@apply flex min-w-[220px] flex-1 items-center gap-2 rounded-lg border border-line bg-panel2 px-3 py-2 transition;
-		@apply focus-within:border-accent/60 focus-within:bg-panel3;
+		@apply flex min-w-[220px] flex-1 items-center gap-2 rounded-[10px] border border-line bg-panel2 px-3 py-2 text-faint transition;
+		@apply focus-within:border-accent/60 focus-within:text-accent;
+	}
+
+	.search:focus-within {
+		box-shadow: 0 0 0 3px rgb(var(--c-accent) / .15);
+	}
+
+	.search input {
+		@apply text-text;
 	}
 
 	.search input {
@@ -509,17 +588,17 @@ a {
 	}
 
 	.segmented {
-		@apply inline-flex max-w-full flex-wrap gap-0.5 rounded-lg border border-line bg-panel2 p-0.5;
+		@apply inline-flex max-w-full flex-wrap gap-0.5 rounded-[10px] border border-line bg-panel2 p-0.5;
 	}
 
 	.segmented button {
-		@apply inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-soft transition;
+		@apply inline-flex items-center gap-1.5 rounded-[7px] px-2.5 py-1.5 text-xs font-medium text-soft transition;
 		@apply hover:text-text;
 	}
 
 	.segmented button.active {
-		@apply bg-panel3 text-text shadow-sm;
-		box-shadow: inset 0 0 0 1px rgb(var(--c-accent) / .35);
+		@apply bg-panel3 text-text;
+		box-shadow: inset 0 0 0 1px rgb(var(--c-border)), 0 1px 3px rgb(0 0 0 / .12);
 	}
 
 	.segmented button em {
@@ -540,8 +619,21 @@ a {
 		@apply -mx-2 flex items-center gap-3 rounded-lg px-2 py-3 transition hover:bg-panel2;
 	}
 
-	.lead-value {
-		@apply w-14 shrink-0 text-right text-xs font-semibold tabular-nums text-soft;
+	.score-chip {
+		@apply grid h-8 w-10 shrink-0 place-items-center rounded-lg bg-panel3 text-[13px] font-semibold tabular-nums text-soft;
+	}
+
+	.score-chip.good { @apply bg-green/10 text-green; }
+	.score-chip.info { @apply bg-accent/10 text-accent; }
+	.score-chip.warn { @apply bg-yellow/10 text-yellow; }
+	.score-chip.bad { @apply bg-red/10 text-red; }
+
+	.lead-arrow {
+		@apply shrink-0 text-faint transition;
+	}
+
+	.lead-list a:hover .lead-arrow {
+		@apply text-accent;
 	}
 
 	.lead-body {
@@ -565,16 +657,8 @@ a {
 		@apply -mx-2 rounded-lg px-2 hover:bg-panel2;
 	}
 
-	.lead-row-age {
-		@apply w-16 shrink-0 pt-0.5 text-right text-xs font-semibold tabular-nums text-soft;
-	}
-
-	.lead-row-age.tone-good { @apply text-green; }
-	.lead-row-age.tone-info { @apply text-accent; }
-	.lead-row-age.tone-warn { @apply text-yellow; }
-
 	.lead-row-body {
-		@apply min-w-[200px] flex-1;
+		@apply min-w-0 flex-1 basis-[200px];
 	}
 
 	.lead-row-body strong {
@@ -585,8 +669,9 @@ a {
 		@apply mt-1 line-clamp-2 text-xs leading-5 text-soft;
 	}
 
+	/* On narrow screens the pills drop under the title, aligned with it. */
 	.lead-row-meta {
-		@apply flex shrink-0 flex-wrap items-center gap-1.5;
+		@apply flex w-full shrink-0 flex-wrap items-center gap-1.5 pl-[52px] sm:w-auto sm:pl-0;
 	}
 
 	.pager {
@@ -600,7 +685,8 @@ a {
 	}
 
 	.issue {
-		@apply flex items-start gap-3 rounded-[var(--radius)] border border-line bg-panel2 p-3.5 transition;
+		@apply flex items-start gap-3 rounded-[var(--radius)] bg-panel2 p-3.5 transition;
+		box-shadow: inset 0 0 0 1px rgb(var(--c-border) / .6);
 	}
 
 	.issue > .pill {
@@ -608,7 +694,7 @@ a {
 	}
 
 	.issue.is-link {
-		@apply hover:border-accent/50 hover:bg-panel3;
+		@apply hover:bg-panel3;
 	}
 
 	.issue strong {
@@ -626,7 +712,8 @@ a {
 	}
 
 	.phase {
-		@apply flex min-w-0 flex-col gap-1.5 rounded-[var(--radius)] border border-line bg-panel2 p-3.5;
+		@apply flex min-w-0 flex-col gap-1.5 rounded-[var(--radius)] bg-panel2 p-3.5;
+		box-shadow: inset 0 0 0 1px rgb(var(--c-border) / .6);
 	}
 
 	.phase > svg {
@@ -635,7 +722,9 @@ a {
 
 	.phase.warn > svg { @apply text-yellow; }
 	.phase.bad > svg { @apply text-red; }
-	.phase.good { @apply border-green/20; }
+	.phase.good { box-shadow: inset 0 0 0 1px rgb(var(--c-good) / .18); }
+	.phase.warn { box-shadow: inset 0 0 0 1px rgb(var(--c-warn) / .22); }
+	.phase.bad { box-shadow: inset 0 0 0 1px rgb(var(--c-bad) / .22); }
 
 	.phase strong {
 		@apply text-sm font-semibold;
@@ -663,7 +752,7 @@ a {
 		@apply rotate-90 text-accent;
 	}
 
-	.disclosure > button > span {
+	.disclosure > button > span:not(.count) {
 		@apply flex min-w-0 flex-1 flex-col;
 	}
 
@@ -676,7 +765,7 @@ a {
 	}
 
 	.disclosure .count {
-		@apply shrink-0 rounded-full border border-line bg-panel2 px-2 py-0.5 text-xs font-semibold tabular-nums text-soft;
+		@apply shrink-0 rounded-full bg-panel3 px-2 py-0.5 text-xs font-semibold tabular-nums text-soft;
 	}
 
 	.disclosure-body {
@@ -766,7 +855,8 @@ a {
 	}
 
 	.tip-address {
-		@apply flex items-center gap-2 rounded-[var(--radius)] border border-accent/30 bg-accent/5 p-2 pl-3.5;
+		@apply flex items-center gap-2 rounded-[var(--radius)] border border-accent/30 bg-accent/5 p-1.5 pl-3.5;
+		box-shadow: 0 0 0 4px rgb(var(--c-accent) / .05);
 	}
 
 	.tip-address code {
@@ -915,7 +1005,7 @@ a {
 	}
 
 	.action-platform {
-		@apply text-xs font-semibold uppercase tracking-[.1em] text-soft;
+		@apply inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[.1em] text-soft;
 	}
 
 	.action p {
@@ -1045,6 +1135,11 @@ a {
 @keyframes fade {
 	from { opacity: 0; }
 	to { opacity: 1; }
+}
+
+@keyframes pulse {
+	0%, 100% { box-shadow: 0 0 0 3px rgb(var(--c-good) / .18); }
+	50% { box-shadow: 0 0 0 5px rgb(var(--c-good) / .06); }
 }
 
 @media (prefers-reduced-motion: reduce) {

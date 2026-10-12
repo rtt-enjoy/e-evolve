@@ -32,7 +32,13 @@ Atria for that one call.
 
 **Without `ATRIA_API_KEY` nothing uses Atria.** Every role then runs on the
 OpenRouter fallback, and the dashboard's Engine panel shows the roles as
-`fallback`, not `active`. Check that panel after adding the secret.
+`fallback`, not `active`. Check that panel after adding the secret: its
+**Atria** card shows whether `ATRIA_API_KEY` is set, how many calls Atria
+answered last cycle, and why it fell back if it did (key missing, key
+rejected, quota spent). The sidebar pill reads `Atria live`,
+`Atria fallback`, or `Atria not reported` (no cycle has run since the change).
+The card reflects the last completed cycle, so it updates about an hour after
+you add the secret.
 
 **Know the daily ceiling.** OpenRouter's free (`:free`) models are capped at
 20 requests/minute and only **50 requests/day** unless the account has ever

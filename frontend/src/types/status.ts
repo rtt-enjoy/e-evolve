@@ -355,6 +355,20 @@ export type Status = {
 		primary_active?: boolean;
 		serving?: string;
 	}>;
+	/** What the main engine actually did last cycle (LLMClient.engine_report). */
+	llm_engine?: {
+		main_provider?: string;
+		main_model?: string;
+		/** Whether ATRIA_API_KEY was present in the cycle's environment. */
+		key_set?: boolean;
+		/** Key set and not latched off by auth/quota/404 during the run. */
+		live?: boolean;
+		serving?: string;
+		/** key_missing | auth_failed | quota_spent | model_not_found, or null. */
+		disabled_reason?: string | null;
+		/** Responses each provider actually returned last cycle. */
+		calls?: Record<string, number>;
+	};
 	article_daily?: {
 		date?: string;
 		published?: number;

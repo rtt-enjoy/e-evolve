@@ -7,6 +7,7 @@ import { buildHealth, buildIssues, buildReadiness } from '../utils/dashboard';
 import { ageLabel, formatDate } from '../utils/format';
 import { navigate, useRoute } from '../utils/route';
 import type { Status } from '../types/status';
+import { atriaState } from '../utils/engine';
 
 const emptyStatus: Status = {
 	active_features: [],
@@ -148,7 +149,7 @@ export function App() {
 				</nav>
 
 				<div className="sidebar-foot">
-					<Pill tone="info">{status.llm_provider || 'no provider'}</Pill>
+					<Pill tone={atriaState(status).tone}>{atriaState(status).label}</Pill>
 					<Pill tone="neutral">v{status.version || '0.0.0'}</Pill>
 					<div className="links">
 						<a href="status.json">status.json</a>

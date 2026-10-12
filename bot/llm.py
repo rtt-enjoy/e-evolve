@@ -198,6 +198,11 @@ class LLMClient:
 		# Set when Atria answers 401 or its free quota is spent. Per-process: the
 		# next hourly cycle starts with Atria enabled again.
 		self._atria_disabled = False
+		# Why Atria was latched off this run (auth_failed / quota_spent /
+		# model_not_found), and which provider actually answered each call.
+		# Both feed engine_report(): a preference is not a live engine.
+		self._atria_disabled_reason: str | None = None
+		self._served: dict[str, int] = {}
 		self.provider        = self._pick_provider()
 		self._current_role: str | None = None
 		self.model           = self._pick_model()
@@ -230,18 +235,21 @@ class LLMClient:
 				attempt += 1
 				try:
 					if provider == "anthropic":
-						return self._call_anthropic(p_prompt, system, max_tokens, temperature, p_model)
-					if provider == "gemini":
-						return self._call_gemini(p_prompt, system, max_tokens, temperature, p_model)
-					if provider == "openrouter":
-						return self._call_openrouter(p_prompt, system, max_tokens, temperature, p_model)
-					if provider == "atria":
-						return self._call_atria(p_prompt, system, max_tokens, temperature, p_model)
-					if provider == "cerebras":
-						return self._call_cerebras(p_prompt, system, max_tokens, temperature, p_model)
-					if provider == "claude-cli":
-						return self._call_claude_cli(p_prompt, system, max_tokens)
-					return self._call_groq(p_prompt, system, max_tokens, temperature, p_model)
+						resp = self._call_anthropic(p_prompt, system, max_tokens, temperature, p_model)
+					elif provider == "gemini":
+						resp = self._call_gemini(p_prompt, system, max_tokens, temperature, p_model)
+					elif provider == "openrouter":
+						resp = self._call_openrouter(p_prompt, system, max_tokens, temperature, p_model)
+					elif provider == "atria":
+						resp = self._call_atria(p_prompt, system, max_tokens, temperature, p_model)
+					elif provider == "cerebras":
+						resp = self._call_cerebras(p_prompt, system, max_tokens, temperature, p_model)
+					elif provider == "claude-cli":
+						resp = self._call_claude_cli(p_prompt, system, max_tokens)
+					else:
+						resp = self._call_groq(p_prompt, system, max_tokens, temperature, p_model)
+					self._served[resp.provider] = self._served.get(resp.provider, 0) + 1
+					return resp
 				except Exception as exc:
 					last_exc = exc
 					exc_str  = str(exc)
@@ -626,6 +634,31 @@ class LLMClient:
 
 	# -- Atria -----------------------------------------------------------------
 
+	def _latch_atria_off(self, reason: str) -> None:
+		self._atria_disabled = True
+		self._atria_disabled_reason = self._atria_disabled_reason or reason
+
+	def engine_report(self) -> dict[str, Any]:
+		"""
+        What the main engine actually did this run, for status["llm_engine"].
+
+        `key_set` answers "is ATRIA_API_KEY configured", `calls` answers "was it
+        used" (responses each provider actually returned), and
+        `disabled_reason` says why the run fell back when it did. Read after
+        the cycle's LLM work, so a quota spent mid-run is reported.
+        """
+		key_set = bool(self._atria_key)
+		live = key_set and not self._atria_disabled
+		return {
+			"main_provider":   "atria",
+			"main_model":      _ATRIA_MODELS[0],
+			"key_set":         key_set,
+			"live":            live,
+			"serving":         "atria" if live else ("openrouter" if self._openrouter_key else self.provider),
+			"disabled_reason": self._atria_disabled_reason if key_set else "key_missing",
+			"calls":           dict(self._served),
+		}
+
 	def _call_atria(
 		self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
 	) -> LLMResponse:
@@ -650,7 +683,7 @@ class LLMClient:
 			timeout=90,
 		)
 		if rsp.status_code in (401, 403):
-			self._atria_disabled = True
+			self._latch_atria_off("auth_failed")
 			raise RuntimeError(f"401 authentication_error from atria: {rsp.text[:200]}")
 		if rsp.status_code == 429:
 			# A per-minute limit sends Retry-After and recovers within the cycle.
@@ -658,13 +691,13 @@ class LLMClient:
 			# spent: stop asking for the rest of this run and use OpenRouter.
 			body = rsp.text[:200]
 			if "Retry-After" not in rsp.headers or re.search(r"quota|balance|insufficient", body, re.I):
-				self._atria_disabled = True
+				self._latch_atria_off("quota_spent")
 				log.warning("atria quota appears spent -- routing the rest of this run to openrouter")
 				raise RuntimeError(f"429 quota_exceeded from atria: {body}")
 			raise RuntimeError(f"429 rate_limit_exceeded from atria: {body}")
 		if rsp.status_code == 404:
 			# Atria serves one model; if it is gone, every later call would 404 too.
-			self._atria_disabled = True
+			self._latch_atria_off("model_not_found")
 			raise RuntimeError(f"model_not_found on atria: {model}: {rsp.text[:200]}")
 		rsp.raise_for_status()
 		data = rsp.json()

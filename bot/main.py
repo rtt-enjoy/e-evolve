@@ -219,6 +219,8 @@ def main() -> int:
 	elapsed = round((datetime.now(timezone.utc) - t0).total_seconds())
 	status["last_cycle_seconds"] = elapsed
 	status["errors"]             = errors[-20:]
+	# Written after all LLM work, so an Atria quota spent mid-cycle shows up.
+	status["llm_engine"]         = llm.engine_report()
 	status.pop("_overrides", None)   # don't persist runtime-only key
 
 	_st.save(status)

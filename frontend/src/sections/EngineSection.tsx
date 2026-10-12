@@ -1,5 +1,6 @@
 import { Bot, FileText } from 'lucide-react';
 import { Card, Disclosure, Empty, KeyValue, Pill, SectionHead, Subhead, Tile } from '../components/ui';
+import { atriaState } from '../utils/engine';
 import { evolutionTone, featureLabel, formatDate, money } from '../utils/format';
 import type { Status } from '../types/status';
 
@@ -8,12 +9,10 @@ export default function EngineSection({ status }: { status: Status }) {
 	const evolution = status.last_evolution || {};
 	const actions = status.last_earning?.actions || [];
 	const tone = evolutionTone(status);
-	// The main engine is the model every role prefers. It only counts as live when
-	// its key is configured; otherwise the roles run on their fallback chain.
-	const mainModel = workflows.find(([, workflow]) => workflow.model)?.[1].model || 'none';
-	const onFallback = workflows.filter(([, workflow]) => workflow.active && workflow.primary_active === false);
-	const mainLive = workflows.length > 0 && workflows.every(([, workflow]) => workflow.primary_active !== false);
-	const mainSecret = workflows.find(([, workflow]) => workflow.secret)?.[1].secret;
+	// Atria is the main engine. Its tile reports what the last cycle observed
+	// (key set, calls answered, fallback reason), not the routing preference.
+	const atria = atriaState(status);
+	const calls = Object.entries(atria.calls);
 
 	return (
 		<>
@@ -23,13 +22,13 @@ export default function EngineSection({ status }: { status: Status }) {
 			/>
 
 			<div className="tile-row">
+				<Tile label="Main engine" value={atria.model} detail={`${atria.label} · ${atria.detail}`} tone={atria.tone} />
 				<Tile
-					label="Main engine"
-					value={mainModel}
-					detail={mainLive ? 'live on every role' : `${mainSecret || 'key'} missing — ${onFallback.length} of ${workflows.length} roles on fallback`}
-					tone={mainLive ? 'good' : 'warn'}
+					label="Served last cycle"
+					value={atria.live === null ? '—' : atria.serving}
+					detail={calls.length ? calls.map(([provider, n]) => `${provider} ${n}`).join(' · ') : 'no calls recorded'}
+					tone={atria.live ? 'good' : atria.live === false ? 'warn' : 'neutral'}
 				/>
-				<Tile label="Serving now" value={status.llm_provider || 'none'} detail={`${workflows.length} roles routed, OpenRouter fallback`} tone="info" />
 				<Tile label="Articles today" value={String(status.article_daily?.published || 0)} detail={status.article_daily?.date || 'no date'} tone={status.article_daily?.published ? 'good' : 'neutral'} />
 				<Tile label="Evolution" value={evolution.error ? 'failed' : 'Codex-owned'} detail={`v${evolution.version_bumped_to || status.version || '0.0.0'}`} tone={tone === 'info' ? 'neutral' : tone} />
 			</div>
@@ -104,6 +103,18 @@ export default function EngineSection({ status }: { status: Status }) {
 				</div>
 
 				<div className="stack">
+					<Card title="Atria" hint="The main engine, as the last cycle saw it.">
+						<KeyValue
+							rows={[
+								['Status', <Pill tone={atria.tone}>{atria.label}</Pill>],
+								['ATRIA_API_KEY', atria.keySet === null ? 'not reported' : atria.keySet ? 'set' : 'not set'],
+								['Model', atria.model],
+								['Calls answered', calls.length ? calls.map(([provider, n]) => `${provider}: ${n}`).join(', ') : 'none recorded'],
+								['Fallback reason', atria.reason || '—'],
+							]}
+						/>
+					</Card>
+
 					<Card title="Cycle facts">
 						<KeyValue
 							rows={[

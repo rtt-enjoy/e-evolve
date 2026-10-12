@@ -77,7 +77,7 @@ E-Evolve is a GitHub Actions bot that runs hourly and refreshes RAG, market rese
 
 Current operating policy: API keys are for RAG, research, market analysis, suggestions, draft text, and **publishing articles to dev.to**. The bot must not use keys to post to social media, place trades, mint NFTs, withdraw funds, or comment on external issues.
 
-**Main AI engine: Atria (`Atria-Dawn-Preview`, ~1B free tokens) via `bot/llm.py`.** Every role prefers it: evolution (`upgrade`), research and lead briefs (`research`), and article/newsletter drafting (`post`). It needs `ATRIA_API_KEY`; without that secret, or once Atria answers 401/404 or a quota-spent 429, every role runs on the free OpenRouter fallback described next, and the dashboard Engine panel marks the roles `fallback` (`llm_workflows.<role>.primary_active: false`, `serving: "openrouter"`). Read those fields, not `ROLE_PROVIDER`, to know what actually ran — a preference is not a live engine.
+**Main AI engine: Atria (`Atria-Dawn-Preview`, ~1B free tokens) via `bot/llm.py`.** Every role prefers it: evolution (`upgrade`), research and lead briefs (`research`), and article/newsletter drafting (`post`). It needs `ATRIA_API_KEY`; without that secret, or once Atria answers 401/404 or a quota-spent 429, every role runs on the free OpenRouter fallback described next, and the dashboard Engine panel marks the roles `fallback` (`llm_workflows.<role>.primary_active: false`, `serving: "openrouter"`). Read those fields, not `ROLE_PROVIDER`, to know what actually ran — a preference is not a live engine. The Engine panel's **Atria** card (and the sidebar pill) answer the two owner questions directly from `status["llm_engine"]`: is `ATRIA_API_KEY` set, and how many calls Atria actually answered last cycle.
 
 **Fallback: free OpenRouter models** — no paid engine, no credits required. Each role's fallback routes through a zero-cost chain led by **`openrouter/free`**, OpenRouter's *free auto-router*: it selects the best zero-cost model per request and filters for the features the request needs, so no role has to name a model up front and the choice tracks the live catalogue. Behind it sits a named fallback chain ordered by capability, led by `minimax/minimax-m3:free` (1M context, $0 in/out, native `response_format` + tools), for when the router itself is rate-limited. Each role's fallbacks then diverge by task: `upgrade` falls back to code-specialised models (`poolside/laguna-s-2.1:free`, `cohere/north-mini-code:free`), `research` to the largest-context reasoners (`nvidia/nemotron-3-ultra-550b-a55b:free`, `nvidia/nemotron-3-super-120b-a12b:free`), and `post` to models with native structured output. On 402/429/model-not-found, `bot/llm.py` steps down through *every* remaining model in the role's chain — each getting a fresh retry budget — before falling back to another provider, so a cycle never fails on cost or one model's rate limit.
 
@@ -1107,6 +1107,18 @@ actions. If such keys exist, they are treated as research context only.
   role. `ROLE_PROVIDER` says `atria` for every role whether or not the key
   exists, so reading it alone would show Atria on a dashboard running entirely
   on OpenRouter.
+- **`status["llm_engine"]` records what the main engine did, not what it was
+  meant to do.** `LLMClient.engine_report()` is written in Phase 5, *after*
+  every LLM call, so an Atria quota spent mid-cycle is reported. Fields:
+  `main_model`, `key_set` (was `ATRIA_API_KEY` present), `live`, `serving`,
+  `disabled_reason` (`key_missing` / `auth_failed` / `quota_spent` /
+  `model_not_found`) and `calls` — responses each provider actually returned,
+  counted in `complete()`. It exists because the dashboard once showed
+  `openrouter/free` as "Main engine — live on every role" on a snapshot
+  written before Atria was wired in: the panel read a *missing*
+  `primary_active` as `true`. `frontend/src/utils/engine.ts` now reads
+  `llm_engine` and, on a snapshot without it, says "Atria not reported" rather
+  than naming another engine as main.
 - **The dashboard reads the chain, it does not restate it.** `status.LLM_ROLE_WORKFLOWS`
   is derived from `llm.ROLE_PROVIDER` + `llm._OPENROUTER_MODELS_BY_ROLE` at call time, so the
   Engine panel can never advertise a model the client no longer calls. `bot/status.py` used to
@@ -1285,6 +1297,11 @@ withdrawal via `balance_high_water_usd`), plus `stablecoins` and `other_assets`.
 (TRX) -- read it before concluding from a `$0.00` balance that nobody paid, since
 a receipt there is real money that the dollar figure declines to guess at. See
 `bot/earning/wallet_assets.py`.
+
+`llm_engine` is written by `main.py` from `LLMClient.engine_report()` at the end
+of the cycle: `main_model`, `key_set`, `live`, `serving`, `disabled_reason`,
+`calls`. Read it — not `llm_provider` or `ROLE_PROVIDER` — to know whether Atria
+is configured and whether it actually served.
 
 `attribution` is written by `status._snapshot_attribution` (via
 `bot/earning/attribution.py`) and records what was published when on-chain money

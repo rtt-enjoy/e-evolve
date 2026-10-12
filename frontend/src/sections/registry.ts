@@ -98,7 +98,7 @@ export const SECTIONS: SectionDef[] = [
 		label: 'Engine',
 		icon: Cpu,
 		blurb: 'Which model handles which role, and what the last cycle changed.',
-		keys: ['llm_provider', 'llm_roles', 'llm_workflows', 'last_evolution', 'article_daily'],
+		keys: ['llm_provider', 'llm_roles', 'llm_workflows', 'llm_engine', 'last_evolution', 'article_daily'],
 		badge: (status) => Object.keys(status.llm_workflows || {}).length || null,
 		load: () => import('./EngineSection'),
 	},

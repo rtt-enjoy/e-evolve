@@ -5109,6 +5109,41 @@ class TestAtriaPrimaryWithOpenRouterFallback(unittest.TestCase):
 		self.assertEqual(len(calls["atria"]), 1)
 		self.assertTrue(client._atria_disabled)
 
+	def test_engine_report_counts_calls_atria_actually_answered(self):
+		client = self._client(atria=True)
+		fake, _ = self._post([self._resp(), self._resp()])
+		with mock.patch("requests.post", side_effect=fake):
+			client.complete_for_role("post", "hi")
+			client.complete_for_role("research", "hi")
+		report = client.engine_report()
+		self.assertEqual(report["main_model"], "Atria-Dawn-Preview")
+		self.assertTrue(report["key_set"])
+		self.assertTrue(report["live"])
+		self.assertEqual(report["serving"], "atria")
+		self.assertIsNone(report["disabled_reason"])
+		self.assertEqual(report["calls"], {"atria": 2})
+
+	def test_engine_report_names_the_reason_a_set_key_fell_back(self):
+		client = self._client(atria=True)
+		quota = self._resp(429, headers={}, text='{"error":"quota exhausted"}')
+		fake, _ = self._post([quota])
+		with mock.patch("requests.post", side_effect=fake):
+			client.complete_for_role("research", "hi")
+		report = client.engine_report()
+		self.assertTrue(report["key_set"])
+		self.assertFalse(report["live"])
+		self.assertEqual(report["serving"], "openrouter")
+		self.assertEqual(report["disabled_reason"], "quota_spent")
+		self.assertEqual(report["calls"], {"openrouter": 1})
+
+	def test_engine_report_says_key_missing_without_atria_key(self):
+		report = self._client(atria=False).engine_report()
+		self.assertFalse(report["key_set"])
+		self.assertFalse(report["live"])
+		self.assertEqual(report["serving"], "openrouter")
+		self.assertEqual(report["disabled_reason"], "key_missing")
+		self.assertEqual(report["calls"], {})
+
 
 class TestDashboardNamesTheEngineThatServes(unittest.TestCase):
 	"""Built is not live: a role routed to Atria with no key must not read as Atria."""

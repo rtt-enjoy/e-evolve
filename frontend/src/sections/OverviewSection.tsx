@@ -5,6 +5,7 @@ import { CopyButton } from '../components/CopyButton';
 import { buildIssues, buildOpportunityStats, buildReadiness, sortLeads } from '../utils/dashboard';
 import { ageLabel, cleanTitle, evolutionTone, formatDate, money, scoreTone, sourceLabel } from '../utils/format';
 import type { Status } from '../types/status';
+import { atriaState } from '../utils/engine';
 
 export default function OverviewSection({ status }: { status: Status }) {
 	const earnings = status.earnings || {};
@@ -187,7 +188,7 @@ export default function OverviewSection({ status }: { status: Status }) {
 							<Stat label="Cycles run" value={String(status.total_runs || 0)} detail={`${status.last_cycle_seconds || 0}s last`} />
 							<Stat label="Articles today" value={String(status.article_daily?.published || 0)} detail={status.article_daily?.date || 'no date'} />
 							<Stat label="Active modules" value={String((status.active_features || []).length)} detail={`${(status.inactive_features || []).length} idle`} />
-							<Stat label="LLM roles" value={String(Object.keys(status.llm_workflows || status.llm_roles || {}).length)} detail={status.llm_provider || 'none'} />
+							<Stat label="LLM roles" value={String(Object.keys(status.llm_workflows || status.llm_roles || {}).length)} detail={atriaState(status).label} />
 						</div>
 					</Card>
 				</div>

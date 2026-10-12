@@ -85,7 +85,7 @@ Current operating policy: API keys are for RAG, research, market analysis, sugge
 
 ```
 bot/main.py          ← 5-phase orchestrator (entry point)
-bot/llm.py           ← LLM abstraction (OpenRouter free chain, then Anthropic/Gemini/Cerebras/Groq)
+bot/llm.py           ← LLM abstraction (Atria first, then OpenRouter free chain, then Anthropic/Gemini/Cerebras/Groq)
 bot/status.py        ← Phase 1: load/save status.json, feature detection, wallet balance
 bot/commands.py      ← Phase 2: owner commands (command.txt or GitHub Issues)
 bot/evolution.py     ← Phase 3: LLM code proposals → review branch (never main)
@@ -121,7 +121,7 @@ command.txt          ← owner command input
 ## Cycle Flow (5 Phases)
 
 ```
-Phase 0: Init LLM (OpenRouter free-model chain first, then Anthropic > Gemini > Groq)
+Phase 0: Init LLM (Atria first, then OpenRouter free-model chain, then Anthropic > Gemini > Groq)
 Phase 1: Status   — load status.json, detect active features from env secrets
 Phase 2: Commands — read command.txt + GitHub Issues labelled "bot-command"
 Phase 3: Evolution — LLM proposes code changes; applied to a sandbox, verified,
@@ -1070,8 +1070,8 @@ actions. If such keys exist, they are treated as research context only.
 
 ## LLM Client (bot/llm.py)
 
-- Provider priority: `OPENROUTER_API_KEY` → `ANTHROPIC_API_KEY` → `GEMINI_API_KEY` → `CEREBRAS_API_KEY` → `GROQ_API_KEY`
-- **Main engine: free OpenRouter models, used for every role in `ROLE_PROVIDER`. No paid model, no credits needed.**
+- Provider priority: `ATRIA_API_KEY` → `OPENROUTER_API_KEY` → `ANTHROPIC_API_KEY` → `GEMINI_API_KEY` → `CEREBRAS_API_KEY` → `GROQ_API_KEY`
+- **Main engine: Atria (`Atria-Dawn-Preview`, ~1B free tokens) for every role in `ROLE_PROVIDER`.** On a 401, a quota-spent 429 (no `Retry-After`), or a 404, Atria is disabled for the rest of the run and each role falls through to its free OpenRouter chain. A per-minute 429 with `Retry-After` only falls through for that call. No paid model, no credits needed.
 - **OpenRouter free-tier ceiling:** `:free` models are capped at 20 req/min and only
   50 requests/day unless the account has ever bought $10 in credits (then 1,000/day).
   An hourly bot with multiple LLM calls per cycle can approach that ceiling — verify

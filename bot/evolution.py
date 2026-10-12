@@ -64,6 +64,7 @@ _MAX_READ_BYTES = {
     "claude-cli": 60_000,
     "gemini":     80_000,
     "openrouter": 200_000,
+    "atria":      200_000,
 }
 
 _SYSTEM = """\

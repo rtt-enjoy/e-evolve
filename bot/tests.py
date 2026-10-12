@@ -2445,7 +2445,7 @@ class TestOpenRouterModelChains(unittest.TestCase):
 			raise RuntimeError(error)
 
 		real_call, real_sleep = llm_module.LLMClient._call_openrouter, llm_module.time.sleep
-		keys = ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY")
+		keys = ("ATRIA_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY")
 		saved = {k: os.environ.pop(k, None) for k in keys}
 		saved_or = os.environ.get("OPENROUTER_API_KEY")
 		os.environ["OPENROUTER_API_KEY"] = "test-key"
@@ -2526,7 +2526,7 @@ class TestOpenRouterModelChains(unittest.TestCase):
 			)
 
 		real_call, real_sleep = llm_module.LLMClient._call_openrouter, llm_module.time.sleep
-		keys = ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY")
+		keys = ("ATRIA_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY")
 		saved = {k: os.environ.pop(k, None) for k in keys}
 		saved_or = os.environ.get("OPENROUTER_API_KEY")
 		os.environ["OPENROUTER_API_KEY"] = "test-key"
@@ -2560,7 +2560,7 @@ class TestOpenRouterModelChains(unittest.TestCase):
 			return llm_module._require_text("", "openrouter", model)
 
 		real_call, real_sleep = llm_module.LLMClient._call_openrouter, llm_module.time.sleep
-		keys = ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY")
+		keys = ("ATRIA_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY")
 		saved = {k: os.environ.pop(k, None) for k in keys}
 		saved_or = os.environ.get("OPENROUTER_API_KEY")
 		os.environ["OPENROUTER_API_KEY"] = "test-key"
@@ -2591,7 +2591,10 @@ class TestOpenRouterModelChains(unittest.TestCase):
 		for role, cfg in status_module._role_workflow_spec().items():
 			chain = llm_module._OPENROUTER_MODELS_BY_ROLE[role]
 			self.assertEqual(cfg["provider"], llm_module.ROLE_PROVIDER[role], role)
-			self.assertEqual(cfg["model"], chain[0], role)
+			# Atria leads every role, so the dashboard names its model; the
+			# OpenRouter chain is the fallback and is named only for that provider.
+			expected = llm_module._ATRIA_MODELS[0] if cfg["provider"] == "atria" else chain[0]
+			self.assertEqual(cfg["model"], expected, role)
 			self.assertTrue(cfg["purpose"], role)
 
 
@@ -4961,3 +4964,119 @@ class TestAskMatchesWhatTheWalletCounts(unittest.TestCase):
 			else:
 				os.environ["USDT_WALLET_ADDRESS"] = original
 		self.assertEqual(public["asset"], payout.accepted_assets("TRC-20 (Tron)"))
+
+
+class TestAtriaPrimaryWithOpenRouterFallback(unittest.TestCase):
+	"""Atria leads every role. Quota, auth or rate failures fall through to OpenRouter."""
+
+	_KEYS = (
+		"ATRIA_API_KEY", "OPENROUTER_API_KEY", "ANTHROPIC_API_KEY",
+		"GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY",
+	)
+
+	def setUp(self):
+		self._saved = {k: os.environ.pop(k, None) for k in self._KEYS}
+
+	def tearDown(self):
+		for k in self._KEYS:
+			os.environ.pop(k, None)
+		for k, v in self._saved.items():
+			if v is not None:
+				os.environ[k] = v
+
+	def _client(self, atria=True, openrouter=True):
+		if atria:
+			os.environ["ATRIA_API_KEY"] = "atria-test"
+		if openrouter:
+			os.environ["OPENROUTER_API_KEY"] = "or-test"
+		return llm_module.LLMClient()
+
+	@staticmethod
+	def _resp(status=200, headers=None, text="ok"):
+		r = mock.Mock()
+		r.status_code = status
+		r.headers = headers or {}
+		r.text = text
+		body = {"choices": [{"message": {"content": text}}]}
+		r.json.return_value = body
+		r.raise_for_status = mock.Mock()
+		return r
+
+	def _post(self, atria_script, openrouter_status=200):
+		"""Route by URL. atria_script is a list of responses consumed in order."""
+		calls = {"atria": [], "openrouter": []}
+
+		def fake_post(url, **kwargs):
+			if "atria" in url:
+				calls["atria"].append(kwargs["json"]["model"])
+				return atria_script.pop(0)
+			calls["openrouter"].append(kwargs["json"]["model"])
+			return self._resp(openrouter_status)
+
+		return fake_post, calls
+
+	def test_atria_is_primary_when_key_set(self):
+		client = self._client(atria=True)
+		self.assertEqual(client.provider, "atria")
+		fake, calls = self._post([self._resp()])
+		with mock.patch("requests.post", side_effect=fake):
+			resp = client.complete_for_role("upgrade", "hi")
+		self.assertEqual(resp.provider, "atria")
+		self.assertEqual(resp.model, "Atria-Dawn-Preview")
+		self.assertEqual(calls["openrouter"], [])
+
+	def test_openrouter_is_primary_without_atria_key(self):
+		client = self._client(atria=False)
+		self.assertEqual(client.provider, "openrouter")
+
+	def test_quota_429_latches_and_falls_through_to_openrouter(self):
+		client = self._client(atria=True)
+		quota = self._resp(429, headers={}, text='{"error":"quota exhausted"}')
+		fake, calls = self._post([quota])
+		with mock.patch("requests.post", side_effect=fake):
+			first = client.complete_for_role("research", "hi")
+			second = client.complete_for_role("research", "hi")
+		self.assertEqual(first.provider, "openrouter")
+		self.assertEqual(second.provider, "openrouter")
+		# Latched after the first 429: the second call never touches Atria again.
+		self.assertEqual(len(calls["atria"]), 1)
+		self.assertTrue(client._atria_disabled)
+
+	def test_rate_limit_with_retry_after_does_not_latch(self):
+		client = self._client(atria=True)
+		rpm = self._resp(429, headers={"Retry-After": "12"}, text="slow down")
+		ok = self._resp()
+		fake, calls = self._post([rpm, ok])
+		with mock.patch("requests.post", side_effect=fake):
+			first = client.complete_for_role("post", "hi")
+			second = client.complete_for_role("post", "hi")
+		self.assertEqual(first.provider, "openrouter")
+		self.assertEqual(second.provider, "atria")
+		self.assertEqual(len(calls["atria"]), 2)
+		self.assertFalse(client._atria_disabled)
+
+	def test_auth_error_disables_atria_and_falls_through(self):
+		client = self._client(atria=True)
+		fake, calls = self._post([self._resp(401, text="invalid key")])
+		with mock.patch("requests.post", side_effect=fake):
+			resp = client.complete_for_role("fast", "hi")
+		self.assertEqual(resp.provider, "openrouter")
+		self.assertTrue(client._atria_disabled)
+		self.assertEqual(len(calls["atria"]), 1)
+
+	def test_without_atria_key_each_role_keeps_its_openrouter_chain(self):
+		"""Regression: routing roles to atria must not drop the per-role OpenRouter
+		chain when no Atria key exists (complete() would fall back to the default
+		chain and lose the code-specialised 'upgrade' models)."""
+		client = self._client(atria=False)
+		fake, calls = self._post([])
+		with mock.patch("requests.post", side_effect=fake):
+			client.complete_for_role("upgrade", "hi")
+		self.assertEqual(
+			calls["openrouter"][0],
+			llm_module._OPENROUTER_MODELS_BY_ROLE["upgrade"][0],
+		)
+
+	def test_atria_secret_is_a_feature(self):
+		from bot.status import FEATURE_MAP
+		self.assertEqual(FEATURE_MAP["llm_atria"], ["ATRIA_API_KEY"])

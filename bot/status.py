@@ -30,6 +30,7 @@ FEATURE_MAP: dict[str, list[str]] = {
 	"llm_openrouter":  ["OPENROUTER_API_KEY"],
 	"llm_groq":        ["GROQ_API_KEY"],
 	"llm_cerebras":    ["CEREBRAS_API_KEY"],
+	"llm_atria":       ["ATRIA_API_KEY"],
 	"usdt_wallet":     ["USDT_WALLET_ADDRESS"],
 }
 
@@ -51,7 +52,7 @@ def _role_workflow_spec() -> dict[str, dict[str, str]]:
 		chain = llm._OPENROUTER_MODELS_BY_ROLE.get(role, llm._OPENROUTER_MODELS)
 		spec[role] = {
 			"provider": provider,
-			"model": chain[0] if provider == "openrouter" and chain else "",
+			"model": llm._ATRIA_MODELS[0] if provider == "atria" else (chain[0] if provider == "openrouter" and chain else ""),
 			"purpose": purpose,
 		}
 	return spec
@@ -578,12 +579,17 @@ def _llm_workflows(
 			"groq": "GROQ_API_KEY",
 			"openrouter": "OPENROUTER_API_KEY",
 			"cerebras": "CEREBRAS_API_KEY",
+			"atria": "ATRIA_API_KEY",
 		}.get(provider)
 		feature = f"llm_{provider}"
+		# Atria roles fall through to OpenRouter, so they are live on either key.
+		keys = [secret] if secret else []
+		if provider == "atria":
+			keys.append("OPENROUTER_API_KEY")
 		workflows[role] = {
 			**cfg,
 			"active": bool(
-				(secret and (os.getenv(secret, "").strip() or secret in configured))
+				any(os.getenv(k, "").strip() or k in configured for k in keys)
 				or feature in active_set
 			),
 			"secret": secret,

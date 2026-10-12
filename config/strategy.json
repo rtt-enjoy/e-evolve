@@ -194,8 +194,8 @@
 		]
 	},
 	"llm": {
-		"main_engine": "openrouter/free",
-		"provider": "openrouter",
+		"main_engine": "Atria-Dawn-Preview",
+		"provider": "atria",
 		"note": "All-free model chain, ordered per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. openrouter/free -- the free auto-router -- leads every chain: it picks the best zero-cost model per request and filters for the features the request needs, so model choice tracks the live catalogue. openrouter/auto is deliberately NOT used: its candidate set includes paid models and it bills at the routed model's rate. Named free models (led by minimax/minimax-m3:free, 1M ctx, native response_format + tools) follow as fallback for when the router is rate-limited; on 402/429/404 the client steps down the rest of the role's free chain before changing provider."
 	},
 	"research_policy": {

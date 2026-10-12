@@ -20,6 +20,12 @@ _GROQ_MODELS = [
 	"llama3-70b-8192",
 	"llama3-8b-8192",
 ]
+# Atria: primary engine when ATRIA_API_KEY is set (~1B free tokens, OpenAI-compatible).
+# Single model, case-sensitive ID. Quota exhaustion latches the provider off for the
+# rest of the run and the chain falls through to OpenRouter.
+_ATRIA_MODELS = [
+	"Atria-Dawn-Preview",
+]
 # Cerebras free tier: 1M tokens/day + 14,400 req/day per model, no credit card.
 # Far higher daily ceiling than OpenRouter's free 50 req/day, so it is a strong
 # fallback once OpenRouter's free chain is exhausted for the day.
@@ -134,15 +140,16 @@ _OPENROUTER_MODELS_BY_ROLE: dict[str, list[str]] = {
 	"post":     _OPENROUTER_MODELS_POST,
 }
 
-# Role → preferred provider mapping. Free OpenRouter models are the main
-# engine for every role; gemini/groq remain as provider-level fallbacks.
+# Role → preferred provider mapping. Atria leads every role; when it is absent or
+# its quota is spent, the chain falls through to the OpenRouter free chains above,
+# then gemini/groq as provider-level fallbacks.
 ROLE_PROVIDER: dict[str, str] = {
-	"upgrade":    "openrouter",
-	"research":   "openrouter",
-	"post":       "openrouter",
-	"think":      "openrouter",
-	"fast":       "openrouter",
-	"experiment": "openrouter",
+	"upgrade":    "atria",
+	"research":   "atria",
+	"post":       "atria",
+	"think":      "atria",
+	"fast":       "atria",
+	"experiment": "atria",
 }
 
 
@@ -187,6 +194,10 @@ class LLMClient:
 		self._openrouter_key = os.getenv("OPENROUTER_API_KEY", "").strip()
 		self._groq_key       = os.getenv("GROQ_API_KEY",       "").strip()
 		self._cerebras_key   = os.getenv("CEREBRAS_API_KEY",   "").strip()
+		self._atria_key      = os.getenv("ATRIA_API_KEY",      "").strip()
+		# Set when Atria answers 401 or its free quota is spent. Per-process: the
+		# next hourly cycle starts with Atria enabled again.
+		self._atria_disabled = False
 		self.provider        = self._pick_provider()
 		self._current_role: str | None = None
 		self.model           = self._pick_model()
@@ -224,6 +235,8 @@ class LLMClient:
 						return self._call_gemini(p_prompt, system, max_tokens, temperature, p_model)
 					if provider == "openrouter":
 						return self._call_openrouter(p_prompt, system, max_tokens, temperature, p_model)
+					if provider == "atria":
+						return self._call_atria(p_prompt, system, max_tokens, temperature, p_model)
 					if provider == "cerebras":
 						return self._call_cerebras(p_prompt, system, max_tokens, temperature, p_model)
 					if provider == "claude-cli":
@@ -318,11 +331,15 @@ class LLMClient:
 		preferred = ROLE_PROVIDER.get(role)
 		if preferred:
 			key_map = {
+				"atria":      "" if self._atria_disabled else self._atria_key,
 				"gemini":     self._gemini_key,
 				"groq":       self._groq_key,
 				"openrouter": self._openrouter_key,
 				"anthropic":  self._anthropic_key,
 			}
+			if preferred == "atria" and not key_map["atria"]:
+				# Atria absent or spent: the role's own OpenRouter chain still applies.
+				preferred = "openrouter"
 			if key_map.get(preferred):
 				log.info("Role=%s → provider=%s", role, preferred)
 				old_provider = self.provider
@@ -593,6 +610,62 @@ class LLMClient:
 			latency_s = round(time.monotonic() - t0, 2),
 		)
 
+	# -- Atria -----------------------------------------------------------------
+
+	def _call_atria(
+		self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
+	) -> LLMResponse:
+		import requests  # already in requirements
+		messages: list[dict] = []
+		if system:
+			messages.append({"role": "system", "content": system})
+		messages.append({"role": "user", "content": prompt})
+		t0  = time.monotonic()
+		rsp = requests.post(
+			"https://api.atria-asi.ai/v1/chat/completions",
+			headers={
+				"Authorization": f"Bearer {self._atria_key}",
+				"Content-Type":  "application/json",
+			},
+			json={
+				"model":       model,
+				"messages":    messages,
+				"max_tokens":  max_tokens,
+				"temperature": temperature,
+			},
+			timeout=90,
+		)
+		if rsp.status_code in (401, 403):
+			self._atria_disabled = True
+			raise RuntimeError(f"401 authentication_error from atria: {rsp.text[:200]}")
+		if rsp.status_code == 429:
+			# A per-minute limit sends Retry-After and recovers within the cycle.
+			# Without it, or with a body naming a quota, the free allowance is
+			# spent: stop asking for the rest of this run and use OpenRouter.
+			body = rsp.text[:200]
+			if "Retry-After" not in rsp.headers or re.search(r"quota|balance|insufficient", body, re.I):
+				self._atria_disabled = True
+				log.warning("atria quota appears spent -- routing the rest of this run to openrouter")
+				raise RuntimeError(f"429 quota_exceeded from atria: {body}")
+			raise RuntimeError(f"429 rate_limit_exceeded from atria: {body}")
+		if rsp.status_code == 404:
+			raise RuntimeError(f"model_not_found on atria: {model}: {rsp.text[:200]}")
+		rsp.raise_for_status()
+		data = rsp.json()
+		if "error" in data:
+			raise RuntimeError(f"Atria error: {data['error']}")
+		if not data.get("choices"):
+			raise RuntimeError(f"Atria returned no choices for {model}: {str(data)[:200]}")
+		text = _require_text(
+			data["choices"][0]["message"]["content"], "atria", model
+		)
+		return LLMResponse(
+			text      = text,
+			provider  = "atria",
+			model     = model,
+			latency_s = round(time.monotonic() - t0, 2),
+		)
+
 	# -- Claude CLI (Pro subscription, no API key) -----------------------------
 
 	def _call_claude_cli(
@@ -626,7 +699,10 @@ class LLMClient:
 	def _pick_provider(self) -> str:
 		if os.getenv("CLAUDE_CLI_MODE", "").strip() == "1":
 			return "claude-cli"
-		# OpenRouter first: it hosts the free-tier model chain, the main engine.
+		# Atria first: ~1B free tokens. OpenRouter is the fallback once it is absent
+		# or its quota is spent.
+		if self._atria_key:
+			return "atria"
 		if self._openrouter_key:
 			return "openrouter"
 		if self._anthropic_key:
@@ -639,7 +715,7 @@ class LLMClient:
 			return "cerebras"
 		raise RuntimeError(
 			"No LLM API key found.\n"
-			"Add one of: ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, CEREBRAS_API_KEY\n"
+			"Add one of: ATRIA_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, CEREBRAS_API_KEY\n"
 			"to GitHub -> Settings -> Secrets and variables -> Actions.\n"
 			"For local dev with Claude Pro: set CLAUDE_CLI_MODE=1 in .env"
 		)
@@ -648,6 +724,8 @@ class LLMClient:
 		return self._model_for_provider(self.provider)
 
 	def _model_for_provider(self, provider: str) -> str:
+		if provider == "atria":
+			return _ATRIA_MODELS[0]
 		if provider == "anthropic":
 			return _ANTHROPIC_MODELS[0]
 		if provider == "gemini":
@@ -670,6 +748,7 @@ class LLMClient:
 		"""Ordered fallback chain starting from primary provider."""
 		all_providers = [
 			("claude-cli",   os.getenv("CLAUDE_CLI_MODE", "").strip() == "1"),
+			("atria",        bool(self._atria_key) and not self._atria_disabled),
 			("openrouter",   bool(self._openrouter_key)),
 			("anthropic",    bool(self._anthropic_key)),
 			("gemini",       bool(self._gemini_key)),
@@ -686,6 +765,7 @@ class LLMClient:
 
 def _model_list_for(provider: str) -> list[str]:
 	return {
+		"atria":       _ATRIA_MODELS,
 		"groq":        _GROQ_MODELS,
 		"anthropic":   _ANTHROPIC_MODELS,
 		"gemini":      _GEMINI_MODELS,

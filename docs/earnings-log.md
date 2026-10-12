@@ -2197,3 +2197,10 @@ Autonomous earnings generated every hourly cycle.
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
 - [ok] **mrr-ideas**: [MRR idea triage refreshed (2 viable, 18 refused)](status.json#mrr_ideas) (est. $0.00)
 - [ok] **dev.to**: [Why Your Hand‑Coded Decision Model Crashes on Missing Values](https://dev.to/robust_true_try/why-your-hand-coded-decision-model-crashes-on-missing-values-2k7g) (est. $0.00)
+
+## Week 2026-10-05 — $0.0000 (code_techs: $0.0000, mrr-ideas: $0.0000, dev.to: $0.0000, dev.to-newsletter: $0.0000)
+
+### 2026-10-12 00:43 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+- [ok] **dev.to**: [Your LLM Evaluation Suite Is Lying To You](https://dev.to/robust_true_try/your-llm-evaluation-suite-is-lying-to-you-5g71) (est. $0.00)

@@ -2,12 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
-*, *::before, *::after {
-	box-sizing: border-box;
-}
+/* ==========================================================================
+   Design tokens
+   --------------------------------------------------------------------------
+   Every colour lives here once. Values are RGB triplets so Tailwind opacity
+   modifiers work (see tailwind.config.js). Dark is the default; light follows
+   the OS preference unless the page pins `data-theme`.
+   ========================================================================== */
 
 :root {
-	--sidebar-w: 236px;
+	color-scheme: dark;
+	--c-bg: 7 10 15;
+	--c-surface: 13 18 26;
+	--c-surface-2: 19 26 36;
+	--c-surface-3: 27 36 49;
+	--c-border: 38 49 64;
+	--c-text: 231 237 245;
+	--c-muted: 143 158 178;
+	--c-faint: 98 113 133;
+	--c-accent: 110 168 255;
+	--c-good: 66 214 132;
+	--c-warn: 245 196 90;
+	--c-bad: 255 110 110;
+	--c-info: 92 214 210;
+
+	--sidebar-w: 248px;
+	--radius-sm: 8px;
+	--radius: 12px;
+	--radius-lg: 16px;
+	--ease: cubic-bezier(.2, .7, .2, 1);
+	--mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: light) {
+	:root:not([data-theme="dark"]) {
+		color-scheme: light;
+		--c-bg: 244 246 250;
+		--c-surface: 255 255 255;
+		--c-surface-2: 246 248 252;
+		--c-surface-3: 234 239 246;
+		--c-border: 222 228 237;
+		--c-text: 17 24 39;
+		--c-muted: 88 102 122;
+		--c-faint: 130 143 161;
+		--c-accent: 37 99 235;
+		--c-good: 22 135 72;
+		--c-warn: 158 102 0;
+		--c-bad: 200 40 40;
+		--c-info: 13 128 130;
+	}
+}
+
+:root[data-theme="light"] {
+	color-scheme: light;
+	--c-bg: 244 246 250;
+	--c-surface: 255 255 255;
+	--c-surface-2: 246 248 252;
+	--c-surface-3: 234 239 246;
+	--c-border: 222 228 237;
+	--c-text: 17 24 39;
+	--c-muted: 88 102 122;
+	--c-faint: 130 143 161;
+	--c-accent: 37 99 235;
+	--c-good: 22 135 72;
+	--c-warn: 158 102 0;
+	--c-bad: 200 40 40;
+	--c-info: 13 128 130;
+}
+
+*, *::before, *::after {
+	box-sizing: border-box;
 }
 
 html, body {
@@ -17,10 +81,17 @@ html, body {
 body {
 	margin: 0;
 	min-width: 320px;
-	background: theme('colors.ink');
-	color: theme('colors.text');
+	color: rgb(var(--c-text));
 	font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-feature-settings: 'cv11', 'ss01';
 	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+	/* Ambient light behind the page: a soft accent wash, not a flat fill. */
+	background:
+		radial-gradient(900px 480px at 85% -8%, rgb(var(--c-accent) / .12), transparent 70%),
+		radial-gradient(700px 400px at -10% 110%, rgb(var(--c-info) / .07), transparent 70%),
+		rgb(var(--c-bg));
+	background-attachment: fixed;
 }
 
 button, input, textarea, select {
@@ -34,10 +105,23 @@ a {
 }
 
 ::selection {
-	background: theme('colors.accent' / 30%);
+	background: rgb(var(--c-accent) / .3);
+}
+
+:focus-visible {
+	outline: 2px solid rgb(var(--c-accent));
+	outline-offset: 2px;
+	border-radius: 6px;
 }
 
 @layer components {
+	/* Declared before the shell so the responsive hide rules below (`lg:hidden`
+	   on .nav-close and .nav-open-btn) can override display. */
+	.icon-btn {
+		@apply grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-line bg-panel2 text-soft transition;
+		@apply hover:border-accent/50 hover:text-text;
+	}
+
 	/* ============================================================== shell */
 
 	.shell {
@@ -49,8 +133,9 @@ a {
 	}
 
 	.sidebar {
-		@apply fixed inset-y-0 left-0 z-40 flex w-[var(--sidebar-w)] shrink-0 flex-col gap-5 border-r border-line bg-panel px-4 py-5;
-		@apply -translate-x-full transition-transform duration-200 lg:translate-x-0;
+		@apply fixed inset-y-0 left-0 z-40 flex w-[var(--sidebar-w)] shrink-0 flex-col gap-6 border-r border-line bg-panel/85 px-4 py-6 backdrop-blur-xl;
+		@apply -translate-x-full transition-transform duration-300 lg:translate-x-0;
+		transition-timing-function: var(--ease);
 	}
 
 	.nav-open .sidebar {
@@ -58,15 +143,17 @@ a {
 	}
 
 	.brand {
-		@apply flex items-center gap-3;
+		@apply flex items-center gap-3 px-1;
 	}
 
 	.brand-mark {
-		@apply grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent text-base font-bold text-ink;
+		@apply grid h-10 w-10 shrink-0 place-items-center rounded-xl text-lg font-bold text-white;
+		background: linear-gradient(135deg, rgb(var(--c-accent)), rgb(var(--c-info)));
+		box-shadow: 0 6px 20px -6px rgb(var(--c-accent) / .6), inset 0 1px 0 rgb(255 255 255 / .25);
 	}
 
 	.brand strong {
-		@apply block truncate text-sm font-semibold;
+		@apply block truncate text-[15px] font-semibold tracking-tight;
 	}
 
 	.brand span {
@@ -78,7 +165,7 @@ a {
 	}
 
 	.live {
-		@apply flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-line bg-panel2 px-3 py-2 text-xs;
+		@apply flex flex-wrap items-center gap-x-2 gap-y-1 rounded-xl border border-line bg-panel2 px-3.5 py-2.5 text-xs;
 	}
 
 	.live span {
@@ -86,21 +173,25 @@ a {
 	}
 
 	.live em {
-		@apply w-full not-italic text-soft;
+		@apply w-full pl-[18px] not-italic text-soft;
 	}
 
 	.sidebar nav {
-		@apply flex flex-1 flex-col gap-1 overflow-y-auto;
+		@apply flex flex-1 flex-col gap-0.5 overflow-y-auto;
 	}
 
 	.sidebar nav a {
-		@apply flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-soft transition;
-		@apply hover:bg-panel2 hover:text-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent;
+		@apply relative flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-soft transition;
+		@apply hover:bg-panel2 hover:text-text;
 	}
 
 	.sidebar nav a.active {
-		@apply bg-accent/10 text-text;
-		box-shadow: inset 2px 0 0 theme('colors.accent');
+		@apply bg-accent/10 font-semibold text-text;
+	}
+
+	.sidebar nav a.active::before {
+		content: '';
+		@apply absolute inset-y-2 left-0 w-[3px] rounded-full bg-accent;
 	}
 
 	.sidebar nav a span {
@@ -116,11 +207,11 @@ a {
 	}
 
 	.sidebar-foot {
-		@apply flex flex-wrap gap-2 border-t border-line pt-4;
+		@apply mt-auto flex flex-wrap gap-2 border-t border-line pt-4;
 	}
 
 	.sidebar-foot .links {
-		@apply flex w-full flex-wrap gap-x-4 gap-y-1 text-xs text-soft;
+		@apply flex w-full flex-wrap gap-x-4 gap-y-1 pt-1 text-xs text-soft;
 	}
 
 	.sidebar-foot .links a {
@@ -128,7 +219,7 @@ a {
 	}
 
 	.nav-scrim {
-		@apply fixed inset-0 z-30 hidden bg-black/60;
+		@apply fixed inset-0 z-30 hidden bg-black/50 backdrop-blur-sm;
 	}
 
 	.nav-open .nav-scrim {
@@ -142,7 +233,7 @@ a {
 	/* ============================================================= topbar */
 
 	.topbar {
-		@apply sticky top-0 z-20 flex items-center gap-3 border-b border-line bg-ink/90 px-4 py-3 backdrop-blur;
+		@apply sticky top-0 z-20 flex items-center gap-3 border-b border-line bg-ink/75 px-4 py-3 backdrop-blur-xl sm:px-6;
 	}
 
 	.nav-open-btn {
@@ -154,11 +245,11 @@ a {
 	}
 
 	.crumb span {
-		@apply truncate text-sm font-semibold;
+		@apply truncate text-sm font-semibold tracking-tight;
 	}
 
 	.crumb em {
-		@apply not-italic text-xs text-soft;
+		@apply rounded-full border border-line px-2 py-0.5 text-[11px] not-italic text-soft;
 	}
 
 	.topbar-actions {
@@ -170,11 +261,12 @@ a {
 	}
 
 	.content {
-		@apply mx-auto flex w-full max-w-[1180px] flex-col gap-5 px-4 py-6 sm:px-6;
+		@apply mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-4 py-7 sm:px-8 sm:py-9;
+		animation: rise .45s var(--ease) both;
 	}
 
 	.foot {
-		@apply mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5 text-xs text-soft;
+		@apply mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5 text-xs text-soft;
 	}
 
 	.linkish {
@@ -184,29 +276,47 @@ a {
 	/* ========================================================== headings */
 
 	.section-head {
-		@apply flex flex-wrap items-start justify-between gap-4;
+		@apply flex flex-wrap items-end justify-between gap-4;
 	}
 
 	.section-head h1 {
-		@apply text-2xl font-semibold tracking-tight sm:text-3xl;
+		@apply text-2xl font-semibold tracking-tight sm:text-[30px] sm:leading-tight;
 	}
 
 	.section-head p {
-		@apply mt-1.5 max-w-3xl text-sm leading-6 text-soft;
+		@apply mt-2 max-w-3xl text-[15px] leading-relaxed text-soft;
 	}
 
 	.subhead {
-		@apply mt-2 flex items-center justify-between gap-3 border-b border-line pb-2;
+		@apply mt-3 flex items-center justify-between gap-3 pb-1;
 	}
 
 	.subhead h3 {
-		@apply text-xs font-semibold uppercase tracking-[0.14em] text-soft;
+		@apply text-[11px] font-semibold uppercase tracking-[.12em] text-soft;
+	}
+
+	/* ============================================================ layout */
+
+	.stack {
+		@apply flex min-w-0 flex-col gap-5;
+	}
+
+	.split {
+		@apply grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)];
+	}
+
+	.grid-2 {
+		@apply grid gap-4 sm:grid-cols-2;
+	}
+
+	.grid-3 {
+		@apply grid gap-4 md:grid-cols-3;
 	}
 
 	/* ============================================================= cards */
 
 	.card {
-		@apply rounded-xl border border-line bg-panel p-4 sm:p-5;
+		@apply min-w-0 rounded-[var(--radius-lg)] border border-line bg-panel p-5 shadow-panel sm:p-6;
 	}
 
 	.card-head {
@@ -214,102 +324,103 @@ a {
 	}
 
 	.card-head h2 {
-		@apply text-sm font-semibold;
+		@apply text-[15px] font-semibold tracking-tight;
 	}
 
 	.card-head p {
-		@apply mt-1 max-w-2xl text-xs leading-5 text-soft;
+		@apply mt-1 text-[13px] leading-relaxed text-soft;
 	}
 
-	.stack {
-		@apply flex flex-col gap-4;
-	}
-
-	.split {
-		@apply grid gap-5 xl:grid-cols-[minmax(0,1fr)_370px];
-	}
-
-	.grid-2 {
-		@apply grid gap-4 md:grid-cols-2;
-	}
-
-	.grid-3 {
-		@apply grid gap-4 md:grid-cols-2 xl:grid-cols-3;
-	}
-
-	/* ============================================================= tiles */
+	/* ============================================================== tiles */
 
 	.tile-row {
-		@apply grid gap-3 sm:grid-cols-2 xl:grid-cols-4;
+		@apply grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4;
 	}
 
 	.tile {
-		@apply relative flex flex-col gap-1 overflow-hidden rounded-xl border border-line bg-panel p-4;
-	}
-
-	.tile.is-link {
-		@apply transition hover:border-accent/60 hover:bg-panel2;
+		@apply relative flex min-w-0 flex-col gap-1 overflow-hidden rounded-[var(--radius-lg)] border border-line p-5;
+		background: linear-gradient(180deg, rgb(var(--c-surface-2)) 0%, rgb(var(--c-surface)) 100%);
+		box-shadow: 0 1px 0 rgb(255 255 255 / .03) inset;
+		transition: transform .2s var(--ease), border-color .2s, box-shadow .2s;
 	}
 
 	.tile-label {
-		@apply text-xs font-medium uppercase tracking-wider text-soft;
+		@apply text-[11px] font-semibold uppercase tracking-[.12em] text-soft;
 	}
 
 	.tile-value {
-		@apply text-[26px] font-semibold leading-tight tabular-nums;
+		@apply mt-1 text-[30px] font-semibold leading-none tracking-tight tabular-nums;
+		font-variant-numeric: tabular-nums;
 	}
 
 	.tile-value.good { @apply text-green; }
-	.tile-value.warn { @apply text-yellow; }
-	.tile-value.bad  { @apply text-red; }
 	.tile-value.info { @apply text-accent; }
+	.tile-value.warn { @apply text-yellow; }
+	.tile-value.bad { @apply text-red; }
 
 	.tile-detail {
-		@apply text-xs leading-5 text-soft;
+		@apply mt-2 text-[13px] leading-snug text-soft;
 	}
 
 	.tile-arrow {
-		@apply absolute right-3 top-3 text-soft opacity-0 transition;
+		@apply absolute right-4 top-4 text-faint transition;
+	}
+
+	.tile.is-link:hover {
+		@apply -translate-y-0.5 border-accent/50;
+		box-shadow: 0 16px 40px -18px rgb(var(--c-accent) / .45);
 	}
 
 	.tile.is-link:hover .tile-arrow {
-		@apply text-accent opacity-100;
+		@apply translate-x-0.5 -translate-y-0.5 text-accent;
+	}
+
+	/* Sparkline sits along the tile's bottom edge, behind the detail text. */
+	.tile > .spark {
+		@apply mt-3 h-8 w-full;
 	}
 
 	.spark {
-		@apply h-6 w-full;
-		stroke: theme('colors.soft');
+		@apply block overflow-visible;
+		stroke: rgb(var(--c-muted));
 	}
 
-	.spark.good { stroke: theme('colors.green'); }
-	.spark.info { stroke: theme('colors.accent'); }
-	.spark.warn { stroke: theme('colors.yellow'); }
-	.spark.bad  { stroke: theme('colors.red'); }
+	.spark polyline {
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.spark.good { stroke: rgb(var(--c-good)); }
+	.spark.info { stroke: rgb(var(--c-accent)); }
+	.spark.warn { stroke: rgb(var(--c-warn)); }
+	.spark.bad { stroke: rgb(var(--c-bad)); }
+
+	/* ============================================================== stats */
 
 	.stat-grid {
 		@apply grid grid-cols-2 gap-3;
 	}
 
 	.stat {
-		@apply rounded-lg border border-line bg-panel2 p-3;
+		@apply min-w-0 rounded-[var(--radius)] border border-line bg-panel2 p-4;
 	}
 
 	.stat span {
-		@apply block text-[11px] font-medium uppercase tracking-wider text-soft;
+		@apply block truncate text-[11px] font-semibold uppercase tracking-[.1em] text-soft;
 	}
 
 	.stat strong {
-		@apply mt-1 block text-lg font-semibold tabular-nums;
+		@apply mt-1.5 block truncate text-xl font-semibold tabular-nums tracking-tight;
 	}
 
 	.stat p {
-		@apply mt-0.5 text-[11px] text-soft;
+		@apply mt-1 truncate text-xs text-faint;
 	}
 
-	/* ========================================================== progress */
+	/* ====================================================== progress / ready */
 
 	.progress-wrap {
-		@apply w-full;
+		@apply min-w-0;
 	}
 
 	.progress-label {
@@ -317,105 +428,108 @@ a {
 	}
 
 	.progress {
-		@apply h-1.5 w-full overflow-hidden rounded-full bg-panel2;
+		@apply h-2 w-full overflow-hidden rounded-full bg-panel3;
 	}
 
 	.progress > span {
-		@apply block h-full rounded-full bg-accent transition-[width] duration-500;
+		@apply block h-full rounded-full transition-[width] duration-700;
+		background: linear-gradient(90deg, rgb(var(--c-accent)), rgb(var(--c-info)));
 	}
 
 	.readiness-head {
-		@apply mb-2 flex items-end justify-between gap-3;
+		@apply mb-3 flex items-baseline justify-between gap-3;
 	}
 
 	.readiness-head strong {
-		@apply text-2xl font-semibold tabular-nums;
+		@apply text-2xl font-semibold tabular-nums tracking-tight;
 	}
 
 	.readiness-head span {
 		@apply text-xs text-soft;
 	}
 
-	/* ============================================================ badges */
+	/* ============================================================ pills */
 
 	.pill {
-		@apply inline-flex max-w-full shrink-0 items-center gap-1 rounded-md border px-2 py-0.5 text-[11px] font-semibold;
+		@apply inline-flex max-w-full items-center gap-1.5 rounded-full border border-line bg-panel2 px-2.5 py-0.5 text-xs font-medium text-soft;
+		@apply whitespace-nowrap;
 	}
 
-	.pill.good    { @apply border-green/40 bg-green/10 text-green; }
-	.pill.warn    { @apply border-yellow/40 bg-yellow/10 text-yellow; }
-	.pill.bad     { @apply border-red/40 bg-red/10 text-red; }
-	.pill.info    { @apply border-accent/40 bg-accent/10 text-accent; }
-	.pill.neutral { @apply border-line bg-panel2 text-soft; }
+	.pill > svg {
+		@apply shrink-0;
+	}
+
+	.pill.good { @apply border-green/25 bg-green/10 text-green; }
+	.pill.warn { @apply border-yellow/30 bg-yellow/10 text-yellow; }
+	.pill.bad { @apply border-red/30 bg-red/10 text-red; }
+	.pill.info { @apply border-accent/30 bg-accent/10 text-accent; }
+	.pill.neutral { @apply text-soft; }
 
 	.dot {
-		@apply inline-block h-2 w-2 shrink-0 rounded-full bg-soft;
+		@apply inline-block h-2 w-2 shrink-0 rounded-full bg-faint;
 	}
 
-	.dot.good { @apply bg-green; box-shadow: 0 0 0 3px theme('colors.green' / 18%); }
-	.dot.warn { @apply bg-yellow; box-shadow: 0 0 0 3px theme('colors.yellow' / 18%); }
-	.dot.bad  { @apply bg-red; box-shadow: 0 0 0 3px theme('colors.red' / 18%); }
-	.dot.info { @apply bg-accent; }
+	.dot.good { @apply bg-green; box-shadow: 0 0 0 3px rgb(var(--c-good) / .18); }
+	.dot.warn { @apply bg-yellow; box-shadow: 0 0 0 3px rgb(var(--c-warn) / .18); }
+	.dot.bad { @apply bg-red; box-shadow: 0 0 0 3px rgb(var(--c-bad) / .18); }
+	.dot.info { @apply bg-accent; box-shadow: 0 0 0 3px rgb(var(--c-accent) / .18); }
 
 	.chips {
 		@apply flex flex-wrap gap-1.5;
 	}
 
-	/* =========================================================== buttons */
+	/* ========================================================== buttons */
 
 	.btn {
-		@apply inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-line bg-panel2 px-3 text-xs font-semibold text-text transition;
-		@apply hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent disabled:opacity-50;
+		@apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border border-line bg-panel2 px-3 py-1.5 text-[13px] font-medium text-text transition;
+		@apply hover:border-accent/50 hover:bg-panel3;
 	}
 
 	.btn.primary {
-		@apply border-accent bg-accent text-ink hover:bg-accent/85 hover:text-ink;
+		@apply border-accent bg-accent text-white hover:bg-accent hover:brightness-110;
 	}
 
 	.btn.back {
-		@apply self-start;
+		@apply mb-1 self-start text-soft;
 	}
 
-	.icon-btn {
-		@apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line bg-panel2 text-soft transition;
-		@apply hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent;
-	}
-
-	/* =========================================================== filters */
+	/* ===================================================== filters / search */
 
 	.filters {
-		@apply mb-4 flex flex-wrap items-center gap-2;
+		@apply flex flex-wrap items-center gap-2;
 	}
 
 	.search {
-		@apply flex h-9 min-w-[180px] flex-1 items-center gap-2 rounded-lg border border-line bg-panel2 px-3 text-soft focus-within:border-accent;
+		@apply flex min-w-[220px] flex-1 items-center gap-2 rounded-lg border border-line bg-panel2 px-3 py-2 transition;
+		@apply focus-within:border-accent/60 focus-within:bg-panel3;
 	}
 
 	.search input {
-		@apply w-full min-w-0 border-0 bg-transparent text-sm text-text outline-none placeholder:text-soft;
+		@apply w-full bg-transparent text-sm outline-none placeholder:text-faint;
 	}
 
 	.segmented {
-		@apply inline-flex flex-wrap gap-1 rounded-lg border border-line bg-panel2 p-1;
+		@apply inline-flex max-w-full flex-wrap gap-0.5 rounded-lg border border-line bg-panel2 p-0.5;
 	}
 
 	.segmented button {
-		@apply inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs font-semibold text-soft transition;
-		@apply hover:text-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent;
+		@apply inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-soft transition;
+		@apply hover:text-text;
 	}
 
 	.segmented button.active {
-		@apply bg-accent text-ink;
+		@apply bg-panel3 text-text shadow-sm;
+		box-shadow: inset 0 0 0 1px rgb(var(--c-accent) / .35);
 	}
 
 	.segmented button em {
-		@apply not-italic tabular-nums opacity-70;
+		@apply not-italic tabular-nums text-faint;
 	}
 
-	/* ============================================================= leads */
+	/* ============================================================ leads */
 
 	.lead-list {
-		@apply flex flex-col;
+		@apply m-0 flex list-none flex-col p-0;
 	}
 
 	.lead-list > li + li {
@@ -423,23 +537,23 @@ a {
 	}
 
 	.lead-list a {
-		@apply flex items-center gap-3 py-2.5 transition hover:text-accent;
+		@apply -mx-2 flex items-center gap-3 rounded-lg px-2 py-3 transition hover:bg-panel2;
 	}
 
 	.lead-value {
-		@apply w-16 shrink-0 text-right text-sm font-semibold tabular-nums text-green;
+		@apply w-14 shrink-0 text-right text-xs font-semibold tabular-nums text-soft;
 	}
 
 	.lead-body {
-		@apply min-w-0 flex-1;
+		@apply flex min-w-0 flex-1 flex-col;
 	}
 
 	.lead-body strong {
-		@apply block truncate text-sm font-medium;
+		@apply truncate text-sm font-medium;
 	}
 
 	.lead-body em {
-		@apply block truncate text-xs not-italic text-soft;
+		@apply truncate text-xs not-italic text-soft;
 	}
 
 	.lead-table {
@@ -447,27 +561,17 @@ a {
 	}
 
 	.lead-row {
-		@apply flex flex-wrap items-start gap-3 border-t border-line py-3 transition first:border-t-0 hover:bg-panel2;
+		@apply flex flex-wrap items-start gap-3 border-t border-line py-3.5 transition first:border-t-0;
+		@apply -mx-2 rounded-lg px-2 hover:bg-panel2;
 	}
 
-	/* Replaces .lead-row-value. A price is variable-width ("$120-160/hr" does
-	   not fit 64px) and often absent, so it moved into .lead-row-meta as a
-	   Pill; age is short, always comparable, and the thing that was broken. */
 	.lead-row-age {
 		@apply w-16 shrink-0 pt-0.5 text-right text-xs font-semibold tabular-nums text-soft;
 	}
 
-	.lead-row-age.tone-good {
-		@apply text-green;
-	}
-
-	.lead-row-age.tone-info {
-		@apply text-accent;
-	}
-
-	.lead-row-age.tone-warn {
-		@apply text-yellow;
-	}
+	.lead-row-age.tone-good { @apply text-green; }
+	.lead-row-age.tone-info { @apply text-accent; }
+	.lead-row-age.tone-warn { @apply text-yellow; }
 
 	.lead-row-body {
 		@apply min-w-[200px] flex-1;
@@ -486,69 +590,73 @@ a {
 	}
 
 	.pager {
-		@apply flex items-center justify-between gap-3;
+		@apply mt-4 flex items-center justify-between gap-3 text-xs text-soft;
 	}
 
-	/* ============================================================ issues */
+	/* ========================================================== attention */
 
 	.issue-list {
-		@apply flex flex-col;
+		@apply flex flex-col gap-2.5;
 	}
 
 	.issue {
-		@apply flex items-start gap-3 border-t border-line py-3 first:border-t-0 first:pt-0;
+		@apply flex items-start gap-3 rounded-[var(--radius)] border border-line bg-panel2 p-3.5 transition;
+	}
+
+	.issue > .pill {
+		@apply mt-0.5;
 	}
 
 	.issue.is-link {
-		@apply transition hover:text-accent;
+		@apply hover:border-accent/50 hover:bg-panel3;
 	}
 
 	.issue strong {
-		@apply block text-sm font-medium leading-5;
+		@apply block text-sm font-semibold leading-snug;
 	}
 
 	.issue p {
-		@apply mt-1 text-xs leading-5 text-soft;
+		@apply mt-1 text-[13px] leading-relaxed text-soft;
 	}
 
-	/* ============================================================ phases */
+	/* ========================================================= cycle phases */
 
 	.phase-row {
-		@apply grid gap-2 sm:grid-cols-3 lg:grid-cols-5;
+		@apply grid grid-cols-2 gap-2.5 sm:grid-cols-5;
 	}
 
 	.phase {
-		@apply rounded-lg border border-line bg-panel2 p-3;
+		@apply flex min-w-0 flex-col gap-1.5 rounded-[var(--radius)] border border-line bg-panel2 p-3.5;
 	}
 
+	.phase > svg {
+		@apply text-green;
+	}
+
+	.phase.warn > svg { @apply text-yellow; }
+	.phase.bad > svg { @apply text-red; }
+	.phase.good { @apply border-green/20; }
+
 	.phase strong {
-		@apply mt-2 block text-xs font-semibold;
+		@apply text-sm font-semibold;
 	}
 
 	.phase p {
-		@apply mt-0.5 truncate text-[11px] text-soft;
+		@apply break-words text-xs text-soft;
 	}
 
-	.phase.good svg { @apply text-green; }
-	.phase.warn svg { @apply text-yellow; }
-	.phase.bad  svg { @apply text-red; }
-	.phase.info svg { @apply text-accent; }
-
-	.phase.bad { @apply border-red/40; }
-
-	/* ======================================================== disclosure */
+	/* ========================================================== disclosure */
 
 	.disclosure {
-		@apply overflow-hidden rounded-xl border border-line bg-panel;
+		@apply min-w-0 overflow-hidden rounded-[var(--radius-lg)] border border-line bg-panel;
 	}
 
 	.disclosure > button {
-		@apply flex w-full items-center gap-2.5 px-4 py-3 text-left transition hover:bg-panel2;
-		@apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent;
+		@apply flex w-full items-center gap-3 px-5 py-4 text-left transition hover:bg-panel2;
 	}
 
 	.disclosure .chevron {
-		@apply shrink-0 text-soft transition-transform duration-200;
+		@apply shrink-0 text-faint transition-transform duration-200;
 	}
 
 	.disclosure.open .chevron {
@@ -556,29 +664,30 @@ a {
 	}
 
 	.disclosure > button > span {
-		@apply flex-1;
+		@apply flex min-w-0 flex-1 flex-col;
 	}
 
 	.disclosure > button strong {
-		@apply block truncate text-sm font-semibold;
+		@apply truncate text-sm font-semibold;
 	}
 
 	.disclosure > button em {
-		@apply block truncate text-xs not-italic text-soft;
+		@apply mt-0.5 truncate text-xs not-italic text-soft;
 	}
 
 	.disclosure .count {
-		@apply shrink-0 rounded-md border border-line bg-panel2 px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-soft;
+		@apply shrink-0 rounded-full border border-line bg-panel2 px-2 py-0.5 text-xs font-semibold tabular-nums text-soft;
 	}
 
 	.disclosure-body {
-		@apply border-t border-line px-4 py-4;
+		@apply border-t border-line px-5 py-5;
+		animation: rise .25s var(--ease) both;
 	}
 
-	/* =========================================================== content */
+	/* ============================================================== text */
 
 	.prose {
-		@apply text-sm leading-6 text-soft;
+		@apply text-[14px] leading-relaxed text-soft;
 	}
 
 	.prose.lead-in {
@@ -586,116 +695,124 @@ a {
 	}
 
 	.muted {
-		@apply text-xs text-soft;
+		@apply text-[13px] leading-relaxed text-soft;
 	}
 
 	.error-text {
-		@apply mt-2 text-sm leading-6 text-red;
+		@apply text-red;
 	}
 
+	.empty {
+		@apply rounded-[var(--radius)] border border-dashed border-line px-4 py-8 text-center text-sm text-soft;
+	}
+
+	.banner {
+		@apply flex items-center gap-2.5 rounded-[var(--radius)] border px-4 py-3 text-sm font-medium;
+	}
+
+	.banner.bad { @apply border-red/30 bg-red/10 text-red; }
+	.banner.warn { @apply border-yellow/30 bg-yellow/10 text-yellow; }
+
 	.bullets {
-		@apply flex flex-col gap-2;
+		@apply m-0 flex list-none flex-col gap-2.5 p-0 text-sm leading-relaxed text-soft;
 	}
 
 	.bullets li {
-		@apply relative pl-4 text-sm leading-6 text-soft;
+		@apply relative pl-5;
 	}
 
 	.bullets li::before {
 		content: '';
-		@apply absolute left-0 top-[11px] h-1 w-1 rounded-full bg-accent;
-	}
-
-	.empty {
-		@apply rounded-lg border border-dashed border-line px-4 py-5 text-center text-xs text-soft;
+		@apply absolute left-0 top-[0.6em] h-1.5 w-1.5 rounded-full bg-accent;
 	}
 
 	.legend {
-		@apply flex flex-wrap gap-x-5 gap-y-2 text-xs text-soft;
+		@apply flex flex-wrap gap-x-4 gap-y-2 text-xs text-soft;
 	}
 
-	.legend span {
+	.legend span,
+	.legend a {
 		@apply inline-flex items-center gap-1.5;
 	}
 
-	.legend a {
-		@apply underline decoration-line underline-offset-4 transition hover:text-accent;
-	}
+	/* ========================================================== code/kv */
 
 	.code-block {
-		@apply max-h-72 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-line bg-ink p-3 font-mono text-xs leading-5 text-soft;
+		@apply overflow-x-auto rounded-[var(--radius)] border border-line bg-ink p-4 font-mono text-xs leading-relaxed text-soft;
 	}
 
 	.code-block.error {
-		@apply border-red/40 text-red;
+		@apply border-red/30 text-red;
 	}
 
 	.keyvalue {
-		@apply flex flex-col;
+		@apply m-0 grid gap-px overflow-hidden rounded-[var(--radius)] border border-line bg-line text-sm;
 	}
 
 	.keyvalue > div {
-		@apply flex items-baseline justify-between gap-4 border-t border-line py-2 first:border-t-0 first:pt-0;
+		@apply grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-3 bg-panel px-4 py-2.5;
 	}
 
 	.keyvalue dt {
-		@apply shrink-0 text-xs text-soft;
+		@apply truncate text-soft;
 	}
 
 	.keyvalue dd {
-		@apply min-w-0 truncate text-right text-xs font-medium tabular-nums;
+		@apply m-0 min-w-0 break-words font-medium tabular-nums;
 	}
 
 	.keyvalue dd a {
-		@apply text-accent underline decoration-line underline-offset-4;
+		@apply underline decoration-line underline-offset-4 hover:text-accent;
 	}
 
-	/* The tip address. Rendered whole and monospaced with the copy button
-	   beside it: a truncated or wrapped receive address is a mistyped one, and
-	   USDT sent to a mistyped address does not come back. It stays selectable
-	   on narrow screens by scrolling rather than ellipsing. */
 	.tip-address {
-		@apply flex items-center gap-3 rounded-lg border border-line bg-black/20 p-3;
+		@apply flex items-center gap-2 rounded-[var(--radius)] border border-accent/30 bg-accent/5 p-2 pl-3.5;
 	}
 
 	.tip-address code {
-		@apply min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-xs;
+		@apply min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-[13px] text-text;
+		scrollbar-width: thin;
 	}
 
 	.mini-kv {
-		@apply mt-3 flex flex-col gap-2;
+		@apply m-0 flex flex-col gap-1 text-xs;
 	}
 
 	.mini-kv dt {
-		@apply text-[11px] font-medium uppercase tracking-wider text-soft;
+		@apply text-soft;
 	}
 
 	.mini-kv dd {
-		@apply mt-0.5 text-xs leading-5;
+		@apply m-0 font-medium tabular-nums;
 	}
 
 	.mini-kv dd.accent {
-		@apply font-semibold text-green;
+		@apply text-accent;
 	}
 
-	/* ========================================================== research */
+	/* ============================================= research / engine cards */
+
+	.service,
+	.suggestion {
+		@apply flex min-w-0 flex-col gap-3 rounded-[var(--radius)] border border-line bg-panel2 p-4 transition hover:border-accent/30;
+	}
 
 	.service .service-head,
 	.suggestion .suggestion-head {
-		@apply flex items-start justify-between gap-3;
+		@apply flex flex-wrap items-start justify-between gap-2;
 	}
 
 	.service .service-head strong,
 	.suggestion .suggestion-head strong {
-		@apply min-w-0 text-sm font-semibold;
+		@apply text-sm font-semibold leading-snug;
 	}
 
 	.service > .prose {
-		@apply mt-1.5;
+		@apply text-[13px];
 	}
 
 	.idea-head {
-		@apply flex flex-wrap items-start justify-between gap-3;
+		@apply flex items-start justify-between gap-3;
 	}
 
 	.idea-head strong {
@@ -707,53 +824,51 @@ a {
 	}
 
 	.idea-price {
-		@apply shrink-0 text-right;
+		@apply text-right;
 	}
 
 	.idea-price span {
-		@apply block text-sm font-semibold text-green;
+		@apply block text-sm font-semibold tabular-nums text-green;
 	}
 
 	.idea-price em {
 		@apply block text-[11px] not-italic text-soft;
 	}
 
-	.suggestion {
-		@apply rounded-lg border border-line bg-panel2 p-3;
-	}
-
 	.suggestion .prose {
-		@apply mt-1.5;
+		@apply text-[13px];
 	}
 
 	.suggestion code {
-		@apply mt-2 inline-block rounded-md border border-line bg-ink px-2 py-1 font-mono text-[11px] text-yellow;
+		@apply rounded bg-ink px-1.5 py-0.5 font-mono text-[12px] text-accent;
 	}
 
 	.suggestion .bullets {
-		@apply mt-3;
+		@apply text-[13px];
 	}
 
 	.reference {
-		@apply flex items-start justify-between gap-3 rounded-lg border border-line bg-panel2 p-3 transition hover:border-accent/60;
+		@apply flex min-w-0 flex-col gap-1 rounded-[var(--radius)] border border-line bg-panel2 p-4 transition hover:border-accent/30;
 	}
 
 	.reference strong {
-		@apply block text-sm font-medium;
+		@apply truncate text-sm font-semibold;
 	}
 
 	.reference p {
-		@apply mt-1 text-xs leading-5 text-soft;
+		@apply text-xs leading-relaxed text-soft;
 	}
 
-	/* ============================================================ engine */
+	.route {
+		@apply flex min-w-0 flex-col gap-3 rounded-[var(--radius)] border border-line bg-panel2 p-4;
+	}
 
 	.route-head {
-		@apply flex items-start gap-2.5;
+		@apply flex items-start gap-3;
 	}
 
 	.route-icon {
-		@apply grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-line bg-panel2 text-accent;
+		@apply grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent/10 text-accent;
 	}
 
 	.route-head strong {
@@ -765,19 +880,21 @@ a {
 	}
 
 	.route-model {
-		@apply mt-3 block break-all rounded-md border border-line bg-ink px-2 py-1.5 font-mono text-[11px] text-cyan;
+		@apply truncate font-mono text-xs text-text;
 	}
 
 	.route > .prose {
-		@apply mt-2.5;
+		@apply text-[13px];
 	}
 
 	.route-secret {
-		@apply mt-2.5 inline-block rounded-md border border-line bg-panel2 px-2 py-0.5 font-mono text-[11px] text-soft;
+		@apply font-mono text-[11px] text-faint;
 	}
 
+	/* ============================================================ actions */
+
 	.change {
-		@apply rounded-lg border border-line bg-panel2 p-3;
+		@apply rounded-[var(--radius)] border border-line bg-panel2 p-4;
 	}
 
 	.change code {
@@ -785,86 +902,89 @@ a {
 	}
 
 	.change p {
-		@apply mt-1 text-xs leading-5 text-soft;
+		@apply mt-2 text-[13px] leading-relaxed text-soft;
 	}
 
 	.action {
-		@apply flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-line bg-panel2 p-3;
+		@apply flex flex-col gap-1 rounded-[var(--radius)] border border-line bg-panel2 p-4;
+		@apply border-l-[3px] border-l-green;
 	}
 
 	.action.bad {
-		@apply border-red/40;
+		@apply border-l-red;
 	}
 
 	.action-platform {
-		@apply inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold;
+		@apply text-xs font-semibold uppercase tracking-[.1em] text-soft;
 	}
 
-	.action.good .action-platform svg { @apply text-green; }
-	.action.bad  .action-platform svg { @apply text-red; }
-
 	.action p {
-		@apply min-w-0 flex-1 truncate text-xs text-soft;
+		@apply text-sm leading-relaxed text-soft;
 	}
 
 	.action a {
-		@apply shrink-0 text-xs text-accent underline decoration-line underline-offset-4;
+		@apply text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent;
 	}
 
 	.action em {
-		@apply shrink-0 text-xs font-semibold not-italic tabular-nums text-green;
+		@apply text-xs not-italic text-faint;
 	}
 
-	/* ============================================================ health */
+	/* ========================================================== modules */
 
 	.module-list {
-		@apply flex flex-col;
+		@apply grid gap-2.5 sm:grid-cols-2;
 	}
 
 	.module {
-		@apply flex items-center gap-2.5 border-t border-line py-2 first:border-t-0 first:pt-0;
+		@apply flex min-w-0 flex-col gap-1 rounded-[var(--radius)] border border-line bg-panel2 p-3.5;
 	}
 
 	.module strong {
-		@apply min-w-0 flex-1 truncate text-sm font-medium;
+		@apply truncate text-sm font-semibold;
 	}
 
 	.secret {
-		@apply rounded-lg border border-line bg-panel2 p-3;
+		@apply flex min-w-0 flex-col gap-2 rounded-[var(--radius)] border border-line bg-panel2 p-3.5;
 	}
 
 	.secret-head {
-		@apply mb-2 flex items-center justify-between gap-3;
+		@apply flex flex-wrap items-center justify-between gap-2;
 	}
 
 	.secret-head strong {
-		@apply min-w-0 truncate text-sm font-medium;
+		@apply truncate text-sm font-semibold;
+	}
+
+	.secret code {
+		@apply break-all font-mono text-xs text-soft;
 	}
 
 	.secret code.missing {
-		@apply mt-2 block break-all font-mono text-[11px] text-yellow;
+		@apply text-faint line-through decoration-faint;
 	}
 
+	/* ============================================================ policy */
+
 	.policy {
-		@apply flex flex-col gap-3;
+		@apply grid gap-4 sm:grid-cols-2;
 	}
 
 	.policy-label {
-		@apply mb-1.5 block text-[11px] font-semibold uppercase tracking-wider;
+		@apply mb-2 block text-[11px] font-semibold uppercase tracking-[.12em];
 	}
 
 	.policy-label.good { @apply text-green; }
-	.policy-label.bad  { @apply text-red; }
+	.policy-label.bad { @apply text-red; }
 
-	/* ============================================================== json */
+	/* ===================================================== JSON explorer */
 
 	.json-branch > button {
-		@apply flex w-full items-center gap-2 rounded-md py-1 text-left transition hover:text-accent;
-		@apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent;
+		@apply flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left font-mono text-[13px] transition hover:bg-panel2;
 	}
 
 	.json-branch .chevron {
-		@apply shrink-0 text-soft transition-transform duration-150;
+		@apply shrink-0 text-faint transition-transform duration-200;
 	}
 
 	.json-branch.open > button > .chevron {
@@ -872,43 +992,72 @@ a {
 	}
 
 	.json-children {
-		@apply ml-2 flex flex-col gap-0.5 border-l border-line pl-3;
+		@apply ml-3 flex flex-col border-l border-line pl-3;
 	}
 
 	.json-row {
-		@apply flex flex-wrap items-baseline gap-x-2 py-0.5;
+		@apply flex min-w-0 flex-wrap items-baseline gap-2 px-2 py-1 font-mono text-[13px];
 	}
 
 	.json-row.block {
-		@apply flex-col items-stretch gap-1.5 py-1.5;
+		@apply flex-col items-stretch;
 	}
 
 	.json-key {
-		@apply shrink-0 font-mono text-[11px] font-semibold text-soft;
+		@apply shrink-0 text-accent;
 	}
 
 	.json-meta {
-		@apply font-mono text-[11px] text-soft opacity-70;
+		@apply text-xs text-faint;
 	}
 
 	.json-val {
-		@apply min-w-0 break-words font-mono text-[11px];
+		@apply min-w-0 break-all text-text;
 	}
 
-	.json-val.str  { @apply text-text; }
-	.json-val.num  { @apply text-cyan; }
-	.json-val.null { @apply text-soft italic opacity-70; }
-	.json-val.true { @apply text-green; }
-	.json-val.false { @apply text-yellow; }
+	.json-val.null { @apply text-faint italic; }
+	.json-val.num { @apply text-yellow; }
+	.json-val.bool { @apply text-cyan; }
+	.json-val.str { @apply text-green; }
+	.json-val a { @apply underline decoration-line underline-offset-4 hover:text-accent; }
 
-	.json-val a {
-		@apply text-accent underline decoration-line underline-offset-2;
+	/* ========================================================== nav drawer */
+
+	.nav-open .nav-scrim {
+		animation: fade .2s ease both;
 	}
+
+	/* Tailwind `.badge`/`.pill` reuse: keep the dot-badge visually centred. */
+	.live .dot {
+		@apply mt-1.5;
+	}
+}
+
+/* ==========================================================================
+   Motion
+   ========================================================================== */
+
+@keyframes rise {
+	from { opacity: 0; transform: translateY(6px); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes fade {
+	from { opacity: 0; }
+	to { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
 	*, *::before, *::after {
 		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
 		transition-duration: 0.01ms !important;
+	}
+}
+
+/* Phones: tighter gutters and a single column for the tile row. */
+@media (max-width: 380px) {
+	.tile-value {
+		@apply text-2xl;
 	}
 }

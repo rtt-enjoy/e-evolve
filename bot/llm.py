@@ -326,34 +326,48 @@ class LLMClient:
 		max_tokens: int = 4096,
 		temperature: float = 0.7,
 	) -> LLMResponse:
-		"""Route to role-appropriate provider (upgrade→gemini, research→openrouter, post→groq).
-        Falls back to complete() with default provider if role provider unavailable."""
-		preferred = ROLE_PROVIDER.get(role)
+		"""Route to the role's provider (Atria for every role, OpenRouter once it is
+        absent or spent). Falls back to complete() with the default provider if
+        the role's provider has no key."""
+		preferred = self.provider_for_role(role)
 		if preferred:
-			key_map = {
-				"atria":      "" if self._atria_disabled else self._atria_key,
-				"gemini":     self._gemini_key,
-				"groq":       self._groq_key,
-				"openrouter": self._openrouter_key,
-				"anthropic":  self._anthropic_key,
-			}
-			if preferred == "atria" and not key_map["atria"]:
-				# Atria absent or spent: the role's own OpenRouter chain still applies.
-				preferred = "openrouter"
-			if key_map.get(preferred):
-				log.info("Role=%s → provider=%s", role, preferred)
-				old_provider = self.provider
-				old_role     = self._current_role
-				self.provider     = preferred
-				self._current_role = role
-				try:
-					return self.complete(prompt, system=system, max_tokens=max_tokens,
-										temperature=temperature)
-				finally:
-					self.provider     = old_provider
-					self._current_role = old_role
+			log.info("Role=%s → provider=%s", role, preferred)
+			old_provider = self.provider
+			old_role     = self._current_role
+			self.provider     = preferred
+			self._current_role = role
+			try:
+				return self.complete(prompt, system=system, max_tokens=max_tokens,
+									temperature=temperature)
+			finally:
+				self.provider     = old_provider
+				self._current_role = old_role
 		return self.complete(prompt, system=system, max_tokens=max_tokens,
 							 temperature=temperature)
+
+	def provider_for_role(self, role: str) -> str | None:
+		"""
+        The provider that will actually serve `role` right now, or None.
+
+        ROLE_PROVIDER names Atria for every role, but that is the *preference*.
+        Without ATRIA_API_KEY, or once its quota is spent, the role is served by
+        its OpenRouter chain -- and the dashboard must say so rather than
+        advertise an engine that is not running.
+        """
+		preferred = ROLE_PROVIDER.get(role)
+		if not preferred:
+			return None
+		key_map = {
+			"atria":      "" if self._atria_disabled else self._atria_key,
+			"gemini":     self._gemini_key,
+			"groq":       self._groq_key,
+			"openrouter": self._openrouter_key,
+			"anthropic":  self._anthropic_key,
+		}
+		if preferred == "atria" and not key_map["atria"]:
+			# Atria absent or spent: the role's own OpenRouter chain still applies.
+			preferred = "openrouter"
+		return preferred if key_map.get(preferred) else None
 
 	def complete_json(
 		self,
@@ -649,6 +663,8 @@ class LLMClient:
 				raise RuntimeError(f"429 quota_exceeded from atria: {body}")
 			raise RuntimeError(f"429 rate_limit_exceeded from atria: {body}")
 		if rsp.status_code == 404:
+			# Atria serves one model; if it is gone, every later call would 404 too.
+			self._atria_disabled = True
 			raise RuntimeError(f"model_not_found on atria: {model}: {rsp.text[:200]}")
 		rsp.raise_for_status()
 		data = rsp.json()

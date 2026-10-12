@@ -64,11 +64,11 @@ def main() -> int:
 			if f != "code_techs"
 		]
 	status["llm_provider"] = llm.provider
-	# Populate per-role provider map for dashboard display
-	from bot.llm import ROLE_PROVIDER
+	# Per-role provider that will actually serve this cycle (Atria, or the
+	# OpenRouter fallback when ATRIA_API_KEY is absent), for dashboard display
 	status["llm_roles"] = {
-		role: p for role, p in ROLE_PROVIDER.items()
-		if role in ("upgrade", "research", "post") and getattr(llm, f"_{p}_key", "")
+		role: p for role in ("upgrade", "research", "post")
+		if (p := llm.provider_for_role(role))
 	}
 
 	# ── 2. Commands ───────────────────────────────────────────────────────────

@@ -25,12 +25,12 @@ VERSION_FILE = Path("version.txt")
 # intentionally not feature activators, so their presence cannot trigger
 # external side effects.
 FEATURE_MAP: dict[str, list[str]] = {
+	"llm_atria":       ["ATRIA_API_KEY"],
 	"llm_anthropic":   ["ANTHROPIC_API_KEY"],
 	"llm_gemini":      ["GEMINI_API_KEY"],
 	"llm_openrouter":  ["OPENROUTER_API_KEY"],
 	"llm_groq":        ["GROQ_API_KEY"],
 	"llm_cerebras":    ["CEREBRAS_API_KEY"],
-	"llm_atria":       ["ATRIA_API_KEY"],
 	"usdt_wallet":     ["USDT_WALLET_ADDRESS"],
 }
 
@@ -55,6 +55,10 @@ def _role_workflow_spec() -> dict[str, dict[str, str]]:
 			"model": llm._ATRIA_MODELS[0] if provider == "atria" else (chain[0] if provider == "openrouter" and chain else ""),
 			"purpose": purpose,
 		}
+		if provider == "atria" and chain:
+			# Where the role lands when Atria is absent or its quota is spent.
+			spec[role]["fallback_provider"] = "openrouter"
+			spec[role]["fallback_model"] = chain[0]
 	return spec
 
 
@@ -586,12 +590,23 @@ def _llm_workflows(
 		keys = [secret] if secret else []
 		if provider == "atria":
 			keys.append("OPENROUTER_API_KEY")
+
+		def _present(k: str) -> bool:
+			return bool(os.getenv(k, "").strip() or k in configured)
+
+		# Built is not live: a role routed to Atria with no ATRIA_API_KEY is
+		# really served by its fallback, and the dashboard must say which.
+		primary_active = bool(
+			(secret and _present(secret)) or feature in active_set
+		)
+		serving = provider
+		if not primary_active and cfg.get("fallback_provider") and _present("OPENROUTER_API_KEY"):
+			serving = cfg["fallback_provider"]
 		workflows[role] = {
 			**cfg,
-			"active": bool(
-				any(os.getenv(k, "").strip() or k in configured for k in keys)
-				or feature in active_set
-			),
+			"active": bool(any(_present(k) for k in keys) or feature in active_set),
+			"primary_active": primary_active,
+			"serving": serving,
 			"secret": secret,
 		}
 	return workflows

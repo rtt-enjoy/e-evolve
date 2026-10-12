@@ -12,19 +12,27 @@ Repo → Settings → Secrets and variables → Actions → **New repository sec
 
 | Secret               | Source                                                        | Cost                          |
 |----------------------|---------------------------------------------------------------|-------------------------------|
-| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | **Main engine** — see below   |
+| `ATRIA_API_KEY`      | [atria-asi.ai](https://atria-asi.ai)                          | **Main engine** — see below   |
+| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | Free — first fallback         |
 | `GROQ_API_KEY`       | [console.groq.com](https://console.groq.com)                  | Free                          |
 | `GEMINI_API_KEY`     | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier                     |
 | `CEREBRAS_API_KEY`   | [cloud.cerebras.ai](https://cloud.cerebras.ai/)               | Free tier                     |
 | `ANTHROPIC_API_KEY`  | [console.anthropic.com](https://console.anthropic.com)        | Paid                          |
 
-Only one is required.
+Only one is required, but set `ATRIA_API_KEY` **and** `OPENROUTER_API_KEY`.
 
-**Main AI engine: free OpenRouter models, no credits required.** `bot/llm.py`
-routes every role through a zero-cost OpenRouter model chain — `openai/gpt-oss-20b:free`
-by default, `nvidia/nemotron-3-ultra-550b-a55b:free` for research (long
-context, strongest reasoning), stepping down through more free models on
-429/rate-limit before ever failing a cycle. No OpenRouter credits are needed.
+**Main AI engine: Atria (`Atria-Dawn-Preview`), roughly 1B free tokens.**
+`bot/llm.py` sends every role to Atria first: evolution proposals (`upgrade`),
+research and lead briefs (`research`), and article and newsletter drafting
+(`post`). On a 401, a 404, or a quota-spent 429, Atria is switched off for the
+rest of that cycle and each role falls through to its own zero-cost
+OpenRouter chain (led by the `openrouter/free` auto-router), so a spent quota
+never fails a cycle. A per-minute 429 that sends `Retry-After` only skips
+Atria for that one call.
+
+**Without `ATRIA_API_KEY` nothing uses Atria.** Every role then runs on the
+OpenRouter fallback, and the dashboard's Engine panel shows the roles as
+`fallback`, not `active`. Check that panel after adding the secret.
 
 **Know the daily ceiling.** OpenRouter's free (`:free`) models are capped at
 20 requests/minute and only **50 requests/day** unless the account has ever
@@ -39,10 +47,10 @@ add at least one fallback key:
   requests/day per model (verify current limit).
 - `GROQ_API_KEY` — free tier, no card, fast inference.
 
-`bot/llm.py` automatically steps down through the OpenRouter free-model chain
-and then falls back to the next configured provider on rate limits, so adding
-any of these only increases headroom — it never changes routing when
-OpenRouter has capacity.
+`bot/llm.py` automatically steps down from Atria to the OpenRouter free-model
+chain, and then to the next configured provider on rate limits. Adding any of
+these only increases headroom. It never changes routing while Atria has
+capacity.
 
 Use the same variable names in both places:
 

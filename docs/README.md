@@ -28,7 +28,7 @@ Blocked API-key use:
 
 1. Clone the repository.
 2. Install dependencies with `pip install -r requirements.txt`.
-3. Add one LLM key, such as `GROQ_API_KEY`, `GEMINI_API_KEY`, or `OPENROUTER_API_KEY`.
+3. Add `ATRIA_API_KEY` (the main engine) plus `OPENROUTER_API_KEY` as its fallback. Any one LLM key is enough to run.
 4. Run `python -m bot.main` locally when LLM keys are available.
 
 ## Features

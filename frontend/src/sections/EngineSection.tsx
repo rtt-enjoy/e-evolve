@@ -8,7 +8,12 @@ export default function EngineSection({ status }: { status: Status }) {
 	const evolution = status.last_evolution || {};
 	const actions = status.last_earning?.actions || [];
 	const tone = evolutionTone(status);
-	const models = new Set(workflows.map(([, workflow]) => workflow.model).filter(Boolean));
+	// The main engine is the model every role prefers. It only counts as live when
+	// its key is configured; otherwise the roles run on their fallback chain.
+	const mainModel = workflows.find(([, workflow]) => workflow.model)?.[1].model || 'none';
+	const onFallback = workflows.filter(([, workflow]) => workflow.active && workflow.primary_active === false);
+	const mainLive = workflows.length > 0 && workflows.every(([, workflow]) => workflow.primary_active !== false);
+	const mainSecret = workflows.find(([, workflow]) => workflow.secret)?.[1].secret;
 
 	return (
 		<>
@@ -18,8 +23,13 @@ export default function EngineSection({ status }: { status: Status }) {
 			/>
 
 			<div className="tile-row">
-				<Tile label="Provider" value={status.llm_provider || 'none'} detail={`${workflows.length} roles routed`} tone="info" />
-				<Tile label="Distinct models" value={String(models.size)} detail="across all roles" tone="neutral" />
+				<Tile
+					label="Main engine"
+					value={mainModel}
+					detail={mainLive ? 'live on every role' : `${mainSecret || 'key'} missing — ${onFallback.length} of ${workflows.length} roles on fallback`}
+					tone={mainLive ? 'good' : 'warn'}
+				/>
+				<Tile label="Serving now" value={status.llm_provider || 'none'} detail={`${workflows.length} roles routed, OpenRouter fallback`} tone="info" />
 				<Tile label="Articles today" value={String(status.article_daily?.published || 0)} detail={status.article_daily?.date || 'no date'} tone={status.article_daily?.published ? 'good' : 'neutral'} />
 				<Tile label="Evolution" value={evolution.error ? 'failed' : 'Codex-owned'} detail={`v${evolution.version_bumped_to || status.version || '0.0.0'}`} tone={tone === 'info' ? 'neutral' : tone} />
 			</div>
@@ -33,11 +43,16 @@ export default function EngineSection({ status }: { status: Status }) {
 								<span className="route-icon"><Bot size={16} /></span>
 								<div className="min-w-0">
 									<strong>{featureLabel(role)}</strong>
-									<em>{workflow.provider || 'unknown provider'}</em>
+									<em>{workflow.serving || workflow.provider || 'unknown provider'}</em>
 								</div>
-								<Pill tone={workflow.active ? 'good' : 'warn'}>{workflow.active ? 'active' : 'idle'}</Pill>
+								<Pill tone={!workflow.active ? 'warn' : workflow.primary_active === false ? 'warn' : 'good'}>
+									{!workflow.active ? 'idle' : workflow.primary_active === false ? 'fallback' : 'active'}
+								</Pill>
 							</div>
 							<code className="route-model">{workflow.model || 'no model configured'}</code>
+							{workflow.fallback_model ? (
+								<span className="route-secret">fallback → {workflow.fallback_provider}: {workflow.fallback_model}</span>
+							) : null}
 							<p className="prose">{workflow.purpose || 'No purpose recorded.'}</p>
 							{workflow.secret ? <span className="route-secret">{workflow.secret}</span> : null}
 						</Card>

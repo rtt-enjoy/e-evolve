@@ -348,6 +348,12 @@ export type Status = {
 		purpose?: string;
 		active?: boolean;
 		secret?: string;
+		/** Where the role lands when Atria is absent or its quota is spent. */
+		fallback_provider?: string;
+		fallback_model?: string;
+		/** False when the preferred provider's key is missing: the fallback is serving. */
+		primary_active?: boolean;
+		serving?: string;
 	}>;
 	article_daily?: {
 		date?: string;

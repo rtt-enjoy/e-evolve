@@ -5080,3 +5080,64 @@ class TestAtriaPrimaryWithOpenRouterFallback(unittest.TestCase):
 	def test_atria_secret_is_a_feature(self):
 		from bot.status import FEATURE_MAP
 		self.assertEqual(FEATURE_MAP["llm_atria"], ["ATRIA_API_KEY"])
+
+	def test_atria_is_the_main_engine_for_every_cycle_role(self):
+		"""Evolution (upgrade), research and articles (post) all prefer Atria."""
+		for role in ("upgrade", "research", "post"):
+			self.assertEqual(llm_module.ROLE_PROVIDER[role], "atria", role)
+
+	def test_provider_for_role_reports_who_actually_serves(self):
+		self.assertEqual(self._client(atria=True).provider_for_role("post"), "atria")
+		os.environ.pop("ATRIA_API_KEY", None)
+		self.assertEqual(self._client(atria=False).provider_for_role("post"), "openrouter")
+		os.environ.pop("OPENROUTER_API_KEY", None)
+		os.environ["GROQ_API_KEY"] = "groq-test"
+		self.assertIsNone(llm_module.LLMClient().provider_for_role("post"))
+
+	def test_spent_atria_reports_openrouter_for_the_role(self):
+		client = self._client(atria=True)
+		client._atria_disabled = True
+		self.assertEqual(client.provider_for_role("upgrade"), "openrouter")
+
+	def test_model_404_latches_atria_off(self):
+		client = self._client(atria=True)
+		fake, calls = self._post([self._resp(404, text="no such model")])
+		with mock.patch("requests.post", side_effect=fake):
+			first = client.complete_for_role("research", "hi")
+			second = client.complete_for_role("research", "hi")
+		self.assertEqual((first.provider, second.provider), ("openrouter", "openrouter"))
+		self.assertEqual(len(calls["atria"]), 1)
+		self.assertTrue(client._atria_disabled)
+
+
+class TestDashboardNamesTheEngineThatServes(unittest.TestCase):
+	"""Built is not live: a role routed to Atria with no key must not read as Atria."""
+
+	def setUp(self):
+		self._saved = {k: os.environ.pop(k, None) for k in ("ATRIA_API_KEY", "OPENROUTER_API_KEY")}
+
+	def tearDown(self):
+		for k, v in self._saved.items():
+			os.environ.pop(k, None)
+			if v is not None:
+				os.environ[k] = v
+
+	def test_without_atria_key_roles_show_the_fallback(self):
+		from bot.status import _llm_workflows
+		flows = _llm_workflows([], {"OPENROUTER_API_KEY"})
+		for role, flow in flows.items():
+			self.assertEqual(flow["model"], "Atria-Dawn-Preview", role)
+			self.assertFalse(flow["primary_active"], role)
+			self.assertEqual(flow["serving"], "openrouter", role)
+			self.assertTrue(flow["active"], role)
+			self.assertEqual(
+				flow["fallback_model"],
+				llm_module._OPENROUTER_MODELS_BY_ROLE.get(role, llm_module._OPENROUTER_MODELS)[0],
+			)
+
+	def test_with_atria_key_roles_are_served_by_atria(self):
+		from bot.status import _llm_workflows
+		flows = _llm_workflows([], {"ATRIA_API_KEY", "OPENROUTER_API_KEY"})
+		for role, flow in flows.items():
+			self.assertTrue(flow["primary_active"], role)
+			self.assertEqual(flow["serving"], "atria", role)

@@ -38,9 +38,10 @@ Keep it public for free GitHub Pages.
 
 | Secret               | Source                                                        | Cost                  |
 |----------------------|---------------------------------------------------------------|-----------------------|
+| `ATRIA_API_KEY`      | [atria-asi.ai](https://atria-asi.ai)                          | Free — main engine    |
 | `GROQ_API_KEY`       | [console.groq.com](https://console.groq.com)                  | Free                  |
 | `GEMINI_API_KEY`     | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier             |
-| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | Free models available |
+| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | Free — Atria fallback |
 | `ANTHROPIC_API_KEY`  | [console.anthropic.com](https://console.anthropic.com)        | Paid (higher quality) |
 
 For local runs, copy `.env.example` to `.env` and fill the same variable names.
@@ -74,7 +75,7 @@ features, phone-gated social APIs, paid services, or funded wallets:
 
 1. Use the default code-tech opportunity flow. It needs no external secret.
 2. Add `GROQ_API_KEY` or `GEMINI_API_KEY` for RAG/research/suggestions.
-3. Optional: add `OPENROUTER_API_KEY` for free-model research fallback.
+3. Add `ATRIA_API_KEY` (main engine for evolution, research and articles) and `OPENROUTER_API_KEY` as its free fallback.
 4. Keep publishing, posting, trading, payout, and minting keys out of the runtime path. If those keys exist in the environment, the bot treats them as setup/suggestion context only and does not call external write APIs.
 
 ### Code-Tech Opportunity Flow
@@ -106,8 +107,8 @@ the referenced "15 High-Paying Remote Jobs With a 4-Hour Work Week" article:
 AI prompt/workflow consulting, no-code automation, support knowledge-base
 cleanup, dashboard/reporting automation, CRM/data cleanup, async docs fixes,
 and productized audits. Fresh online leads are synthesized by the configured
-research LLM when available, with OpenRouter free models preferred for the
-research role.
+research LLM when available: Atria for the research role, with OpenRouter free
+models as its fallback.
 
 The target is practical pipeline creation, for example finding enough small
 code-maintenance work to pursue `$10/day`. Discovery is not counted as earned
@@ -176,7 +177,7 @@ status report            # dump full status to workflow log
 .github/workflows/evolve.yml  ← hourly workflow (never evolved)
 bot/
   main.py                     ← 5-phase orchestrator
-  llm.py                      ← LLM client (OpenRouter free chain, then Anthropic/Gemini/Cerebras/Groq)
+  llm.py                      ← LLM client (Atria, then OpenRouter free chain, then Anthropic/Gemini/Cerebras/Groq)
   status.py                   ← Phase 1: load/save state, feature detection
   commands.py                 ← Phase 2: owner command system
   earnings.py                 ← cumulative earnings + weekly reset

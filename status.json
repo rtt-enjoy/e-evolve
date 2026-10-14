@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-14T17:12:33.162418+00:00",
-  "total_runs": 1976,
+  "last_run": "2026-10-14T20:42:27.652329+00:00",
+  "total_runs": 1977,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,8 +33,17 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add exponential backoff retry logic for LLM calls in articles module, improve Reddit rate-limit handling in code_techs, and add retry logic for dev.to API calls",
-    "changes_applied": [],
+    "summary": "Add exponential backoff retry utility to shared module and apply it to LLM calls in articles module to reduce llm_error rejections",
+    "changes_applied": [
+      {
+        "file": "bot/earning/_shared.py",
+        "reason": "Add retry_with_backoff utility with exponential backoff and jitter for resilient external API calls. This addresses the 12 llm_error rejections in articles module by enabling retry logic for LLM provider calls. The utility is generic and can be adopted by code_techs (Reddit), devto (API), and other modules in future cycles."
+      },
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "Apply retry_with_backoff to all LLM calls in articles module (_generate_article, _generate_followup, _revise_title, _revise_format) with 3 retries for main calls and 2 for revisions. This directly addresses the 12 llm_error rejections by adding resilience against transient provider failures (Atria quota exhaustion, OpenRouter free-tier limits). Uses the new shared utility from _shared.py for consistent backoff behavior across modules."
+      }
+    ],
     "suggestions": [
       {
         "title": "Add ANTHROPIC_API_KEY secret to enable llm_anthropic provider",
@@ -74,22 +83,11 @@
       }
     ],
     "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
+    "branch": "evolve/1.42.0-20261014-205258",
+    "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -131,7 +129,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 411,
+  "last_cycle_seconds": 632,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1171,7 +1169,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-14T17:12:33.618447+00:00",
+    "checked_at": "2026-10-14T20:42:28.342790+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1462,8 +1460,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.42.0-20261014-205258",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 33,
     "total_views": 4645,
@@ -1578,32 +1576,22 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-14T17:19:21.271683+00:00",
+    "last_run": "2026-10-14T20:52:58.374090+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 5,
-    "with_footer": 5,
+    "checked": 4,
+    "with_footer": 4,
     "without_footer": 0,
-    "unreachable": 0,
+    "unreachable": 1,
     "missing": [],
-    "last_run": "2026-10-14T17:19:22.417360+00:00",
+    "last_run": "2026-10-14T20:52:58.630177+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
         "id": 4579420,
-        "at": "2026-10-12T07:41:19.140321+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-10-12T07:41:19.140321+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
         "at": "2026-10-12T07:41:19.140321+00:00",
         "ok": true
       },
@@ -1614,11 +1602,6 @@
       },
       {
         "id": 4671278,
-        "at": "2026-10-12T18:20:28.755733+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
         "at": "2026-10-12T18:20:28.755733+00:00",
         "ok": true
       },
@@ -1758,8 +1741,23 @@
         "ok": true
       },
       {
+        "id": 4619528,
+        "at": "2026-10-14T20:52:58.630177+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-10-14T20:52:58.630177+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-10-14T20:52:58.630177+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-14T17:19:22.417360+00:00",
+        "at": "2026-10-14T20:52:58.630177+00:00",
         "ok": true
       }
     ],
@@ -1768,7 +1766,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 57.6
+    "oldest_check_age_hours": 61.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1785,7 +1783,7 @@
     "serving": "openrouter",
     "disabled_reason": "quota_spent",
     "calls": {
-      "openrouter": 2
+      "openrouter": 1
     }
   }
 }

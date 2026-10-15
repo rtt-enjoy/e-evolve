@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-14T23:55:48.791145+00:00",
-  "total_runs": 1978,
+  "last_run": "2026-10-15T04:42:06.165230+00:00",
+  "total_runs": 1979,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,30 +33,18 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add retry utility and secret readiness warnings to improve resilience and visibility.",
+    "summary": "Enable Cerebras provider for article generation to utilize higher free-tier limits and reduce quota issues.",
     "changes_applied": [
       {
-        "file": "bot/earning/retry_utils.py",
-        "reason": ""
+        "file": "version.txt",
+        "reason": "Bump version for new feature: enabling Cerebras provider for post role"
       },
       {
-        "file": "bot/earning/secret_check.py",
-        "reason": ""
+        "file": "config/strategy.json",
+        "reason": "Update llm_workflows to use Cerebras provider for the post role to leverage higher free-tier limits and reduce quota_spent issues with Atria and OpenRouter."
       }
     ],
     "suggestions": [
-      {
-        "title": "Add ANTHROPIC_API_KEY secret to enable llm_anthropic provider",
-        "description": "Unlock Anthropic Claude models (including free-tier Haiku) for research, upgrade, and post roles. Adds provider diversity and higher free-tier limits than OpenRouter's free chain.",
-        "secret_needed": "ANTHROPIC_API_KEY",
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Go to https://console.anthropic.com/ and create an API key",
-          "Copy the key value (starts with sk-ant-)",
-          "Add ANTHROPIC_API_KEY as a GitHub repository secret"
-        ]
-      },
       {
         "title": "Add CEREBRAS_API_KEY secret to enable llm_cerebras provider",
         "description": "Unlock Cerebras Cloud free tier (~1M tokens/day, 14,400 requests/day per model) for research and post roles. Highest free-tier throughput of any provider, with no credit card required.",
@@ -70,7 +58,19 @@
         ]
       },
       {
-        "title": "Configure dev.to API key for article publishing",
+        "title": "Add ANTHROPIC_API_KEY secret to enable llm_anthropic provider",
+        "description": "Unlock Anthropic Claude models (including free-tier Haiku) for research, upgrade, and post roles. Adds provider diversity and higher free-tier limits than OpenRouter's free chain.",
+        "secret_needed": "ANTHROPIC_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Go to https://console.anthropic.com/ and create an API key",
+          "Copy the key value (starts with sk-ant-)",
+          "Add ANTHROPIC_API_KEY as a GitHub repository secret"
+        ]
+      },
+      {
+        "title": "Add DEV_TO_API_KEY secret for article publishing",
         "description": "Enable the articles and newsletter modules to publish to dev.to. Currently DEV_TO_API_KEY is not set, causing both modules to skip silently.",
         "secret_needed": "DEV_TO_API_KEY",
         "estimated_weekly_usd": 0,
@@ -83,46 +83,14 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20261015-000234",
+    "branch": "evolve/1.42.0-20261015-044601",
     "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Three Sandbox Failures That Let AI Agents Escape",
-        "url": "https://dev.to/robust_true_try/three-sandbox-failures-that-let-ai-agents-escape-3ab6",
-        "estimated_usd": 0.0,
-        "source_url": "https://www.csoonline.com/article/4234854/ai-agents-arent-going-rogue-frontier-labs-are-skipping-security-basics.html",
-        "source_title": "Containment and monitoring failures are to blame for AI hacking reports:\u00a0experts"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
-    {
-      "title": "Add ANTHROPIC_API_KEY secret to enable llm_anthropic provider",
-      "description": "Unlock Anthropic Claude models (including free-tier Haiku) for research, upgrade, and post roles. Adds provider diversity and higher free-tier limits than OpenRouter's free chain.",
-      "secret_needed": "ANTHROPIC_API_KEY",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Go to https://console.anthropic.com/ and create an API key",
-        "Copy the key value (starts with sk-ant-)",
-        "Add ANTHROPIC_API_KEY as a GitHub repository secret"
-      ]
-    },
     {
       "title": "Add CEREBRAS_API_KEY secret to enable llm_cerebras provider",
       "description": "Unlock Cerebras Cloud free tier (~1M tokens/day, 14,400 requests/day per model) for research and post roles. Highest free-tier throughput of any provider, with no credit card required.",
@@ -136,7 +104,19 @@
       ]
     },
     {
-      "title": "Configure dev.to API key for article publishing",
+      "title": "Add ANTHROPIC_API_KEY secret to enable llm_anthropic provider",
+      "description": "Unlock Anthropic Claude models (including free-tier Haiku) for research, upgrade, and post roles. Adds provider diversity and higher free-tier limits than OpenRouter's free chain.",
+      "secret_needed": "ANTHROPIC_API_KEY",
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Go to https://console.anthropic.com/ and create an API key",
+        "Copy the key value (starts with sk-ant-)",
+        "Add ANTHROPIC_API_KEY as a GitHub repository secret"
+      ]
+    },
+    {
+      "title": "Add DEV_TO_API_KEY secret for article publishing",
       "description": "Enable the articles and newsletter modules to publish to dev.to. Currently DEV_TO_API_KEY is not set, causing both modules to skip silently.",
       "secret_needed": "DEV_TO_API_KEY",
       "estimated_weekly_usd": 0,
@@ -149,7 +129,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1460,
+  "last_cycle_seconds": 237,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1193,7 +1173,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-14T23:55:49.453388+00:00",
+    "checked_at": "2026-10-15T04:42:06.502919+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1484,7 +1464,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20261015-000234",
+  "last_evolution_branch": "evolve/1.42.0-20261015-044601",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 34,
@@ -1600,7 +1580,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-15T00:20:06.841376+00:00",
+    "last_run": "2026-10-15T04:46:01.786471+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1610,32 +1590,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-15T00:20:07.212344+00:00",
+    "last_run": "2026-10-15T04:46:02.000799+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4641536,
-        "at": "2026-10-12T18:20:28.755733+00:00",
-        "ok": true
-      },
-      {
         "id": 4740283,
-        "at": "2026-10-13T01:03:58.483282+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-10-13T01:03:58.483282+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
-        "at": "2026-10-13T01:03:58.483282+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
         "at": "2026-10-13T01:03:58.483282+00:00",
         "ok": true
       },
@@ -1780,13 +1740,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4853251,
         "at": "2026-10-15T00:20:07.212344+00:00",
         "ok": true
       },
       {
-        "id": 4853251,
-        "at": "2026-10-15T00:20:07.212344+00:00",
+        "id": 4641536,
+        "at": "2026-10-15T04:46:02.000799+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-10-15T04:46:02.000799+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-10-15T04:46:02.000799+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-10-15T04:46:02.000799+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-10-15T04:46:02.000799+00:00",
         "ok": true
       }
     ],
@@ -1795,7 +1775,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 54.0
+    "oldest_check_age_hours": 51.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1812,7 +1792,7 @@
     "serving": "openrouter",
     "disabled_reason": "quota_spent",
     "calls": {
-      "openrouter": 6
+      "openrouter": 1
     }
   },
   "github_repo": "rtt-enjoy/e-evolve"

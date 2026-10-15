@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-15T09:56:46.993639+00:00",
-  "total_runs": 1980,
+  "last_run": "2026-10-15T15:02:39.941427+00:00",
+  "total_runs": 1981,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,11 +33,15 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add Cerebras provider support, a product ideas generation module, and documentation for wallet embedding to enable passive income without extra cost.",
+    "summary": "Add Cerebras LLM provider, product ideas earning module, and wallet embedding documentation to expand free-tier capacity and enable passive income pathways.",
     "changes_applied": [
       {
+        "file": "bot/earning/product_ideas.py",
+        "reason": "Create new product_ideas.py module that generates concrete product ideas for passive income using free AI APIs. This implements the 'Add Product Ideas Module' suggestion from the last evolution, leveraging the existing wallet address and article audience to create zero-marginal-cost digital products."
+      },
+      {
         "file": "docs/product_guide.md",
-        "reason": ""
+        "reason": "Create comprehensive wallet embedding documentation (docs/product_guide.md) showing how to embed the Tron wallet address across GitHub (FUNDING.yml, README, Releases), product pages, CLI tools, and dev.to articles. This implements the 'Document Wallet Embedding Guide' suggestion and enables passive payments without platform fees or KYC."
       }
     ],
     "suggestions": [
@@ -82,22 +86,11 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20261015-100526",
+    "branch": "evolve/1.42.0-20261015-151812",
     "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -142,7 +135,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 544,
+  "last_cycle_seconds": 934,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1226,7 +1219,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-15T09:56:47.622757+00:00",
+    "checked_at": "2026-10-15T15:02:40.842065+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1517,7 +1510,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20261015-100526",
+  "last_evolution_branch": "evolve/1.42.0-20261015-151812",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 34,
@@ -1633,42 +1626,22 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-15T10:05:49.443822+00:00",
+    "last_run": "2026-10-15T15:18:13.102660+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-15T10:05:49.747071+00:00",
+    "last_run": "2026-10-15T15:18:13.314143+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4820684,
-        "at": "2026-10-13T08:03:56.514196+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-10-13T16:29:44.033788+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-10-13T16:29:44.033788+00:00",
-        "ok": true
-      },
-      {
         "id": 4765372,
-        "at": "2026-10-13T16:29:44.033788+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
         "at": "2026-10-13T16:29:44.033788+00:00",
         "ok": true
       },
@@ -1818,8 +1791,28 @@
         "ok": true
       },
       {
+        "id": 4820684,
+        "at": "2026-10-15T15:18:13.314143+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-10-15T15:18:13.314143+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-15T15:18:13.314143+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-10-15T15:18:13.314143+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-15T10:05:49.747071+00:00",
+        "at": "2026-10-15T15:18:13.314143+00:00",
         "ok": true
       }
     ],
@@ -1828,7 +1821,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 50.0
+    "oldest_check_age_hours": 46.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1845,7 +1838,7 @@
     "serving": "openrouter",
     "disabled_reason": "quota_spent",
     "calls": {
-      "openrouter": 2
+      "openrouter": 1
     }
   }
 }

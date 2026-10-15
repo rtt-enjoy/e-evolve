@@ -2235,3 +2235,8 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-10-14 17:19 UTC
 
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+
+### 2026-10-15 00:20 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+- [ok] **dev.to**: [Three Sandbox Failures That Let AI Agents Escape](https://dev.to/robust_true_try/three-sandbox-failures-that-let-ai-agents-escape-3ab6) (est. $0.00)

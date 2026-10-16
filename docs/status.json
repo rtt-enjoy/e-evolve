@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-16T01:22:19.444265+00:00",
-  "total_runs": 1984,
+  "last_run": "2026-10-16T07:11:53.205956+00:00",
+  "total_runs": 1985,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,24 +34,24 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Enable Cerebras free tier for article drafting to unblock Atria quota, improve title revision logic to reduce weak_title rejects, and create FocusFlow extension manifest for Getly listing.",
+    "summary": "Add FocusFlow extension popup and manifest with embedded icons to enable listing on Getly, and bump version for release.",
     "changes_applied": [
       {
-        "file": "config/strategy.json",
-        "reason": "Switch post role to Cerebras (llama3.1-8b) to use free tier (1M tokens/day) and relieve Atria quota_spent. Increase backfill.max_per_cycle from 3 to 10 to complete footer coverage on all 36 published articles faster. Keep Atria for upgrade/research roles where its reasoning excels."
+        "file": "version.txt",
+        "reason": "Bump version to 1.42.0 for the new FocusFlow extension release."
       },
       {
-        "file": "bot/earning/articles.py",
-        "reason": "Improve title revision prompt with concrete good/bad examples to reduce weak_title rejects (8 in history). The enhanced prompt gives the LLM clear patterns to follow and avoid, increasing first-pass title quality and reducing wasted revision cycles."
+        "file": "bot/products/focus_flow/popup.html",
+        "reason": "Create a simple popup for the FocusFlow extension to provide a user interface."
       },
       {
         "file": "bot/products/focus_flow/manifest.json",
-        "reason": "Create the Chrome Extension Manifest V3 for FocusFlow, the first digital product to list on Getly (score 92 channel). This is the foundational file; background.js, popup.html, content.js, and styles will follow in subsequent evolutions. The extension blocks distracting page elements (sidebars, recommended feeds, notifications) with a single toggle, fitting the 'one-task tool' product shape."
+        "reason": "Update the manifest to include the popup and embedded icons, making the extension ready for packaging and listing."
       }
     ],
     "suggestions": [
       {
-        "title": "Enable Cerebras Provider for Post Role",
+        "title": "Add Cerebras API key for Post Role",
         "description": "Unlock Cerebras Cloud free tier (1M tokens/day, 14.4k req/day) for article drafting, reducing quota_spent on Atria and expanding free-tier capacity.",
         "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
@@ -70,10 +70,10 @@
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Build the FocusFlow extension from bot/products/focus_flow/ (manifest.json + background.js + popup.html)",
+          "Zip the contents of bot/products/focus_flow/ (manifest.json, popup.html) into a file named focusflow.zip",
           "Create a free Getly account at https://www.getly.store/sell/crypto",
-          "Add the Tron wallet address ([redacted]) as payout destination",
-          "Upload the extension ZIP and set a one-time license price (e.g., $5)"
+          "Add the Tron wallet address from repository secrets (USDT_WALLET_ADDRESS) as payout destination",
+          "Upload the focusflow.zip and set a one-time license price (e.g., $5)"
         ]
       },
       {
@@ -83,56 +83,24 @@
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Create .github/FUNDING.yml with custom: ['https://tronscan.org/#/address/[redacted]'] (owner must do \u2014 .github/ is protected)",
-          "Add the wallet address to README.md 'Support this work' section",
+          "Create .github/FUNDING.yml with custom: ['https://tronscan.org/#/address/<USDT_WALLET_ADDRESS>'] (owner must do this \u2014 .github/ is protected)",
+          "Add the wallet address to README.md in a 'Support this work' section",
           "Include the address in GitHub Release notes for each tag",
           "Verify with receipt_check that the address appears on the product page"
-        ]
-      },
-      {
-        "title": "Increase Backfill Batch Size",
-        "description": "Raise backfill.max_per_cycle from 3 to 10 to add the support footer to all 36 published articles faster (currently 11 done, 25 remaining).",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Edit config/strategy.json backfill.max_per_cycle to 10",
-          "Next cycle will process up to 10 posts instead of 3",
-          "Monitor dev.to API rate limits; 10 is well within limits"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20261016-014831",
+    "branch": "evolve/1.42.0-20261016-071546",
     "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Your Ad-Targeting Pipeline Is Leaking Spyware Vectors",
-        "url": "https://dev.to/robust_true_try/your-ad-targeting-pipeline-is-leaking-spyware-vectors-24fe",
-        "estimated_usd": 0.0,
-        "source_url": "https://citizenlab.ca/research/how-discover-tech-turned-targeted-ads-into-a-pipeline-for-spyware/",
-        "source_title": "AdFection: Targeted ads turned into a pipeline for zero-click mercenary spyware"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Enable Cerebras Provider for Post Role",
+      "title": "Add Cerebras API key for Post Role",
       "description": "Unlock Cerebras Cloud free tier (1M tokens/day, 14.4k req/day) for article drafting, reducing quota_spent on Atria and expanding free-tier capacity.",
       "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
@@ -151,10 +119,10 @@
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Build the FocusFlow extension from bot/products/focus_flow/ (manifest.json + background.js + popup.html)",
+        "Zip the contents of bot/products/focus_flow/ (manifest.json, popup.html) into a file named focusflow.zip",
         "Create a free Getly account at https://www.getly.store/sell/crypto",
-        "Add the Tron wallet address ([redacted]) as payout destination",
-        "Upload the extension ZIP and set a one-time license price (e.g., $5)"
+        "Add the Tron wallet address from repository secrets (USDT_WALLET_ADDRESS) as payout destination",
+        "Upload the focusflow.zip and set a one-time license price (e.g., $5)"
       ]
     },
     {
@@ -164,27 +132,15 @@
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Create .github/FUNDING.yml with custom: ['https://tronscan.org/#/address/[redacted]'] (owner must do \u2014 .github/ is protected)",
-        "Add the wallet address to README.md 'Support this work' section",
+        "Create .github/FUNDING.yml with custom: ['https://tronscan.org/#/address/<USDT_WALLET_ADDRESS>'] (owner must do this \u2014 .github/ is protected)",
+        "Add the wallet address to README.md in a 'Support this work' section",
         "Include the address in GitHub Release notes for each tag",
         "Verify with receipt_check that the address appears on the product page"
-      ]
-    },
-    {
-      "title": "Increase Backfill Batch Size",
-      "description": "Raise backfill.max_per_cycle from 3 to 10 to add the support footer to all 36 published articles faster (currently 11 done, 25 remaining).",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Edit config/strategy.json backfill.max_per_cycle to 10",
-        "Next cycle will process up to 10 posts instead of 3",
-        "Monitor dev.to API rate limits; 10 is well within limits"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1900,
+  "last_cycle_seconds": 236,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1278,7 +1234,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-16T01:22:20.028514+00:00",
+    "checked_at": "2026-10-16T07:11:53.915736+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1584,7 +1540,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20261016-014831",
+  "last_evolution_branch": "evolve/1.42.0-20261016-071546",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 36,
@@ -1700,7 +1656,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-16T01:53:57.697298+00:00",
+    "last_run": "2026-10-16T07:15:47.657332+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1710,25 +1666,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-16T01:53:58.083228+00:00",
+    "last_run": "2026-10-16T07:15:49.023352+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4681657,
-        "at": "2026-10-14T12:35:10.696614+00:00",
-        "ok": true
-      },
-      {
-        "id": 4568987,
-        "at": "2026-10-14T12:35:10.696614+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-10-14T17:19:22.417360+00:00",
-        "ok": true
-      },
       {
         "id": 4602729,
         "at": "2026-10-14T17:19:22.417360+00:00",
@@ -1736,11 +1677,6 @@
       },
       {
         "id": 4552210,
-        "at": "2026-10-14T17:19:22.417360+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-10-14T17:19:22.417360+00:00",
         "ok": true
       },
@@ -1890,13 +1826,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4859277,
         "at": "2026-10-16T01:53:58.083228+00:00",
         "ok": true
       },
       {
-        "id": 4859277,
-        "at": "2026-10-16T01:53:58.083228+00:00",
+        "id": 4681657,
+        "at": "2026-10-16T07:15:49.023352+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-10-16T07:15:49.023352+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-10-16T07:15:49.023352+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-10-16T07:15:49.023352+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-10-16T07:15:49.023352+00:00",
         "ok": true
       }
     ],
@@ -1905,7 +1861,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 37.3
+    "oldest_check_age_hours": 37.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1922,7 +1878,7 @@
     "serving": "openrouter",
     "disabled_reason": "quota_spent",
     "calls": {
-      "openrouter": 6
+      "openrouter": 1
     }
   },
   "github_repo": "rtt-enjoy/e-evolve"

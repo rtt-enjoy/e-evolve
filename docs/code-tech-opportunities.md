@@ -1,6 +1,6 @@
 # Passive Product Income Queue
 
-Refreshed: 2026-10-16T01:48:31.694854+00:00
+Refreshed: 2026-10-16T12:28:55.637509+00:00
 
 Routes to passive income from a digital product on a zero budget: where it can
 be listed and paid for (channels) and what can build or market it (assets).
@@ -24,37 +24,12 @@ balance, and a listing is not a receipt.
 
 ## Current Best Angle
 
-Build a simple browser extension or utility that solves one specific problem, then distribute it for free with a paid upgrade (freemium). Use GitHub Releases as the primary host (free, no listing fee) and embed a validated Tron (TRC-20) receive address in the README and product page for direct USDT/USDC payouts to your own wallet. This creates passive income because buyers pay directly without any platform cut, no KYC, and no per-sale owner action.
-
-## Sales Channels
-
-| Channel | What it lists | Cost | Crypto payout | Owner setup | Why passive |
-| --- | --- | --- | --- | --- | --- |
-| GitHub Releases | Hosts binary/archive files free with no listing fee or per-extension charge | $0 (no monthly fee) | USDT/TRC-20 stablecoins sent directly to your own wallet | Upload the extension binary to a GitHub repository, add the validated Tron receive address to the README and FUNDING.yml file, and update release notes with the price | Users download and pay directly; no per-sale action required, and the product continues earning indefinitely |
-| Product Page Wallet Ask (already living) | Embeds a validated Tron receive address in the README and product page so users can pay without opening a storefront | $0 | USDT/TRC-20 stablecoins deposited into your own wallet | Add the Tron receive address to the GitHub repository's FUNDING.yml file and to the README.md file, then ensure the product page links to this address | Works for all users regardless of whether they discover the product through a storefront or search engine; no platform holds funds or takes a cut |
-
-## Product Ideas
-
-1. **FocusBlock — a browser extension that auto-blocks distracting websites during scheduled focus sessions**
-   - Who buys: Remote workers, students, and knowledge workers seeking better concentration
-   - Deliverable: Browser extension that detects active work periods and blocks specified distracting domains
-   - Pricing model: Free basic version (blocks common sites like social media); paid premium ($5 one-time) for custom schedule management, dark mode, and usage analytics
-   - Cost per extra user: Near zero — runs locally on the user's device, no server costs
-   - Free stack: Self-hosted extension built from open-source templates; distributed via GitHub Releases
-2. **QuickClean — a lightweight command-line utility that scans and removes temporary system files and old cache folders**
-   - Who buys: Power users and sysadmins who want quick disk cleanup without installing bloatware
-   - Deliverable: CLI script that recursively finds and deletes safe temporary files, with optional dry-run mode
-   - Pricing model: Free basic cleanup; paid Pro tier ($10 one-time) for batch processing of multiple machines and detailed reports
-   - Cost per extra user: Zero — runs locally, no cloud resources needed
-   - Free stack: Python-based script hosted on GitHub, released via GitHub Releases
+Channel brief failed; used the verified channel table and local scoring only. Error: Could not get valid JSON from LLM (role=research): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has
 
 ## Next Actions
 
-- Create a minimal browser extension (e.g., FocusBlock) using an open-source template and test it locally
-- Set up a free GitHub repository containing the extension source code and the validated Tron (TRC-20) receive address
-- Add the Tron receive address to the repository's README.md and to the FUNDING.yml file for GitHub Sponsors integration
-- Publish the extension binary to GitHub Releases with a clear price tag (e.g., $5 for Premium) in the description
-- Write a short article on dev.to explaining the problem (distraction during work) and solution (the extension), embedding the wallet address for payments
+- Work the verified channel rows below: they are checked by hand and need no LLM.
+- Verify each platform's current fees and payout terms yourself before listing.
 
 ## Monetization Patterns
 
@@ -327,250 +302,250 @@ platform cannot climb back onto this page.
    - Why: pays in stablecoin, so the receive path is on-chain and verifiable; sells the product while nobody is working; the signup is one-time
    - Next: List the product once and set the price. Owner does this by hand: Owner creates an account, completes the tax interview with a TIN/SSN, pays the one-time $3 identity fee, and adds fiat payout details.
    - Verified: Tax interview, TIN requirement and the one-time $3.00 identity fee confirmed on itch.io/docs/creators/payments 2026-09-15. The earlier row said 'free to publish, no approval queue' and recorded cost_u
-10. [7 months on Google Play, €0 revenue](https://www.reddit.com/r/SideProject/comments/1x6kwkk/7_months_on_google_play_0_revenue/)
+10. [24 users and no feedback](https://www.reddit.com/r/SideProject/comments/1x6nyvz/24_users_and_no_feedback/)
+   - Kind: asset
+   - Score: 59/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: pays in stablecoin, so the receive path is on-chain and verifiable; free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-15T15:00:14+00:00 (22h ago)
+11. [7 months on Google Play, €0 revenue](https://www.reddit.com/r/SideProject/comments/1x6kwkk/7_months_on_google_play_0_revenue/)
    - Kind: asset
    - Score: 58/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T12:56:42+00:00 (13h ago)
-11. [An empty news list is a gap in my dataset, not proof of a quiet market](https://www.reddit.com/r/SideProject/comments/1x67e4b/an_empty_news_list_is_a_gap_in_my_dataset_not/)
+   - Posted: 2026-10-15T12:56:42+00:00 (24h ago)
+12. [I launched my first paid Chrome extension: copy text from any image, privately, for a one-time price](https://www.reddit.com/r/SideProject/comments/1x62me6/i_launched_my_first_paid_chrome_extension_copy/)
+   - Kind: asset
+   - Score: 58/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-14T20:46:29+00:00 (40h ago)
+13. [An empty news list is a gap in my dataset, not proof of a quiet market](https://www.reddit.com/r/SideProject/comments/1x67e4b/an_empty_news_list_is_a_gap_in_my_dataset_not/)
    - Kind: asset
    - Score: 54/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T00:15:38+00:00 (26h ago)
-12. One product, listed on every free channel at once
+   - Posted: 2026-10-15T00:15:38+00:00 (36h ago)
+14. One product, listed on every free channel at once
    - Kind: channel
    - Score: 53/100
    - Cost: not published
    - Owner must do: nothing
    - Why: sells the product while nobody is working; the signup is one-time
    - Next: List the product once and set the price. Owner does this by hand: open the account
-13. [product- question](https://www.reddit.com/r/SideProject/comments/1x56oer/product_question/)
+15. [product- question](https://www.reddit.com/r/SideProject/comments/1x56oer/product_question/)
    - Kind: asset
    - Score: 53/100
    - Cost: not published
    - Owner must do: nothing
    - Why: pays in stablecoin, so the receive path is on-chain and verifiable; free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-13T19:45:09+00:00 (54h ago)
-14. [I'm exploring a camera built around extreme optical bokeh, targeting 499 USD. Is there a real niche?](https://www.reddit.com/r/SideProject/comments/1wyxvlg/im_exploring_a_camera_built_around_extreme/)
+   - Posted: 2026-10-13T19:45:09+00:00 (65h ago)
+16. [I'm exploring a camera built around extreme optical bokeh, targeting 499 USD. Is there a real niche?](https://www.reddit.com/r/SideProject/comments/1wyxvlg/im_exploring_a_camera_built_around_extreme/)
    - Kind: asset
    - Score: 53/100
    - Cost: not published
    - Owner must do: nothing
    - Why: pays in stablecoin, so the receive path is on-chain and verifiable; free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-06T09:09:44+00:00 (233h ago)
-15. [Dicklesworthstone/agentic_coding_flywheel_setup](https://github.com/Dicklesworthstone/agentic_coding_flywheel_setup)
+   - Posted: 2026-10-06T09:09:44+00:00 (243h ago)
+17. [TencentCloudBase/CloudBase-AI-Toolkit](https://github.com/TencentCloudBase/CloudBase-AI-Toolkit)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-16T01:43:44+00:00 (0h ago)
-16. [milisp/codexia](https://github.com/milisp/codexia)
+   - Posted: 2026-10-16T12:28:42+00:00 (0h ago)
+18. [mdozmorov/MachineLearning_notes](https://github.com/mdozmorov/MachineLearning_notes)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-16T01:41:49+00:00 (0h ago)
-17. [opencrabs/opencrabs](https://github.com/opencrabs/opencrabs)
+   - Posted: 2026-10-16T12:26:27+00:00 (0h ago)
+19. [anolilab/lunora](https://github.com/anolilab/lunora)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-16T12:26:39+00:00 (0h ago)
+20. [yibie/awesome-autoresearch](https://github.com/yibie/awesome-autoresearch)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-16T12:25:59+00:00 (0h ago)
+21. [diegosouzapw/OmniRoute](https://github.com/diegosouzapw/OmniRoute)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-16T12:22:58+00:00 (0h ago)
+22. [yaolifeng0629/Awesome-independent-tools](https://github.com/yaolifeng0629/Awesome-independent-tools)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-16T12:20:29+00:00 (0h ago)
+23. [TryGhost/Starter](https://github.com/TryGhost/Starter)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-16T12:18:30+00:00 (0h ago)
+24. [0xsline/awesome-deepseek-harness](https://github.com/0xsline/awesome-deepseek-harness)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-16T12:16:30+00:00 (0h ago)
+25. [Arnon-hs/open-source](https://github.com/Arnon-hs/open-source)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.
-   - Posted: 2026-10-16T01:43:20+00:00 (0h ago)
-18. [AnotiaWang/awesome-decision-models](https://github.com/AnotiaWang/awesome-decision-models)
+   - Posted: 2026-10-16T12:18:18+00:00 (0h ago)
+26. [ilhamnurrachman/claude-opus-dev-workbench](https://github.com/ilhamnurrachman/claude-opus-dev-workbench)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-16T01:34:27+00:00 (0h ago)
-19. [jaywcjlove/awesome-swift-macos-apps](https://github.com/jaywcjlove/awesome-swift-macos-apps)
+   - Posted: 2026-10-16T12:15:12+00:00 (0h ago)
+27. [QwenAudio/qwen-audio-agent](https://github.com/QwenAudio/qwen-audio-agent)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-16T12:09:52+00:00 (0h ago)
+28. [paperclipai/paperclip](https://github.com/paperclipai/paperclip)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-16T12:09:33+00:00 (0h ago)
+29. [Chat2AnyLLM/awesome-claude-plugins](https://github.com/Chat2AnyLLM/awesome-claude-plugins)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-16T12:13:55+00:00 (0h ago)
+30. [cr0hn/dockerscan](https://github.com/cr0hn/dockerscan)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-16T12:12:33+00:00 (0h ago)
+31. [hoilc/scoop-lemon](https://github.com/hoilc/scoop-lemon)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-16T12:07:36+00:00 (0h ago)
+32. [Chat2AnyLLM/awesome-claude-skills](https://github.com/Chat2AnyLLM/awesome-claude-skills)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: free tooling or reach to build and market the product with
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-10-16T12:01:34+00:00 (0h ago)
+33. [birobirobiro/awesome-shadcn-ui](https://github.com/birobirobiro/awesome-shadcn-ui)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.
-   - Posted: 2026-10-16T01:34:04+00:00 (0h ago)
-20. [paperclipai/paperclip](https://github.com/paperclipai/paperclip)
+   - Posted: 2026-10-16T11:54:07+00:00 (1h ago)
+34. [logicrw/awesome-jev-projects](https://github.com/logicrw/awesome-jev-projects)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-16T01:36:25+00:00 (0h ago)
-21. [ArchiveBox/ArchiveBox](https://github.com/ArchiveBox/ArchiveBox)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-16T01:30:35+00:00 (0h ago)
-22. [gmh5225/awesome-game-security](https://github.com/gmh5225/awesome-game-security)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-16T01:28:34+00:00 (0h ago)
-23. [jaseci-labs/jac](https://github.com/jaseci-labs/jac)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-16T01:23:01+00:00 (0h ago)
-24. [I built a site that scores how much people regret a purchase after the honeymoon phase wears off](https://www.reddit.com/r/SideProject/comments/1x72zvd/i_built_a_site_that_scores_how_much_people_regret/)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-16T01:09:37+00:00 (1h ago)
-25. [andrew/ultimate-awesome](https://github.com/andrew/ultimate-awesome)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-16T00:45:04+00:00 (1h ago)
-26. [hoilc/scoop-lemon](https://github.com/hoilc/scoop-lemon)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-16T00:13:21+00:00 (2h ago)
-27. [marcelscruz/dev-resources](https://github.com/marcelscruz/dev-resources)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T23:31:21+00:00 (2h ago)
-28. [AppitStudio/awesome-jev](https://github.com/AppitStudio/awesome-jev)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T22:30:31+00:00 (3h ago)
-29. [amanbolat/awesome-go-with-stars](https://github.com/amanbolat/awesome-go-with-stars)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T22:08:33+00:00 (4h ago)
-30. [logicrw/awesome-jev-projects](https://github.com/logicrw/awesome-jev-projects)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T21:36:44+00:00 (4h ago)
-31. [dkhamsing/open-source-ios-apps](https://github.com/dkhamsing/open-source-ios-apps)
+   - Posted: 2026-10-16T11:30:59+00:00 (1h ago)
+35. [marcelscruz/public-apis](https://github.com/marcelscruz/public-apis)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.
-   - Posted: 2026-10-15T21:12:18+00:00 (5h ago)
-32. [ebertti/awesome-telegram](https://github.com/ebertti/awesome-telegram)
+   - Posted: 2026-10-16T11:30:57+00:00 (1h ago)
+36. [ripienaar/free-for-dev](https://github.com/ripienaar/free-for-dev)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T20:35:43+00:00 (5h ago)
-33. [gavischneider/awesome-llm-wiki](https://github.com/gavischneider/awesome-llm-wiki)
+   - Posted: 2026-10-16T11:17:28+00:00 (1h ago)
+37. [Manavarya09/public-apis-live](https://github.com/Manavarya09/public-apis-live)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T20:09:51+00:00 (6h ago)
-34. [PatrickJS/awesome-angular](https://github.com/PatrickJS/awesome-angular)
+   - Posted: 2026-10-16T10:50:51+00:00 (2h ago)
+38. [KartikTalwar/gmail.js](https://github.com/KartikTalwar/gmail.js)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T17:35:49+00:00 (8h ago)
-35. [trackawesomelist/trackawesomelist](https://github.com/trackawesomelist/trackawesomelist)
+   - Posted: 2026-10-16T10:43:14+00:00 (2h ago)
+39. [bradtraversy/design-resources-for-developers](https://github.com/bradtraversy/design-resources-for-developers)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T17:00:06+00:00 (9h ago)
-36. [MobinX/awesome-mcp-list](https://github.com/MobinX/awesome-mcp-list)
+   - Posted: 2026-10-16T10:39:48+00:00 (2h ago)
+40. [marcelscruz/dev-resources](https://github.com/marcelscruz/dev-resources)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T15:09:59+00:00 (11h ago)
-37. [avelino/awesome-go](https://github.com/avelino/awesome-go)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T14:03:07+00:00 (12h ago)
-38. [ripienaar/free-for-dev](https://github.com/ripienaar/free-for-dev)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T12:27:37+00:00 (13h ago)
-39. [DirectorySurf/awesome-launch-platforms](https://github.com/DirectorySurf/awesome-launch-platforms)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T11:03:13+00:00 (15h ago)
-40. [hellogumbo/awesome-jev](https://github.com/hellogumbo/awesome-jev)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: free tooling or reach to build and market the product with
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-15T10:00:57+00:00 (16h ago)
+   - Posted: 2026-10-16T10:34:23+00:00 (2h ago)

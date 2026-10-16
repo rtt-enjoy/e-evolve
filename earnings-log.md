@@ -2253,3 +2253,8 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-10-15 22:34 UTC
 
 - [ok] **dev.to-newsletter**: [Spyware via ads, kernel bugs on ARM, and GitHub's automation](https://dev.to/robust_true_try/spyware-via-ads-kernel-bugs-on-arm-and-githubs-automation-playbook-1bfd) (est. $0.00)
+
+### 2026-10-16 01:53 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+- [ok] **dev.to**: [Your Ad-Targeting Pipeline Is Leaking Spyware Vectors](https://dev.to/robust_true_try/your-ad-targeting-pipeline-is-leaking-spyware-vectors-24fe) (est. $0.00)

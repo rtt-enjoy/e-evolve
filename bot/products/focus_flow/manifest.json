@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "FocusFlow",
+  "description": "Block distracting websites to improve focus.",
+  "version": "1.0",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><text y='10'>FF</text></svg>",
+      "32": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='20'>FF</text></svg>",
+      "48": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><text y='30'>FF</text></svg>",
+      "128": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='128' height='128'><text y='80'>FF</text></svg>"
+    }
+  },
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "icons": {
+    "16": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><text y='10'>FF</text></svg>",
+    "32": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='20'>FF</text></svg>",
+    "48": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><text y='30'>FF</text></svg>",
+    "128": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='128' height='128'><text y='80'>FF</text></svg>"
+  }
+}

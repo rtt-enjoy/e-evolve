@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { width: 200px; font-family: Arial, sans-serif; margin: 10px; }
+    button { width: 100%; padding: 10px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h3>FocusFlow</h3>
+  <p>Click to toggle blocking distracting sites.</p>
+  <button id="toggleButton">Toggle Focus</button>
+  <script>
+    document.getElementById('toggleButton').addEventListener('click', async () => {
+      alert('Focus toggled!');
+      // In a real extension, we would inject a content script to block sites.
+      // For now, we keep it simple as a placeholder.
+    });
+  </script>
+</body>
+</html>

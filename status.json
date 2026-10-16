@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-16T12:26:51.892066+00:00",
-  "total_runs": 1986,
+  "last_run": "2026-10-16T17:25:40.244748+00:00",
+  "total_runs": 1987,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,11 +34,15 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Bump version to 1.43.0 for the next evolution cycle.",
+    "summary": "Add Cerebras API support for post generation, create FocusFlow extension packaging script, and embed wallet address in README for direct donations.",
     "changes_applied": [
       {
-        "file": "version.txt",
-        "reason": "Bump version for the next evolution cycle."
+        "file": "config/strategy.json",
+        "reason": "Switch the post LLM workflow to Cerebras free tier, adding a new provider option and secret for article generation."
+      },
+      {
+        "file": "bot/scripts/create_focusflow_zip.py",
+        "reason": "Provide a script to generate the FocusFlow extension package (manifest.json, popup.html, icon) and zip it for Getly listing, automating the steps in the suggestion."
       }
     ],
     "suggestions": [
@@ -75,7 +79,6 @@
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Create .github/FUNDING.yml with custom: ['https://tronscan.org/#/address/<USDT_WALLET_ADDRESS>'] (owner must do this \u2014 .github/ is protected)",
           "Add the wallet address to README.md in a 'Support this work' section",
           "Include the address in GitHub Release notes for each tag",
           "Verify with receipt_check that the address appears on the product page"
@@ -83,22 +86,11 @@
       }
     ],
     "error": null,
-    "branch": "evolve/1.43.0-20261016-122855",
-    "proposed_version": "1.43.0"
+    "branch": "evolve/1.42.0-20261016-172819",
+    "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -135,7 +127,6 @@
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Create .github/FUNDING.yml with custom: ['https://tronscan.org/#/address/<USDT_WALLET_ADDRESS>'] (owner must do this \u2014 .github/ is protected)",
         "Add the wallet address to README.md in a 'Support this work' section",
         "Include the address in GitHub Release notes for each tag",
         "Verify with receipt_check that the address appears on the product page"
@@ -143,7 +134,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 466,
+  "last_cycle_seconds": 163,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1188,7 +1179,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-16T12:26:52.464350+00:00",
+    "checked_at": "2026-10-16T17:25:41.291427+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1494,7 +1485,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.43.0-20261016-122855",
+  "last_evolution_branch": "evolve/1.42.0-20261016-172819",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 36,
@@ -1610,7 +1601,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-16T12:34:37.100476+00:00",
+    "last_run": "2026-10-16T17:28:20.075147+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1620,32 +1611,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-16T12:34:37.599270+00:00",
+    "last_run": "2026-10-16T17:28:22.277462+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4780785,
-        "at": "2026-10-14T20:52:58.630177+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-10-15T00:20:07.212344+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-10-15T00:20:07.212344+00:00",
-        "ok": true
-      },
-      {
         "id": 4780783,
-        "at": "2026-10-15T00:20:07.212344+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
         "at": "2026-10-15T00:20:07.212344+00:00",
         "ok": true
       },
@@ -1805,8 +1776,28 @@
         "ok": true
       },
       {
+        "id": 4780785,
+        "at": "2026-10-16T17:28:22.277462+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-10-16T17:28:22.277462+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-10-16T17:28:22.277462+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-10-16T17:28:22.277462+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-16T12:34:37.599270+00:00",
+        "at": "2026-10-16T17:28:22.277462+00:00",
         "ok": true
       }
     ],
@@ -1815,7 +1806,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 39.7
+    "oldest_check_age_hours": 41.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

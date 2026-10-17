@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-17T13:44:24.058569+00:00",
-  "total_runs": 1992,
+  "last_run": "2026-10-17T17:12:25.467138+00:00",
+  "total_runs": 1993,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,120 +34,100 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add missing passive-income-doctrine.md, document required GitHub secrets, and provide a script to list FocusFlow extension on Getly.",
-    "changes_applied": [
-      {
-        "file": "docs/passive-income-doctrine.md",
-        "reason": "Missing file referenced by attribution.py and backfill.py; creating it provides a single source of truth for earning principles."
-      },
-      {
-        "file": "docs/secrets.md",
-        "reason": "Document all required GitHub secrets to help the owner configure the bot correctly."
-      },
-      {
-        "file": "bot/products/focus_flow/list_on_getly.py",
-        "reason": "Provide a script to guide the owner through listing the FocusFlow extension on Getly, automating the zip creation and checklist."
-      }
-    ],
+    "summary": "Add a standalone health diagnostic module, document all required GitHub secrets, and export the health runner from the earning package.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Create passive-income-doctrine.md",
-        "description": "Add the single source of truth for earning principles referenced by attribution.py and backfill.py.",
-        "secret_needed": null,
-        "estimated_weekly_usd": 0,
-        "free_tier": true,
-        "how_to": [
-          "Create docs/passive-income-doctrine.md with the full doctrine (principles, focus, strategy, avoid patterns).",
-          "Copy the content from the existing code_techs module to ensure consistency.",
-          "Commit the file to the repository."
-        ]
-      },
-      {
         "title": "Add CEREBRAS_API_KEY GitHub secret",
-        "description": "Unlock Cerebras Cloud free tier (1M tokens/day, 14.4k req/day) for article drafting, reducing quota_spent on Atria and expanding free-tier capacity.",
+        "description": "Unlock Cerebras Cloud free tier (1M tokens/day, 14.4k req/day) as an additional LLM provider, reducing pressure on quota-spent Atria and expanding free-tier capacity for article drafting.",
         "secret_needed": "CEREBRAS_API_KEY",
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
           "Create a free Cerebras Cloud account at https://cloud.cerebras.ai/",
           "Generate an API key from the dashboard",
-          "Add CEREBRAS_API_KEY as a GitHub repository secret"
+          "Add CEREBRAS_API_KEY as a GitHub repository secret",
+          "Run the new health check to confirm the provider is detected"
         ]
       },
       {
-        "title": "List FocusFlow Extension on Getly",
-        "description": "Publish the browser extension prototype on Getly (verified no-KYC, USDT/USDC on Tron to own wallet, free to list) to activate the highest-scoring actionable channel.",
+        "title": "Add ANTHROPIC_API_KEY GitHub secret",
+        "description": "Unlock Anthropic as an additional LLM provider for article writing and research, giving the bot a third fallback beyond Atria, Gemini, OpenRouter, and Groq.",
+        "secret_needed": "ANTHROPIC_API_KEY",
+        "estimated_weekly_usd": 0,
+        "free_tier": true,
+        "how_to": [
+          "Create a free Anthropic Console account at https://console.anthropic.com/",
+          "Generate an API key from the account settings",
+          "Add ANTHROPIC_API_KEY as a GitHub repository secret",
+          "Run the new health check to confirm the provider is detected"
+        ]
+      },
+      {
+        "title": "Run the new health diagnostic to verify system readiness",
+        "description": "Execute bot/earning/health.py to check all required secrets, LLM provider availability, dev.to publishing readiness, and wallet configuration, then review docs/health.json for any gaps.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Run bot/products/focus_flow/list_on_getly.py to generate focusflow.zip and view the checklist.",
-          "Create a free Getly account at https://www.getly.store/sell/crypto.",
-          "Upload focusflow.zip, set a one-time license price, and point payouts to the validated Tron address (USDT_WALLET_ADDRESS).",
-          "Verify the listing is live and note the product URL for documentation."
+          "Run: python -m bot.earning.health",
+          "Inspect docs/health.json for missing_required or can_generate: false",
+          "Add any missing required secrets as GitHub repository secrets",
+          "Re-run the health check until all_required_secrets_present is true"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20261017-141043",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Create passive-income-doctrine.md",
-      "description": "Add the single source of truth for earning principles referenced by attribution.py and backfill.py.",
-      "secret_needed": null,
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": [
-        "Create docs/passive-income-doctrine.md with the full doctrine (principles, focus, strategy, avoid patterns).",
-        "Copy the content from the existing code_techs module to ensure consistency.",
-        "Commit the file to the repository."
-      ]
-    },
-    {
       "title": "Add CEREBRAS_API_KEY GitHub secret",
-      "description": "Unlock Cerebras Cloud free tier (1M tokens/day, 14.4k req/day) for article drafting, reducing quota_spent on Atria and expanding free-tier capacity.",
+      "description": "Unlock Cerebras Cloud free tier (1M tokens/day, 14.4k req/day) as an additional LLM provider, reducing pressure on quota-spent Atria and expanding free-tier capacity for article drafting.",
       "secret_needed": "CEREBRAS_API_KEY",
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
         "Create a free Cerebras Cloud account at https://cloud.cerebras.ai/",
         "Generate an API key from the dashboard",
-        "Add CEREBRAS_API_KEY as a GitHub repository secret"
+        "Add CEREBRAS_API_KEY as a GitHub repository secret",
+        "Run the new health check to confirm the provider is detected"
       ]
     },
     {
-      "title": "List FocusFlow Extension on Getly",
-      "description": "Publish the browser extension prototype on Getly (verified no-KYC, USDT/USDC on Tron to own wallet, free to list) to activate the highest-scoring actionable channel.",
+      "title": "Add ANTHROPIC_API_KEY GitHub secret",
+      "description": "Unlock Anthropic as an additional LLM provider for article writing and research, giving the bot a third fallback beyond Atria, Gemini, OpenRouter, and Groq.",
+      "secret_needed": "ANTHROPIC_API_KEY",
+      "estimated_weekly_usd": 0,
+      "free_tier": true,
+      "how_to": [
+        "Create a free Anthropic Console account at https://console.anthropic.com/",
+        "Generate an API key from the account settings",
+        "Add ANTHROPIC_API_KEY as a GitHub repository secret",
+        "Run the new health check to confirm the provider is detected"
+      ]
+    },
+    {
+      "title": "Run the new health diagnostic to verify system readiness",
+      "description": "Execute bot/earning/health.py to check all required secrets, LLM provider availability, dev.to publishing readiness, and wallet configuration, then review docs/health.json for any gaps.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Run bot/products/focus_flow/list_on_getly.py to generate focusflow.zip and view the checklist.",
-        "Create a free Getly account at https://www.getly.store/sell/crypto.",
-        "Upload focusflow.zip, set a one-time license price, and point payouts to the validated Tron address (USDT_WALLET_ADDRESS).",
-        "Verify the listing is live and note the product URL for documentation."
+        "Run: python -m bot.earning.health",
+        "Inspect docs/health.json for missing_required or can_generate: false",
+        "Add any missing required secrets as GitHub repository secrets",
+        "Re-run the health check until all_required_secrets_present is true"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1644,
+  "last_cycle_seconds": 448,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1199,7 +1179,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-17T13:44:24.810224+00:00",
+    "checked_at": "2026-10-17T17:12:26.007856+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1505,8 +1485,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261017-141043",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 36,
     "total_views": 4853,
@@ -1621,7 +1601,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-17T14:11:47.429599+00:00",
+    "last_run": "2026-10-17T17:19:52.527385+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1631,30 +1611,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-17T14:11:47.801787+00:00",
+    "last_run": "2026-10-17T17:19:52.844448+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4848276,
-        "at": "2026-10-16T01:53:58.083228+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-10-16T01:53:58.083228+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-10-16T01:53:58.083228+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
-        "at": "2026-10-16T01:53:58.083228+00:00",
-        "ok": true
-      },
       {
         "id": 4681657,
         "at": "2026-10-16T07:15:49.023352+00:00",
@@ -1816,8 +1776,28 @@
         "ok": true
       },
       {
+        "id": 4848276,
+        "at": "2026-10-17T17:19:52.844448+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-10-17T17:19:52.844448+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-10-17T17:19:52.844448+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-10-17T17:19:52.844448+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-17T14:11:47.801787+00:00",
+        "at": "2026-10-17T17:19:52.844448+00:00",
         "ok": true
       }
     ],
@@ -1826,7 +1806,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 36.3
+    "oldest_check_age_hours": 34.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

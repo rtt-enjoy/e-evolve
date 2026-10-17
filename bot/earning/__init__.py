@@ -1,4 +1,5 @@
-"""Earning modules.
+"""
+Earning modules.
 
 Products (each owns a ``run(llm, status)`` the orchestrator calls):
   ``articles``    -- one deep dev.to article per day, plus follow-ups
@@ -10,8 +11,10 @@ Products (each owns a ``run(llm, status)`` the orchestrator calls):
 Support (no ``run``; imported by the products):
   ``_shared``     -- config loading, cadence, and feed parsing used by all
   ``devto``       -- the dev.to publish call and the gates every post passes
-  ``trending``    -- sources fresh stories from free public feeds
   ``devto_stats`` -- reads this account's own dev.to reach numbers
+  ``trending``    -- sources fresh stories from free public feeds
+  ``payout``      -- the support footer appended to every published post
+  ``health``      -- standalone health diagnostic for secrets and readiness
 
 ``bot.main`` imports the products lazily via ``importlib``; these re-exports
 are for tests and ad-hoc use.

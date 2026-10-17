@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-17T17:12:25.467138+00:00",
-  "total_runs": 1993,
+  "last_run": "2026-10-17T19:25:28.232797+00:00",
+  "total_runs": 1994,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,7 +35,12 @@
   "last_evolution": {
     "version_bumped_to": "1.41.0",
     "summary": "Add a standalone health diagnostic module, document all required GitHub secrets, and export the health runner from the earning package.",
-    "changes_applied": [],
+    "changes_applied": [
+      {
+        "file": "bot/earning/health.py",
+        "reason": ""
+      }
+    ],
     "suggestions": [
       {
         "title": "Add CEREBRAS_API_KEY GitHub secret",
@@ -78,11 +83,22 @@
       }
     ],
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.41.1-20261017-194401",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "mrr-ideas",
+        "success": true,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
+        "estimated_usd": 0.0,
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "status.json#mrr_ideas"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -127,7 +143,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 448,
+  "last_cycle_seconds": 1248,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1179,7 +1195,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-17T17:12:26.007856+00:00",
+    "checked_at": "2026-10-17T19:25:28.860608+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1315,7 +1331,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-10-15T19:31:09.002884+00:00",
+    "last_refresh_at": "2026-10-17T19:44:01.575042+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -1324,41 +1340,42 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The strongest recurring-revenue angle for a zero-cost, research-first, publish-to-dev.to stack is a paid newsletter aimed at solo developers who build and ship small tools or apps on GitHub using free-tier infrastructure. The owner researches and writes deep, practical guides on surviving and thriving with zero-budget constraints (no servers, no payment processing, no outreach), then publishes them to dev.to to build an audience. Once the audience is warm, the owner can offer a paid newsletter subscription via a hand-opened payment account (e.g., Gumroad or Substack with ID verification, or a crypto wallet address for tips). The content itself is the acquisition channel: each article ends with a question or prompt that invites readers to subscribe for more. No automation can open the payment account, verify identity, or convert readers into paying subscribers \u2014 that is entirely the owner",
+    "summary": "The only recurring-revenue model that fits a zero-cost, research-first, publish-to-dev.to stack is a paid newsletter for a narrow technical niche: the bot publishes free dev.to articles that demonstrate deep expertise, the owner manually sets up a Substack (or Gumroad) account with ID verification, and the newsletter sells for a monthly fee verified independently; a Notion template store is a close second but requires the same manual payment setup and adds the friction of delivering Notion duplicates.",
     "ranked_ideas": [
       {
         "name": "Paid newsletter",
-        "why_this_stack_fits": "The owner can research, draft, and publish articles to dev.to for free using GitHub Actions, building an audience that can be converted to paid subscribers once a payment account is opened by hand.",
-        "narrow_niche": "Solo developers building and shipping small tools or apps on GitHub using only free-tier infrastructure (no servers, no payment processing, no outreach).",
-        "first_proof_artifact": "A 5-part article series titled 'How I Built and Shipped a SaaS on GitHub Actions Free Tier \u2014 With No Backend, No Payments, and No Outreach' published on dev.to, ending with a clear call-to-action for a paid newsletter.",
-        "who_pays": "Solo developers, indie hackers, and bootstrapped founders who are constrained to free-tier tools and need practical, no-fluff guidance on building and shipping real products without spending money.",
-        "monthly_price_usd": "10-20",
+        "why_this_stack_fits": "The bot can publish free dev.to articles that demonstrate expertise and funnel readers to a paid newsletter the owner sets up by hand.",
+        "narrow_niche": "Go backend developers who need practical concurrency patterns for high-throughput services",
+        "first_proof_artifact": "A 5-article dev.to series on Go worker pools, rate limiting, and context cancellation, ending with a newsletter sign-up call-to-action",
+        "who_pays": "Mid-level Go engineers at Series A\u2013C startups who want to level up concurrency skills",
+        "monthly_price_usd": "verify independently",
         "runway_to_first_dollar": "8-12 weeks",
-        "owner_must_do_by_hand": "Open a payment account (Gumroad, Substack, or a crypto wallet address) by hand, pass ID verification if required, create the subscription product, and personally engage with readers who respond to article calls-to-action to convert them into paying subscribers."
+        "owner_must_do_by_hand": "Open a Substack (or Gumroad) account, complete ID verification, create a paid newsletter product, and manually add the subscription link to dev.to bio and article footers"
       },
       {
         "name": "Notion / digital template store",
-        "why_this_stack_fits": "The owner can draft and publish articles on dev.to showcasing Notion templates for developers, then link to a hand-opened storefront (e.g., Gumroad) where templates are sold individually or via a library subscription.",
-        "narrow_niche": "Solo developers and indie hackers who use Notion to track projects, manage roadmaps, and document code, but lack structured templates tailored to their workflow.",
-        "first_proof_artifact": "A free, downloadable 'Developer's Notion Toolkit' (3 templates: Project Tracker, Bug Log, and Release Notes) published as a dev.to article with a link to a Gumroad product page for the full library.",
-        "who_pays": "Solo developers, indie hackers, and small teams who use Notion daily and want pre-built, developer-specific templates to save time and reduce setup friction.",
-        "monthly_price_usd": "5-15",
+        "why_this_stack_fits": "The bot can draft Notion template structures and dev.to tutorials; the owner publishes tutorials and sells templates via a Gumroad store set up by hand.",
+        "narrow_niche": "Solo SaaS founders who track MRR, churn, and LTV in Notion but lack a ready-made dashboard",
+        "first_proof_artifact": "A dev.to article walking through a Notion MRR-tracking template with a duplicate link, plus a free minimal template version",
+        "who_pays": "Solo founders of B2B SaaS products under $10K MRR who manage metrics in Notion",
+        "monthly_price_usd": "verify independently",
         "runway_to_first_dollar": "6-10 weeks",
-        "owner_must_do_by_hand": "Open a Gumroad or similar storefront account by hand, pass ID verification, create product listings for each template, and personally respond to comments and questions on dev.to articles to drive traffic to the store."
+        "owner_must_do_by_hand": "Open a Gumroad account, complete ID verification, create a product for the Notion template, and manually embed purchase links in dev.to articles"
       }
     ],
     "validation_steps": [
-      "Write and publish a dev.to article titled 'I Built a Product on GitHub Actions Free Tier \u2014 Here's What Broke and How I Fixed It' and end it with the question: 'Would you pay $10/month for a newsletter that teaches you how to do this without spending a dime?' Track replies and email signups via a link to a free Substack or Buttondown form (no payment required to start).",
-      "Join the 'Indie Hackers' and 'Solo Python' communities on Discord or Reddit (if already a member) and share the article link in relevant threads where people discuss free-tier constraints. Ask for feedback on what topics they'd want covered in a paid newsletter.",
-      "Search dev.to for existing articles about 'free tier', 'GitHub Actions', 'no backend', and 'zero budget' and read the top 20 comments. Identify recurring pain points and questions that are not being answered \u2014 these become the first 3 article topics.",
-      "Publish a second dev.to article that includes a free, downloadable Notion template (e.g., 'A Developer's Notion Project Tracker \u2014 Free Download') and track how many people download it via a Gumroad link. If more than 50 people download it, there is demand for paid templates."
+      "Publish a dev.to article titled \"The Go concurrency pattern I wish I knew earlier\" ending with \"What's your biggest headache with worker pools? Comment below.\"",
+      "Post a thread in the Go subreddit (by hand) asking for feedback on the article's examples.",
+      "Join the \"Go Developers\" Discord (already a member) and share the article in #general, asking for pain points.",
+      "Write a follow-up article addressing the top 3 comments, again ending with a question.",
+      "Compile the pain points into a newsletter outline and publish as a dev.to article with a \"Subscribe for the full series\" note."
     ],
     "owner_actions": [
-      "Research and outline the first 3 article topics by reading the top 20 dev.to articles and comments about building on free-tier infrastructure (GitHub Actions, no backend, no payments).",
-      "Write and publish the first article on dev.to: 'How I Built and Shipped a Tool on GitHub Actions Free Tier \u2014 With No Backend, No Payments, and No Outreach' \u2014 ending with a question asking readers if they'd pay $10/month for more guides like this.",
-      "Open a free Substack or Buttondown account by hand (no ID verification required for free tier) and add a signup form link at the end of the article to collect email addresses from interested readers.",
-      "Join one relevant developer community (e.g., Indie Hackers Discord or r/SoloPython on Reddit) if not already a member, and share the article link in a relevant discussion thread to gather feedback on what topics readers want covered next.",
-      "Based on reader feedback and email signups, decide whether to proceed with the paid newsletter (open a Gumroad or Substack paid plan by hand) or pivot to the Notion template store (open a Gumroad account by hand and create the first product listing)."
+      "Research and write the first dev.to article on Go worker pools (Week 1).",
+      "Set up Substack account by hand, complete ID verification, create paid newsletter product, add subscription link to dev.to bio (Week 1-2).",
+      "Engage with comments and Discord thread to collect 10 specific pain points (Weeks 2-3).",
+      "Draft 5-issue paid newsletter outline based on pain points (Week 4).",
+      "Launch paid newsletter on Substack, announce via dev.to article (Week 5-6)."
     ],
     "viable": [
       {
@@ -1485,8 +1502,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261017-194401",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 36,
     "total_views": 4853,
@@ -1601,7 +1618,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-17T17:19:52.527385+00:00",
+    "last_run": "2026-10-17T19:46:15.107143+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1611,30 +1628,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-17T17:19:52.844448+00:00",
+    "last_run": "2026-10-17T19:46:15.668102+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4681657,
-        "at": "2026-10-16T07:15:49.023352+00:00",
-        "ok": true
-      },
-      {
-        "id": 4568987,
-        "at": "2026-10-16T07:15:49.023352+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-10-16T07:15:49.023352+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
-        "at": "2026-10-16T07:15:49.023352+00:00",
-        "ok": true
-      },
       {
         "id": 4602729,
         "at": "2026-10-16T12:34:37.599270+00:00",
@@ -1796,8 +1793,28 @@
         "ok": true
       },
       {
+        "id": 4681657,
+        "at": "2026-10-17T19:46:15.668102+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-10-17T19:46:15.668102+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-10-17T19:46:15.668102+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-10-17T19:46:15.668102+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-17T17:19:52.844448+00:00",
+        "at": "2026-10-17T19:46:15.668102+00:00",
         "ok": true
       }
     ],
@@ -1806,7 +1823,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 34.1
+    "oldest_check_age_hours": 31.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

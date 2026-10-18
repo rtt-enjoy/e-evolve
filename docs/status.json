@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-18T14:35:58.976081+00:00",
-  "total_runs": 1999,
+  "last_run": "2026-10-18T18:07:03.416247+00:00",
+  "total_runs": 2000,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,21 +34,8 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add health diagnostic, fix wallet address inconsistency, and skip recent posts in backfill to reduce unnecessary updates.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/health.py",
-        "reason": "Add health diagnostic to verify secrets, LLM providers, dev.to readiness, and wallet configuration, providing owners a clear status file."
-      },
-      {
-        "file": "bot/dashboard.py",
-        "reason": "Normalize wallet address fields: populate usdt_wallet from environment and ensure wallet dict contains a masked address for consistency."
-      },
-      {
-        "file": "bot/earning/backfill.py",
-        "reason": "Skip recent posts (configurable window) in backfill to avoid unnecessary updates and align with the optimization mentioned in the last evolution."
-      }
-    ],
+    "summary": "Add bot/earning/health.py diagnostic that verifies secrets, LLM providers, dev.to readiness, and wallet configuration, writing docs/health.json for owner review.",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Run the new health diagnostic to verify system readiness",
@@ -86,29 +73,18 @@
         "free_tier": true,
         "how_to": [
           "Edit config/strategy.json",
-          "Add a new entry under \"reference_sources\" for Anthropic Console free tier",
+          "Add a new entry under code_techs.reference_sources for Anthropic Console free tier",
           "Commit and push the change",
           "Run the code_techs module to refresh the brief"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.41.1-20261018-145108",
-    "proposed_version": "1.41.1"
+    "branch": null,
+    "proposed_version": "1.42.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -148,14 +124,14 @@
       "free_tier": true,
       "how_to": [
         "Edit config/strategy.json",
-        "Add a new entry under \"reference_sources\" for Anthropic Console free tier",
+        "Add a new entry under code_techs.reference_sources for Anthropic Console free tier",
         "Commit and push the change",
         "Run the code_techs module to refresh the brief"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1031,
+  "last_cycle_seconds": 214,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1243,7 +1219,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-18T14:35:59.545665+00:00",
+    "checked_at": "2026-10-18T18:07:03.797137+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1550,8 +1526,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261018-145108",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 37,
     "total_views": 4863,
@@ -1666,7 +1642,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-18T14:53:08.423495+00:00",
+    "last_run": "2026-10-18T18:10:36.159367+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1676,32 +1652,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-18T14:53:08.716394+00:00",
+    "last_run": "2026-10-18T18:10:36.862335+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4503417,
-        "at": "2026-10-17T04:35:43.688620+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-10-17T04:35:43.688620+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-10-17T04:35:43.688620+00:00",
-        "ok": true
-      },
-      {
         "id": 4800078,
-        "at": "2026-10-17T09:41:28.756690+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-10-17T09:41:28.756690+00:00",
         "ok": true
       },
@@ -1866,8 +1822,28 @@
         "ok": true
       },
       {
+        "id": 4503417,
+        "at": "2026-10-18T18:10:36.862335+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-18T18:10:36.862335+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-10-18T18:10:36.862335+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-10-18T18:10:36.862335+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-18T14:53:08.716394+00:00",
+        "at": "2026-10-18T18:10:36.862335+00:00",
         "ok": true
       }
     ],
@@ -1876,7 +1852,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 34.3
+    "oldest_check_age_hours": 32.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1893,7 +1869,7 @@
     "serving": "openrouter",
     "disabled_reason": "quota_spent",
     "calls": {
-      "openrouter": 2
+      "openrouter": 1
     }
   },
   "github_repo": "rtt-enjoy/e-evolve"

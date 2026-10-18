@@ -1,0 +1,7 @@
+# FUNDING.yml
+# Add this file to .github/FUNDING.yml to display a Sponsor button with a
+# direct stablecoin receive path. No GitHub Sponsors enrollment required.
+
+custom:
+  - type: crypto
+    url: "https://tronscan.org/#/address/TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"

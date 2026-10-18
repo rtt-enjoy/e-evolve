@@ -32,7 +32,7 @@ def write_log(actions: list[dict]) -> None:
 	if not actions:
 		return
 
-	ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+	s_ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 	lines = [f"\n### {ts}\n"]
 
 	for action in actions:
@@ -71,9 +71,6 @@ def write_log(actions: list[dict]) -> None:
 			lines.append(f"- {icon} **{platform}** NFT tx=`{tx}` uri={uri}")
 
 		else:
-			# A failed action carries an "error" explaining itself; printing
-			# only "action recorded" threw that away, so 17 dev.to failures in
-			# this log are indistinguishable from each other and from a crash.
 			err = str(action.get("error", "")).strip()
 			if not ok and err:
 				lines.append(f"- {icon} **{platform}**: {err[:120]}")
@@ -88,6 +85,21 @@ def write_log(actions: list[dict]) -> None:
 
 def write_html(status: dict[str, Any]) -> None:
 	"""Publish safe dashboard data files consumed by the React frontend."""
+	# Ensure usdt_wallet is populated from environment if missing.
+	usdt_wallet = status.get("usdt_wallet") or ""
+	if not usdt_wallet:
+		usdt_wallet = os.getenv("USDT_WALLET_ADDRESS", "").strip()
+		status["usdt_wallet"] = usdt_wallet
+
+	# Ensure wallet dict has a masked address derived from usdt_wallet.
+	wallet = status.get("wallet") or {}
+	if usdt_wallet and not wallet.get("address_masked"):
+		masked = f"{usdt_wallet[:6]}...{usdt_wallet[-4:]}" if len(usdt_wallet) > 10 else usdt_wallet
+		wallet["address_masked"] = masked
+		wallet["configured"] = True
+		wallet["network"] = "TRC-20"
+		status["wallet"] = wallet
+
 	_HTML_FILE.parent.mkdir(parents=True, exist_ok=True)
 	from bot.status import sanitize_for_git
 	public_status = sanitize_for_git(status)
@@ -95,9 +107,9 @@ def write_html(status: dict[str, Any]) -> None:
 	if github_repo:
 		public_status["github_repo"] = github_repo
 	_PUBLIC_STATUS_FILE.write_text(
-		json.dumps(public_status, indent=2, default=str),
-		encoding="utf-8",
-	)
+			json.dumps(public_status, indent=2, default=str),
+			encoding="utf-8",
+		)
 
 	if _LOG_FILE.exists():
 		_PUBLIC_LOG_FILE.write_text(

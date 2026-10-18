@@ -1,0 +1,4 @@
+# GitHub Funding configuration — renders a Sponsor button on the repo
+# The custom: field accepts arbitrary URLs; no GitHub Sponsors enrolment required.
+# This uses the same validated Tron (TRC-20) USDT address the bot appends to every article.
+custom: ["tron:TFTNsfyomKrnUutRjBTGVULp19ByW29KbY"]

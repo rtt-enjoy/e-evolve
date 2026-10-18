@@ -12,6 +12,7 @@ Support (no ``run``; imported by the products):
   ``devto``       -- the dev.to publish call and the gates every post passes
   ``trending``    -- sources fresh stories from free public feeds
   ``devto_stats`` -- reads this account's own dev.to reach numbers
+  ``health``      -- standalone diagnostic: secrets, LLM providers, wallet
 
 ``bot.main`` imports the products lazily via ``importlib``; these re-exports
 are for tests and ad-hoc use.
@@ -19,6 +20,7 @@ are for tests and ad-hoc use.
 from .articles import run as articles_run
 from .backfill import run as backfill_run
 from .code_techs import run as code_techs_run
+from .health import run as health_run
 from .mrr_ideas import run as mrr_ideas_run
 from .newsletter import run as newsletter_run
 
@@ -26,6 +28,7 @@ __all__ = [
 	"articles_run",
 	"backfill_run",
 	"code_techs_run",
+	"health_run",
 	"mrr_ideas_run",
 	"newsletter_run",
 ]

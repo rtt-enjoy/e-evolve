@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-18T05:55:51.110274+00:00",
-  "total_runs": 1997,
+  "last_run": "2026-10-18T11:09:02.218692+00:00",
+  "total_runs": 1998,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,21 +34,8 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add GitHub FUNDING.yml for wallet visibility, tune strategy config for more aggressive earning, and increase backfill throughput to monetize existing article traffic faster.",
-    "changes_applied": [
-      {
-        "file": "docs/FUNDING.yml",
-        "reason": "Implements the #2 ranked code_techs opportunity: 'Put the receive address in the GitHub repo itself \u2014 FUNDING.yml, README, and releases'. Zero cost, no KYC, no new secrets, and reaches developers who never open a storefront. The address is already published in articles and verified by receipt_check."
-      },
-      {
-        "file": "config/strategy.json",
-        "reason": "Tunes three levers: (1) lowers followup_min_views from 40 to 20 so more high-performing articles get follow-ups (the best archetype 'problem-workaround' averages 427 views but many posts sit in the 20-40 range); (2) increases backfill max_per_cycle from 3 to 5 to monetize the 37 existing articles faster (85% of lifetime views are on pre-footer posts); (3) adds health.run_on_startup so the new diagnostic runs every cycle and catches secret drift early."
-      },
-      {
-        "file": "bot/earning/backfill.py",
-        "reason": "Increases max_per_cycle default from 3 to 5 (matching the config change) so the backfill processes more high-traffic posts per run. The 37 existing articles have 4,863 total views with zero footers on most; at 5 per cycle the backlog clears in ~8 cycles instead of ~13, putting the wallet address in front of readers sooner."
-      }
-    ],
+    "summary": "Improve article publishing success, add Anthropic free tier reference, and optimize backfill to skip recent posts.",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Add CEREBRAS_API_KEY and ANTHROPIC_API_KEY GitHub secrets",
@@ -79,36 +66,25 @@
         ]
       },
       {
-        "title": "Add the wallet address to GitHub FUNDING.yml for zero-cost discoverability",
-        "description": "Create docs/FUNDING.yml with the published Tron USDT address so the Sponsor button appears on the repo, giving every visitor a way to pay without any platform fees or KYC.",
+        "title": "Add Anthropic free tier reference to strategy config",
+        "description": "Include Anthropic's free tier in the reference sources so the online AI brief highlights it, encouraging owners to add ANTHROPIC_API_KEY and expand free-tier capacity.",
         "secret_needed": null,
         "estimated_weekly_usd": 0,
         "free_tier": true,
         "how_to": [
-          "Copy the wallet address from the dashboard (TFTNsf...9KbY)",
-          "Create docs/FUNDING.yml with the custom: field pointing to the address",
-          "Commit and push \u2014 GitHub renders the Sponsor button automatically",
-          "Verify the button appears on the repository homepage"
+          "Edit config/strategy.json",
+          "Add a new entry under \"reference_sources\" for Anthropic Console free tier",
+          "Commit and push the change",
+          "Run the code_techs module to refresh the brief"
         ]
       }
     ],
     "error": null,
-    "branch": "evolve/1.42.0-20261018-060703",
-    "proposed_version": "1.42.0"
+    "branch": null,
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -141,21 +117,21 @@
       ]
     },
     {
-      "title": "Add the wallet address to GitHub FUNDING.yml for zero-cost discoverability",
-      "description": "Create docs/FUNDING.yml with the published Tron USDT address so the Sponsor button appears on the repo, giving every visitor a way to pay without any platform fees or KYC.",
+      "title": "Add Anthropic free tier reference to strategy config",
+      "description": "Include Anthropic's free tier in the reference sources so the online AI brief highlights it, encouraging owners to add ANTHROPIC_API_KEY and expand free-tier capacity.",
       "secret_needed": null,
       "estimated_weekly_usd": 0,
       "free_tier": true,
       "how_to": [
-        "Copy the wallet address from the dashboard (TFTNsf...9KbY)",
-        "Create docs/FUNDING.yml with the custom: field pointing to the address",
-        "Commit and push \u2014 GitHub renders the Sponsor button automatically",
-        "Verify the button appears on the repository homepage"
+        "Edit config/strategy.json",
+        "Add a new entry under \"reference_sources\" for Anthropic Console free tier",
+        "Commit and push the change",
+        "Run the code_techs module to refresh the brief"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 707,
+  "last_cycle_seconds": 1446,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1303,7 +1279,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-18T05:55:51.673741+00:00",
+    "checked_at": "2026-10-18T11:09:02.890538+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1610,8 +1586,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.42.0-20261018-060703",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 37,
     "total_views": 4863,
@@ -1726,7 +1702,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-18T06:07:36.511805+00:00",
+    "last_run": "2026-10-18T11:33:03.280526+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1736,25 +1712,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-18T06:07:36.824462+00:00",
+    "last_run": "2026-10-18T11:33:03.717219+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4780783,
-        "at": "2026-10-16T21:14:43.319852+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-10-16T21:14:43.319852+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-10-16T21:14:43.319852+00:00",
-        "ok": true
-      },
       {
         "id": 4641536,
         "at": "2026-10-16T23:42:17.165444+00:00",
@@ -1767,11 +1728,6 @@
       },
       {
         "id": 4636715,
-        "at": "2026-10-16T23:42:17.165444+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
         "at": "2026-10-16T23:42:17.165444+00:00",
         "ok": true
       },
@@ -1926,8 +1882,28 @@
         "ok": true
       },
       {
+        "id": 4780783,
+        "at": "2026-10-18T11:33:03.717219+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-10-18T11:33:03.717219+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-10-18T11:33:03.717219+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-10-18T11:33:03.717219+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-18T06:07:36.824462+00:00",
+        "at": "2026-10-18T11:33:03.717219+00:00",
         "ok": true
       }
     ],
@@ -1936,7 +1912,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 32.9
+    "oldest_check_age_hours": 35.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1953,7 +1929,7 @@
     "serving": "openrouter",
     "disabled_reason": "quota_spent",
     "calls": {
-      "openrouter": 2
+      "openrouter": 1
     }
   },
   "github_repo": "rtt-enjoy/e-evolve"

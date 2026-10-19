@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-19T15:37:42.910322+00:00",
-  "total_runs": 2006,
+  "last_run": "2026-10-19T21:04:31.806947+00:00",
+  "total_runs": 2007,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -21,7 +21,8 @@
     "last_cycle_usd": 0.0,
     "week_started": "2026-10-19",
     "breakdown": {
-      "code_techs": 0.0
+      "code_techs": 0.0,
+      "mrr-ideas": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -31,11 +32,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Sharpen the article draft prompt to explicitly steer toward the problem-workaround archetype, the account's best-performing shape, so more articles match what readers engage with.",
+    "summary": "Add the account's best-performing article as a concrete example in the audience guidance prompt, so the model steers more consistently toward the problem-workaround shape that earns the most engagement.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "Add an explicit reference to the problem-workaround shape in the user prompt so the model steers toward the account's best-performing archetype when picking an angle."
+        "reason": "The audience guidance prompt already names problem-workaround as the top archetype but gives no concrete example of it. Adding the account's actual best-performing article as a named example makes the shape visible to the model, which should increase the share of problem-workaround drafts and reduce the 'other' category that currently dominates."
       }
     ],
     "suggestions": [
@@ -50,29 +51,30 @@
         ]
       }
     ],
-    "direction": "Doctrine Principle 5, step 3: reach into a live receive path by publishing more articles in the shapes readers measurably prefer.",
+    "direction": "Principle 5, step 2: reach into a live receive path by publishing more articles in the shapes readers measurably prefer.",
     "evidence": [
-      "article_interest.best_archetype = 'problem-workaround' with avg_engagement 449.0 (n=9)",
-      "article_interest.next best build-tutorial avg_engagement 102.5 (n=2)",
-      "The user prompt in _generate_article() says only 'Pick a specific practitioner angle' without mentioning the preferred shape, so the model may not consistently apply the audience guidance"
+      "article_interest.best_archetype = 'problem-workaround'",
+      "article_interest.archetypes: problem-workaround n=9 avg=450.1, other n=13 avg=52.2",
+      "preferred_archetypes() = ['problem-workaround']",
+      "The 'other' category is the largest (n=13), indicating many articles are not using the preferred shape."
     ],
-    "money_path": "reach-only. This change improves reach by aligning articles with the highest-engagement shape; money enters only when readers tip, which is unaffected directly.",
-    "verify": "After the next publish, status['article_interest']['archetypes'][0]['archetype'] should remain 'problem-workaround' and its count should rise from 9 to 10.",
+    "money_path": "reach-only",
+    "verify": "article_interest.archetypes for problem-workaround should increase from 9 within a few cycles, or the next published article should match the problem-workaround shape (concrete failure in title, failure-cause-fix structure).",
     "error": null,
-    "branch": "evolve/1.41.1-20261019-155340",
+    "branch": "evolve/1.41.1-20261019-212019",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "mrr-ideas",
         "success": true,
-        "opportunity_count": 35,
-        "pursued_count": 0,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (35 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "status.json#mrr_ideas"
       },
       {
         "platform": "dev.to",
@@ -98,7 +100,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1425,
+  "last_cycle_seconds": 1489,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1219,7 +1221,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-19T15:37:43.412188+00:00",
+    "checked_at": "2026-10-19T21:04:32.453499+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1355,7 +1357,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-10-17T19:44:01.575042+00:00",
+    "last_refresh_at": "2026-10-19T21:20:19.130495+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -1364,43 +1366,21 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The only recurring-revenue model that fits a zero-cost, research-first, publish-to-dev.to stack is a paid newsletter for a narrow technical niche: the bot publishes free dev.to articles that demonstrate deep expertise, the owner manually sets up a Substack (or Gumroad) account with ID verification, and the newsletter sells for a monthly fee verified independently; a Notion template store is a close second but requires the same manual payment setup and adds the friction of delivering Notion duplicates.",
+    "summary": "The honest recurring-revenue angle is to treat dev.to as the proof channel, not the payment channel: publish narrow research artifacts that double as samples for a paid newsletter or template library, use article comments as the only inbound validation, and defer every billing step until the owner manually opens and verifies a payment path outside this stack. With no payment processor and no client-acquisition channel today, no recurring revenue can start automatically; the closest fit is a low-price subscription for a narrowly useful research artifact that the owner can research, write, and publish without automation.",
     "ranked_ideas": [
       {
         "name": "Paid newsletter",
-        "why_this_stack_fits": "The bot can publish free dev.to articles that demonstrate expertise and funnel readers to a paid newsletter the owner sets up by hand.",
-        "narrow_niche": "Go backend developers who need practical concurrency patterns for high-throughput services",
-        "first_proof_artifact": "A 5-article dev.to series on Go worker pools, rate limiting, and context cancellation, ending with a newsletter sign-up call-to-action",
-        "who_pays": "Mid-level Go engineers at Series A\u2013C startups who want to level up concurrency skills",
-        "monthly_price_usd": "verify independently",
-        "runway_to_first_dollar": "8-12 weeks",
-        "owner_must_do_by_hand": "Open a Substack (or Gumroad) account, complete ID verification, create a paid newsletter product, and manually add the subscription link to dev.to bio and article footers"
-      },
-      {
-        "name": "Notion / digital template store",
-        "why_this_stack_fits": "The bot can draft Notion template structures and dev.to tutorials; the owner publishes tutorials and sells templates via a Gumroad store set up by hand.",
-        "narrow_niche": "Solo SaaS founders who track MRR, churn, and LTV in Notion but lack a ready-made dashboard",
-        "first_proof_artifact": "A dev.to article walking through a Notion MRR-tracking template with a duplicate link, plus a free minimal template version",
-        "who_pays": "Solo founders of B2B SaaS products under $10K MRR who manage metrics in Notion",
-        "monthly_price_usd": "verify independently",
-        "runway_to_first_dollar": "6-10 weeks",
-        "owner_must_do_by_hand": "Open a Gumroad account, complete ID verification, create a product for the Notion template, and manually embed purchase links in dev.to articles"
+        "why_this_stack_fits": "The stack can do the entire product loop for a changelog-style newsletter: research public sources, write a tight issue, and publish it as an article; no client acquisition is needed if the sample issue is the marketing.",
+        "narrow_niche": "Solo developers and small maintainers who run production workloads on GitHub Actions free tier and need a monthly verified summary of runner changes, deprecated actions, free-tier limits, and breaking workflow behavior.",
+        "first_proof_artifact": "One sample issue published to dev.to: a table of five verified GitHub Actions changes or limits, each with a public source link, a one-line impact note, and one copy-paste workflow snippet that fails loudly if a named limit is hit.",
+        "who_pays": "A solo developer or volunteer maintainer who already spends hours reading changelogs and wants a filtered version tied to free-tier risk.",
+        "monthly_price_usd": "12",
+        "runway_to_first_dollar": "8-12 weeks after a manual payment path exists; $0 until then.",
+        "owner_must_do_by_hand": "Read and verify every source, write each issue, publish it, read dev.to comments, and\u2014only if choosing to charge\u2014open and pass verification for a payment account; this stack cannot collect money, find subscribers, or verify payout claims, so all provider terms must be verified independently."
       }
     ],
-    "validation_steps": [
-      "Publish a dev.to article titled \"The Go concurrency pattern I wish I knew earlier\" ending with \"What's your biggest headache with worker pools? Comment below.\"",
-      "Post a thread in the Go subreddit (by hand) asking for feedback on the article's examples.",
-      "Join the \"Go Developers\" Discord (already a member) and share the article in #general, asking for pain points.",
-      "Write a follow-up article addressing the top 3 comments, again ending with a question.",
-      "Compile the pain points into a newsletter outline and publish as a dev.to article with a \"Subscribe for the full series\" note."
-    ],
-    "owner_actions": [
-      "Research and write the first dev.to article on Go worker pools (Week 1).",
-      "Set up Substack account by hand, complete ID verification, create paid newsletter product, add subscription link to dev.to bio (Week 1-2).",
-      "Engage with comments and Discord thread to collect 10 specific pain points (Weeks 2-3).",
-      "Draft 5-issue paid newsletter outline based on pain points (Week 4).",
-      "Launch paid newsletter on Substack, announce via dev.to article (Week 5-6)."
-    ],
+    "validation_steps": [],
+    "owner_actions": [],
     "viable": [
       {
         "name": "Paid newsletter",
@@ -1526,12 +1506,12 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261019-155340",
+  "last_evolution_branch": "evolve/1.41.1-20261019-212019",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 38,
-    "total_views": 4903,
-    "avg_views": 129.0,
+    "total_views": 4913,
+    "avg_views": 129.3,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 3258,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -1570,8 +1550,8 @@
       {
         "archetype": "other",
         "count": 13,
-        "avg_engagement": 52.2,
-        "avg_views": 27.2,
+        "avg_engagement": 52.9,
+        "avg_views": 27.9,
         "best_title": "Your AI Agent Can't See What It Clicks"
       },
       {
@@ -1603,15 +1583,15 @@
   "article_rejects": {
     "last_reason": "empty_draft",
     "last_detail": "LLM returned no usable title/body",
-    "last_at": "2026-10-19T16:01:25.898041+00:00",
+    "last_at": "2026-10-19T21:29:19.192663+00:00",
     "counts": {
-      "empty_draft": 6,
+      "empty_draft": 7,
       "fabricated": 2,
       "weak_title": 9,
       "revision_fabricated": 1,
       "llm_error": 13
     },
-    "total": 31,
+    "total": 32,
     "recent": [
       {
         "code": "empty_draft",
@@ -1621,6 +1601,11 @@
       {
         "code": "empty_draft",
         "at": "2026-10-19T16:01:25.898041+00:00",
+        "detail": ""
+      },
+      {
+        "code": "empty_draft",
+        "at": "2026-10-19T21:29:19.192663+00:00",
         "detail": ""
       }
     ]
@@ -1654,7 +1639,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-19T16:01:26.657773+00:00",
+    "last_run": "2026-10-19T21:29:19.616354+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1664,32 +1649,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-19T16:01:27.010270+00:00",
+    "last_run": "2026-10-19T21:29:20.099334+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4671278,
-        "at": "2026-10-18T06:07:36.824462+00:00",
-        "ok": true
-      },
-      {
         "id": 4780783,
-        "at": "2026-10-18T11:33:03.717219+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-10-18T11:33:03.717219+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-10-18T11:33:03.717219+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
         "at": "2026-10-18T11:33:03.717219+00:00",
         "ok": true
       },
@@ -1854,8 +1819,28 @@
         "ok": true
       },
       {
+        "id": 4671278,
+        "at": "2026-10-19T21:29:20.099334+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-10-19T21:29:20.099334+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-10-19T21:29:20.099334+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-10-19T21:29:20.099334+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-19T16:01:27.010270+00:00",
+        "at": "2026-10-19T21:29:20.099334+00:00",
         "ok": true
       }
     ],

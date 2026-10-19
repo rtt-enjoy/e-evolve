@@ -186,7 +186,8 @@ Known dead ends. Each was proposed repeatedly and never merged:
   and summary scripts fail this; status.json and the dashboard already report.
 - A new secret, token or account (GH_TOKEN, GITHUB_TOKEN, more LLM keys,
   storefront signups). "Needs no new secret" is rank 1 of the channel table.
-- Anything under .github/ (FUNDING.yml, workflows). The sandbox drops it.
+- Anything under .github/ (workflows). The sandbox drops it. FUNDING.yml is
+  already live at .github/FUNDING.yml (owner-shipped 2026-10-19).
 - Loosening a quality gate (title, fabrication, tone, min_words, follow-up
   thresholds) to publish more. The gates exist because loose ones published
   junk. Fix the draft, or the prompt that produced it, not the gate.

@@ -1,0 +1,7 @@
+# Sponsor button on the repo header. custom: takes plain URLs, so no GitHub
+# Sponsors enrolment, Stripe Connect or KYC is involved.
+# This is the same Tron (TRC-20) receive address every dev.to post carries
+# (USDT_WALLET_ADDRESS, see bot/earning/payout.py). It is hardcoded here because
+# GitHub reads this file statically; if the address ever changes, change it here too.
+custom:
+  - https://tronscan.org/#/address/TFTNsfyomKrnUutRjBTGVULp19ByW29KbY

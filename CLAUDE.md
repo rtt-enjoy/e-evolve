@@ -627,6 +627,14 @@ exempts exactly that one field; `TestPublicAddressSurvivesRedaction` pins that
 the address is still redacted in `errors`, `suggestions`, and everywhere else,
 and that API keys are untouched. Do not widen that exemption.
 
+**The same address is on the repo header.** `.github/FUNDING.yml` (owner-shipped
+2026-10-19) puts a Sponsor button on the GitHub repo. Its `custom:` entry is a
+tronscan link to the address, so there is no Sponsors enrolment and no KYC. GitHub
+reads the file as it is, so the address is hardcoded there. If
+`USDT_WALLET_ADDRESS` ever changes, update that file too. GitHub shows the button
+only when **Settings → General → Features → Sponsorships** is ticked, and that is
+an owner action.
+
 ### Back-catalogue retrofit (bot/earning/backfill.py)
 
 The footer was attached inside `devto.publish`, which is a `POST` — so it ran on

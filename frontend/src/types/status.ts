@@ -19,6 +19,9 @@ export type Suggestion = {
 	title?: string;
 	description?: string;
 	secret_needed?: string;
+	/** The one step only the owner can take (evolution brief schema). */
+	owner_action?: string;
+	/** Pre-brief schema only; absent on suggestions written since 2026-10-19. */
 	free_tier?: boolean;
 	estimated_weekly_usd?: number;
 	how_to?: string[];

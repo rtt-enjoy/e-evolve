@@ -230,9 +230,12 @@ export default function ResearchSection({ status }: { status: Status }) {
 								<article className="suggestion" key={suggestion.title}>
 									<div className="suggestion-head">
 										<strong>{suggestion.title}</strong>
-										<Pill tone={suggestion.free_tier ? 'good' : 'warn'}>{suggestion.free_tier ? 'free' : 'paid'}</Pill>
+										{typeof suggestion.free_tier === 'boolean' ? (
+											<Pill tone={suggestion.free_tier ? 'good' : 'warn'}>{suggestion.free_tier ? 'free' : 'paid'}</Pill>
+										) : null}
 									</div>
 									<p className="prose">{suggestion.description}</p>
+									{suggestion.owner_action ? <p className="prose"><strong>You do:</strong> {suggestion.owner_action}</p> : null}
 									{suggestion.secret_needed ? <code>{suggestion.secret_needed}</code> : null}
 									{(suggestion.how_to || []).length ? <Bullets items={suggestion.how_to || []} /> : null}
 								</article>

@@ -155,6 +155,10 @@ Only the masked address (`wallet.address_masked`) is written to tracked files;
 - Suggestion views prefer code-tech, dev.to, and free LLM work. `isAvoidedSuggestion`
   filters recommendations needing KYC, paid access, phone-gated APIs, or funded
   wallets.
+- Suggestion cards render `owner_action` (the evolution brief schema). The
+  free/paid pill shows only when `free_tier` is a boolean: the brief schema
+  dropped that field, and reading its absence as `false` labelled every new
+  owner action "paid".
 - When adding a new module or secret, update `bot/status.py` first, then extend
   the relevant section in `frontend/src/sections/`.
 - Build with `pnpm build` from `frontend/` so `docs/` holds the public artifacts.

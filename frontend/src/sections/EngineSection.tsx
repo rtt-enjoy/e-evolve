@@ -166,15 +166,18 @@ export default function EngineSection({ status }: { status: Status }) {
 					</Card>
 
 					{(evolution.suggestions || []).length ? (
-						<Disclosure title="Evolution suggestions" hint="Repair ideas from the last cycle" count={evolution.suggestions?.length}>
+						<Disclosure title="Evolution suggestions" hint="Owner actions proposed with the last evolution" count={evolution.suggestions?.length}>
 							<div className="stack">
 								{(evolution.suggestions || []).map((suggestion) => (
 									<article className="suggestion" key={suggestion.title}>
 										<div className="suggestion-head">
 											<strong>{suggestion.title}</strong>
-											<Pill tone={suggestion.free_tier ? 'good' : 'warn'}>{suggestion.free_tier ? 'free' : 'paid'}</Pill>
+											{typeof suggestion.free_tier === 'boolean' ? (
+												<Pill tone={suggestion.free_tier ? 'good' : 'warn'}>{suggestion.free_tier ? 'free' : 'paid'}</Pill>
+											) : null}
 										</div>
 										<p className="prose">{suggestion.description}</p>
+										{suggestion.owner_action ? <p className="prose"><strong>You do:</strong> {suggestion.owner_action}</p> : null}
 										{(suggestion.how_to || []).length ? (
 											<ul className="bullets">
 												{(suggestion.how_to || []).map((step) => <li key={step}>{step}</li>)}

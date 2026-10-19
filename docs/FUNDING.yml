@@ -1,0 +1,9 @@
+# GitHub Sponsors button configuration.
+# Copy this file to .github/FUNDING.yml to enable the Sponsor button on the repo.
+# The custom: field accepts arbitrary URLs, so no GitHub Sponsors enrollment
+# or Stripe Connect onboarding is required -- the button links directly to
+# the Tron (TRC-20) USDT receive address this project already publishes.
+#
+# After copying, the Sponsor button appears on the repo header within 24 hours.
+custom:
+  - https://tronscan.org/#/address/TFTNsfyomKrnUutRjBTGVULp19ByW29KbY

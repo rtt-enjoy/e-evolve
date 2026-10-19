@@ -24,6 +24,12 @@ Only one is required, but set `ATRIA_API_KEY` **and** `OPENROUTER_API_KEY`.
 **Main AI engine: Atria (`Atria-Dawn`), roughly 1B free tokens.**
 It is called through the OpenAI-style endpoint
 `https://discovery-api.intern-ai.org.cn/v1` with model `Atria-Dawn`.
+Create the key at [discovery.intern-ai.org.cn](https://discovery.intern-ai.org.cn)
+→ System Settings → API Key → Key Management
+([docs](https://discovery.intern-ai.org.cn/docs/en/userCenter/api-key/)).
+A key allows 500 requests/minute and **expires after 6 months** — an expired
+key answers 401, so Atria quietly drops to the fallback (`auth_failed` on the
+Engine panel). Rotate it before then.
 `bot/llm.py` sends every role to Atria first: evolution proposals (`upgrade`),
 research and lead briefs (`research`), and article and newsletter drafting
 (`post`). On a 401, a 404, or a quota-spent 429, Atria is switched off for the

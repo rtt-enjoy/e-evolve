@@ -209,7 +209,7 @@
   "llm_workflows": {
     "upgrade": {
       "provider": "atria",
-      "model": "Atria-Dawn-Preview",
+      "model": "Atria-Dawn",
       "purpose": "research-only repair suggestions for Codex-owned code changes",
       "fallback_provider": "openrouter",
       "fallback_model": "openrouter/free",
@@ -220,7 +220,7 @@
     },
     "research": {
       "provider": "atria",
-      "model": "Atria-Dawn-Preview",
+      "model": "Atria-Dawn",
       "purpose": "free-AI-service discovery, market research, and earning-suggestion briefs",
       "fallback_provider": "openrouter",
       "fallback_model": "openrouter/free",
@@ -231,7 +231,7 @@
     },
     "post": {
       "provider": "atria",
-      "model": "Atria-Dawn-Preview",
+      "model": "Atria-Dawn",
       "purpose": "article drafting and formatting for publication",
       "fallback_provider": "openrouter",
       "fallback_model": "openrouter/free",
@@ -1924,7 +1924,7 @@
   },
   "llm_engine": {
     "main_provider": "atria",
-    "main_model": "Atria-Dawn-Preview",
+    "main_model": "Atria-Dawn",
     "key_set": true,
     "live": false,
     "serving": "openrouter",

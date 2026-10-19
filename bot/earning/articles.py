@@ -565,7 +565,14 @@ def _audience_guidance(status: dict) -> str:
 		if not hint:
 			continue
 		lead = "earns the most engagement here" if rank == 0 else "also performs well here"
-		lines.append(f"- The '{name}' kind {lead}. {hint}")
+		line = f"- The '{name}' kind {lead}. {hint}"
+		if rank == 0:
+			stats = status.get("article_stats") or {}
+			best_title = str(stats.get("best_title") or "")
+			best_views = int(stats.get("best_views") or 0)
+			if best_title:
+				line += f" For example, \"{best_title}\" earned {best_views} views."
+		lines.append(line)
 
 	weak = str(report.get("worst_archetype", ""))
 	if weak and weak not in preferred and weak in _ARCHETYPE_ANGLES:

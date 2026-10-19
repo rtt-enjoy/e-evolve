@@ -735,9 +735,19 @@ class LLMClient:
 			raise RuntimeError(f"Atria error: {data['error']}")
 		if not data.get("choices"):
 			raise RuntimeError(f"Atria returned no choices for {model}: {str(data)[:200]}")
-		text = _require_text(
-			data["choices"][0]["message"]["content"], "atria", model
-		)
+		choice  = data["choices"][0]
+		message = choice.get("message") or {}
+		content = message.get("content")
+		if not (content and content.strip()):
+			# The chain has one model, so complete() logs only "chain exhausted";
+			# record why the answer was empty. Field names and sizes, never text.
+			log.warning(
+				"atria returned no content: finish_reason=%s message_fields=%s usage=%s",
+				choice.get("finish_reason"),
+				{k: len(v) if isinstance(v, str) else type(v).__name__ for k, v in message.items()},
+				data.get("usage"),
+			)
+		text = _require_text(content, "atria", model)
 		return LLMResponse(
 			text      = text,
 			provider  = "atria",

@@ -7,6 +7,8 @@ Hard safety rules (cannot be overridden by LLM output):
   • Never touches: .github/, .git/
   • No path traversal (.. rejected)
   • Python files are syntax-checked before writing
+  • Existing files change by exact search/replace edits; a full rewrite that
+    drops 40%+ of a large file is refused
   • Max 3 file changes per cycle
   • Original files are backed up before overwriting
 
@@ -69,50 +71,122 @@ _MAX_READ_BYTES = {
     "atria":      200_000,
 }
 
+# The doctrine is the standing brief for what "evolve" means here, and the
+# codebase snapshot never included docs/ -- so the engine evolved blind to it,
+# and four separate proposals "added the missing doctrine" by overwriting the
+# 1,209-line file with a stub. These sections are quoted verbatim from the file
+# on every cycle rather than restated here, so the prompt cannot drift from it.
+_DOCTRINE_PATH = "docs/passive-income-doctrine.md"
+_DOCTRINE_SECTIONS = (
+    "The standing checklist for the next evolution",
+    "Candidate channels, scored",
+)
+# Open evolve/* branches are unmerged proposals. Showing them stops the engine
+# re-proposing the same idea hourly: on 2026-10-19 the 47 open branches held
+# the "health diagnostic" module four times and "add the doctrine" four times.
+_MAX_PRIOR_PROPOSALS = 30
+# A status sub-tree larger than this is summarised by name and size, not
+# dumped: code_tech_earning alone was 37 KB of the old 97 KB status dump.
+_STATUS_FIELD_MAX_BYTES = 1_500
+# Fields that only ever led the engine to "add a secret": the old prompt listed
+# "Inactive (need secrets): llm_anthropic, llm_cerebras" and five proposals
+# then tried to enable Cerebras. A missing secret is an owner decision, never
+# a code change, so these are left out of the digest entirely.
+_STATUS_BAIT = frozenset({
+    "inactive_features", "secret_readiness", "configured_github_secrets",
+    "last_earning",
+})
+# A full-file rewrite that keeps less than this share of an existing file is
+# refused. Observed: payout.py -416 lines, code_techs.py -2,069 lines, and the
+# doctrine replaced by a 56-line stub -- all from "COMPLETE file" rewrites of
+# files too large to reproduce inside one response.
+_SHRINK_FLOOR = 0.6
+_SHRINK_MIN_BYTES = 4_000
+
 _SYSTEM = """\
-You are the autonomous evolution engine of E-Evolve, a self-improving GitHub Actions bot.
+You are the evolution engine of E-Evolve: an hourly GitHub Actions bot that
+publishes developer articles to dev.to with a USDT tip address in every post,
+and earns only what readers send to that address. Real revenue is the
+on-chain balance. Nothing else counts as money.
 
-Analyse the codebase and current status, then propose CONCRETE, WORKING improvements.
+Your output is a code proposal on a REVIEW BRANCH. A human reads the diff and
+decides whether to merge it. Dozens of earlier proposals were never merged,
+mostly because they rebuilt something that already exists, rewrote a large
+file and lost code, or went where the project has already decided not to go.
+One small, evidenced, verifiable change is worth more than three speculative
+ones. Proposing no change is a correct answer when nothing clears the bar.
 
-Respond with ONLY a single JSON object — no markdown, no prose outside the JSON.
+How to choose the change:
+1. Read the SITUATION BRIEF. It is computed from status.json and names the
+   doctrine checklist step that binds right now. Serve that step, unless the
+   OWNER DIRECTION says otherwise.
+2. Ground it in evidence: quote the status fields and values that show the
+   problem. No evidence, no change.
+3. Say where money enters because of it ("money_path"). If it does not touch
+   the receive path, say "reach-only". That is allowed, but say it.
+4. Say how the reviewer confirms it worked ("verify"): a test you added to
+   bot/tests.py, or a status field that should move next cycle.
+5. Find the code that causes the problem in the CODEBASE and change that code.
+   A new file is rarely the answer to a problem in an existing one.
 
-Required JSON schema:
+Known dead ends. Each was proposed repeatedly and never merged:
+- A module that duplicates one in the FILE INVENTORY. Address validation is
+  bot/earning/payout.py; retrofitting the footer onto old posts is backfill.py;
+  reading posts back to verify the footer is receipt_check.py; the doctrine is
+  docs/passive-income-doctrine.md and already exists. Check the inventory
+  before creating any file.
+- A new module that nothing calls. Only bot/main.py calls product run()
+  functions and you cannot edit it, so a new bot/earning/*.py is dead code
+  unless an existing editable module imports and calls it. Health, diagnostic
+  and summary scripts fail this; status.json and the dashboard already report.
+- A new secret, token or account (GH_TOKEN, GITHUB_TOKEN, more LLM keys,
+  storefront signups). "Needs no new secret" is rank 1 of the channel table.
+- Anything under .github/ (FUNDING.yml, workflows). The sandbox drops it.
+- Loosening a quality gate (title, fabrication, tone, min_words, follow-up
+  thresholds) to publish more. The gates exist because loose ones published
+  junk. Fix the draft, or the prompt that produced it, not the gate.
+- Rewording or enlarging the tip footer. Doctrine Principle 5: do not tune the
+  ask until receipts exist.
+- Retry/backoff loops for HTTP 429. dev.to and Reddit throttle the IP; backfill
+  and receipt_check stop at the first failure on purpose, and the next hourly
+  cycle is the retry.
+- Any revenue estimate. estimated_usd stays 0.0.
+- Anything already in PRIOR PROPOSALS. Those branches are still open.
+
+Hard rules, enforced in code (breaking one only wastes the cycle):
+- Write only under bot/, docs/, config/, requirements.txt, version.txt.
+- Never write bot/main.py, bot/commands.py, bot/evolution.py, bot/status.py,
+  bot/llm.py or bot/git_utils.py.
+- At most 3 changes. Python must parse and import.
+- To change an EXISTING file, use "edits": exact search/replace pairs. Each
+  "old" must occur exactly once in the current file, copied character for
+  character from the CODEBASE. Use "content" (the complete file) only for a
+  new file. A rewrite that drops 40% or more of an existing file is refused.
+- Social posting, trading, minting, payouts, cold outreach and commenting on
+  external issues stay blocked.
+
+Respond with ONLY one JSON object, keys in this order:
 {
-  "version": "X.Y.Z",
-  "summary": "one-sentence description of changes",
-  "suggestions": [
-    {
-      "title": "short title",
-      "description": "what it unlocks or earns",
-      "secret_needed": "SECRET_NAME or null",
-      "estimated_weekly_usd": 0,
-      "free_tier": true,
-      "how_to": ["Step 1: go to ...", "Step 2: copy the key", "Step 3: add as GitHub secret"]
-    }
-  ],
+  "version": "X.Y.Z (patch for a fix, minor for a feature)",
+  "summary": "one sentence: what changes and why",
+  "direction": "the checklist step or doctrine principle this serves",
+  "evidence": ["status field = value that shows the problem"],
+  "money_path": "where money enters because of this, or reach-only, or none (maintenance)",
+  "verify": "how the reviewer confirms it worked",
   "changes": [
-    {
-      "file": "bot/some_file.py",
-      "content": "COMPLETE new file content — never a diff or snippet",
-      "reason": "why"
-    }
+    {"file": "bot/earning/x.py", "reason": "why, specific enough to review",
+     "edits": [{"old": "exact existing text", "new": "replacement"}]},
+    {"file": "bot/earning/new_file.py", "reason": "why", "content": "COMPLETE new file"}
+  ],
+  "suggestions": [
+    {"title": "short title", "description": "what it unlocks",
+     "owner_action": "the one step only the owner can take",
+     "secret_needed": null, "how_to": ["Step 1: ...", "Step 2: ..."]}
   ]
 }
-
-Rules:
-1. Only write files under: bot/, docs/, config/, requirements.txt, version.txt
-2. Never touch .github/ or .git/
-3. Every "content" must be the COMPLETE new file — not a patch
-4. Python files must be syntactically valid
-5. At most 3 changes per response
-6. If nothing to change, return "changes": []
-6a. NEVER propose changes to: bot/main.py, bot/commands.py, bot/evolution.py, bot/status.py, bot/llm.py, bot/git_utils.py — these are protected orchestrator files
-7. Always return at least 3 ranked suggestions; set free_tier=true when the suggestion costs nothing to start (free API tier exists); populate how_to with 2-4 concrete numbered steps the owner must follow to activate it
-8. Bump patch for fixes, minor for new features, major for rewrites
-9. Your changes are committed to a REVIEW BRANCH, not to main. A human reads
-   the diff before it can run. Optimise for a reviewable, self-contained
-   change: prefer one well-explained fix over three speculative ones, and
-   make "reason" specific enough to review without reading the whole file."""
+"suggestions" are 0-3 actions only the owner can take: none the doctrine
+already refuses, never with a dollar estimate. An empty list is fine.
+If no change clears the bar, return "changes": [] and say why in "summary"."""
 
 
 def enabled(cfg: dict[str, Any] | None = None) -> bool:
@@ -163,33 +237,9 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
         evo_provider = getattr(llm, "provider", "groq")
     max_bytes = _MAX_READ_BYTES.get(evo_provider, _MAX_READ_BYTES["groq"])
     log.info("Evolution provider=%s (upgrade role), max_bytes=%d", evo_provider, max_bytes)
-    codebase = _read_codebase(max_bytes, include_config=(evo_provider not in ("groq",)))
-
-    # Trim bulky runtime-only fields before sending to LLM to save tokens.
-    status_slim = {k: v for k, v in status.items()
-                   if k not in ("last_earning",)}
-    if "earnings" in status_slim:
-        e = dict(status_slim["earnings"])
-        e.pop("history", None)
-        status_slim["earnings"] = e
-
-    focus = ""
-    improve_target = status.get("_overrides", {}).get("improve_suggestion")
-    if improve_target:
-        focus = (
-            f"\nOwner requested: improve suggestion '{improve_target}'. "
-            "Prioritize changes that make that suggestion actionable, automated, "
-            "or easier to complete in the GitHub workflow.\n"
-        )
-
-    prompt = (
-        f"Current status:\n{json.dumps(status_slim, indent=2, default=str)}\n\n"
-        f"Active features: {status.get('active_features', [])}\n"
-        f"Inactive (need secrets): {status.get('inactive_features', [])}\n\n"
-        f"{focus}"
-        f"Codebase:\n{codebase}\n\n"
-        "Propose improvements. JSON only."
-    )
+    compact = evo_provider == "groq"
+    codebase = _read_codebase(max_bytes, include_config=not compact)
+    prompt = build_prompt(status, codebase, _load_config(), compact=compact)
 
     try:
         plan = llm.complete_json_for_role("upgrade", prompt, system=_SYSTEM, max_tokens=_MAX_PLAN_TOKENS)
@@ -215,7 +265,7 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
         branch = _branch_name(version, str(cfg.get("branch_prefix", "evolve")))
         paths = [c["file"] for c in applied] + ["version.txt"]
         result = _git.commit_to_branch(
-            f"🧬 evolve v{version}: {summary[:80]}", paths, branch,
+            _commit_message(version, summary, plan), paths, branch,
         )
         if not result["success"]:
             branch_error = f"branch commit failed: {result['error']}"
@@ -238,10 +288,309 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
             {k: v for k, v in ch.items() if not k.startswith("_")} for ch in applied
         ],
         "suggestions":       plan.get("suggestions", []),
+        # The reasoning a reviewer needs, persisted beside the diff it explains.
+        **{k: plan[k] for k in _RATIONALE_KEYS if plan.get(k)},
         "error":             branch_error,
         "branch":            branch,
         "proposed_version":  _resolve_version(plan.get("version"), version),
     }
+
+
+# ── Prompt composition ───────────────────────────────────────────────────────
+
+_RATIONALE_KEYS = ("direction", "evidence", "money_path", "verify")
+
+
+def build_prompt(status: dict[str, Any], codebase: str,
+                 cfg: dict[str, Any] | None = None, compact: bool = False) -> str:
+    """
+    The evolution request: what binds now, why, what exists, what was tried.
+
+    The codebase goes last and the task is restated after it, so the closing
+    instruction is not 200 KB away from the answer. The prompt carries no raw
+    status dump: that was ~97 KB, dominated by queues no change acts on,
+    while the few fields the doctrine says to read were buried inside it.
+    """
+    cfg = cfg if cfg is not None else _load_config()
+    step, evidence = checklist_step(status)
+    parts = []
+
+    direction = str(cfg.get("direction") or "").strip()
+    improve_target = (status.get("_overrides") or {}).get("improve_suggestion")
+    if direction or improve_target:
+        owner = ["OWNER DIRECTION (outranks the binding step below):"]
+        if direction:
+            owner.append(f"- Standing direction (config evolution.direction): {direction}")
+        if improve_target:
+            owner.append(f"- This cycle only: improve the suggestion '{improve_target}' — "
+                         "make it actionable or automated inside current policy.")
+        parts.append("\n".join(owner))
+
+    parts.append(
+        "SITUATION BRIEF (computed from status.json this cycle):\n"
+        f"Binding step: {step}\n" + "\n".join(f"- {line}" for line in evidence)
+    )
+    ops = _operations_lines(status)
+    if ops:
+        parts.append("OPERATIONS:\n" + "\n".join(f"- {line}" for line in ops))
+    if not compact:
+        parts.append(_doctrine_extract())
+        parts.append("STATUS FIELDS (large sub-trees summarised by size):\n"
+                     + _status_digest(status))
+    prior = prior_proposals(limit=10 if compact else _MAX_PRIOR_PROPOSALS)
+    if prior:
+        parts.append(prior)
+    parts.append(_file_inventory())
+    parts.append(f"CODEBASE:\n{codebase}")
+    parts.append(
+        f"TASK: the binding step is \"{step}\". Propose the smallest change that "
+        "moves it, grounded in the evidence above, or return no change and say "
+        "why. Follow the system rules and the dead-end list. JSON only."
+    )
+    return "\n\n".join(parts)
+
+
+def checklist_step(status: dict[str, Any]) -> tuple[str, list[str]]:
+    """
+    The first doctrine checklist step that is not clean, plus its evidence.
+
+    Deterministic, so the engine is told which step binds instead of
+    re-deriving it from a status dump every hour. The order is the doctrine's:
+    a later step is never worth work while an earlier one reads "no".
+    """
+    payout = status.get("payout") or {}
+    rc = status.get("receipt_check") or {}
+    wallet = status.get("wallet") or {}
+    earnings = status.get("earnings") or {}
+
+    if not payout.get("live"):
+        return ("1 — the receive path is off, so every reader sees no way to pay", [
+            f"payout.live = {payout.get('live')}",
+            f"payout.blocked_reason = {payout.get('blocked_reason')!r}",
+        ])
+
+    rc_lines = [
+        f"receipt_check.covered / published_total = "
+        f"{rc.get('covered')} / {rc.get('published_total')}",
+        f"receipt_check.coverage_complete = {rc.get('coverage_complete')} "
+        "(None = this cycle observed nothing; read as unknown, not as true)",
+        f"receipt_check.known_without_footer = {rc.get('known_without_footer')}",
+        f"receipt_check.last_reason = {rc.get('last_reason')!r}",
+    ]
+    known = rc.get("known_without_footer") or 0
+    if known:
+        missing = [f"{m.get('views')} views: {m.get('title')}"
+                   for m in (rc.get("missing") or [])[:3] if isinstance(m, dict)]
+        return (f"1 — {known} published post(s) show readers no way to pay",
+                rc_lines + [f"busiest offenders: {missing}"])
+    if rc.get("agrees_with_backfill") is False:
+        return ("1 — backfill's self-report disagrees with what readers see",
+                rc_lines + [
+                    f"backfill.remaining = {(status.get('backfill') or {}).get('remaining')}",
+                    "the observation (receipt_check) is the half to believe",
+                ])
+
+    received = float(wallet.get("received_total_usd")
+                     or earnings.get("received_total_usd") or 0)
+    other = wallet.get("other_assets") or {}
+    wallet_lines = [
+        f"wallet.received_total_usd = {received}",
+        f"wallet.other_assets = {other}",
+        f"wallet.error = {wallet.get('error')!r}",
+    ]
+    if received > 0 or other:
+        attr = status.get("attribution") or {}
+        return ("2 — money has arrived; attribute it before changing anything else",
+                rc_lines + wallet_lines + [
+                    f"attribution.receipt_count = {attr.get('receipt_count')}",
+                    f"attribution.by_archetype = {attr.get('by_archetype')}",
+                    "read count beside every total: one receipt is not a trend",
+                ])
+
+    return ("4 — reach into a live receive path (doctrine Principle 5, step 3): "
+            "publish more articles, in the shapes readers measurably prefer",
+            ["receive path verified; wallet is a real $0.00, so the work is reach"]
+            + rc_lines + wallet_lines + _reach_lines(status))
+
+
+def _reach_lines(status: dict[str, Any]) -> list[str]:
+    """What reach work steers on: output, what readers prefer, what blocks a post."""
+    lines: list[str] = []
+    stats = status.get("article_stats") or {}
+    if stats:
+        lines.append(
+            f"article_stats: {stats.get('count')} posts, {stats.get('total_views')} "
+            f"views, avg {stats.get('avg_views')}, best {stats.get('best_views')} "
+            f"({stats.get('best_title')!r})"
+        )
+    interest = status.get("article_interest") or {}
+    rows = [r for r in (interest.get("archetypes") or []) if isinstance(r, dict)]
+    if rows:
+        lines.append("article_interest (n = posts; a row under n=3 is noise): " + "; ".join(
+            f"{r.get('archetype')} n={r.get('count')} avg={r.get('avg_engagement')}"
+            for r in rows
+        ))
+        try:
+            from bot.earning.devto_stats import preferred_archetypes
+            lines.append(f"preferred_archetypes() = {preferred_archetypes(interest)}")
+        except Exception as exc:
+            lines.append(f"preferred_archetypes() unavailable: {exc}")
+    rejects = status.get("article_rejects") or {}
+    counts = rejects.get("counts") or {}
+    if counts:
+        ranked = sorted(counts.items(), key=lambda kv: -kv[1])
+        lines.append(
+            f"article_rejects.counts (drafts lost per gate; total {rejects.get('total')}): "
+            + ", ".join(f"{k}={v}" for k, v in ranked)
+        )
+        lines.append(f"article_rejects.last = {rejects.get('last_reason')!r}: "
+                     f"{rejects.get('last_detail')!r}")
+    daily = status.get("article_daily") or {}
+    if daily:
+        lines.append(f"article_daily = {daily}")
+    news = status.get("newsletter_daily") or {}
+    if news:
+        lines.append(f"newsletter last published {news.get('published_at')}, "
+                     f"{news.get('published')} issues total")
+    return lines
+
+
+def _operations_lines(status: dict[str, Any]) -> list[str]:
+    """Engine and error state: a cycle that cannot draft cannot publish."""
+    lines: list[str] = []
+    eng = status.get("llm_engine") or {}
+    if eng:
+        lines.append(
+            f"llm_engine: serving={eng.get('serving')}, live={eng.get('live')}, "
+            f"disabled_reason={eng.get('disabled_reason')}, calls={eng.get('calls')}"
+        )
+    errors = [str(e)[:200] for e in (status.get("errors") or [])][:5]
+    if errors:
+        lines.append(f"errors this cycle: {errors}")
+    last = status.get("last_evolution") or {}
+    if last.get("error"):
+        lines.append(f"last evolution error: {str(last['error'])[:200]}")
+    skipped = (status.get("backfill") or {}).get("skipped") or {}
+    if skipped:
+        lines.append(f"backfill.skipped: {len(skipped)} post(s), e.g. "
+                     f"{str(next(iter(skipped.values())))[:120]}")
+    return lines
+
+
+def _status_digest(status: dict[str, Any]) -> str:
+    """Small fields verbatim, large ones by name and size, runtime keys dropped."""
+    out: list[str] = []
+    for key, value in status.items():
+        if key.startswith("_") or key in _STATUS_BAIT:
+            continue
+        raw = json.dumps(value, default=str)
+        if len(raw) <= _STATUS_FIELD_MAX_BYTES:
+            out.append(f"{key}: {raw}")
+        else:
+            out.append(f"{key}: <{len(raw)} bytes omitted; read the module that owns it>")
+    return "\n".join(out)
+
+
+def _doctrine_extract(path: str = _DOCTRINE_PATH) -> str:
+    """Every principle heading plus the checklist and channel table, verbatim."""
+    try:
+        text = Path(path).read_text(encoding="utf-8")
+    except Exception:
+        return f"DOCTRINE: {path} could not be read this cycle."
+    sections: dict[str, list[str]] = {}
+    principles: list[str] = []
+    current = None
+    for line in text.splitlines():
+        if line.startswith("## "):
+            title = line[3:].strip()
+            current = title if title in _DOCTRINE_SECTIONS else None
+            if title.startswith("Principle"):
+                principles.append(title)
+            if current:
+                sections[current] = []
+            continue
+        if current:
+            sections[current].append(line)
+    out = [f"DOCTRINE ({path}; the standing brief, it outranks local improvements).",
+           "Principles:"] + [f"- {p}" for p in principles]
+    for title in _DOCTRINE_SECTIONS:
+        body = "\n".join(sections.get(title, [])).strip().strip("-").strip()
+        if body:
+            out.append(f"\n### {title}\n{body}")
+    return "\n".join(out)
+
+
+def prior_proposals(limit: int = _MAX_PRIOR_PROPOSALS) -> str:
+    """Open evolve/* branches, newest first, deduplicated with a repeat count."""
+    try:
+        result = subprocess.run(
+            ["git", "log", "--no-walk=sorted", "--format=@@%cs %s", "--name-only",
+             "--glob=refs/remotes/origin/evolve/*", "--glob=refs/heads/evolve/*"],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            timeout=30,
+        )
+    except Exception as exc:
+        log.info("Prior proposals unavailable: %s", exc)
+        return ""
+    if result.returncode != 0:
+        return ""
+    return format_prior_proposals(result.stdout, limit)
+
+
+def format_prior_proposals(log_text: str, limit: int = _MAX_PRIOR_PROPOSALS) -> str:
+    """Render `git log --name-only` output as one line per distinct proposal."""
+    seen: dict[str, dict[str, Any]] = {}
+    for block in log_text.split("@@")[1:]:
+        lines = [ln.strip() for ln in block.strip().splitlines() if ln.strip()]
+        if not lines:
+            continue
+        date, _, subject = lines[0].partition(" ")
+        summary = re.sub(r"^\S*\s*evolve v[\d.]+:\s*", "", subject).strip()
+        files = sorted({f for f in lines[1:] if f != "version.txt"})
+        entry = seen.setdefault(summary, {"date": date, "files": set(), "n": 0})
+        entry["n"] += 1
+        entry["files"].update(files)
+    if not seen:
+        return ""
+    rows = [
+        f"- {e['date']} {s}" + (f" (proposed {e['n']}x)" if e["n"] > 1 else "")
+        + (f" [{', '.join(sorted(e['files']))}]" if e["files"] else "")
+        for s, e in list(seen.items())[:limit]
+    ]
+    return ("PRIOR PROPOSALS (open review branches, none merged; do not repeat "
+            f"them — {len(seen)} distinct):\n" + "\n".join(rows))
+
+
+def _file_inventory() -> str:
+    """Every editable file with its size, so the model can see what exists."""
+    rows: list[str] = []
+    for pat in ("bot/**/*.py", "config/*.json", "docs/*.md", "requirements.txt"):
+        for path in sorted(Path(".").glob(pat)):
+            if not path.is_file():
+                continue
+            key = path.as_posix()
+            try:
+                n = len(path.read_text(encoding="utf-8", errors="replace").splitlines())
+            except Exception:
+                n = "?"
+            mark = " (protected: never write)" if key in PROTECTED_FILES else ""
+            rows.append(f"- {key}: {n} lines{mark}")
+    return "FILE INVENTORY (these already exist):\n" + "\n".join(rows)
+
+
+def _commit_message(version: str, summary: str, plan: dict[str, Any]) -> str:
+    """Subject for the branch list, body with the rationale the reviewer needs."""
+    body: list[str] = []
+    for key in _RATIONALE_KEYS:
+        value = plan.get(key)
+        if isinstance(value, list):
+            value = "\n".join(f"  - {v}" for v in value)
+            if value:
+                body.append(f"{key}:\n{value}")
+        elif value:
+            body.append(f"{key}: {value}")
+    subject = f"🧬 evolve v{version}: {summary[:80]}"
+    return subject + ("\n\n" + "\n".join(body) if body else "")
 
 
 # ── File reading ─────────────────────────────────────────────────────────────
@@ -309,17 +658,27 @@ def _apply_changes(changes: list, max_changes: Any = None) -> list[dict]:
         if not isinstance(ch, dict):
             continue
         filepath = str(ch.get("file", "")).strip().lstrip("/")
-        content  = str(ch.get("content", "")).strip()
         reason   = str(ch.get("reason", ""))
 
-        if not filepath or not content:
-            log.warning("Skipping malformed change (missing file or content)")
+        if not filepath:
+            log.warning("Skipping malformed change (missing file)")
             continue
         if filepath in PROTECTED_FILES:
             log.warning("Blocked write to protected orchestrator file: %s", filepath)
             continue
         if not _is_safe(filepath):
             log.warning("Blocked write to forbidden path: %s", filepath)
+            continue
+        if ch.get("edits") is not None:
+            content = _apply_edits(filepath, ch["edits"])
+        else:
+            content = str(ch.get("content", "")).strip()
+            if content and _truncates(filepath, content):
+                log.warning("Refused rewrite of %s: it would drop %d%%+ of the file",
+                            filepath, round((1 - _SHRINK_FLOOR) * 100))
+                continue
+        if not content:
+            log.warning("Skipping change to %s (no content, or edits did not apply)", filepath)
             continue
         if filepath.endswith(".py") and not _is_valid_python(content):
             log.warning("Skipping file with Python syntax error: %s", filepath)
@@ -333,6 +692,49 @@ def _apply_changes(changes: list, max_changes: Any = None) -> list[dict]:
         applied.append({"file": filepath, "reason": reason, "_backup": original_backup})
 
     return applied
+
+
+def _apply_edits(filepath: str, edits: Any) -> str | None:
+    """
+    Apply search/replace pairs to an existing file, or None if any pair misses.
+
+    All or nothing: an "old" that occurs zero times or more than once means the
+    model is editing a file it did not read correctly, and applying the other
+    pairs would leave a half-made change for the reviewer to untangle.
+    """
+    path = Path(filepath)
+    if not path.is_file() or not isinstance(edits, list) or not edits:
+        log.warning("Edits for %s skipped: file missing or no edits given", filepath)
+        return None
+    text = path.read_text(encoding="utf-8")
+    for i, edit in enumerate(edits):
+        if not isinstance(edit, dict):
+            return None
+        old, new = edit.get("old"), edit.get("new", "")
+        if not isinstance(old, str) or not old or not isinstance(new, str):
+            log.warning("Edit %d for %s is malformed", i, filepath)
+            return None
+        hits = text.count(old)
+        if hits != 1:
+            log.warning("Edit %d for %s: 'old' found %d times, need exactly 1",
+                        i, filepath, hits)
+            return None
+        text = text.replace(old, new, 1)
+    if text == path.read_text(encoding="utf-8"):
+        return None
+    return text
+
+
+def _truncates(filepath: str, content: str) -> bool:
+    """True when a full rewrite would keep too little of a large existing file."""
+    path = Path(filepath)
+    if not path.is_file():
+        return False
+    try:
+        old_size = len(path.read_text(encoding="utf-8", errors="replace"))
+    except Exception:
+        return False
+    return old_size >= _SHRINK_MIN_BYTES and len(content) < old_size * _SHRINK_FLOOR
 
 
 # ── Verification & LLM fix ───────────────────────────────────────────────────

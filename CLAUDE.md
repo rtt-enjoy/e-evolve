@@ -175,6 +175,27 @@ The gate, in order:
    the newest branches from the age rule, so a quiet fortnight still leaves
    something to review. It touches nothing outside `evolve/*`.
 
+8. **Edits, not rewrites.** An existing file changes only through exact
+   search/replace `edits` (each `old` must occur once, all or nothing). A full
+   `content` rewrite that keeps under 60% of an existing file of 4 KB or more is
+   refused. Full rewrites truncated `code_techs.py` by 2,069 lines and
+   `payout.py` by 416, and four proposals replaced the doctrine with a stub.
+
+**What the engine is asked** is built by `evolution.build_prompt()`, documented
+in [`docs/evolution.md`](docs/evolution.md). The old prompt was a ~97 KB raw
+status dump with no doctrine, no file list and no memory, and none of 65
+proposals over three weeks was merged. The new prompt is a deterministic
+**situation brief** naming the first unclean doctrine checklist step
+(`checklist_step()`), the doctrine checklist and channel table quoted from the
+file, the open `evolve/*` proposals not to repeat, a file inventory, and a
+dead-end list in the system prompt. The schema requires `direction`, `evidence`,
+`money_path` and `verify`, which are persisted to `last_evolution` and written into
+the branch's commit body. `estimated_weekly_usd` is gone. An owner steers with
+`evolution.direction` in `config/strategy.json` (standing) or `improve
+suggestion TEXT` (one cycle). Secret-readiness fields are deliberately kept out
+of the prompt: listing inactive secrets is how "enable Cerebras" got proposed
+five times.
+
 `version.txt` is bumped **on the review branch only**; the running version
 changes when you merge, not when the bot proposes. A branch that is never
 merged is therefore deleted at 14 days along with its version bump — review
@@ -1361,7 +1382,8 @@ Tunable by owner or changed here in Codex:
                       "min_channel_share": 0.5, "supply_max_age_days": 120,
                       "max_reddit_requests": 3, "auto_pursue": false,
                       "...": "searches, sources, product shapes" },
-  "evolution":      { "enabled": true, "branch_prefix": "evolve", "max_changes": 3 },
+  "evolution":      { "enabled": true, "branch_prefix": "evolve", "max_changes": 3,
+                      "direction": "" },
   "llm":            { "main_engine": "Atria-Dawn", "provider": "atria" },
   "research_policy":{ "allowed_actions": ["research", "suggestions", "drafts", "article publishing"],
                       "blocked_actions": ["social posting", "trading", "minting", "payouts"] }

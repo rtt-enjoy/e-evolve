@@ -217,6 +217,8 @@
 		"enabled": true,
 		"branch_prefix": "evolve",
 		"max_changes": 3,
+		"direction": "",
+		"direction_note": "Standing owner direction for evolution, e.g. 'cut the llm_error article rejects'. Empty means the engine serves the first unclean doctrine checklist step, computed from status.json each cycle. Outranks that computed step; see docs/evolution.md.",
 		"note": "LLM code proposals are committed to a review branch (branch_prefix/<version>-<utc>) and never to main. Merge the branch to apply. Writes are restricted to bot/, docs/, config/, requirements.txt, version.txt; bot/main.py, bot/llm.py, bot/status.py, bot/commands.py, bot/evolution.py, bot/git_utils.py and .github/ can never be written. Engine is Atria (Atria-Dawn), falling back to the free OpenRouter 'upgrade' chain led by the openrouter/free auto-router; no paid model."
 	}
 }

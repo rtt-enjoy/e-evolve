@@ -5225,3 +5225,190 @@ class TestDashboardNamesTheEngineThatServes(unittest.TestCase):
 		for role, flow in flows.items():
 			self.assertTrue(flow["primary_active"], role)
 			self.assertEqual(flow["serving"], "atria", role)
+
+
+
+class TestEvolutionEdits(unittest.TestCase):
+	"""
+	Existing files change by search/replace, never by a lossy full rewrite.
+
+	Full-file rewrites of large modules were the commonest way a proposal
+	destroyed code: payout.py lost 416 lines, code_techs.py 2,069, and the
+	doctrine was replaced by a 56-line stub.
+	"""
+
+	def setUp(self):
+		self.target = Path("bot/earning/_edit_probe.py")
+		self.original = "A = 1\nB = 2\nB = 2\n" + "# pad\n" * 1000
+		self.target.write_text(self.original, encoding="utf-8")
+		self.addCleanup(self.target.unlink, True)
+
+	def _apply(self, change):
+		applied = _evo_apply_changes([{"file": "bot/earning/_edit_probe.py", "reason": "r", **change}])
+		for ch in applied:
+			if ch.get("_backup"):
+				self.addCleanup(Path(ch["_backup"]).unlink, True)
+		return applied
+
+	def test_unique_edit_applies(self):
+		applied = self._apply({"edits": [{"old": "A = 1", "new": "A = 3"}]})
+		self.assertEqual(len(applied), 1)
+		text = self.target.read_text(encoding="utf-8")
+		self.assertTrue(text.startswith("A = 3\n"))
+		self.assertEqual(len(text), len(self.original))
+
+	def test_ambiguous_edit_changes_nothing(self):
+		self.assertEqual(self._apply({"edits": [{"old": "B = 2", "new": "B = 9"}]}), [])
+		self.assertEqual(self.target.read_text(encoding="utf-8"), self.original)
+
+	def test_one_missing_pair_rejects_the_whole_change(self):
+		edits = [{"old": "A = 1", "new": "A = 3"}, {"old": "not there", "new": "x"}]
+		self.assertEqual(self._apply({"edits": edits}), [])
+		self.assertEqual(self.target.read_text(encoding="utf-8"), self.original)
+
+	def test_edits_to_a_protected_file_are_blocked(self):
+		before = Path("bot/evolution.py").read_text(encoding="utf-8")
+		applied = _evo_apply_changes([{"file": "bot/evolution.py", "reason": "r",
+			"edits": [{"old": "MAX_CHANGES       = 3", "new": "MAX_CHANGES = 99"}]}])
+		self.assertEqual(applied, [])
+		self.assertEqual(Path("bot/evolution.py").read_text(encoding="utf-8"), before)
+
+	def test_rewrite_that_drops_most_of_a_large_file_is_refused(self):
+		self.assertEqual(self._apply({"content": "A = 1\n"}), [])
+		self.assertEqual(self.target.read_text(encoding="utf-8"), self.original)
+
+	def test_new_file_may_still_be_written_whole(self):
+		path = Path("bot/earning/_new_probe.py")
+		self.addCleanup(path.unlink, True)
+		applied = _evo_apply_changes([{"file": path.as_posix(), "content": "X = 1", "reason": "r"}])
+		self.assertEqual(len(applied), 1)
+
+
+class TestEvolutionBrief(unittest.TestCase):
+	"""The engine is told which doctrine step binds, not left to guess from a dump."""
+
+	def _clean(self, **over):
+		status = {
+			"payout": {"live": True},
+			"receipt_check": {"covered": 38, "published_total": 38, "coverage_complete": True,
+							  "known_without_footer": 0, "agrees_with_backfill": True},
+			"wallet": {"received_total_usd": 0.0, "other_assets": {}},
+			"article_rejects": {"counts": {"weak_title": 9, "llm_error": 12}, "total": 21},
+		}
+		status.update(over)
+		return status
+
+	def test_receive_path_off_binds_step_one(self):
+		step, ev = evolution_module.checklist_step(self._clean(payout={"live": False, "blocked_reason": "disabled"}))
+		self.assertTrue(step.startswith("1"))
+		self.assertIn("payout.blocked_reason = 'disabled'", ev)
+
+	def test_posts_without_an_ask_bind_step_one(self):
+		rc = {"known_without_footer": 2, "missing": [{"views": 900, "title": "Big post"}]}
+		step, ev = evolution_module.checklist_step(self._clean(receipt_check=rc))
+		self.assertIn("2 published post(s)", step)
+		self.assertTrue(any("Big post" in line for line in ev))
+
+	def test_unobserved_cycle_does_not_bind_step_one(self):
+		"""coverage_complete None is unknown (Principle 3k), not a broken path to 'fix'."""
+		rc = dict(self._clean()["receipt_check"], coverage_complete=None)
+		step, _ = evolution_module.checklist_step(self._clean(receipt_check=rc))
+		self.assertTrue(step.startswith("4"))
+
+	def test_money_arriving_binds_step_two(self):
+		for wallet in ({"received_total_usd": 1.5}, {"received_total_usd": 0, "other_assets": {"TRX": 10}}):
+			step, _ = evolution_module.checklist_step(self._clean(wallet=wallet))
+			self.assertTrue(step.startswith("2"), wallet)
+
+	def test_clean_path_at_zero_is_reach_with_rejects_ranked(self):
+		step, ev = evolution_module.checklist_step(self._clean())
+		self.assertTrue(step.startswith("4"))
+		line = next(l for l in ev if l.startswith("article_rejects.counts"))
+		self.assertLess(line.index("llm_error=12"), line.index("weak_title=9"))
+
+	def test_doctrine_extract_quotes_the_checklist_and_principles(self):
+		text = evolution_module._doctrine_extract()
+		self.assertIn("Principle 1", text)
+		self.assertIn("### The standing checklist for the next evolution", text)
+		self.assertIn("### Candidate channels, scored", text)
+		self.assertIn("receipt_check", text)
+
+	def test_missing_doctrine_is_reported_not_raised(self):
+		self.assertIn("could not be read", evolution_module._doctrine_extract("docs/_nope.md"))
+
+	def test_prior_proposals_are_deduplicated_with_counts(self):
+		log_text = (
+			"@@2026-10-18 \U0001F9EC evolve v1.42.0: Add health diagnostic\n\nbot/earning/health.py\nversion.txt\n"
+			"@@2026-10-17 \U0001F9EC evolve v1.41.1: Add health diagnostic\n\nbot/earning/health.py\nversion.txt\n"
+			"@@2026-10-16 \U0001F9EC evolve v1.41.1: Tune titles\n\nconfig/strategy.json\n"
+		)
+		text = evolution_module.format_prior_proposals(log_text)
+		self.assertIn("2 distinct", text)
+		self.assertIn("Add health diagnostic (proposed 2x) [bot/earning/health.py]", text)
+		self.assertNotIn("version.txt", text)
+
+
+class TestEvolutionPrompt(unittest.TestCase):
+	"""What the engine is asked, end to end through run(), with no change applied."""
+
+	class _FakeLLM:
+		provider = "openrouter"
+
+		def __init__(self):
+			self.calls = []
+
+		def complete_json_for_role(self, role, prompt, system="", max_tokens=0):
+			self.calls.append((prompt, system))
+			return {"version": "1.0.1", "summary": "nothing clears the bar", "changes": [],
+					"direction": "4", "money_path": "reach-only", "verify": "n/a",
+					"evidence": ["article_rejects.counts.llm_error = 12"]}
+
+	def _run(self, status):
+		llm = self._FakeLLM()
+		result = evolution_module.run(llm, status)
+		self.assertEqual(len(llm.calls), 1)
+		return result, llm.calls[0][0], llm.calls[0][1]
+
+	def test_prompt_carries_brief_doctrine_inventory_not_raw_queues(self):
+		status = {
+			"version": "1.0.0", "payout": {"live": True},
+			"code_tech_earning": {"opportunities": ["x" * 50] * 200},
+			"inactive_features": ["llm_cerebras"],
+		}
+		result, prompt, _ = self._run(status)
+		self.assertIn("SITUATION BRIEF", prompt)
+		self.assertIn("### The standing checklist for the next evolution", prompt)
+		self.assertIn("- docs/passive-income-doctrine.md:", prompt)
+		self.assertIn("code_tech_earning: <", prompt)
+		self.assertNotIn("x" * 50, prompt)
+		self.assertNotIn("inactive_features", prompt)
+		self.assertTrue(prompt.rstrip().endswith("JSON only."))
+		self.assertIsNone(result.get("branch"))
+
+	def test_schema_asks_for_rationale_and_no_estimate(self):
+		_, _, system = self._run({"version": "1.0.0"})
+		for key in ('"direction"', '"evidence"', '"money_path"', '"verify"', '"edits"'):
+			self.assertIn(key, system)
+		self.assertNotIn("estimated_weekly_usd", system)
+
+	def test_rationale_is_persisted_with_the_result(self):
+		result, _, _ = self._run({"version": "1.0.0"})
+		self.assertEqual(result["money_path"], "reach-only")
+		self.assertEqual(result["evidence"], ["article_rejects.counts.llm_error = 12"])
+
+	def test_owner_direction_outranks_the_brief(self):
+		prompt = evolution_module.build_prompt(
+			{"_overrides": {"improve_suggestion": "profile bio"}}, "",
+			{"direction": "cut llm_error rejects"},
+		)
+		self.assertLess(prompt.index("OWNER DIRECTION"), prompt.index("SITUATION BRIEF"))
+		self.assertIn("cut llm_error rejects", prompt)
+		self.assertIn("profile bio", prompt)
+
+	def test_commit_message_carries_the_rationale(self):
+		msg = evolution_module._commit_message("1.2.3", "fix titles", {
+			"direction": "step 4", "evidence": ["a = 1"], "verify": "test_x"})
+		subject, _, body = msg.partition("\n\n")
+		self.assertTrue(subject.endswith("evolve v1.2.3: fix titles"))
+		self.assertIn("direction: step 4", body)
+		self.assertIn("  - a = 1", body)

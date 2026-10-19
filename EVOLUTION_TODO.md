@@ -1,7 +1,12 @@
 # Evolution TODO
 
-Bot state: v1.40.0 - cycle #1774 - active: `llm_anthropic`, `llm_gemini`, `llm_openrouter`, `llm_groq`, `articles_devto`, `usdt_wallet`
-Receive path: **live on new posts, verified missing on 10 of 12 published** - first receipt still pending.
+Bot state: v1.41.0 - cycle #2003 - engine: Atria (`Atria-Dawn`), OpenRouter free chain as fallback
+Receive path: **verified on 38 of 38 published posts** (`receipt_check.coverage_complete: true`,
+`known_without_footer: 0`) - wallet a real $0.00, so the binding work is reach (checklist step 4).
+
+The hourly evolution engine now receives this same checklist position, computed
+from `status.json` by `evolution.checklist_step()` (see `docs/evolution.md`).
+If this file and the engine's brief disagree, the brief is computed from live data.
 
 **Read [`docs/passive-income-doctrine.md`](docs/passive-income-doctrine.md) before
 working this list.** It ranks channels by what runs unattended and carries the
@@ -11,8 +16,34 @@ scored candidate table, so a cycle does not re-derive the same refused ideas.
 
 ## Bugs (break current earning)
 
-- **The back catalogue still has no ask, and `backfill` has never written to a
-  post.** Verified 2026-09-06 against the live account by `receipt_check`, which
+_(none open)_
+
+---
+
+## High Priority - Earning
+
+- **Drafts are lost before publishing, and `llm_error` is the biggest cause.**
+  `article_rejects.counts` at cycle #2003: `llm_error` 12, `weak_title` 9,
+  `empty_draft` 4, `fabricated` 2, `revision_fabricated` 1 (28 total). Each one
+  is a day with no new post into a verified receive path. Diagnose `llm_error`
+  before touching any gate. Atria moved endpoints on 2026-10-19 (`7cdc3af`), and
+  `llm_engine.calls` read `{"openrouter": 2}`, so check whether the rejects
+  predate that fix before changing code. Do **not** loosen the title gate to
+  clear `weak_title`; improve the title prompt or the rewrite instead.
+
+- **The evolution engine had never been shown the doctrine** - fixed
+  2026-10-19, see Resolved. Watch the first proposals under the new prompt.
+  `last_evolution.direction` / `evidence` / `verify` should cite real
+  status fields, and `changes` should use `edits`. If proposals still repeat a
+  dead end, add it to `_SYSTEM` in `bot/evolution.py`, not to this file.
+
+---
+
+## Previously open, now resolved by observation
+
+- **The back catalogue had no ask, and `backfill` had never written to a
+  post.** Closed: `receipt_check` reports 38/38 covered, 0 without footer,
+  `backfill.updated_total: 11`. Original diagnosis kept below. Verified 2026-09-06 against the live account by `receipt_check`, which
   reads the published articles back through the unauthenticated API rather than
   trusting any field this bot wrote about itself:
 
@@ -62,14 +93,12 @@ scored candidate table, so a cycle does not re-derive the same refused ideas.
 
 ---
 
-## High Priority - Earning
+## High Priority - Earning (continued)
 
 - **Publish consistently into the shapes the audience measurably prefers.**
-  Doctrine Principle 5, step 3. **Blocked behind the bug above**: the receive
-  path is live on new posts only, so until the back catalogue is fixed most
-  reach is still being multiplied by zero and this work would compound into
-  nothing. Do this after `receipt_check.without_footer` reaches 0.
-  `status["article_interest"]` measures that `problem-workaround` earns ~25x
+  Doctrine Principle 5, step 3. **Unblocked**: the receive path covers all 38
+  posts. `problem-workaround` is now n=9 at avg 447.9 engagement, and
+  `preferred_archetypes()` returns it alone. `status["article_interest"]` measures that `problem-workaround` earns ~25x
   `build-tutorial`, and `_prefer_proven_archetypes` already applies a bounded
   bonus for it. What is not yet known is whether the current bonus is big enough
   to change which source actually gets picked. Measure before tuning: read
@@ -108,6 +137,22 @@ _(none open)_
 ---
 
 ## Resolved
+
+- **The evolution engine evolved blind** - fixed 2026-10-19 in
+  `bot/evolution.py`. None of 65 proposals over three weeks was merged. The
+  prompt was a ~97 KB raw status dump plus `bot/**/*.py`: no doctrine, no
+  `docs/`, no file list, no memory of earlier proposals. Its schema asked for
+  `estimated_weekly_usd` and listed inactive secrets. So it re-created the
+  doctrine four times (deleting up to 1,191 lines of it), proposed a health
+  module four times and "enable Cerebras" five times, and truncated
+  `code_techs.py` by 2,069 lines with full-file rewrites. Now:
+  a computed situation brief (`checklist_step()`), the doctrine checklist and
+  channel table quoted from the file, open proposals not to repeat, a file
+  inventory, a dead-end list, a required `direction`/`evidence`/`money_path`/
+  `verify` rationale, search/replace `edits` for existing files, and a guard
+  refusing a rewrite that drops 40%+ of a large file. An owner can steer with
+  `evolution.direction`. See `docs/evolution.md`; 19 tests in
+  `TestEvolutionEdits`, `TestEvolutionBrief` and `TestEvolutionPrompt`.
 
 - **Nothing ever checked whether a reader could actually see the ask** - fixed
   2026-09-06 by `bot/earning/receipt_check.py`. Every signal about the receive

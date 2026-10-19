@@ -69,9 +69,10 @@ Schema:
 STRUCTURE -- a digest, not an essay:
 - Open with 2-3 sentences on what connects this week's stories. No "In today's world".
 - One `##` section per story, in the order given. Never use `#` (the title owns it).
-- Each `##` heading states the story's outcome in your own words. Do NOT copy the
-  source headline verbatim, and do NOT number your headings.
-- Leave one blank line after every heading, before the paragraph that follows it.
+- Each `##` heading states the story's outcome in your own words, in sentence
+  case and under 10 words. Do NOT copy the source headline verbatim, and do NOT
+  number your headings.
+- Leave one blank line between every block: headings, paragraphs, and lists.
 - Under each heading write 2-4 short paragraphs covering, in this order:
     1. What actually happened or shipped.
     2. Why it matters to a working developer.
@@ -79,17 +80,10 @@ STRUCTURE -- a digest, not an essay:
 - End every story section with a source line exactly like this, on its own line:
   `Source: [<source title>](<source url>)`
   Use the exact URL given to you. Never invent, shorten, or alter a URL.
-- Close with a `## What I'd Watch Next` section of 2-4 bullets.
+- Close with a `## What I'd watch next` section of 2-4 bullets.
 
-VOICE -- plain-spoken, like a colleague summarizing the week:
-- Warm and direct. Address the reader as "you". Use "I" for your own read on things.
-  Contractions are good ("it's", "you'll", "doesn't").
-- Short, clean sentences. One idea each.
-- Prefer the simple word: "use" over "utilize", "start" over "commence", "about"
-  over "approximately", "so" over "consequently".
-- Explain jargon the first time you use it, in one short clause.
-- No "simply", "just", or "obviously". No hype, no exclamation marks.
-- Calm and factual. You are reporting, not selling.
+""" + devto.VOICE + """
+- You are reporting, not selling.
 
 CONTENT RULES:
 - Be accurate and specific. Real library names, real project names.

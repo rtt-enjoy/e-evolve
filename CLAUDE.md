@@ -342,8 +342,14 @@ identical posts on dev.to. Each article starts from a real trending piece:
 6. The LLM writes an *improved, original* article on that subject. The system
    prompt forbids rewording and requires added value (working code, tradeoffs,
    failure modes) plus a `## Source` attribution section. It also fixes the
-   **voice**: plain-spoken, short sentences, "you"/"I", no hype, no jargon, and a
-   skimmable heading structure where each `##` states an outcome, not a topic.
+   **voice**: professional, plain and calm — short sentences (12-20 words),
+   paragraphs under ~80 words, "you" with "I" only for judgement (never "we"),
+   active voice, no hype, no filler, no meta narration ("In this article"). The
+   voice block is `devto.VOICE`, shared verbatim by `articles` and `newsletter`
+   so the two cannot drift. Headings are short, sentence case, and each `##`
+   states an outcome, not a topic. The prompt also forbids inventing a bug,
+   error, endpoint, model ID or flag: a 2026-10 post manufactured a DeepSeek
+   streaming bug from a model card, with a typo'd API host in the fix.
 7. Gates run before publishing, in this order:
    - `_strip_fabricated_tables()` — deletes invented spec tables (latency,
      parameter counts, prices) but keeps the surrounding prose. Deterministic,
@@ -372,9 +378,20 @@ identical posts on dev.to. Each article starts from a real trending piece:
      SQLite) are allowlisted, so `_shouted_words` does not reject legitimate
      technical headlines.
    - `_format_problems()` — structure + `_tone_problems()` (hype, "simply/just",
-     corporate jargon, exclamation marks, sentences averaging over 26 words).
+     corporate jargon, exclamation marks, sentences averaging over 26 words)
+     + `devto.style_problems()` (meta narration, stiff connectors like
+     "Consequently", "delve"/"seamless", filler, paragraphs over 90 words).
      Only these trigger a revision call. The vetted title is re-applied
      afterwards, because `_revise_format` tends to echo the pre-gate one.
+     **`style_problems` is revision-only and must never join `tone_problems`:**
+     `newsletter._digest_problems` treats a tone problem as a hard reject, so
+     one "Additionally" would cancel a weekly issue.
+   - `devto.normalize()` is fence-aware: heading fixes run on prose only (they
+     used to rewrite a column-0 `# comment` in code into `## comment`), every
+     fence gets a blank line on both sides, and non-breaking hyphens/spaces
+     become plain ones. `devto.publish` restores acronym casing in the title
+     (`fix_title_casing`: "Pdf" → "PDF"), because Title Case mangles them and
+     the title is replaced at several stages before that one call site.
    - `_boost_tags()` — tags are how dev.to distributes a post, so a post tagged
      only with niche slugs reaches nobody. Guarantees at least one high-traffic
      tag, preferring one proven on this account (`article_stats.winning_tags`)

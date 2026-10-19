@@ -122,7 +122,8 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
   "Your Python Retry Loop Is Lying To You" is not.
 - Create a curiosity gap and then PAY IT OFF in the body. Never promise something
   the article does not deliver -- dev.to readers punish that in the comments.
-- Title Case The Important Words. It reads as considered, not shouted.
+- Title Case The Important Words. It reads as considered, not shouted. Keep
+  acronyms and product names in their real casing ("PDF", "JSON", "GitHub").
 - BANNED in titles: exclamation marks, "Ultimate", "Complete Guide",
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
@@ -138,34 +139,28 @@ TAGS -- tags are how dev.to distributes the post, so treat them as reach, not la
 - Then one or two specific tags matching the real subject.
 - Lowercase, letters and digits only, no spaces, no punctuation.
 
-VOICE -- write like a helpful senior colleague explaining something at a whiteboard:
-- Warm and plain-spoken. Address the reader as "you". Use "I" for your own
-  experience. Contractions are good ("it's", "you'll", "doesn't").
-- Short, clean sentences. One idea each. If a sentence needs a comma splice or a
-  semicolon to hold together, split it in two.
-- Prefer the simple word: "use" over "utilize", "start" over "commence", "about"
-  over "approximately", "so" over "consequently".
-- Explain jargon the first time you use it, in one short clause. Never assume the
-  reader already knows the acronym.
-- Encouraging, never condescending. No "simply", "just", or "obviously" -- if it
-  were obvious the reader would not be here.
-- Calm and factual. No hype, no exclamation marks, no rhetorical questions
-  stacked up as a hook.
+""" + devto.VOICE + """
 
-STRUCTURE -- simple but very organized. The reader must be able to skim headings
-and know exactly what the article covers:
-- Open with a 2-3 sentence hook stating the concrete problem. No "In today's world".
-- Then one short "what you'll learn" line or 3-bullet list, so the reader knows
-  the payoff before investing time.
-- Use `##` for main sections and `###` for sub-points. Never use `#` (the title owns it).
-- 4-7 `##` sections with descriptive, specific headings. Not "Introduction"/"Conclusion".
-  A good heading states an outcome ("Cache the Expensive Call"), not a topic ("Caching").
-- Do NOT number your headings. Write `## Choose a Strategy`, never `## 2. Choose a Strategy`.
-- Leave one blank line after every heading, before the paragraph that follows it.
-- Order sections so each one builds on the last. Problem, then approach, then
-  implementation, then what breaks.
-- Keep paragraphs to 2-4 sentences. Insert a blank line between every block.
+STRUCTURE -- clean and predictable. A reader who skims only the headings should
+know the whole story:
+- Open with 2-3 sentences: the concrete problem and why it matters to the reader.
+  No preamble, no "In today's world".
+- Follow with one sentence or a 3-bullet list saying what the reader will be able
+  to do by the end. Do not give it a heading.
+- 4-6 `##` sections. Never use `#` (the title owns it). Use `###` only when a
+  section has two or more distinct steps.
+- Headings are short (under 8 words), in sentence case, and state an outcome:
+  `## Cache the expensive call`, not `## Caching` or `## The Real Problem`.
+  Never "Introduction", "Overview", "Conclusion", or "Best Practices".
+- Do NOT number headings. Write `## Choose a strategy`, never `## 2. Choose a strategy`.
+- Order sections so each builds on the last: the problem, the cause, the fix,
+  then what can still go wrong.
+- Leave one blank line between every block: headings, paragraphs, lists, tables,
+  and code fences.
 - Never stack two headings with no prose between them.
+- Keep list items short and parallel in form, at most 7 per list.
+- Bold at most a few key terms per article. Never bold a whole sentence.
+- End with `## Key takeaways`: 3-5 bullets, each a complete, specific sentence.
 
 CODE AND TABLES:
 - Include at least two fenced code blocks with an explicit language tag
@@ -177,13 +172,16 @@ CODE AND TABLES:
   comparisons (approach, tradeoff, when-to-use). Never build a table of specs
   you would have to invent: no latency figures, parameter counts, model sizes,
   prices, or benchmark numbers.
-- Use bulleted lists for enumerations, but never more than 7 items.
-- Bold key terms sparingly with **term**, at most a few per article.
-- End with a `## Key Takeaways` section of 3-5 concrete bullets.
 
 CONTENT RULES:
 - Be technically accurate and specific. Real library names, real flags.
 - Never invent benchmarks, pricing, citations, or version numbers you are unsure of.
+- Never invent a bug, error message, API endpoint, model ID, flag, or config key.
+  If the source does not describe a failure, do not manufacture one -- write about
+  a real tradeoff or a real usage pattern instead. A made-up problem with a
+  confident fix is the fastest way to lose a professional reader.
+- Use only URLs you are certain exist. In example code, use a clear placeholder
+  such as `https://api.example.com`.
 - This is the rule most often broken: do NOT state latency figures, model
   parameter counts, token prices, throughput, or rate limits as fact. If a
   number matters, describe it qualitatively ("noticeably slower", "cheaper per
@@ -199,7 +197,7 @@ SOURCE HANDLING -- this part is mandatory:
   synonym. If a sentence of yours could be diffed against the source and look
   like an edit of it, rewrite it from scratch.
 - Your article must ADD what the source lacks: working code the source omits,
-  a comparison table, failure modes, tradeoffs, a step-by-step implementation,
+  a comparison table, failure modes that genuinely apply, tradeoffs, a step-by-step implementation,
   or the practitioner's "what this actually means for your codebase" angle.
 - Your title must NOT restate the source title. Choose your own specific angle.
 - Quote the source only to disagree or build on it, at most one short sentence,
@@ -511,7 +509,8 @@ _ARCHETYPE_ANGLES = {
 	"problem-workaround": (
 		"Frame it as a concrete thing that breaks and the way out. Name the "
 		"failure in the title. Readers of this account turn up for a specific "
-		"broken situation plus a working escape route."
+		"broken situation plus a working escape route. Use a failure the source "
+		"describes or that is well documented; never invent one to fit this shape."
 	),
 	"myth-correction": (
 		"Frame it as a belief the reader probably holds that turns out to be "
@@ -1059,13 +1058,15 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 	if re.search(r"^# ", body, re.MULTILINE):
 		problems.append("uses a top-level '#' heading")
 	if "key takeaway" not in body.lower():
-		problems.append("missing '## Key Takeaways' section")
+		problems.append("missing '## Key takeaways' section")
 	if re.search(r"^```\s*$", body, re.MULTILINE) and not re.search(r"^```\w+", body, re.MULTILINE):
 		problems.append("code block missing language tag")
 	if re.search(r"^(#{2,3} .*)\n+(#{2,3} )", body, re.MULTILINE):
 		problems.append("stacked headings with no prose between them")
 	problems.extend(devto.fabrication_problems(body))
 	problems.extend(devto.tone_problems(body))
+	# Readability, not correctness: only ever answered with a revision call.
+	problems.extend(devto.style_problems(body))
 	return problems
 
 
@@ -1089,8 +1090,9 @@ def _format_problems(body: str, cfg: dict | None = None) -> list[str]:
 def _revise_format(llm: Any, data: dict, problems: list[str]) -> Optional[dict]:
 	"""Ask the model to fix specific formatting violations. Returns None on failure."""
 	prompt = (
-		"Revise this article to fix the listed formatting problems. "
-		"Keep the technical content and voice; only restructure and expand as needed.\n\n"
+		"Revise this article to fix the listed problems. Keep the technical content. "
+		"Restructure, expand, split long paragraphs, or reword sentences as needed, "
+		"following the VOICE and STRUCTURE rules.\n\n"
 		f"Problems: {'; '.join(problems)}\n\n"
 		f"Title: {data.get('title', '')}\n\n"
 		f"Current body:\n{data.get('body_markdown', '')}\n\n"

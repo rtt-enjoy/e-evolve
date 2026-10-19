@@ -45,6 +45,8 @@ from bot.earning.devto import (
 	publish as _publish_to_devto,
 	strip_fabricated_tables as _strip_fabricated_tables,
 	tone_problems as _tone_problems,
+	style_problems as _style_problems,
+	fix_title_casing as _fix_title_casing,
 )
 import bot.earning.articles as articles_module
 import bot.earning.trending as trending_module
@@ -772,6 +774,62 @@ class TestMarkdownNormalization(unittest.TestCase):
 		self.assertIn("## Title", out["body_markdown"])
 		self.assertNotRegex(out["body_markdown"], r"^# ")
 
+	def test_code_comment_is_not_demoted_to_a_heading(self):
+		# Heading fixes used to run over code too, turning "# retry once" into
+		# "## retry once" inside a Python block.
+		body = "## Fix\n\nText.\n\n```python\n# retry once\n# 1. first\nx = 1\n```\n\nMore."
+		out = _normalize({"body_markdown": body})["body_markdown"]
+		self.assertIn("```python\n# retry once\n# 1. first\nx = 1\n```", out)
+
+	def test_blank_line_around_code_fences(self):
+		# Published posts ran prose straight on from a closing fence.
+		body = "Intro:\n```python\nx = 1\n```\nThis sets x."
+		out = _normalize({"body_markdown": body})["body_markdown"]
+		self.assertEqual(out, "Intro:\n\n```python\nx = 1\n```\n\nThis sets x.")
+
+	def test_non_breaking_hyphens_become_plain(self):
+		out = _normalize({"title": "Re‑type", "body_markdown": "re‑type it"})
+		self.assertEqual(out["body_markdown"], "re-type it")
+		self.assertEqual(out["title"], "Re-type")
+
+
+class TestTitleCasing(unittest.TestCase):
+	"""Title Case published "The Pdf Parsing Script That Wastes Your Hours"."""
+
+	def test_acronyms_and_brands_restored(self):
+		self.assertEqual(
+			_fix_title_casing("The Pdf Parsing Script For Github And Json Apis"),
+			"The PDF Parsing Script For GitHub And JSON APIs",
+		)
+
+	def test_lowercase_and_ordinary_words_untouched(self):
+		# A lowercase word in a Title Case headline was written that way on purpose.
+		title = "Why cd Ignores Your Git Symlinks On Redis Hosts"
+		self.assertEqual(_fix_title_casing(title), title)
+
+	def test_publish_sends_the_fixed_title(self):
+		sent = {}
+
+		class Resp:
+			def raise_for_status(self):
+				pass
+
+			def json(self):
+				return {"url": "https://dev.to/x"}
+
+		def fake_post(url, headers=None, json=None, timeout=None):
+			sent.update(json["article"])
+			return Resp()
+
+		import bot.earning.devto as devto_module
+		original = devto_module.requests.post
+		devto_module.requests.post = fake_post
+		try:
+			_publish_to_devto({"title": "Parsing Pdf Files", "body_markdown": "b"}, "k")
+		finally:
+			devto_module.requests.post = original
+		self.assertEqual(sent["title"], "Parsing PDF Files")
+
 
 class TestToneChecks(unittest.TestCase):
 	"""The owner asked for a clear, clean, friendly tone. Enforce it mechanically."""
@@ -805,6 +863,30 @@ class TestToneChecks(unittest.TestCase):
 
 	def test_code_blocks_exempt_from_tone_rules(self):
 		self.assertEqual(_tone_problems("```python\nprint('just do it!')\n```"), [])
+
+	def test_style_tells_flagged(self):
+		self.assertIn("meta narration", _style_problems("In this article, you fix it."))
+		self.assertIn("stiff transition", _style_problems("It fails. Consequently the job stops."))
+		self.assertIn("machine-sounding word", _style_problems("Let us delve into retries."))
+		self.assertIn("filler phrase", _style_problems("It's important to note the cache."))
+
+	def test_wall_of_text_flagged_but_lists_are_not(self):
+		wall = " ".join(["word"] * 95) + "."
+		self.assertTrue(any("paragraph" in p for p in _style_problems(wall)))
+		listing = "\n".join("- " + " ".join(["word"] * 10) for _ in range(12))
+		self.assertEqual(_style_problems(listing), [])
+
+	def test_style_is_not_a_tone_reject(self):
+		# newsletter rejects on tone_problems; style tells must never cancel an issue.
+		self.assertEqual(_tone_problems("Additionally, the cache helps. In this post you see it."), [])
+
+	def test_clean_prose_passes_style(self):
+		body = (
+			"You probably hit this when your cache grows past memory. "
+			"The fix is small, and it holds up well.\n\n"
+			"Here is what changed. Each step is short."
+		)
+		self.assertEqual(_style_problems(body), [])
 
 	def test_stacked_headings_flagged(self):
 		problems = _format_problems("## One\n\n## Two\n\ntext")

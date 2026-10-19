@@ -23,6 +23,36 @@ from . import payout
 log = logging.getLogger(__name__)
 
 
+# The house voice, shared by every writing prompt published under this byline,
+# so ``articles`` and ``newsletter`` cannot drift apart on style. Gates below
+# enforce the mechanical half of it; this tells the model the whole of it.
+VOICE = """\
+VOICE -- professional, plain and calm. Write the way a respected senior engineer
+explains something to a colleague: clear first, never clever for its own sake.
+- Short sentences, one idea each. Aim for 12-20 words on average. If a sentence
+  needs a semicolon or a second "and", split it.
+- Short paragraphs: 2-4 sentences, never more than about 80 words.
+- Address the reader as "you". Use "I" only for your own judgement. Do not write
+  "we", and never switch voice partway through.
+- Active voice, present tense: "the client retries the call", not "the call is
+  retried by the client".
+- Prefer the plain word: "use" not "utilize", "start" not "commence", "about" not
+  "approximately", "so" not "consequently", "help" not "facilitate".
+- Be specific. Name the function, flag, file, or error message instead of
+  describing it in general terms.
+- Explain each acronym or term of art the first time, in one short clause.
+- Contractions are fine ("it's", "you'll", "doesn't").
+- Respect the reader. No "simply", "just", "obviously", or "of course" -- if it
+  were obvious they would not be reading.
+- Calm and factual. No hype, no exclamation marks, no stacked rhetorical questions.
+- Cut filler. Do not narrate the piece ("In this article", "Let's dive in", "As
+  mentioned above"). Do not open sentences with stiff connectors ("Furthermore",
+  "Moreover", "Additionally", "Consequently", "In conclusion"). Avoid "delve",
+  "seamless", "landscape", and "it's important to note".
+- Keep acronyms and product names in their real casing: PDF, JSON, API, GitHub,
+  PostgreSQL, macOS."""
+
+
 TONE_PATTERNS = [
 	(r"\bin today's (world|fast-paced)", "cliche opener \"in today's world\""),
 	(r"\b(revolutionary|game.changing|cutting.edge|paradigm shift)\b", "hype language"),
@@ -50,6 +80,49 @@ def tone_problems(body: str) -> list[str]:
 		avg = sum(len(s.split()) for s in sentences) / len(sentences)
 		if avg > 26:
 			found.append(f"sentences too long (avg {avg:.0f} words, aim under 22)")
+	return found
+
+
+# Softer style tells: stiff, padded, or machine-sounding prose. Kept apart from
+# TONE_PATTERNS on purpose. ``newsletter`` treats a tone problem as a hard
+# reject, so adding these there would let one "Additionally" cancel a weekly
+# issue. ``articles`` only ever answers them with a revision call.
+STYLE_PATTERNS = [
+	(r"\b(in this (article|post|guide|tutorial)|let's dive in|without further ado|as mentioned (above|earlier))\b",
+	 "meta narration"),
+	(r"(^|[.!?]\s+)(furthermore|moreover|additionally|consequently|in conclusion)\b",
+	 "stiff transition"),
+	(r"\b(delve|delves|delving|seamless|seamlessly)\b", "machine-sounding word"),
+	(r"\bit(?: is|'s|’s) (worth noting|important to note)\b", "filler phrase"),
+]
+
+# Paragraphs longer than this read as a wall of text on a phone screen.
+_MAX_PARAGRAPH_WORDS = 90
+
+
+def style_problems(body: str) -> list[str]:
+	"""Flag prose that is correct but hard to read: padding, stiffness, walls of text.
+
+    Revision-only. Never use this as a reject gate -- see STYLE_PATTERNS.
+    """
+	prose = strip_code_blocks(body)
+	found: list[str] = []
+	for pattern, label in STYLE_PATTERNS:
+		if re.search(pattern, prose, re.IGNORECASE | re.MULTILINE) and label not in found:
+			found.append(label)
+
+	# Lists, tables, quotes and headings are blocks too, but not paragraphs.
+	long_paras = [
+		p for p in re.split(r"\n\s*\n", prose)
+		if p.strip()
+		and not re.match(r"\s*([#>|*-]|\d+[.)]\s)", p)
+		and len(p.split()) > _MAX_PARAGRAPH_WORDS
+	]
+	if long_paras:
+		found.append(
+			f"{len(long_paras)} paragraph(s) over {_MAX_PARAGRAPH_WORDS} words; "
+			"split into 2-4 sentence paragraphs"
+		)
 	return found
 
 
@@ -137,26 +210,51 @@ def strip_fabricated_tables(body: str) -> tuple[str, int]:
 	return "\n".join(out), removed
 
 
+# A fenced code block, opening and closing fence at the start of a line.
+_FENCE_RE = re.compile(r"(^```.*?^```[ \t]*$)", re.MULTILINE | re.DOTALL)
+
+# Models emit non-breaking hyphens and spaces ("re‑type"). They render the same
+# but break search, copy-paste into a terminal, and any code they land in.
+_ODD_CHARS = str.maketrans({"‑": "-", "‐": "-", " ": " ", " ": " "})
+
+
+def _tidy_prose(text: str) -> str:
+	"""Heading fixes for prose only -- never run inside a code fence."""
+	# dev.to renders the title itself, so a top-level '#' heading shows up as a
+	# duplicate title. Demote any '# ' to '## '.
+	text = re.sub(r"^# (?!#)", "## ", text, flags=re.MULTILINE)
+	# Strip "1. "/"2) " numbering the model adds to headings. dev.to renders a
+	# clean outline without it, and the numbers go stale if sections are reordered.
+	text = re.sub(r"^(#{2,3} )\d+[.)]\s+", r"\1", text, flags=re.MULTILINE)
+	# Collapse 3+ blank lines to 2, then guarantee one blank line on both sides of
+	# every heading. Without the trailing one, dev.to runs the first paragraph
+	# into the heading.
+	text = re.sub(r"\n{4,}", "\n\n\n", text)
+	text = re.sub(r"(?<!\n)\n(#{2,3} )", r"\n\n\1", text)
+	return re.sub(r"^(#{2,3} .*)\n(?!\n)(?=\S)", r"\1\n\n", text, flags=re.MULTILINE)
+
+
 def normalize(data: dict) -> dict:
 	"""Clean up markdown artifacts that hurt rendering on dev.to."""
-	body = str(data.get("body_markdown", ""))
+	body = str(data.get("body_markdown", "")).translate(_ODD_CHARS)
 	# Strip a stray wrapping code fence around the whole article.
 	if body.lstrip().startswith("```markdown"):
 		body = re.sub(r"^\s*```markdown\s*\n", "", body)
 		body = re.sub(r"\n```\s*$", "", body)
-	# dev.to renders the title itself, so a top-level '#' heading shows up as a
-	# duplicate title. Demote any '# ' to '## '.
-	body = re.sub(r"^# (?!#)", "## ", body, flags=re.MULTILINE)
-	# Strip "1. "/"2) " numbering the model adds to headings. dev.to renders a
-	# clean outline without it, and the numbers go stale if sections are reordered.
-	body = re.sub(r"^(#{2,3} )\d+[.)]\s+", r"\1", body, flags=re.MULTILINE)
-	# Collapse 3+ blank lines to 2, then guarantee one blank line on both sides of
-	# every heading. Without the trailing one, dev.to runs the first paragraph
-	# into the heading.
-	body = re.sub(r"\n{4,}", "\n\n\n", body)
-	body = re.sub(r"(?<!\n)\n(#{2,3} )", r"\n\n\1", body)
-	body = re.sub(r"^(#{2,3} .*)\n(?!\n)(?=\S)", r"\1\n\n", body, flags=re.MULTILINE)
-	data["body_markdown"] = body.strip()
+	# Heading fixes run on prose only. Applied to the whole body they rewrote a
+	# Python or bash comment at column 0 ("# retry once") into "## retry once".
+	# Each fence also gets one blank line on both sides, so a paragraph never
+	# starts on the line straight after a closing fence.
+	parts = _FENCE_RE.split(body)
+	out = _tidy_prose(parts[0]).rstrip()
+	for fence, prose in zip(parts[1::2], parts[2::2]):
+		out = (out + "\n\n" if out.strip() else "") + fence
+		prose = _tidy_prose(prose).strip("\n")
+		if prose.strip():
+			out += "\n\n" + prose.rstrip()
+	data["body_markdown"] = out.strip()
+	if "title" in data:
+		data["title"] = str(data["title"]).translate(_ODD_CHARS)
 
 	tags = [
 		re.sub(r"[^a-z0-9]", "", str(t).lower())
@@ -179,6 +277,30 @@ def own_post_urls(status: dict) -> list[str]:
 	return [str(u) for u in hist.get("own_urls", []) if u]
 
 
+# Title Case turns acronyms into words: the bot published "The Pdf Parsing
+# Script That Wastes Your Hours". Only terms whose capitalised form is never
+# right belong here -- "Git" and "Redis" are correct as written, so they are not.
+_TITLE_CASING = {w.lower(): w for w in (
+	"PDF", "API", "APIs", "JSON", "YAML", "HTML", "CSS", "SQL", "HTTP", "HTTPS",
+	"URL", "URLs", "CLI", "SDK", "SDKs", "LLM", "LLMs", "AI", "GPU", "GPUs", "CPU",
+	"DNS", "TLS", "SSH", "JWT", "CSV", "XML", "UI", "UX", "AWS", "GCP", "CI", "CD",
+	"GitHub", "GitLab", "JavaScript", "TypeScript", "PostgreSQL", "SQLite",
+	"GraphQL", "OAuth", "macOS", "iOS", "DevOps", "WebAssembly",
+)}
+
+
+def fix_title_casing(title: str) -> str:
+	"""Restore the real casing of acronyms and product names in a title.
+
+    An all-lowercase word is left alone: in a Title Case headline it was written
+    that way on purpose (`cd`, `npm`), and Title Case never produces one.
+    """
+	def fix(m: re.Match) -> str:
+		word = m.group(0)
+		return word if word.islower() else _TITLE_CASING.get(word.lower(), word)
+	return re.sub(r"[A-Za-z]+", fix, str(title or ""))
+
+
 def publish(article: dict, api_key: str) -> dict:
 	"""Publish article to dev.to and return action result.
 
@@ -191,6 +313,9 @@ def publish(article: dict, api_key: str) -> dict:
     footer is appended to what they approved.
     """
 	article = payout.add_footer(dict(article))
+	# Here, not in normalize: titles are also replaced later by _revise_title and
+	# re-applied after a format revision, and this is the one place all converge.
+	article["title"] = fix_title_casing(article.get("title", "")) or "Untitled"
 	url = "https://dev.to/api/articles"
 	headers = {
 		"api-key": api_key,

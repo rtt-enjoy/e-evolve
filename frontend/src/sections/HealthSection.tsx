@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Card, Dot, Empty, KeyValue, Phase, Pill, Progress, SectionHead, Subhead, Tile } from '../components/ui';
-import { buildIssues, buildReadiness } from '../utils/dashboard';
-import { ageLabel, evolutionTone, featureLabel, formatDate, money } from '../utils/format';
+import { buildIssues, buildPhases, buildReadiness } from '../utils/dashboard';
+import { ageLabel, featureLabel, formatDate, money } from '../utils/format';
 import type { Status } from '../types/status';
 
 export default function HealthSection({ status }: { status: Status }) {
@@ -12,8 +12,7 @@ export default function HealthSection({ status }: { status: Status }) {
 	const inactive = status.inactive_features || [];
 	const errors = status.errors || [];
 	const secrets = Object.entries(status.secret_readiness || {});
-	const evolution = status.last_evolution || {};
-	const actions = status.last_earning?.actions || [];
+	const phases = useMemo(() => buildPhases(status), [status]);
 
 	return (
 		<>
@@ -31,11 +30,7 @@ export default function HealthSection({ status }: { status: Status }) {
 
 			<Card title="Phase results" hint="The five phases of the last cycle.">
 				<div className="phase-row">
-					<Phase name="Status" ok={Boolean(status.last_run)} detail={formatDate(status.last_run)} />
-					<Phase name="Commands" ok detail="queue ready" />
-					<Phase name="Evolution" ok={!evolution.error} detail={evolution.error ? 'failed' : 'skipped by design'} tone={evolutionTone(status)} />
-					<Phase name="Research" ok={actions.every((action) => action.success !== false)} detail={`${actions.length} actions`} />
-					<Phase name="Update" ok={!errors.length} detail={errors.length ? `${errors.length} errors` : 'saved'} />
+					{phases.map((phase) => <Phase key={phase.name} {...phase} />)}
 				</div>
 			</Card>
 
@@ -117,6 +112,23 @@ export default function HealthSection({ status }: { status: Status }) {
 						</div>
 					</Card>
 
+					<Card title="Action policy" hint="What the bot's API keys are permitted to do. Blocked actions are refused in code.">
+						<div className="policy">
+							<div>
+								<span className="policy-label good">allowed</span>
+								<div className="chips">
+									{(status.external_action_policy?.allowed || []).map((item) => <Pill tone="good" key={item}>{item}</Pill>)}
+								</div>
+							</div>
+							<div>
+								<span className="policy-label bad">blocked</span>
+								<div className="chips">
+									{(status.external_action_policy?.blocked || []).map((item) => <Pill tone="bad" key={item}>{item}</Pill>)}
+								</div>
+							</div>
+						</div>
+					</Card>
+
 					<Card title="Configured secrets" hint="Present in the GitHub Actions environment.">
 						<div className="chips">
 							{(status.configured_github_secrets || []).map((secret) => <Pill tone="good" key={secret}>{secret}</Pill>)}
@@ -136,7 +148,7 @@ export default function HealthSection({ status }: { status: Status }) {
 						/>
 					</Card>
 
-					<Card title="Receive wallet" hint="The only real source of earnings. Clients pay this address directly.">
+					<Card title="Receive wallet" hint="The only real source of earnings. Readers tip this address directly.">
 						<KeyValue
 							rows={[
 								['Address', status.wallet?.address_masked || 'not configured'],

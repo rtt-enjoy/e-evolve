@@ -10,12 +10,13 @@
  *      starts emitting later are unclaimed, and the Data section renders them
  *      generically — new backend fields appear without a frontend change.
  */
-import { Activity, Braces, Cpu, LayoutDashboard, Lightbulb, Target, type LucideIcon } from 'lucide-react';
+import { Activity, Braces, Cpu, LayoutDashboard, Lightbulb, Newspaper, Target, type LucideIcon } from 'lucide-react';
 import type { ComponentType } from 'react';
 import type { Status } from '../types/status';
 
 export type SectionId =
 	| 'overview'
+	| 'reach'
 	| 'leads'
 	| 'research'
 	| 'engine'
@@ -69,6 +70,29 @@ export const SECTIONS: SectionDef[] = [
 		load: () => import('./OverviewSection'),
 	},
 	{
+		id: 'reach',
+		label: 'Reach',
+		icon: Newspaper,
+		blurb: 'What was published, who read it, and whether every reader is shown a way to pay.',
+		keys: [
+			'article_stats',
+			'article_interest',
+			'article_rejects',
+			'article_daily',
+			'article_history',
+			'newsletter_daily',
+			'newsletter_history',
+			// Self-reported retrofit state; rendered beside receipt_check, the
+			// independent re-read that checks it.
+			'backfill',
+		],
+		badge: (status) => {
+			const gap = status.receipt_check?.known_without_footer ?? status.receipt_check?.without_footer ?? 0;
+			return gap || null;
+		},
+		load: () => import('./ReachSection'),
+	},
+	{
 		id: 'leads',
 		label: 'Leads',
 		icon: Target,
@@ -82,7 +106,7 @@ export const SECTIONS: SectionDef[] = [
 		label: 'Research',
 		icon: Lightbulb,
 		blurb: 'Free-tier AI services, earning playbooks, MRR idea triage, and the strategy guardrails.',
-		keys: ['suggestions', 'mrr_ideas'],
+		keys: ['suggestions', 'mrr_ideas', 'mrr_ideas_history'],
 		badge: (status) => {
 			const brief = status.code_tech_earning?.online_ai_brief;
 			const services = brief?.free_ai_services?.length || 0;
@@ -97,9 +121,17 @@ export const SECTIONS: SectionDef[] = [
 		id: 'engine',
 		label: 'Engine',
 		icon: Cpu,
-		blurb: 'Which model handles which role, and what the last cycle changed.',
-		keys: ['llm_provider', 'llm_roles', 'llm_workflows', 'llm_engine', 'last_evolution', 'article_daily'],
-		badge: (status) => Object.keys(status.llm_workflows || {}).length || null,
+		blurb: 'Which model served each role, and what the last evolution proposed.',
+		keys: [
+			'llm_provider',
+			'llm_roles',
+			'llm_workflows',
+			'llm_engine',
+			'last_evolution',
+			'last_evolution_branch',
+			'evolution_pending_review',
+		],
+		badge: (status) => (status.evolution_pending_review ? 1 : null),
 		load: () => import('./EngineSection'),
 	},
 	{

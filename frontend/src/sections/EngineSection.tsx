@@ -1,18 +1,26 @@
-import { Bot, FileText } from 'lucide-react';
-import { Card, Disclosure, Empty, KeyValue, Pill, SectionHead, Subhead, Tile } from '../components/ui';
+import { Bot, ExternalLink, FileText, GitBranch } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { Bullets, Card, Disclosure, Empty, KeyValue, Pill, SectionHead, Subhead, Tile } from '../components/ui';
 import { atriaState } from '../utils/engine';
-import { evolutionTone, featureLabel, formatDate, money } from '../utils/format';
+import { featureLabel, formatDate, money } from '../utils/format';
+import { rejectLabel } from '../utils/dashboard';
 import type { Status } from '../types/status';
 
 export default function EngineSection({ status }: { status: Status }) {
 	const workflows = Object.entries(status.llm_workflows || {});
 	const evolution = status.last_evolution || {};
 	const actions = status.last_earning?.actions || [];
-	const tone = evolutionTone(status);
+	// Proposals park on an evolve/* branch and reach main only when merged.
+	const branch = status.last_evolution_branch || evolution.branch || null;
+	const pending = Boolean(status.evolution_pending_review && branch);
+	const repo = status.github_repo && /^[\w.-]+\/[\w.-]+$/.test(status.github_repo) ? status.github_repo : null;
+	const compareUrl = repo && branch && /^[\w./-]+$/.test(branch) ? `https://github.com/${repo}/compare/main...${branch}` : null;
+	const evidence = Array.isArray(evolution.evidence) ? evolution.evidence : evolution.evidence ? [evolution.evidence] : [];
 	// Atria is the main engine. Its tile reports what the last cycle observed
 	// (key set, calls answered, fallback reason), not the routing preference.
 	const atria = atriaState(status);
 	const calls = Object.entries(atria.calls);
+	const totalCalls = calls.reduce((sum, [, n]) => sum + n, 0);
 
 	return (
 		<>
@@ -22,15 +30,21 @@ export default function EngineSection({ status }: { status: Status }) {
 			/>
 
 			<div className="tile-row">
-				<Tile label="Main engine" value={atria.model} detail={`${atria.label} · ${atria.detail}`} tone={atria.tone} />
+				<Tile label="Main engine" value={atria.model} detail={atria.detail} tone={atria.tone} icon={<Bot size={15} />} />
 				<Tile
 					label="Served last cycle"
 					value={atria.live === null ? '—' : atria.serving}
 					detail={calls.length ? calls.map(([provider, n]) => `${provider} ${n}`).join(' · ') : 'no calls recorded'}
-					tone={atria.live ? 'good' : atria.live === false ? 'warn' : 'neutral'}
+					tone={atria.tone}
 				/>
-				<Tile label="Articles today" value={String(status.article_daily?.published || 0)} detail={status.article_daily?.date || 'no date'} tone={status.article_daily?.published ? 'good' : 'neutral'} />
-				<Tile label="Evolution" value={evolution.error ? 'failed' : 'Codex-owned'} detail={`v${evolution.version_bumped_to || status.version || '0.0.0'}`} tone={tone === 'info' ? 'neutral' : tone} />
+				<Tile label="LLM calls" value={String(totalCalls)} detail="responses returned last cycle" tone="neutral" />
+				<Tile
+					label="Evolution"
+					value={evolution.error ? 'failed' : pending ? 'in review' : 'no proposal'}
+					detail={pending ? `v${evolution.proposed_version || '?'} on a review branch` : `running v${status.version || '0.0.0'}`}
+					tone={evolution.error ? 'bad' : pending ? 'info' : 'neutral'}
+					icon={<GitBranch size={15} />}
+				/>
 			</div>
 
 			<Subhead>Role routing</Subhead>
@@ -44,8 +58,10 @@ export default function EngineSection({ status }: { status: Status }) {
 									<strong>{featureLabel(role)}</strong>
 									<em>{workflow.serving || workflow.provider || 'unknown provider'}</em>
 								</div>
-								<Pill tone={!workflow.active ? 'warn' : workflow.primary_active === false ? 'warn' : 'good'}>
-									{!workflow.active ? 'idle' : workflow.primary_active === false ? 'fallback' : 'active'}
+								{/* `primary_active` only says Atria was not latched off; when it
+								    answered none of the cycle's calls the fallback did the work. */}
+								<Pill tone={!workflow.active || workflow.primary_active === false || (workflow.provider === 'atria' && atria.tone === 'warn') ? 'warn' : 'good'}>
+									{!workflow.active ? 'idle' : workflow.primary_active === false || (workflow.provider === 'atria' && atria.tone === 'warn') ? 'fallback' : 'active'}
 								</Pill>
 							</div>
 							<code className="route-model">{workflow.model || 'no model configured'}</code>
@@ -64,9 +80,30 @@ export default function EngineSection({ status }: { status: Status }) {
 			<Subhead>Last cycle</Subhead>
 			<div className="split">
 				<div className="stack">
-					<Card title="Evolution result" hint="Automatic code changes are disabled; Codex owns implementation.">
+					<Card
+						title="Latest evolution proposal"
+						hint="Proposals land on an evolve/* branch. Nothing reaches main until you merge it."
+						action={compareUrl && pending ? <a className="btn" href={compareUrl} target="_blank" rel="noreferrer">review diff <ExternalLink size={13} /></a> : undefined}
+					>
 						<p className="prose lead-in">{evolution.summary || 'No evolution summary recorded.'}</p>
-						{evolution.error ? <p className="error-text">{evolution.error}</p> : null}
+						{evolution.error ? <p className="error-text mt-3">{evolution.error}</p> : null}
+						{evolution.direction || evolution.money_path || evolution.verify || branch ? (
+							<div className="mt-4">
+								<KeyValue
+									rows={[
+										...(branch ? [['Branch', <code className="font-mono text-xs">{branch}</code>] as [string, ReactNode]] : []),
+										...(evolution.direction ? [['Serves', evolution.direction] as [string, ReactNode]] : []),
+										...(evolution.money_path ? [['Money path', evolution.money_path] as [string, ReactNode]] : []),
+										...(evolution.verify ? [['How to verify', evolution.verify] as [string, ReactNode]] : []),
+									]}
+								/>
+							</div>
+						) : null}
+						{evidence.length ? (
+							<div className="mt-4">
+								<Bullets items={evidence.map(String)} />
+							</div>
+						) : null}
 						{(evolution.changes_applied || []).length ? (
 							<div className="stack mt-4">
 								{(evolution.changes_applied || []).map((change) => (
@@ -85,12 +122,12 @@ export default function EngineSection({ status }: { status: Status }) {
 						{actions.length ? (
 							<div className="stack">
 								{actions.map((action, index) => (
-									<div className={`action ${action.success === false ? 'bad' : 'good'}`} key={index}>
+									<div className={`action ${action.skipped ? 'held' : action.success === false ? 'bad' : 'good'}`} key={index}>
 										<span className="action-platform">
 											<FileText size={15} />
 											{action.platform || 'module'}
 										</span>
-										<p>{action.title || action.topic || action.symbol || action.error || 'Action recorded'}</p>
+										<p>{action.skipped ? `Held back: ${rejectLabel(action.reject_code)}` : action.title || action.topic || action.symbol || action.error || 'Action recorded'}</p>
 										{action.url ? <a href={action.url} target="_blank" rel="noreferrer">open ↗</a> : null}
 										{typeof action.estimated_usd === 'number' ? <em>{money(action.estimated_usd, 4)}</em> : null}
 									</div>

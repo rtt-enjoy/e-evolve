@@ -1466,7 +1466,21 @@ python -m bot.main
 
 ---
 
-## Dashboard (docs/index.html)
+## Dashboard (frontend/ → docs/)
 
-- CSS variables are defined in the `:root` block at the top of the file. Never hardcode hex values — use `var(--ac)`, `var(--gn)`, `var(--rd)`, etc.
-- `dashboard.py` regenerates `docs/index.html` each cycle from `status.json`. Changes to the HTML template must be made in `bot/dashboard.py`, not in `docs/index.html` directly (they will be overwritten).
+- The UI is the React/Vite app in `frontend/`, built into `docs/` by
+  `.github/workflows/frontend.yml`. `bot/dashboard.py` only publishes the data
+  (`docs/status.json`, `docs/earnings-log.md`) plus a fallback shell when no
+  build exists. UI changes go in `frontend/src/`, never in built `docs/` files.
+- Colours are RGB-triplet tokens in the `:root` block of
+  `frontend/src/styles/styles.css`, exposed to Tailwind as `accent`, `green`,
+  `red`, etc. Never hardcode hex values.
+- **Sync:** the page reads both the Pages copy of `status.json` and the raw file
+  on `main` and keeps the newer `last_run`, because Pages lags a cycle commit by
+  up to an hour. It polls every minute while visible, refetches on tab focus,
+  and announces "Cycle #N landed" with what moved. See
+  `docs/frontend-dashboard.md`.
+- **Every top-level `status.json` key should be claimed** by a section in
+  `frontend/src/sections/registry.ts`. Unclaimed keys still render generically
+  under Data with an "N new" badge, which is the signal a new backend field
+  needs a real view.

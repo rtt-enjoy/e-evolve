@@ -1,6 +1,9 @@
 export type Action = {
 	platform?: string;
 	success?: boolean;
+	/** A gate held the draft back on purpose: not a breakage. */
+	skipped?: boolean;
+	reject_code?: string;
 	title?: string;
 	topic?: string;
 	symbol?: string;
@@ -332,7 +335,17 @@ export type Status = {
 		error?: string | null;
 		error_type?: string;
 		version_bumped_to?: string;
+		/** Review branch the proposal was parked on; null when nothing was committed. */
+		branch?: string | null;
+		proposed_version?: string;
+		/** The rationale a reviewer needs, persisted beside the diff (evolution._RATIONALE_KEYS). */
+		direction?: string;
+		evidence?: string[] | string;
+		money_path?: string;
+		verify?: string;
 	};
+	last_evolution_branch?: string | null;
+	evolution_pending_review?: boolean;
 	last_earning?: {
 		actions?: Action[];
 		total_usd?: number;
@@ -373,6 +386,67 @@ export type Status = {
 		date?: string;
 		published?: number;
 	};
+	/** Reach, read back from the dev.to API (devto_stats.summarize). */
+	article_stats?: {
+		count?: number;
+		total_views?: number;
+		avg_views?: number;
+		best_title?: string;
+		best_views?: number;
+		best_url?: string;
+		winning_tags?: string[];
+	};
+	/** Engagement per article archetype; `count` is the sample behind each mean. */
+	article_interest?: {
+		archetypes?: Array<{
+			archetype?: string;
+			count?: number;
+			avg_engagement?: number;
+			avg_views?: number;
+			best_title?: string;
+		}>;
+		best_archetype?: string;
+		worst_archetype?: string;
+		sample_size?: number;
+	};
+	/** Which quality gate held drafts back, as a running tally. */
+	article_rejects?: {
+		last_reason?: string;
+		last_detail?: string;
+		last_at?: string;
+		counts?: Record<string, number>;
+		total?: number;
+	};
+	article_history?: {
+		source_urls?: string[];
+		source_titles?: string[];
+		titles?: string[];
+		followed_up_ids?: number[];
+		own_urls?: string[];
+	};
+	newsletter_daily?: {
+		enabled?: boolean;
+		date?: string;
+		published_at?: string;
+		published?: number;
+		last_item_count?: number;
+		last_title?: string;
+		last_url?: string;
+	};
+	newsletter_history?: {
+		source_urls?: string[];
+		source_titles?: string[];
+	};
+	/** Retrofit of the tip footer onto old posts. Self-reported: see receipt_check. */
+	backfill?: {
+		done_ids?: number[];
+		skipped?: Record<string, string>;
+		updated_total?: number;
+		last_run?: string;
+		last_reason?: string;
+		remaining?: number;
+	};
+	mrr_ideas_history?: { names?: string[] };
 	code_tech_earning?: CodeTechEarning;
 	mrr_ideas?: MrrIdeas;
 

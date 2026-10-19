@@ -2,8 +2,34 @@
 
 `docs/index.html` is the public GitHub Pages dashboard. It is built from the
 React/Vite/Tailwind app in `frontend/`, while `bot/dashboard.py` publishes the
-safe data files during Phase 5 of every cycle. The browser polls
-`docs/status.json` every 60 seconds so new status appears without a page reload.
+safe data files during Phase 5 of every cycle. The browser keeps itself in
+sync with the newest cycle without a reload — see **Staying In Sync** below.
+
+## Staying In Sync
+
+A cycle commits `docs/status.json` to `main`, but the Pages copy only changes
+when the frontend workflow redeploys. A push made with the Actions token does
+not trigger that workflow, so it falls back to its `:27` hourly cron, and Pages
+then caches the file for 10 minutes. Read from Pages alone, the dashboard could
+trail the bot by most of an hour.
+
+`frontend/src/services/status.ts` therefore reads **both** copies — Pages and
+`raw.githubusercontent.com/<github_repo>/main/docs/status.json` (public,
+CORS-enabled, 5-minute cache) — and keeps whichever has the newer `last_run`.
+The repo name comes from the snapshot's own `github_repo`. If the raw read
+fails, Pages is used unchanged.
+
+`frontend/src/utils/sync.ts` (`useStatusSync`) owns the polling:
+
+- every 60 s while the tab is visible; paused while hidden; immediate refetch
+  when the tab regains focus or the network returns;
+- a snapshot with fewer `total_runs` than the one on screen is ignored, so the
+  two copies briefly disagreeing never steps the page backwards;
+- when `total_runs` increases, a **"Cycle #N landed"** notice lists what moved
+  (`diffCycle`: money received, posts, views, drafts held back, a new review
+  branch, errors) and tile values that changed replay their entrance;
+- the top bar shows `synced Ns ago · next cycle in ~Mm` (due an hour after
+  `last_run`, which is the cycle's start).
 
 ## Source Of Truth
 
@@ -27,14 +53,15 @@ essentials, and detail lives one click away.
 | Route        | Answers                                                         	  |
 |--------------|--------------------------------------------------------------------|
 | `#/overview` | Is it earning, is it fresh, what needs attention right now?        |
+| `#/reach`    | What was published, who read it, does every reader see the ask?    |
 | `#/leads`    | Which opportunities exist, worth what, and what is the first step? |
 | `#/research` | Which free AI services and earning playbooks were found?           |
-| `#/engine`   | Which model serves which role, and what did the last cycle do?     |
+| `#/engine`   | Which model served each role, and what did evolution propose?      |
 | `#/health`   | Freshness, integration readiness, errors, receive-wallet state.    |
 | `#/data`     | Every snapshot field, including keys no section claims yet.        |
 
-`#/leads/<index>` is a detail view carrying the lead's `codex_prompt` and
-`outreach_draft` with copy buttons. Outreach is never sent automatically.
+`#/leads/<index>` is a detail view carrying the lead's `codex_prompt` with a
+copy button.
 
 ## Section Registry
 
@@ -57,9 +84,28 @@ a new field deserves a first-class view, add its key to the relevant section's
 The Overview must answer, without scrolling:
 
 - Is the cycle fresh, late, or stalled?
-- Earnings confirmed on-chain, and the value sitting in the lead pipeline.
+- Earnings confirmed on-chain.
+- The reader → ask → wallet funnel (`buildFunnel`): views, posts observed to
+  carry the ask (from `receipt_check`, never `backfill`), money received — and
+  a verdict saying *why* the figure is what it is. `$0.00` because nobody
+  tipped and `$0.00` because no ask shipped need opposite fixes.
 - What needs attention, ranked, each linking to the section that resolves it.
-- Which of the five phases succeeded in the last run.
+- Which of the five phases succeeded in the last run (`buildPhases`, shared
+  with Health).
+
+Two states are deliberately **not** shown as failures:
+
+- A draft a quality gate held back (`action.skipped`) is the system working.
+  It appears as an `info` item linking to Reach, where `article_rejects`
+  shows which gate fires most.
+- An evolution proposal on a review branch is `good`, with a "review diff"
+  link; it becomes main only when merged.
+
+And one is shown as a warning although `llm_engine.live` is `true`: **Atria
+answered 0 of the cycle's calls.** `live` only means Atria was not latched off;
+a timeout or empty completion falls through per call without latching, so a
+cycle can end "live" with OpenRouter having served everything. `atriaState`
+reads `llm_engine.calls` and says "Atria not answering".
 
 ## What "Earned" Means
 
@@ -82,12 +128,23 @@ high-water mark, so it survives a manual withdrawal without double-counting the
 recovery. `wallet.stale` means the chain lookup failed and the last known
 balance is being shown; no receipt is recorded for that cycle.
 
-The wallet is a **receive** address handed to clients in outreach drafts, so
-payments arrive already at their destination. There is no transfer step and no
-withdrawal code path anywhere in the tree — the payout module was removed.
+The wallet is a **receive** address printed in every published article's
+footer (`bot/earning/payout.py`), so tips arrive already at their destination.
+There is no transfer step and no withdrawal code path anywhere in the tree.
 
 Only the masked address (`wallet.address_masked`) is written to tracked files;
 `sanitize_for_git` redacts the raw value.
+
+## Visual Rules
+
+- Flat and quiet: no background washes, glows or gradients. Colour carries
+  meaning only (status dots, icons, verdict rule), never decoration.
+- Tile values are in text ink; the tile's tone shows in its icon and detail.
+- Charts are single-series bars (`BarList`): one accent hue on a shared zero,
+  the value printed beside each bar, and the sample size as `n=` so a mean over
+  two posts reads as one. Rows below `_MIN_ARCHETYPE_SAMPLE` are drawn faint.
+- Both themes come from the same tokens; check light and dark, and a 390 px
+  phone width, before shipping.
 
 ## Implementation Notes
 

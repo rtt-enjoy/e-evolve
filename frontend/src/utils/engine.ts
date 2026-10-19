@@ -46,8 +46,16 @@ export function atriaState(status: Status): AtriaState {
 	const atriaCalls = calls.atria || 0;
 	const totalCalls = Object.values(calls).reduce((sum, n) => sum + n, 0);
 
+	// `live` only means Atria was not latched off. A call that times out or
+	// comes back empty falls through to OpenRouter without latching, so a cycle
+	// can end "live" with Atria having answered nothing -- cycle #2004 did,
+	// 0 of 2. Built is not live; neither is configured.
+	if (live === true && totalCalls > 0 && atriaCalls === 0) {
+		const busiest = Object.entries(calls).sort((a, b) => b[1] - a[1])[0]?.[0];
+		return { model, keySet, live, serving: busiest || serving, reason, calls, label: 'Atria not answering', tone: 'warn', detail: `key set, but answered 0 of ${totalCalls} calls — the fallback served all of them` };
+	}
 	if (live === true) {
-		return { model, keySet, live, serving, reason, calls, label: 'Atria live', tone: 'good', detail: `key set · answered ${atriaCalls} of ${totalCalls} calls last cycle` };
+		return { model, keySet, live, serving, reason, calls, label: 'Atria live', tone: 'good', detail: totalCalls ? `answered ${atriaCalls} of ${totalCalls} calls last cycle` : 'key set · no LLM calls last cycle' };
 	}
 	if (live === false) {
 		return { model, keySet, live, serving, reason, calls, label: 'Atria fallback', tone: 'warn', detail: `${reason || 'not serving'} — roles ran on ${serving}` };

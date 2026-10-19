@@ -1,4 +1,4 @@
-import type { CodeTechOpportunity, LeadValueBasis, Status } from '../types/status';
+import type { CodeTechOpportunity, LeadValueBasis } from '../types/status';
 import type { Tone } from '../components/ui';
 
 export function money(value = 0, digits = 2): string {
@@ -81,14 +81,6 @@ export function featureLabel(feature: string): string {
 		.replace(/^llm_/, '')
 		.replace(/_/g, ' ')
 		.replace(/\b\w/g, (char) => char.toUpperCase());
-}
-
-export function evolutionTone(status: Status): 'good' | 'warn' | 'bad' | 'info' {
-	const evolution = status.last_evolution || {};
-	if (evolution.error) return evolution.error_type === 'api' ? 'warn' : 'bad';
-	if ((evolution.changes_applied || []).length) return 'good';
-	if ((evolution.summary || '').toLowerCase().includes('skipped')) return 'warn';
-	return 'info';
 }
 
 export function clampPercent(value: number): number {

@@ -1,4 +1,4 @@
-import { AlertTriangle, ArrowRight, CheckCircle2, ChevronRight, XCircle } from 'lucide-react';
+import { AlertTriangle, ArrowRight, CheckCircle2, ChevronRight, Info, XCircle } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 
@@ -114,7 +114,9 @@ export function Tile({
 			</span>
 			{/* Model names and phrases are far wider than a number; size them down
 			    rather than letting a two-column phone grid break them mid-word. */}
-			<strong className={`tile-value ${tone} ${value.length > 9 ? 'is-long' : ''}`}>{value}</strong>
+			{/* Keyed by value so a figure that changes on a sync replays its
+			    entrance: the eye catches what moved without a diff view. */}
+			<strong key={value} className={`tile-value ${value.length > 9 ? 'is-long' : ''}`}>{value}</strong>
 			{spark && spark.length > 1 ? <Sparkline values={spark} tone={tone} /> : null}
 			{detail ? <p className="tile-detail">{detail}</p> : null}
 			{to ? <ArrowRight className="tile-arrow" size={15} /> : null}
@@ -173,14 +175,48 @@ export function Dot({ tone = 'neutral' }: { tone?: Tone }) {
 	return <span className={`dot ${tone}`} />;
 }
 
-export function Phase({ name, ok, detail, tone }: { name: string; ok: boolean; detail: string; tone?: Exclude<Tone, 'neutral'> }) {
-	const actualTone = tone || (ok ? 'good' : 'bad');
+export function Phase({ name, detail, tone }: { name: string; detail: string; tone: Exclude<Tone, 'neutral'> }) {
+	const Icon = tone === 'good' ? CheckCircle2 : tone === 'bad' ? XCircle : tone === 'info' ? Info : AlertTriangle;
 	return (
-		<article className={`phase ${actualTone}`}>
-			{actualTone === 'good' ? <CheckCircle2 size={16} /> : actualTone === 'bad' ? <XCircle size={16} /> : <AlertTriangle size={16} />}
+		<article className={`phase ${tone}`}>
+			<Icon size={16} aria-hidden="true" />
 			<strong>{name}</strong>
 			<p>{detail}</p>
 		</article>
+	);
+}
+
+/**
+ * One measure across a few labelled rows: horizontal bars on a shared zero.
+ *
+ * Single series, so one hue and no legend; the value is printed beside every
+ * bar in text ink, and `note` carries the sample size so a mean over two posts
+ * cannot pass for a trend. `muted` rows (too small a sample) are drawn faint.
+ */
+export function BarList({
+	rows,
+	format = (value) => value.toLocaleString(),
+}: {
+	rows: Array<{ label: string; value: number; note?: string; title?: string; muted?: boolean }>;
+	format?: (value: number) => string;
+}) {
+	if (!rows.length) return <Empty text="Nothing recorded yet." />;
+	const max = Math.max(...rows.map((row) => row.value), 0.0001);
+	return (
+		<ul className="bars">
+			{rows.map((row) => (
+				<li key={row.label} className={row.muted ? 'muted-row' : ''} title={row.title || `${row.label}: ${format(row.value)}${row.note ? ` (${row.note})` : ''}`}>
+					<span className="bar-label">{row.label}</span>
+					<span className="bar-track" aria-hidden="true">
+						<span className="bar-fill" style={{ width: `${Math.max(1.5, (row.value / max) * 100)}%` }} />
+					</span>
+					<span className="bar-value">
+						{format(row.value)}
+						{row.note ? <em>{row.note}</em> : null}
+					</span>
+				</li>
+			))}
+		</ul>
 	);
 }
 

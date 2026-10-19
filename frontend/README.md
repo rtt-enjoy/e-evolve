@@ -8,8 +8,10 @@ writes:
 - `../docs/status.json`
 - `../docs/earnings-log.md`
 
-The frontend reads those files in the browser and polls `status.json` every
-minute.
+The frontend reads those files in the browser and keeps itself current: it
+reads both the Pages copy and the raw file on `main`, keeps the newer cycle,
+polls every minute while the tab is visible, and announces when a new cycle
+lands (`src/utils/sync.ts`).
 
 ## Local Development
 
@@ -25,7 +27,9 @@ Dev and production render the same sections; there is no gated UI mode.
 ```
 src/sections/registry.ts   ← declares sections + which status.json keys they use
 src/sections/*Section.tsx  ← one lazy-loaded page per route
-src/components/ui.tsx      ← shared primitives (Tile, Card, Disclosure, …)
+src/components/ui.tsx      ← shared primitives (Tile, Card, BarList, Disclosure, …)
+src/components/Funnel.tsx  ← reader → ask → wallet, used by Overview and Reach
+src/utils/sync.ts          ← polling, freshest-copy selection, cycle-landed notices
 src/components/JsonNode.tsx ← generic renderer for unmapped/new bot fields
 src/utils/route.ts         ← hash router (#/leads, #/leads/3)
 ```

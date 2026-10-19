@@ -6,7 +6,7 @@ Phases:
   0. Init LLM
   1. Status   — load state, detect active features
   2. Commands — read owner commands
-  3. Evolve   — skipped; Codex owns code changes
+  3. Evolve   — propose code changes onto an evolve/* review branch
   4. Research — refresh suggestion-only research queues
   5. Update   — save status, dashboard, commit
 """

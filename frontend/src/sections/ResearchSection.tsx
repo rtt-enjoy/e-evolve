@@ -31,7 +31,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 				<Tile label="Earning ideas" value={String(ideas.length)} detail="with pricing guidance" tone="info" />
 				<Tile label="Owner actions" value={String(ownerActions.length)} detail="manual setup steps" tone={ownerActions.length ? 'warn' : 'neutral'} />
 				<Tile label="Bot suggestions" value={String(suggestions.length)} detail="free-tier only" tone="neutral" />
-				<Tile label="MRR models kept" value={String(mrrViable.length)} detail={`${mrrRefused.length} refused`} tone={mrrViable.length ? 'good' : 'neutral'} />
+				<Tile label="MRR models kept" value={String(mrrViable.length)} detail={`${mrrRefused.length} refused · ${(status.mrr_ideas_history?.names || []).length} triaged to date`} tone={mrrViable.length ? 'good' : 'neutral'} />
 			</div>
 
 			{brief.summary ? (

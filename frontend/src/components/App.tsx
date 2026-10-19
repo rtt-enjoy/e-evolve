@@ -1,23 +1,13 @@
-import { ChevronRight, Menu, Monitor, Moon, RefreshCw, Sun, X } from 'lucide-react';
+import { ChevronRight, Menu, Monitor, Moon, RefreshCw, Sparkles, Sun, X } from 'lucide-react';
 import { Suspense, lazy, useEffect, useMemo, useRef, useState, type ComponentType } from 'react';
 import { Banner, Dot, Empty, Pill } from './ui';
-import { fetchStatus } from '../services/status';
 import { availableSections, sectionById, SECTIONS, unclaimedKeys } from '../sections/registry';
 import { buildHealth, buildIssues, buildReadiness } from '../utils/dashboard';
 import { ageLabel, formatDate } from '../utils/format';
+import { nextCycle, sinceLabel, useNow, useStatusSync } from '../utils/sync';
 import { navigate, useRoute } from '../utils/route';
 import type { Status } from '../types/status';
 import { atriaState } from '../utils/engine';
-
-const emptyStatus: Status = {
-	active_features: [],
-	inactive_features: [],
-	earnings: {},
-	last_evolution: {},
-	last_earning: { actions: [] },
-	suggestions: [],
-	errors: [],
-};
 
 type Theme = 'system' | 'light' | 'dark';
 const THEME_KEY = 'e-evolve-theme';
@@ -57,34 +47,13 @@ const SECTION_VIEWS = new Map<string, ComponentType<{ status: Status }>>(
 );
 
 export function App() {
-	const [status, setStatus] = useState<Status>(emptyStatus);
-	const [lastPoll, setLastPoll] = useState<Date | null>(null);
-	const [loadError, setLoadError] = useState('');
-	const [loading, setLoading] = useState(true);
+	const { status, source, lastPoll, error: loadError, loading, refreshing, notice, dismiss, refresh } = useStatusSync();
+	const now = useNow();
 	const [navOpen, setNavOpen] = useState(false);
 	const [theme, cycleTheme] = useTheme();
 	const ThemeIcon = THEME_ICON[theme];
 	const route = useRoute();
 	const mainRef = useRef<HTMLElement>(null);
-
-	async function load() {
-		try {
-			const next = await fetchStatus();
-			setStatus(next);
-			setLastPoll(new Date());
-			setLoadError('');
-		} catch (error) {
-			setLoadError(error instanceof Error ? error.message : String(error));
-		} finally {
-			setLoading(false);
-		}
-	}
-
-	useEffect(() => {
-		load();
-		const timer = window.setInterval(load, 60_000);
-		return () => window.clearInterval(timer);
-	}, []);
 
 	// Close the mobile drawer and scroll to top whenever the route changes.
 	useEffect(() => {
@@ -98,6 +67,8 @@ export function App() {
 	const health = useMemo(() => buildHealth(status, issues, readiness.percent), [status, issues, readiness.percent]);
 	const newKeys = useMemo(() => unclaimedKeys(status), [status]);
 	const freshness = ageLabel(status.last_run);
+	const next = nextCycle(status.last_run, now);
+	const atria = atriaState(status);
 
 	const active = sections.find((section) => section.id === route.section)
 		// A hash pointing at a hidden or unknown section falls back to Overview.
@@ -123,8 +94,8 @@ export function App() {
 
 				<div className="live">
 					<Dot tone={freshness.tone} />
-					<span>{loading ? 'connecting' : freshness.label}</span>
-					<em>{health.label}</em>
+					<span>{loading ? 'connecting' : `cycle ${freshness.label}`}</span>
+					<em>{health.label} · {next.label}</em>
 				</div>
 
 				<nav>
@@ -149,7 +120,7 @@ export function App() {
 				</nav>
 
 				<div className="sidebar-foot">
-					<Pill tone={atriaState(status).tone}>{atriaState(status).label}</Pill>
+					<Pill tone={atria.tone}>{atria.label}</Pill>
 					<Pill tone="neutral">v{status.version || '0.0.0'}</Pill>
 					<div className="links">
 						<a href="status.json">status.json</a>
@@ -179,7 +150,14 @@ export function App() {
 						)}
 					</nav>
 					<div className="topbar-actions">
-						<span className="poll">{lastPoll ? `synced ${formatDate(lastPoll.toISOString())}` : 'syncing'}</span>
+						<span
+							className={`sync ${loadError ? 'bad' : refreshing ? 'busy' : 'ok'}`}
+							title={lastPoll ? `Last checked ${formatDate(lastPoll.toISOString())} from ${source === 'repo' ? 'the repository (newer than Pages)' : 'GitHub Pages'}. Checks every minute while this tab is open.` : 'Connecting'}
+						>
+							<span className="sync-dot" aria-hidden="true" />
+							{loadError ? 'offline' : `synced ${sinceLabel(lastPoll, now)}`}
+							<em>{next.label}</em>
+						</span>
 						<button
 							className="icon-btn"
 							type="button"
@@ -189,14 +167,14 @@ export function App() {
 						>
 							<ThemeIcon size={17} />
 						</button>
-						<button className="icon-btn" type="button" onClick={load} aria-label="Refresh now" title="Refresh now">
+						<button className={`icon-btn ${refreshing ? 'spinning' : ''}`} type="button" onClick={refresh} aria-label="Refresh now" title="Refresh now">
 							<RefreshCw size={17} />
 						</button>
 					</div>
 				</div>
 
 				<div className="content">
-					{loadError ? <Banner tone="bad" text={`Could not load status.json: ${loadError}`} /> : null}
+					{loadError ? <Banner tone="bad" text={`Could not refresh status.json (${loadError}). Showing the last snapshot that loaded.`} /> : null}
 
 					{View && active ? (
 						<Suspense fallback={<Empty text={`Loading ${active.label.toLowerCase()}…`} />}>
@@ -212,6 +190,21 @@ export function App() {
 					</footer>
 				</div>
 			</main>
+
+			<div className="toast-region" aria-live="polite">
+				{notice ? (
+					<div className="toast" role="status" key={notice.run}>
+						<Sparkles size={16} className="toast-icon" aria-hidden="true" />
+						<div className="min-w-0">
+							<strong>Cycle #{notice.run} landed</strong>
+							<p>{notice.changes.length ? notice.changes.join(' · ') : 'No headline numbers moved.'}</p>
+						</div>
+						<button className="icon-btn" type="button" onClick={dismiss} aria-label="Dismiss">
+							<X size={15} />
+						</button>
+					</div>
+				) : null}
+			</div>
 		</div>
 	);
 }

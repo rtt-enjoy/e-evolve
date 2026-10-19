@@ -1,4 +1,5 @@
 import { ageLabel } from './format';
+import { atriaState } from './engine';
 import type { CodeTechOpportunity, Status } from '../types/status';
 
 export type Tone = 'good' | 'warn' | 'bad' | 'info' | 'neutral';
@@ -12,6 +13,28 @@ export type Issue = {
 	section?: string;
 };
 
+/** Human wording for `articles._reject` codes (status.article_rejects). */
+export const REJECT_LABELS: Record<string, string> = {
+	no_llm: 'no LLM available',
+	no_source: 'no fresh source',
+	llm_error: 'LLM call failed',
+	empty_draft: 'model returned nothing',
+	fabricated: 'invented figures',
+	weak_title: 'title too weak',
+	revision_fabricated: 'revision invented figures',
+	duplicate: 'duplicate of a past post',
+	too_similar: 'too close to the source',
+};
+
+export function rejectLabel(code?: string): string {
+	return (code && REJECT_LABELS[code]) || (code || 'unknown').replace(/_/g, ' ');
+}
+
+/** A gate refusing a draft is the system working, not a module breaking. */
+function isFailure(action: { success?: boolean; skipped?: boolean }): boolean {
+	return action.success === false && !action.skipped;
+}
+
 export function buildIssues(status: Status): Issue[] {
 	const issues: Issue[] = [];
 	const fresh = ageLabel(status.last_run);
@@ -22,6 +45,25 @@ export function buildIssues(status: Status): Issue[] {
 			title: 'Cycle is behind schedule',
 			detail: `Latest run is ${fresh.label}. Check GitHub Actions if this is unexpected.`,
 			section: 'health',
+		});
+	}
+	if (status.payout && status.payout.live === false) {
+		issues.push({
+			tone: 'bad',
+			label: 'zero',
+			title: 'No way to pay is being published',
+			detail: `${status.payout.blocked_reason || 'The receive path is off'}. Every view is multiplied by zero.`,
+			section: 'reach',
+		});
+	}
+	const gap = status.receipt_check?.known_without_footer ?? status.receipt_check?.without_footer ?? 0;
+	if (gap > 0) {
+		issues.push({
+			tone: 'bad',
+			label: 'gap',
+			title: `${gap} published post${gap === 1 ? '' : 's'} show readers no way to pay`,
+			detail: 'Observed by re-reading the live posts, not taken from the bot’s own report.',
+			section: 'reach',
 		});
 	}
 	if (status.last_evolution?.error) {
@@ -36,13 +78,36 @@ export function buildIssues(status: Status): Issue[] {
 	for (const error of status.errors || []) {
 		issues.push({ tone: 'bad', label: 'error', title: 'Cycle error', detail: error, section: 'health' });
 	}
-	const failed = (status.last_earning?.actions || []).filter((action) => action.success === false);
-	for (const action of failed.slice(0, 3)) {
+	const atria = atriaState(status);
+	if (atria.tone === 'warn') {
+		issues.push({ tone: 'warn', label: 'engine', title: atria.label, detail: atria.detail, section: 'engine' });
+	}
+	const actions = status.last_earning?.actions || [];
+	for (const action of actions.filter(isFailure).slice(0, 3)) {
 		issues.push({
 			tone: 'warn',
 			label: 'module',
 			title: `${action.platform || 'module'} action failed`,
 			detail: action.error || action.title || 'Inspect module output.',
+			section: 'engine',
+		});
+	}
+	const held = actions.find((action) => action.skipped);
+	if (held) {
+		issues.push({
+			tone: 'info',
+			label: 'held',
+			title: 'Latest draft was held back',
+			detail: `${rejectLabel(held.reject_code)}: a quality gate refused it, so nothing weak was published.`,
+			section: 'reach',
+		});
+	}
+	if (status.evolution_pending_review && status.last_evolution_branch) {
+		issues.push({
+			tone: 'info',
+			label: 'review',
+			title: 'A code proposal is waiting for review',
+			detail: `${status.last_evolution_branch}. Nothing reaches main until you merge it.`,
 			section: 'engine',
 		});
 	}
@@ -66,15 +131,80 @@ export function buildIssues(status: Status): Issue[] {
 			section: 'leads',
 		});
 	}
-	if (!issues.length) {
-		issues.push({
+	if (!issues.some((issue) => issue.tone !== 'info')) {
+		issues.unshift({
 			tone: 'good',
 			label: 'clear',
-			title: 'Nothing needs attention',
-			detail: 'Cycle freshness, integrations, and the latest actions all look healthy.',
+			title: 'Nothing is broken',
+			detail: 'Cycle freshness, the receive path, and the latest actions all look healthy.',
 		});
 	}
 	return issues.slice(0, 6);
+}
+
+export type PhaseResult = { name: string; tone: 'good' | 'warn' | 'bad' | 'info'; detail: string };
+
+/** The five phases of the last cycle, shared by Overview and Health. */
+export function buildPhases(status: Status): PhaseResult[] {
+	const evolution = status.last_evolution || {};
+	const actions = status.last_earning?.actions || [];
+	const errors = status.errors || [];
+	const failed = actions.filter(isFailure).length;
+	const held = actions.filter((action) => action.skipped).length;
+
+	let evolutionPhase: PhaseResult;
+	if (evolution.error) evolutionPhase = { name: 'Evolution', tone: 'bad', detail: 'failed' };
+	else if (status.evolution_pending_review) evolutionPhase = { name: 'Evolution', tone: 'good', detail: 'proposal in review' };
+	else if ((evolution.summary || '').toLowerCase().includes('skip')) evolutionPhase = { name: 'Evolution', tone: 'info', detail: 'skipped' };
+	else evolutionPhase = { name: 'Evolution', tone: 'info', detail: 'no proposal' };
+
+	return [
+		{ name: 'Status', tone: status.last_run ? 'good' : 'bad', detail: status.last_run ? 'loaded' : 'never ran' },
+		{ name: 'Commands', tone: 'good', detail: 'queue read' },
+		evolutionPhase,
+		{
+			name: 'Research',
+			tone: failed ? 'warn' : held ? 'info' : 'good',
+			detail: failed ? `${failed} failed` : held ? 'draft held back' : `${actions.length} action${actions.length === 1 ? '' : 's'}`,
+		},
+		{ name: 'Update', tone: errors.length ? 'bad' : 'good', detail: errors.length ? `${errors.length} errors` : 'saved' },
+	];
+}
+
+/**
+ * Reader -> ask -> wallet: the three stages of the only channel that earns.
+ *
+ * `$0.00` has to say why, because the two causes need opposite fixes: nobody
+ * tipped (a conversion question) or no ask shipped (a structural zero).
+ */
+export function buildFunnel(status: Status) {
+	const stats = status.article_stats || {};
+	const check = status.receipt_check || {};
+	const views = stats.total_views || 0;
+	const posts = stats.count || check.published_total || 0;
+	const published = check.published_total || posts;
+	const gap = check.known_without_footer ?? check.without_footer ?? 0;
+	const covered = check.covered || 0;
+	const withAsk = Math.max(0, covered - gap);
+	const received = status.wallet?.received_total_usd ?? status.earnings?.received_total_usd ?? 0;
+	const live = status.payout?.live === true;
+	const complete = check.coverage_complete === true;
+	const unverified = check.unverified || 0;
+
+	let verdict: { tone: 'good' | 'warn' | 'bad' | 'info'; text: string };
+	if (received > 0) {
+		verdict = { tone: 'good', text: 'Readers have paid. The on-chain balance is the only figure counted as earned.' };
+	} else if (!live) {
+		verdict = { tone: 'bad', text: 'No ask is being published, so every view is multiplied by zero.' };
+	} else if (gap > 0) {
+		verdict = { tone: 'warn', text: `${gap} post${gap === 1 ? '' : 's'} still show no ask. Those readers cannot pay.` };
+	} else if (complete) {
+		verdict = { tone: 'info', text: 'Every published post shows a way to pay, and nobody has tipped yet. The path works, so this is a conversion question rather than a broken pipe.' };
+	} else {
+		verdict = { tone: 'info', text: `The ask ships on new posts; ${unverified} older post${unverified === 1 ? '' : 's'} not yet re-read. Unverified is not the same as fine.` };
+	}
+
+	return { views, posts, published, withAsk, covered, gap, received, live, complete, verdict };
 }
 
 function staleHours(lastRefresh?: string, refreshHours = 24): number | null {
@@ -143,7 +273,7 @@ export function buildHealth(
 	if (issues.some((issue) => issue.tone === 'bad')) return { tone: 'bad', label: 'attention required' };
 	if (ageLabel(status.last_run).tone !== 'good') return { tone: 'warn', label: 'stale cycle' };
 	if (readinessPercent < 60) return { tone: 'warn', label: 'setup incomplete' };
-	if ((status.last_earning?.actions || []).some((action) => action.success === false)) {
+	if ((status.last_earning?.actions || []).some(isFailure)) {
 		return { tone: 'warn', label: 'module warning' };
 	}
 	return { tone: 'good', label: 'operational' };

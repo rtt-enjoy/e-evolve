@@ -38,7 +38,7 @@ FEATURE_MAP: dict[str, list[str]] = {
 # dashboard can never advertise a model the client no longer calls. Hardcoding
 # them here once left the UI naming stealth/ox-alpha after it was withdrawn.
 _LLM_ROLE_PURPOSES: dict[str, str] = {
-	"upgrade":  "research-only repair suggestions for Codex-owned code changes",
+	"upgrade":  "code-change proposals, parked on an evolve/* branch for human review",
 	"research": "free-AI-service discovery, market research, and earning-suggestion briefs",
 	"post":     "article drafting and formatting for publication",
 }

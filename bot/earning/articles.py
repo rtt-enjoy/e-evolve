@@ -132,7 +132,11 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
 - BANNED in titles: exclamation marks, "Ultimate", "Complete Guide",
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
-  and any ALL-CAPS word. These read as spam and suppress clicks here.
+  any ALL-CAPS word, and the vague filler a weak title falls back on:
+  "getting started", "introduction to", "a guide to", "an overview",
+  "the basics", "best practices", "better code", "explained simply",
+  "made easy", "for beginners", or a trailing "in 2024"-style year.
+  All of them read as low-effort, and the title gate rejects every one.
 - No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
   wastes the scannable half of the line. Pick the sharper half and stop.
 

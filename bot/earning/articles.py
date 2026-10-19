@@ -369,7 +369,7 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 		f"SOURCE URL: {source.get('url', '')}\n"
 		f"SOURCE PUBLISHER: {source.get('source', '')}\n"
 		f"SOURCE SUMMARY: {source.get('summary', '') or '(no summary provided; rely on the title)'}\n\n"
-		"Pick a specific practitioner angle on this subject. Add working code, "
+		"Pick a specific practitioner angle on this subject -- this account's readers respond best to the problem-workaround shape: a concrete thing that breaks and the way out. Add working code, "
 		"tradeoffs, and failure modes the source does not cover. Do not reword the "
 		"source. Your title must differ from the source title. Follow every "
 		"formatting and source-handling rule in the system prompt, including the "

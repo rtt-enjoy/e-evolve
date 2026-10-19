@@ -194,9 +194,9 @@
 		]
 	},
 	"llm": {
-		"main_engine": "Atria-Dawn-Preview",
+		"main_engine": "Atria-Dawn",
 		"provider": "atria",
-		"note": "Atria (Atria-Dawn-Preview, ~1B free tokens, needs ATRIA_API_KEY) is the main engine for every role: evolution (upgrade), research, and article/newsletter drafting (post). On a 401, a 404, or a quota-spent 429 Atria is switched off for the rest of the run and each role falls through to its all-free OpenRouter chain, ordered per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. Without ATRIA_API_KEY every role runs on that fallback. openrouter/free -- the free auto-router -- leads every chain: it picks the best zero-cost model per request and filters for the features the request needs, so model choice tracks the live catalogue. openrouter/auto is deliberately NOT used: its candidate set includes paid models and it bills at the routed model's rate. Named free models (led by minimax/minimax-m3:free, 1M ctx, native response_format + tools) follow as fallback for when the router is rate-limited; on 402/429/404 the client steps down the rest of the role's free chain before changing provider."
+		"note": "Atria (Atria-Dawn, ~1B free tokens, needs ATRIA_API_KEY) is the main engine for every role: evolution (upgrade), research, and article/newsletter drafting (post). On a 401, a 404, or a quota-spent 429 Atria is switched off for the rest of the run and each role falls through to its all-free OpenRouter chain, ordered per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. Without ATRIA_API_KEY every role runs on that fallback. openrouter/free -- the free auto-router -- leads every chain: it picks the best zero-cost model per request and filters for the features the request needs, so model choice tracks the live catalogue. openrouter/auto is deliberately NOT used: its candidate set includes paid models and it bills at the routed model's rate. Named free models (led by minimax/minimax-m3:free, 1M ctx, native response_format + tools) follow as fallback for when the router is rate-limited; on 402/429/404 the client steps down the rest of the role's free chain before changing provider."
 	},
 	"research_policy": {
 		"mode": "research_and_article_publishing",
@@ -217,6 +217,6 @@
 		"enabled": true,
 		"branch_prefix": "evolve",
 		"max_changes": 3,
-		"note": "LLM code proposals are committed to a review branch (branch_prefix/<version>-<utc>) and never to main. Merge the branch to apply. Writes are restricted to bot/, docs/, config/, requirements.txt, version.txt; bot/main.py, bot/llm.py, bot/status.py, bot/commands.py, bot/evolution.py, bot/git_utils.py and .github/ can never be written. Engine is Atria (Atria-Dawn-Preview), falling back to the free OpenRouter 'upgrade' chain led by the openrouter/free auto-router; no paid model."
+		"note": "LLM code proposals are committed to a review branch (branch_prefix/<version>-<utc>) and never to main. Merge the branch to apply. Writes are restricted to bot/, docs/, config/, requirements.txt, version.txt; bot/main.py, bot/llm.py, bot/status.py, bot/commands.py, bot/evolution.py, bot/git_utils.py and .github/ can never be written. Engine is Atria (Atria-Dawn), falling back to the free OpenRouter 'upgrade' chain led by the openrouter/free auto-router; no paid model."
 	}
 }

@@ -38,7 +38,7 @@ Keep it public for free GitHub Pages.
 
 | Secret               | Source                                                        | Cost                  |
 |----------------------|---------------------------------------------------------------|-----------------------|
-| `ATRIA_API_KEY`      | [atria-asi.ai](https://atria-asi.ai)                          | Free — main engine    |
+| `ATRIA_API_KEY`      | [intern-ai.org.cn](https://discovery.intern-ai.org.cn)        | Free — main engine    |
 | `GROQ_API_KEY`       | [console.groq.com](https://console.groq.com)                  | Free                  |
 | `GEMINI_API_KEY`     | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier             |
 | `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | Free — Atria fallback |

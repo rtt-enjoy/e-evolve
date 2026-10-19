@@ -53,7 +53,7 @@ _MAX_FIX_TOKENS  = 16_000
 # Groq is a fallback only; _MAX_PLAN_TOKENS is sized for Atria and the openrouter
 # upgrade chain, so a groq cycle stays capped by that 12k TPM ceiling.
 # Gemini/Anthropic: large context, no TPM issue.
-# Atria (main engine): Atria-Dawn-Preview holds ~256K context and ~65K output
+# Atria (main engine): Atria-Dawn holds ~256K context and ~65K output
 # (third-party listings, 2026-10), so the same 200k-byte snapshot and 32k plan fit.
 # OpenRouter: the free upgrade chain leads with 1M-context models and the
 # smallest entry still holds 256K, so 30k starved the model -- one module filled

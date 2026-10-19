@@ -77,7 +77,7 @@ E-Evolve is a GitHub Actions bot that runs hourly and refreshes RAG, market rese
 
 Current operating policy: API keys are for RAG, research, market analysis, suggestions, draft text, and **publishing articles to dev.to**. The bot must not use keys to post to social media, place trades, mint NFTs, withdraw funds, or comment on external issues.
 
-**Main AI engine: Atria (`Atria-Dawn-Preview`, ~1B free tokens) via `bot/llm.py`.** Every role prefers it: evolution (`upgrade`), research and lead briefs (`research`), and article/newsletter drafting (`post`). It needs `ATRIA_API_KEY`; without that secret, or once Atria answers 401/404 or a quota-spent 429, every role runs on the free OpenRouter fallback described next, and the dashboard Engine panel marks the roles `fallback` (`llm_workflows.<role>.primary_active: false`, `serving: "openrouter"`). Read those fields, not `ROLE_PROVIDER`, to know what actually ran — a preference is not a live engine. The Engine panel's **Atria** card (and the sidebar pill) answer the two owner questions directly from `status["llm_engine"]`: is `ATRIA_API_KEY` set, and how many calls Atria actually answered last cycle.
+**Main AI engine: Atria (`Atria-Dawn`, ~1B free tokens) via `bot/llm.py`.** Every role prefers it: evolution (`upgrade`), research and lead briefs (`research`), and article/newsletter drafting (`post`). It needs `ATRIA_API_KEY`; without that secret, or once Atria answers 401/404 or a quota-spent 429, every role runs on the free OpenRouter fallback described next, and the dashboard Engine panel marks the roles `fallback` (`llm_workflows.<role>.primary_active: false`, `serving: "openrouter"`). Read those fields, not `ROLE_PROVIDER`, to know what actually ran — a preference is not a live engine. The Engine panel's **Atria** card (and the sidebar pill) answer the two owner questions directly from `status["llm_engine"]`: is `ATRIA_API_KEY` set, and how many calls Atria actually answered last cycle.
 
 **Fallback: free OpenRouter models** — no paid engine, no credits required. Each role's fallback routes through a zero-cost chain led by **`openrouter/free`**, OpenRouter's *free auto-router*: it selects the best zero-cost model per request and filters for the features the request needs, so no role has to name a model up front and the choice tracks the live catalogue. Behind it sits a named fallback chain ordered by capability, led by `minimax/minimax-m3:free` (1M context, $0 in/out, native `response_format` + tools), for when the router itself is rate-limited. Each role's fallbacks then diverge by task: `upgrade` falls back to code-specialised models (`poolside/laguna-s-2.1:free`, `cohere/north-mini-code:free`), `research` to the largest-context reasoners (`nvidia/nemotron-3-ultra-550b-a55b:free`, `nvidia/nemotron-3-super-120b-a12b:free`), and `post` to models with native structured output. On 402/429/model-not-found, `bot/llm.py` steps down through *every* remaining model in the role's chain — each getting a fresh retry budget — before falling back to another provider, so a cycle never fails on cost or one model's rate limit.
 
@@ -180,7 +180,7 @@ changes when you merge, not when the bot proposes. A branch that is never
 merged is therefore deleted at 14 days along with its version bump — review
 is opt-in, and unreviewed proposals expire rather than accumulate.
 
-The engine is Atria (`Atria-Dawn-Preview`), falling back to the free OpenRouter
+The engine is Atria (`Atria-Dawn`), falling back to the free OpenRouter
 `upgrade` chain led by the `openrouter/free` auto-router — no paid model and no
 credits, so a cost error can never break a cycle. Paid Qwen3.8 variants were evaluated and rejected for this reason, and
 `openrouter/auto` is refused on the same grounds (see below).
@@ -1074,7 +1074,8 @@ actions. If such keys exist, they are treated as research context only.
 ## LLM Client (bot/llm.py)
 
 - Provider priority: `ATRIA_API_KEY` → `OPENROUTER_API_KEY` → `ANTHROPIC_API_KEY` → `GEMINI_API_KEY` → `CEREBRAS_API_KEY` → `GROQ_API_KEY`
-- **Main engine: Atria (`Atria-Dawn-Preview`, ~1B free tokens) for every role in `ROLE_PROVIDER`.** On a 401, a quota-spent 429 (no `Retry-After`), or a 404, Atria is disabled for the rest of the run and each role falls through to its free OpenRouter chain. A per-minute 429 with `Retry-After` only falls through for that call. No paid model, no credits needed.
+- **Atria endpoint: `https://discovery-api.intern-ai.org.cn/v1` (OpenAI-style, `POST /chat/completions`, `Authorization: Bearer $ATRIA_API_KEY`), model `Atria-Dawn`.** `_ATRIA_BASE_URL` in `bot/llm.py`. The same host serves an Anthropic-style API at its root (`https://discovery-api.intern-ai.org.cn`); this client does not use it. Moved off `api.atria-asi.ai` / `Atria-Dawn-Preview` on 2026-10-19 when the Preview was upgraded to Atria Dawn.
+- **Main engine: Atria (`Atria-Dawn`, ~1B free tokens) for every role in `ROLE_PROVIDER`.** On a 401, a quota-spent 429 (no `Retry-After`), or a 404, Atria is disabled for the rest of the run and each role falls through to its free OpenRouter chain. A per-minute 429 with `Retry-After` only falls through for that call. No paid model, no credits needed.
 - **Atria is slow — give it patience.** `_ATRIA_TIMEOUT` is `(15, 300)`: five minutes to answer, against OpenRouter's 90s. With the old shared 90s timeout a slow but working Atria was abandoned mid-answer, and a timeout then burned 3 retries. Now a timeout falls through to OpenRouter **for that call only**, with no retry, and after `_ATRIA_MAX_TIMEOUTS` (2) in one run Atria is latched off (`disabled_reason: "timeout"`). That bound is what keeps a stalled Atria inside the 55-minute job cap: at most ~10 minutes lost per cycle. Do not shorten the timeout to "speed up" a cycle — that turns Atria's slowness into a silent permanent fallback.
 - **OpenRouter free-tier ceiling:** `:free` models are capped at 20 req/min and only
   50 requests/day unless the account has ever bought $10 in credits (then 1,000/day).
@@ -1361,7 +1362,7 @@ Tunable by owner or changed here in Codex:
                       "max_reddit_requests": 3, "auto_pursue": false,
                       "...": "searches, sources, product shapes" },
   "evolution":      { "enabled": true, "branch_prefix": "evolve", "max_changes": 3 },
-  "llm":            { "main_engine": "Atria-Dawn-Preview", "provider": "atria" },
+  "llm":            { "main_engine": "Atria-Dawn", "provider": "atria" },
   "research_policy":{ "allowed_actions": ["research", "suggestions", "drafts", "article publishing"],
                       "blocked_actions": ["social posting", "trading", "minting", "payouts"] }
 }

@@ -10,7 +10,7 @@ Set at least one LLM provider key for LLM-backed runs:
 
 | Key                  | Required    | Used by                         | Notes                            |
 |----------------------|-------------|---------------------------------|----------------------------------|
-| `ATRIA_API_KEY`      | One LLM key | `bot/llm.py`, feature readiness | **Main engine** for every role (`Atria-Dawn-Preview`, ~1B free tokens). Falls through to OpenRouter on auth failure, missing model, or spent quota. |
+| `ATRIA_API_KEY`      | One LLM key | `bot/llm.py`, feature readiness | **Main engine** for every role (`Atria-Dawn`, ~1B free tokens). Falls through to OpenRouter on auth failure, missing model, or spent quota. |
 | `GROQ_API_KEY`       | One LLM key | `bot/llm.py`, feature readiness | Free-tier friendly LLM provider. |
 | `GEMINI_API_KEY`     | One LLM key | `bot/llm.py`, feature readiness | Free-tier friendly LLM provider; highest daily request ceiling of the free options. |
 | `OPENROUTER_API_KEY` | One LLM key | `bot/llm.py`, feature readiness | First fallback after Atria; free-model chain per role. Free (`:free`) models are capped at 50 requests/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit. |

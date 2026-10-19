@@ -1,7 +1,7 @@
 import type { Tone } from '../components/ui';
 import type { Status } from '../types/status';
 
-const MAIN_MODEL = 'Atria-Dawn-Preview';
+const MAIN_MODEL = 'Atria-Dawn';
 
 const REASONS: Record<string, string> = {
 	key_missing: 'ATRIA_API_KEY is not set',

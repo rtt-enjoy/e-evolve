@@ -5007,7 +5007,7 @@ class TestAtriaPrimaryWithOpenRouterFallback(unittest.TestCase):
 		calls = {"atria": [], "openrouter": []}
 
 		def fake_post(url, **kwargs):
-			if "atria" in url:
+			if url.startswith(llm_module._ATRIA_BASE_URL):
 				calls["atria"].append(kwargs["json"]["model"])
 				return atria_script.pop(0)
 			calls["openrouter"].append(kwargs["json"]["model"])
@@ -5022,7 +5022,7 @@ class TestAtriaPrimaryWithOpenRouterFallback(unittest.TestCase):
 		with mock.patch("requests.post", side_effect=fake):
 			resp = client.complete_for_role("upgrade", "hi")
 		self.assertEqual(resp.provider, "atria")
-		self.assertEqual(resp.model, "Atria-Dawn-Preview")
+		self.assertEqual(resp.model, "Atria-Dawn")
 		self.assertEqual(calls["openrouter"], [])
 
 	def test_openrouter_is_primary_without_atria_key(self):
@@ -5165,7 +5165,7 @@ class TestAtriaPrimaryWithOpenRouterFallback(unittest.TestCase):
 			client.complete_for_role("post", "hi")
 			client.complete_for_role("research", "hi")
 		report = client.engine_report()
-		self.assertEqual(report["main_model"], "Atria-Dawn-Preview")
+		self.assertEqual(report["main_model"], "Atria-Dawn")
 		self.assertTrue(report["key_set"])
 		self.assertTrue(report["live"])
 		self.assertEqual(report["serving"], "atria")
@@ -5210,7 +5210,7 @@ class TestDashboardNamesTheEngineThatServes(unittest.TestCase):
 		from bot.status import _llm_workflows
 		flows = _llm_workflows([], {"OPENROUTER_API_KEY"})
 		for role, flow in flows.items():
-			self.assertEqual(flow["model"], "Atria-Dawn-Preview", role)
+			self.assertEqual(flow["model"], "Atria-Dawn", role)
 			self.assertFalse(flow["primary_active"], role)
 			self.assertEqual(flow["serving"], "openrouter", role)
 			self.assertTrue(flow["active"], role)

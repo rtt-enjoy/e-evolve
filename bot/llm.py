@@ -20,11 +20,15 @@ _GROQ_MODELS = [
 	"llama3-70b-8192",
 	"llama3-8b-8192",
 ]
-# Atria: primary engine when ATRIA_API_KEY is set (~1B free tokens, OpenAI-compatible).
-# Single model, case-sensitive ID. Quota exhaustion latches the provider off for the
-# rest of the run and the chain falls through to OpenRouter.
+# Atria: primary engine when ATRIA_API_KEY is set (~1B free tokens). Called through
+# the OpenAI-style endpoint of the intern-ai discovery API; the same host also
+# serves an Anthropic-style API at its root, which this client does not use.
+# Single model, case-sensitive ID ("Atria-Dawn" since the Preview was upgraded).
+# Quota exhaustion latches the provider off for the rest of the run and the chain
+# falls through to OpenRouter.
+_ATRIA_BASE_URL = "https://discovery-api.intern-ai.org.cn/v1"
 _ATRIA_MODELS = [
-	"Atria-Dawn-Preview",
+	"Atria-Dawn",
 ]
 # Atria is slow to answer, so it gets far more patience than OpenRouter's 90s:
 # (connect, read) seconds. A timeout after that wait falls through to OpenRouter
@@ -686,7 +690,7 @@ class LLMClient:
 		t0  = time.monotonic()
 		try:
 			rsp = requests.post(
-				"https://api.atria-asi.ai/v1/chat/completions",
+				f"{_ATRIA_BASE_URL}/chat/completions",
 				headers={
 					"Authorization": f"Bearer {self._atria_key}",
 					"Content-Type":  "application/json",

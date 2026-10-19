@@ -12,7 +12,7 @@ Repo → Settings → Secrets and variables → Actions → **New repository sec
 
 | Secret               | Source                                                        | Cost                          |
 |----------------------|---------------------------------------------------------------|-------------------------------|
-| `ATRIA_API_KEY`      | [atria-asi.ai](https://atria-asi.ai)                          | **Main engine** — see below   |
+| `ATRIA_API_KEY`      | [intern-ai.org.cn](https://discovery.intern-ai.org.cn)        | **Main engine** — see below   |
 | `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | Free — first fallback         |
 | `GROQ_API_KEY`       | [console.groq.com](https://console.groq.com)                  | Free                          |
 | `GEMINI_API_KEY`     | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier                     |
@@ -21,7 +21,9 @@ Repo → Settings → Secrets and variables → Actions → **New repository sec
 
 Only one is required, but set `ATRIA_API_KEY` **and** `OPENROUTER_API_KEY`.
 
-**Main AI engine: Atria (`Atria-Dawn-Preview`), roughly 1B free tokens.**
+**Main AI engine: Atria (`Atria-Dawn`), roughly 1B free tokens.**
+It is called through the OpenAI-style endpoint
+`https://discovery-api.intern-ai.org.cn/v1` with model `Atria-Dawn`.
 `bot/llm.py` sends every role to Atria first: evolution proposals (`upgrade`),
 research and lead briefs (`research`), and article and newsletter drafting
 (`post`). On a 401, a 404, or a quota-spent 429, Atria is switched off for the

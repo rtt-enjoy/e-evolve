@@ -26,7 +26,8 @@ import re
 import shutil
 import subprocess
 import sys
-from datetime import datetime, timezone
+from collections import Counter
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -103,6 +104,34 @@ _STATUS_BAIT = frozenset({
 _SHRINK_FLOOR = 0.6
 _SHRINK_MIN_BYTES = 4_000
 
+# Every prompt that writes what readers see: (name, file, where, reject codes
+# that grade it). A reject is a draft the prompt produced and a gate refused,
+# so these codes are the prompt's measured failure rate. Owner directive
+# 2026-10-19: every evolution attends to these prompts and upgrades them a
+# step at a time, toward more passive income.
+_PROMPT_LEDGER = (
+    ("article draft", "bot/earning/articles.py",
+     "_SYSTEM (TITLE, CONTENT RULES, SOURCE HANDLING) + the user prompt in "
+     "_generate_article()",
+     ("weak_title", "fabricated", "too_similar")),
+    ("title rewrite", "bot/earning/articles.py", "_revise_title()", ("weak_title",)),
+    ("format revision", "bot/earning/articles.py", "_revise_format()",
+     ("revision_fabricated",)),
+    ("follow-up", "bot/earning/articles.py",
+     "_FOLLOWUP_EXTRA + the user prompt in _generate_followup()", ()),
+    ("audience guidance", "bot/earning/articles.py",
+     "_audience_guidance() + _ARCHETYPE_ANGLES, steered by article_interest", ()),
+    ("house voice", "bot/earning/devto.py", "VOICE, shared by every writing prompt", ()),
+    ("newsletter digest", "bot/earning/newsletter.py",
+     "_SYSTEM + the user prompt in run()", ()),
+)
+_PROMPT_FILES = frozenset(entry[1] for entry in _PROMPT_LEDGER)
+# No text came back, so no prompt edit moves these. Naming them stops the
+# engine "fixing" a prompt for an engine outage.
+_ENGINE_REJECTS = ("llm_error", "empty_draft", "no_llm")
+# Matches the review-branch retention: a fix merged inside it shows up here.
+_PROMPT_WINDOW_DAYS = 14
+
 _SYSTEM = """\
 You are the evolution engine of E-Evolve: an hourly GitHub Actions bot that
 publishes developer articles to dev.to with a USDT tip address in every post,
@@ -128,6 +157,22 @@ How to choose the change:
    bot/tests.py, or a status field that should move next cycle.
 5. Find the code that causes the problem in the CODEBASE and change that code.
    A new file is rarely the answer to a problem in an existing one.
+
+Prompts are the main lever. The PROMPT LEDGER lists every prompt that writes
+what readers see. Each draft a gate refuses is one post, and one tip ask, that
+never ships; the title and the angle decide how many readers each post gets.
+Upgrade prompts gradually, one step per cycle:
+- One prompt, a few-line edit: sharpen, replace or reorder one rule, or add
+  one concrete example. Never rewrite a whole prompt.
+- Aim at the PROMPT FOCUS. Quote its reject count and gate findings as
+  "evidence"; in "verify", name the count that should fall in the window.
+- Replace a rule that is not working instead of stacking a new one beside it.
+  A prompt that grows every cycle buries the rules that matter.
+- Change the instruction, never the gate. Never soften the rules against
+  invented figures, bugs, endpoints or URLs to get a draft through.
+- Voice rules live once, in devto.VOICE, shared by every product.
+- An article never asks for money and never mentions tips, the wallet, the
+  account or its statistics. The footer is attached after the gates on purpose.
 
 Known dead ends. Each was proposed repeatedly and never merged:
 - A module that duplicates one in the FILE INVENTORY. Address validation is
@@ -334,6 +379,8 @@ def build_prompt(status: dict[str, Any], codebase: str,
     if ops:
         parts.append("OPERATIONS:\n" + "\n".join(f"- {line}" for line in ops))
     if not compact:
+        # Compact snapshots hold no prompt text, so an edit there cannot match.
+        parts.append(prompt_ledger(status))
         parts.append(_doctrine_extract())
         parts.append("STATUS FIELDS (large sub-trees summarised by size):\n"
                      + _status_digest(status))
@@ -342,12 +389,85 @@ def build_prompt(status: dict[str, Any], codebase: str,
         parts.append(prior)
     parts.append(_file_inventory())
     parts.append(f"CODEBASE:\n{codebase}")
-    parts.append(
-        f"TASK: the binding step is \"{step}\". Propose the smallest change that "
-        "moves it, grounded in the evidence above, or return no change and say "
-        "why. Follow the system rules and the dead-end list. JSON only."
-    )
+    if step.startswith("4") and not compact:
+        task = ("TASK: the binding step is reach, and the PROMPT FOCUS is the default "
+                "way to move it. Propose one gradual edit to the prompt it names, "
+                "unless the evidence above points more strongly elsewhere, or return "
+                "no change and say why.")
+    else:
+        task = (f"TASK: the binding step is \"{step}\". Propose the smallest change "
+                "that moves it, grounded in the evidence above, or return no change "
+                "and say why. Prompt work waits until this step is clean.")
+    parts.append(task + " Follow the system rules and the dead-end list. JSON only.")
     return "\n\n".join(parts)
+
+
+def prompt_ledger(status: dict[str, Any], now: datetime | None = None) -> str:
+    """
+    Every reader-facing prompt, what grades it, and the one to upgrade next.
+
+    Graded on dated rejects inside _PROMPT_WINDOW_DAYS so a merged prompt fix
+    moves the focus on to the next prompt. The lifetime counts would point at
+    the same prompt forever, which makes gradual work impossible.
+    """
+    rejects = status.get("article_rejects") or {}
+    recent = rejects.get("recent")
+    details: dict[str, Counter] = {}
+    if isinstance(recent, list):
+        now = now or datetime.now(timezone.utc)
+        cutoff = now - timedelta(days=_PROMPT_WINDOW_DAYS)
+        counts: Counter = Counter()
+        for r in recent:
+            if not isinstance(r, dict):
+                continue
+            try:
+                at = datetime.fromisoformat(str(r.get("at")))
+            except ValueError:
+                continue
+            if at.tzinfo is None:
+                at = at.replace(tzinfo=timezone.utc)
+            if at < cutoff:
+                continue
+            code = str(r.get("code"))
+            counts[code] += 1
+            if r.get("detail"):
+                details.setdefault(code, Counter())[str(r["detail"])] += 1
+        basis = f"last {_PROMPT_WINDOW_DAYS} days"
+    else:
+        counts = Counter({str(k): int(v) for k, v in (rejects.get("counts") or {}).items()})
+        basis = "lifetime tally; no dated window recorded yet, so an old fix still counts"
+
+    lines = ["PROMPT LEDGER (the prompts that write what readers see):"]
+    for name, path, where, codes in _PROMPT_LEDGER:
+        graded = f"graded by {', '.join(codes)}" if codes else "no gate tally"
+        lines.append(f"- {name}: {path} {where}; {graded}")
+
+    prompt_codes = [c for entry in _PROMPT_LEDGER for c in entry[3]]
+    lost = sorted({c for c in prompt_codes if counts.get(c)},
+                  key=lambda c: (-counts[c], prompt_codes.index(c)))
+    engine = [c for c in _ENGINE_REJECTS if counts.get(c)]
+    if lost:
+        lines.append(f"Drafts lost to a prompt ({basis}): "
+                     + ", ".join(f"{c}={counts[c]}" for c in lost))
+    if engine:
+        lines.append(f"Drafts lost to the engine, not fixable by a prompt edit ({basis}): "
+                     + ", ".join(f"{c}={counts[c]}" for c in engine))
+
+    if not lost:
+        lines.append(f"PROMPT FOCUS: no prompt lost a draft ({basis}). Upgrade on outcome: "
+                     "the article draft angle and _audience_guidance(), steered by "
+                     "article_interest. No change is also a valid answer.")
+        return "\n".join(lines)
+    focus = lost[0]
+    owners = [f"{name} ({where})"
+              for name, _, where, codes in _PROMPT_LEDGER if focus in codes]
+    lines.append(f"PROMPT FOCUS: {focus} lost {counts[focus]} draft(s); "
+                 f"the prompts that produce it: {'; '.join(owners)}.")
+    top = (details.get(focus) or Counter()).most_common(3)
+    if top:
+        lines.append("Gate findings behind it: "
+                     + "; ".join(f"{d!r} x{n}" for d, n in top))
+    return "\n".join(lines)
 
 
 def checklist_step(status: dict[str, Any]) -> tuple[str, list[str]]:
@@ -605,10 +725,14 @@ def _snapshot_priority(key: str) -> tuple[int, str]:
     """
     norm = key.replace("\\", "/")
     if norm in PROTECTED_FILES:
-        return (2, norm)
+        return (3, norm)
     if norm.endswith("tests.py"):
-        return (1, norm)
-    return (0, norm)
+        return (2, norm)
+    # The prompt files lead: newsletter.py once fell past the budget, so the
+    # digest prompt sat in OMITTED FILES and could never be upgraded.
+    if norm in _PROMPT_FILES:
+        return (0, norm)
+    return (1, norm)
 
 
 def _read_codebase(max_bytes: int, include_config: bool = True) -> str:

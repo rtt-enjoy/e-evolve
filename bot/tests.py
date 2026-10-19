@@ -5430,6 +5430,85 @@ class TestEvolutionBrief(unittest.TestCase):
 		self.assertNotIn("version.txt", text)
 
 
+class TestPromptLedger(unittest.TestCase):
+	"""Every evolution sees the reader-facing prompts and which one to upgrade next."""
+
+	NOW = datetime(2026, 10, 19, tzinfo=timezone.utc)
+
+	def _status(self, *rows):
+		recent = [{"code": c, "at": (self.NOW - timedelta(days=d)).isoformat(), "detail": det}
+				  for c, d, det in rows]
+		return {"article_rejects": {"recent": recent, "counts": {"weak_title": 99}}}
+
+	def test_focus_is_graded_on_the_dated_window(self):
+		"""A merged fix must move the focus on; lifetime counts never would."""
+		text = evolution_module.prompt_ledger(self._status(
+			*[("weak_title", 30, "too long")] * 5, ("fabricated", 1, "latency")), now=self.NOW)
+		self.assertIn("PROMPT FOCUS: fabricated lost 1", text)
+		self.assertNotIn("weak_title=", text)
+
+	def test_engine_failures_never_become_the_focus(self):
+		text = evolution_module.prompt_ledger(self._status(
+			*[("llm_error", 1, "timeout")] * 10, ("weak_title", 1, "too long (78 chars)")), now=self.NOW)
+		self.assertIn("PROMPT FOCUS: weak_title", text)
+		self.assertIn("title rewrite (_revise_title())", text)
+		self.assertIn("not fixable by a prompt edit (last 14 days): llm_error=10", text)
+		self.assertIn("'too long (78 chars)' x1", text)
+
+	def test_lifetime_counts_are_a_labelled_fallback(self):
+		text = evolution_module.prompt_ledger(
+			{"article_rejects": {"counts": {"weak_title": 9, "llm_error": 13}}}, now=self.NOW)
+		self.assertIn("PROMPT FOCUS: weak_title lost 9", text)
+		self.assertIn("lifetime tally", text)
+
+	def test_no_prompt_loss_steers_on_outcome(self):
+		text = evolution_module.prompt_ledger(self._status(("llm_error", 1, "")), now=self.NOW)
+		self.assertIn("no prompt lost a draft", text)
+		self.assertIn("article_interest", text)
+
+	def test_every_ledger_prompt_still_exists(self):
+		"""A renamed prompt would leave the engine pointed at text it cannot find."""
+		for name, path, where, _ in evolution_module._PROMPT_LEDGER:
+			src = pathlib.Path(path).read_text(encoding="utf-8")
+			for symbol in re.findall(r"\w+(?=\(\))|\b_?[A-Z][A-Z_]{2,}\b", where):
+				self.assertIn(symbol, src, f"{name}: {symbol} not in {path}")
+
+	def test_prompt_files_lead_the_snapshot(self):
+		"""newsletter.py once fell past the budget, so its prompt could not be evolved."""
+		snapshot = evolution_module._read_codebase(200_000)
+		for path in evolution_module._PROMPT_FILES:
+			header = f"=== {pathlib.Path(path)} ==="
+			self.assertIn(header, snapshot)
+			self.assertNotIn("... [truncated]", snapshot.split(header, 1)[1].split("\n=== ", 1)[0])
+
+	def test_reach_step_makes_prompt_work_the_default_task(self):
+		clean = {"payout": {"live": True}, "receipt_check": {"agrees_with_backfill": True},
+				 "article_rejects": {"counts": {"weak_title": 9}}}
+		prompt = evolution_module.build_prompt(clean, "", {})
+		self.assertIn("PROMPT LEDGER", prompt)
+		self.assertIn("PROMPT FOCUS is the default", prompt)
+		blocked = evolution_module.build_prompt({"payout": {"live": False}}, "", {})
+		self.assertIn("Prompt work waits", blocked)
+		compact = evolution_module.build_prompt(clean, "", {}, compact=True)
+		self.assertNotIn("PROMPT LEDGER", compact)
+
+	def test_system_prompt_asks_for_gradual_prompt_edits(self):
+		self.assertIn("one step per cycle", evolution_module._SYSTEM)
+		self.assertIn("never the gate", evolution_module._SYSTEM)
+
+	def test_reject_keeps_the_gate_finding_dated_and_bounded(self):
+		articles_module._reject("weak_title", "too long (78 chars)")
+		self.assertEqual(articles_module._LAST_DETAIL, "too long (78 chars)")
+		status = {}
+		for _ in range(articles_module._RECENT_REJECTS + 10):
+			articles_module._record_reject(status, "weak_title", "too long (78 chars)")
+		rec = status["article_rejects"]
+		self.assertEqual(len(rec["recent"]), articles_module._RECENT_REJECTS)
+		self.assertEqual(rec["counts"]["weak_title"], articles_module._RECENT_REJECTS + 10)
+		self.assertEqual(rec["recent"][-1]["detail"], "too long (78 chars)")
+		datetime.fromisoformat(rec["recent"][-1]["at"])
+
+
 class TestEvolutionPrompt(unittest.TestCase):
 	"""What the engine is asked, end to end through run(), with no change applied."""
 

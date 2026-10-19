@@ -78,6 +78,10 @@ _REJECTS = {
 
 # Set by _generate_article on the way out so run() can report the real cause.
 _LAST_REJECT: str = ""
+_LAST_DETAIL: str = ""
+# Dated rejects kept in article_rejects.recent. counts is a lifetime tally, so
+# a prompt fix never shows in it; evolution grades prompts on this window.
+_RECENT_REJECTS = 50
 
 
 def _reject(code: str, detail: str = "") -> None:
@@ -86,8 +90,9 @@ def _reject(code: str, detail: str = "") -> None:
     Returning None is what the callers already expect; this only makes the
     cause survive the return so it can be counted and displayed.
     """
-	global _LAST_REJECT
+	global _LAST_REJECT, _LAST_DETAIL
 	_LAST_REJECT = code
+	_LAST_DETAIL = detail
 	log.warning("[articles] rejected (%s): %s%s", code, _REJECTS.get(code, code),
 				f" -- {detail}" if detail else "")
 	return None
@@ -283,12 +288,13 @@ def _publish_once(
 	today: str,
 ) -> tuple[list[dict], bool]:
 	"""Generate and publish a single article. Returns (results, published)."""
-	global _LAST_REJECT
+	global _LAST_REJECT, _LAST_DETAIL
 	_LAST_REJECT = ""
+	_LAST_DETAIL = ""
 	article = _generate_article(llm, status)
 	if not article:
 		code = _LAST_REJECT or "unknown"
-		_record_reject(status, code)
+		_record_reject(status, code, _LAST_DETAIL)
 		return [{
 			"platform": "dev.to",
 			"success": False,
@@ -845,7 +851,7 @@ def _record_publish(status: dict, article: dict) -> None:
 		bounded_append(hist.setdefault("followed_up_ids", []), parent_id, limit)
 
 
-def _record_reject(status: dict, code: str) -> None:
+def _record_reject(status: dict, code: str, detail: str = "") -> None:
 	"""Persist why a cycle published nothing, and keep a running tally.
 
     A single last_reason answers "what happened today"; the counts answer the
@@ -861,6 +867,13 @@ def _record_reject(status: dict, code: str) -> None:
 	counts = rec.setdefault("counts", {})
 	counts[code] = int(counts.get(code, 0)) + 1
 	rec["total"] = int(rec.get("total", 0)) + 1
+	# The gate's own finding ("title too long (78 chars)") is what a prompt
+	# edit has to answer, and the date is what lets a merged fix show up.
+	# Plain append, not bounded_append: that skips equal entries, and two
+	# rejects inside one clock tick are still two lost drafts.
+	recent = rec.setdefault("recent", [])
+	recent.append({"code": code, "at": rec["last_at"], "detail": str(detail)[:160]})
+	del recent[:-_RECENT_REJECTS]
 
 
 def _duplicate_reason(article: dict, status: dict) -> str:

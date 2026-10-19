@@ -196,6 +196,21 @@ suggestion TEXT` (one cycle). Secret-readiness fields are deliberately kept out
 of the prompt: listing inactive secrets is how "enable Cerebras" got proposed
 five times.
 
+**Prompt work is the standing default for reach (owner directive,
+2026-10-19).** Every evolution attends to the prompts that write what readers
+see and upgrades them one step at a time, toward more passive income.
+`evolution._PROMPT_LEDGER` names each one (article draft, title rewrite, format
+revision, follow-up, audience guidance, `devto.VOICE`, newsletter digest) with
+the `article_rejects` codes that grade it, and `prompt_ledger()` picks the
+**prompt focus** from rejects in the last 14 days, with the gate's own findings
+behind it. Engine failures (`llm_error`, `empty_draft`) are listed apart,
+because no prompt edit moves them. When step 4 (reach) binds, the task makes
+that focus the default change. The system prompt asks for one prompt per
+cycle, a few-line edit, replacing a weak rule rather than stacking one, and the
+instruction changed, never the gate. The prompt files lead the codebase
+snapshot, because `newsletter.py` used to fall past the 200 KB budget and the
+digest prompt could not be evolved at all. See `docs/evolution.md`.
+
 `version.txt` is bumped **on the review branch only**; the running version
 changes when you merge, not when the bot proposes. A branch that is never
 merged is therefore deleted at 14 days along with its version bump — review
@@ -413,6 +428,10 @@ actually costing articles* — without them, a gate that quietly kills one draft
 in three looks identical to one that has never fired. Codes: `no_llm`,
 `no_source`, `llm_error`, `empty_draft`, `fabricated`, `weak_title`,
 `revision_fabricated`, `duplicate`, `too_similar`.
+
+`counts` is a lifetime tally, so a fix never shows in it. `recent` keeps the
+last 50 rejects with `at` and the gate's `detail` (for example `too long (78
+chars)`). The evolution prompt ledger grades prompts on that dated window.
 
 `dashboard.write_log` was the other half of the same blind spot: its fallback
 branch printed `"action recorded"` and discarded the action's `error`, which is

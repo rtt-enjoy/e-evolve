@@ -1136,6 +1136,11 @@ Work this in order. Stop at the first honest "no".
    a source-ranking bonus *and* an "also performs well here" line in the
    writing prompt, so the bot publishes more of the shape, which keeps the row
    populated.
+
+   **Then upgrade the prompts that write it, one step per cycle.** The prompt
+   ledger in the evolution brief names the prompt losing the most drafts to a
+   gate in the last 14 days. A draft a gate refuses is one post and one ask that
+   never ship. Change the instruction, never the gate.
 5. **Did anything start estimating revenue?** Delete it. On-chain or nothing.
 
 ---

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-20T11:40:13.572483+00:00",
-  "total_runs": 2010,
+  "last_run": "2026-10-20T17:09:50.061014+00:00",
+  "total_runs": 2011,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,48 +33,23 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a concrete problem\u2011workaround requirement to the article draft prompt to steer content toward the preferred archetype and reduce empty drafts.",
+    "summary": "Gate the _audience_guidance 'avoid this shape' line on the same 3-post minimum as preferred archetypes",
     "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Steer article drafts toward problem\u2011workaround shape",
-        "description": "Add a concrete problem\u2011workaround requirement to the prompt so drafts match the audience\u2019s preferred archetype.",
-        "owner_action": "Edit the _generate_article prompt in bot/earning/articles.py as described in the change.",
-        "secret_needed": null,
-        "how_to": [
-          "Open bot/earning/articles.py",
-          "Locate the prompt string inside _generate_article",
-          "Replace the specified sentence with the new version",
-          "Save the file and run a test cycle to verify the change"
-        ]
-      }
-    ],
+    "suggestions": [],
     "direction": "article draft angle and audience guidance (steered by article_interest)",
     "evidence": [
       "article_interest.preferred_archetypes = ['problem-workaround']",
-      "article_rejects.last_reason = 'empty_draft'",
-      "article_rejects.counts.empty_draft = 7",
-      "drafts lost to engine empty_draft = 3 (last 14 days)"
+      "article_interest.archetypes includes 'engineering-culture' with count=1",
+      "The worst archetype is shown in guidance despite having only 1 post, violating the 3-post minimum that gates preferred archetypes"
     ],
     "money_path": "reach-only",
-    "verify": "Check that new articles have titles reflecting a concrete problem and a clear workaround, and that the empty_draft count in article_rejects.recent drops.",
+    "verify": "Check that _audience_guidance no longer includes the 'avoid this shape' line for archetypes with count < 3, and that the empty_draft count in article_rejects.recent drops as the prompt steers away from weak shapes",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -92,7 +67,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1082,
+  "last_cycle_seconds": 328,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1167,7 +1142,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-20T11:40:13.955540+00:00",
+    "checked_at": "2026-10-20T17:09:51.023961+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1585,7 +1560,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-20T11:58:13.275349+00:00",
+    "last_run": "2026-10-20T17:15:16.462465+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1595,32 +1570,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-20T11:58:13.999185+00:00",
+    "last_run": "2026-10-20T17:15:16.922094+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4800078,
-        "at": "2026-10-18T20:57:02.457826+00:00",
-        "ok": true
-      },
-      {
-        "id": 4765372,
-        "at": "2026-10-18T23:19:03.126048+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-10-18T23:19:03.126048+00:00",
-        "ok": true
-      },
-      {
         "id": 4720062,
-        "at": "2026-10-18T23:19:03.126048+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
         "at": "2026-10-18T23:19:03.126048+00:00",
         "ok": true
       },
@@ -1780,8 +1735,28 @@
         "ok": true
       },
       {
+        "id": 4800078,
+        "at": "2026-10-20T17:15:16.922094+00:00",
+        "ok": true
+      },
+      {
+        "id": 4765372,
+        "at": "2026-10-20T17:15:16.922094+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-10-20T17:15:16.922094+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-10-20T17:15:16.922094+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-20T11:58:13.999185+00:00",
+        "at": "2026-10-20T17:15:16.922094+00:00",
         "ok": true
       }
     ],
@@ -1790,7 +1765,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 39.0
+    "oldest_check_age_hours": 41.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1807,8 +1782,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 1,
-      "atria": 1
+      "openrouter": 1
     }
   }
 }

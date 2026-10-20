@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-20T00:21:56.468530+00:00",
-  "total_runs": 2008,
+  "last_run": "2026-10-20T06:02:43.959771+00:00",
+  "total_runs": 2009,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,61 +33,55 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change. The receive path is live and fully verified (38/38 covered, known_without_footer 0, coverage_complete true), the wallet is still $0.00 so the remaining work is reach, and _audience_guidance() already steers the article draft exclusively to problem-workaround \u2014 the only archetype with a non-noise sample (n=9, avg 450.1; preferred_archetypes() = ['problem-workaround']). No prompt lost a draft in the last 14 days; recent rejects are engine-classified empty_draft, which a prompt edit cannot fix. A speculative reword would not clear the evidenced-change bar.",
-    "changes_applied": [],
-    "suggestions": [],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path: publish into the shapes article_interest proves (problem-workaround). The named prompt (_audience_guidance + article draft angle) already does this, so there is no one-step edit to propose.",
-    "evidence": [
-      "receipt_check.covered / published_total = 38 / 38, coverage_complete = True, known_without_footer = 0, last_reason = 'all_verified' \u2014 the receive path is verified on everything published",
-      "wallet.received_total_usd = 0.0, wallet.other_assets = {} \u2014 no money has arrived, so the blocker is reach/audience fit, not the ask",
-      "article_interest: problem-workaround n=9 avg=450.1 dwarfs every other archetype; preferred_archetypes() = ['problem-workaround'] \u2014 the only row above the 3-post confidence threshold (Principle 3j)",
-      "article_rejects: PROMPT FOCUS records no prompt-caused draft loss in the last 14 days; the recent rejects are empty_draft (engine-classified 'LLM returned no usable title/body'), not fixable by a prompt edit",
-      "_audience_guidance() already emits the 'earns the most engagement here' lead line for problem-workaround plus the avoid-line for engineering-culture"
-    ],
-    "money_path": "none (maintenance)",
-    "verify": "No change to verify. Next cycle should show article_rejects gaining no new prompt-caused rejects and preferred_archetypes() still returning ['problem-workaround'] with n=9 >= 3; any prompt-caused reject in that window is the evidenced trigger for the next one-step edit.",
-    "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
-  },
-  "last_earning": {
-    "actions": [
+    "summary": "Gate the _audience_guidance 'avoid this shape' line on the same 3-post minimum that preferred_archetypes already enforces, so the article prompt stops steering writers away from 'engineering-culture' on a single quiet post (n=1).",
+    "changes_applied": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Your Time-Series Forecast Breaks When You Ignore Context",
-        "url": "https://dev.to/robust_true_try/your-time-series-forecast-breaks-when-you-ignore-context-2eik",
-        "estimated_usd": 0.0,
-        "source_url": "https://mistral.ai/news/timestral/",
-        "source_title": "Timestral: Mistral's time-series foundation models"
+        "file": "bot/earning/articles.py",
+        "reason": "_audience_guidance() currently emits its 'avoid this shape' line for worst_archetype regardless of that row's post count. On the live account that row is engineering-culture at n=1 avg 20.0 \u2014 noise by the brief's own n<3 rule \u2014 and the avoid-line is self-reinforcing: while the writer is told to avoid the shape, no post of it can be published, so the row can never grow to a confident sample. preferred_archetypes already applies _MIN_ARCHETYPE_SAMPLE to the steer-toward side; this applies the same gate to the steer-away side so the two halves of the steering signal cannot drift apart on sample discipline (Principle 3j)."
       }
     ],
+    "suggestions": [
+      {
+        "title": "Put the receive address in the dev.to profile bio",
+        "description": "One manual edit at dev.to/settings carries the ask on every profile visitor permanently \u2014 no account, no processor, no policy change, and it is the one deferred channel row that needs neither. Every new article brings readers to the profile; the bio is the one high-traffic surface the article footer cannot reach.",
+        "owner_action": "Paste the TRC-20 USDT address ([redacted]) and its network into the Bio field at dev.to/settings and save.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Sign in at dev.to and open dev.to/settings.",
+          "Step 2: Paste the address and network into the Bio field and save \u2014 the Forem API offers no writer for it (users is only: %i[show]), so this is the only way."
+        ]
+      }
+    ],
+    "direction": "Checklist step 4 (reach into a live receive path \u2014 upgrade the article-draft prompt on outcome, steered by article_interest) under Principle 3j, which requires the steering signal to carry the same sample discipline as the verifier.",
+    "evidence": [
+      "article_interest archetypes row: archetype='engineering-culture', count=1, avg_engagement=20.0 \u2014 the brief itself reads any row under n=3 as noise, yet _audience_guidance emits 'The ... kind has earned the least engagement here. Avoid that shape unless the source genuinely demands it.' for exactly that row",
+      "preferred_archetypes() = ['problem-workaround'] \u2014 the steer-toward side of the prompt is already count-gated at devto_stats._MIN_ARCHETYPE_SAMPLE (3); the steer-away side (worst_archetype = rows[-1]) has no count gate at all",
+      "PROMPT FOCUS: no prompt lost a draft in the last 14 days (article_rejects.recent in that window is empty_draft only, 'not fixable by a prompt edit'), so the only evidenced upgrade to the article draft angle / _audience_guidance is on outcome, not gate damage"
+    ],
+    "money_path": "reach-only \u2014 this changes the archetype steering text appended to the article draft prompt; it does not touch the receive path (receipt_check.covered/published_total = 39/39, coverage_complete = True, wallet.received_total_usd = 0.0).",
+    "verify": "Add to bot/tests.py: build a status dict whose article_interest has worst_archetype 'engineering-culture' with count 1 and assert 'Avoid that shape' is absent from articles._audience_guidance(status); set that row's count to 3 and assert the line appears. If an existing _audience_guidance test asserts the avoid-line against a report whose worst row has count < 3, give that fixture the same count bump. On the live account (n=1) the avoid-line is gone from the prompt as of the next cycle, and if an engineering-culture post is ever published and the row reaches n=3 the line returns on its own.",
+    "error": null,
+    "branch": "evolve/1.41.1-20261020-060926",
+    "proposed_version": "1.41.1"
+  },
+  "last_earning": {
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Put the receive address in the dev.to profile bio",
-      "description": "One manual edit at dev.to/settings carries the ask on every profile visitor permanently \u2014 no account, no processor, no policy change, and it is the one deferred channel row that needs neither.",
-      "owner_action": "Paste the TRC-20 USDT address ([redacted]) into the Bio field at dev.to/settings and save.",
+      "description": "One manual edit at dev.to/settings carries the ask on every profile visitor permanently \u2014 no account, no processor, no policy change, and it is the one deferred channel row that needs neither. Every new article brings readers to the profile; the bio is the one high-traffic surface the article footer cannot reach.",
+      "owner_action": "Paste the TRC-20 USDT address ([redacted]) and its network into the Bio field at dev.to/settings and save.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Sign in at dev.to and open dev.to/settings.",
-        "Step 2: Paste the address and network into the Bio field and save \u2014 the Forem API offers no writer for it, so this is the only way."
+        "Step 2: Paste the address and network into the Bio field and save \u2014 the Forem API offers no writer for it (users is only: %i[show]), so this is the only way."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1502,
+  "last_cycle_seconds": 404,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1199,7 +1193,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-20T00:21:57.109901+00:00",
+    "checked_at": "2026-10-20T06:02:44.428701+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1484,8 +1478,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261020-060926",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 38,
     "total_views": 4913,
@@ -1617,7 +1611,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-20T00:46:57.199901+00:00",
+    "last_run": "2026-10-20T06:09:26.494390+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1627,25 +1621,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-20T00:46:57.526524+00:00",
+    "last_run": "2026-10-20T06:09:27.352471+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4641536,
-        "at": "2026-10-18T14:53:08.716394+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-10-18T14:53:08.716394+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-10-18T18:10:36.862335+00:00",
-        "ok": true
-      },
       {
         "id": 4633220,
         "at": "2026-10-18T18:10:36.862335+00:00",
@@ -1657,22 +1636,12 @@
         "ok": true
       },
       {
-        "id": 4421693,
-        "at": "2026-10-18T18:10:36.862335+00:00",
-        "ok": true
-      },
-      {
         "id": 4800078,
         "at": "2026-10-18T20:57:02.457826+00:00",
         "ok": true
       },
       {
         "id": 4391849,
-        "at": "2026-10-18T20:57:02.457826+00:00",
-        "ok": true
-      },
-      {
-        "id": 4866834,
         "at": "2026-10-18T20:57:02.457826+00:00",
         "ok": true
       },
@@ -1762,11 +1731,6 @@
         "ok": true
       },
       {
-        "id": 4869631,
-        "at": "2026-10-19T16:01:27.010270+00:00",
-        "ok": true
-      },
-      {
         "id": 4780785,
         "at": "2026-10-19T16:01:27.010270+00:00",
         "ok": true
@@ -1817,22 +1781,42 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4880468,
         "at": "2026-10-20T00:46:57.526524+00:00",
         "ok": true
       },
       {
-        "id": 4880468,
-        "at": "2026-10-20T00:46:57.526524+00:00",
+        "id": 4641536,
+        "at": "2026-10-20T06:09:27.352471+00:00",
+        "ok": true
+      },
+      {
+        "id": 4740283,
+        "at": "2026-10-20T06:09:27.352471+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-10-20T06:09:27.352471+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-10-20T06:09:27.352471+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-10-20T06:09:27.352471+00:00",
         "ok": true
       }
     ],
-    "published_total": 39,
-    "covered": 39,
+    "published_total": 37,
+    "covered": 37,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 33.9
+    "oldest_check_age_hours": 36.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1849,7 +1833,6 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 3,
       "atria": 1
     }
   }

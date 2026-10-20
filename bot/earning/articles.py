@@ -369,6 +369,7 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 		f"SOURCE URL: {source.get('url', '')}\n"
 		f"SOURCE PUBLISHER: {source.get('source', '')}\n"
 		f"SOURCE SUMMARY: {source.get('summary', '') or '(no summary provided; rely on the title)'}\n\n"
+		"FRAME IT AS A PROBLEM-WORKAROUND: Identify a concrete thing that breaks or is difficult, then show the way out. Name the failure or pain point in the title. This audience turns up for specific broken situations plus working escape routes.\n\n"
 		"Pick a specific practitioner angle on this subject. Add working code, "
 		"tradeoffs, and failure modes the source does not cover. Do not reword the "
 		"source. Your title must differ from the source title. Follow every "

@@ -568,7 +568,19 @@ def _audience_guidance(status: dict) -> str:
 		lines.append(f"- The '{name}' kind {lead}. {hint}")
 
 	weak = str(report.get("worst_archetype", ""))
-	if weak and weak not in preferred and weak in _ARCHETYPE_ANGLES:
+	# Principle 3j: the row the prompt says to avoid needs the same sample
+	# discipline as the rows it steers toward. `preferred_archetypes` already
+	# refuses to return any archetype with fewer than _MIN_ARCHETYPE_SAMPLE
+	# posts; `worst_archetype` is simply rows[-1] with no count gate, so on the
+	# live account it reads 'engineering-culture' at n=1 -- one quiet post, not
+	# a pattern. The avoid-line is self-reinforcing too: while the writer is
+	# told to avoid the shape, no post of it can be published, so the row can
+	# never grow to a confident sample.
+	weak_row = next(
+		(r for r in report.get("archetypes", []) if r.get("archetype") == weak), {}
+	)
+	weak_confident = int(weak_row.get("count") or 0) >= devto_stats._MIN_ARCHETYPE_SAMPLE
+	if weak and weak_confident and weak not in preferred and weak in _ARCHETYPE_ANGLES:
 		lines.append(
 			f"- The '{weak}' kind has earned the least engagement here. Avoid that "
 			"shape unless the source genuinely demands it."

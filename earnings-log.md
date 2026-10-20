@@ -2328,3 +2328,8 @@ Autonomous earnings generated every hourly cycle.
 
 - [ok] **mrr-ideas**: [MRR idea triage refreshed (2 viable, 18 refused)](status.json#mrr_ideas) (est. $0.00)
 - [fail] **dev.to**: LLM returned no usable title/body
+
+### 2026-10-20 00:46 UTC
+
+- [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+- [ok] **dev.to**: [Your Time-Series Forecast Breaks When You Ignore Context](https://dev.to/robust_true_try/your-time-series-forecast-breaks-when-you-ignore-context-2eik) (est. $0.00)

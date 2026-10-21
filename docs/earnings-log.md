@@ -2359,3 +2359,7 @@ Autonomous earnings generated every hourly cycle.
 
 - [ok] **code_techs**: [Code-tech queue refreshed (40 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
 - [fail] **dev.to**: title too weak to earn a click, and the rewrite failed
+
+### 2026-10-21 19:32 UTC
+
+- [fail] **dev.to**: LLM call failed

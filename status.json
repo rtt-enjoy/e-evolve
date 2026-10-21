@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-21T04:51:05.483372+00:00",
-  "total_runs": 2014,
+  "last_run": "2026-10-21T10:11:30.184701+00:00",
+  "total_runs": 2015,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,40 +33,35 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Make the audience guidance prescriptive: require the problem-workaround shape in the article draft prompt so the LLM must frame every article as a concrete failure plus a working escape route, reducing empty_draft rejections caused by vague angle selection.",
-    "changes_applied": [],
-    "suggestions": [],
-    "direction": "Principle 5 step 3 / PROMPT FOCUS: upgrade article draft angle and _audience_guidance steered by article_interest",
-    "evidence": [
-      "article_interest.preferred_archetypes() = ['problem-workaround'] only (n=9, avg_engagement=450.1)",
-      "article_rejects.recent (last 14 days): empty_draft=3, llm_error=1",
-      "article_rejects.counts: empty_draft=7 total, weak_title=9, llm_error=14",
-      "Current _audience_guidance ends with 'Apply this to the ANGLE and the TITLE' \u2014 descriptive, not prescriptive"
+    "summary": "Make the ALL-CAPS title rule concrete by naming specific shouted words, so the model stops producing titles that the weak_title gate rejects for ALL-CAPS.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "The _SYSTEM TITLE rule 'and any ALL-CAPS word' is too brief for the model to reliably follow \u2014 the last weak_title reject was an ALL-CAPS title that the rewrite also failed to fix. Replacing it with a concrete version that names specific words (STOP, FIX, BUG, ERROR, CRASH) gives the model a clear, actionable instruction."
+      }
     ],
-    "money_path": "reach-only \u2014 improves article shape to earn more views into the live USDT footer",
-    "verify": "Next cycle: article_rejects.recent empty_draft count should drop; published article title should name a concrete failure + workaround (problem-workaround shape)",
+    "suggestions": [],
+    "direction": "Principle 5 step 3 / PROMPT FOCUS: upgrade the article draft title prompt to reduce weak_title rejects",
+    "evidence": [
+      "article_rejects.counts.weak_title = 10 total, 1 in last 14 days",
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "article_rejects.recent last weak_title detail: 'title has ALL-CAPS word'",
+      "PROMPT FOCUS: weak_title lost 1 draft(s); gate finding: 'title has ALL-CAPS word' x1"
+    ],
+    "money_path": "reach-only \u2014 sharper titles earn more views into the live USDT footer on every published post (receipt_check coverage 36/36, known_without_footer=0)",
+    "verify": "Next cycle: article_rejects.recent should show 0 weak_title rejects; if one appears, its detail should not be 'title has ALL-CAPS word'. The weak_title count in the 14-day window should drop from 1 to 0.",
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.41.1-20261021-102303",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
         "platform": "dev.to",
         "success": false,
         "skipped": true,
-        "reject_code": "weak_title",
-        "error": "title too weak to earn a click, and the rewrite failed",
+        "reject_code": "llm_error",
+        "error": "LLM call failed",
         "estimated_usd": 0.0
       }
     ],
@@ -87,7 +82,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 3286,
+  "last_cycle_seconds": 1027,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1248,7 +1243,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-21T04:51:06.156955+00:00",
+    "checked_at": "2026-10-21T10:11:31.034036+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1533,12 +1528,12 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261021-102303",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 36,
-    "total_views": 4923,
-    "avg_views": 136.8,
+    "total_views": 4933,
+    "avg_views": 137.0,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 3258,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -1584,8 +1579,8 @@
       {
         "archetype": "surprising-behavior",
         "count": 6,
-        "avg_engagement": 38.5,
-        "avg_views": 26.0,
+        "avg_engagement": 40.2,
+        "avg_views": 27.7,
         "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
       },
       {
@@ -1608,17 +1603,17 @@
     "sample_size": 36
   },
   "article_rejects": {
-    "last_reason": "weak_title",
-    "last_detail": "title too weak to earn a click, and the rewrite failed",
-    "last_at": "2026-10-21T05:45:49.932580+00:00",
+    "last_reason": "llm_error",
+    "last_detail": "LLM call failed",
+    "last_at": "2026-10-21T10:28:36.150996+00:00",
     "counts": {
       "empty_draft": 7,
       "fabricated": 2,
       "weak_title": 10,
       "revision_fabricated": 1,
-      "llm_error": 14
+      "llm_error": 15
     },
-    "total": 34,
+    "total": 35,
     "recent": [
       {
         "code": "empty_draft",
@@ -1644,6 +1639,11 @@
         "code": "weak_title",
         "at": "2026-10-21T05:45:49.932580+00:00",
         "detail": "title has ALL-CAPS word"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-10-21T10:28:36.150996+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
       }
     ]
   },
@@ -1676,7 +1676,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-21T05:45:50.332381+00:00",
+    "last_run": "2026-10-21T10:28:36.481461+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1686,30 +1686,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-21T05:45:50.646001+00:00",
+    "last_run": "2026-10-21T10:28:36.973596+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4602729,
-        "at": "2026-10-19T08:03:36.669687+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-10-19T16:01:27.010270+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-10-19T16:01:27.010270+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
-        "at": "2026-10-19T16:01:27.010270+00:00",
-        "ok": true
-      },
       {
         "id": 4671278,
         "at": "2026-10-19T21:29:20.099334+00:00",
@@ -1866,8 +1846,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-10-21T10:28:36.973596+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-10-21T10:28:36.973596+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-10-21T10:28:36.973596+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-10-21T10:28:36.973596+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-21T05:45:50.646001+00:00",
+        "at": "2026-10-21T10:28:36.973596+00:00",
         "ok": true
       }
     ],
@@ -1876,7 +1876,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 45.7
+    "oldest_check_age_hours": 37.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1893,8 +1893,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 2,
-      "atria": 1
+      "openrouter": 1
     }
   }
 }

@@ -479,6 +479,9 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
 		"technology or failure, no clickbait words, no exclamation marks, no "
 		"ALL-CAPS, no colon-subtitle padding.\n\n"
+		"Example: rewrite \"Stop Using THESE Docker Mistakes\" as "
+		"\"Stop Using These Docker Mistakes\" -- lowercase the shouted word, "
+		"do not just delete it.\n\n"
 		'Respond with ONLY this JSON: {"title": "..."}'
 	)
 	try:

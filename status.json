@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-22T20:08:29.220330+00:00",
-  "total_runs": 2022,
+  "last_run": "2026-10-22T23:23:58.601695+00:00",
+  "total_runs": 2023,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -23,7 +23,8 @@
     "breakdown": {
       "code_techs": 0.0,
       "mrr-ideas": 0.0,
-      "dev.to": 0.0
+      "dev.to": 0.0,
+      "dev.to-newsletter": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -33,33 +34,40 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a concrete problem-workaround title example to the article draft prompt to steer toward high-engagement shapes and reduce empty drafts.",
-    "changes_applied": [],
-    "suggestions": [],
-    "direction": "Principle 5 \u2014 reach into a live receive path (publish more articles in shapes readers prefer)",
-    "evidence": [
-      "article_rejects.last = 'empty_draft': 'LLM returned no usable title/body'",
-      "article_rejects.counts.weak_title=2",
-      "article_interest.preferred_archetypes() = ['problem-workaround']"
+    "summary": "Add a concrete fix example to the title revision prompt so ALL-CAPS titles get corrected instead of rejected, reducing weak_title draft losses.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "The _revise_title prompt is the last line of defense when _title_problems flags an ALL-CAPS word; it tells the model 'no ALL-CAPS' but gives no example of how to fix one, so the revision call fails and the draft is rejected as weak_title."
+      }
     ],
-    "money_path": "articles \u2192 dev.to \u2192 wallet receive path",
-    "verify": "Reviewer can run the existing title problem test and see the weak_title reject count drop from 2 to 0, confirming the new title example passes the title problems check.",
+    "suggestions": [
+      {
+        "title": "Add the USDT tip address to the dev.to profile bio",
+        "description": "One settings edit at dev.to/settings carries the receive ask on every profile visit permanently; the bot cannot do it because Forem's users API is read-only for non-super-admin.",
+        "owner_action": "Edit the Bio field at dev.to/settings to include the published Tron USDT receive address and a one-line support ask.",
+        "secret_needed": null,
+        "how_to": [
+          "Open dev.to/settings",
+          "Paste the Tron receive address and a short support line into the Bio field",
+          "Save the profile"
+        ]
+      }
+    ],
+    "direction": "Checklist step 4 \u2014 upgrade the prompt losing drafts to the weak_title gate (title rewrite in _revise_title)",
+    "evidence": [
+      "article_rejects weak_title = 2 in the last 14 days",
+      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x2",
+      "_revise_title prompt tells the model 'no ALL-CAPS' but never shows how to fix one"
+    ],
+    "money_path": "reach-only",
+    "verify": "Next cycle, article_rejects.recent should show no new weak_title entries whose detail contains 'ALL-CAPS', and the 14-day weak_title count should fall from 2.",
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.41.1-20261022-233606",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
       {
         "platform": "dev.to",
         "success": false,
@@ -67,6 +75,14 @@
         "reject_code": "llm_error",
         "error": "LLM call failed",
         "estimated_usd": 0.0
+      },
+      {
+        "platform": "dev.to-newsletter",
+        "success": true,
+        "title": "Infrastructure Exits and the AI Authenticity Tax",
+        "url": "https://dev.to/robust_true_try/infrastructure-exits-and-the-ai-authenticity-tax-5fl7",
+        "estimated_usd": 0.0,
+        "item_count": 7
       }
     ],
     "total_usd": 0.0
@@ -85,7 +101,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 2155,
+  "last_cycle_seconds": 1189,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1219,7 +1235,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-22T20:08:29.719627+00:00",
+    "checked_at": "2026-10-22T23:23:59.193325+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1228,12 +1244,12 @@
   },
   "newsletter_daily": {
     "enabled": true,
-    "date": "2026-10-15",
-    "published_at": "2026-10-15T22:34:52.196760+00:00",
-    "published": 8,
+    "date": "2026-10-22",
+    "published_at": "2026-10-22T23:43:46.309398+00:00",
+    "published": 9,
     "last_item_count": 7,
-    "last_title": "Spyware via ads, kernel bugs on ARM, and GitHub's automation playbook",
-    "last_url": "https://dev.to/robust_true_try/spyware-via-ads-kernel-bugs-on-arm-and-githubs-automation-playbook-1bfd"
+    "last_title": "Infrastructure Exits and the AI Authenticity Tax",
+    "last_url": "https://dev.to/robust_true_try/infrastructure-exits-and-the-ai-authenticity-tax-5fl7"
   },
   "newsletter_history": {
     "source_urls": [
@@ -1292,7 +1308,14 @@
       "github.blog/news-insights/company-news/the-next-developer-interface-is-ambient-intelligence",
       "github.blog/engineering/platform-security/staying-evergreen-how-we-automated-secure-access-and-repo-hygiene-in-a-shared-org",
       "martinfowler.com/articles/software-meets-hardware.html",
-      "github.blog/news-insights/company-news/github-availability-report-september-2026"
+      "github.blog/news-insights/company-news/github-availability-report-september-2026",
+      "quad9.net/news/blog/au-revoir-france",
+      "emudhra.com/en/press-release/emudhra-to-exit-global-ssl-tls-certificate-business",
+      "github.blog/security/how-bug-bounty-sharpens-one-researchers-security-skills",
+      "github.blog/engineering/architecture-optimization/the-bridge-to-agent-scale-git-infrastructure",
+      "martinfowler.com/fragments/2026-10-21.html",
+      "github.blog/ai-and-ml/github-copilot/how-3-java-champions-are-using-github-copilot-for-increased-productivity",
+      "github.blog/ai-and-ml/github-copilot/how-to-continue-a-github-copilot-app-session-in-vs-code"
     ],
     "source_titles": [
       "nitter xcancel receive cease desist notic",
@@ -1350,7 +1373,14 @@
       "next developer interface ambient intelligence",
       "staying evergreen automated secure acces repo hygiene shared org",
       "software meet hardware",
-      "github availability report september 2026"
+      "github availability report september 2026",
+      "quad9 dns resolver exit france",
+      "emudhra exit global ssl tls certificate busines",
+      "bug bounty sharpen one researcher s security skill",
+      "bridge agent scale git infrastructure",
+      "fragment october 21",
+      "3 java champion github copilot increased productivity",
+      "continue github copilot app session vs code"
     ]
   },
   "mrr_ideas": {
@@ -1526,8 +1556,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261022-233606",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 36,
     "total_views": 4993,
@@ -1603,15 +1633,15 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-10-22T20:44:23.283393+00:00",
+    "last_at": "2026-10-22T23:41:13.704146+00:00",
     "counts": {
       "empty_draft": 9,
       "fabricated": 2,
       "weak_title": 11,
       "revision_fabricated": 1,
-      "llm_error": 19
+      "llm_error": 20
     },
-    "total": 42,
+    "total": 43,
     "recent": [
       {
         "code": "empty_draft",
@@ -1677,6 +1707,11 @@
         "code": "llm_error",
         "at": "2026-10-22T20:44:23.283393+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-10-22T23:41:13.704146+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
       }
     ]
   },
@@ -1709,7 +1744,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-22T20:44:23.712902+00:00",
+    "last_run": "2026-10-22T23:43:46.616981+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1719,27 +1754,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-22T20:44:24.110938+00:00",
+    "last_run": "2026-10-22T23:43:47.014660+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
         "id": 4681657,
-        "at": "2026-10-21T05:45:50.646001+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-10-21T05:45:50.646001+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-10-21T05:45:50.646001+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
         "at": "2026-10-21T05:45:50.646001+00:00",
         "ok": true
       },
@@ -1899,17 +1919,37 @@
         "ok": true
       },
       {
+        "id": 4619528,
+        "at": "2026-10-22T23:43:47.014660+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-10-22T23:43:47.014660+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-10-22T23:43:47.014660+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-22T20:44:24.110938+00:00",
+        "at": "2026-10-22T23:43:47.014660+00:00",
+        "ok": true
+      },
+      {
+        "id": 4901372,
+        "at": "2026-10-22T23:43:47.014660+00:00",
         "ok": true
       }
     ],
-    "published_total": 36,
-    "covered": 36,
+    "published_total": 37,
+    "covered": 37,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 39.0
+    "oldest_check_age_hours": 42.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1926,7 +1966,8 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 2
+      "openrouter": 1,
+      "atria": 1
     }
   }
 }

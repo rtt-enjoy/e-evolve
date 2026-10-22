@@ -133,6 +133,10 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
   and any ALL-CAPS word. These read as spam and suppress clicks here.
+- "ALL-CAPS" means any word in full capitals that is not a recognised
+  acronym. "Fix Your GitHub Workflow" is fine; "Fix YOUR GitHub Workflow"
+  is not — "YOUR" is shouted, not an acronym. When in doubt, write the
+  word in normal case.
 - No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
   wastes the scannable half of the line. Pick the sharper half and stop.
 

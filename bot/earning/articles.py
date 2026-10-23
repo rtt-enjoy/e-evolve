@@ -133,6 +133,10 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
   and any ALL-CAPS word. These read as spam and suppress clicks here.
+- Example that FAILS: "WHY YOUR DOCKER BUILD IS BROKEN AND HOW TO FIX IT"
+  (shouted words: WHY, BROKEN, FIX — not acronyms).
+- Example that PASSES: "Why Your Docker Build Is Broken and How to Fix It"
+  (Title Case, real acronyms like Docker stay capitalized).
 - No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
   wastes the scannable half of the line. Pick the sharper half and stop.
 

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-23T15:05:52.135624+00:00",
-  "total_runs": 2026,
+  "last_run": "2026-10-23T19:15:27.359645+00:00",
+  "total_runs": 2027,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,60 +34,29 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Tighten the ALL-CAPS title rule in the article draft prompt so the model does not repeat shouted words from the source title, cutting weak_title rejections (gate finding: 'title has ALL-CAPS word' x3).",
+    "summary": "Add concrete examples of banned ALL-CAPS words to the article draft prompt to reduce weak_title rejections",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "The _SYSTEM TITLE rule bans ALL-CAPS words but the LLM still generates them (3 weak_title losses in 14 days). The rule is sharpened with one source-specific clause: shouted words copied from the source title must not be repeated. This changes the instruction, not the gate, and touches only the existing prompt string."
+        "reason": "The prompt currently says 'any ALL-CAPS word' but doesn't give concrete examples, causing the model to generate titles with ALL-CAPS words that get rejected. Adding specific examples will make the rule actionable."
       }
     ],
-    "suggestions": [
-      {
-        "title": "Add the USDT tip address to the dev.to profile bio",
-        "description": "One settings edit at dev.to/settings carries the receive ask on every profile visit permanently; the bot cannot do it because Forem's users API is read-only for non-super-admin.",
-        "owner_action": "Edit the Bio field at dev.to/settings to include the published Tron USDT receive address and a one-line support ask.",
-        "secret_needed": null,
-        "how_to": [
-          "Open dev.to/settings",
-          "Paste the Tron receive address and a short support line into the Bio field",
-          "Save the profile"
-        ]
-      }
-    ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path (Principle 5, step 3): publish more articles in the shapes readers measurably prefer; prompt focus is weak_title, which lost 3 drafts in 14 days.",
+    "suggestions": [],
+    "direction": "4 \u2014 reach into a live receive path (doctrine Principle 5, step 3)",
     "evidence": [
-      "article_rejects 14-day prompt losses: weak_title=3",
-      "weak_title gate findings: 'title has ALL-CAPS word' x3",
-      "preferred_archetypes() = ['problem-workaround'] with n=9, avg_engagement=452.3 \u2014 reach work must clear the title gate to publish"
+      "article_rejects.counts: weak_title=12",
+      "article_rejects.last: 'title too weak to earn a click, and the rewrite failed'",
+      "Gate findings: 'title has ALL-CAPS word' x3",
+      "article_interest.preferred_archetypes: ['problem-workaround']"
     ],
     "money_path": "reach-only",
-    "verify": "Next cycle's status.json should show article_rejects.counts.weak_title below 3 and 'title has ALL-CAPS word' findings at 0, visible in article_rejects.recent.",
+    "verify": "Check article_rejects.counts for weak_title in next cycle; should fall below 3 in the 14-day window",
     "error": null,
-    "branch": "evolve/1.41.1-20261023-151440",
+    "branch": "evolve/1.41.1-20261023-192055",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Your Multi-Model Fallback Fails Together",
-        "url": "https://dev.to/robust_true_try/your-multi-model-fallback-fails-together-485p",
-        "estimated_usd": 0.0,
-        "source_url": "https://www.modelcompare.ai/blog/ai-models-controversial-take-on-humans",
-        "source_title": "Every AI model has the same \"controversial\" take on humans"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -104,7 +73,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 959,
+  "last_cycle_seconds": 329,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1166,7 +1135,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-23T15:05:52.611298+00:00",
+    "checked_at": "2026-10-23T19:15:28.107268+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1487,7 +1456,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261023-151440",
+  "last_evolution_branch": "evolve/1.41.1-20261023-192055",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 37,
@@ -1685,7 +1654,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-23T15:21:50.091715+00:00",
+    "last_run": "2026-10-23T19:20:55.733552+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1695,32 +1664,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-23T15:21:50.489011+00:00",
+    "last_run": "2026-10-23T19:20:56.104633+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4780783,
-        "at": "2026-10-21T19:32:27.469806+00:00",
-        "ok": true
-      },
-      {
         "id": 4641536,
-        "at": "2026-10-22T00:02:00.775139+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-10-22T00:02:00.775139+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-10-22T00:02:00.775139+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-10-22T00:02:00.775139+00:00",
         "ok": true
       },
@@ -1880,13 +1829,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4906111,
         "at": "2026-10-23T15:21:50.489011+00:00",
         "ok": true
       },
       {
-        "id": 4906111,
-        "at": "2026-10-23T15:21:50.489011+00:00",
+        "id": 4780783,
+        "at": "2026-10-23T19:20:56.104633+00:00",
+        "ok": true
+      },
+      {
+        "id": 4740283,
+        "at": "2026-10-23T19:20:56.104633+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-10-23T19:20:56.104633+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-10-23T19:20:56.104633+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-10-23T19:20:56.104633+00:00",
         "ok": true
       }
     ],
@@ -1895,7 +1864,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 43.8
+    "oldest_check_age_hours": 43.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1912,8 +1881,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 1,
-      "atria": 3
+      "openrouter": 1
     }
   }
 }

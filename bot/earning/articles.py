@@ -944,7 +944,7 @@ _TITLE_BANNED = [
 	(r"\btop \d+\b", 'listicle "top N"'),
 	(r"\bmust.(know|read|have)\b", 'clickbait "must-know"'),
 	(r"!", "exclamation mark"),
-	("__SHOUTING__", "ALL-CAPS word"),
+	("__SHOUTING__", "ALL-CAPS word (e.g., 'BROKEN')"),
 	(r"\b\d+\s*(things|ways|tips|tricks)\s+(you|to|that)\b", "generic listicle framing"),
 ]
 

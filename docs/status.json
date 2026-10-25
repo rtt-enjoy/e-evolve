@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-24T22:29:12.851498+00:00",
-  "total_runs": 2034,
+  "last_run": "2026-10-25T01:11:29.672239+00:00",
+  "total_runs": 2035,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,52 +34,66 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a concrete example to the ALL-CAPS title ban in the article draft prompt so the model sees what 'ALL-CAPS word' means in practice, reducing weak_title rejections.",
-    "changes_applied": [],
-    "suggestions": [],
-    "direction": "PROMPT FOCUS (weak_title) \u2014 serve the binding reach step by fixing the prompt that loses drafts to the title gate",
+    "summary": "Add one bounded second attempt to the title rewrite before a weak title rejects the draft, so a fixable title that the first rewrite misses is not lost.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "The weak_title gate rejects a draft when the single title-rewrite attempt fails, but the code comment already said a retry was worth it; the ALL-CAPS concrete-example fix was exhausted as a repeated dead end, so the retry is the small evidenced fix that keeps a fixable title from becoming a lost draft."
+      }
+    ],
+    "suggestions": [
+      {
+        "title": "Force an article to exercise the title rewrite retry",
+        "description": "The weak_title retry fix needs a live LLM rewrite pass to be exercised end to end before the next hourly cycle trusts it.",
+        "owner_action": "Trigger one forced article publish from the owner command surface.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Run the owner command that forces an article publish (force articles).",
+          "Step 2: Confirm the cycle logs a second title-rewrite attempt when the first candidate is weak, before any weak_title reject."
+        ]
+      }
+    ],
+    "direction": "Checklist step 4 (publish more articles in the shapes readers measurably prefer) via the weak_title prompt focus; Doctrine Principle 5 (measure the funnel, not the last stage).",
     "evidence": [
-      "article_rejects.counts.weak_title = 12 (lifetime), 3 in last 14 days",
       "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "article_rejects.counts.weak_title = 12 (lifetime), 3 in last 14 days",
       "gate findings: 'title has ALL-CAPS word' x3",
-      "preferred_archetypes() = ['problem-workaround'] but weak_title gate blocks 3 drafts per cycle from shipping"
+      "last_evolution version_bumped_to = 1.41.0 added a concrete ALL-CAPS example, yet the weak_title window still shows 3 losses and the last reject is weak_title with the rewrite failing"
     ],
     "money_path": "reach-only",
-    "verify": "Next 14-day window: article_rejects.recent weak_title count should drop from 3 toward 0; reviewer can run the bot with a test title containing 'BROKEN' and see it passes the title gate (no weak_title reject).",
+    "verify": "Next 14-day window: article_rejects.recent weak_title count should drop from 3 toward 0; reviewer can run the bot with a test title containing 'BROKEN' and see it passes the title gate (no weak_title reject); add a unit test in bot/tests.py covering the second title-rewrite attempt.",
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.41.1-20261025-012011",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "dev.to",
         "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
+        "title": "Why Your AI Pilot Never Reaches Production",
+        "url": "https://dev.to/robust_true_try/why-your-ai-pilot-never-reaches-production-3jff",
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "source_url": "https://www.apollo.com/wealth/insights-news/insights/daily-spark/no-signs-of-ai-payoff-outside-the-tech-sector",
+        "source_title": "No signs of AI payoff outside the tech sector"
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge an existing evolve/* branch that adds concrete ALL-CAPS examples",
-      "description": "One of the open evolve/* branches already adds concrete banned-word examples; merging it lets the next hourly run test whether weak_title rejections drop.",
-      "owner_action": "Review and merge a PR for any evolve/* branch that edits bot/earning/articles.py _SYSTEM title rules to include concrete examples such as 'BROKEN'.",
+      "title": "Force an article to exercise the title rewrite retry",
+      "description": "The weak_title retry fix needs a live LLM rewrite pass to be exercised end to end before the next hourly cycle trusts it.",
+      "owner_action": "Trigger one forced article publish from the owner command surface.",
       "secret_needed": null,
       "how_to": [
-        "Open the GitHub PR for the chosen evolve/* branch that modifies bot/earning/articles.py _SYSTEM title rules.",
-        "Verify the edit adds a concrete example such as 'BROKEN' to the BANNED list.",
-        "Merge the PR; the next hourly run will use the updated prompt."
+        "Step 1: Run the owner command that forces an article publish (force articles).",
+        "Step 2: Confirm the cycle logs a second title-rewrite attempt when the first candidate is weak, before any weak_title reject."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1675,
+  "last_cycle_seconds": 1255,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -187,7 +201,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-10-24",
+    "date": "2026-10-25",
     "published": 1
   },
   "code_tech_earning": {
@@ -960,7 +974,8 @@
       "huggingface.co/deepseek-ai/deepseek-v4.1-flash-1017",
       "mistral.ai/news/timestral",
       "modelcompare.ai/blog/ai-models-controversial-take-on-humans",
-      "kimi.ai/blog/kimi-k3-1-pro"
+      "kimi.ai/blog/kimi-k3-1-pro",
+      "apollo.com/wealth/insights-news/insights/daily-spark/no-signs-of-ai-payoff-outside-the-tech-sector"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -1039,7 +1054,8 @@
       "deepseek v4 1 flash 1017",
       "timestral mistral s time sery foundation model",
       "every ai model has same controversial take human",
-      "kimi k3 1 pro k3 1 pro highspeed"
+      "kimi k3 1 pro k3 1 pro highspeed",
+      "sign ai payoff outside tech sector"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1118,12 +1134,14 @@
       "deepseek flash model return stale result",
       "time sery forecast break ignore context",
       "multi model fallback fail together",
-      "kimi k3 1 pro respons truncate silently"
+      "kimi k3 1 pro respons truncate silently",
+      "ai pilot never reach production"
     ],
     "followed_up_ids": [
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/your-kimi-k31-pro-responses-truncate-silently-2odg",
       "https://dev.to/robust_true_try/your-multi-model-fallback-fails-together-485p",
       "https://dev.to/robust_true_try/infrastructure-exits-and-the-ai-authenticity-tax-5fl7",
       "https://dev.to/robust_true_try/your-ad-targeting-pipeline-is-leaking-spyware-vectors-24fe",
@@ -1172,7 +1190,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-24T22:29:13.210816+00:00",
+    "checked_at": "2026-10-25T01:11:30.673973+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1491,12 +1509,12 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261025-012011",
+  "evolution_pending_review": true,
   "article_stats": {
-    "count": 38,
-    "total_views": 5023,
-    "avg_views": 132.2,
+    "count": 39,
+    "total_views": 5055,
+    "avg_views": 129.6,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 3288,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -1514,8 +1532,8 @@
       {
         "archetype": "problem-workaround",
         "count": 9,
-        "avg_engagement": 453.4,
-        "avg_views": 434.0,
+        "avg_engagement": 454.6,
+        "avg_views": 435.1,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1540,18 +1558,18 @@
         "best_title": "Your AI Agent Can't See What It Clicks"
       },
       {
-        "archetype": "surprising-behavior",
-        "count": 6,
-        "avg_engagement": 40.2,
-        "avg_views": 27.7,
-        "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
-      },
-      {
         "archetype": "engineering-culture",
         "count": 1,
         "avg_engagement": 40.0,
         "avg_views": 40.0,
         "best_title": "How AI Pull Requests Slip Past Code Review"
+      },
+      {
+        "archetype": "surprising-behavior",
+        "count": 7,
+        "avg_engagement": 37.6,
+        "avg_views": 26.9,
+        "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
       },
       {
         "archetype": "security-privacy",
@@ -1563,7 +1581,7 @@
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "security-privacy",
-    "sample_size": 38
+    "sample_size": 39
   },
   "article_rejects": {
     "last_reason": "weak_title",
@@ -1689,7 +1707,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-24T22:57:07.166560+00:00",
+    "last_run": "2026-10-25T01:32:23.082266+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1699,27 +1717,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-24T22:57:07.387479+00:00",
+    "last_run": "2026-10-25T01:32:23.421378+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
         "id": 4602729,
-        "at": "2026-10-23T10:47:02.671785+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-10-23T10:47:02.671785+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-10-23T10:47:02.671785+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
         "at": "2026-10-23T10:47:02.671785+00:00",
         "ok": true
       },
@@ -1894,17 +1897,37 @@
         "ok": true
       },
       {
+        "id": 4820198,
+        "at": "2026-10-25T01:32:23.421378+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-10-25T01:32:23.421378+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-10-25T01:32:23.421378+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-24T22:57:07.387479+00:00",
+        "at": "2026-10-25T01:32:23.421378+00:00",
+        "ok": true
+      },
+      {
+        "id": 4912931,
+        "at": "2026-10-25T01:32:23.421378+00:00",
         "ok": true
       }
     ],
-    "published_total": 39,
-    "covered": 39,
+    "published_total": 40,
+    "covered": 40,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 36.2
+    "oldest_check_age_hours": 38.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

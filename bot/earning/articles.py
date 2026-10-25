@@ -426,14 +426,21 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 
 	# The title decides whether the body is ever read, so a weak one is worth a
 	# retry of its own. Retitling is one cheap call and does not touch the body.
+	# The first rewrite is not trusted on its own: a candidate that still fails
+	# the deterministic checks gets one more attempt before the draft is rejected,
+	# because a single rewrite that misses is a lost article, not a bad title.
 	title_issues = _title_problems(article.get("title", ""))
-	if title_issues:
+	for _attempt in range(2):
+		if not title_issues:
+			break
 		log.info("[articles] title issues %s -- requesting a better title", title_issues)
 		better = _revise_title(llm, article, title_issues)
-		if better:
-			article["title"] = better
-		else:
-			return _reject("weak_title", ", ".join(title_issues))
+		if not better:
+			break
+		article["title"] = better
+		title_issues = _title_problems(article.get("title", ""))
+	if title_issues:
+		return _reject("weak_title", ", ".join(title_issues))
 
 	problems = _format_problems(article["body_markdown"])
 	if problems:

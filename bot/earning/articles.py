@@ -132,7 +132,7 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
 - BANNED in titles: exclamation marks, "Ultimate", "Complete Guide",
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
-  and any ALL-CAPS word. These read as spam and suppress clicks here.
+  and any ALL-CAPS word (e.g., "STOP"). These read as spam and suppress clicks here.
 - No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
   wastes the scannable half of the line. Pick the sharper half and stop.
 

@@ -478,7 +478,9 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		"Follow the TITLE rules in the system prompt exactly: "
 		f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
 		"technology or failure, no clickbait words, no exclamation marks, no "
-		"ALL-CAPS, no colon-subtitle padding.\n\n"
+		"ALL-CAPS, no colon-subtitle padding. Write the replacement in Title Case -- "
+		"only the important words capitalized, the rest lowercase -- and keep acronyms "
+		"and product names in their real casing (JSON, Postgres, macOS).\n\n"
 		'Respond with ONLY this JSON: {"title": "..."}'
 	)
 	try:

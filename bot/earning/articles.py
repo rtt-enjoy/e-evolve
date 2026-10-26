@@ -470,11 +470,18 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
     """
 	body = str(data.get("body_markdown", ""))
 	opening = " ".join(body.split()[:120])
+	shouted = _shouted_words(data.get("title", ""))
+	shout_line = ""
+	if shouted:
+		shout_line = (
+			f"These words are shouting: {', '.join(shouted)}. Rewrite each in Title Case "
+			"only real acronyms like PDF, JSON, API stay all-caps.\n\n"
+		)
 	prompt = (
 		"Rewrite ONLY the title of this article so it earns clicks in the dev.to feed.\n\n"
 		f"Current title: {data.get('title', '')}\n"
 		f"Problems with it: {'; '.join(problems)}\n\n"
-		f"Article opening for context:\n{opening}\n\n"
+		f"{shout_line}Article opening for context:\n{opening}\n\n"
 		"Follow the TITLE rules in the system prompt exactly: "
 		f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
 		"technology or failure, no clickbait words, no exclamation marks, no "

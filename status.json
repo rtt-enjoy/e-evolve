@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-26T16:35:31.826094+00:00",
-  "total_runs": 2046,
+  "last_run": "2026-10-26T17:35:37.407606+00:00",
+  "total_runs": 2047,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,9 +33,20 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete examples of banned ALL-CAPS words to the title rewrite prompt so the model knows which shouted words to avoid when fixing weak titles",
+    "summary": "Add concrete examples of banned ALL-CAPS words to the title rewrite prompt so the model knows which shouted words to avoid when fixing weak titles.",
     "changes_applied": [],
-    "suggestions": [],
+    "suggestions": [
+      {
+        "title": "Force a title rewrite verification",
+        "description": "Run a forced article publish to confirm the title rewrite prompt reduces weak_title rejects.",
+        "owner_action": "Trigger the owner command that forces an article publish (force articles).",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Run the owner command that forces an article publish (force articles).",
+          "Step 2: Confirm the cycle logs a second title-rewrite attempt when the first candidate is weak, before any weak_title reject."
+        ]
+      }
+    ],
     "direction": "Principle 5, step 2 \u2014 reach into a live receive path by publishing more articles in the shapes readers measurably prefer (problem-workaround)",
     "evidence": [
       "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
@@ -46,7 +57,7 @@
     "verify": "In the next 14-day window, article_rejects.recent should show fewer weak_title entries with 'ALL-CAPS word' detail; the weak_title count should drop from 3 toward 0.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.2"
+    "proposed_version": "1.41.3"
   },
   "last_earning": {
     "actions": [],
@@ -65,7 +76,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 92,
+  "last_cycle_seconds": 388,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1174,7 +1185,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-26T16:35:32.301924+00:00",
+    "checked_at": "2026-10-26T17:35:37.952811+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1692,7 +1703,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-26T16:37:02.673673+00:00",
+    "last_run": "2026-10-26T17:42:04.583502+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1702,32 +1713,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-26T16:37:03.314649+00:00",
+    "last_run": "2026-10-26T17:42:04.917162+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4780783,
-        "at": "2026-10-25T11:48:28.464751+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-10-25T11:48:28.464751+00:00",
-        "ok": true
-      },
-      {
         "id": 4740283,
-        "at": "2026-10-25T16:38:39.323259+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-10-25T16:38:39.323259+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-10-25T16:38:39.323259+00:00",
         "ok": true
       },
@@ -1892,8 +1883,28 @@
         "ok": true
       },
       {
+        "id": 4780783,
+        "at": "2026-10-26T17:42:04.917162+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-10-26T17:42:04.917162+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-10-26T17:42:04.917162+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-10-26T17:42:04.917162+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-26T16:37:03.314649+00:00",
+        "at": "2026-10-26T17:42:04.917162+00:00",
         "ok": true
       }
     ],
@@ -1902,7 +1913,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 28.8
+    "oldest_check_age_hours": 25.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

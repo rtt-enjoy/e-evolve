@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-26T21:23:58.504436+00:00",
-  "total_runs": 2051,
+  "last_run": "2026-10-26T22:23:59.673574+00:00",
+  "total_runs": 2052,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,26 +33,33 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Replace the vague 'any ALL-CAPS word' ban in the article draft prompt with concrete examples of shouted non-acronym words that the model actually produces, so the title rewrite gate stops rejecting drafts for 'title has ALL-CAPS word'.",
-    "changes_applied": [
+    "summary": "Add concrete example of banned ALL-CAPS word to system prompt title rules to reduce weak_title rejects; model needs explicit guidance on what ALL-CAPS means beyond the vague 'any ALL-CAPS word' phrasing",
+    "changes_applied": [],
+    "suggestions": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "The _SYSTEM prompt bans 'any ALL-CAPS word' but gives no concrete examples of shouted non-acronym words. The model keeps emitting words like BROKEN, FAILED, URGENT, FIXED, WORKING in ALL-CAPS for emphasis, which the gate correctly rejects. Adding specific banned examples teaches the model what 'ALL-CAPS word' means in practice without loosening the gate."
+        "title": "Monitor weak_title reject count in next 14-day window",
+        "description": "Track whether the concrete example reduces ALL-CAPS-triggered weak_title rejects",
+        "owner_action": "After this cycle runs, check article_rejects.recent for weak_title entries with 'ALL-CAPS word' detail; count should trend toward 0",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Wait for next hourly cycle to complete",
+          "Step 2: Check article_rejects.recent in status.json for weak_title entries",
+          "Step 3: Count entries with 'ALL-CAPS word' detail; should be fewer than current 3"
+        ]
       }
     ],
-    "suggestions": [],
-    "direction": "Principle 5 step 3 \u2014 reach into a live receive path by publishing more articles in the shapes readers prefer; the weak_title gate (3 rejects in 14 days, all 'ALL-CAPS word') is the prompt-level blocker.",
+    "direction": "prompt - title quality",
     "evidence": [
-      "article_rejects.counts.weak_title = 12 (lifetime), 3 (last 14 days)",
       "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "Gate findings behind weak_title: 'title has ALL-CAPS word' x3",
-      "preferred_archetypes() = ['problem-workaround'] (only archetype with n\u22653)",
-      "article_interest: problem-workaround n=9 avg=456.8 vs build-tutorial n=2 avg=102.5"
+      "article_rejects.counts includes weak_title=12 (lifetime), weak_title=3 in last 14 days",
+      "gate findings: 'title has ALL-CAPS word' x3",
+      "preferred_archetypes() = ['problem-workaround']",
+      "PROMPT FOCUS: weak_title lost 3 draft(s); prompts producing it include article draft _SYSTEM and title rewrite _revise_title()"
     ],
-    "money_path": "reach-only \u2014 this change only affects whether a draft passes the title gate and gets published; the receive path (footer) is already live and verified on every published post.",
-    "verify": "In the next 14-day window, article_rejects.recent entries with code 'weak_title' and detail containing 'ALL-CAPS word' should fall toward 0; article_daily.published should stay at 1/day without weak_title rejections.",
+    "money_path": "reach-only",
+    "verify": "In next 14-day window, article_rejects.recent weak_title entries with 'ALL-CAPS word' detail should fall toward 0 from current 3; title rewrite success rate should improve",
     "error": null,
-    "branch": "evolve/1.41.1-20261026-221026",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -61,19 +68,19 @@
   },
   "suggestions": [
     {
-      "title": "Merge an existing open ALL-CAPS title branch",
-      "description": "Seventeen prior proposals already cover the weak_title/ALL-CAPS fix and need no re-deriving. The owner can review and merge one open branch, or trigger 'force articles' to test whether the current title-rewrite prompt reduces weak_title rejects.",
-      "owner_action": "Review the open evolve/* review branches for the ALL-CAPS title proposals and merge one, or run the 'force articles' owner command to test the title-rewrite path.",
+      "title": "Monitor weak_title reject count in next 14-day window",
+      "description": "Track whether the concrete example reduces ALL-CAPS-triggered weak_title rejects",
+      "owner_action": "After this cycle runs, check article_rejects.recent for weak_title entries with 'ALL-CAPS word' detail; count should trend toward 0",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List the open evolve/* review branches.",
-        "Step 2: Merge the branch that adds concrete banned-ALL-CAPS-word examples to the title rewrite prompt.",
-        "Step 3: Confirm article_rejects.recent weak_title entries with 'ALL-CAPS word' detail fall toward 0 in the next 14-day window."
+        "Step 1: Wait for next hourly cycle to complete",
+        "Step 2: Check article_rejects.recent in status.json for weak_title entries",
+        "Step 3: Count entries with 'ALL-CAPS word' detail; should be fewer than current 3"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 2790,
+  "last_cycle_seconds": 896,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1179,7 +1186,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-26T21:23:58.991046+00:00",
+    "checked_at": "2026-10-26T22:24:00.168320+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1499,8 +1506,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261026-221026",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 40,
     "total_views": 5096,
@@ -1697,25 +1704,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-26T22:10:26.906113+00:00",
+    "last_run": "2026-10-26T22:38:54.675225+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 5,
-    "with_footer": 5,
+    "checked": 4,
+    "with_footer": 4,
     "without_footer": 0,
-    "unreachable": 0,
+    "unreachable": 1,
     "missing": [],
-    "last_run": "2026-10-26T22:10:27.339191+00:00",
+    "last_run": "2026-10-26T22:38:54.967679+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-10-26T06:44:29.524292+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-10-26T13:25:27.208974+00:00",
@@ -1723,16 +1725,6 @@
       },
       {
         "id": 4619528,
-        "at": "2026-10-26T13:25:27.208974+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-10-26T13:25:27.208974+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
         "at": "2026-10-26T13:25:27.208974+00:00",
         "ok": true
       },
@@ -1897,8 +1889,23 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-10-26T22:38:54.967679+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-10-26T22:38:54.967679+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-10-26T22:38:54.967679+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-26T22:10:27.339191+00:00",
+        "at": "2026-10-26T22:38:54.967679+00:00",
         "ok": true
       }
     ],
@@ -1907,7 +1914,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 15.4
+    "oldest_check_age_hours": 9.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

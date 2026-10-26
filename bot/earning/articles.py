@@ -408,6 +408,7 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 	# Normalize first: it deterministically fixes stray '#' headings and fence
 	# artifacts, so we never spend free-tier LLM calls revising those.
 	article = devto.normalize(data)
+	article["title"] = _fix_title_shouting(article.get("title", ""))
 
 	# Drop invented spec tables before anything else looks at the body. This is
 	# deterministic, so it costs no LLM call -- and asking the model to "fix"
@@ -490,7 +491,7 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		log.warning("[articles] title revision failed: %s", exc)
 		return None
 
-	candidate = str((out or {}).get("title", "")).strip()
+	candidate = _fix_title_shouting(str((out or {}).get("title", "")).strip())
 	if not candidate:
 		return None
 	remaining = _title_problems(candidate)
@@ -978,6 +979,24 @@ def _shouted_words(text: str) -> list[str]:
 		word for word in re.findall(r"\b[A-Z]{2,}\b", text)
 		if word.upper() not in _KNOWN_ACRONYMS
 	]
+
+
+def _fix_title_shouting(title: str) -> str:
+	"""Convert ALL-CAPS non-acronym words to Title Case.
+
+	The model emits ALL-CAPS words in titles despite the ban, and the
+	title rewrite can reproduce the same mistake. This is a deterministic
+	fix applied before the title gate, the same way devto.normalize()
+	cleans up markdown artifacts before the format gates run. It costs
+	no LLM call and never softens the gate: a title that still fails after
+	this is still rejected.
+	"""
+	def fix(m: re.Match) -> str:
+		word = m.group(0)
+		if word.upper() not in _KNOWN_ACRONYMS:
+			return word.title()
+		return word
+	return re.sub(r"\b[A-Z]{2,}\b", fix, title)
 
 
 def _title_problems(title: str, cfg: dict | None = None) -> list[str]:

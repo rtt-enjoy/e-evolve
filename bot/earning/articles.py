@@ -133,6 +133,9 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
   and any ALL-CAPS word. These read as spam and suppress clicks here.
+- FIX: when you want emphasis, use Title Case, not shouting.
+  Wrong: "Your BROKEN Retry Loop Is Lying To You"
+  Right: "Your Broken Retry Loop Is Lying To You"
 - No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
   wastes the scannable half of the line. Pick the sharper half and stop.
 

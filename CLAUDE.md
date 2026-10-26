@@ -111,7 +111,9 @@ bot/earning/         ← products own a run(llm, status); support modules do not
   attribution.py     ← [support] what was live when on-chain money arrived (correlated, never proof)
   wallet_assets.py   ← [support] every stablecoin the address can receive, not just USDT
 frontend/            ← React + Vite dashboard, built to docs/ by .github/workflows/frontend.yml
-.github/workflows/evolve.yml  ← hourly scheduler (never evolved)
+.github/workflows/evolve.yml  ← hourly scheduler (never evolved). Cron is only a backup: GitHub
+                               dropped it to one run per 3-6h, so the `chain` job re-dispatches
+                               the workflow 60 min after each run starts
 config/strategy.json ← tunable strategy parameters (the ONLY file in config/)
 status.json          ← persisted bot state (auto-updated each cycle)
 version.txt          ← current bot version (X.Y.Z)

@@ -2,7 +2,10 @@ name: evolve
 
 on:
   schedule:
-    - cron: '17 * * * *'   # Every hour at :17 — avoids congested :00 window
+    # Backup only. GitHub treats cron as best-effort and drops runs under load:
+    # this fired every 3-6h in practice, not hourly. The `chain` job below is
+    # what actually keeps the hourly cadence; cron restarts it if it ever breaks.
+    - cron: '17 * * * *'
   workflow_dispatch:        # Allow manual trigger for testing
   push:
     paths:
@@ -10,12 +13,16 @@ on:
 
 permissions:
   contents: write           # Bot must commit evolved code and state files
+  actions: write            # `chain` dispatches the next run
 
 jobs:
   pulse:
     name: Hourly Pulse
     runs-on: ubuntu-latest
     timeout-minutes: 55     # Hard cap — must finish before next scheduled run
+    concurrency:            # Two pulses must never push to main at once
+      group: evolve-pulse
+      cancel-in-progress: false
 
     env:
       # ── LLM keys (add at least one) ─────────────────────────────────────
@@ -136,3 +143,41 @@ jobs:
             git push origin "${doomed[@]}" \
               || echo "Prune push failed — will retry next cycle."
           fi
+
+  chain:
+    # Self-schedules the next pulse one hour after this one STARTED. Dispatch
+    # via GITHUB_TOKEN is one of the few events that does start a workflow.
+    # Skipped only when the owner cancels the run, so a failed pulse still
+    # keeps the heartbeat alive.
+    name: Schedule next pulse
+    needs: pulse
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      INTERVAL_SECONDS: "3600"
+    steps:
+      - name: Wait for the hour, then dispatch
+        run: |
+          set -euo pipefail
+          api="repos/$GITHUB_REPOSITORY/actions"
+          started=$(gh api "$api/runs/$GITHUB_RUN_ID" --jq '.run_started_at')
+
+          wait=$(( $(date -d "$started" +%s) + INTERVAL_SECONDS - $(date +%s) ))
+          if [ "$wait" -gt 0 ]; then
+            echo "Next pulse in ${wait}s"
+            sleep "$wait"
+          fi
+
+          # A cron or manual run that started after us already owns the chain.
+          # Dispatching too would double the cadence, permanently.
+          newer=$(gh api "$api/workflows/evolve.yml/runs?per_page=20" \
+            --jq "[.workflow_runs[] | select(.id != $GITHUB_RUN_ID and .run_started_at > \"$started\")] | length")
+          if [ "$newer" -gt 0 ]; then
+            echo "A newer run exists ($newer); it will schedule the next pulse."
+            exit 0
+          fi
+
+          gh workflow run evolve.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME"
+          echo "Dispatched next pulse."

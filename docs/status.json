@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-26T15:35:38.097004+00:00",
-  "total_runs": 2045,
+  "last_run": "2026-10-26T16:35:31.826094+00:00",
+  "total_runs": 2046,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,35 +33,20 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete examples of banned ALL-CAPS words to the title rewrite prompt to reduce weak_title rejects.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "Add concrete examples of banned ALL-CAPS words to title rewrite prompt to reduce weak_title rejects"
-      }
-    ],
-    "suggestions": [
-      {
-        "title": "Force a title rewrite verification",
-        "description": "Run a forced article publish to confirm the title rewrite prompt reduces weak_title rejects.",
-        "owner_action": "Trigger the owner command that forces an article publish (force articles).",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Run the owner command that forces an article publish (force articles).",
-          "Step 2: Confirm the cycle logs a second title-rewrite attempt when the first candidate is weak, before any weak_title reject."
-        ]
-      }
-    ],
+    "summary": "Add concrete examples of banned ALL-CAPS words to the title rewrite prompt so the model knows which shouted words to avoid when fixing weak titles",
+    "changes_applied": [],
+    "suggestions": [],
     "direction": "Principle 5, step 2 \u2014 reach into a live receive path by publishing more articles in the shapes readers measurably prefer (problem-workaround)",
     "evidence": [
       "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "gate findings: 'title has ALL-CAPS word' x3"
+      "gate findings: 'title has ALL-CAPS word' x3",
+      "weak_title lost 3 draft(s) in the last 14 days"
     ],
     "money_path": "reach-only",
     "verify": "In the next 14-day window, article_rejects.recent should show fewer weak_title entries with 'ALL-CAPS word' detail; the weak_title count should drop from 3 toward 0.",
     "error": null,
-    "branch": "evolve/1.41.1-20261026-155056",
-    "proposed_version": "1.41.1"
+    "branch": null,
+    "proposed_version": "1.41.2"
   },
   "last_earning": {
     "actions": [],
@@ -80,7 +65,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 920,
+  "last_cycle_seconds": 92,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1189,7 +1174,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-26T15:35:38.933780+00:00",
+    "checked_at": "2026-10-26T16:35:32.301924+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1509,8 +1494,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261026-155056",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 40,
     "total_views": 5096,
@@ -1707,7 +1692,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-26T15:50:57.056477+00:00",
+    "last_run": "2026-10-26T16:37:02.673673+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1717,25 +1702,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-26T15:50:57.290152+00:00",
+    "last_run": "2026-10-26T16:37:03.314649+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4602729,
-        "at": "2026-10-25T06:20:55.789900+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-10-25T06:20:55.789900+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-10-25T06:20:55.789900+00:00",
-        "ok": true
-      },
       {
         "id": 4780783,
         "at": "2026-10-25T11:48:28.464751+00:00",
@@ -1743,11 +1713,6 @@
       },
       {
         "id": 4503417,
-        "at": "2026-10-25T11:48:28.464751+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-10-25T11:48:28.464751+00:00",
         "ok": true
       },
@@ -1907,8 +1872,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-10-26T16:37:03.314649+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-10-26T16:37:03.314649+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-10-26T16:37:03.314649+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-10-26T16:37:03.314649+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-26T15:50:57.290152+00:00",
+        "at": "2026-10-26T16:37:03.314649+00:00",
         "ok": true
       }
     ],
@@ -1917,7 +1902,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 33.5
+    "oldest_check_age_hours": 28.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

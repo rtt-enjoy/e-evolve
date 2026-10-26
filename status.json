@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-25T22:34:39.637885+00:00",
-  "total_runs": 2040,
+  "last_run": "2026-10-26T01:12:16.867957+00:00",
+  "total_runs": 2041,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -19,12 +19,9 @@
     "total_usd": 0.0,
     "this_week_usd": 0.0,
     "last_cycle_usd": 0.0,
-    "week_started": "2026-10-19",
+    "week_started": "2026-10-26",
     "breakdown": {
-      "code_techs": 0.0,
-      "mrr-ideas": 0.0,
-      "dev.to": 0.0,
-      "dev.to-newsletter": 0.0
+      "dev.to": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -34,48 +31,37 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a concrete example of a banned ALL-CAPS word to the article title prompt to reduce weak_title rejects.",
+    "summary": "Add a deterministic ALL-CAPS-to-Title-Case fix applied before the title gate, so titles that would be rejected for shouting can still publish without softening the gate or editing the prompt.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "Clarify the ALL-CAPS ban in the title prompt by providing a concrete example, preventing the model from generating ALL-CAPS titles that trigger weak_title rejects."
+        "reason": "The model emits ALL-CAPS words in titles despite the prompt ban, and the title rewrite can reproduce the same mistake. Fourteen prompt edits adding examples of banned ALL-CAPS words were proposed and never merged, which is evidence that the instruction alone is not taking. This adds a deterministic fix applied before the title gate \u2014 the same pattern devto.normalize() already uses for markdown artifacts \u2014 so a title that would be rejected for shouting gets corrected for free, with no LLM call and no gate weakening."
       }
     ],
-    "suggestions": [
-      {
-        "title": "Force an article to exercise the title rewrite",
-        "description": "Run a forced article publish to verify the title rewrite path works end\u2011to\u2011end before the next hourly cycle.",
-        "owner_action": "Trigger one forced article publish from the owner command surface.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Run the owner command that forces an article publish (force articles).",
-          "Step 2: Confirm the cycle logs a second title-rewrite attempt when the first candidate is weak, before any weak_title reject."
-        ]
-      }
-    ],
-    "direction": "Prompt focus (article draft title rules) \u2013 doctrine Principle 5, step 3 (reach into a live receive path).",
+    "suggestions": [],
+    "direction": "Doctrine Principle 5, step 3 (reach into a live receive path) \u2014 the PROMPT FOCUS is weak_title, specifically 'title has ALL-CAPS word' x3 in the last 14 days, and 14+ prior prompt edits on this exact rule were never merged.",
     "evidence": [
-      "article_rejects.last = 'weak_title'",
-      "article_rejects.counts.weak_title = 12",
-      "gate findings behind weak_title: 'title has ALL-CAPS word' x3"
+      "article_rejects.counts.weak_title = 12 (lifetime), 3 in the last 14 days",
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x3",
+      "prior proposals on ALL-CAPS examples: 14 distinct branches, none merged"
     ],
-    "money_path": "reach-only",
-    "verify": "Reviewer can confirm it worked by seeing the weak_title count in the next cycle drop toward 0 after the edit.",
+    "money_path": "reach-only \u2014 this keeps more drafts publishing into the live receive path; it does not touch the wallet, footer, or any payment rail",
+    "verify": "Reviewer confirms by checking that the next cycle's article_rejects.counts.weak_title drops and the 'title has ALL-CAPS word' finding no longer appears in article_rejects.recent. The function _fix_title_shouting can also be exercised directly: _fix_title_shouting('BUG IN YOUR CODE') returns 'Bug In Your Code', and _fix_title_shouting('Your API Integration BUG') returns 'Your API Integration Bug'.",
     "error": null,
-    "branch": "evolve/1.41.1-20261025-224859",
+    "branch": "evolve/1.41.1-20261026-012846",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "dev.to",
         "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
+        "title": "Your Skin Cancer Model Fails On Real Photos",
+        "url": "https://dev.to/robust_true_try/your-skin-cancer-model-fails-on-real-photos-2lp1",
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "source_url": "https://lynchlab.net/llm-skin-cancer",
+        "source_title": "A 10-year-old CNN outperforms frontier LLMs for skin cancer diagnosis"
       }
     ],
     "total_usd": 0.0
@@ -93,7 +79,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1011,
+  "last_cycle_seconds": 1325,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -201,7 +187,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-10-25",
+    "date": "2026-10-26",
     "published": 1
   },
   "code_tech_earning": {
@@ -1059,7 +1045,8 @@
       "mistral.ai/news/timestral",
       "modelcompare.ai/blog/ai-models-controversial-take-on-humans",
       "kimi.ai/blog/kimi-k3-1-pro",
-      "apollo.com/wealth/insights-news/insights/daily-spark/no-signs-of-ai-payoff-outside-the-tech-sector"
+      "apollo.com/wealth/insights-news/insights/daily-spark/no-signs-of-ai-payoff-outside-the-tech-sector",
+      "lynchlab.net/llm-skin-cancer"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -1139,7 +1126,8 @@
       "timestral mistral s time sery foundation model",
       "every ai model has same controversial take human",
       "kimi k3 1 pro k3 1 pro highspeed",
-      "sign ai payoff outside tech sector"
+      "sign ai payoff outside tech sector",
+      "10 year old cnn outperform frontier llms skin cancer diagnosi"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1219,12 +1207,14 @@
       "time sery forecast break ignore context",
       "multi model fallback fail together",
       "kimi k3 1 pro respons truncate silently",
-      "ai pilot never reach production"
+      "ai pilot never reach production",
+      "skin cancer model fail real photo"
     ],
     "followed_up_ids": [
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/why-your-ai-pilot-never-reaches-production-3jff",
       "https://dev.to/robust_true_try/your-kimi-k31-pro-responses-truncate-silently-2odg",
       "https://dev.to/robust_true_try/your-multi-model-fallback-fails-together-485p",
       "https://dev.to/robust_true_try/infrastructure-exits-and-the-ai-authenticity-tax-5fl7",
@@ -1274,7 +1264,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-25T22:34:40.406933+00:00",
+    "checked_at": "2026-10-26T01:12:17.370791+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1593,14 +1583,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261025-224859",
+  "last_evolution_branch": "evolve/1.41.1-20261026-012846",
   "evolution_pending_review": true,
   "article_stats": {
-    "count": 39,
-    "total_views": 5055,
-    "avg_views": 129.6,
+    "count": 40,
+    "total_views": 5096,
+    "avg_views": 127.4,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 3288,
+    "best_views": 3308,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1616,8 +1606,8 @@
       {
         "archetype": "problem-workaround",
         "count": 9,
-        "avg_engagement": 454.6,
-        "avg_views": 435.1,
+        "avg_engagement": 456.8,
+        "avg_views": 437.3,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1637,9 +1627,16 @@
       {
         "archetype": "other",
         "count": 13,
-        "avg_engagement": 56.0,
-        "avg_views": 31.0,
+        "avg_engagement": 56.8,
+        "avg_views": 31.8,
         "best_title": "Your AI Agent Can't See What It Clicks"
+      },
+      {
+        "archetype": "surprising-behavior",
+        "count": 8,
+        "avg_engagement": 40.5,
+        "avg_views": 24.9,
+        "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
       },
       {
         "archetype": "engineering-culture",
@@ -1647,13 +1644,6 @@
         "avg_engagement": 40.0,
         "avg_views": 40.0,
         "best_title": "How AI Pull Requests Slip Past Code Review"
-      },
-      {
-        "archetype": "surprising-behavior",
-        "count": 7,
-        "avg_engagement": 37.6,
-        "avg_views": 26.9,
-        "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
       },
       {
         "archetype": "security-privacy",
@@ -1665,7 +1655,7 @@
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "security-privacy",
-    "sample_size": 39
+    "sample_size": 40
   },
   "article_rejects": {
     "last_reason": "weak_title",
@@ -1791,7 +1781,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-25T22:51:29.571798+00:00",
+    "last_run": "2026-10-26T01:34:20.513047+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1801,27 +1791,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-25T22:51:29.844339+00:00",
+    "last_run": "2026-10-26T01:34:20.990241+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4765372,
-        "at": "2026-10-24T07:38:11.194729+00:00",
-        "ok": true
-      },
-      {
         "id": 4720062,
-        "at": "2026-10-24T12:49:07.895115+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
-        "at": "2026-10-24T12:49:07.895115+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
         "at": "2026-10-24T12:49:07.895115+00:00",
         "ok": true
       },
@@ -2001,17 +1976,37 @@
         "ok": true
       },
       {
+        "id": 4765372,
+        "at": "2026-10-26T01:34:20.990241+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-10-26T01:34:20.990241+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-10-26T01:34:20.990241+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-25T22:51:29.844339+00:00",
+        "at": "2026-10-26T01:34:20.990241+00:00",
+        "ok": true
+      },
+      {
+        "id": 4918200,
+        "at": "2026-10-26T01:34:20.990241+00:00",
         "ok": true
       }
     ],
-    "published_total": 40,
-    "covered": 40,
+    "published_total": 41,
+    "covered": 41,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 39.2
+    "oldest_check_age_hours": 36.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2028,8 +2023,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 1,
-      "atria": 1
+      "openrouter": 2
     }
   }
 }

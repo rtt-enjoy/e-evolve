@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-26T20:23:56.658372+00:00",
-  "total_runs": 2050,
+  "last_run": "2026-10-26T21:23:58.504436+00:00",
+  "total_runs": 2051,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,33 +33,27 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change. The PROMPT FOCUS (weak_title / ALL-CAPS title words) already has the fix in 17+ open review branches listed under PRIOR PROPOSALS, none merged; proposing yet another variation of the same ALL-CAPS title edit duplicates a dead end instead of shipping. The owner should merge one open evolve/* branch or run 'force articles' to test the current title-rewrite prompt, then watch weak_title rejects fall.",
-    "changes_applied": [],
-    "suggestions": [
+    "summary": "Replace the vague 'any ALL-CAPS word' ban in the article draft prompt with concrete examples of shouted non-acronym words that the model actually produces, so the title rewrite gate stops rejecting drafts for 'title has ALL-CAPS word'.",
+    "changes_applied": [
       {
-        "title": "Merge an existing open ALL-CAPS title branch",
-        "description": "Seventeen prior proposals already cover the weak_title/ALL-CAPS fix and need no re-deriving. The owner can review and merge one open branch, or trigger 'force articles' to test whether the current title-rewrite prompt reduces weak_title rejects.",
-        "owner_action": "Review the open evolve/* review branches for the ALL-CAPS title proposals and merge one, or run the 'force articles' owner command to test the title-rewrite path.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: List the open evolve/* review branches.",
-          "Step 2: Merge the branch that adds concrete banned-ALL-CAPS-word examples to the title rewrite prompt.",
-          "Step 3: Confirm article_rejects.recent weak_title entries with 'ALL-CAPS word' detail fall toward 0 in the next 14-day window."
-        ]
+        "file": "bot/earning/articles.py",
+        "reason": "The _SYSTEM prompt bans 'any ALL-CAPS word' but gives no concrete examples of shouted non-acronym words. The model keeps emitting words like BROKEN, FAILED, URGENT, FIXED, WORKING in ALL-CAPS for emphasis, which the gate correctly rejects. Adding specific banned examples teaches the model what 'ALL-CAPS word' means in practice without loosening the gate."
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path: publish more articles in the shapes readers measurably prefer (PROMPT FOCUS: weak_title, gate finding 'title has ALL-CAPS word' x3).",
+    "suggestions": [],
+    "direction": "Principle 5 step 3 \u2014 reach into a live receive path by publishing more articles in the shapes readers prefer; the weak_title gate (3 rejects in 14 days, all 'ALL-CAPS word') is the prompt-level blocker.",
     "evidence": [
-      "article_rejects.counts weak_title=12 lifetime, 3 in the last 14 days; article_rejects.last = 'weak_title'",
+      "article_rejects.counts.weak_title = 12 (lifetime), 3 (last 14 days)",
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
       "Gate findings behind weak_title: 'title has ALL-CAPS word' x3",
-      "PRIOR PROPOSALS lists 17+ open branches covering the weak_title/ALL-CAPS fix in bot/earning/articles.py, none merged",
-      "status suggestions: merge an open evolve/* ALL-CAPS title branch, or run 'force articles' to test whether the current title-rewrite prompt reduces weak_title rejects"
+      "preferred_archetypes() = ['problem-workaround'] (only archetype with n\u22653)",
+      "article_interest: problem-workaround n=9 avg=456.8 vs build-tutorial n=2 avg=102.5"
     ],
-    "money_path": "reach-only",
-    "verify": "No code change to verify. After the owner merges an open ALL-CAPS title branch (or runs 'force articles'), confirm article_rejects.recent weak_title entries with 'ALL-CAPS word' detail fall toward 0 in the next 14-day window.",
+    "money_path": "reach-only \u2014 this change only affects whether a draft passes the title gate and gets published; the receive path (footer) is already live and verified on every published post.",
+    "verify": "In the next 14-day window, article_rejects.recent entries with code 'weak_title' and detail containing 'ALL-CAPS word' should fall toward 0; article_daily.published should stay at 1/day without weak_title rejections.",
     "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
+    "branch": "evolve/1.41.1-20261026-221026",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [],
@@ -79,7 +73,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 380,
+  "last_cycle_seconds": 2790,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1185,7 +1179,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-26T20:23:57.145925+00:00",
+    "checked_at": "2026-10-26T21:23:58.991046+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1505,8 +1499,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261026-221026",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 40,
     "total_views": 5096,
@@ -1703,7 +1697,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-26T20:30:15.799403+00:00",
+    "last_run": "2026-10-26T22:10:26.906113+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1713,32 +1707,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-26T20:30:16.096377+00:00",
+    "last_run": "2026-10-26T22:10:27.339191+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4918200,
-        "at": "2026-10-26T01:34:20.990241+00:00",
-        "ok": true
-      },
-      {
         "id": 4720062,
-        "at": "2026-10-26T06:44:29.524292+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
-        "at": "2026-10-26T06:44:29.524292+00:00",
-        "ok": true
-      },
-      {
-        "id": 4568987,
-        "at": "2026-10-26T06:44:29.524292+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
         "at": "2026-10-26T06:44:29.524292+00:00",
         "ok": true
       },
@@ -1903,8 +1877,28 @@
         "ok": true
       },
       {
+        "id": 4918200,
+        "at": "2026-10-26T22:10:27.339191+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-10-26T22:10:27.339191+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-10-26T22:10:27.339191+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-10-26T22:10:27.339191+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-26T20:30:16.096377+00:00",
+        "at": "2026-10-26T22:10:27.339191+00:00",
         "ok": true
       }
     ],
@@ -1913,7 +1907,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 18.9
+    "oldest_check_age_hours": 15.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

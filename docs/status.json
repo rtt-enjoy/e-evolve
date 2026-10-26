@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-26T19:23:54.438949+00:00",
-  "total_runs": 2049,
+  "last_run": "2026-10-26T20:23:56.658372+00:00",
+  "total_runs": 2050,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,7 +33,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change: the PROMPT FOCUS is weak_title/ALL-CAPS (3 rejects in 14 days, gate finding 'title has ALL-CAPS word' x3), and 17+ prior proposals on open review branches already address this exact fix \u2014 none merged, and the owner's own suggestion in status.json is to merge an existing branch rather than propose another.",
+    "summary": "No change. The PROMPT FOCUS (weak_title / ALL-CAPS title words) already has the fix in 17+ open review branches listed under PRIOR PROPOSALS, none merged; proposing yet another variation of the same ALL-CAPS title edit duplicates a dead end instead of shipping. The owner should merge one open evolve/* branch or run 'force articles' to test the current title-rewrite prompt, then watch weak_title rejects fall.",
     "changes_applied": [],
     "suggestions": [
       {
@@ -48,32 +48,21 @@
         ]
       }
     ],
-    "direction": "Doctrine Principle 5, step 3 (reach) \u2014 the checklist step binding this cycle, served by the prompt named in PROMPT FOCUS",
+    "direction": "Checklist step 4 \u2014 reach into a live receive path: publish more articles in the shapes readers measurably prefer (PROMPT FOCUS: weak_title, gate finding 'title has ALL-CAPS word' x3).",
     "evidence": [
-      "article_rejects.counts.weak_title = 12 lifetime, 3 in the last 14 days",
-      "PROMPT FOCUS: weak_title lost 3 draft(s); gate findings: 'title has ALL-CAPS word' x3",
-      "17+ open review branches propose ALL-CAPS title fixes; none merged",
-      "status.json suggestions[0]: 'Merge an existing open ALL-CAPS title branch or force a publish to test it'"
+      "article_rejects.counts weak_title=12 lifetime, 3 in the last 14 days; article_rejects.last = 'weak_title'",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x3",
+      "PRIOR PROPOSALS lists 17+ open branches covering the weak_title/ALL-CAPS fix in bot/earning/articles.py, none merged",
+      "status suggestions: merge an open evolve/* ALL-CAPS title branch, or run 'force articles' to test whether the current title-rewrite prompt reduces weak_title rejects"
     ],
-    "money_path": "reach-only \u2014 a title that earns a click is reach; the receive path is already verified live (payout.live=true, receipt_check.covered/published_total=38/38, coverage_complete=True)",
-    "verify": "No change proposed, so nothing to verify this cycle. If the owner merges one of the 17 open ALL-CAPS branches, article_rejects.recent weak_title entries with 'ALL-CAPS word' detail should fall toward 0 in the next 14-day window.",
+    "money_path": "reach-only",
+    "verify": "No code change to verify. After the owner merges an open ALL-CAPS title branch (or runs 'force articles'), confirm article_rejects.recent weak_title entries with 'ALL-CAPS word' detail fall toward 0 in the next 14-day window.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -90,7 +79,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 565,
+  "last_cycle_seconds": 380,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1196,7 +1185,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-26T19:23:55.294306+00:00",
+    "checked_at": "2026-10-26T20:23:57.145925+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1714,7 +1703,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-26T19:33:17.815785+00:00",
+    "last_run": "2026-10-26T20:30:15.799403+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1724,30 +1713,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-26T19:33:18.196066+00:00",
+    "last_run": "2026-10-26T20:30:16.096377+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4908316,
-        "at": "2026-10-25T22:51:29.844339+00:00",
-        "ok": true
-      },
-      {
-        "id": 4765372,
-        "at": "2026-10-26T01:34:20.990241+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
-        "at": "2026-10-26T01:34:20.990241+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-10-26T01:34:20.990241+00:00",
-        "ok": true
-      },
       {
         "id": 4918200,
         "at": "2026-10-26T01:34:20.990241+00:00",
@@ -1914,8 +1883,28 @@
         "ok": true
       },
       {
+        "id": 4908316,
+        "at": "2026-10-26T20:30:16.096377+00:00",
+        "ok": true
+      },
+      {
+        "id": 4765372,
+        "at": "2026-10-26T20:30:16.096377+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-10-26T20:30:16.096377+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-10-26T20:30:16.096377+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-26T19:33:18.196066+00:00",
+        "at": "2026-10-26T20:30:16.096377+00:00",
         "ok": true
       }
     ],
@@ -1924,7 +1913,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 20.7
+    "oldest_check_age_hours": 18.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1941,8 +1930,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 1,
-      "atria": 1
+      "openrouter": 1
     }
   },
   "github_repo": "rtt-enjoy/e-evolve"

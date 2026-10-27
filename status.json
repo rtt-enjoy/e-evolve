@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-27T01:54:53.838118+00:00",
-  "total_runs": 2056,
+  "last_run": "2026-10-27T02:54:54.083132+00:00",
+  "total_runs": 2057,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,78 +33,56 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Sharpen the ALL-CAPS title ban in the article draft prompt with a concrete negative/positive example pair, replacing the vague 'any ALL-CAPS word' rule that still triggers 3 weak_title rejects in the last 14 days.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "Replace the vague ALL-CAPS ban with a concrete negative/positive example so the model stops capitalizing emphasis words like BROKEN, FIXED, FAILED, URGENT, CRITICAL, ESSENTIAL, VITAL, KEY, MAIN, MAJOR, HUGE, MASSIVE"
-      }
-    ],
+    "summary": "The binding step is step 4 (reach into a live receive path), which is allowed, but the PROMPT FOCUS fix \u2014 weak_title 'ALL-CAPS word' x3 in 14 days \u2014 has been proposed 20+ times and never merged; the most recent proposals dated 2026-10-27 remain open. The evidence does not point to a different change that clears the bar.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Monitor weak_title reject count in next 14-day window",
-        "description": "Track whether the concrete negative/positive example reduces ALL-CAPS-triggered weak_title rejects",
-        "owner_action": "After this cycle runs, check article_rejects.recent for weak_title entries with 'ALL-CAPS word' detail; count should trend toward 0",
+        "title": "Edit the dev.to bio to carry the tip address",
+        "description": "One manual edit at dev.to/settings to put the wallet address in the profile bio, reaching every profile visitor permanently \u2014 the one cheap exception the doctrine flags",
+        "owner_action": "Edit the Bio field at dev.to/settings to include the validated Tron receive address",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Wait for next hourly cycle to complete",
-          "Step 2: Check article_rejects.recent in status.json for weak_title entries",
-          "Step 3: Count entries with 'ALL-CAPS word' detail; should be fewer than current 3"
+          "Step 1: Open dev.to/settings for the account",
+          "Step 2: Edit the Bio field to include the wallet address from status['payout_public']['address']",
+          "Step 3: Save; the address now carries on every profile visit"
         ]
       }
     ],
-    "direction": "Principle 5 step 3 \u2014 reach into live receive path by reducing weak_title gate losses (prompt focus: weak_title lost 3 drafts to 'title has ALL-CAPS word')",
+    "direction": "Step 4 of the standing checklist \u2014 reach into a live receive path, per Principle 5",
     "evidence": [
-      "article_rejects.counts[weak_title] = 12 lifetime, 3 in last 14 days",
-      "gate findings: 'title has ALL-CAPS word' x3 (last 14 days)",
-      "preferred_archetypes() = ['problem-workaround'] \u2014 only one archetype has enough sample to steer",
-      "wallet.received_total_usd = 0.0 \u2014 reach is the only lever"
+      "status['receipt_check'].known_without_footer = 0",
+      "status['receipt_check'].coverage_complete = True",
+      "status['payout'].live = true",
+      "wallet.received_total_usd = 0.0",
+      "article_interest.preferred_archetypes() = ['problem-workaround']",
+      "PROMPT LEDGER: weak_title=3 in last 14 days; llm_error=10, empty_draft=5 not prompt-fixable",
+      "Prior proposals for ALL-CAPS title fixes: 20+ distinct, none merged; latest dated 2026-10-27 still open"
     ],
-    "money_path": "reach-only",
-    "verify": "After next hourly cycle, check article_rejects.recent in status.json for weak_title entries with 'ALL-CAPS word' detail; count should trend toward 0 from current 3.",
+    "money_path": "reach-only (no money enters; the receive path is live but no tips have arrived)",
+    "verify": "none (no change proposed; the PROMPT FOCUS fix remains open pending merge)",
     "error": null,
-    "branch": "evolve/1.41.1-20261027-022242",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Your Backtracking Solver Is Slower Than Brute Force",
-        "url": "https://dev.to/robust_true_try/your-backtracking-solver-is-slower-than-brute-force-1e5g",
-        "estimated_usd": 0.0,
-        "source_url": "https://openai.com/index/building-scientific-understanding-with-academic-communities/",
-        "source_title": "Three new discoveries in mathematics, computer science, and physics"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Monitor weak_title reject count in next 14-day window",
-      "description": "Track whether the concrete negative/positive example reduces ALL-CAPS-triggered weak_title rejects",
-      "owner_action": "After this cycle runs, check article_rejects.recent for weak_title entries with 'ALL-CAPS word' detail; count should trend toward 0",
+      "title": "Edit the dev.to bio to carry the tip address",
+      "description": "One manual edit at dev.to/settings to put the wallet address in the profile bio, reaching every profile visitor permanently \u2014 the one cheap exception the doctrine flags",
+      "owner_action": "Edit the Bio field at dev.to/settings to include the validated Tron receive address",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Wait for next hourly cycle to complete",
-        "Step 2: Check article_rejects.recent in status.json for weak_title entries",
-        "Step 3: Count entries with 'ALL-CAPS word' detail; should be fewer than current 3"
+        "Step 1: Open dev.to/settings for the account",
+        "Step 2: Edit the Bio field to include the wallet address from status['payout_public']['address']",
+        "Step 3: Save; the address now carries on every profile visit"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 2608,
+  "last_cycle_seconds": 1034,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1290,7 +1268,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-27T01:54:54.299599+00:00",
+    "checked_at": "2026-10-27T02:54:54.549013+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1610,8 +1588,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261027-022242",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 38,
     "total_views": 5106,
@@ -1818,7 +1796,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-27T02:38:21.217267+00:00",
+    "last_run": "2026-10-27T03:12:06.996432+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1828,30 +1806,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-27T02:38:21.563174+00:00",
+    "last_run": "2026-10-27T03:12:07.324676+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4780783,
-        "at": "2026-10-26T17:42:04.917162+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-10-26T17:42:04.917162+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-10-26T17:42:04.917162+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
-        "at": "2026-10-26T17:42:04.917162+00:00",
-        "ok": true
-      },
       {
         "id": 4740283,
         "at": "2026-10-26T18:54:30.440544+00:00",
@@ -2018,13 +1976,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4925166,
         "at": "2026-10-27T02:38:21.563174+00:00",
         "ok": true
       },
       {
-        "id": 4925166,
-        "at": "2026-10-27T02:38:21.563174+00:00",
+        "id": 4780783,
+        "at": "2026-10-27T03:12:07.324676+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-10-27T03:12:07.324676+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-10-27T03:12:07.324676+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-10-27T03:12:07.324676+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-10-27T03:12:07.324676+00:00",
         "ok": true
       }
     ],
@@ -2033,7 +2011,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.9
+    "oldest_check_age_hours": 8.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2046,12 +2024,11 @@
     "main_provider": "atria",
     "main_model": "Atria-Dawn",
     "key_set": true,
-    "live": false,
-    "serving": "openrouter",
-    "disabled_reason": "timeout",
+    "live": true,
+    "serving": "atria",
+    "disabled_reason": null,
     "calls": {
-      "openrouter": 4,
-      "atria": 1
+      "openrouter": 1
     }
   }
 }

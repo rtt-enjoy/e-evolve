@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-27T22:20:54.401552+00:00",
-  "total_runs": 2079,
+  "last_run": "2026-10-27T23:20:54.496276+00:00",
+  "total_runs": 2080,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,35 +33,26 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Replace the vague 'Title Case The Important Words' title rule in the article draft system prompt with a concrete sentence-case rule and a shouted-word fix example, so the model stops producing ALL-CAPS titles that the weak_title gate rejects (3 drafts lost in the last 14 days).",
+    "summary": "Sharpen the article draft TITLE rule to replace the vague 'Title Case The Important Words' with an explicit definition and concrete ALL-CAPS examples, reducing weak_title rejections.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "The affirmative 'Title Case The Important Words' rule tells the model to capitalize words it deems important \u2014 exactly when it shouts (NEED, URGENT, BROKEN). Replacing that rule \u2014 not stacking another banned-word example beside it \u2014 removes the incentive to capitalize for emphasis and gives a concrete before/after fix."
+        "reason": "Add concrete ALL-CAPS banned examples to the article draft prompt's TITLE rule to reduce weak_title rejections."
       }
     ],
-    "suggestions": [
-      {
-        "title": "Add the receive address to the dev.to profile bio",
-        "description": "One manual settings edit carries the USDT ask on every profile visit, permanently, with no new secret and no policy change.",
-        "owner_action": "Open dev.to/settings and paste the Tron USDT address plus a one-line 'Support this work' note into the Bio field.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Go to dev.to/settings.",
-          "Step 2: Paste the wallet address and a one-line ask into the Bio field and save."
-        ]
-      }
-    ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path: publish into the shapes readers measurably prefer (Doctrine Principle 5, step 2).",
+    "suggestions": [],
+    "direction": "Prompt focus: weak_title lost 3 draft(s); gate findings: 'title has ALL-CAPS word' x3. Edit the _SYSTEM prompt's TITLE rule in bot/earning/articles.py to be more explicit and include concrete banned ALL-CAPS examples.",
     "evidence": [
-      "article_rejects.counts.weak_title = 12 lifetime, 3 in the last 14 days",
-      "article_rejects gate finding 'title has ALL-CAPS word' x3 (PROMPT FOCUS)"
+      "article_rejects.counts.weak_title=12",
+      "article_rejects.last='llm_error' (but weak_title gate findings show 'title has ALL-CAPS word' x3)",
+      "status[\"article_interest\"].preferred_archetypes() = ['problem-workaround']",
+      "status[\"article_stats\"].count=38"
     ],
     "money_path": "reach-only",
-    "verify": "weak_title rejects in the 14-day window fall from 3 to 0, with the 'title has ALL-CAPS word' finding count falling from 3 to 0 in article_rejects.recent",
+    "verify": "After the edit, run the bot and verify that article_rejects.weak_title count does not increase in the next cycle (status[\"article_rejects\"].counts.weak_title should be <=12). Also check that the new prompt includes explicit Title Case definition and concrete ALL-CAPS examples.",
     "error": null,
-    "branch": "evolve/1.41.1-20261027-222717",
-    "proposed_version": "1.41.1"
+    "branch": "evolve/1.41.2-20261027-234743",
+    "proposed_version": "1.41.2"
   },
   "last_earning": {
     "actions": [],
@@ -80,7 +71,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 384,
+  "last_cycle_seconds": 1610,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1220,7 +1211,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-27T22:20:54.996356+00:00",
+    "checked_at": "2026-10-27T23:20:55.261383+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1540,7 +1531,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261027-222717",
+  "last_evolution_branch": "evolve/1.41.2-20261027-234743",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 38,
@@ -1748,7 +1739,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-27T22:27:17.617489+00:00",
+    "last_run": "2026-10-27T23:47:43.747248+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1758,37 +1749,17 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-27T22:27:17.853803+00:00",
+    "last_run": "2026-10-27T23:47:44.145200+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4908316,
-        "at": "2026-10-27T14:48:57.906665+00:00",
-        "ok": true
-      },
-      {
-        "id": 4765372,
-        "at": "2026-10-27T14:48:57.906665+00:00",
-        "ok": true
-      },
       {
         "id": 4918200,
         "at": "2026-10-27T15:48:18.775526+00:00",
         "ok": true
       },
       {
-        "id": 4859277,
-        "at": "2026-10-27T15:48:18.775526+00:00",
-        "ok": true
-      },
-      {
         "id": 4568987,
-        "at": "2026-10-27T15:48:18.775526+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
         "at": "2026-10-27T15:48:18.775526+00:00",
         "ok": true
       },
@@ -1953,8 +1924,28 @@
         "ok": true
       },
       {
+        "id": 4908316,
+        "at": "2026-10-27T23:47:44.145200+00:00",
+        "ok": true
+      },
+      {
+        "id": 4765372,
+        "at": "2026-10-27T23:47:44.145200+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-10-27T23:47:44.145200+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-10-27T23:47:44.145200+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-27T22:27:17.853803+00:00",
+        "at": "2026-10-27T23:47:44.145200+00:00",
         "ok": true
       }
     ],
@@ -1963,7 +1954,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 7.6
+    "oldest_check_age_hours": 8.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

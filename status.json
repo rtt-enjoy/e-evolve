@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-27T14:36:46.629562+00:00",
-  "total_runs": 2070,
+  "last_run": "2026-10-27T15:36:48.709776+00:00",
+  "total_runs": 2071,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,42 +33,44 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete ALL-CAPS prohibition example to system prompt title rules to reduce weak_title rejects",
+    "summary": "No change proposed: the evidenced fix for weak_title (concrete ALL-CAPS examples in the article title rules) already exists as open evolve/* branches and was the last cycle's proposal (1.41.0) with changes_applied empty, so another variant would duplicate an open branch rather than add a new fix; the blocker is human review/merge, not a missing code edit.",
     "changes_applied": [],
-    "suggestions": [],
-    "direction": "checklist step 4: improve reach without touching receive path",
-    "evidence": [
-      "status['article_rejects']['counts']['weak_title'] = 12",
-      "status['article_rejects']['last'] = 'llm_error'",
-      "PROMPT FOCUS: weak_title lost 3 draft(s)",
-      "gate findings: 'title has ALL-CAPS word' x3"
-    ],
-    "money_path": "reach-only",
-    "verify": "weak_title reject count should fall below 3 in the next cycle",
-    "error": null,
-    "branch": null,
-    "proposed_version": "1.41.1"
-  },
-  "last_earning": {
-    "actions": [
+    "suggestions": [
       {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "title": "Review and merge existing ALL-CAPS title prompt branches",
+        "description": "56 open evolve/* branches already propose edits to the ALL-CAPS ban in _SYSTEM or _revise_title. The last evolution's suggestion recommends evaluating these before proposing another variant.",
+        "owner_action": "List open evolve/* branches, diff each against current _SYSTEM TITLE rules and _revise_title prompt in bot/earning/articles.py, merge the branch with clearest evidence (weak_title reject reduction) or close the rest",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: List open evolve/* branches on the repo (git branch -r | grep evolve)",
+          "Step 2: For each branch touching bot/earning/articles.py, diff the _SYSTEM TITLE section and _revise_title prompt against current main",
+          "Step 3: Merge the branch with the clearest evidence (weak_title reject reduction) or close branches without evidence"
+        ]
       }
     ],
+    "direction": "checklist step 4: improve reach without touching the receive path (prompt focus: weak_title)",
+    "evidence": [
+      "status['article_rejects']['counts']['weak_title'] = 12 lifetime, 3 lost in the last 14 days",
+      "status['article_rejects']['last'] = 'llm_error' \u2014 engine failures, not prompt-fixable",
+      "PROMPT FOCUS: weak_title lost 3 draft(s); gate findings: 'title has ALL-CAPS word' x3",
+      "last_evolution (1.41.0): 'Add concrete ALL-CAPS prohibition example to system prompt title rules', changes_applied: []",
+      "PRIOR PROPOSALS: 57 distinct open branches, most proposing ALL-CAPS title prompt edits to bot/earning/articles.py"
+    ],
+    "money_path": "none (maintenance)",
+    "verify": "No status field moves from this proposal. The reviewer should list open evolve/* branches, diff each against the current _SYSTEM TITLE rules and _revise_title prompt in bot/earning/articles.py, merge the branch with the clearest weak_title evidence or close the rest; once merged, weak_title rejects should fall below 3 in the next cycle.",
+    "error": null,
+    "branch": null,
+    "proposed_version": "1.41.0"
+  },
+  "last_earning": {
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Review and merge existing ALL-CAPS title prompt branches",
       "description": "56 open evolve/* branches already propose edits to the ALL-CAPS ban in _SYSTEM or _revise_title. The last evolution's suggestion recommends evaluating these before proposing another variant.",
-      "owner_action": "List open evolve/* branches, diff each against current _SYSTEM TITLE rules and _revise_title prompt in bot/earning/articles.py, merge the branch with clearest evidence or close the rest",
+      "owner_action": "List open evolve/* branches, diff each against current _SYSTEM TITLE rules and _revise_title prompt in bot/earning/articles.py, merge the branch with clearest evidence (weak_title reject reduction) or close the rest",
       "secret_needed": null,
       "how_to": [
         "Step 1: List open evolve/* branches on the repo (git branch -r | grep evolve)",
@@ -78,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 732,
+  "last_cycle_seconds": 691,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1163,7 +1165,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-27T14:36:47.309404+00:00",
+    "checked_at": "2026-10-27T15:36:49.064635+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1691,7 +1693,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-27T14:48:57.621642+00:00",
+    "last_run": "2026-10-27T15:48:17.962380+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1701,25 +1703,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-27T14:48:57.906665+00:00",
+    "last_run": "2026-10-27T15:48:18.775526+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4918200,
-        "at": "2026-10-27T06:15:37.486880+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
-        "at": "2026-10-27T06:15:37.486880+00:00",
-        "ok": true
-      },
-      {
-        "id": 4568987,
-        "at": "2026-10-27T06:15:37.486880+00:00",
-        "ok": true
-      },
       {
         "id": 4720062,
         "at": "2026-10-27T07:33:58.688678+00:00",
@@ -1732,11 +1719,6 @@
       },
       {
         "id": 4853251,
-        "at": "2026-10-27T07:33:58.688678+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
         "at": "2026-10-27T07:33:58.688678+00:00",
         "ok": true
       },
@@ -1896,8 +1878,28 @@
         "ok": true
       },
       {
+        "id": 4918200,
+        "at": "2026-10-27T15:48:18.775526+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-10-27T15:48:18.775526+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-10-27T15:48:18.775526+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-10-27T15:48:18.775526+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-27T14:48:57.906665+00:00",
+        "at": "2026-10-27T15:48:18.775526+00:00",
         "ok": true
       }
     ],
@@ -1906,7 +1908,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.6
+    "oldest_check_age_hours": 8.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1923,8 +1925,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 1,
-      "atria": 1
+      "openrouter": 1
     }
   }
 }

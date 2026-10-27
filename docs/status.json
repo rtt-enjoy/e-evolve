@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-27T02:54:54.083132+00:00",
-  "total_runs": 2057,
+  "last_run": "2026-10-27T03:54:54.684837+00:00",
+  "total_runs": 2058,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,36 +33,21 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "The binding step is step 4 (reach into a live receive path), which is allowed, but the PROMPT FOCUS fix \u2014 weak_title 'ALL-CAPS word' x3 in 14 days \u2014 has been proposed 20+ times and never merged; the most recent proposals dated 2026-10-27 remain open. The evidence does not point to a different change that clears the bar.",
+    "summary": "No change this cycle. The PROMPT FOCUS is weak_title from ALL-CAPS words (gate finding 'title has ALL-CAPS word' x3, 3 drafts lost in 14 days), but this exact fix space has already been exhausted: 21 prior proposals from 2026-10-21 to 2026-10-27 cover concrete examples, named banned words, deterministic pre-gate ALL-CAPS-to-Title-Case fixes, and bounded second title attempts \u2014 none merged. Adding yet another variation stacks onto a rule that has resisted every prior attempt and violates the dead-end rule against repeating prior proposals. The receive path is live and verified (39/39 covered, known_without_footer=0, coverage_complete=True), so reach is the remaining work, but the editorial fix for this gate has been tried and not merged.",
     "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Edit the dev.to bio to carry the tip address",
-        "description": "One manual edit at dev.to/settings to put the wallet address in the profile bio, reaching every profile visitor permanently \u2014 the one cheap exception the doctrine flags",
-        "owner_action": "Edit the Bio field at dev.to/settings to include the validated Tron receive address",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open dev.to/settings for the account",
-          "Step 2: Edit the Bio field to include the wallet address from status['payout_public']['address']",
-          "Step 3: Save; the address now carries on every profile visit"
-        ]
-      }
-    ],
-    "direction": "Step 4 of the standing checklist \u2014 reach into a live receive path, per Principle 5",
+    "suggestions": [],
+    "direction": "doctrine Principle 5, step 2 \u2014 reach into a live receive path by publishing more articles in preferred shapes",
     "evidence": [
-      "status['receipt_check'].known_without_footer = 0",
-      "status['receipt_check'].coverage_complete = True",
-      "status['payout'].live = true",
-      "wallet.received_total_usd = 0.0",
-      "article_interest.preferred_archetypes() = ['problem-workaround']",
-      "PROMPT LEDGER: weak_title=3 in last 14 days; llm_error=10, empty_draft=5 not prompt-fixable",
-      "Prior proposals for ALL-CAPS title fixes: 20+ distinct, none merged; latest dated 2026-10-27 still open"
+      "article_rejects: weak_title=12 lifetime, 3 in last 14 days; gate finding 'title has ALL-CAPS word' x3",
+      "receipt_check.covered / published_total = 39 / 39; known_without_footer = 0; coverage_complete = True \u2014 receive path live and verified",
+      "wallet.received_total_usd = 0.0 \u2014 no money yet, so reach is the remaining work",
+      "PRIOR PROPOSALS lists 21 ALL-CAPS title-fix proposals (2026-10-21 through 2026-10-27), none merged"
     ],
-    "money_path": "reach-only (no money enters; the receive path is live but no tips have arrived)",
-    "verify": "none (no change proposed; the PROMPT FOCUS fix remains open pending merge)",
+    "money_path": "reach-only \u2014 no change to the receive path; publishing more articles is the path to tips",
+    "verify": "N/A \u2014 no change proposed. If weak_title rejects continue next cycle, the evidence points to the LLM engine (llm_error=10, empty_draft=5 in last 14 days) rather than the title prompt, since every prompt-side ALL-CAPS fix has already been proposed.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -82,7 +67,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1034,
+  "last_cycle_seconds": 870,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1268,7 +1253,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-27T02:54:54.549013+00:00",
+    "checked_at": "2026-10-27T03:54:55.109156+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1796,7 +1781,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-27T03:12:06.996432+00:00",
+    "last_run": "2026-10-27T04:09:23.779518+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1806,30 +1791,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-27T03:12:07.324676+00:00",
+    "last_run": "2026-10-27T04:09:23.985331+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4740283,
-        "at": "2026-10-26T18:54:30.440544+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-10-26T18:54:30.440544+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-10-26T18:54:30.440544+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-10-26T18:54:30.440544+00:00",
-        "ok": true
-      },
       {
         "id": 4641536,
         "at": "2026-10-26T19:33:18.196066+00:00",
@@ -2001,8 +1966,28 @@
         "ok": true
       },
       {
+        "id": 4740283,
+        "at": "2026-10-27T04:09:23.985331+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-10-27T04:09:23.985331+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-27T04:09:23.985331+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-10-27T04:09:23.985331+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-27T03:12:07.324676+00:00",
+        "at": "2026-10-27T04:09:23.985331+00:00",
         "ok": true
       }
     ],
@@ -2011,7 +1996,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.3
+    "oldest_check_age_hours": 8.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

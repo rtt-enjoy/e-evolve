@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-27T16:48:05.939850+00:00",
-  "total_runs": 2073,
+  "last_run": "2026-10-27T17:41:48.350415+00:00",
+  "total_runs": 2074,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,37 +33,44 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete ALL-CAPS banned examples to the article draft prompt's TITLE rule to reduce weak_title rejections caused by shouted words like BROKEN, FAILED, URGENT.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The TITLE rule bans 'any ALL-CAPS word' but gives no concrete examples; the model keeps emitting shouted words (BROKEN, FAILED, URGENT, NEED) that are not acronyms. Adding two before/after examples makes the rule actionable."
-      }
-    ],
+    "summary": "No change proposed: the weak_title / ALL-CAPS prompt edit the focus names already has roughly two dozen open unmerged variants (status.json itself counts 56 evolve/* branches on that one rule and asks the owner to merge one rather than add another), and the larger draft killers (llm_error=23, empty_draft=9) are engine failures the brief explicitly marks as not fixable by a prompt edit.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Review and merge existing ALL-CAPS title prompt branches",
-        "description": "56 open evolve/* branches already propose edits to the ALL-CAPS ban in _SYSTEM or _revise_title. The last evolution's suggestion recommends evaluating these before proposing another variant.",
-        "owner_action": "List open evolve/* branches, diff each against current _SYSTEM TITLE rules and _revise_title prompt in bot/earning/articles.py, merge the branch with clearest evidence (weak_title reject reduction) or close the rest",
+        "title": "Merge one ALL-CAPS title branch and close the rest",
+        "description": "56 open evolve/* branches propose variants of the same TITLE-rule edit; the 3 drafts lost to 'title has ALL-CAPS word' in the last 14 days will keep dying until one of them is merged. A merge unblocks one post and one tip ask per affected cycle at zero new code.",
+        "owner_action": "Diff the open branches against the current _SYSTEM TITLE rule and _revise_title prompt in bot/earning/articles.py, merge the single variant with the clearest evidence (a concrete ALL-CAPS-to-Title-Case example is the most-repeated shape), and close the remaining duplicates so the review queue stops growing.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: List open evolve/* branches on the repo (git branch -r | grep evolve)",
-          "Step 2: For each branch touching bot/earning/articles.py, diff the _SYSTEM TITLE section and _revise_title prompt against current main",
-          "Step 3: Merge the branch with the clearest evidence (weak_title reject reduction) or close branches without evidence"
+          "Step 1: git branch -r | grep evolve to list the open review branches",
+          "Step 2: for each branch touching bot/earning/articles.py, diff its _SYSTEM TITLE section and _revise_title prompt against main",
+          "Step 3: merge the one variant most likely to cut the 'title has ALL-CAPS word' finding, then close the rest as duplicates"
+        ]
+      },
+      {
+        "title": "Check the ATRIA key's quota or plan status",
+        "description": "llm_error is the account's single biggest draft killer (23 lifetime, 10 in the last 14 days) and it is engine-side, not prompt-side; llm_engine shows serving=atria with calls={'openrouter': 1}, meaning the fallback already fired at least once. Each failed call is a day's article at risk.",
+        "owner_action": "Sign in to the Atria provider account and confirm the ATRIA_API_KEY is within its quota and not rate-limited or expired; the bot cannot read the provider's billing or quota pages and bot/llm.py is protected from edit.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Check the last 14 days of article_rejects.recent entries with code 'llm_error' for the failure detail",
+          "Step 2: Verify the Atria key's current quota/plan on the provider's own console",
+          "Step 3: If exhausted, rotate or top up the key so the post role stops failing before the title gate is even reached"
         ]
       }
     ],
-    "direction": "Principle 5, step 3 \u2014 reach into a live receive path by publishing more articles in the shapes readers prefer; weak_title gate lost 3 drafts in 14 days with 'title has ALL-CAPS word' x3",
+    "direction": "Checklist step 4 / Principle 5 (reach into the live receive path) \u2014 served by declining to add a 57th unmerged variant of the same prompt rule.",
     "evidence": [
-      "article_rejects.counts.weak_title = 12 (lifetime), 3 in last 14 days",
-      "article_rejects.last = 'weak_title' with gate finding 'title has ALL-CAPS word' x3",
-      "preferred_archetypes() = ['problem-workaround'] (only archetype with n\u22653 and meaningful lead)",
-      "wallet.received_total_usd = 0.0 \u2014 reach is the only lever until money arrives"
+      "PROMPT FOCUS: weak_title lost 3 drafts in the last 14 days, gate findings 'title has ALL-CAPS word' x3 \u2014 the named edit target",
+      "status.suggestions = 'Review and merge existing ALL-CAPS title prompt branches' \u2014 '56 open evolve/* branches already propose edits to the ALL-CAPS ban in _SYSTEM or _revise_title'",
+      "PRIOR PROPOSALS lists ~24 distinct 2026-10-21..2026-10-27 branches on this exact rule (banned-word examples, Title Case definition, deterministic pre-gate fix, naming the found word, second rewrite attempt, removing 'NEED') \u2014 all still open, none merged",
+      "article_rejects.counts (total 47): llm_error=23, weak_title=12, empty_draft=9 \u2014 the two larger causes are LLM-engine failures ('LLM call failed', empty output), which the brief classes as 'not fixable by a prompt edit', and bot/llm.py is protected",
+      "receive path is clean and idle: receipt_check.covered/published_total = 39/39, known_without_footer = 0, wallet.received_total_usd = 0.0 \u2014 so reach is the work, but no unproposed reach lever clears the bar this cycle"
     ],
-    "money_path": "reach-only \u2014 improves article acceptance rate so more problem-workaround posts ship with the live footer",
-    "verify": "Next cycle's article_rejects.recent should show fewer weak_title entries; weak_title count in 14-day window should drop from 3 toward 0",
+    "money_path": "none (maintenance) \u2014 no code change, so nothing touches the receive path this cycle; the reach lever that would move tips (fixing the title gate's lost drafts) is already written and waiting on a merge, not on a new proposal",
+    "verify": "Nothing to verify in-code, because nothing changes. The reviewer confirms the diagnosis instead: list open evolve/* branches touching bot/earning/articles.py (git branch -r | grep evolve), diff the _SYSTEM TITLE rule and _revise_title prompt against main, merge the variant with the clearest weak_title evidence, then watch article_rejects.recent for the weak_title count over the next 14 days \u2014 it should fall from 3 toward 0 while llm_error/empty_draft stay engine-driven.",
     "error": null,
-    "branch": "evolve/1.41.1-20261027-172639",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -72,19 +79,30 @@
   },
   "suggestions": [
     {
-      "title": "Review and merge existing ALL-CAPS title prompt branches",
-      "description": "56 open evolve/* branches already propose edits to the ALL-CAPS ban in _SYSTEM or _revise_title. The last evolution's suggestion recommends evaluating these before proposing another variant.",
-      "owner_action": "List open evolve/* branches, diff each against current _SYSTEM TITLE rules and _revise_title prompt in bot/earning/articles.py, merge the branch with clearest evidence (weak_title reject reduction) or close the rest",
+      "title": "Merge one ALL-CAPS title branch and close the rest",
+      "description": "56 open evolve/* branches propose variants of the same TITLE-rule edit; the 3 drafts lost to 'title has ALL-CAPS word' in the last 14 days will keep dying until one of them is merged. A merge unblocks one post and one tip ask per affected cycle at zero new code.",
+      "owner_action": "Diff the open branches against the current _SYSTEM TITLE rule and _revise_title prompt in bot/earning/articles.py, merge the single variant with the clearest evidence (a concrete ALL-CAPS-to-Title-Case example is the most-repeated shape), and close the remaining duplicates so the review queue stops growing.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List open evolve/* branches on the repo (git branch -r | grep evolve)",
-        "Step 2: For each branch touching bot/earning/articles.py, diff the _SYSTEM TITLE section and _revise_title prompt against current main",
-        "Step 3: Merge the branch with the clearest evidence (weak_title reject reduction) or close branches without evidence"
+        "Step 1: git branch -r | grep evolve to list the open review branches",
+        "Step 2: for each branch touching bot/earning/articles.py, diff its _SYSTEM TITLE section and _revise_title prompt against main",
+        "Step 3: merge the one variant most likely to cut the 'title has ALL-CAPS word' finding, then close the rest as duplicates"
+      ]
+    },
+    {
+      "title": "Check the ATRIA key's quota or plan status",
+      "description": "llm_error is the account's single biggest draft killer (23 lifetime, 10 in the last 14 days) and it is engine-side, not prompt-side; llm_engine shows serving=atria with calls={'openrouter': 1}, meaning the fallback already fired at least once. Each failed call is a day's article at risk.",
+      "owner_action": "Sign in to the Atria provider account and confirm the ATRIA_API_KEY is within its quota and not rate-limited or expired; the bot cannot read the provider's billing or quota pages and bot/llm.py is protected from edit.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Check the last 14 days of article_rejects.recent entries with code 'llm_error' for the failure detail",
+        "Step 2: Verify the Atria key's current quota/plan on the provider's own console",
+        "Step 3: If exhausted, rotate or top up the key so the post role stops failing before the title gate is even reached"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 2315,
+  "last_cycle_seconds": 297,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1169,7 +1187,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-27T16:48:06.588267+00:00",
+    "checked_at": "2026-10-27T17:41:48.967809+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1489,8 +1507,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261027-172639",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 38,
     "total_views": 5106,
@@ -1697,7 +1715,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-27T17:26:40.125167+00:00",
+    "last_run": "2026-10-27T17:46:44.016799+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1707,32 +1725,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-27T17:26:40.413132+00:00",
+    "last_run": "2026-10-27T17:46:44.406613+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4681657,
-        "at": "2026-10-27T09:15:22.963906+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-10-27T09:15:22.963906+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820684,
-        "at": "2026-10-27T09:15:22.963906+00:00",
-        "ok": true
-      },
-      {
         "id": 4820198,
-        "at": "2026-10-27T10:20:03.228340+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
         "at": "2026-10-27T10:20:03.228340+00:00",
         "ok": true
       },
@@ -1902,8 +1900,28 @@
         "ok": true
       },
       {
+        "id": 4681657,
+        "at": "2026-10-27T17:46:44.406613+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-10-27T17:46:44.406613+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-10-27T17:46:44.406613+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-10-27T17:46:44.406613+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-27T17:26:40.413132+00:00",
+        "at": "2026-10-27T17:46:44.406613+00:00",
         "ok": true
       }
     ],
@@ -1912,7 +1930,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.2
+    "oldest_check_age_hours": 7.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1929,7 +1947,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 1
+      "atria": 1
     }
   },
   "github_repo": "rtt-enjoy/e-evolve"

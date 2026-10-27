@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-27T10:08:43.215052+00:00",
-  "total_runs": 2065,
+  "last_run": "2026-10-27T10:36:32.125270+00:00",
+  "total_runs": 2066,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,23 +33,33 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete example URGENT to the ALL-CAPS banned words in the article draft _SYSTEM prompt, making the rule explicit for the model and reducing weak_title rejects.",
-    "changes_applied": [
+    "summary": "No change proposed: 22 prior open branches already edit the ALL-CAPS title rule in _SYSTEM or _revise_title with similar evidence (weak_title gate, 'title has ALL-CAPS word' findings); the last evolution's suggestion explicitly recommends reviewing those branches instead of spawning a 23rd variant.",
+    "changes_applied": [],
+    "suggestions": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "Add concrete example to ALL-CAPS ban in _SYSTEM prompt to make rule explicit for model"
+        "title": "Review and merge existing ALL-CAPS title prompt branches",
+        "description": "22 open evolve/* branches already propose edits to the ALL-CAPS ban in _SYSTEM or _revise_title. The last evolution's suggestion recommends evaluating these before proposing another variant.",
+        "owner_action": "List open evolve/* branches, diff each against current _SYSTEM TITLE rules and _revise_title prompt in bot/earning/articles.py, merge the branch with clearest evidence or close the rest",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: List open evolve/* branches on the repo (git branch -r | grep evolve)",
+          "Step 2: For each branch touching bot/earning/articles.py, diff the _SYSTEM TITLE section and _revise_title prompt against current main",
+          "Step 3: Merge the branch with the clearest evidence (weak_title reject reduction) or close branches without evidence"
+        ]
       }
     ],
-    "suggestions": [],
-    "direction": "prompt quality - article title gate",
+    "direction": "Prompt quality - article title gate (doctrine Principle 5, step 3: reach into live receive path)",
     "evidence": [
-      "weak_title lost 3 draft(s) in last 14 days",
-      "gate findings: 'title has ALL-CAPS word' x3"
+      "weak_title lost 3 drafts in last 14 days",
+      "gate findings: 'title has ALL-CAPS word' x3",
+      "article_rejects.counts: weak_title=12 total, llm_error=23 total",
+      "last_evolution.suggestions[0]: 'Evaluate the open ALL-CAPS title prompt branches instead of adding another variant... Twenty-two prior proposals... none merged'",
+      "PRIOR PROPOSALS lists 22 open evolve/* branches editing the ALL-CAPS rule in bot/earning/articles.py"
     ],
     "money_path": "reach-only",
-    "verify": "weak_title reject count should fall below 3 in the next 14-day window",
+    "verify": "Owner reviews open evolve/* branches touching bot/earning/articles.py title rules; merges the best-evidenced one or closes the rest. Next cycle's weak_title reject count should reflect the merged fix.",
     "error": null,
-    "branch": "evolve/1.41.1-20261027-102002",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -58,19 +68,19 @@
   },
   "suggestions": [
     {
-      "title": "Evaluate the open ALL-CAPS title prompt branches instead of adding another variant",
-      "description": "Twenty-two prior proposals (2026-10-21\u20262026-10-27) already edit the ALL-CAPS title rule in _SYSTEM or _revise_title; none merged. Before any new prompt edit, review those open evolve/* branches and merge one if its evidence holds, rather than spawning a twenty-third variant.",
-      "owner_action": "Review open evolve/* branches touching bot/earning/articles.py title rules; merge the best-evidenced one or close the rest as not evidenced",
+      "title": "Review and merge existing ALL-CAPS title prompt branches",
+      "description": "22 open evolve/* branches already propose edits to the ALL-CAPS ban in _SYSTEM or _revise_title. The last evolution's suggestion recommends evaluating these before proposing another variant.",
+      "owner_action": "List open evolve/* branches, diff each against current _SYSTEM TITLE rules and _revise_title prompt in bot/earning/articles.py, merge the branch with clearest evidence or close the rest",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List open evolve/* branches on the repo",
-        "Step 2: Diff each branch against the current _SYSTEM TITLE rules and _revise_title prompt in bot/earning/articles.py",
-        "Step 3: Merge the branch with the clearest evidence, or close the rest"
+        "Step 1: List open evolve/* branches on the repo (git branch -r | grep evolve)",
+        "Step 2: For each branch touching bot/earning/articles.py, diff the _SYSTEM TITLE section and _revise_title prompt against current main",
+        "Step 3: Merge the branch with the clearest evidence (weak_title reject reduction) or close branches without evidence"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 681,
+  "last_cycle_seconds": 356,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1196,7 +1206,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-27T10:08:43.815733+00:00",
+    "checked_at": "2026-10-27T10:36:33.487377+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1516,8 +1526,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261027-102002",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 38,
     "total_views": 5106,
@@ -1724,35 +1734,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-27T10:20:02.852720+00:00",
+    "last_run": "2026-10-27T10:42:27.087850+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-27T10:20:03.228340+00:00",
+    "last_run": "2026-10-27T10:42:27.481411+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4602729,
-        "at": "2026-10-27T02:38:21.563174+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-10-27T02:38:21.563174+00:00",
-        "ok": true
-      },
-      {
-        "id": 4925166,
-        "at": "2026-10-27T02:38:21.563174+00:00",
-        "ok": true
-      },
       {
         "id": 4780783,
         "at": "2026-10-27T03:12:07.324676+00:00",
@@ -1765,11 +1760,6 @@
       },
       {
         "id": 4748037,
-        "at": "2026-10-27T03:12:07.324676+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-10-27T03:12:07.324676+00:00",
         "ok": true
       },
@@ -1929,8 +1919,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-10-27T10:42:27.481411+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-10-27T10:42:27.481411+00:00",
+        "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-10-27T10:42:27.481411+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-10-27T10:42:27.481411+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-27T10:20:03.228340+00:00",
+        "at": "2026-10-27T10:42:27.481411+00:00",
         "ok": true
       }
     ],
@@ -1939,7 +1949,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 7.7
+    "oldest_check_age_hours": 7.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

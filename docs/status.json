@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-27T18:41:48.987413+00:00",
-  "total_runs": 2075,
+  "last_run": "2026-10-27T19:41:50.221829+00:00",
+  "total_runs": 2076,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,10 +33,10 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Sharpen the article draft _SYSTEM TITLE rule with a concrete negative example of an ALL-CAPS word to stop the weak_title gate from refusing drafts.",
+    "summary": "Replace the vague 'any ALL-CAPS word' ban in the article draft prompt's TITLE rule with a concrete parenthetical example showing the Title Case correction, so the LLM stops producing shouted words that trigger the weak_title gate.",
     "changes_applied": [],
     "suggestions": [],
-    "direction": "Principle 5, step 2 \u2014 improve reach by upgrading the prompt that loses the most drafts (weak_title, 3 lost in last 14 days)",
+    "direction": "Principle 5, step 2 \u2014 improve reach by upgrading the prompt that loses the most drafts (weak_title, 3 lost in last 14 days, all gate findings: 'title has ALL-CAPS word')",
     "evidence": [
       "article_rejects.counts.weak_title = 3 (last 14 days)",
       "article_rejects.last = 'weak_title'",
@@ -78,7 +78,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1199,
+  "last_cycle_seconds": 930,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1163,7 +1163,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-27T18:41:49.354593+00:00",
+    "checked_at": "2026-10-27T19:41:50.957697+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1691,7 +1691,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-27T19:01:47.061638+00:00",
+    "last_run": "2026-10-27T19:57:19.198430+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1701,37 +1701,17 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-27T19:01:47.272210+00:00",
+    "last_run": "2026-10-27T19:57:19.409797+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4602729,
-        "at": "2026-10-27T10:42:27.481411+00:00",
-        "ok": true
-      },
-      {
-        "id": 4925166,
-        "at": "2026-10-27T10:42:27.481411+00:00",
-        "ok": true
-      },
       {
         "id": 4780783,
         "at": "2026-10-27T11:41:48.800795+00:00",
         "ok": true
       },
       {
-        "id": 4503417,
-        "at": "2026-10-27T11:41:48.800795+00:00",
-        "ok": true
-      },
-      {
         "id": 4748037,
-        "at": "2026-10-27T11:41:48.800795+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-10-27T11:41:48.800795+00:00",
         "ok": true
       },
@@ -1896,8 +1876,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-10-27T19:57:19.409797+00:00",
+        "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-10-27T19:57:19.409797+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-10-27T19:57:19.409797+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-10-27T19:57:19.409797+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-27T19:01:47.272210+00:00",
+        "at": "2026-10-27T19:57:19.409797+00:00",
         "ok": true
       }
     ],

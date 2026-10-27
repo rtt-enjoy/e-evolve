@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-27T11:36:35.015191+00:00",
-  "total_runs": 2067,
+  "last_run": "2026-10-27T12:36:38.030579+00:00",
+  "total_runs": 2068,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,32 +33,24 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "no change: 56 open branches already propose ALL-CAPS title prompt edits; per status.json suggestion, evaluate existing branches before proposing another variant",
-    "changes_applied": [],
-    "suggestions": [
+    "summary": "Add concrete ALL-CAPS banned examples to article draft prompt TITLE rule to reduce weak_title rejects",
+    "changes_applied": [
       {
-        "title": "Review and merge existing ALL-CAPS title prompt branches",
-        "description": "56 open evolve/* branches already propose edits to the ALL-CAPS ban in _SYSTEM or _revise_title. The last evolution's suggestion recommends evaluating these before proposing another variant.",
-        "owner_action": "List open evolve/* branches, diff each against current _SYSTEM TITLE rules and _revise_title prompt in bot/earning/articles.py, merge the branch with clearest evidence or close the rest",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: List open evolve/* branches on the repo (git branch -r | grep evolve)",
-          "Step 2: For each branch touching bot/earning/articles.py, diff the _SYSTEM TITLE section and _revise_title prompt against current main",
-          "Step 3: Merge the branch with the clearest evidence (weak_title reject reduction) or close branches without evidence"
-        ]
+        "file": "bot/earning/articles.py",
+        "reason": "sharpen ALL-CAPS title ban with concrete examples in _SYSTEM TITLE rule"
       }
     ],
-    "direction": "4 \u2014 reach into a live receive path (doctrine Principle 5, step 3)",
+    "suggestions": [],
+    "direction": "checklist step 4: improve reach without touching receive path, via prompt quality edit",
     "evidence": [
-      "article_rejects.counts: weak_title=12 (3 lost to ALL-CAPS gate)",
-      "PRIOR PROPOSALS: 56 distinct branches proposing ALL-CAPS ban edits in _SYSTEM and _revise_title",
-      "status.json suggestion: 'Review and merge existing ALL-CAPS title prompt branches'"
+      "status['article_rejects']['counts']['weak_title'] = 12 (lifetime rejects gate)",
+      "PROMPT_FOCUS weak_title lost 3 draft(s) last 14 days with gate findings 'title has ALL-CAPS word' x3"
     ],
     "money_path": "reach-only",
-    "verify": "Reviewer merges the branch with clearest evidence of weak_title reject reduction; status.json should show reduced weak_title count in next cycle",
+    "verify": "weak_title reject count in last 14-day window should fall from 3 to below 3",
     "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
+    "branch": "evolve/1.41.1-20261027-125302",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [],
@@ -78,7 +70,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 314,
+  "last_cycle_seconds": 985,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1204,7 +1196,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-27T11:36:35.624503+00:00",
+    "checked_at": "2026-10-27T12:36:38.470804+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1524,8 +1516,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261027-125302",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 38,
     "total_views": 5106,
@@ -1732,7 +1724,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-27T11:41:48.413845+00:00",
+    "last_run": "2026-10-27T12:53:02.499198+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1742,25 +1734,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-27T11:41:48.800795+00:00",
+    "last_run": "2026-10-27T12:53:02.821423+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4740283,
-        "at": "2026-10-27T04:09:23.985331+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-10-27T04:09:23.985331+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-10-27T04:09:23.985331+00:00",
-        "ok": true
-      },
       {
         "id": 4641536,
         "at": "2026-10-27T05:10:55.096023+00:00",
@@ -1773,11 +1750,6 @@
       },
       {
         "id": 4662663,
-        "at": "2026-10-27T05:10:55.096023+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-10-27T05:10:55.096023+00:00",
         "ok": true
       },
@@ -1937,8 +1909,28 @@
         "ok": true
       },
       {
+        "id": 4740283,
+        "at": "2026-10-27T12:53:02.821423+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-27T12:53:02.821423+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-10-27T12:53:02.821423+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-10-27T12:53:02.821423+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-27T11:41:48.800795+00:00",
+        "at": "2026-10-27T12:53:02.821423+00:00",
         "ok": true
       }
     ],
@@ -1947,7 +1939,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 7.5
+    "oldest_check_age_hours": 7.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

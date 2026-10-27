@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-27T04:54:55.584673+00:00",
-  "total_runs": 2059,
+  "last_run": "2026-10-27T05:11:17.851081+00:00",
+  "total_runs": 2060,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,37 +33,23 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Replace the vague Title Case rule with an explicit one that defines Title Case, contrasts it against ALL CAPS, and moves the ALL-CAPS ban out of the crowded banned-words list into the rule where it is the natural counterpart, so the model stops producing ALL-CAPS words that the gate rejects.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The TITLE rule 'Title Case The Important Words' does not define what Title Case means or contrast it with ALL CAPS, so the model produces ALL-CAPS words that the gate rejects. Moving the ALL-CAPS ban out of the banned-words list (where it is one item among nine) and into the Title Case rule (where it is the natural counterpart) makes the prohibition impossible to miss, and removing it from the banned list declutters that list. The concrete Title Case example ('The Postgres Index That Made Queries Slower') gives the model a correct pattern to imitate."
-      }
-    ],
-    "suggestions": [
-      {
-        "title": "Edit the dev.to bio to carry the tip address",
-        "description": "One manual edit at dev.to/settings to put the wallet address in the profile bio, reaching every profile visitor permanently \u2014 the one cheap exception the doctrine flags",
-        "owner_action": "Edit the Bio field at dev.to/settings to include the validated Tron receive address",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open dev.to/settings for the account",
-          "Step 2: Edit the Bio field to include the wallet address from status['payout_public']['address']",
-          "Step 3: Save; the address now carries on every profile visit"
-        ]
-      }
-    ],
-    "direction": "PROMPT FOCUS \u2014 weak_title lost 3 drafts to 'title has ALL-CAPS word' in the last 14 days; the article draft prompt's TITLE section is the prompt losing the most drafts to a gate",
+    "summary": "No change this cycle: the PROMPT FOCUS (weak_title from ALL-CAPS titles, 3 rejects in the window) has already been proposed as roughly 20 distinct prompt edits\u2014concrete banned-word examples, named shouted words, a deterministic de-shouting fix before the gate\u2014and none were merged, so repeating one sharpens nothing the deterministic gate does not already catch; the remaining reject volume (llm_error=10, empty_draft=5 in 14 days) is engine-side and not prompt-fixable per the ledger, while the receive path is live and fully covered (39/39, coverage_complete=True, known_without_footer=0).",
+    "changes_applied": [],
+    "suggestions": [],
+    "direction": "doctrine checklist step 4 \u2014 reach into a live receive path (PROMPT FOCUS: weak_title)",
     "evidence": [
-      "article_rejects.counts.weak_title = 12 lifetime, 3 in the last 14 days",
-      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x3 \u2014 100% of weak_title rejects in the window",
-      "preferred_archetypes() = ['problem-workaround'] \u2014 reach work steered by article_interest; every rejected draft is a post and a tip ask that never ships"
+      "article_rejects: weak_title=3 in the last 14 days, all with gate finding 'title has ALL-CAPS word'; lifetime weak_title=12",
+      "PROMPT FOCUS names the article draft _SYSTEM TITLE rules and _revise_title() as the prompts producing weak_title",
+      "PRIOR PROPOSALS (2026-10-22 to 2026-10-27): roughly 20 distinct ALL-CAPS title prompt edits, none merged",
+      "receipt_check: covered/published_total = 39/39, coverage_complete = True, known_without_footer = 0, last_reason = 'all_verified'",
+      "wallet.received_total_usd = 0.0; payout.live = true, so remaining work is reach, not the receive path",
+      "ledger: llm_error=10 and empty_draft=5 in the last 14 days are engine losses, not prompt-fixable"
     ],
-    "money_path": "reach-only \u2014 a title that never ships is a post that never reaches a reader, and the footer on a published post is the only receive path; wallet.received_total_usd = 0.0 means the constraint is reach, not the ask",
-    "verify": "article_rejects.counts.weak_title should fall in the next 14-day window; the 'title has ALL-CAPS word' finding should stop appearing in article_rejects.recent; article_daily.published should stay at 1 per day without a weak_title reject",
+    "money_path": "none (maintenance)",
+    "verify": "No code change is proposed, so there is no diff to test; the reviewer can confirm the status quo holds next cycle by watching article_rejects.recent (weak_title should not grow beyond the current 3 in the window) and receipt_check (coverage_complete stays True, known_without_footer stays 0).",
     "error": null,
-    "branch": "evolve/1.41.1-20261027-051054",
-    "proposed_version": "1.41.1"
+    "branch": null,
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -83,7 +69,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 960,
+  "last_cycle_seconds": 365,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1269,7 +1255,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-27T04:54:56.196421+00:00",
+    "checked_at": "2026-10-27T05:11:19.227152+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1589,8 +1575,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261027-051054",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 38,
     "total_views": 5106,
@@ -1797,7 +1783,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-27T05:10:54.767635+00:00",
+    "last_run": "2026-10-27T05:17:21.949247+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1807,30 +1793,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-27T05:10:55.096023+00:00",
+    "last_run": "2026-10-27T05:17:22.312152+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4908316,
-        "at": "2026-10-26T20:30:16.096377+00:00",
-        "ok": true
-      },
-      {
-        "id": 4765372,
-        "at": "2026-10-26T20:30:16.096377+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
-        "at": "2026-10-26T20:30:16.096377+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-10-26T20:30:16.096377+00:00",
-        "ok": true
-      },
       {
         "id": 4918200,
         "at": "2026-10-26T22:10:27.339191+00:00",
@@ -2002,8 +1968,28 @@
         "ok": true
       },
       {
+        "id": 4908316,
+        "at": "2026-10-27T05:17:22.312152+00:00",
+        "ok": true
+      },
+      {
+        "id": 4765372,
+        "at": "2026-10-27T05:17:22.312152+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-10-27T05:17:22.312152+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-10-27T05:17:22.312152+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-27T05:10:55.096023+00:00",
+        "at": "2026-10-27T05:17:22.312152+00:00",
         "ok": true
       }
     ],
@@ -2012,7 +1998,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.7
+    "oldest_check_age_hours": 7.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

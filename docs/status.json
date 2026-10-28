@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T11:35:26.402309+00:00",
-  "total_runs": 2093,
+  "last_run": "2026-10-28T12:35:34.158090+00:00",
+  "total_runs": 2094,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,30 +33,25 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete examples of banned ALL-CAPS words to the article title prompt to reduce weak_title rejections.",
-    "changes_applied": [],
-    "suggestions": [
+    "summary": "Replace the vague 'Title Case The Important Words' instruction with a concrete definition of title case that explicitly distinguishes acronyms from ALL-CAPS, reducing weak_title rejects caused by the model shouting words it thinks are important.",
+    "changes_applied": [
       {
-        "title": "Close the pending ALL-CAPS title prompt branch",
-        "description": "The pending branch adds examples that are now redundant after the code fix; closing it removes unnecessary review overhead.",
-        "owner_action": "Review the branch and close the PR with a comment explaining that deterministic normalization makes the prompt edit redundant.",
-        "secret_needed": null,
-        "how_to": [
-          "Open the PR for branch evolve/1.41.1-20261028-033035",
-          "Confirm that the code fix in this proposal is merged first",
-          "Close the PR with a comment explaining that the deterministic normalization makes the prompt edit redundant"
-        ]
+        "file": "bot/earning/articles.py",
+        "reason": "The instruction 'Title Case The Important Words' is the root ambiguity: the model hears 'Important' and emphasizes words with ALL-CAPS, which the gate then rejects. Sixty prior proposals added banned-word examples to the BANNED list, but the positive instruction that triggers the behaviour was never replaced. Substituting a concrete definition removes the ambiguity at its source rather than stacking another ban beside ones the model already ignores."
       }
     ],
-    "direction": "prompt edit (article draft _SYSTEM)",
+    "suggestions": [],
+    "direction": "prompt edit (article draft _SYSTEM TITLE rule) \u2014 PROMPT FOCUS: weak_title lost 3 draft(s) in 14 days, all with 'title has ALL-CAPS word'",
     "evidence": [
-      "article_rejects.counts.weak_title=3",
-      "gate findings: 'title has ALL-CAPS word' x3"
+      "article_rejects.counts.weak_title=3 in last 14 days",
+      "gate findings: 'title has ALL-CAPS word' x3",
+      "article_rejects.counts (total 49): llm_error=25, weak_title=12, empty_draft=9, fabricated=2, revision_fabricated=1",
+      "PROMPT FOCUS explicitly names weak_title and the article draft _SYSTEM + _revise_title() as the losing prompts"
     ],
-    "money_path": "reach-only",
-    "verify": "Check that the weak_title reject count drops in the next cycle (e.g., from 3 to 0) after the prompt change.",
+    "money_path": "reach-only \u2014 better titles earn more clicks into the live receive path; no money enters directly from this change",
+    "verify": "Check that article_rejects.counts.weak_title drops in the next cycle (from 3 toward 0) and that gate findings no longer include 'title has ALL-CAPS word'. The deterministic fix_title_casing() in devto.publish() remains as a backstop if the model still slips through.",
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.41.1-20261028-124726",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -77,7 +72,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 944,
+  "last_cycle_seconds": 714,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1248,7 +1243,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T11:35:27.012326+00:00",
+    "checked_at": "2026-10-28T12:35:34.536227+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1568,8 +1563,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261028-124726",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 39,
     "total_views": 5136,
@@ -1786,7 +1781,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T11:51:09.704898+00:00",
+    "last_run": "2026-10-28T12:47:27.397178+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1796,37 +1791,17 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T11:51:10.077248+00:00",
+    "last_run": "2026-10-28T12:47:27.702130+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4681657,
-        "at": "2026-10-28T03:35:44.389864+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-10-28T03:35:44.389864+00:00",
-        "ok": true
-      },
       {
         "id": 4820198,
         "at": "2026-10-28T04:51:44.222914+00:00",
         "ok": true
       },
       {
-        "id": 4636715,
-        "at": "2026-10-28T04:51:44.222914+00:00",
-        "ok": true
-      },
-      {
         "id": 4671278,
-        "at": "2026-10-28T04:51:44.222914+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-10-28T04:51:44.222914+00:00",
         "ok": true
       },
@@ -1991,8 +1966,28 @@
         "ok": true
       },
       {
+        "id": 4681657,
+        "at": "2026-10-28T12:47:27.702130+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-10-28T12:47:27.702130+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-10-28T12:47:27.702130+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-10-28T12:47:27.702130+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T11:51:10.077248+00:00",
+        "at": "2026-10-28T12:47:27.702130+00:00",
         "ok": true
       }
     ],
@@ -2001,7 +1996,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.3
+    "oldest_check_age_hours": 7.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T21:05:00.887405+00:00",
-  "total_runs": 2103,
+  "last_run": "2026-10-28T21:30:37.376115+00:00",
+  "total_runs": 2104,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,33 +34,45 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle. The evidence (weak_title lost 3 drafts to 'title has ALL-CAPS word' x3) is already addressed by the pending 1.41.1 branch, which adds concrete banned ALL-CAPS examples to the article draft TITLE rule in bot/earning/articles.py; re-proposing it would duplicate a prior proposal (69 open branches, many on this exact topic). The reviewer should merge or close that pending branch instead of starting a new one.",
+    "summary": "No change: the prompt focus (weak_title from ALL-CAPS titles) is already covered by roughly 25 open, unmerged review branches, and the owner's own standing suggestion asks that the pending one be merged or closed rather than re-proposed every cycle; the larger draft-killer in the window (llm_error=13) is engine failure that no prompt edit addresses.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Review the pending ALL-CAPS title prompt branch",
-        "description": "Merge or close evolve/1.41.1-20261028-203602 so the weak_title fix either ships or is formally declined, rather than being re-proposed every cycle.",
-        "owner_action": "Review the open PR and either merge it or close it with a comment stating which.",
+        "title": "Merge or close the pending ALL-CAPS title branch",
+        "description": "25 evolution branches have proposed variants of this one prompt rule and none has been reviewed. Deciding this one either way stops the cycle from re-deriving it and tells the next evolution whether the prompt or the gate is the real target.",
+        "owner_action": "Open the PR for branch evolve/1.41.1-20261028-203602 and merge it or close it with a comment stating which.",
         "secret_needed": null,
         "how_to": [
-          "Open the PR for branch evolve/1.41.1-20261028-203602",
-          "Decide merge or close based on whether the prompt examples add value beyond the existing deterministic gate",
-          "Merge or close the PR with a comment explaining the decision"
+          "Step 1: Open the PR for branch evolve/1.41.1-20261028-203602",
+          "Step 2: Decide merge or close based on whether the prompt examples add value beyond the existing deterministic gate",
+          "Step 3: Merge or close the PR with a comment explaining the decision"
+        ]
+      },
+      {
+        "title": "Put the tip address in the dev.to profile bio",
+        "description": "The one deferred channel that needs no account, no processor and no policy change. Every profile visitor \u2014 including readers who land on the author page from a post \u2014 would see the ask permanently.",
+        "owner_action": "Edit the Bio field once at dev.to/settings and paste the published TRC-20 address ([redacted]).",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Sign in at dev.to/settings",
+          "Step 2: Paste the TRC-20 address and a one-line ask into the Bio field",
+          "Step 3: Save \u2014 the bio then carries the ask on every profile visit with no further action"
         ]
       }
     ],
-    "direction": "Reach into a live receive path (Principle 5, step 3): publish more articles in shapes readers prefer. Prompt focus is weak_title / ALL-CAPS title rejections; receive path already verified end to end (payout.live=true, receipt_check 39/39 covered, known_without_footer=0, coverage_complete=true), and received_total_usd is still 0.0 so the remaining work is reach.",
+    "direction": "Checklist step 4 / Principle 5 (reach into the live receive path) \u2014 examined, nothing cleared the bar this cycle",
     "evidence": [
-      "article_rejects.counts.weak_title=12 lifetime; weak_title=3 in the last 14 days",
-      "article_rejects recent gate findings: 'title has ALL-CAPS word' x3",
-      "last_evolution proposed_version=1.41.1 already adds concrete banned ALL-CAPS examples to the TITLE rule in bot/earning/articles.py and is pending review (evolution_pending_review=true, branch evolve/1.41.1-20261028-203602)",
-      "PRIOR PROPOSALS list 20+ ALL-CAPS title prompt edits from 2026-10-27 and 2026-10-28, none merged"
+      "PROMPT FOCUS: weak_title lost 3 drafts in the last 14 days, gate findings 'title has ALL-CAPS word' x3 \u2014 a real but small loss",
+      "PRIOR PROPOSALS list 68 open branches, of which ~25 are variants of this exact rule: concrete ALL-CAPS banned-word examples, Title Case definitions, deterministic ALL-CAPS-to-Title-Case fixes, and naming the exact shouted word in the rewrite \u2014 every gradual edit available on this prompt is already on an open branch",
+      "status suggestions: 'Merge or close evolve/1.41.1-20261028-203602 so the weak_title fix either ships or is formally declined, rather than being re-proposed every cycle' \u2014 the owner has already asked for this not to be re-proposed",
+      "article_rejects.counts (last 14 days): llm_error=13, empty_draft=5, weak_title=3 \u2014 the majority of lost drafts are LLM call failures, which the ledger marks 'not fixable by a prompt edit'",
+      "article_interest: problem-workaround n=9 avg=459.0 versus all other archetypes at 40-76 \u2014 the audience steering (_audience_guidance, _prefer_proven_archetypes) already targets the winning shape, so no reach lever is obviously missing"
     ],
-    "money_path": "reach-only",
-    "verify": "If the pending 1.41.1 branch is merged, status['article_rejects'].recent should stop gaining 'weak_title' entries with 'title has ALL-CAPS word' detail; if closed, the next cycle re-evaluates whether the deterministic _shouted_words gate alone is sufficient.",
+    "money_path": "none (no change proposed this cycle)",
+    "verify": "The reviewer unblocks the focus without a new branch: merge or close evolve/1.41.1-20261028-203602, then watch the 14-day weak_title count in article_rejects.recent over the next few cycles. If it falls, the pending fix was the answer; if it does not, the ALL-CAPS rule is not the real cause and the next cycle should look at the gate's acronym allowlist instead.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.0"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
@@ -77,19 +89,30 @@
   },
   "suggestions": [
     {
-      "title": "Review the pending ALL-CAPS title prompt branch",
-      "description": "Merge or close evolve/1.41.1-20261028-203602 so the weak_title fix either ships or is formally declined, rather than being re-proposed every cycle.",
-      "owner_action": "Review the open PR and either merge it or close it with a comment stating which.",
+      "title": "Merge or close the pending ALL-CAPS title branch",
+      "description": "25 evolution branches have proposed variants of this one prompt rule and none has been reviewed. Deciding this one either way stops the cycle from re-deriving it and tells the next evolution whether the prompt or the gate is the real target.",
+      "owner_action": "Open the PR for branch evolve/1.41.1-20261028-203602 and merge it or close it with a comment stating which.",
       "secret_needed": null,
       "how_to": [
-        "Open the PR for branch evolve/1.41.1-20261028-203602",
-        "Decide merge or close based on whether the prompt examples add value beyond the existing deterministic gate",
-        "Merge or close the PR with a comment explaining the decision"
+        "Step 1: Open the PR for branch evolve/1.41.1-20261028-203602",
+        "Step 2: Decide merge or close based on whether the prompt examples add value beyond the existing deterministic gate",
+        "Step 3: Merge or close the PR with a comment explaining the decision"
+      ]
+    },
+    {
+      "title": "Put the tip address in the dev.to profile bio",
+      "description": "The one deferred channel that needs no account, no processor and no policy change. Every profile visitor \u2014 including readers who land on the author page from a post \u2014 would see the ask permanently.",
+      "owner_action": "Edit the Bio field once at dev.to/settings and paste the published TRC-20 address ([redacted]).",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Sign in at dev.to/settings",
+        "Step 2: Paste the TRC-20 address and a one-line ask into the Bio field",
+        "Step 3: Save \u2014 the bio then carries the ask on every profile visit with no further action"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1511,
+  "last_cycle_seconds": 520,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1245,7 +1268,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T21:05:01.441834+00:00",
+    "checked_at": "2026-10-28T21:30:37.848005+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1642,15 +1665,15 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-10-28T21:30:10.933057+00:00",
+    "last_at": "2026-10-28T21:39:15.763999+00:00",
     "counts": {
       "empty_draft": 9,
       "fabricated": 2,
       "weak_title": 12,
       "revision_fabricated": 1,
-      "llm_error": 26
+      "llm_error": 27
     },
-    "total": 50,
+    "total": 51,
     "recent": [
       {
         "code": "empty_draft",
@@ -1756,6 +1779,11 @@
         "code": "llm_error",
         "at": "2026-10-28T21:30:10.933057+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-10-28T21:39:15.763999+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
       }
     ]
   },
@@ -1788,7 +1816,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T21:30:11.295072+00:00",
+    "last_run": "2026-10-28T21:39:16.083520+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1798,25 +1826,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T21:30:11.583129+00:00",
+    "last_run": "2026-10-28T21:39:16.392174+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4681657,
-        "at": "2026-10-28T12:47:27.702130+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-10-28T12:47:27.702130+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-10-28T12:47:27.702130+00:00",
-        "ok": true
-      },
       {
         "id": 4820198,
         "at": "2026-10-28T13:46:57.061911+00:00",
@@ -1829,11 +1842,6 @@
       },
       {
         "id": 4503417,
-        "at": "2026-10-28T13:46:57.061911+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-10-28T13:46:57.061911+00:00",
         "ok": true
       },
@@ -1993,8 +2001,28 @@
         "ok": true
       },
       {
+        "id": 4681657,
+        "at": "2026-10-28T21:39:16.392174+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-10-28T21:39:16.392174+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-10-28T21:39:16.392174+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-10-28T21:39:16.392174+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T21:30:11.583129+00:00",
+        "at": "2026-10-28T21:39:16.392174+00:00",
         "ok": true
       }
     ],
@@ -2003,7 +2031,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.7
+    "oldest_check_age_hours": 7.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2020,7 +2048,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 1
+      "atria": 1
     }
   },
   "ctf_bounty": {

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T06:24:42.145615+00:00",
-  "total_runs": 2087,
+  "last_run": "2026-10-28T07:24:40.876199+00:00",
+  "total_runs": 2088,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -37,58 +37,23 @@
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "Add concrete examples of banned ALL-CAPS words to the TITLE rule to reduce weak_title rejections caused by shouting words."
+        "reason": "Add concrete examples of banned ALL-CAPS words to the article title prompt to reduce weak_title rejections."
       }
     ],
-    "suggestions": [
-      {
-        "title": "Merge the pending ALL-CAPS title fix",
-        "description": "The evolve/1.41.1 branch already contains the prompt edit targeting this exact rejection cause. Merging it will test whether concrete examples reduce weak_title rejections.",
-        "owner_action": "Review and merge branch evolve/1.41.1-20261028-033035",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open the PR for evolve/1.41.1-20261028-033035",
-          "Step 2: Verify the edit adds concrete ALL-CAPS examples to the _SYSTEM prompt TITLE rule",
-          "Step 3: Merge if the change is minimal and targeted"
-        ]
-      },
-      {
-        "title": "Add unit test for ALL-CAPS title rejection",
-        "description": "The previous evolution suggested a test in bot/tests.py to verify titles with ALL-CAPS words are rejected. This would confirm the gate works and prevent regression.",
-        "owner_action": "Edit bot/tests.py to add the test case",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open bot/tests.py",
-          "Step 2: Add a test that feeds a title containing an ALL-CAPS word (e.g., 'URGENT Fix Needed') to _title_problems and asserts a rejection",
-          "Step 3: Run the test suite to confirm it passes"
-        ]
-      }
-    ],
-    "direction": "Principle 5, step 3: improve reach by reducing weak_title rejections.",
+    "suggestions": [],
+    "direction": "Principle 5, step 3: publish more articles in the shapes readers measurably prefer",
     "evidence": [
-      "article_rejects.counts (drafts lost per gate; total 49): llm_error=25, weak_title=12, empty_draft=9, fabricated=2, revision_fabricated=1",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "Gate findings behind weak_title: 'title has ALL-CAPS word' x3"
+      "article_rejects.counts weak_title=12",
+      "article_rejects.last = 'llm_error'"
     ],
     "money_path": "reach-only",
-    "verify": "Monitor article_rejects.weak_title count; a reduction in the next cycle confirms the fix. Also add a unit test in bot/tests.py to verify titles with ALL-CAPS words are rejected.",
+    "verify": "Merge the pending ALL-CAPS title fix branch evolve/1.41.1-20261028-033035 and verify that weak_title rejections drop below 3 in the next cycle.",
     "error": null,
-    "branch": "evolve/1.41.1-20261028-064035",
+    "branch": "evolve/1.41.1-20261028-073501",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "mrr-ideas",
-        "success": true,
-        "idea_count": 2,
-        "refused_count": 18,
-        "llm": true,
-        "estimated_usd": 0.0,
-        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
-        "url": "status.json#mrr_ideas"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -116,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1206,
+  "last_cycle_seconds": 621,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1255,7 +1220,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T06:24:42.541481+00:00",
+    "checked_at": "2026-10-28T07:24:41.401436+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1575,7 +1540,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261028-064035",
+  "last_evolution_branch": "evolve/1.41.1-20261028-073501",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 39,
@@ -1793,7 +1758,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T06:44:46.991722+00:00",
+    "last_run": "2026-10-28T07:35:01.618821+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1803,25 +1768,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T06:44:47.319847+00:00",
+    "last_run": "2026-10-28T07:35:01.831795+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4740283,
-        "at": "2026-10-27T21:28:52.252124+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-10-27T21:28:52.252124+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-10-27T21:28:52.252124+00:00",
-        "ok": true
-      },
       {
         "id": 4641536,
         "at": "2026-10-27T22:27:17.853803+00:00",
@@ -1834,11 +1784,6 @@
       },
       {
         "id": 4826008,
-        "at": "2026-10-27T22:27:17.853803+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
         "at": "2026-10-27T22:27:17.853803+00:00",
         "ok": true
       },
@@ -1998,8 +1943,28 @@
         "ok": true
       },
       {
+        "id": 4740283,
+        "at": "2026-10-28T07:35:01.831795+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-28T07:35:01.831795+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-10-28T07:35:01.831795+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-10-28T07:35:01.831795+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T06:44:47.319847+00:00",
+        "at": "2026-10-28T07:35:01.831795+00:00",
         "ok": true
       }
     ],
@@ -2008,7 +1973,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.3
+    "oldest_check_age_hours": 9.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2025,7 +1990,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 2
+      "openrouter": 1
     }
   },
   "github_repo": "rtt-enjoy/e-evolve"

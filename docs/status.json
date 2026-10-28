@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T10:35:28.003329+00:00",
-  "total_runs": 2092,
+  "last_run": "2026-10-28T11:35:26.402309+00:00",
+  "total_runs": 2093,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,22 +33,13 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Apply deterministic title casing before the title gate so ALL-CAPS words are corrected instead of rejected, removing the weak_title rejects caused by shouting.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "Normalize ALL-CAPS words in the title before the gate sees them, so the gate no longer rejects titles for shouting; the deterministic fix_title_casing already exists and is used at publish time."
-      },
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "Normalize the revised title before checking it, so a rewrite that still shouts is corrected rather than rejected."
-      }
-    ],
+    "summary": "Add concrete examples of banned ALL-CAPS words to the article title prompt to reduce weak_title rejections.",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Close the pending ALL-CAPS title prompt branch",
-        "description": "The pending branch evolve/1.41.1-20261028-033035 edits the prompt to add concrete examples of banned ALL-CAPS words. This code fix supersedes it by normalizing ALL-CAPS deterministically before the gate, so the prompt edit is no longer needed.",
-        "owner_action": "Review the branch and close it if this code fix is merged.",
+        "description": "The pending branch adds examples that are now redundant after the code fix; closing it removes unnecessary review overhead.",
+        "owner_action": "Review the branch and close the PR with a comment explaining that deterministic normalization makes the prompt edit redundant.",
         "secret_needed": null,
         "how_to": [
           "Open the PR for branch evolve/1.41.1-20261028-033035",
@@ -57,18 +48,16 @@
         ]
       }
     ],
-    "direction": "reach into a live receive path (doctrine Principle 5, step 3)",
+    "direction": "prompt edit (article draft _SYSTEM)",
     "evidence": [
-      "article_rejects.counts['weak_title'] = 3",
-      "article_rejects.last = 'llm_error' (title rewrite failure)",
-      "PROMPT FOCUS: weak_title lost 3 draft(s)",
+      "article_rejects.counts.weak_title=3",
       "gate findings: 'title has ALL-CAPS word' x3"
     ],
     "money_path": "reach-only",
-    "verify": "Check that `article_rejects.counts['weak_title']` drops to 0 in the next status.json after merging, and that no recent reject carries 'title has ALL-CAPS word'.",
+    "verify": "Check that the weak_title reject count drops in the next cycle (e.g., from 3 to 0) after the prompt change.",
     "error": null,
-    "branch": "evolve/1.41.2-20261028-105134",
-    "proposed_version": "1.41.2"
+    "branch": null,
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [],
@@ -77,8 +66,8 @@
   "suggestions": [
     {
       "title": "Close the pending ALL-CAPS title prompt branch",
-      "description": "The pending branch evolve/1.41.1-20261028-033035 edits the prompt to add concrete examples of banned ALL-CAPS words. This code fix supersedes it by normalizing ALL-CAPS deterministically before the gate, so the prompt edit is no longer needed.",
-      "owner_action": "Review the branch and close it if this code fix is merged.",
+      "description": "The pending branch adds examples that are now redundant after the code fix; closing it removes unnecessary review overhead.",
+      "owner_action": "Review the branch and close the PR with a comment explaining that deterministic normalization makes the prompt edit redundant.",
       "secret_needed": null,
       "how_to": [
         "Open the PR for branch evolve/1.41.1-20261028-033035",
@@ -88,7 +77,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 967,
+  "last_cycle_seconds": 944,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1259,7 +1248,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T10:35:28.815004+00:00",
+    "checked_at": "2026-10-28T11:35:27.012326+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1579,8 +1568,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.2-20261028-105134",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 39,
     "total_views": 5136,
@@ -1797,7 +1786,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T10:51:34.806860+00:00",
+    "last_run": "2026-10-28T11:51:09.704898+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1807,20 +1796,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T10:51:35.090523+00:00",
+    "last_run": "2026-10-28T11:51:10.077248+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4356423,
-        "at": "2026-10-28T02:50:11.281613+00:00",
-        "ok": true
-      },
-      {
-        "id": 4931682,
-        "at": "2026-10-28T02:50:11.281613+00:00",
-        "ok": true
-      },
       {
         "id": 4681657,
         "at": "2026-10-28T03:35:44.389864+00:00",
@@ -1828,16 +1807,6 @@
       },
       {
         "id": 4780785,
-        "at": "2026-10-28T03:35:44.389864+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
-        "at": "2026-10-28T03:35:44.389864+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-10-28T03:35:44.389864+00:00",
         "ok": true
       },
@@ -2002,8 +1971,28 @@
         "ok": true
       },
       {
+        "id": 4356423,
+        "at": "2026-10-28T11:51:10.077248+00:00",
+        "ok": true
+      },
+      {
+        "id": 4931682,
+        "at": "2026-10-28T11:51:10.077248+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-10-28T11:51:10.077248+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-10-28T11:51:10.077248+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T10:51:35.090523+00:00",
+        "at": "2026-10-28T11:51:10.077248+00:00",
         "ok": true
       }
     ],
@@ -2012,7 +2001,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.0
+    "oldest_check_age_hours": 8.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

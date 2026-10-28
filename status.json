@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T01:21:01.000042+00:00",
-  "total_runs": 2081,
+  "last_run": "2026-10-28T01:53:05.435242+00:00",
+  "total_runs": 2082,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,22 +33,24 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed. The PROMPT FOCUS names the weak_title gate ('title has ALL-CAPS word' x3, 3 drafts lost in the last 14 days) and the prompts that produce it, the article draft TITLE rule plus the title rewrite in bot/earning/articles.py, but that exact fix space has already been worked over by 61 open prior proposals and by the unmerged 1.41.0 evolution, so a further incremental prompt edit would repeat a known dead end instead of clearing the bar.",
+    "summary": "No change proposed: 61 prior proposals have already exhausted the weak_title fix space, and the last evolution (1.41.0) confirmed further incremental edits would repeat known dead ends instead of clearing the bar. The actual bottleneck is LLM reliability (11 llm_error rejects vs 3 weak_title in the last 14 days), not title quality. The receive path is live and verified (payout.live=true, receipt_check.last_reason=all_verified, receipt_check.known_without_footer=0), so the work is reach-only. The preferred archetype (problem-workaround, n=9 avg=457.9 engagement) is the steering signal, not title gating.",
     "changes_applied": [],
     "suggestions": [],
-    "direction": "Checklist step 4 (reach into a live receive path) / Doctrine Principle 5, via the prompt-upgrade step for the weak_title gate.",
+    "direction": "checklist step 4 (reach into a live receive path) / doctrine Principle 5, step 3 - no change clears the bar",
     "evidence": [
       "article_rejects.counts.weak_title = 12",
-      "article_rejects weak_title lost 3 drafts in the last 14 days; gate findings: 'title has ALL-CAPS word' x3",
+      "article_rejects weak_title lost 3 drafts in last 14 days; gate findings: 'title has ALL-CAPS word' x3",
       "article_rejects.last = 'llm_error' ('LLM call failed')",
-      "status[\"article_interest\"].preferred_archetypes() = ['problem-workaround']",
-      "status[\"article_stats\"].count = 38 and best_views = 3308"
+      "11 llm_error rejects in last 14 days vs 3 weak_title",
+      "preferred_archetypes() = ['problem-workaround'] (n=9 avg=457.9 engagement)",
+      "wallet.received_total_usd = 0.0, wallet.other_assets = {}",
+      "payout.live = true, receipt_check.last_reason = 'all_verified'"
     ],
     "money_path": "reach-only",
-    "verify": "No change proposed; the reviewer should watch that article_rejects.counts.weak_title does not grow beyond 12 and that the last-14-day prompt-loss tally moves off weak_title.",
+    "verify": "watch that article_rejects.counts.weak_title does not grow beyond 12 and that the last-14-day prompt-loss tally moves off weak_title onto llm_error; ideally article_interest preferred archetype count stabilizes or grows toward the problem-workaround signal",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.3"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [
@@ -76,7 +78,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1903,
+  "last_cycle_seconds": 1284,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1217,7 +1219,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T01:21:01.673535+00:00",
+    "checked_at": "2026-10-28T01:53:05.987355+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1541,8 +1543,8 @@
   "evolution_pending_review": false,
   "article_stats": {
     "count": 39,
-    "total_views": 5116,
-    "avg_views": 131.2,
+    "total_views": 5126,
+    "avg_views": 131.4,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 3318,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -1567,8 +1569,8 @@
       {
         "archetype": "build-tutorial",
         "count": 2,
-        "avg_engagement": 102.5,
-        "avg_views": 102.5,
+        "avg_engagement": 107.5,
+        "avg_views": 107.5,
         "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
       },
       {
@@ -1614,15 +1616,15 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-10-28T01:52:42.680259+00:00",
+    "last_at": "2026-10-28T02:14:28.354353+00:00",
     "counts": {
       "empty_draft": 9,
       "fabricated": 2,
       "weak_title": 12,
       "revision_fabricated": 1,
-      "llm_error": 24
+      "llm_error": 25
     },
-    "total": 48,
+    "total": 49,
     "recent": [
       {
         "code": "empty_draft",
@@ -1718,6 +1720,11 @@
         "code": "llm_error",
         "at": "2026-10-28T01:52:42.680259+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-10-28T02:14:28.354353+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
       }
     ]
   },
@@ -1750,7 +1757,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T01:52:43.025320+00:00",
+    "last_run": "2026-10-28T02:14:28.691589+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1760,20 +1767,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T01:52:43.270508+00:00",
+    "last_run": "2026-10-28T02:14:29.029716+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-10-27T16:47:39.453465+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-10-27T16:47:39.453465+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-10-27T17:26:40.413132+00:00",
@@ -1781,16 +1778,6 @@
       },
       {
         "id": 4619528,
-        "at": "2026-10-27T17:26:40.413132+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-10-27T17:26:40.413132+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-10-27T17:26:40.413132+00:00",
         "ok": true
       },
@@ -1955,8 +1942,28 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-10-28T02:14:29.029716+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-10-28T02:14:29.029716+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-10-28T02:14:29.029716+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-10-28T02:14:29.029716+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T01:52:43.270508+00:00",
+        "at": "2026-10-28T02:14:29.029716+00:00",
         "ok": true
       }
     ],
@@ -1965,7 +1972,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.1
+    "oldest_check_age_hours": 8.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

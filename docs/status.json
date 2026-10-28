@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T17:04:53.204665+00:00",
-  "total_runs": 2099,
+  "last_run": "2026-10-28T18:05:00.536681+00:00",
+  "total_runs": 2100,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,12 +34,12 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change: the weak_title / ALL-CAPS prompt edit is already proposed and pending review (branch evolve/1.41.1-20261028-161540, proposed version 1.41.1), and the title gate already enforces the acronym-exempt rule deterministically in _shouted_words / _KNOWN_ACRONYMS, so re-proposing it would duplicate an open branch.",
+    "summary": "No change is proposed: the prompt focus (weak_title losing 3 drafts in the last 14 days to the title-has-ALL-CAPS-word gate) sits on the article draft TITLE rule and the title rewrite prompt, and every gradual edit to that prompt -- concrete banned ALL-CAPS examples, ALL-CAPS-to-Title-Case fix examples, a Title Case definition, deterministic casing, a bounded second rewrite attempt, or the rewrite naming the exact offending words -- already has an open unmerged evolve branch, so the dead-end rule bars repeating one.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Review the pending ALL-CAPS title prompt branch",
-        "description": "Branch evolve/1.41.1-20261028-161540 (proposed 1.41.1) already makes the article draft TITLE rule concrete with banned ALL-CAPS examples and an acronym exemption; the code gate (_shouted_words / _KNOWN_ACRONYMS) already enforces it deterministically.",
+        "description": "What it unlocks: a concrete article draft TITLE rule with banned ALL-CAPS examples and an acronym exemption, complementing the deterministic _shouted_words / _KNOWN_ACRONYMS gate.",
         "owner_action": "Review the open PR and either merge it (if the examples add clarity for the model) or close it (if the deterministic gate alone is deemed sufficient), with a comment stating which.",
         "secret_needed": null,
         "how_to": [
@@ -49,34 +49,27 @@
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach into a live receive path: publish more articles in the shapes readers prefer; title quality decides whether a post is read at all.",
+    "direction": "Checklist step 4 -- reach into a live receive path (doctrine Principle 5, step 3): publish more articles in the shapes readers measurably prefer, served through the prompt-ledger step for weak_title.",
     "evidence": [
-      "article_rejects.counts weak_title=12 lifetime; PROMPT FOCUS weak_title=3 drafts lost in the last 14 days",
-      "gate findings behind weak_title: 'title has ALL-CAPS word' x3",
-      "last_evolution proposed_version=1.41.1, evolution_pending_review=true, branch evolve/1.41.1-20261028-161540, summary: replace the vague 'any ALL-CAPS word' ban with concrete examples and an acronym exemption",
-      "PRIOR PROPOSALS lists the ALL-CAPS title prompt edit proposed 2x on 2026-10-28 (bot/earning/articles.py)"
+      "article_rejects.counts.weak_title = 12 (lifetime); drafts lost to a prompt in the last 14 days: weak_title=3, gate finding: title has ALL-CAPS word x3",
+      "article_rejects.last = llm_error: LLM call failed",
+      "article_interest archetypes problem-workaround = count 9, avg_engagement 459.0; preferred_archetypes() = [problem-workaround]",
+      "wallet.received_total_usd = 0.0; payout.live = true; receipt_check.known_without_footer = 0; receipt_check.coverage_complete = true"
     ],
-    "money_path": "reach-only",
-    "verify": "The reviewer should merge or close the pending branch evolve/1.41.1-20261028-161540; once resolved, the weak_title reject count in the prompt ledger should fall from 3 to 0 in the next 14-day window.",
+    "money_path": "none maintenance -- no change proposed; the reach work this cycle would drive is reach-only, since the receive path is verified live and the wallet is a real 0.00.",
+    "verify": "No change proposed, so there is nothing to verify; the reviewer should instead adjudicate the already-open ALL-CAPS prompt branch evolve/1.41.1-20261028-161540 via the owner suggestion, and confirm the weak_title reject count does not move until a prompt edit lands.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.0"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Review the pending ALL-CAPS title prompt branch",
-      "description": "Branch evolve/1.41.1-20261028-161540 (proposed 1.41.1) already makes the article draft TITLE rule concrete with banned ALL-CAPS examples and an acronym exemption; the code gate (_shouted_words / _KNOWN_ACRONYMS) already enforces it deterministically.",
+      "description": "What it unlocks: a concrete article draft TITLE rule with banned ALL-CAPS examples and an acronym exemption, complementing the deterministic _shouted_words / _KNOWN_ACRONYMS gate.",
       "owner_action": "Review the open PR and either merge it (if the examples add clarity for the model) or close it (if the deterministic gate alone is deemed sufficient), with a comment stating which.",
       "secret_needed": null,
       "how_to": [
@@ -87,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 909,
+  "last_cycle_seconds": 1265,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1243,7 +1236,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T17:04:53.919735+00:00",
+    "checked_at": "2026-10-28T18:05:01.062762+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1781,7 +1774,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T17:20:01.195265+00:00",
+    "last_run": "2026-10-28T18:26:05.047012+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1791,25 +1784,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T17:20:01.508625+00:00",
+    "last_run": "2026-10-28T18:26:05.318256+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4908316,
-        "at": "2026-10-28T08:44:21.751117+00:00",
-        "ok": true
-      },
-      {
-        "id": 4765372,
-        "at": "2026-10-28T08:44:21.751117+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
-        "at": "2026-10-28T08:44:21.751117+00:00",
-        "ok": true
-      },
       {
         "id": 4568987,
         "at": "2026-10-28T09:55:32.606524+00:00",
@@ -1822,11 +1800,6 @@
       },
       {
         "id": 4579420,
-        "at": "2026-10-28T09:55:32.606524+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-10-28T09:55:32.606524+00:00",
         "ok": true
       },
@@ -1986,8 +1959,28 @@
         "ok": true
       },
       {
+        "id": 4908316,
+        "at": "2026-10-28T18:26:05.318256+00:00",
+        "ok": true
+      },
+      {
+        "id": 4765372,
+        "at": "2026-10-28T18:26:05.318256+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-10-28T18:26:05.318256+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-10-28T18:26:05.318256+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T17:20:01.508625+00:00",
+        "at": "2026-10-28T18:26:05.318256+00:00",
         "ok": true
       }
     ],
@@ -1996,7 +1989,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.6
+    "oldest_check_age_hours": 8.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

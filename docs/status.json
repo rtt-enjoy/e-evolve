@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T19:05:08.836251+00:00",
-  "total_runs": 2101,
+  "last_run": "2026-10-28T20:05:03.026395+00:00",
+  "total_runs": 2102,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,21 +34,25 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed. The weak_title rejects are all title has ALL-CAPS word (x3 in the window), but every concrete prompt fix for that rule-adding banned examples, naming the exact words, deterministic title-casing, a bounded second rewrite attempt-already appears in PRIOR PROPOSALS on bot/earning/articles.py and none was merged. The deterministic gate (_shouted_words with _KNOWN_ACRONYMS) already enforces the rule, and the _SYSTEM TITLE rule already bans any ALL-CAPS word. Repeating the prompt edit is a dead end; the remaining rejects are the LLM failing to follow an already-clear rule, not a prompt gap.",
-    "changes_applied": [],
-    "suggestions": [],
-    "direction": "doctrine checklist step 4 (reach into a live receive path) via PROMPT FOCUS weak_title, but the prompt lever is exhausted",
-    "evidence": [
-      "article_rejects: weak_title=12 lifetime, 3 in last 14 days; gate finding title has ALL-CAPS word x3",
-      "PRIOR PROPOSALS: 20+ ALL-CAPS title-prompt edits on bot/earning/articles.py, none merged",
-      "_title_problems/_shouted_words/_KNOWN_ACRONYMS already enforce ALL-CAPS deterministically with acronym exemptions",
-      "_SYSTEM TITLE rule already bans any ALL-CAPS word and instructs real casing for acronyms"
+    "summary": "Sharpen the ALL-CAPS title rule in the article draft prompt with concrete banned examples, so the weak_title gate catches fewer drafts.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "Add concrete examples of banned ALL-CAPS words to the TITLE rule in the _SYSTEM prompt, making the rule more explicit and reducing weak_title rejections."
+      }
     ],
-    "money_path": "reach-only (no change; receive path already live and verified on all 39 posts)",
-    "verify": "N/A - no change; weak_title rejects would fall only from an engine improvement or a lever not already in PRIOR PROPOSALS",
+    "suggestions": [],
+    "direction": "Reach into a live receive path (Principle 5, step 3): publish more articles in shapes readers prefer. The prompt focus is weak_title lost 3 drafts due to 'title has ALL-CAPS word' x3.",
+    "evidence": [
+      "article_rejects.counts.weak_title=12 (lifetime, but last 14 days weak_title=3)",
+      "article_rejects.last='llm_error': 'LLM call failed' (but recent weak_title rejections are from title gate)",
+      "article_rejects.recent includes weak_title with detail 'title has ALL-CAPS word' x3"
+    ],
+    "money_path": "reach-only",
+    "verify": "After the edit, the weak_title gate should lose its recent rejections; status['article_rejects'].recent should no longer contain 'weak_title' entries from the last 14 days.",
     "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
+    "branch": "evolve/1.41.1-20261028-203602",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [],
@@ -68,7 +72,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 932,
+  "last_cycle_seconds": 1861,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1224,7 +1228,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T19:05:10.089239+00:00",
+    "checked_at": "2026-10-28T20:05:03.367556+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1544,8 +1548,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261028-203602",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 39,
     "total_views": 5136,
@@ -1762,7 +1766,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T19:20:39.538862+00:00",
+    "last_run": "2026-10-28T20:36:03.334792+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1772,25 +1776,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T19:20:39.940927+00:00",
+    "last_run": "2026-10-28T20:36:03.702323+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-10-28T10:51:35.090523+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-10-28T10:51:35.090523+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820684,
-        "at": "2026-10-28T10:51:35.090523+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-10-28T11:51:10.077248+00:00",
@@ -1803,11 +1792,6 @@
       },
       {
         "id": 4727685,
-        "at": "2026-10-28T11:51:10.077248+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-10-28T11:51:10.077248+00:00",
         "ok": true
       },
@@ -1967,8 +1951,28 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-10-28T20:36:03.702323+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-10-28T20:36:03.702323+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-10-28T20:36:03.702323+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-10-28T20:36:03.702323+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T19:20:39.940927+00:00",
+        "at": "2026-10-28T20:36:03.702323+00:00",
         "ok": true
       }
     ],
@@ -1977,7 +1981,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.5
+    "oldest_check_age_hours": 8.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

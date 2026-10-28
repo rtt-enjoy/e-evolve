@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T03:24:32.259984+00:00",
-  "total_runs": 2084,
+  "last_run": "2026-10-28T04:24:34.933240+00:00",
+  "total_runs": 2085,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,68 +33,76 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Clarify the ALL-CAPS ban in the article title prompt by adding concrete examples, reducing weak_title rejections.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "clarify ALL-CAPS ban in title rule to reduce weak_title rejections"
-      }
-    ],
+    "summary": "No change proposed: the identified weak_title issue (ALL-CAPS words) already has a pending fix in evolve/1.41.1-20261028-033035 that clarifies the ban with concrete examples; the other major reject category (llm_error=25) is an engine failure not fixable by prompt edits. Stacking another prompt edit on an unmerged branch would violate the rule against stacking rules beside unproven ones.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Add a unit test for title ALL-CAPS rejection",
-        "description": "Create a test in bot/tests.py that verifies titles containing ALL-CAPS words are rejected, ensuring the fix works.",
-        "owner_action": "Edit bot/tests.py to add the test",
+        "title": "Merge the pending ALL-CAPS title fix",
+        "description": "The evolve/1.41.1 branch already contains the prompt edit targeting this exact rejection cause. Merging it will test whether concrete examples reduce weak_title rejections.",
+        "owner_action": "Review and merge branch evolve/1.41.1-20261028-033035",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open the PR for evolve/1.41.1-20261028-033035",
+          "Step 2: Verify the edit adds concrete ALL-CAPS examples to the _SYSTEM prompt TITLE rule",
+          "Step 3: Merge if the change is minimal and targeted"
+        ]
+      },
+      {
+        "title": "Add unit test for ALL-CAPS title rejection",
+        "description": "The previous evolution suggested a test in bot/tests.py to verify titles with ALL-CAPS words are rejected. This would confirm the gate works and prevent regression.",
+        "owner_action": "Edit bot/tests.py to add the test case",
         "secret_needed": null,
         "how_to": [
           "Step 1: Open bot/tests.py",
-          "Step 2: Add a test case that feeds a title with an ALL-CAPS word to the title validation function and asserts a rejection",
-          "Step 3: Run the test suite to confirm the test passes after the prompt edit"
+          "Step 2: Add a test that feeds a title containing an ALL-CAPS word (e.g., 'URGENT Fix Needed') to _title_problems and asserts a rejection",
+          "Step 3: Run the test suite to confirm it passes"
         ]
       }
     ],
     "direction": "reach into a live receive path (doctrine Principle 5, step 3)",
     "evidence": [
-      "article_rejects.counts.weak_title=3",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "gate findings behind it: 'title has ALL-CAPS word' x3"
+      "article_rejects.counts.weak_title=12 lifetime, 3 in last 14 days",
+      "gate findings: 'title has ALL-CAPS word' x3",
+      "last_evolution.summary addresses exactly this with 'Clarify the ALL-CAPS ban... adding concrete examples'",
+      "evolution_pending_review=true (fix not yet merged)",
+      "article_rejects.counts.llm_error=25 (largest category, engine-side, not prompt-fixable)"
     ],
     "money_path": "reach-only",
-    "verify": "add a test in bot/tests.py that ensures titles containing ALL-CAPS words are rejected and confirm the weak_title count drops to 0 in the next cycle",
+    "verify": "wait for evolve/1.41.1 to be merged, then confirm weak_title count drops in the next 14-day window",
     "error": null,
-    "branch": "evolve/1.41.1-20261028-033035",
-    "proposed_version": "1.41.1"
+    "branch": null,
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add a unit test for title ALL-CAPS rejection",
-      "description": "Create a test in bot/tests.py that verifies titles containing ALL-CAPS words are rejected, ensuring the fix works.",
-      "owner_action": "Edit bot/tests.py to add the test",
+      "title": "Merge the pending ALL-CAPS title fix",
+      "description": "The evolve/1.41.1 branch already contains the prompt edit targeting this exact rejection cause. Merging it will test whether concrete examples reduce weak_title rejections.",
+      "owner_action": "Review and merge branch evolve/1.41.1-20261028-033035",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Open the PR for evolve/1.41.1-20261028-033035",
+        "Step 2: Verify the edit adds concrete ALL-CAPS examples to the _SYSTEM prompt TITLE rule",
+        "Step 3: Merge if the change is minimal and targeted"
+      ]
+    },
+    {
+      "title": "Add unit test for ALL-CAPS title rejection",
+      "description": "The previous evolution suggested a test in bot/tests.py to verify titles with ALL-CAPS words are rejected. This would confirm the gate works and prevent regression.",
+      "owner_action": "Edit bot/tests.py to add the test case",
       "secret_needed": null,
       "how_to": [
         "Step 1: Open bot/tests.py",
-        "Step 2: Add a test case that feeds a title with an ALL-CAPS word to the title validation function and asserts a rejection",
-        "Step 3: Run the test suite to confirm the test passes after the prompt edit"
+        "Step 2: Add a test that feeds a title containing an ALL-CAPS word (e.g., 'URGENT Fix Needed') to _title_problems and asserts a rejection",
+        "Step 3: Run the test suite to confirm it passes"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 673,
+  "last_cycle_seconds": 1630,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1233,7 +1241,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T03:24:32.683434+00:00",
+    "checked_at": "2026-10-28T04:24:35.783314+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1553,8 +1561,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261028-033035",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 39,
     "total_views": 5136,
@@ -1771,7 +1779,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T03:35:44.085731+00:00",
+    "last_run": "2026-10-28T04:51:43.899868+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1781,25 +1789,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T03:35:44.389864+00:00",
+    "last_run": "2026-10-28T04:51:44.222914+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4820198,
-        "at": "2026-10-27T19:01:47.272210+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-10-27T19:01:47.272210+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-10-27T19:01:47.272210+00:00",
-        "ok": true
-      },
       {
         "id": 4602729,
         "at": "2026-10-27T19:57:19.409797+00:00",
@@ -1812,11 +1805,6 @@
       },
       {
         "id": 4503417,
-        "at": "2026-10-27T19:57:19.409797+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-10-27T19:57:19.409797+00:00",
         "ok": true
       },
@@ -1901,11 +1889,6 @@
         "ok": true
       },
       {
-        "id": 4918200,
-        "at": "2026-10-28T01:52:43.270508+00:00",
-        "ok": true
-      },
-      {
         "id": 4568987,
         "at": "2026-10-28T01:52:43.270508+00:00",
         "ok": true
@@ -1981,17 +1964,37 @@
         "ok": true
       },
       {
+        "id": 4820198,
+        "at": "2026-10-28T04:51:44.222914+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-10-28T04:51:44.222914+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-10-28T04:51:44.222914+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-10-28T04:51:44.222914+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T03:35:44.389864+00:00",
+        "at": "2026-10-28T04:51:44.222914+00:00",
         "ok": true
       }
     ],
-    "published_total": 40,
-    "covered": 40,
+    "published_total": 39,
+    "covered": 39,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.6
+    "oldest_check_age_hours": 8.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2008,7 +2011,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 2
+      "openrouter": 1
     }
   }
 }

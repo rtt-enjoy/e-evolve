@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T18:05:00.536681+00:00",
-  "total_runs": 2100,
+  "last_run": "2026-10-28T19:05:08.836251+00:00",
+  "total_runs": 2101,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,33 +34,21 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change is proposed: the prompt focus (weak_title losing 3 drafts in the last 14 days to the title-has-ALL-CAPS-word gate) sits on the article draft TITLE rule and the title rewrite prompt, and every gradual edit to that prompt -- concrete banned ALL-CAPS examples, ALL-CAPS-to-Title-Case fix examples, a Title Case definition, deterministic casing, a bounded second rewrite attempt, or the rewrite naming the exact offending words -- already has an open unmerged evolve branch, so the dead-end rule bars repeating one.",
+    "summary": "No change proposed. The weak_title rejects are all title has ALL-CAPS word (x3 in the window), but every concrete prompt fix for that rule-adding banned examples, naming the exact words, deterministic title-casing, a bounded second rewrite attempt-already appears in PRIOR PROPOSALS on bot/earning/articles.py and none was merged. The deterministic gate (_shouted_words with _KNOWN_ACRONYMS) already enforces the rule, and the _SYSTEM TITLE rule already bans any ALL-CAPS word. Repeating the prompt edit is a dead end; the remaining rejects are the LLM failing to follow an already-clear rule, not a prompt gap.",
     "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Review the pending ALL-CAPS title prompt branch",
-        "description": "What it unlocks: a concrete article draft TITLE rule with banned ALL-CAPS examples and an acronym exemption, complementing the deterministic _shouted_words / _KNOWN_ACRONYMS gate.",
-        "owner_action": "Review the open PR and either merge it (if the examples add clarity for the model) or close it (if the deterministic gate alone is deemed sufficient), with a comment stating which.",
-        "secret_needed": null,
-        "how_to": [
-          "Open the PR for branch evolve/1.41.1-20261028-161540",
-          "Decide merge or close based on whether the prompt examples add value beyond the existing gate",
-          "Merge or close the PR with a comment explaining the decision"
-        ]
-      }
-    ],
-    "direction": "Checklist step 4 -- reach into a live receive path (doctrine Principle 5, step 3): publish more articles in the shapes readers measurably prefer, served through the prompt-ledger step for weak_title.",
+    "suggestions": [],
+    "direction": "doctrine checklist step 4 (reach into a live receive path) via PROMPT FOCUS weak_title, but the prompt lever is exhausted",
     "evidence": [
-      "article_rejects.counts.weak_title = 12 (lifetime); drafts lost to a prompt in the last 14 days: weak_title=3, gate finding: title has ALL-CAPS word x3",
-      "article_rejects.last = llm_error: LLM call failed",
-      "article_interest archetypes problem-workaround = count 9, avg_engagement 459.0; preferred_archetypes() = [problem-workaround]",
-      "wallet.received_total_usd = 0.0; payout.live = true; receipt_check.known_without_footer = 0; receipt_check.coverage_complete = true"
+      "article_rejects: weak_title=12 lifetime, 3 in last 14 days; gate finding title has ALL-CAPS word x3",
+      "PRIOR PROPOSALS: 20+ ALL-CAPS title-prompt edits on bot/earning/articles.py, none merged",
+      "_title_problems/_shouted_words/_KNOWN_ACRONYMS already enforce ALL-CAPS deterministically with acronym exemptions",
+      "_SYSTEM TITLE rule already bans any ALL-CAPS word and instructs real casing for acronyms"
     ],
-    "money_path": "none maintenance -- no change proposed; the reach work this cycle would drive is reach-only, since the receive path is verified live and the wallet is a real 0.00.",
-    "verify": "No change proposed, so there is nothing to verify; the reviewer should instead adjudicate the already-open ALL-CAPS prompt branch evolve/1.41.1-20261028-161540 via the owner suggestion, and confirm the weak_title reject count does not move until a prompt edit lands.",
+    "money_path": "reach-only (no change; receive path already live and verified on all 39 posts)",
+    "verify": "N/A - no change; weak_title rejects would fall only from an engine improvement or a lever not already in PRIOR PROPOSALS",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -80,7 +68,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1265,
+  "last_cycle_seconds": 932,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1236,7 +1224,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T18:05:01.062762+00:00",
+    "checked_at": "2026-10-28T19:05:10.089239+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1774,7 +1762,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T18:26:05.047012+00:00",
+    "last_run": "2026-10-28T19:20:39.538862+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1784,25 +1772,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T18:26:05.318256+00:00",
+    "last_run": "2026-10-28T19:20:39.940927+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4568987,
-        "at": "2026-10-28T09:55:32.606524+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-10-28T09:55:32.606524+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-10-28T09:55:32.606524+00:00",
-        "ok": true
-      },
       {
         "id": 4720062,
         "at": "2026-10-28T10:51:35.090523+00:00",
@@ -1810,11 +1783,6 @@
       },
       {
         "id": 4552210,
-        "at": "2026-10-28T10:51:35.090523+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
         "at": "2026-10-28T10:51:35.090523+00:00",
         "ok": true
       },
@@ -1979,8 +1947,28 @@
         "ok": true
       },
       {
+        "id": 4568987,
+        "at": "2026-10-28T19:20:39.940927+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-10-28T19:20:39.940927+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-10-28T19:20:39.940927+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-10-28T19:20:39.940927+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T18:26:05.318256+00:00",
+        "at": "2026-10-28T19:20:39.940927+00:00",
         "ok": true
       }
     ],

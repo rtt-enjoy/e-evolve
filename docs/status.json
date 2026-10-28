@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T13:35:33.028388+00:00",
-  "total_runs": 2095,
+  "last_run": "2026-10-28T14:35:38.488282+00:00",
+  "total_runs": 2096,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,11 +33,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a concrete example (URGENT) to the banned ALL-CAPS word rule in the article draft prompt to reduce weak title rejections.",
+    "summary": "Add concrete examples of banned ALL-CAPS words to the article title prompt to reduce weak_title rejections.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "Add a concrete example to the ALL-CAPS ban to make the rule clearer and reduce weak title rejections."
+        "reason": "Add concrete examples of banned ALL-CAPS words to the title prompt to reduce weak_title rejections"
       }
     ],
     "suggestions": [
@@ -53,18 +53,16 @@
         ]
       }
     ],
-    "direction": "article draft prompt (TITLE rule) \u2013 sharpen the ALL-CAPS ban with a concrete example",
+    "direction": "Principle 5, step 3 (reach into a live receive path) \u2013 publish more articles in shapes readers measurably prefer",
     "evidence": [
-      "article_rejects.counts.weak_title=3",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "receipt_check.known_without_footer = 0",
-      "article_interest.preferred_archetypes = ['problem-workaround']",
+      "article_rejects.counts.weak_title = 3",
+      "PROMPT FOCUS: weak_title lost 3 draft(s)",
       "gate findings: 'title has ALL-CAPS word' x3"
     ],
     "money_path": "reach-only",
-    "verify": "Reviewer can see the diff showing the added '(e.g., URGENT)' in the TITLE rule and confirm that subsequent title rejections due to ALL-CAPS words drop (weak_title count falls) in the next status.json cycle.",
+    "verify": "Add a test in bot/tests.py that asserts article_rejects.counts.weak_title drops to 0 after the prompt edit, and confirm the count decreases in the next cycle.",
     "error": null,
-    "branch": "evolve/1.41.1-20261028-134655",
+    "branch": "evolve/1.41.1-20261028-145017",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -85,7 +83,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 685,
+  "last_cycle_seconds": 880,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1256,7 +1254,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T13:35:33.743483+00:00",
+    "checked_at": "2026-10-28T14:35:39.393720+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1576,7 +1574,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261028-134655",
+  "last_evolution_branch": "evolve/1.41.1-20261028-145017",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 39,
@@ -1794,7 +1792,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T13:46:56.008350+00:00",
+    "last_run": "2026-10-28T14:50:18.030067+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1804,20 +1802,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T13:46:57.061911+00:00",
+    "last_run": "2026-10-28T14:50:18.387141+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4602729,
-        "at": "2026-10-28T05:36:51.013157+00:00",
-        "ok": true
-      },
-      {
-        "id": 4925166,
-        "at": "2026-10-28T05:36:51.013157+00:00",
-        "ok": true
-      },
       {
         "id": 4780783,
         "at": "2026-10-28T06:44:47.319847+00:00",
@@ -1825,16 +1813,6 @@
       },
       {
         "id": 4748037,
-        "at": "2026-10-28T06:44:47.319847+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-10-28T06:44:47.319847+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
         "at": "2026-10-28T06:44:47.319847+00:00",
         "ok": true
       },
@@ -1999,8 +1977,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-10-28T14:50:18.387141+00:00",
+        "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-10-28T14:50:18.387141+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-10-28T14:50:18.387141+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-10-28T14:50:18.387141+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T13:46:57.061911+00:00",
+        "at": "2026-10-28T14:50:18.387141+00:00",
         "ok": true
       }
     ],
@@ -2009,7 +2007,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.2
+    "oldest_check_age_hours": 8.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

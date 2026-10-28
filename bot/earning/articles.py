@@ -408,6 +408,7 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 	# Normalize first: it deterministically fixes stray '#' headings and fence
 	# artifacts, so we never spend free-tier LLM calls revising those.
 	article = devto.normalize(data)
+	article["title"] = devto.fix_title_casing(article.get("title", ""))
 
 	# Drop invented spec tables before anything else looks at the body. This is
 	# deterministic, so it costs no LLM call -- and asking the model to "fix"
@@ -491,6 +492,7 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		return None
 
 	candidate = str((out or {}).get("title", "")).strip()
+	candidate = devto.fix_title_casing(candidate)
 	if not candidate:
 		return None
 	remaining = _title_problems(candidate)

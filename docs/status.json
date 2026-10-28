@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T20:05:03.026395+00:00",
-  "total_runs": 2102,
+  "last_run": "2026-10-28T21:05:00.887405+00:00",
+  "total_runs": 2103,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,45 +34,62 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Sharpen the ALL-CAPS title rule in the article draft prompt with concrete banned examples, so the weak_title gate catches fewer drafts.",
-    "changes_applied": [
+    "summary": "No change this cycle. The evidence (weak_title lost 3 drafts to 'title has ALL-CAPS word' x3) is already addressed by the pending 1.41.1 branch, which adds concrete banned ALL-CAPS examples to the article draft TITLE rule in bot/earning/articles.py; re-proposing it would duplicate a prior proposal (69 open branches, many on this exact topic). The reviewer should merge or close that pending branch instead of starting a new one.",
+    "changes_applied": [],
+    "suggestions": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "Add concrete examples of banned ALL-CAPS words to the TITLE rule in the _SYSTEM prompt, making the rule more explicit and reducing weak_title rejections."
+        "title": "Review the pending ALL-CAPS title prompt branch",
+        "description": "Merge or close evolve/1.41.1-20261028-203602 so the weak_title fix either ships or is formally declined, rather than being re-proposed every cycle.",
+        "owner_action": "Review the open PR and either merge it or close it with a comment stating which.",
+        "secret_needed": null,
+        "how_to": [
+          "Open the PR for branch evolve/1.41.1-20261028-203602",
+          "Decide merge or close based on whether the prompt examples add value beyond the existing deterministic gate",
+          "Merge or close the PR with a comment explaining the decision"
+        ]
       }
     ],
-    "suggestions": [],
-    "direction": "Reach into a live receive path (Principle 5, step 3): publish more articles in shapes readers prefer. The prompt focus is weak_title lost 3 drafts due to 'title has ALL-CAPS word' x3.",
+    "direction": "Reach into a live receive path (Principle 5, step 3): publish more articles in shapes readers prefer. Prompt focus is weak_title / ALL-CAPS title rejections; receive path already verified end to end (payout.live=true, receipt_check 39/39 covered, known_without_footer=0, coverage_complete=true), and received_total_usd is still 0.0 so the remaining work is reach.",
     "evidence": [
-      "article_rejects.counts.weak_title=12 (lifetime, but last 14 days weak_title=3)",
-      "article_rejects.last='llm_error': 'LLM call failed' (but recent weak_title rejections are from title gate)",
-      "article_rejects.recent includes weak_title with detail 'title has ALL-CAPS word' x3"
+      "article_rejects.counts.weak_title=12 lifetime; weak_title=3 in the last 14 days",
+      "article_rejects recent gate findings: 'title has ALL-CAPS word' x3",
+      "last_evolution proposed_version=1.41.1 already adds concrete banned ALL-CAPS examples to the TITLE rule in bot/earning/articles.py and is pending review (evolution_pending_review=true, branch evolve/1.41.1-20261028-203602)",
+      "PRIOR PROPOSALS list 20+ ALL-CAPS title prompt edits from 2026-10-27 and 2026-10-28, none merged"
     ],
     "money_path": "reach-only",
-    "verify": "After the edit, the weak_title gate should lose its recent rejections; status['article_rejects'].recent should no longer contain 'weak_title' entries from the last 14 days.",
+    "verify": "If the pending 1.41.1 branch is merged, status['article_rejects'].recent should stop gaining 'weak_title' entries with 'title has ALL-CAPS word' detail; if closed, the next cycle re-evaluates whether the deterministic _shouted_words gate alone is sufficient.",
     "error": null,
-    "branch": "evolve/1.41.1-20261028-203602",
-    "proposed_version": "1.41.1"
+    "branch": null,
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "llm_error",
+        "error": "LLM call failed",
+        "estimated_usd": 0.0
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Review the pending ALL-CAPS title prompt branch",
-      "description": "What it unlocks: a concrete article draft TITLE rule with banned ALL-CAPS examples and an acronym exemption, complementing the deterministic _shouted_words / _KNOWN_ACRONYMS gate.",
-      "owner_action": "Review the open PR and either merge it (if the examples add clarity for the model) or close it (if the deterministic gate alone is deemed sufficient), with a comment stating which.",
+      "description": "Merge or close evolve/1.41.1-20261028-203602 so the weak_title fix either ships or is formally declined, rather than being re-proposed every cycle.",
+      "owner_action": "Review the open PR and either merge it or close it with a comment stating which.",
       "secret_needed": null,
       "how_to": [
-        "Open the PR for branch evolve/1.41.1-20261028-161540",
-        "Decide merge or close based on whether the prompt examples add value beyond the existing gate",
+        "Open the PR for branch evolve/1.41.1-20261028-203602",
+        "Decide merge or close based on whether the prompt examples add value beyond the existing deterministic gate",
         "Merge or close the PR with a comment explaining the decision"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1861,
+  "last_cycle_seconds": 1511,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1179,8 +1196,8 @@
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/the-configure-flag-that-breaks-python-314-builds-1g3n",
       "https://dev.to/robust_true_try/your-backtracking-solver-is-slower-than-brute-force-1e5g",
-      "https://dev.to/robust_true_try/your-skin-cancer-model-fails-on-real-photos-2lp1",
       "https://dev.to/robust_true_try/your-kimi-k31-pro-responses-truncate-silently-2odg",
       "https://dev.to/robust_true_try/your-ad-targeting-pipeline-is-leaking-spyware-vectors-24fe",
       "https://dev.to/robust_true_try/three-sandbox-failures-that-let-ai-agents-escape-3ab6",
@@ -1228,7 +1245,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T20:05:03.367556+00:00",
+    "checked_at": "2026-10-28T21:05:01.441834+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1548,12 +1565,12 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261028-203602",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 39,
-    "total_views": 5136,
-    "avg_views": 131.7,
+    "total_views": 5179,
+    "avg_views": 132.8,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 3328,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -1561,9 +1578,9 @@
       "twitter",
       "selfhosting",
       "privacy",
+      "computervision",
       "kubernetes",
-      "python",
-      "linux"
+      "python"
     ]
   },
   "article_interest": {
@@ -1577,10 +1594,17 @@
       },
       {
         "archetype": "build-tutorial",
-        "count": 2,
-        "avg_engagement": 107.5,
-        "avg_views": 107.5,
+        "count": 3,
+        "avg_engagement": 76.0,
+        "avg_views": 76.0,
         "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
+      },
+      {
+        "archetype": "other",
+        "count": 12,
+        "avg_engagement": 63.2,
+        "avg_views": 36.1,
+        "best_title": "Your AI Agent Can't See What It Clicks"
       },
       {
         "archetype": "myth-correction",
@@ -1590,17 +1614,10 @@
         "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       },
       {
-        "archetype": "other",
-        "count": 13,
-        "avg_engagement": 57.5,
-        "avg_views": 32.5,
-        "best_title": "Your AI Agent Can't See What It Clicks"
-      },
-      {
         "archetype": "surprising-behavior",
         "count": 8,
-        "avg_engagement": 40.5,
-        "avg_views": 24.9,
+        "avg_engagement": 43.0,
+        "avg_views": 27.4,
         "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
       },
       {
@@ -1625,15 +1642,15 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-10-28T02:14:28.354353+00:00",
+    "last_at": "2026-10-28T21:30:10.933057+00:00",
     "counts": {
       "empty_draft": 9,
       "fabricated": 2,
       "weak_title": 12,
       "revision_fabricated": 1,
-      "llm_error": 25
+      "llm_error": 26
     },
-    "total": 49,
+    "total": 50,
     "recent": [
       {
         "code": "empty_draft",
@@ -1734,6 +1751,11 @@
         "code": "llm_error",
         "at": "2026-10-28T02:14:28.354353+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-10-28T21:30:10.933057+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
       }
     ]
   },
@@ -1766,7 +1788,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T20:36:03.334792+00:00",
+    "last_run": "2026-10-28T21:30:11.295072+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1776,25 +1798,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T20:36:03.702323+00:00",
+    "last_run": "2026-10-28T21:30:11.583129+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4356423,
-        "at": "2026-10-28T11:51:10.077248+00:00",
-        "ok": true
-      },
-      {
-        "id": 4931682,
-        "at": "2026-10-28T11:51:10.077248+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
-        "at": "2026-10-28T11:51:10.077248+00:00",
-        "ok": true
-      },
       {
         "id": 4681657,
         "at": "2026-10-28T12:47:27.702130+00:00",
@@ -1807,11 +1814,6 @@
       },
       {
         "id": 4636715,
-        "at": "2026-10-28T12:47:27.702130+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-10-28T12:47:27.702130+00:00",
         "ok": true
       },
@@ -1971,8 +1973,28 @@
         "ok": true
       },
       {
+        "id": 4356423,
+        "at": "2026-10-28T21:30:11.583129+00:00",
+        "ok": true
+      },
+      {
+        "id": 4931682,
+        "at": "2026-10-28T21:30:11.583129+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-10-28T21:30:11.583129+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-10-28T21:30:11.583129+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T20:36:03.702323+00:00",
+        "at": "2026-10-28T21:30:11.583129+00:00",
         "ok": true
       }
     ],

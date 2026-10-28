@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T22:06:37.597772+00:00",
-  "total_runs": 2105,
+  "last_run": "2026-10-28T23:06:39.383416+00:00",
+  "total_runs": 2106,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,80 +34,53 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Sharpen the ALL-CAPS title rule with concrete banned examples to reduce weak_title rejections.",
-    "changes_applied": [
+    "summary": "No change proposed: the PROMPT FOCUS (weak_title rejections due to 'title has ALL-CAPS word') has 25+ prior proposals on the same prompt rule in bot/earning/articles.py, all open and unmerged. Per the dead-end list, repeating prompt edits already in PRIOR PROPOSALS wastes the cycle. The human reviewer must first decide on the pending branches (e.g., evolve/1.41.1-20261028-203602) before further prompt iterations can clear the bar.",
+    "changes_applied": [],
+    "suggestions": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "Add concrete examples of banned ALL-CAPS words to the TITLE rule in the _SYSTEM prompt, making the rule clearer and reducing weak_title rejections."
-      },
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "Add a note in the TITLE rule that ALL-CAPS words are banned, with examples, to clarify the gate and reduce weak_title rejections."
+        "title": "Decide on the pending ALL-CAPS title branches",
+        "description": "25 evolution branches have proposed variants of the ALL-CAPS title rule; none merged. The owner must merge or close the oldest (evolve/1.41.1-20261028-203602) to unblock further prompt iteration.",
+        "owner_action": "Open the PR for branch evolve/1.41.1-20261028-203602 and merge or close with a comment stating whether prompt examples add value beyond the existing deterministic gate.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open the PR for branch evolve/1.41.1-20261028-203602",
+          "Step 2: Decide merge or close based on whether the prompt examples add value beyond the existing deterministic gate",
+          "Step 3: Merge or close the PR with a comment explaining the decision"
+        ]
       }
     ],
-    "suggestions": [],
-    "direction": "Reach into a live receive path (Principle 5, step 3): publish more articles by fixing the prompt that causes weak_title rejections.",
+    "direction": "Principle 5, step 3 \u2014 reach into a live receive path (publish more articles in preferred shapes)",
     "evidence": [
-      "article_rejects.counts.weak_title=3",
-      "article_rejects.last='weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "PROMPT FOCUS: weak_title lost 3 draft(s); gate findings: 'title has ALL-CAPS word' x3"
+      "article_rejects.counts.weak_title=12 (lifetime), 3 in last 14 days",
+      "PROMPT FOCUS: weak_title lost 3 drafts; gate findings: 'title has ALL-CAPS word' x3",
+      "PRIOR PROPOSALS lists 25+ open branches editing the same TITLE rule in bot/earning/articles.py",
+      "last_evolution.summary: 'Sharpen the ALL-CAPS title rule with concrete banned examples...' (branch evolve/1.41.1-20261028-223624 still pending)"
     ],
     "money_path": "reach-only",
-    "verify": "After merging, the next evolution should show article_rejects.counts.weak_title < 3 (ideally 0) and the prompt should list concrete ALL-CAPS examples.",
+    "verify": "Next evolution should show article_rejects.counts.weak_title decreasing only after a pending ALL-CAPS branch is merged or closed, confirming the human decision unblocks further prompt work.",
     "error": null,
-    "branch": "evolve/1.41.1-20261028-223624",
-    "proposed_version": "1.41.1"
+    "branch": null,
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Your macOS Git Still Trusts Compromised Certificates",
-        "url": "https://dev.to/robust_true_try/your-macos-git-still-trusts-compromised-certificates-5691",
-        "estimated_usd": 0.0,
-        "source_url": "https://emudhra.we-have-a-problem.com/apple.html",
-        "source_title": "Apple's git still trusts the compromised eMudhra certificates"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge or close the pending ALL-CAPS title branch",
-      "description": "25 evolution branches have proposed variants of this one prompt rule and none has been reviewed. Deciding this one either way stops the cycle from re-deriving it and tells the next evolution whether the prompt or the gate is the real target.",
-      "owner_action": "Open the PR for branch evolve/1.41.1-20261028-203602 and merge it or close it with a comment stating which.",
+      "title": "Decide on the pending ALL-CAPS title branches",
+      "description": "25 evolution branches have proposed variants of the ALL-CAPS title rule; none merged. The owner must merge or close the oldest (evolve/1.41.1-20261028-203602) to unblock further prompt iteration.",
+      "owner_action": "Open the PR for branch evolve/1.41.1-20261028-203602 and merge or close with a comment stating whether prompt examples add value beyond the existing deterministic gate.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Open the PR for branch evolve/1.41.1-20261028-203602",
         "Step 2: Decide merge or close based on whether the prompt examples add value beyond the existing deterministic gate",
         "Step 3: Merge or close the PR with a comment explaining the decision"
       ]
-    },
-    {
-      "title": "Put the tip address in the dev.to profile bio",
-      "description": "The one deferred channel that needs no account, no processor and no policy change. Every profile visitor \u2014 including readers who land on the author page from a post \u2014 would see the ask permanently.",
-      "owner_action": "Edit the Bio field once at dev.to/settings and paste the published TRC-20 address ([redacted]).",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: Sign in at dev.to/settings",
-        "Step 2: Paste the TRC-20 address and a one-line ask into the Bio field",
-        "Step 3: Save \u2014 the bio then carries the ask on every profile visit with no further action"
-      ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 3037,
+  "last_cycle_seconds": 421,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1227,7 +1200,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T22:06:38.069795+00:00",
+    "checked_at": "2026-10-28T23:06:40.077817+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1547,8 +1520,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261028-223624",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 39,
     "total_views": 5179,
@@ -1775,37 +1748,22 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T22:57:14.217140+00:00",
+    "last_run": "2026-10-28T23:13:33.780111+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 5,
-    "with_footer": 5,
+    "checked": 4,
+    "with_footer": 4,
     "without_footer": 0,
-    "unreachable": 0,
+    "unreachable": 1,
     "missing": [],
-    "last_run": "2026-10-28T22:57:14.518561+00:00",
+    "last_run": "2026-10-28T23:13:40.018105+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
         "id": 4602729,
-        "at": "2026-10-28T14:50:18.387141+00:00",
-        "ok": true
-      },
-      {
-        "id": 4925166,
-        "at": "2026-10-28T14:50:18.387141+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-10-28T14:50:18.387141+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
         "at": "2026-10-28T14:50:18.387141+00:00",
         "ok": true
       },
@@ -1980,13 +1938,28 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4937139,
         "at": "2026-10-28T22:57:14.518561+00:00",
         "ok": true
       },
       {
-        "id": 4937139,
-        "at": "2026-10-28T22:57:14.518561+00:00",
+        "id": 4925166,
+        "at": "2026-10-28T23:13:40.018105+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-10-28T23:13:40.018105+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-10-28T23:13:40.018105+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-10-28T23:13:40.018105+00:00",
         "ok": true
       }
     ],
@@ -1995,7 +1968,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.1
+    "oldest_check_age_hours": 8.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2012,8 +1985,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 2,
-      "atria": 2
+      "openrouter": 1
     }
   },
   "ctf_bounty": {

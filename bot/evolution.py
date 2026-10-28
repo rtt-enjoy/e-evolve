@@ -66,7 +66,6 @@ _MAX_FIX_TOKENS  = 16_000
 _MAX_READ_BYTES = {
     "groq":       4_000,
     "anthropic":  60_000,
-    "claude-cli": 60_000,
     "gemini":     80_000,
     "openrouter": 200_000,
     "atria":      200_000,
@@ -276,8 +275,8 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
     from bot.llm import ROLE_PROVIDER
     upgrade_provider = ROLE_PROVIDER.get("upgrade", ROLE_PROVIDER.get("think", "gemini"))
     # Use upgrade-role provider capacity if that key is available, else fallback to default
-    key_attr = f"_{upgrade_provider}_key" if upgrade_provider != "claude-cli" else None
-    if key_attr and getattr(llm, key_attr, ""):
+    key_attr = f"_{upgrade_provider}_key"
+    if getattr(llm, key_attr, ""):
         evo_provider = upgrade_provider
     else:
         evo_provider = getattr(llm, "provider", "groq")

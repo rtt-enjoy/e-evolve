@@ -35,7 +35,6 @@ according to the role routing in `bot/llm.py`.
 
 | Key                            | Required | Used by                                    | Notes                                                                                              |
 |--------------------------------|----------|--------------------------------------------|----------------------------------------------------------------------------------------------------|
-| `CLAUDE_CLI_MODE`              | Optional | `bot/llm.py`                               | Set to `1` only when using an installed, authenticated Claude CLI locally.                         |
 | `CODE_TECH_EARN_ENABLED`       | Optional | `bot/main.py`, `bot/earning/code_techs.py` | Default is enabled. Set to `0`, `false`, `no`, or `off` to disable code-tech opportunity research. |
 
 ## Read-Only Status Context

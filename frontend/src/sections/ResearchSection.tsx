@@ -1,5 +1,6 @@
 import { AlertTriangle, ExternalLink, Lightbulb, ListChecks, Target } from 'lucide-react';
-import { Bullets, Card, Disclosure, Empty, Pill, SectionHead, Subhead, Tile } from '../components/ui';
+import { CtfList } from '../components/CtfList';
+import { Banner, Bullets, Card, Disclosure, Empty, Pill, SectionHead, Subhead, Tile } from '../components/ui';
 import { formatDate } from '../utils/format';
 import { isAvoidedSuggestion } from '../utils/suggestions';
 import type { Status } from '../types/status';
@@ -19,21 +20,47 @@ export default function ResearchSection({ status }: { status: Status }) {
 	const mrrSteps = mrr.validation_steps || [];
 	const mrrActions = mrr.owner_actions || [];
 
+	const ctf = status.ctf_bounty || {};
+	const ctfEvents = ctf.events || [];
+	const ctfStale = ctf.last_reason === 'fetch_failed';
+
 	return (
 		<>
 			<SectionHead
 				title="Research"
-				blurb={`Free-tier AI services and earning playbooks from the research cycle. Last refreshed ${formatDate(codeTech.last_refresh_at)}.`}
+				blurb={`CTF bounties first. Last checked ${formatDate(ctf.last_refresh_at)}${ctf.source ? ` · source ${ctf.source}` : ''}.`}
 			/>
 
 			<div className="tile-row">
-				<Tile label="Free services" value={String(services.length)} detail="no credit card required" tone="good" />
-				<Tile label="Earning ideas" value={String(ideas.length)} detail="with pricing guidance" tone="info" />
-				<Tile label="Owner actions" value={String(ownerActions.length)} detail="manual setup steps" tone={ownerActions.length ? 'warn' : 'neutral'} />
-				<Tile label="Bot suggestions" value={String(suggestions.length)} detail="free-tier only" tone="neutral" />
-				<Tile label="MRR models kept" value={String(mrrViable.length)} detail={`${mrrRefused.length} refused · ${(status.mrr_ideas_history?.names || []).length} triaged to date`} tone={mrrViable.length ? 'good' : 'neutral'} />
+				<Tile label="Open CTFs" value={String(ctf.enterable ?? 0)} detail={`${ctf.fetched ?? 0} listed · online and open to anyone`} tone="info" />
+				<Tile label="Prize stated" value={String(ctf.paying ?? 0)} detail="organiser lists a cash prize" tone={ctf.paying ? 'good' : 'neutral'} />
+				<Tile label="Pays crypto" value={String(ctf.crypto ?? 0)} detail="prize text names a coin" tone={ctf.crypto ? 'good' : 'neutral'} />
+				<Tile label="Beginner friendly" value={String(ctf.beginner ?? 0)} detail="marked for newcomers" tone="neutral" />
 			</div>
 
+			{ctfStale ? <Banner tone="warn" text="CTFtime could not be reached last cycle. Showing the last list that loaded." /> : null}
+
+			<Card title="Enter these next" hint="Ranked: stated prize, crypto, beginner format, then how soon it starts.">
+				{ctfEvents.length ? <CtfList events={ctfEvents} /> : <Empty text="No open CTFs found yet. The next cycle checks again." />}
+			</Card>
+
+			<Card title="Read before registering">
+				<Bullets
+					items={[
+						'A prize is the organiser’s own claim from CTFtime. Payout and identity checks are not published, so open the rules page first.',
+						'A CTF pays for your own solving, once per event. It is not passive income and never counts as earnings here.',
+						'The bot only lists events. It never registers, submits, or contacts anyone.',
+					]}
+				/>
+			</Card>
+
+			<Subhead>More research</Subhead>
+			<Disclosure
+				title="Free AI services, earning ideas, MRR triage and guardrails"
+				hint="The earlier research focus, kept for reference"
+				count={services.length + ideas.length + mrrViable.length}
+			>
+			<div className="stack">
 			{brief.summary ? (
 				<Card title="Current thesis" hint="The strongest angle the research cycle identified.">
 					<p className="prose lead-in">{brief.summary}</p>
@@ -266,6 +293,8 @@ export default function ResearchSection({ status }: { status: Status }) {
 				<span><AlertTriangle size={14} /> avoid patterns reject them</span>
 				<span><Lightbulb size={14} /> ideas become leads</span>
 			</div>
+			</div>
+			</Disclosure>
 		</>
 	);
 }

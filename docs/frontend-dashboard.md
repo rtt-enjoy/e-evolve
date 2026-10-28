@@ -55,7 +55,7 @@ essentials, and detail lives one click away.
 | `#/overview` | Is it earning, is it fresh, what needs attention right now?        |
 | `#/reach`    | What was published, who read it, does every reader see the ask?    |
 | `#/leads`    | Which opportunities exist, worth what, and what is the first step? |
-| `#/research` | Which free AI services and earning playbooks were found?           |
+| `#/research` | Which CTF bounties can I enter now? (older research is collapsed.) |
 | `#/engine`   | Which model served each role, and what did evolution propose?      |
 | `#/health`   | Freshness, integration readiness, errors, receive-wallet state.    |
 | `#/data`     | Every snapshot field, including keys no section claims yet.        |
@@ -83,7 +83,9 @@ a new field deserves a first-class view, add its key to the relevant section's
 
 The Overview must answer, without scrolling:
 
-- Is the cycle fresh, late, or stalled?
+- Is the cycle fresh, late, or stalled? (sidebar pill and Health; the fourth
+  tile is today's article: published, or pending its morning window.)
+- The next open CTF bounties (`ctf_bounty.events`), linked to their own sites.
 - Earnings confirmed on-chain.
 - The reader → ask → wallet funnel (`buildFunnel`): views, posts observed to
   carry the ask (from `receipt_check`, never `backfill`), money received — and

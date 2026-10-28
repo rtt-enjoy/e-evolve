@@ -190,6 +190,28 @@ export type MrrIdeas = {
 	llm_used?: boolean;
 };
 
+export type CtfEvent = {
+	id?: number;
+	title?: string;
+	url?: string;
+	ctftime_url?: string;
+	start?: string;
+	finish?: string;
+	live?: boolean;
+	days_until_start?: number;
+	format?: string;
+	weight?: number;
+	participants?: number;
+	/** The organiser's own prize text. A claim, not a promise. */
+	prizes?: string;
+	pays?: boolean;
+	crypto?: boolean;
+	beginner?: boolean;
+	/** Always "not published": the feed carries no payout or identity terms. */
+	kyc?: string;
+	score?: number;
+};
+
 export type Status = {
 	version?: string;
 	last_run?: string;
@@ -388,6 +410,21 @@ export type Status = {
 	article_daily?: {
 		date?: string;
 		published?: number;
+		/** Morning publish window, e.g. "06:00-12:00 UTC+9", or "any hour". */
+		window?: string;
+	};
+	/** CTF bounty research (bot/earning/ctf_bounty.py). Research, never earnings. */
+	ctf_bounty?: {
+		source?: string;
+		last_refresh_at?: string;
+		/** ok | fetch_failed | disabled. fetch_failed means `events` is the last good list. */
+		last_reason?: string;
+		fetched?: number;
+		enterable?: number;
+		paying?: number;
+		crypto?: number;
+		beginner?: number;
+		events?: CtfEvent[];
 	};
 	/** Reach, read back from the dev.to API (devto_stats.summarize). */
 	article_stats?: {

@@ -9,7 +9,10 @@
 		"followup_window_hours": 48,
 		"followup_min_views": 40,
 		"title_min_chars": 25,
-		"title_max_chars": 70
+		"title_max_chars": 70,
+		"publish_utc_offset_hours": 9,
+		"publish_from_hour": 6,
+		"publish_until_hour": 12
 	},
 	"newsletter": {
 		"enabled": true,
@@ -46,6 +49,16 @@
 		"enabled": true,
 		"history_limit": 200,
 		"note_on_config": "Records what was published when on-chain money arrived. Writes nothing unless wallet.last_received_usd > 0, so it cannot invent revenue. A TRC-20 transfer carries no memo, so every record is labelled confidence: correlated -- it is which posts were live when money landed, not proof of which one earned it. Read the count beside each total before believing an ordering: one receipt is one receipt."
+	},
+	"ctf_bounty": {
+		"enabled": true,
+		"refresh_hours": 6,
+		"lookahead_days": 45,
+		"running_grace_days": 3,
+		"fetch_limit": 100,
+		"status_max_items": 14,
+		"prize_max_chars": 160,
+		"note_on_config": "Owner-directed research focus (2026-10-29): Capture The Flag competitions that pay a prize, ranked for an entry-level solver. Source is CTFtime's keyless public API, so no new secret and no LLM call. This is research, not earning: a CTF prize is paid per event for the owner's own solving, which is labour per unit (doctrine Principle 2 row 2). It reports estimated_usd 0.0 and never enters the Leads queue as a channel. pays and crypto read the organiser's free-text prize field only; payout and KYC terms are not in the feed, so every row says kyc: not published and the rules page must be read before registering."
 	},
 	"mrr_ideas": {
 		"enabled": true,

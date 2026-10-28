@@ -88,7 +88,7 @@ social APIs, Claude premium features, paid LLM accounts, or funded wallets:
 These keys no longer activate runtime actions:
 
 1. `DEV_TO_API_KEY` — **active**. Enables live article publishing to dev.to,
-   one article per day. Omit it to keep the bot research-only.
+   one article per day, published in the morning window (default 06:00-12:00 UTC+9, set in `config/strategy.json` under `articles`). Omit it to keep the bot research-only.
 2. Twitter/X posting keys.
 3. Binance trading or payout keys.
 4. Ethereum NFT minting keys.

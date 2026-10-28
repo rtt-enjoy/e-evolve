@@ -70,6 +70,16 @@ export const SECTIONS: SectionDef[] = [
 		load: () => import('./OverviewSection'),
 	},
 	{
+		id: 'research',
+		label: 'Research',
+		icon: Lightbulb,
+		blurb: 'CTF bounties you can enter now. Other research is kept below.',
+		keys: ['ctf_bounty', 'suggestions', 'mrr_ideas', 'mrr_ideas_history'],
+		// The badge counts what the page leads with: CTFs that state a prize.
+		badge: (status) => status.ctf_bounty?.paying || null,
+		load: () => import('./ResearchSection'),
+	},
+	{
 		id: 'reach',
 		label: 'Reach',
 		icon: Newspaper,
@@ -100,22 +110,6 @@ export const SECTIONS: SectionDef[] = [
 		keys: ['code_tech_earning'],
 		badge: (status) => status.code_tech_earning?.opportunities?.length || null,
 		load: () => import('./LeadsSection'),
-	},
-	{
-		id: 'research',
-		label: 'Research',
-		icon: Lightbulb,
-		blurb: 'Free-tier AI services, earning playbooks, MRR idea triage, and the strategy guardrails.',
-		keys: ['suggestions', 'mrr_ideas', 'mrr_ideas_history'],
-		badge: (status) => {
-			const brief = status.code_tech_earning?.online_ai_brief;
-			const services = brief?.free_ai_services?.length || 0;
-			const ideas = brief?.easy_earning_ideas?.length || 0;
-			const themes = brief?.market_themes?.length || 0;
-			const mrr = status.mrr_ideas?.viable?.length || 0;
-			return services + ideas + themes + mrr || null;
-		},
-		load: () => import('./ResearchSection'),
 	},
 	{
 		id: 'engine',

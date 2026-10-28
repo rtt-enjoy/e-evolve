@@ -4,7 +4,6 @@ import json
 import logging
 import os
 import re
-import subprocess
 import time
 from dataclasses import dataclass
 from typing import Any
@@ -188,8 +187,7 @@ def _require_text(text: str | None, provider: str, model: str) -> str:
     `complete_json*` then re-sent the same prompt to the same dead model three
     times before failing the cycle with `First 200 chars: ''`. Raising instead
     puts an empty response on the same footing as a 404 -- advance to the next
-    model. `_call_claude_cli` already did this; the API paths did not.
-    """
+    model.    """
 	if text and text.strip():
 		return text
 	raise RuntimeError(
@@ -257,8 +255,6 @@ class LLMClient:
 						resp = self._call_atria(p_prompt, system, max_tokens, temperature, p_model)
 					elif provider == "cerebras":
 						resp = self._call_cerebras(p_prompt, system, max_tokens, temperature, p_model)
-					elif provider == "claude-cli":
-						resp = self._call_claude_cli(p_prompt, system, max_tokens)
 					else:
 						resp = self._call_groq(p_prompt, system, max_tokens, temperature, p_model)
 					self._served[resp.provider] = self._served.get(resp.provider, 0) + 1
@@ -755,39 +751,9 @@ class LLMClient:
 			latency_s = round(time.monotonic() - t0, 2),
 		)
 
-	# -- Claude CLI (Pro subscription, no API key) -----------------------------
-
-	def _call_claude_cli(
-		self, prompt: str, system: str, max_tokens: int
-	) -> LLMResponse:
-		full_prompt = f"{system}\n\n{prompt}" if system else prompt
-		t0 = time.monotonic()
-		result = subprocess.run(
-			["claude", "-p", full_prompt],
-			capture_output=True,
-			text=True,
-			timeout=120,
-		)
-		if result.returncode != 0:
-			stderr = result.stderr[:400]
-			if "401" in stderr or "authentication" in stderr.lower() or "api key" in stderr.lower():
-				raise RuntimeError(f"401 authentication_error from claude CLI: {stderr}")
-			raise RuntimeError(f"claude CLI exited {result.returncode}: {stderr}")
-		text = result.stdout.strip()
-		if not text:
-			raise RuntimeError("claude CLI returned empty response")
-		return LLMResponse(
-			text      = text,
-			provider  = "claude-cli",
-			model     = self.model,
-			latency_s = round(time.monotonic() - t0, 2),
-		)
-
 	# -- Helpers ---------------------------------------------------------------
 
 	def _pick_provider(self) -> str:
-		if os.getenv("CLAUDE_CLI_MODE", "").strip() == "1":
-			return "claude-cli"
 		# Atria first: ~1B free tokens. OpenRouter is the fallback once it is absent
 		# or its quota is spent.
 		if self._atria_key:
@@ -805,8 +771,7 @@ class LLMClient:
 		raise RuntimeError(
 			"No LLM API key found.\n"
 			"Add one of: ATRIA_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, CEREBRAS_API_KEY\n"
-			"to GitHub -> Settings -> Secrets and variables -> Actions.\n"
-			"For local dev with Claude Pro: set CLAUDE_CLI_MODE=1 in .env"
+			"to GitHub -> Settings -> Secrets and variables -> Actions."
 		)
 
 	def _pick_model(self) -> str:
@@ -823,8 +788,6 @@ class LLMClient:
 			return self._model_list_for(provider)[0]
 		if provider == "cerebras":
 			return _CEREBRAS_MODELS[0]
-		if provider == "claude-cli":
-			return "claude-sonnet-4-6"
 		return _GROQ_MODELS[0]
 
 	def _model_list_for(self, provider: str) -> list[str]:
@@ -836,7 +799,6 @@ class LLMClient:
 	def _provider_chain(self) -> list[str]:
 		"""Ordered fallback chain starting from primary provider."""
 		all_providers = [
-			("claude-cli",   os.getenv("CLAUDE_CLI_MODE", "").strip() == "1"),
 			("atria",        bool(self._atria_key) and not self._atria_disabled),
 			("openrouter",   bool(self._openrouter_key)),
 			("anthropic",    bool(self._anthropic_key)),

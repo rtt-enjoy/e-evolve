@@ -103,6 +103,7 @@ bot/earning/         ← products own a run(llm, status); support modules do not
   receipt_check.py   ← [product] reads published posts back, unauthenticated, to prove readers see an ask
   code_techs.py      ← [product] passive product income: channel (gets paid) vs asset (builds/markets)
   mrr_ideas.py       ← [product] recurring-revenue idea triage (research/suggestion only)
+  ctf_bounty.py      ← [product] CTF bounty research from CTFtime: the owner's standing research focus
   _shared.py         ← [support] config loading, cadence, feed parsing — used by all four
   devto.py           ← [support] the dev.to publish call + gates every post passes
   trending.py        ← [support] finds recent tech articles from free public feeds
@@ -130,7 +131,8 @@ Phase 1: Status   — load status.json, detect active features from env secrets
 Phase 2: Commands — read command.txt + GitHub Issues labelled "bot-command"
 Phase 3: Evolution — LLM proposes code changes; applied to a sandbox, verified,
                     then committed to an evolve/* review branch for human merge
-Phase 4: Research — refresh free-AI earning queue and MRR idea triage,
+Phase 4: Research — refresh the CTF bounty list (CTFtime), the free-AI earning
+                    queue and MRR idea triage,
                     draft + publish one article, then draft + publish the
                     weekly newsletter digest when due, then retrofit the tip
                     footer onto any post published before the footer existed
@@ -250,8 +252,9 @@ Features activate automatically when their secrets are present in env.
 | `llm_cerebras`   | `CEREBRAS_API_KEY`   |
 
 `DEV_TO_API_KEY` enables live article publishing to dev.to (one article per day,
-capped by `articles.max_articles_per_cycle`). Without it, the articles module
-skips silently.
+capped by `articles.max_articles_per_cycle`, and only in the owner's morning:
+`articles.publish_from_hour`-`publish_until_hour` at `publish_utc_offset_hours`,
+default 06:00-12:00 UTC+9). Without it, the articles module skips silently.
 
 ### Shared earning layer (bot/earning/_shared.py, bot/earning/devto.py)
 
@@ -286,7 +289,16 @@ Rules for this layer:
   asserts essay structure; `newsletter._digest_problems` asserts digest
   structure. Those must not be merged.
 - `articles.min_interval_hours` in `config/strategy.json` is **not read**:
-  articles gate on the calendar date (one per UTC day), not an elapsed interval.
+  articles gate on the calendar date (one per *local* day, local = UTC +
+  `publish_utc_offset_hours`), not an elapsed interval. A cycle outside the
+  publish window returns before any LLM call, and `force articles N` ignores the
+  window. The day is counted in the window's own offset because a 06:00-12:00
+  UTC+9 morning straddles UTC midnight: counting UTC days let one morning publish
+  twice. Until 2026-10-29 the post went out in whichever hourly cycle first got a
+  clean draft, which was often the evening. `status["article_daily"].window`
+  carries the label the dashboard shows. An offset, not a zone name, so no
+  tzdata is needed on the runner; set `publish_until_hour <= publish_from_hour`
+  to lift the restriction.
 
 ### Article sourcing (bot/earning/trending.py)
 
@@ -912,6 +924,41 @@ Newsletter history and cadence live in `status["newsletter_history"]` and
 > widening those boundaries needs an explicit owner decision. Only the newsletter
 > was built, and it publishes to dev.to — a channel already allowed.
 
+### CTF bounty research (bot/earning/ctf_bounty.py)
+
+Owner directive, 2026-10-29: research centres on Capture The Flag competitions
+that pay a prize, aimed at an entry-level solver. The dashboard's Research page
+leads with it and keeps the earlier free-AI / MRR research collapsed below.
+
+- **Source is CTFtime's public event API** (`ctftime.org/api/v1/events/`):
+  keyless, JSON, and the calendar organisers list on. **No new secret, no LLM
+  call.** It answers 403 to the default requests agent, so a `User-Agent` is sent.
+- **Research, not earning.** A CTF prize is paid per event for the owner's own
+  solving: labour per unit, which fails Principle 2 row 2. It is listed because
+  the owner asked, reports `estimated_usd: 0.0`, and never enters the Leads queue
+  as a `channel`. Real revenue stays the on-chain balance.
+- **Only events the owner can enter**: online, `restrictions == "Open"`, not over.
+  Onsite finals and prequalified brackets are dropped.
+- **`pays` / `crypto` read the organiser's free-text `prizes` field and nothing
+  else.** "TBD" and "Certificates" are not prizes. A blockchain-themed CTF with a
+  dollar prize is `pays`, not `crypto`.
+- **Payout and KYC terms are not in the feed**, so every row says `kyc: "not
+  published"` rather than leaving the field out where absence reads as "none". The
+  owner cannot pass an identity check (see Principle 3h), so the rules page has to
+  be read before registering. The 2026-10 survey of crypto-paying bounty sources
+  found no confirmed no-KYC route; this module does not change that, it only makes
+  the open CTFs visible.
+- **Ranking** (`score`, 0-100): stated prize 40, crypto 25, beginner wording 15,
+  Jeopardy format 10, starts soon 4-10. Jeopardy is the entry format;
+  attack-defence needs a team and infrastructure.
+- **An unreadable feed is not an empty month.** `fetch_events` returns `None`, the
+  last good list is kept, and `last_reason` becomes `fetch_failed` so the page can
+  say it is stale.
+- Self-throttles to `ctf_bounty.refresh_hours` (6). State in `status["ctf_bounty"]`
+  (`events`, `enterable`, `paying`, `crypto`, `beginner`, `last_refresh_at`,
+  `last_reason`), capped by `status_max_items` because `status.json` is committed
+  hourly.
+
 ### MRR idea triage (bot/earning/mrr_ideas.py)
 
 A recurring-revenue reality check. It scores business models against this
@@ -1214,8 +1261,7 @@ actions. If such keys exist, they are treated as research context only.
   then re-sent the same prompt to the same dead model 3x before failing the
   cycle with the misleading `No valid JSON object found ... First 200 chars: ''`.
   That is what skipped evolution on cycle #1751 and produced both `empty_draft`
-  article rejects. `_call_claude_cli` already raised on empty output; the API
-  paths now match it. An empty response is treated like a 404 — **step down the
+  article rejects. Every provider path now raises on empty output. An empty response is treated like a 404 — **step down the
   chain**, not retry the same model, because re-asking a model that just
   returned nothing usually returns nothing again and each wasted call comes off
   the 50/day free-tier ceiling.

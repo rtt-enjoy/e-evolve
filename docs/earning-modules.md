@@ -12,7 +12,7 @@ Exceptions are caught by `main.py._module()` — a crashed module does not stop 
 
 ---
 
-Four modules run: `code_techs` and `mrr_ideas` (research/suggestions only), plus
+Five modules run: `ctf_bounty`, `code_techs` and `mrr_ideas` (research/suggestions only), plus
 `articles` and `newsletter` (both publish to dev.to when `DEV_TO_API_KEY` is
 set). Social posting, crypto trading, NFT minting, payouts, and external
 comments are blocked by policy — the modules that once implemented them have
@@ -95,6 +95,21 @@ duplicate flood on dev.to.
 **Override:** `force articles N` command posts N articles in one cycle.
 
 ---
+
+## CTF Bounties (`bot/earning/ctf_bounty.py`)
+
+**Activates when:** `ctf_bounty.enabled` is true in `config/strategy.json`. No
+secret needed.
+
+The standing research focus. Reads CTFtime's keyless event API every
+`refresh_hours` (6), keeps online, open CTFs that are not over, and ranks them by
+stated prize, crypto, beginner wording, Jeopardy format and how soon they start.
+Deterministic, no LLM call, and it never registers or submits anything.
+
+It is research, not earning: a CTF prize is paid per event for the owner's own
+solving. Prize text is the organiser's claim, and payout / KYC terms are not
+published in the feed, so read the rules page before registering. State is in
+`status["ctf_bounty"]`.
 
 ## MRR Ideas (`bot/earning/mrr_ideas.py`)
 

@@ -992,7 +992,9 @@ class TestArticlePublishing(unittest.TestCase):
 		import bot.earning.articles as articles_module
 		from datetime import datetime, timezone
 
-		today = datetime.now(timezone.utc).date().isoformat()
+		# 01:00 UTC is 10:00 in the default UTC+9 morning window.
+		clock = datetime(2026, 10, 29, 1, 0, tzinfo=timezone.utc)
+		today = "2026-10-29"
 
 		class FakeResp:
 			status_code = 201
@@ -1002,17 +1004,20 @@ class TestArticlePublishing(unittest.TestCase):
 		status = {"article_daily": {"date": "1999-01-01", "published": 26}}
 		original_post = devto_module.requests.post
 		original_gen = articles_module._generate_article
+		original_clock = articles_module._clock
 		original_key = os.environ.get("DEV_TO_API_KEY")
 		try:
 			devto_module.requests.post = lambda *a, **k: FakeResp()
 			articles_module._generate_article = lambda llm, st: {
 				"title": "t", "body_markdown": "b", "tags": ["python"], "_source": {},
 			}
+			articles_module._clock = lambda: clock
 			os.environ["DEV_TO_API_KEY"] = "key"
 			articles_module.run(object(), status)
 		finally:
 			devto_module.requests.post = original_post
 			articles_module._generate_article = original_gen
+			articles_module._clock = original_clock
 			if original_key is None:
 				os.environ.pop("DEV_TO_API_KEY", None)
 			else:
@@ -3120,6 +3125,97 @@ class TestJsonParsing(unittest.TestCase):
 		self.assertGreaterEqual(evolution_module._MAX_FIX_TOKENS, 16_000)
 
 
+class TestCtfBountyResearch(unittest.TestCase):
+	"""CTF research ranks what a newcomer can enter and never claims a payout."""
+
+	NOW = None
+
+	def setUp(self):
+		from datetime import datetime, timezone
+		import bot.earning.ctf_bounty as C
+		self.C = C
+		self.now = datetime(2026, 10, 29, 0, 0, tzinfo=timezone.utc)
+		self.cfg = dict(C._DEFAULTS)
+
+	def _raw(self, **over):
+		raw = {
+			"id": 1, "title": "Sample CTF", "url": "https://ctf.example/",
+			"ctftime_url": "https://ctftime.org/event/1/", "format": "Jeopardy",
+			"onsite": False, "restrictions": "Open", "prizes": "TBD",
+			"start": "2026-11-02T00:00:00+00:00", "finish": "2026-11-03T00:00:00+00:00",
+			"weight": 0.0, "participants": 0, "description": "",
+		}
+		raw.update(over)
+		return raw
+
+	def _row(self, **over):
+		return self.C.build_event(self._raw(**over), self.cfg, self.now)
+
+	def test_unannounced_prize_is_not_a_prize(self):
+		for text in ("TBD", "", "None", "Certificates and swag", "To be announced!"):
+			self.assertFalse(self._row(prizes=text)["pays"], text)
+
+	def test_stated_cash_prize_is_a_prize(self):
+		for text in ("USD 2,500 Guaranteed Cash Prize Pool", "1st: 300 USD + a licence", "1st Place: 25$"):
+			self.assertTrue(self._row(prizes=text)["pays"], text)
+
+	def test_crypto_needs_the_prize_text_to_say_so(self):
+		self.assertTrue(self._row(prizes="1st: 500 USDT")["crypto"])
+		# A blockchain-themed CTF with a cash prize is not a crypto payout.
+		row = self._row(prizes="$500", title="Blockchain CTF")
+		self.assertTrue(row["pays"])
+		self.assertFalse(row["crypto"])
+
+	def test_onsite_restricted_and_finished_events_are_dropped(self):
+		self.assertIsNone(self._row(onsite=True))
+		self.assertIsNone(self._row(restrictions="Prequalified"))
+		self.assertIsNone(self._row(finish="2026-10-28T00:00:00+00:00"))
+
+	def test_running_event_is_kept_and_marked_live(self):
+		row = self._row(start="2026-10-28T00:00:00+00:00", finish="2026-10-30T00:00:00+00:00")
+		self.assertTrue(row["live"])
+
+	def test_payout_terms_are_never_claimed(self):
+		self.assertEqual(self._row(prizes="$500")["kyc"], "not published")
+
+	def test_a_stated_prize_outranks_a_beginner_event_with_none(self):
+		paying = self._raw(id=1, prizes="$500")
+		beginner = self._raw(id=2, description="A beginner friendly CTF")
+		rows = self.C.build_events([beginner, paying], self.cfg, self.now)
+		self.assertEqual([r["id"] for r in rows], [1, 2])
+
+	def test_unreadable_feed_keeps_the_last_good_list(self):
+		status = {"ctf_bounty": {"events": [{"id": 9}], "last_refresh_at": "2000-01-01T00:00:00+00:00"}}
+		original = self.C.fetch_events
+		self.C.fetch_events = lambda cfg, now: None
+		try:
+			actions = self.C.run(None, status)
+		finally:
+			self.C.fetch_events = original
+		self.assertFalse(actions[0]["success"])
+		self.assertEqual(status["ctf_bounty"]["events"], [{"id": 9}])
+		self.assertEqual(status["ctf_bounty"]["last_reason"], "fetch_failed")
+
+	def test_never_reports_money(self):
+		original = self.C.fetch_events
+		self.C.fetch_events = lambda cfg, now: [self._raw(prizes="$500")]
+		try:
+			actions = self.C.run(None, {})
+		finally:
+			self.C.fetch_events = original
+		self.assertEqual(actions[0]["estimated_usd"], 0.0)
+
+	def test_fresh_list_is_not_refetched_within_the_interval(self):
+		from datetime import datetime, timezone
+		status = {"ctf_bounty": {"last_refresh_at": datetime.now(timezone.utc).isoformat()}}
+		original = self.C.fetch_events
+		self.C.fetch_events = lambda cfg, now: self.fail("fetched inside the refresh interval")
+		try:
+			self.assertEqual(self.C.run(None, status), [])
+		finally:
+			self.C.fetch_events = original
+
+
 if __name__ == "__main__":
 	unittest.main()
 
@@ -3232,6 +3328,13 @@ class TestDevtoModuleIsThePublicSeam(unittest.TestCase):
 			self.assertFalse(hasattr(articles_module, name), name)
 
 
+def _morning_clock():
+	"""01:00 UTC, i.e. 10:00 in the default UTC+9 window."""
+	from datetime import datetime, timezone
+	return datetime(2026, 10, 29, 1, 0, tzinfo=timezone.utc)
+
+
+
 class TestRejectReasonIsRecorded(unittest.TestCase):
 	"""A cycle that publishes nothing must say which gate stopped it.
 
@@ -3245,12 +3348,15 @@ class TestRejectReasonIsRecorded(unittest.TestCase):
 		self.A = A
 		self._picked = A._pick_source
 		self._target = A._followup_target
+		self._clock = A._clock
 		A._followup_target = lambda status, key: None
+		A._clock = _morning_clock
 		os.environ["DEV_TO_API_KEY"] = "test-key"
 
 	def tearDown(self):
 		self.A._pick_source = self._picked
 		self.A._followup_target = self._target
+		self.A._clock = self._clock
 		os.environ.pop("DEV_TO_API_KEY", None)
 
 	def test_missing_llm_is_not_reported_as_a_sourcing_failure(self):
@@ -3316,7 +3422,8 @@ class TestForceArticlesHonoursItsCount(unittest.TestCase):
 		import bot.earning.articles as A
 		self.A = A
 		self._saved = (A._generate_article, A._record_publish, A._refresh_stats,
-					   A.devto.publish)
+					   A.devto.publish, A._clock)
+		A._clock = _morning_clock
 		os.environ["DEV_TO_API_KEY"] = "test-key"
 		self.published = []
 
@@ -3335,7 +3442,7 @@ class TestForceArticlesHonoursItsCount(unittest.TestCase):
 
 	def tearDown(self):
 		(self.A._generate_article, self.A._record_publish,
-		 self.A._refresh_stats, self.A.devto.publish) = self._saved
+		 self.A._refresh_stats, self.A.devto.publish, self.A._clock) = self._saved
 		os.environ.pop("DEV_TO_API_KEY", None)
 
 	def test_force_three_publishes_three(self):
@@ -3348,6 +3455,45 @@ class TestForceArticlesHonoursItsCount(unittest.TestCase):
 		status = {}
 		self.A.run(None, status)
 		self.assertEqual(len(self.published), 1)
+
+	def test_evening_cycle_waits_for_the_morning_window(self):
+		"""The article goes out in the owner's morning, not whenever a cycle lands."""
+		from datetime import datetime, timezone
+		# 15:00 UTC is 00:00 the next day at UTC+9: outside 06:00-12:00.
+		self.A._clock = lambda: datetime(2026, 10, 29, 15, 0, tzinfo=timezone.utc)
+		status = {}
+		self.assertEqual(self.A.run(None, status), [])
+		self.assertEqual(self.published, [])
+		self.assertEqual(status["article_daily"]["window"], "06:00-12:00 UTC+9")
+
+	def test_window_edges_are_start_inclusive_end_exclusive(self):
+		cfg = dict(self.A._DEFAULTS)
+		self.assertFalse(self.A._in_window(cfg, 5))
+		self.assertTrue(self.A._in_window(cfg, 6))
+		self.assertTrue(self.A._in_window(cfg, 11))
+		self.assertFalse(self.A._in_window(cfg, 12))
+
+	def test_window_can_be_lifted(self):
+		cfg = dict(self.A._DEFAULTS, publish_from_hour=0, publish_until_hour=0)
+		self.assertTrue(all(self.A._in_window(cfg, h) for h in range(24)))
+		self.assertEqual(self.A._window_label(cfg), "any hour")
+
+	def test_force_ignores_the_window(self):
+		from datetime import datetime, timezone
+		self.A._clock = lambda: datetime(2026, 10, 29, 15, 0, tzinfo=timezone.utc)
+		self.A.run(None, {"_overrides": {"force_articles": 1}})
+		self.assertEqual(len(self.published), 1)
+
+	def test_one_article_per_local_day_across_utc_midnight(self):
+		"""22:00 UTC and 00:00 UTC are both morning at UTC+9 and the same local day."""
+		from datetime import datetime, timezone
+		status = {}
+		self.A._clock = lambda: datetime(2026, 10, 28, 22, 0, tzinfo=timezone.utc)
+		self.A.run(None, status)
+		self.A._clock = lambda: datetime(2026, 10, 29, 0, 0, tzinfo=timezone.utc)
+		self.A.run(None, status)
+		self.assertEqual(len(self.published), 1)
+		self.assertEqual(status["article_daily"]["date"], "2026-10-29")
 
 	def test_a_failure_partway_stops_the_forced_batch(self):
 		"""A dead source mid-batch must not spin the remaining attempts."""

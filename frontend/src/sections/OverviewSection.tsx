@@ -1,11 +1,24 @@
-import { ArrowUpRight, Clock3, Eye, HandCoins, Wallet } from 'lucide-react';
+import { ArrowUpRight, Eye, HandCoins, Newspaper, Wallet } from 'lucide-react';
 import { useMemo } from 'react';
 import { Card, Empty, KeyValue, Phase, Pill, SectionHead, Stat, Tile } from '../components/ui';
 import { CopyButton } from '../components/CopyButton';
+import { CtfList } from '../components/CtfList';
 import { Funnel } from '../components/Funnel';
 import { buildFunnel, buildIssues, buildOpportunityStats, buildPhases, sortLeads } from '../utils/dashboard';
-import { ageLabel, cleanTitle, formatDate, money, scoreTone, sourceLabel } from '../utils/format';
+import { cleanTitle, formatDate, money, scoreTone, sourceLabel } from '../utils/format';
 import type { Status } from '../types/status';
+
+/**
+ * Whether today's article is out. The bot counts a day in the publish window's
+ * own UTC offset ("06:00-12:00 UTC+9"), so "today" is read the same way here;
+ * a window-less snapshot falls back to UTC.
+ */
+function articleToday(daily: NonNullable<Status['article_daily']>): { published: boolean; window: string } {
+	const window = daily.window || '';
+	const offset = Number(/UTC([+-]\d+)/.exec(window)?.[1] || 0);
+	const local = new Date(Date.now() + offset * 3_600_000).toISOString().slice(0, 10);
+	return { published: daily.date === local && (daily.published || 0) > 0, window };
+}
 
 export default function OverviewSection({ status }: { status: Status }) {
 	const earnings = status.earnings || {};
@@ -30,7 +43,8 @@ export default function OverviewSection({ status }: { status: Status }) {
 		).slice(0, 4),
 		[opportunities],
 	);
-	const freshness = ageLabel(status.last_run);
+	const article = articleToday(status.article_daily || {});
+	const ctfEvents = (status.ctf_bounty?.events || []).slice(0, 4);
 	const articleStats = status.article_stats || {};
 	// The ask. `payout_public` only exists when the same address is already
 	// printed in every published article, so this page exposes nothing the
@@ -79,12 +93,12 @@ export default function OverviewSection({ status }: { status: Status }) {
 					icon={<HandCoins size={15} />}
 				/>
 				<Tile
-					label="Last cycle"
-					value={freshness.label}
-					detail={`#${status.total_runs || 0} · took ${Math.round((status.last_cycle_seconds || 0) / 60)}m`}
-					tone={freshness.tone}
-					to="#/health"
-					icon={<Clock3 size={15} />}
+					label="Today's article"
+					value={article.published ? 'Published' : 'Pending'}
+					detail={article.window ? `goes out ${article.window}` : 'one article a day'}
+					tone={article.published ? 'good' : 'neutral'}
+					to="#/reach"
+					icon={<Newspaper size={15} />}
 				/>
 			</div>
 
@@ -124,6 +138,14 @@ export default function OverviewSection({ status }: { status: Status }) {
 				</div>
 
 				<div className="stack">
+					<Card
+						title="CTF bounties to enter"
+						hint="Online, open to anyone. Ranked by stated prize, then how soon."
+						action={<a className="btn" href="#/research">all {status.ctf_bounty?.enterable ?? 0} <ArrowUpRight size={14} /></a>}
+					>
+						{ctfEvents.length ? <CtfList events={ctfEvents} /> : <Empty text="No open CTFs found yet." />}
+					</Card>
+
 					{tip?.address ? (
 						<Card title={tip.heading || 'Support this work'} hint="The address printed at the end of every published article.">
 							{tip.note ? <p className="muted">{tip.note}</p> : null}

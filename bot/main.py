@@ -166,6 +166,10 @@ def main() -> int:
 			", ".join(ov["blocked_action_commands"]),
 		)
 
+	# CTF bounty research, the owner's standing research focus. Keyless CTFtime
+	# read, deterministic, no LLM call; self-throttles to ctf_bounty.refresh_hours.
+	actions += _module("ctf_bounty", llm, status, errors)
+
 	# Independent code-tech opportunity queue. This is suggestion-only: it may
 	# search and rank opportunities, but it must not comment, post, trade, mint,
 	# publish, or move funds.

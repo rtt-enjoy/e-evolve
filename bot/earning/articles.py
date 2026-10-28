@@ -1,6 +1,6 @@
 """
 Earning Module — Articles (dev.to)
-Generates and publishes one original technical article per day to dev.to,
+Generates and publishes one original technical article per morning to dev.to,
 written from a real trending source found by ``trending``.
 
 Activates with: DEV_TO_API_KEY. Without it the module skips silently.
@@ -10,6 +10,7 @@ from __future__ import annotations
 import logging
 import os
 import re
+from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
 from . import devto, devto_stats, trending
@@ -21,9 +22,17 @@ _PLATFORM = "dev.to"
 
 _DEFAULTS = {
 	"max_articles_per_cycle": 1,
-	# NOTE: articles gate on the calendar date (one per UTC day), not on an
+	# NOTE: articles gate on the calendar date (one per local day), not on an
 	# elapsed interval, so strategy.json's articles.min_interval_hours is not
 	# read here. It is left in the config file rather than silently honoured.
+	# The article goes out in the owner's morning: only cycles whose local hour
+	# is in [publish_from_hour, publish_until_hour) may publish, and "local" is
+	# UTC + publish_utc_offset_hours (9 = KST). A fixed offset, not a zone name,
+	# so nothing depends on tzdata being installed on the runner. Set until <=
+	# from to lift the restriction. `force articles N` ignores the window.
+	"publish_utc_offset_hours": 9,
+	"publish_from_hour": 6,
+	"publish_until_hour": 12,
 	"source_max_age_hours": 24,
 	# How many past titles/sources to remember for duplicate detection.
 	"history_limit": 200,
@@ -236,6 +245,25 @@ actually turned up for. The subject is proven; do not re-explain it.
 _FOLLOWUP_SYSTEM = _SYSTEM + _FOLLOWUP_EXTRA
 
 
+def _clock() -> datetime:
+	"""Current UTC time. A seam so tests can pin the hour the window sees."""
+	return datetime.now(timezone.utc)
+
+
+def _in_window(cfg: dict, local_hour: int) -> bool:
+	"""True when ``local_hour`` is inside the publish window (or none is set)."""
+	start, end = int(cfg["publish_from_hour"]), int(cfg["publish_until_hour"])
+	return end <= start or start <= local_hour < end
+
+
+def _window_label(cfg: dict) -> str:
+	start, end = int(cfg["publish_from_hour"]), int(cfg["publish_until_hour"])
+	if end <= start:
+		return "any hour"
+	offset = int(cfg["publish_utc_offset_hours"])
+	return f"{start:02d}:00-{end:02d}:00 UTC{offset:+d}"
+
+
 def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	"""Main entry point for the articles earning module."""
 	devto_api_key = os.getenv("DEV_TO_API_KEY", "").strip()
@@ -244,20 +272,24 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		log.debug("[articles] DEV_TO_API_KEY not set — skipping")
 		return []
 
-	# Check rate limiting
+	cfg = _config()
+	now = _clock()
+	local = now + timedelta(hours=int(cfg["publish_utc_offset_hours"]))
+	today = local.date().isoformat()
 	state = status.setdefault("article_daily", {})
-	last_date = state.get("date", "")
-	from datetime import datetime, timezone
-	today = datetime.now(timezone.utc).date().isoformat()
-	
+	state["window"] = _window_label(cfg)
+
 	forced = int(status.get("_overrides", {}).get("force_articles", 0) or 0)
-	if last_date == today and not forced:
+	if state.get("date") == today and not forced:
 		published_today = state.get("published", 0)
-		if published_today >= int(_config()["max_articles_per_cycle"]):
+		if published_today >= int(cfg["max_articles_per_cycle"]):
 			log.info("[articles] Already published %d article(s) today — skipping", published_today)
 			return []
 	if forced:
-		log.info("[articles] daily cap bypassed by 'force articles' command")
+		log.info("[articles] daily cap and morning window bypassed by 'force articles' command")
+	elif not _in_window(cfg, local.hour):
+		log.info("[articles] outside the morning window (%s) — waiting", state["window"])
+		return []
 
 	# `force articles N` is documented as "publish N articles now". commands.py
 	# already parses and clamps N to 1-5 and logs it, but this only ever

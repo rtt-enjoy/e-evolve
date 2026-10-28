@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T05:24:37.118749+00:00",
-  "total_runs": 2086,
+  "last_run": "2026-10-28T06:24:42.145615+00:00",
+  "total_runs": 2087,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,24 +33,62 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed. The PROMPT FOCUS is weak_title (ALL-CAPS words, 3 rejects in 14 days), but 24 prior proposals on this exact failure mode were rejected, the deterministic gate is working correctly, and the larger bottleneck is llm_error (25 rejects, 12 in 14 days) which no prompt edit can fix. Another prompt edit on ALL-CAPS titles would be the 25th unmerged branch on the same topic.",
-    "changes_applied": [],
-    "suggestions": [],
-    "direction": "Doctrine Principle 5, step 4 \u2014 reach into a live receive path; PROMPT FOCUS: weak_title / ALL-CAPS title rejections",
-    "evidence": [
-      "article_rejects.counts.weak_title = 12 lifetime, 3 in last 14 days, all 'title has ALL-CAPS word'",
-      "article_rejects.counts.llm_error = 25 lifetime, 12 in last 14 days \u2014 4x the weak_title rate, and not addressable by prompt edits",
-      "PRIOR PROPOSALS: 24 distinct open branches targeting the ALL-CAPS title rule, none merged",
-      "The gate _title_problems / _shouted_words is deterministic and correct; the LLM produces ALL-CAPS despite the ban being stated in both _SYSTEM and _revise_title"
+    "summary": "Add concrete examples of banned ALL-CAPS words to the article title prompt to reduce weak_title rejections.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "Add concrete examples of banned ALL-CAPS words to the TITLE rule to reduce weak_title rejections caused by shouting words."
+      }
     ],
-    "money_path": "reach-only (title quality affects click-through, which affects reach; no money enters directly)",
-    "verify": "No change made. If the reviewer disagrees, the next cycle can re-examine whether the deterministic ALL-CAPS normalization (extending devto.fix_title_casing to capitalize non-acronym ALL-CAPS words, called before the title gate in _finalize) would clear the bar \u2014 it is the one approach not yet attempted in code, only in a prior proposal.",
+    "suggestions": [
+      {
+        "title": "Merge the pending ALL-CAPS title fix",
+        "description": "The evolve/1.41.1 branch already contains the prompt edit targeting this exact rejection cause. Merging it will test whether concrete examples reduce weak_title rejections.",
+        "owner_action": "Review and merge branch evolve/1.41.1-20261028-033035",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open the PR for evolve/1.41.1-20261028-033035",
+          "Step 2: Verify the edit adds concrete ALL-CAPS examples to the _SYSTEM prompt TITLE rule",
+          "Step 3: Merge if the change is minimal and targeted"
+        ]
+      },
+      {
+        "title": "Add unit test for ALL-CAPS title rejection",
+        "description": "The previous evolution suggested a test in bot/tests.py to verify titles with ALL-CAPS words are rejected. This would confirm the gate works and prevent regression.",
+        "owner_action": "Edit bot/tests.py to add the test case",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open bot/tests.py",
+          "Step 2: Add a test that feeds a title containing an ALL-CAPS word (e.g., 'URGENT Fix Needed') to _title_problems and asserts a rejection",
+          "Step 3: Run the test suite to confirm it passes"
+        ]
+      }
+    ],
+    "direction": "Principle 5, step 3: improve reach by reducing weak_title rejections.",
+    "evidence": [
+      "article_rejects.counts (drafts lost per gate; total 49): llm_error=25, weak_title=12, empty_draft=9, fabricated=2, revision_fabricated=1",
+      "article_rejects.last = 'llm_error': 'LLM call failed'",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x3"
+    ],
+    "money_path": "reach-only",
+    "verify": "Monitor article_rejects.weak_title count; a reduction in the next cycle confirms the fix. Also add a unit test in bot/tests.py to verify titles with ALL-CAPS words are rejected.",
     "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
+    "branch": "evolve/1.41.1-20261028-064035",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "mrr-ideas",
+        "success": true,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
+        "estimated_usd": 0.0,
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "status.json#mrr_ideas"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -78,7 +116,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 734,
+  "last_cycle_seconds": 1206,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1217,7 +1255,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T05:24:37.793232+00:00",
+    "checked_at": "2026-10-28T06:24:42.541481+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1367,7 +1405,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-10-26T06:40:06.002155+00:00",
+    "last_refresh_at": "2026-10-28T06:40:35.866948+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -1376,41 +1414,41 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The only recurring-revenue path that fits a zero\u2011cost, research\u2011first, publish\u2011to\u2011dev.to stack is to create a highly focused paid newsletter or a niche Notion template library, prove demand with free dev.to articles, and then manually set up a payment account (Substack or Gumroad) to collect subscriptions \u2014 the owner must handle all account creation, ID verification, and payout configuration by hand because the automation cannot touch payments or inbound channels.",
+    "summary": "The only recurring-revenue path that fits a zero\u2011cost, research\u2011first, publish\u2011to\u2011dev.to stack is a paid weekly newsletter for a tightly defined developer niche; the owner writes a free sample issue as a dev.to article, manually opens a Gumroad account, creates a $12/mo subscription product, and then uses each subsequent dev.to post to drive sign\u2011ups, because the platform supplies the only audience and the owner can handle all payment setup by hand.",
     "ranked_ideas": [
       {
         "name": "Paid newsletter",
-        "why_this_stack_fits": "Articles on dev.to can serve as free sample issues and build an inbound audience without any outreach.",
-        "narrow_niche": "Backend engineers who need weekly curated PostgreSQL performance\u2011tuning tips",
-        "first_proof_artifact": "A complete sample newsletter issue published as a dev.to article with a clear \u201cSubscribe for weekly tips\u201d call\u2011to\u2011action",
-        "who_pays": "Individual backend engineers at mid\u2011size SaaS companies",
-        "monthly_price_usd": "10-15",
-        "runway_to_first_dollar": "6-10 weeks",
-        "owner_must_do_by_hand": "Open a Substack account, complete government\u2011ID verification, connect a Stripe payout account, create a paid subscription tier, and manually import any email addresses collected from dev.to comments"
+        "why_this_stack_fits": "dev.to articles become the free top\u2011of\u2011funnel and the only distribution channel the owner controls.",
+        "narrow_niche": "Junior backend engineers who need weekly, actionable Go performance\u2011tuning tips.",
+        "first_proof_artifact": "A complete sample newsletter issue (\u22481500 words) published as a dev.to article with a clear call\u2011to\u2011action linking to the Gumroad subscription page.",
+        "who_pays": "Individual junior backend engineers (2\u20115 years experience) who expense learning budgets.",
+        "monthly_price_usd": "12",
+        "runway_to_first_dollar": "4-8 weeks",
+        "owner_must_do_by_hand": "Open a Gumroad account, complete ID verification, create a $12/mo subscription product, and manually copy each new issue\u2019s URL into the Gumroad product description; no automation can collect payments or manage subscribers."
       },
       {
-        "name": "Notion / digital template store",
-        "why_this_stack_fits": "Dev.to articles can showcase a single high\u2011value template and gauge willingness to pay before any storefront exists.",
-        "narrow_niche": "Freelance frontend developers who need ready\u2011to\u2011use React component library templates in Notion",
-        "first_proof_artifact": "One polished Notion template (e.g., \u201cReact Hook Library Starter\u201d) shared via a dev.to article with a download link",
-        "who_pays": "Freelance frontend developers billing $75\u2011150/hr",
-        "monthly_price_usd": "12-20",
-        "runway_to_first_dollar": "8-12 weeks",
-        "owner_must_do_by_hand": "Create a Gumroad account, pass ID verification, set up a product for the template library, configure payout to a bank account, and manually upload each new template version"
+        "name": "Notion template library subscription",
+        "why_this_stack_fits": "Each dev.to article can showcase a single template, turning readers into subscribers for a growing library.",
+        "narrow_niche": "Solo SaaS founders building internal admin dashboards in Notion.",
+        "first_proof_artifact": "A fully functional Notion \u201cSaaS Metrics Dashboard\u201d template duplicated via a public link, embedded in a dev.to article with a subscription upsell.",
+        "who_pays": "Solo SaaS founders (1\u20113 person teams) who manage product metrics in Notion.",
+        "monthly_price_usd": "20",
+        "runway_to_first_dollar": "6-10 weeks",
+        "owner_must_do_by_hand": "Open a Gumroad account, verify identity, create a $20/mo subscription product that grants access to a private Notion workspace, and manually invite each paying subscriber to that workspace; the bot cannot handle invites or billing."
       }
     ],
     "validation_steps": [
-      "Publish a dev.to article that ends with a direct question: \u201cWould you pay $10\u201115/mo for a weekly PostgreSQL performance tip newsletter?\u201d and track comments.",
-      "Publish a dev.to article that ends with a direct question: \u201cWould you subscribe $12\u201120/mo for a growing library of React component Notion templates?\u201d and track comments.",
-      "Post a follow\u2011up comment thread on each article (by hand) asking readers to describe their current pain points and price sensitivity.",
-      "Engage in existing dev.to tags (#postgresql, #react, #freelance) where the owner already participates, answering questions and noting recurring requests."
+      "Publish a dev.to article that ends with a specific question (e.g., \u201cWhat\u2019s the hardest part of profiling Go services for you?\u201d) and monitor comments for 10 distinct respondents.",
+      "Reply to each comment by hand, asking if they\u2019d read a free weekly tip sheet; collect their dev.to usernames as inbound leads.",
+      "Join the existing dev.to \u201cGo\u201d and \u201cPerformance\u201d tag feeds the owner already follows; note recurring pain points mentioned in discussions.",
+      "Post a follow\u2011up dev.to thread (by hand) summarizing the top 3 pain points and ask readers to vote on the most valuable format (newsletter vs template)."
     ],
     "owner_actions": [
-      "Write and publish the two sample articles (newsletter issue and template showcase) on dev.to with clear CTAs.",
-      "Add a personal crypto tip address (e.g., Tron) to the dev.to profile for voluntary support \u2014 no account setup required.",
-      "Research 5\u201110 existing newsletters or template packs in each niche to identify gaps and differentiate the offer.",
-      "Collect at least 10 interested commenters per article, then manually create the Substack and Gumroad accounts (including ID verification) if the owner decides to proceed.",
-      "Set up a simple spreadsheet to track subscriber interest, pricing feedback, and template feature requests for future iterations."
+      "Write and publish a pillar dev.to article demonstrating deep Go performance knowledge, ending with the validation question.",
+      "Manually create a Gumroad account, complete ID verification, and set up a $12/mo subscription product for the newsletter.",
+      "Produce the first full newsletter issue, publish it as a dev.to article, and add the Gumroad subscription link in the article body.",
+      "Publish a weekly dev.to article that delivers one actionable Go tip and includes the subscription link, repeating the cadence indefinitely.",
+      "Monitor comments on each article for expressions of interest and manually note usernames for future reference (no automated capture)."
     ],
     "viable": [
       {
@@ -1537,8 +1575,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261028-064035",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 39,
     "total_views": 5136,
@@ -1755,7 +1793,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T05:36:50.724085+00:00",
+    "last_run": "2026-10-28T06:44:46.991722+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1765,25 +1803,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T05:36:51.013157+00:00",
+    "last_run": "2026-10-28T06:44:47.319847+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4780783,
-        "at": "2026-10-27T21:09:25.708332+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-10-27T21:09:25.708332+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-10-27T21:09:25.708332+00:00",
-        "ok": true
-      },
       {
         "id": 4740283,
         "at": "2026-10-27T21:28:52.252124+00:00",
@@ -1796,11 +1819,6 @@
       },
       {
         "id": 4729472,
-        "at": "2026-10-27T21:28:52.252124+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
         "at": "2026-10-27T21:28:52.252124+00:00",
         "ok": true
       },
@@ -1960,8 +1978,28 @@
         "ok": true
       },
       {
+        "id": 4780783,
+        "at": "2026-10-28T06:44:47.319847+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-10-28T06:44:47.319847+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-10-28T06:44:47.319847+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-10-28T06:44:47.319847+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T05:36:51.013157+00:00",
+        "at": "2026-10-28T06:44:47.319847+00:00",
         "ok": true
       }
     ],
@@ -1970,7 +2008,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.5
+    "oldest_check_age_hours": 9.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1987,7 +2025,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 1
+      "openrouter": 2
     }
   }
 }

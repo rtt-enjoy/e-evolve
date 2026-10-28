@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-28T04:24:34.933240+00:00",
-  "total_runs": 2085,
+  "last_run": "2026-10-28T05:24:37.118749+00:00",
+  "total_runs": 2086,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -33,42 +33,18 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the identified weak_title issue (ALL-CAPS words) already has a pending fix in evolve/1.41.1-20261028-033035 that clarifies the ban with concrete examples; the other major reject category (llm_error=25) is an engine failure not fixable by prompt edits. Stacking another prompt edit on an unmerged branch would violate the rule against stacking rules beside unproven ones.",
+    "summary": "No change proposed. The PROMPT FOCUS is weak_title (ALL-CAPS words, 3 rejects in 14 days), but 24 prior proposals on this exact failure mode were rejected, the deterministic gate is working correctly, and the larger bottleneck is llm_error (25 rejects, 12 in 14 days) which no prompt edit can fix. Another prompt edit on ALL-CAPS titles would be the 25th unmerged branch on the same topic.",
     "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Merge the pending ALL-CAPS title fix",
-        "description": "The evolve/1.41.1 branch already contains the prompt edit targeting this exact rejection cause. Merging it will test whether concrete examples reduce weak_title rejections.",
-        "owner_action": "Review and merge branch evolve/1.41.1-20261028-033035",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open the PR for evolve/1.41.1-20261028-033035",
-          "Step 2: Verify the edit adds concrete ALL-CAPS examples to the _SYSTEM prompt TITLE rule",
-          "Step 3: Merge if the change is minimal and targeted"
-        ]
-      },
-      {
-        "title": "Add unit test for ALL-CAPS title rejection",
-        "description": "The previous evolution suggested a test in bot/tests.py to verify titles with ALL-CAPS words are rejected. This would confirm the gate works and prevent regression.",
-        "owner_action": "Edit bot/tests.py to add the test case",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open bot/tests.py",
-          "Step 2: Add a test that feeds a title containing an ALL-CAPS word (e.g., 'URGENT Fix Needed') to _title_problems and asserts a rejection",
-          "Step 3: Run the test suite to confirm it passes"
-        ]
-      }
-    ],
-    "direction": "reach into a live receive path (doctrine Principle 5, step 3)",
+    "suggestions": [],
+    "direction": "Doctrine Principle 5, step 4 \u2014 reach into a live receive path; PROMPT FOCUS: weak_title / ALL-CAPS title rejections",
     "evidence": [
-      "article_rejects.counts.weak_title=12 lifetime, 3 in last 14 days",
-      "gate findings: 'title has ALL-CAPS word' x3",
-      "last_evolution.summary addresses exactly this with 'Clarify the ALL-CAPS ban... adding concrete examples'",
-      "evolution_pending_review=true (fix not yet merged)",
-      "article_rejects.counts.llm_error=25 (largest category, engine-side, not prompt-fixable)"
+      "article_rejects.counts.weak_title = 12 lifetime, 3 in last 14 days, all 'title has ALL-CAPS word'",
+      "article_rejects.counts.llm_error = 25 lifetime, 12 in last 14 days \u2014 4x the weak_title rate, and not addressable by prompt edits",
+      "PRIOR PROPOSALS: 24 distinct open branches targeting the ALL-CAPS title rule, none merged",
+      "The gate _title_problems / _shouted_words is deterministic and correct; the LLM produces ALL-CAPS despite the ban being stated in both _SYSTEM and _revise_title"
     ],
-    "money_path": "reach-only",
-    "verify": "wait for evolve/1.41.1 to be merged, then confirm weak_title count drops in the next 14-day window",
+    "money_path": "reach-only (title quality affects click-through, which affects reach; no money enters directly)",
+    "verify": "No change made. If the reviewer disagrees, the next cycle can re-examine whether the deterministic ALL-CAPS normalization (extending devto.fix_title_casing to capitalize non-acronym ALL-CAPS words, called before the title gate in _finalize) would clear the bar \u2014 it is the one approach not yet attempted in code, only in a prior proposal.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -102,7 +78,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1630,
+  "last_cycle_seconds": 734,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1241,7 +1217,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-28T04:24:35.783314+00:00",
+    "checked_at": "2026-10-28T05:24:37.793232+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1779,7 +1755,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-28T04:51:43.899868+00:00",
+    "last_run": "2026-10-28T05:36:50.724085+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1789,25 +1765,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-28T04:51:44.222914+00:00",
+    "last_run": "2026-10-28T05:36:51.013157+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4602729,
-        "at": "2026-10-27T19:57:19.409797+00:00",
-        "ok": true
-      },
-      {
-        "id": 4925166,
-        "at": "2026-10-27T19:57:19.409797+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-10-27T19:57:19.409797+00:00",
-        "ok": true
-      },
       {
         "id": 4780783,
         "at": "2026-10-27T21:09:25.708332+00:00",
@@ -1820,11 +1781,6 @@
       },
       {
         "id": 4800078,
-        "at": "2026-10-27T21:09:25.708332+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-10-27T21:09:25.708332+00:00",
         "ok": true
       },
@@ -1984,8 +1940,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-10-28T05:36:51.013157+00:00",
+        "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-10-28T05:36:51.013157+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-10-28T05:36:51.013157+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-10-28T05:36:51.013157+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-28T04:51:44.222914+00:00",
+        "at": "2026-10-28T05:36:51.013157+00:00",
         "ok": true
       }
     ],
@@ -1994,7 +1970,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.9
+    "oldest_check_age_hours": 8.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

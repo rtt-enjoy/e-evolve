@@ -976,7 +976,7 @@ _TITLE_BANNED = [
 	(r"\btop \d+\b", 'listicle "top N"'),
 	(r"\bmust.(know|read|have)\b", 'clickbait "must-know"'),
 	(r"!", "exclamation mark"),
-	("__SHOUTING__", "ALL-CAPS word"),
+	(r"(?<!\\b(?:JSON|HTTP|HTML|CSS|SQL|API|GPU|GPUs|CPU|DNS|TLS|SSH|URL|URI|SDK|CLI|GUI|IA|ML|RPC|CRUD|ACID|TCP|UDP|SSD|OS|VM|AWS|GCP|SQLITE|POSTGRES|MYSQL|REDIS|NGINX|LLM|LLMS|RAG|GPT|AI|ML|ETL|CI|CD|TDD|DDD|MVC|ORM|UUID|ASCII|UTF|REGEX|WASM|PDF|OCR|NPM|PIP|GIT|AST)\[A-Z]{2,}\", "ALL-CAPS word not an acronym"),
 	(r"\b\d+\s*(things|ways|tips|tricks)\s+(you|to|that)\b", "generic listicle framing"),
 ]
 

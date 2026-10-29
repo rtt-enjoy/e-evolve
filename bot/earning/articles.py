@@ -1033,8 +1033,9 @@ def _title_problems(title: str, cfg: dict | None = None) -> list[str]:
 
 	for pattern, label in _TITLE_BANNED:
 		if pattern == "__SHOUTING__":
-			if _shouted_words(text):
-				problems.append(f"title has {label}")
+			shouted = _shouted_words(text)
+			if shouted:
+				problems.append(f"title has {label}: {', '.join(shouted)}")
 			continue
 		if re.search(pattern, text, re.IGNORECASE):
 			problems.append(f"title has {label}")

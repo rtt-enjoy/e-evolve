@@ -136,8 +136,11 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
   "Your Python Retry Loop Is Lying To You" is not.
 - Create a curiosity gap and then PAY IT OFF in the body. Never promise something
   the article does not deliver -- dev.to readers punish that in the comments.
-- Title Case The Important Words. It reads as considered, not shouted. Keep
-  acronyms and product names in their real casing ("PDF", "JSON", "GitHub").
+- Use Title Case for the important words: capitalize the first letter of each
+  key word (e.g., "Your Python Retry Loop Is Lying To You"). Do NOT write
+  any word in ALL-CAPS — that reads as shouting and suppresses clicks.
+  Keep acronyms and product names in their real casing ("PDF", "JSON",
+  "GitHub").
 - BANNED in titles: exclamation marks, "Ultimate", "Complete Guide",
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",

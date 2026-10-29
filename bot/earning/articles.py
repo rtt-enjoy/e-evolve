@@ -137,11 +137,23 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
 - Create a curiosity gap and then PAY IT OFF in the body. Never promise something
   the article does not deliver -- dev.to readers punish that in the comments.
 - Title Case The Important Words. It reads as considered, not shouted. Keep
-  acronyms and product names in their real casing ("PDF", "JSON", "GitHub").
+  acronyms and product names in their real casing — allowed examples:
+  "PDF", "JSON", "YAML", "HTTP", "HTTPS", "HTML", "CSS", "SQL", "REST",
+  "GraphQL", "JWT", "OAuth", "CORS", "TCP", "UDP", "DNS", "SSH",
+  "TLS", "SSL", "VPN", "CDN", "URL", "URI", "API", "SDK", "CLI",
+  "GUI", "IDE", "CPU", "GPU", "RAM", "SSD", "OS", "VM", "AWS",
+  "GCP", "PostgreSQL", "MySQL", "Redis", "NGINX", "LLM", "LLMs",
+  "RAG", "GPT", "AI", "ML", "ETL", "CI", "CD", "TDD", "DDD",
+  "MVC", "ORM", "UUID", "ASCII", "UTF", "Regex", "WASM", "OCR",
+  "npm", "pip", "Git", "GitHub", "GitLab", "JavaScript", "TypeScript",
+  "macOS", "iOS", "DevOps", "WebAssembly".
 - BANNED in titles: exclamation marks, "Ultimate", "Complete Guide",
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
-  and any ALL-CAPS word. These read as spam and suppress clicks here.
+  and any ALL-CAPS word that is NOT a real acronym or product name above.
+  Examples of banned shouting: "URGENT", "BREAKING", "MUST READ",
+  "SECRET", "HACK", "TRICK", "MAGIC", "INSANE", "CRAZY", "BEST",
+  "FREE", "NEW", "HOT", "TOP", "PRO", "MAX", "ULTRA", "SUPER".
 - No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
   wastes the scannable half of the line. Pick the sharper half and stop.
 

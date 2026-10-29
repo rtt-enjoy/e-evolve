@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-29T01:58:58.423783+00:00",
-  "total_runs": 2109,
+  "last_run": "2026-10-29T02:59:01.258178+00:00",
+  "total_runs": 2110,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,17 +34,22 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Edit the article draft system prompt to explicitly prohibit ALL-CAPS words in titles with a concrete example, addressing the gate finding 'title has ALL-CAPS word' that caused 3 weak_title rejections in the last 14 days.",
-    "changes_applied": [],
+    "summary": "Add one concrete example to the ALL-CAPS banned words rule in the article draft system prompt, showing that writing 'TIP' in all caps reads as shouting and should be written as 'Tip' instead, making the rule more concrete for the LLM.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "sharpen the ALL-CAPS title ban with a concrete example so the LLM understands the rule"
+      }
+    ],
     "suggestions": [],
     "direction": "prompt focus: weak_title gate",
     "evidence": [
       "weak_title lost 3 draft(s) in last 14 days per PROMPT LEDGER; gate findings 'title has ALL-CAPS word' x3"
     ],
-    "money_path": "reach-only (more compliant articles enter the live receive path with footer)",
-    "verify": "weak_title count in 14-day window should fall from 3 to 0; no gate findings of 'title has ALL-CAPS word'",
+    "money_path": "reach-only (better title compliance enables more articles into the live receive path)",
+    "verify": "weak_title count in 14-day window should fall from 3 to 0; no gate findings of 'title has ALL-CAPS word' in the next cycle",
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.41.1-20261029-031559",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -65,7 +70,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 571,
+  "last_cycle_seconds": 1020,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1185,7 +1190,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-29T01:58:58.938849+00:00",
+    "checked_at": "2026-10-29T02:59:02.154749+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1505,8 +1510,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261029-031559",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 39,
     "total_views": 5179,
@@ -1733,7 +1738,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-29T02:08:28.936149+00:00",
+    "last_run": "2026-10-29T03:15:59.722724+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1743,32 +1748,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-29T02:08:29.127065+00:00",
+    "last_run": "2026-10-29T03:16:00.126036+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4641536,
-        "at": "2026-10-28T17:20:01.508625+00:00",
-        "ok": true
-      },
-      {
-        "id": 4908316,
-        "at": "2026-10-28T18:26:05.318256+00:00",
-        "ok": true
-      },
-      {
         "id": 4765372,
-        "at": "2026-10-28T18:26:05.318256+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
-        "at": "2026-10-28T18:26:05.318256+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-10-28T18:26:05.318256+00:00",
         "ok": true
       },
@@ -1943,8 +1928,28 @@
         "ok": true
       },
       {
+        "id": 4641536,
+        "at": "2026-10-29T03:16:00.126036+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-10-29T03:16:00.126036+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-10-29T03:16:00.126036+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-10-29T03:16:00.126036+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-29T02:08:29.127065+00:00",
+        "at": "2026-10-29T03:16:00.126036+00:00",
         "ok": true
       }
     ],

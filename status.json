@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-29T06:59:07.426732+00:00",
-  "total_runs": 2114,
+  "last_run": "2026-10-29T07:12:05.288164+00:00",
+  "total_runs": 2115,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,35 +34,19 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Tighten the ALL-CAPS title rule in the article-draft system prompt: replace the vague 'any ALL-CAPS word' ban with concrete banned examples (URGENT, NOW, IMPORTANT, FREE) and an explicit acronym exception (PDF, JSON, API, GitHub), so the LLM stops producing titles the gate rejects as shouted words.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The _SYSTEM TITLE rule bans 'any ALL-CAPS word' without saying which words, so the LLM keeps guessing and the gate rejects titles containing shouted words. Replacing that one line with concrete banned examples plus the acronym exception gives the model a deterministic target it can match, and _revise_title inherits the same system prompt."
-      }
-    ],
-    "suggestions": [
-      {
-        "title": "Add the receive address to the dev.to profile bio",
-        "description": "One manual edit at dev.to/settings puts the tip ask on every profile visit permanently; the bot cannot do it (Forem's users API is read-only for this token).",
-        "owner_action": "Edit the Bio field at dev.to/settings to include the Tron USDT receive address and a one-line ask.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open dev.to/settings.",
-          "Step 2: Paste the published Tron address and a short ask into the Bio field and save."
-        ]
-      }
-    ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path: publish more articles in the shapes readers prefer; PROMPT FOCUS is weak_title (article draft _SYSTEM TITLE rules and title rewrite _revise_title).",
+    "summary": "Clarify the ALL-CAPS title ban in the system prompt to exclude known acronyms, reducing weak_title rejections and improving reach into the live receive path.",
+    "changes_applied": [],
+    "suggestions": [],
+    "direction": "PROMPT FOCUS (weak_title) \u2013 improve title quality to increase reach into the live receive path.",
     "evidence": [
-      "article_rejects: weak_title lost 3 drafts in the last 14 days, the prompt-fixable slice of the 51 lifetime rejects",
-      "Gate finding behind those rejects: 'title has ALL-CAPS word' x3",
-      "PROMPT FOCUS names weak_title and the prompts that produce it: article draft _SYSTEM (TITLE, CONTENT RULES, SOURCE HANDLING) and title rewrite _revise_title()"
+      "article_rejects.counts weak_title=3",
+      "article_rejects.last = 'llm_error': 'LLM call failed'",
+      "gate findings: 'title has ALL-CAPS word' x3"
     ],
     "money_path": "reach-only",
-    "verify": "article_rejects.recent weak_title entries in the last-14-day window should fall from 3 toward 0, and the 'title has ALL-CAPS word' gate finding should stop appearing; next cycle's status should show no new weak_title rejects.",
+    "verify": "Add a test in bot/tests.py that asserts titles from _revise_title contain no disallowed ALL-CAPS words (i.e., not in _KNOWN_ACRONYMS) and that the weak_title reject count drops to 0 after the change.",
     "error": null,
-    "branch": "evolve/1.41.1-20261029-071137",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -82,7 +66,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 751,
+  "last_cycle_seconds": 357,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1200,7 +1184,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-29T06:59:07.960842+00:00",
+    "checked_at": "2026-10-29T07:12:05.816918+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1520,8 +1504,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261029-071137",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 39,
     "total_views": 5179,
@@ -1748,7 +1732,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-29T07:11:37.739339+00:00",
+    "last_run": "2026-10-29T07:18:01.036365+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1758,30 +1742,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-29T07:11:38.006787+00:00",
+    "last_run": "2026-10-29T07:18:01.357025+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4681657,
-        "at": "2026-10-28T21:39:16.392174+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-10-28T22:57:14.518561+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-10-28T22:57:14.518561+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-10-28T22:57:14.518561+00:00",
-        "ok": true
-      },
       {
         "id": 4937139,
         "at": "2026-10-28T22:57:14.518561+00:00",
@@ -1958,8 +1922,28 @@
         "ok": true
       },
       {
+        "id": 4681657,
+        "at": "2026-10-29T07:18:01.357025+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-10-29T07:18:01.357025+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-10-29T07:18:01.357025+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-10-29T07:18:01.357025+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-29T07:11:38.006787+00:00",
+        "at": "2026-10-29T07:18:01.357025+00:00",
         "ok": true
       }
     ],
@@ -1968,7 +1952,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.5
+    "oldest_check_age_hours": 8.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

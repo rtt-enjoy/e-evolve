@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-29T02:59:01.258178+00:00",
-  "total_runs": 2110,
+  "last_run": "2026-10-29T03:59:07.984420+00:00",
+  "total_runs": 2111,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,23 +34,32 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add one concrete example to the ALL-CAPS banned words rule in the article draft system prompt, showing that writing 'TIP' in all caps reads as shouting and should be written as 'Tip' instead, making the rule more concrete for the LLM.",
-    "changes_applied": [
+    "summary": "No code change proposed this cycle. The PROMPT FOCUS is weak_title with 'title has ALL-CAPS word' x3 gate findings, but the fix\u2014a concrete ALL-CAPS example in the article draft system prompt\u2014is already proposed as pending branch evolve/1.41.1-20261029-031559 (version 1.41.1), and PRIOR PROPOSALS lists 25+ open branches covering the same ALL-CAPS title edit. Repeating it would duplicate prior proposals; the blocker is owner review of the existing branch, not a missing code change.",
+    "changes_applied": [],
+    "suggestions": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "sharpen the ALL-CAPS title ban with a concrete example so the LLM understands the rule"
+        "title": "Merge or close the pending ALL-CAPS title branch",
+        "description": "Branch evolve/1.41.1-20261029-031559 already adds the concrete ALL-CAPS example the prompt focus needs; 25 similar branches are open and unmerged, blocking further prompt iteration",
+        "owner_action": "Open the PR for branch evolve/1.41.1-20261029-031559 and merge or close it",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open the PR for branch evolve/1.41.1-20261029-031559",
+          "Step 2: Merge or close based on whether the prompt example adds value beyond the existing deterministic gate",
+          "Step 3: Comment on the PR explaining the decision so future cycles do not re-derive the same edit"
+        ]
       }
     ],
-    "suggestions": [],
-    "direction": "prompt focus: weak_title gate",
+    "direction": "prompt focus: weak_title gate \u2014 the required prompt edit already exists as a pending proposal; no new change clears the bar",
     "evidence": [
-      "weak_title lost 3 draft(s) in last 14 days per PROMPT LEDGER; gate findings 'title has ALL-CAPS word' x3"
+      "weak_title lost 3 draft(s) in last 14 days per PROMPT LEDGER; gate findings 'title has ALL-CAPS word' x3",
+      "last_evolution.proposed_version = 1.41.1 with the same ALL-CAPS example fix; evolution_pending_review = true",
+      "PRIOR PROPOSALS: 25+ ALL-CAPS title branches open, none merged"
     ],
     "money_path": "reach-only (better title compliance enables more articles into the live receive path)",
-    "verify": "weak_title count in 14-day window should fall from 3 to 0; no gate findings of 'title has ALL-CAPS word' in the next cycle",
+    "verify": "Owner merges or closes the pending ALL-CAPS branch; after the prompt edit lands, weak_title count in the 14-day window should fall from 3 to 0 with no 'title has ALL-CAPS word' gate findings",
     "error": null,
-    "branch": "evolve/1.41.1-20261029-031559",
-    "proposed_version": "1.41.1"
+    "branch": null,
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -58,19 +67,19 @@
   },
   "suggestions": [
     {
-      "title": "Decide on the pending ALL-CAPS title branches",
-      "description": "25 evolution branches have proposed variants of the ALL-CAPS title rule; none merged. The owner must merge or close the oldest (evolve/1.41.1-20261028-203602) to unblock further prompt iteration.",
-      "owner_action": "Open the PR for branch evolve/1.41.1-20261028-203602 and merge or close with a comment stating whether prompt examples add value beyond the existing deterministic gate.",
+      "title": "Merge or close the pending ALL-CAPS title branch",
+      "description": "Branch evolve/1.41.1-20261029-031559 already adds the concrete ALL-CAPS example the prompt focus needs; 25 similar branches are open and unmerged, blocking further prompt iteration",
+      "owner_action": "Open the PR for branch evolve/1.41.1-20261029-031559 and merge or close it",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the PR for branch evolve/1.41.1-20261028-203602",
-        "Step 2: Decide merge or close based on whether the prompt examples add value beyond the existing deterministic gate",
-        "Step 3: Merge or close the PR with a comment explaining the decision"
+        "Step 1: Open the PR for branch evolve/1.41.1-20261029-031559",
+        "Step 2: Merge or close based on whether the prompt example adds value beyond the existing deterministic gate",
+        "Step 3: Comment on the PR explaining the decision so future cycles do not re-derive the same edit"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1020,
+  "last_cycle_seconds": 431,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1190,7 +1199,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-29T02:59:02.154749+00:00",
+    "checked_at": "2026-10-29T03:59:09.176943+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1510,8 +1519,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261029-031559",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 39,
     "total_views": 5179,
@@ -1738,7 +1747,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-29T03:15:59.722724+00:00",
+    "last_run": "2026-10-29T04:06:15.535263+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1748,32 +1757,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-29T03:16:00.126036+00:00",
+    "last_run": "2026-10-29T04:06:16.518200+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4765372,
-        "at": "2026-10-28T18:26:05.318256+00:00",
-        "ok": true
-      },
-      {
         "id": 4568987,
-        "at": "2026-10-28T19:20:39.940927+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-10-28T19:20:39.940927+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-10-28T19:20:39.940927+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
         "at": "2026-10-28T19:20:39.940927+00:00",
         "ok": true
       },
@@ -1948,8 +1937,28 @@
         "ok": true
       },
       {
+        "id": 4765372,
+        "at": "2026-10-29T04:06:16.518200+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-10-29T04:06:16.518200+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-10-29T04:06:16.518200+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-10-29T04:06:16.518200+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-29T03:16:00.126036+00:00",
+        "at": "2026-10-29T04:06:16.518200+00:00",
         "ok": true
       }
     ],

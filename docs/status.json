@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-29T00:58:51.063013+00:00",
-  "total_runs": 2108,
+  "last_run": "2026-10-29T01:58:58.423783+00:00",
+  "total_runs": 2109,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,36 +34,17 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Include the specific ALL-CAPS words in the title problem message so the rewrite prompt tells the LLM exactly which words to fix, making the rewrite more likely to succeed and reducing weak_title rejections.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "_title_problems() reports ALL-CAPS violations generically ('title has ALL-CAPS word') without naming the actual words. The rewrite prompt in _revise_title() includes this problem text, so the LLM receives no guidance about which specific words to fix. Naming the words in the problem message makes the rewrite prompt actionable and should increase the first-rewrite success rate, reducing weak_title rejections without softening the gate."
-      }
-    ],
-    "suggestions": [
-      {
-        "title": "Decide on the pending ALL-CAPS title branches",
-        "description": "25 evolution branches have proposed variants of the ALL-CAPS title rule; none merged. The owner must merge or close the oldest (evolve/1.41.1-20261028-203602) to unblock further prompt iteration.",
-        "owner_action": "Open the PR for branch evolve/1.41.1-20261028-203602 and merge or close with a comment stating whether prompt examples add value beyond the existing deterministic gate.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open the PR for branch evolve/1.41.1-20261028-203602",
-          "Step 2: Decide merge or close based on whether the prompt examples add value beyond the existing deterministic gate",
-          "Step 3: Merge or close the PR with a comment explaining the decision"
-        ]
-      }
-    ],
-    "direction": "Principle 5, step 2 \u2014 reach into a live receive path; PROMPT FOCUS is weak_title from 'title has ALL-CAPS word'",
+    "summary": "Edit the article draft system prompt to explicitly prohibit ALL-CAPS words in titles with a concrete example, addressing the gate finding 'title has ALL-CAPS word' that caused 3 weak_title rejections in the last 14 days.",
+    "changes_applied": [],
+    "suggestions": [],
+    "direction": "prompt focus: weak_title gate",
     "evidence": [
-      "article_rejects.counts (last 14 days): weak_title=3",
-      "Gate findings behind it: 'title has ALL-CAPS word' x3",
-      "_title_problems() reports 'title has ALL-CAPS word' generically without naming the specific words, so _revise_title()'s prompt gives the LLM no target to fix"
+      "weak_title lost 3 draft(s) in last 14 days per PROMPT LEDGER; gate findings 'title has ALL-CAPS word' x3"
     ],
-    "money_path": "reach-only (improves reach by getting more drafts through the gate; does not touch the receive path)",
-    "verify": "next cycle's article_rejects.counts weak_title should fall below 3; the count that should move is the one currently at 3",
+    "money_path": "reach-only (more compliant articles enter the live receive path with footer)",
+    "verify": "weak_title count in 14-day window should fall from 3 to 0; no gate findings of 'title has ALL-CAPS word'",
     "error": null,
-    "branch": "evolve/1.41.1-20261029-010512",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -84,7 +65,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 383,
+  "last_cycle_seconds": 571,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1204,7 +1185,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-29T00:58:51.507053+00:00",
+    "checked_at": "2026-10-29T01:58:58.938849+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1524,8 +1505,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261029-010512",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 39,
     "total_views": 5179,
@@ -1752,7 +1733,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-29T01:05:12.504557+00:00",
+    "last_run": "2026-10-29T02:08:28.936149+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1762,32 +1743,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-29T01:05:13.126201+00:00",
+    "last_run": "2026-10-29T02:08:29.127065+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4740283,
-        "at": "2026-10-28T16:18:34.242813+00:00",
-        "ok": true
-      },
-      {
         "id": 4641536,
-        "at": "2026-10-28T17:20:01.508625+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-10-28T17:20:01.508625+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-10-28T17:20:01.508625+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
         "at": "2026-10-28T17:20:01.508625+00:00",
         "ok": true
       },
@@ -1962,8 +1923,28 @@
         "ok": true
       },
       {
+        "id": 4740283,
+        "at": "2026-10-29T02:08:29.127065+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-10-29T02:08:29.127065+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-10-29T02:08:29.127065+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-10-29T02:08:29.127065+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-29T01:05:13.126201+00:00",
+        "at": "2026-10-29T02:08:29.127065+00:00",
         "ok": true
       }
     ],

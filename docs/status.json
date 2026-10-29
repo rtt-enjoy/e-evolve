@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-29T14:08:21.727551+00:00",
-  "total_runs": 2122,
+  "last_run": "2026-10-29T14:40:02.001355+00:00",
+  "total_runs": 2123,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,13 +34,8 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Refine the ALL-CAPS title rule to allow known acronyms, reducing weak_title rejections and improving reach.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "Refine the ALL-CAPS title rule to allow known acronyms, reducing weak_title rejections and improving reach."
-      }
-    ],
+    "summary": "No change is proposed this cycle because the weak_title prompt focus is saturated with over thirty open ALL-CAPS title-rule proposals including the v1.41.0 refinement already applied, so another incremental edit would repeat an open proposal.",
+    "changes_applied": [],
     "suggestions": [],
     "direction": "Principle 5, step 3: publish more articles in shapes readers measurably prefer",
     "evidence": [
@@ -48,9 +43,9 @@
       "article_rejects.last = 'llm_error'"
     ],
     "money_path": "reach-only",
-    "verify": "status['article_rejects']['counts']['weak_title'] should drop by at least 1 in the next cycle, indicating fewer rejections due to the refined ALL-CAPS rule.",
+    "verify": "No change proposed; the reviewer should confirm the pending evolve/1.41.1-20261029-143938 ALL-CAPS refinement and watch status['article_rejects']['counts']['weak_title'] next cycle.",
     "error": null,
-    "branch": "evolve/1.41.1-20261029-143938",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -70,7 +65,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1878,
+  "last_cycle_seconds": 735,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1256,7 +1251,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-29T14:08:22.518499+00:00",
+    "checked_at": "2026-10-29T14:40:02.603481+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1576,8 +1571,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261029-143938",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 39,
     "total_views": 5179,
@@ -1804,7 +1799,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-29T14:39:38.813089+00:00",
+    "last_run": "2026-10-29T14:52:16.564016+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1814,25 +1809,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-29T14:39:39.091567+00:00",
+    "last_run": "2026-10-29T14:52:16.743786+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-10-29T06:19:37.501347+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-10-29T06:19:37.501347+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
-        "at": "2026-10-29T06:19:37.501347+00:00",
-        "ok": true
-      },
       {
         "id": 4931682,
         "at": "2026-10-29T07:11:38.006787+00:00",
@@ -1845,11 +1825,6 @@
       },
       {
         "id": 4636715,
-        "at": "2026-10-29T07:11:38.006787+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-10-29T07:11:38.006787+00:00",
         "ok": true
       },
@@ -2014,8 +1989,28 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-10-29T14:52:16.743786+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-10-29T14:52:16.743786+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-10-29T14:52:16.743786+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-10-29T14:52:16.743786+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-29T14:39:39.091567+00:00",
+        "at": "2026-10-29T14:52:16.743786+00:00",
         "ok": true
       }
     ],
@@ -2024,7 +2019,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.3
+    "oldest_check_age_hours": 7.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-29T08:08:09.099459+00:00",
-  "total_runs": 2116,
+  "last_run": "2026-10-29T09:08:12.599334+00:00",
+  "total_runs": 2117,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,24 +34,22 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Replace the ambiguous 'Title Case The Important Words' instruction in the article draft system prompt with a clear definition of Title Case and explicit ALL-CAPS prohibition, to reduce weak_title rejections caused by LLM-generated ALL-CAPS words.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The 'Title Case The Important Words' rule is ambiguous \u2014 the LLM interprets it as permission to capitalize 'important' words fully (ALL-CAPS), triggering the weak_title gate. Replace it with a clear Title Case definition and explicit ALL-CAPS ban."
-      }
-    ],
+    "summary": "No change proposed. The PROMPT FOCUS (weak_title, ALL-CAPS findings) has been addressed in 25+ prior proposals, none merged, with the most recent (today, 2026-10-29) still pending review on branch evolve/1.41.1-20261029-084343. Every specific fix for the ALL-CAPS title rule \u2014 clarifying Title Case, adding banned examples, removing contradictory banned phrases, deterministic casing before the gate, including specific words in the problem message, and defining ALL-CAPS in the revision prompt \u2014 has already been proposed and rejected. The evidence does not point more strongly elsewhere: llm_error=14 in the last 14 days is higher than weak_title=3 but is explicitly not fixable by a prompt edit. Continuing to propose variations of the same ALL-CAPS fix would repeat prior proposals, which the system rules prohibit.",
+    "changes_applied": [],
     "suggestions": [],
-    "direction": "PROMPT FOCUS (weak_title) \u2014 improve title quality to increase reach into the live receive path.",
+    "direction": "PROMPT FOCUS (weak_title) \u2014 no change; the fix space for this specific gate finding is exhausted by prior open proposals",
     "evidence": [
       "article_rejects.counts weak_title=12 (3 in last 14 days)",
-      "gate findings: 'title has ALL-CAPS word' x3",
-      "article_rejects.last = 'llm_error': 'LLM call failed' (engine errors dominate but weak_title is the prompt-fixable gate)"
+      "gate findings: 'title has ALL-CAPS word' x3 (the only weak_title finding in the window)",
+      "PROMPT FOCUS names article draft _SYSTEM and _revise_title() as the losing prompts",
+      "74 prior proposals, 25+ address the ALL-CAPS title rule specifically, none merged",
+      "last_evolution (2026-10-29, pending review) addresses the same ambiguous Title Case instruction",
+      "llm_error=14 in last 14 days exceeds weak_title=3 but is engine-level, not prompt-fixable"
     ],
     "money_path": "reach-only",
-    "verify": "Add a test in bot/tests.py that asserts titles from _revise_title contain no disallowed ALL-CAPS words (i.e., not in _KNOWN_ACRONYMS) and that the weak_title reject count drops to 0 after the change.",
+    "verify": "If a future cycle shows weak_title rejections with a gate finding OTHER than ALL-CAPS (e.g., 'title too short', 'vague filler', 'colon subtitle padding'), that is a new, unaddressed prompt gap and can be proposed then. The weak_title reject count in article_rejects.counts is the field to watch.",
     "error": null,
-    "branch": "evolve/1.41.1-20261029-084343",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -71,7 +69,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 2136,
+  "last_cycle_seconds": 699,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1189,7 +1187,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-29T08:08:09.954888+00:00",
+    "checked_at": "2026-10-29T09:08:13.169012+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1509,8 +1507,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261029-084343",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 39,
     "total_views": 5179,
@@ -1737,7 +1735,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-29T08:43:44.234974+00:00",
+    "last_run": "2026-10-29T09:19:50.729780+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1747,25 +1745,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-29T08:43:44.563612+00:00",
+    "last_run": "2026-10-29T09:19:51.198569+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4602729,
-        "at": "2026-10-29T00:17:11.147749+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-10-29T00:17:11.147749+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-10-29T00:17:11.147749+00:00",
-        "ok": true
-      },
       {
         "id": 4780783,
         "at": "2026-10-29T01:05:13.126201+00:00",
@@ -1778,11 +1761,6 @@
       },
       {
         "id": 4633220,
-        "at": "2026-10-29T01:05:13.126201+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
         "at": "2026-10-29T01:05:13.126201+00:00",
         "ok": true
       },
@@ -1947,8 +1925,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-10-29T09:19:51.198569+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-10-29T09:19:51.198569+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-10-29T09:19:51.198569+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-10-29T09:19:51.198569+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-29T08:43:44.563612+00:00",
+        "at": "2026-10-29T09:19:51.198569+00:00",
         "ok": true
       }
     ],
@@ -1957,7 +1955,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.4
+    "oldest_check_age_hours": 8.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

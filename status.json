@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-29T20:19:18.440013+00:00",
-  "total_runs": 2129,
+  "last_run": "2026-10-29T21:19:24.307801+00:00",
+  "total_runs": 2130,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,28 +34,33 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete examples of banned ALL-CAPS words to the article draft system prompt to reduce weak_title rejections from incorrectly capitalized tech terms.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The prompt's TITLE rule bans ALL-CAPS words but gives no concrete examples, so the LLM writes terms like DOCKER, KUBERNETES, POSTGRESQL. Adding explicit examples will sharpen the instruction and reduce weak_title rejections."
-      }
-    ],
+    "summary": "Add concrete real-casing examples for common tech terms to the article draft TITLE rule so the LLM stops writing ALL-CAPS product names that the title gate rejects as shouting.",
+    "changes_applied": [],
     "suggestions": [],
     "direction": "Principle 5, step 3 \u2014 reach into a live receive path by publishing more articles in shapes readers prefer",
     "evidence": [
-      "article_rejects.counts.weak_title = 12 (lifetime), PROMPT FOCUS: weak_title lost 3 drafts in last 14 days",
-      "Gate findings: 'title has ALL-CAPS word' x3",
-      "preferred_archetypes() = ['problem-workaround'] (n=9, avg 459 engagement) \u2014 each rejected draft is a lost problem-workaround article"
+      "article_rejects.counts.weak_title = 12 (lifetime); PROMPT FOCUS: weak_title lost 3 drafts in the last 14 days",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x3",
+      "preferred_archetypes() = ['problem-workaround'] (n=9, avg engagement 459.0) \u2014 each rejected draft is a lost problem-workaround article"
     ],
     "money_path": "reach-only \u2014 more published articles increase views and tip surface area; no new receive path",
     "verify": "article_rejects.recent weak_title count should fall below 3 in the next 14-day window",
     "error": null,
-    "branch": "evolve/1.41.2-20261029-203352",
-    "proposed_version": "1.41.2"
+    "branch": null,
+    "proposed_version": "1.41.3"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "The Agentic Code That Compiles but Crashes in Production",
+        "url": "https://dev.to/robust_true_try/the-agentic-code-that-compiles-but-crashes-in-production-i3",
+        "estimated_usd": 0.0,
+        "source_url": "https://martinfowler.com/rachels-ramblings/good-devs-wary.html",
+        "source_title": "Why are good developers so wary of agentic development?"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -71,7 +76,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 876,
+  "last_cycle_seconds": 1348,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -179,7 +184,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-10-29",
+    "date": "2026-10-30",
     "published": 1,
     "window": "06:00-12:00 UTC+9"
   },
@@ -977,7 +982,8 @@
       "lynchlab.net/llm-skin-cancer",
       "openai.com/index/building-scientific-understanding-with-academic-communities",
       "lwn.net/subscriberlink/1102102/0c00e4d550f25f8c",
-      "emudhra.we-have-a-problem.com/apple.html"
+      "emudhra.we-have-a-problem.com/apple.html",
+      "martinfowler.com/rachels-ramblings/good-devs-wary.html"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -1061,7 +1067,8 @@
       "10 year old cnn outperform frontier llms skin cancer diagnosi",
       "three new discovery mathematic computer science physic",
       "python s experimental jit removed",
-      "apple s git still trust compromised emudhra certificat"
+      "apple s git still trust compromised emudhra certificat",
+      "good developer so wary agentic development"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1145,12 +1152,14 @@
       "skin cancer model fail real photo",
       "backtracking solver slower than brute force",
       "configure flag break python 3 14 build",
-      "maco git still trust compromised certificat"
+      "maco git still trust compromised certificat",
+      "agentic code compil crash production"
     ],
     "followed_up_ids": [
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/your-macos-git-still-trusts-compromised-certificates-5691",
       "https://dev.to/robust_true_try/the-configure-flag-that-breaks-python-314-builds-1g3n",
       "https://dev.to/robust_true_try/your-backtracking-solver-is-slower-than-brute-force-1e5g",
       "https://dev.to/robust_true_try/your-kimi-k31-pro-responses-truncate-silently-2odg",
@@ -1200,7 +1209,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-29T20:19:18.903281+00:00",
+    "checked_at": "2026-10-29T21:19:25.017551+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1520,14 +1529,14 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.2-20261029-203352",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
-    "count": 39,
-    "total_views": 5179,
-    "avg_views": 132.8,
+    "count": 40,
+    "total_views": 5229,
+    "avg_views": 130.7,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 3328,
+    "best_views": 3358,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1543,8 +1552,8 @@
       {
         "archetype": "problem-workaround",
         "count": 9,
-        "avg_engagement": 459.0,
-        "avg_views": 439.6,
+        "avg_engagement": 462.3,
+        "avg_views": 442.9,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1576,23 +1585,23 @@
         "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
       },
       {
-        "archetype": "security-privacy",
-        "count": 3,
-        "avg_engagement": 40.0,
-        "avg_views": 40.0,
-        "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
-      },
-      {
         "archetype": "engineering-culture",
         "count": 1,
         "avg_engagement": 40.0,
         "avg_views": 40.0,
         "best_title": "How AI Pull Requests Slip Past Code Review"
+      },
+      {
+        "archetype": "security-privacy",
+        "count": 4,
+        "avg_engagement": 35.0,
+        "avg_views": 35.0,
+        "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
       }
     ],
     "best_archetype": "problem-workaround",
-    "worst_archetype": "engineering-culture",
-    "sample_size": 39
+    "worst_archetype": "security-privacy",
+    "sample_size": 40
   },
   "article_rejects": {
     "last_reason": "llm_error",
@@ -1748,7 +1757,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-29T20:33:53.186164+00:00",
+    "last_run": "2026-10-29T21:41:51.121609+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1758,25 +1767,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-29T20:33:53.486925+00:00",
+    "last_run": "2026-10-29T21:41:51.394261+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4641536,
-        "at": "2026-10-29T12:29:40.128416+00:00",
-        "ok": true
-      },
-      {
-        "id": 4908316,
-        "at": "2026-10-29T12:29:40.128416+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
-        "at": "2026-10-29T12:29:40.128416+00:00",
-        "ok": true
-      },
       {
         "id": 4765372,
         "at": "2026-10-29T13:23:16.110763+00:00",
@@ -1958,17 +1952,37 @@
         "ok": true
       },
       {
+        "id": 4641536,
+        "at": "2026-10-29T21:41:51.394261+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-10-29T21:41:51.394261+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-10-29T21:41:51.394261+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-29T20:33:53.486925+00:00",
+        "at": "2026-10-29T21:41:51.394261+00:00",
+        "ok": true
+      },
+      {
+        "id": 4943485,
+        "at": "2026-10-29T21:41:51.394261+00:00",
         "ok": true
       }
     ],
-    "published_total": 40,
-    "covered": 40,
+    "published_total": 41,
+    "covered": 41,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.1
+    "oldest_check_age_hours": 8.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1981,11 +1995,11 @@
     "main_provider": "atria",
     "main_model": "Atria-Dawn",
     "key_set": true,
-    "live": true,
-    "serving": "atria",
-    "disabled_reason": null,
+    "live": false,
+    "serving": "openrouter",
+    "disabled_reason": "timeout",
     "calls": {
-      "openrouter": 1
+      "openrouter": 3
     }
   },
   "ctf_bounty": {

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-29T13:08:23.159264+00:00",
-  "total_runs": 2121,
+  "last_run": "2026-10-29T14:08:21.727551+00:00",
+  "total_runs": 2122,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,32 +34,24 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change: the article draft prompt already explicitly bans ALL-CAPS words and defines Title Case; further prompt edits are speculative and have been repeatedly proposed without merge, while the gate correctly enforces the rule. The remaining weak_title rejects (3 in 14 days) are a small fraction of total rejects (51) and are not amenable to further prompt engineering.",
-    "changes_applied": [],
-    "suggestions": [
+    "summary": "Refine the ALL-CAPS title rule to allow known acronyms, reducing weak_title rejections and improving reach.",
+    "changes_applied": [
       {
-        "title": "Add the receive address to the dev.to profile bio",
-        "description": "One manual edit at dev.to/settings puts the tip ask on every profile visit permanently; the bot cannot do it (Forem's users API is read-only for this token).",
-        "owner_action": "Edit the Bio field at dev.to/settings to include the Tron USDT receive address and a one-line ask.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open dev.to/settings.",
-          "Step 2: Paste the published Tron address and a short ask into the Bio field and save."
-        ]
+        "file": "bot/earning/articles.py",
+        "reason": "Refine the ALL-CAPS title rule to allow known acronyms, reducing weak_title rejections and improving reach."
       }
     ],
-    "direction": "Prompt focus (weak_title) \u2014 Doctrine Principle 5, step 3 (reach into a live receive path).",
+    "suggestions": [],
+    "direction": "Principle 5, step 3: publish more articles in shapes readers measurably prefer",
     "evidence": [
-      "article_rejects.counts.weak_title = 12 lifetime, 3 in last 14 days",
-      "article_rejects.recent gate findings: 'title has ALL-CAPS word' x3",
-      "the prompt already states 'Title Case The Important Words' and bans 'any ALL-CAPS word'",
-      "last_evolution (pending) already proposed clarifying the Title Case instruction"
+      "article_rejects.counts.weak_title = 12",
+      "article_rejects.last = 'llm_error'"
     ],
     "money_path": "reach-only",
-    "verify": "No change to verify; the existing gate and prompt remain in place.",
+    "verify": "status['article_rejects']['counts']['weak_title'] should drop by at least 1 in the next cycle, indicating fewer rejections due to the refined ALL-CAPS rule.",
     "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
+    "branch": "evolve/1.41.1-20261029-143938",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [],
@@ -78,7 +70,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 894,
+  "last_cycle_seconds": 1878,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1264,7 +1256,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-29T13:08:23.762349+00:00",
+    "checked_at": "2026-10-29T14:08:22.518499+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1584,8 +1576,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261029-143938",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 39,
     "total_views": 5179,
@@ -1812,7 +1804,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-29T13:23:15.764769+00:00",
+    "last_run": "2026-10-29T14:39:38.813089+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1822,25 +1814,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-29T13:23:16.110763+00:00",
+    "last_run": "2026-10-29T14:39:39.091567+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4568987,
-        "at": "2026-10-29T05:14:08.184500+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-10-29T05:14:08.184500+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820684,
-        "at": "2026-10-29T05:14:08.184500+00:00",
-        "ok": true
-      },
       {
         "id": 4720062,
         "at": "2026-10-29T06:19:37.501347+00:00",
@@ -1853,11 +1830,6 @@
       },
       {
         "id": 4727685,
-        "at": "2026-10-29T06:19:37.501347+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-10-29T06:19:37.501347+00:00",
         "ok": true
       },
@@ -2022,8 +1994,28 @@
         "ok": true
       },
       {
+        "id": 4568987,
+        "at": "2026-10-29T14:39:39.091567+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-10-29T14:39:39.091567+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-10-29T14:39:39.091567+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-10-29T14:39:39.091567+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-29T13:23:16.110763+00:00",
+        "at": "2026-10-29T14:39:39.091567+00:00",
         "ok": true
       }
     ],
@@ -2032,7 +2024,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.2
+    "oldest_check_age_hours": 8.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

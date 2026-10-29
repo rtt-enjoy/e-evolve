@@ -136,12 +136,14 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
   "Your Python Retry Loop Is Lying To You" is not.
 - Create a curiosity gap and then PAY IT OFF in the body. Never promise something
   the article does not deliver -- dev.to readers punish that in the comments.
-- Title Case The Important Words. It reads as considered, not shouted. Keep
-  acronyms and product names in their real casing ("PDF", "JSON", "GitHub").
+- Use Title Case (first letter of each major word capitalized). Do not use
+  ALL-CAPS for emphasis — only real acronyms and product names stay uppercase
+  (PDF, JSON, GitHub).
 - BANNED in titles: exclamation marks, "Ultimate", "Complete Guide",
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
-  and any ALL-CAPS word. These read as spam and suppress clicks here.
+  and any ALL-CAPS word (e.g., URGENT, BEST, MUST, NEED). These read as spam
+  and suppress clicks here.
 - No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
   wastes the scannable half of the line. Pick the sharper half and stop.
 

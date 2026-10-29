@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-29T00:06:43.566903+00:00",
-  "total_runs": 2107,
+  "last_run": "2026-10-29T00:58:51.063013+00:00",
+  "total_runs": 2108,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,35 +34,40 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Clarify the ALL-CAPS title rule in the article draft system prompt so the LLM distinguishes acronym-keeping from shouting, reducing weak_title rejections caused by non-acronym ALL-CAPS words.",
+    "summary": "Include the specific ALL-CAPS words in the title problem message so the rewrite prompt tells the LLM exactly which words to fix, making the rewrite more likely to succeed and reducing weak_title rejections.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "The TITLE rule bans 'any ALL-CAPS word' but the LLM does not reliably distinguish acronyms (which should stay uppercase) from shouting (which must be Title Cased). The vague phrasing causes the model to generate non-acronym ALL-CAPS words, which the deterministic gate catches and rejects. Clarifying the distinction in the instruction prevents the bad generation at the source."
+        "reason": "_title_problems() reports ALL-CAPS violations generically ('title has ALL-CAPS word') without naming the actual words. The rewrite prompt in _revise_title() includes this problem text, so the LLM receives no guidance about which specific words to fix. Naming the words in the problem message makes the rewrite prompt actionable and should increase the first-rewrite success rate, reducing weak_title rejections without softening the gate."
       }
     ],
-    "suggestions": [],
+    "suggestions": [
+      {
+        "title": "Decide on the pending ALL-CAPS title branches",
+        "description": "25 evolution branches have proposed variants of the ALL-CAPS title rule; none merged. The owner must merge or close the oldest (evolve/1.41.1-20261028-203602) to unblock further prompt iteration.",
+        "owner_action": "Open the PR for branch evolve/1.41.1-20261028-203602 and merge or close with a comment stating whether prompt examples add value beyond the existing deterministic gate.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open the PR for branch evolve/1.41.1-20261028-203602",
+          "Step 2: Decide merge or close based on whether the prompt examples add value beyond the existing deterministic gate",
+          "Step 3: Merge or close the PR with a comment explaining the decision"
+        ]
+      }
+    ],
     "direction": "Principle 5, step 2 \u2014 reach into a live receive path; PROMPT FOCUS is weak_title from 'title has ALL-CAPS word'",
     "evidence": [
       "article_rejects.counts (last 14 days): weak_title=3",
       "Gate findings behind it: 'title has ALL-CAPS word' x3",
-      "preferred_archetypes() = ['problem-workaround'] \u2014 the winning shape, so every post must clear the title gate to publish"
+      "_title_problems() reports 'title has ALL-CAPS word' generically without naming the specific words, so _revise_title()'s prompt gives the LLM no target to fix"
     ],
     "money_path": "reach-only (improves reach by getting more drafts through the gate; does not touch the receive path)",
-    "verify": "next cycle's article_rejects.counts weak_title should fall; the count that should move is the one currently at 3",
+    "verify": "next cycle's article_rejects.counts weak_title should fall below 3; the count that should move is the one currently at 3",
     "error": null,
-    "branch": "evolve/1.41.1-20261029-001708",
+    "branch": "evolve/1.41.1-20261029-010512",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -79,7 +84,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 628,
+  "last_cycle_seconds": 383,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1199,7 +1204,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-29T00:06:44.397480+00:00",
+    "checked_at": "2026-10-29T00:58:51.507053+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1519,7 +1524,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261029-001708",
+  "last_evolution_branch": "evolve/1.41.1-20261029-010512",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 39,
@@ -1747,42 +1752,22 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-29T00:17:10.691710+00:00",
+    "last_run": "2026-10-29T01:05:12.504557+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-29T00:17:11.147749+00:00",
+    "last_run": "2026-10-29T01:05:13.126201+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4780783,
-        "at": "2026-10-28T15:50:31.377650+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-10-28T15:50:31.377650+00:00",
-        "ok": true
-      },
-      {
         "id": 4740283,
-        "at": "2026-10-28T16:18:34.242813+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-10-28T16:18:34.242813+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
         "at": "2026-10-28T16:18:34.242813+00:00",
         "ok": true
       },
@@ -1957,8 +1942,28 @@
         "ok": true
       },
       {
+        "id": 4780783,
+        "at": "2026-10-29T01:05:13.126201+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-10-29T01:05:13.126201+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-29T01:05:13.126201+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-10-29T01:05:13.126201+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-29T00:17:11.147749+00:00",
+        "at": "2026-10-29T01:05:13.126201+00:00",
         "ok": true
       }
     ],
@@ -1967,7 +1972,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.4
+    "oldest_check_age_hours": 8.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

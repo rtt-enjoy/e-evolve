@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-29T14:40:02.001355+00:00",
-  "total_runs": 2123,
+  "last_run": "2026-10-29T15:22:24.495664+00:00",
+  "total_runs": 2124,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -34,19 +34,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change is proposed this cycle because the weak_title prompt focus is saturated with over thirty open ALL-CAPS title-rule proposals including the v1.41.0 refinement already applied, so another incremental edit would repeat an open proposal.",
+    "summary": "No change is proposed: weak_title lost 3 drafts in the last 14 days (all 'title has ALL-CAPS word'), but that fix is already saturated \u2014 over thirty open ALL-CAPS title-rule proposals on bot/earning/articles.py including the v1.41.0 refinement already applied, so another incremental edit would repeat an open proposal instead of clearing the bar.",
     "changes_applied": [],
-    "suggestions": [],
-    "direction": "Principle 5, step 3: publish more articles in shapes readers measurably prefer",
+    "suggestions": [
+      {
+        "title": "Add the receive address to the dev.to profile bio",
+        "description": "One manual edit at dev.to/settings puts the tip ask on every profile visit permanently; the bot cannot do it (Forem's users API is read-only for this token).",
+        "owner_action": "Edit the Bio field at dev.to/settings to include the published Tron receive address and a one-line ask.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open dev.to/settings.",
+          "Step 2: Paste the published Tron address and a short ask into the Bio field and save."
+        ]
+      }
+    ],
+    "direction": "Principle 5, step 3: publish more articles in shapes readers measurably prefer (prompt focus: weak_title)",
     "evidence": [
-      "article_rejects.counts.weak_title = 12",
-      "article_rejects.last = 'llm_error'"
+      "article_rejects.counts.weak_title = 12 lifetime, 3 in the last 14 days",
+      "article_rejects gate findings: 'title has ALL-CAPS word' x3",
+      "PRIOR PROPOSALS: 30+ open ALL-CAPS title-rule branches on bot/earning/articles.py, none merged; last_evolution declined v1.41.1 for the same saturation reason"
     ],
     "money_path": "reach-only",
-    "verify": "No change proposed; the reviewer should confirm the pending evolve/1.41.1-20261029-143938 ALL-CAPS refinement and watch status['article_rejects']['counts']['weak_title'] next cycle.",
+    "verify": "Confirm the pending evolve/1.41.1-20261029-143938 ALL-CAPS refinement is reviewed or merged, then watch status['article_rejects']['counts']['weak_title'] next cycle; with no code change there is nothing else to verify.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -56,7 +68,7 @@
     {
       "title": "Add the receive address to the dev.to profile bio",
       "description": "One manual edit at dev.to/settings puts the tip ask on every profile visit permanently; the bot cannot do it (Forem's users API is read-only for this token).",
-      "owner_action": "Edit the Bio field at dev.to/settings to include the Tron USDT receive address and a one-line ask.",
+      "owner_action": "Edit the Bio field at dev.to/settings to include the published Tron receive address and a one-line ask.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Open dev.to/settings.",
@@ -65,7 +77,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 735,
+  "last_cycle_seconds": 630,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1251,7 +1263,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-29T14:40:02.603481+00:00",
+    "checked_at": "2026-10-29T15:22:25.492702+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1799,7 +1811,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-29T14:52:16.564016+00:00",
+    "last_run": "2026-10-29T15:32:54.061491+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1809,25 +1821,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-29T14:52:16.743786+00:00",
+    "last_run": "2026-10-29T15:32:54.338128+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4931682,
-        "at": "2026-10-29T07:11:38.006787+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-10-29T07:11:38.006787+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-10-29T07:11:38.006787+00:00",
-        "ok": true
-      },
       {
         "id": 4681657,
         "at": "2026-10-29T07:18:01.357025+00:00",
@@ -1840,11 +1837,6 @@
       },
       {
         "id": 4671278,
-        "at": "2026-10-29T07:18:01.357025+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
         "at": "2026-10-29T07:18:01.357025+00:00",
         "ok": true
       },
@@ -2009,8 +2001,28 @@
         "ok": true
       },
       {
+        "id": 4931682,
+        "at": "2026-10-29T15:32:54.338128+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-10-29T15:32:54.338128+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-10-29T15:32:54.338128+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-10-29T15:32:54.338128+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-29T14:52:16.743786+00:00",
+        "at": "2026-10-29T15:32:54.338128+00:00",
         "ok": true
       }
     ],
@@ -2019,7 +2031,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 7.7
+    "oldest_check_age_hours": 8.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-30T04:01:42.194319+00:00",
-  "total_runs": 2137,
+  "last_run": "2026-10-30T05:01:40.751868+00:00",
+  "total_runs": 2138,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,20 +35,22 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Edit the article draft TITLE rule to clarify ALL-CAPS banning with concrete examples, reducing weak_title rejections while keeping the rule effective.",
+    "summary": "No change. The PROMPT FOCUS names weak_title (3 drafts lost to 'title has ALL-CAPS word' in 14 days), but 27 distinct prior proposals on the ALL-CAPS title rule were never merged \u2014 each a prompt edit to bot/earning/articles.py's TITLE rule, _revise_title(), or deterministic casing. The gate already distinguishes acronyms via _KNOWN_ACRONYMS and _shouted_words(). The evidence does not point more strongly elsewhere: llm_error=14 and empty_draft=5 dominate the reject counts but the prompt ledger correctly records them as engine failures, not prompt-fixable. Nothing clears the bar.",
     "changes_applied": [],
     "suggestions": [],
-    "direction": "Prompt focus: weak_title lost 3 draft(s) due to 'title has ALL-CAPS word' gate. The article draft system prompt's TITLE rule is vague; we need to replace the bare 'no ALL-CAPS word' with a concrete list of banned words and examples, and add a note about known acronyms.",
+    "direction": "Doctrine Principle 5, step 4 \u2014 reach into a live receive path. The prompt-focus loop asks for a prompt edit, but this specific prompt topic is exhausted by prior unmerged proposals and the dead-end list.",
     "evidence": [
-      "article_rejects.counts weak_title=12 (total), last 14 days weak_title=3",
-      "article_rejects.last = 'llm_error': 'LLM call failed' (but earlier weak_title rejections exist)",
-      "PROMPT FOCUS: weak_title lost 3 draft(s); gate findings: 'title has ALL-CAPS word' x3"
+      "PROMPT FOCUS: weak_title lost 3 draft(s); gate findings: 'title has ALL-CAPS word' x3",
+      "article_rejects.counts: llm_error=27, weak_title=12, empty_draft=9 (lifetime); last 14 days: llm_error=14, weak_title=3, empty_draft=5",
+      "27 prior proposals on ALL-CAPS title rule in PRIOR PROPOSALS, none merged",
+      "The gate (_title_problems / _shouted_words) already exempts _KNOWN_ACRONYMS \u2014 the prompt rule ('any ALL-CAPS word') is stricter than the gate, so the LLM is not being undercut by an inconsistent rule",
+      "article_interest: problem-workaround n=9 avg=462.3 dominates; the _audience_guidance() prompt already steers toward it"
     ],
     "money_path": "reach-only",
-    "verify": "After the edit, the weak_title count in status['article_rejects'].counts should drop below 3 in the next cycle (or the reject detail should change from 'title has ALL-CAPS word' to something else). Also, the prompt's new rule should be visible in the code.",
+    "verify": "Not applicable \u2014 no change proposed. If the reviewer disagrees, the weak_title count in status['article_rejects'].counts should be monitored; a drop below 3 without a prompt edit would confirm the gate is already adequate.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.2"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -67,7 +69,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 664,
+  "last_cycle_seconds": 351,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1228,7 +1230,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-30T04:01:42.944905+00:00",
+    "checked_at": "2026-10-30T05:01:41.247864+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1790,7 +1792,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-30T04:12:45.398884+00:00",
+    "last_run": "2026-10-30T05:07:31.255411+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1800,32 +1802,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-30T04:12:45.697285+00:00",
+    "last_run": "2026-10-30T05:07:31.499026+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4602729,
-        "at": "2026-10-29T18:29:39.432454+00:00",
-        "ok": true
-      },
-      {
         "id": 4780783,
-        "at": "2026-10-29T19:30:19.817777+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-10-29T19:30:19.817777+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-10-29T19:30:19.817777+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-10-29T19:30:19.817777+00:00",
         "ok": true
       },
@@ -2010,8 +1992,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-10-30T05:07:31.499026+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-10-30T05:07:31.499026+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-30T05:07:31.499026+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-10-30T05:07:31.499026+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-30T04:12:45.697285+00:00",
+        "at": "2026-10-30T05:07:31.499026+00:00",
         "ok": true
       }
     ],
@@ -2020,7 +2022,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.7
+    "oldest_check_age_hours": 9.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

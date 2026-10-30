@@ -1001,6 +1001,13 @@ _KNOWN_ACRONYMS = {
 	"GPT", "AI", "ML", "ETL", "CI", "CD", "TDD", "DDD", "MVC", "ORM", "UUID",
 	"ASCII", "UTF", "REGEX", "WASM", "PDF", "OCR", "NPM", "PIP", "GIT", "AST",
 	"IO", "FIFO", "LIFO", "RPC", "SSR", "SPA", "PWA", "DOM", "SEO", "MRR", "IDE",
+	# Acronyms the LLM writes in all-caps that are legitimate in a tech title.
+	# Added after 3 ALL-CAPS title rejections in 14 days; the gate was catching
+	# real acronyms because they were absent from this list.
+	"CRON", "ENV", "PR", "DEVOPS", "SAAS", "PAAS", "IAAS", "B2B", "B2C",
+	"CEO", "CTO", "VP", "ETA", "FAQ", "KPI", "OKR", "SLA", "SRE", "QA",
+	"CMS", "HDD", "BIOS", "UEFI", "LAN", "WAN", "VOIP", "P2P", "DRM",
+	"RGB", "CMYK", "HDR", "UI", "UX",
 }
 
 

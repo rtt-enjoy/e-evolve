@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-30T21:24:28.566782+00:00",
-  "total_runs": 2157,
+  "last_run": "2026-10-30T22:24:32.073249+00:00",
+  "total_runs": 2158,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,7 +35,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the PROMPT FOCUS (weak_title, 'title has ALL-CAPS word' x3 in the last 14 days) is already addressed by 28+ open prior proposals covering ALL-CAPS rule clarification, _KNOWN_ACRONYMS expansion, deterministic title casing, and specific offending-word inclusion in the problem message -- every approach to this problem is already in open prior proposals, so proposing another would repeat work that is still awaiting review.",
+    "summary": "No change proposed: the PROMPT FOCUS (weak_title, 'title has ALL-CAPS word' x3 in the last 14 days) is already addressed by 28+ open prior proposals covering ALL-CAPS rule clarification, _KNOWN_ACRONYMS expansion, deterministic title casing, and specific offending-word inclusion in the problem message \u2014 every approach to this problem is already in open prior proposals, so proposing another would repeat work that is still awaiting review.",
     "changes_applied": [],
     "suggestions": [],
     "direction": "Principle 5, step 3: reach into a live receive path by publishing more articles in shapes readers measurably prefer; the PROMPT FOCUS is weak_title but all approaches are already in open prior proposals",
@@ -78,7 +78,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1822,
+  "last_cycle_seconds": 1371,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1270,7 +1270,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-30T21:24:29.073409+00:00",
+    "checked_at": "2026-10-30T22:24:32.951498+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1660,15 +1660,15 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-10-30T21:54:49.046147+00:00",
+    "last_at": "2026-10-30T22:47:21.969189+00:00",
     "counts": {
       "empty_draft": 9,
       "fabricated": 2,
       "weak_title": 12,
       "revision_fabricated": 1,
-      "llm_error": 28
+      "llm_error": 29
     },
-    "total": 52,
+    "total": 53,
     "recent": [
       {
         "code": "empty_draft",
@@ -1784,6 +1784,11 @@
         "code": "llm_error",
         "at": "2026-10-30T21:54:49.046147+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-10-30T22:47:21.969189+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
       }
     ]
   },
@@ -1816,7 +1821,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-30T21:54:49.382653+00:00",
+    "last_run": "2026-10-30T22:47:22.262364+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1826,32 +1831,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-30T21:54:49.691967+00:00",
+    "last_run": "2026-10-30T22:47:22.434532+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4681657,
-        "at": "2026-10-30T13:28:04.280160+00:00",
-        "ok": true
-      },
-      {
         "id": 4925166,
-        "at": "2026-10-30T14:16:43.289706+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-10-30T14:16:43.289706+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-10-30T14:16:43.289706+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-10-30T14:16:43.289706+00:00",
         "ok": true
       },
@@ -2036,8 +2021,28 @@
         "ok": true
       },
       {
+        "id": 4681657,
+        "at": "2026-10-30T22:47:22.434532+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-10-30T22:47:22.434532+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-30T22:47:22.434532+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-10-30T22:47:22.434532+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-30T21:54:49.691967+00:00",
+        "at": "2026-10-30T22:47:22.434532+00:00",
         "ok": true
       }
     ],
@@ -2046,7 +2051,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.4
+    "oldest_check_age_hours": 8.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2059,9 +2064,9 @@
     "main_provider": "atria",
     "main_model": "Atria-Dawn",
     "key_set": true,
-    "live": true,
-    "serving": "atria",
-    "disabled_reason": null,
+    "live": false,
+    "serving": "openrouter",
+    "disabled_reason": "timeout",
     "calls": {
       "openrouter": 1
     }

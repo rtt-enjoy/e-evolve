@@ -441,6 +441,9 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 	# artifacts, so we never spend free-tier LLM calls revising those.
 	article = devto.normalize(data)
 
+	# Deterministically fix ALL-CAPS words before the title gate sees them.
+	article["title"] = _fix_shouting(article.get("title", ""))
+
 	# Drop invented spec tables before anything else looks at the body. This is
 	# deterministic, so it costs no LLM call -- and asking the model to "fix"
 	# numbers it hallucinated tends to produce different hallucinated numbers.
@@ -525,6 +528,7 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 	candidate = str((out or {}).get("title", "")).strip()
 	if not candidate:
 		return None
+	candidate = _fix_shouting(candidate)
 	remaining = _title_problems(candidate)
 	if remaining:
 		log.info("[articles] revised title still weak %s", remaining)
@@ -1010,6 +1014,23 @@ def _shouted_words(text: str) -> list[str]:
 		word for word in re.findall(r"\b[A-Z]{2,}\b", text)
 		if word.upper() not in _KNOWN_ACRONYMS
 	]
+
+
+def _fix_shouting(title: str) -> str:
+	"""Title-case ALL-CAPS words that are not recognised acronyms.
+
+    The gate correctly bans ALL-CAPS titles and the prompt correctly forbids
+    them, but the LLM writes them anyway: 3 drafts lost to this gate in the
+    last 14 days, after a cycle of prompt edits aimed at this rule. Same
+    pattern as ``devto.normalize`` and ``strip_fabricated_tables`` -- fix it
+    deterministically, then gate the result. Costs no LLM call.
+    """
+	def fix(m: re.Match) -> str:
+		word = m.group(0)
+		if word in _KNOWN_ACRONYMS:
+			return word
+		return word.capitalize()
+	return re.sub(r"\b[A-Z]{2,}\b", fix, str(title or ""))
 
 
 def _title_problems(title: str, cfg: dict | None = None) -> list[str]:

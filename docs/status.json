@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-30T20:24:23.822154+00:00",
-  "total_runs": 2156,
+  "last_run": "2026-10-30T21:24:28.566782+00:00",
+  "total_runs": 2157,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,15 +35,15 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the PROMPT FOCUS (weak_title, 'title has ALL-CAPS word' x3 in the last 14 days) is already addressed by 28+ open prior proposals covering ALL-CAPS rule clarification, _KNOWN_ACRONYMS expansion, and deterministic title casing -- all in prior proposals, so repeating them would waste the cycle.",
+    "summary": "No change proposed: the PROMPT FOCUS (weak_title, 'title has ALL-CAPS word' x3 in the last 14 days) is already addressed by 28+ open prior proposals covering ALL-CAPS rule clarification, _KNOWN_ACRONYMS expansion, deterministic title casing, and specific offending-word inclusion in the problem message -- every approach to this problem is already in open prior proposals, so proposing another would repeat work that is still awaiting review.",
     "changes_applied": [],
     "suggestions": [],
-    "direction": "Principle 5, step 3: reach into a live receive path by publishing more articles in shapes readers prefer; sharpen the title rule to cut weak_title losses.",
+    "direction": "Principle 5, step 3: reach into a live receive path by publishing more articles in shapes readers measurably prefer; the PROMPT FOCUS is weak_title but all approaches are already in open prior proposals",
     "evidence": [
       "article_rejects.counts.weak_title=12 (lifetime), 3 in last 14 days",
-      "article_rejects.last='llm_error' but gate findings: 'title has ALL-CAPS word' x3",
       "PROMPT FOCUS: weak_title lost 3 draft(s), all from ALL-CAPS words",
-      "28+ prior proposals already target the ALL-CAPS title rule, _KNOWN_ACRONYMS expansion, and deterministic title casing"
+      "Gate findings behind it: 'title has ALL-CAPS word' x3",
+      "28+ prior proposals already target the ALL-CAPS title rule from every angle: rule clarification with concrete examples, _KNOWN_ACRONYMS expansion, deterministic title casing before the gate, and including the specific offending word in the title problem message"
     ],
     "money_path": "reach-only",
     "verify": "No change to verify; all approaches to the ALL-CAPS weak_title problem are already in open prior proposals.",
@@ -54,10 +54,12 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "llm_error",
+        "error": "LLM call failed",
+        "estimated_usd": 0.0
       }
     ],
     "total_usd": 0.0
@@ -76,7 +78,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1101,
+  "last_cycle_seconds": 1822,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1216,6 +1218,8 @@
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/agents-go-mainstream-while-trust-becomes-the-bottleneck-p5n",
+      "https://dev.to/robust_true_try/the-agentic-code-that-compiles-but-crashes-in-production-i3",
       "https://dev.to/robust_true_try/your-macos-git-still-trusts-compromised-certificates-5691",
       "https://dev.to/robust_true_try/the-configure-flag-that-breaks-python-314-builds-1g3n",
       "https://dev.to/robust_true_try/your-backtracking-solver-is-slower-than-brute-force-1e5g",
@@ -1266,7 +1270,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-30T20:24:24.505833+00:00",
+    "checked_at": "2026-10-30T21:24:29.073409+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1582,11 +1586,11 @@
   "last_evolution_branch": null,
   "evolution_pending_review": false,
   "article_stats": {
-    "count": 40,
-    "total_views": 5229,
-    "avg_views": 130.7,
+    "count": 42,
+    "total_views": 5289,
+    "avg_views": 125.9,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 3358,
+    "best_views": 3378,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1602,8 +1606,8 @@
       {
         "archetype": "problem-workaround",
         "count": 9,
-        "avg_engagement": 462.3,
-        "avg_views": 442.9,
+        "avg_engagement": 465.7,
+        "avg_views": 446.2,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1614,13 +1618,6 @@
         "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
       },
       {
-        "archetype": "other",
-        "count": 12,
-        "avg_engagement": 63.2,
-        "avg_views": 36.1,
-        "best_title": "Your AI Agent Can't See What It Clicks"
-      },
-      {
         "archetype": "myth-correction",
         "count": 3,
         "avg_engagement": 61.0,
@@ -1628,11 +1625,18 @@
         "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       },
       {
+        "archetype": "other",
+        "count": 13,
+        "avg_engagement": 59.1,
+        "avg_views": 34.1,
+        "best_title": "Your AI Agent Can't See What It Clicks"
+      },
+      {
         "archetype": "surprising-behavior",
         "count": 8,
-        "avg_engagement": 43.0,
-        "avg_views": 27.4,
-        "best_title": "Your GPU Quota Is Silently Starving Your Training Jobs"
+        "avg_engagement": 44.2,
+        "avg_views": 28.6,
+        "best_title": "The Redaction Bug That Leaks Data Center Power Usage"
       },
       {
         "archetype": "engineering-culture",
@@ -1643,28 +1647,28 @@
       },
       {
         "archetype": "security-privacy",
-        "count": 4,
-        "avg_engagement": 35.0,
-        "avg_views": 35.0,
+        "count": 5,
+        "avg_engagement": 30.0,
+        "avg_views": 30.0,
         "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
       }
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "security-privacy",
-    "sample_size": 40
+    "sample_size": 42
   },
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-10-28T21:39:15.763999+00:00",
+    "last_at": "2026-10-30T21:54:49.046147+00:00",
     "counts": {
       "empty_draft": 9,
       "fabricated": 2,
       "weak_title": 12,
       "revision_fabricated": 1,
-      "llm_error": 27
+      "llm_error": 28
     },
-    "total": 51,
+    "total": 52,
     "recent": [
       {
         "code": "empty_draft",
@@ -1775,6 +1779,11 @@
         "code": "llm_error",
         "at": "2026-10-28T21:39:15.763999+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-10-30T21:54:49.046147+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
       }
     ]
   },
@@ -1807,7 +1816,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-30T20:42:43.571439+00:00",
+    "last_run": "2026-10-30T21:54:49.382653+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1817,32 +1826,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-30T20:42:43.898082+00:00",
+    "last_run": "2026-10-30T21:54:49.691967+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4931682,
-        "at": "2026-10-30T12:28:31.287310+00:00",
-        "ok": true
-      },
-      {
         "id": 4681657,
-        "at": "2026-10-30T13:28:04.280160+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-10-30T13:28:04.280160+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-10-30T13:28:04.280160+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
         "at": "2026-10-30T13:28:04.280160+00:00",
         "ok": true
       },
@@ -2027,8 +2016,28 @@
         "ok": true
       },
       {
+        "id": 4931682,
+        "at": "2026-10-30T21:54:49.691967+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-10-30T21:54:49.691967+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-10-30T21:54:49.691967+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-10-30T21:54:49.691967+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-30T20:42:43.898082+00:00",
+        "at": "2026-10-30T21:54:49.691967+00:00",
         "ok": true
       }
     ],
@@ -2037,7 +2046,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.2
+    "oldest_check_age_hours": 8.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

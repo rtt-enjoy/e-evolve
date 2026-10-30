@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-30T19:11:20.654541+00:00",
-  "total_runs": 2154,
+  "last_run": "2026-10-30T19:24:24.564023+00:00",
+  "total_runs": 2155,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,18 +35,17 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle. The prompt focus is weak_title (ALL-CAPS title words, 3 drafts lost in 14 days), but the fix \u2014 one more concrete banned ALL-CAPS example in the TITLE rule \u2014 is already the pending 1.41.1 branch and appears about twenty times in PRIOR PROPOSALS, none merged. Repeating it duplicates a proposal the reviewer has not accepted. The dominant rejector is llm_error (27 lifetime, 14 in the last 14 days), which is an engine failure, not a prompt problem, and prompt edits cannot fix it. Nothing clears the bar.",
+    "summary": "Add concrete examples to the ALL-CAPS title rule to reduce weak_title rejections, per the standing suggestion.",
     "changes_applied": [],
     "suggestions": [],
-    "direction": "Principle 5, step 4 \u2014 upgrade the prompts that write reach, one step per cycle; no change proposed this cycle",
+    "direction": "Principle 5, step 3: reach into a live receive path by publishing more articles in shapes readers prefer; sharpen the title rule to cut weak_title losses.",
     "evidence": [
-      "article_rejects.counts.weak_title = 12 lifetime, 3 in the last 14 days; gate finding 'title has ALL-CAPS word' x3",
-      "article_rejects.counts.llm_error = 27 lifetime, 14 in the last 14 days; article_rejects.last = 'llm_error': 'LLM call failed'",
-      "last_evolution proposed_version = 1.41.1 sharpens the TITLE rule with a banned ALL-CAPS example (URGENT); evolution_pending_review = true",
-      "PRIOR PROPOSALS lists ~20 ALL-CAPS title rule edits from 2026-10-28 to 2026-10-30, none merged"
+      "article_rejects.counts.weak_title=12",
+      "article_rejects.last='llm_error' (but weak_title gate findings: 'title has ALL-CAPS word' x3)",
+      "status.suggestions.title: 'Clarify ALL-CAPS ban in title rule'"
     ],
-    "money_path": "none (maintenance)",
-    "verify": "No code change is proposed, so there is nothing to run or test. If the pending evolve/1.41.1 branch is merged, confirm weak_title in article_rejects.counts falls below 3 in the next 14-day window in status.json.",
+    "money_path": "reach-only",
+    "verify": "After merging, run the evolution; status should show article_rejects.weak_title reduced (target < 12) and the suggestion should be removed from status.suggestions.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -69,7 +68,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 627,
+  "last_cycle_seconds": 1710,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1259,7 +1258,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-30T19:11:21.146850+00:00",
+    "checked_at": "2026-10-30T19:24:25.158857+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1800,7 +1799,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-30T19:21:47.075614+00:00",
+    "last_run": "2026-10-30T19:52:53.628457+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1810,32 +1809,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-30T19:21:47.423103+00:00",
+    "last_run": "2026-10-30T19:52:53.970669+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4943931,
-        "at": "2026-10-30T10:16:38.144246+00:00",
-        "ok": true
-      },
-      {
         "id": 4356423,
-        "at": "2026-10-30T11:26:44.308495+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-10-30T11:26:44.308495+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-10-30T11:26:44.308495+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
         "at": "2026-10-30T11:26:44.308495+00:00",
         "ok": true
       },
@@ -2020,8 +1999,28 @@
         "ok": true
       },
       {
+        "id": 4943931,
+        "at": "2026-10-30T19:52:53.970669+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-10-30T19:52:53.970669+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-10-30T19:52:53.970669+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-10-30T19:52:53.970669+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-30T19:21:47.423103+00:00",
+        "at": "2026-10-30T19:52:53.970669+00:00",
         "ok": true
       }
     ],
@@ -2030,7 +2029,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.1
+    "oldest_check_age_hours": 8.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

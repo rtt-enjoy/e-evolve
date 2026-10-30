@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-30T12:08:51.354824+00:00",
-  "total_runs": 2146,
+  "last_run": "2026-10-30T13:08:57.421876+00:00",
+  "total_runs": 2147,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,39 +35,29 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete example of a banned ALL-CAPS word (URGENT) to the title rule to clarify the ban and reduce weak_title rejections",
+    "summary": "Add a deterministic ALL-CAPS title fix as a fallback when the LLM title revision fails, so an ALL-CAPS word no longer costs a day's article",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "Clarify banned ALL-CAPS words by adding concrete example to reduce weak_title rejections"
+        "reason": "Add _fix_shouting() and use it as a deterministic fallback in _finalize() when _revise_title returns None. The LLM has failed 27 times to avoid ALL-CAPS words in titles despite every prompt clarification tried; a deterministic fix that costs no LLM call converts shouted words to Title Case and lets the article publish instead of being rejected."
       }
     ],
     "suggestions": [],
-    "direction": "PROMPT FOCUS (weak_title)",
+    "direction": "PROMPT FOCUS (weak_title) \u2014 served by a code fallback instead of another prompt edit, after 27 prompt-only proposals on this rule failed to reduce the reject count",
     "evidence": [
-      "article_rejects.counts: weak_title=3 total (3 in last 14 days)",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "PROMPT FOCUS: weak_title lost 3 draft(s), gate finding 'title has ALL-CAPS word' x3"
+      "article_rejects.counts.weak_title = 12 lifetime, 3 in the last 14 days",
+      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x3",
+      "27 prior proposals on the ALL-CAPS title rule (prompt edits, deterministic casing before the gate, acronym relaxation) \u2014 none merged",
+      "last merged change 1.41.0 added '(e.g., URGENT)' to the title rule; weak_title count did not drop"
     ],
-    "money_path": "none (maintenance)",
-    "verify": "Reviewer can see the updated _SYSTEM title rule includes '(e.g., URGENT)' and that future weak_title counts should drop; check article_rejects counts after next cycle",
+    "money_path": "reach-only \u2014 more published articles mean more readers see the tip footer; the receive path itself is unchanged",
+    "verify": "bot/tests.py should still pass; article_rejects.counts.weak_title should fall in subsequent cycles; log line '[articles] deterministic title fix' appears when the fallback fires",
     "error": null,
-    "branch": "evolve/1.41.1-20261030-122342",
+    "branch": "evolve/1.41.1-20261030-132803",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -83,7 +73,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1181,
+  "last_cycle_seconds": 1148,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1229,7 +1219,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-30T12:08:51.854132+00:00",
+    "checked_at": "2026-10-30T13:08:58.170105+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1542,7 +1532,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261030-122342",
+  "last_evolution_branch": "evolve/1.41.1-20261030-132803",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 40,
@@ -1770,7 +1760,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-30T12:28:30.883285+00:00",
+    "last_run": "2026-10-30T13:28:03.935055+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1780,32 +1770,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-30T12:28:31.287310+00:00",
+    "last_run": "2026-10-30T13:28:04.280160+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4681657,
-        "at": "2026-10-30T03:08:46.875756+00:00",
-        "ok": true
-      },
-      {
         "id": 4925166,
-        "at": "2026-10-30T04:12:45.697285+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-10-30T04:12:45.697285+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-10-30T04:12:45.697285+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
         "at": "2026-10-30T04:12:45.697285+00:00",
         "ok": true
       },
@@ -1990,8 +1960,28 @@
         "ok": true
       },
       {
+        "id": 4681657,
+        "at": "2026-10-30T13:28:04.280160+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-10-30T13:28:04.280160+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-10-30T13:28:04.280160+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-10-30T13:28:04.280160+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-30T12:28:31.287310+00:00",
+        "at": "2026-10-30T13:28:04.280160+00:00",
         "ok": true
       }
     ],
@@ -2017,8 +2007,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 1,
-      "atria": 1
+      "openrouter": 1
     }
   },
   "ctf_bounty": {

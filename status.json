@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-30T14:08:55.503705+00:00",
-  "total_runs": 2148,
+  "last_run": "2026-10-30T14:17:04.242116+00:00",
+  "total_runs": 2149,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,51 +35,56 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Expand _KNOWN_ACRONYMS in bot/earning/articles.py with 34 common tech acronyms so the title gate stops rejecting legitimate ALL-CAPS words, reducing the 3 weak_title losses in 14 days and keeping more articles in the reach funnel.",
-    "changes_applied": [
+    "summary": "Add a concrete example of a banned ALL-CAPS word (URGENT) to the title rewrite prompt to clarify the rule and reduce weak titles.",
+    "changes_applied": [],
+    "suggestions": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "The title gate's _shouted_words() rejects any ALL-CAPS word not in _KNOWN_ACRONYMS. The LLM writes legitimate acronyms (CRON, ENV, PR) in all-caps because the prompt says to keep acronyms in their real casing, but the gate does not recognise them. Expanding the allowlist fixes the 3 ALL-CAPS rejections without softening the gate \u2014 it still catches actual shouting."
+        "title": "Edit title rewrite prompt",
+        "description": "Add a concrete banned ALL-CAPS example (URGENT) to the prompt to make the rule explicit.",
+        "owner_action": "Edit the prompt in bot/earning/articles.py as described.",
+        "secret_needed": null,
+        "how_to": [
+          "Open bot/earning/articles.py",
+          "Locate the prompt string in _revise_title",
+          "Replace \"no ALL-CAPS\" with \"no ALL-CAPS words like URGENT\"",
+          "Save the file"
+        ]
       }
     ],
-    "suggestions": [],
-    "direction": "Doctrine Principle 5 step 3 \u2014 reach into a live receive path; the PROMPT FOCUS is weak_title (ALL-CAPS word x3), and the gate's acronym allowlist is the code causing the rejections.",
+    "direction": "reach into a live receive path (doctrine Principle 5, step 3)",
     "evidence": [
-      "article_rejects.counts.weak_title = 12 lifetime, 3 in the last 14 days",
-      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x3",
-      "preferred_archetypes() = ['problem-workaround'] \u2014 the winning shape needs titles that survive the gate to reach readers"
+      "article_rejects.counts.weak_title = 12",
+      "article_rejects.last = 'llm_error'",
+      "receipt_check.covered / published_total = 42 / 42",
+      "receipt_check.coverage_complete = None",
+      "article_interest.preferred_archetypes() = ['problem-workaround']"
     ],
-    "money_path": "reach-only \u2014 more articles surviving the title gate means more reach into the live receive path; no money enters directly",
-    "verify": "Next cycle's article_rejects.counts.weak_title should drop below 3 in the 14-day window, and the 'title has ALL-CAPS word' finding should appear less often. If it does not, the LLM is using acronyms still absent from the list.",
+    "money_path": "reach-only",
+    "verify": "Reviewer checks that article_rejects.last no longer reports llm_error and that weak_title count in article_rejects.counts drops in the next cycle.",
     "error": null,
-    "branch": "evolve/1.41.1-20261030-141642",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add the receive address to the dev.to profile bio",
-      "description": "One manual edit at dev.to/settings puts the tip ask on every profile visit permanently; the bot cannot do it (Forem's users API is read-only for this token).",
-      "owner_action": "Edit the Bio field at dev.to/settings to include the published Tron receive address and a one-line ask.",
+      "title": "Edit title rewrite prompt",
+      "description": "Add a concrete banned ALL-CAPS example (URGENT) to the prompt to make the rule explicit.",
+      "owner_action": "Edit the prompt in bot/earning/articles.py as described.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open dev.to/settings.",
-        "Step 2: Paste the published Tron address and a short ask into the Bio field and save."
+        "Open bot/earning/articles.py",
+        "Locate the prompt string in _revise_title",
+        "Replace \"no ALL-CAPS\" with \"no ALL-CAPS words like URGENT\"",
+        "Save the file"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 468,
+  "last_cycle_seconds": 334,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1225,7 +1230,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-30T14:08:56.294121+00:00",
+    "checked_at": "2026-10-30T14:17:04.914857+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1538,8 +1543,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261030-141642",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 40,
     "total_views": 5229,
@@ -1766,7 +1771,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-30T14:16:43.087897+00:00",
+    "last_run": "2026-10-30T14:22:37.274964+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1776,32 +1781,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-30T14:16:43.289706+00:00",
+    "last_run": "2026-10-30T14:22:37.685865+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4602729,
-        "at": "2026-10-30T05:07:31.499026+00:00",
-        "ok": true
-      },
-      {
         "id": 4780783,
-        "at": "2026-10-30T06:10:37.891477+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-10-30T06:10:37.891477+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-10-30T06:10:37.891477+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
         "at": "2026-10-30T06:10:37.891477+00:00",
         "ok": true
       },
@@ -1986,8 +1971,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-10-30T14:22:37.685865+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-10-30T14:22:37.685865+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-10-30T14:22:37.685865+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-10-30T14:22:37.685865+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-30T14:16:43.289706+00:00",
+        "at": "2026-10-30T14:22:37.685865+00:00",
         "ok": true
       }
     ],
@@ -1996,7 +2001,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.2
+    "oldest_check_age_hours": 8.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

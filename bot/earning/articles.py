@@ -465,7 +465,16 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 		if better:
 			article["title"] = better
 		else:
-			return _reject("weak_title", ", ".join(title_issues))
+			# Deterministic fallback: an ALL-CAPS word the LLM could not
+			# rewrite is fixed here rather than costing the day's article.
+			fixed = _fix_shouting(article.get("title", ""))
+			if fixed != article.get("title", "") and not _title_problems(fixed):
+				log.info(
+					"[articles] deterministic title fix: %r -> %r",
+					article.get("title", ""), fixed)
+				article["title"] = fixed
+			else:
+				return _reject("weak_title", ", ".join(title_issues))
 
 	problems = _format_problems(article["body_markdown"])
 	if problems:
@@ -1010,6 +1019,19 @@ def _shouted_words(text: str) -> list[str]:
 		word for word in re.findall(r"\b[A-Z]{2,}\b", text)
 		if word.upper() not in _KNOWN_ACRONYMS
 	]
+
+
+def _fix_shouting(title: str) -> str:
+	"""Convert ALL-CAPS non-acronym words to Title Case deterministically.
+
+    Used as a fallback when the LLM title revision fails. Costs no LLM call
+    and turns a rejected draft into a publishable one: the gate already bans
+    ALL-CAPS, so a title that reaches here has nothing left to lose.
+    """
+	def fix(m: re.Match) -> str:
+		word = m.group(0)
+		return word if word in _KNOWN_ACRONYMS else word.capitalize()
+	return re.sub(r"\b[A-Z]{2,}\b", fix, str(title or ""))
 
 
 def _title_problems(title: str, cfg: dict | None = None) -> list[str]:

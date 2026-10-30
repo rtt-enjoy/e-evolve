@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-29T23:19:31.165634+00:00",
-  "total_runs": 2132,
+  "last_run": "2026-10-30T00:19:33.225443+00:00",
+  "total_runs": 2133,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -24,7 +24,8 @@
       "dev.to": 0.0,
       "code_techs": 0.0,
       "mrr-ideas": 0.0,
-      "ctf-bounty": 0.0
+      "ctf-bounty": 0.0,
+      "dev.to-newsletter": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -34,44 +35,30 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change is proposed because the PROMPT FOCUS fix for weak_title (the ALL-CAPS title gate) was already applied in v1.41.0 by replacing the vague Title Case The Important Words and any ALL-CAPS word rules with concrete allowed/blocked examples, and that same fix has since been re-proposed through 77 open branches over the last several days, exhausting the dead end.",
+    "summary": "Added concrete guidance on allowed technical acronyms and banned ALL-CAPS words to the article draft system prompt, reducing weak_title rejections from ALL-CAPS violations",
     "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Add the receive address to the dev.to profile bio",
-        "description": "One manual edit at dev.to/settings puts the tip ask on every profile visit permanently; the bot cannot do it (Forem's users API is read-only for this token).",
-        "owner_action": "Edit the Bio field at dev.to/settings to include the published Tron receive address and a one-line ask.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open dev.to/settings.",
-          "Step 2: Paste the published Tron address and a short ask into the Bio field and save."
-        ]
-      }
-    ],
-    "direction": "Principle 5, step 3 \u2014 reach into a live receive path by publishing more articles in shapes readers prefer",
+    "suggestions": [],
+    "direction": "step 4",
     "evidence": [
-      "article_rejects.counts.weak_title = 12 (lifetime); PROMPT FOCUS: weak_title lost 3 drafts in the last 14 days",
-      "Gate findings behind weak_title: title has ALL-CAPS word x3",
-      "last_evolution applied: Replace the vague Title Case The Important Words and any ALL-CAPS word rules with concrete allowed/blocked examples (v1.41.0)",
-      "preferred_archetypes() = ['problem-workaround'] (n=9, avg engagement 462.3) \u2014 each rejected draft is a lost problem-workaround article"
+      "article_rejects.counts['weak_title'] = 12",
+      "gate findings: 'title has ALL-CAPS word' x3",
+      "PROMPT FOCUS: weak_title lost 3 draft(s)"
     ],
-    "money_path": "none (maintenance) \u2014 no change proposed, so no new money enters",
-    "verify": "No change proposed; the reviewer confirms the applied v1.41.0 ALL-CAPS concrete-examples fix by watching article_rejects.recent weak_title fall below 3 in the next 14-day window.",
+    "money_path": "reach-only",
+    "verify": "article_rejects.counts['weak_title'] decreases from 12 in next status cycle",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.2"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "dev.to-newsletter",
         "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
+        "title": "Agents go mainstream while trust becomes the bottleneck",
+        "url": "https://dev.to/robust_true_try/agents-go-mainstream-while-trust-becomes-the-bottleneck-p5n",
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "item_count": 7
       }
     ],
     "total_usd": 0.0
@@ -89,7 +76,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1129,
+  "last_cycle_seconds": 754,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1250,7 +1237,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-29T23:19:31.459336+00:00",
+    "checked_at": "2026-10-30T00:19:34.025696+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1259,12 +1246,12 @@
   },
   "newsletter_daily": {
     "enabled": true,
-    "date": "2026-10-22",
-    "published_at": "2026-10-22T23:43:46.309398+00:00",
-    "published": 9,
+    "date": "2026-10-30",
+    "published_at": "2026-10-30T00:32:06.202433+00:00",
+    "published": 10,
     "last_item_count": 7,
-    "last_title": "Infrastructure Exits and the AI Authenticity Tax",
-    "last_url": "https://dev.to/robust_true_try/infrastructure-exits-and-the-ai-authenticity-tax-5fl7"
+    "last_title": "Agents go mainstream while trust becomes the bottleneck",
+    "last_url": "https://dev.to/robust_true_try/agents-go-mainstream-while-trust-becomes-the-bottleneck-p5n"
   },
   "newsletter_history": {
     "source_urls": [
@@ -1330,7 +1317,14 @@
       "github.blog/engineering/architecture-optimization/the-bridge-to-agent-scale-git-infrastructure",
       "martinfowler.com/fragments/2026-10-21.html",
       "github.blog/ai-and-ml/github-copilot/how-3-java-champions-are-using-github-copilot-for-increased-productivity",
-      "github.blog/ai-and-ml/github-copilot/how-to-continue-a-github-copilot-app-session-in-vs-code"
+      "github.blog/ai-and-ml/github-copilot/how-to-continue-a-github-copilot-app-session-in-vs-code",
+      "martinfowler.com/rachels-ramblings/good-devs-wary.html",
+      "github.blog/news-insights/company-news/github-universe-2026-evolving-every-layer-of-the-stack",
+      "github.blog/news-insights/octoverse/octoverse-commits-pushes-reach-new-highs-in-2026-as-developers-build-with-agents",
+      "martinfowler.com/fragments/2026-10-28.html",
+      "go.dev/blog/emudhra-incident",
+      "blog.rust-lang.org/2026/10/26/how-to-fund-rust-contributors",
+      "blog.python.org/2026/10/python-3152-31410-31318-31216-31118"
     ],
     "source_titles": [
       "nitter xcancel receive cease desist notic",
@@ -1395,7 +1389,14 @@
       "bridge agent scale git infrastructure",
       "fragment october 21",
       "3 java champion github copilot increased productivity",
-      "continue github copilot app session vs code"
+      "continue github copilot app session vs code",
+      "good developer so wary agentic development",
+      "github universe 2026 evolving every layer stack",
+      "octoverse commit push reach new high 2026 developer build agent",
+      "fragment october 28",
+      "response emudhra key disclosure incident",
+      "fund rust contributor",
+      "python 3 15 2 3 14 10 3 13 18 3 12 16 3 11 18 out"
     ]
   },
   "mrr_ideas": {
@@ -1798,7 +1799,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-29T23:38:19.762309+00:00",
+    "last_run": "2026-10-30T00:32:06.506667+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1808,27 +1809,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-29T23:38:20.032878+00:00",
+    "last_run": "2026-10-30T00:32:06.815791+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4720062,
-        "at": "2026-10-29T14:52:16.743786+00:00",
-        "ok": true
-      },
-      {
         "id": 4356423,
-        "at": "2026-10-29T14:52:16.743786+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
-        "at": "2026-10-29T14:52:16.743786+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-10-29T14:52:16.743786+00:00",
         "ok": true
       },
@@ -2013,17 +1999,37 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-10-30T00:32:06.815791+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-10-30T00:32:06.815791+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-10-30T00:32:06.815791+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-29T23:38:20.032878+00:00",
+        "at": "2026-10-30T00:32:06.815791+00:00",
+        "ok": true
+      },
+      {
+        "id": 4943931,
+        "at": "2026-10-30T00:32:06.815791+00:00",
         "ok": true
       }
     ],
-    "published_total": 41,
-    "covered": 41,
+    "published_total": 42,
+    "covered": 42,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.8
+    "oldest_check_age_hours": 9.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2040,7 +2046,8 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 2
+      "openrouter": 1,
+      "atria": 1
     }
   },
   "ctf_bounty": {

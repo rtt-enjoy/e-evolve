@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-30T22:24:32.073249+00:00",
-  "total_runs": 2158,
+  "last_run": "2026-10-30T23:24:32.198575+00:00",
+  "total_runs": 2159,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,7 +35,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the PROMPT FOCUS (weak_title, 'title has ALL-CAPS word' x3 in the last 14 days) is already addressed by 28+ open prior proposals covering ALL-CAPS rule clarification, _KNOWN_ACRONYMS expansion, deterministic title casing, and specific offending-word inclusion in the problem message \u2014 every approach to this problem is already in open prior proposals, so proposing another would repeat work that is still awaiting review.",
+    "summary": "No change: the weak_title gate caused by ALL-CAPS words is already addressed by 28+ open prior proposals covering rule clarification, _KNOWN_ACRONYMS expansion, deterministic title casing, and specific offending-word inclusion; proposing another would repeat work awaiting review.",
     "changes_applied": [],
     "suggestions": [],
     "direction": "Principle 5, step 3: reach into a live receive path by publishing more articles in shapes readers measurably prefer; the PROMPT FOCUS is weak_title but all approaches are already in open prior proposals",
@@ -43,10 +43,10 @@
       "article_rejects.counts.weak_title=12 (lifetime), 3 in last 14 days",
       "PROMPT FOCUS: weak_title lost 3 draft(s), all from ALL-CAPS words",
       "Gate findings behind it: 'title has ALL-CAPS word' x3",
-      "28+ prior proposals already target the ALL-CAPS title rule from every angle: rule clarification with concrete examples, _KNOWN_ACRONYMS expansion, deterministic title casing before the gate, and including the specific offending word in the title problem message"
+      "28+ prior proposals already target the ALL-CAPS title rule from every angle: rule clarification with concrete examples, _KNOWN_ACRONYMS expansion, deterministic title casing, and including the specific offending word in the title problem message"
     ],
     "money_path": "reach-only",
-    "verify": "No change to verify; all approaches to the ALL-CAPS weak_title problem are already in open prior proposals.",
+    "verify": "No change to verify; the problem is already addressed by open proposals.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -57,8 +57,8 @@
         "platform": "dev.to",
         "success": false,
         "skipped": true,
-        "reject_code": "llm_error",
-        "error": "LLM call failed",
+        "reject_code": "weak_title",
+        "error": "title too weak to earn a click, and the rewrite failed",
         "estimated_usd": 0.0
       }
     ],
@@ -78,7 +78,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1371,
+  "last_cycle_seconds": 1000,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1270,7 +1270,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-30T22:24:32.951498+00:00",
+    "checked_at": "2026-10-30T23:24:32.925104+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1658,17 +1658,17 @@
     "sample_size": 42
   },
   "article_rejects": {
-    "last_reason": "llm_error",
-    "last_detail": "LLM call failed",
-    "last_at": "2026-10-30T22:47:21.969189+00:00",
+    "last_reason": "weak_title",
+    "last_detail": "title too weak to earn a click, and the rewrite failed",
+    "last_at": "2026-10-30T23:41:10.377608+00:00",
     "counts": {
       "empty_draft": 9,
       "fabricated": 2,
-      "weak_title": 12,
+      "weak_title": 13,
       "revision_fabricated": 1,
       "llm_error": 29
     },
-    "total": 53,
+    "total": 54,
     "recent": [
       {
         "code": "empty_draft",
@@ -1789,6 +1789,11 @@
         "code": "llm_error",
         "at": "2026-10-30T22:47:21.969189+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
+      },
+      {
+        "code": "weak_title",
+        "at": "2026-10-30T23:41:10.377608+00:00",
+        "detail": "title has ALL-CAPS word"
       }
     ]
   },
@@ -1821,7 +1826,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-30T22:47:22.262364+00:00",
+    "last_run": "2026-10-30T23:41:10.689675+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1831,32 +1836,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-30T22:47:22.434532+00:00",
+    "last_run": "2026-10-30T23:41:11.221144+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4925166,
-        "at": "2026-10-30T14:16:43.289706+00:00",
-        "ok": true
-      },
-      {
         "id": 4602729,
-        "at": "2026-10-30T14:22:37.685865+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-10-30T14:22:37.685865+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-10-30T14:22:37.685865+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
         "at": "2026-10-30T14:22:37.685865+00:00",
         "ok": true
       },
@@ -2041,8 +2026,28 @@
         "ok": true
       },
       {
+        "id": 4925166,
+        "at": "2026-10-30T23:41:11.221144+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-10-30T23:41:11.221144+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-10-30T23:41:11.221144+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-10-30T23:41:11.221144+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-30T22:47:22.434532+00:00",
+        "at": "2026-10-30T23:41:11.221144+00:00",
         "ok": true
       }
     ],
@@ -2051,7 +2056,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.5
+    "oldest_check_age_hours": 9.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2064,11 +2069,12 @@
     "main_provider": "atria",
     "main_model": "Atria-Dawn",
     "key_set": true,
-    "live": false,
-    "serving": "openrouter",
-    "disabled_reason": "timeout",
+    "live": true,
+    "serving": "atria",
+    "disabled_reason": null,
     "calls": {
-      "openrouter": 1
+      "openrouter": 2,
+      "atria": 1
     }
   },
   "ctf_bounty": {

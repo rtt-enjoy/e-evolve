@@ -2612,3 +2612,7 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-10-30 22:47 UTC
 
 - [fail] **dev.to**: LLM call failed
+
+### 2026-10-30 23:41 UTC
+
+- [fail] **dev.to**: title too weak to earn a click, and the rewrite failed

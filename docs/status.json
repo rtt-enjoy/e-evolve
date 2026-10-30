@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-30T13:08:57.421876+00:00",
-  "total_runs": 2147,
+  "last_run": "2026-10-30T14:08:55.503705+00:00",
+  "total_runs": 2148,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,29 +35,35 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a deterministic ALL-CAPS title fix as a fallback when the LLM title revision fails, so an ALL-CAPS word no longer costs a day's article",
+    "summary": "Expand _KNOWN_ACRONYMS in bot/earning/articles.py with 34 common tech acronyms so the title gate stops rejecting legitimate ALL-CAPS words, reducing the 3 weak_title losses in 14 days and keeping more articles in the reach funnel.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "Add _fix_shouting() and use it as a deterministic fallback in _finalize() when _revise_title returns None. The LLM has failed 27 times to avoid ALL-CAPS words in titles despite every prompt clarification tried; a deterministic fix that costs no LLM call converts shouted words to Title Case and lets the article publish instead of being rejected."
+        "reason": "The title gate's _shouted_words() rejects any ALL-CAPS word not in _KNOWN_ACRONYMS. The LLM writes legitimate acronyms (CRON, ENV, PR) in all-caps because the prompt says to keep acronyms in their real casing, but the gate does not recognise them. Expanding the allowlist fixes the 3 ALL-CAPS rejections without softening the gate \u2014 it still catches actual shouting."
       }
     ],
     "suggestions": [],
-    "direction": "PROMPT FOCUS (weak_title) \u2014 served by a code fallback instead of another prompt edit, after 27 prompt-only proposals on this rule failed to reduce the reject count",
+    "direction": "Doctrine Principle 5 step 3 \u2014 reach into a live receive path; the PROMPT FOCUS is weak_title (ALL-CAPS word x3), and the gate's acronym allowlist is the code causing the rejections.",
     "evidence": [
       "article_rejects.counts.weak_title = 12 lifetime, 3 in the last 14 days",
       "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x3",
-      "27 prior proposals on the ALL-CAPS title rule (prompt edits, deterministic casing before the gate, acronym relaxation) \u2014 none merged",
-      "last merged change 1.41.0 added '(e.g., URGENT)' to the title rule; weak_title count did not drop"
+      "preferred_archetypes() = ['problem-workaround'] \u2014 the winning shape needs titles that survive the gate to reach readers"
     ],
-    "money_path": "reach-only \u2014 more published articles mean more readers see the tip footer; the receive path itself is unchanged",
-    "verify": "bot/tests.py should still pass; article_rejects.counts.weak_title should fall in subsequent cycles; log line '[articles] deterministic title fix' appears when the fallback fires",
+    "money_path": "reach-only \u2014 more articles surviving the title gate means more reach into the live receive path; no money enters directly",
+    "verify": "Next cycle's article_rejects.counts.weak_title should drop below 3 in the 14-day window, and the 'title has ALL-CAPS word' finding should appear less often. If it does not, the LLM is using acronyms still absent from the list.",
     "error": null,
-    "branch": "evolve/1.41.1-20261030-132803",
+    "branch": "evolve/1.41.1-20261030-141642",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "ctf-bounty",
+        "success": true,
+        "estimated_usd": 0.0,
+        "listed": 14
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -73,7 +79,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1148,
+  "last_cycle_seconds": 468,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1219,7 +1225,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-30T13:08:58.170105+00:00",
+    "checked_at": "2026-10-30T14:08:56.294121+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1532,7 +1538,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261030-132803",
+  "last_evolution_branch": "evolve/1.41.1-20261030-141642",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 40,
@@ -1760,7 +1766,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-30T13:28:03.935055+00:00",
+    "last_run": "2026-10-30T14:16:43.087897+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1770,32 +1776,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-30T13:28:04.280160+00:00",
+    "last_run": "2026-10-30T14:16:43.289706+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4925166,
-        "at": "2026-10-30T04:12:45.697285+00:00",
-        "ok": true
-      },
-      {
         "id": 4602729,
-        "at": "2026-10-30T05:07:31.499026+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-10-30T05:07:31.499026+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-10-30T05:07:31.499026+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-10-30T05:07:31.499026+00:00",
         "ok": true
       },
@@ -1980,8 +1966,28 @@
         "ok": true
       },
       {
+        "id": 4925166,
+        "at": "2026-10-30T14:16:43.289706+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-10-30T14:16:43.289706+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-30T14:16:43.289706+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-10-30T14:16:43.289706+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-30T13:28:04.280160+00:00",
+        "at": "2026-10-30T14:16:43.289706+00:00",
         "ok": true
       }
     ],
@@ -1990,7 +1996,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.3
+    "oldest_check_age_hours": 9.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2012,9 +2018,9 @@
   },
   "ctf_bounty": {
     "source": "ctftime",
-    "last_refresh_at": "2026-10-30T07:35:26.496916+00:00",
+    "last_refresh_at": "2026-10-30T14:16:42.246415+00:00",
     "last_reason": "ok",
-    "fetched": 33,
+    "fetched": 32,
     "enterable": 19,
     "paying": 3,
     "crypto": 0,
@@ -2027,17 +2033,17 @@
         "ctftime_url": "https://ctftime.org/event/3460/",
         "start": "2026-10-30T14:00:00+00:00",
         "finish": "2026-11-01T14:00:00+00:00",
-        "live": false,
-        "days_until_start": 0.3,
+        "live": true,
+        "days_until_start": 0.0,
         "format": "Jeopardy",
-        "weight": 0.0,
-        "participants": 144,
+        "weight": 0,
+        "participants": 163,
         "prizes": "USD 2,500 Guaranteed Cash Prize Pool + Additional Sponsored Rewards CASH PRIZES (TOP 5 TEAMS) * 1st Place: USD 1,000 * 2nd Place: USD 700 * 3rd Place: USD 500 *",
         "pays": true,
         "crypto": false,
         "beginner": false,
         "kyc": "not published",
-        "score": 58
+        "score": 60
       },
       {
         "id": 3331,
@@ -2047,16 +2053,16 @@
         "start": "2026-11-06T12:00:00+00:00",
         "finish": "2026-11-09T12:00:00+00:00",
         "live": false,
-        "days_until_start": 7.2,
+        "days_until_start": 6.9,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 29,
+        "participants": 30,
         "prizes": "1st Place: 25$ + 6 Month Caido License per Member (Worth ~$545) + 4 .xyz Domains 2nd Place: 15$ + 3 Month Caido License per Member (Worth ~$272) + 2 .xyz Domain",
         "pays": true,
         "crypto": false,
         "beginner": false,
         "kyc": "not published",
-        "score": 54
+        "score": 58
       },
       {
         "id": 3419,
@@ -2066,7 +2072,7 @@
         "start": "2026-11-20T10:00:00+00:00",
         "finish": "2026-11-22T10:00:00+00:00",
         "live": false,
-        "days_until_start": 21.1,
+        "days_until_start": 20.8,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 11,
@@ -2075,7 +2081,7 @@
         "crypto": false,
         "beginner": false,
         "kyc": "not published",
-        "score": 50
+        "score": 54
       },
       {
         "id": 3333,
@@ -2085,16 +2091,16 @@
         "start": "2026-11-06T13:00:00+00:00",
         "finish": "2026-11-08T13:00:00+00:00",
         "live": false,
-        "days_until_start": 7.2,
+        "days_until_start": 6.9,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 33,
+        "participants": 35,
         "prizes": "TBD",
         "pays": false,
         "crypto": false,
         "beginner": true,
         "kyc": "not published",
-        "score": 29
+        "score": 33
       },
       {
         "id": 3339,
@@ -2104,10 +2110,10 @@
         "start": "2026-11-06T17:00:00+00:00",
         "finish": "2026-11-07T17:00:00+00:00",
         "live": false,
-        "days_until_start": 7.4,
+        "days_until_start": 7.1,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 30,
+        "participants": 34,
         "prizes": "",
         "pays": false,
         "crypto": false,
@@ -2123,7 +2129,7 @@
         "start": "2026-11-12T17:00:00+00:00",
         "finish": "2026-11-14T05:00:00+00:00",
         "live": false,
-        "days_until_start": 13.4,
+        "days_until_start": 13.1,
         "format": "Jeopardy",
         "weight": 1.0,
         "participants": 16,
@@ -2142,7 +2148,7 @@
         "start": "2026-11-13T17:00:00+00:00",
         "finish": "2026-11-14T11:00:00+00:00",
         "live": false,
-        "days_until_start": 14.4,
+        "days_until_start": 14.1,
         "format": "Jeopardy",
         "weight": 37.0,
         "participants": 34,
@@ -2161,10 +2167,10 @@
         "start": "2026-11-13T23:00:00+00:00",
         "finish": "2026-11-15T23:00:00+00:00",
         "live": false,
-        "days_until_start": 14.6,
+        "days_until_start": 14.4,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 84,
+        "participants": 85,
         "prizes": "To be announced!",
         "pays": false,
         "crypto": false,
@@ -2180,7 +2186,7 @@
         "start": "2026-11-20T23:00:00+00:00",
         "finish": "2026-11-21T23:00:00+00:00",
         "live": false,
-        "days_until_start": 21.6,
+        "days_until_start": 21.4,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 5,
@@ -2199,7 +2205,7 @@
         "start": "2026-11-21T13:00:00+00:00",
         "finish": "2026-11-21T21:00:00+00:00",
         "live": false,
-        "days_until_start": 22.2,
+        "days_until_start": 21.9,
         "format": "Jeopardy",
         "weight": 37.0,
         "participants": 19,
@@ -2218,10 +2224,10 @@
         "start": "2026-11-28T04:30:00+00:00",
         "finish": "2026-11-28T16:30:00+00:00",
         "live": false,
-        "days_until_start": 28.9,
+        "days_until_start": 28.6,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 13,
+        "participants": 14,
         "prizes": "To be announced",
         "pays": false,
         "crypto": false,
@@ -2237,10 +2243,10 @@
         "start": "2026-10-31T02:00:00+00:00",
         "finish": "2026-11-01T02:00:00+00:00",
         "live": false,
-        "days_until_start": 0.8,
+        "days_until_start": 0.5,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 32,
+        "participants": 34,
         "prizes": "Eligible teams will qualify for the on-site finals, which are planned to take place in Nanjing, China. Qualification criteria, the number of qualifying teams an",
         "pays": false,
         "crypto": false,
@@ -2256,10 +2262,10 @@
         "start": "2026-10-31T09:00:00+00:00",
         "finish": "2026-11-01T09:00:00+00:00",
         "live": false,
-        "days_until_start": 1.1,
+        "days_until_start": 0.8,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 45,
+        "participants": 46,
         "prizes": "",
         "pays": false,
         "crypto": false,
@@ -2275,7 +2281,7 @@
         "start": "2026-11-06T10:00:00+00:00",
         "finish": "2026-11-07T10:00:00+00:00",
         "live": false,
-        "days_until_start": 7.1,
+        "days_until_start": 6.8,
         "format": "Jeopardy",
         "weight": 10.31,
         "participants": 50,
@@ -2284,7 +2290,7 @@
         "crypto": false,
         "beginner": false,
         "kyc": "not published",
-        "score": 14
+        "score": 18
       }
     ]
   },

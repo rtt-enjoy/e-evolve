@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-30T09:08:48.600254+00:00",
-  "total_runs": 2143,
+  "last_run": "2026-10-30T10:08:50.081235+00:00",
+  "total_runs": 2144,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,25 +35,20 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Replace the vague 'any ALL-CAPS word' title ban with a clearer rule that explicitly allows standard acronyms and bans emphasis words (URGENT, BREAKING, MUST, CRITICAL), so the LLM stops generating titles that trigger the weak_title gate.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The TITLE rule bans 'any ALL-CAPS word' but doesn't distinguish banned emphasis words from allowed acronyms, so the LLM keeps producing titles like 'URGENT: Fix This Bug' that trigger the weak_title gate. Replacing the vague ban with a concrete rule that lists banned emphasis words and explicitly permits acronyms gives the model a followable boundary."
-      }
-    ],
+    "summary": "No change this cycle. The prompt-focus rule (ALL-CAPS titles) has already been proposed 29 times in open branches, and the dominant rejects in the window are engine failures (llm_error=14, empty_draft=5) that no prompt edit can fix.",
+    "changes_applied": [],
     "suggestions": [],
-    "direction": "Principle 5, step 3: reach into a live receive path by publishing more articles in shapes readers prefer.",
+    "direction": "checklist step 4 \u2014 reach into a live receive path via prompt upgrades",
     "evidence": [
-      "article_rejects.counts weak_title=12 (total drafts lost to weak title)",
-      "article_rejects.recent includes 'title has ALL-CAPS word' x3 (gate findings behind weak_title in last 14 days)",
-      "article_interest preferred_archetypes = ['problem-workaround'] (reach work is bottlenecked by title gate)"
+      "article_rejects: weak_title=3 drafts lost in the window, gate finding 'title has ALL-CAPS word' x3",
+      "article_rejects: llm_error=14 and empty_draft=5 lost in the window \u2014 engine failures, explicitly not fixable by a prompt edit",
+      "PRIOR PROPOSALS: 29 distinct ALL-CAPS/title-rule edits to bot/earning/articles.py, none merged; branches still open"
     ],
-    "money_path": "reach-only",
-    "verify": "Next cycle's article_rejects.counts weak_title should decrease (e.g., <12). The test in bot/tests.py will assert the _SYSTEM prompt includes the clarified ALL-CAPS rule with acronym allowance and emphasis-word examples.",
+    "money_path": "none (maintenance)",
+    "verify": "No change proposed, so nothing to verify; the weak_title and llm_error window counts would only move if the LLM engine stabilizes or a genuinely new prompt angle lands",
     "error": null,
-    "branch": "evolve/1.41.1-20261030-092507",
-    "proposed_version": "1.41.1"
+    "branch": null,
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -72,7 +67,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 981,
+  "last_cycle_seconds": 468,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1270,7 +1265,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-30T09:08:49.693311+00:00",
+    "checked_at": "2026-10-30T10:08:50.531593+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1583,8 +1578,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261030-092507",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 40,
     "total_views": 5229,
@@ -1811,7 +1806,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-30T09:25:08.190118+00:00",
+    "last_run": "2026-10-30T10:16:37.853668+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1821,32 +1816,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-30T09:25:08.437205+00:00",
+    "last_run": "2026-10-30T10:16:38.144246+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4943931,
-        "at": "2026-10-30T00:32:06.815791+00:00",
-        "ok": true
-      },
-      {
         "id": 4356423,
-        "at": "2026-10-30T01:33:14.612035+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-10-30T01:33:14.612035+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-10-30T01:33:14.612035+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
         "at": "2026-10-30T01:33:14.612035+00:00",
         "ok": true
       },
@@ -2031,8 +2006,28 @@
         "ok": true
       },
       {
+        "id": 4943931,
+        "at": "2026-10-30T10:16:38.144246+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-10-30T10:16:38.144246+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-10-30T10:16:38.144246+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-10-30T10:16:38.144246+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-30T09:25:08.437205+00:00",
+        "at": "2026-10-30T10:16:38.144246+00:00",
         "ok": true
       }
     ],
@@ -2041,7 +2036,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.9
+    "oldest_check_age_hours": 8.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

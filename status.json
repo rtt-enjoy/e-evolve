@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-30T10:08:50.081235+00:00",
-  "total_runs": 2144,
+  "last_run": "2026-10-30T11:08:47.911054+00:00",
+  "total_runs": 2145,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,14 +35,16 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle. The prompt-focus rule (ALL-CAPS titles) has already been proposed 29 times in open branches, and the dominant rejects in the window are engine failures (llm_error=14, empty_draft=5) that no prompt edit can fix.",
+    "summary": "No change. The PROMPT FOCUS (weak_title, 'title has ALL-CAPS word' x3) has been proposed 29 times in open branches and is explicitly listed under PRIOR PROPOSALS as do-not-repeat. The dominant rejects in the window are engine failures (llm_error=14, empty_draft=5) that no prompt edit can fix, as the previous cycle already concluded.",
     "changes_applied": [],
     "suggestions": [],
     "direction": "checklist step 4 \u2014 reach into a live receive path via prompt upgrades",
     "evidence": [
-      "article_rejects: weak_title=3 drafts lost in the window, gate finding 'title has ALL-CAPS word' x3",
-      "article_rejects: llm_error=14 and empty_draft=5 lost in the window \u2014 engine failures, explicitly not fixable by a prompt edit",
-      "PRIOR PROPOSALS: 29 distinct ALL-CAPS/title-rule edits to bot/earning/articles.py, none merged; branches still open"
+      "article_rejects.counts: llm_error=27 total (14 in last 14 days), weak_title=12 total (3 in last 14 days), empty_draft=9 total (5 in last 14 days)",
+      "article_rejects.last = 'llm_error': 'LLM call failed'",
+      "PROMPT FOCUS: weak_title lost 3 draft(s), gate finding 'title has ALL-CAPS word' x3",
+      "PRIOR PROPOSALS: 29 distinct ALL-CAPS/title-rule edits to bot/earning/articles.py, none merged; branches still open",
+      "last_evolution.summary: 'The prompt-focus rule (ALL-CAPS titles) has already been proposed 29 times in open branches, and the dominant rejects in the window are engine failures (llm_error=14, empty_draft=5) that no prompt edit can fix.'"
     ],
     "money_path": "none (maintenance)",
     "verify": "No change proposed, so nothing to verify; the weak_title and llm_error window counts would only move if the LLM engine stabilizes or a genuinely new prompt angle lands",
@@ -67,7 +69,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 468,
+  "last_cycle_seconds": 1077,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1265,7 +1267,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-30T10:08:50.531593+00:00",
+    "checked_at": "2026-10-30T11:08:48.462792+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1806,7 +1808,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-30T10:16:37.853668+00:00",
+    "last_run": "2026-10-30T11:26:43.943547+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1816,32 +1818,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-30T10:16:38.144246+00:00",
+    "last_run": "2026-10-30T11:26:44.308495+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4356423,
-        "at": "2026-10-30T01:33:14.612035+00:00",
-        "ok": true
-      },
-      {
         "id": 4931682,
-        "at": "2026-10-30T02:08:32.933211+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-10-30T02:08:32.933211+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-10-30T02:08:32.933211+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
         "at": "2026-10-30T02:08:32.933211+00:00",
         "ok": true
       },
@@ -2026,8 +2008,28 @@
         "ok": true
       },
       {
+        "id": 4356423,
+        "at": "2026-10-30T11:26:44.308495+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-10-30T11:26:44.308495+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-10-30T11:26:44.308495+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-10-30T11:26:44.308495+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-30T10:16:38.144246+00:00",
+        "at": "2026-10-30T11:26:44.308495+00:00",
         "ok": true
       }
     ],
@@ -2036,7 +2038,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.7
+    "oldest_check_age_hours": 9.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

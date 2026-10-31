@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-31T09:45:01.167061+00:00",
-  "total_runs": 2170,
+  "last_run": "2026-10-31T10:45:06.462743+00:00",
+  "total_runs": 2171,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,59 +35,57 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Replace the vague ALL-CAPS placeholder in the title ban list with a regex that matches any all-caps word, reducing weak_title rejections.",
-    "changes_applied": [],
+    "summary": "Clarify the ALL-CAPS title ban in the article draft _SYSTEM prompt by naming recognised acronyms explicitly, so the LLM stops producing ALL-CAPS words the gate rejects.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "The _SYSTEM prompt bans 'any ALL-CAPS word' without saying which ALL-CAPS words are recognised acronyms and therefore allowed. The LLM keeps producing ALL-CAPS words the gate rejects (4 losses in 14 days). Naming the allowed acronyms concretely gives the LLM a clear contrast and reduces the rejection rate without touching the gate."
+      }
+    ],
     "suggestions": [
       {
-        "title": "Merge edit updating ALL-CAPS ban pattern",
-        "description": "Apply the regex change to catch all ALL-CAPS words in titles, reducing weak_title rejections.",
+        "title": "Merge edit clarifying the ALL-CAPS title ban in the article draft prompt",
+        "description": "Replace the vague 'any ALL-CAPS word' ban with a precise rule naming recognised acronyms, reducing weak_title rejections.",
         "owner_action": "Merge the change on the evolve branch",
         "secret_needed": null,
         "how_to": [
           "Open bot/earning/articles.py",
-          "Replace \"__SHOUTING__\" with \"\\b[A-Z]{2,}\\b\" in the _TITLE_BANNED list",
+          "In _SYSTEM, replace 'and any ALL-CAPS word. These read as spam and suppress clicks here.' with the clarified rule naming recognised acronyms",
           "Commit and merge on the evolve branch"
         ]
       }
     ],
-    "direction": "Principle 5 step 2 \u2014 reach into live receive path by improving prompt that loses most drafts (weak_title gate).",
+    "direction": "Principle 5 step 2 \u2014 reach into live receive path by improving the prompt that loses most drafts (weak_title gate).",
     "evidence": [
       "article_rejects.counts weak_title=13 (lifetime)",
-      "gate findings: 'title has ALL-CAPS word' x4",
+      "gate findings: 'title has ALL-CAPS word' x4 in the last 14 days",
       "weak_title lost 4 drafts (last 14 days)"
     ],
     "money_path": "reach-only",
-    "verify": "weak_title count in article_rejects.counts should decrease in the next cycle",
+    "verify": "weak_title count in article_rejects.counts should not increase by 4 in the next 14-day window; the 'title has ALL-CAPS word' finding should appear less frequently in article_rejects.recent.",
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.41.1-20261031-105210",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge edit updating ALL-CAPS ban pattern",
-      "description": "Apply the regex change to catch all ALL-CAPS words in titles, reducing weak_title rejections.",
+      "title": "Merge edit clarifying the ALL-CAPS title ban in the article draft prompt",
+      "description": "Replace the vague 'any ALL-CAPS word' ban with a precise rule naming recognised acronyms, reducing weak_title rejections.",
       "owner_action": "Merge the change on the evolve branch",
       "secret_needed": null,
       "how_to": [
         "Open bot/earning/articles.py",
-        "Replace \"__SHOUTING__\" with \"\\b[A-Z]{2,}\\b\" in the _TITLE_BANNED list",
+        "In _SYSTEM, replace 'and any ALL-CAPS word. These read as spam and suppress clicks here.' with the clarified rule naming recognised acronyms",
         "Commit and merge on the evolve branch"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 321,
+  "last_cycle_seconds": 426,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1252,7 +1250,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-31T09:45:01.789149+00:00",
+    "checked_at": "2026-10-31T10:45:06.989102+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1565,8 +1563,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261031-105210",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 42,
     "total_views": 5289,
@@ -1823,7 +1821,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-31T09:50:20.951755+00:00",
+    "last_run": "2026-10-31T10:52:11.246314+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1833,32 +1831,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-31T09:50:21.177615+00:00",
+    "last_run": "2026-10-31T10:52:11.536555+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4602729,
-        "at": "2026-10-31T00:01:30.315165+00:00",
-        "ok": true
-      },
-      {
         "id": 4740283,
-        "at": "2026-10-31T01:10:26.145416+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-10-31T01:10:26.145416+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-10-31T01:10:26.145416+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-10-31T01:10:26.145416+00:00",
         "ok": true
       },
@@ -2043,8 +2021,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-10-31T10:52:11.536555+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-10-31T10:52:11.536555+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-10-31T10:52:11.536555+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-10-31T10:52:11.536555+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-31T09:50:21.177615+00:00",
+        "at": "2026-10-31T10:52:11.536555+00:00",
         "ok": true
       }
     ],
@@ -2053,7 +2051,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.8
+    "oldest_check_age_hours": 9.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

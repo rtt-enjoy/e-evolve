@@ -405,7 +405,7 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 		"tradeoffs, and failure modes the source does not cover. Do not reword the "
 		"source. Your title must differ from the source title. Follow every "
 		"formatting and source-handling rule in the system prompt, including the "
-		"TITLE and TAGS rules. JSON only."
+		"TITLE and TAGS rules. In particular, your title must not contain any ALL-CAPS words (except recognized acronyms like PDF, JSON, API). JSON only."
 		+ _audience_guidance(status)
 	)
 

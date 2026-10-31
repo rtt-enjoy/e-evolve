@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-31T16:19:00.344896+00:00",
-  "total_runs": 2177,
+  "last_run": "2026-10-31T17:19:03.375013+00:00",
+  "total_runs": 2178,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,31 +36,27 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change is proposed because every prompt edit that could reduce the weak_title / ALL-CAPS rejects already appears in the unmerged PRIOR PROPOSALS, the title gate must not be touched, and the larger reject source (llm_error) is engine-side rather than prompt-fixable.",
-    "changes_applied": [],
-    "suggestions": [],
-    "direction": "Checklist step 4 (reach into a live receive path); PROMPT FOCUS weak_title \u2014 no prompt edit clears the bar this cycle",
-    "evidence": [
-      "article_rejects.counts weak_title = 13 lifetime, 4 in the last 14 days",
-      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x4, naming the article draft _SYSTEM and _revise_title prompts",
-      "article_rejects.counts llm_error = 32 lifetime, 19 in the last 14 days \u2014 documented as engine failure, not fixable by a prompt edit",
-      "PRIOR PROPOSALS (2026-10-29 to 2026-10-31): 20+ branches already cover every ALL-CAPS / title-casing prompt edit \u2014 banned examples (IMPORTANT, NOTE, URGENT), allowed acronym examples, clarifying 'Title Case The Important Words', a definitive rewrite rule, and including the failing words in the rewrite message"
-    ],
-    "money_path": "none (maintenance) \u2014 no change proposed; reach flows through the already-live tip footer in devto.publish / payout.py",
-    "verify": "N/A \u2014 no change; the weak_title window count (currently 4) would only fall if a non-repeating prompt edit were merged and published",
-    "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
-  },
-  "last_earning": {
-    "actions": [
+    "summary": "Add concrete example 'IMPORTANT' and 'NOTE' to the ALL-CAPS ban in the article draft system prompt to clarify the title rule and reduce weak_title rejections.",
+    "changes_applied": [
       {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
+        "file": "bot/earning/articles.py",
+        "reason": "add concrete example to ALL-CAPS ban to reduce weak_title rejections"
       }
     ],
+    "suggestions": [],
+    "direction": "reach into a live receive path (doctrine Principle 5, step 3)",
+    "evidence": [
+      "article_rejects.counts.weak_title=4",
+      "article_rejects.last = 'weak_title'"
+    ],
+    "money_path": "reach-only",
+    "verify": "article_rejects.counts.weak_title should decrease to 0 in the next cycle",
+    "error": null,
+    "branch": "evolve/1.41.1-20261031-172427",
+    "proposed_version": "1.41.1"
+  },
+  "last_earning": {
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -87,7 +83,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 502,
+  "last_cycle_seconds": 325,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1284,7 +1280,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-31T16:19:00.855723+00:00",
+    "checked_at": "2026-10-31T17:19:03.813456+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1597,8 +1593,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261031-172427",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 42,
     "total_views": 5289,
@@ -1855,7 +1851,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-31T16:27:21.132252+00:00",
+    "last_run": "2026-10-31T17:24:27.666904+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1865,32 +1861,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-31T16:27:21.424717+00:00",
+    "last_run": "2026-10-31T17:24:28.068578+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4937139,
-        "at": "2026-10-31T07:04:26.068351+00:00",
-        "ok": true
-      },
-      {
         "id": 4931682,
-        "at": "2026-10-31T08:32:45.219120+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-10-31T08:32:45.219120+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-10-31T08:32:45.219120+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-10-31T08:32:45.219120+00:00",
         "ok": true
       },
@@ -2075,8 +2051,28 @@
         "ok": true
       },
       {
+        "id": 4937139,
+        "at": "2026-10-31T17:24:28.068578+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-10-31T17:24:28.068578+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-10-31T17:24:28.068578+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-10-31T17:24:28.068578+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-31T16:27:21.424717+00:00",
+        "at": "2026-10-31T17:24:28.068578+00:00",
         "ok": true
       }
     ],
@@ -2085,7 +2081,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.4
+    "oldest_check_age_hours": 8.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

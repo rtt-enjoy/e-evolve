@@ -400,6 +400,10 @@ export type Status = {
 	llm_engine?: {
 		main_provider?: string;
 		main_model?: string;
+		/** First model in the GLM chain; differs from main_model when the key was refused on it. */
+		preferred_model?: string;
+		/** Models the key was refused on this run, with Z.ai's business code. */
+		refused?: Array<{ model?: string; endpoint?: string; code?: string; message?: string }>;
 		/** Resolved GLM host the key works on; null until the first GLM call. */
 		endpoint?: string | null;
 		/** Whether the main engine's key (GLM_API_KEY) was present this cycle. */

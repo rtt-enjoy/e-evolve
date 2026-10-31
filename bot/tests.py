@@ -5548,6 +5548,32 @@ class TestGlmPrimaryThenAtriaThenOpenRouter(unittest.TestCase):
 		self.assertEqual((resp.provider, resp.model), ("glm", "glm-4.7-flash"))
 		self.assertEqual(client.engine_report()["main_model"], "glm-4.7-flash")
 
+	def test_report_says_why_the_preferred_model_was_skipped(self):
+		"""A key that lands below glm-5.3-flash must name the refusal, not hide it."""
+		client = self._client()
+
+		def rule(endpoint, model, probe):
+			return self._resp(400, "1211") if model == "glm-5.3-flash" else self._resp()
+
+		fake, _ = self._post(rule)
+		with mock.patch("requests.post", side_effect=fake):
+			client.complete_for_role("post", "hi")
+		report = client.engine_report()
+		self.assertEqual(report["preferred_model"], "glm-5.3-flash")
+		self.assertEqual(report["main_model"], "glm-5.2")
+		self.assertEqual(
+			[(r["model"], r["endpoint"], r["code"]) for r in report["refused"]],
+			[("glm-5.3-flash", self.CODING, "1211")],
+		)
+
+	def test_report_lists_no_refusal_when_the_lead_model_answers(self):
+		client = self._client()
+		fake, _ = self._post(lambda e, m, p: self._resp())
+		with mock.patch("requests.post", side_effect=fake):
+			client.complete_for_role("post", "hi")
+		report = client.engine_report()
+		self.assertEqual((report["main_model"], report["refused"]), ("glm-5.3-flash", []))
+
 	def test_glm_53_runs_low_effort_thinking_with_headroom(self):
 		"""5.3 refuses thinking "disabled"; low effort is its documented "off"."""
 		client = self._client()

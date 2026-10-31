@@ -255,6 +255,9 @@ class LLMClient:
 		self._glm_disabled = False
 		self._glm_disabled_reason: str | None = None
 		self._glm_failures = 0
+		# Models this key was refused on, so a run that settles below
+		# _GLM_MODELS[0] can say why instead of quietly naming another model.
+		self._glm_refused: list[dict[str, str]] = []
 		# Set when Atria answers 401 or its free quota is spent. Per-process: the
 		# next hourly cycle starts with Atria enabled again.
 		self._atria_disabled = False
@@ -739,6 +742,8 @@ class LLMClient:
 			# The model the probe settled on, so a key that fell to the free
 			# Flash tier says so instead of naming the model it was meant to use.
 			"main_model":      self._glm_model or _GLM_MODELS[0],
+			"preferred_model": _GLM_MODELS[0],
+			"refused":         self._glm_refused[:8],
 			"endpoint":        self._glm_endpoint,
 			"key_set":         glm_set,
 			"live":            glm_live,
@@ -792,6 +797,9 @@ class LLMClient:
 		# the answer; with thinking on, long JSON plans came back cut.
 		return {"thinking": {"type": "disabled"}}
 
+	def _note_glm_refusal(self, endpoint: str, model: str, code: str, msg: str) -> None:
+		self._glm_refused.append({"model": model, "endpoint": endpoint, "code": code, "message": msg})
+
 	def _glm_failed_to_reach(self, why: str) -> RuntimeError:
 		"""A timeout or outage. Two in one run latch GLM off for the rest of it."""
 		self._glm_failures += 1
@@ -837,6 +845,7 @@ class LLMClient:
 					raise self._glm_failed_to_reach(f"probe of {endpoint} answered {rsp.status_code}")
 				if code in _GLM_NEXT_MODEL_CODES or rsp.status_code == 400:
 					no_balance = no_balance or code == "1113"
+					self._note_glm_refusal(endpoint, model, code or str(rsp.status_code), msg)
 					continue
 				# Any other 429: usage or plan limit spent on this host.
 				self._latch_glm_off("quota_spent")
@@ -887,6 +896,7 @@ class LLMClient:
 			if code in _GLM_NEXT_MODEL_CODES:
 				# Balance or plan no longer covers this model: step down for the
 				# rest of the run, so later calls do not re-hit the same wall.
+				self._note_glm_refusal(self._glm_endpoint, model, code, msg)
 				idx = _GLM_MODELS.index(model)
 				if idx == len(_GLM_MODELS) - 1:
 					self._latch_glm_off("model_not_found")

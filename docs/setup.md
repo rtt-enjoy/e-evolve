@@ -58,9 +58,10 @@ A key with no balance runs on the free Flash models.
 GLM is switched off for the rest of the cycle on a rejected key, a spent
 quota or usage limit, or two timeouts/outages. A rate limit (1302/1305) or a
 refused request (prompt too long, flagged content) skips GLM for that one call
-only. The Engine panel's **GLM** card shows the model and endpoint the probe
-settled on, how many calls GLM answered, and why it fell back. Its last row
-reports Atria. The sidebar pill reads `GLM live`, `GLM fallback`, or
+only. The Engine page leads with the model the probe settled on, then the
+fallback order GLM → Atria → OpenRouter with what each served last cycle. If
+the key was refused on `glm-5.3-flash`, a yellow line gives the Z.ai code and
+the model it fell to (`llm_engine.refused`). The endpoint sits under Cycle facts. The sidebar pill reads `GLM live`, `GLM fallback`, or
 `GLM not reported`.
 
 **Atria (first fallback): `Atria-Dawn`, roughly 1B free tokens.**

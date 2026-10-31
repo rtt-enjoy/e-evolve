@@ -1068,36 +1068,105 @@ a {
 		@apply text-xs leading-relaxed text-soft;
 	}
 
-	.route {
-		@apply flex min-w-0 flex-col gap-3 rounded-[var(--radius)] border border-line bg-panel2 p-4;
+	/* ============================================================ engine */
+
+	.engine-hero {
+		@apply flex flex-col gap-5;
 	}
 
-	.route-head {
-		@apply flex items-start gap-3;
+	.engine-hero-top {
+		@apply flex flex-wrap items-start justify-between gap-3;
 	}
 
-	.route-icon {
-		@apply grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent/10 text-accent;
+	.engine-eyebrow {
+		@apply text-[11px] font-semibold uppercase tracking-[.12em] text-faint;
 	}
 
-	.route-head strong {
-		@apply block truncate text-sm font-semibold;
+	.engine-model {
+		@apply mt-2 flex min-w-0 items-center gap-3;
 	}
 
-	.route-head em {
-		@apply block truncate text-xs not-italic text-soft;
+	.engine-model code {
+		@apply font-mono text-[26px] font-semibold leading-tight sm:text-[32px];
+		letter-spacing: -0.02em;
+		overflow-wrap: anywhere;
 	}
 
-	.route-model {
-		@apply truncate font-mono text-xs text-text;
+	.engine-model .dot {
+		@apply h-2.5 w-2.5;
 	}
 
-	.route > .prose {
-		@apply text-[13px];
+	.engine-detail {
+		@apply mt-1.5 text-sm text-soft;
 	}
 
-	.route-secret {
-		@apply font-mono text-[11px] text-faint;
+	.engine-note {
+		@apply flex items-start gap-2 rounded-[var(--radius)] border border-yellow/25 bg-yellow/5 px-3.5 py-2.5 text-[13px] leading-relaxed text-yellow;
+	}
+
+	.engine-note > svg {
+		@apply mt-0.5 shrink-0;
+	}
+
+	.chain {
+		@apply m-0 grid list-none gap-2.5 p-0 md:grid-cols-3;
+	}
+
+	.chain-step {
+		@apply flex min-w-0 items-center gap-3 rounded-[var(--radius)] border border-line bg-panel2 px-3.5 py-3;
+		--tone: var(--c-faint);
+	}
+
+	.chain-step.tone-good { --tone: var(--c-good); border-color: rgb(var(--c-good) / .35); }
+	.chain-step.tone-info { --tone: var(--c-accent); }
+	.chain-step.tone-warn { --tone: var(--c-warn); border-color: rgb(var(--c-warn) / .35); }
+	.chain-step.tone-bad { --tone: var(--c-bad); border-color: rgb(var(--c-bad) / .35); }
+
+	.chain-num {
+		@apply grid h-6 w-6 shrink-0 place-items-center rounded-full text-[11px] font-semibold;
+		color: rgb(var(--tone));
+		background: rgb(var(--tone) / .12);
+	}
+
+	.chain-step strong {
+		@apply block text-sm font-semibold;
+	}
+
+	.chain-step code {
+		@apply block truncate font-mono text-xs text-soft;
+	}
+
+	.chain-state {
+		@apply ml-auto flex shrink-0 flex-col items-end text-xs font-medium;
+		color: rgb(var(--tone));
+	}
+
+	.chain-state em {
+		@apply not-italic text-faint;
+	}
+
+	.roles {
+		@apply m-0 list-none p-0;
+	}
+
+	.roles > li {
+		@apply grid items-center gap-x-4 gap-y-2 border-b border-line px-5 py-4 last:border-b-0 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:px-6;
+	}
+
+	.roles strong {
+		@apply text-sm font-semibold;
+	}
+
+	.roles p {
+		@apply mt-0.5 text-[13px] leading-snug text-soft;
+	}
+
+	.roles code {
+		@apply font-mono text-xs text-text;
+	}
+
+	.roles .pill {
+		@apply justify-self-start sm:justify-self-end;
 	}
 
 	/* ============================================================ actions */

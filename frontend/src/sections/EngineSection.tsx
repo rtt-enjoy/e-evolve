@@ -1,12 +1,17 @@
-import { Bot, ExternalLink, FileText, GitBranch } from 'lucide-react';
+import { AlertTriangle, ExternalLink, FileText } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { Bullets, Card, Disclosure, Empty, KeyValue, Pill, SectionHead, Subhead, Tile } from '../components/ui';
-import { engineState } from '../utils/engine';
+import { Bullets, Card, Disclosure, Dot, Empty, KeyValue, Pill, SectionHead, Subhead } from '../components/ui';
+import type { Tone } from '../components/ui';
+import { engineChain, engineState } from '../utils/engine';
 import { featureLabel, formatDate, money } from '../utils/format';
 import { rejectLabel } from '../utils/dashboard';
 import type { Status } from '../types/status';
 
 export default function EngineSection({ status }: { status: Status }) {
+	// Every figure here is what the last cycle observed (status.llm_engine),
+	// not the routing preference: a preference is not a live engine.
+	const engine = engineState(status);
+	const chain = engineChain(status, engine);
 	const workflows = Object.entries(status.llm_workflows || {});
 	const evolution = status.last_evolution || {};
 	const actions = status.last_earning?.actions || [];
@@ -16,67 +21,81 @@ export default function EngineSection({ status }: { status: Status }) {
 	const repo = status.github_repo && /^[\w.-]+\/[\w.-]+$/.test(status.github_repo) ? status.github_repo : null;
 	const compareUrl = repo && branch && /^[\w./-]+$/.test(branch) ? `https://github.com/${repo}/compare/main...${branch}` : null;
 	const evidence = Array.isArray(evolution.evidence) ? evolution.evidence : evolution.evidence ? [evolution.evidence] : [];
-	// GLM is the main engine (Atria behind it, then OpenRouter). Its tile
-	// reports what the last cycle observed (key set, calls answered, fallback
-	// reason), not the routing preference.
-	const engine = engineState(status);
-	const calls = Object.entries(engine.calls);
-	const totalCalls = calls.reduce((sum, [, n]) => sum + n, 0);
+	const evoTone: Tone = evolution.error ? 'bad' : pending ? 'info' : 'neutral';
 
 	return (
 		<>
-			<SectionHead
-				title="Engine"
-				blurb="Which model handles which role, and what the last cycle actually did."
-			/>
+			<SectionHead title="Engine" blurb="Which model writes for the bot, and what it did last cycle." />
 
-			<div className="tile-row">
-				<Tile label="Main engine" value={engine.model} detail={engine.detail} tone={engine.tone} icon={<Bot size={15} />} />
-				<Tile
-					label="Served last cycle"
-					value={engine.live === null ? '—' : engine.serving}
-					detail={calls.length ? calls.map(([provider, n]) => `${provider} ${n}`).join(' · ') : 'no calls recorded'}
-					tone={engine.tone}
-				/>
-				<Tile label="LLM calls" value={String(totalCalls)} detail="responses returned last cycle" tone="neutral" />
-				<Tile
-					label="Evolution"
-					value={evolution.error ? 'failed' : pending ? 'in review' : 'no proposal'}
-					detail={pending ? `v${evolution.proposed_version || '?'} on a review branch` : `running v${status.version || '0.0.0'}`}
-					tone={evolution.error ? 'bad' : pending ? 'info' : 'neutral'}
-					icon={<GitBranch size={15} />}
-				/>
-			</div>
-
-			<Subhead>Role routing</Subhead>
-			{workflows.length ? (
-				<div className="grid-3">
-					{workflows.map(([role, workflow]) => (
-						<Card key={role} className="route">
-							<div className="route-head">
-								<span className="route-icon"><Bot size={16} /></span>
-								<div className="min-w-0">
-									<strong>{featureLabel(role)}</strong>
-									<em>{workflow.serving || workflow.provider || 'unknown provider'}</em>
-								</div>
-								{/* `primary_active` only says the main engine was not latched off;
-								    when it answered none of the cycle's calls the fallback did the work. */}
-								<Pill tone={!workflow.active || workflow.primary_active === false || (workflow.provider === engine.provider && engine.tone === 'warn') ? 'warn' : 'good'}>
-									{!workflow.active ? 'idle' : workflow.primary_active === false || (workflow.provider === engine.provider && engine.tone === 'warn') ? 'fallback' : 'active'}
-								</Pill>
-							</div>
-							<code className="route-model">{workflow.model || 'no model configured'}</code>
-							{workflow.fallback_model ? (
-								<span className="route-secret">fallback → {workflow.fallback_provider}: {workflow.fallback_model}</span>
-							) : null}
-							{workflow.last_resort_model ? (
-								<span className="route-secret">then → {workflow.last_resort_provider}: {workflow.last_resort_model}</span>
-							) : null}
-							<p className="prose">{workflow.purpose || 'No purpose recorded.'}</p>
-							{workflow.secret ? <span className="route-secret">{workflow.secret}</span> : null}
-						</Card>
-					))}
+			<section className="card engine-hero">
+				<div className="engine-hero-top">
+					<div className="min-w-0">
+						<span className="engine-eyebrow">Main engine · {engine.name}</span>
+						<div className="engine-model">
+							<Dot tone={engine.tone} />
+							<code>{engine.model}</code>
+						</div>
+						<p className="engine-detail">{engine.detail}</p>
+					</div>
+					<Pill tone={engine.tone}>{engine.label}</Pill>
 				</div>
+
+				{engine.modelNote ? (
+					<p className="engine-note">
+						<AlertTriangle size={15} aria-hidden="true" />
+						{engine.modelNote}
+					</p>
+				) : null}
+
+				<ol className="chain" aria-label="Fallback order">
+					{chain.map((step, index) => (
+						<li key={step.name} className={`chain-step tone-${step.tone}`}>
+							<span className="chain-num">{index + 1}</span>
+							<div className="min-w-0">
+								<strong>{step.name}</strong>
+								<code>{step.model}</code>
+							</div>
+							<span className="chain-state">
+								{step.state}
+								{step.calls ? <em>{step.calls} call{step.calls === 1 ? '' : 's'}</em> : null}
+							</span>
+						</li>
+					))}
+				</ol>
+			</section>
+
+			<Subhead>Roles</Subhead>
+			{workflows.length ? (
+				<Card className="p-0 sm:p-0">
+					<ul className="roles">
+						{workflows.map(([role, workflow]) => {
+							const serving = workflow.serving || workflow.provider || '';
+							// The model that answered, not the role's preference: the
+							// main engine's resolved model, or the fallback's.
+							const model =
+								serving === engine.provider
+									? engine.model
+									: serving === workflow.fallback_provider
+										? workflow.fallback_model
+										: serving === workflow.last_resort_provider
+											? workflow.last_resort_model
+											: workflow.model;
+							const onFallback = workflow.primary_active === false || (serving === engine.provider && engine.tone === 'warn');
+							return (
+								<li key={role}>
+									<div className="min-w-0">
+										<strong>{featureLabel(role)}</strong>
+										<p>{workflow.purpose || 'No purpose recorded.'}</p>
+									</div>
+									<code>{model || '—'}</code>
+									<Pill tone={!workflow.active ? 'neutral' : onFallback ? 'warn' : 'good'}>
+										{!workflow.active ? 'idle' : onFallback ? `fallback · ${serving}` : serving}
+									</Pill>
+								</li>
+							);
+						})}
+					</ul>
+				</Card>
 			) : (
 				<Card><Empty text="No role routing recorded in this snapshot." /></Card>
 			)}
@@ -85,9 +104,13 @@ export default function EngineSection({ status }: { status: Status }) {
 			<div className="split">
 				<div className="stack">
 					<Card
-						title="Latest evolution proposal"
-						hint="Proposals land on an evolve/* branch. Nothing reaches main until you merge it."
-						action={compareUrl && pending ? <a className="btn" href={compareUrl} target="_blank" rel="noreferrer">review diff <ExternalLink size={13} /></a> : undefined}
+						title="Evolution proposal"
+						hint="Lands on an evolve/* branch. Nothing reaches main until you merge it."
+						action={
+							compareUrl && pending
+								? <a className="btn" href={compareUrl} target="_blank" rel="noreferrer">review diff <ExternalLink size={13} /></a>
+								: <Pill tone={evoTone}>{evolution.error ? 'failed' : pending ? 'in review' : 'no proposal'}</Pill>
+						}
 					>
 						<p className="prose lead-in">{evolution.summary || 'No evolution summary recorded.'}</p>
 						{evolution.error ? <p className="error-text mt-3">{evolution.error}</p> : null}
@@ -103,11 +126,7 @@ export default function EngineSection({ status }: { status: Status }) {
 								/>
 							</div>
 						) : null}
-						{evidence.length ? (
-							<div className="mt-4">
-								<Bullets items={evidence.map(String)} />
-							</div>
-						) : null}
+						{evidence.length ? <div className="mt-4"><Bullets items={evidence.map(String)} /></div> : null}
 						{(evolution.changes_applied || []).length ? (
 							<div className="stack mt-4">
 								{(evolution.changes_applied || []).map((change) => (
@@ -117,9 +136,7 @@ export default function EngineSection({ status }: { status: Status }) {
 									</div>
 								))}
 							</div>
-						) : (
-							<p className="muted mt-4">No files changed this cycle.</p>
-						)}
+						) : null}
 					</Card>
 
 					<Card title="Cycle actions" hint="What the research phase emitted.">
@@ -144,38 +161,16 @@ export default function EngineSection({ status }: { status: Status }) {
 				</div>
 
 				<div className="stack">
-					<Card title={engine.name} hint="The main engine, as the last cycle saw it.">
-						<KeyValue
-							rows={[
-								['Status', <Pill tone={engine.tone}>{engine.label}</Pill>],
-								[engine.secret, engine.keySet === null ? 'not reported' : engine.keySet ? 'set' : 'not set'],
-								['Model', engine.model],
-								...(engine.endpoint ? [['Endpoint', engine.endpoint] as [string, ReactNode]] : []),
-								['Calls answered', calls.length ? calls.map(([provider, n]) => `${provider}: ${n}`).join(', ') : 'none recorded'],
-								['Fallback reason', engine.reason || '—'],
-								...(engine.fallback
-									? [[
-										`Fallback: ${engine.fallback.name}`,
-										engine.fallback.keySet === false
-											? 'key not set'
-											: engine.fallback.live === false
-												? engine.fallback.reason || 'off this cycle'
-												: `${engine.fallback.model} ready`,
-									] as [string, ReactNode]]
-									: []),
-							]}
-						/>
-					</Card>
-
 					<Card title="Cycle facts">
 						<KeyValue
 							rows={[
-								['Version', status.version || '—'],
 								['Cycle', `#${status.total_runs || 0}`],
-								['Duration', `${status.last_cycle_seconds || 0}s`],
 								['Last run', formatDate(status.last_run)],
-								['Mode', status.operation_mode || '—'],
-								['Provider', status.llm_provider || '—'],
+								['Duration', `${status.last_cycle_seconds || 0}s`],
+								['Version', status.version || '—'],
+								[engine.secret, engine.keySet === null ? 'not reported' : engine.keySet ? 'set' : 'not set'],
+								...(engine.endpoint ? [['Endpoint', <code className="font-mono text-xs">{engine.endpoint}</code>] as [string, ReactNode]] : []),
+								...(engine.reason ? [['Fallback reason', engine.reason] as [string, ReactNode]] : []),
 							]}
 						/>
 					</Card>

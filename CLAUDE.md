@@ -1421,10 +1421,16 @@ a receipt there is real money that the dollar figure declines to guess at. See
 
 `llm_engine` is written by `main.py` from `LLMClient.engine_report()` at the end
 of the cycle: `main_provider` (`glm`), `main_model` (the model the probe settled
-on), `endpoint` (the GLM host the key works on), `key_set`, `live`, `serving`,
-`disabled_reason`, `calls`, and `fallback` (Atria's `key_set`, `live`,
-`disabled_reason`). Read it — not `llm_provider` or `ROLE_PROVIDER` — to know
-whether GLM is configured and whether it actually served.
+on), `preferred_model` (`_GLM_MODELS[0]`), `refused` (each model the key was
+refused on, with endpoint and Z.ai code), `endpoint` (the GLM host the key works
+on), `key_set`, `live`, `serving`, `disabled_reason`, `calls`, and `fallback`
+(Atria's `key_set`, `live`, `disabled_reason`). Read it — not `llm_provider` or
+`ROLE_PROVIDER` — to know whether GLM is configured and whether it actually
+served. When `main_model` differs from `preferred_model`, `refused` says why;
+the Engine page prints that line instead of silently naming the lower model.
+`llm_workflows.<role>.model` is the *preference*; the page shows the resolved
+model for roles GLM served. The 2026-10-31 "still shows glm-5.2" report was a
+snapshot written six minutes before the glm-5.3-flash commit.
 
 `attribution` is written by `status._snapshot_attribution` (via
 `bot/earning/attribution.py`) and records what was published when on-chain money

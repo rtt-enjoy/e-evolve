@@ -109,6 +109,16 @@ a timeout or empty completion falls through per call without latching, so a
 cycle can end "live" with OpenRouter having served everything. `atriaState`
 reads `llm_engine.calls` and says "Atria not answering".
 
+## Engine page
+
+One hero card answers "which model writes for the bot": the model GLM's probe
+settled on (`llm_engine.main_model`), its state, and the fallback order
+GLM → Atria → OpenRouter with what each step served last cycle
+(`engineChain`). When `main_model` is not `preferred_model`, a yellow line says
+why, from `llm_engine.refused`; a snapshot without `preferred_model` was written
+before glm-5.3-flash led and says so. Role rows show the model that answered,
+not `llm_workflows.<role>.model`, which is only the preference.
+
 ## What "Earned" Means
 
 The Overview's earnings tile shows **only money confirmed on-chain** at

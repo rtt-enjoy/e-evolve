@@ -25,6 +25,12 @@ export type EngineState = {
 	name: string;
 	secret: string;
 	model: string;
+	/**
+	 * Why `model` is not the chain's lead, when it is not: the key was refused
+	 * on the lead model, or the snapshot was written by code that led with a
+	 * different one. null when the lead model is the one serving.
+	 */
+	modelNote: string | null;
 	/** Resolved GLM host, e.g. https://api.z.ai/api/paas/v4; null until probed. */
 	endpoint: string | null;
 	/** null = this snapshot cannot tell. */
@@ -76,7 +82,19 @@ export function engineState(status: Status): EngineState {
 				reason: fb.disabled_reason ? reasonText(fb.disabled_reason, fbMeta?.name || 'fallback', fbMeta?.secret || 'key') : null,
 			}
 		: null;
-	const base = { provider, name, secret, model, endpoint: engine?.endpoint || null, keySet, live, reason, calls, fallback };
+	const preferred = engine?.preferred_model || null;
+	let modelNote: string | null = null;
+	if (preferred && model !== preferred) {
+		const refusal = (engine?.refused || []).find((row) => row.model === preferred);
+		modelNote = refusal
+			? `${preferred} refused by this key (code ${refusal.code || '?'}${refusal.message ? `: ${refusal.message}` : ''}) — running on ${model}`
+			: `${preferred} is first in the chain — running on ${model}`;
+	} else if (engine && !preferred && model !== meta.model) {
+		// Written before the bot reported its preferred model, i.e. before
+		// meta.model led the chain: the next cycle replaces this value.
+		modelNote = `Snapshot predates the ${meta.model} lead — the next cycle reports it`;
+	}
+	const base = { provider, name, secret, model, modelNote, endpoint: engine?.endpoint || null, keySet, live, reason, calls, fallback };
 
 	// `live` only means the engine was not latched off. A call that times out
 	// or comes back empty falls through without latching, so a cycle can end
@@ -99,4 +117,62 @@ export function engineState(status: Status): EngineState {
 		tone: 'neutral',
 		detail: keySet ? `${secret} set — usage appears after the next cycle` : `snapshot predates ${name} — next cycle will report it`,
 	};
+}
+
+export type ChainStep = {
+	name: string;
+	model: string;
+	/** Short state word shown beside the step. */
+	state: string;
+	tone: Tone;
+	calls: number;
+};
+
+/**
+ * The order every role tries engines in, each with what it did last cycle:
+ * GLM, then Atria, then OpenRouter's free router.
+ */
+export function engineChain(status: Status, engine: EngineState): ChainStep[] {
+	const calls = engine.calls;
+	const totalCalls = Object.values(calls).reduce((sum, n) => sum + n, 0);
+	const mainCalls = calls[engine.provider] || 0;
+	const main: ChainStep = {
+		name: engine.name,
+		model: engine.model,
+		calls: mainCalls,
+		...(engine.keySet === false
+			? { state: 'key not set', tone: 'bad' as Tone }
+			: engine.live === false
+				? { state: 'off this cycle', tone: 'warn' as Tone }
+				: engine.live === true && totalCalls > 0 && mainCalls === 0
+					? { state: 'not answering', tone: 'warn' as Tone }
+					: engine.live === true
+						? { state: mainCalls ? 'serving' : 'ready', tone: 'good' as Tone }
+						: { state: 'not reported', tone: 'neutral' as Tone }),
+	};
+	const steps = [main];
+
+	const fb = engine.fallback;
+	if (fb) {
+		const fbProvider = status.llm_engine?.fallback?.provider || 'atria';
+		const n = calls[fbProvider] || 0;
+		steps.push({
+			name: fb.name,
+			model: fb.model,
+			calls: n,
+			...(fb.keySet === false
+				? { state: 'key not set', tone: 'neutral' as Tone }
+				: fb.live === false
+					? { state: 'off this cycle', tone: 'warn' as Tone }
+					: n
+						? { state: 'served', tone: 'info' as Tone }
+						: { state: 'standby', tone: 'neutral' as Tone }),
+		});
+	}
+
+	const flow = Object.values(status.llm_workflows || {})[0];
+	const lastModel = flow?.last_resort_model || 'openrouter/free';
+	const n = calls.openrouter || 0;
+	steps.push({ name: 'OpenRouter', model: lastModel, calls: n, state: n ? 'served' : 'standby', tone: n ? 'info' : 'neutral' });
+	return steps;
 }

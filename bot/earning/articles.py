@@ -140,8 +140,11 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
   acronyms and product names in their real casing ("PDF", "JSON", "GitHub").
 - BANNED in titles: exclamation marks, "Ultimate", "Complete Guide",
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
-  "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
-  and any ALL-CAPS word. These read as spam and suppress clicks here.
+  "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know".
+  Do not use ALL-CAPS words in titles -- they read as spam and suppress clicks.
+  Use Title Case for important terms instead (e.g. "Postgres Index Slowness",
+  not "POSTGRES INDEX SLOWNESS"). Keep acronyms and product names in their
+  real casing ("PDF", "JSON", "GitHub").
 - No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
   wastes the scannable half of the line. Pick the sharper half and stop.
 

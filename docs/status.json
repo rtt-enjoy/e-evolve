@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-31T00:48:59.506010+00:00",
-  "total_runs": 2161,
+  "last_run": "2026-10-31T01:49:10.356846+00:00",
+  "total_runs": 2162,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,38 +35,29 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Replace the vague 'any ALL-CAPS word' title ban in the article draft system prompt with concrete banned examples (URGENT, BREAKING, NOW, FREE) so the LLM stops drafting titles the weak_title gate rejects; reach-only change, no receive-path edit.",
+    "summary": "Add concrete examples of banned ALL-CAPS words to the _SYSTEM prompt to reduce weak_title rejections",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "The weak_title gate rejects titles with ALL-CAPS words; the _SYSTEM TITLE rule states the ban abstractly with no examples, so the LLM keeps producing rejected titles. Replacing the vague rule with concrete banned examples gives the model an unambiguous target, and _revise_title shares _SYSTEM so both title paths improve with one edit."
+        "reason": "Add concrete examples of banned ALL-CAPS words to the _SYSTEM prompt so the LLM can follow the rule consistently"
       }
     ],
     "suggestions": [],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path: publish more articles in the shapes readers measurably prefer (Principle 5, step 3).",
+    "direction": "prompt focus: weak_title gate findings - 'title has ALL-CAPS word' x4",
     "evidence": [
-      "article_rejects.counts.weak_title = 13 lifetime, 4 lost in the last 14 days",
-      "PROMPT FOCUS: weak_title lost 4 draft(s), all from ALL-CAPS words; gate finding 'title has ALL-CAPS word' x4",
-      "articles.py _SYSTEM TITLE rule states the ban abstractly ('and any ALL-CAPS word') with no examples, so the LLM keeps guessing which words count"
+      "PROMPT FOCUS: weak_title lost 4 draft(s) in last 14 days",
+      "gate findings: 'title has ALL-CAPS word' x4",
+      "article_rejects.counts weak_title=13 (lifetime tally)",
+      "article_rejects.last = 'llm_error': 'LLM call failed'"
     ],
-    "money_path": "reach-only",
-    "verify": "article_rejects.counts.weak_title in the last-14-days window falls from 4 toward 0, and the 'title has ALL-CAPS word' gate finding falls from x4; _revise_title shares _SYSTEM so both title paths named in the PROMPT FOCUS are covered by the same edit",
+    "money_path": "reach-only (improves title quality, which improves reach into live receive path; wallet remains $0.00 until reader tips)",
+    "verify": "weak_title reject count in next 14-day window should fall from 4 toward 0",
     "error": null,
-    "branch": "evolve/1.41.1-20261031-005447",
+    "branch": "evolve/1.41.1-20261031-015512",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
       {
         "platform": "dev.to",
         "success": false,
@@ -92,7 +83,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1287,
+  "last_cycle_seconds": 678,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1198,7 +1189,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-31T00:49:00.234454+00:00",
+    "checked_at": "2026-10-31T01:49:10.931886+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1511,7 +1502,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261031-005447",
+  "last_evolution_branch": "evolve/1.41.1-20261031-015512",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 42,
@@ -1588,15 +1579,15 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-10-31T01:10:25.538657+00:00",
+    "last_at": "2026-10-31T02:00:27.060862+00:00",
     "counts": {
       "empty_draft": 9,
       "fabricated": 2,
       "weak_title": 13,
       "revision_fabricated": 1,
-      "llm_error": 31
+      "llm_error": 32
     },
-    "total": 56,
+    "total": 57,
     "recent": [
       {
         "code": "empty_draft",
@@ -1732,6 +1723,11 @@
         "code": "llm_error",
         "at": "2026-10-31T01:10:25.538657+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-10-31T02:00:27.060862+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
       }
     ]
   },
@@ -1764,7 +1760,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-31T01:10:25.855110+00:00",
+    "last_run": "2026-10-31T02:00:27.436221+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1774,32 +1770,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-31T01:10:26.145416+00:00",
+    "last_run": "2026-10-31T02:00:27.686712+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4641536,
-        "at": "2026-10-30T16:26:46.055510+00:00",
-        "ok": true
-      },
-      {
         "id": 4943485,
-        "at": "2026-10-30T17:25:30.531145+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-10-30T17:25:30.531145+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820684,
-        "at": "2026-10-30T17:25:30.531145+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-10-30T17:25:30.531145+00:00",
         "ok": true
       },
@@ -1984,8 +1960,28 @@
         "ok": true
       },
       {
+        "id": 4641536,
+        "at": "2026-10-31T02:00:27.686712+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-10-31T02:00:27.686712+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-10-31T02:00:27.686712+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-10-31T02:00:27.686712+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-31T01:10:26.145416+00:00",
+        "at": "2026-10-31T02:00:27.686712+00:00",
         "ok": true
       }
     ],
@@ -1994,7 +1990,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.7
+    "oldest_check_age_hours": 8.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2011,7 +2007,7 @@
     "serving": "atria",
     "disabled_reason": null,
     "calls": {
-      "openrouter": 2
+      "openrouter": 1
     }
   },
   "ctf_bounty": {

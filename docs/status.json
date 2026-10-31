@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-31T01:49:10.356846+00:00",
-  "total_runs": 2162,
+  "last_run": "2026-10-31T02:49:05.848229+00:00",
+  "total_runs": 2163,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,36 +35,29 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete examples of banned ALL-CAPS words to the _SYSTEM prompt to reduce weak_title rejections",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "Add concrete examples of banned ALL-CAPS words to the _SYSTEM prompt so the LLM can follow the rule consistently"
-      }
-    ],
+    "summary": "Replace the vague 'any ALL-CAPS word' title ban in the article draft system prompt with a clearer rule that explicitly lists allowed technical acronyms, so the LLM stops generating fully-capitalized emphasis words (URGENT, IMPORTANT, etc.) that trigger the weak_title gate.",
+    "changes_applied": [],
     "suggestions": [],
-    "direction": "prompt focus: weak_title gate findings - 'title has ALL-CAPS word' x4",
+    "direction": "Prompt focus: weak_title gate findings - 'title has ALL-CAPS word' x4 in last 14 days",
     "evidence": [
-      "PROMPT FOCUS: weak_title lost 4 draft(s) in last 14 days",
-      "gate findings: 'title has ALL-CAPS word' x4",
-      "article_rejects.counts weak_title=13 (lifetime tally)",
-      "article_rejects.last = 'llm_error': 'LLM call failed'"
+      "article_rejects.counts weak_title=13 (lifetime), 4 in last 14 days",
+      "PROMPT FOCUS: weak_title lost 4 draft(s); gate findings: 'title has ALL-CAPS word' x4",
+      "article_interest: problem-workaround n=9 avg=465.7 is the only archetype with strong signal",
+      "Prior evolution 1.41.0 added examples but weak_title rejections persist"
     ],
     "money_path": "reach-only (improves title quality, which improves reach into live receive path; wallet remains $0.00 until reader tips)",
-    "verify": "weak_title reject count in next 14-day window should fall from 4 toward 0",
+    "verify": "weak_title reject count in next 14-day window should fall from 4 toward 0; article_daily.published should hold at 1/day",
     "error": null,
-    "branch": "evolve/1.41.1-20261031-015512",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "dev.to",
-        "success": false,
-        "skipped": true,
-        "reject_code": "llm_error",
-        "error": "LLM call failed",
-        "estimated_usd": 0.0
+        "platform": "ctf-bounty",
+        "success": true,
+        "estimated_usd": 0.0,
+        "listed": 14
       }
     ],
     "total_usd": 0.0
@@ -83,7 +76,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 678,
+  "last_cycle_seconds": 2483,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1189,7 +1182,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-31T01:49:10.931886+00:00",
+    "checked_at": "2026-10-31T02:49:06.316680+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1502,8 +1495,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261031-015512",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 42,
     "total_views": 5289,
@@ -1760,7 +1753,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-31T02:00:27.436221+00:00",
+    "last_run": "2026-10-31T03:30:28.213596+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1770,32 +1763,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-31T02:00:27.686712+00:00",
+    "last_run": "2026-10-31T03:30:28.558494+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4943485,
-        "at": "2026-10-30T17:25:30.531145+00:00",
-        "ok": true
-      },
-      {
         "id": 4765372,
-        "at": "2026-10-30T18:30:38.239409+00:00",
-        "ok": true
-      },
-      {
-        "id": 4720062,
-        "at": "2026-10-30T18:30:38.239409+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
-        "at": "2026-10-30T18:30:38.239409+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-10-30T18:30:38.239409+00:00",
         "ok": true
       },
@@ -1980,8 +1953,28 @@
         "ok": true
       },
       {
+        "id": 4943485,
+        "at": "2026-10-31T03:30:28.558494+00:00",
+        "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-10-31T03:30:28.558494+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-10-31T03:30:28.558494+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-10-31T03:30:28.558494+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-31T02:00:27.686712+00:00",
+        "at": "2026-10-31T03:30:28.558494+00:00",
         "ok": true
       }
     ],
@@ -1990,7 +1983,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.6
+    "oldest_check_age_hours": 9.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2003,16 +1996,16 @@
     "main_provider": "atria",
     "main_model": "Atria-Dawn",
     "key_set": true,
-    "live": true,
-    "serving": "atria",
-    "disabled_reason": null,
+    "live": false,
+    "serving": "openrouter",
+    "disabled_reason": "timeout",
     "calls": {
-      "openrouter": 1
+      "openrouter": 2
     }
   },
   "ctf_bounty": {
     "source": "ctftime",
-    "last_refresh_at": "2026-10-30T20:42:42.282632+00:00",
+    "last_refresh_at": "2026-10-31T03:30:27.181470+00:00",
     "last_reason": "ok",
     "fetched": 32,
     "enterable": 19,
@@ -2028,7 +2021,7 @@
         "start": "2026-11-06T17:00:00+00:00",
         "finish": "2026-11-07T17:00:00+00:00",
         "live": false,
-        "days_until_start": 6.8,
+        "days_until_start": 6.6,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 35,
@@ -2066,7 +2059,7 @@
         "start": "2026-11-06T12:00:00+00:00",
         "finish": "2026-11-09T12:00:00+00:00",
         "live": false,
-        "days_until_start": 6.6,
+        "days_until_start": 6.4,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 30,
@@ -2085,7 +2078,7 @@
         "start": "2026-11-20T10:00:00+00:00",
         "finish": "2026-11-22T10:00:00+00:00",
         "live": false,
-        "days_until_start": 20.6,
+        "days_until_start": 20.3,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 11,
@@ -2104,7 +2097,7 @@
         "start": "2026-11-06T13:00:00+00:00",
         "finish": "2026-11-08T13:00:00+00:00",
         "live": false,
-        "days_until_start": 6.7,
+        "days_until_start": 6.4,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 36,
@@ -2123,7 +2116,7 @@
         "start": "2026-11-12T17:00:00+00:00",
         "finish": "2026-11-14T05:00:00+00:00",
         "live": false,
-        "days_until_start": 12.8,
+        "days_until_start": 12.6,
         "format": "Jeopardy",
         "weight": 1.0,
         "participants": 16,
@@ -2142,10 +2135,10 @@
         "start": "2026-11-13T17:00:00+00:00",
         "finish": "2026-11-14T11:00:00+00:00",
         "live": false,
-        "days_until_start": 13.8,
+        "days_until_start": 13.6,
         "format": "Jeopardy",
         "weight": 37.0,
-        "participants": 34,
+        "participants": 36,
         "prizes": "See https://platypwnies.de/events/platypwn",
         "pays": false,
         "crypto": false,
@@ -2161,7 +2154,7 @@
         "start": "2026-11-13T23:00:00+00:00",
         "finish": "2026-11-15T23:00:00+00:00",
         "live": false,
-        "days_until_start": 14.1,
+        "days_until_start": 13.8,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 85,
@@ -2180,7 +2173,7 @@
         "start": "2026-11-20T23:00:00+00:00",
         "finish": "2026-11-21T23:00:00+00:00",
         "live": false,
-        "days_until_start": 21.1,
+        "days_until_start": 20.8,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 5,
@@ -2189,7 +2182,7 @@
         "crypto": false,
         "beginner": true,
         "kyc": "not published",
-        "score": 25
+        "score": 29
       },
       {
         "id": 3336,
@@ -2199,7 +2192,7 @@
         "start": "2026-11-21T13:00:00+00:00",
         "finish": "2026-11-21T21:00:00+00:00",
         "live": false,
-        "days_until_start": 21.7,
+        "days_until_start": 21.4,
         "format": "Jeopardy",
         "weight": 37.0,
         "participants": 19,
@@ -2218,7 +2211,7 @@
         "start": "2026-11-28T04:30:00+00:00",
         "finish": "2026-11-28T16:30:00+00:00",
         "live": false,
-        "days_until_start": 28.3,
+        "days_until_start": 28.0,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 14,
@@ -2236,17 +2229,17 @@
         "ctftime_url": "https://ctftime.org/event/3459/",
         "start": "2026-10-31T02:00:00+00:00",
         "finish": "2026-11-01T02:00:00+00:00",
-        "live": false,
-        "days_until_start": 0.2,
+        "live": true,
+        "days_until_start": 0.0,
         "format": "Jeopardy",
-        "weight": 0.0,
-        "participants": 38,
+        "weight": 0,
+        "participants": 39,
         "prizes": "Eligible teams will qualify for the on-site finals, which are planned to take place in Nanjing, China. Qualification criteria, the number of qualifying teams an",
         "pays": false,
         "crypto": false,
         "beginner": false,
         "kyc": "not published",
-        "score": 18
+        "score": 20
       },
       {
         "id": 3469,
@@ -2256,7 +2249,7 @@
         "start": "2026-10-31T09:00:00+00:00",
         "finish": "2026-11-01T09:00:00+00:00",
         "live": false,
-        "days_until_start": 0.5,
+        "days_until_start": 0.2,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 48,
@@ -2275,10 +2268,10 @@
         "start": "2026-11-06T10:00:00+00:00",
         "finish": "2026-11-07T10:00:00+00:00",
         "live": false,
-        "days_until_start": 6.6,
+        "days_until_start": 6.3,
         "format": "Jeopardy",
         "weight": 10.31,
-        "participants": 52,
+        "participants": 53,
         "prizes": "There are 2 rounds of the competition -> qualifying round and final round. The top 5 teams of international category of the qualifying round will advance to the",
         "pays": false,
         "crypto": false,

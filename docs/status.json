@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-31T14:18:58.545079+00:00",
-  "total_runs": 2175,
+  "last_run": "2026-10-31T15:19:05.728272+00:00",
+  "total_runs": 2176,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,25 +36,43 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Give the title gate a second rewrite attempt in _finalize: weak_title lost 4 drafts in the last 14 days and every prior prompt-wording fix for the ALL-CAPS rule is already sitting unmerged on open branches, so the remaining loss is the single-shot rewrite failing, not the instruction.",
-    "changes_applied": [
+    "summary": "No change proposed: the binding step is reach, but the evidence shows the reach bottleneck this cycle is the LLM engine, not the prompts, and every targeted fix for the named prompt focus already sits on open, unmerged review branches.",
+    "changes_applied": [],
+    "suggestions": [
       {
-        "file": "bot/earning/articles.py",
-        "reason": "_finalize makes exactly one _revise_title call and rejects on the first failure. A second cheap 300-token call, feeding whatever problems remain, recovers drafts whose first rewrite failed \u2014 without touching the gate or rewording the already-re-proposed ALL-CAPS rule."
+        "title": "Merge one of the open weak_title branches, then watch the 14-day window",
+        "description": "The same fix has been proposed ~30 times without a decision, so each cycle re-derives it. Merging one (e.g. the deterministic casing-before-gate branch) closes the loop and frees the prompt focus for whatever the next window actually shows.",
+        "owner_action": "Review and merge (or close) the open evolve/* branches for bot/earning/articles.py weak_title fixes.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open the open review branches listed under PRIOR PROPOSALS for 2026-10-30/31.",
+          "Step 2: Merge the deterministic ALL-CAPS-casing-before-gate proposal; it fixes the finding without touching the gate.",
+          "Step 3: After one cycle, check that article_rejects recent entries no longer contain 'title has ALL-CAPS word'."
+        ]
+      },
+      {
+        "title": "Investigate the llm_error spike \u2014 the real draft killer",
+        "description": "24 of the last 14 days' lost drafts died in the engine (llm_error/empty_draft), not at any gate; no prompt edit can recover them. This is where reach is actually leaking.",
+        "owner_action": "Check GLM_API_KEY health/quota and the workflow logs for the failing 'post' role calls, or confirm whether glm-5.3-flash is rate-limiting.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: In the Actions log, find cycles where article_rejects.last_reason was 'llm_error' and read the underlying exception.",
+          "Step 2: If it is quota/429 on the GLM free tier, confirm the atria fallback actually fired (llm_engine.calls shows only glm: 1 this cycle)."
+        ]
       }
     ],
-    "suggestions": [],
-    "direction": "Step 4 \u2014 reach into a live receive path via the prompt ledger (PROMPT FOCUS: weak_title), one gradual step, gate untouched.",
+    "direction": "Checklist step 4 (reach into a live receive path) and the PROMPT FOCUS instruction, evaluated and declined on evidence.",
     "evidence": [
-      "article_rejects.counts.weak_title = 13 lifetime, PROMPT FOCUS says 4 drafts lost to weak_title in the last 14 days",
-      "gate findings behind it: 'title has ALL-CAPS word' x4 \u2014 the rewrite path (_revise_title) returned None or an still-weak candidate and the draft died",
-      "PRIOR PROPOSALS lists ~30 unmerged 2026-10-28..31 branches all rewording the same ALL-CAPS rule in _SYSTEM/_revise_title \u2014 the instruction-edit angle is exhausted and repeats are refused",
-      "llm_error=32 is the larger bucket but is engine-side, explicitly 'not fixable by a prompt edit'"
+      "article_rejects.counts: llm_error=32 and empty_draft=9 dwarf weak_title=13 (lifetime)",
+      "PROMPT LEDGER, last 14 days: drafts lost to the engine llm_error=19 + empty_draft=5 = 24, versus weak_title=4 lost to prompts",
+      "article_rejects.last = 'llm_error': 'LLM call failed'",
+      "llm_engine.calls = {'glm': 1} \u2014 the serving engine made one call this cycle",
+      "PROMPT FOCUS gate findings are 'title has ALL-CAPS word' x4, but the ledger lists ~30 open proposals against exactly this finding, including a deterministic pre-gate casing fix and acronym-list expansions; a 31st variant would duplicate them"
     ],
-    "money_path": "reach-only: each weak_title reject is one post (and one footer ask) that never ships; a recovered title publishes into the preferred problem-workaround shape readers measurably read (avg 465.7 vs account avg 125.9).",
-    "verify": "In the next cycles, article_rejects.recent entries with code 'weak_title' should record attempts having been made twice in the logs, and the 14-day weak_title count should fall from 4 toward 0; article_daily.published should stay at 1/day more often.",
+    "money_path": "none \u2014 no change shipped; note that weak_title=4/14d is a small loss next to 24 engine-lost drafts, so even a merged title-prompt edit would move reach by at most one post per fortnight until llm_error is addressed.",
+    "verify": "If the owner instead merges one of the open title-fix branches, weak_title count in the 14-day window should fall to 0 and the 'title has ALL-CAPS word' gate finding should disappear from article_rejects.recent; if llm_error is addressed (engine/stability, outside prompt scope), article_rejects.counts.llm_error growth should slow next cycle.",
     "error": null,
-    "branch": "evolve/1.41.1-20261031-141927",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -63,18 +81,29 @@
   },
   "suggestions": [
     {
-      "title": "Add the dev.to profile bio tip line manually",
-      "description": "Unlocks a permanent receive path on every profile visit, not just on published posts. Needs no account, no processor, and no policy change \u2014 one edit at dev.to/settings.",
-      "owner_action": "Edit the Bio field at https://dev.to/settings to add the published USDT receive address and a short support line.",
+      "title": "Merge one of the open weak_title branches, then watch the 14-day window",
+      "description": "The same fix has been proposed ~30 times without a decision, so each cycle re-derives it. Merging one (e.g. the deterministic casing-before-gate branch) closes the loop and frees the prompt focus for whatever the next window actually shows.",
+      "owner_action": "Review and merge (or close) the open evolve/* branches for bot/earning/articles.py weak_title fixes.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Go to dev.to/settings and paste a line like 'Support this work: USDT (TRC-20) [redacted]' into the Bio field.",
-        "Step 2: Save. The address is already verified live; this adds it to a surface the bot cannot reach via API."
+        "Step 1: Open the open review branches listed under PRIOR PROPOSALS for 2026-10-30/31.",
+        "Step 2: Merge the deterministic ALL-CAPS-casing-before-gate proposal; it fixes the finding without touching the gate.",
+        "Step 3: After one cycle, check that article_rejects recent entries no longer contain 'title has ALL-CAPS word'."
+      ]
+    },
+    {
+      "title": "Investigate the llm_error spike \u2014 the real draft killer",
+      "description": "24 of the last 14 days' lost drafts died in the engine (llm_error/empty_draft), not at any gate; no prompt edit can recover them. This is where reach is actually leaking.",
+      "owner_action": "Check GLM_API_KEY health/quota and the workflow logs for the failing 'post' role calls, or confirm whether glm-5.3-flash is rate-limiting.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: In the Actions log, find cycles where article_rejects.last_reason was 'llm_error' and read the underlying exception.",
+        "Step 2: If it is quota/429 on the GLM free tier, confirm the atria fallback actually fired (llm_engine.calls shows only glm: 1 this cycle)."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 30,
+  "last_cycle_seconds": 39,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -158,7 +187,7 @@
   "llm_workflows": {
     "upgrade": {
       "provider": "glm",
-      "model": "glm-5.2",
+      "model": "glm-5.3-flash",
       "purpose": "code-change proposals, parked on an evolve/* branch for human review",
       "fallback_provider": "atria",
       "fallback_model": "Atria-Dawn",
@@ -171,7 +200,7 @@
     },
     "research": {
       "provider": "glm",
-      "model": "glm-5.2",
+      "model": "glm-5.3-flash",
       "purpose": "free-AI-service discovery, market research, and earning-suggestion briefs",
       "fallback_provider": "atria",
       "fallback_model": "Atria-Dawn",
@@ -184,7 +213,7 @@
     },
     "post": {
       "provider": "glm",
-      "model": "glm-5.2",
+      "model": "glm-5.3-flash",
       "purpose": "article drafting and formatting for publication",
       "fallback_provider": "atria",
       "fallback_model": "Atria-Dawn",
@@ -1271,7 +1300,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-31T14:18:59.248051+00:00",
+    "checked_at": "2026-10-31T15:19:06.265271+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1584,8 +1613,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261031-141927",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 42,
     "total_views": 5289,
@@ -1842,7 +1871,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-31T14:19:27.804687+00:00",
+    "last_run": "2026-10-31T15:19:43.354682+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1852,32 +1881,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-31T14:19:28.102699+00:00",
+    "last_run": "2026-10-31T15:19:43.740220+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4568987,
-        "at": "2026-10-31T04:57:40.807431+00:00",
-        "ok": true
-      },
-      {
         "id": 4943931,
-        "at": "2026-10-31T05:53:52.392622+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-10-31T05:53:52.392622+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
-        "at": "2026-10-31T05:53:52.392622+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
         "at": "2026-10-31T05:53:52.392622+00:00",
         "ok": true
       },
@@ -2062,8 +2071,28 @@
         "ok": true
       },
       {
+        "id": 4568987,
+        "at": "2026-10-31T15:19:43.740220+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-10-31T15:19:43.740220+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-10-31T15:19:43.740220+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-10-31T15:19:43.740220+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-31T14:19:28.102699+00:00",
+        "at": "2026-10-31T15:19:43.740220+00:00",
         "ok": true
       }
     ],
@@ -2083,7 +2112,9 @@
   },
   "llm_engine": {
     "main_provider": "glm",
-    "main_model": "glm-5.2",
+    "main_model": "glm-5.3-flash",
+    "preferred_model": "glm-5.3-flash",
+    "refused": [],
     "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
     "live": true,

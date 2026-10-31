@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-31T18:45:04.706639+00:00",
-  "total_runs": 2180,
+  "last_run": "2026-10-31T19:45:02.963628+00:00",
+  "total_runs": 2181,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,19 +36,37 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Reduce weak_title rejections by tightening the ALL-CAPS ban in the article draft system prompt: add concrete examples of banned ALL-CAPS words (e.g., IMPORTANT, NOTE) and clarify that Title Case must use sentence case for each word, not all caps, even for acronyms that are normally uppercase (e.g., JSON, API). This should cut the 'title has ALL-CAPS word' gate findings from 4 to 0.",
-    "changes_applied": [],
-    "suggestions": [],
+    "summary": "Add concrete examples of banned ALL-CAPS words to the title ban list in the article draft system prompt to reduce weak_title rejections.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "Clarify the ALL-CAPS ban by adding concrete examples, reducing false weak_title rejections"
+      }
+    ],
+    "suggestions": [
+      {
+        "title": "Add concrete examples of banned ALL-CAPS words",
+        "description": "Clarify the title ban list to reduce weak_title rejections",
+        "owner_action": "Edit bot/earning/articles.py _SYSTEM prompt to include the example phrase",
+        "secret_needed": null,
+        "how_to": [
+          "Locate the _SYSTEM string in bot/earning/articles.py",
+          "Replace the phrase 'and any ALL-CAPS word.' with 'and any ALL-CAPS word (e.g., IMPORTANT, NOTE) that is not a recognized acronym (PDF, JSON, API).'",
+          "Save the file and run the next cycle to verify reduced weak_title rejections"
+        ]
+      }
+    ],
     "direction": "reach into a live receive path (doctrine Principle 5, step 3)",
     "evidence": [
-      "article_rejects.counts.weak_title = 13 (lifetime), 4 in last 14 days",
-      "article_rejects.last = 'llm_error' but PROMPT FOCUS shows weak_title lost 4 drafts with gate finding 'title has ALL-CAPS word' x4",
+      "article_rejects.counts.weak_title = 13 (lifetime)",
+      "article_rejects.counts.weak_title = 4 (last 14 days)",
+      "article_rejects.last = 'llm_error' with gate finding 'title has ALL-CAPS word' x4",
       "preferred_archetypes() = ['problem-workaround'] but weak_title gate blocks publishing into the best-performing shape"
     ],
     "money_path": "reach-only",
-    "verify": "article_rejects.counts.weak_title should decrease in next cycle; 'title has ALL-CAPS word' gate findings should drop from 4 toward 0",
+    "verify": "weak_title rejections should decrease in the next cycle; 'title has ALL-CAPS word' gate findings should drop from 4 toward 0",
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.41.1-20261031-195050",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -57,29 +75,19 @@
   },
   "suggestions": [
     {
-      "title": "Merge one of the open weak_title branches, then watch the 14-day window",
-      "description": "The same fix has been proposed ~30 times without a decision, so each cycle re-derives it. Merging one (e.g. the deterministic casing-before-gate branch) closes the loop and frees the prompt focus for whatever the next window actually shows.",
-      "owner_action": "Review and merge (or close) the open evolve/* branches for bot/earning/articles.py weak_title fixes.",
+      "title": "Add concrete examples of banned ALL-CAPS words",
+      "description": "Clarify the title ban list to reduce weak_title rejections",
+      "owner_action": "Edit bot/earning/articles.py _SYSTEM prompt to include the example phrase",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the open review branches listed under PRIOR PROPOSALS for 2026-10-30/31.",
-        "Step 2: Merge the deterministic ALL-CAPS-casing-before-gate proposal; it fixes the finding without touching the gate.",
-        "Step 3: After one cycle, check that article_rejects recent entries no longer contain 'title has ALL-CAPS word'."
-      ]
-    },
-    {
-      "title": "Investigate the llm_error spike \u2014 the real draft killer",
-      "description": "24 of the last 14 days' lost drafts died in the engine (llm_error/empty_draft), not at any gate; no prompt edit can recover them. This is where reach is actually leaking.",
-      "owner_action": "Check GLM_API_KEY health/quota and the workflow logs for the failing 'post' role calls, or confirm whether glm-5.3-flash is rate-limiting.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: In the Actions log, find cycles where article_rejects.last_reason was 'llm_error' and read the underlying exception.",
-        "Step 2: If it is quota/429 on the GLM free tier, confirm the atria fallback actually fired (llm_engine.calls shows only glm: 1 this cycle)."
+        "Locate the _SYSTEM string in bot/earning/articles.py",
+        "Replace the phrase 'and any ALL-CAPS word.' with 'and any ALL-CAPS word (e.g., IMPORTANT, NOTE) that is not a recognized acronym (PDF, JSON, API).'",
+        "Save the file and run the next cycle to verify reduced weak_title rejections"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1490,
+  "last_cycle_seconds": 349,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1276,7 +1284,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-31T18:45:05.322070+00:00",
+    "checked_at": "2026-10-31T19:45:03.421680+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1589,8 +1597,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261031-195050",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 42,
     "total_views": 5289,
@@ -1847,7 +1855,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-31T19:09:53.911833+00:00",
+    "last_run": "2026-10-31T19:50:50.766552+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1857,32 +1865,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-31T19:09:54.285823+00:00",
+    "last_run": "2026-10-31T19:50:51.152452+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4780783,
-        "at": "2026-10-31T09:50:21.177615+00:00",
-        "ok": true
-      },
-      {
         "id": 4602729,
-        "at": "2026-10-31T10:52:11.536555+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-10-31T10:52:11.536555+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-10-31T10:52:11.536555+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-10-31T10:52:11.536555+00:00",
         "ok": true
       },
@@ -2067,8 +2055,28 @@
         "ok": true
       },
       {
+        "id": 4780783,
+        "at": "2026-10-31T19:50:51.152452+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-10-31T19:50:51.152452+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-10-31T19:50:51.152452+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-10-31T19:50:51.152452+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-31T19:09:54.285823+00:00",
+        "at": "2026-10-31T19:50:51.152452+00:00",
         "ok": true
       }
     ],
@@ -2077,7 +2085,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.3
+    "oldest_check_age_hours": 9.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-31T21:37:12.781587+00:00",
-  "total_runs": 2183,
+  "last_run": "2026-10-31T22:37:14.248421+00:00",
+  "total_runs": 2184,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,37 +36,42 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete examples of banned ALL-CAPS words to the article draft title rule to reduce weak_title rejections and improve reach.",
+    "summary": "Add concrete examples of banned ALL-CAPS words (non-acronyms) to the article draft _SYSTEM prompt to reduce weak_title rejections caused by 'title has ALL-CAPS word' gate findings.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "Add concrete examples of banned ALL-CAPS words to the title rule, reducing weak_title rejections and improving reach."
+        "reason": "The _SYSTEM prompt bans 'any ALL-CAPS word' but gives no examples of non-acronym words that trigger the ban. The LLM keeps using words like IMPORTANT, NOTE, URGENT, WARNING, ALERT, CRITICAL, ESSENTIAL, MUST, REQUIRED \u2014 which are not in _KNOWN_ACRONYMS \u2014 causing weak_title rejections. Adding concrete examples in the prompt helps the model distinguish banned shouty words from allowed acronyms."
       }
     ],
     "suggestions": [],
     "direction": "reach into a live receive path (doctrine Principle 5, step 3): publish more articles, in the shapes readers measurably prefer",
     "evidence": [
-      "article_rejects.counts.weak_title = 13",
+      "article_rejects.counts.weak_title = 13 (lifetime), 4 in last 14 days",
       "article_rejects.last = 'weak_title'",
       "Gate findings: 'title has ALL-CAPS word' x4",
-      "receipt_check.covered / published_total = 42 / 42",
-      "receipt_check.known_without_footer = 0",
-      "wallet.received_total_usd = 0.0"
+      "preferred_archetypes() = ['problem-workaround'] (n=9, avg=469.0) \u2014 reach is the bottleneck, not the receive path",
+      "wallet.received_total_usd = 0.0 \u2014 money path is reach-only until tips arrive"
     ],
     "money_path": "reach-only",
-    "verify": "the reviewer can confirm by checking that status['article_rejects']['counts']['weak_title'] drops in the next cycle",
+    "verify": "status['article_rejects']['counts']['weak_title'] should drop in the next 14-day window; gate finding 'title has ALL-CAPS word' should fall from 4 toward 0",
     "error": null,
-    "branch": "evolve/1.41.1-20261031-214257",
+    "branch": "evolve/1.41.1-20261031-224243",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
+        "platform": "ctf-bounty",
+        "success": true,
+        "estimated_usd": 0.0,
+        "listed": 14
+      },
+      {
         "platform": "dev.to",
         "success": false,
         "skipped": true,
-        "reject_code": "llm_error",
-        "error": "LLM call failed",
+        "reject_code": "fabricated",
+        "error": "unverifiable figures in prose",
         "estimated_usd": 0.0
       }
     ],
@@ -86,7 +91,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 718,
+  "last_cycle_seconds": 980,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1218,7 +1223,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-31T21:37:13.292828+00:00",
+    "checked_at": "2026-10-31T22:37:14.678431+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1531,7 +1536,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261031-214257",
+  "last_evolution_branch": "evolve/1.41.1-20261031-224243",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 42,
@@ -1606,17 +1611,17 @@
     "sample_size": 42
   },
   "article_rejects": {
-    "last_reason": "llm_error",
-    "last_detail": "LLM call failed",
-    "last_at": "2026-10-31T21:49:09.227233+00:00",
+    "last_reason": "fabricated",
+    "last_detail": "unverifiable figures in prose",
+    "last_at": "2026-10-31T22:53:33.693676+00:00",
     "counts": {
       "empty_draft": 9,
-      "fabricated": 2,
+      "fabricated": 3,
       "weak_title": 13,
       "revision_fabricated": 1,
       "llm_error": 33
     },
-    "total": 58,
+    "total": 59,
     "recent": [
       {
         "code": "empty_draft",
@@ -1762,6 +1767,11 @@
         "code": "llm_error",
         "at": "2026-10-31T21:49:09.227233+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
+      },
+      {
+        "code": "fabricated",
+        "at": "2026-10-31T22:53:33.693676+00:00",
+        "detail": "invented latency figures (ms)"
       }
     ]
   },
@@ -1794,7 +1804,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-31T21:49:09.551545+00:00",
+    "last_run": "2026-10-31T22:53:33.977854+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1804,32 +1814,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-31T21:49:09.971517+00:00",
+    "last_run": "2026-10-31T22:53:34.238157+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4641536,
-        "at": "2026-10-31T12:42:33.184248+00:00",
-        "ok": true
-      },
-      {
         "id": 4943485,
-        "at": "2026-10-31T13:55:11.730306+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-10-31T13:55:11.730306+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-10-31T13:55:11.730306+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
         "at": "2026-10-31T13:55:11.730306+00:00",
         "ok": true
       },
@@ -2014,8 +2004,28 @@
         "ok": true
       },
       {
+        "id": 4641536,
+        "at": "2026-10-31T22:53:34.238157+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-10-31T22:53:34.238157+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-10-31T22:53:34.238157+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-10-31T22:53:34.238157+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-31T21:49:09.971517+00:00",
+        "at": "2026-10-31T22:53:34.238157+00:00",
         "ok": true
       }
     ],
@@ -2024,7 +2034,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.1
+    "oldest_check_age_hours": 9.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2041,22 +2051,22 @@
     "endpoint": null,
     "key_set": true,
     "live": false,
-    "serving": "atria",
+    "serving": "openrouter",
     "disabled_reason": "quota_spent",
     "calls": {
-      "openrouter": 1
+      "openrouter": 2
     },
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",
       "key_set": true,
-      "live": true,
-      "disabled_reason": null
+      "live": false,
+      "disabled_reason": "timeout"
     }
   },
   "ctf_bounty": {
     "source": "ctftime",
-    "last_refresh_at": "2026-10-31T16:27:20.112326+00:00",
+    "last_refresh_at": "2026-10-31T22:42:43.617081+00:00",
     "last_reason": "ok",
     "fetched": 32,
     "enterable": 19,
@@ -2072,10 +2082,10 @@
         "start": "2026-11-06T17:00:00+00:00",
         "finish": "2026-11-07T17:00:00+00:00",
         "live": false,
-        "days_until_start": 6.0,
+        "days_until_start": 5.8,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 36,
+        "participants": 37,
         "prizes": "Open Division: (Online + In-person) 1st - 100$ 2nd - 50$ 3rd - 25$ In-Person: 1st - 100$",
         "pays": true,
         "crypto": false,
@@ -2110,10 +2120,10 @@
         "start": "2026-11-06T12:00:00+00:00",
         "finish": "2026-11-09T12:00:00+00:00",
         "live": false,
-        "days_until_start": 5.8,
+        "days_until_start": 5.6,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 33,
+        "participants": 34,
         "prizes": "1st Place: 25$ + 6 Month Caido License per Member (Worth ~$545) + 4 .xyz Domains 2nd Place: 15$ + 3 Month Caido License per Member (Worth ~$272) + 2 .xyz Domain",
         "pays": true,
         "crypto": false,
@@ -2129,7 +2139,7 @@
         "start": "2026-11-20T10:00:00+00:00",
         "finish": "2026-11-22T10:00:00+00:00",
         "live": false,
-        "days_until_start": 19.7,
+        "days_until_start": 19.5,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 11,
@@ -2148,7 +2158,7 @@
         "start": "2026-11-06T13:00:00+00:00",
         "finish": "2026-11-08T13:00:00+00:00",
         "live": false,
-        "days_until_start": 5.9,
+        "days_until_start": 5.6,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 43,
@@ -2167,7 +2177,7 @@
         "start": "2026-11-12T17:00:00+00:00",
         "finish": "2026-11-14T05:00:00+00:00",
         "live": false,
-        "days_until_start": 12.0,
+        "days_until_start": 11.8,
         "format": "Jeopardy",
         "weight": 1.0,
         "participants": 16,
@@ -2186,7 +2196,7 @@
         "start": "2026-11-13T17:00:00+00:00",
         "finish": "2026-11-14T11:00:00+00:00",
         "live": false,
-        "days_until_start": 13.0,
+        "days_until_start": 12.8,
         "format": "Jeopardy",
         "weight": 37.0,
         "participants": 38,
@@ -2205,10 +2215,10 @@
         "start": "2026-11-13T23:00:00+00:00",
         "finish": "2026-11-15T23:00:00+00:00",
         "live": false,
-        "days_until_start": 13.3,
+        "days_until_start": 13.0,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 85,
+        "participants": 86,
         "prizes": "To be announced!",
         "pays": false,
         "crypto": false,
@@ -2224,7 +2234,7 @@
         "start": "2026-11-20T23:00:00+00:00",
         "finish": "2026-11-21T23:00:00+00:00",
         "live": false,
-        "days_until_start": 20.3,
+        "days_until_start": 20.0,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 5,
@@ -2243,7 +2253,7 @@
         "start": "2026-11-21T13:00:00+00:00",
         "finish": "2026-11-21T21:00:00+00:00",
         "live": false,
-        "days_until_start": 20.9,
+        "days_until_start": 20.6,
         "format": "Jeopardy",
         "weight": 37.0,
         "participants": 19,
@@ -2262,7 +2272,7 @@
         "start": "2026-11-28T04:30:00+00:00",
         "finish": "2026-11-28T16:30:00+00:00",
         "live": false,
-        "days_until_start": 27.5,
+        "days_until_start": 27.2,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 14,
@@ -2319,10 +2329,10 @@
         "start": "2026-11-06T10:00:00+00:00",
         "finish": "2026-11-07T10:00:00+00:00",
         "live": false,
-        "days_until_start": 5.7,
+        "days_until_start": 5.5,
         "format": "Jeopardy",
         "weight": 10.31,
-        "participants": 57,
+        "participants": 61,
         "prizes": "There are 2 rounds of the competition -> qualifying round and final round. The top 5 teams of international category of the qualifying round will advance to the",
         "pays": false,
         "crypto": false,

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-31T03:49:05.310991+00:00",
-  "total_runs": 2164,
+  "last_run": "2026-10-31T04:49:08.131941+00:00",
+  "total_runs": 2165,
   "active_features": [
     "llm_atria",
     "llm_gemini",
@@ -35,18 +35,30 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete examples of banned ALL-CAPS words to the title rule to reduce weak_title rejections",
+    "summary": "Add concrete examples of banned ALL-CAPS words (URGENT, NOW, BIG, FAST) and note allowed acronyms to the title ban list, reducing weak_title rejections.",
     "changes_applied": [],
-    "suggestions": [],
-    "direction": "Prompt focus: weak_title gate findings - 'title has ALL-CAPS word' x4 in last 14 days",
+    "suggestions": [
+      {
+        "title": "Merge edit that adds concrete ALL-CAPS examples to title ban list",
+        "description": "Review the _SYSTEM prompt in bot/earning/articles.py and merge the edit that adds concrete examples of banned ALL-CAPS words and allowed acronyms.",
+        "owner_action": "Merge the change on the evolve branch",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open bot/earning/articles.py",
+          "Step 2: Locate the _SYSTEM string and replace the ALL-CAPS ban line with the updated version containing concrete examples",
+          "Step 3: Commit the change on the evolve branch and merge it"
+        ]
+      }
+    ],
+    "direction": "Prompt focus: weak_title gate findings \u2013 'title has ALL-CAPS word' x4 in last 14 days (doctrine Principle 5).",
     "evidence": [
-      "article_rejects.counts weak_title=13 (lifetime), 4 in last 14 days",
-      "PROMPT FOCUS: weak_title lost 4 draft(s); gate findings: 'title has ALL-CAPS word' x4",
-      "article_interest: problem-workaround n=9 avg=465.7 is the only archetype with strong signal",
-      "Prior evolution 1.41.0 added examples but weak_title rejections persist"
+      "article_rejects.counts weak_title=4 (last 14 days)",
+      "article_rejects.counts weak_title=13 (lifetime)",
+      "article_rejects.last = 'llm_error' (indicates LLM failure on title rewrite)",
+      "article_interest preferred_archetype = 'problem-workaround' with high engagement, showing need for strong titles"
     ],
     "money_path": "reach-only (improves title quality, which improves reach into live receive path; wallet remains $0.00 until reader tips)",
-    "verify": "weak_title reject count in next 14-day window should fall from 4 toward 0; article_daily.published should hold at 1/day",
+    "verify": "weak_title reject count in next 14\u2011day window should fall from 4 toward 0; article_daily.published should stay at 1 per day",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.1"
@@ -57,9 +69,9 @@
   },
   "suggestions": [
     {
-      "title": "Clarify ALL-CAPS ban in title rule",
-      "description": "Add concrete examples of banned ALL-CAPS words and allowed acronyms to reduce weak_title rejections.",
-      "owner_action": "Review the _SYSTEM prompt in bot/earning/articles.py and merge the edit that adds concrete examples.",
+      "title": "Merge edit that adds concrete ALL-CAPS examples to title ban list",
+      "description": "Review the _SYSTEM prompt in bot/earning/articles.py and merge the edit that adds concrete examples of banned ALL-CAPS words and allowed acronyms.",
+      "owner_action": "Merge the change on the evolve branch",
       "secret_needed": null,
       "how_to": [
         "Step 1: Open bot/earning/articles.py",
@@ -69,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1527,
+  "last_cycle_seconds": 513,
   "llm_roles": {
     "upgrade": "atria",
     "research": "atria",
@@ -1175,7 +1187,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-31T03:49:05.894215+00:00",
+    "checked_at": "2026-10-31T04:49:08.707476+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1746,7 +1758,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-31T04:14:30.955156+00:00",
+    "last_run": "2026-10-31T04:57:40.440852+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1756,32 +1768,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-31T04:14:31.222292+00:00",
+    "last_run": "2026-10-31T04:57:40.807431+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4568987,
-        "at": "2026-10-30T19:21:47.423103+00:00",
-        "ok": true
-      },
-      {
         "id": 4943931,
-        "at": "2026-10-30T19:52:53.970669+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-10-30T19:52:53.970669+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-10-30T19:52:53.970669+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
         "at": "2026-10-30T19:52:53.970669+00:00",
         "ok": true
       },
@@ -1966,8 +1958,28 @@
         "ok": true
       },
       {
+        "id": 4568987,
+        "at": "2026-10-31T04:57:40.807431+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-10-31T04:57:40.807431+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-10-31T04:57:40.807431+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-10-31T04:57:40.807431+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-31T04:14:31.222292+00:00",
+        "at": "2026-10-31T04:57:40.807431+00:00",
         "ok": true
       }
     ],
@@ -1976,7 +1988,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.9
+    "oldest_check_age_hours": 9.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

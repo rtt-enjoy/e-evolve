@@ -141,7 +141,12 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
 - BANNED in titles: exclamation marks, "Ultimate", "Complete Guide",
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
-  and any ALL-CAPS word. These read as spam and suppress clicks here.
+  and any ALL-CAPS word that is not a recognised acronym. These read as
+  spam and suppress clicks here. Recognised acronyms may stay in their
+  real casing: PDF, JSON, API, HTTP, SQL, YAML, CLI, SDK, AWS, GCP, GPU,
+  CPU, RAM, URL, URI, NPM, PIP, LLM, AI, ML, REST, GraphQL, NGINX, Redis,
+  TLS, SSH, CDN, DNS, TCP, UDP, CORS, CRUD, JWT, OAuth, SAML, UUID, WASM,
+  OCR, IDE, GUI.
 - No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
   wastes the scannable half of the line. Pick the sharper half and stop.
 

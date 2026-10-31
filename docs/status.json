@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-31T15:19:05.728272+00:00",
-  "total_runs": 2176,
+  "last_run": "2026-10-31T16:19:00.344896+00:00",
+  "total_runs": 2177,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,47 +36,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the binding step is reach, but the evidence shows the reach bottleneck this cycle is the LLM engine, not the prompts, and every targeted fix for the named prompt focus already sits on open, unmerged review branches.",
+    "summary": "No change is proposed because every prompt edit that could reduce the weak_title / ALL-CAPS rejects already appears in the unmerged PRIOR PROPOSALS, the title gate must not be touched, and the larger reject source (llm_error) is engine-side rather than prompt-fixable.",
     "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Merge one of the open weak_title branches, then watch the 14-day window",
-        "description": "The same fix has been proposed ~30 times without a decision, so each cycle re-derives it. Merging one (e.g. the deterministic casing-before-gate branch) closes the loop and frees the prompt focus for whatever the next window actually shows.",
-        "owner_action": "Review and merge (or close) the open evolve/* branches for bot/earning/articles.py weak_title fixes.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open the open review branches listed under PRIOR PROPOSALS for 2026-10-30/31.",
-          "Step 2: Merge the deterministic ALL-CAPS-casing-before-gate proposal; it fixes the finding without touching the gate.",
-          "Step 3: After one cycle, check that article_rejects recent entries no longer contain 'title has ALL-CAPS word'."
-        ]
-      },
-      {
-        "title": "Investigate the llm_error spike \u2014 the real draft killer",
-        "description": "24 of the last 14 days' lost drafts died in the engine (llm_error/empty_draft), not at any gate; no prompt edit can recover them. This is where reach is actually leaking.",
-        "owner_action": "Check GLM_API_KEY health/quota and the workflow logs for the failing 'post' role calls, or confirm whether glm-5.3-flash is rate-limiting.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: In the Actions log, find cycles where article_rejects.last_reason was 'llm_error' and read the underlying exception.",
-          "Step 2: If it is quota/429 on the GLM free tier, confirm the atria fallback actually fired (llm_engine.calls shows only glm: 1 this cycle)."
-        ]
-      }
-    ],
-    "direction": "Checklist step 4 (reach into a live receive path) and the PROMPT FOCUS instruction, evaluated and declined on evidence.",
+    "suggestions": [],
+    "direction": "Checklist step 4 (reach into a live receive path); PROMPT FOCUS weak_title \u2014 no prompt edit clears the bar this cycle",
     "evidence": [
-      "article_rejects.counts: llm_error=32 and empty_draft=9 dwarf weak_title=13 (lifetime)",
-      "PROMPT LEDGER, last 14 days: drafts lost to the engine llm_error=19 + empty_draft=5 = 24, versus weak_title=4 lost to prompts",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "llm_engine.calls = {'glm': 1} \u2014 the serving engine made one call this cycle",
-      "PROMPT FOCUS gate findings are 'title has ALL-CAPS word' x4, but the ledger lists ~30 open proposals against exactly this finding, including a deterministic pre-gate casing fix and acronym-list expansions; a 31st variant would duplicate them"
+      "article_rejects.counts weak_title = 13 lifetime, 4 in the last 14 days",
+      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x4, naming the article draft _SYSTEM and _revise_title prompts",
+      "article_rejects.counts llm_error = 32 lifetime, 19 in the last 14 days \u2014 documented as engine failure, not fixable by a prompt edit",
+      "PRIOR PROPOSALS (2026-10-29 to 2026-10-31): 20+ branches already cover every ALL-CAPS / title-casing prompt edit \u2014 banned examples (IMPORTANT, NOTE, URGENT), allowed acronym examples, clarifying 'Title Case The Important Words', a definitive rewrite rule, and including the failing words in the rewrite message"
     ],
-    "money_path": "none \u2014 no change shipped; note that weak_title=4/14d is a small loss next to 24 engine-lost drafts, so even a merged title-prompt edit would move reach by at most one post per fortnight until llm_error is addressed.",
-    "verify": "If the owner instead merges one of the open title-fix branches, weak_title count in the 14-day window should fall to 0 and the 'title has ALL-CAPS word' gate finding should disappear from article_rejects.recent; if llm_error is addressed (engine/stability, outside prompt scope), article_rejects.counts.llm_error growth should slow next cycle.",
+    "money_path": "none (maintenance) \u2014 no change proposed; reach flows through the already-live tip footer in devto.publish / payout.py",
+    "verify": "N/A \u2014 no change; the weak_title window count (currently 4) would only fall if a non-repeating prompt edit were merged and published",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "ctf-bounty",
+        "success": true,
+        "estimated_usd": 0.0,
+        "listed": 14
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -103,7 +87,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 39,
+  "last_cycle_seconds": 502,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1300,7 +1284,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-31T15:19:06.265271+00:00",
+    "checked_at": "2026-10-31T16:19:00.855723+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1871,7 +1855,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-31T15:19:43.354682+00:00",
+    "last_run": "2026-10-31T16:27:21.132252+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1881,32 +1865,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-31T15:19:43.740220+00:00",
+    "last_run": "2026-10-31T16:27:21.424717+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4943931,
-        "at": "2026-10-31T05:53:52.392622+00:00",
-        "ok": true
-      },
-      {
         "id": 4937139,
-        "at": "2026-10-31T07:04:26.068351+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-10-31T07:04:26.068351+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-10-31T07:04:26.068351+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
         "at": "2026-10-31T07:04:26.068351+00:00",
         "ok": true
       },
@@ -2091,8 +2055,28 @@
         "ok": true
       },
       {
+        "id": 4943931,
+        "at": "2026-10-31T16:27:21.424717+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-10-31T16:27:21.424717+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-10-31T16:27:21.424717+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-10-31T16:27:21.424717+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-31T15:19:43.740220+00:00",
+        "at": "2026-10-31T16:27:21.424717+00:00",
         "ok": true
       }
     ],
@@ -2115,13 +2099,13 @@
     "main_model": "glm-5.3-flash",
     "preferred_model": "glm-5.3-flash",
     "refused": [],
-    "endpoint": "https://api.z.ai/api/coding/paas/v4",
+    "endpoint": null,
     "key_set": true,
-    "live": true,
-    "serving": "glm",
-    "disabled_reason": null,
+    "live": false,
+    "serving": "atria",
+    "disabled_reason": "quota_spent",
     "calls": {
-      "glm": 1
+      "openrouter": 1
     },
     "fallback": {
       "provider": "atria",
@@ -2133,7 +2117,7 @@
   },
   "ctf_bounty": {
     "source": "ctftime",
-    "last_refresh_at": "2026-10-31T09:50:20.061235+00:00",
+    "last_refresh_at": "2026-10-31T16:27:20.112326+00:00",
     "last_reason": "ok",
     "fetched": 32,
     "enterable": 19,
@@ -2149,10 +2133,10 @@
         "start": "2026-11-06T17:00:00+00:00",
         "finish": "2026-11-07T17:00:00+00:00",
         "live": false,
-        "days_until_start": 6.3,
+        "days_until_start": 6.0,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 35,
+        "participants": 36,
         "prizes": "Open Division: (Online + In-person) 1st - 100$ 2nd - 50$ 3rd - 25$ In-Person: 1st - 100$",
         "pays": true,
         "crypto": false,
@@ -2187,10 +2171,10 @@
         "start": "2026-11-06T12:00:00+00:00",
         "finish": "2026-11-09T12:00:00+00:00",
         "live": false,
-        "days_until_start": 6.1,
+        "days_until_start": 5.8,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 30,
+        "participants": 33,
         "prizes": "1st Place: 25$ + 6 Month Caido License per Member (Worth ~$545) + 4 .xyz Domains 2nd Place: 15$ + 3 Month Caido License per Member (Worth ~$272) + 2 .xyz Domain",
         "pays": true,
         "crypto": false,
@@ -2206,7 +2190,7 @@
         "start": "2026-11-20T10:00:00+00:00",
         "finish": "2026-11-22T10:00:00+00:00",
         "live": false,
-        "days_until_start": 20.0,
+        "days_until_start": 19.7,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 11,
@@ -2225,10 +2209,10 @@
         "start": "2026-11-06T13:00:00+00:00",
         "finish": "2026-11-08T13:00:00+00:00",
         "live": false,
-        "days_until_start": 6.1,
+        "days_until_start": 5.9,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 38,
+        "participants": 43,
         "prizes": "TBD",
         "pays": false,
         "crypto": false,
@@ -2244,7 +2228,7 @@
         "start": "2026-11-12T17:00:00+00:00",
         "finish": "2026-11-14T05:00:00+00:00",
         "live": false,
-        "days_until_start": 12.3,
+        "days_until_start": 12.0,
         "format": "Jeopardy",
         "weight": 1.0,
         "participants": 16,
@@ -2263,10 +2247,10 @@
         "start": "2026-11-13T17:00:00+00:00",
         "finish": "2026-11-14T11:00:00+00:00",
         "live": false,
-        "days_until_start": 13.3,
+        "days_until_start": 13.0,
         "format": "Jeopardy",
         "weight": 37.0,
-        "participants": 36,
+        "participants": 38,
         "prizes": "See https://platypwnies.de/events/platypwn",
         "pays": false,
         "crypto": false,
@@ -2282,7 +2266,7 @@
         "start": "2026-11-13T23:00:00+00:00",
         "finish": "2026-11-15T23:00:00+00:00",
         "live": false,
-        "days_until_start": 13.5,
+        "days_until_start": 13.3,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 85,
@@ -2301,7 +2285,7 @@
         "start": "2026-11-20T23:00:00+00:00",
         "finish": "2026-11-21T23:00:00+00:00",
         "live": false,
-        "days_until_start": 20.5,
+        "days_until_start": 20.3,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 5,
@@ -2320,7 +2304,7 @@
         "start": "2026-11-21T13:00:00+00:00",
         "finish": "2026-11-21T21:00:00+00:00",
         "live": false,
-        "days_until_start": 21.1,
+        "days_until_start": 20.9,
         "format": "Jeopardy",
         "weight": 37.0,
         "participants": 19,
@@ -2329,7 +2313,7 @@
         "crypto": false,
         "beginner": true,
         "kyc": "not published",
-        "score": 25
+        "score": 29
       },
       {
         "id": 3485,
@@ -2339,7 +2323,7 @@
         "start": "2026-11-28T04:30:00+00:00",
         "finish": "2026-11-28T16:30:00+00:00",
         "live": false,
-        "days_until_start": 27.8,
+        "days_until_start": 27.5,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 14,
@@ -2396,10 +2380,10 @@
         "start": "2026-11-06T10:00:00+00:00",
         "finish": "2026-11-07T10:00:00+00:00",
         "live": false,
-        "days_until_start": 6.0,
+        "days_until_start": 5.7,
         "format": "Jeopardy",
         "weight": 10.31,
-        "participants": 54,
+        "participants": 57,
         "prizes": "There are 2 rounds of the competition -> qualifying round and final round. The top 5 teams of international category of the qualifying round will advance to the",
         "pays": false,
         "crypto": false,

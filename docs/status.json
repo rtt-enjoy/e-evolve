@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-10-31T17:19:03.375013+00:00",
-  "total_runs": 2178,
+  "last_run": "2026-10-31T17:45:01.299847+00:00",
+  "total_runs": 2179,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,23 +36,24 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete example 'IMPORTANT' and 'NOTE' to the ALL-CAPS ban in the article draft system prompt to clarify the title rule and reduce weak_title rejections.",
+    "summary": "Replace the ambiguous 'Title Case The Important Words' instruction in the article draft system prompt with a clear Title Case vs ALL-CAPS contrast to reduce weak_title rejections from ALL-CAPS words.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "add concrete example to ALL-CAPS ban to reduce weak_title rejections"
+        "reason": "The phrase 'Title Case The Important Words' tells the LLM to capitalize important words, which it interprets as writing them in ALL CAPS. Replace with explicit Title Case instruction that forbids ALL CAPS even for emphasis."
       }
     ],
     "suggestions": [],
     "direction": "reach into a live receive path (doctrine Principle 5, step 3)",
     "evidence": [
-      "article_rejects.counts.weak_title=4",
-      "article_rejects.last = 'weak_title'"
+      "article_rejects.counts.weak_title = 13 (lifetime), 4 in last 14 days",
+      "article_rejects.last = 'llm_error' but PROMPT FOCUS shows weak_title lost 4 drafts with gate finding 'title has ALL-CAPS word' x4",
+      "preferred_archetypes() = ['problem-workaround'] but weak_title gate blocks publishing into the best-performing shape"
     ],
     "money_path": "reach-only",
-    "verify": "article_rejects.counts.weak_title should decrease to 0 in the next cycle",
+    "verify": "article_rejects.counts.weak_title should decrease in next cycle; 'title has ALL-CAPS word' gate findings should drop from 4 toward 0",
     "error": null,
-    "branch": "evolve/1.41.1-20261031-172427",
+    "branch": "evolve/1.41.1-20261031-175952",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -83,7 +84,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 325,
+  "last_cycle_seconds": 893,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1280,7 +1281,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-10-31T17:19:03.813456+00:00",
+    "checked_at": "2026-10-31T17:45:01.797727+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1593,7 +1594,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261031-172427",
+  "last_evolution_branch": "evolve/1.41.1-20261031-175952",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 42,
@@ -1851,7 +1852,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-10-31T17:24:27.666904+00:00",
+    "last_run": "2026-10-31T17:59:52.853522+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1861,32 +1862,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-10-31T17:24:28.068578+00:00",
+    "last_run": "2026-10-31T17:59:53.237581+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4931682,
-        "at": "2026-10-31T08:32:45.219120+00:00",
-        "ok": true
-      },
-      {
         "id": 4681657,
-        "at": "2026-10-31T09:01:28.120071+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-10-31T09:01:28.120071+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-10-31T09:01:28.120071+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
         "at": "2026-10-31T09:01:28.120071+00:00",
         "ok": true
       },
@@ -2071,8 +2052,28 @@
         "ok": true
       },
       {
+        "id": 4931682,
+        "at": "2026-10-31T17:59:53.237581+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-10-31T17:59:53.237581+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-10-31T17:59:53.237581+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-10-31T17:59:53.237581+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-10-31T17:24:28.068578+00:00",
+        "at": "2026-10-31T17:59:53.237581+00:00",
         "ok": true
       }
     ],
@@ -2081,7 +2082,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.9
+    "oldest_check_age_hours": 9.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

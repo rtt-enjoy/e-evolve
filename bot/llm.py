@@ -33,11 +33,12 @@ _GLM_ENDPOINTS = [
 	"https://open.bigmodel.cn/api/coding/paas/v4",
 	"https://open.bigmodel.cn/api/paas/v4",
 ]
-# Strongest first. glm-5.3 is left out on purpose: its thinking cannot be
-# switched off, and hidden reasoning spends the max_tokens budget every caller
-# sizes for the answer. The two Flash models are free on the general API, so a
-# key with no balance (code 1113) still lands on a model that answers.
+# glm-5.3-flash leads (owner directive 2026-10-31): $0.15/$0.50 per 1M tokens on
+# the general API, against $1.40/$4.40 for glm-5.2. The rest run strongest
+# first. The two Flash models at the end are free on the general API, so a key
+# with no balance (code 1113) still lands on a model that answers.
 _GLM_MODELS = [
+	"glm-5.3-flash",
 	"glm-5.2",
 	"glm-5.1",
 	"glm-5",
@@ -50,6 +51,13 @@ _GLM_MODELS = [
 _GLM_NEXT_MODEL_CODES = {"1113", "1211", "1212", "1221", "1311"}   # this model is not usable on this key
 _GLM_WRONG_HOST_CODES = {"1000", "1001", "1003", "1005", "1220", "1309", "1315"}  # key belongs elsewhere
 _GLM_TRANSIENT_CODES  = {"1302", "1305"}                           # rate limit / overloaded: this call only
+# GLM-5.3 models cannot switch thinking off: thinking.type accepts only
+# "enabled", and "disabled" is refused (docs.z.ai/guides/llm/glm-5.3). Their
+# documented equivalent of "off" is reasoning_effort "low". Reasoning may count
+# against max_tokens, so a 5.3 call gets extra room for it on top of what the
+# caller sized for the answer; max_tokens is a ceiling, not a charge.
+_GLM_ALWAYS_THINKS = ("glm-5.3",)
+_GLM_REASONING_HEADROOM = 8192
 _GLM_TIMEOUT = (15, 240)
 _GLM_MAX_FAILURES = 2
 _GLM_SKIP_MARKER = "glm_skip"
@@ -775,6 +783,15 @@ class LLMClient:
 			return "", str(err)[:120]
 		return str(err.get("code") or ""), str(err.get("message") or "")[:120]
 
+	@staticmethod
+	def _glm_thinking(model: str) -> dict:
+		"""The lightest reasoning setting the model accepts."""
+		if model.startswith(_GLM_ALWAYS_THINKS):
+			return {"thinking": {"type": "enabled"}, "reasoning_effort": "low"}
+		# Reasoning tokens count against max_tokens, which callers size for
+		# the answer; with thinking on, long JSON plans came back cut.
+		return {"thinking": {"type": "disabled"}}
+
 	def _glm_failed_to_reach(self, why: str) -> RuntimeError:
 		"""A timeout or outage. Two in one run latch GLM off for the rest of it."""
 		self._glm_failures += 1
@@ -798,14 +815,13 @@ class LLMClient:
 		probe = {
 			"messages":   [{"role": "user", "content": "ping"}],
 			"max_tokens": 8,
-			"thinking":   {"type": "disabled"},
 		}
 		host_accepted_key = False
 		no_balance = False
 		for endpoint in _GLM_ENDPOINTS:
 			for model in _GLM_MODELS:
 				try:
-					rsp = self._glm_post(endpoint, {**probe, "model": model})
+					rsp = self._glm_post(endpoint, {**probe, **self._glm_thinking(model), "model": model})
 				except requests.RequestException as exc:
 					raise self._glm_failed_to_reach(f"probe of {endpoint} failed: {type(exc).__name__}") from exc
 				code, msg = self._glm_error(rsp) if rsp.status_code != 200 else ("", "")
@@ -847,6 +863,8 @@ class LLMClient:
 		if system:
 			messages.append({"role": "system", "content": system})
 		messages.append({"role": "user", "content": prompt})
+		if model.startswith(_GLM_ALWAYS_THINKS):
+			max_tokens += _GLM_REASONING_HEADROOM
 		t0 = time.monotonic()
 		try:
 			rsp = self._glm_post(self._glm_endpoint, {
@@ -854,9 +872,7 @@ class LLMClient:
 				"messages":    messages,
 				"max_tokens":  max_tokens,
 				"temperature": temperature,
-				# Reasoning tokens count against max_tokens, which callers size
-				# for the answer; with thinking on, long JSON plans came back cut.
-				"thinking":    {"type": "disabled"},
+				**self._glm_thinking(model),
 			})
 		except requests.Timeout as exc:
 			raise self._glm_failed_to_reach(f"timed out after {_GLM_TIMEOUT[1]}s") from exc

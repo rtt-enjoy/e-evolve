@@ -207,7 +207,7 @@
 		]
 	},
 	"llm": {
-		"main_engine": "GLM (glm-5.2, stepping down to the free glm-4.7-flash)",
+		"main_engine": "GLM (glm-5.3-flash, stepping down to the free glm-4.7-flash)",
 		"provider": "glm",
 		"note": "GLM (Z.ai / Zhipu, needs GLM_API_KEY) is the main engine for every role: evolution (upgrade), research, and article/newsletter drafting (post). The first GLM call each run probes the Coding Plan and general hosts of api.z.ai and open.bigmodel.cn and keeps the first that accepts the key. On a rejected key, a spent quota, or two timeouts GLM is switched off for the rest of the run and Atria (Atria-Dawn, ~1B free tokens, needs ATRIA_API_KEY) serves instead. On a 401, a 404, or a quota-spent 429 Atria is switched off too and each role falls through to its all-free OpenRouter chain, ordered per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. Without ATRIA_API_KEY every role runs on that fallback. openrouter/free -- the free auto-router -- leads every chain: it picks the best zero-cost model per request and filters for the features the request needs, so model choice tracks the live catalogue. openrouter/auto is deliberately NOT used: its candidate set includes paid models and it bills at the routed model's rate. Named free models (led by minimax/minimax-m3:free, 1M ctx, native response_format + tools) follow as fallback for when the router is rate-limited; on 402/429/404 the client steps down the rest of the role's free chain before changing provider."
 	},

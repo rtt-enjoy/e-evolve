@@ -10,7 +10,7 @@ Set at least one LLM provider key for LLM-backed runs:
 
 | Key                  | Required    | Used by                         | Notes                            |
 |----------------------|-------------|---------------------------------|----------------------------------|
-| `GLM_API_KEY`        | One LLM key | `bot/llm.py`, feature readiness | **Main engine** for every role (Z.ai / Zhipu GLM, `glm-5.2` stepping down to the free `glm-4.7-flash`). The first call probes the Coding Plan and general hosts on api.z.ai and open.bigmodel.cn. Falls through to Atria on a rejected key, spent quota, or two timeouts. |
+| `GLM_API_KEY`        | One LLM key | `bot/llm.py`, feature readiness | **Main engine** for every role (Z.ai / Zhipu GLM, `glm-5.3-flash` stepping down to the free `glm-4.7-flash`). The first call probes the Coding Plan and general hosts on api.z.ai and open.bigmodel.cn. Falls through to Atria on a rejected key, spent quota, or two timeouts. |
 | `ATRIA_API_KEY`      | One LLM key | `bot/llm.py`, feature readiness | First fallback for every role (`Atria-Dawn`, ~1B free tokens). Falls through to OpenRouter on auth failure, missing model, or spent quota. |
 | `GROQ_API_KEY`       | One LLM key | `bot/llm.py`, feature readiness | Free-tier friendly LLM provider. |
 | `GEMINI_API_KEY`     | One LLM key | `bot/llm.py`, feature readiness | Free-tier friendly LLM provider; highest daily request ceiling of the free options. |

@@ -3,7 +3,7 @@ import type { Status } from '../types/status';
 
 /** Names and secrets for engines that can lead (`llm_engine.main_provider`). */
 const ENGINES: Record<string, { name: string; secret: string; model: string }> = {
-	glm: { name: 'GLM', secret: 'GLM_API_KEY', model: 'glm-5.2' },
+	glm: { name: 'GLM', secret: 'GLM_API_KEY', model: 'glm-5.3-flash' },
 	atria: { name: 'Atria', secret: 'ATRIA_API_KEY', model: 'Atria-Dawn' },
 };
 

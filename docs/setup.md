@@ -38,15 +38,21 @@ accepts the key:
 3. `https://open.bigmodel.cn/api/coding/paas/v4`
 4. `https://open.bigmodel.cn/api/paas/v4`
 
-Models are tried strongest first: `glm-5.2`, `glm-5.1`, `glm-5`, `glm-4.7`,
-then the free `glm-4.7-flash` and `glm-4.5-flash`. A key with no balance
-(code 1113) or a plan without a model (1311) steps down to the next one, so a
-general-API key with no credit still lands on a free Flash model. `glm-5.3` is
-left out because its thinking cannot be disabled. Every request sends
-`thinking: disabled`, because reasoning tokens count against `max_tokens`.
+`glm-5.3-flash` is tried first (owner choice, 2026-10-31). The rest follow
+strongest first: `glm-5.2`, `glm-5.1`, `glm-5`, `glm-4.7`, then the free
+`glm-4.7-flash` and `glm-4.5-flash`. A key with no balance (code 1113) or a
+plan without a model (1311) steps down to the next one, so a general-API key
+with no credit still lands on a free Flash model.
 
-**Cost:** on a metered general-API key with a balance, `glm-5.2` bills per
-token (about $1.4 in / $4.4 out per 1M). A Coding Plan key bills nothing extra.
+GLM-5.3 models cannot switch thinking off: Z.ai refuses `thinking: disabled`
+for them. They are sent `thinking: enabled` with `reasoning_effort: low`, and
+`max_tokens` gets 8,192 extra tokens so reasoning cannot crowd out the answer.
+Every older model is sent `thinking: disabled`, because reasoning tokens count
+against `max_tokens`.
+
+**Cost:** on a metered general-API key with a balance, `glm-5.3-flash` bills
+per token (about $0.15 in / $0.50 out per 1M, reasoning included). That is
+cheaper than `glm-5.2` at $1.4 / $4.4. A Coding Plan key bills nothing extra.
 A key with no balance runs on the free Flash models.
 
 GLM is switched off for the rest of the cycle on a rejected key, a spent

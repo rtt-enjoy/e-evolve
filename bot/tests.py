@@ -5482,7 +5482,7 @@ class TestGlmPrimaryThenAtriaThenOpenRouter(unittest.TestCase):
 		glm_rule(endpoint, model, is_probe) -> response. atria is a list of
 		responses consumed in order (default: always 200).
 		"""
-		calls = {"glm": [], "atria": [], "openrouter": []}
+		calls = {"glm": [], "glm_bodies": [], "atria": [], "openrouter": []}
 
 		def fake_post(url, **kwargs):
 			body = kwargs["json"]
@@ -5490,6 +5490,7 @@ class TestGlmPrimaryThenAtriaThenOpenRouter(unittest.TestCase):
 				if url == f"{endpoint}/chat/completions":
 					probe = body["max_tokens"] == 8
 					calls["glm"].append((endpoint, body["model"], probe, body.get("thinking")))
+					calls["glm_bodies"].append(body)
 					out = glm_rule(endpoint, body["model"], probe)
 					if isinstance(out, Exception):
 						raise out
@@ -5509,7 +5510,7 @@ class TestGlmPrimaryThenAtriaThenOpenRouter(unittest.TestCase):
 		fake, calls = self._post(lambda e, m, p: self._resp())
 		with mock.patch("requests.post", side_effect=fake):
 			resp = client.complete_for_role("upgrade", "hi")
-		self.assertEqual((resp.provider, resp.model), ("glm", "glm-5.2"))
+		self.assertEqual((resp.provider, resp.model), ("glm", "glm-5.3-flash"))
 		self.assertEqual(calls["atria"], [])
 		self.assertEqual(calls["openrouter"], [])
 
@@ -5526,7 +5527,7 @@ class TestGlmPrimaryThenAtriaThenOpenRouter(unittest.TestCase):
 			client.complete_for_role("research", "b")
 		probes = [c for c in calls["glm"] if c[2]]
 		# One probe on the coding host (401 ends that host), one that succeeds.
-		self.assertEqual([(e, m) for e, m, _, _ in probes], [(self.CODING, "glm-5.2"), (self.GENERAL, "glm-5.2")])
+		self.assertEqual([(e, m) for e, m, _, _ in probes], [(self.CODING, "glm-5.3-flash"), (self.GENERAL, "glm-5.3-flash")])
 		real = [c for c in calls["glm"] if not c[2]]
 		self.assertEqual([e for e, *_ in real], [self.GENERAL, self.GENERAL])
 		self.assertEqual(client.engine_report()["endpoint"], self.GENERAL)
@@ -5538,7 +5539,8 @@ class TestGlmPrimaryThenAtriaThenOpenRouter(unittest.TestCase):
 		def rule(endpoint, model, probe):
 			if endpoint != self.GENERAL:
 				return self._resp(401, "1000")
-			return self._resp() if "flash" in model else self._resp(429, "1113")
+			# Only the 4.x Flash models are free; glm-5.3-flash is metered.
+			return self._resp() if model in ("glm-4.7-flash", "glm-4.5-flash") else self._resp(429, "1113")
 
 		fake, _ = self._post(rule)
 		with mock.patch("requests.post", side_effect=fake):
@@ -5546,14 +5548,33 @@ class TestGlmPrimaryThenAtriaThenOpenRouter(unittest.TestCase):
 		self.assertEqual((resp.provider, resp.model), ("glm", "glm-4.7-flash"))
 		self.assertEqual(client.engine_report()["main_model"], "glm-4.7-flash")
 
-	def test_thinking_is_disabled_on_every_glm_request(self):
+	def test_glm_53_runs_low_effort_thinking_with_headroom(self):
+		"""5.3 refuses thinking "disabled"; low effort is its documented "off"."""
 		client = self._client()
 		fake, calls = self._post(lambda e, m, p: self._resp())
 		with mock.patch("requests.post", side_effect=fake):
-			client.complete_for_role("upgrade", "hi")
-		self.assertTrue(calls["glm"])
-		for *_, thinking in calls["glm"]:
-			self.assertEqual(thinking, {"type": "disabled"})
+			client.complete_for_role("upgrade", "hi", max_tokens=1000)
+		bodies = calls["glm_bodies"]
+		self.assertTrue(bodies)
+		for body in bodies:
+			self.assertEqual(body["model"], "glm-5.3-flash")
+			self.assertEqual(body["thinking"], {"type": "enabled"})
+			self.assertEqual(body["reasoning_effort"], "low")
+		real = [b for b in bodies if b["max_tokens"] != 8]
+		self.assertEqual(real[0]["max_tokens"], 1000 + llm_module._GLM_REASONING_HEADROOM)
+
+	def test_thinking_is_disabled_on_older_glm_models(self):
+		client = self._client()
+		fake, calls = self._post(lambda e, m, p: self._resp(429, "1113") if m == "glm-5.3-flash" else self._resp())
+		with mock.patch("requests.post", side_effect=fake):
+			resp = client.complete_for_role("upgrade", "hi", max_tokens=1000)
+		self.assertEqual(resp.model, "glm-5.2")
+		older = [b for b in calls["glm_bodies"] if b["model"] != "glm-5.3-flash"]
+		self.assertTrue(older)
+		for body in older:
+			self.assertEqual(body["thinking"], {"type": "disabled"})
+			self.assertNotIn("reasoning_effort", body)
+			self.assertIn(body["max_tokens"], (8, 1000))
 
 	def test_key_rejected_everywhere_falls_to_atria(self):
 		client = self._client()

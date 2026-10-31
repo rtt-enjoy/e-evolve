@@ -25,6 +25,7 @@ VERSION_FILE = Path("version.txt")
 # intentionally not feature activators, so their presence cannot trigger
 # external side effects.
 FEATURE_MAP: dict[str, list[str]] = {
+	"llm_glm":         ["GLM_API_KEY"],
 	"llm_atria":       ["ATRIA_API_KEY"],
 	"llm_anthropic":   ["ANTHROPIC_API_KEY"],
 	"llm_gemini":      ["GEMINI_API_KEY"],
@@ -50,13 +51,21 @@ def _role_workflow_spec() -> dict[str, dict[str, str]]:
 	for role, purpose in _LLM_ROLE_PURPOSES.items():
 		provider = llm.ROLE_PROVIDER.get(role, "openrouter")
 		chain = llm._OPENROUTER_MODELS_BY_ROLE.get(role, llm._OPENROUTER_MODELS)
-		spec[role] = {
-			"provider": provider,
-			"model": llm._ATRIA_MODELS[0] if provider == "atria" else (chain[0] if provider == "openrouter" and chain else ""),
-			"purpose": purpose,
-		}
-		if provider == "atria" and chain:
-			# Where the role lands when Atria is absent or its quota is spent.
+		model = {
+			"glm": llm._GLM_MODELS[0],
+			"atria": llm._ATRIA_MODELS[0],
+			"openrouter": chain[0] if chain else "",
+		}.get(provider, "")
+		spec[role] = {"provider": provider, "model": model, "purpose": purpose}
+		if provider == "glm":
+			# Where the role lands when GLM is absent or latched off: Atria,
+			# and when Atria is too, the role's OpenRouter free chain.
+			spec[role]["fallback_provider"] = "atria"
+			spec[role]["fallback_model"] = llm._ATRIA_MODELS[0]
+			if chain:
+				spec[role]["last_resort_provider"] = "openrouter"
+				spec[role]["last_resort_model"] = chain[0]
+		elif provider == "atria" and chain:
 			spec[role]["fallback_provider"] = "openrouter"
 			spec[role]["fallback_model"] = chain[0]
 	return spec
@@ -584,24 +593,33 @@ def _llm_workflows(
 			"openrouter": "OPENROUTER_API_KEY",
 			"cerebras": "CEREBRAS_API_KEY",
 			"atria": "ATRIA_API_KEY",
+			"glm": "GLM_API_KEY",
 		}.get(provider)
 		feature = f"llm_{provider}"
-		# Atria roles fall through to OpenRouter, so they are live on either key.
+		# GLM roles fall through to Atria then OpenRouter, so any of those keys
+		# keeps the role running.
 		keys = [secret] if secret else []
-		if provider == "atria":
+		if provider == "glm":
+			keys += ["ATRIA_API_KEY", "OPENROUTER_API_KEY"]
+		elif provider == "atria":
 			keys.append("OPENROUTER_API_KEY")
 
 		def _present(k: str) -> bool:
 			return bool(os.getenv(k, "").strip() or k in configured)
 
-		# Built is not live: a role routed to Atria with no ATRIA_API_KEY is
-		# really served by its fallback, and the dashboard must say which.
+		# Built is not live: a role routed to GLM with no GLM_API_KEY is
+		# really served by a fallback, and the dashboard must say which.
 		primary_active = bool(
 			(secret and _present(secret)) or feature in active_set
 		)
 		serving = provider
-		if not primary_active and cfg.get("fallback_provider") and _present("OPENROUTER_API_KEY"):
-			serving = cfg["fallback_provider"]
+		if not primary_active:
+			for p_key in ("fallback_provider", "last_resort_provider"):
+				fallback = cfg.get(p_key)
+				fallback_secret = {"atria": "ATRIA_API_KEY", "openrouter": "OPENROUTER_API_KEY"}.get(fallback or "")
+				if fallback_secret and _present(fallback_secret):
+					serving = fallback
+					break
 		workflows[role] = {
 			**cfg,
 			"active": bool(any(_present(k) for k in keys) or feature in active_set),

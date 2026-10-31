@@ -53,10 +53,13 @@ _MAX_PLAN_TOKENS = 32_000
 _MAX_FIX_TOKENS  = 16_000
 # Per-provider codebase snapshot limits.
 # Groq free tier: 12k TPM total — status JSON ~1k, system prompt ~0.6k, response 6k → 4k left for codebase.
-# Groq is a fallback only; _MAX_PLAN_TOKENS is sized for Atria and the openrouter
+# Groq is a fallback only; _MAX_PLAN_TOKENS is sized for GLM, Atria and the openrouter
 # upgrade chain, so a groq cycle stays capped by that 12k TPM ceiling.
 # Gemini/Anthropic: large context, no TPM issue.
-# Atria (main engine): Atria-Dawn holds ~256K context and ~65K output
+# GLM (main engine): glm-5.x holds ~200K context, and the free Flash fallbacks
+# 128K+, so the 200k-byte (~57K-token) snapshot and 32k plan fit every entry.
+# Without this row GLM would get groq's 4k budget and evolve blind.
+# Atria (first fallback): Atria-Dawn holds ~256K context and ~65K output
 # (third-party listings, 2026-10), so the same 200k-byte snapshot and 32k plan fit.
 # OpenRouter: the free upgrade chain leads with 1M-context models and the
 # smallest entry still holds 256K, so 30k starved the model -- one module filled
@@ -69,6 +72,7 @@ _MAX_READ_BYTES = {
     "gemini":     80_000,
     "openrouter": 200_000,
     "atria":      200_000,
+    "glm":        200_000,
 }
 
 # The doctrine is the standing brief for what "evolve" means here, and the

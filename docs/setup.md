@@ -12,16 +12,52 @@ Repo → Settings → Secrets and variables → Actions → **New repository sec
 
 | Secret               | Source                                                        | Cost                          |
 |----------------------|---------------------------------------------------------------|-------------------------------|
-| `ATRIA_API_KEY`      | [intern-ai.org.cn](https://discovery.intern-ai.org.cn)        | **Main engine** — see below   |
-| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | Free — first fallback         |
+| `GLM_API_KEY`        | [z.ai](https://z.ai/manage-apikey/apikey-list) or [bigmodel.cn](https://open.bigmodel.cn) | **Main engine** — see below   |
+| `ATRIA_API_KEY`      | [intern-ai.org.cn](https://discovery.intern-ai.org.cn)        | Free — first fallback         |
+| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | Free — second fallback        |
 | `GROQ_API_KEY`       | [console.groq.com](https://console.groq.com)                  | Free                          |
 | `GEMINI_API_KEY`     | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier                     |
 | `CEREBRAS_API_KEY`   | [cloud.cerebras.ai](https://cloud.cerebras.ai/)               | Free tier                     |
 | `ANTHROPIC_API_KEY`  | [console.anthropic.com](https://console.anthropic.com)        | Paid                          |
 
-Only one is required, but set `ATRIA_API_KEY` **and** `OPENROUTER_API_KEY`.
+Only one is required, but set `GLM_API_KEY`, `ATRIA_API_KEY` **and**
+`OPENROUTER_API_KEY`.
 
-**Main AI engine: Atria (`Atria-Dawn`), roughly 1B free tokens.**
+**Main AI engine: GLM (`GLM_API_KEY`, Z.ai / Zhipu).** Every role tries it
+first: evolution proposals (`upgrade`), research (`research`), and article and
+newsletter drafting (`post`). If GLM cannot serve, **Atria** takes over, and if
+Atria cannot either, the free **OpenRouter** chain does.
+
+Z.ai and bigmodel.cn issue separate keys for the general API and the Coding
+Plan, and those keys are not interchangeable. So the first GLM call of each
+cycle sends a one-word probe to these hosts in order and keeps the first that
+accepts the key:
+
+1. `https://api.z.ai/api/coding/paas/v4` (Coding Plan, flat fee)
+2. `https://api.z.ai/api/paas/v4` (general API, metered)
+3. `https://open.bigmodel.cn/api/coding/paas/v4`
+4. `https://open.bigmodel.cn/api/paas/v4`
+
+Models are tried strongest first: `glm-5.2`, `glm-5.1`, `glm-5`, `glm-4.7`,
+then the free `glm-4.7-flash` and `glm-4.5-flash`. A key with no balance
+(code 1113) or a plan without a model (1311) steps down to the next one, so a
+general-API key with no credit still lands on a free Flash model. `glm-5.3` is
+left out because its thinking cannot be disabled. Every request sends
+`thinking: disabled`, because reasoning tokens count against `max_tokens`.
+
+**Cost:** on a metered general-API key with a balance, `glm-5.2` bills per
+token (about $1.4 in / $4.4 out per 1M). A Coding Plan key bills nothing extra.
+A key with no balance runs on the free Flash models.
+
+GLM is switched off for the rest of the cycle on a rejected key, a spent
+quota or usage limit, or two timeouts/outages. A rate limit (1302/1305) or a
+refused request (prompt too long, flagged content) skips GLM for that one call
+only. The Engine panel's **GLM** card shows the model and endpoint the probe
+settled on, how many calls GLM answered, and why it fell back. Its last row
+reports Atria. The sidebar pill reads `GLM live`, `GLM fallback`, or
+`GLM not reported`.
+
+**Atria (first fallback): `Atria-Dawn`, roughly 1B free tokens.**
 It is called through the OpenAI-style endpoint
 `https://discovery-api.intern-ai.org.cn/v1` with model `Atria-Dawn`.
 Create the key at [discovery.intern-ai.org.cn](https://discovery.intern-ai.org.cn)
@@ -30,23 +66,17 @@ Create the key at [discovery.intern-ai.org.cn](https://discovery.intern-ai.org.c
 A key allows 500 requests/minute and **expires after 6 months** — an expired
 key answers 401, so Atria quietly drops to the fallback (`auth_failed` on the
 Engine panel). Rotate it before then.
-`bot/llm.py` sends every role to Atria first: evolution proposals (`upgrade`),
-research and lead briefs (`research`), and article and newsletter drafting
-(`post`). On a 401, a 404, or a quota-spent 429, Atria is switched off for the
+When GLM is unavailable, `bot/llm.py` sends each role to Atria next. On a
+401, a 404, or a quota-spent 429, Atria is switched off for the
 rest of that cycle and each role falls through to its own zero-cost
 OpenRouter chain (led by the `openrouter/free` auto-router), so a spent quota
 never fails a cycle. A per-minute 429 that sends `Retry-After` only skips
 Atria for that one call.
 
-**Without `ATRIA_API_KEY` nothing uses Atria.** Every role then runs on the
-OpenRouter fallback, and the dashboard's Engine panel shows the roles as
-`fallback`, not `active`. Check that panel after adding the secret: its
-**Atria** card shows whether `ATRIA_API_KEY` is set, how many calls Atria
-answered last cycle, and why it fell back if it did (key missing, key
-rejected, quota spent). The sidebar pill reads `Atria live`,
-`Atria fallback`, or `Atria not reported` (no cycle has run since the change).
-The card reflects the last completed cycle, so it updates about an hour after
-you add the secret.
+**Without `GLM_API_KEY` GLM is skipped** and Atria leads; without both, every
+role runs on the OpenRouter fallback. The Engine panel then shows the roles as
+`fallback`, not `active`. The card reflects the last completed cycle, so it
+updates about an hour after you add a secret.
 
 **Know the daily ceiling.** OpenRouter's free (`:free`) models are capped at
 20 requests/minute and only **50 requests/day** unless the account has ever
@@ -61,10 +91,10 @@ add at least one fallback key:
   requests/day per model (verify current limit).
 - `GROQ_API_KEY` — free tier, no card, fast inference.
 
-`bot/llm.py` automatically steps down from Atria to the OpenRouter free-model
-chain, and then to the next configured provider on rate limits. Adding any of
-these only increases headroom. It never changes routing while Atria has
-capacity.
+`bot/llm.py` automatically steps down from GLM to Atria, then to the
+OpenRouter free-model chain, and then to the next configured provider on rate
+limits. Adding any of these only increases headroom. It never changes routing
+while GLM has capacity.
 
 Use the same variable names in both places:
 

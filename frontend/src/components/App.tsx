@@ -7,7 +7,7 @@ import { ageLabel, formatDate } from '../utils/format';
 import { nextCycle, sinceLabel, useNow, useStatusSync } from '../utils/sync';
 import { navigate, useRoute } from '../utils/route';
 import type { Status } from '../types/status';
-import { atriaState } from '../utils/engine';
+import { engineState } from '../utils/engine';
 
 type Theme = 'system' | 'light' | 'dark';
 const THEME_KEY = 'e-evolve-theme';
@@ -68,7 +68,7 @@ export function App() {
 	const newKeys = useMemo(() => unclaimedKeys(status), [status]);
 	const freshness = ageLabel(status.last_run);
 	const next = nextCycle(status.last_run, now);
-	const atria = atriaState(status);
+	const engine = engineState(status);
 
 	const active = sections.find((section) => section.id === route.section)
 		// A hash pointing at a hidden or unknown section falls back to Overview.
@@ -120,7 +120,7 @@ export function App() {
 				</nav>
 
 				<div className="sidebar-foot">
-					<Pill tone={atria.tone}>{atria.label}</Pill>
+					<Pill tone={engine.tone}>{engine.label}</Pill>
 					<Pill tone="neutral">v{status.version || '0.0.0'}</Pill>
 					<div className="links">
 						<a href="status.json">status.json</a>

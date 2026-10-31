@@ -64,8 +64,8 @@ def main() -> int:
 			if f != "code_techs"
 		]
 	status["llm_provider"] = llm.provider
-	# Per-role provider that will actually serve this cycle (Atria, or the
-	# OpenRouter fallback when ATRIA_API_KEY is absent), for dashboard display
+	# Per-role provider that will actually serve this cycle (GLM, or Atria /
+	# OpenRouter when GLM_API_KEY is absent), for dashboard display
 	status["llm_roles"] = {
 		role: p for role in ("upgrade", "research", "post")
 		if (p := llm.provider_for_role(role))
@@ -223,7 +223,7 @@ def main() -> int:
 	elapsed = round((datetime.now(timezone.utc) - t0).total_seconds())
 	status["last_cycle_seconds"] = elapsed
 	status["errors"]             = errors[-20:]
-	# Written after all LLM work, so an Atria quota spent mid-cycle shows up.
+	# Written after all LLM work, so a GLM quota spent mid-cycle shows up.
 	status["llm_engine"]         = llm.engine_report()
 	status.pop("_overrides", None)   # don't persist runtime-only key
 

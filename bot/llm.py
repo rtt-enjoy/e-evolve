@@ -19,7 +19,41 @@ _GROQ_MODELS = [
 	"llama3-70b-8192",
 	"llama3-8b-8192",
 ]
-# Atria: primary engine when ATRIA_API_KEY is set (~1B free tokens). Called through
+# GLM (Z.ai / Zhipu): main engine when GLM_API_KEY is set. Atria is the first
+# fallback, then the OpenRouter free chains.
+#
+# Z.ai issues separate, non-interchangeable keys for its general API and its
+# Coding Plan, and bigmodel.cn (mainland) issues its own, so the key alone does
+# not say which host to call. The first GLM call of a run probes these in order
+# with a tiny request and keeps the first endpoint + model that accepts the key.
+# Coding Plan hosts go first: a flat subscription, not metered per token.
+_GLM_ENDPOINTS = [
+	"https://api.z.ai/api/coding/paas/v4",
+	"https://api.z.ai/api/paas/v4",
+	"https://open.bigmodel.cn/api/coding/paas/v4",
+	"https://open.bigmodel.cn/api/paas/v4",
+]
+# Strongest first. glm-5.3 is left out on purpose: its thinking cannot be
+# switched off, and hidden reasoning spends the max_tokens budget every caller
+# sizes for the answer. The two Flash models are free on the general API, so a
+# key with no balance (code 1113) still lands on a model that answers.
+_GLM_MODELS = [
+	"glm-5.2",
+	"glm-5.1",
+	"glm-5",
+	"glm-4.7",
+	"glm-4.7-flash",
+	"glm-4.5-flash",
+]
+# Z.ai business codes (docs.z.ai/api-reference/api-code), grouped by what the
+# caller should do next.
+_GLM_NEXT_MODEL_CODES = {"1113", "1211", "1212", "1221", "1311"}   # this model is not usable on this key
+_GLM_WRONG_HOST_CODES = {"1000", "1001", "1003", "1005", "1220", "1309", "1315"}  # key belongs elsewhere
+_GLM_TRANSIENT_CODES  = {"1302", "1305"}                           # rate limit / overloaded: this call only
+_GLM_TIMEOUT = (15, 240)
+_GLM_MAX_FAILURES = 2
+_GLM_SKIP_MARKER = "glm_skip"
+# Atria: first fallback when ATRIA_API_KEY is set (~1B free tokens). Called through
 # the OpenAI-style endpoint of the intern-ai discovery API; the same host also
 # serves an Anthropic-style API at its root, which this client does not use.
 # Single model, case-sensitive ID ("Atria-Dawn" since the Preview was upgraded).
@@ -151,16 +185,16 @@ _OPENROUTER_MODELS_BY_ROLE: dict[str, list[str]] = {
 	"post":     _OPENROUTER_MODELS_POST,
 }
 
-# Role → preferred provider mapping. Atria leads every role; when it is absent or
-# its quota is spent, the chain falls through to the OpenRouter free chains above,
-# then gemini/groq as provider-level fallbacks.
+# Role → preferred provider mapping. GLM leads every role; when it is absent or
+# latched off, Atria serves, then the OpenRouter free chains above, then
+# anthropic/gemini/cerebras/groq as provider-level fallbacks.
 ROLE_PROVIDER: dict[str, str] = {
-	"upgrade":    "atria",
-	"research":   "atria",
-	"post":       "atria",
-	"think":      "atria",
-	"fast":       "atria",
-	"experiment": "atria",
+	"upgrade":    "glm",
+	"research":   "glm",
+	"post":       "glm",
+	"think":      "glm",
+	"fast":       "glm",
+	"experiment": "glm",
 }
 
 
@@ -205,6 +239,14 @@ class LLMClient:
 		self._groq_key       = os.getenv("GROQ_API_KEY",       "").strip()
 		self._cerebras_key   = os.getenv("CEREBRAS_API_KEY",   "").strip()
 		self._atria_key      = os.getenv("ATRIA_API_KEY",      "").strip()
+		self._glm_key        = os.getenv("GLM_API_KEY",        "").strip()
+		# GLM state for this run: the endpoint + model the probe settled on
+		# (None until the first GLM call), and why it was latched off, if it was.
+		self._glm_endpoint: str | None = None
+		self._glm_model: str | None = None
+		self._glm_disabled = False
+		self._glm_disabled_reason: str | None = None
+		self._glm_failures = 0
 		# Set when Atria answers 401 or its free quota is spent. Per-process: the
 		# next hourly cycle starts with Atria enabled again.
 		self._atria_disabled = False
@@ -251,6 +293,8 @@ class LLMClient:
 						resp = self._call_gemini(p_prompt, system, max_tokens, temperature, p_model)
 					elif provider == "openrouter":
 						resp = self._call_openrouter(p_prompt, system, max_tokens, temperature, p_model)
+					elif provider == "glm":
+						resp = self._call_glm(p_prompt, system, max_tokens, temperature, p_model)
 					elif provider == "atria":
 						resp = self._call_atria(p_prompt, system, max_tokens, temperature, p_model)
 					elif provider == "cerebras":
@@ -273,6 +317,14 @@ class LLMClient:
 					# on the same prompt is not worth the cycle time.
 					if _ATRIA_TIMEOUT_MARKER in exc_str:
 						log.warning("atria gave no answer in time -- using fallback for this call: %s", exc)
+						exhausted = True
+						break
+
+					# GLM timed out, was unreachable, or refused this one
+					# request (too long, flagged): retrying the same prompt
+					# would fail the same way, so the next provider takes it.
+					if _GLM_SKIP_MARKER in exc_str:
+						log.warning("glm could not serve this call -- using fallback: %s", exc)
 						exhausted = True
 						break
 
@@ -350,9 +402,9 @@ class LLMClient:
 		max_tokens: int = 4096,
 		temperature: float = 0.7,
 	) -> LLMResponse:
-		"""Route to the role's provider (Atria for every role, OpenRouter once it is
-        absent or spent). Falls back to complete() with the default provider if
-        the role's provider has no key."""
+		"""Route to the role's provider (GLM for every role, then Atria, then
+        OpenRouter once those are absent or spent). Falls back to complete()
+        with the default provider if the role's provider has no key."""
 		preferred = self.provider_for_role(role)
 		if preferred:
 			log.info("Role=%s → provider=%s", role, preferred)
@@ -373,21 +425,24 @@ class LLMClient:
 		"""
         The provider that will actually serve `role` right now, or None.
 
-        ROLE_PROVIDER names Atria for every role, but that is the *preference*.
-        Without ATRIA_API_KEY, or once its quota is spent, the role is served by
-        its OpenRouter chain -- and the dashboard must say so rather than
-        advertise an engine that is not running.
+        ROLE_PROVIDER names GLM for every role, but that is the *preference*.
+        Without GLM_API_KEY, or once GLM is latched off, the role is served by
+        Atria, and without that by its OpenRouter chain -- and the dashboard
+        must say so rather than advertise an engine that is not running.
         """
 		preferred = ROLE_PROVIDER.get(role)
 		if not preferred:
 			return None
 		key_map = {
+			"glm":        "" if self._glm_disabled else self._glm_key,
 			"atria":      "" if self._atria_disabled else self._atria_key,
 			"gemini":     self._gemini_key,
 			"groq":       self._groq_key,
 			"openrouter": self._openrouter_key,
 			"anthropic":  self._anthropic_key,
 		}
+		if preferred == "glm" and not key_map["glm"]:
+			preferred = "atria"
 		if preferred == "atria" and not key_map["atria"]:
 			# Atria absent or spent: the role's own OpenRouter chain still applies.
 			preferred = "openrouter"
@@ -658,22 +713,200 @@ class LLMClient:
 		"""
         What the main engine actually did this run, for status["llm_engine"].
 
-        `key_set` answers "is ATRIA_API_KEY configured", `calls` answers "was it
+        `key_set` answers "is GLM_API_KEY configured", `calls` answers "was it
         used" (responses each provider actually returned), and
-        `disabled_reason` says why the run fell back when it did. Read after
-        the cycle's LLM work, so a quota spent mid-run is reported.
+        `disabled_reason` says why the run fell back when it did. `fallback`
+        reports Atria the same way, since it serves whenever GLM does not.
+        Read after the cycle's LLM work, so a quota spent mid-run is reported.
         """
-		key_set = bool(self._atria_key)
-		live = key_set and not self._atria_disabled
+		glm_set = bool(self._glm_key)
+		glm_live = glm_set and not self._glm_disabled
+		atria_set = bool(self._atria_key)
+		atria_live = atria_set and not self._atria_disabled
+		# First provider still usable, in fallback order -- never a latched one.
+		chain = self._provider_chain()
+		serving = chain[0] if chain else "none"
 		return {
-			"main_provider":   "atria",
-			"main_model":      _ATRIA_MODELS[0],
-			"key_set":         key_set,
-			"live":            live,
-			"serving":         "atria" if live else ("openrouter" if self._openrouter_key else self.provider),
-			"disabled_reason": self._atria_disabled_reason if key_set else "key_missing",
+			"main_provider":   "glm",
+			# The model the probe settled on, so a key that fell to the free
+			# Flash tier says so instead of naming the model it was meant to use.
+			"main_model":      self._glm_model or _GLM_MODELS[0],
+			"endpoint":        self._glm_endpoint,
+			"key_set":         glm_set,
+			"live":            glm_live,
+			"serving":         serving,
+			"disabled_reason": self._glm_disabled_reason if glm_set else "key_missing",
 			"calls":           dict(self._served),
+			"fallback": {
+				"provider":        "atria",
+				"model":           _ATRIA_MODELS[0],
+				"key_set":         atria_set,
+				"live":            atria_live,
+				"disabled_reason": self._atria_disabled_reason if atria_set else "key_missing",
+			},
 		}
+
+	# -- GLM -------------------------------------------------------------------
+
+	def _latch_glm_off(self, reason: str) -> None:
+		self._glm_disabled = True
+		self._glm_disabled_reason = self._glm_disabled_reason or reason
+
+	def _glm_post(self, endpoint: str, body: dict[str, Any]):
+		import requests  # already in requirements
+		return requests.post(
+			f"{endpoint}/chat/completions",
+			headers={
+				"Authorization": f"Bearer {self._glm_key}",
+				"Content-Type":  "application/json",
+			},
+			json=body,
+			timeout=_GLM_TIMEOUT,
+		)
+
+	@staticmethod
+	def _glm_error(rsp) -> tuple[str, str]:
+		"""(business code, message) from a Z.ai error body, or ("", "")."""
+		try:
+			err = rsp.json().get("error") or {}
+		except Exception:
+			return "", ""
+		if not isinstance(err, dict):
+			return "", str(err)[:120]
+		return str(err.get("code") or ""), str(err.get("message") or "")[:120]
+
+	def _glm_failed_to_reach(self, why: str) -> RuntimeError:
+		"""A timeout or outage. Two in one run latch GLM off for the rest of it."""
+		self._glm_failures += 1
+		if self._glm_failures >= _GLM_MAX_FAILURES:
+			self._latch_glm_off("timeout" if "timed out" in why else "unreachable")
+			log.warning("glm failed %d times -- routing the rest of this run to the fallback",
+						self._glm_failures)
+		return RuntimeError(f"{_GLM_SKIP_MARKER}: {why}")
+
+	def _resolve_glm(self) -> None:
+		"""
+        Find the endpoint + model this key works on, once per run.
+
+        Each probe is a one-word request capped at a few tokens, and an error
+        answer is not billed, so the walk costs next to nothing. A 401 means the
+        key belongs to another host; a 1113/1211/1311 means this model is not on
+        the key's plan or balance, so the next (cheaper, then free) model is
+        tried. Raises when nothing accepts the key, after latching GLM off.
+        """
+		import requests
+		probe = {
+			"messages":   [{"role": "user", "content": "ping"}],
+			"max_tokens": 8,
+			"thinking":   {"type": "disabled"},
+		}
+		host_accepted_key = False
+		no_balance = False
+		for endpoint in _GLM_ENDPOINTS:
+			for model in _GLM_MODELS:
+				try:
+					rsp = self._glm_post(endpoint, {**probe, "model": model})
+				except requests.RequestException as exc:
+					raise self._glm_failed_to_reach(f"probe of {endpoint} failed: {type(exc).__name__}") from exc
+				code, msg = self._glm_error(rsp) if rsp.status_code != 200 else ("", "")
+				if rsp.status_code == 200 or code in _GLM_TRANSIENT_CODES:
+					# A rate limit still proves the key and model are valid here.
+					self._glm_endpoint, self._glm_model = endpoint, model
+					log.info("glm resolved -- endpoint=%s model=%s", endpoint, model)
+					return
+				if rsp.status_code in (401, 403) or code in _GLM_WRONG_HOST_CODES:
+					break  # key belongs to another host; its models are moot
+				host_accepted_key = True
+				if rsp.status_code >= 500:
+					raise self._glm_failed_to_reach(f"probe of {endpoint} answered {rsp.status_code}")
+				if code in _GLM_NEXT_MODEL_CODES or rsp.status_code == 400:
+					no_balance = no_balance or code == "1113"
+					continue
+				# Any other 429: usage or plan limit spent on this host.
+				self._latch_glm_off("quota_spent")
+				raise RuntimeError(f"429 quota_exceeded from glm: code {code} {msg}")
+		if not host_accepted_key:
+			self._latch_glm_off("auth_failed")
+			raise RuntimeError("401 authentication_error from glm: no endpoint accepted the key")
+		self._latch_glm_off("quota_spent" if no_balance else "model_not_found")
+		raise RuntimeError(f"{_GLM_SKIP_MARKER}: no model in the chain is available to this key")
+
+	def _call_glm(
+		self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
+	) -> LLMResponse:
+		import requests
+		if self._glm_disabled:
+			# Latched mid-call (e.g. the last model ran out): stop stepping.
+			raise RuntimeError(f"{_GLM_SKIP_MARKER}: off for this run ({self._glm_disabled_reason})")
+		if self._glm_endpoint is None:
+			self._resolve_glm()
+		# Never go back up the chain past the model the key actually reaches.
+		if model not in _GLM_MODELS or _GLM_MODELS.index(model) < _GLM_MODELS.index(self._glm_model):
+			model = self._glm_model
+		messages: list[dict] = []
+		if system:
+			messages.append({"role": "system", "content": system})
+		messages.append({"role": "user", "content": prompt})
+		t0 = time.monotonic()
+		try:
+			rsp = self._glm_post(self._glm_endpoint, {
+				"model":       model,
+				"messages":    messages,
+				"max_tokens":  max_tokens,
+				"temperature": temperature,
+				# Reasoning tokens count against max_tokens, which callers size
+				# for the answer; with thinking on, long JSON plans came back cut.
+				"thinking":    {"type": "disabled"},
+			})
+		except requests.Timeout as exc:
+			raise self._glm_failed_to_reach(f"timed out after {_GLM_TIMEOUT[1]}s") from exc
+		except requests.RequestException as exc:
+			raise self._glm_failed_to_reach(f"request failed: {type(exc).__name__}") from exc
+
+		if rsp.status_code != 200:
+			code, msg = self._glm_error(rsp)
+			if rsp.status_code in (401, 403) or code in _GLM_WRONG_HOST_CODES:
+				self._latch_glm_off("auth_failed")
+				raise RuntimeError(f"401 authentication_error from glm: code {code} {msg}")
+			if code in _GLM_NEXT_MODEL_CODES:
+				# Balance or plan no longer covers this model: step down for the
+				# rest of the run, so later calls do not re-hit the same wall.
+				idx = _GLM_MODELS.index(model)
+				if idx == len(_GLM_MODELS) - 1:
+					self._latch_glm_off("model_not_found")
+				else:
+					self._glm_model = _GLM_MODELS[idx + 1]
+				raise RuntimeError(f"model_not_found on glm: {model} (code {code})")
+			if code in _GLM_TRANSIENT_CODES:
+				raise RuntimeError(f"429 rate_limit_exceeded from glm: code {code}")
+			if rsp.status_code == 429:
+				self._latch_glm_off("quota_spent")
+				raise RuntimeError(f"429 quota_exceeded from glm: code {code} {msg}")
+			if rsp.status_code == 400:
+				# Prompt too long, content flagged, bad parameter: this request
+				# fails identically on retry, but another provider may take it.
+				raise RuntimeError(f"{_GLM_SKIP_MARKER}: glm refused the request (code {code}: {msg})")
+			raise RuntimeError(f"GLM HTTP {rsp.status_code} (code {code})")
+
+		data = rsp.json()
+		if not data.get("choices"):
+			raise RuntimeError(f"GLM returned no choices for {model}: {str(data)[:200]}")
+		choice  = data["choices"][0]
+		message = choice.get("message") or {}
+		content = message.get("content")
+		if not (content and content.strip()):
+			log.warning(
+				"glm returned no content: finish_reason=%s message_fields=%s usage=%s",
+				choice.get("finish_reason"),
+				{k: len(v) if isinstance(v, str) else type(v).__name__ for k, v in message.items()},
+				data.get("usage"),
+			)
+		return LLMResponse(
+			text      = _require_text(content, "glm", model),
+			provider  = "glm",
+			model     = model,
+			latency_s = round(time.monotonic() - t0, 2),
+		)
 
 	def _call_atria(
 		self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
@@ -754,8 +987,9 @@ class LLMClient:
 	# -- Helpers ---------------------------------------------------------------
 
 	def _pick_provider(self) -> str:
-		# Atria first: ~1B free tokens. OpenRouter is the fallback once it is absent
-		# or its quota is spent.
+		# GLM first, then Atria (~1B free tokens), then OpenRouter's free chain.
+		if self._glm_key:
+			return "glm"
 		if self._atria_key:
 			return "atria"
 		if self._openrouter_key:
@@ -770,7 +1004,7 @@ class LLMClient:
 			return "cerebras"
 		raise RuntimeError(
 			"No LLM API key found.\n"
-			"Add one of: ATRIA_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, CEREBRAS_API_KEY\n"
+			"Add one of: GLM_API_KEY, ATRIA_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, CEREBRAS_API_KEY\n"
 			"to GitHub -> Settings -> Secrets and variables -> Actions."
 		)
 
@@ -778,6 +1012,8 @@ class LLMClient:
 		return self._model_for_provider(self.provider)
 
 	def _model_for_provider(self, provider: str) -> str:
+		if provider == "glm":
+			return self._glm_model or _GLM_MODELS[0]
 		if provider == "atria":
 			return _ATRIA_MODELS[0]
 		if provider == "anthropic":
@@ -799,7 +1035,8 @@ class LLMClient:
 	def _provider_chain(self) -> list[str]:
 		"""Ordered fallback chain starting from primary provider."""
 		all_providers = [
-			("atria",        bool(self._atria_key) and not self._atria_disabled),
+			("glm",          bool(self._glm_key) and not self._glm_disabled),
+			("atria",       bool(self._atria_key) and not self._atria_disabled),
 			("openrouter",   bool(self._openrouter_key)),
 			("anthropic",    bool(self._anthropic_key)),
 			("gemini",       bool(self._gemini_key)),
@@ -816,6 +1053,7 @@ class LLMClient:
 
 def _model_list_for(provider: str) -> list[str]:
 	return {
+		"glm":         _GLM_MODELS,
 		"atria":       _ATRIA_MODELS,
 		"groq":        _GROQ_MODELS,
 		"anthropic":   _ANTHROPIC_MODELS,

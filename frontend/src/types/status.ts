@@ -386,9 +386,12 @@ export type Status = {
 		purpose?: string;
 		active?: boolean;
 		secret?: string;
-		/** Where the role lands when Atria is absent or its quota is spent. */
+		/** Where the role lands when the main engine (GLM) is absent or latched off. */
 		fallback_provider?: string;
 		fallback_model?: string;
+		/** Where it lands when the fallback is unavailable too (OpenRouter). */
+		last_resort_provider?: string;
+		last_resort_model?: string;
 		/** False when the preferred provider's key is missing: the fallback is serving. */
 		primary_active?: boolean;
 		serving?: string;
@@ -397,15 +400,25 @@ export type Status = {
 	llm_engine?: {
 		main_provider?: string;
 		main_model?: string;
-		/** Whether ATRIA_API_KEY was present in the cycle's environment. */
+		/** Resolved GLM host the key works on; null until the first GLM call. */
+		endpoint?: string | null;
+		/** Whether the main engine's key (GLM_API_KEY) was present this cycle. */
 		key_set?: boolean;
 		/** Key set and not latched off by auth/quota/404 during the run. */
 		live?: boolean;
 		serving?: string;
-		/** key_missing | auth_failed | quota_spent | model_not_found, or null. */
+		/** key_missing | auth_failed | quota_spent | model_not_found | timeout | unreachable, or null. */
 		disabled_reason?: string | null;
 		/** Responses each provider actually returned last cycle. */
 		calls?: Record<string, number>;
+		/** The engine behind the main one (Atria), reported the same way. */
+		fallback?: {
+			provider?: string;
+			model?: string;
+			key_set?: boolean;
+			live?: boolean;
+			disabled_reason?: string | null;
+		};
 	};
 	article_daily?: {
 		date?: string;

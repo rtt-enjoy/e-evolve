@@ -10,14 +10,15 @@ Set at least one LLM provider key for LLM-backed runs:
 
 | Key                  | Required    | Used by                         | Notes                            |
 |----------------------|-------------|---------------------------------|----------------------------------|
-| `ATRIA_API_KEY`      | One LLM key | `bot/llm.py`, feature readiness | **Main engine** for every role (`Atria-Dawn`, ~1B free tokens). Falls through to OpenRouter on auth failure, missing model, or spent quota. |
+| `GLM_API_KEY`        | One LLM key | `bot/llm.py`, feature readiness | **Main engine** for every role (Z.ai / Zhipu GLM, `glm-5.2` stepping down to the free `glm-4.7-flash`). The first call probes the Coding Plan and general hosts on api.z.ai and open.bigmodel.cn. Falls through to Atria on a rejected key, spent quota, or two timeouts. |
+| `ATRIA_API_KEY`      | One LLM key | `bot/llm.py`, feature readiness | First fallback for every role (`Atria-Dawn`, ~1B free tokens). Falls through to OpenRouter on auth failure, missing model, or spent quota. |
 | `GROQ_API_KEY`       | One LLM key | `bot/llm.py`, feature readiness | Free-tier friendly LLM provider. |
 | `GEMINI_API_KEY`     | One LLM key | `bot/llm.py`, feature readiness | Free-tier friendly LLM provider; highest daily request ceiling of the free options. |
-| `OPENROUTER_API_KEY` | One LLM key | `bot/llm.py`, feature readiness | First fallback after Atria; free-model chain per role. Free (`:free`) models are capped at 50 requests/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit. |
+| `OPENROUTER_API_KEY` | One LLM key | `bot/llm.py`, feature readiness | Second fallback, after GLM and Atria; free-model chain per role. Free (`:free`) models are capped at 50 requests/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit. |
 | `ANTHROPIC_API_KEY`  | One LLM key | `bot/llm.py`, feature readiness | Higher-quality paid provider.    |
 | `CEREBRAS_API_KEY`   | Optional    | `bot/llm.py`, feature readiness | Free-tier fallback: roughly 1M tokens/day, 14,400 requests/day per model, no credit card -- verify current limit. |
 
-Provider selection prefers Atria, then OpenRouter, then Anthropic/Gemini/Cerebras/Groq,
+Provider selection prefers GLM, then Atria, then OpenRouter, then Anthropic/Gemini/Cerebras/Groq,
 according to the role routing in `bot/llm.py`.
 
 ## Local and GitHub Metadata

@@ -1,5 +1,5 @@
 import { ageLabel } from './format';
-import { atriaState } from './engine';
+import { engineState } from './engine';
 import type { CodeTechOpportunity, Status } from '../types/status';
 
 export type Tone = 'good' | 'warn' | 'bad' | 'info' | 'neutral';
@@ -78,9 +78,9 @@ export function buildIssues(status: Status): Issue[] {
 	for (const error of status.errors || []) {
 		issues.push({ tone: 'bad', label: 'error', title: 'Cycle error', detail: error, section: 'health' });
 	}
-	const atria = atriaState(status);
-	if (atria.tone === 'warn') {
-		issues.push({ tone: 'warn', label: 'engine', title: atria.label, detail: atria.detail, section: 'engine' });
+	const engine = engineState(status);
+	if (engine.tone === 'warn') {
+		issues.push({ tone: 'warn', label: 'engine', title: engine.label, detail: engine.detail, section: 'engine' });
 	}
 	const actions = status.last_earning?.actions || [];
 	for (const action of actions.filter(isFailure).slice(0, 3)) {

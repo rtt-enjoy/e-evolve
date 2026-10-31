@@ -26,6 +26,7 @@ jobs:
 
     env:
       # ── LLM keys (add at least one) ─────────────────────────────────────
+      GLM_API_KEY:              ${{ secrets.GLM_API_KEY }}
       ATRIA_API_KEY:            ${{ secrets.ATRIA_API_KEY }}
       OPENROUTER_API_KEY:       ${{ secrets.OPENROUTER_API_KEY }}
       ANTHROPIC_API_KEY:        ${{ secrets.ANTHROPIC_API_KEY }}

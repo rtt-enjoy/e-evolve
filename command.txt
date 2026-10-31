@@ -1,2 +1,2 @@
-
 # 2026-10-26: touch to start the hourly chain (see evolve.yml chain job)
+# 2026-10-31: touch to run a cycle with GLM_API_KEY as the main engine

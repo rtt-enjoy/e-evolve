@@ -1,7 +1,7 @@
 import { Bot, ExternalLink, FileText, GitBranch } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Bullets, Card, Disclosure, Empty, KeyValue, Pill, SectionHead, Subhead, Tile } from '../components/ui';
-import { atriaState } from '../utils/engine';
+import { engineState } from '../utils/engine';
 import { featureLabel, formatDate, money } from '../utils/format';
 import { rejectLabel } from '../utils/dashboard';
 import type { Status } from '../types/status';
@@ -16,10 +16,11 @@ export default function EngineSection({ status }: { status: Status }) {
 	const repo = status.github_repo && /^[\w.-]+\/[\w.-]+$/.test(status.github_repo) ? status.github_repo : null;
 	const compareUrl = repo && branch && /^[\w./-]+$/.test(branch) ? `https://github.com/${repo}/compare/main...${branch}` : null;
 	const evidence = Array.isArray(evolution.evidence) ? evolution.evidence : evolution.evidence ? [evolution.evidence] : [];
-	// Atria is the main engine. Its tile reports what the last cycle observed
-	// (key set, calls answered, fallback reason), not the routing preference.
-	const atria = atriaState(status);
-	const calls = Object.entries(atria.calls);
+	// GLM is the main engine (Atria behind it, then OpenRouter). Its tile
+	// reports what the last cycle observed (key set, calls answered, fallback
+	// reason), not the routing preference.
+	const engine = engineState(status);
+	const calls = Object.entries(engine.calls);
 	const totalCalls = calls.reduce((sum, [, n]) => sum + n, 0);
 
 	return (
@@ -30,12 +31,12 @@ export default function EngineSection({ status }: { status: Status }) {
 			/>
 
 			<div className="tile-row">
-				<Tile label="Main engine" value={atria.model} detail={atria.detail} tone={atria.tone} icon={<Bot size={15} />} />
+				<Tile label="Main engine" value={engine.model} detail={engine.detail} tone={engine.tone} icon={<Bot size={15} />} />
 				<Tile
 					label="Served last cycle"
-					value={atria.live === null ? '—' : atria.serving}
+					value={engine.live === null ? '—' : engine.serving}
 					detail={calls.length ? calls.map(([provider, n]) => `${provider} ${n}`).join(' · ') : 'no calls recorded'}
-					tone={atria.tone}
+					tone={engine.tone}
 				/>
 				<Tile label="LLM calls" value={String(totalCalls)} detail="responses returned last cycle" tone="neutral" />
 				<Tile
@@ -58,15 +59,18 @@ export default function EngineSection({ status }: { status: Status }) {
 									<strong>{featureLabel(role)}</strong>
 									<em>{workflow.serving || workflow.provider || 'unknown provider'}</em>
 								</div>
-								{/* `primary_active` only says Atria was not latched off; when it
-								    answered none of the cycle's calls the fallback did the work. */}
-								<Pill tone={!workflow.active || workflow.primary_active === false || (workflow.provider === 'atria' && atria.tone === 'warn') ? 'warn' : 'good'}>
-									{!workflow.active ? 'idle' : workflow.primary_active === false || (workflow.provider === 'atria' && atria.tone === 'warn') ? 'fallback' : 'active'}
+								{/* `primary_active` only says the main engine was not latched off;
+								    when it answered none of the cycle's calls the fallback did the work. */}
+								<Pill tone={!workflow.active || workflow.primary_active === false || (workflow.provider === engine.provider && engine.tone === 'warn') ? 'warn' : 'good'}>
+									{!workflow.active ? 'idle' : workflow.primary_active === false || (workflow.provider === engine.provider && engine.tone === 'warn') ? 'fallback' : 'active'}
 								</Pill>
 							</div>
 							<code className="route-model">{workflow.model || 'no model configured'}</code>
 							{workflow.fallback_model ? (
 								<span className="route-secret">fallback → {workflow.fallback_provider}: {workflow.fallback_model}</span>
+							) : null}
+							{workflow.last_resort_model ? (
+								<span className="route-secret">then → {workflow.last_resort_provider}: {workflow.last_resort_model}</span>
 							) : null}
 							<p className="prose">{workflow.purpose || 'No purpose recorded.'}</p>
 							{workflow.secret ? <span className="route-secret">{workflow.secret}</span> : null}
@@ -140,14 +144,25 @@ export default function EngineSection({ status }: { status: Status }) {
 				</div>
 
 				<div className="stack">
-					<Card title="Atria" hint="The main engine, as the last cycle saw it.">
+					<Card title={engine.name} hint="The main engine, as the last cycle saw it.">
 						<KeyValue
 							rows={[
-								['Status', <Pill tone={atria.tone}>{atria.label}</Pill>],
-								['ATRIA_API_KEY', atria.keySet === null ? 'not reported' : atria.keySet ? 'set' : 'not set'],
-								['Model', atria.model],
+								['Status', <Pill tone={engine.tone}>{engine.label}</Pill>],
+								[engine.secret, engine.keySet === null ? 'not reported' : engine.keySet ? 'set' : 'not set'],
+								['Model', engine.model],
+								...(engine.endpoint ? [['Endpoint', engine.endpoint] as [string, ReactNode]] : []),
 								['Calls answered', calls.length ? calls.map(([provider, n]) => `${provider}: ${n}`).join(', ') : 'none recorded'],
-								['Fallback reason', atria.reason || '—'],
+								['Fallback reason', engine.reason || '—'],
+								...(engine.fallback
+									? [[
+										`Fallback: ${engine.fallback.name}`,
+										engine.fallback.keySet === false
+											? 'key not set'
+											: engine.fallback.live === false
+												? engine.fallback.reason || 'off this cycle'
+												: `${engine.fallback.model} ready`,
+									] as [string, ReactNode]]
+									: []),
 							]}
 						/>
 					</Card>

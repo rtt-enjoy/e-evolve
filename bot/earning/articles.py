@@ -1033,8 +1033,16 @@ def _title_problems(title: str, cfg: dict | None = None) -> list[str]:
 
 	for pattern, label in _TITLE_BANNED:
 		if pattern == "__SHOUTING__":
-			if _shouted_words(text):
-				problems.append(f"title has {label}")
+			shouted = _shouted_words(text)
+			if shouted:
+				# Name the words. The revision prompt only ever received the
+				# generic "title has ALL-CAPS word" -- a claim with no subject --
+				# so the model re-scanned its own title for the offender and
+				# reliably settled on an acronym, leaving the real one (NOTE,
+				# URGENT) untouched because it reads those as legitimate emphasis.
+				problems.append(
+					f"title has ALL-CAPS word(s): {', '.join(shouted)}"
+				)
 			continue
 		if re.search(pattern, text, re.IGNORECASE):
 			problems.append(f"title has {label}")
@@ -1049,7 +1057,12 @@ def _title_problems(title: str, cfg: dict | None = None) -> list[str]:
 	if ":" in text:
 		head, _, tail = text.partition(":")
 		if len(head.split()) >= 3 and len(tail.split()) >= 4:
-			problems.append("title padded with a colon subtitle; pick the sharper half")
+			# Show the two halves. "pick the sharper half" is an instruction the
+			# model cannot act on without knowing which half is the padding.
+			problems.append(
+				f"title padded with a colon subtitle: keep '{head.strip()}', "
+				f"drop '{tail.strip()}'"
+			)
 
 	return problems
 

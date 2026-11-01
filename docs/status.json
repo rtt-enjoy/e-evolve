@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-01T03:12:06.771114+00:00",
-  "total_runs": 2189,
+  "last_run": "2026-11-01T04:12:18.306452+00:00",
+  "total_runs": 2190,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,68 +36,53 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete examples of banned ALL-CAPS words to the article draft _SYSTEM prompt to reduce weak_title rejections.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "Clarify the ALL-CAPS ban list in the _SYSTEM prompt to prevent weak_title rejections caused by ambiguous wording."
-      }
-    ],
+    "summary": "No prompt change: the article draft _SYSTEM already explicitly bans ALL-CAPS words and colon subtitles, and the weak_title rejections are caused by the fallback LLM (atria) not following existing rules, not by unclear rules. The primary LLM (glm-5.3-flash) is disabled due to quota_spent, so further prompt edits are unlikely to reduce rejects.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Add concrete examples of banned ALL-CAPS words",
-        "description": "Clarify the ALL-CAPS ban list to reduce weak_title rejections",
-        "owner_action": "Edit bot/earning/articles.py _SYSTEM prompt to include example phrase",
+        "title": "Refill GLM_API_KEY quota to restore primary LLM",
+        "description": "The primary LLM (glm-5.3-flash) is disabled because its quota was spent, and the fallback (atria) is producing weak titles that fail the existing gates. Restoring the primary should reduce weak_title rejections.",
+        "owner_action": "Refill the GLM_API_KEY quota at the provider dashboard.",
         "secret_needed": null,
         "how_to": [
-          "Locate the _SYSTEM string in bot/earning/articles.py",
-          "Replace the phrase 'and any ALL-CAPS word.' with 'and any ALL-CAPS word (e.g., IMPORTANT, NOTE) that is not a recognized acronym (PDF, JSON, API).'",
-          "Save the file and run the next cycle to verify reduced weak_title rejections"
+          "Log into the GLM provider console.",
+          "Add credits or enable a free tier refill for the API key used by this project.",
+          "No code change needed; the next cycle will detect the key as live and switch back to the primary model."
         ]
       }
     ],
-    "direction": "checklist step 4 \u2014 reach into a live receive path (Principle 5, step 2)",
+    "direction": "checklist step 4 \u2014 reach into a live receive path (Principle 5, step 2); PROMPT FOCUS: weak_title",
     "evidence": [
-      "article_rejects.counts weak_title=13 (lifetime tally)",
-      "article_rejects recent: weak_title lost 4 drafts in last 14 days",
-      "gate findings: 'title has ALL-CAPS word' x4"
+      "article_rejects.counts weak_title=13 (lifetime), 5 in last 14 days",
+      "gate findings: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle; pick the sharper half' x1",
+      "llm_engine: serving=atria, live=False, disabled_reason=quota_spent",
+      "article draft _SYSTEM already states: 'and any ALL-CAPS word' and 'No colon-subtitle padding. ... Pick the sharper half and stop.'"
     ],
     "money_path": "reach-only",
-    "verify": "weak_title reject count in the 14-day window should decrease from 4; title gate should pass more drafts in subsequent cycles",
+    "verify": "If the owner refills the GLM quota and the primary model returns, weak_title rejects should drop without any prompt change. If not, a prompt edit may be needed.",
     "error": null,
-    "branch": "evolve/1.41.1-20261101-031728",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 12,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (12 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add concrete examples of banned ALL-CAPS words",
-      "description": "Clarify the ALL-CAPS ban list to reduce weak_title rejections",
-      "owner_action": "Edit bot/earning/articles.py _SYSTEM prompt to include example phrase",
+      "title": "Refill GLM_API_KEY quota to restore primary LLM",
+      "description": "The primary LLM (glm-5.3-flash) is disabled because its quota was spent, and the fallback (atria) is producing weak titles that fail the existing gates. Restoring the primary should reduce weak_title rejections.",
+      "owner_action": "Refill the GLM_API_KEY quota at the provider dashboard.",
       "secret_needed": null,
       "how_to": [
-        "Locate the _SYSTEM string in bot/earning/articles.py",
-        "Replace the phrase 'and any ALL-CAPS word.' with 'and any ALL-CAPS word (e.g., IMPORTANT, NOTE) that is not a recognized acronym (PDF, JSON, API).'",
-        "Save the file and run the next cycle to verify reduced weak_title rejections"
+        "Log into the GLM provider console.",
+        "Add credits or enable a free tier refill for the API key used by this project.",
+        "No code change needed; the next cycle will detect the key as live and switch back to the primary model."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 821,
+  "last_cycle_seconds": 407,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1129,7 +1114,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-01T03:12:07.477574+00:00",
+    "checked_at": "2026-11-01T04:12:19.040329+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1442,8 +1427,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261101-031728",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 42,
     "total_views": 5399,
@@ -1730,7 +1715,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-01T03:25:46.984105+00:00",
+    "last_run": "2026-11-01T04:19:04.735860+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1740,32 +1725,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-01T03:25:47.207647+00:00",
+    "last_run": "2026-11-01T04:19:04.930678+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4931682,
-        "at": "2026-10-31T17:59:53.237581+00:00",
-        "ok": true
-      },
-      {
         "id": 4681657,
-        "at": "2026-10-31T19:09:54.285823+00:00",
-        "ok": true
-      },
-      {
-        "id": 4925166,
-        "at": "2026-10-31T19:09:54.285823+00:00",
-        "ok": true
-      },
-      {
-        "id": 4908316,
-        "at": "2026-10-31T19:09:54.285823+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
         "at": "2026-10-31T19:09:54.285823+00:00",
         "ok": true
       },
@@ -1950,8 +1915,28 @@
         "ok": true
       },
       {
+        "id": 4931682,
+        "at": "2026-11-01T04:19:04.930678+00:00",
+        "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-11-01T04:19:04.930678+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-11-01T04:19:04.930678+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-01T04:19:04.930678+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-01T03:25:47.207647+00:00",
+        "at": "2026-11-01T04:19:04.930678+00:00",
         "ok": true
       }
     ],
@@ -1960,7 +1945,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.4
+    "oldest_check_age_hours": 9.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1980,8 +1965,7 @@
     "serving": "atria",
     "disabled_reason": "quota_spent",
     "calls": {
-      "openrouter": 1,
-      "atria": 1
+      "openrouter": 1
     },
     "fallback": {
       "provider": "atria",

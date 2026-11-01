@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-01T19:11:58.653921+00:00",
-  "total_runs": 2200,
+  "last_run": "2026-11-01T19:42:07.155547+00:00",
+  "total_runs": 2201,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,25 +36,36 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a concrete banned ALL-CAPS example (IMPORTANT, NOTE) and a before/after colon-subtitle example to the article draft _SYSTEM prompt, so the LLM can distinguish banned shouting from allowed acronyms and stop padding titles with weak subtitles.",
+    "summary": "Add a concrete banned ALL-CAPS example (URGENT) and a concrete colon\u2011subtitle rule to the _SYSTEM prompt, reducing weak_title rejections by giving the model clear, actionable guidance.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "The _SYSTEM prompt's TITLE rules ban 'any ALL-CAPS word' but don't give a concrete non-acronym example, so the LLM keeps using words like IMPORTANT/NOTE in ALL-CAPS. It also bans colon-subtitle padding without a before/after example. Adding both reduces weak_title rejections without touching gates."
+        "reason": "Provide a concrete banned ALL-CAPS word to eliminate ambiguity in the title ban rule."
       }
     ],
-    "suggestions": [],
-    "direction": "Reach into a live receive path (Principle 5, step 3): publish more articles in shapes readers prefer",
+    "suggestions": [
+      {
+        "title": "Monitor weak_title rejections",
+        "description": "Track article_rejects.counts.weak_title in the next cycle; if it stays \u22655, refine the prompt further.",
+        "owner_action": "Review the weak_title reject count in status.json after the merged cycle runs",
+        "secret_needed": null,
+        "how_to": [
+          "Open status.json.",
+          "Read article_rejects.counts.weak_title.",
+          "If still \u22655, consider a different edit to _revise_title."
+        ]
+      }
+    ],
+    "direction": "Principle 5, step 3 \u2013 reach into a live receive path by publishing more articles in shapes readers measurably prefer",
     "evidence": [
       "article_rejects.counts.weak_title = 5 (last 14 days)",
       "gate findings: 'title has ALL-CAPS word' x4",
-      "gate findings: 'title padded with a colon subtitle; pick the sharper half' x1",
-      "preferred_archetypes() = ['problem-workaround'] \u2014 reach work must ship more posts"
+      "gate findings: 'title padded with a colon subtitle; pick the sharper half' x1"
     ],
     "money_path": "reach-only",
-    "verify": "After the merged cycle runs, check status.json article_rejects.counts.weak_title; it should be <5 (ideally 0). Also verify the new examples appear in the prompt by inspecting the diff.",
+    "verify": "After merging, check status.json article_rejects.counts.weak_title; it should drop below 5, and inspect the diff to confirm the new examples appear in the prompt.",
     "error": null,
-    "branch": "evolve/1.41.1-20261101-192548",
+    "branch": "evolve/1.41.1-20261101-195555",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -63,19 +74,19 @@
   },
   "suggestions": [
     {
-      "title": "Monitor weak_title rejections after the edit",
-      "description": "Check article_rejects.counts.weak_title in the next cycle; if it stays at or above 5, the revision prompt still needs work.",
+      "title": "Monitor weak_title rejections",
+      "description": "Track article_rejects.counts.weak_title in the next cycle; if it stays \u22655, refine the prompt further.",
       "owner_action": "Review the weak_title reject count in status.json after the merged cycle runs",
       "secret_needed": null,
       "how_to": [
         "Open status.json.",
         "Read article_rejects.counts.weak_title.",
-        "If still >= 5, consider a different edit to _revise_title."
+        "If still \u22655, consider a different edit to _revise_title."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 831,
+  "last_cycle_seconds": 830,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1231,7 +1242,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-01T19:11:59.392309+00:00",
+    "checked_at": "2026-11-01T19:42:07.508184+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1556,7 +1567,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261101-192548",
+  "last_evolution_branch": "evolve/1.41.1-20261101-195555",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 42,
@@ -1844,7 +1855,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-01T19:25:48.741513+00:00",
+    "last_run": "2026-11-01T19:55:55.992957+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1854,32 +1865,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-01T19:25:49.245833+00:00",
+    "last_run": "2026-11-01T19:55:56.292658+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4931682,
-        "at": "2026-11-01T04:19:04.930678+00:00",
-        "ok": true
-      },
-      {
         "id": 4681657,
-        "at": "2026-11-01T05:20:24.000928+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-11-01T05:20:24.000928+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-11-01T05:20:24.000928+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-11-01T05:20:24.000928+00:00",
         "ok": true
       },
@@ -2064,8 +2055,28 @@
         "ok": true
       },
       {
+        "id": 4931682,
+        "at": "2026-11-01T19:55:56.292658+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-11-01T19:55:56.292658+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-11-01T19:55:56.292658+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-01T19:55:56.292658+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-01T19:25:49.245833+00:00",
+        "at": "2026-11-01T19:55:56.292658+00:00",
         "ok": true
       }
     ],
@@ -2074,7 +2085,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 15.1
+    "oldest_check_age_hours": 14.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

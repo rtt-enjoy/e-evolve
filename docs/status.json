@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-01T22:42:16.531077+00:00",
-  "total_runs": 2204,
+  "last_run": "2026-11-01T23:37:21.574457+00:00",
+  "total_runs": 2205,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,50 +36,28 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Revise the _SYSTEM prompt's title rules to make the ALL-CAPS ban and colon-subtitle prohibition more concrete, reducing LLM-produced titles that trigger these gates and enabling more problem-workaround articles to publish with the live footer.",
+    "summary": "Sharpen the ALL-CAPS title ban in the system prompt by clarifying it applies to non-acronym all-caps words only, with recognized acronyms exempt per the Title Case rule; this makes the rule consistent with the code's _shouted_words check and should reduce weak_title rejections.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "Make the ALL-CAPS ban concrete by adding examples of non-acronym words that trigger the gate"
+        "reason": "Sharpen the ALL-CAPS title ban to make it consistent with the code's _shouted_words check, reducing weak_title rejections"
       }
     ],
-    "suggestions": [
-      {
-        "title": "Monitor weak_title rejections in the next cycle",
-        "description": "Track article_rejects.counts.weak_title after the merged cycle runs",
-        "owner_action": "Review the weak_title reject count in status.json after the merged cycle runs",
-        "secret_needed": null,
-        "how_to": [
-          "Open status.json",
-          "Read article_rejects.counts.weak_title",
-          "If still >=5, consider a different prompt edit"
-        ]
-      }
-    ],
-    "direction": "Principle 5, step 2 \u2014 reduce draft loss at the title gate so more problem-workaround articles reach readers with the live footer.",
+    "suggestions": [],
+    "direction": "reach into a live receive path (doctrine Principle 5, step 3) - improving title quality to increase publish rate into the live receive path",
     "evidence": [
-      "article_rejects.counts.weak_title = 14 (5 in last 14 days)",
-      "Gate findings: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle; pick the sharper half' x1",
-      "preferred_archetypes() = ['problem-workaround'] (avg 471.2 engagement)"
+      "article_rejects.counts weak_title=14 total",
+      "gate findings: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle; pick the sharper half' x1",
+      "PROMPT FOCUS: weak_title lost 5 draft(s) in last 14 days"
     ],
-    "money_path": "reach-only \u2014 fixing weak_title lets more problem-workaround articles publish, putting the live footer in front of more readers",
-    "verify": "article_rejects.counts.weak_title should fall below 5 in the next 14-day window; article_daily.published should hold at 1/day",
+    "money_path": "reach-only (improves article publish rate, which increases potential receipts to the live wallet address; no direct receive path change)",
+    "verify": "weak_title reject count in article_rejects.counts should decrease from 14 in the next cycle; specifically the 'title has ALL-CAPS word' findings should drop toward 0-2",
     "error": null,
-    "branch": "evolve/1.41.1-20261101-224944",
+    "branch": "evolve/1.41.1-20261101-235234",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Your Mention Counter Thinks Hate Is Love",
-        "url": "https://dev.to/robust_true_try/your-mention-counter-thinks-hate-is-love-1kh3",
-        "estimated_usd": 0.0,
-        "source_url": "https://hackerbooks.org",
-        "source_title": "Show HN: HackerBooks \u2013 HackerTube, but for books mentioned on HN"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -96,7 +74,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 714,
+  "last_cycle_seconds": 914,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1209,7 +1187,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-01T22:42:17.201422+00:00",
+    "checked_at": "2026-11-01T23:37:21.965108+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1534,7 +1512,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261101-224944",
+  "last_evolution_branch": "evolve/1.41.1-20261101-235234",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 42,
@@ -1827,7 +1805,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-01T22:54:09.904271+00:00",
+    "last_run": "2026-11-01T23:52:34.687569+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1837,43 +1815,18 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-01T22:54:10.211336+00:00",
+    "last_run": "2026-11-01T23:52:34.901499+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-11-01T07:53:26.812837+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-11-01T07:53:26.812837+00:00",
-        "ok": true
-      },
       {
         "id": 4641536,
         "at": "2026-11-01T08:39:52.885141+00:00",
         "ok": true
       },
       {
-        "id": 4820198,
-        "at": "2026-11-01T08:39:52.885141+00:00",
-        "ok": true
-      },
-      {
         "id": 4671278,
         "at": "2026-11-01T08:39:52.885141+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-11-01T08:39:52.885141+00:00",
-        "ok": true
-      },
-      {
-        "id": 4943485,
-        "at": "2026-11-01T15:31:01.904053+00:00",
         "ok": true
       },
       {
@@ -2047,22 +2000,42 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4959304,
         "at": "2026-11-01T22:54:10.211336+00:00",
         "ok": true
       },
       {
-        "id": 4959304,
-        "at": "2026-11-01T22:54:10.211336+00:00",
+        "id": 4720062,
+        "at": "2026-11-01T23:52:34.901499+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-01T23:52:34.901499+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-11-01T23:52:34.901499+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-11-01T23:52:34.901499+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-01T23:52:34.901499+00:00",
         "ok": true
       }
     ],
-    "published_total": 43,
-    "covered": 43,
+    "published_total": 42,
+    "covered": 42,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 15.0
+    "oldest_check_age_hours": 15.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2082,8 +2055,7 @@
     "serving": "atria",
     "disabled_reason": "quota_spent",
     "calls": {
-      "openrouter": 1,
-      "atria": 1
+      "openrouter": 1
     },
     "fallback": {
       "provider": "atria",

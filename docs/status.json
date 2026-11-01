@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-01T05:12:01.163550+00:00",
-  "total_runs": 2191,
+  "last_run": "2026-11-01T06:12:07.439471+00:00",
+  "total_runs": 2192,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,30 +36,23 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add one concrete example of colon-subtitle padding prohibition to the article draft _SYSTEM prompt, addressing the gate finding 'title padded with a colon subtitle; pick the sharper half' that loses 1 of 5 weak_title drafts",
+    "summary": "Add a concrete title example to avoid colon\u2011subtitle padding, showing a sharper alternative to reduce weak_title rejections",
     "changes_applied": [],
     "suggestions": [],
-    "direction": "Principle 5 step 3: publish more articles in shapes readers measurably prefer",
+    "direction": "Principle 5 step 3 (publish more articles in shapes readers measurably prefer)",
     "evidence": [
-      "article_rejects counts weak_title=14",
-      "PROMPT FOCUS weak_title lost 5 draft(s) last 14 days",
-      "gate_findings 'title padded with a colon subtitle; pick the sharper half' x1"
+      "article_rejects.counts weak_title=14",
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "article_interest.preferred_archetypes = ['problem-workaround']"
     ],
     "money_path": "reach-only",
-    "verify": "weak_title reject count in next 14-day window should decrease from 5; article_rejects.counts['weak_title'] should fall",
+    "verify": "weak_title reject count should drop from 5 to \u22644 in the next 14\u2011day window",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -76,7 +69,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 503,
+  "last_cycle_seconds": 701,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1108,7 +1101,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-01T05:12:01.579620+00:00",
+    "checked_at": "2026-11-01T06:12:08.025606+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1709,7 +1702,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-01T05:20:23.627396+00:00",
+    "last_run": "2026-11-01T06:23:47.840770+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1719,32 +1712,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-01T05:20:24.000928+00:00",
+    "last_run": "2026-11-01T06:23:48.197843+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4780783,
-        "at": "2026-10-31T19:50:51.152452+00:00",
-        "ok": true
-      },
-      {
         "id": 4602729,
-        "at": "2026-10-31T20:55:21.846111+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-10-31T20:55:21.846111+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820684,
-        "at": "2026-10-31T20:55:21.846111+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-10-31T20:55:21.846111+00:00",
         "ok": true
       },
@@ -1929,8 +1902,28 @@
         "ok": true
       },
       {
+        "id": 4780783,
+        "at": "2026-11-01T06:23:48.197843+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-11-01T06:23:48.197843+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-11-01T06:23:48.197843+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-01T06:23:48.197843+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-01T05:20:24.000928+00:00",
+        "at": "2026-11-01T06:23:48.197843+00:00",
         "ok": true
       }
     ],

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-01T07:34:33.358667+00:00",
-  "total_runs": 2194,
+  "last_run": "2026-11-01T08:34:40.200270+00:00",
+  "total_runs": 2195,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,26 +36,25 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Clarify the ALL-CAPS rule in the title rewrite prompt: replace 'no ALL-CAPS' with 'no fully uppercase words (write them in Title Case instead)' so the rewrite step has an actionable fix for the most common weak_title rejection",
+    "summary": "Add a concrete banned ALL-CAPS example to the article draft _SYSTEM prompt to reduce weak_title rejections.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "The title rewrite prompt (_revise_title) says 'no ALL-CAPS' which can be read as banning the phrase rather than the formatting rule. Replacing it with 'no fully uppercase words (write them in Title Case instead)' gives the LLM an explicit, actionable fix when the gate reports an ALL-CAPS violation. This targets the rewrite prompt specifically \u2014 all prior proposals in the ledger edited the _SYSTEM prompt, which the LLM already has. The rewrite prompt is the one actually driving the fix attempt when a title is rejected, and it currently names the rule without saying how to correct it."
+        "reason": "Add a concrete banned ALL-CAPS example to the TITLE rules in the _SYSTEM prompt, clarifying that words like 'IMPORTANT' and 'NOTE' are prohibited, which should reduce weak_title rejections caused by ALL-CAPS titles."
       }
     ],
     "suggestions": [],
-    "direction": "Principle 5 step 3 (publish more articles in shapes readers measurably prefer)",
+    "direction": "Reach into a live receive path (Principle 5, step 3): publish more articles, in the shapes readers measurably prefer",
     "evidence": [
-      "article_rejects.counts weak_title=14 (lifetime), 5 in the last 14 days",
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "gate findings behind weak_title in the last 14 days: 'title has ALL-CAPS word' x4; 'title padded with a colon subtitle; pick the sharper half' x1",
-      "PROMPT FOCUS: weak_title lost 5 draft(s); the prompts that produce it: article draft _SYSTEM + title rewrite _revise_title()"
+      "article_rejects.counts.weak_title=5",
+      "article_rejects.last='weak_title'",
+      "article_rejects.recent entries: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle; pick the sharper half' x1"
     ],
     "money_path": "reach-only",
-    "verify": "weak_title reject count should drop from 5 (last 14 days) to \u22643 in the next 14-day window; check article_rejects.counts.weak_title and the recent array for 'ALL-CAPS' entries",
+    "verify": "After the edit, run the cycle and verify that article_rejects.counts.weak_title drops below 5 (ideally to 0) in status.json.",
     "error": null,
-    "branch": "evolve/1.41.2-20261101-075326",
-    "proposed_version": "1.41.2"
+    "branch": "evolve/1.41.3-20261101-083952",
+    "proposed_version": "1.41.3"
   },
   "last_earning": {
     "actions": [],
@@ -75,7 +74,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1134,
+  "last_cycle_seconds": 313,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1107,7 +1106,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-01T07:34:33.982755+00:00",
+    "checked_at": "2026-11-01T08:34:40.781249+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1432,7 +1431,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.2-20261101-075326",
+  "last_evolution_branch": "evolve/1.41.3-20261101-083952",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 42,
@@ -1720,7 +1719,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-01T07:53:26.512985+00:00",
+    "last_run": "2026-11-01T08:39:52.558089+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1730,32 +1729,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-01T07:53:26.812837+00:00",
+    "last_run": "2026-11-01T08:39:52.885141+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4641536,
-        "at": "2026-10-31T22:53:34.238157+00:00",
-        "ok": true
-      },
-      {
         "id": 4943485,
-        "at": "2026-11-01T00:00:34.231330+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-11-01T00:00:34.231330+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-11-01T00:00:34.231330+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
         "at": "2026-11-01T00:00:34.231330+00:00",
         "ok": true
       },
@@ -1940,8 +1919,28 @@
         "ok": true
       },
       {
+        "id": 4641536,
+        "at": "2026-11-01T08:39:52.885141+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-11-01T08:39:52.885141+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-11-01T08:39:52.885141+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-11-01T08:39:52.885141+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-01T07:53:26.812837+00:00",
+        "at": "2026-11-01T08:39:52.885141+00:00",
         "ok": true
       }
     ],
@@ -1950,7 +1949,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.0
+    "oldest_check_age_hours": 8.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

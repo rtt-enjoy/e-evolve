@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-01T06:12:07.439471+00:00",
-  "total_runs": 2192,
+  "last_run": "2026-11-01T07:12:06.923982+00:00",
+  "total_runs": 2193,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,40 +36,67 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add a concrete title example to avoid colon\u2011subtitle padding, showing a sharper alternative to reduce weak_title rejections",
-    "changes_applied": [],
-    "suggestions": [],
+    "summary": "Add a concrete example (URGENT) to the banned ALL-CAPS word rule in the article prompt to help the LLM avoid weak titles and reduce weak_title rejections.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "Add a concrete example of a banned ALL-CAPS word to the prompt to reduce weak_title rejections"
+      }
+    ],
+    "suggestions": [
+      {
+        "title": "Monitor weak_title rejections",
+        "description": "Review the weekly weak_title reject count and, if still high, add additional concrete banned ALL-CAPS examples to the prompt.",
+        "owner_action": "Add more concrete banned ALL-CAPS examples to the prompt as needed",
+        "secret_needed": null,
+        "how_to": [
+          "Check the current weak_title reject count in status.json.",
+          "If the count remains above the target, edit the _SYSTEM prompt to include another concrete banned ALL-CAPS word example.",
+          "Re\u2011run the cycle and verify the reject count drops."
+        ]
+      }
+    ],
     "direction": "Principle 5 step 3 (publish more articles in shapes readers measurably prefer)",
     "evidence": [
       "article_rejects.counts weak_title=14",
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "article_interest.preferred_archetypes = ['problem-workaround']"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'"
     ],
     "money_path": "reach-only",
-    "verify": "weak_title reject count should drop from 5 to \u22644 in the next 14\u2011day window",
+    "verify": "weak_title reject count should drop from 14 to \u226410 in the next 14\u2011day window",
     "error": null,
-    "branch": null,
+    "branch": "evolve/1.41.1-20261101-071820",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "mrr-ideas",
+        "success": true,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
+        "estimated_usd": 0.0,
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "status.json#mrr_ideas"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Refill GLM_API_KEY quota to restore primary LLM",
-      "description": "The primary LLM (glm-5.3-flash) is disabled because its quota was spent, and the fallback (atria) is producing weak titles that fail the existing gates. Restoring the primary should reduce weak_title rejections.",
-      "owner_action": "Refill the GLM_API_KEY quota at the provider dashboard.",
+      "title": "Monitor weak_title rejections",
+      "description": "Review the weekly weak_title reject count and, if still high, add additional concrete banned ALL-CAPS examples to the prompt.",
+      "owner_action": "Add more concrete banned ALL-CAPS examples to the prompt as needed",
       "secret_needed": null,
       "how_to": [
-        "Log into the GLM provider console.",
-        "Add credits or enable a free tier refill for the API key used by this project.",
-        "No code change needed; the next cycle will detect the key as live and switch back to the primary model."
+        "Check the current weak_title reject count in status.json.",
+        "If the count remains above the target, edit the _SYSTEM prompt to include another concrete banned ALL-CAPS word example.",
+        "Re\u2011run the cycle and verify the reject count drops."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 701,
+  "last_cycle_seconds": 699,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1101,7 +1128,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-01T06:12:08.025606+00:00",
+    "checked_at": "2026-11-01T07:12:07.501932+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1265,7 +1292,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-10-30T07:16:46.862248+00:00",
+    "last_refresh_at": "2026-11-01T07:18:20.810201+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -1274,21 +1301,33 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "By publishing targeted dev.to articles that solve a concrete problem for React side\u2011project developers and soliciting voluntary tips via a crypto wallet, the owner can build a paid newsletter without any client acquisition, payment processor, or inbound server, achieving recurring revenue once a modest audience tips regularly.",
+    "summary": "The only recurring-revenue model that fits a zero\u2011cost, research\u2011first, publish\u2011to\u2011dev.to stack is a paid newsletter that delivers a focused, weekly deep\u2011dive on a narrow technical problem; the owner writes the articles, publishes them on dev.to to attract the exact buyers, and manually sets up a Gumroad subscription product to collect a modest monthly fee from each subscriber.",
     "ranked_ideas": [
       {
-        "name": "Paid Newsletter (tip-based)",
-        "why_this_stack_fits": "Zero\u2011cost research and publishing on dev.to can attract a niche audience without outreach, and tips via a crypto wallet avoid payment\u2011processor requirements.",
-        "narrow_niche": "React developers building small side projects",
-        "first_proof_artifact": "Three dev.to articles that demonstrate a concrete solution and include a tip request for a premium newsletter",
-        "who_pays": "React developers in the niche who find the articles valuable",
-        "monthly_price_usd": "10",
+        "name": "Paid newsletter",
+        "why_this_stack_fits": "The bot can research, draft, and publish articles to dev.to; each article serves as both content and a funnel to a manually created Gumroad subscription.",
+        "narrow_niche": "Junior backend developers who struggle with writing reliable integration tests for Go microservices",
+        "first_proof_artifact": "A 4\u2011week email mini\u2011course (one issue per week) that walks through a real\u2011world Go integration\u2011test pattern with code snippets and a reusable test harness",
+        "who_pays": "Junior backend developers (0\u20112 years experience) who need a concrete, copy\u2011pasteable testing pattern for their day\u2011to\u2011day work",
+        "monthly_price_usd": "12",
         "runway_to_first_dollar": "4-8 weeks",
-        "owner_must_do_by_hand": "Write and publish three dev.to articles targeting the niche, each ending with a tip prompt, and create a Tron wallet address for voluntary payments"
+        "owner_must_do_by_hand": "Open a Gumroad account, complete government\u2011ID verification, create a subscription product priced at $12/mo, and manually paste the product link into each dev.to article and the newsletter sign\u2011up page."
       }
     ],
-    "validation_steps": [],
-    "owner_actions": [],
+    "validation_steps": [
+      "Publish a dev.to article titled \"Why Go integration tests fail in CI \u2014 and a pattern that works\" ending with the question: \"What\u2019s the biggest blocker you hit when testing external services?\"",
+      "Reply to every comment on that article by hand, asking the commenter to describe their current test setup in a few sentences.",
+      "Join the existing dev.to \"Go\" and \"Testing\" tags, read the top 20 recent posts, and note the recurring pain points mentioned in the discussions.",
+      "Create a short Google Form (or a simple markdown file in the repo) that captures the respondent\u2019s role, team size, and the specific testing problem; share the link only in the article\u2019s comment thread.",
+      "Collect at least 10 completed responses; use the exact language from those responses to shape the first newsletter issue."
+    ],
+    "owner_actions": [
+      "Research the Go integration\u2011test pain points by reading the last 30 dev.to articles tagged \"Go\" and \"Testing\" and extracting the top three recurring complaints.",
+      "Write and publish the first dev.to article with the validation question, then manually respond to every comment within 24 hours.",
+      "Set up a Gumroad account, complete ID verification, create a $12/mo subscription product, and add the product URL to the article\u2019s call\u2011to\u2011action.",
+      "Draft the first 4\u2011week email mini\u2011course (one issue per week) using the language gathered from the 10 validation responses.",
+      "Schedule the mini\u2011course issues to be sent manually each week (e.g., via Gumroad\u2019s email tool) and track open/click rates to decide whether to continue."
+    ],
     "viable": [
       {
         "name": "Paid newsletter",
@@ -1414,8 +1453,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261101-071820",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 42,
     "total_views": 5399,
@@ -1702,7 +1741,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-01T06:23:47.840770+00:00",
+    "last_run": "2026-11-01T07:23:45.020640+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1712,32 +1751,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-01T06:23:48.197843+00:00",
+    "last_run": "2026-11-01T07:23:45.403314+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4602729,
-        "at": "2026-10-31T20:55:21.846111+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-10-31T21:49:09.971517+00:00",
-        "ok": true
-      },
-      {
         "id": 4720062,
-        "at": "2026-10-31T21:49:09.971517+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
-        "at": "2026-10-31T21:49:09.971517+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-10-31T21:49:09.971517+00:00",
         "ok": true
       },
@@ -1922,8 +1941,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-11-01T07:23:45.403314+00:00",
+        "ok": true
+      },
+      {
+        "id": 4740283,
+        "at": "2026-11-01T07:23:45.403314+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-01T07:23:45.403314+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-01T07:23:45.403314+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-01T06:23:48.197843+00:00",
+        "at": "2026-11-01T07:23:45.403314+00:00",
         "ok": true
       }
     ],
@@ -1932,7 +1971,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.5
+    "oldest_check_age_hours": 9.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -1952,7 +1991,7 @@
     "serving": "atria",
     "disabled_reason": "quota_spent",
     "calls": {
-      "openrouter": 1
+      "openrouter": 2
     },
     "fallback": {
       "provider": "atria",

@@ -141,9 +141,13 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
 - BANNED in titles: exclamation marks, "Ultimate", "Complete Guide",
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
-  and any ALL-CAPS word. These read as spam and suppress clicks here.
+  and any ALL-CAPS word that is not a real acronym. For example: IMPORTANT,
+  NOTE, URGENT, BEST, NEW, FREE — these are shouting, not acronyms. These
+  read as spam and suppress clicks here.
 - No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
   wastes the scannable half of the line. Pick the sharper half and stop.
+  Example: instead of "Docker Builds: Why They Are Slow and How to Fix Them",
+  write "Why Your Docker Build Is Slow" or "Fixing Slow Docker Builds".
 
 TAGS -- tags are how dev.to distributes the post, so treat them as reach, not labels:
 - Exactly 4 tags. Fewer costs you feed placement.

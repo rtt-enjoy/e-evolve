@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-01T17:11:52.162179+00:00",
-  "total_runs": 2198,
+  "last_run": "2026-11-01T18:11:51.635738+00:00",
+  "total_runs": 2199,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -36,37 +36,19 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add concrete fix examples to the _revise_title prompt so the LLM can repair ALL-CAPS and colon-subtitle titles instead of the article being rejected as weak_title",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The _revise_title prompt is the last chance to fix a weak title before the article is rejected. It currently tells the model what is wrong (ALL-CAPS word, colon subtitle) but not how to fix it. Adding concrete before/after examples for the two detected failure modes gives the model a pattern to follow, targeting the 4 ALL-CAPS and 1 colon-subtitle rejections behind the PROMPT FOCUS."
-      }
-    ],
-    "suggestions": [
-      {
-        "title": "Monitor weak_title rejections after the edit",
-        "description": "Check article_rejects.counts.weak_title in the next cycle; if it stays at or above 5, the revision prompt still needs work.",
-        "owner_action": "Review the weak_title reject count in status.json after the merged cycle runs",
-        "secret_needed": null,
-        "how_to": [
-          "Open status.json.",
-          "Read article_rejects.counts.weak_title.",
-          "If still >= 5, consider a different edit to _revise_title."
-        ]
-      }
-    ],
-    "direction": "PROMPT FOCUS: weak_title lost 5 draft(s) - give the title rewrite prompt concrete fix examples",
+    "summary": "Edit the article draft _SYSTEM prompt to add a concrete ALL-CAPS example and clarify the colon subtitle rule, reducing weak_title rejections.",
+    "changes_applied": [],
+    "suggestions": [],
+    "direction": "Reach into a live receive path (Principle 5, step 3): publish more articles in shapes readers prefer",
     "evidence": [
-      "article_rejects.counts.weak_title=14",
-      "article_rejects.last='weak_title'",
-      "weak_title drafts lost in last 14 days = 5",
-      "gate findings: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle; pick the sharper half' x1"
+      "article_rejects.counts.weak_title = 5",
+      "gate findings: 'title has ALL-CAPS word' x4",
+      "gate findings: 'title padded with a colon subtitle; pick the sharper half' x1"
     ],
     "money_path": "reach-only",
-    "verify": "Run the cycle and confirm article_rejects.counts.weak_title stops growing and the last-14-days weak_title count falls below 5",
+    "verify": "After the merged cycle runs, check status.json article_rejects.counts.weak_title; it should be <5 (ideally 0). Also verify that the new example appears in the prompt.",
     "error": null,
-    "branch": "evolve/1.41.1-20261101-172829",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -87,7 +69,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 998,
+  "last_cycle_seconds": 818,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1243,7 +1225,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-01T17:11:52.716200+00:00",
+    "checked_at": "2026-11-01T18:11:52.347227+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1568,8 +1550,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261101-172829",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 42,
     "total_views": 5399,
@@ -1856,7 +1838,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-01T17:28:29.826276+00:00",
+    "last_run": "2026-11-01T18:25:28.889660+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1866,32 +1848,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-01T17:28:30.102542+00:00",
+    "last_run": "2026-11-01T18:25:29.153489+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4943931,
-        "at": "2026-11-01T02:35:11.116640+00:00",
-        "ok": true
-      },
-      {
         "id": 4937139,
-        "at": "2026-11-01T03:25:47.207647+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-11-01T03:25:47.207647+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-01T03:25:47.207647+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
         "at": "2026-11-01T03:25:47.207647+00:00",
         "ok": true
       },
@@ -2076,8 +2038,28 @@
         "ok": true
       },
       {
+        "id": 4943931,
+        "at": "2026-11-01T18:25:29.153489+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-11-01T18:25:29.153489+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-11-01T18:25:29.153489+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-01T18:25:29.153489+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-01T17:28:30.102542+00:00",
+        "at": "2026-11-01T18:25:29.153489+00:00",
         "ok": true
       }
     ],
@@ -2086,7 +2068,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 14.9
+    "oldest_check_age_hours": 15.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-02T04:37:35.804779+00:00",
-  "total_runs": 2210,
+  "last_run": "2026-11-02T05:37:33.887990+00:00",
+  "total_runs": 2211,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,31 +33,16 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: weak_title is the PROMPT FOCUS (5 recent rejects; ALL-CAPS x4, colon-subtitle x1), but the title rules already ban both explicitly and 92 prior weak_title prompt branches were never merged, while the real binding constraint on reach is the LLM engine (live=false, quota_spent, serving=atria; llm_error=23 recent), so another title reword would repeat a dead end.",
+    "summary": "Add one concrete example of the colon-subtitle rule to the system prompt, helping the model distinguish between a strong headline and padded subtitle",
     "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Monitor weak_title rejections in the next cycle",
-        "description": "Track article_rejects.counts.weak_title after the merged cycle runs",
-        "owner_action": "Review the weak_title reject count in status.json after the merged cycle runs",
-        "secret_needed": null,
-        "how_to": [
-          "Open status.json",
-          "Read article_rejects.counts.weak_title",
-          "If still >=5, consider a different prompt edit"
-        ]
-      }
-    ],
+    "suggestions": [],
     "direction": "reach into a live receive path (doctrine Principle 5, step 3)",
     "evidence": [
-      "article_rejects.counts.weak_title = 5 in the last 14 days (lifetime 14 of 64 total)",
-      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x4; 'title padded with a colon subtitle; pick the sharper half' x1",
-      "llm_engine: live=false, disabled_reason='quota_spent', serving='atria'",
-      "article_rejects.llm_error=23 in the last 14 days \u2014 engine failures, not prompt-fixable",
-      "PRIOR PROPOSALS: 92 weak_title branches on bot/earning/articles.py, none merged"
+      "article_rejects.counts.weak_title = 5 (last 14 days)",
+      "gate findings: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle; pick the sharper half' x1"
     ],
-    "money_path": "none \u2014 no change proposed; no receive-path or prompt change",
-    "verify": "N/A \u2014 no change. Next cycle, watch article_rejects.counts.weak_title (window currently 5) and llm_engine.live; if the engine recovers and weak_title stays high, a prompt edit can be reconsidered.",
+    "money_path": "reach-only",
+    "verify": "weak_title reject count should fall from 5 to \u22643 in the next 14-day window",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.1"
@@ -80,7 +65,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 638,
+  "last_cycle_seconds": 502,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1244,7 +1229,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-02T04:37:36.234058+00:00",
+    "checked_at": "2026-11-02T05:37:34.503795+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1862,7 +1847,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-02T04:48:12.815276+00:00",
+    "last_run": "2026-11-02T05:45:55.312673+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1872,32 +1857,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-02T04:48:13.090666+00:00",
+    "last_run": "2026-11-02T05:45:55.611762+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4925166,
-        "at": "2026-11-01T19:25:49.245833+00:00",
-        "ok": true
-      },
-      {
         "id": 4931682,
-        "at": "2026-11-01T19:55:56.292658+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-11-01T19:55:56.292658+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-11-01T19:55:56.292658+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-11-01T19:55:56.292658+00:00",
         "ok": true
       },
@@ -2082,8 +2047,28 @@
         "ok": true
       },
       {
+        "id": 4925166,
+        "at": "2026-11-02T05:45:55.611762+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-11-02T05:45:55.611762+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-11-02T05:45:55.611762+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-02T05:45:55.611762+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-02T04:48:13.090666+00:00",
+        "at": "2026-11-02T05:45:55.611762+00:00",
         "ok": true
       }
     ],
@@ -2092,7 +2077,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.4
+    "oldest_check_age_hours": 9.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

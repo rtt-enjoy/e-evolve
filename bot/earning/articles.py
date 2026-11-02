@@ -142,8 +142,7 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
   and any ALL-CAPS word. These read as spam and suppress clicks here.
-- No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
-  wastes the scannable half of the line. Pick the sharper half and stop.
+- No colon-subtitle padding. If your title uses a colon, and the head has 3+ words while the tail has 4+ words, the title wastes the scannable half. Pick the sharper half: keep the head short or the tail brief.
 
 TAGS -- tags are how dev.to distributes the post, so treat them as reach, not labels:
 - Exactly 4 tags. Fewer costs you feed placement.

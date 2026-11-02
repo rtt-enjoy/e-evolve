@@ -142,8 +142,11 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
   and any ALL-CAPS word. These read as spam and suppress clicks here.
+  Concrete ALL-CAPS examples: IMPORTANT, NOTE, URGENT, CRITICAL, ALERT, WARNING.
 - No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
   wastes the scannable half of the line. Pick the sharper half and stop.
+  If a title contains a colon and the part after the colon is at least 4 words,
+  treat it as padding and pick the sharper half.
 
 TAGS -- tags are how dev.to distributes the post, so treat them as reach, not labels:
 - Exactly 4 tags. Fewer costs you feed placement.

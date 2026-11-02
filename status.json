@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-02T06:08:04.653853+00:00",
-  "total_runs": 2212,
+  "last_run": "2026-11-02T07:08:13.379629+00:00",
+  "total_runs": 2213,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,23 +33,25 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Revise the colon-subtitle rule in the article system prompt to directly mirror the code's word-count check (head 3+ words AND tail 4+ words), replacing an example that didn't match the pattern the code enforces",
+    "summary": "Add concrete banned ALL-CAPS examples (URGENT, IMPORTANT, NOTE, BREAKING) to the article draft _SYSTEM prompt so the LLM distinguishes them from allowed acronyms, targeting the 4 weak_title rejections from ALL-CAPS words in the last 14 days.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "The colon-subtitle rule in _SYSTEM has an example that doesn't match the code's word-count check (head 3+ words AND tail 4+ words), so the model doesn't understand the exact pattern to avoid"
+        "reason": "The _SYSTEM prompt bans 'any ALL-CAPS word' but gives no concrete examples of non-acronym words that trigger the gate. The LLM keeps using words like URGENT, IMPORTANT, NOTE, BREAKING in titles, causing 4 weak_title rejections in 14 days. Adding explicit examples teaches the model the boundary without changing the gate."
       }
     ],
     "suggestions": [],
     "direction": "reach into a live receive path (doctrine Principle 5, step 3)",
     "evidence": [
       "article_rejects.counts.weak_title = 5 (last 14 days)",
-      "gate findings: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle; pick the sharper half' x1"
+      "gate findings: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle; pick the sharper half' x1",
+      "preferred_archetypes() = ['problem-workaround'] (avg 475.7 engagement, n=9)",
+      "wallet.received_total_usd = 0.0 (reach-only work until money arrives)"
     ],
     "money_path": "reach-only",
-    "verify": "weak_title reject count should fall from 5 to \u22643 in the next 14-day window",
+    "verify": "weak_title reject count should fall from 5 to \u22643 in the next 14-day window; article_rejects.counts.weak_title in status.json",
     "error": null,
-    "branch": "evolve/1.41.1-20261102-062550",
+    "branch": "evolve/1.41.1-20261102-071416",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -70,7 +72,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1067,
+  "last_cycle_seconds": 364,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1234,7 +1236,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-02T06:08:05.318735+00:00",
+    "checked_at": "2026-11-02T07:08:14.128237+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1559,7 +1561,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261102-062550",
+  "last_evolution_branch": "evolve/1.41.1-20261102-071416",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 42,
@@ -1852,7 +1854,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-02T06:25:51.336465+00:00",
+    "last_run": "2026-11-02T07:14:16.397699+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1862,32 +1864,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-02T06:25:51.514512+00:00",
+    "last_run": "2026-11-02T07:14:16.613825+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4681657,
-        "at": "2026-11-01T20:49:12.660471+00:00",
-        "ok": true
-      },
-      {
         "id": 4780783,
-        "at": "2026-11-01T22:17:44.295711+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-11-01T22:17:44.295711+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
-        "at": "2026-11-01T22:17:44.295711+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-11-01T22:17:44.295711+00:00",
         "ok": true
       },
@@ -2072,8 +2054,28 @@
         "ok": true
       },
       {
+        "id": 4681657,
+        "at": "2026-11-02T07:14:16.613825+00:00",
+        "ok": true
+      },
+      {
+        "id": 4740283,
+        "at": "2026-11-02T07:14:16.613825+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-02T07:14:16.613825+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-02T07:14:16.613825+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-02T06:25:51.514512+00:00",
+        "at": "2026-11-02T07:14:16.613825+00:00",
         "ok": true
       }
     ],
@@ -2082,7 +2084,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.6
+    "oldest_check_age_hours": 8.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

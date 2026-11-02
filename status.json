@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-02T03:37:32.198835+00:00",
-  "total_runs": 2209,
+  "last_run": "2026-11-02T04:37:35.804779+00:00",
+  "total_runs": 2210,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -35,40 +35,35 @@
     "version_bumped_to": "1.41.0",
     "summary": "No change this cycle: weak_title is the PROMPT FOCUS (5 recent rejects; ALL-CAPS x4, colon-subtitle x1), but the title rules already ban both explicitly and 92 prior weak_title prompt branches were never merged, while the real binding constraint on reach is the LLM engine (live=false, quota_spent, serving=atria; llm_error=23 recent), so another title reword would repeat a dead end.",
     "changes_applied": [],
-    "suggestions": [],
+    "suggestions": [
+      {
+        "title": "Monitor weak_title rejections in the next cycle",
+        "description": "Track article_rejects.counts.weak_title after the merged cycle runs",
+        "owner_action": "Review the weak_title reject count in status.json after the merged cycle runs",
+        "secret_needed": null,
+        "how_to": [
+          "Open status.json",
+          "Read article_rejects.counts.weak_title",
+          "If still >=5, consider a different prompt edit"
+        ]
+      }
+    ],
     "direction": "reach into a live receive path (doctrine Principle 5, step 3)",
     "evidence": [
-      "article_rejects recent weak_title=5 in the last 14 days (lifetime weak_title=14 of 64 total)",
+      "article_rejects.counts.weak_title = 5 in the last 14 days (lifetime 14 of 64 total)",
       "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x4; 'title padded with a colon subtitle; pick the sharper half' x1",
       "llm_engine: live=false, disabled_reason='quota_spent', serving='atria'",
-      "article_rejects llm_error=23 in the last 14 days \u2014 engine failures, not prompt-fixable",
+      "article_rejects.llm_error=23 in the last 14 days \u2014 engine failures, not prompt-fixable",
       "PRIOR PROPOSALS: 92 weak_title branches on bot/earning/articles.py, none merged"
     ],
     "money_path": "none \u2014 no change proposed; no receive-path or prompt change",
     "verify": "N/A \u2014 no change. Next cycle, watch article_rejects.counts.weak_title (window currently 5) and llm_engine.live; if the engine recovers and weak_title stays high, a prompt edit can be reconsidered.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.0"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -85,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 1439,
+  "last_cycle_seconds": 638,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1249,7 +1244,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-02T03:37:32.907747+00:00",
+    "checked_at": "2026-11-02T04:37:36.234058+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1867,7 +1862,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-02T04:01:30.302047+00:00",
+    "last_run": "2026-11-02T04:48:12.815276+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1877,32 +1872,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-02T04:01:30.593268+00:00",
+    "last_run": "2026-11-02T04:48:13.090666+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4943931,
-        "at": "2026-11-01T18:25:29.153489+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-01T19:25:49.245833+00:00",
-        "ok": true
-      },
-      {
         "id": 4925166,
-        "at": "2026-11-01T19:25:49.245833+00:00",
-        "ok": true
-      },
-      {
-        "id": 4908316,
-        "at": "2026-11-01T19:25:49.245833+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
         "at": "2026-11-01T19:25:49.245833+00:00",
         "ok": true
       },
@@ -2087,8 +2062,28 @@
         "ok": true
       },
       {
+        "id": 4943931,
+        "at": "2026-11-02T04:48:13.090666+00:00",
+        "ok": true
+      },
+      {
+        "id": 4937139,
+        "at": "2026-11-02T04:48:13.090666+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-11-02T04:48:13.090666+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-02T04:48:13.090666+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-02T04:01:30.593268+00:00",
+        "at": "2026-11-02T04:48:13.090666+00:00",
         "ok": true
       }
     ],
@@ -2097,7 +2092,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.6
+    "oldest_check_age_hours": 9.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2117,8 +2112,7 @@
     "serving": "atria",
     "disabled_reason": "quota_spent",
     "calls": {
-      "openrouter": 1,
-      "atria": 1
+      "openrouter": 1
     },
     "fallback": {
       "provider": "atria",

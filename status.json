@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-02T20:57:53.913895+00:00",
-  "total_runs": 2227,
+  "last_run": "2026-11-02T21:57:57.212135+00:00",
+  "total_runs": 2228,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -23,7 +23,8 @@
     "week_started": "2026-11-02",
     "breakdown": {
       "ctf-bounty": 0.0,
-      "code_techs": 0.0
+      "code_techs": 0.0,
+      "dev.to": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -33,54 +34,86 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the dominant draft loss (llm_error, 36 lifetime / 23 in 14 days) is engine-side quota exhaustion and not prompt-fixable, and every remaining weak_title edit is a repeat of one of ~30 unmerged proposals on the same prompt lines.",
+    "summary": "No change clears the bar: every one-step prompt edit the weak_title focus admits is already parked on one of 30 open review branches, and the dominant reject (llm_error=36 of 64) is engine-side and not fixable by a prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Restore or top up the GLM API key quota",
-        "description": "Unblocks the primary 'post' role; 23 of the last 14 days' 64 rejected drafts died as llm_error because the primary provider reported quota_spent and the cycle fell back to atria, which also failed per-call. Every prompt improvement is multiplied by zero while drafts cannot be generated at all.",
-        "owner_action": "Top up or replace the GLM_API_KEY quota (or confirm the fallback atria key is funded), then run one cycle and check llm_engine.disabled_reason returns to null.",
+        "description": "Unblocks the post role: 23 of the last 14 days' 64 rejected drafts died as llm_error. Every prompt improvement, including any of the 30 parked title-prompt branches, is multiplied by zero while drafts cannot be generated at all. weak_title (5) is the only fixable-by-prompt reject; the other 25 are engine failures.",
+        "owner_action": "Top up or replace the GLM_API_KEY quota (or confirm the fallback atria key is funded), then run one cycle.",
         "secret_needed": null,
         "how_to": [
           "Step 1: Check the GLM account console for quota/billing status on glm-5.3-flash.",
           "Step 2: Add credit or regenerate the key, update the GLM_API_KEY secret, and trigger a run.",
-          "Step 3: Confirm status.json llm_engine.live is true and article_rejects.counts.llm_error stops growing."
+          "Step 3: Confirm status.json llm_engine.live stays true and article_rejects.counts.llm_error stops growing."
+        ]
+      },
+      {
+        "title": "Review and merge one of the 30 parked title-prompt branches",
+        "description": "The weak_title findings (ALL-CAPS x4, colon-subtitle x1) already have one-step prompt fixes parked on open branches; none was merged, so the count cannot move even when the engine works. Picking the sharpest one closes the loop.",
+        "owner_action": "Read the open bot/earning/articles.py branches and merge at most one; they are deliberately overlapping variants, not complementary.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Filter open branches touching bot/earning/articles.py from 2026-10-31 to 2026-11-02.",
+          "Step 2: Merge the single variant that adds concrete banned-word examples to _SYSTEM; reject the rest as duplicates.",
+          "Step 3: Watch article_rejects 'title has ALL-CAPS word' findings in the 14-day window after merge."
         ]
       }
     ],
-    "direction": "4 \u2014 reach into a live receive path; PROMPT FOCUS is weak_title, but the evidence does not support another edit on that lane this cycle",
+    "direction": "Checklist step 4 / PROMPT FOCUS (weak_title, 5 drafts lost in 14 days)",
     "evidence": [
-      "article_rejects.counts (total 64): llm_error=36, weak_title=14, empty_draft=9 \u2014 the largest bucket is llm_error, 'LLM call failed'",
-      "llm_engine: serving=atria, live=False, disabled_reason=quota_spent \u2014 the primary 'post' model is out of quota, so drafts die before any prompt rule applies",
-      "gate findings behind weak_title: 'title has ALL-CAPS word' x4, 'colon subtitle' x1 \u2014 5 losses in 14 days",
-      "PRIOR PROPOSALS contains ~30 open, unmerged proposals on articles.py title rules (ALL-CAPS examples, colon-subtitle rewording, _revise_title rewrites), including last cycle's own 1.41.1 edit \u2014 the lane is saturated, not under-served",
-      "prompt fix cannot move llm_error: 'Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=23, empty_draft=3'"
+      "article_rejects.counts (total 64): llm_error=36, weak_title=14, empty_draft=9, fabricated=4, revision_fabricated=1",
+      "Drafts lost to a prompt (14d): weak_title=5, fabricated=2; drafts lost to the engine (14d): llm_error=23, empty_draft=2",
+      "PRIOR PROPOSALS: 30 open branches, all one-step edits to the article draft _SYSTEM title rules or _revise_title targeting ALL-CAPS and colon-subtitle findings \u2014 none merged",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x4; 'title padded with a colon subtitle' x1",
+      "llm_engine.calls = {'glm': 1} with article_rejects.last = 'llm_error': 'LLM call failed'"
     ],
-    "money_path": "none \u2014 no change proposed; when drafting resumes, reach into the live footer path is the benefit",
-    "verify": "Next cycle: article_rejects.counts.llm_error should stop climbing once quota is restored; weak_title additions should show whether the already-proposed title edits work \u2014 if they keep failing review, the gate finding texts themselves are the thing to re-examine, not the prompts again",
+    "money_path": "none (no change proposed; would have been reach-only anyway)",
+    "verify": "No diff to verify. The field to watch next cycle is article_rejects.counts.llm_error: with the GLM key restored it should stop growing while weak_title (5 in 14d) remains the only prompt-side cost \u2014 and if the owner merges any of the 30 parked title-prompt branches, weak_title in the 14-day window should fall next window.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": true,
+        "title": "The Timeout Math That Breaks Your Retry Loop",
+        "url": "https://dev.to/robust_true_try/the-timeout-math-that-breaks-your-retry-loop-4all",
+        "estimated_usd": 0.0,
+        "source_url": "https://alfy.blog/2026/04/23/stop-hardcoding-your-timeouts.html",
+        "source_title": "Stop Hardcoding Your Timeouts"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Restore or top up the GLM API key quota",
-      "description": "Unblocks the primary 'post' role; 23 of the last 14 days' 64 rejected drafts died as llm_error because the primary provider reported quota_spent and the cycle fell back to atria, which also failed per-call. Every prompt improvement is multiplied by zero while drafts cannot be generated at all.",
-      "owner_action": "Top up or replace the GLM_API_KEY quota (or confirm the fallback atria key is funded), then run one cycle and check llm_engine.disabled_reason returns to null.",
+      "description": "Unblocks the post role: 23 of the last 14 days' 64 rejected drafts died as llm_error. Every prompt improvement, including any of the 30 parked title-prompt branches, is multiplied by zero while drafts cannot be generated at all. weak_title (5) is the only fixable-by-prompt reject; the other 25 are engine failures.",
+      "owner_action": "Top up or replace the GLM_API_KEY quota (or confirm the fallback atria key is funded), then run one cycle.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Check the GLM account console for quota/billing status on glm-5.3-flash.",
         "Step 2: Add credit or regenerate the key, update the GLM_API_KEY secret, and trigger a run.",
-        "Step 3: Confirm status.json llm_engine.live is true and article_rejects.counts.llm_error stops growing."
+        "Step 3: Confirm status.json llm_engine.live stays true and article_rejects.counts.llm_error stops growing."
+      ]
+    },
+    {
+      "title": "Review and merge one of the 30 parked title-prompt branches",
+      "description": "The weak_title findings (ALL-CAPS x4, colon-subtitle x1) already have one-step prompt fixes parked on open branches; none was merged, so the count cannot move even when the engine works. Picking the sharpest one closes the loop.",
+      "owner_action": "Read the open bot/earning/articles.py branches and merge at most one; they are deliberately overlapping variants, not complementary.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Filter open branches touching bot/earning/articles.py from 2026-10-31 to 2026-11-02.",
+        "Step 2: Merge the single variant that adds concrete banned-word examples to _SYSTEM; reject the rest as duplicates.",
+        "Step 3: Watch article_rejects 'title has ALL-CAPS word' findings in the 14-day window after merge."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 25,
+  "last_cycle_seconds": 66,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -203,7 +236,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "published": 1,
     "window": "06:00-12:00 UTC+9"
   },
@@ -1074,7 +1107,8 @@
       "lwn.net/subscriberlink/1102102/0c00e4d550f25f8c",
       "emudhra.we-have-a-problem.com/apple.html",
       "martinfowler.com/rachels-ramblings/good-devs-wary.html",
-      "hackerbooks.org"
+      "hackerbooks.org",
+      "alfy.blog/2026/04/23/stop-hardcoding-your-timeouts.html"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -1160,7 +1194,8 @@
       "python s experimental jit removed",
       "apple s git still trust compromised emudhra certificat",
       "good developer so wary agentic development",
-      "show hn hackerbook hackertube book mentioned hn"
+      "show hn hackerbook hackertube book mentioned hn",
+      "stop hardcoding timeout"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -1246,14 +1281,15 @@
       "configure flag break python 3 14 build",
       "maco git still trust compromised certificat",
       "agentic code compil crash production",
-      "mention counter think hate love"
+      "mention counter think hate love",
+      "timeout math break retry loop"
     ],
     "followed_up_ids": [
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/your-mention-counter-thinks-hate-is-love-1kh3",
       "https://dev.to/robust_true_try/agents-go-mainstream-while-trust-becomes-the-bottleneck-p5n",
-      "https://dev.to/robust_true_try/the-agentic-code-that-compiles-but-crashes-in-production-i3",
       "https://dev.to/robust_true_try/your-macos-git-still-trusts-compromised-certificates-5691",
       "https://dev.to/robust_true_try/the-configure-flag-that-breaks-python-314-builds-1g3n",
       "https://dev.to/robust_true_try/your-backtracking-solver-is-slower-than-brute-force-1e5g",
@@ -1304,7 +1340,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-02T20:57:54.456193+00:00",
+    "checked_at": "2026-11-02T21:57:57.704102+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1633,10 +1669,10 @@
   "evolution_pending_review": false,
   "article_stats": {
     "count": 42,
-    "total_views": 5479,
-    "avg_views": 130.5,
+    "total_views": 5611,
+    "avg_views": 133.6,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 3468,
+    "best_views": 3518,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -1652,8 +1688,8 @@
       {
         "archetype": "problem-workaround",
         "count": 9,
-        "avg_engagement": 475.7,
-        "avg_views": 456.2,
+        "avg_engagement": 483.4,
+        "avg_views": 464.0,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -1673,8 +1709,8 @@
       {
         "archetype": "other",
         "count": 13,
-        "avg_engagement": 61.4,
-        "avg_views": 36.4,
+        "avg_engagement": 64.6,
+        "avg_views": 39.6,
         "best_title": "Your AI Agent Can't See What It Clicks"
       },
       {
@@ -1694,8 +1730,8 @@
       {
         "archetype": "security-privacy",
         "count": 5,
-        "avg_engagement": 30.0,
-        "avg_views": 30.0,
+        "avg_engagement": 34.0,
+        "avg_views": 34.0,
         "best_title": "Your OpenAI Agent Got Hijacked Through a Message Board"
       }
     ],
@@ -1922,7 +1958,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-02T20:58:18.657897+00:00",
+    "last_run": "2026-11-02T21:59:02.757116+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1932,15 +1968,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-02T20:58:18.953661+00:00",
+    "last_run": "2026-11-02T21:59:02.998571+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4641536,
-        "at": "2026-11-02T11:08:44.482901+00:00",
-        "ok": true
-      },
       {
         "id": 4568987,
         "at": "2026-11-02T12:08:51.355556+00:00",
@@ -1948,16 +1979,6 @@
       },
       {
         "id": 4748037,
-        "at": "2026-11-02T12:08:51.355556+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-11-02T12:08:51.355556+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-11-02T12:08:51.355556+00:00",
         "ok": true
       },
@@ -2142,13 +2163,33 @@
         "ok": true
       },
       {
+        "id": 4641536,
+        "at": "2026-11-02T21:59:02.998571+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-11-02T21:59:02.998571+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-11-02T21:59:02.998571+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-02T20:58:18.953661+00:00",
+        "at": "2026-11-02T21:59:02.998571+00:00",
+        "ok": true
+      },
+      {
+        "id": 4965279,
+        "at": "2026-11-02T21:59:02.998571+00:00",
         "ok": true
       }
     ],
-    "published_total": 42,
-    "covered": 42,
+    "published_total": 43,
+    "covered": 43,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
@@ -2172,7 +2213,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 1
+      "glm": 2
     },
     "fallback": {
       "provider": "atria",

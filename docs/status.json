@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-02T15:08:44.763719+00:00",
-  "total_runs": 2221,
+  "last_run": "2026-11-02T15:57:42.365507+00:00",
+  "total_runs": 2222,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,43 +33,42 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change: the weak_title problem is already addressed by ~30 unmerged evolve/* branches proposing the exact same class of edit; a 31st duplicate branch cannot help until the owner merges or closes the existing ones.",
+    "summary": "No change proposed: the PROMPT FOCUS (weak_title / ALL-CAPS + colon-subtitle rules) has absorbed 30 unmerged prior proposals with no new evidence distinguishing a 31st variant, and the dominant draft loss (llm_error=23 of 36 in 14 days) is engine-side and not fixable by a prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one title-rule branch and close the rest, so the ledger stops re-proposing the same edit",
-        "description": "weak_title is the top prompt-attributable reject (5 drafts/14 days), and every plausible fix variant is already parked on an open evolve/* branch. Merging the clearest one recovers those drafts; closing the rest stops ~30 branches from re-proposing each cycle.",
-        "owner_action": "Review evolve/* branches touching bot/earning/articles.py, merge the smallest/clearest one, close the remainder.",
+        "title": "Investigate the llm_error spike rather than prompts",
+        "description": "23 of the last 36 rejected drafts died on 'LLM call failed' from a provider that reports live and serving. Each one is a post and a tip ask that never shipped \u2014 five times the weak_title loss the prompt work targets.",
+        "owner_action": "Check the GLM API key's quota, billing status, and rate limits in the z.ai console for the window the errors cluster in; if the free tier is exhausted by the research and upgrade roles sharing it, consider which role it should be reserved for.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: git branch --list 'evolve/*' and diff each against bot/earning/articles.py.",
-          "Step 2: Merge the branch whose title edit is the concrete one \u2014 banned ALL-CAPS words with an acronym carve-out mirroring _KNOWN_ACRONYMS, plus the one-line colon-subtitle rule.",
-          "Step 3: Close the unmerged title-rule branches and watch article_rejects.recent for weak_title over the next 14 days."
+          "Step 1: Open the z.ai dashboard and inspect request/error logs for the last 14 days against the calls made by the 'post' role.",
+          "Step 2: If it is quota exhaustion, decide whether to reserve GLM for the post role or add a funded fallback; if it is transient 5xx, no action is needed \u2014 the hourly cycle already retries."
         ]
       },
       {
-        "title": "Diagnose glm's llm_error rejects (23 drafts in 14 days) \u2014 larger than every prompt loss combined",
-        "description": "llm_error is 23 lost posts/tip-asks vs weak_title's 5, and no prompt edit can recover engine failures; fixing it is the biggest single reach lever available.",
-        "owner_action": "Inspect recent GitHub Actions logs for '[articles] rejected (llm_error)' and check the GLM key's quota/rate-limit state.",
+        "title": "Merge or close the 30 title-prompt branches",
+        "description": "Thirty nearly identical weak_title proposals are pending. Whichever variant is best should be merged and the rest closed, so future cycles stop re-deriving the same edit and the ledger shows whether the title rule actually moved weak_title.",
+        "owner_action": "Review the 2026-11-02 branches, merge one, close the remainder, then watch article_rejects.counts.weak_title over the next two weeks.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Grep workflow logs for 'rejected (llm_error)' across the last 14 days.",
-          "Step 2: Check GLM quota and rate-limit headers; if exhausted, promote atria to primary in llm_workflows (owner-side config)."
+          "Step 1: Diff the title-rule edits across the open branches and pick the one that both exempts acronyms and replaces the flat 'no ALL-CAPS' phrase in _revise_title.",
+          "Step 2: Merge it, close the other 29, and record the merge date so the weak_title window can be dated against it."
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS (weak_title), but blocked at the human-review stage, not the prompt stage",
+    "direction": "Checklist step 4 \u2014 upgrade the prompt losing the most drafts, one step per cycle; no honest step clears the bar this cycle",
     "evidence": [
-      "article_rejects last 14 days: weak_title=5, gate findings 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle; pick the sharper half' x1",
-      "PRIOR PROPOSALS lists 30 open branches, all touching bot/earning/articles.py title rules (ALL-CAPS ban, colon-subtitle rule, Title Case wording), none merged",
-      "status.suggestions already carries 'Merge one title-rule branch and close the other ~29' as the owner action",
-      "receive path clean: payout.live=true, receipt_check coverage 42/42, known_without_footer=0 \u2014 nothing upstream blocks reach work"
+      "article_rejects.counts: llm_error=36, weak_title=14; last 14 days: weak_title=5 vs llm_error=23, empty_draft=4",
+      "PRIOR PROPOSALS: 30 open branches on 2026-10-31 through 2026-11-02 all edit the same ALL-CAPS / colon-subtitle title rules in bot/earning/articles.py and none were merged \u2014 every concrete-example, acronym-exemption, and flat-phrase-replacement variant is already sitting on a review branch",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle' x1 \u2014 all already addressed by at least one open proposal",
+      "llm_engine.calls={'glm': 1} with serving=glm, live=true, disabled_reason=null \u2014 the engine reports healthy while llm_error dominates, so the cause is not visible from here and a prompt edit cannot touch it"
     ],
-    "money_path": "none this cycle \u2014 the fix that would recover the 5 lost drafts already exists on an open branch; merging it (not rewriting it) is what unblocks one post and one tip ask",
-    "verify": "After the owner merges or closes the evolve/* branches, article_rejects.counts.weak_title should stop growing over the next two weekly windows; if it still rises, the next evolution can propose the sharpest surviving prompt edit on a clean ledger",
+    "money_path": "none (maintenance): no change proposed this cycle; reach work is paused rather than spent on a duplicate proposal",
+    "verify": "No change to verify. If a title-prompt proposal is merged from the existing branches, article_rejects.recent should show no 'title has ALL-CAPS word' entries over the next 14-day window; the llm_error count is the number to watch separately and may warrant an engine-side investigation, not a prompt edit.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -77,29 +76,28 @@
   },
   "suggestions": [
     {
-      "title": "Merge one title-rule branch and close the rest, so the ledger stops re-proposing the same edit",
-      "description": "weak_title is the top prompt-attributable reject (5 drafts/14 days), and every plausible fix variant is already parked on an open evolve/* branch. Merging the clearest one recovers those drafts; closing the rest stops ~30 branches from re-proposing each cycle.",
-      "owner_action": "Review evolve/* branches touching bot/earning/articles.py, merge the smallest/clearest one, close the remainder.",
+      "title": "Investigate the llm_error spike rather than prompts",
+      "description": "23 of the last 36 rejected drafts died on 'LLM call failed' from a provider that reports live and serving. Each one is a post and a tip ask that never shipped \u2014 five times the weak_title loss the prompt work targets.",
+      "owner_action": "Check the GLM API key's quota, billing status, and rate limits in the z.ai console for the window the errors cluster in; if the free tier is exhausted by the research and upgrade roles sharing it, consider which role it should be reserved for.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: git branch --list 'evolve/*' and diff each against bot/earning/articles.py.",
-        "Step 2: Merge the branch whose title edit is the concrete one \u2014 banned ALL-CAPS words with an acronym carve-out mirroring _KNOWN_ACRONYMS, plus the one-line colon-subtitle rule.",
-        "Step 3: Close the unmerged title-rule branches and watch article_rejects.recent for weak_title over the next 14 days."
+        "Step 1: Open the z.ai dashboard and inspect request/error logs for the last 14 days against the calls made by the 'post' role.",
+        "Step 2: If it is quota exhaustion, decide whether to reserve GLM for the post role or add a funded fallback; if it is transient 5xx, no action is needed \u2014 the hourly cycle already retries."
       ]
     },
     {
-      "title": "Diagnose glm's llm_error rejects (23 drafts in 14 days) \u2014 larger than every prompt loss combined",
-      "description": "llm_error is 23 lost posts/tip-asks vs weak_title's 5, and no prompt edit can recover engine failures; fixing it is the biggest single reach lever available.",
-      "owner_action": "Inspect recent GitHub Actions logs for '[articles] rejected (llm_error)' and check the GLM key's quota/rate-limit state.",
+      "title": "Merge or close the 30 title-prompt branches",
+      "description": "Thirty nearly identical weak_title proposals are pending. Whichever variant is best should be merged and the rest closed, so future cycles stop re-deriving the same edit and the ledger shows whether the title rule actually moved weak_title.",
+      "owner_action": "Review the 2026-11-02 branches, merge one, close the remainder, then watch article_rejects.counts.weak_title over the next two weeks.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Grep workflow logs for 'rejected (llm_error)' across the last 14 days.",
-        "Step 2: Check GLM quota and rate-limit headers; if exhausted, promote atria to primary in llm_workflows (owner-side config)."
+        "Step 1: Diff the title-rule edits across the open branches and pick the one that both exempts acronyms and replaces the flat 'no ALL-CAPS' phrase in _revise_title.",
+        "Step 2: Merge it, close the other 29, and record the merge date so the weak_title window can be dated against it."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 31,
+  "last_cycle_seconds": 37,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1307,7 +1305,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-02T15:08:45.307570+00:00",
+    "checked_at": "2026-11-02T15:57:43.040258+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1925,7 +1923,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-02T15:09:14.425352+00:00",
+    "last_run": "2026-11-02T15:58:18.516062+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1935,32 +1933,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-02T15:09:14.803425+00:00",
+    "last_run": "2026-11-02T15:58:18.737019+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4925166,
-        "at": "2026-11-02T05:45:55.611762+00:00",
-        "ok": true
-      },
-      {
         "id": 4931682,
-        "at": "2026-11-02T06:25:51.514512+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-11-02T06:25:51.514512+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820684,
-        "at": "2026-11-02T06:25:51.514512+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-11-02T06:25:51.514512+00:00",
         "ok": true
       },
@@ -2145,8 +2123,28 @@
         "ok": true
       },
       {
+        "id": 4925166,
+        "at": "2026-11-02T15:58:18.737019+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-11-02T15:58:18.737019+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-11-02T15:58:18.737019+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-02T15:58:18.737019+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-02T15:09:14.803425+00:00",
+        "at": "2026-11-02T15:58:18.737019+00:00",
         "ok": true
       }
     ],
@@ -2155,7 +2153,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.4
+    "oldest_check_age_hours": 9.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

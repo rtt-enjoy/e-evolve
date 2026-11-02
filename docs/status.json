@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-02T13:08:28.414231+00:00",
-  "total_runs": 2219,
+  "last_run": "2026-11-02T14:08:31.862626+00:00",
+  "total_runs": 2220,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,42 +33,42 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the weak_title prompt fixes the PROMPT FOCUS points at have been attempted ~30 times on open branches without a merge, and the drafts actually being lost in volume (llm_error=23, empty_draft=4 over 14 days) are engine-side and not fixable by any prompt edit.",
+    "summary": "No change proposed: the PROMPT FOCUS edit (ALL-CAPS/colon-subtitle rules in articles.py) already has ~30 open, unmerged, near-identical review branches, so a 31st copy wastes the cycle instead of moving reach.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Consolidate the ~30 open ALL-CAPS title branches into one decision",
-        "description": "A human merge of any one of them changes the title prompt; leaving all open guarantees the next cycles keep re-proposing the same edit. Either merge one or close them all so the ledger stops steering into a dead end.",
-        "owner_action": "Review the open evolve/* branches touching bot/earning/articles.py title rules and merge one (or close all).",
+        "title": "Merge one title-rule branch and close the other ~29",
+        "description": "weak_title is the top prompt-attributable reject (5 drafts in 14 days). Every proposed fix is parked; merging any one changes the prompt, closing the rest stops the ledger re-proposing the same edit every cycle.",
+        "owner_action": "Review the evolve/* branches touching bot/earning/articles.py and merge the smallest one (or close all unmerged).",
         "secret_needed": null,
         "how_to": [
-          "Step 1: List branches: git branch --list 'evolve/*'.",
-          "Step 2: Diff each against bot/earning/articles.py; they are near-identical few-line edits to _SYSTEM / _revise_title.",
-          "Step 3: Merge the smallest one and delete the rest."
+          "Step 1: git branch --list 'evolve/*' and diff each against bot/earning/articles.py.",
+          "Step 2: Merge the clearest one (concrete banned ALL-CAPS examples + acronym carve-out, mirroring _KNOWN_ACRONYMS).",
+          "Step 3: Delete the remaining title-rule branches and watch article_rejects.weak_title over the next two weeks."
         ]
       },
       {
-        "title": "Check why glm is failing 23 drafts in 14 days",
-        "description": "llm_error is the largest reject bucket and no prompt edit can touch it; a model/key/rate diagnosis could recover more posts than any prompt change.",
-        "owner_action": "Inspect workflow logs for GLM API errors (rate limit, quota, timeout) over the last two weeks.",
+        "title": "Diagnose glm's llm_error rejects (23 drafts in 14 days)",
+        "description": "llm_error dwarfs every prompt-attributable bucket and no prompt edit can recover those drafts; it is the largest single loss of posts and tip asks.",
+        "owner_action": "Inspect recent GitHub Actions runs for '[articles] rejected (llm_error)' and check the GLM key's quota/rate-limit state.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open recent GitHub Actions runs and grep for '[articles] rejected (llm_error)'.",
-          "Step 2: Check the GLM API key's quota and rate-limit headers.",
-          "Step 3: If it is sustained quota exhaustion, consider promoting atria to primary in llm_workflows (owner-side config)."
+          "Step 1: Grep workflow logs for 'rejected (llm_error)' over the last 14 days.",
+          "Step 2: Check GLM quota and rate-limit headers; if exhausted, promote atria to primary in llm_workflows (owner-side config)."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach via prompt upgrades); standing down because the lever it names is exhausted and the dominant loss is not prompt-fixable",
+    "direction": "Checklist step 4 \u2014 upgrade the prompts that write reach, one step per cycle; superseded locally by the fact that this exact upgrade is already parked awaiting human review",
     "evidence": [
-      "article_rejects.counts: llm_error=36 vs weak_title=14 (llm_error dominates 2.6:1)",
-      "Drafts lost to a prompt (14d): weak_title=5, fabricated=2; drafts lost to the engine: llm_error=23, empty_draft=4",
-      "PRIOR PROPOSALS lists ~30 distinct unmerged branches all editing the ALL-CAPS / colon-subtitle title wording in bot/earning/articles.py, including every variant of the acronym clarification and concrete-example additions the gate findings suggest",
-      "Gate findings: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle' x1 \u2014 both findings already have matching rules and examples in _SYSTEM and _revise_title",
-      "wallet.received_total_usd = 0.0, payout.live = true, receipt_check coverage 42/42 \u2014 reach is the work, but llm_engine calls={'glm': 1} with glm serving shows the engine, not the prompt, is dropping drafts"
+      "article_rejects window: weak_title=5 in 14 days (PROMPT FOCUS)",
+      "Gate findings: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle' x1",
+      "PRIOR PROPOSALS: ~30 open branches 2026-10-31..2026-11-02 all targeting bot/earning/articles.py title rules (_SYSTEM ALL-CAPS examples, acronym carve-out, colon-subtitle mirror)",
+      "status.suggestions[0] already names this: 'Consolidate the ~30 open ALL-CAPS title branches into one decision'",
+      "Reach itself is healthy per step 1: receipt_check.covered/published_total = 42/42, known_without_footer = 0, payout.live = true",
+      "preferred_archetypes = ['problem-workaround'] with n=9 \u2014 above the Principle 3j floor, so steering is sound"
     ],
-    "money_path": "none (maintenance) \u2014 no change this cycle",
-    "verify": "Next cycles: article_rejects 14-day window. If weak_title falls below the current 5 while llm_error stays above 20, the prompt side is already as good as the evidence says it can be made and the binding constraint is engine reliability, not wording. Revisit a prompt edit only if weak_title rises on fresh findings not covered by an open branch.",
+    "money_path": "reach-only (and this cycle, zero change: the fix is unblocking an already-proposed edit, not writing another)",
+    "verify": "No diff to verify this cycle. After the owner merges (or closes) the open title-rule branches, the count that should fall is article_rejects.weak_title in the next 14-day window (baseline 5), with gate finding 'title has ALL-CAPS word' falling from 4 toward 0.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -79,30 +79,29 @@
   },
   "suggestions": [
     {
-      "title": "Consolidate the ~30 open ALL-CAPS title branches into one decision",
-      "description": "A human merge of any one of them changes the title prompt; leaving all open guarantees the next cycles keep re-proposing the same edit. Either merge one or close them all so the ledger stops steering into a dead end.",
-      "owner_action": "Review the open evolve/* branches touching bot/earning/articles.py title rules and merge one (or close all).",
+      "title": "Merge one title-rule branch and close the other ~29",
+      "description": "weak_title is the top prompt-attributable reject (5 drafts in 14 days). Every proposed fix is parked; merging any one changes the prompt, closing the rest stops the ledger re-proposing the same edit every cycle.",
+      "owner_action": "Review the evolve/* branches touching bot/earning/articles.py and merge the smallest one (or close all unmerged).",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List branches: git branch --list 'evolve/*'.",
-        "Step 2: Diff each against bot/earning/articles.py; they are near-identical few-line edits to _SYSTEM / _revise_title.",
-        "Step 3: Merge the smallest one and delete the rest."
+        "Step 1: git branch --list 'evolve/*' and diff each against bot/earning/articles.py.",
+        "Step 2: Merge the clearest one (concrete banned ALL-CAPS examples + acronym carve-out, mirroring _KNOWN_ACRONYMS).",
+        "Step 3: Delete the remaining title-rule branches and watch article_rejects.weak_title over the next two weeks."
       ]
     },
     {
-      "title": "Check why glm is failing 23 drafts in 14 days",
-      "description": "llm_error is the largest reject bucket and no prompt edit can touch it; a model/key/rate diagnosis could recover more posts than any prompt change.",
-      "owner_action": "Inspect workflow logs for GLM API errors (rate limit, quota, timeout) over the last two weeks.",
+      "title": "Diagnose glm's llm_error rejects (23 drafts in 14 days)",
+      "description": "llm_error dwarfs every prompt-attributable bucket and no prompt edit can recover those drafts; it is the largest single loss of posts and tip asks.",
+      "owner_action": "Inspect recent GitHub Actions runs for '[articles] rejected (llm_error)' and check the GLM key's quota/rate-limit state.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open recent GitHub Actions runs and grep for '[articles] rejected (llm_error)'.",
-        "Step 2: Check the GLM API key's quota and rate-limit headers.",
-        "Step 3: If it is sustained quota exhaustion, consider promoting atria to primary in llm_workflows (owner-side config)."
+        "Step 1: Grep workflow logs for 'rejected (llm_error)' over the last 14 days.",
+        "Step 2: Check GLM quota and rate-limit headers; if exhausted, promote atria to primary in llm_workflows (owner-side config)."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 46,
+  "last_cycle_seconds": 34,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1310,7 +1309,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-02T13:08:28.794206+00:00",
+    "checked_at": "2026-11-02T14:08:32.411730+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1928,7 +1927,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-02T13:09:13.885009+00:00",
+    "last_run": "2026-11-02T14:09:04.922300+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1938,32 +1937,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-02T13:09:14.284847+00:00",
+    "last_run": "2026-11-02T14:09:05.238454+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4356423,
-        "at": "2026-11-02T04:01:30.593268+00:00",
-        "ok": true
-      },
-      {
         "id": 4943931,
-        "at": "2026-11-02T04:48:13.090666+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-02T04:48:13.090666+00:00",
-        "ok": true
-      },
-      {
-        "id": 4908316,
-        "at": "2026-11-02T04:48:13.090666+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
         "at": "2026-11-02T04:48:13.090666+00:00",
         "ok": true
       },
@@ -2148,8 +2127,28 @@
         "ok": true
       },
       {
+        "id": 4356423,
+        "at": "2026-11-02T14:09:05.238454+00:00",
+        "ok": true
+      },
+      {
+        "id": 4937139,
+        "at": "2026-11-02T14:09:05.238454+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-11-02T14:09:05.238454+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-02T14:09:05.238454+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-02T13:09:14.284847+00:00",
+        "at": "2026-11-02T14:09:05.238454+00:00",
         "ok": true
       }
     ],
@@ -2158,7 +2157,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.1
+    "oldest_check_age_hours": 9.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

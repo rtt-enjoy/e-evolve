@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-02T01:37:29.839375+00:00",
-  "total_runs": 2207,
+  "last_run": "2026-11-02T02:37:28.678122+00:00",
+  "total_runs": 2208,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -30,13 +30,8 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add more concrete ALL-CAPS examples and clarify colon-subtitle rule in the article draft system prompt to reduce weak_title rejections.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "Add more concrete ALL-CAPS examples and clarify colon-subtitle rule in the article draft system prompt to reduce weak_title rejections."
-      }
-    ],
+    "summary": "Add specific title rules to the user prompt in _generate_article to reduce weak_title rejections: explicitly prohibit ALL-CAPS words (except recognized acronyms) and colon-subtitle padding, reinforcing the system prompt's TITLE rules.",
+    "changes_applied": [],
     "suggestions": [],
     "direction": "reach into a live receive path (doctrine Principle 5, step 3) - improving title quality to increase publish rate into the live receive path",
     "evidence": [
@@ -47,8 +42,8 @@
     "money_path": "reach-only (improves article publish rate, which increases potential receipts to the live wallet address; no direct receive path change)",
     "verify": "weak_title reject count in article_rejects.counts should decrease from 14 in the next cycle; specifically the 'title has ALL-CAPS word' findings should drop toward 0-2",
     "error": null,
-    "branch": "evolve/1.41.3-20261102-014243",
-    "proposed_version": "1.41.3"
+    "branch": null,
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [],
@@ -68,7 +63,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 315,
+  "last_cycle_seconds": 1146,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1181,7 +1176,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-02T01:37:30.255023+00:00",
+    "checked_at": "2026-11-02T02:37:29.213021+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1506,8 +1501,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.3-20261102-014243",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 42,
     "total_views": 5479,
@@ -1799,7 +1794,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-02T01:42:44.019730+00:00",
+    "last_run": "2026-11-02T02:56:33.397374+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1809,32 +1804,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-02T01:42:44.317069+00:00",
+    "last_run": "2026-11-02T02:56:33.708229+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4765372,
-        "at": "2026-11-01T16:18:35.508581+00:00",
-        "ok": true
-      },
-      {
         "id": 4356423,
-        "at": "2026-11-01T17:28:30.102542+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-11-01T17:28:30.102542+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-11-01T17:28:30.102542+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-11-01T17:28:30.102542+00:00",
         "ok": true
       },
@@ -2019,8 +1994,28 @@
         "ok": true
       },
       {
+        "id": 4765372,
+        "at": "2026-11-02T02:56:33.708229+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-11-02T02:56:33.708229+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-11-02T02:56:33.708229+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-11-02T02:56:33.708229+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-02T01:42:44.317069+00:00",
+        "at": "2026-11-02T02:56:33.708229+00:00",
         "ok": true
       }
     ],
@@ -2029,7 +2024,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.4
+    "oldest_check_age_hours": 9.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-03T00:32:09.861482+00:00",
-  "total_runs": 2231,
+  "last_run": "2026-11-03T01:32:11.838113+00:00",
+  "total_runs": 2232,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,7 +34,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the prompt-ledger focus (weak_title) is saturated by 30 unmerged near-identical branches, so a 31st variant cannot be graded, and the largest reject source (llm_error=36 of 64) is the engine, not a prompt, so no prompt edit clears the bar until one branch is merged.",
+    "summary": "No change this cycle: the weak_title prompt space is saturated with ~30 unmerged, near-identical open proposals covering exactly the two edits the gate findings point at (ALL-CACS wording, colon-subtitle rule), and status.suggestions itself records that without a merge, further prompt edits there are ungradeable \u2014 a 31st proposal only buries the space further.",
     "changes_applied": [],
     "suggestions": [
       {
@@ -49,8 +49,8 @@
       },
       {
         "title": "Decide glm's future as the post-role provider",
-        "description": "llm_error is 36/64 lifetime rejects and 23 in the last 14 days; no prompt edit can recover those drafts. A provider or role swap recovers more posts than all prompt work combined.",
-        "owner_action": "Read article_rejects.recent llm_error detail strings; if quota/timeout, switch llm_roles.post to an already-configured fallback (atria) in config \u2014 no new secret.",
+        "description": "llm_error is 23 of the last-14-day rejects; no prompt edit can recover those drafts. A provider or role swap recovers more posts than all prompt work combined.",
+        "owner_action": "Read article_rejects.recent llm_error detail strings; if quota/timeout, switch llm_roles.post to the already-configured atria fallback in config \u2014 no new secret.",
         "secret_needed": null,
         "how_to": [
           "Step 1: Open docs/status.json, find article_rejects.recent entries with code llm_error and read the error text.",
@@ -58,16 +58,15 @@
         ]
       }
     ],
-    "direction": "Checklist step 4 / Principle 5 \u2014 reach via better prompts, one step per cycle; step 3k-style discipline: a cycle that cannot measure its own fix must not pile on another unmeasurable one",
+    "direction": "Checklist step 4 (reach via prompts), Principle 3j discipline applied to the evolution loop itself: don't stack changes on top of unmeasured ones",
     "evidence": [
-      "article_rejects.counts total 64: llm_error=36, weak_title=14, empty_draft=9, fabricated=4",
-      "Drafts lost to a prompt (14d): weak_title=5, fabricated=2; drafts lost to the engine (14d): llm_error=23",
-      "Gate findings behind weak_title: 'title has ALL-CAPS word' x4, colon-subtitle x1",
-      "PRIOR PROPOSALS lists 30 distinct open branches from 2026-10-31 to 2026-11-02 all editing articles.py title rules for exactly these findings",
-      "suggestions already carries 'Merge one open title-prompt branch' and 'Check why glm drops 23 drafts to llm_error'"
+      "article_rejects last-14-day weak_title = 5 ('title has ALL-CAPS word' x4, 'colon subtitle' x1)",
+      "PRIOR PROPOSALS lists 30 distinct open branches, every one targeting articles.py title rules (ALL-CAPS examples or colon-subtitle wording), none merged",
+      "status.suggestions[0] = 'Merge one open title-prompt branch so the fix can be measured ... without a merge, further prompt edits there are ungradeable and the drafts keep dying'",
+      "llm_error=23 in the same window \u2014 larger than weak_title=5 and not fixable by any prompt edit"
     ],
-    "money_path": "none this cycle \u2014 the proposed edit would be reach-only, and it would be unmeasurable while the space is unmerged",
-    "verify": "After the owner merges exactly one of the 30 open title-rule branches: the 14-day weak_title count in article_rejects should fall from 5 toward 0, and llm_error should fall from 23 only if the glm role/provider decision is taken \u2014 both read from article_rejects.counts in the next status window.",
+    "money_path": "none this cycle (maintenance of proposal quality): the eventual fix converts rejected drafts into published posts, each carrying the tip footer",
+    "verify": "After the owner merges one open title-rule branch, the next 14-day article_rejects window should show weak_title falling from 5; this cycle proposes nothing new to verify",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.1"
@@ -89,8 +88,8 @@
     },
     {
       "title": "Decide glm's future as the post-role provider",
-      "description": "llm_error is 36/64 lifetime rejects and 23 in the last 14 days; no prompt edit can recover those drafts. A provider or role swap recovers more posts than all prompt work combined.",
-      "owner_action": "Read article_rejects.recent llm_error detail strings; if quota/timeout, switch llm_roles.post to an already-configured fallback (atria) in config \u2014 no new secret.",
+      "description": "llm_error is 23 of the last-14-day rejects; no prompt edit can recover those drafts. A provider or role swap recovers more posts than all prompt work combined.",
+      "owner_action": "Read article_rejects.recent llm_error detail strings; if quota/timeout, switch llm_roles.post to the already-configured atria fallback in config \u2014 no new secret.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Open docs/status.json, find article_rejects.recent entries with code llm_error and read the error text.",
@@ -99,7 +98,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 24,
+  "last_cycle_seconds": 29,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1300,7 +1299,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-03T00:32:10.626070+00:00",
+    "checked_at": "2026-11-03T01:32:12.323543+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1918,7 +1917,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-03T00:32:33.192299+00:00",
+    "last_run": "2026-11-03T01:32:40.060272+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1928,20 +1927,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-03T00:32:33.546084+00:00",
+    "last_run": "2026-11-03T01:32:40.300383+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4943931,
-        "at": "2026-11-02T15:09:14.803425+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-11-02T15:09:14.803425+00:00",
-        "ok": true
-      },
       {
         "id": 4925166,
         "at": "2026-11-02T15:58:18.737019+00:00",
@@ -1949,16 +1938,6 @@
       },
       {
         "id": 4552210,
-        "at": "2026-11-02T15:58:18.737019+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820684,
-        "at": "2026-11-02T15:58:18.737019+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-11-02T15:58:18.737019+00:00",
         "ok": true
       },
@@ -2143,8 +2122,28 @@
         "ok": true
       },
       {
+        "id": 4943931,
+        "at": "2026-11-03T01:32:40.300383+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-11-03T01:32:40.300383+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-11-03T01:32:40.300383+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-03T01:32:40.300383+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-03T00:32:33.546084+00:00",
+        "at": "2026-11-03T01:32:40.300383+00:00",
         "ok": true
       }
     ],
@@ -2153,7 +2152,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.4
+    "oldest_check_age_hours": 9.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

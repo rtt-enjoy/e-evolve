@@ -206,3 +206,9 @@ Only the masked address (`wallet.address_masked`) is written to tracked files;
   owner saw both changes as lost. Before pushing a UI change, run `pnpm build`,
   commit `docs/`, and check that `docs/assets/` holds the new code (for
   example, `grep` the built chunk for a new class name).
+- **The document scrolls, not `<main>`.** `.main` has no height cap and no
+  `overflow`, so `mainRef.current.scrollTo()` did nothing. Until 2026-11-03 a
+  detail page's scroll offset carried over to the next page, on every section.
+  `App.tsx` now calls `window.scrollTo` on every `section`/`detail` change. The
+  browser still restores the old offset on Back. If `<main>` ever becomes its
+  own scroll box, move the reset back onto it.

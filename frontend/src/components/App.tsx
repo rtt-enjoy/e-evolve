@@ -1,5 +1,5 @@
 import { ChevronRight, Menu, Monitor, Moon, RefreshCw, Sparkles, Sun, X } from 'lucide-react';
-import { Suspense, lazy, useEffect, useMemo, useRef, useState, type ComponentType } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useState, type ComponentType } from 'react';
 import { Banner, Dot, Empty, Pill } from './ui';
 import { availableSections, sectionById, SECTIONS, unclaimedKeys } from '../sections/registry';
 import { buildHealth, buildIssues, buildReadiness } from '../utils/dashboard';
@@ -53,12 +53,13 @@ export function App() {
 	const [theme, cycleTheme] = useTheme();
 	const ThemeIcon = THEME_ICON[theme];
 	const route = useRoute();
-	const mainRef = useRef<HTMLElement>(null);
 
 	// Close the mobile drawer and scroll to top whenever the route changes.
+	// The document scrolls, not <main> (it has no height cap or overflow), so
+	// scrolling <main> was a no-op and a detail page's offset carried over.
 	useEffect(() => {
 		setNavOpen(false);
-		mainRef.current?.scrollTo({ top: 0 });
+		window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 	}, [route.section, route.detail]);
 
 	const sections = useMemo(() => availableSections(status), [status]);
@@ -131,7 +132,7 @@ export function App() {
 
 			<button className="nav-scrim" type="button" onClick={() => setNavOpen(false)} aria-hidden={!navOpen} tabIndex={-1} />
 
-			<main className="main" id="main" ref={mainRef}>
+			<main className="main" id="main">
 				<div className="topbar">
 					<button className="icon-btn nav-open-btn" type="button" onClick={() => setNavOpen(true)} aria-label="Open navigation">
 						<Menu size={18} />

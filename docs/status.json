@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-03T01:32:11.838113+00:00",
-  "total_runs": 2232,
+  "last_run": "2026-11-03T02:32:17.046294+00:00",
+  "total_runs": 2233,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,13 +34,13 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the weak_title prompt space is saturated with ~30 unmerged, near-identical open proposals covering exactly the two edits the gate findings point at (ALL-CACS wording, colon-subtitle rule), and status.suggestions itself records that without a merge, further prompt edits there are ungradeable \u2014 a 31st proposal only buries the space further.",
+    "summary": "No change proposed: the weak_title prompt space is saturated by 30 unmerged branches covering exactly the two gate findings ('title has ALL-CAPS word' x4, colon-subtitle x1), so another edit is ungradeable until one merges, and the remaining reject mass (llm_error=23 of 25 last-14-day losses) is engine-side, not prompt-fixable.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Merge one open title-prompt branch so the fix can be measured",
-        "description": "Thirty unmerged proposals cover the same weak_title space; without a merge, further prompt edits there are ungradeable and the drafts keep dying.",
-        "owner_action": "Pick any single small branch touching articles.py title rules (ALL-CAPS examples or colon-subtitle wording), merge it, and leave the space untouched for two weeks.",
+        "description": "Thirty unmerged proposals cover the same weak_title space; without a merge, further prompt edits there are ungradeable and 5 drafts per 14 days keep dying on two repeat findings.",
+        "owner_action": "Pick any single small branch touching articles.py title rules (the ALL-CAPS examples or colon-subtitle wording), merge it, and leave the space untouched for two weeks.",
         "secret_needed": null,
         "how_to": [
           "Step 1: Open the evolve/* review branches from 2026-10-31 onward and choose one tiny title-rule edit.",
@@ -49,7 +49,7 @@
       },
       {
         "title": "Decide glm's future as the post-role provider",
-        "description": "llm_error is 23 of the last-14-day rejects; no prompt edit can recover those drafts. A provider or role swap recovers more posts than all prompt work combined.",
+        "description": "llm_error is 23 of the last-14-day rejects \u2014 nearly five times weak_title \u2014 so no prompt edit can recover as many posts as a provider or role swap.",
         "owner_action": "Read article_rejects.recent llm_error detail strings; if quota/timeout, switch llm_roles.post to the already-configured atria fallback in config \u2014 no new secret.",
         "secret_needed": null,
         "how_to": [
@@ -58,18 +58,19 @@
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach via prompts), Principle 3j discipline applied to the evolution loop itself: don't stack changes on top of unmeasured ones",
+    "direction": "Checklist step 4 (reach via prompts), gated by the PROMPT LEDGER's own measurement rule: a prompt fix must be gradeable in the next 14-day window.",
     "evidence": [
-      "article_rejects last-14-day weak_title = 5 ('title has ALL-CAPS word' x4, 'colon subtitle' x1)",
-      "PRIOR PROPOSALS lists 30 distinct open branches, every one targeting articles.py title rules (ALL-CAPS examples or colon-subtitle wording), none merged",
-      "status.suggestions[0] = 'Merge one open title-prompt branch so the fix can be measured ... without a merge, further prompt edits there are ungradeable and the drafts keep dying'",
-      "llm_error=23 in the same window \u2014 larger than weak_title=5 and not fixable by any prompt edit"
+      "article_rejects last-14-day window: weak_title=5, fabricated=2 (prompt-side), llm_error=23, empty_draft=2 (engine-side)",
+      "article_rejects.counts total 64 with llm_error=36 lifetime and last reject 'llm_error': 'LLM call failed'",
+      "PRIOR PROPOSALS: 30 distinct open branches since 2026-10-31 target the ALL-CAPS / colon-subtitle title rules in bot/earning/articles.py, none merged",
+      "suggestions already carries the owner action: merge one title-prompt branch and leave the space untouched for two weeks",
+      "reach itself is healthy: article_daily published=1 today, receipt_check coverage complete, 42 posts avg 133.6 views, preferred_archetypes=['problem-workaround'] already steered into the prompt"
     ],
-    "money_path": "none this cycle (maintenance of proposal quality): the eventual fix converts rejected drafts into published posts, each carrying the tip footer",
-    "verify": "After the owner merges one open title-rule branch, the next 14-day article_rejects window should show weak_title falling from 5; this cycle proposes nothing new to verify",
+    "money_path": "none (no change; reach work deferred pending a merge so the next prompt edit can be measured)",
+    "verify": "No change to verify. Once the owner merges one title-rule branch, the next 14-day article_rejects window should show weak_title falling from 5; if the owner instead swaps llm_roles.post to atria, llm_error should fall from 23.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -78,8 +79,8 @@
   "suggestions": [
     {
       "title": "Merge one open title-prompt branch so the fix can be measured",
-      "description": "Thirty unmerged proposals cover the same weak_title space; without a merge, further prompt edits there are ungradeable and the drafts keep dying.",
-      "owner_action": "Pick any single small branch touching articles.py title rules (ALL-CAPS examples or colon-subtitle wording), merge it, and leave the space untouched for two weeks.",
+      "description": "Thirty unmerged proposals cover the same weak_title space; without a merge, further prompt edits there are ungradeable and 5 drafts per 14 days keep dying on two repeat findings.",
+      "owner_action": "Pick any single small branch touching articles.py title rules (the ALL-CAPS examples or colon-subtitle wording), merge it, and leave the space untouched for two weeks.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Open the evolve/* review branches from 2026-10-31 onward and choose one tiny title-rule edit.",
@@ -88,7 +89,7 @@
     },
     {
       "title": "Decide glm's future as the post-role provider",
-      "description": "llm_error is 23 of the last-14-day rejects; no prompt edit can recover those drafts. A provider or role swap recovers more posts than all prompt work combined.",
+      "description": "llm_error is 23 of the last-14-day rejects \u2014 nearly five times weak_title \u2014 so no prompt edit can recover as many posts as a provider or role swap.",
       "owner_action": "Read article_rejects.recent llm_error detail strings; if quota/timeout, switch llm_roles.post to the already-configured atria fallback in config \u2014 no new secret.",
       "secret_needed": null,
       "how_to": [
@@ -98,7 +99,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 29,
+  "last_cycle_seconds": 27,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1299,7 +1300,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-03T01:32:12.323543+00:00",
+    "checked_at": "2026-11-03T02:32:17.727569+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1917,7 +1918,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-03T01:32:40.060272+00:00",
+    "last_run": "2026-11-03T02:32:43.481323+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1927,20 +1928,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-03T01:32:40.300383+00:00",
+    "last_run": "2026-11-03T02:32:43.805147+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4925166,
-        "at": "2026-11-02T15:58:18.737019+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-11-02T15:58:18.737019+00:00",
-        "ok": true
-      },
       {
         "id": 4931682,
         "at": "2026-11-02T16:59:45.551108+00:00",
@@ -1948,16 +1939,6 @@
       },
       {
         "id": 4740283,
-        "at": "2026-11-02T16:59:45.551108+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
-        "at": "2026-11-02T16:59:45.551108+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-11-02T16:59:45.551108+00:00",
         "ok": true
       },
@@ -2142,8 +2123,28 @@
         "ok": true
       },
       {
+        "id": 4925166,
+        "at": "2026-11-03T02:32:43.805147+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-11-03T02:32:43.805147+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-03T02:32:43.805147+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-03T02:32:43.805147+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-03T01:32:40.300383+00:00",
+        "at": "2026-11-03T02:32:43.805147+00:00",
         "ok": true
       }
     ],
@@ -2152,7 +2153,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.6
+    "oldest_check_age_hours": 9.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

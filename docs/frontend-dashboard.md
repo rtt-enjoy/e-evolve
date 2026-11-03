@@ -155,6 +155,11 @@ Only the masked address (`wallet.address_masked`) is written to tracked files;
 - Charts are single-series bars (`BarList`): one accent hue on a shared zero,
   the value printed beside each bar, and the sample size as `n=` so a mean over
   two posts reads as one. Rows below `_MIN_ARCHETYPE_SAMPLE` are drawn faint.
+- Generous spacing: the owner found Leads and Research cramped (2026-11-03).
+  A `.card` is a flex column with `gap-5`, so its children (filters, lists,
+  key/value blocks) never touch; don't add `mt-*` to a card's direct child.
+  Secondary text is at least 13px with `leading-relaxed`; list rows get `py-4`
+  or more, with a gap between a title and its detail line.
 - Both themes come from the same tokens; check light and dark, and a 390 px
   phone width, before shipping.
 

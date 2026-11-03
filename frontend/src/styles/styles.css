@@ -421,7 +421,7 @@ a {
 	}
 
 	.content {
-		@apply mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-4 py-7 sm:px-8 sm:py-9;
+		@apply mx-auto flex w-full max-w-[1200px] flex-col gap-8 px-4 py-8 sm:px-8 sm:py-10;
 		animation: rise .45s var(--ease) both;
 	}
 
@@ -445,7 +445,7 @@ a {
 	}
 
 	.section-head p {
-		@apply mt-2 max-w-3xl text-[14.5px] leading-relaxed text-soft;
+		@apply mt-3 max-w-3xl text-[15px] leading-[1.75] text-soft;
 	}
 
 	.subhead {
@@ -459,15 +459,15 @@ a {
 	/* ============================================================ layout */
 
 	.stack {
-		@apply flex min-w-0 flex-col gap-5;
+		@apply flex min-w-0 flex-col gap-6;
 	}
 
 	.split {
-		@apply grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)];
+		@apply grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)];
 	}
 
 	.grid-2 {
-		@apply grid gap-4 sm:grid-cols-2;
+		@apply grid gap-5 sm:grid-cols-2;
 	}
 
 	.grid-3 {
@@ -477,11 +477,11 @@ a {
 	/* ============================================================= cards */
 
 	.card {
-		@apply min-w-0 rounded-[var(--radius-lg)] border border-line bg-panel p-5 shadow-panel sm:p-6;
+		@apply flex min-w-0 flex-col gap-5 rounded-[var(--radius-lg)] border border-line bg-panel p-5 shadow-panel sm:p-7;
 	}
 
 	.card-head {
-		@apply mb-4 flex flex-wrap items-start justify-between gap-3;
+		@apply flex flex-wrap items-start justify-between gap-3;
 	}
 
 	.card-head h2 {
@@ -490,13 +490,13 @@ a {
 	}
 
 	.card-head p {
-		@apply mt-1 text-[13px] leading-relaxed text-soft;
+		@apply mt-1.5 text-[13.5px] leading-relaxed text-soft;
 	}
 
 	/* ============================================================== tiles */
 
 	.tile-row {
-		@apply grid min-w-0 grid-cols-2 gap-3 xl:grid-cols-4;
+		@apply grid min-w-0 grid-cols-2 gap-4 xl:grid-cols-4;
 	}
 
 	.tile {
@@ -535,7 +535,7 @@ a {
 	}
 
 	.tile-detail {
-		@apply mt-1.5 text-xs leading-snug text-soft sm:text-[13px];
+		@apply mt-2 text-xs leading-relaxed text-soft sm:text-[13px];
 	}
 
 	.tile-arrow {
@@ -683,7 +683,7 @@ a {
 	/* ===================================================== filters / search */
 
 	.filters {
-		@apply flex flex-wrap items-center gap-2;
+		@apply flex flex-wrap items-center gap-3;
 	}
 
 	.search {
@@ -732,7 +732,7 @@ a {
 	}
 
 	.lead-list a {
-		@apply -mx-2 flex items-center gap-3 rounded-lg px-2 py-3 transition hover:bg-panel2;
+		@apply -mx-3 flex items-center gap-4 rounded-lg px-3 py-4 transition hover:bg-panel2;
 	}
 
 	.score-chip {
@@ -753,15 +753,15 @@ a {
 	}
 
 	.lead-body {
-		@apply flex min-w-0 flex-1 flex-col;
+		@apply flex min-w-0 flex-1 flex-col gap-1;
 	}
 
 	.lead-body strong {
-		@apply truncate text-sm font-medium;
+		@apply truncate text-[14.5px] font-medium leading-6;
 	}
 
 	.lead-body em {
-		@apply truncate text-xs not-italic text-soft;
+		@apply truncate text-[13px] not-italic leading-5 text-soft;
 	}
 
 	.lead-table {
@@ -770,15 +770,15 @@ a {
 
 	.lead-row {
 		@apply flex items-start gap-2 border-t border-line transition first:border-t-0;
-		@apply -mx-2 rounded-lg px-2 hover:bg-panel2;
+		@apply -mx-3 rounded-lg px-3 hover:bg-panel2;
 	}
 
 	.lead-row-link {
-		@apply flex min-w-0 flex-1 flex-wrap items-start gap-3 py-3.5;
+		@apply flex min-w-0 flex-1 flex-wrap items-start gap-x-4 gap-y-3 py-5;
 	}
 
 	.lead-row-source {
-		@apply mt-3.5 h-8 w-8;
+		@apply mt-5 h-8 w-8;
 	}
 
 	.lead-row-body {
@@ -786,20 +786,20 @@ a {
 	}
 
 	.lead-row-body strong {
-		@apply block text-sm font-medium leading-5;
+		@apply block text-[14.5px] font-medium leading-6;
 	}
 
 	.lead-row-body p {
-		@apply mt-1 line-clamp-2 text-xs leading-5 text-soft;
+		@apply mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-soft;
 	}
 
 	/* On narrow screens the pills drop under the title, aligned with it. */
 	.lead-row-meta {
-		@apply flex w-full shrink-0 flex-wrap items-center gap-1.5 pl-[52px] sm:w-auto sm:pl-0;
+		@apply flex w-full shrink-0 flex-wrap items-center gap-2 pl-14 sm:w-auto sm:pl-0;
 	}
 
 	.pager {
-		@apply mt-4 flex items-center justify-between gap-3 text-xs text-soft;
+		@apply -mt-3 flex items-center justify-between gap-3 text-xs text-soft;
 	}
 
 	/* ========================================================== attention */
@@ -889,7 +889,7 @@ a {
 	}
 
 	.disclosure > button em {
-		@apply mt-0.5 truncate text-xs not-italic text-soft;
+		@apply mt-1 truncate text-[13px] not-italic text-soft;
 	}
 
 	.disclosure .count {
@@ -897,14 +897,14 @@ a {
 	}
 
 	.disclosure-body {
-		@apply border-t border-line px-5 py-5;
+		@apply border-t border-line px-5 py-6 sm:px-6;
 		animation: rise .25s var(--ease) both;
 	}
 
 	/* ============================================================== text */
 
 	.prose {
-		@apply text-[14px] leading-relaxed text-soft;
+		@apply text-[14px] leading-[1.75] text-soft;
 	}
 
 	.prose.lead-in {
@@ -931,7 +931,7 @@ a {
 	.banner.warn { @apply border-yellow/30 bg-yellow/10 text-yellow; }
 
 	.bullets {
-		@apply m-0 flex list-none flex-col gap-2.5 p-0 text-sm leading-relaxed text-soft;
+		@apply m-0 flex list-none flex-col gap-3.5 p-0 text-sm leading-[1.7] text-soft;
 	}
 
 	.bullets li {
@@ -940,7 +940,7 @@ a {
 
 	.bullets li::before {
 		content: '';
-		@apply absolute left-0 top-[0.6em] h-1.5 w-1.5 rounded-full bg-accent;
+		@apply absolute left-0 top-[0.7em] h-1.5 w-1.5 rounded-full bg-accent;
 	}
 
 	.legend {
@@ -967,7 +967,7 @@ a {
 	}
 
 	.keyvalue > div {
-		@apply grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-3 bg-panel px-4 py-2.5;
+		@apply grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-4 bg-panel px-4 py-3 leading-relaxed;
 	}
 
 	.keyvalue dt {
@@ -992,7 +992,7 @@ a {
 	}
 
 	.mini-kv {
-		@apply m-0 flex flex-col gap-1 text-xs;
+		@apply m-0 flex flex-col gap-3 text-[13px] leading-relaxed;
 	}
 
 	.mini-kv dt {
@@ -1000,7 +1000,7 @@ a {
 	}
 
 	.mini-kv dd {
-		@apply m-0 font-medium tabular-nums;
+		@apply m-0 mt-0.5 font-medium tabular-nums;
 	}
 
 	.mini-kv dd.accent {
@@ -1011,7 +1011,7 @@ a {
 
 	.service,
 	.suggestion {
-		@apply flex min-w-0 flex-col gap-3 rounded-[var(--radius)] border border-line bg-panel2 p-4 transition hover:border-accent/30;
+		@apply flex min-w-0 flex-col gap-4 rounded-[var(--radius)] border border-line bg-panel2 p-5 transition hover:border-accent/30;
 	}
 
 	.service .service-head,
@@ -1029,7 +1029,7 @@ a {
 	}
 
 	.idea-head {
-		@apply flex items-start justify-between gap-3;
+		@apply flex items-start justify-between gap-4;
 	}
 
 	.idea-head strong {
@@ -1037,7 +1037,7 @@ a {
 	}
 
 	.idea-head p {
-		@apply mt-1 text-xs text-soft;
+		@apply mt-1.5 text-[13px] leading-relaxed text-soft;
 	}
 
 	.idea-price {
@@ -1049,7 +1049,7 @@ a {
 	}
 
 	.idea-price em {
-		@apply block text-[11px] not-italic text-soft;
+		@apply mt-0.5 block text-xs not-italic text-soft;
 	}
 
 	.suggestion .prose {
@@ -1065,7 +1065,7 @@ a {
 	}
 
 	.reference {
-		@apply flex min-w-0 flex-col gap-1 rounded-[var(--radius)] border border-line bg-panel2 p-4 transition hover:border-accent/30;
+		@apply flex min-w-0 flex-col gap-1.5 rounded-[var(--radius)] border border-line bg-panel2 p-5 transition hover:border-accent/30;
 	}
 
 	.reference strong {
@@ -1073,7 +1073,7 @@ a {
 	}
 
 	.reference p {
-		@apply text-xs leading-relaxed text-soft;
+		@apply text-[13px] leading-relaxed text-soft;
 	}
 
 	/* ============================================================ engine */

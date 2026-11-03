@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-03T16:10:04.910192+00:00",
-  "total_runs": 2248,
+  "last_run": "2026-11-03T17:10:09.707541+00:00",
+  "total_runs": 2249,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -35,31 +35,30 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus edit (weak_title / ALL-CAPS wording in articles.py) has already been proposed 30 times and never merged, and the evidence shows the dominant draft loss is llm_error, which no prompt edit can fix.",
+    "summary": "No change proposed: the PROMPT FOCUS (weak_title, 5 drafts in 14 days) is already covered by roughly twenty open, unmerged branches proposing nearly the same ALL-CAPS/colon-subtitle prompt clarifications, and the dominant actual loss is llm_error (23 drafts in 14 days), which lives in the protected bot/llm.py engine layer and cannot be fixed by any prompt edit I am permitted to make.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Check why GLM's post role is failing so often",
-        "description": "llm_error killed 23 drafts in 14 days \u2014 roughly one article and one tip ask every other day. No prompt edit can recover these; the engine call itself is failing.",
-        "owner_action": "Inspect the workflow logs for the failing complete_json_for_role('post') calls (timeout vs 4xx vs malformed JSON) and consider whether the glm-5.3-flash free tier is being rate-limited at the scheduled hour.",
+        "title": "Recover the 23 llm_error article drafts lost to the GLM engine",
+        "description": "llm_error killed 23 drafts in 14 days \u2014 roughly one article and one tip ask every other day, four times the weak_title loss and unreachable by any prompt edit. Fixing it is the single largest reach lever left.",
+        "owner_action": "Inspect workflow logs for the failing complete_json_for_role('post') calls and confirm whether the atria fallback actually fires for the post role (status shows llm_engine.calls={glm: 1} with no fallback calls recorded).",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open a recent failed run's log and grep for '[articles] rejected (llm_error)' to read the exception text.",
-          "Step 2: If it is a rate limit or timeout on GLM, verify the atria fallback actually fired for the post role, or shift the publish window in config/strategy.json."
+          "Step 1: In a recent run log, grep '[articles] rejected (llm_error)' and read the exception text to classify timeout vs 4xx vs malformed JSON.",
+          "Step 2: Verify in bot/llm.py's role fallback chain that a primary failure on role 'post' really escalates to atria; if it only escalates for 'upgrade'/'research', widen it or point the post role's primary at atria for a week and compare reject counts.",
+          "Step 3: If it is free-tier rate limiting at the 06:00-12:00 UTC+9 window, shift the publish window in config/strategy.json rather than adding retries (retry loops are a recorded dead-end)."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach), Principle 5 \u2014 but only when the lever actually moves the number",
+    "direction": "Checklist step 4 \u2014 reach via prompt upgrades (Principle 5), refused this cycle because the named prompt has no un-proposed edit left and the evidence points at the engine instead.",
     "evidence": [
-      "article_rejects.counts total 64: llm_error=36 is the dominant reject, weak_title=14 is second",
-      "Prompt ledger, last 14 days: weak_title=5 vs llm_error=23 and empty_draft=2 \u2014 25 of 27 lost drafts died in the engine, not at the title gate",
-      "PRIOR PROPOSALS lists ~30 open branches since 2026-10-31 all editing the ALL-CAPS / colon-subtitle wording in _SYSTEM and _revise_title; none merged",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "preferred_archetypes() = ['problem-workaround'] and receipt_check coverage_complete=True: steering and receive path are clean",
-      "backfill.skipped shows 5 posts held by dev.to 429 \u2014 doctrine forbids retry loops; next cycle is the retry"
+      "article_rejects.counts: llm_error=36 of 64 total, weak_title=14 lifetime but only 5 in the 14-day window",
+      "Prompt ledger: 'Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=23, empty_draft=2' \u2014 the engine loses ~4.6x more drafts than weak_title",
+      "PRIOR PROPOSALS: 2026-10-31 through 2026-11-02 contain 20+ distinct weak_title/ALL-CAPS prompt edits, all still unmerged \u2014 a 21st variant is a known dead-end",
+      "llm_workflows.post primary_active=true, serving=glm, model glm-5.3-flash with an atria fallback that evidently did not recover the failing complete_json_for_role('post') calls"
     ],
-    "money_path": "none (maintenance-only decision this cycle)",
-    "verify": "Next cycle's status: article_rejects.counts['weak_title'] growth rate in the 14-day window is the metric a merged prompt fix would move; article_rejects.counts['llm_error'] growth is the metric showing whether the engine, not the prompt, still owns the loss",
+    "money_path": "none this cycle \u2014 a rejected proposal would have been a prompt tweak against a gate finding the ledger already shows over-addressed; publishing-reach upside is blocked on the engine failures instead.",
+    "verify": "No change shipped. If the owner resolves the llm_error path, the 14-day llm_error count in the prompt ledger should fall from 23 toward the empty_draft baseline, and article_daily.published should reach 1 on more consecutive days.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -70,18 +69,19 @@
   },
   "suggestions": [
     {
-      "title": "Check why GLM's post role is failing so often",
-      "description": "llm_error killed 23 drafts in 14 days \u2014 roughly one article and one tip ask every other day. No prompt edit can recover these; the engine call itself is failing.",
-      "owner_action": "Inspect the workflow logs for the failing complete_json_for_role('post') calls (timeout vs 4xx vs malformed JSON) and consider whether the glm-5.3-flash free tier is being rate-limited at the scheduled hour.",
+      "title": "Recover the 23 llm_error article drafts lost to the GLM engine",
+      "description": "llm_error killed 23 drafts in 14 days \u2014 roughly one article and one tip ask every other day, four times the weak_title loss and unreachable by any prompt edit. Fixing it is the single largest reach lever left.",
+      "owner_action": "Inspect workflow logs for the failing complete_json_for_role('post') calls and confirm whether the atria fallback actually fires for the post role (status shows llm_engine.calls={glm: 1} with no fallback calls recorded).",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open a recent failed run's log and grep for '[articles] rejected (llm_error)' to read the exception text.",
-        "Step 2: If it is a rate limit or timeout on GLM, verify the atria fallback actually fired for the post role, or shift the publish window in config/strategy.json."
+        "Step 1: In a recent run log, grep '[articles] rejected (llm_error)' and read the exception text to classify timeout vs 4xx vs malformed JSON.",
+        "Step 2: Verify in bot/llm.py's role fallback chain that a primary failure on role 'post' really escalates to atria; if it only escalates for 'upgrade'/'research', widen it or point the post role's primary at atria for a week and compare reject counts.",
+        "Step 3: If it is free-tier rate limiting at the 06:00-12:00 UTC+9 window, shift the publish window in config/strategy.json rather than adding retries (retry loops are a recorded dead-end)."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 44,
+  "last_cycle_seconds": 33,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1817,7 +1817,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-03T16:10:05.522582+00:00",
+    "checked_at": "2026-11-03T17:10:10.361047+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2444,7 +2444,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-03T16:10:48.666282+00:00",
+    "last_run": "2026-11-03T17:10:41.891825+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -2454,20 +2454,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-03T16:10:48.977334+00:00",
+    "last_run": "2026-11-03T17:10:42.143378+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-11-03T06:51:15.022433+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-11-03T06:51:15.022433+00:00",
-        "ok": true
-      },
       {
         "id": 4641536,
         "at": "2026-11-03T07:52:02.690725+00:00",
@@ -2475,16 +2465,6 @@
       },
       {
         "id": 4965279,
-        "at": "2026-11-03T07:52:02.690725+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-03T07:52:02.690725+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
         "at": "2026-11-03T07:52:02.690725+00:00",
         "ok": true
       },
@@ -2669,8 +2649,28 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-11-03T17:10:42.143378+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-11-03T17:10:42.143378+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-11-03T17:10:42.143378+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-03T17:10:42.143378+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-03T16:10:48.977334+00:00",
+        "at": "2026-11-03T17:10:42.143378+00:00",
         "ok": true
       }
     ],

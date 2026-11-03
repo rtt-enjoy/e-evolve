@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-03T18:10:25.297946+00:00",
-  "total_runs": 2250,
+  "last_run": "2026-11-03T19:10:40.002703+00:00",
+  "total_runs": 2251,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -35,96 +35,77 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Expand the title gate's known-acronym allowlist (UI, UX, NLP, UNIX, K8S) so legitimate technical acronyms stop being rejected as ALL-CAPS shouting \u2014 the one weak_title lever not already exhausted by the 30 unmerged prompt-example proposals.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "Four of five weak_title losses were ALL-CAPS findings. The acronym allowlist that _shouted_words uses is missing several acronyms that are correct, expected casing in a dev.to headline (UI, UX, NLP, UNIX, K8S). Because the rewrite prompt bans ALL-CAPS flatly, a title the gate false-positives on can never be repaired, so the draft \u2014 and its tip footer \u2014 is lost deterministically. This is a false-positive fix in the gate's own documented spirit ('Blocking these would reject perfectly good headlines'), not a loosening: invented shouting like URGENT or BREAKING still rejects."
-      }
-    ],
+    "summary": "No change: the PROMPT FOCUS (weak_title, 5 drafts) points at exactly two prompts, and every plausible gradual edit to either is already an open, unmerged review branch \u2014 30+ distinct title-prompt proposals since 2026-10-31 (concrete ALL-CAPS examples, acronym allowlist, colon-subtitle mirror, second rewrite attempt, naming offending words). Re-proposing one would repeat a known dead end; the binding step is reach, but the lever is the reviewer's merge decision, not another branch.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Put the USDT address in the dev.to profile bio",
-        "description": "Carries the ask on every profile visit permanently \u2014 the one cheap channel row the doctrine still lists as owner-only, covering readers who arrive via the profile rather than a post.",
-        "owner_action": "Paste the TRC-20 address from payout_public into the Bio field at dev.to/settings once.",
+        "title": "Merge one of the open title-rewrite branches instead of letting 30 accumulate",
+        "description": "weak_title keeps costing ~5 drafts per 14 days because no title-prompt proposal has ever been merged; merging the smallest one (the 2026-11-02 _revise_title wording edit) lets the next cycle measure it against the reject tally and stop the loop of duplicate proposals.",
+        "owner_action": "Review and merge evolve branch 'evolve/1.41.1-20261103-181143' or the 2026-11-02 _revise_title branch, whichever diff is smaller.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open dev.to/settings and copy the address [redacted] into the Bio field.",
-          "Step 2: Save; no API route can do this (Forem's users endpoint is show-only), so it cannot be automated."
+          "Step 1: open the open evolve/* branches listed as PRIOR PROPOSALS dated 2026-11-02 touching bot/earning/articles.py _revise_title.",
+          "Step 2: merge the one that replaces the flat 'no ALL-CAPS, no colon-subtitle padding' phrase with the acronym-allowlist wording.",
+          "Step 3: let two hourly cycles run, then compare article_rejects.counts.weak_title."
         ]
       },
       {
-        "title": "Recover the 23 llm_error article drafts lost to the GLM engine",
-        "description": "llm_error killed 23 drafts in 14 days \u2014 over four times the weak_title loss and unreachable by any prompt edit. It is the largest remaining reach lever.",
-        "owner_action": "Inspect workflow logs for the failing complete_json_for_role('post') calls and confirm the atria fallback actually fires for the post role (llm_engine.calls shows {glm: 1} with no fallback calls recorded).",
+        "title": "Put the receive address in the dev.to profile bio",
+        "description": "Per the doctrine's channel table this is the one cheap remaining row: it carries the ask on every profile visit permanently and needs no account, processor or policy change.",
+        "owner_action": "Paste the published Tron address into the Bio field at dev.to/settings once.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Grep a recent run log for '[articles] rejected (llm_error)' and read the exception to classify timeout vs 4xx vs malformed JSON.",
-          "Step 2: Check bot/llm.py's role fallback chain: if 'post' does not escalate to atria, widen it, or point post's primary at atria for a week and compare reject counts.",
-          "Step 3: If it is free-tier rate limiting in the 06:00-12:00 UTC+9 window, shift the publish window in config/strategy.json rather than adding retries (retry loops are a recorded dead-end)."
+          "Step 1: open dev.to/settings and edit the profile Bio.",
+          "Step 2: include the address TFTNsf\u202629KbY in full so a reader can copy it.",
+          "Step 3: no bot change needed; the address is then live on every profile view."
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS: weak_title lost 5 drafts; 'title has ALL-CAPS word' x4. Served by fixing a gate false positive that no prompt edit can rescue: the prompts correctly tell the model to keep acronyms in real casing, then the gate rejects the acronym anyway.",
+    "direction": "Checklist step 4 (reach via preferred archetypes) / PROMPT FOCUS on weak_title \u2014 served by unblocking an existing proposal rather than duplicating it",
     "evidence": [
       "article_rejects.counts: weak_title=14 lifetime, 5 in last 14 days (PROMPT FOCUS)",
-      "Gate findings behind it: 'title has ALL-CAPS word' x4",
-      "articles._shouted_words filters via _KNOWN_ACRONYMS, whose own docstring says blocking real acronyms 'would reject perfectly good headlines' \u2014 but the set omits UI, UX, NLP, UNIX, K8S, all standard in dev.to headlines",
-      "30 prior proposals tried adding ALL-CAPS examples to _SYSTEM and _revise_title; none merged and weak_title persists \u2014 the instruction side is saturated",
-      "The rewrite prompt says flatly 'no ALL-CAPS', so even a correct rewrite containing UI/UX can never pass _title_problems; the draft is unrecoverable by any prompt wording"
+      "gate findings: 'title has ALL-CAPS word' x4, 'colon subtitle' x1 \u2014 the same two rules 30+ prior proposals targeted",
+      "article_rejects.counts: llm_error=36 (23 in window) \u2014 engine-side, not prompt-fixable",
+      "article_interest: problem-workaround n=9 avg=483.4 is the preferred archetype and steering is already wired via _audience_guidance and _prefer_proven_archetypes",
+      "receipt_check coverage 43/43, known_without_footer=0 \u2014 receive path is clean, so no step-1 work exists",
+      "wallet.received_total_usd=0.0 with other_assets empty \u2014 the gap is reach, not the ask"
     ],
-    "money_path": "reach-only: each rescued draft is one post and one tip ask that otherwise never ships; the footer itself is untouched.",
-    "verify": "Next cycles' article_rejects.recent should stop showing 'title has ALL-CAPS word' findings where the shouting word is UI/UX/NLP/UNIX/K8S; the 14-day weak_title count should fall from 5. Titles such as 'Why Your UI Loads Slow' now pass _title_problems while 'URGENT FIX' still rejects \u2014 the gate is narrowed to its documented intent, not loosened.",
+    "money_path": "reach-only: a merged title fix converts rejected drafts into published posts that carry the tip footer; no receive-path code touched",
+    "verify": "article_rejects.counts.weak_title should stop growing in the next 14-day window once the already-proposed title-rewrite edit is merged and observed; drafts lost per the evolution brief's 14-day tally is the count to watch fall",
     "error": null,
-    "branch": "evolve/1.41.1-20261103-181143",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Put the USDT address in the dev.to profile bio",
-      "description": "Carries the ask on every profile visit permanently \u2014 the one cheap channel row the doctrine still lists as owner-only, covering readers who arrive via the profile rather than a post.",
-      "owner_action": "Paste the TRC-20 address from payout_public into the Bio field at dev.to/settings once.",
+      "title": "Merge one of the open title-rewrite branches instead of letting 30 accumulate",
+      "description": "weak_title keeps costing ~5 drafts per 14 days because no title-prompt proposal has ever been merged; merging the smallest one (the 2026-11-02 _revise_title wording edit) lets the next cycle measure it against the reject tally and stop the loop of duplicate proposals.",
+      "owner_action": "Review and merge evolve branch 'evolve/1.41.1-20261103-181143' or the 2026-11-02 _revise_title branch, whichever diff is smaller.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open dev.to/settings and copy the address [redacted] into the Bio field.",
-        "Step 2: Save; no API route can do this (Forem's users endpoint is show-only), so it cannot be automated."
+        "Step 1: open the open evolve/* branches listed as PRIOR PROPOSALS dated 2026-11-02 touching bot/earning/articles.py _revise_title.",
+        "Step 2: merge the one that replaces the flat 'no ALL-CAPS, no colon-subtitle padding' phrase with the acronym-allowlist wording.",
+        "Step 3: let two hourly cycles run, then compare article_rejects.counts.weak_title."
       ]
     },
     {
-      "title": "Recover the 23 llm_error article drafts lost to the GLM engine",
-      "description": "llm_error killed 23 drafts in 14 days \u2014 over four times the weak_title loss and unreachable by any prompt edit. It is the largest remaining reach lever.",
-      "owner_action": "Inspect workflow logs for the failing complete_json_for_role('post') calls and confirm the atria fallback actually fires for the post role (llm_engine.calls shows {glm: 1} with no fallback calls recorded).",
+      "title": "Put the receive address in the dev.to profile bio",
+      "description": "Per the doctrine's channel table this is the one cheap remaining row: it carries the ask on every profile visit permanently and needs no account, processor or policy change.",
+      "owner_action": "Paste the published Tron address into the Bio field at dev.to/settings once.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Grep a recent run log for '[articles] rejected (llm_error)' and read the exception to classify timeout vs 4xx vs malformed JSON.",
-        "Step 2: Check bot/llm.py's role fallback chain: if 'post' does not escalate to atria, widen it, or point post's primary at atria for a week and compare reject counts.",
-        "Step 3: If it is free-tier rate limiting in the 06:00-12:00 UTC+9 window, shift the publish window in config/strategy.json rather than adding retries (retry loops are a recorded dead-end)."
+        "Step 1: open dev.to/settings and edit the profile Bio.",
+        "Step 2: include the address TFTNsf\u202629KbY in full so a reader can copy it.",
+        "Step 3: no bot change needed; the address is then live on every profile view."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 131,
+  "last_cycle_seconds": 41,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1860,7 +1841,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-03T18:10:25.864382+00:00",
+    "checked_at": "2026-11-03T19:10:40.694128+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2194,8 +2175,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261103-181143",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 42,
     "total_views": 5611,
@@ -2487,7 +2468,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-03T18:12:35.227957+00:00",
+    "last_run": "2026-11-03T19:11:20.395593+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -2497,20 +2478,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-03T18:12:35.546747+00:00",
+    "last_run": "2026-11-03T19:11:20.669300+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4568987,
-        "at": "2026-11-03T08:51:19.873432+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-11-03T08:51:19.873432+00:00",
-        "ok": true
-      },
       {
         "id": 4765372,
         "at": "2026-11-03T09:50:50.961543+00:00",
@@ -2518,16 +2489,6 @@
       },
       {
         "id": 4662663,
-        "at": "2026-11-03T09:50:50.961543+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-11-03T09:50:50.961543+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-11-03T09:50:50.961543+00:00",
         "ok": true
       },
@@ -2712,8 +2673,28 @@
         "ok": true
       },
       {
+        "id": 4568987,
+        "at": "2026-11-03T19:11:20.669300+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-11-03T19:11:20.669300+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-11-03T19:11:20.669300+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-03T19:11:20.669300+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-03T18:12:35.546747+00:00",
+        "at": "2026-11-03T19:11:20.669300+00:00",
         "ok": true
       }
     ],
@@ -2722,7 +2703,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.4
+    "oldest_check_age_hours": 9.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2742,7 +2723,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

@@ -510,7 +510,11 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		"Follow the TITLE rules in the system prompt exactly: "
 		f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
 		"technology or failure, no clickbait words, no exclamation marks, no "
-		"ALL-CAPS, no colon-subtitle padding.\n\n"
+		"shouted non-acronym words, no colon-subtitle padding. Acronyms in their "
+		"real casing (JSON, API, GitHub) are fine.\n\n"
+		"Example of the fix: 'Retries: A Practical Guide to Backoff in Python' "
+		"becomes 'Your Python Retry Loop Is Lying To You' -- one clause, no "
+		"subtitle, no shouted words.\n\n"
 		'Respond with ONLY this JSON: {"title": "..."}'
 	)
 	try:

@@ -84,6 +84,13 @@ and up to four related leads of the same kind. `SCORE_PARTS` in
 `LeadsSection.tsx` restates the Python weights (28/22/20/13/10/7), so update it
 if `_score` changes.
 
+Related-lead titles wrap (2026-11-03). They inherited `.reference strong`'s
+`truncate`, and on an inline `<strong>` that only applies `nowrap`, so a long
+title such as "Ask in the artifact, not only beside it — README, --help
+output, and docs footer" ran off the **Other places to get paid** card. The
+detail view overrides it with `block whitespace-normal break-words`. The shared
+`.reference` rule is unchanged, so Research reference cards are not affected.
+
 **Never adult, piracy or other prohibited content (owner rule, top
 priority).** `bot/earning/code_techs.py` drops such rows before they reach
 `status.json`. `LeadsSection.tsx` also filters them with `PROHIBITED_RE`, as a

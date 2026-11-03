@@ -485,7 +485,9 @@ function LeadDetail({ lead, index, opportunities }: { lead: CodeTechOpportunity;
 								{related.map(({ other, otherIndex }) => (
 									<a className="reference" key={`${other.url}-${otherIndex}`} href={`#/leads/${otherIndex}`}>
 										<span className="min-w-0">
-											<strong>{cleanTitle(other.title) || 'Untitled lead'}</strong>
+											{/* .reference truncates to one line, and on an inline <strong>
+											    that only forces nowrap -- long lead titles ran off the card. */}
+											<strong className="block whitespace-normal break-words">{cleanTitle(other.title) || 'Untitled lead'}</strong>
 											<p>{other.score || 0}/100 · {formatCost(other.cost_usd)} · {sourceLabel(other.source)}</p>
 										</span>
 									</a>

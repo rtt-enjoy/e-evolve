@@ -63,6 +63,19 @@ essentials, and detail lives one click away.
 `#/leads/<index>` is a detail view carrying the lead's `codex_prompt` with a
 copy button.
 
+**Every lead row in the `#/leads` list has its own open-source button** (the
+external-link icon at the row's right edge, owner request 2026-11-03). It opens
+`lead.url` in a new tab, so the owner does not have to open the detail view
+first. Keep it:
+
+- The row is a `<div class="lead-row">` holding two sibling links:
+  `.lead-row-link` (to the detail view) and `.lead-row-source` (to the source).
+  It must not go back to being one `<a>`, because links cannot nest and the
+  source button would have to be dropped.
+- Rows without a `url` (the curated `local-playbook` / `channel-table` rows that
+  have no page) show no button, never a dead one.
+- The detail view keeps its own `open source` button as well.
+
 ## Section Registry
 
 `frontend/src/sections/registry.ts` is the mechanism that keeps this dashboard
@@ -160,6 +173,10 @@ Only the masked address (`wallet.address_masked`) is written to tracked files;
   key/value blocks) never touch; don't add `mt-*` to a card's direct child.
   Secondary text is at least 13px with `leading-relaxed`; list rows get `py-4`
   or more, with a gap between a title and its detail line.
+- Filter chips (`.segmented`, e.g. *every source*, *local-playbook*) have
+  `p-1.5` inside the frame and `gap-1` between chips (2026-11-03). At `p-0.5`
+  the active chip sat 2 px from the frame, and a wrapped row had no room at
+  the right and bottom edges. Do not tighten it again.
 - Both themes come from the same tokens; check light and dark, and a 390 px
   phone width, before shipping.
 
@@ -181,3 +198,11 @@ Only the masked address (`wallet.address_masked`) is written to tracked files;
 - Build with `pnpm build` from `frontend/` so `docs/` holds the public artifacts.
   The prebuild step clears all hashed bundles, because section chunk names are
   open-ended and stale files would otherwise accumulate.
+- **A `frontend/src` change is not live until the rebuilt `docs/` is committed
+  in the same commit.** The public page serves the committed `docs/index.html`
+  and `docs/assets/*`. On 2026-11-03 two commits changed `frontend/src` (the
+  per-row source button and the spacing pass) without rebuilding `docs/`. The
+  live page still loaded `LeadsSection-Qe85-t6i.js` from 2026-10-31, so the
+  owner saw both changes as lost. Before pushing a UI change, run `pnpm build`,
+  commit `docs/`, and check that `docs/assets/` holds the new code (for
+  example, `grep` the built chunk for a new class name).

@@ -704,11 +704,11 @@ a {
 	}
 
 	.segmented {
-		@apply inline-flex max-w-full flex-wrap gap-0.5 rounded-[10px] border border-line bg-panel2 p-0.5;
+		@apply inline-flex max-w-full flex-wrap gap-1 rounded-xl border border-line bg-panel2 p-1.5;
 	}
 
 	.segmented button {
-		@apply inline-flex items-center gap-1.5 rounded-[7px] px-2.5 py-1.5 text-xs font-medium text-soft transition;
+		@apply inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-soft transition;
 		@apply hover:text-text;
 	}
 

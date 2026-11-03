@@ -1578,6 +1578,11 @@ python -m bot.main
   `.github/workflows/frontend.yml`. `bot/dashboard.py` only publishes the data
   (`docs/status.json`, `docs/earnings-log.md`) plus a fallback shell when no
   build exists. UI changes go in `frontend/src/`, never in built `docs/` files.
+- **Rebuild and commit `docs/` with every UI change.** The public page serves
+  the committed `docs/index.html` + `docs/assets/*`. A `frontend/src` commit
+  without `pnpm build` never reaches the page. On 2026-11-03 that hid the
+  Leads per-row source button and the spacing pass, and both looked lost.
+  Record every UI change in `docs/frontend-dashboard.md` in the same commit.
 - Colours are RGB-triplet tokens in the `:root` block of
   `frontend/src/styles/styles.css`, exposed to Tailwind as `accent`, `green`,
   `red`, etc. Never hardcode hex values.

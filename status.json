@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-03T11:50:35.565271+00:00",
-  "total_runs": 2243,
+  "last_run": "2026-11-03T12:50:35.255705+00:00",
+  "total_runs": 2244,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -35,71 +35,52 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No new change clears the bar: the PROMPT FOCUS fix (concrete banned ALL-CAPS examples plus acronym exception, in the article draft _SYSTEM and _revise_title) has already been proposed at least 30 times since 2026-10-31 \u2014 every variant is still an open, unmerged review branch \u2014 and the prompt's existing rules plus devto.fix_title_casing already cover what those proposals add, so a 31st near-identical diff adds nothing until one of the parked branches is merged and observed for a 14-day window.",
+    "summary": "No change proposed: the weak_title fix the PROMPT FOCUS asks for already exists in at least 30 open, unmerged review branches (2026-10-31 to 2026-11-02, all touching bot/earning/articles.py), so another variant would duplicate them into a 31st and further bury the rules that matter; the binding constraint is the owner merging one, not another prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the 2026-11-02 parked title-prompt branches instead of waiting for a 31st variant",
-        "description": "Unlocks the only edit that can move weak_title; every draft the gate saves after it ships is one more article and one more tip ask published",
-        "owner_action": "Review the open evolve/* branches dated 2026-11-02 touching bot/earning/articles.py and merge the one that adds concrete banned ALL-CAPS examples (URGENT, IMPORTANT, NOTE, BREAKING) while keeping the acronym exception",
+        "title": "Merge exactly one parked title-prompt branch; discard the rest",
+        "description": "Unlocks the only edit class that can move weak_title; every subsequent gate save is one more article and one more tip ask that ships",
+        "owner_action": "Review the open evolve/* branches dated 2026-11-02 touching bot/earning/articles.py and merge the one that adds concrete banned ALL-CAPS examples (URGENT, IMPORTANT, NOTE, BREAKING) while keeping the acronym exception (PDF, JSON, API); close the other 29 to stop the ledger filling with duplicates",
         "secret_needed": null,
         "how_to": [
-          "Step 1: List the open evolve/* review branches dated 2026-10-31 to 2026-11-02",
-          "Step 2: Pick the 2026-11-02 variant that names concrete banned ALL-CAPS words and keeps the acronym exception (PDF, JSON, API); discard the rest to stop the ledger filling with duplicates",
-          "Step 3: After merging, wait one full 14-day window and check article_rejects.counts.weak_title and the gate findings behind it in status.json; if ALL-CAPS rejects persist, the next edit should target _revise_title's prompt (the rewrite step), not the draft prompt again"
+          "Step 1: List open evolve/* review branches dated 2026-10-31 to 2026-11-02",
+          "Step 2: Merge the variant that names concrete banned ALL-CAPS words and keeps the acronym exception; delete the rest",
+          "Step 3: Wait one full 14-day window, then read article_rejects.counts.weak_title and its gate findings in status.json; if ALL-CAPS rejects persist, target _revise_title's prompt next, not the draft prompt"
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS: weak_title lost 5 drafts in 14 days ('title has ALL-CAPS word' x4, colon-subtitle x1)",
+    "direction": "Checklist step 4 \u2014 upgrade prompts one step per cycle \u2014 read together with the dead-end rule 'Anything already in PRIOR PROPOSALS. Those branches are still open.'",
     "evidence": [
-      "article_rejects.counts: weak_title=5 over the 14-day prompt window",
-      "gate findings: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle' x1",
-      "PRIOR PROPOSALS: 30+ open branches since 2026-10-31 all editing the same _SYSTEM title rules in bot/earning/articles.py, none merged",
-      "evolution_pending_review = false and last_evolution_branch = null, i.e. nothing is currently awaiting review",
-      "devto._TITLE_BANNED already contains the ALL-CAPS and colon-subtitle rules; devto._KNOWN_ACRONYMS already carves out PDF, JSON, API etc.; devto.fix_title_casing already restores real acronym casing at publish"
+      "article_rejects.counts: weak_title=5 in last 14 days, gate findings 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle' x1",
+      "PROMPT LEDGER: every one of those findings maps to bot/earning/articles.py _SYSTEM or _revise_title, and PRIOR PROPOSALS lists 30 distinct unmerged branches proposing exactly those edits (concrete banned ALL-CAPS examples, acronym exception, colon-subtitle rule, replace 'Title Case The Important Words' \u2014 the latter proposed 3x)",
+      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=23 \u2014 the largest loss, and by design not a prompt matter"
     ],
-    "money_path": "reach-only: prompt fixes convert refused drafts into published posts, each carrying the tip footer; no receive-path code is touched",
-    "verify": "Owner merges the strongest parked 2026-11-02 branch (the one adding concrete banned ALL-CAPS examples with the acronym exception), then reads article_rejects.counts.weak_title in status.json over the next 14-day window \u2014 it should fall toward 0; the lifetime counts tally will not move, by design",
+    "money_path": "reach-only: a merged title prompt saves drafts, and each saved draft is one post and one tip ask published; no receive-path code is touched.",
+    "verify": "After the owner merges one 2026-11-02 branch and a full 14-day window elapses, article_rejects.counts.weak_title and the 'title has ALL-CAPS word' gate findings in status.json should fall; if they do not, the next edit targets _revise_title, not the draft prompt again.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one of the 2026-11-02 parked title-prompt branches instead of waiting for a 31st variant",
-      "description": "Unlocks the only edit that can move weak_title; every draft the gate saves after it ships is one more article and one more tip ask published",
-      "owner_action": "Review the open evolve/* branches dated 2026-11-02 touching bot/earning/articles.py and merge the one that adds concrete banned ALL-CAPS examples (URGENT, IMPORTANT, NOTE, BREAKING) while keeping the acronym exception",
+      "title": "Merge exactly one parked title-prompt branch; discard the rest",
+      "description": "Unlocks the only edit class that can move weak_title; every subsequent gate save is one more article and one more tip ask that ships",
+      "owner_action": "Review the open evolve/* branches dated 2026-11-02 touching bot/earning/articles.py and merge the one that adds concrete banned ALL-CAPS examples (URGENT, IMPORTANT, NOTE, BREAKING) while keeping the acronym exception (PDF, JSON, API); close the other 29 to stop the ledger filling with duplicates",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List the open evolve/* review branches dated 2026-10-31 to 2026-11-02",
-        "Step 2: Pick the 2026-11-02 variant that names concrete banned ALL-CAPS words and keeps the acronym exception (PDF, JSON, API); discard the rest to stop the ledger filling with duplicates",
-        "Step 3: After merging, wait one full 14-day window and check article_rejects.counts.weak_title and the gate findings behind it in status.json; if ALL-CAPS rejects persist, the next edit should target _revise_title's prompt (the rewrite step), not the draft prompt again"
+        "Step 1: List open evolve/* review branches dated 2026-10-31 to 2026-11-02",
+        "Step 2: Merge the variant that names concrete banned ALL-CAPS words and keeps the acronym exception; delete the rest",
+        "Step 3: Wait one full 14-day window, then read article_rejects.counts.weak_title and its gate findings in status.json; if ALL-CAPS rejects persist, target _revise_title's prompt next, not the draft prompt"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 80,
+  "last_cycle_seconds": 39,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1835,7 +1816,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-03T11:50:35.857154+00:00",
+    "checked_at": "2026-11-03T12:50:35.845147+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2462,7 +2443,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-03T11:51:54.730850+00:00",
+    "last_run": "2026-11-03T12:51:13.962886+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -2472,20 +2453,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-03T11:51:54.971161+00:00",
+    "last_run": "2026-11-03T12:51:14.300675+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4925166,
-        "at": "2026-11-03T02:32:43.805147+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-11-03T02:32:43.805147+00:00",
-        "ok": true
-      },
       {
         "id": 4931682,
         "at": "2026-11-03T03:32:40.680430+00:00",
@@ -2493,16 +2464,6 @@
       },
       {
         "id": 4740283,
-        "at": "2026-11-03T03:32:40.680430+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-11-03T03:32:40.680430+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
         "at": "2026-11-03T03:32:40.680430+00:00",
         "ok": true
       },
@@ -2687,8 +2648,28 @@
         "ok": true
       },
       {
+        "id": 4925166,
+        "at": "2026-11-03T12:51:14.300675+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-11-03T12:51:14.300675+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-03T12:51:14.300675+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-03T12:51:14.300675+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-03T11:51:54.971161+00:00",
+        "at": "2026-11-03T12:51:14.300675+00:00",
         "ok": true
       }
     ],
@@ -2717,7 +2698,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

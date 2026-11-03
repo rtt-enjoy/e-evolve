@@ -1001,6 +1001,11 @@ _KNOWN_ACRONYMS = {
 	"GPT", "AI", "ML", "ETL", "CI", "CD", "TDD", "DDD", "MVC", "ORM", "UUID",
 	"ASCII", "UTF", "REGEX", "WASM", "PDF", "OCR", "NPM", "PIP", "GIT", "AST",
 	"IO", "FIFO", "LIFO", "RPC", "SSR", "SPA", "PWA", "DOM", "SEO", "MRR", "IDE",
+	# UI/UX appear in real published headlines constantly and are never
+	# written as "Ui"/"Ux"; a gate hit on them was a lost draft the title
+	# rewrite could not rescue, because the rewrite prompt bans ALL-CAPS
+	# flatly and would never emit the acronym either.
+	"UI", "UX", "NLP", "UNIX", "K8S",
 }
 
 

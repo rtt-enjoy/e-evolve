@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-03T19:10:40.002703+00:00",
-  "total_runs": 2251,
+  "last_run": "2026-11-03T20:10:41.568152+00:00",
+  "total_runs": 2252,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -35,43 +35,41 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change: the PROMPT FOCUS (weak_title, 5 drafts) points at exactly two prompts, and every plausible gradual edit to either is already an open, unmerged review branch \u2014 30+ distinct title-prompt proposals since 2026-10-31 (concrete ALL-CAPS examples, acronym allowlist, colon-subtitle mirror, second rewrite attempt, naming offending words). Re-proposing one would repeat a known dead end; the binding step is reach, but the lever is the reviewer's merge decision, not another branch.",
+    "summary": "No change clears the bar this cycle: the weak_title losses (5 in 14 days, ALL-CAPS x4, colon-subtitle x1) have been the target of 30+ unmerged prompt proposals that are still open, so a 31st variant of the same edit adds nothing; meanwhile the dominant loss is the engine, not the prompts (llm_error=36 lifetime, 23 of the last 14 days' rejects, vs weak_title=5), and no prompt edit can fix an LLM call that fails.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the open title-rewrite branches instead of letting 30 accumulate",
-        "description": "weak_title keeps costing ~5 drafts per 14 days because no title-prompt proposal has ever been merged; merging the smallest one (the 2026-11-02 _revise_title wording edit) lets the next cycle measure it against the reject tally and stop the loop of duplicate proposals.",
-        "owner_action": "Review and merge evolve branch 'evolve/1.41.1-20261103-181143' or the 2026-11-02 _revise_title branch, whichever diff is smaller.",
+        "title": "Put the wallet address in the dev.to profile bio",
+        "description": "Carries the ask on every profile visit permanently \u2014 the one cheap owner-only action the channel table already recommends; no account, no processor, no policy change.",
+        "owner_action": "One manual edit of the Bio field at dev.to/settings",
         "secret_needed": null,
         "how_to": [
-          "Step 1: open the open evolve/* branches listed as PRIOR PROPOSALS dated 2026-11-02 touching bot/earning/articles.py _revise_title.",
-          "Step 2: merge the one that replaces the flat 'no ALL-CAPS, no colon-subtitle padding' phrase with the acronym-allowlist wording.",
-          "Step 3: let two hourly cycles run, then compare article_rejects.counts.weak_title."
+          "Step 1: Open https://dev.to/settings/profile.",
+          "Step 2: Add one line to the bio, e.g. 'If a post saved you an afternoon, USDT (TRC-20) tips: [redacted]'.",
+          "Step 3: Save. Next cycle, confirm the address renders by visiting the public profile page."
         ]
       },
       {
-        "title": "Put the receive address in the dev.to profile bio",
-        "description": "Per the doctrine's channel table this is the one cheap remaining row: it carries the ask on every profile visit permanently and needs no account, processor or policy change.",
-        "owner_action": "Paste the published Tron address into the Bio field at dev.to/settings once.",
+        "title": "Review the open title-gate acronym-allowlist branch",
+        "description": "Four of the five recent weak_title losses were ALL-CAPS findings; if they are legitimate acronyms (UI, UX, NLP), the fix is the gate's _KNOWN_ACRONYMS list, which only a human-merged branch can widen \u2014 30 unmerged prompt edits have not reduced the count.",
+        "owner_action": "Read and merge or close the 2026-11-03 'Expand the title gate's known-acronym allowlist' branch",
         "secret_needed": null,
         "how_to": [
-          "Step 1: open dev.to/settings and edit the profile Bio.",
-          "Step 2: include the address TFTNsf\u202629KbY in full so a reader can copy it.",
-          "Step 3: no bot change needed; the address is then live on every profile view."
+          "Step 1: Open the review branch and check the five acronyms against dev.to's own published titles.",
+          "Step 2: Merge if they are safe, or close it so future cycles stop re-deriving prompt edits for the same gate finding."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach via preferred archetypes) / PROMPT FOCUS on weak_title \u2014 served by unblocking an existing proposal rather than duplicating it",
+    "direction": "Checklist step 4 (reach into a live receive path) via the PROMPT FOCUS; declined because the named prompt edits are saturated and the evidence points at a non-prompt cause.",
     "evidence": [
-      "article_rejects.counts: weak_title=14 lifetime, 5 in last 14 days (PROMPT FOCUS)",
-      "gate findings: 'title has ALL-CAPS word' x4, 'colon subtitle' x1 \u2014 the same two rules 30+ prior proposals targeted",
-      "article_rejects.counts: llm_error=36 (23 in window) \u2014 engine-side, not prompt-fixable",
-      "article_interest: problem-workaround n=9 avg=483.4 is the preferred archetype and steering is already wired via _audience_guidance and _prefer_proven_archetypes",
-      "receipt_check coverage 43/43, known_without_footer=0 \u2014 receive path is clean, so no step-1 work exists",
-      "wallet.received_total_usd=0.0 with other_assets empty \u2014 the gap is reach, not the ask"
+      "article_rejects.counts: llm_error=36, weak_title=14, empty_draft=9, fabricated=4",
+      "Drafts lost last 14 days: llm_error=23 vs weak_title=5 \u2014 the engine, not a prompt, loses ~4.6x more drafts",
+      "article_rejects.last = 'llm_error': 'LLM call failed'",
+      "PRIOR PROPOSALS lists ~25 open branches targeting the same _SYSTEM/_revise_title ALL-CAPS and colon-subtitle rules, including the exact 'replace the flat no-ALL-CAPS phrase in the title-rewrite prompt' edit from 2026-11-02",
+      "llm_engine.calls = {'glm': 1} with serving=glm, live=True \u2014 the single call this cycle succeeded, so the 23 recent failures were transient, matching the known no-retry-on-429 doctrine"
     ],
-    "money_path": "reach-only: a merged title fix converts rejected drafts into published posts that carry the tip footer; no receive-path code touched",
-    "verify": "article_rejects.counts.weak_title should stop growing in the next 14-day window once the already-proposed title-rewrite edit is merged and observed; drafts lost per the evolution brief's 14-day tally is the count to watch fall",
+    "money_path": "none (maintenance): this cycle proposes no change, so nothing touches the receive path; the footer coverage is already complete (receipt_check.covered/published_total = 43/43, known_without_footer = 0)",
+    "verify": "No change to verify. Next cycle, watch article_rejects.recent: if weak_title findings recur after the accumulated prompt proposals merge, the fix is in the gate's acronym list (an owner review decision on the open 2026-11-03 branch), not another prompt example. If llm_error continues to dominate, the lever is provider stability, which is outside prompt scope.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.1"
@@ -82,30 +80,29 @@
   },
   "suggestions": [
     {
-      "title": "Merge one of the open title-rewrite branches instead of letting 30 accumulate",
-      "description": "weak_title keeps costing ~5 drafts per 14 days because no title-prompt proposal has ever been merged; merging the smallest one (the 2026-11-02 _revise_title wording edit) lets the next cycle measure it against the reject tally and stop the loop of duplicate proposals.",
-      "owner_action": "Review and merge evolve branch 'evolve/1.41.1-20261103-181143' or the 2026-11-02 _revise_title branch, whichever diff is smaller.",
+      "title": "Put the wallet address in the dev.to profile bio",
+      "description": "Carries the ask on every profile visit permanently \u2014 the one cheap owner-only action the channel table already recommends; no account, no processor, no policy change.",
+      "owner_action": "One manual edit of the Bio field at dev.to/settings",
       "secret_needed": null,
       "how_to": [
-        "Step 1: open the open evolve/* branches listed as PRIOR PROPOSALS dated 2026-11-02 touching bot/earning/articles.py _revise_title.",
-        "Step 2: merge the one that replaces the flat 'no ALL-CAPS, no colon-subtitle padding' phrase with the acronym-allowlist wording.",
-        "Step 3: let two hourly cycles run, then compare article_rejects.counts.weak_title."
+        "Step 1: Open https://dev.to/settings/profile.",
+        "Step 2: Add one line to the bio, e.g. 'If a post saved you an afternoon, USDT (TRC-20) tips: [redacted]'.",
+        "Step 3: Save. Next cycle, confirm the address renders by visiting the public profile page."
       ]
     },
     {
-      "title": "Put the receive address in the dev.to profile bio",
-      "description": "Per the doctrine's channel table this is the one cheap remaining row: it carries the ask on every profile visit permanently and needs no account, processor or policy change.",
-      "owner_action": "Paste the published Tron address into the Bio field at dev.to/settings once.",
+      "title": "Review the open title-gate acronym-allowlist branch",
+      "description": "Four of the five recent weak_title losses were ALL-CAPS findings; if they are legitimate acronyms (UI, UX, NLP), the fix is the gate's _KNOWN_ACRONYMS list, which only a human-merged branch can widen \u2014 30 unmerged prompt edits have not reduced the count.",
+      "owner_action": "Read and merge or close the 2026-11-03 'Expand the title gate's known-acronym allowlist' branch",
       "secret_needed": null,
       "how_to": [
-        "Step 1: open dev.to/settings and edit the profile Bio.",
-        "Step 2: include the address TFTNsf\u202629KbY in full so a reader can copy it.",
-        "Step 3: no bot change needed; the address is then live on every profile view."
+        "Step 1: Open the review branch and check the five acronyms against dev.to's own published titles.",
+        "Step 2: Merge if they are safe, or close it so future cycles stop re-deriving prompt edits for the same gate finding."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 41,
+  "last_cycle_seconds": 38,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1841,7 +1838,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-03T19:10:40.694128+00:00",
+    "checked_at": "2026-11-03T20:10:42.064149+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2468,7 +2465,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-03T19:11:20.395593+00:00",
+    "last_run": "2026-11-03T20:11:18.969202+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -2478,20 +2475,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-03T19:11:20.669300+00:00",
+    "last_run": "2026-11-03T20:11:19.270615+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4765372,
-        "at": "2026-11-03T09:50:50.961543+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-11-03T09:50:50.961543+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-11-03T11:05:04.443266+00:00",
@@ -2499,16 +2486,6 @@
       },
       {
         "id": 4908316,
-        "at": "2026-11-03T11:05:04.443266+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820684,
-        "at": "2026-11-03T11:05:04.443266+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-11-03T11:05:04.443266+00:00",
         "ok": true
       },
@@ -2693,8 +2670,28 @@
         "ok": true
       },
       {
+        "id": 4765372,
+        "at": "2026-11-03T20:11:19.270615+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-11-03T20:11:19.270615+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-11-03T20:11:19.270615+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-03T20:11:19.270615+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-03T19:11:20.669300+00:00",
+        "at": "2026-11-03T20:11:19.270615+00:00",
         "ok": true
       }
     ],
@@ -2703,7 +2700,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.3
+    "oldest_check_age_hours": 9.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

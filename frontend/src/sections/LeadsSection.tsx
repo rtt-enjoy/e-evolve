@@ -165,26 +165,43 @@ function LeadList({ status, opportunities }: { status: Status; opportunities: Co
 							const index = opportunities.indexOf(lead);
 							const isChannel = normalizeKind(lead.kind) === 'channel';
 							return (
-								<a className="lead-row" href={`#/leads/${index}`} key={`${lead.url}-${index}`}>
-									{/* Score leads the row: it ranks by how passive the income is. */}
-									<span className={`score-chip ${scoreTone(lead.score)}`} title="passive score, out of 100">{lead.score || 0}</span>
-									<span className="lead-row-body">
-										<strong>{cleanTitle(lead.title) || 'Untitled lead'}</strong>
-										<p>{lead.reason || 'No reason recorded.'}</p>
-									</span>
-									<span className="lead-row-meta">
-										{/* "Free" only when the platform published $0. An unknown
-										    cost renders nothing rather than implying free. */}
-										{lead.cost_usd === 0 ? <Pill tone="good">free</Pill> : null}
-										{typeof lead.cost_usd === 'number' && lead.cost_usd > 0 ? (
-											<Pill tone="warn">{formatCost(lead.cost_usd)}</Pill>
-										) : null}
-										<Pill tone={isChannel ? 'info' : 'neutral'}>
-											{isChannel ? 'gets paid' : 'build & market'}
-										</Pill>
-										<Pill tone="neutral">{sourceLabel(lead.source)}</Pill>
-									</span>
-								</a>
+								// A div, not an <a>: the row holds two links (detail and
+								// source), and links cannot nest.
+								<div className="lead-row" key={`${lead.url}-${index}`}>
+									<a className="lead-row-link" href={`#/leads/${index}`}>
+										{/* Score leads the row: it ranks by how passive the income is. */}
+										<span className={`score-chip ${scoreTone(lead.score)}`} title="passive score, out of 100">{lead.score || 0}</span>
+										<span className="lead-row-body">
+											<strong>{cleanTitle(lead.title) || 'Untitled lead'}</strong>
+											<p>{lead.reason || 'No reason recorded.'}</p>
+										</span>
+										<span className="lead-row-meta">
+											{/* "Free" only when the platform published $0. An unknown
+											    cost renders nothing rather than implying free. */}
+											{lead.cost_usd === 0 ? <Pill tone="good">free</Pill> : null}
+											{typeof lead.cost_usd === 'number' && lead.cost_usd > 0 ? (
+												<Pill tone="warn">{formatCost(lead.cost_usd)}</Pill>
+											) : null}
+											<Pill tone={isChannel ? 'info' : 'neutral'}>
+												{isChannel ? 'gets paid' : 'build & market'}
+											</Pill>
+											<Pill tone="neutral">{sourceLabel(lead.source)}</Pill>
+										</span>
+									</a>
+									{/* Playbook rows have no URL, so no button rather than a dead one. */}
+									{lead.url ? (
+										<a
+											className="icon-btn lead-row-source"
+											href={lead.url}
+											target="_blank"
+											rel="noreferrer"
+											title="Open source"
+											aria-label={`Open source: ${cleanTitle(lead.title) || 'lead'}`}
+										>
+											<ExternalLink size={15} />
+										</a>
+									) : null}
+								</div>
 							);
 						})}
 					</div>

@@ -769,8 +769,16 @@ a {
 	}
 
 	.lead-row {
-		@apply flex flex-wrap items-start gap-3 border-t border-line py-3.5 transition first:border-t-0;
+		@apply flex items-start gap-2 border-t border-line transition first:border-t-0;
 		@apply -mx-2 rounded-lg px-2 hover:bg-panel2;
+	}
+
+	.lead-row-link {
+		@apply flex min-w-0 flex-1 flex-wrap items-start gap-3 py-3.5;
+	}
+
+	.lead-row-source {
+		@apply mt-3.5 h-8 w-8;
 	}
 
 	.lead-row-body {

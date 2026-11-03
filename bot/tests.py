@@ -1937,10 +1937,11 @@ class TestLeadsNeedNoNewSecret(unittest.TestCase):
 		original = code_techs_module.requests.get
 		try:
 			code_techs_module.requests.get = fake_get
-			code_techs_module._fetch_hn_leads({"community_searches": ["selling a chrome extension"]})
+			code_techs_module._fetch_hn_leads({"hn_searches": ["revenue"]})
 		finally:
 			code_techs_module.requests.get = original
 
+		self.assertTrue(headers_seen)
 		self.assertFalse(any("Authorization" in h for h in headers_seen))
 
 	def test_the_channel_table_needs_no_request_at_all(self):
@@ -2286,7 +2287,10 @@ class TestLeadStatusPayloadStaysBounded(unittest.TestCase):
     each carried a 1.7 KB prompt and a 470 B outreach draft.
     """
 
-	def test_forty_leads_stay_under_thirty_kilobytes(self):
+	def test_the_snapshot_stays_under_forty_five_kilobytes(self):
+		# The cap went from 16 rows / 30 KB to 32 rows / 45 KB on 2026-11-03,
+		# when the owner asked the Leads page to show more. The extra rows
+		# carry no prompt, so they cost ~1 KB each here and ~0.8 KB live.
 		# Fixtures mirror what the live queue actually holds now: channel rows
 		# carrying a manual_setup and verified_note, plus community assets.
 		# The old fixtures were job postings, so after the redirect they no
@@ -2304,12 +2308,175 @@ class TestLeadStatusPayloadStaysBounded(unittest.TestCase):
 			"verified_note": "Fees, networks and payout terms confirmed on the platform's own pricing page.",
 		} for i in range(40)]
 
-		ranked = _rank(leads, {"prompt_top_n": 6}, max_items=16, min_score=0)
+		ranked = _rank(leads, {"prompt_top_n": 6}, max_items=32, min_score=0)
 		payload = len(json.dumps([op.__dict__ for op in ranked]))
 
-		self.assertLess(payload, 30_000, f"{payload} bytes")
+		self.assertEqual(len(ranked), 32)
+		self.assertLess(payload, 45_000, f"{payload} bytes")
 		# Only the leads worth acting on pay for a prompt.
 		self.assertEqual(sum(1 for op in ranked if op.codex_prompt), 6)
+
+
+class TestHnLeadsCanMatchAnything(unittest.TestCase):
+	"""The HN fetcher sent ``tags=story,comment`` -- AND in Algolia -- and so
+    returned 0 leads every cycle for its whole life. Pin the query shape and
+    the title screen that replaced it.
+    """
+
+	def _run(self, hits):
+		params_seen = []
+
+		def fake_get(url, **kwargs):
+			params_seen.append(kwargs.get("params") or {})
+			return _StubResp({"hits": hits})
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = fake_get
+			leads = code_techs_module._fetch_hn_leads({"hn_searches": ["revenue"]})
+		finally:
+			code_techs_module.requests.get = original
+		return leads, params_seen
+
+	def test_no_tag_list_is_an_impossible_and(self):
+		_, params = self._run([])
+		self.assertTrue(params)
+		for p in params:
+			tags = str(p.get("tags", ""))
+			# A bare comma list is AND; an item is never two types at once.
+			self.assertFalse("," in tags and not tags.startswith("("), tags)
+
+	def test_only_ask_hn_titles_about_earning_survive(self):
+		leads, _ = self._run([
+			{"objectID": "1", "title": "Ask HN: Do you have side-projects that generate >$500 revenue/month?",
+			 "story_text": "", "created_at": _hours_ago_iso(5)},
+			{"objectID": "2", "title": "At this point I feel like AI companies selling Fear",
+			 "story_text": "", "created_at": _hours_ago_iso(5)},
+			{"objectID": "3", "title": "Ask HN: Which books did you read at least twice?",
+			 "story_text": "revenue", "created_at": _hours_ago_iso(5)},
+		])
+		self.assertEqual([lead["url"] for lead in leads], ["https://news.ycombinator.com/item?id=1"])
+		self.assertEqual(leads[0]["kind"], "asset")
+
+
+class TestGithubLeadsUseBestMatch(unittest.TestCase):
+	def test_search_is_not_sorted_by_push_time(self):
+		"""`sort=updated` ranked loose README hits by push time, so "awesome
+        browser extensions" returned awesome-game-security and a Black Friday
+        deals list ahead of awesome-browser-extensions-for-github."""
+		params_seen = []
+
+		def fake_get(url, **kwargs):
+			params_seen.append(kwargs.get("params") or {})
+			return _StubResp({"items": []})
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = fake_get
+			code_techs_module._fetch_github_leads({"github_searches": ["awesome browser extensions"]})
+		finally:
+			code_techs_module.requests.get = original
+
+		self.assertTrue(params_seen)
+		self.assertNotIn("sort", params_seen[0])
+
+
+class TestLeadsShowOnlyLegalContent(unittest.TestCase):
+	"""Owner rule, top priority: never adult, piracy or other prohibited content.
+
+    A live refresh ranked "webLiang/Pornhub-Video-Downloader-Plugin-v3" for
+    the query "chrome extension boilerplate". The screen sits in `_rank`, the
+    only path into the page, and applies to curated rows too.
+    """
+
+	PROHIBITED = [
+		("someone/Pornhub-Video-Downloader-Plugin-v3", "chrome extension", "adult"),
+		("nsfw-gallery", "image viewer", "adult"),
+		("someone/VMware-License-Keygen", "", "piracy"),
+		("Photoshop cracked build", "free download", "piracy"),
+		("movie-torrent-search", "find torrents fast", "piracy"),
+		("youtube-video-downloader-pro", "save videos", "piracy"),
+		("windows-activator", "KMSpico alternative", "piracy"),
+		("bypass-paywalls-chrome", "read articles", "piracy"),
+		("online casino starter kit", "", "gambling"),
+		("fake-id-generator", "", "fraud"),
+		("discord spam bot", "", "fraud"),
+		("token stealer", "", "malware"),
+		("valorant aimbot", "", "malware"),
+	]
+
+	ALLOWED = [
+		("Ask HN: Do you have side-projects that generate >$500 revenue/month?", ""),
+		("johackim/awesome-indiehackers", "resources for indie hackers"),
+		("awesomemotive/easy-digital-downloads", "Sell digital downloads through WordPress"),
+		("Python cheat sheet for beginners", ""),
+		("Getly — sell a digital product, settle USDT on Tron to your own wallet", ""),
+		("chrome-extension-boilerplate-react-vite", "manifest v3 starter"),
+		("gmh5225/awesome-game-security", "game security research"),
+	]
+
+	def _row(self, title, body, source="github"):
+		return {"title": title, "url": f"https://example.com/{abs(hash(title))}", "source": source,
+		        "kind": "asset", "body": body, "labels": []}
+
+	def test_every_prohibited_category_is_dropped(self):
+		for title, body, category in self.PROHIBITED:
+			with self.subTest(title=title):
+				self.assertEqual(code_techs_module._prohibited(self._row(title, body)), category)
+		ranked = code_techs_module._rank([self._row(t, b) for t, b, _ in self.PROHIBITED], {}, max_items=50, min_score=0)
+		self.assertEqual(ranked, [])
+
+	def test_curated_rows_get_no_exception(self):
+		row = self._row("Sell your warez here", "", source="local-playbook")
+		self.assertEqual(code_techs_module._rank([row], {}, max_items=5, min_score=0), [])
+
+	def test_legitimate_rows_still_rank(self):
+		# The false-negative check: a screen that empties the page fails too.
+		for title, body in self.ALLOWED:
+			with self.subTest(title=title):
+				self.assertEqual(code_techs_module._prohibited(self._row(title, body)), "")
+
+	def test_every_curated_row_passes(self):
+		for row in list(code_techs_module._PRODUCT_CHANNELS) + list(code_techs_module._LOCAL_LEADS):
+			with self.subTest(title=row.get("title")):
+				self.assertEqual(code_techs_module._prohibited(row), "")
+
+
+class TestLeadsRememberWhenTheyWereFirstSeen(unittest.TestCase):
+	def _op(self, url):
+		return code_techs_module._rank(
+			[{"title": f"Lead {url}", "url": url, "source": "github", "kind": "asset",
+			  "body": "", "labels": [], "posted_at": _hours_ago_iso(2)}],
+			{}, max_items=1, min_score=0,
+		)[0]
+
+	def test_known_lead_keeps_its_first_seen_time_and_is_not_new(self):
+		op = self._op("https://a")
+		count = code_techs_module._mark_new([op], [{"url": "https://a", "discovered_at": "2026-09-01T00:00:00+00:00"}])
+		self.assertEqual(count, 0)
+		self.assertFalse(op.is_new)
+		self.assertEqual(op.discovered_at, "2026-09-01T00:00:00+00:00")
+
+	def test_unknown_lead_is_new_only_when_there_was_a_previous_snapshot(self):
+		op = self._op("https://b")
+		self.assertEqual(code_techs_module._mark_new([op], [{"url": "https://a"}]), 1)
+		self.assertTrue(op.is_new)
+		first = self._op("https://c")
+		self.assertEqual(code_techs_module._mark_new([first], []), 0)
+		self.assertFalse(first.is_new)
+
+
+class TestSourceStatsShowSilentSources(unittest.TestCase):
+	def test_a_source_that_fetched_nothing_is_still_listed(self):
+		raw = [{"source": "reddit:r/SideProject"}, {"source": "reddit:r/SaaS"}, {"source": "channel-table"}]
+		ops = code_techs_module._rank(
+			[dict(r, title=f"t{i}", url=f"https://x/{i}", body="", labels=[]) for i, r in enumerate(raw)],
+			{}, max_items=10, min_score=0,
+		)
+		stats = {row["source"]: row for row in code_techs_module._source_stats(raw, ops, ops[:1])}
+		self.assertEqual(stats["reddit"]["fetched"], 2)
+		self.assertEqual(stats["hacker-news"], {"source": "hacker-news", "fetched": 0, "ranked": 0, "shown": 0})
+		self.assertEqual(sum(row["shown"] for row in stats.values()), 1)
 
 
 class TestLeadCountsDescribeWhatIsShown(unittest.TestCase):

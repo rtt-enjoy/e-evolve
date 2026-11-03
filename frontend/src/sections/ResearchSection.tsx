@@ -229,26 +229,14 @@ export default function ResearchSection({ status }: { status: Status }) {
 						<Bullets items={ownerActions} />
 					</Disclosure>
 				) : null}
-				<Disclosure title="Strategy playbook" hint="How to convert research into income" count={codeTech.strategy_playbook?.length}>
-					<Bullets items={codeTech.strategy_playbook || []} />
-				</Disclosure>
 				<Disclosure title="Focus areas" hint="Where to look for leads" count={codeTech.focus?.length}>
 					<Bullets items={codeTech.focus || []} />
 				</Disclosure>
 				<Disclosure title="Free-AI focus" hint="Service categories being tracked" count={codeTech.free_ai_focus?.length}>
 					<Bullets items={codeTech.free_ai_focus || []} />
 				</Disclosure>
-				<Disclosure title="Monetization patterns" hint="Ways a product earns unattended" count={codeTech.monetization_patterns?.length}>
-					<Bullets items={codeTech.monetization_patterns || []} />
-				</Disclosure>
-				<Disclosure title="Product shapes" hint="What a solo dev can build and sell" count={codeTech.product_shapes?.length}>
-					<Bullets items={codeTech.product_shapes || []} />
-				</Disclosure>
 				<Disclosure title="Lead requirements" hint="What a lead must satisfy" count={codeTech.requirements?.length}>
 					<Bullets items={codeTech.requirements || []} />
-				</Disclosure>
-				<Disclosure title="Avoid patterns" hint="Disqualifies a lead immediately" count={codeTech.avoid_patterns?.length}>
-					<Bullets items={codeTech.avoid_patterns || []} />
 				</Disclosure>
 				{suggestions.length ? (
 					<Disclosure title="Bot suggestions" hint="Ideas proposed by the last cycle" count={suggestions.length}>
@@ -290,7 +278,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 			<div className="legend">
 				<span><Target size={14} /> focus drives lead discovery</span>
 				<span><ListChecks size={14} /> requirements filter candidates</span>
-				<span><AlertTriangle size={14} /> avoid patterns reject them</span>
+				<span><AlertTriangle size={14} /> avoid patterns (on Leads) reject them</span>
 				<span><Lightbulb size={14} /> ideas become leads</span>
 			</div>
 			</div>

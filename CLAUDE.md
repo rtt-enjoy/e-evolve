@@ -1145,7 +1145,33 @@ subreddits now read are where people ship and sell small tools.
 once sent to `search/issues`, which ignores both qualifiers: the identical
 query returns **12 junk issues** there and **511 real repositories** on
 `search/repositories`. That is how a studio's roadmap and an "awesome ideas" PR
-became the top three earning leads.
+became the top three earning leads. It also must **not** send `sort=updated`:
+that orders the thousands of loose `in:readme` hits by push time, so "awesome
+browser extensions" returned `awesome-game-security` and a Black Friday deals
+list. Best match (no `sort`) returned `awesome-browser-extensions-for-github`;
+the `supply_max_age_days` cutoff already enforces freshness.
+`TestGithubLeadsUseBestMatch` pins it.
+
+**The HN fetcher returned 0 leads for its whole life (fixed 2026-11-03).** It
+sent `tags=story,comment`, which Algolia reads as AND, so no item could match.
+It now runs short `hn_searches` (`revenue`, `side project`, `micro-saas`, ...)
+on `ask_hn` over `hn_max_age_days` (60) with `points>=hn_min_points` (5), and
+keeps only titles starting "Ask HN" that `_HN_INCOME_RE` reads as about
+earning. That yields threads like "Ask HN: Do you have side-projects that
+generate >$500 revenue/month?". `status["code_tech_earning"].source_stats`
+(fetched / ranked / shown per source) exists so a source that silently
+returns nothing is visible on the Leads page.
+
+**Only legal, non-prohibited content — owner rule, top priority
+(2026-11-03).** A live refresh ranked a porn-site downloader plugin for the
+query "chrome extension boilerplate". `_PROHIBITED_PATTERNS` in `code_techs.py`
+(adult, piracy, gambling, fraud, malware/cheats, drugs/weapons) is checked in
+`_rank` on **every** row, curated ones included, over title, body, labels and
+URL. False positives are accepted on purpose: a lost legitimate row costs
+little, one prohibited row on the owner's dashboard is the failure. Never
+loosen a pattern to rescue a row. `TestLeadsShowOnlyLegalContent` checks each
+category and a false-negative list. `LeadsSection.tsx` carries a short
+backstop regex for snapshots written before the screen existed.
 
 **Prompts are deterministic and lead-specific.** `_codex_prompt` fills labelled
 slots (KIND, LEAD, COST, OWNER MUST DO, NEXT STEP, FREE STACK) from the lead's
@@ -1156,13 +1182,23 @@ opening an account or accepting terms on the owner's behalf. No per-lead LLM
 call.
 
 **Two caps, because `status.json` is committed hourly.** `max_items` (40) sizes
-the markdown report; `status_max_items` (16) sizes the committed snapshot; and
+the markdown report; `status_max_items` (32, raised from 16 on 2026-11-03 when
+the owner asked for more on the Leads page) sizes the committed snapshot; and
 `prompt_top_n` (6) means only the leads worth acting on carry a ~1.3 KB prompt.
 Both were lowered when realistic fixtures measured **36.7 KB against a 30 KB
 budget** — the old fixtures were job postings, so after the redirect they no
 longer exercised the fields that take up the room, and the budget test was
 passing while the live payload breached it. `TestLeadStatusPayloadStaysBounded`
-now uses the shape the queue actually holds.
+now uses the shape the queue actually holds. Its budget is now 45 KB for 32
+rows; the live slice measured 36 KB, since rows past `prompt_top_n` weigh
+~0.8 KB.
+
+**`discovered_at` is the first time the page held a lead, and `is_new` marks
+rows the previous snapshot did not.** `_mark_new` carries `discovered_at` over
+from the previous snapshot; it used to be restamped every refresh, so a
+two-month-old storefront read "seen today". A first refresh flags nothing new.
+`new_count` counts new rows on the page, and `new_ranked_count` counts them
+across the ranked list.
 
 > **`_outreach_draft` was removed, not repaired.** It generated a ready-to-send
 > cold-outreach email per lead — for a channel this project refuses in code.
@@ -1484,7 +1520,7 @@ Tunable by owner or changed here in Codex:
   "mrr_ideas":      { "enabled": true, "refresh_hours": 48, "max_ideas": 8,
                       "min_score": 50, "history_limit": 100 },
   "code_techs":     { "enabled": true, "refresh_hours": 6, "max_items": 40,
-                      "status_max_items": 16, "prompt_top_n": 6, "min_score": 40,
+                      "status_max_items": 32, "prompt_top_n": 6, "min_score": 40,
                       "min_channel_share": 0.5, "supply_max_age_days": 120,
                       "max_reddit_requests": 3, "auto_pursue": false,
                       "...": "searches, sources, product shapes" },

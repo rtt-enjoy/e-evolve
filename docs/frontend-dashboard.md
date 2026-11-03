@@ -63,6 +63,33 @@ essentials, and detail lives one click away.
 `#/leads/<index>` is a detail view carrying the lead's `codex_prompt` with a
 copy button.
 
+**Leads expansion (owner request 2026-11-03: "show more").** The list page now
+has:
+
+- A **New this refresh** tile and a `new` pill per row (`lead.is_new`), plus a
+  posting-age pill on fetched rows.
+- Stackable quick filters — **free to start** (published $0 only; unknown cost
+  is not free), **no setup**, **new** — and a "Showing N of M" line.
+- **Where leads come from**: `code_tech_earning.source_stats` as fetched /
+  ranked / shown per source, so a source returning 0 is visible.
+- **Refused routes**: `refused_channels` with the reason each was rejected.
+- **Product playbook**: product shapes, monetization patterns, strategy
+  playbook and avoid patterns. These moved here from Research's collapsed
+  "Strategy and guardrails" block. They describe the product route, and showing
+  them twice would let the two copies drift.
+
+The detail page adds **Why it scores this** (each `score_parts` component as
+points out of its `_score` weight, with any penalty), **First seen by bot**,
+and up to four related leads of the same kind. `SCORE_PARTS` in
+`LeadsSection.tsx` restates the Python weights (28/22/20/13/10/7), so update it
+if `_score` changes.
+
+**Never adult, piracy or other prohibited content (owner rule, top
+priority).** `bot/earning/code_techs.py` drops such rows before they reach
+`status.json`. `LeadsSection.tsx` also filters them with `PROHIBITED_RE`, as a
+backstop for older snapshots. It filters before indexing, so `#/leads/<n>`
+links and the detail page agree.
+
 **Every lead row in the `#/leads` list has its own open-source button** (the
 external-link icon at the row's right edge, owner request 2026-11-03). It opens
 `lead.url` in a new tab, so the owner does not have to open the detail view

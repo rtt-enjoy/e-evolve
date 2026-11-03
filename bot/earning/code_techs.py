@@ -28,7 +28,9 @@ _DEFAULT_CONFIG = {
 	# that is committed every hour. One cap would force a choice between a thin
 	# page and a repo that grows hourly, so there are two.
 	"max_items": 40,
-	"status_max_items": 16,
+	# Raised from 16 on 2026-11-03 (owner asked for more on the Leads page).
+	# Rows past `prompt_top_n` carry no prompt and weigh ~0.8 KB each.
+	"status_max_items": 32,
 	# Prompts are the expensive field (~1.3 KB each) and status.json is
 	# committed hourly. Lowered from 10 when the payload measured 36.7 KB
 	# against a 30 KB budget: the top rows are a stable, hand-checked table,
@@ -114,13 +116,19 @@ _DEFAULT_CONFIG = {
 		"awesome browser extensions in:name,readme stars:>200",
 		"chrome extension boilerplate manifest v3 in:name,readme stars:>200",
 		"indie hackers open source saas alternatives in:readme stars:>200",
-		"awesome self-hosted single file tool in:name,readme stars:>150",
-		"crypto payment button static site in:readme stars:>100",
-		"awesome digital products templates in:readme stars:>100",
-		"license key generator offline validation in:readme stars:>100"
+		"awesome indie hackers in:name,description stars:>100",
+		"sell digital downloads in:name,description stars:>30",
+		"digital products in:name,description stars:>50",
+		"license validation in:name,description stars:>50"
 	],
-	# What sells and how it gets paid, not who is hiring. These feed HN's
-	# Algolia search and, as a fallback, Reddit.
+	# Short on purpose: Algolia needs every word to match, and the long
+	# community phrases below returned 0 hits on Ask HN. Titles are screened by
+	# `_HN_INCOME_RE`, so a broad query costs precision nothing.
+	"hn_searches": ["revenue", "side project", "micro-saas", "monetize", "paying users", "selling"],
+	"hn_max_age_days": 60,
+	"hn_min_points": 5,
+	# What sells and how it gets paid, not who is hiring. Reddit's fallback
+	# when `reddit_searches` is empty.
 	"community_searches": [
 		"selling a chrome extension revenue",
 		"how much my browser extension makes",
@@ -575,6 +583,8 @@ class Opportunity:
 	manual_setup: str = ""
 	verified_note: str = ""
 	pursued: bool = False
+	# True when this refresh is the first to rank the lead. See `_mark_new`.
+	is_new: bool = False
 
 def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	cfg = _config()
@@ -595,6 +605,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	min_score = max(0, int(cfg.get("min_score", 40) or 40))
 	raw = _fetch_online_leads(cfg)
 	opportunities = _rank(raw, cfg, max_items=max_items, min_score=min_score)
+	new_count = _mark_new(opportunities, state.get("opportunities") or [])
 
 	pursued_count = 0
 	if cfg.get("auto_pursue"):
@@ -631,6 +642,9 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		"supply_count": len(shown) - channels,
 		"priced_count": priced,
 		"needs_setup_count": needs_setup,
+		"new_count": sum(1 for op in shown if op.is_new),
+		"new_ranked_count": new_count,
+		"source_stats": _source_stats(raw, opportunities, shown),
 		"refused_channels": [dict(x) for x in _REFUSED_CHANNELS],
 		"ranked_total": len(opportunities),
 		"requirements": _clean_list(cfg.get("requirements", [])),
@@ -716,7 +730,12 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 		try:
 			resp = requests.get(
 				"https://api.github.com/search/repositories",
-				params={"q": str(query), "sort": "updated", "order": "desc", "per_page": 8},
+				# Best match, not `sort=updated`: sorting by push time returned
+				# whichever of thousands of loose `in:readme` hits was pushed
+				# last -- "awesome-game-security" and a Black Friday deals list
+				# for "awesome browser extensions". Freshness is already
+				# enforced by the `supply_max_age_days` cutoff below.
+				params={"q": str(query), "per_page": 8},
 				headers=headers,
 				timeout=20
 			)
@@ -785,22 +804,48 @@ def _fetch_online_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 	leads.extend(_fetch_github_leads(cfg))
 	return _dedupe(leads)
 
+# An Ask HN title that is about earning from a product. The query alone is
+# not enough: Algolia matches the body too, so "sell" returned "AI companies
+# selling Fear" and "pricing" returned DeepSeek release notes.
+_HN_INCOME_RE = re.compile(
+	r"\b(revenue|mrr|arr|income|monetiz\w*|paying|paid users?|sales?|selling|sell"
+	r"|pricing|customers?|side[- ]?projects?|micro[- ]?saas|saas|indie|bootstrapp\w*)\b",
+	re.I,
+)
+
 def _fetch_hn_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
+	"""Ask HN threads where developers report what their products earn.
+
+    **This fetcher returned nothing for its whole life.** It sent
+    ``tags=story,comment``, and Algolia reads a comma as AND -- an item that is
+    both a story and a comment does not exist, so every query answered 0 hits
+    and the page never held a single HN row. Measured 2026-11-03: the same ten
+    queries with that tag returned 0/10; ``(story,comment)`` (OR) returned
+    mostly unrelated comments ("Postgres 19 is late"), because long phrases
+    match scattered words in comment bodies.
+
+    What works is short queries on ``ask_hn`` over a few weeks, kept only when
+    the *title* is about earning. That surfaced "Ask HN: Do you have
+    side-projects that generate >$500 revenue/month?" and "Ask HN: Show your
+    micro-SaaS" -- threads where many developers state what they built and how
+    it is paid for, which is the market evidence this lane exists for.
+    """
 	leads: list[dict[str, Any]] = []
 	headers = {"User-Agent": "e-evolve-code-techs"}
-	max_age_hours = max(1, int(cfg.get("demand_max_age_hours", 72) or 72))
-	# Algolia can filter by age server-side, so a stale thread with one recent
-	# comment never arrives in the first place.
-	since = int((datetime.now(timezone.utc) - timedelta(hours=max_age_hours)).timestamp())
-	for query in cfg.get("community_searches", []):
+	max_age_days = max(1, int(cfg.get("hn_max_age_days", 60) or 60))
+	min_points = max(0, int(cfg.get("hn_min_points", 5) or 0))
+	# Algolia filters age and points server-side, so a dead thread never
+	# arrives in the first place.
+	since = int((datetime.now(timezone.utc) - timedelta(days=max_age_days)).timestamp())
+	for query in _clean_list(cfg.get("hn_searches", [])):
 		try:
 			resp = requests.get(
-				"https://hn.algolia.com/api/v1/search_by_date",
+				"https://hn.algolia.com/api/v1/search",
 				params={
 					"query": str(query),
-					"tags": "story,comment",
-					"hitsPerPage": 6,
-					"numericFilters": f"created_at_i>{since}",
+					"tags": "ask_hn",
+					"hitsPerPage": 10,
+					"numericFilters": f"created_at_i>{since},points>={min_points}",
 				},
 				headers=headers,
 				timeout=20,
@@ -810,13 +855,12 @@ def _fetch_hn_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 				continue
 			resp.raise_for_status()
 			for item in resp.json().get("hits", []):
-				title = item.get("title") or item.get("story_title") or "Hacker News request"
-				body = item.get("comment_text") or item.get("story_text") or ""
-				object_id = item.get("objectID") or item.get("story_id")
-				story_id = item.get("story_id") or object_id
-				url = item.get("url") or (
-					f"https://news.ycombinator.com/item?id={story_id}" if story_id else ""
-				)
+				title = str(item.get("title") or "")
+				if not title.lower().startswith("ask hn") or not _HN_INCOME_RE.search(title):
+					continue
+				body = item.get("story_text") or ""
+				story_id = item.get("objectID") or item.get("story_id")
+				url = f"https://news.ycombinator.com/item?id={story_id}" if story_id else ""
 				leads.append({
 					"title": title,
 					"url": url,
@@ -921,6 +965,105 @@ def _dedupe(leads: list[dict[str, Any]]) -> list[dict[str, Any]]:
 		out.append(lead)
 	return out
 
+def _lead_key(lead: Any) -> str:
+	get = lead.get if isinstance(lead, dict) else lambda name, default="": getattr(lead, name, default)
+	return str(get("url", "") or get("title", "")).strip().lower()
+
+def _mark_new(ranked: list[Opportunity], previous: list[dict[str, Any]]) -> int:
+	"""Flag leads the last snapshot did not hold, and keep first-seen times.
+
+    ``discovered_at`` used to be stamped with the refresh time on every row,
+    so "Seen by bot" read as today for a storefront the page has shown for two
+    months. A lead already in the previous snapshot now keeps its original
+    time. With no previous snapshot nothing is flagged new: on a first refresh
+    every row would be "new", which says nothing.
+    """
+	before = {_lead_key(lead): lead for lead in previous if isinstance(lead, dict) and _lead_key(lead)}
+	count = 0
+	for op in ranked:
+		old = before.get(_lead_key(op))
+		if old is not None:
+			op.discovered_at = str(old.get("discovered_at") or op.discovered_at)
+		elif before:
+			op.is_new = True
+			count += 1
+	return count
+
+# Fetched sources that should appear in the source table even when they
+# returned nothing, because "Reddit: 0" is the finding (it 429s most cycles).
+_FETCHED_SOURCES = ("hacker-news", "reddit", "github")
+
+def _source_stats(
+	raw: list[dict[str, Any]], ranked: list[Opportunity], shown: list[Opportunity]
+) -> list[dict[str, Any]]:
+	"""Per source: rows fetched, rows that cleared ``min_score``, rows on the page.
+
+    Without this a source that silently returns nothing looks the same as one
+    whose rows all scored too low -- the HN fetcher returned 0 for its whole
+    life and nothing on the page could show it.
+    """
+	def family(source: Any) -> str:
+		return str(source or "unknown").split(":", 1)[0]
+
+	stats: dict[str, dict[str, Any]] = {
+		name: {"source": name, "fetched": 0, "ranked": 0, "shown": 0} for name in _FETCHED_SOURCES
+	}
+	for field, rows in (("fetched", raw), ("ranked", ranked), ("shown", shown)):
+		for row in rows:
+			name = family(row.get("source") if isinstance(row, dict) else row.source)
+			stats.setdefault(name, {"source": name, "fetched": 0, "ranked": 0, "shown": 0})[field] += 1
+	return sorted(stats.values(), key=lambda row: (-row["shown"], -row["fetched"], row["source"]))
+
+# OWNER RULE (2026-11-03), top priority: the Leads page shows only legal,
+# non-prohibited content. Never adult content, never piracy. Enforced here in
+# code, on every row, because a broad repo search did return a porn-site
+# downloader plugin for "chrome extension boilerplate".
+#
+# Each pattern is one category. False positives are accepted on purpose: a
+# legitimate repo that happens to say "keygen" is a lost row, while one
+# prohibited row on the owner's dashboard is the failure this exists to stop.
+# Do not loosen a pattern to rescue a row; add a narrower one only if a
+# category starts emptying the page.
+_PROHIBITED_PATTERNS: dict[str, str] = {
+	"adult": (
+		r"porn|xxx|nsfw|hentai|onlyfans|\bsex(ual|y)?\b|\bnude|\bnudity\b|erotic|\bescorts?\b"
+		r"|adult[- ](content|site|video|cam)s?|\bcamgirls?\b|\bfetish|\bxvideos\b|\bxhamster\b"
+	),
+	"piracy": (
+		r"\bwarez\b|\bkeygens?\b|\bcrack(ed|s|ing)?\b|\bnulled\b|\bpirat(e|ed|es|ing|cy)\b"
+		r"|\btorrents?\b|serial[- ]?keys?|licen[cs]e[- ]?keys?[- ]?(generator|gen)\b"
+		r"|\bactivators?\b|\bkms[- ]?(pico|auto)\b|drm[- ]?(removal|remover|bypass|free)"
+		r"|paywall[- ]?(bypass|remover)|bypass(es|ing)?[- ]paywalls?"
+		r"|(youtube|netflix|spotify|tiktok|instagram|pornhub|onlyfans)[\w -]{0,20}(download|ripper)"
+	),
+	"gambling": r"\bcasinos?\b|gambl(e|ing)|\bbetting\b|sportsbook|\bslots? machine",
+	"fraud": (
+		r"fake[- ](id|ids|identity|documents?|passports?|reviews?)\b"
+		r"|(driver'?s?|driving)[- ]licen[cs]e[- ]generator|\bcarding\b|\bcvv\b|\bphishing\b"
+		r"|account[- ]generator|\bspam[- ]?bots?\b|\bmass[- ]dm\b|\bbotnet\b|\bddos\b"
+	),
+	"malware": (
+		r"\bstealers?\b|\bkeyloggers?\b|\bransomware\b|\baimbot\b|\bwallhack\b"
+		r"|game[- ]cheats?\b|cheat[- ](engine|menu|tool)s?\b"
+	),
+	"drugs_weapons": r"\bcannabis\b|\bmarijuana\b|\bdark ?web market|\bfirearms?\b|\bguns? (shop|store)\b",
+}
+
+def _prohibited(lead: dict[str, Any]) -> str:
+	"""The prohibited category a lead falls in, or "" when it is allowed.
+
+    Reads the title, body, labels and URL: a repo name or link can carry the
+    signal when the description is bland.
+    """
+	text = " ".join([
+		str(lead.get("title", "")), str(lead.get("body", "")),
+		" ".join(str(x) for x in lead.get("labels", []) or []), str(lead.get("url", "")),
+	])
+	for category, pattern in _PROHIBITED_PATTERNS.items():
+		if re.search(pattern, text, re.I):
+			return category
+	return ""
+
 def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_score: int) -> list[Opportunity]:
 	now = datetime.now(timezone.utc)
 	discovered_at = now.isoformat()
@@ -943,6 +1086,12 @@ def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_
 		posted = parse_dt(lead.get("posted_at"))
 		age_hours = round((now - posted).total_seconds() / 3600, 1) if posted else None
 		value_usd, value_basis, value_note = _lead_value(lead)
+		# Every row, curated ones included: the owner rule has no exceptions.
+		# See `_PROHIBITED_PATTERNS`.
+		category = _prohibited(lead)
+		if category:
+			log.info("[code_techs] dropped prohibited lead (%s): %s", category, title[:80])
+			continue
 		score, parts = _score(lead, text, labels, kind, age_hours, value_basis, cfg)
 		if score < min_score and not is_local:
 			continue

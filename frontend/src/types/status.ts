@@ -76,6 +76,16 @@ export type CodeTechOpportunity = {
 	/** When and where this row's terms were last checked by hand. */
 	verified_note?: string;
 	pursued?: boolean;
+	/** True when this refresh is the first to put the lead on the page. */
+	is_new?: boolean;
+};
+
+/** Per source: rows fetched, rows that cleared min_score, rows on the page. */
+export type LeadSourceStat = {
+	source?: string;
+	fetched?: number;
+	ranked?: number;
+	shown?: number;
 };
 
 export type FreeAiService = {
@@ -134,6 +144,10 @@ export type CodeTechEarning = {
 	priced_count?: number;
 	/** How many leads ranked in total; the rest are in the markdown report. */
 	ranked_total?: number;
+	/** Rows on the page that the previous refresh did not hold. */
+	new_count?: number;
+	new_ranked_count?: number;
+	source_stats?: LeadSourceStat[];
 	requirements?: string[];
 	focus?: string[];
 	free_ai_focus?: string[];

@@ -73,7 +73,7 @@
 		"max_items": 40,
 		"min_score": 40,
 		"auto_pursue": false,
-		"status_max_items": 16,
+		"status_max_items": 32,
 		"prompt_top_n": 6,
 		"min_channel_share": 0.5,
 		"supply_max_age_days": 120,
@@ -136,11 +136,14 @@
 			"awesome browser extensions in:name,readme stars:>200",
 			"chrome extension boilerplate manifest v3 in:name,readme stars:>200",
 			"indie hackers open source saas alternatives in:readme stars:>200",
-			"awesome self-hosted single file tool in:name,readme stars:>150",
-			"crypto payment button static site in:readme stars:>100",
-			"awesome digital products templates in:readme stars:>100",
-			"license key generator offline validation in:readme stars:>100"
+			"awesome indie hackers in:name,description stars:>100",
+			"sell digital downloads in:name,description stars:>30",
+			"digital products in:name,description stars:>50",
+			"license validation in:name,description stars:>50"
 		],
+		"hn_searches": ["revenue", "side project", "micro-saas", "monetize", "paying users", "selling"],
+		"hn_max_age_days": 60,
+		"hn_min_points": 5,
 		"community_searches": [
 			"selling a chrome extension revenue",
 			"how much my browser extension makes",

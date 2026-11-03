@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-03T07:50:35.648751+00:00",
-  "total_runs": 2239,
+  "last_run": "2026-11-03T08:50:30.896460+00:00",
+  "total_runs": 2240,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -35,86 +35,53 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed this cycle: the named prompt focus (weak_title, 5 lost drafts) is already the target of ~30 distinct open review proposals of the same few-line edits, none merged, so another variant cannot add information; and the dominant reject source is engine-side, not prompt-fixable.",
+    "summary": "No change proposed: the only prompt-fixable reject path (weak_title, 5 drafts in 14 days) already has 30 open unmerged proposals covering every variant of the fix, and the dominant cost (llm_error=23) is engine-side, not prompt-fixable.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge exactly one of the open weak_title prompt branches, then close the rest",
-        "description": "Unblocks the only prompt-side fix the evidence calls for. Thirty near-identical branches (add ALL-CAPS examples, clarify the acronym exemption, replace the colon-subtitle rule) have accumulated without a decision, so every cycle re-proposes the same edit. One merge makes the 14-day reject window a real measurement; the other 29 branches should be closed as superseded.",
-        "owner_action": "Review and merge one bot/earning/articles.py weak_title branch from 2026-11-02, then close the remaining duplicates",
+        "title": "Merge one of the 30 open weak_title prompt branches instead of generating a 31st",
+        "description": "weak_title cost 5 drafts in 14 days and every candidate fix (ALL-CAPS examples, acronym exception, colon-subtitle rewording, rewrite-prompt examples) is already parked on an open review branch. None merged means the reject count cannot move. One merge converts the parked work into shipped reach.",
+        "owner_action": "Review and merge the 2026-11-02 branch that adds concrete banned ALL-CAPS examples plus the acronym exception to bot/earning/articles.py \u2014 the most complete variant of the pending set.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the 2026-11-02 branches touching bot/earning/articles.py and pick one (any of them encodes the same fix: name concrete banned ALL-CAPS words and allow known acronyms).",
-          "Step 2: Merge it and close the other 29 open weak_title branches as superseded so future cycles stop re-deriving this edit.",
-          "Step 3: After 14 days, compare article_rejects.counts.weak_title and the ALL-CAPS gate findings against this cycle's values (weak_title=5 in window, 4 ALL-CAPS findings)."
-        ]
-      },
-      {
-        "title": "Investigate the llm_error losses \u2014 they cost 4x more drafts than weak_title",
-        "description": "23 of the last 14 days' lost drafts died on 'LLM call failed' with glm serving and live=true, which no prompt edit can fix. Whether it is rate limiting on the free glm tier, timeouts, or malformed JSON responses determines the right fix, and right now the logs are the only place it shows.",
-        "owner_action": "Check the glm API key's usage dashboard for rate-limit or quota events during the 06:00-12:00 UTC+9 publish window",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open the z.ai coding-plan usage page for the GLM_API_KEY account.",
-          "Step 2: Correlate the timestamps of article_rejects.recent entries with code 'llm_error' against quota resets and rate-limit windows.",
-          "Step 3: If it is quota, decide between raising the tier or letting fallback (atria) serve the post role, which is an owner config decision."
+          "Step 1: Open the pending review branches dated 2026-11-02 touching bot/earning/articles.py.",
+          "Step 2: Pick the one that both names concrete banned words (URGENT, IMPORTANT, NOTE) and keeps the acronym exception (PDF, JSON, API) \u2014 it addresses 4 of the 5 gate findings.",
+          "Step 3: Merge it, then read article_rejects.counts.weak_title in status.json after the next 14-day window; it should stay at or near 0 for the period."
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS \u2014 evaluated and declined; the evidence points elsewhere",
+    "direction": "Step 4 / PROMPT FOCUS (weak_title) \u2014 evaluated and declined on evidence",
     "evidence": [
-      "article_rejects.counts: llm_error=36 vs weak_title=14 lifetime; drafts lost last 14 days: llm_error=23, weak_title=5, fabricated=2, empty_draft=2",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x4, 'colon subtitle' x1 \u2014 all four candidate edits to _SYSTEM and _revise_title are already covered by open unmerged branches dated 2026-10-31 through 2026-11-02",
-      "llm_engine.calls = {'glm': 1} and serving=glm, live=True \u2014 the 23 llm_error losses in 14 days come from the provider, not the prompt"
+      "article_rejects.counts: weak_title=14 lifetime, weak_title=5 in last 14 days",
+      "gate findings behind weak_title: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle' x1",
+      "llm_error=23 in last 14 days vs weak_title=5 \u2014 the engine, not the prompts, loses 4.6x more drafts",
+      "PRIOR PROPOSALS: 30 distinct open branches (2026-10-31 to 2026-11-02) already propose the ALL-CAPS example clarification, the acronym exception, the colon-subtitle rewording, and _revise_title example fixes \u2014 every angle on this axis is taken"
     ],
-    "money_path": "none \u2014 no change merged this cycle; reach is unchanged",
-    "verify": "No change to verify. If the reviewer merges one of the open weak_title prompt branches instead, the confirmable signal is article_rejects.counts.weak_title staying flat over the next 14-day window while weak_title losses in that window fall from 5 toward 0; the 4 ALL-CAPS gate findings should not recur.",
+    "money_path": "none this cycle \u2014 declining avoids another dead review branch; the change that matters is a human merge, not a 31st proposal",
+    "verify": "If the owner merges one of the open weak_title prompt branches, article_rejects.counts.weak_title should stop growing over the next 14-day window (currently 5), with gate findings 'title has ALL-CAPS word' falling from 4 toward 0 in article_rejects.recent.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "mrr-ideas",
-        "success": true,
-        "idea_count": 2,
-        "refused_count": 18,
-        "llm": true,
-        "estimated_usd": 0.0,
-        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
-        "url": "status.json#mrr_ideas"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge exactly one of the open weak_title prompt branches, then close the rest",
-      "description": "Unblocks the only prompt-side fix the evidence calls for. Thirty near-identical branches (add ALL-CAPS examples, clarify the acronym exemption, replace the colon-subtitle rule) have accumulated without a decision, so every cycle re-proposes the same edit. One merge makes the 14-day reject window a real measurement; the other 29 branches should be closed as superseded.",
-      "owner_action": "Review and merge one bot/earning/articles.py weak_title branch from 2026-11-02, then close the remaining duplicates",
+      "title": "Merge one of the 30 open weak_title prompt branches instead of generating a 31st",
+      "description": "weak_title cost 5 drafts in 14 days and every candidate fix (ALL-CAPS examples, acronym exception, colon-subtitle rewording, rewrite-prompt examples) is already parked on an open review branch. None merged means the reject count cannot move. One merge converts the parked work into shipped reach.",
+      "owner_action": "Review and merge the 2026-11-02 branch that adds concrete banned ALL-CAPS examples plus the acronym exception to bot/earning/articles.py \u2014 the most complete variant of the pending set.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the 2026-11-02 branches touching bot/earning/articles.py and pick one (any of them encodes the same fix: name concrete banned ALL-CAPS words and allow known acronyms).",
-        "Step 2: Merge it and close the other 29 open weak_title branches as superseded so future cycles stop re-deriving this edit.",
-        "Step 3: After 14 days, compare article_rejects.counts.weak_title and the ALL-CAPS gate findings against this cycle's values (weak_title=5 in window, 4 ALL-CAPS findings)."
-      ]
-    },
-    {
-      "title": "Investigate the llm_error losses \u2014 they cost 4x more drafts than weak_title",
-      "description": "23 of the last 14 days' lost drafts died on 'LLM call failed' with glm serving and live=true, which no prompt edit can fix. Whether it is rate limiting on the free glm tier, timeouts, or malformed JSON responses determines the right fix, and right now the logs are the only place it shows.",
-      "owner_action": "Check the glm API key's usage dashboard for rate-limit or quota events during the 06:00-12:00 UTC+9 publish window",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: Open the z.ai coding-plan usage page for the GLM_API_KEY account.",
-        "Step 2: Correlate the timestamps of article_rejects.recent entries with code 'llm_error' against quota resets and rate-limit windows.",
-        "Step 3: If it is quota, decide between raising the tier or letting fallback (atria) serve the post role, which is an owner config decision."
+        "Step 1: Open the pending review branches dated 2026-11-02 touching bot/earning/articles.py.",
+        "Step 2: Pick the one that both names concrete banned words (URGENT, IMPORTANT, NOTE) and keeps the acronym exception (PDF, JSON, API) \u2014 it addresses 4 of the 5 gate findings.",
+        "Step 3: Merge it, then read article_rejects.counts.weak_title in status.json after the next 14-day window; it should stay at or near 0 for the period."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 87,
+  "last_cycle_seconds": 50,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1320,7 +1287,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-03T07:50:36.333073+00:00",
+    "checked_at": "2026-11-03T08:50:31.355763+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1947,7 +1914,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-03T07:52:02.505898+00:00",
+    "last_run": "2026-11-03T08:51:19.703696+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1957,20 +1924,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-03T07:52:02.690725+00:00",
+    "last_run": "2026-11-03T08:51:19.873432+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4568987,
-        "at": "2026-11-02T22:58:35.559152+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-11-02T22:58:35.559152+00:00",
-        "ok": true
-      },
       {
         "id": 4765372,
         "at": "2026-11-02T23:33:09.872472+00:00",
@@ -1978,16 +1935,6 @@
       },
       {
         "id": 4662663,
-        "at": "2026-11-02T23:33:09.872472+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-02T23:33:09.872472+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
         "at": "2026-11-02T23:33:09.872472+00:00",
         "ok": true
       },
@@ -2172,8 +2119,28 @@
         "ok": true
       },
       {
+        "id": 4568987,
+        "at": "2026-11-03T08:51:19.873432+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-11-03T08:51:19.873432+00:00",
+        "ok": true
+      },
+      {
+        "id": 4937139,
+        "at": "2026-11-03T08:51:19.873432+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-03T08:51:19.873432+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-03T07:52:02.690725+00:00",
+        "at": "2026-11-03T08:51:19.873432+00:00",
         "ok": true
       }
     ],
@@ -2182,7 +2149,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 8.9
+    "oldest_check_age_hours": 9.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2202,7 +2169,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

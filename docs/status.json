@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-03T04:32:22.234142+00:00",
-  "total_runs": 2235,
+  "last_run": "2026-11-03T05:32:20.553551+00:00",
+  "total_runs": 2236,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,52 +34,68 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the named prompt focus (weak_title, 5 drafts in 14 days) is already saturated by ~30 open, unmerged prompt-edit branches on the same two prompts, and the dominant reject cause (llm_error=36 of 64 lifetime, 23 in 14 days) is engine-side and explicitly not fixable by a prompt edit.",
+    "summary": "No code change this cycle: the weak_title fix the PROMPT FOCUS asks for is already written and parked on ~30 unmerged review branches (2026-10-31 through 2026-11-02, all touching articles.py title rules), so a 31st branch editing the same two prompt strings adds no information \u2014 it just re-derives the same proposal while the evidence needed to judge any of them (a merged fix and a 14-day weak_title window) never accumulates.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the ~30 open title-prompt branches",
-        "description": "Unblocks the weak_title fix: the edits are written, parked on review branches, and each was left unmerged, so every cycle re-derives the same proposal instead of observing whether it reduced weak_title in the 14-day window",
-        "owner_action": "Review and merge (or close) the 2026-11-02 branch replacing the flat 'no ALL-CAPS, no colon-subtitle padding' phrase in the title-revision prompt; that is the most recent and most specific of the weak_title proposals",
+        "title": "Merge one title-prompt branch, then hold for 14 days",
+        "description": "Unblocks the weak_title fix that ~30 cycles have each re-derived instead of observed, and lets the next weak_title count actually measure a merged change rather than add a 31st duplicate branch",
+        "owner_action": "Review and merge (or close) the 2026-11-02 branch replacing the flat 'no ALL-CAPS, no colon-subtitle padding' phrase in _revise_title, then merge no further title-prompt branches for two weeks",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the evolve/* branch from 2026-11-02 touching bot/earning/articles.py _revise_title",
+          "Step 1: Open the evolve/* branch from 2026-11-02 touching bot/earning/articles.py _revise_title; confirm the diff only rewrites that one prompt string",
           "Step 2: Merge it, then read the 'Drafts lost to a prompt' weak_title count over the next 14 days before accepting any further title-prompt proposal"
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach via prompt upgrades, one step per cycle; declining because the step is already fully occupied by open branches",
+    "direction": "Checklist step 4 \u2014 upgrade the prompts that write reach, one step per cycle; blocked here by unmerged prior work, not by a missing proposal",
     "evidence": [
-      "article_rejects.counts: llm_error=36 of total 64 \u2014 more than weak_title (14) and empty_draft (9) combined, and the ledger marks it 'not fixable by a prompt edit'",
-      "Drafts lost to a prompt (14 days): weak_title=5, fabricated=2 \u2014 small against llm_error=23 in the same window",
-      "PRIOR PROPOSALS lists ~30 distinct, still-unmerged prompt edits targeting exactly the weak_title producers (_SYSTEM title rules, _revise_title), including every variant of adding banned ALL-CAPS examples and replacing the Title Case / colon-subtitle phrasing",
-      "Gate findings: 'title has ALL-CAPS word' x4 \u2014 the gate already exempts known acronyms (_KNOWN_ACRONYMS) and _SYSTEM already names the ban with the acronym exception, so further prompt wording on this rule duplicates refused work",
-      "reach is healthy: receipt_check 43/43 covered, known_without_footer=0, article_daily published 1 \u2014 no receive-path or coverage gap to serve instead"
+      "article_rejects.counts: weak_title=14 lifetime, 5 in the last 14 days, gate findings 'title has ALL-CAPS word' x4 and 'title padded with a colon subtitle' x1",
+      "PRIOR PROPOSALS lists ~30 distinct unmerged branches proposing exactly this edit to bot/earning/articles.py (_SYSTEM title rules / _revise_title), 2026-10-31 to 2026-11-02, none merged",
+      "last_evolution_branch = null and evolution_pending_review = false \u2014 no branch is currently under review, so the backlog is not being drained",
+      "receive path is clean (receipt_check.covered/published_total = 43/43, known_without_footer = 0), so step 1 does not block; the only blocked item is observing a title-prompt fix"
     ],
-    "money_path": "none (maintenance) \u2014 no change proposed, so nothing touches the receive path this cycle",
-    "verify": "Next cycle: article_rejects counts \u2014 if weak_title rises again while the ~30 open title-prompt branches remain unmerged, the reviewer's highest-value action is merging one of them rather than a 31st proposal; llm_error is the count worth watching for engine-side causes",
+    "money_path": "reach-only: weak_title rejects are one post and one tip ask that never ship; the fix exists, merging it is the only step that can move the count",
+    "verify": "After the owner merges one of the title-prompt branches, read 'Drafts lost to a prompt: weak_title' over the next 14 days in the evolution brief \u2014 it should fall from 5 toward 0, with 'title has ALL-CAPS word' disappearing from article_rejects.recent details.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.0"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "ctf-bounty",
+        "success": true,
+        "estimated_usd": 0.0,
+        "listed": 14
+      },
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 40,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one of the ~30 open title-prompt branches",
-      "description": "Unblocks the weak_title fix: the edits are written, parked on review branches, and each was left unmerged, so every cycle re-derives the same proposal instead of observing whether it reduced weak_title in the 14-day window",
-      "owner_action": "Review and merge (or close) the 2026-11-02 branch replacing the flat 'no ALL-CAPS, no colon-subtitle padding' phrase in the title-revision prompt; that is the most recent and most specific of the weak_title proposals",
+      "title": "Merge one title-prompt branch, then hold for 14 days",
+      "description": "Unblocks the weak_title fix that ~30 cycles have each re-derived instead of observed, and lets the next weak_title count actually measure a merged change rather than add a 31st duplicate branch",
+      "owner_action": "Review and merge (or close) the 2026-11-02 branch replacing the flat 'no ALL-CAPS, no colon-subtitle padding' phrase in _revise_title, then merge no further title-prompt branches for two weeks",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the evolve/* branch from 2026-11-02 touching bot/earning/articles.py _revise_title",
+        "Step 1: Open the evolve/* branch from 2026-11-02 touching bot/earning/articles.py _revise_title; confirm the diff only rewrites that one prompt string",
         "Step 2: Merge it, then read the 'Drafts lost to a prompt' weak_title count over the next 14 days before accepting any further title-prompt proposal"
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 42,
+  "last_cycle_seconds": 92,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -230,7 +246,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
         "age_hours": null,
         "reason": "already running, so it needs no account and no owner action; pays in stablecoin, so the receive path is on-chain and verifiable",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -259,7 +275,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -288,7 +304,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -317,7 +333,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "Put the same published receive address on the product page and in the README, then confirm a reader can see it -- receipt_check already proves this for the articles.",
@@ -346,7 +362,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
         "age_hours": null,
         "reason": "settles to the wallet address this project already publishes; sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once, set the price, and point the payout at the published Tron address. Owner does this by hand: Owner signs up (no ID upload), adds the Tron receive address, and uploads the product once.",
@@ -375,7 +391,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once and set the price. Owner does this by hand: open the account",
@@ -404,7 +420,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time; costs $5.00 once, stated rather than hidden",
         "next_step": "List the product once and set the price. Owner does this by hand: Owner pays the one-time $5 registration and submits the extension for review.",
@@ -432,9 +448,9 @@
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
-        "posted_at": "2026-11-02T22:26:47+00:00",
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
-        "age_hours": 1.1,
+        "posted_at": "2026-11-03T05:30:03+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
+        "age_hours": 0.1,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -462,7 +478,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
         "age_hours": null,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.",
@@ -491,7 +507,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
         "age_hours": null,
         "reason": "pays in stablecoin, so the receive path is on-chain and verifiable; sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once and set the price. Owner does this by hand: Owner creates an account, completes the tax interview with a TIN/SSN, pays the one-time $3 identity fee, and adds fiat payout details.",
@@ -499,35 +515,6 @@
         "cost_usd": 3.0,
         "manual_setup": "Owner creates an account, completes the tax interview with a TIN/SSN, pays the one-time $3 identity fee, and adds fiat payout details.",
         "verified_note": "Tax interview, TIN requirement and the one-time $3.00 identity fee confirmed on itch.io/docs/creators/payments 2026-09-15. The earlier row said 'free to publish, no approval queue' and recorded cost_u",
-        "pursued": false
-      },
-      {
-        "title": "Agent-Threat-Rule/agent-threat-rules",
-        "url": "https://github.com/Agent-Threat-Rule/agent-threat-rules",
-        "source": "github",
-        "buyer": "tooling, no buyer",
-        "kind": "asset",
-        "score": 58,
-        "score_parts": {
-          "owner_action": 0.6,
-          "receive_path": 0.2,
-          "identity_cost": 0.6,
-          "zero_budget": 0.6,
-          "setup_burden": 1.0,
-          "recency": 1.0
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-11-02T23:20:29+00:00",
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
-        "age_hours": 0.2,
-        "reason": "free tooling or reach to build and market the product with",
-        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
-        "codex_prompt": "",
-        "cost_usd": null,
-        "manual_setup": "",
-        "verified_note": "",
         "pursued": false
       },
       {
@@ -543,14 +530,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 1.0
+          "recency": 0.998
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-02T22:50:49+00:00",
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
-        "age_hours": 0.7,
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
+        "age_hours": 6.7,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -572,14 +559,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.94
+          "recency": 0.938
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-10-26T18:14:58+00:00",
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
-        "age_hours": 173.3,
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
+        "age_hours": 179.3,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -601,14 +588,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.935
+          "recency": 0.933
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-10-26T05:26:01+00:00",
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
-        "age_hours": 186.1,
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
+        "age_hours": 192.1,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -636,7 +623,7 @@
         "value_basis": "none",
         "value_note": "",
         "posted_at": null,
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
         "age_hours": null,
         "reason": "sells the product while nobody is working; the signup is one-time",
         "next_step": "List the product once and set the price. Owner does this by hand: open the account",
@@ -647,8 +634,8 @@
         "pursued": false
       },
       {
-        "title": "kairichard/awesome-nocode-lowcode",
-        "url": "https://github.com/kairichard/awesome-nocode-lowcode",
+        "title": "cheaper-inference/OmniRoute",
+        "url": "https://github.com/cheaper-inference/OmniRoute",
         "source": "github",
         "buyer": "tooling, no buyer",
         "kind": "asset",
@@ -664,8 +651,37 @@
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
-        "posted_at": "2026-11-02T23:31:52+00:00",
-        "discovered_at": "2026-11-02T23:32:38.027712+00:00",
+        "posted_at": "2026-11-03T05:31:13+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
+        "age_hours": 0.0,
+        "reason": "free tooling or reach to build and market the product with",
+        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
+        "codex_prompt": "",
+        "cost_usd": null,
+        "manual_setup": "",
+        "verified_note": "",
+        "pursued": false
+      },
+      {
+        "title": "paperclipai/paperclip",
+        "url": "https://github.com/paperclipai/paperclip",
+        "source": "github",
+        "buyer": "tooling, no buyer",
+        "kind": "asset",
+        "score": 52,
+        "score_parts": {
+          "owner_action": 0.4,
+          "receive_path": 0.2,
+          "identity_cost": 0.6,
+          "zero_budget": 0.6,
+          "setup_burden": 1.0,
+          "recency": 1.0
+        },
+        "value_usd": null,
+        "value_basis": "none",
+        "value_note": "",
+        "posted_at": "2026-11-03T05:30:49+00:00",
+        "discovered_at": "2026-11-03T05:33:04.256071+00:00",
         "age_hours": 0.0,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
@@ -747,106 +763,111 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "The best current route is: build one small client-side or single-purpose product, ship its free tier on channels that cost nothing (GitHub Releases, GitHub Pages, Chrome Web Store's one-time $5), and take payment through the already-validated Tron receive address published on the product page, README, FUNDING.yml, --help output, and every dev.to article. For buyers who want a card checkout, add Getly as a storefront, since it settles USDT/USDC on Tron directly to the seller's own wallet with no KYC and no monthly fee (verify current terms before relying on it). No channel here requires per-sale owner action, and the only hard costs are Chrome's one-time $5 registration and Tron network fees.",
+      "summary": "On a zero budget the best route is to build one small self-contained digital product that costs nothing per user to run, host it free on GitHub (Releases, Pages, repo), and collect payment through the Tron TRC-20 USDT receive address the project already publishes \u2014 placed in the README, the tool's --help output, and a FUNDING.yml. For buyers who want a normal checkout, Getly is the storefront route: digital-goods listing with no monthly fee and direct USDT-to-own-wallet settlement on Tron (verify current terms, minimum payout applies). A browser extension adds organic discovery via the Chrome Web Store at a one-time $5 registration fee \u2014 the only non-zero cost here. Nothing in this plan involves hourly work; every sale, tip, or download is delivered by files and pages that already exist.",
       "market_themes": [
         {
-          "theme": "Sell the upgrade, give away the tool: the free tier does the discovery the owner cannot buy",
-          "evidence": "Lead samples 'Ship the product free, sell the upgrade' and 'Free-tier stack so the product costs nothing to run'; Chrome Web Store free listing",
-          "offer": "A client-side browser extension or CLI utility, free to use, with a paid tier (extra features, config presets) delivered via Getly or a licence key in exchange for the wallet ask"
+          "theme": "Ship free, monetise with a wallet ask attached to the artifact itself",
+          "evidence": "lead: 'Wallet ask on the product page and in every article (already live)', 'Ask in the artifact \u2014 README, --help, docs footer', 'Put the receive address in the GitHub repo'",
+          "offer": "Publish the tool free with the validated TRC-20 address in the README, release notes, FUNDING.yml custom field, and the tool's own about/--help output, so any user can pay without a storefront."
         },
         {
-          "theme": "Wallet-as-storefront: publish the receive address everywhere the product travels, so no platform mediates a sale",
-          "evidence": "Leads 'Wallet ask on the product page and in every article (already live)', 'Put the receive address in the GitHub repo', and 'Ask in the artifact'",
-          "offer": "Downloadable asset packs, data sets, or self-hostable scripts on GitHub Releases, priced by an honest ask, with the Tron USDT address in README, FUNDING.yml, release notes, --help, and docs footer"
+          "theme": "Freemium: free tier buys discovery, paid upgrade is the price",
+          "evidence": "lead: 'Ship the product free, sell the upgrade, ask in the README'; Chrome Web Store row shows a free extension listing has real organic discovery",
+          "offer": "A free browser extension in the Chrome Web Store whose Pro tier (extra features, unlocked via a licence file) is bought by paying the published receive address or through a Getly listing."
         },
         {
-          "theme": "One artifact, many free shelves: list the same product on every zero-cost channel since the build is already done",
-          "evidence": "Lead 'One product, listed on every free channel at once'; itch.io free upload; Chrome Web Store distribution row",
-          "offer": "The same download listed on itch.io (pay-what-you-want, if the owner accepts a tax interview), Chrome Web Store (extensions), and Getly (card + crypto checkout)"
+          "theme": "Sell built-once downloads (asset packs, templates, datasets) on storefronts that settle crypto",
+          "evidence": "lead: 'Getly \u2014 sell a digital product, settle USDT on Tron to your own wallet'; itch.io row confirms free listing but fiat/KYC payout, showing why a crypto-settling storefront is preferred",
+          "offer": "One-time-licence downloads \u2014 preset packs, templates, reference data \u2014 listed on Getly with USDT settlement to the owner's wallet, and mirrored as free-with-ask on GitHub Releases."
+        },
+        {
+          "theme": "One product, every zero-cost channel at once",
+          "evidence": "lead: 'One product, listed on every free channel at once'; dev.to article lead shows content marketing already running",
+          "offer": "List the same artifact on GitHub Releases, the Chrome Web Store (if an extension), Getly, and write the dev.to article whose footer is the product and the ask."
         }
       ],
       "sales_channels": [
         {
-          "name": "Tron USDT receive address (already live)",
-          "what_it_does": "Direct wallet-to-wallet payment, no platform, no custodian",
-          "cost": "Zero; only Tron network fees on receipt, paid by sender or negligible",
-          "crypto_payout": "USDT (TRC-20) directly to the owner's own validated wallet",
-          "owner_setup": "Paste the existing address into README, product page, FUNDING.yml custom field, release notes, --help, and docs footer (one-time)",
-          "why_passive": "Payment arrives on-chain with no owner in the loop; balance is visible on-chain"
+          "name": "GitHub Releases + repo (README, FUNDING.yml, release notes)",
+          "what_it_does": "Hosts the product binary/archive and the payment ask, with no storefront",
+          "cost": "$0 listing, $0 revenue cut, no approval queue",
+          "crypto_payout": "Any asset the receive address accepts; already validated TRC-20 USDT, straight to the owner's wallet",
+          "owner_setup": "One-time: push the repo, attach the release file, add .github/FUNDING.yml custom: field with the address, paste the address into the README and release body",
+          "why_passive": "Files and markdown serve every buyer forever; no owner action per download or payment"
+        },
+        {
+          "name": "Wallet ask inside the artifact (--help, about box, docs footer)",
+          "what_it_does": "Carries the payment address with every copy and fork of the tool",
+          "cost": "$0",
+          "crypto_payout": "TRC-20 USDT to the owner's own wallet",
+          "owner_setup": "One-time: embed the address string in the tool's help/about output and docs page",
+          "why_passive": "Travels with the artifact; reaches users who never visit the listing page, with zero per-sale work"
         },
         {
           "name": "Getly",
-          "what_it_does": "Digital-goods storefront with card checkout and native stablecoin payout",
-          "cost": "Verify current terms; no monthly fee per lead sample",
-          "crypto_payout": "USDT/USDC; TRC-20 supported, minimum payout $15 on Tron (verify current terms); paid to the seller's own wallet, no KYC for crypto settlement (verify)",
-          "owner_setup": "One signup, product upload, paste wallet address",
-          "why_passive": "Storefront delivers the file and processes payment automatically"
-        },
-        {
-          "name": "GitHub Releases + Pages",
-          "what_it_does": "Free hosting and download distribution for binaries, archives, and the product page",
-          "cost": "Zero on the free tier of the existing account",
-          "crypto_payout": "None itself; pairs with the wallet ask in README and release bodies",
-          "owner_setup": "Push code, cut a release, publish a static landing page (one-time per product)",
-          "why_passive": "Downloads and page traffic need no owner action; nothing can be seized or geo-blocked"
+          "what_it_does": "Storefront for digital downloads with card and crypto checkout",
+          "cost": "No monthly fee; platform cut and current fee schedule: verify current terms",
+          "crypto_payout": "USDT/USDC to the seller's own wallet; TRC-20 supported; minimum payout ~$15 on Tron \u2014 verify current terms",
+          "owner_setup": "One-time: create account, upload the product file, set price, paste the Tron payout address",
+          "why_passive": "The storefront handles checkout and file delivery automatically; owner only monitors the wallet"
         },
         {
           "name": "Chrome Web Store",
-          "what_it_does": "Distribution with real organic discovery for browser extensions",
-          "cost": "One-time $5 developer registration per account, covers up to 20 extensions; store takes no cut of free extensions (verify)",
-          "crypto_payout": "None directly; monetise via the wallet ask in the extension's about/settings screen or a paid upgrade sold through Getly",
-          "owner_setup": "Pay the $5 fee (the only non-zero cost in this plan), upload the extension once, update manually for versions",
-          "why_passive": "Store listings surface organically; installs and paid upgrades need no owner per sale"
+          "what_it_does": "Distribution with organic discovery for browser extensions",
+          "cost": "One-time $5 developer registration, no renewal, up to 20 extensions; store takes no cut of a free extension",
+          "crypto_payout": "None directly \u2014 the store distributes only; payment happens via the in-product wallet ask or a Getly row for the Pro tier",
+          "owner_setup": "One-time: pay the $5 fee, package and upload the extension, write the listing, and include the TRC-20 address in the listing page and extension's about screen",
+          "why_passive": "Organic search delivers users indefinitely; upgrades unlock via licence file with no owner involvement"
         },
         {
-          "name": "itch.io",
-          "what_it_does": "Free storefront listing tools and asset packs, pay-what-you-want supported",
-          "cost": "Free to upload, ~10% default revenue share (seller-adjustable); one-time $3 tax identity fee plus a tax interview with a TIN required for payout (verify current terms)",
-          "crypto_payout": "None; fiat-only settlement, so it fails the no-KYC preference but is a free extra shelf for owners with a TIN",
-          "owner_setup": "Account, upload, tax interview once",
-          "why_passive": "Buyers download and pay via itch.io with no owner involvement"
+          "name": "GitHub Pages + dev.to article",
+          "what_it_does": "Free landing page for the product, promoted by an already-running article pipeline",
+          "cost": "$0 on both (existing free-tier accounts)",
+          "crypto_payout": "TRC-20 USDT address printed on the page and article footer, direct to owner wallet",
+          "owner_setup": "One-time: write the product page and one 'problem-workaround' article whose solution is the product",
+          "why_passive": "The article runs on existing publishing infrastructure and funnels readers to a static page; no per-visitor action"
         }
       ],
       "product_ideas": [
         {
-          "idea": "One-annoyance browser extension",
-          "who_buys": "Users annoyed by one specific behaviour on a major site (e.g. clutter, autoplay, bad formatting)",
-          "deliverable": "Free extension with a paid tier unlocking config options or premium presets, delivered by the storefront or licence after wallet payment",
-          "pricing_model": "Free tier plus paid upgrade",
-          "marginal_cost": "Zero; extension runs client-side",
-          "free_stack": "Chrome Web Store ($5 one-time), GitHub Pages landing page, wallet ask in the settings/about screen"
+          "idea": "Tab-cleaner browser extension",
+          "who_buys": "Heavy-tab users drowning in dozens of open tabs who want one-click cleanup and session restore",
+          "deliverable": "Chrome extension; free tier cleans tabs manually, Pro tier adds auto-rules, session snapshots, whitelist \u2014 unlocked by a licence file after payment",
+          "pricing_model": "Free tier + one-time paid upgrade (pay via published TRC-20 address or Getly listing)",
+          "marginal_cost": "$0 \u2014 all logic runs client-side",
+          "free_stack": "Chrome Web Store ($5 one-time listing) + GitHub Pages landing page + wallet address in the extension's about screen"
         },
         {
-          "idea": "Single-purpose CLI utility",
-          "who_buys": "Developers or sysadmins who hit one recurring task repeatedly",
-          "deliverable": "Binary or script on GitHub Releases; paid tier adds features or a config preset pack",
-          "pricing_model": "Free tool plus paid upgrade, or pay-what-you-want ask",
-          "marginal_cost": "Zero; buyer runs it on their own machine",
-          "free_stack": "GitHub Releases + Actions, README/FUNDING.yml wallet ask"
+          "idea": "Markdown-to-anything CLI utility",
+          "who_buys": "Developers and technical writers who need batch conversion of Markdown to PDF/HTML/docx with custom templates",
+          "deliverable": "Downloadable binary on GitHub Releases; free tier converts single files, paid tier adds batch mode and custom templates",
+          "pricing_model": "Pay-what-you-want with a suggested price; address in README, --help output, and release notes",
+          "marginal_cost": "$0 \u2014 the buyer runs it on their own machine",
+          "free_stack": "GitHub Releases hosting, GitHub Actions builds, FUNDING.yml + README ask"
         },
         {
-          "idea": "Template/preset/asset pack",
-          "who_buys": "Users of a popular tool who want a working starting configuration",
-          "deliverable": "A downloadable file (pack, config, dataset) built once",
-          "pricing_model": "One-time licence or pay-what-you-want",
-          "marginal_cost": "Zero; same file downloaded repeatedly",
-          "free_stack": "GitHub Releases, Getly, itch.io listing"
+          "idea": "Compiled reference dataset",
+          "who_buys": "Analysts or indie devs who need a clean, structured dataset (e.g. timezone quirks, browser user-agent history) and don't want to compile it themselves",
+          "deliverable": "Downloadable JSON/CSV pack with a licence, delivered by Getly or a GitHub Releases link",
+          "pricing_model": "One-time licence per pack",
+          "marginal_cost": "$0 \u2014 compiled once, downloaded many times",
+          "free_stack": "GitHub repo for the sample + Getly storefront for the paid pack, settled in TRC-20 USDT"
         },
         {
-          "idea": "Self-hostable script",
-          "who_buys": "Self-hosters who want one working, documented script instead of assembling it themselves",
-          "deliverable": "Script plus README, as a tagged release",
-          "pricing_model": "Free source plus pay-what-you-want ask in README and --help",
-          "marginal_cost": "Zero; buyer runs their own instance",
-          "free_stack": "GitHub repo, Releases, dev.to article with the problem-workaround framing and existing wallet footer"
+          "idea": "Preset/template pack for an existing tool",
+          "who_buys": "Users of a popular editor or framework who want a polished config out of the box",
+          "deliverable": "Zip of presets/templates with install instructions, hosted on GitHub Releases",
+          "pricing_model": "Pay-what-you-want; address in README and on the product page",
+          "marginal_cost": "$0 \u2014 static files",
+          "free_stack": "GitHub Pages product page, GitHub Releases delivery, wallet ask in the README"
         }
       ],
       "owner_actions": [
-        "Pick one product shape (extension, CLI utility, or asset pack) and ship the free tier on GitHub Releases with the validated Tron address in README, FUNDING.yml, release notes, --help, and a GitHub Pages landing page.",
-        "Set up a Getly storefront with the product at a fixed price, confirming payout in TRC-20 USDT to the existing address, and re-verify current minimum payout and fee terms first.",
-        "Pay the one-time $5 Chrome Web Store registration if the product is an extension, and include the wallet ask in the extension's about/settings screen rather than only on the listing page.",
-        "Reuse the existing dev.to pipeline: write one problem-workaround article where the product is the fix, so the footer (already carrying the address) acts as marketing at zero marginal cost.",
-        "Only if the owner has a TIN and wants fiat alongside crypto, complete the itch.io tax interview once and list the same artifact pay-what-you-want there."
+        "Pick one product shape (extension or CLI utility), build it client-side so the marginal cost per user is zero, and host the artifact on GitHub Releases with the TRC-20 address in the README, release notes, and FUNDING.yml custom field.",
+        "Embed the validated receive address in the artifact itself \u2014 --help output, about box, docs footer \u2014 so it travels with every copy and fork.",
+        "Create a Getly account once: upload the paid deliverable, set the price, paste the Tron payout address; verify current fee and minimum-payout terms before relying on it.",
+        "If the product is a browser extension, pay the one-time $5 Chrome Web Store registration and publish the free tier with the address in the listing and the in-app about screen.",
+        "Write one 'problem-workaround' dev.to article where the product is the fix and the existing article footer carries the ask, reusing the pipeline already running."
       ]
     },
     "free_ai_focus": [
@@ -871,7 +892,7 @@
     "supply_count": 7,
     "priced_count": 0,
     "ranked_total": 40,
-    "last_refresh_at": "2026-11-02T23:32:26.548098+00:00",
+    "last_refresh_at": "2026-11-03T05:32:51.754853+00:00",
     "channel_count": 9,
     "asset_count": 7,
     "needs_setup_count": 3,
@@ -1280,7 +1301,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-03T04:32:22.687681+00:00",
+    "checked_at": "2026-11-03T05:32:21.294933+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1898,7 +1919,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-03T04:33:03.599070+00:00",
+    "last_run": "2026-11-03T05:33:52.127362+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1908,20 +1929,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-03T04:33:03.900685+00:00",
+    "last_run": "2026-11-03T05:33:52.489958+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4602729,
-        "at": "2026-11-02T19:13:24.598021+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-11-02T19:13:24.598021+00:00",
-        "ok": true
-      },
       {
         "id": 4959304,
         "at": "2026-11-02T20:04:18.804668+00:00",
@@ -1929,16 +1940,6 @@
       },
       {
         "id": 4671278,
-        "at": "2026-11-02T20:04:18.804668+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
-        "at": "2026-11-02T20:04:18.804668+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
         "at": "2026-11-02T20:04:18.804668+00:00",
         "ok": true
       },
@@ -2123,8 +2124,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-11-03T05:33:52.489958+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-11-03T05:33:52.489958+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-11-03T05:33:52.489958+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-11-03T05:33:52.489958+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-03T04:33:03.900685+00:00",
+        "at": "2026-11-03T05:33:52.489958+00:00",
         "ok": true
       }
     ],
@@ -2133,7 +2154,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.3
+    "oldest_check_age_hours": 9.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2153,7 +2174,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 1
+      "glm": 2
     },
     "fallback": {
       "provider": "atria",
@@ -2165,9 +2186,9 @@
   },
   "ctf_bounty": {
     "source": "ctftime",
-    "last_refresh_at": "2026-11-02T23:32:26.012096+00:00",
+    "last_refresh_at": "2026-11-03T05:32:51.156356+00:00",
     "last_reason": "ok",
-    "fetched": 28,
+    "fetched": 26,
     "enterable": 16,
     "paying": 3,
     "crypto": 0,
@@ -2181,10 +2202,10 @@
         "start": "2026-11-06T17:00:00+00:00",
         "finish": "2026-11-07T17:00:00+00:00",
         "live": false,
-        "days_until_start": 3.7,
+        "days_until_start": 3.5,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 58,
+        "participants": 61,
         "prizes": "Open Division: (Online + In-person) 1st - 100$ 2nd - 50$ 3rd - 25$ In-Person: 1st - 100$",
         "pays": true,
         "crypto": false,
@@ -2200,10 +2221,10 @@
         "start": "2026-11-06T12:00:00+00:00",
         "finish": "2026-11-09T12:00:00+00:00",
         "live": false,
-        "days_until_start": 3.5,
+        "days_until_start": 3.3,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 48,
+        "participants": 50,
         "prizes": "1st Place: 25$ + 6 Month Caido License per Member (Worth ~$545) + 4 .xyz Domains 2nd Place: 15$ + 3 Month Caido License per Member (Worth ~$272) + 2 .xyz Domain",
         "pays": true,
         "crypto": false,
@@ -2219,7 +2240,7 @@
         "start": "2026-11-20T10:00:00+00:00",
         "finish": "2026-11-22T10:00:00+00:00",
         "live": false,
-        "days_until_start": 17.4,
+        "days_until_start": 17.2,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 13,
@@ -2238,10 +2259,10 @@
         "start": "2026-11-06T13:00:00+00:00",
         "finish": "2026-11-08T13:00:00+00:00",
         "live": false,
-        "days_until_start": 3.6,
+        "days_until_start": 3.3,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 61,
+        "participants": 63,
         "prizes": "TBD",
         "pays": false,
         "crypto": false,
@@ -2257,7 +2278,7 @@
         "start": "2026-11-12T17:00:00+00:00",
         "finish": "2026-11-14T05:00:00+00:00",
         "live": false,
-        "days_until_start": 9.7,
+        "days_until_start": 9.5,
         "format": "Jeopardy",
         "weight": 1.0,
         "participants": 18,
@@ -2276,7 +2297,7 @@
         "start": "2026-11-13T17:00:00+00:00",
         "finish": "2026-11-14T11:00:00+00:00",
         "live": false,
-        "days_until_start": 10.7,
+        "days_until_start": 10.5,
         "format": "Jeopardy",
         "weight": 37.0,
         "participants": 45,
@@ -2295,10 +2316,10 @@
         "start": "2026-11-13T23:00:00+00:00",
         "finish": "2026-11-15T23:00:00+00:00",
         "live": false,
-        "days_until_start": 11.0,
+        "days_until_start": 10.7,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 89,
+        "participants": 90,
         "prizes": "To be announced!",
         "pays": false,
         "crypto": false,
@@ -2314,7 +2335,7 @@
         "start": "2026-11-20T23:00:00+00:00",
         "finish": "2026-11-21T23:00:00+00:00",
         "live": false,
-        "days_until_start": 18.0,
+        "days_until_start": 17.7,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 7,
@@ -2333,10 +2354,10 @@
         "start": "2026-11-21T13:00:00+00:00",
         "finish": "2026-11-21T21:00:00+00:00",
         "live": false,
-        "days_until_start": 18.6,
+        "days_until_start": 18.3,
         "format": "Jeopardy",
         "weight": 37.0,
-        "participants": 22,
+        "participants": 23,
         "prizes": "",
         "pays": false,
         "crypto": false,
@@ -2352,7 +2373,7 @@
         "start": "2026-11-28T04:30:00+00:00",
         "finish": "2026-11-28T16:30:00+00:00",
         "live": false,
-        "days_until_start": 25.2,
+        "days_until_start": 25.0,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 16,
@@ -2371,10 +2392,10 @@
         "start": "2026-11-06T10:00:00+00:00",
         "finish": "2026-11-07T10:00:00+00:00",
         "live": false,
-        "days_until_start": 3.4,
+        "days_until_start": 3.2,
         "format": "Jeopardy",
         "weight": 10.31,
-        "participants": 97,
+        "participants": 98,
         "prizes": "There are 2 rounds of the competition -> qualifying round and final round. The top 5 teams of international category of the qualifying round will advance to the",
         "pays": false,
         "crypto": false,
@@ -2390,7 +2411,7 @@
         "start": "2026-11-20T18:00:00+00:00",
         "finish": "2026-11-21T18:00:00+00:00",
         "live": false,
-        "days_until_start": 17.8,
+        "days_until_start": 17.5,
         "format": "Jeopardy",
         "weight": 73.17,
         "participants": 60,
@@ -2409,7 +2430,7 @@
         "start": "2026-11-27T18:00:00+00:00",
         "finish": "2026-11-28T18:00:00+00:00",
         "live": false,
-        "days_until_start": 24.8,
+        "days_until_start": 24.5,
         "format": "Jeopardy",
         "weight": 45.76,
         "participants": 23,
@@ -2428,7 +2449,7 @@
         "start": "2026-12-04T18:00:00+00:00",
         "finish": "2026-12-06T18:00:00+00:00",
         "live": false,
-        "days_until_start": 31.8,
+        "days_until_start": 31.5,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 6,

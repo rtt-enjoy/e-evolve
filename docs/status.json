@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-02T23:32:06.319233+00:00",
-  "total_runs": 2230,
+  "last_run": "2026-11-03T00:32:09.861482+00:00",
+  "total_runs": 2231,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,89 +34,72 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus space (weak_title) is saturated with 30 unmerged near-identical proposals that cannot be graded while unmerged, and the largest draft loss (llm_error=23 in 14 days) is engine-side and unfixable by any prompt edit.",
+    "summary": "No change this cycle: the prompt-ledger focus (weak_title) is saturated by 30 unmerged near-identical branches, so a 31st variant cannot be graded, and the largest reject source (llm_error=36 of 64) is the engine, not a prompt, so no prompt edit clears the bar until one branch is merged.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Merge one open title-prompt branch so the fix can be measured",
-        "description": "Thirty unmerged proposals cover the same weak_title space; merging one lets the next cycles show whether weak_title rejects actually fall, instead of the ledger accumulating near-identical variants that can never be graded.",
-        "owner_action": "Review and merge one of the 2026-10-31/2026-11-01 branches touching articles.py title rules (any single one), then leave the space untouched for two weeks.",
+        "description": "Thirty unmerged proposals cover the same weak_title space; without a merge, further prompt edits there are ungradeable and the drafts keep dying.",
+        "owner_action": "Pick any single small branch touching articles.py title rules (ALL-CAPS examples or colon-subtitle wording), merge it, and leave the space untouched for two weeks.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the open review branches listed in the evolution brief and pick one small ALL-CAPS/colon-subtitle edit.",
-          "Step 2: Merge it; the next 14-day article_rejects window is the A/B result \u2014 weak_title should drop from 5."
+          "Step 1: Open the evolve/* review branches from 2026-10-31 onward and choose one tiny title-rule edit.",
+          "Step 2: Merge it; the next 14-day article_rejects window is the result \u2014 weak_title should drop from 5."
         ]
       },
       {
-        "title": "Check why glm drops 23 drafts to llm_error in 14 days",
-        "description": "llm_error is the largest reject source by far and no prompt edit can touch it; if the glm-5.3-flash free tier is rate-limiting or truncating, a model/provider swap recovers more posts than any prompt work.",
-        "owner_action": "Review the llm_error detail strings in status.article_rejects.recent and decide whether glm-5.3-flash stays the 'post' role provider.",
+        "title": "Decide glm's future as the post-role provider",
+        "description": "llm_error is 36/64 lifetime rejects and 23 in the last 14 days; no prompt edit can recover those drafts. A provider or role swap recovers more posts than all prompt work combined.",
+        "owner_action": "Read article_rejects.recent llm_error detail strings; if quota/timeout, switch llm_roles.post to an already-configured fallback (atria) in config \u2014 no new secret.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Read article_rejects.recent entries with code 'llm_error' in docs/status.json for the error text.",
-          "Step 2: If it is quota/timeout, switch llm_roles.post to an already-configured fallback provider in config \u2014 no new secret."
+          "Step 1: Open docs/status.json, find article_rejects.recent entries with code llm_error and read the error text.",
+          "Step 2: If it is rate-limit/timeout, edit llm_roles.post in config to the atria fallback; expect llm_error in the next 14-day window to fall from 23."
         ]
       }
     ],
-    "direction": "Step 4 reach work via the PROMPT FOCUS, but blocked by evidence: merging must precede further title-prompt edits, and llm_error dwarfs weak_title as the loss source",
+    "direction": "Checklist step 4 / Principle 5 \u2014 reach via better prompts, one step per cycle; step 3k-style discipline: a cycle that cannot measure its own fix must not pile on another unmeasurable one",
     "evidence": [
-      "article_rejects.counts: llm_error=36 vs weak_title=14 (lifetime); ledger window: llm_error=23, weak_title=5 in last 14 days",
-      "PRIOR PROPOSALS lists 30 open branches since 2026-10-31 all touching articles.py title rules; none merged (last_evolution_branch=null, evolution_pending_review=false)",
-      "status.suggestions[0] already asks the owner to merge exactly one title-prompt branch before more variants accumulate",
-      "gate findings behind weak_title are fully diagnosed: 'title has ALL-CAPS word' x4 and colon-subtitle x1 \u2014 the instruction is known; the bottleneck is that no fix is live",
-      "prompt-focus edits cannot raise throughput while llm_error=36 and empty_draft=9 exceed weak_title=14 even lifetime"
+      "article_rejects.counts total 64: llm_error=36, weak_title=14, empty_draft=9, fabricated=4",
+      "Drafts lost to a prompt (14d): weak_title=5, fabricated=2; drafts lost to the engine (14d): llm_error=23",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x4, colon-subtitle x1",
+      "PRIOR PROPOSALS lists 30 distinct open branches from 2026-10-31 to 2026-11-02 all editing articles.py title rules for exactly these findings",
+      "suggestions already carries 'Merge one open title-prompt branch' and 'Check why glm drops 23 drafts to llm_error'"
     ],
-    "money_path": "none this cycle (maintenance/decision): the reach gain is locked behind an owner merge and an owner provider review, both already staged",
-    "verify": "After the owner merges one title-prompt branch: article_rejects 14-day weak_title count falls below 5. If glm stays the post role despite llm_error, the count to watch instead is article_rejects.counts.llm_error continuing to grow.",
+    "money_path": "none this cycle \u2014 the proposed edit would be reach-only, and it would be unmeasurable while the space is unmerged",
+    "verify": "After the owner merges exactly one of the 30 open title-rule branches: the 14-day weak_title count in article_rejects should fall from 5 toward 0, and llm_error should fall from 23 only if the glm role/provider decision is taken \u2014 both read from article_rejects.counts in the next status window.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.0"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Merge one open title-prompt branch so the fix can be measured",
-      "description": "Thirty unmerged proposals cover the same weak_title space; merging one lets the next cycles show whether weak_title rejects actually fall, instead of the ledger accumulating near-identical variants that can never be graded.",
-      "owner_action": "Review and merge one of the 2026-10-31/2026-11-01 branches touching articles.py title rules (any single one), then leave the space untouched for two weeks.",
+      "description": "Thirty unmerged proposals cover the same weak_title space; without a merge, further prompt edits there are ungradeable and the drafts keep dying.",
+      "owner_action": "Pick any single small branch touching articles.py title rules (ALL-CAPS examples or colon-subtitle wording), merge it, and leave the space untouched for two weeks.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the open review branches listed in the evolution brief and pick one small ALL-CAPS/colon-subtitle edit.",
-        "Step 2: Merge it; the next 14-day article_rejects window is the A/B result \u2014 weak_title should drop from 5."
+        "Step 1: Open the evolve/* review branches from 2026-10-31 onward and choose one tiny title-rule edit.",
+        "Step 2: Merge it; the next 14-day article_rejects window is the result \u2014 weak_title should drop from 5."
       ]
     },
     {
-      "title": "Check why glm drops 23 drafts to llm_error in 14 days",
-      "description": "llm_error is the largest reject source by far and no prompt edit can touch it; if the glm-5.3-flash free tier is rate-limiting or truncating, a model/provider swap recovers more posts than any prompt work.",
-      "owner_action": "Review the llm_error detail strings in status.article_rejects.recent and decide whether glm-5.3-flash stays the 'post' role provider.",
+      "title": "Decide glm's future as the post-role provider",
+      "description": "llm_error is 36/64 lifetime rejects and 23 in the last 14 days; no prompt edit can recover those drafts. A provider or role swap recovers more posts than all prompt work combined.",
+      "owner_action": "Read article_rejects.recent llm_error detail strings; if quota/timeout, switch llm_roles.post to an already-configured fallback (atria) in config \u2014 no new secret.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Read article_rejects.recent entries with code 'llm_error' in docs/status.json for the error text.",
-        "Step 2: If it is quota/timeout, switch llm_roles.post to an already-configured fallback provider in config \u2014 no new secret."
+        "Step 1: Open docs/status.json, find article_rejects.recent entries with code llm_error and read the error text.",
+        "Step 2: If it is rate-limit/timeout, edit llm_roles.post in config to the atria fallback; expect llm_error in the next 14-day window to fall from 23."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 64,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1317,7 +1300,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-02T23:32:06.936616+00:00",
+    "checked_at": "2026-11-03T00:32:10.626070+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1935,7 +1918,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-02T23:33:09.609718+00:00",
+    "last_run": "2026-11-03T00:32:33.192299+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1945,37 +1928,17 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-02T23:33:09.872472+00:00",
+    "last_run": "2026-11-03T00:32:33.546084+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4356423,
-        "at": "2026-11-02T14:09:05.238454+00:00",
-        "ok": true
-      },
-      {
-        "id": 4908316,
-        "at": "2026-11-02T14:09:05.238454+00:00",
-        "ok": true
-      },
       {
         "id": 4943931,
         "at": "2026-11-02T15:09:14.803425+00:00",
         "ok": true
       },
       {
-        "id": 4579420,
-        "at": "2026-11-02T15:09:14.803425+00:00",
-        "ok": true
-      },
-      {
         "id": 4619528,
-        "at": "2026-11-02T15:09:14.803425+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-11-02T15:09:14.803425+00:00",
         "ok": true
       },
@@ -2160,8 +2123,28 @@
         "ok": true
       },
       {
+        "id": 4356423,
+        "at": "2026-11-03T00:32:33.546084+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-11-03T00:32:33.546084+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-11-03T00:32:33.546084+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-03T00:32:33.546084+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-02T23:33:09.872472+00:00",
+        "at": "2026-11-03T00:32:33.546084+00:00",
         "ok": true
       }
     ],
@@ -2190,7 +2173,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

@@ -676,8 +676,9 @@ a {
 		box-shadow: 0 6px 18px -8px rgb(var(--c-accent) / .8);
 	}
 
+	/* Lives in the sticky topbar, so it never scrolls out of reach. */
 	.btn.back {
-		@apply mb-1 self-start text-soft;
+		@apply shrink-0 text-soft;
 	}
 
 	/* ===================================================== filters / search */

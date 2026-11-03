@@ -1,4 +1,4 @@
-import { ChevronRight, Menu, Monitor, Moon, RefreshCw, Sparkles, Sun, X } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Menu, Monitor, Moon, RefreshCw, Sparkles, Sun, X } from 'lucide-react';
 import { Suspense, lazy, useEffect, useMemo, useState, type ComponentType } from 'react';
 import { Banner, Dot, Empty, Pill } from './ui';
 import { availableSections, sectionById, SECTIONS, unclaimedKeys } from '../sections/registry';
@@ -137,6 +137,13 @@ export function App() {
 					<button className="icon-btn nav-open-btn" type="button" onClick={() => setNavOpen(true)} aria-label="Open navigation">
 						<Menu size={18} />
 					</button>
+					{/* In the sticky topbar, not the page body, so it stays reachable
+					    however far down a detail page the reader has scrolled. */}
+					{route.detail ? (
+						<a className="btn back" href={`#/${active?.id || ''}`} aria-label={`Back to ${active?.label || 'Dashboard'}`}>
+							<ArrowLeft size={15} /> <span>{active?.label || 'Back'}</span>
+						</a>
+					) : null}
 					<nav className="crumb" aria-label="Breadcrumb">
 						<a href="#/overview">E-Evolve</a>
 						<ChevronRight size={14} aria-hidden="true" />

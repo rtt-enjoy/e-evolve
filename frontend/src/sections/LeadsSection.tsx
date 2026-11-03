@@ -224,8 +224,6 @@ function LeadDetail({ lead, index, total }: { lead: CodeTechOpportunity; index: 
 
 	return (
 		<>
-			<a className="btn back" href="#/leads"><ArrowLeft size={15} /> all leads</a>
-
 			<SectionHead
 				title={cleanTitle(lead.title) || 'Untitled lead'}
 				blurb={lead.reason || 'No reason recorded for this lead.'}

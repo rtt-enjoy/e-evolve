@@ -212,3 +212,9 @@ Only the masked address (`wallet.address_masked`) is written to tracked files;
   `App.tsx` now calls `window.scrollTo` on every `section`/`detail` change. The
   browser still restores the old offset on Back. If `<main>` ever becomes its
   own scroll box, move the reset back onto it.
+- **The Back button lives in the sticky topbar.** It used to be the first
+  element of the Leads detail body, so it scrolled away with the page and the
+  reader had no way back short of the sidebar. `App.tsx` now renders it in
+  `.topbar` whenever the route has a `detail`, labelled with the section name.
+  Any section that adds a detail route gets it for free. Do not put a second
+  Back link inside a detail view.

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-03T06:32:20.882424+00:00",
-  "total_runs": 2237,
+  "last_run": "2026-11-03T06:50:32.083478+00:00",
+  "total_runs": 2238,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,34 +34,45 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change clears the bar: the PROMPT FOCUS (weak_title, 5 drafts in 14 days) already has ~30 open unmerged branches proposing exactly this one-line prompt edit, so a 31st duplicate cannot be reviewed or measured, and the dominant loss (llm_error=23) is engine-side, not prompt-fixable.",
+    "summary": "No change proposed: the prompt focus (weak_title, 5 drafts) has already attracted ~30 near-identical unmerged proposals touching _SYSTEM and _revise_title, so a 31st branch of the same edit cannot be verified as an improvement and only buries the experiment.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one title-prompt branch, then hold for 14 days",
-        "description": "Converts ~30 duplicate unmerged proposals into one measured experiment; every future weak_title count then reflects a real change instead of piling up a 31st identical branch",
-        "owner_action": "Pick one 2026-11-02 branch touching bot/earning/articles.py (_SYSTEM or _revise_title), confirm the diff is a single prompt-string edit, merge it, and close the other title branches",
+        "title": "Merge exactly one open title-prompt branch, close the other ~29 as duplicates, hold 14 days",
+        "description": "Unblocks the weak_title fix (~5 drafts per 14 days, each a lost post and tip ask) and makes every future weak_title count a real measurement of the merged change instead of noise across 31 branches.",
+        "owner_action": "Pick one 2026-10-31..11-02 branch editing bot/earning/articles.py (_SYSTEM title rules or _revise_title), confirm the diff is a single prompt-string edit, merge it, close the rest, and accept no further title-prompt proposals for 14 days.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: List evolve/* branches from 2026-11-01/02 that edit bot/earning/articles.py; select the one whose diff only rewrites one prompt string",
-          "Step 2: Merge it and close the remaining title-prompt branches as duplicates",
-          "Step 3: Do not accept further title-prompt proposals for 14 days; read the 14-day weak_title tally in the evolution brief to judge the merged change"
+          "Step 1: List evolve/* branches dated 2026-10-31 to 2026-11-02 that touch bot/earning/articles.py.",
+          "Step 2: Choose the one whose diff rewrites exactly one prompt string (e.g. the ALL-CAPS acronym-exception edit); verify no other code changed.",
+          "Step 3: Merge it, close the remaining title branches as duplicates, and read the next 14-day weak_title tally before approving any further title prompt work."
+        ]
+      },
+      {
+        "title": "One-time bio edit at dev.to/settings to carry the wallet ask on the profile",
+        "description": "Every profile visitor permanently sees the receive address; the only cheap, no-account channel still unbuilt per the channel table.",
+        "owner_action": "Paste the published Tron address (TFTNsf\u20269KbY) into the Bio field at dev.to/settings once.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open https://dev.to/settings and edit the Bio field.",
+          "Step 2: Add a one-line ask naming the TRC-20 USDT address exactly as published in payout_public.address.",
+          "Step 3: Save; the API cannot write this field (users is show-only), so this is a one-time manual step."
         ]
       }
     ],
-    "direction": "Checklist step 4 / Principle 5 \u2014 reach via prompt upgrades, gated on observing a merged change rather than re-deriving it",
+    "direction": "Checklist step 4 \u2014 upgrade the prompts losing drafts, one measured step per cycle; the measurement is void while 30 duplicate branches are open.",
     "evidence": [
-      "article_rejects.counts total 64, last 14 days: weak_title=5 vs llm_error=23",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "PRIOR PROPOSALS: 94 distinct open branches, ~30 of them title-prompt edits to articles.py, none merged",
-      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle' x1",
-      "suggestions field already carries the owner action to merge one title branch and hold 14 days"
+      "article_rejects last-14d: weak_title = 5 drafts (gate findings: 'title has ALL-CAPS word' x4, 'colon subtitle' x1)",
+      "PRIOR PROPOSALS list: ~30 distinct open branches from 2026-10-31..11-02 all editing bot/earning/articles.py title prompts, none merged",
+      "status.suggestions already on record: 'Merge one title-prompt branch, then hold for 14 days'",
+      "receive path clean: payout.live = true, receipt_check coverage_complete = true, known_without_footer = 0",
+      "reach signal: problem-workaround n=9 avg=483.4 leads preferred_archetypes"
     ],
-    "money_path": "reach-only (would be, if any of the 30 branches were merged; nothing ships from this cycle)",
-    "verify": "No change to verify. After the owner merges exactly one title-prompt branch, the next observable is the 14-day weak_title count in 'Drafts lost to a prompt' falling below 5; until a merge happens, any further count only measures the unmerged status quo.",
+    "money_path": "none (maintenance) \u2014 no change merged means no change shipped; the only unblock is owner review of the existing branches.",
+    "verify": "After the owner merges exactly one of the open title-prompt branches and closes the rest, the 14-day weak_title tally in the evolution brief should fall from 5 toward 0; until then any further title proposal is indistinguishable from the 30 already parked.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -69,19 +80,30 @@
   },
   "suggestions": [
     {
-      "title": "Merge one title-prompt branch, then hold for 14 days",
-      "description": "Converts ~30 duplicate unmerged proposals into one measured experiment; every future weak_title count then reflects a real change instead of piling up a 31st identical branch",
-      "owner_action": "Pick one 2026-11-02 branch touching bot/earning/articles.py (_SYSTEM or _revise_title), confirm the diff is a single prompt-string edit, merge it, and close the other title branches",
+      "title": "Merge exactly one open title-prompt branch, close the other ~29 as duplicates, hold 14 days",
+      "description": "Unblocks the weak_title fix (~5 drafts per 14 days, each a lost post and tip ask) and makes every future weak_title count a real measurement of the merged change instead of noise across 31 branches.",
+      "owner_action": "Pick one 2026-10-31..11-02 branch editing bot/earning/articles.py (_SYSTEM title rules or _revise_title), confirm the diff is a single prompt-string edit, merge it, close the rest, and accept no further title-prompt proposals for 14 days.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List evolve/* branches from 2026-11-01/02 that edit bot/earning/articles.py; select the one whose diff only rewrites one prompt string",
-        "Step 2: Merge it and close the remaining title-prompt branches as duplicates",
-        "Step 3: Do not accept further title-prompt proposals for 14 days; read the 14-day weak_title tally in the evolution brief to judge the merged change"
+        "Step 1: List evolve/* branches dated 2026-10-31 to 2026-11-02 that touch bot/earning/articles.py.",
+        "Step 2: Choose the one whose diff rewrites exactly one prompt string (e.g. the ALL-CAPS acronym-exception edit); verify no other code changed.",
+        "Step 3: Merge it, close the remaining title branches as duplicates, and read the next 14-day weak_title tally before approving any further title prompt work."
+      ]
+    },
+    {
+      "title": "One-time bio edit at dev.to/settings to carry the wallet ask on the profile",
+      "description": "Every profile visitor permanently sees the receive address; the only cheap, no-account channel still unbuilt per the channel table.",
+      "owner_action": "Paste the published Tron address (TFTNsf\u20269KbY) into the Bio field at dev.to/settings once.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Open https://dev.to/settings and edit the Bio field.",
+        "Step 2: Add a one-line ask naming the TRC-20 USDT address exactly as published in payout_public.address.",
+        "Step 3: Save; the API cannot write this field (users is show-only), so this is a one-time manual step."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 26,
+  "last_cycle_seconds": 43,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1287,7 +1309,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-03T06:32:21.510884+00:00",
+    "checked_at": "2026-11-03T06:50:32.781192+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1905,7 +1927,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-03T06:32:46.238601+00:00",
+    "last_run": "2026-11-03T06:51:14.739155+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1915,32 +1937,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-03T06:32:46.474327+00:00",
+    "last_run": "2026-11-03T06:51:15.022433+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4720062,
-        "at": "2026-11-02T20:58:18.953661+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-11-02T20:58:18.953661+00:00",
-        "ok": true
-      },
-      {
         "id": 4641536,
-        "at": "2026-11-02T21:59:02.998571+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-11-02T21:59:02.998571+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-11-02T21:59:02.998571+00:00",
         "ok": true
       },
@@ -2130,8 +2132,28 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-11-03T06:51:15.022433+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-03T06:51:15.022433+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-11-03T06:51:15.022433+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-11-03T06:51:15.022433+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-03T06:32:46.474327+00:00",
+        "at": "2026-11-03T06:51:15.022433+00:00",
         "ok": true
       }
     ],
@@ -2140,7 +2162,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.6
+    "oldest_check_age_hours": 8.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

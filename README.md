@@ -219,6 +219,22 @@ documentation files. The app reads `docs/status.json` in production.
 
 ---
 
+## Support this work
+
+E-Evolve is free and MIT-licensed, with no paywall, sponsor, or tracking. If it
+saved you an afternoon, a small tip keeps it running.
+
+USDT, USDC or USDD · TRC-20 (Tron)
+
+```
+TFTNsfyomKrnUutRjBTGVULp19ByW29KbY
+```
+
+This is the same receive address every published article carries and the
+repo's Sponsor button links to (`.github/FUNDING.yml`). Send only on Tron.
+
+---
+
 ## License
 
 MIT — fork, evolve, earn.

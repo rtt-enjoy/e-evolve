@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-03T02:32:17.046294+00:00",
-  "total_runs": 2233,
+  "last_run": "2026-11-03T03:32:11.769537+00:00",
+  "total_runs": 2234,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,7 +34,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the weak_title prompt space is saturated by 30 unmerged branches covering exactly the two gate findings ('title has ALL-CAPS word' x4, colon-subtitle x1), so another edit is ungradeable until one merges, and the remaining reject mass (llm_error=23 of 25 last-14-day losses) is engine-side, not prompt-fixable.",
+    "summary": "No change proposed: the prompt the PROMPT FOCUS names (article title rules in articles.py) has 30+ unmerged proposals covering the same weak_title space already parked on review branches, so a 31st identical edit cannot be graded or measured, and the far larger loss (llm_error=23 of the last-14-day rejects vs weak_title=5) is an engine failure no prompt edit can recover.",
     "changes_applied": [],
     "suggestions": [
       {
@@ -48,26 +48,26 @@
         ]
       },
       {
-        "title": "Decide glm's future as the post-role provider",
-        "description": "llm_error is 23 of the last-14-day rejects \u2014 nearly five times weak_title \u2014 so no prompt edit can recover as many posts as a provider or role swap.",
-        "owner_action": "Read article_rejects.recent llm_error detail strings; if quota/timeout, switch llm_roles.post to the already-configured atria fallback in config \u2014 no new secret.",
+        "title": "Recover 4x more drafts by moving the post role off glm if its errors are rate limits",
+        "description": "llm_error is 23 of the last-14-day rejects \u2014 nearly five times weak_title \u2014 so no prompt edit can recover as many posts as a provider/role swap. Atria is already configured as fallback with its key set and live.",
+        "owner_action": "Read article_rejects.recent llm_error detail strings; if they are quota/timeout, edit llm_roles.post in config/strategy.json from glm to atria.",
         "secret_needed": null,
         "how_to": [
           "Step 1: Open docs/status.json, find article_rejects.recent entries with code llm_error and read the error text.",
-          "Step 2: If it is rate-limit/timeout, edit llm_roles.post in config to the atria fallback; expect llm_error in the next 14-day window to fall from 23."
+          "Step 2: If rate-limit/timeout, set llm_roles.post to atria; expect llm_error in the next 14-day window to fall from 23 and article_daily.published to hold at 1 more consistently."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach via prompts), gated by the PROMPT LEDGER's own measurement rule: a prompt fix must be gradeable in the next 14-day window.",
+    "direction": "Step 4 reach / Principle 5 \u2014 publish more articles in the shapes readers prefer",
     "evidence": [
-      "article_rejects last-14-day window: weak_title=5, fabricated=2 (prompt-side), llm_error=23, empty_draft=2 (engine-side)",
-      "article_rejects.counts total 64 with llm_error=36 lifetime and last reject 'llm_error': 'LLM call failed'",
-      "PRIOR PROPOSALS: 30 distinct open branches since 2026-10-31 target the ALL-CAPS / colon-subtitle title rules in bot/earning/articles.py, none merged",
-      "suggestions already carries the owner action: merge one title-prompt branch and leave the space untouched for two weeks",
-      "reach itself is healthy: article_daily published=1 today, receipt_check coverage complete, 42 posts avg 133.6 views, preferred_archetypes=['problem-workaround'] already steered into the prompt"
+      "article_rejects.counts: weak_title=5 in the 14-day window, llm_error=23, empty_draft=2",
+      "PRIOR PROPOSALS: 30 distinct open branches from 2026-10-31 to 2026-11-02 all edit articles.py title rules (ALL-CAPS examples, colon-subtitle wording, 'Title Case The Important Words') \u2014 none merged",
+      "status.suggestions already carries the owner action: 'Merge one open title-prompt branch so the fix can be measured'",
+      "article_interest: problem-workaround n=9 avg=483.4 is the proven preferred archetype; receive path verified (receipt_check.covered/published_total = 43/43, known_without_footer = 0)",
+      "weak_title's gate findings are two repeat causes ('title has ALL-CAPS word' x4, colon-subtitle x1) already addressed in wording by multiple parked branches"
     ],
-    "money_path": "none (no change; reach work deferred pending a merge so the next prompt edit can be measured)",
-    "verify": "No change to verify. Once the owner merges one title-rule branch, the next 14-day article_rejects window should show weak_title falling from 5; if the owner instead swaps llm_roles.post to atria, llm_error should fall from 23.",
+    "money_path": "reach-only (and this cycle: none \u2014 no edit proposed)",
+    "verify": "Not applicable for a no-change cycle. If the owner merges one parked title branch, the 14-day article_rejects window's weak_title count falling from 5 is the result; if the owner swaps llm_roles.post to atria per the second suggestion, llm_error falling from 23 is the result.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -88,18 +88,18 @@
       ]
     },
     {
-      "title": "Decide glm's future as the post-role provider",
-      "description": "llm_error is 23 of the last-14-day rejects \u2014 nearly five times weak_title \u2014 so no prompt edit can recover as many posts as a provider or role swap.",
-      "owner_action": "Read article_rejects.recent llm_error detail strings; if quota/timeout, switch llm_roles.post to the already-configured atria fallback in config \u2014 no new secret.",
+      "title": "Recover 4x more drafts by moving the post role off glm if its errors are rate limits",
+      "description": "llm_error is 23 of the last-14-day rejects \u2014 nearly five times weak_title \u2014 so no prompt edit can recover as many posts as a provider/role swap. Atria is already configured as fallback with its key set and live.",
+      "owner_action": "Read article_rejects.recent llm_error detail strings; if they are quota/timeout, edit llm_roles.post in config/strategy.json from glm to atria.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Open docs/status.json, find article_rejects.recent entries with code llm_error and read the error text.",
-        "Step 2: If it is rate-limit/timeout, edit llm_roles.post in config to the atria fallback; expect llm_error in the next 14-day window to fall from 23."
+        "Step 2: If rate-limit/timeout, set llm_roles.post to atria; expect llm_error in the next 14-day window to fall from 23 and article_daily.published to hold at 1 more consistently."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 27,
+  "last_cycle_seconds": 29,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1300,7 +1300,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-03T02:32:17.727569+00:00",
+    "checked_at": "2026-11-03T03:32:12.244341+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -1918,7 +1918,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-03T02:32:43.481323+00:00",
+    "last_run": "2026-11-03T03:32:40.428165+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -1928,20 +1928,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-03T02:32:43.805147+00:00",
+    "last_run": "2026-11-03T03:32:40.680430+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4931682,
-        "at": "2026-11-02T16:59:45.551108+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-11-02T16:59:45.551108+00:00",
-        "ok": true
-      },
       {
         "id": 4681657,
         "at": "2026-11-02T17:58:29.686070+00:00",
@@ -1949,16 +1939,6 @@
       },
       {
         "id": 4780783,
-        "at": "2026-11-02T17:58:29.686070+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-11-02T17:58:29.686070+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
         "at": "2026-11-02T17:58:29.686070+00:00",
         "ok": true
       },
@@ -2143,8 +2123,28 @@
         "ok": true
       },
       {
+        "id": 4931682,
+        "at": "2026-11-03T03:32:40.680430+00:00",
+        "ok": true
+      },
+      {
+        "id": 4740283,
+        "at": "2026-11-03T03:32:40.680430+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-03T03:32:40.680430+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-03T03:32:40.680430+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-03T02:32:43.805147+00:00",
+        "at": "2026-11-03T03:32:40.680430+00:00",
         "ok": true
       }
     ],
@@ -2153,7 +2153,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.5
+    "oldest_check_age_hours": 9.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

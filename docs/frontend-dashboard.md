@@ -5,6 +5,17 @@ React/Vite/Tailwind app in `frontend/`, while `bot/dashboard.py` publishes the
 safe data files during Phase 5 of every cycle. The browser keeps itself in
 sync with the newest cycle without a reload — see **Staying In Sync** below.
 
+## Deploy Retry
+
+`frontend.yml` deploys with `actions/deploy-pages`. When the repo's Pages
+source is "Deploy from a branch", every bot commit to `main` also starts
+GitHub's own `pages build and deployment` run, and the two can collide: the
+deploy is then refused with `due to in progress deployment` (seen once in 60
+runs, 2026-11-03, run 41572809901). The deploy step is therefore tried, waited
+90 s on failure, and tried once more. A failure that survives the retry is a
+real one. Setting **Settings → Pages → Source** to "GitHub Actions" removes the
+second deployer entirely, and is an owner action.
+
 ## Staying In Sync
 
 A cycle commits `docs/status.json` to `main`, but the Pages copy only changes

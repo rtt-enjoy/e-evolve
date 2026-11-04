@@ -35,3 +35,15 @@ export function isAvoidedSuggestion(suggestion: Suggestion): boolean {
 	const haystack = `${suggestion.title || ''} ${suggestion.description || ''}`.toLowerCase();
 	return AVOIDED_TERMS.some((term) => haystack.includes(term));
 }
+
+/**
+ * One suggestion as text that can be pasted straight into a prompt box.
+ * Only fields the bot actually wrote are included; nothing is invented.
+ */
+export function suggestionPrompt(suggestion: Suggestion): string {
+	const lines = [`Work on this suggestion: ${suggestion.title || 'Untitled suggestion'}`];
+	if (suggestion.description) lines.push('', suggestion.description);
+	if (suggestion.owner_action) lines.push('', `Owner action: ${suggestion.owner_action}`);
+	if ((suggestion.how_to || []).length) lines.push('', 'Steps:', ...(suggestion.how_to || []).map((step) => `- ${step}`));
+	return lines.join('\n');
+}

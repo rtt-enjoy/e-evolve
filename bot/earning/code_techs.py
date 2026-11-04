@@ -14,7 +14,7 @@ from urllib.parse import quote_plus
 
 import requests
 
-from ._shared import load_config, parse_dt, strip_html, xml_text
+from ._shared import load_config, parse_dt, stamp_first_seen, strip_html, xml_text
 
 log = logging.getLogger(__name__)
 
@@ -81,19 +81,9 @@ _DEFAULT_CONFIG = {
 			"takeaway": "The viable path is not easy money; it is rare skill, specialization, automation, retainers, async work, and results-based delivery."
 		},
 		{
-			"title": "OpenRouter free model list",
-			"url": "https://openrouter.ai/models?max_price=0",
-			"takeaway": "Free (:free) models are capped at 20 req/min and only 50 req/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit before relying on volume."
-		},
-		{
 			"title": "Google AI Studio (Gemini API)",
 			"url": "https://aistudio.google.com/app/apikey",
-			"takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day; much higher daily ceiling than OpenRouter's free chain -- verify current limit."
-		},
-		{
-			"title": "Cerebras Cloud free tier",
-			"url": "https://cloud.cerebras.ai/",
-			"takeaway": "No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model -- verify current limit."
+			"takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day; verify current limit."
 		}
 	],
 	# Product shapes a solo developer can build and sell with no server and no
@@ -626,6 +616,11 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		if str(getattr(op, "manual_setup", "")).strip()
 		and not str(getattr(op, "manual_setup", "")).strip().lower().startswith("none")
 	)
+	# Each theme carries `discovered_at`, the first refresh that produced it.
+	brief = _online_ai_brief(llm, raw, cfg)
+	brief["market_themes"] = stamp_first_seen(
+		brief.get("market_themes"), (state.get("online_ai_brief") or {}).get("market_themes"), "theme", now,
+	)
 	state.update({
 		"enabled": True,
 		"last_refresh_at": now.isoformat(),
@@ -652,7 +647,7 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		"product_shapes": _clean_list(cfg.get("product_shapes", [])),
 		"free_ai_focus": _clean_list(cfg.get("free_ai_focus", [])),
 		"monetization_patterns": _clean_list(cfg.get("monetization_patterns", [])),
-		"online_ai_brief": _online_ai_brief(llm, raw, cfg),
+		"online_ai_brief": brief,
 		"focus": _clean_list(cfg.get("underserved_focus", [])),
 		"strategy_playbook": _clean_list(cfg.get("strategy_playbook", [])),
 		"avoid_patterns": _clean_list(cfg.get("avoid_patterns", []))

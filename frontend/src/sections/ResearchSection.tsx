@@ -1,6 +1,6 @@
 import { AlertTriangle, ExternalLink, Lightbulb, ListChecks, Target } from 'lucide-react';
 import { CtfList } from '../components/CtfList';
-import { Banner, Bullets, Card, Disclosure, Empty, Pill, SectionHead, Subhead, Tile } from '../components/ui';
+import { AddedPill, Banner, Bullets, Card, Disclosure, Empty, Pill, SectionHead, Subhead, Tile } from '../components/ui';
 import { formatDate } from '../utils/format';
 import { isAvoidedSuggestion } from '../utils/suggestions';
 import type { Status } from '../types/status';
@@ -75,7 +75,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 					<Subhead>What the market is asking for</Subhead>
 					<div className="grid-2">
 						{themes.map((theme, index) => (
-							<Card key={`${theme.theme}-${index}`} title={theme.theme || 'Theme'}>
+							<Card key={`${theme.theme}-${index}`} title={theme.theme || 'Theme'} action={<AddedPill at={theme.discovered_at} />}>
 								<div className="stack">
 									{theme.offer ? <p className="prose lead-in">{theme.offer}</p> : null}
 									{theme.evidence ? <p className="muted">Seen in: {theme.evidence}</p> : null}
@@ -153,6 +153,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 										<div className="min-w-0">
 											<strong>{idea.name || 'Unnamed model'}</strong>
 											<p>{idea.narrow_niche ? `Niche: ${idea.narrow_niche}` : 'No niche recorded.'}</p>
+											<AddedPill at={idea.discovered_at} />
 										</div>
 										<div className="idea-price">
 											<span>{idea.monthly_price_usd || '—'}</span>
@@ -176,6 +177,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 										<div className="suggestion-head">
 											<strong>{model.name || 'Unnamed model'}</strong>
 											<Pill tone="info">{model.bot_role || 'none'}</Pill>
+											<AddedPill at={model.discovered_at} />
 										</div>
 										<p className="prose">{model.mrr_model || 'No MRR model recorded.'}</p>
 										{(model.manual_steps || []).length ? (
@@ -203,6 +205,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 										<div className="suggestion-head">
 											<strong>{model.name || 'Unnamed model'}</strong>
 											<Pill tone="warn">refused</Pill>
+											<AddedPill at={model.discovered_at} />
 										</div>
 										<p className="prose">{model.reason || 'No reason recorded.'}</p>
 										{model.mrr_model ? <code>{model.mrr_model}</code> : null}
@@ -249,6 +252,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 											<Pill tone={suggestion.free_tier ? 'good' : 'warn'}>{suggestion.free_tier ? 'free' : 'paid'}</Pill>
 										) : null}
 									</div>
+									<AddedPill at={suggestion.discovered_at} />
 									<p className="prose">{suggestion.description}</p>
 									{suggestion.owner_action ? <p className="prose"><strong>You do:</strong> {suggestion.owner_action}</p> : null}
 									{suggestion.secret_needed ? <code>{suggestion.secret_needed}</code> : null}

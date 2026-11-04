@@ -50,7 +50,7 @@ changes belong in `frontend/src/`. Durable dashboard data contract changes
 belong in `bot/dashboard.py` and the status-producing backend modules.
 
 The dashboard must represent safe status only. Secret names such as
-`OPENROUTER_API_KEY` may be rendered so setup remains actionable, but actual
+`GLM_API_KEY` may be rendered so setup remains actionable, but actual
 secret values must never be written to tracked status files, built assets, or
 logs.
 
@@ -164,14 +164,14 @@ Two states are deliberately **not** shown as failures:
 And one is shown as a warning although `llm_engine.live` is `true`: **Atria
 answered 0 of the cycle's calls.** `live` only means Atria was not latched off;
 a timeout or empty completion falls through per call without latching, so a
-cycle can end "live" with OpenRouter having served everything. `atriaState`
+cycle can end "live" with a fallback having served everything. `atriaState`
 reads `llm_engine.calls` and says "Atria not answering".
 
 ## Engine page
 
 One hero card answers "which model writes for the bot": the model GLM's probe
 settled on (`llm_engine.main_model`), its state, and the fallback order
-GLM → Atria → OpenRouter with what each step served last cycle
+GLM → Atria with what each step served last cycle
 (`engineChain`). When `main_model` is not `preferred_model`, a yellow line says
 why, from `llm_engine.refused`; a snapshot without `preferred_model` was written
 before glm-5.3-flash led and says so. Role rows show the model that answered,
@@ -263,3 +263,32 @@ Only the masked address (`wallet.address_masked`) is written to tracked files;
   `.topbar` whenever the route has a `detail`, labelled with the section name.
   Any section that adds a detail route gets it for free. Do not put a second
   Back link inside a detail view.
+
+## 2026-11-04 changes
+
+- **Leads: every row says when the bot first listed it.** An `added 3h ago`
+  pill (tooltip: the exact time) reads `discovered_at`, which `code_techs`
+  already carried over between refreshes. The fetched-row pill that used to say
+  `5h ago` now says `posted 5h ago`, so the source's posting time and the bot's
+  first sighting cannot be confused.
+- **Leads: a free route already at 100 is hidden.** `cost_usd === 0` and
+  `score >= 100` means nothing is left to do (today: the wallet ask that is
+  already live). It is filtered in `LeadsSection` before indexing, like the
+  prohibited-content backstop, so tiles, counts, filters and `#/leads/N` links
+  all agree. An unknown cost is not free and is never hidden by this rule.
+- **Research: every item says when it was added.** CTF events, MRR ideas
+  (ranked, surviving, refused), market themes and bot suggestions carry
+  `discovered_at`, stamped by `_shared.stamp_first_seen` and carried over by
+  id/name/title from the previous snapshot. Rows written before the stamp show
+  no pill until their module's next refresh (MRR every 48h, `force mrr` to
+  hurry it); on that first refresh every existing row reads "just now".
+- **Engine: each evolution suggestion has a `copy prompt` button.** The text is
+  built by `suggestionPrompt()` from the fields the bot wrote (title,
+  description, owner action, steps) and nothing else, ready to paste into a
+  prompt box.
+- **Health and Engine: Cerebras, Groq and OpenRouter are gone.** Their
+  features no longer exist in `status.FEATURE_MAP`, so Modules, Secret
+  readiness and the Engine fallback chain stop listing them once the next cycle
+  rewrites `status.json`. The "Configured secrets" card is read from the repo
+  and will keep naming `GROQ_API_KEY` / `OPENROUTER_API_KEY` until the owner
+  deletes those secrets in GitHub.

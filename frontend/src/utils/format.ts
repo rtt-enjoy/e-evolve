@@ -40,6 +40,21 @@ export function ageLabel(value?: string): { label: string; tone: 'good' | 'warn'
 }
 
 /**
+ * How long ago the bot first listed an item ("added 3h ago"), with the exact
+ * time for a tooltip. null when the snapshot predates the stamp, so a row never
+ * claims an add time it does not have.
+ */
+export function addedAgo(value?: string | null): { label: string; exact: string } | null {
+	if (!value) return null;
+	const date = new Date(value);
+	if (Number.isNaN(date.getTime())) return null;
+	const minutes = Math.max(0, Math.floor((Date.now() - date.getTime()) / 60000));
+	const label =
+		minutes < 60 ? `${minutes}m ago` : minutes < 48 * 60 ? `${Math.floor(minutes / 60)}h ago` : `${Math.floor(minutes / 1440)}d ago`;
+	return { label, exact: formatDate(value) };
+}
+
+/**
  * A lead's age, on a scale that suits leads.
  *
  * `ageLabel` above is tuned for cycle freshness -- anything over 75 minutes is

@@ -29,9 +29,6 @@ FEATURE_MAP: dict[str, list[str]] = {
 	"llm_atria":       ["ATRIA_API_KEY"],
 	"llm_anthropic":   ["ANTHROPIC_API_KEY"],
 	"llm_gemini":      ["GEMINI_API_KEY"],
-	"llm_openrouter":  ["OPENROUTER_API_KEY"],
-	"llm_groq":        ["GROQ_API_KEY"],
-	"llm_cerebras":    ["CEREBRAS_API_KEY"],
 	"usdt_wallet":     ["USDT_WALLET_ADDRESS"],
 }
 
@@ -49,25 +46,16 @@ def _role_workflow_spec() -> dict[str, dict[str, str]]:
 	"""Read the live role routing out of bot/llm.py."""
 	spec: dict[str, dict[str, str]] = {}
 	for role, purpose in _LLM_ROLE_PURPOSES.items():
-		provider = llm.ROLE_PROVIDER.get(role, "openrouter")
-		chain = llm._OPENROUTER_MODELS_BY_ROLE.get(role, llm._OPENROUTER_MODELS)
+		provider = llm.ROLE_PROVIDER.get(role, "glm")
 		model = {
 			"glm": llm._GLM_MODELS[0],
 			"atria": llm._ATRIA_MODELS[0],
-			"openrouter": chain[0] if chain else "",
 		}.get(provider, "")
 		spec[role] = {"provider": provider, "model": model, "purpose": purpose}
 		if provider == "glm":
-			# Where the role lands when GLM is absent or latched off: Atria,
-			# and when Atria is too, the role's OpenRouter free chain.
+			# Where the role lands when GLM is absent or latched off.
 			spec[role]["fallback_provider"] = "atria"
 			spec[role]["fallback_model"] = llm._ATRIA_MODELS[0]
-			if chain:
-				spec[role]["last_resort_provider"] = "openrouter"
-				spec[role]["last_resort_model"] = chain[0]
-		elif provider == "atria" and chain:
-			spec[role]["fallback_provider"] = "openrouter"
-			spec[role]["fallback_model"] = chain[0]
 	return spec
 
 
@@ -589,20 +577,14 @@ def _llm_workflows(
 		provider = cfg["provider"]
 		secret = {
 			"gemini": "GEMINI_API_KEY",
-			"groq": "GROQ_API_KEY",
-			"openrouter": "OPENROUTER_API_KEY",
-			"cerebras": "CEREBRAS_API_KEY",
 			"atria": "ATRIA_API_KEY",
 			"glm": "GLM_API_KEY",
 		}.get(provider)
 		feature = f"llm_{provider}"
-		# GLM roles fall through to Atria then OpenRouter, so any of those keys
-		# keeps the role running.
+		# GLM roles fall through to Atria, so either key keeps the role running.
 		keys = [secret] if secret else []
 		if provider == "glm":
-			keys += ["ATRIA_API_KEY", "OPENROUTER_API_KEY"]
-		elif provider == "atria":
-			keys.append("OPENROUTER_API_KEY")
+			keys.append("ATRIA_API_KEY")
 
 		def _present(k: str) -> bool:
 			return bool(os.getenv(k, "").strip() or k in configured)
@@ -614,12 +596,10 @@ def _llm_workflows(
 		)
 		serving = provider
 		if not primary_active:
-			for p_key in ("fallback_provider", "last_resort_provider"):
-				fallback = cfg.get(p_key)
-				fallback_secret = {"atria": "ATRIA_API_KEY", "openrouter": "OPENROUTER_API_KEY"}.get(fallback or "")
-				if fallback_secret and _present(fallback_secret):
-					serving = fallback
-					break
+			fallback = cfg.get("fallback_provider")
+			fallback_secret = {"atria": "ATRIA_API_KEY"}.get(fallback or "")
+			if fallback_secret and _present(fallback_secret):
+				serving = fallback
 		workflows[role] = {
 			**cfg,
 			"active": bool(any(_present(k) for k in keys) or feature in active_set),

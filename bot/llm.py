@@ -10,17 +10,8 @@ from typing import Any
 
 log = logging.getLogger(__name__)
 
-_GROQ_MAX_PROMPT_TOKENS = 8_000
-_CHARS_PER_TOKEN = 3.5
-
-_GROQ_MODELS = [
-	"llama-3.3-70b-versatile",
-	"llama-3.1-70b-versatile",
-	"llama3-70b-8192",
-	"llama3-8b-8192",
-]
 # GLM (Z.ai / Zhipu): main engine when GLM_API_KEY is set. Atria is the first
-# fallback, then the OpenRouter free chains.
+# fallback, then Anthropic and Gemini when their keys are set.
 #
 # Z.ai issues separate, non-interchangeable keys for its general API and its
 # Coding Plan, and bigmodel.cn (mainland) issues its own, so the key alone does
@@ -66,26 +57,19 @@ _GLM_SKIP_MARKER = "glm_skip"
 # serves an Anthropic-style API at its root, which this client does not use.
 # Single model, case-sensitive ID ("Atria-Dawn" since the Preview was upgraded).
 # Quota exhaustion latches the provider off for the rest of the run and the chain
-# falls through to OpenRouter.
+# falls through to the next provider.
 _ATRIA_BASE_URL = "https://discovery-api.intern-ai.org.cn/v1"
 _ATRIA_MODELS = [
 	"Atria-Dawn",
 ]
-# Atria is slow to answer, so it gets far more patience than OpenRouter's 90s:
-# (connect, read) seconds. A timeout after that wait falls through to OpenRouter
-# for that call -- it is not retried, since three 5-minute waits on one prompt
+# Atria is slow to answer, so it gets far more patience than a 90s call:
+# (connect, read) seconds. A timeout after that wait falls through to the next
+# provider for that call -- it is not retried, since three 5-minute waits on one prompt
 # would eat most of the 55-minute job cap. After _ATRIA_MAX_TIMEOUTS in one run
 # Atria is latched off, so a stalled Atria costs at most ~10 minutes a cycle.
 _ATRIA_TIMEOUT = (15, 300)
 _ATRIA_MAX_TIMEOUTS = 2
 _ATRIA_TIMEOUT_MARKER = "atria_timeout"
-# Cerebras free tier: 1M tokens/day + 14,400 req/day per model, no credit card.
-# Far higher daily ceiling than OpenRouter's free 50 req/day, so it is a strong
-# fallback once OpenRouter's free chain is exhausted for the day.
-_CEREBRAS_MODELS = [
-	"llama-3.3-70b",
-	"llama3.1-8b",
-]
 _ANTHROPIC_MODELS = [
 	"claude-sonnet-4-6",
 	"claude-3-5-sonnet-20241022",
@@ -96,106 +80,8 @@ _GEMINI_MODELS = [
 	"gemini-2.5-flash",
 	"gemini-2.5-flash-lite",
 ]
-# OpenRouter: every chain is zero-cost. Kimi K3 was the main engine but is PAID
-# and fails outright without credits, so the whole chain is free-tier models,
-# ordered by capability so a rate limit degrades quality instead of breaking a
-# cycle.
-#
-# openrouter/free -- the Free Models Router -- leads every chain. It is
-# OpenRouter's auto-router restricted to zero-cost models: it picks the best
-# free model per request and filters for the features the request needs
-# (response_format, tools), so the model choice tracks the live catalogue
-# instead of a hand-maintained list that goes stale when a model is withdrawn.
-#
-# openrouter/auto is deliberately NOT used. It is the same routing idea but its
-# candidate set includes PAID models and it bills at the routed model's rate
-# (the catalogue reports pricing "-1", i.e. variable). OpenRouter's own docs say
-# it is "built for quality, not for staying free" and point zero-cost callers at
-# openrouter/free. An hourly bot on openrouter/auto would spend real credits
-# every cycle, which is the exact failure that removed Kimi K3.
-#
-# The named models below stay as an explicit fallback chain: the router is one
-# upstream service, and if it is rate-limited or degraded the cycle still needs
-# somewhere to go. They are ordered hardest-first and were picked by probing the
-# live OpenRouter catalogue.
-#
-# minimax/minimax-m3:free is the strongest of them -- $0 in/$0 out with a 1M
-# context window, and the only free model that advertises BOTH native
-# response_format and tools. It returned valid, compiling, spec-complete code on
-# every trial and was the fastest candidate (2-3s vs 5-42s). It led every chain
-# before the router did.
-#
-# It replaced stealth/ox-alpha, which has been withdrawn from OpenRouter --
-# exactly the stealth-release risk noted below. That is why no chain here ever
-# has a single entry.
-#
-# Rejected during that probe, so they are deliberately absent:
-#   thinkingmachines/inkling{,-small}:free -- best on paper (975B MoE, 1M ctx)
-#     but returns HTTP 403 "only available on agentic harnesses". It is
-#     allowlisted to approved apps, so this bot can never call it.
-#   dots-studio/dots-3-note-preview:free   -- 512K ctx but failed to emit
-#     parseable JSON on repeated trials.
-#   nvidia/nemotron-3.5-lightning:free     -- slow (42s) and failed JSON.
-# Free auto-router: selects the best zero-cost model per request. Leads every
-# chain, so no role has to name a model up front.
-_MAIN = "openrouter/free"
-
-# Strongest named free model; the first fallback when the router is unavailable.
-_MAIN_NAMED = "minimax/minimax-m3:free"
-
-# Default chain: general-purpose fallback order, strongest first.
-_OPENROUTER_MODELS = [
-	_MAIN,                                      # free auto-router: picks per request
-	_MAIN_NAMED,                                # 1M ctx, response_format + tools
-	"nvidia/nemotron-3-ultra-550b-a55b:free",   # 1M ctx, strongest open-weight reasoning
-	"google/gemma-4-26b-a4b-it:free",           # 262K ctx, native function calling
-	"z-ai/glm-5.2:free",                        # 256K ctx, response_format
-	"minimax/minimax-m2.7:free",                # verified fallback, response_format
-]
-
-# Code / repair suggestions ("upgrade"): lead with the models that are actually
-# trained for software engineering, then fall back to general reasoners. This
-# role previously had no chain of its own and silently used the default.
-_OPENROUTER_MODELS_UPGRADE = [
-	_MAIN,                                      # free auto-router: picks per request
-	_MAIN_NAMED,                                # verified: compiling code + strict JSON
-	"poolside/laguna-s-2.1:free",               # code-specialised, 262K ctx
-	"cohere/north-mini-code:free",              # code-specialised
-	"nvidia/nemotron-3-ultra-550b-a55b:free",
-	"minimax/minimax-m2.7:free",                # verified fallback
-]
-
-# Research/long-context work: research prompts are long, so rank by context
-# window and reasoning strength.
-_OPENROUTER_MODELS_RESEARCH = [
-	_MAIN,                                      # free auto-router: picks per request
-	_MAIN_NAMED,                                # 1M ctx
-	"nvidia/nemotron-3-ultra-550b-a55b:free",   # 1M ctx
-	"nvidia/nemotron-3-super-120b-a12b:free",   # 262K ctx, response_format
-	"google/gemma-4-26b-a4b-it:free",
-	"minimax/minimax-m2.7:free",                # verified fallback
-]
-
-# Article writing (long-form structured JSON): every model here must support
-# response_format natively, so drafts don't come back as prose-wrapped JSON.
-_OPENROUTER_MODELS_POST = [
-	_MAIN,                                      # free auto-router: filters for response_format
-	_MAIN_NAMED,
-	"google/gemma-4-26b-a4b-it:free",
-	"z-ai/glm-5.2:free",
-	"nvidia/nemotron-3-super-120b-a12b:free",
-	"minimax/minimax-m2.7:free",                # verified sibling fallback
-]
-
-_OPENROUTER_MODELS_BY_ROLE: dict[str, list[str]] = {
-	"upgrade":  _OPENROUTER_MODELS_UPGRADE,
-	"research": _OPENROUTER_MODELS_RESEARCH,
-	"post":     _OPENROUTER_MODELS_POST,
-}
-
 # Role → preferred provider mapping. GLM leads every role; when it is absent or
-# latched off, Atria serves, then the OpenRouter free chains above, then
-# anthropic/gemini/cerebras/groq as provider-level fallbacks.
+# latched off, Atria serves, then anthropic/gemini as provider-level fallbacks.
 ROLE_PROVIDER: dict[str, str] = {
 	"upgrade":    "glm",
 	"research":   "glm",
@@ -243,9 +129,6 @@ class LLMClient:
 	def __init__(self) -> None:
 		self._anthropic_key  = os.getenv("ANTHROPIC_API_KEY",  "").strip()
 		self._gemini_key     = os.getenv("GEMINI_API_KEY",     "").strip()
-		self._openrouter_key = os.getenv("OPENROUTER_API_KEY", "").strip()
-		self._groq_key       = os.getenv("GROQ_API_KEY",       "").strip()
-		self._cerebras_key   = os.getenv("CEREBRAS_API_KEY",   "").strip()
 		self._atria_key      = os.getenv("ATRIA_API_KEY",      "").strip()
 		self._glm_key        = os.getenv("GLM_API_KEY",        "").strip()
 		# GLM state for this run: the endpoint + model the probe settled on
@@ -268,7 +151,6 @@ class LLMClient:
 		self._atria_timeouts = 0
 		self._served: dict[str, int] = {}
 		self.provider        = self._pick_provider()
-		self._current_role: str | None = None
 		self.model           = self._pick_model()
 		self.info            = {"provider": self.provider, "model": self.model}
 		log.info("LLM ready -- provider=%s model=%s", self.provider, self.model)
@@ -287,7 +169,7 @@ class LLMClient:
 		last_exc: Exception | None = None
 
 		for provider in providers_to_try:
-			p_prompt  = self._truncate_for_groq(prompt, system, max_tokens) if provider == "groq" else prompt
+			p_prompt  = prompt
 			p_model   = self._model_for_provider(provider)
 			exhausted = False
 
@@ -302,16 +184,10 @@ class LLMClient:
 						resp = self._call_anthropic(p_prompt, system, max_tokens, temperature, p_model)
 					elif provider == "gemini":
 						resp = self._call_gemini(p_prompt, system, max_tokens, temperature, p_model)
-					elif provider == "openrouter":
-						resp = self._call_openrouter(p_prompt, system, max_tokens, temperature, p_model)
 					elif provider == "glm":
 						resp = self._call_glm(p_prompt, system, max_tokens, temperature, p_model)
-					elif provider == "atria":
-						resp = self._call_atria(p_prompt, system, max_tokens, temperature, p_model)
-					elif provider == "cerebras":
-						resp = self._call_cerebras(p_prompt, system, max_tokens, temperature, p_model)
 					else:
-						resp = self._call_groq(p_prompt, system, max_tokens, temperature, p_model)
+						resp = self._call_atria(p_prompt, system, max_tokens, temperature, p_model)
 					self._served[resp.provider] = self._served.get(resp.provider, 0) + 1
 					return resp
 				except Exception as exc:
@@ -339,49 +215,24 @@ class LLMClient:
 						exhausted = True
 						break
 
-					# Out of credits / rate limited on a PAID OpenRouter model:
-					# step down to the next model in the chain (which is free)
-					# rather than abandoning OpenRouter entirely.
-					if provider == "openrouter" and any(
-						code in exc_str for code in ("402", "429", "insufficient", "rate_limit", "quota", "Too Many Requests")
-					):
-						model_list = self._model_list_for(provider)
-						if p_model in model_list and model_list.index(p_model) < len(model_list) - 1:
-							p_model = model_list[model_list.index(p_model) + 1]
-							log.warning("openrouter model unavailable (%s) -- stepping down to %s", exc_str[:80], p_model)
-							attempt = 0  # new model gets a fresh retry budget
-							continue
-						log.warning("openrouter model chain exhausted -- skipping to fallback: %s", exc)
-						exhausted = True
-						break
-
 					# Rate limit / quota exhausted: skip provider immediately
 					if any(code in exc_str for code in ("429", "rate_limit_exceeded", "RESOURCE_EXHAUSTED", "quota_exceeded", "RateLimitError", "insufficient_quota", "Too Many Requests")):
 						log.warning("LLM rate limit on provider=%s -- skipping to fallback: %s", provider, exc)
 						exhausted = True
 						break
 
-					# 413: truncate and retry (Groq only)
-					if "413" in exc_str and provider == "groq" and attempt < 3:
-						cutoff   = int(len(p_prompt) * 0.6)
-						nl       = p_prompt.rfind("\n", 0, cutoff)
-						p_prompt = p_prompt[: nl if nl > 0 else cutoff]
-						log.warning("LLM 413 attempt %d -- truncated to %d chars", attempt, len(p_prompt))
-						continue
-
 					# Model deprecated/withdrawn (stealth previews can vanish
 					# without notice), or answering 200 with an empty body:
 					# advance to the next entry in the chain. An empty response
 					# belongs here and not with the generic retry below --
 					# re-asking a model that just returned nothing almost always
-					# returns nothing again, and on the OpenRouter free tier
-					# those three wasted calls come off a 50/day ceiling.
+					# returns nothing again, and each wasted call spends quota.
 					if (
 						"model_not_found" in exc_str
 						or "model not found" in exc_str.lower()
 						or _EMPTY_RESPONSE_MARKER in exc_str
 					):
-						model_list = self._model_list_for(provider)
+						model_list = _model_list_for(provider)
 						if p_model in model_list:
 							idx = model_list.index(p_model)
 							if idx < len(model_list) - 1:
@@ -414,21 +265,18 @@ class LLMClient:
 		temperature: float = 0.7,
 	) -> LLMResponse:
 		"""Route to the role's provider (GLM for every role, then Atria, then
-        OpenRouter once those are absent or spent). Falls back to complete()
+        Anthropic/Gemini once those are absent or spent). Falls back to complete()
         with the default provider if the role's provider has no key."""
 		preferred = self.provider_for_role(role)
 		if preferred:
 			log.info("Role=%s → provider=%s", role, preferred)
 			old_provider = self.provider
-			old_role     = self._current_role
 			self.provider     = preferred
-			self._current_role = role
 			try:
 				return self.complete(prompt, system=system, max_tokens=max_tokens,
 									temperature=temperature)
 			finally:
 				self.provider     = old_provider
-				self._current_role = old_role
 		return self.complete(prompt, system=system, max_tokens=max_tokens,
 							 temperature=temperature)
 
@@ -438,8 +286,9 @@ class LLMClient:
 
         ROLE_PROVIDER names GLM for every role, but that is the *preference*.
         Without GLM_API_KEY, or once GLM is latched off, the role is served by
-        Atria, and without that by its OpenRouter chain -- and the dashboard
-        must say so rather than advertise an engine that is not running.
+        Atria, and without that by Anthropic or Gemini when their keys are set --
+        and the dashboard must say so rather than advertise an engine that is not
+        running.
         """
 		preferred = ROLE_PROVIDER.get(role)
 		if not preferred:
@@ -448,15 +297,13 @@ class LLMClient:
 			"glm":        "" if self._glm_disabled else self._glm_key,
 			"atria":      "" if self._atria_disabled else self._atria_key,
 			"gemini":     self._gemini_key,
-			"groq":       self._groq_key,
-			"openrouter": self._openrouter_key,
 			"anthropic":  self._anthropic_key,
 		}
 		if preferred == "glm" and not key_map["glm"]:
 			preferred = "atria"
 		if preferred == "atria" and not key_map["atria"]:
-			# Atria absent or spent: the role's own OpenRouter chain still applies.
-			preferred = "openrouter"
+			# Atria absent or spent: whichever of anthropic/gemini has a key serves.
+			preferred = next((p for p in ("anthropic", "gemini") if key_map[p]), "")
 		return preferred if key_map.get(preferred) else None
 
 	def complete_json(
@@ -526,45 +373,6 @@ class LLMClient:
 					time.sleep(1)
 		raise ValueError(f"Could not get valid JSON from LLM (role={role}): {last_exc}") from last_exc
 
-	# -- Groq ------------------------------------------------------------------
-
-	def _truncate_for_groq(self, prompt: str, system: str, max_tokens: int) -> str:
-		system_tokens    = len(system) / _CHARS_PER_TOKEN
-		response_budget  = max_tokens
-		available_chars  = int(
-			(_GROQ_MAX_PROMPT_TOKENS - system_tokens - response_budget) * _CHARS_PER_TOKEN
-		)
-		if len(prompt) > available_chars > 0:
-			log.info(
-				"Groq prompt pre-truncated from %d to %d chars (token budget)",
-				len(prompt), available_chars,
-			)
-			return prompt[:available_chars] + "\n... [truncated for token limit]"
-		return prompt
-
-	def _call_groq(
-		self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
-	) -> LLMResponse:
-		from groq import Groq  # lazy import
-		client   = Groq(api_key=self._groq_key)
-		messages: list[dict] = []
-		if system:
-			messages.append({"role": "system", "content": system})
-		messages.append({"role": "user", "content": prompt})
-		t0  = time.monotonic()
-		rsp = client.chat.completions.create(
-			model=model,
-			messages=messages,
-			max_tokens=max_tokens,
-			temperature=temperature,
-		)
-		return LLMResponse(
-			text      = _require_text(rsp.choices[0].message.content, "groq", model),
-			provider  = "groq",
-			model     = model,
-			latency_s = round(time.monotonic() - t0, 2),
-		)
-
 	# -- Anthropic -------------------------------------------------------------
 
 	def _call_anthropic(
@@ -612,104 +420,6 @@ class LLMClient:
 		return LLMResponse(
 			text      = _require_text(rsp.text, "gemini", model),
 			provider  = "gemini",
-			model     = model,
-			latency_s = round(time.monotonic() - t0, 2),
-		)
-
-	# -- OpenRouter ------------------------------------------------------------
-
-	def _call_openrouter(
-		self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
-	) -> LLMResponse:
-		import requests  # already in requirements
-		messages: list[dict] = []
-		if system:
-			messages.append({"role": "system", "content": system})
-		messages.append({"role": "user", "content": prompt})
-		t0  = time.monotonic()
-		rsp = requests.post(
-			"https://openrouter.ai/api/v1/chat/completions",
-			headers={
-				"Authorization":  f"Bearer {self._openrouter_key}",
-				"HTTP-Referer":   "https://github.com/rtt-enjoy/e-evolve",
-				"X-Title":        "e-evolve",
-				"Content-Type":   "application/json",
-			},
-			json={
-				"model":       model,
-				"messages":    messages,
-				"max_tokens":  max_tokens,
-				"temperature": temperature,
-			},
-			timeout=90,
-		)
-		if rsp.status_code in (401, 403):
-			raise RuntimeError(f"401 authentication_error from openrouter: {rsp.text[:200]}")
-		if rsp.status_code == 402:
-			raise RuntimeError(f"402 insufficient credits on openrouter model {model}: {rsp.text[:200]}")
-		if rsp.status_code == 429:
-			raise RuntimeError(f"429 rate_limit_exceeded from openrouter: {rsp.text[:200]}")
-		if rsp.status_code == 404:
-			raise RuntimeError(f"model_not_found on openrouter: {model}: {rsp.text[:200]}")
-		rsp.raise_for_status()
-		data = rsp.json()
-		if "error" in data:
-			raise RuntimeError(f"OpenRouter error: {data['error']}")
-		if not data.get("choices"):
-			raise RuntimeError(f"OpenRouter returned no choices for {model}: {str(data)[:200]}")
-		text = _require_text(
-			data["choices"][0]["message"]["content"], "openrouter", model
-		)
-		return LLMResponse(
-			text      = text,
-			provider  = "openrouter",
-			model     = model,
-			latency_s = round(time.monotonic() - t0, 2),
-		)
-
-	# -- Cerebras ----------------------------------------------------------------
-
-	def _call_cerebras(
-		self, prompt: str, system: str, max_tokens: int, temperature: float, model: str
-	) -> LLMResponse:
-		import requests  # already in requirements
-		messages: list[dict] = []
-		if system:
-			messages.append({"role": "system", "content": system})
-		messages.append({"role": "user", "content": prompt})
-		t0  = time.monotonic()
-		rsp = requests.post(
-			"https://api.cerebras.ai/v1/chat/completions",
-			headers={
-				"Authorization": f"Bearer {self._cerebras_key}",
-				"Content-Type":  "application/json",
-			},
-			json={
-				"model":       model,
-				"messages":    messages,
-				"max_tokens":  max_tokens,
-				"temperature": temperature,
-			},
-			timeout=90,
-		)
-		if rsp.status_code in (401, 403):
-			raise RuntimeError(f"401 authentication_error from cerebras: {rsp.text[:200]}")
-		if rsp.status_code == 429:
-			raise RuntimeError(f"429 rate_limit_exceeded from cerebras: {rsp.text[:200]}")
-		if rsp.status_code == 404:
-			raise RuntimeError(f"model_not_found on cerebras: {model}: {rsp.text[:200]}")
-		rsp.raise_for_status()
-		data = rsp.json()
-		if "error" in data:
-			raise RuntimeError(f"Cerebras error: {data['error']}")
-		if not data.get("choices"):
-			raise RuntimeError(f"Cerebras returned no choices for {model}: {str(data)[:200]}")
-		text = _require_text(
-			data["choices"][0]["message"]["content"], "cerebras", model
-		)
-		return LLMResponse(
-			text      = text,
-			provider  = "cerebras",
 			model     = model,
 			latency_s = round(time.monotonic() - t0, 2),
 		)
@@ -962,7 +672,7 @@ class LLMClient:
 			self._atria_timeouts += 1
 			if self._atria_timeouts >= _ATRIA_MAX_TIMEOUTS:
 				self._latch_atria_off("timeout")
-				log.warning("atria timed out %d times -- routing the rest of this run to openrouter",
+				log.warning("atria timed out %d times -- routing the rest of this run to the next provider",
 							self._atria_timeouts)
 			raise RuntimeError(
 				f"{_ATRIA_TIMEOUT_MARKER}: no answer from atria within {_ATRIA_TIMEOUT[1]}s"
@@ -973,11 +683,11 @@ class LLMClient:
 		if rsp.status_code == 429:
 			# A per-minute limit sends Retry-After and recovers within the cycle.
 			# Without it, or with a body naming a quota, the free allowance is
-			# spent: stop asking for the rest of this run and use OpenRouter.
+			# spent: stop asking for the rest of this run and use the next provider.
 			body = rsp.text[:200]
 			if "Retry-After" not in rsp.headers or re.search(r"quota|balance|insufficient", body, re.I):
 				self._latch_atria_off("quota_spent")
-				log.warning("atria quota appears spent -- routing the rest of this run to openrouter")
+				log.warning("atria quota appears spent -- routing the rest of this run to the next provider")
 				raise RuntimeError(f"429 quota_exceeded from atria: {body}")
 			raise RuntimeError(f"429 rate_limit_exceeded from atria: {body}")
 		if rsp.status_code == 404:
@@ -1013,24 +723,18 @@ class LLMClient:
 	# -- Helpers ---------------------------------------------------------------
 
 	def _pick_provider(self) -> str:
-		# GLM first, then Atria (~1B free tokens), then OpenRouter's free chain.
+		# GLM first, then Atria (~1B free tokens), then Anthropic, then Gemini.
 		if self._glm_key:
 			return "glm"
 		if self._atria_key:
 			return "atria"
-		if self._openrouter_key:
-			return "openrouter"
 		if self._anthropic_key:
 			return "anthropic"
 		if self._gemini_key:
 			return "gemini"
-		if self._groq_key:
-			return "groq"
-		if self._cerebras_key:
-			return "cerebras"
 		raise RuntimeError(
 			"No LLM API key found.\n"
-			"Add one of: GLM_API_KEY, ATRIA_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENROUTER_API_KEY, GROQ_API_KEY, CEREBRAS_API_KEY\n"
+			"Add one of: GLM_API_KEY, ATRIA_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY\n"
 			"to GitHub -> Settings -> Secrets and variables -> Actions."
 		)
 
@@ -1046,28 +750,15 @@ class LLMClient:
 			return _ANTHROPIC_MODELS[0]
 		if provider == "gemini":
 			return _GEMINI_MODELS[0]
-		if provider == "openrouter":
-			return self._model_list_for(provider)[0]
-		if provider == "cerebras":
-			return _CEREBRAS_MODELS[0]
-		return _GROQ_MODELS[0]
-
-	def _model_list_for(self, provider: str) -> list[str]:
-		"""Model fallback chain for a provider, role-aware for openrouter."""
-		if provider == "openrouter":
-			return _OPENROUTER_MODELS_BY_ROLE.get(self._current_role, _OPENROUTER_MODELS)
-		return _model_list_for(provider)
+		raise ValueError(f"unknown LLM provider: {provider!r}")
 
 	def _provider_chain(self) -> list[str]:
 		"""Ordered fallback chain starting from primary provider."""
 		all_providers = [
 			("glm",          bool(self._glm_key) and not self._glm_disabled),
 			("atria",       bool(self._atria_key) and not self._atria_disabled),
-			("openrouter",   bool(self._openrouter_key)),
 			("anthropic",    bool(self._anthropic_key)),
 			("gemini",       bool(self._gemini_key)),
-			("cerebras",     bool(self._cerebras_key)),
-			("groq",         bool(self._groq_key)),
 		]
 		available = [p for p, has_key in all_providers if has_key]
 		# Ensure primary is first
@@ -1081,11 +772,8 @@ def _model_list_for(provider: str) -> list[str]:
 	return {
 		"glm":         _GLM_MODELS,
 		"atria":       _ATRIA_MODELS,
-		"groq":        _GROQ_MODELS,
 		"anthropic":   _ANTHROPIC_MODELS,
 		"gemini":      _GEMINI_MODELS,
-		"openrouter":  _OPENROUTER_MODELS,
-		"cerebras":    _CEREBRAS_MODELS,
 	}.get(provider, [])
 
 

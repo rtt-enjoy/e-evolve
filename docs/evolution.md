@@ -97,8 +97,9 @@ says so.
 
 When the binding step is reach (step 4), the task line makes the prompt focus
 the default change. When step 1 or 2 binds, prompt work waits. The ledger is
-left out of compact (Groq) prompts, whose 4 KB snapshot holds no prompt text
-to edit.
+left out of compact prompts (`build_prompt(compact=True)`), whose small
+snapshot holds no prompt text to edit. `run()` no longer uses compact mode:
+it existed for Groq's 4 KB budget, and Groq was removed on 2026-11-04.
 
 The system prompt's rules for a prompt change:
 

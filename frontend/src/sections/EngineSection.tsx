@@ -5,6 +5,8 @@ import type { Tone } from '../components/ui';
 import { engineChain, engineState } from '../utils/engine';
 import { featureLabel, formatDate, money } from '../utils/format';
 import { rejectLabel } from '../utils/dashboard';
+import { suggestionPrompt } from '../utils/suggestions';
+import { CopyButton } from '../components/CopyButton';
 import type { Status } from '../types/status';
 
 export default function EngineSection({ status }: { status: Status }) {
@@ -77,9 +79,7 @@ export default function EngineSection({ status }: { status: Status }) {
 									? engine.model
 									: serving === workflow.fallback_provider
 										? workflow.fallback_model
-										: serving === workflow.last_resort_provider
-											? workflow.last_resort_model
-											: workflow.model;
+										: workflow.model;
 							const onFallback = workflow.primary_active === false || (serving === engine.provider && engine.tone === 'warn');
 							return (
 								<li key={role}>
@@ -185,6 +185,7 @@ export default function EngineSection({ status }: { status: Status }) {
 											{typeof suggestion.free_tier === 'boolean' ? (
 												<Pill tone={suggestion.free_tier ? 'good' : 'warn'}>{suggestion.free_tier ? 'free' : 'paid'}</Pill>
 											) : null}
+											<CopyButton text={suggestionPrompt(suggestion)} label="copy prompt" />
 										</div>
 										<p className="prose">{suggestion.description}</p>
 										{suggestion.owner_action ? <p className="prose"><strong>You do:</strong> {suggestion.owner_action}</p> : null}

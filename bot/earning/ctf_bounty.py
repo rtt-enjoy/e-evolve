@@ -33,7 +33,7 @@ from typing import Any, Optional
 
 import requests
 
-from ._shared import hours_until_due, load_config, parse_dt
+from ._shared import hours_until_due, load_config, parse_dt, stamp_first_seen
 
 log = logging.getLogger(__name__)
 
@@ -209,7 +209,9 @@ def run(llm: Any = None, status: Optional[dict] = None) -> list[dict]:
 		"paying": sum(1 for r in rows if r["pays"]),
 		"crypto": sum(1 for r in rows if r["crypto"]),
 		"beginner": sum(1 for r in rows if r["beginner"]),
-		"events": rows[: int(cfg["status_max_items"])],
+		# `discovered_at` is when the page first listed the event, carried over
+		# from the previous snapshot by CTFtime id.
+		"events": stamp_first_seen(rows[: int(cfg["status_max_items"])], state.get("events"), "id", now),
 	})
 	action.update({"success": True, "listed": len(state["events"])})
 	log.info(

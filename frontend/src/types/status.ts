@@ -16,6 +16,8 @@ export type Action = {
 };
 
 export type Suggestion = {
+	/** When the bot first proposed it (carried over by title). */
+	discovered_at?: string;
 	title?: string;
 	description?: string;
 	secret_needed?: string;
@@ -108,6 +110,8 @@ export type EarningIdea = {
 
 /** What the current demand leads have in common, and what to sell into it. */
 export type MarketTheme = {
+	/** First refresh that produced this theme. */
+	discovered_at?: string;
 	theme?: string;
 	evidence?: string;
 	offer?: string;
@@ -163,6 +167,8 @@ export type CodeTechEarning = {
 
 /** One recurring-revenue model that survived the constraint matrix. */
 export type MrrIdea = {
+	/** First refresh that produced this idea. */
+	discovered_at?: string;
 	name?: string;
 	why_this_stack_fits?: string;
 	narrow_niche?: string;
@@ -175,6 +181,8 @@ export type MrrIdea = {
 
 /** A model the triage kept, before the LLM brief expands on it. */
 export type MrrViableModel = {
+	/** First refresh that kept this model. */
+	discovered_at?: string;
 	name?: string;
 	mrr_model?: string;
 	source_note?: string;
@@ -185,6 +193,8 @@ export type MrrViableModel = {
 
 /** A model this stack cannot support, with the reason. */
 export type MrrRefusedModel = {
+	/** First refresh that refused this model. */
+	discovered_at?: string;
 	name?: string;
 	mrr_model?: string;
 	reason?: string;
@@ -205,6 +215,8 @@ export type MrrIdeas = {
 };
 
 export type CtfEvent = {
+	/** When the page first listed this event. */
+	discovered_at?: string;
 	id?: number;
 	title?: string;
 	url?: string;
@@ -403,9 +415,6 @@ export type Status = {
 		/** Where the role lands when the main engine (GLM) is absent or latched off. */
 		fallback_provider?: string;
 		fallback_model?: string;
-		/** Where it lands when the fallback is unavailable too (OpenRouter). */
-		last_resort_provider?: string;
-		last_resort_model?: string;
 		/** False when the preferred provider's key is missing: the fallback is serving. */
 		primary_active?: boolean;
 		serving?: string;

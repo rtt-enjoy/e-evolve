@@ -52,25 +52,18 @@ _MAX_PLAN_TOKENS = 32_000
 # A repair returns one rewritten file, so it needs a full file's worth too.
 _MAX_FIX_TOKENS  = 16_000
 # Per-provider codebase snapshot limits.
-# Groq free tier: 12k TPM total — status JSON ~1k, system prompt ~0.6k, response 6k → 4k left for codebase.
-# Groq is a fallback only; _MAX_PLAN_TOKENS is sized for GLM, Atria and the openrouter
-# upgrade chain, so a groq cycle stays capped by that 12k TPM ceiling.
 # Gemini/Anthropic: large context, no TPM issue.
 # GLM (main engine): glm-5.x holds ~200K context, and the free Flash fallbacks
 # 128K+, so the 200k-byte (~57K-token) snapshot and 32k plan fit every entry.
-# Without this row GLM would get groq's 4k budget and evolve blind.
+# Without this row GLM would fall to the default budget and evolve blind.
 # Atria (first fallback): Atria-Dawn holds ~256K context and ~65K output
 # (third-party listings, 2026-10), so the same 200k-byte snapshot and 32k plan fit.
-# OpenRouter: the free upgrade chain leads with 1M-context models and the
-# smallest entry still holds 256K, so 30k starved the model -- one module filled
-# the whole budget and the other 19 files were skipped, leaving it unable to see
-# what it was changing. 200k bytes is ~50k tokens: the whole editable surface,
-# well inside every model in the chain.
+# A 30k budget starved the model once: one module filled the whole budget and
+# the other 19 files were skipped, leaving it unable to see what it was
+# changing. 200k bytes is ~50k tokens: the whole editable surface.
 _MAX_READ_BYTES = {
-    "groq":       4_000,
     "anthropic":  60_000,
     "gemini":     80_000,
-    "openrouter": 200_000,
     "atria":      200_000,
     "glm":        200_000,
 }
@@ -94,7 +87,7 @@ _MAX_PRIOR_PROPOSALS = 30
 _STATUS_FIELD_MAX_BYTES = 1_500
 # Fields that only ever led the engine to "add a secret": the old prompt listed
 # "Inactive (need secrets): llm_anthropic, llm_cerebras" and five proposals
-# then tried to enable Cerebras. A missing secret is an owner decision, never
+# then tried to enable Cerebras (since removed by the owner). A missing secret is an owner decision, never
 # a code change, so these are left out of the digest entirely.
 _STATUS_BAIT = frozenset({
     "inactive_features", "secret_readiness", "configured_github_secrets",
@@ -188,7 +181,8 @@ Known dead ends. Each was proposed repeatedly and never merged:
   unless an existing editable module imports and calls it. Health, diagnostic
   and summary scripts fail this; status.json and the dashboard already report.
 - A new secret, token or account (GH_TOKEN, GITHUB_TOKEN, more LLM keys,
-  storefront signups). "Needs no new secret" is rank 1 of the channel table.
+  storefront signups). Cerebras, Groq and OpenRouter were removed by the owner
+  on 2026-11-04: never propose adding any of them back. "Needs no new secret" is rank 1 of the channel table.
 - Anything under .github/ (workflows). The sandbox drops it. FUNDING.yml is
   already live at .github/FUNDING.yml (owner-shipped 2026-10-19).
 - Loosening a quality gate (title, fabrication, tone, min_words, follow-up
@@ -277,18 +271,17 @@ def run(llm: Any, status: dict[str, Any]) -> dict[str, Any]:
     Changes are committed to a review branch, never to the working branch.
     """
     from bot.llm import ROLE_PROVIDER
-    upgrade_provider = ROLE_PROVIDER.get("upgrade", ROLE_PROVIDER.get("think", "gemini"))
+    upgrade_provider = ROLE_PROVIDER.get("upgrade", ROLE_PROVIDER.get("think", "glm"))
     # Use upgrade-role provider capacity if that key is available, else fallback to default
     key_attr = f"_{upgrade_provider}_key"
     if getattr(llm, key_attr, ""):
         evo_provider = upgrade_provider
     else:
-        evo_provider = getattr(llm, "provider", "groq")
-    max_bytes = _MAX_READ_BYTES.get(evo_provider, _MAX_READ_BYTES["groq"])
+        evo_provider = getattr(llm, "provider", "glm")
+    max_bytes = _MAX_READ_BYTES.get(evo_provider, _MAX_READ_BYTES["anthropic"])
     log.info("Evolution provider=%s (upgrade role), max_bytes=%d", evo_provider, max_bytes)
-    compact = evo_provider == "groq"
-    codebase = _read_codebase(max_bytes, include_config=not compact)
-    prompt = build_prompt(status, codebase, _load_config(), compact=compact)
+    codebase = _read_codebase(max_bytes)
+    prompt = build_prompt(status, codebase, _load_config())
 
     try:
         plan = llm.complete_json_for_role("upgrade", prompt, system=_SYSTEM, max_tokens=_MAX_PLAN_TOKENS)

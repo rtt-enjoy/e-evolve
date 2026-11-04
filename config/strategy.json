@@ -183,19 +183,9 @@
 				"takeaway": "The viable path is not easy money; it is rare skill, specialization, automation, retainers, async work, and results-based delivery."
 			},
 			{
-				"title": "OpenRouter free model list",
-				"url": "https://openrouter.ai/models?max_price=0",
-				"takeaway": "Free (:free) models are capped at 20 req/min and only 50 req/day unless the account has ever purchased $10 in credits (then 1,000/day) -- verify current limit before relying on volume."
-			},
-			{
 				"title": "Google AI Studio (Gemini API)",
 				"url": "https://aistudio.google.com/app/apikey",
-				"takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day; much higher daily ceiling than OpenRouter's free chain -- verify current limit."
-			},
-			{
-				"title": "Cerebras Cloud free tier",
-				"url": "https://cloud.cerebras.ai/",
-				"takeaway": "No credit card required. Roughly 1M tokens/day and 14,400 requests/day per model -- verify current limit."
+				"takeaway": "No credit card required. Gemini 2.5 Flash free tier is roughly 1,500 requests/day -- verify current limit."
 			}
 		],
 		"free_ai_focus": [
@@ -212,7 +202,7 @@
 	"llm": {
 		"main_engine": "GLM (glm-5.3-flash, stepping down to the free glm-4.7-flash)",
 		"provider": "glm",
-		"note": "GLM (Z.ai / Zhipu, needs GLM_API_KEY) is the main engine for every role: evolution (upgrade), research, and article/newsletter drafting (post). The first GLM call each run probes the Coding Plan and general hosts of api.z.ai and open.bigmodel.cn and keeps the first that accepts the key. On a rejected key, a spent quota, or two timeouts GLM is switched off for the rest of the run and Atria (Atria-Dawn, ~1B free tokens, needs ATRIA_API_KEY) serves instead. On a 401, a 404, or a quota-spent 429 Atria is switched off too and each role falls through to its all-free OpenRouter chain, ordered per role in bot/llm.py _OPENROUTER_MODELS_BY_ROLE. Without ATRIA_API_KEY every role runs on that fallback. openrouter/free -- the free auto-router -- leads every chain: it picks the best zero-cost model per request and filters for the features the request needs, so model choice tracks the live catalogue. openrouter/auto is deliberately NOT used: its candidate set includes paid models and it bills at the routed model's rate. Named free models (led by minimax/minimax-m3:free, 1M ctx, native response_format + tools) follow as fallback for when the router is rate-limited; on 402/429/404 the client steps down the rest of the role's free chain before changing provider."
+		"note": "GLM (Z.ai / Zhipu, needs GLM_API_KEY) is the main engine for every role: evolution (upgrade), research, and article/newsletter drafting (post). The first GLM call each run probes the Coding Plan and general hosts of api.z.ai and open.bigmodel.cn and keeps the first that accepts the key. On a rejected key, a spent quota, or two timeouts GLM is switched off for the rest of the run and Atria (Atria-Dawn, ~1B free tokens, needs ATRIA_API_KEY) serves instead. On a 401, a 404, or a quota-spent 429 Atria is switched off too and each role falls through to Anthropic or Gemini when their keys are set, otherwise the call fails. Without ATRIA_API_KEY every role runs on that fallback. Cerebras, Groq and OpenRouter were removed by owner decision on 2026-11-04; do not re-add them."
 	},
 	"research_policy": {
 		"mode": "research_and_article_publishing",
@@ -235,6 +225,6 @@
 		"max_changes": 3,
 		"direction": "",
 		"direction_note": "Standing owner direction for evolution, e.g. 'cut the llm_error article rejects'. Empty means the engine serves the first unclean doctrine checklist step, computed from status.json each cycle. Outranks that computed step; see docs/evolution.md.",
-		"note": "LLM code proposals are committed to a review branch (branch_prefix/<version>-<utc>) and never to main. Merge the branch to apply. Writes are restricted to bot/, docs/, config/, requirements.txt, version.txt; bot/main.py, bot/llm.py, bot/status.py, bot/commands.py, bot/evolution.py, bot/git_utils.py and .github/ can never be written. Engine is Atria (Atria-Dawn), falling back to the free OpenRouter 'upgrade' chain led by the openrouter/free auto-router; no paid model."
+		"note": "LLM code proposals are committed to a review branch (branch_prefix/<version>-<utc>) and never to main. Merge the branch to apply. Writes are restricted to bot/, docs/, config/, requirements.txt, version.txt; bot/main.py, bot/llm.py, bot/status.py, bot/commands.py, bot/evolution.py, bot/git_utils.py and .github/ can never be written. Engine is GLM, then Atria (Atria-Dawn), then Anthropic/Gemini when their keys are set."
 	}
 }

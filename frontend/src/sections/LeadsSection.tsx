@@ -1,7 +1,7 @@
 import { ArrowLeft, ExternalLink, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { CopyButton } from '../components/CopyButton';
-import { Bullets, Card, Disclosure, Empty, KeyValue, Pill, Progress, SectionHead, Subhead, Tile } from '../components/ui';
+import { AddedPill, Bullets, Card, Disclosure, Empty, KeyValue, Pill, Progress, SectionHead, Subhead, Tile } from '../components/ui';
 import { buildOpportunityStats, leadSources, sortLeads, type LeadSort } from '../utils/dashboard';
 import { cleanTitle, formatDate, leadAge, scoreTone, sourceLabel } from '../utils/format';
 import { useRoute } from '../utils/route';
@@ -53,6 +53,15 @@ const SCORE_PARTS: Array<{ key: string; label: string; weight: number; help: str
 type QuickFilter = 'free' | 'nosetup' | 'new';
 
 /**
+ * A free route already at 100 is fully live: nothing is left for the owner to
+ * do, so listing it again only pushes open work down the page. Free means a
+ * published $0 -- an unknown cost is not free.
+ */
+function isFreeAndDone(lead: CodeTechOpportunity): boolean {
+	return lead.cost_usd === 0 && (lead.score || 0) >= 100;
+}
+
+/**
  * Owner rule, top priority: never adult or piracy content on this page.
  *
  * The real screen is `_PROHIBITED_PATTERNS` in bot/earning/code_techs.py,
@@ -71,7 +80,7 @@ export default function LeadsSection({ status }: { status: Status }) {
 	const codeTech = status.code_tech_earning || {};
 	// Filtered before indexing, so lead links and the detail page agree.
 	const opportunities = useMemo(
-		() => (codeTech.opportunities || []).filter((lead) => !isProhibited(lead)),
+		() => (codeTech.opportunities || []).filter((lead) => !isProhibited(lead) && !isFreeAndDone(lead)),
 		[codeTech.opportunities],
 	);
 
@@ -273,7 +282,9 @@ function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; oppo
 											</Pill>
 											<Pill tone="neutral">{sourceLabel(lead.source)}</Pill>
 											{/* Only fetched rows have a posting time; curated rows show none. */}
-											{lead.posted_at ? <Pill tone={age.tone}>{age.label} ago</Pill> : null}
+											{lead.posted_at ? <Pill tone={age.tone}>posted {age.label} ago</Pill> : null}
+											{/* When the bot first listed it, for every row. */}
+											<AddedPill at={lead.discovered_at} />
 										</span>
 									</a>
 									{/* Playbook rows have no URL, so no button rather than a dead one. */}

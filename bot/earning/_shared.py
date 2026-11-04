@@ -118,6 +118,30 @@ def xml_text(parent: ET.Element, tag: str) -> str:
 	return element.text.strip()
 
 
+def stamp_first_seen(items: Any, previous: Any, key: str, now: datetime) -> list:
+	"""Give each dict in ``items`` a ``discovered_at``: when it first appeared.
+
+    ``status.json`` is rewritten every refresh, so an item's own time cannot be
+    read off the item. The stamp is carried over from ``previous`` (the last
+    snapshot of the same list) by ``key``, and only an item the last snapshot
+    did not hold is stamped ``now``. Without the carry-over every refresh would
+    restamp every row and the page would say everything was added just now.
+    Items with no ``key`` value are stamped ``now`` each time, because nothing
+    can say they are the same item as before. Never raises.
+    """
+	seen: dict[str, str] = {}
+	for old in previous if isinstance(previous, list) else []:
+		if isinstance(old, dict) and old.get(key) not in (None, "") and old.get("discovered_at"):
+			seen.setdefault(str(old[key]), str(old["discovered_at"]))
+	stamp = now.isoformat()
+	out = []
+	for item in items if isinstance(items, list) else []:
+		if isinstance(item, dict):
+			item = {**item, "discovered_at": seen.get(str(item.get(key)), stamp) if item.get(key) not in (None, "") else stamp}
+		out.append(item)
+	return out
+
+
 def bounded_append(entries: list, value: Any, limit: int) -> None:
 	"""Append ``value`` if new, then trim ``entries`` to the newest ``limit``.
 

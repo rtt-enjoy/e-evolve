@@ -65,7 +65,7 @@ def main() -> int:
 		]
 	status["llm_provider"] = llm.provider
 	# Per-role provider that will actually serve this cycle (GLM, or Atria /
-	# OpenRouter when GLM_API_KEY is absent), for dashboard display
+	# Anthropic / Gemini when GLM_API_KEY is absent), for dashboard display
 	status["llm_roles"] = {
 		role: p for role in ("upgrade", "research", "post")
 		if (p := llm.provider_for_role(role))
@@ -136,8 +136,14 @@ def main() -> int:
 		for s in _st.FEATURE_MAP.get(f, [])
 	}
 	if evo.get("suggestions"):
+		# Carry each suggestion's first-seen time over by title: the Research
+		# page says when a suggestion was added, not when it was last repeated.
+		from bot.earning._shared import stamp_first_seen
+		stamped = stamp_first_seen(
+			evo["suggestions"], status.get("suggestions"), "title", datetime.now(timezone.utc),
+		)
 		status["suggestions"] = [
-			sg for sg in evo["suggestions"]
+			sg for sg in stamped
 			if not sg.get("secret_needed") or sg["secret_needed"] not in active_secrets
 		]
 	else:

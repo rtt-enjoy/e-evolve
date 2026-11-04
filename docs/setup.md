@@ -14,19 +14,17 @@ Repo → Settings → Secrets and variables → Actions → **New repository sec
 |----------------------|---------------------------------------------------------------|-------------------------------|
 | `GLM_API_KEY`        | [z.ai](https://z.ai/manage-apikey/apikey-list) or [bigmodel.cn](https://open.bigmodel.cn) | **Main engine** — see below   |
 | `ATRIA_API_KEY`      | [intern-ai.org.cn](https://discovery.intern-ai.org.cn)        | Free — first fallback         |
-| `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/keys)                   | Free — second fallback        |
-| `GROQ_API_KEY`       | [console.groq.com](https://console.groq.com)                  | Free                          |
 | `GEMINI_API_KEY`     | [aistudio.google.com](https://aistudio.google.com/app/apikey) | Free tier                     |
-| `CEREBRAS_API_KEY`   | [cloud.cerebras.ai](https://cloud.cerebras.ai/)               | Free tier                     |
 | `ANTHROPIC_API_KEY`  | [console.anthropic.com](https://console.anthropic.com)        | Paid                          |
 
-Only one is required, but set `GLM_API_KEY`, `ATRIA_API_KEY` **and**
-`OPENROUTER_API_KEY`.
+Only one is required, but set `GLM_API_KEY` **and** `ATRIA_API_KEY`: there is no
+other free safety net behind them (Cerebras, Groq and OpenRouter were removed
+on 2026-11-04).
 
 **Main AI engine: GLM (`GLM_API_KEY`, Z.ai / Zhipu).** Every role tries it
 first: evolution proposals (`upgrade`), research (`research`), and article and
 newsletter drafting (`post`). If GLM cannot serve, **Atria** takes over, and if
-Atria cannot either, the free **OpenRouter** chain does.
+Atria cannot either, Anthropic or Gemini does when its key is set.
 
 Z.ai and bigmodel.cn issue separate keys for the general API and the Coding
 Plan, and those keys are not interchangeable. So the first GLM call of each
@@ -59,7 +57,7 @@ GLM is switched off for the rest of the cycle on a rejected key, a spent
 quota or usage limit, or two timeouts/outages. A rate limit (1302/1305) or a
 refused request (prompt too long, flagged content) skips GLM for that one call
 only. The Engine page leads with the model the probe settled on, then the
-fallback order GLM → Atria → OpenRouter with what each served last cycle. If
+fallback order GLM → Atria with what each served last cycle. If
 the key was refused on `glm-5.3-flash`, a yellow line gives the Z.ai code and
 the model it fell to (`llm_engine.refused`). The endpoint sits under Cycle facts. The sidebar pill reads `GLM live`, `GLM fallback`, or
 `GLM not reported`.
@@ -75,38 +73,30 @@ key answers 401, so Atria quietly drops to the fallback (`auth_failed` on the
 Engine panel). Rotate it before then.
 When GLM is unavailable, `bot/llm.py` sends each role to Atria next. On a
 401, a 404, or a quota-spent 429, Atria is switched off for the
-rest of that cycle and each role falls through to its own zero-cost
-OpenRouter chain (led by the `openrouter/free` auto-router), so a spent quota
-never fails a cycle. A per-minute 429 that sends `Retry-After` only skips
+rest of that cycle and each role falls through to Anthropic or Gemini when
+its key is set. Without one, that call fails. A per-minute 429 that sends `Retry-After` only skips
 Atria for that one call.
 
 **Without `GLM_API_KEY` GLM is skipped** and Atria leads; without both, every
-role runs on the OpenRouter fallback. The Engine panel then shows the roles as
+role needs an Anthropic or Gemini key. The Engine panel then shows the roles as
 `fallback`, not `active`. The card reflects the last completed cycle, so it
 updates about an hour after you add a secret.
 
-**Know the daily ceiling.** OpenRouter's free (`:free`) models are capped at
-20 requests/minute and only **50 requests/day** unless the account has ever
-purchased $10 in credits (then 1,000/day) — verify the current limit at
-[openrouter.ai/docs](https://openrouter.ai/docs/api-reference/limits). An
-hourly bot making multiple LLM calls per cycle can approach that ceiling, so
-add at least one fallback key:
+**Know the ceiling.** With the OpenRouter free chain gone, an hourly bot has
+no free multi-model safety net, so add a fallback key behind GLM and Atria:
 
 - `GEMINI_API_KEY` — free tier, no card, roughly 1,500 requests/day on
   Gemini 2.5 Flash (verify current limit).
-- `CEREBRAS_API_KEY` — free tier, no card, roughly 1M tokens/day and 14,400
-  requests/day per model (verify current limit).
-- `GROQ_API_KEY` — free tier, no card, fast inference.
+- `ANTHROPIC_API_KEY` — paid; the bot only calls it if you set the key.
 
-`bot/llm.py` automatically steps down from GLM to Atria, then to the
-OpenRouter free-model chain, and then to the next configured provider on rate
-limits. Adding any of these only increases headroom. It never changes routing
-while GLM has capacity.
+`bot/llm.py` steps down from GLM to Atria, then to the next configured
+provider on rate limits. Adding a key only increases headroom. It never changes
+routing while GLM has capacity.
 
 Use the same variable names in both places:
 
 - Local development: copy `.env.example` to `.env`, then fill in private values.
-- GitHub Actions: add repository secrets with matching names, such as `GROQ_API_KEY`.
+- GitHub Actions: add repository secrets with matching names, such as `GLM_API_KEY`.
 
 `.env` is ignored by git and should never be committed. `.env.example` is the
 committed template and must contain names only, not real secret values.
@@ -119,8 +109,7 @@ Use this order when you cannot use Binance identity verification, phone-gated
 social APIs, Claude premium features, paid LLM accounts, or funded wallets:
 
 1. Free-AI earning leads - enabled by default and no external secret required.
-2. `GROQ_API_KEY` or `GEMINI_API_KEY` - free LLM generation within rate limits.
-3. `OPENROUTER_API_KEY` with no credits - still works, using free models only.
+2. `GEMINI_API_KEY` - free LLM generation within rate limits.
 
 These keys no longer activate runtime actions:
 
@@ -193,8 +182,8 @@ pip install -r requirements.txt
 
 # 3. Create .env with your keys
 cp .env.example .env
-# Edit .env and set at least one of GROQ_API_KEY, GEMINI_API_KEY,
-# OPENROUTER_API_KEY, or ANTHROPIC_API_KEY.
+# Edit .env and set at least one of GLM_API_KEY, ATRIA_API_KEY,
+# GEMINI_API_KEY, or ANTHROPIC_API_KEY.
 
 # 4. Run one cycle
 python -m bot.main

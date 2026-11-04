@@ -130,7 +130,8 @@ export type ChainStep = {
 
 /**
  * The order every role tries engines in, each with what it did last cycle:
- * GLM, then Atria, then OpenRouter's free router.
+ * GLM, then Atria. Anthropic and Gemini follow when their keys are set, but
+ * the bot reports no per-provider state for them here.
  */
 export function engineChain(status: Status, engine: EngineState): ChainStep[] {
 	const calls = engine.calls;
@@ -169,10 +170,5 @@ export function engineChain(status: Status, engine: EngineState): ChainStep[] {
 						: { state: 'standby', tone: 'neutral' as Tone }),
 		});
 	}
-
-	const flow = Object.values(status.llm_workflows || {})[0];
-	const lastModel = flow?.last_resort_model || 'openrouter/free';
-	const n = calls.openrouter || 0;
-	steps.push({ name: 'OpenRouter', model: lastModel, calls: n, state: n ? 'served' : 'standby', tone: n ? 'info' : 'neutral' });
 	return steps;
 }

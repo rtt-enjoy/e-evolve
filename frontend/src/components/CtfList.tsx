@@ -1,5 +1,5 @@
 import { ExternalLink } from 'lucide-react';
-import { Pill } from './ui';
+import { AddedPill, Pill } from './ui';
 import { scoreTone } from '../utils/format';
 import type { CtfEvent } from '../types/status';
 
@@ -33,6 +33,7 @@ export function CtfList({ events }: { events: CtfEvent[] }) {
 						<span className="chips">
 							{event.crypto ? <Pill tone="good">crypto</Pill> : event.pays ? <Pill tone="info">prize</Pill> : null}
 							{event.beginner ? <Pill tone="neutral">beginner</Pill> : null}
+							<AddedPill at={event.discovered_at} />
 						</span>
 						<ExternalLink className="lead-arrow" size={15} />
 					</a>

@@ -7,9 +7,8 @@ social APIs, Claude premium features, paid LLM accounts, or funded wallets.
 
 1. Enable code-tech leads. This is already on by default and needs no external
    account secret.
-2. Add `GROQ_API_KEY` or `GEMINI_API_KEY` for free LLM capacity.
+2. Add `GEMINI_API_KEY` for free LLM capacity.
 3. Add `DEV_TO_API_KEY` when you want the bot to publish articles.
-4. Use OpenRouter free models only if Groq or Gemini limits are not enough.
 
 ## Avoid By Default
 
@@ -25,8 +24,6 @@ social APIs, Claude premium features, paid LLM accounts, or funded wallets.
 
 - Google lists a Gemini API free tier with free input/output tokens on eligible
   models and published rate limits.
-- OpenRouter documents free model routing and a free-tier quota, but availability
-  depends on the selected free model/provider.
 - Forem/dev.to documents user-generated API keys for article publishing.
 - Provider anti-abuse checks can change. This path avoids services whose core
   use is known to require exchange KYC, premium subscription, phone-gated social
@@ -37,6 +34,4 @@ social APIs, Claude premium features, paid LLM accounts, or funded wallets.
 
 - Gemini API pricing: https://ai.google.dev/gemini-api/docs/pricing
 - Gemini API rate limits: https://ai.google.dev/gemini-api/docs/rate-limits
-- OpenRouter FAQ: https://openrouter.ai/docs/faq
-- OpenRouter rate limits: https://openrouter.zendesk.com/hc/en-us/articles/39501163636379-OpenRouter-Rate-Limits-What-You-Need-to-Know
 - Forem/dev.to API: https://developers.forem.com/api/

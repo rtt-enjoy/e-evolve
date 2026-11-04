@@ -1,6 +1,7 @@
 import { AlertTriangle, ArrowRight, CheckCircle2, ChevronRight, Info, XCircle } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
+import { addedAgo } from '../utils/format';
 
 export type Tone = 'good' | 'warn' | 'bad' | 'info' | 'neutral';
 
@@ -169,6 +170,13 @@ export function Progress({ value, label }: { value: number; label?: string }) {
 
 export function Pill({ tone = 'neutral', icon, children }: { tone?: Tone; icon?: ReactNode; children: ReactNode }) {
 	return <span className={`pill ${tone}`}>{icon}{children}</span>;
+}
+
+/** "added 3h ago" for an item the bot stamped `discovered_at`; nothing when it did not. */
+export function AddedPill({ at }: { at?: string | null }) {
+	const added = addedAgo(at);
+	if (!added) return null;
+	return <span className="pill neutral" title={`First listed ${added.exact}`}>added {added.label}</span>;
 }
 
 export function Dot({ tone = 'neutral' }: { tone?: Tone }) {

@@ -32,7 +32,7 @@ import os
 from datetime import datetime, timezone
 from typing import Any
 
-from ._shared import bounded_append, hours_until_due, load_config
+from ._shared import bounded_append, hours_until_due, load_config, stamp_first_seen
 from .code_techs import _cell, _clean_list, _dicts
 
 log = logging.getLogger(__name__)
@@ -319,13 +319,17 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	else:
 		brief = _viability_brief(llm, viable, cfg)
 
+	# `discovered_at` is when each idea first appeared, carried over by name.
+	ranked = stamp_first_seen(brief.get("ranked_ideas", []), state.get("ranked_ideas"), "name", now)
+	viable = stamp_first_seen(viable, state.get("viable"), "name", now)
+	refused = stamp_first_seen(refused, state.get("refused"), "name", now)
 	state.update({
 		"enabled": True,
 		"last_refresh_at": now.isoformat(),
 		"refresh_hours": int(cfg["refresh_hours"]),
 		"constraints": list(_CONSTRAINTS),
 		"summary": str(brief.get("summary", "")),
-		"ranked_ideas": brief.get("ranked_ideas", []),
+		"ranked_ideas": ranked,
 		"validation_steps": brief.get("validation_steps", []),
 		"owner_actions": brief.get("owner_actions", []),
 		"viable": viable,

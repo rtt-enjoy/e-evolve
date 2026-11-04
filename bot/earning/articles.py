@@ -141,7 +141,10 @@ TITLE -- this decides whether anyone reads the article at all. Spend real effort
 - BANNED in titles: exclamation marks, "Ultimate", "Complete Guide",
   "You NEED to Know", "Amazing", "Mind-blowing", "Secrets", "Hacks",
   "Top 10 ...", "A Deep Dive Into", "Everything You Need To Know",
-  and any ALL-CAPS word. These read as spam and suppress clicks here.
+  and any ALL-CAPS word the reader cannot recognise as a standard acronym.
+  Well-known ones (PDF, JSON, API) stay capitalised; anything less universal
+  is written in mixed case or spelled out. A fully capitalised word the feed
+  scanner does not know reads as shouting and kills the click.
 - No colon-subtitle padding. "Retries: A Practical Guide to Backoff in Python"
   wastes the scannable half of the line. Pick the sharper half and stop.
 

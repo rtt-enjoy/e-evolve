@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-04T01:23:43.458572+00:00",
-  "total_runs": 2258,
+  "last_run": "2026-11-04T02:23:41.546402+00:00",
+  "total_runs": 2259,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -35,35 +35,33 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the weak_title prompt focus is already covered by 30 distinct open review branches on articles.py title prompts, none merged, so a 31st overlapping edit adds no evidence \u2014 the binding step is reach, but the lever here is review throughput, not another prompt draft.",
+    "summary": "No change proposed: the only prompt-losers this window are weak_title (5), and every angle on that prompt \u2014 ALL-CAPS examples, acronym allowlists, colon-subtitle rules, _revise_title sharpening, before/after examples \u2014 already sits in ~30 open unmerged evolve/* branches on bot/earning/articles.py. A 31st duplicate would waste the review cycle; merging one existing branch is the actual unblock.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge exactly one title-prompt branch and close the duplicates",
-        "description": "Unblocks the reach step: every angle on the weak_title prompt (ALL-CAPS clarification, colon-subtitle rule, acronym allowlist, rewrite examples) is already sitting in an open evolve/* branch. Merging one gives the reject window a real baseline; leaving all 30 open guarantees the cycle keeps proposing duplicates forever.",
-        "owner_action": "Review the evolve/* branches dated 2026-10-31 to 2026-11-04 that edit the TITLE rules in _SYSTEM or _revise_title in bot/earning/articles.py; merge the smallest one-to-three-line edit and close the rest as superseded.",
+        "title": "Merge exactly one title-prompt branch, then close the rest as superseded",
+        "description": "Unblocks the reach step without a 31st duplicate proposal: weak_title loses ~5 drafts per 14 days to two mechanical failures (non-acronym ALL-CAPS words, colon-subtitle padding), and every fix formulation already exists in an open branch. One merged edit gives the reject window a real baseline; thirty open branches guarantee every future cycle re-derives the same proposal.",
+        "owner_action": "Review the evolve/* branches dated 2026-10-31 to 2026-11-04 touching the TITLE rules in _SYSTEM or _revise_title in bot/earning/articles.py; merge the smallest one-to-three-line instruction edit (e.g. the acronym allowlist for UI/UX/K8S or the concrete banned ALL-CAPS examples) and close the remaining overlapping branches as superseded.",
         "secret_needed": null,
         "how_to": [
           "Step 1: List the open evolve/* pull requests touching bot/earning/articles.py title prompts.",
-          "Step 2: Pick the one that makes a single concrete instruction change (e.g. naming banned ALL-CAPS words or stating acronyms are allowed) and merge it.",
-          "Step 3: Close the remaining overlapping branches as superseded, then watch article_rejects.counts.weak_title for the next 14-day window."
+          "Step 2: Merge the one with a single concrete instruction change and no other edits.",
+          "Step 3: Close the rest as superseded, then read article_rejects.counts.weak_title over the next 14-day window to confirm it falls."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach into a live receive path) via the PROMPT FOCUS on weak_title, blocked by review backlog rather than by a missing proposal",
+    "direction": "Checklist step 4 \u2014 reach into a live receive path; PROMPT FOCUS weak_title",
     "evidence": [
-      "article_rejects.counts weak_title=14 lifetime, 5 in last 14 days",
-      "gate findings behind it: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle' x1",
-      "PRIOR PROPOSALS lists ~30 distinct open branches touching bot/earning/articles.py title prompts (2026-10-31 to 2026-11-04), none merged",
-      "brief's own guidance: 'Dozens of earlier proposals were never merged, mostly because they rebuilt something that already exists'",
-      "receive path clean: payout.live=true, receipt_check covered 44/44, known_without_footer=0",
-      "preferred_archetypes=['problem-workaround'] n=9 avg_engagement=485.7 \u2014 steering already in place"
+      "article_rejects.counts: weak_title=5 in the last 14 days, gate findings 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle' x1",
+      "PRIOR PROPOSALS: 30 distinct open branches, all editing the same TITLE rules in _SYSTEM or _revise_title in bot/earning/articles.py, none merged since 2026-10-31",
+      "llm_error=22 in the last 14 days dominates total rejects (64 lifetime, 36 llm_error) and is engine-side, not prompt-fixable",
+      "receipt_check.covered/published_total = 44/44, known_without_footer = 0, coverage_complete = True \u2014 receive path clean, so step 1 offers no work"
     ],
-    "money_path": "none (maintenance): no change this cycle; the reach work it would serve is already proposed in dozens of unmerged branches",
-    "verify": "No code change. After the owner merges one title-prompt branch, article_rejects.counts.weak_title in the 14-day window should fall from 5 toward zero; if it stays flat while llm_error stays at 22, the residual loss is the engine, not the prompt.",
+    "money_path": "none this cycle \u2014 the change would be reach-only (more drafts surviving the title gate means more posts and asks shipped), and this cycle proposes nothing",
+    "verify": "After the owner merges one title-prompt branch: article_rejects.counts.weak_title should stop growing across the next 14-day window (from 5), and the 'title has ALL-CAPS word' finding should stop appearing in article_rejects.recent",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -71,19 +69,19 @@
   },
   "suggestions": [
     {
-      "title": "Merge exactly one title-prompt branch and close the duplicates",
-      "description": "Unblocks the reach step: every angle on the weak_title prompt (ALL-CAPS clarification, colon-subtitle rule, acronym allowlist, rewrite examples) is already sitting in an open evolve/* branch. Merging one gives the reject window a real baseline; leaving all 30 open guarantees the cycle keeps proposing duplicates forever.",
-      "owner_action": "Review the evolve/* branches dated 2026-10-31 to 2026-11-04 that edit the TITLE rules in _SYSTEM or _revise_title in bot/earning/articles.py; merge the smallest one-to-three-line edit and close the rest as superseded.",
+      "title": "Merge exactly one title-prompt branch, then close the rest as superseded",
+      "description": "Unblocks the reach step without a 31st duplicate proposal: weak_title loses ~5 drafts per 14 days to two mechanical failures (non-acronym ALL-CAPS words, colon-subtitle padding), and every fix formulation already exists in an open branch. One merged edit gives the reject window a real baseline; thirty open branches guarantee every future cycle re-derives the same proposal.",
+      "owner_action": "Review the evolve/* branches dated 2026-10-31 to 2026-11-04 touching the TITLE rules in _SYSTEM or _revise_title in bot/earning/articles.py; merge the smallest one-to-three-line instruction edit (e.g. the acronym allowlist for UI/UX/K8S or the concrete banned ALL-CAPS examples) and close the remaining overlapping branches as superseded.",
       "secret_needed": null,
       "how_to": [
         "Step 1: List the open evolve/* pull requests touching bot/earning/articles.py title prompts.",
-        "Step 2: Pick the one that makes a single concrete instruction change (e.g. naming banned ALL-CAPS words or stating acronyms are allowed) and merge it.",
-        "Step 3: Close the remaining overlapping branches as superseded, then watch article_rejects.counts.weak_title for the next 14-day window."
+        "Step 2: Merge the one with a single concrete instruction change and no other edits.",
+        "Step 3: Close the rest as superseded, then read article_rejects.counts.weak_title over the next 14-day window to confirm it falls."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 34,
+  "last_cycle_seconds": 45,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1823,7 +1821,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-04T01:23:44.051912+00:00",
+    "checked_at": "2026-11-04T02:23:42.178323+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2450,7 +2448,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-04T01:24:16.426076+00:00",
+    "last_run": "2026-11-04T02:24:25.971309+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -2460,25 +2458,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-04T01:24:16.781432+00:00",
+    "last_run": "2026-11-04T02:24:26.169185+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4959304,
-        "at": "2026-11-03T16:10:48.977334+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-11-03T16:10:48.977334+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-11-03T16:10:48.977334+00:00",
-        "ok": true
-      },
       {
         "id": 4720062,
         "at": "2026-11-03T17:10:42.143378+00:00",
@@ -2491,11 +2474,6 @@
       },
       {
         "id": 4826008,
-        "at": "2026-11-03T17:10:42.143378+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
         "at": "2026-11-03T17:10:42.143378+00:00",
         "ok": true
       },
@@ -2680,8 +2658,28 @@
         "ok": true
       },
       {
+        "id": 4959304,
+        "at": "2026-11-04T02:24:26.169185+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-11-04T02:24:26.169185+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-04T02:24:26.169185+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-04T02:24:26.169185+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-04T01:24:16.781432+00:00",
+        "at": "2026-11-04T02:24:26.169185+00:00",
         "ok": true
       }
     ],

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-04T04:23:58.073917+00:00",
-  "total_runs": 2261,
+  "last_run": "2026-11-04T05:23:52.757020+00:00",
+  "total_runs": 2262,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -35,37 +35,21 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "One-line edit to the _revise_title prompt replacing the ambiguous 'no ALL-CAPS' phrase with positive casing instructions and an explicit ban on colon subtitles, targeting the weak_title rejects the gate attributes to ALL-CAPS wording and colon padding.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The title-rewrite prompt states the casing rules only as a negation ('no ALL-CAPS, no colon-subtitle padding'). Gate findings show 4 of 5 recent weak_title losses were ALL-CAPS words and 1 was colon padding, i.e. the rewrite is producing titles that still violate exactly these two rules. Replace the bare negation with a positive, concrete instruction: Title Case everything except well-known acronyms, one clause, never a colon subtitle. This is the single instruction the gate findings say is not landing; it replaces a rule rather than stacking a new one, and touches only _revise_title's prompt text \u2014 no gate is changed."
-      }
-    ],
-    "suggestions": [
-      {
-        "title": "Add the wallet address to the dev.to profile bio",
-        "description": "Carries the receive path on every profile visit permanently; the channel table already marks this as the one cheap owner-only exception, and it cannot be automated (Forem's users API is show-only).",
-        "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Sign in at dev.to and open https://dev.to/settings.",
-          "Step 2: Append to the Bio: 'If a post saved you time, USDT (TRC-20): [redacted]'.",
-          "Step 3: Save \u2014 no other setup; receipt_check already verifies the address renders correctly elsewhere."
-        ]
-      }
-    ],
-    "direction": "Checklist step 4 (reach into a live receive path) via the PROMPT LEDGER focus: upgrade the prompt losing the most drafts to a gate, one step per cycle. Receive path itself is clean (receipt_check.covered/published_total = 44/44, known_without_footer = 0, coverage_complete observed true), so reach is the remaining work.",
+    "summary": "No change proposed: the named PROMPT FOCUS (weak_title, 5 drafts) has already absorbed 31 unmerged proposal attempts on exactly these two prompts, and the dominant draft loss is llm_error (22 in the 14-day window), which no prompt edit can fix.",
+    "changes_applied": [],
+    "suggestions": [],
+    "direction": "Checklist step 4 (reach) via the PROMPT FOCUS; declining after evidence, per 'one small, evidenced change is worth more than three speculative ones'.",
     "evidence": [
-      "article_rejects: weak_title lost 5 drafts in the last 14 days (PROMPT FOCUS)",
-      "gate findings: 'title has ALL-CAPS word' x4, 'title padded with a colon subtitle; pick the sharper half' x1",
-      "_revise_title() is one of the two prompts named by the PROMPT FOCUS, and its instruction is the only place the rewrite model is told the casing rules \u2014 currently as a bare negation: 'no ALL-CAPS, no colon-subtitle padding', with no statement that acronyms keep their casing",
-      "A bare 'no ALL-CAPS' gives the rewrite model no positive model of a correct title, so revised titles still trip the gate and the whole draft (one post, one ask) is lost"
+      "article_rejects.counts total 64: llm_error=36, weak_title=14, empty_draft=9, fabricated=4",
+      "Drafts lost to the engine, last 14 days: llm_error=22, empty_draft=2; to prompts: weak_title=5, fabricated=2",
+      "PRIOR PROPOSALS list contains 31 open branches all editing articles.py title prompts (ALL-CAPS examples, colon-subtitle rules, acronym allowlist, one proposed 3x), none merged",
+      "Gate findings: 'title has ALL-CAPS word' x4, 'colon subtitle' x1 \u2014 4 of 5 already covered by the open 2026-11-03 acronym-allowlist proposal",
+      "receive path verified: receipt_check.covered/published_total = 44/44, known_without_footer = 0, wallet live but received_total_usd = 0.0"
     ],
-    "money_path": "reach-only: the receive path is verified end to end; this widens the funnel of drafts that survive the title gate, so one more post per lost draft carries the tip footer to readers.",
-    "verify": "A test added to bot/tests.py asserting _revise_title's prompt no longer contains the bare 'no ALL-CAPS' string and does contain the acronym-casing and colon-subtitle clauses; operationally, article_rejects recent-window weak_title should fall from 5 over the next 14-day window, and the gate findings 'title has ALL-CAPS word' / 'colon subtitle' should stop recurring on revised titles.",
+    "money_path": "none (no change this cycle; reach-only work was under consideration)",
+    "verify": "N/A \u2014 no change. If the owner merges the open 2026-11-03 allowlist proposal instead, article_rejects.counts.weak_title should stop growing in the next window.",
     "error": null,
-    "branch": "evolve/1.41.1-20261104-042433",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -86,7 +70,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 36,
+  "last_cycle_seconds": 34,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1826,7 +1810,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-04T04:23:58.884681+00:00",
+    "checked_at": "2026-11-04T05:23:53.217453+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2160,8 +2144,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261104-042433",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 43,
     "total_views": 5701,
@@ -2453,7 +2437,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-04T04:24:33.618678+00:00",
+    "last_run": "2026-11-04T05:24:25.920504+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -2463,25 +2447,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-04T04:24:34.057919+00:00",
+    "last_run": "2026-11-04T05:24:26.265036+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4568987,
-        "at": "2026-11-03T19:11:20.669300+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-11-03T19:11:20.669300+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-11-03T19:11:20.669300+00:00",
-        "ok": true
-      },
       {
         "id": 4765372,
         "at": "2026-11-03T20:11:19.270615+00:00",
@@ -2494,11 +2463,6 @@
       },
       {
         "id": 4820684,
-        "at": "2026-11-03T20:11:19.270615+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-11-03T20:11:19.270615+00:00",
         "ok": true
       },
@@ -2683,8 +2647,28 @@
         "ok": true
       },
       {
+        "id": 4568987,
+        "at": "2026-11-04T05:24:26.265036+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-11-04T05:24:26.265036+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-11-04T05:24:26.265036+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-04T05:24:26.265036+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-04T04:24:34.057919+00:00",
+        "at": "2026-11-04T05:24:26.265036+00:00",
         "ok": true
       }
     ],

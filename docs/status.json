@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-04T23:20:31.715709+00:00",
-  "total_runs": 2274,
+  "last_run": "2026-11-04T23:41:06.912886+00:00",
+  "total_runs": 2275,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -32,17 +32,12 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Sharpen the title-rewrite prompt's colon-subtitle instruction to mirror the gate's actual rule (short prefix allowed, two full clauses rejected), targeting the 'padded with a colon subtitle' gate finding behind this window's weak_title losses.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The _revise_title prompt tells the model 'no colon-subtitle padding' but never states the gate's actual rule, so a rewrite that keeps a legitimate short prefix ('Postgres: ...') fails again, and a padded title may be rewritten into another padded one. Stating the rule the gate enforces gives the model the exact fix ('pick the sharper half') and the allowed case, without touching the gate or the shared _SYSTEM title rules."
-      }
-    ],
+    "summary": "No change this cycle: every angle on the PROMPT FOCUS prompt is already parked on an open review branch, and the dominant loss is the engine, not a prompt.",
+    "changes_applied": [],
     "suggestions": [
       {
         "title": "Flip the post role's primary to atria, or diagnose glm's llm_error failures",
-        "description": "20 of the last 14 days' 27 draft losses are 'LLM call failed' from glm \u2014 far more than every gate combined. Each is a lost article and a lost tip ask; recovering them moves reach more than any prompt edit can, and the atria fallback is already key-set and live.",
+        "description": "20 of the last 14 days' 27 draft losses are 'LLM call failed' from glm \u2014 7x weak_title. Each is a lost article and a lost tip ask. Recovering them moves reach more than any further title-prompt edit, and the atria fallback is already key-set and live.",
         "owner_action": "Either grep the Actions logs for '[articles] rejected (llm_error)' to read glm's exception text, or set llm_workflows.post.primary_active to false so Atria-Dawn serves the post role.",
         "secret_needed": null,
         "how_to": [
@@ -51,44 +46,28 @@
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS: weak_title lost 3 drafts in 14 days; gate findings include 'title padded with a colon subtitle; pick the sharper half' (1x), alongside 2x ALL-CAPS which prior proposals already covered exhaustively.",
+    "direction": "Step 4 \u2014 reach into a live receive path, via prompt upgrades where they are actually the lever",
     "evidence": [
-      "article_rejects.counts: weak_title=14 lifetime, 3 in last 14 days",
-      "PROMPT FOCUS gate findings: 'title padded with a colon subtitle; pick the sharper half' x1",
-      "articles.py _revise_title prompt says only 'no colon-subtitle padding' with no rule text, while the gate in _title_problems allows short prefixes (head <3 words or tail <4 words) and rejects two full clauses",
-      "prior proposals never addressed the colon-subtitle line in _revise_title; they overwhelmingly reworked the ALL-CAPS wording"
+      "article_rejects.counts: llm_error=36 vs weak_title=14 lifetime; last 14 days llm_error=20 vs weak_title=3",
+      "weak_title=3 in the 14-day window while llm_error=20 \u2014 the gate cost ~1 draft per 5 days; the engine cost ~1.4 per day",
+      "PROMPT FOCUS gate findings ('title has ALL-CAPS word' x2; 'colon subtitle' x1) are already addressed by at least 29 open proposals against articles.py (_SYSTEM and _revise_title), including exact-match ones for both findings: 'replacing the ambiguous no ALL-CAPS', 'colon-subtitle instruction to mirror the gate', 'concrete banned ALL-CAPS examples' (multiple)",
+      "llm_workflows.post.primary_active=true and llm_engine.calls={glm: 2} \u2014 the serving provider is the failing one; bot/llm.py is protected so only the owner can reroute",
+      "receipt_check.covered/published_total=45/45, known_without_footer=0 \u2014 the receive path is verified end to end, so lost drafts are the whole remaining reach leak"
     ],
-    "money_path": "reach-only: a draft the title gate refuses is one post and one tip ask that never ships; recovering it widens the audience the footer reaches.",
-    "verify": "article_rejects recent window should show no further 'title padded with a colon subtitle' details over the next cycles, and weak_title in the 14-day prompt-loss count should fall; add no test since the change is prompt text only \u2014 bot/tests.py already covers _title_problems behaviour, which is unchanged.",
+    "money_path": "none this cycle \u2014 declining to add a 30th duplicate title-prompt proposal; the live lever is the pending owner action on llm_error, which is where ~85% of lost posts (and lost tip asks) are actually going",
+    "verify": "Next cycle: article_rejects window counts. If the owner reroutes the post role, llm_error in the 14-day window should fall sharply; weak_title=3 is below the noise floor for prompt grading (a single gate firing per 5 days cannot show a prompt edit's effect).",
     "error": null,
-    "branch": "evolve/1.41.1-20261104-232053",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Flip the post role's primary to atria, or diagnose glm's llm_error failures",
-      "description": "20 of the last 14 days' 27 draft losses are 'LLM call failed' from glm \u2014 far more than every gate combined. Each is a lost article and a lost tip ask; recovering them moves reach more than any prompt edit can, and the atria fallback is already key-set and live.",
+      "description": "20 of the last 14 days' 27 draft losses are 'LLM call failed' from glm \u2014 7x weak_title. Each is a lost article and a lost tip ask. Recovering them moves reach more than any further title-prompt edit, and the atria fallback is already key-set and live.",
       "owner_action": "Either grep the Actions logs for '[articles] rejected (llm_error)' to read glm's exception text, or set llm_workflows.post.primary_active to false so Atria-Dawn serves the post role.",
       "secret_needed": null,
       "how_to": [
@@ -99,7 +78,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 61,
+  "last_cycle_seconds": 23,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1788,7 +1767,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-04T23:20:32.629924+00:00",
+    "checked_at": "2026-11-04T23:41:07.660072+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2122,8 +2101,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261104-232053",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 44,
     "total_views": 5753,
@@ -2415,47 +2394,27 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-04T23:21:32.042154+00:00",
+    "last_run": "2026-11-04T23:41:29.119178+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-04T23:21:32.358517+00:00",
+    "last_run": "2026-11-04T23:41:29.576211+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4765372,
-        "at": "2026-11-04T06:24:52.997054+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-11-04T06:24:52.997054+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-11-04T07:25:35.911128+00:00",
         "ok": true
       },
       {
-        "id": 4908316,
-        "at": "2026-11-04T07:25:35.911128+00:00",
-        "ok": true
-      },
-      {
         "id": 4971614,
-        "at": "2026-11-04T07:25:35.911128+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
         "at": "2026-11-04T07:25:35.911128+00:00",
         "ok": true
       },
@@ -2650,8 +2609,28 @@
         "ok": true
       },
       {
+        "id": 4765372,
+        "at": "2026-11-04T23:41:29.576211+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-11-04T23:41:29.576211+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-11-04T23:41:29.576211+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-04T23:41:29.576211+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-04T23:21:32.358517+00:00",
+        "at": "2026-11-04T23:41:29.576211+00:00",
         "ok": true
       }
     ],
@@ -2660,7 +2639,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 16.9
+    "oldest_check_age_hours": 16.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -2680,7 +2659,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

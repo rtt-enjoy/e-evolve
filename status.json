@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-04T18:20:11.844620+00:00",
-  "total_runs": 2269,
+  "last_run": "2026-11-04T19:20:13.663410+00:00",
+  "total_runs": 2270,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -32,32 +32,33 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "One-line edit to the title-rewrite prompt in _revise_title: it forbids colon-subtitle padding but never tells the model what to do when the current title already has one, so the rewrite keeps the colon and the gate re-rejects.",
+    "summary": "No change proposed: the prompt focus (weak_title, 3 drafts lost in 14 days) has already been targeted by roughly 30 distinct prompt-edit proposals that were never merged, and the dominant reject cause (llm_error=36 lifetime, 21 in the window) is an engine failure no prompt edit can fix.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Put the wallet ask in the dev.to profile bio",
-        "description": "Carries the receive address on every profile visit permanently; the doctrine's channel table already names this as the one cheap owner-action row left.",
-        "owner_action": "Edit the Bio field once at dev.to/settings to include the TRC-20 address [redacted].",
+        "title": "Investigate the LLM failure rate before more prompt work",
+        "description": "21 of 34 draft losses in the last 14 days are llm_error/empty_draft from the glm post role. Merging any prompt edit multiplies a publisher that fails two-thirds of the time; raising llm_engine reliability would recover more posts per month than every title-prompt proposal combined.",
+        "owner_action": "Review the glm-5.3-flash post-role error logs (or model choice) once; the bot cannot edit bot/llm.py or change the model itself.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open dev.to/settings, paste a one-line bio naming the address and 'USDT/USDC/USDD on Tron'.",
-          "Step 2: Save; receipt_check-style spot check via the public profile page confirms the address renders."
+          "Step 1: Check workflow logs for the 'LLM call failed' warnings from bot/earning/articles.py over the past 14 days \u2014 the exception message is already recorded in article_rejects.recent.",
+          "Step 2: If the failures are provider-side (timeouts, JSON parse errors), consider switching the post role to the already-configured atria fallback or a more reliable model \u2014 that is an owner config change, not an evolution edit."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path; PROMPT FOCUS: weak_title, drafts lost 3 in 14 days, gate findings include 'title padded with a colon subtitle; pick the sharper half' x1.",
+    "direction": "Step 4 \u2014 reach into a live receive path, via the PROMPT FOCUS upgrade path",
     "evidence": [
-      "article_rejects.counts.weak_title = 14 lifetime, 3 in the last 14 days (PROMPT LEDGER)",
-      "gate finding behind it: 'title padded with a colon subtitle; pick the sharper half' x1",
-      "_revise_title prompt currently says only 'no colon-subtitle padding' with no repair instruction for a title that already has one",
-      "article_stats.count = 43, avg_views = 132.6 \u2014 every saved draft is one post and one tip ask that ships"
+      "article_rejects.counts total 64: llm_error=36 dominates; weak_title=14 lifetime but only weak_title=3 in the last 14 days (PROMPT LEDGER)",
+      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=21, empty_draft=2 vs weak_title=3, fabricated=2",
+      "PRIOR PROPOSALS contains ~30 open branches, all unmerged, nearly all one-line edits to the ALL-CAPS or colon-subtitle title rules in _SYSTEM / _revise_title",
+      "Gate findings behind the focus: 'title has ALL-CAPS word' x2; 'colon subtitle' x1 \u2014 three drafts in two weeks is the entire addressable loss",
+      "receipt_check.covered / published_total = 44 / 44, known_without_footer = 0: the receive path is fully live; publishing one extra article per month is worth far less than the cycle cost of another speculative unmerged title-prompt edit"
     ],
-    "money_path": "Reach-only: each draft the weak_title gate refuses is one dev.to post and one footer ask that never publishes; fixing the rewrite prompt recovers that post, and the footer attached at publish is the receive surface.",
-    "verify": "In the next 14-day window, article_rejects recent entries with code 'weak_title' and detail containing 'colon subtitle' should fall to 0, and the weak_title 14-day count should not include a colon-subtitle finding. A unit test can pin it: a title like 'Retries: A Practical Guide to Backoff in Python' passed to _revise_title's prompt must contain the drop-the-colon instruction (test added to bot/tests.py is not possible in this proposal \u2014 tests.py is out of my write scope here per the omitted-file list \u2014 so verification is the status count).",
+    "money_path": "none (no change; another unmerged prompt edit would spend the cycle without shipping a post)",
+    "verify": "No change to verify. If a merged title fix ever lands, the count that should fall is article_rejects recent weak_title entries in the 14-day window (currently 3) \u2014 but 30 prior variants of that fix sit unmerged, so proposing a 31st is the pattern the evolution brief names as failing.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -65,19 +66,19 @@
   },
   "suggestions": [
     {
-      "title": "Put the wallet ask in the dev.to profile bio",
-      "description": "Carries the receive address on every profile visit permanently; the doctrine's channel table already names this as the one cheap owner-action row left.",
-      "owner_action": "Edit the Bio field once at dev.to/settings to include the TRC-20 address [redacted].",
+      "title": "Investigate the LLM failure rate before more prompt work",
+      "description": "21 of 34 draft losses in the last 14 days are llm_error/empty_draft from the glm post role. Merging any prompt edit multiplies a publisher that fails two-thirds of the time; raising llm_engine reliability would recover more posts per month than every title-prompt proposal combined.",
+      "owner_action": "Review the glm-5.3-flash post-role error logs (or model choice) once; the bot cannot edit bot/llm.py or change the model itself.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open dev.to/settings, paste a one-line bio naming the address and 'USDT/USDC/USDD on Tron'.",
-        "Step 2: Save; receipt_check-style spot check via the public profile page confirms the address renders."
+        "Step 1: Check workflow logs for the 'LLM call failed' warnings from bot/earning/articles.py over the past 14 days \u2014 the exception message is already recorded in article_rejects.recent.",
+        "Step 2: If the failures are provider-side (timeouts, JSON parse errors), consider switching the post role to the already-configured atria fallback or a more reliable model \u2014 that is an owner config change, not an evolution edit."
       ],
-      "discovered_at": "2026-11-04T18:20:41.530806+00:00"
+      "discovered_at": "2026-11-04T19:20:36.416979+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 32,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1792,7 +1793,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-04T18:20:12.414473+00:00",
+    "checked_at": "2026-11-04T19:20:14.234878+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2419,7 +2420,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-04T18:20:41.969405+00:00",
+    "last_run": "2026-11-04T19:20:36.768771+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -2429,30 +2430,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-04T18:20:42.321546+00:00",
+    "last_run": "2026-11-04T19:20:37.158921+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4959304,
-        "at": "2026-11-04T02:24:26.169185+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-11-04T02:24:26.169185+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-11-04T02:24:26.169185+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-11-04T02:24:26.169185+00:00",
-        "ok": true
-      },
       {
         "id": 4720062,
         "at": "2026-11-04T03:26:14.839609+00:00",
@@ -2649,8 +2630,28 @@
         "ok": true
       },
       {
+        "id": 4959304,
+        "at": "2026-11-04T19:20:37.158921+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-11-04T19:20:37.158921+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-04T19:20:37.158921+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-04T19:20:37.158921+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-04T18:20:42.321546+00:00",
+        "at": "2026-11-04T19:20:37.158921+00:00",
         "ok": true
       }
     ],

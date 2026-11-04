@@ -3366,18 +3366,20 @@ class TestStampFirstSeen(unittest.TestCase):
 			self._stamp(items, previous)
 
 	def test_ctf_refresh_carries_the_stamp_over(self):
-		from datetime import datetime, timezone
+		from datetime import datetime, timedelta, timezone
 		from bot.earning import ctf_bounty
+		# Relative to now, so the event never ages into "over" and drops out of
+		# the list, which would let this test pass while checking nothing.
+		start = datetime.now(timezone.utc) + timedelta(days=3)
 		raw = [{"id": 7, "title": "T", "url": "https://x", "ctftime_url": "https://y",
-				"start": "2026-11-10T00:00:00+00:00", "finish": "2026-11-11T00:00:00+00:00",
+				"start": start.isoformat(), "finish": (start + timedelta(days=1)).isoformat(),
 				"format": "Jeopardy", "onsite": False, "restrictions": "Open", "prizes": "$100"}]
+		status = {"ctf_bounty": {"events": [{"id": 7, "discovered_at": "2026-11-01T00:00:00+00:00"}]}}
 		with mock.patch.object(ctf_bounty, "fetch_events", return_value=raw):
-			status = {"ctf_bounty": {"events": [{"id": 7, "discovered_at": "2026-11-01T00:00:00+00:00"}]}}
-			with mock.patch.object(ctf_bounty, "hours_until_due", return_value=0.0):
-				ctf_bounty.run(None, status)
+			ctf_bounty.run(None, status)
 		events = status["ctf_bounty"]["events"]
-		if events:  # the row survives the enterable filter
-			self.assertEqual(events[0]["discovered_at"], "2026-11-01T00:00:00+00:00")
+		self.assertEqual(len(events), 1)
+		self.assertEqual(events[0]["discovered_at"], "2026-11-01T00:00:00+00:00")
 
 
 if __name__ == "__main__":

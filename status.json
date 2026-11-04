@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-04T07:23:58.025087+00:00",
-  "total_runs": 2264,
+  "last_run": "2026-11-04T08:23:57.255871+00:00",
+  "total_runs": 2265,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -35,72 +35,55 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the weak_title gate has been answered by 31+ distinct unmerged prompt-edit proposals across 5 days, so another title-prompt edit cannot move the 14-day count no matter how correct it is, and the dominant reject (llm_error=36 of 64) is an engine failure no prompt edit fixes.",
+    "summary": "No change proposed: the prompt focus (weak_title) has already accumulated dozens of unmerged title-prompt proposals (2026-10-31 through 2026-11-04, including three this week alone), so a 31st variant would add no measurable signal \u2014 the owner's own suggestion records that exactly one merged edit plus a clean window is the only way this gate's loss count can move.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge or close the 31 open title-prompt branches before approving any more",
-        "description": "Unblocks the weak_title fix. With 31 unmerged variants, no future edit can show its effect in article_rejects; one merged edit plus one clean measurement window is the only way this gate's loss count can move.",
-        "owner_action": "Review the evolve/* branches touching bot/earning/articles.py title rules, merge exactly one (the 2026-11-04 _revise_title edit or the 2026-11-03 before/after example), and close the remainder as superseded.",
+        "title": "Merge one title-prompt branch and close the rest (repeated from the standing suggestion, still binding)",
+        "description": "Unblocks the weak_title fix; without it every further title edit is indistinguishable from the 30 already parked.",
+        "owner_action": "Review the evolve/* branches touching the TITLE rules in bot/earning/articles.py, merge exactly one, and close the remainder as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the repository pull-request list and filter branches starting with evolve/.",
-          "Step 2: Merge one branch editing the title rules; close the rest as superseded so future cycles stop re-proposing them.",
-          "Step 3: After two weeks compare article_rejects.counts.weak_title and the recent 'title has ALL-CAPS word' findings against the current values (4 and x3)."
+          "Step 1: Filter pull requests with branch names starting evolve/ and find those editing bot/earning/articles.py.",
+          "Step 2: Merge one (e.g. the 2026-11-03 _revise_title before/after example); close the others as superseded.",
+          "Step 3: Leave a two-week window before approving the next title edit, then compare weak_title rejects against 4."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach via better drafts), evaluated and honestly declined; the binding evidence points to review-queue cleanup, not another prompt variant",
+    "direction": "Step 4 of the checklist (prompt upgrades one step per cycle), read together with the PROMPT LEDGER's own evidence about unmerged branches",
     "evidence": [
-      "article_rejects.counts total 64: llm_error=36, weak_title=14, empty_draft=9, fabricated=4, revision_fabricated=1",
-      "Drafts lost to a prompt fixable gate (14 days): weak_title=4, fabricated=2; drafts lost to the engine: llm_error=22, empty_draft=2",
-      "article_rejects.last = 'llm_error': 'LLM call failed' \u2014 the most recent lost draft was not a title problem",
-      "96 distinct unmerged proposals are open, the majority edits to the articles.py title rules (ALL-CAPS ban x31+, colon-subtitle variants, rewrite examples)",
-      "PRIOR PROPOSALS warn these branches are still open; a 32nd near-identical proposal cannot be distinguished from them by a reviewer",
-      "receipt_check.covered/published_total = 44/44, known_without_footer=0 \u2014 the receive path is clean; this is purely reach work"
+      "article_rejects.counts: weak_title=14 lifetime, 4 in the last 14 days \u2014 the prompt-focus count",
+      "gate findings behind it: 'title has ALL-CAPS word' x3, 'title padded with a colon subtitle' x1",
+      "PRIOR PROPOSALS: ~30 of the 96 open branches are title-prompt edits to the same two prompts (_SYSTEM TITLE rules, _revise_title), none merged",
+      "status.suggestions already carries: 'Merge or close the 31 open title-prompt branches before approving any more'",
+      "article_rejects last 14 days: llm_error=22 + empty_draft=2 dominate \u2014 engine-side, not fixable by a prompt edit",
+      "receipt_check coverage complete, backfill remaining=0, payout.live=true \u2014 receive path verified, so no step-1 work"
     ],
-    "money_path": "none this cycle (reach-only work; declining keeps the review queue clear so an already-proposed title fix can actually merge and start moving weak_title)",
-    "verify": "Owner merges exactly one open title-rule branch, closes the rest as superseded; after two weekly cycles, article_rejects.counts.weak_title (currently 14 lifetime, 4 in the 14-day window) and the 'title has ALL-CAPS word' findings (currently x3) should fall in that window. llm_error (22/14 days) should be watched separately as an engine/availability issue, not a prompt one.",
+    "money_path": "none this cycle \u2014 a merged title edit is the reach lever, but stacking an unmeasurable variant on an unmerged pile cannot move any count",
+    "verify": "Owner merges exactly one existing title-prompt branch, closes the rest as superseded; after two weeks article_rejects.counts.weak_title and the 'ALL-CAPS word' finding count should fall from 4 and x3. The next cycle can then propose the single incremental edit against a clean measurement window.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 14
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 40,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (40 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge or close the 31 open title-prompt branches before approving any more",
-      "description": "Unblocks the weak_title fix. With 31 unmerged variants, no future edit can show its effect in article_rejects; one merged edit plus one clean measurement window is the only way this gate's loss count can move.",
-      "owner_action": "Review the evolve/* branches touching bot/earning/articles.py title rules, merge exactly one (the 2026-11-04 _revise_title edit or the 2026-11-03 before/after example), and close the remainder as superseded.",
+      "title": "Merge one title-prompt branch and close the rest (repeated from the standing suggestion, still binding)",
+      "description": "Unblocks the weak_title fix; without it every further title edit is indistinguishable from the 30 already parked.",
+      "owner_action": "Review the evolve/* branches touching the TITLE rules in bot/earning/articles.py, merge exactly one, and close the remainder as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the repository pull-request list and filter branches starting with evolve/.",
-        "Step 2: Merge one branch editing the title rules; close the rest as superseded so future cycles stop re-proposing them.",
-        "Step 3: After two weeks compare article_rejects.counts.weak_title and the recent 'title has ALL-CAPS word' findings against the current values (4 and x3)."
+        "Step 1: Filter pull requests with branch names starting evolve/ and find those editing bot/earning/articles.py.",
+        "Step 2: Merge one (e.g. the 2026-11-03 _revise_title before/after example); close the others as superseded.",
+        "Step 3: Leave a two-week window before approving the next title edit, then compare weak_title rejects against 4."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 98,
+  "last_cycle_seconds": 36,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1853,7 +1836,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-04T07:23:58.498477+00:00",
+    "checked_at": "2026-11-04T08:23:57.922696+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2480,7 +2463,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-04T07:25:35.609828+00:00",
+    "last_run": "2026-11-04T08:24:32.451287+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -2490,25 +2473,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-04T07:25:35.911128+00:00",
+    "last_run": "2026-11-04T08:24:32.752919+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4943931,
-        "at": "2026-11-03T22:01:45.568354+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-11-03T22:01:45.568354+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-11-03T22:01:45.568354+00:00",
-        "ok": true
-      },
       {
         "id": 4925166,
         "at": "2026-11-03T23:01:44.249189+00:00",
@@ -2521,11 +2489,6 @@
       },
       {
         "id": 4636715,
-        "at": "2026-11-03T23:01:44.249189+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
         "at": "2026-11-03T23:01:44.249189+00:00",
         "ok": true
       },
@@ -2710,8 +2673,28 @@
         "ok": true
       },
       {
+        "id": 4943931,
+        "at": "2026-11-04T08:24:32.752919+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-11-04T08:24:32.752919+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-04T08:24:32.752919+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-11-04T08:24:32.752919+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-04T07:25:35.911128+00:00",
+        "at": "2026-11-04T08:24:32.752919+00:00",
         "ok": true
       }
     ],
@@ -2740,7 +2723,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

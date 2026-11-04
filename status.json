@@ -6,14 +6,11 @@
     "llm_glm",
     "llm_atria",
     "llm_gemini",
-    "llm_openrouter",
-    "llm_groq",
     "usdt_wallet",
     "code_techs"
   ],
   "inactive_features": [
-    "llm_anthropic",
-    "llm_cerebras"
+    "llm_anthropic"
   ],
   "llm_provider": "glm",
   "earnings": {
@@ -170,33 +167,6 @@
       "present_count": 1,
       "required_count": 1
     },
-    "llm_openrouter": {
-      "active": true,
-      "present": [
-        "OPENROUTER_API_KEY"
-      ],
-      "missing": [],
-      "present_count": 1,
-      "required_count": 1
-    },
-    "llm_groq": {
-      "active": true,
-      "present": [
-        "GROQ_API_KEY"
-      ],
-      "missing": [],
-      "present_count": 1,
-      "required_count": 1
-    },
-    "llm_cerebras": {
-      "active": false,
-      "present": [],
-      "missing": [
-        "CEREBRAS_API_KEY"
-      ],
-      "present_count": 0,
-      "required_count": 1
-    },
     "usdt_wallet": {
       "active": true,
       "present": [
@@ -214,8 +184,6 @@
       "purpose": "code-change proposals, parked on an evolve/* branch for human review",
       "fallback_provider": "atria",
       "fallback_model": "Atria-Dawn",
-      "last_resort_provider": "openrouter",
-      "last_resort_model": "openrouter/free",
       "active": true,
       "primary_active": true,
       "serving": "glm",
@@ -227,8 +195,6 @@
       "purpose": "free-AI-service discovery, market research, and earning-suggestion briefs",
       "fallback_provider": "atria",
       "fallback_model": "Atria-Dawn",
-      "last_resort_provider": "openrouter",
-      "last_resort_model": "openrouter/free",
       "active": true,
       "primary_active": true,
       "serving": "glm",
@@ -240,8 +206,6 @@
       "purpose": "article drafting and formatting for publication",
       "fallback_provider": "atria",
       "fallback_model": "Atria-Dawn",
-      "last_resort_provider": "openrouter",
-      "last_resort_model": "openrouter/free",
       "active": true,
       "primary_active": true,
       "serving": "glm",
@@ -1535,8 +1499,6 @@
     "GEMINI_API_KEY",
     "GH_TOKEN",
     "GLM_API_KEY",
-    "GROQ_API_KEY",
-    "OPENROUTER_API_KEY",
     "USDT_WALLET_ADDRESS"
   ],
   "operation_mode": "research_and_article_publishing",

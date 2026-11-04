@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-04T05:23:52.757020+00:00",
-  "total_runs": 2262,
+  "last_run": "2026-11-04T06:23:56.631462+00:00",
+  "total_runs": 2263,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -35,19 +35,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the named PROMPT FOCUS (weak_title, 5 drafts) has already absorbed 31 unmerged proposal attempts on exactly these two prompts, and the dominant draft loss is llm_error (22 in the 14-day window), which no prompt edit can fix.",
+    "summary": "No change proposed: the prompt-focus area (weak_title / ALL-CAPS / colon-subtitle wording in articles.py) already carries 31 open, unmerged near-identical proposals, and the remaining reject volume is engine-side, so another prompt edit cannot clear the no-repeat bar.",
     "changes_applied": [],
-    "suggestions": [],
-    "direction": "Checklist step 4 (reach) via the PROMPT FOCUS; declining after evidence, per 'one small, evidenced change is worth more than three speculative ones'.",
-    "evidence": [
-      "article_rejects.counts total 64: llm_error=36, weak_title=14, empty_draft=9, fabricated=4",
-      "Drafts lost to the engine, last 14 days: llm_error=22, empty_draft=2; to prompts: weak_title=5, fabricated=2",
-      "PRIOR PROPOSALS list contains 31 open branches all editing articles.py title prompts (ALL-CAPS examples, colon-subtitle rules, acronym allowlist, one proposed 3x), none merged",
-      "Gate findings: 'title has ALL-CAPS word' x4, 'colon subtitle' x1 \u2014 4 of 5 already covered by the open 2026-11-03 acronym-allowlist proposal",
-      "receive path verified: receipt_check.covered/published_total = 44/44, known_without_footer = 0, wallet live but received_total_usd = 0.0"
+    "suggestions": [
+      {
+        "title": "Merge or close the 31 open title-prompt branches, then measure before proposing more",
+        "description": "The ALL-CAPS/colon title rules have been edited 31 ways across 5 days with none merged, so the 14-day weak_title count cannot move no matter how correct any single edit is; one merged edit plus one measurement window beats another proposal.",
+        "owner_action": "Review the open evolve/* branches for articles.py title rules, merge exactly one (the 2026-11-04 _revise_title edit or the 2026-11-03 before/after example), and let two weekly cycles accrue before approving further title-prompt edits.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open the repository's pull-request list and filter branches starting with evolve/.",
+          "Step 2: Merge one branch touching bot/earning/articles.py title rules; close the rest as superseded so future cycles stop re-proposing them.",
+          "Step 3: After two weeks, compare article_rejects.counts.weak_title and the recent 'title has ALL-CAPS word' findings against the current values (4 and x3)."
+        ]
+      }
     ],
-    "money_path": "none (no change this cycle; reach-only work was under consideration)",
-    "verify": "N/A \u2014 no change. If the owner merges the open 2026-11-03 allowlist proposal instead, article_rejects.counts.weak_title should stop growing in the next window.",
+    "direction": "Step 4 / PROMPT FOCUS \u2014 but saturated, so declining to add a 32nd variant is the honest move",
+    "evidence": [
+      "article_rejects.counts total 64: llm_error=36, weak_title=14, empty_draft=9 \u2014 the prompt-fixable slice is weak_title only",
+      "Drafts lost to a prompt (14d) = weak_title=4; drafts lost to the engine (14d) = llm_error=22, empty_draft=2",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x3; 'colon subtitle' x1",
+      "PRIOR PROPOSALS contains 31 open branches 2026-10-31..2026-11-04 that each reword the ALL-CAPS or colon rule in _SYSTEM or _revise_title, including a before/after example (2026-11-03) and an acronym-clarification edit (2026-11-01, 2026-11-02) \u2014 every micro-variant of the fix I would otherwise propose is already parked on a review branch",
+      "backfill.skipped shows 5 posts stopped on 429 \u2014 an intentional stop, next cycle is the retry; nothing to change"
+    ],
+    "money_path": "none (no change this cycle); reach-only was the target but no non-duplicate edit exists",
+    "verify": "Nothing to verify; if any of the 31 open branches is merged, watch article_rejects.counts.weak_title fall across the next 14-day window (currently 4), and article_daily.published stay at 1",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.1"
@@ -58,19 +70,19 @@
   },
   "suggestions": [
     {
-      "title": "Add the wallet address to the dev.to profile bio",
-      "description": "Carries the receive path on every profile visit permanently; the channel table already marks this as the one cheap owner-only exception, and it cannot be automated (Forem's users API is show-only).",
-      "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once.",
+      "title": "Merge or close the 31 open title-prompt branches, then measure before proposing more",
+      "description": "The ALL-CAPS/colon title rules have been edited 31 ways across 5 days with none merged, so the 14-day weak_title count cannot move no matter how correct any single edit is; one merged edit plus one measurement window beats another proposal.",
+      "owner_action": "Review the open evolve/* branches for articles.py title rules, merge exactly one (the 2026-11-04 _revise_title edit or the 2026-11-03 before/after example), and let two weekly cycles accrue before approving further title-prompt edits.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Sign in at dev.to and open https://dev.to/settings.",
-        "Step 2: Append to the Bio: 'If a post saved you time, USDT (TRC-20): [redacted]'.",
-        "Step 3: Save \u2014 no other setup; receipt_check already verifies the address renders correctly elsewhere."
+        "Step 1: Open the repository's pull-request list and filter branches starting with evolve/.",
+        "Step 2: Merge one branch touching bot/earning/articles.py title rules; close the rest as superseded so future cycles stop re-proposing them.",
+        "Step 3: After two weeks, compare article_rejects.counts.weak_title and the recent 'title has ALL-CAPS word' findings against the current values (4 and x3)."
       ]
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 34,
+  "last_cycle_seconds": 57,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1810,7 +1822,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-04T05:23:53.217453+00:00",
+    "checked_at": "2026-11-04T06:23:56.901255+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2437,7 +2449,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-04T05:24:25.920504+00:00",
+    "last_run": "2026-11-04T06:24:52.711243+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -2447,25 +2459,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-04T05:24:26.265036+00:00",
+    "last_run": "2026-11-04T06:24:52.997054+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4765372,
-        "at": "2026-11-03T20:11:19.270615+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-11-03T20:11:19.270615+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820684,
-        "at": "2026-11-03T20:11:19.270615+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-11-03T21:02:32.491024+00:00",
@@ -2473,11 +2470,6 @@
       },
       {
         "id": 4908316,
-        "at": "2026-11-03T21:02:32.491024+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-11-03T21:02:32.491024+00:00",
         "ok": true
       },
@@ -2667,8 +2659,28 @@
         "ok": true
       },
       {
+        "id": 4765372,
+        "at": "2026-11-04T06:24:52.997054+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-11-04T06:24:52.997054+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-11-04T06:24:52.997054+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-04T06:24:52.997054+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-04T05:24:26.265036+00:00",
+        "at": "2026-11-04T06:24:52.997054+00:00",
         "ok": true
       }
     ],
@@ -2677,7 +2689,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.2
+    "oldest_check_age_hours": 9.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

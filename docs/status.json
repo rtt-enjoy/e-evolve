@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-05T20:29:42.981973+00:00",
-  "total_runs": 2297,
+  "last_run": "2026-11-05T21:29:43.909046+00:00",
+  "total_runs": 2298,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -40,7 +40,16 @@
     "error_type": "json"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "llm_error",
+        "error": "LLM call failed",
+        "estimated_usd": 0.0
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -59,7 +68,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-pro is no longer available to new users. Please update your code to use models/gemini-3.1-pro-preview for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started)."
   ],
-  "last_cycle_seconds": 312,
+  "last_cycle_seconds": 1200,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2635,6 +2644,7 @@
       4489474
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/your-legacy-exec-call-is-an-ai-agents-favorite-toy-4abe",
       "https://dev.to/robust_true_try/stop-postman-from-sharing-your-api-traffic-with-its-ai-55jk",
       "https://dev.to/robust_true_try/the-timeout-math-that-breaks-your-retry-loop-4all",
       "https://dev.to/robust_true_try/your-mention-counter-thinks-hate-is-love-1kh3",
@@ -2689,7 +2699,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-05T20:29:43.756064+00:00",
+    "checked_at": "2026-11-05T21:29:44.711535+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3048,11 +3058,11 @@
   "last_evolution_branch": null,
   "evolution_pending_review": false,
   "article_stats": {
-    "count": 44,
-    "total_views": 5753,
-    "avg_views": 130.8,
+    "count": 45,
+    "total_views": 5812,
+    "avg_views": 129.2,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 3558,
+    "best_views": 3578,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -3068,8 +3078,8 @@
       {
         "archetype": "problem-workaround",
         "count": 10,
-        "avg_engagement": 440.3,
-        "avg_views": 422.8,
+        "avg_engagement": 444.3,
+        "avg_views": 426.8,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -3088,9 +3098,9 @@
       },
       {
         "archetype": "other",
-        "count": 14,
-        "avg_engagement": 61.4,
-        "avg_views": 38.2,
+        "count": 15,
+        "avg_engagement": 66.9,
+        "avg_views": 36.9,
         "best_title": "Your AI Agent Can't See What It Clicks"
       },
       {
@@ -3117,20 +3127,20 @@
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "security-privacy",
-    "sample_size": 44
+    "sample_size": 45
   },
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-11-01T22:17:43.602917+00:00",
+    "last_at": "2026-11-05T21:49:42.570210+00:00",
     "counts": {
       "empty_draft": 9,
       "fabricated": 4,
       "weak_title": 14,
       "revision_fabricated": 1,
-      "llm_error": 36
+      "llm_error": 37
     },
-    "total": 64,
+    "total": 65,
     "recent": [
       {
         "code": "empty_draft",
@@ -3306,6 +3316,11 @@
         "code": "llm_error",
         "at": "2026-11-01T22:17:43.602917+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-11-05T21:49:42.570210+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-pro is no longer available to new users. Please upd"
       }
     ]
   },
@@ -3338,7 +3353,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-05T20:34:54.280192+00:00",
+    "last_run": "2026-11-05T21:49:42.919476+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3348,30 +3363,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-05T20:34:54.595965+00:00",
+    "last_run": "2026-11-05T21:49:43.589628+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4765372,
-        "at": "2026-11-05T10:50:38.017683+00:00",
-        "ok": true
-      },
-      {
-        "id": 4908316,
-        "at": "2026-11-05T10:50:38.017683+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-11-05T10:50:38.017683+00:00",
-        "ok": true
-      },
-      {
-        "id": 4971614,
-        "at": "2026-11-05T10:50:38.017683+00:00",
-        "ok": true
-      },
       {
         "id": 4943931,
         "at": "2026-11-05T11:50:36.920207+00:00",
@@ -3573,8 +3568,28 @@
         "ok": true
       },
       {
+        "id": 4765372,
+        "at": "2026-11-05T21:49:43.589628+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-11-05T21:49:43.589628+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-11-05T21:49:43.589628+00:00",
+        "ok": true
+      },
+      {
+        "id": 4971614,
+        "at": "2026-11-05T21:49:43.589628+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-05T20:34:54.595965+00:00",
+        "at": "2026-11-05T21:49:43.589628+00:00",
         "ok": true
       }
     ],
@@ -3583,7 +3598,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.7
+    "oldest_check_age_hours": 10.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

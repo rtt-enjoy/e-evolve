@@ -608,7 +608,10 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	# ranked list. A count that exceeds what the page can show is a claim the
 	# page cannot back up -- the same "field reports on more than it covers"
 	# problem `receipt_check` exists to catch. `ranked_total` carries the rest.
-	shown = opportunities[:status_max_items]
+	# The snapshot is selected at its own size, with the same quotas. A plain
+	# slice of the score-ordered list undid the freshness quota: fresh rows score
+	# lowest, so they were the first ones cut when 90 became 64.
+	shown = _apply_channel_share(opportunities, cfg, status_max_items)
 	channels = sum(1 for op in shown if op.kind == _CHANNEL)
 	priced = sum(1 for op in shown if op.value_basis != "none")
 	# Rows that need the owner to open an account or pay a fee before they can
@@ -1059,6 +1062,7 @@ def _fetch_medium_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 		for item in root.iter("item"):
 			title = xml_text(item, "title")
 			summary = strip_html(xml_text(item, "{*}encoded") or xml_text(item, "description"))
+			summary = summary.replace("Continue reading on Medium »", "").strip()
 			posted = xml_text(item, "pubDate")
 			if not title or not _recent_and_about_earning(posted, title, summary, max_days):
 				continue

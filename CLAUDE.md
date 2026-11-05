@@ -1234,8 +1234,12 @@ have fetched more and shown the same page. What changed, in order of importance:
   no key, and never raises (`_http_get` returns `None` on any failure or 403/429).
   `refresh_hours` is 3. `status["code_tech_earning"].source_stats` lists the new
   families (`devto`, `medium`).
-- Measured on live feeds before and after: rows posted within 72h went from 8 of
-  32 to 37 of 64, within 24h from 3 to 25, new on the page from 0 to 43.
+- Measured on live feeds through `run()`'s own path (`_rank` at `max_items`, then
+  `_apply_channel_share` at `status_max_items`): rows posted within 72h went from
+  8 of 32 to 34 of 64, within 24h from 3 to 24, new on the page from 0 to 45. An
+  earlier measurement called `_rank` at 64 directly and over-reported (25 within
+  24h): `run()` used to slice the score-ordered 90 down to 64, which cut the fresh
+  rows first, and now selects the snapshot with the same quotas instead.
   `TestLeadsChangeFromDayToDay` pins the quota, the cap, the endpoints and the
   star-farm guard.
 - The `awesome browser extensions` GitHub query was removed from

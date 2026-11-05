@@ -6358,3 +6358,38 @@ class TestLeadsChangeFromDayToDay(unittest.TestCase):
 		urls = [op["url"] for op in status["code_tech_earning"]["opportunities"]]
 		self.assertIn("https://dev.to/o/theirs", urls)
 		self.assertNotIn(own + "?utm=x", urls)
+
+	def test_the_snapshot_keeps_the_fresh_quota_when_it_is_smaller_than_the_report(self):
+		"""run() ranks at `max_items` and then keeps `status_max_items`. A plain
+		slice of that list undid the quota, because fresh rows score lowest."""
+		stale = [{
+			"title": f"Stale tool {i}", "url": f"https://x/stale/{i}", "source": "github", "kind": "asset",
+			"body": "free tooling " * 5, "labels": ["reuse", "one-time-setup"], "posted_at": _hours_ago_iso(900 + i),
+		} for i in range(30)]
+		fresh = [{
+			"title": f"Fresh post {i}", "url": f"https://x/fresh/{i}", "source": "medium", "kind": "asset",
+			"body": "", "labels": [], "posted_at": _hours_ago_iso(2 + i),
+		} for i in range(8)]
+		status: dict = {}
+		original = code_techs_module._fetch_online_leads
+		original_report = code_techs_module._write_report
+		original_brief = code_techs_module._online_ai_brief
+		original_config = code_techs_module._config
+		try:
+			code_techs_module._fetch_online_leads = lambda cfg: stale + fresh
+			code_techs_module._write_report = lambda state, leads=None: None
+			code_techs_module._online_ai_brief = lambda llm, leads, cfg: {}
+			code_techs_module._config = lambda: {
+				"enabled": True, "max_items": 40, "status_max_items": 12, "min_score": 0,
+				"min_channel_share": 0, "min_fresh_share": 0.5, "fresh_hours": 72,
+			}
+			code_techs_module.run(None, status)
+		finally:
+			code_techs_module._fetch_online_leads = original
+			code_techs_module._write_report = original_report
+			code_techs_module._online_ai_brief = original_brief
+			code_techs_module._config = original_config
+		shown = status["code_tech_earning"]["opportunities"]
+		self.assertEqual(len(shown), 12)
+		self.assertGreaterEqual(sum(1 for op in shown if op["source"] == "medium"), 6)
+

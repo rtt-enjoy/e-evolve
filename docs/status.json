@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-05T00:41:11.883749+00:00",
-  "total_runs": 2276,
+  "last_run": "2026-11-05T01:41:11.783200+00:00",
+  "total_runs": 2277,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -32,30 +32,30 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt focus (weak_title, 3 drafts) has already been targeted by roughly thirty distinct, still-unmerged proposals covering every remaining edit I would make, and the dominant reject is llm_error (19 of 27 in the window), which is an engine failure no prompt edit can fix \u2014 another title-prompt edit would be the fourth attempt at the same lines.",
+    "summary": "No change proposed. The PROMPT FOCUS (weak_title, 3 drafts in 14 days) names the article title prompts, but roughly thirty near-identical edits to exactly those prompts (_SYSTEM TITLE rules and _revise_title) sit as unmerged review branches in PRIOR PROPOSALS \u2014 ALL-CAPS examples, colon-subtitle rules, before/after examples, each tried multiple times. Repeating one is a known dead end, and the evidence says the prompt is no longer the binding loss: drafts lost to prompts in the last 14 days total 5 (weak_title=3, fabricated=2) against 21 lost to the engine (llm_error=19, empty_draft=2). article_rejects lifetime counts confirm the shape (llm_error=36 of 64 total). The fix for the dominant loss is already documented in the open suggestion: flip llm_workflows.post.primary_active to atria or read glm's exception text in the Actions logs \u2014 that is an owner action, not an evolution edit, since bot/llm.py is protected. Nothing a prompt edit can reach clears the bar this cycle.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Flip the post role's primary to atria, or diagnose glm's llm_error failures",
-        "description": "19 of the last 14 days' draft losses are 'LLM call failed' from glm \u2014 6x weak_title and growing (lifetime llm_error=36 of 64). Each is a lost article and a lost tip ask. Recovering them moves reach more than any further title-prompt edit could, and the Atria-Dawn fallback is already key-set and live.",
-        "owner_action": "Either grep the Actions logs for '[articles] rejected (llm_error)' to read glm's exception text, or set config llm_workflows.post.primary_active to false so Atria-Dawn serves the post role.",
+        "title": "Stop serving glm for the post role (or read its exception text)",
+        "description": "19 of the last 14 days' lost drafts are 'LLM call failed' from glm \u2014 roughly 4x all prompt-gate losses combined. Each is a lost article and a lost tip ask on a verified receive path. The atria fallback is already key-set and live, so this recovers reach with zero new infrastructure.",
+        "owner_action": "Set llm_workflows.post.primary_active to false in config/strategy.json (or grep Actions logs for '[articles] rejected (llm_error)' to read glm's exception before deciding).",
         "secret_needed": null,
         "how_to": [
           "Step 1: In GitHub Actions logs, filter for '[articles] rejected (llm_error)' and read the exception text after the message.",
-          "Step 2: If the failures are provider-side, set llm_workflows.post.primary_active to false in config/strategy.json \u2014 no new secret; bot/llm.py is protected and cannot be edited by the evolution engine."
+          "Step 2: If failures are provider-side, set llm_workflows.post.primary_active to false \u2014 bot/llm.py already routes to the configured atria fallback with no new secret."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach via prompt upgrade), read against the dead-end rule that repeated proposals are never merged",
+    "direction": "Checklist step 4 (reach into a live receive path) and Principle 3j; the named lever is prompt quality, and the honest reading of the reject ledger is that the engine, not the prompts, is what costs posts",
     "evidence": [
-      "article_rejects.counts: llm_error=36 vs weak_title=14 lifetime; last 14 days: llm_error=19, weak_title=3",
-      "Prompt ledger: drafts lost to weak_title=3, to the engine=19 \u2014 the title prompt is not the bottleneck",
-      "PRIOR PROPOSALS lists ~30 open branches on exactly the weak_title prompt: ALL-CAPS examples, colon-subtitle mirroring, 'no ALL-CAPS' replacement in _revise_title, 'Title Case The Important Words' rewording (proposed 3x)",
-      "Gate findings behind weak_title ('ALL-CAPS' x2, colon-subtitle x1) are each already covered by at least one open proposal",
-      "receipt_check coverage complete (45/45), payout.live=true, wallet $0.00 \u2014 receive path clean, remaining work is reach, but reach is lost to llm_error, not to title wording"
+      "article_rejects.counts: llm_error=36 of total=64; weak_title=14 lifetime",
+      "Last-14-day split: drafts lost to prompts = 5 (weak_title=3, fabricated=2); drafts lost to engine = 21 (llm_error=19, empty_draft=2)",
+      "article_rejects.last = 'llm_error': 'LLM call failed'",
+      "llm_engine.serving = glm, calls={'glm': 1}; llm_workflows.post.primary_active = true with fallback atria key_set=true, live=true",
+      "PRIOR PROPOSALS contain ~30 unmerged branches editing articles.py title prompts (ALL-CAPS and colon-subtitle wording), including two dated 2026-11-04"
     ],
-    "money_path": "none this cycle \u2014 each lost llm_error draft is one article and one tip ask that never ships, but recovering them requires the owner's provider decision, not a prompt edit",
-    "verify": "Next cycle: article_rejects 14-day llm_error count should fall (owner action), and if any weak_title proposal merges, weak_title in the last-14-days window should read 0-1",
+    "money_path": "none this cycle \u2014 no change ships; the highest-value recoverable posts are blocked by glm's llm_error, which only an owner config flip (post.primary_active -> atria) can recover, and that suggestion is already open",
+    "verify": "Next cycle: article_rejects last-14-day llm_error should fall toward 0 after the owner flips llm_workflows.post.primary_active; weak_title should stay at or below 3 \u2014 if it climbs instead, a fresh (non-duplicate) prompt edit becomes justified",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -66,19 +66,19 @@
   },
   "suggestions": [
     {
-      "title": "Flip the post role's primary to atria, or diagnose glm's llm_error failures",
-      "description": "19 of the last 14 days' draft losses are 'LLM call failed' from glm \u2014 6x weak_title and growing (lifetime llm_error=36 of 64). Each is a lost article and a lost tip ask. Recovering them moves reach more than any further title-prompt edit could, and the Atria-Dawn fallback is already key-set and live.",
-      "owner_action": "Either grep the Actions logs for '[articles] rejected (llm_error)' to read glm's exception text, or set config llm_workflows.post.primary_active to false so Atria-Dawn serves the post role.",
+      "title": "Stop serving glm for the post role (or read its exception text)",
+      "description": "19 of the last 14 days' lost drafts are 'LLM call failed' from glm \u2014 roughly 4x all prompt-gate losses combined. Each is a lost article and a lost tip ask on a verified receive path. The atria fallback is already key-set and live, so this recovers reach with zero new infrastructure.",
+      "owner_action": "Set llm_workflows.post.primary_active to false in config/strategy.json (or grep Actions logs for '[articles] rejected (llm_error)' to read glm's exception before deciding).",
       "secret_needed": null,
       "how_to": [
         "Step 1: In GitHub Actions logs, filter for '[articles] rejected (llm_error)' and read the exception text after the message.",
-        "Step 2: If the failures are provider-side, set llm_workflows.post.primary_active to false in config/strategy.json \u2014 no new secret; bot/llm.py is protected and cannot be edited by the evolution engine."
+        "Step 2: If failures are provider-side, set llm_workflows.post.primary_active to false \u2014 bot/llm.py already routes to the configured atria fallback with no new secret."
       ],
-      "discovered_at": "2026-11-04T23:20:53.660632+00:00"
+      "discovered_at": "2026-11-05T01:41:34.272338+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 23,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -1767,7 +1767,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-05T00:41:12.345444+00:00",
+    "checked_at": "2026-11-05T01:41:12.431275+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2394,40 +2394,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-05T00:41:34.084421+00:00",
+    "last_run": "2026-11-05T01:41:34.708856+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 3,
-    "with_footer": 3,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 2,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-05T00:41:34.459604+00:00",
+    "last_run": "2026-11-05T01:41:35.114487+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4943931,
-        "at": "2026-11-04T08:24:32.752919+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-11-04T08:24:32.752919+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-11-04T08:24:32.752919+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-11-04T08:24:32.752919+00:00",
-        "ok": true
-      },
       {
         "id": 4925166,
         "at": "2026-11-04T09:16:51.848558+00:00",
@@ -2629,8 +2609,28 @@
         "ok": true
       },
       {
+        "id": 4943931,
+        "at": "2026-11-05T01:41:35.114487+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-11-05T01:41:35.114487+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-05T01:41:35.114487+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-11-05T01:41:35.114487+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-05T00:41:34.459604+00:00",
+        "at": "2026-11-05T01:41:35.114487+00:00",
         "ok": true
       }
     ],
@@ -2639,7 +2639,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 16.3
+    "oldest_check_age_hours": 16.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

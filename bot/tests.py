@@ -2287,10 +2287,13 @@ class TestLeadStatusPayloadStaysBounded(unittest.TestCase):
     each carried a 1.7 KB prompt and a 470 B outreach draft.
     """
 
-	def test_the_snapshot_stays_under_forty_five_kilobytes(self):
+	def test_the_snapshot_stays_under_eighty_five_kilobytes(self):
 		# The cap went from 16 rows / 30 KB to 32 rows / 45 KB on 2026-11-03,
-		# when the owner asked the Leads page to show more. The extra rows
-		# carry no prompt, so they cost ~1 KB each here and ~0.8 KB live.
+		# when the owner asked the Leads page to show more, and to 64 rows /
+		# 85 KB on 2026-11-05, when they asked for more fresh material each day.
+		# The fixtures are the heavy case (every row carries a setup and a
+		# verification note, 80 KB for 64 rows); the live slice measured 64 KB.
+		# The extra rows carry no prompt.
 		# Fixtures mirror what the live queue actually holds now: channel rows
 		# carrying a manual_setup and verified_note, plus community assets.
 		# The old fixtures were job postings, so after the redirect they no
@@ -2306,13 +2309,13 @@ class TestLeadStatusPayloadStaysBounded(unittest.TestCase):
 			"cost_usd": 0.0,
 			"manual_setup": "Owner signs up, adds the receive address, and uploads the product once.",
 			"verified_note": "Fees, networks and payout terms confirmed on the platform's own pricing page.",
-		} for i in range(40)]
+		} for i in range(80)]
 
-		ranked = _rank(leads, {"prompt_top_n": 6}, max_items=32, min_score=0)
+		ranked = _rank(leads, {"prompt_top_n": 6}, max_items=64, min_score=0)
 		payload = len(json.dumps([op.__dict__ for op in ranked]))
 
-		self.assertEqual(len(ranked), 32)
-		self.assertLess(payload, 45_000, f"{payload} bytes")
+		self.assertEqual(len(ranked), 64)
+		self.assertLess(payload, 85_000, f"{payload} bytes")
 		# Only the leads worth acting on pay for a prompt.
 		self.assertEqual(sum(1 for op in ranked if op.codex_prompt), 6)
 
@@ -6184,3 +6187,174 @@ class TestEvolutionPrompt(unittest.TestCase):
 		self.assertTrue(subject.endswith("evolve v1.2.3: fix titles"))
 		self.assertIn("direction: step 4", body)
 		self.assertIn("  - a = 1", body)
+
+
+class TestLeadsChangeFromDayToDay(unittest.TestCase):
+	"""The Leads page showed almost the same rows every day.
+
+    A fetched asset scores nearly the same at two hours and at two weeks, so by
+    score alone the stable rows won every refresh and fresh rows were found
+    (`new_ranked_count: 8`) and then cut (`new_count: 0`). These pin the pieces
+    that fixed it: a freshness quota, a per-source cap, and fetchers that read
+    what was posted lately.
+    """
+
+	def _op(self, source, hours, score, name):
+		return code_techs_module.Opportunity(
+			title=name, url=f"https://x/{source}/{name}",
+			source=source, buyer="", kind="asset", score=score, score_parts={}, value_usd=None,
+			value_basis="none", value_note="", posted_at=None, discovered_at="", age_hours=hours,
+			reason="", next_step="", codex_prompt="",
+		)
+
+	def test_fresh_rows_are_kept_even_when_stable_rows_score_higher(self):
+		stable = [self._op("github", 900.0, 60, f"s{i}") for i in range(10)]
+		fresh = [self._op("devto", 5.0, 40, f"f{i}") for i in range(4)]
+		kept = code_techs_module._apply_channel_share(
+			stable + fresh, {"min_channel_share": 0, "min_fresh_share": 0.5, "fresh_hours": 72}, 8
+		)
+		self.assertEqual(len(kept), 8)
+		self.assertEqual(sum(1 for op in kept if op.source == "devto"), 4)
+
+	def test_no_quota_means_the_old_behaviour(self):
+		stable = [self._op("github", 900.0, 60, f"s{i}") for i in range(6)]
+		fresh = [self._op("devto", 5.0, 40, f"f{i}") for i in range(4)]
+		kept = code_techs_module._apply_channel_share(stable + fresh, {"min_channel_share": 0}, 6)
+		self.assertTrue(all(op.source == "github" for op in kept))
+
+	def test_one_source_cannot_fill_the_page(self):
+		rows = [self._op("medium", float(i), 50, f"m{i}") for i in range(10)]
+		rows += [self._op("hacker-news", float(i), 45, f"h{i}") for i in range(3)]
+		kept = code_techs_module._apply_channel_share(
+			rows, {"min_channel_share": 0, "min_fresh_share": 1.0, "per_source_cap": 4}, 20
+		)
+		self.assertEqual(sum(1 for op in kept if op.source == "medium"), 4)
+		self.assertEqual(sum(1 for op in kept if op.source == "hacker-news"), 3)
+
+	def test_curated_rows_ignore_the_source_cap(self):
+		rows = [self._op("local-playbook", None, 90, f"p{i}") for i in range(5)]
+		kept = code_techs_module._apply_channel_share(
+			rows, {"min_channel_share": 0, "per_source_cap": 2}, 10
+		)
+		self.assertEqual(len(kept), 5)
+
+	def test_a_new_repo_is_stamped_with_its_birth_not_its_last_push(self):
+		queries = []
+
+		def fake_get(url, **kwargs):
+			queries.append(kwargs.get("params") or {})
+			return _StubResp({"items": [{
+				"full_name": "a/new-tool", "html_url": "https://github.com/a/new-tool",
+				"description": "A chrome extension", "stargazers_count": 12, "forks_count": 2,
+				"topics": ["chrome-extension"], "created_at": "2026-11-01T00:00:00Z",
+				"pushed_at": "2026-11-04T00:00:00Z",
+			}]})
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = fake_get
+			leads = _fetch_github_leads({"github_new_searches": ["topic:chrome-extension"], "github_new_days": 14})
+		finally:
+			code_techs_module.requests.get = original
+
+		self.assertEqual(leads[0]["posted_at"], "2026-11-01T00:00:00Z")
+		self.assertIn("new-repo", leads[0]["labels"])
+		self.assertIn("created:>", queries[0]["q"])
+		self.assertEqual(queries[0]["sort"], "stars")
+
+	def test_star_farmed_new_repos_are_dropped(self):
+		def fake_get(url, **kwargs):
+			return _StubResp({"items": [{
+				"full_name": "x/farm", "html_url": "https://github.com/x/farm", "description": "Full tool",
+				"stargazers_count": 300, "forks_count": 0, "topics": [],
+				"created_at": "2026-11-01T00:00:00Z", "pushed_at": "2026-11-04T00:00:00Z",
+			}]})
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = fake_get
+			leads = _fetch_github_leads({"github_new_searches": ["topic:developer-tools"]})
+		finally:
+			code_techs_module.requests.get = original
+		self.assertEqual(leads, [])
+
+	def test_the_cracked_software_seen_on_a_star_farm_listing_is_prohibited(self):
+		for title in (
+			"Instagram Liker Bot 2023", "Metatrader 5 Bot Full working installer",
+			"Discord Server Raider 2026", "Autodesk Inventor 2026 full working installer",
+		):
+			self.assertTrue(code_techs_module._prohibited({"title": title}), title)
+		self.assertFalse(code_techs_module._prohibited({"title": "Show HN: a CLI that checks your docs"}))
+
+	def test_devto_keeps_recent_posts_about_earning_only(self):
+		posts = [
+			{"title": "I shipped a Chrome extension and made my first sale", "description": "",
+			 "url": "https://dev.to/a/first-sale", "published_at": _hours_ago_iso(20)},
+			{"title": "Auth0 FGA questions", "description": "tutorial", "url": "https://dev.to/a/auth",
+			 "published_at": _hours_ago_iso(20)},
+			{"title": "My side project revenue, a year on", "description": "", "url": "https://dev.to/a/old",
+			 "published_at": _hours_ago_iso(24 * 40)},
+		]
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = lambda url, **kw: _StubResp(posts)
+			leads = code_techs_module._fetch_devto_leads({"devto_tags": ["sideproject"], "devto_max_age_days": 14})
+		finally:
+			code_techs_module.requests.get = original
+		self.assertEqual([lead["url"] for lead in leads], ["https://dev.to/a/first-sale"])
+		self.assertEqual(leads[0]["kind"], "asset")
+
+	def test_a_throttled_source_costs_only_that_source(self):
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = lambda url, **kw: _StubResp(status_code=429)
+			self.assertEqual(code_techs_module._fetch_devto_leads({"devto_tags": ["x"]}), [])
+			self.assertEqual(code_techs_module._fetch_medium_leads({"medium_tags": ["x"]}), [])
+			self.assertEqual(code_techs_module._fetch_hn_show_leads({"hn_show_searches": ["x"]}), [])
+		finally:
+			code_techs_module.requests.get = original
+
+	def test_show_hn_launches_use_the_by_date_endpoint(self):
+		urls = []
+
+		def fake_get(url, **kwargs):
+			urls.append(url)
+			return _StubResp({"hits": [
+				{"title": "Show HN: A Chrome extension for tabs", "objectID": "1", "created_at": _hours_ago_iso(3)},
+				{"title": "Show HN: My dating app", "objectID": "2", "created_at": _hours_ago_iso(3)},
+			]})
+
+		original = code_techs_module.requests.get
+		try:
+			code_techs_module.requests.get = fake_get
+			leads = code_techs_module._fetch_hn_show_leads({"hn_show_searches": ["chrome extension"]})
+		finally:
+			code_techs_module.requests.get = original
+		self.assertTrue(urls[0].endswith("/search_by_date"))
+		self.assertEqual([lead["title"] for lead in leads], ["Show HN: A Chrome extension for tabs"])
+
+	def test_the_bots_own_posts_are_not_leads(self):
+		own = "https://dev.to/me/my-post"
+		leads = [
+			{"title": "My post about revenue", "url": own + "?utm=x", "source": "devto", "kind": "asset",
+			 "body": "", "labels": [], "posted_at": _hours_ago_iso(2)},
+			{"title": "Someone else's launch", "url": "https://dev.to/o/theirs", "source": "devto", "kind": "asset",
+			 "body": "", "labels": [], "posted_at": _hours_ago_iso(2)},
+		]
+		status = {"article_history": {"own_urls": [own]}}
+		original = code_techs_module._fetch_online_leads
+		# run() writes the markdown report and calls the LLM. Stub both.
+		original_report = code_techs_module._write_report
+		original_brief = code_techs_module._online_ai_brief
+		try:
+			code_techs_module._fetch_online_leads = lambda cfg: leads
+			code_techs_module._write_report = lambda state, leads=None: None
+			code_techs_module._online_ai_brief = lambda llm, leads, cfg: {}
+			code_techs_module.run(None, status)
+		finally:
+			code_techs_module._fetch_online_leads = original
+			code_techs_module._write_report = original_report
+			code_techs_module._online_ai_brief = original_brief
+		urls = [op["url"] for op in status["code_tech_earning"]["opportunities"]]
+		self.assertIn("https://dev.to/o/theirs", urls)
+		self.assertNotIn(own + "?utm=x", urls)

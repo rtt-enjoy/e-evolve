@@ -122,6 +122,32 @@ export function sourceLabel(source = ''): string {
 	return rest.length ? rest.join(':') : head || 'unknown';
 }
 
+const SOURCE_NAMES: Record<string, string> = {
+	'hacker-news': 'Hacker News',
+	reddit: 'Reddit',
+	github: 'GitHub',
+	devto: 'dev.to',
+	medium: 'Medium',
+	'channel-table': 'Channel table',
+	'local-playbook': 'Playbook',
+};
+
+/** The feed a source belongs to: `reddit:r/SaaS` and `reddit:r/SideProject` are both `reddit`. */
+export function sourceFamily(source = ''): string {
+	return source.split(':')[0] || 'unknown';
+}
+
+/**
+ * A source's real name. A feed family is mapped (`github` -> GitHub); a
+ * qualified source keeps its qualifier (`reddit:r/SaaS` -> r/SaaS), because
+ * which community said it is part of the evidence.
+ */
+export function sourceName(source = ''): string {
+	const [head, ...rest] = source.split(':');
+	if (rest.length) return rest.join(':');
+	return SOURCE_NAMES[head] || head || 'unknown';
+}
+
 /** Strip emoji + issue/PR noise so lead titles read cleanly in a list. */
 export function cleanTitle(value = ''): string {
 	return value

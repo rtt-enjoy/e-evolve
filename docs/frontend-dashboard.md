@@ -260,7 +260,7 @@ and were compacted. **Compact is the default; generous spacing is the exception.
 
 | Element | Size |
 |---------|------|
-| List / secret / role row | ~36-44px, `py-2` to `py-2.5` (Leads rows have two lines, ~75px, never below `py-3.5`) |
+| List / secret / role row | ~36-44px, `py-2` to `py-2.5` (Leads rows have two lines, ~75px, never below `py-3.5`; the list is grouped and paged, see 2026-11-05) |
 | Module chip | ~32px |
 | Fold summary row | ~40px |
 | Card | `card-compact`: `gap-4`, `p-4 sm:p-5` (default `.card` is `gap-5`, `p-5 sm:p-7`) |
@@ -374,6 +374,35 @@ the same commit.
   deletes those secrets in GitHub.
 
 ## 2026-11-05 changes
+
+- **Leads: restructured, not re-padded (owner: "cleaner, compact, and nicer").**
+  The earlier 2026-11-05 padding pass left a 4-tile row, two filter rows with one
+  chip per subreddit, a flat list of 32 rows with five pills each, and a lower
+  block of 12 full-height refused-route cards. What changed:
+  - **One stat strip** (`.leads-stats`, ~52px) replaces the four tiles: routes,
+    posted in 24h, new this refresh, free to start, needs setup.
+  - **Filters are chips** (`.leads-chip`): one search + sort row and one row of
+    kind / quick / source chips. Sources group by **feed** (`sourceFamily`:
+    `reddit:r/SaaS` and `reddit:r/SideProject` are both Reddit), because every new
+    feed would otherwise widen the row. `sourceName` is the one place a feed gets
+    its real name.
+  - **Two groups, "Gets paid" and "Build & market"** (`.lead-group`), each paged
+    at 20 with a `Show N more` button. The curated channels no longer sit
+    between the fresh rows, so the daily change is visible at a glance. The
+    kind pill is gone (the header says it) and so is the added-ago pill (it stays
+    in the detail facts). A row keeps `new`, `free` or a fee, and plain
+    `Feed · age` text.
+  - **Everything below the list is closed**: Where leads come from, Refused
+    routes (one `Fold` each) and the four playbook blocks are `Disclosure`s under
+    one `Reference` heading. The refused list was 12 cards taller than its
+    neighbour, which broke the balanced-columns rule.
+  - **Detail page**: `tile-row compact`, `split even`, `card-compact`; the Codex
+    prompt is a closed `Fold` with `copy prompt`; Lead facts drop the rows the
+    tiles already show (cost, score, kind, new).
+  - Fetched rows show a 140-character excerpt of the post or repository as the
+    reason (`_reason`), not one sentence shared by every row.
+  Page-scoped classes only: `.leads-*`, `.lead-group*`, `.lead-more`,
+  `.lead-row-src`. `.segmented`, `.card` and `.suggestion` are untouched.
 
 - **Leads: compact layout.** The owner found each card needlessly large, and
   asked for compact but not dense. A lead row is now two lines (title, one-line

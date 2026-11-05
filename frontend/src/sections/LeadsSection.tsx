@@ -1,9 +1,9 @@
 import { ArrowLeft, ExternalLink, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { CopyButton } from '../components/CopyButton';
-import { AddedPill, Bullets, Card, Disclosure, Empty, KeyValue, Pill, Progress, SectionHead, Subhead, Tile } from '../components/ui';
-import { buildOpportunityStats, leadSources, sortLeads, type LeadSort } from '../utils/dashboard';
-import { cleanTitle, formatDate, leadAge, scoreTone, sourceLabel } from '../utils/format';
+import { Bullets, Card, Disclosure, Empty, Fold, KeyValue, Pill, Progress, SectionHead, Subhead, Tile } from '../components/ui';
+import { buildOpportunityStats, sortLeads, type LeadSort } from '../utils/dashboard';
+import { cleanTitle, formatDate, leadAge, scoreTone, sourceFamily, sourceName } from '../utils/format';
 import { useRoute } from '../utils/route';
 import type { CodeTechEarning, CodeTechOpportunity, LeadKind, Status } from '../types/status';
 
@@ -100,6 +100,57 @@ export default function LeadsSection({ status }: { status: Status }) {
 
 /* --------------------------------------------------------------------- list */
 
+/** Rows a group shows before "show more", so 60+ leads do not become a 5,000px page. */
+const GROUP_PAGE = 20;
+
+const KIND_GROUPS: Array<{ kind: 'channel' | 'asset'; title: string; hint: string }> = [
+	{ kind: 'channel', title: 'Gets paid', hint: 'where a product is listed and money arrives' },
+	{ kind: 'asset', title: 'Build & market', hint: 'tooling, launches and what makers report earning' },
+];
+
+function LeadRow({ lead, index }: { lead: CodeTechOpportunity; index: number }) {
+	const age = leadAge(lead.age_hours);
+	return (
+		// A div, not an <a>: the row holds two links (detail and source), and
+		// links cannot nest.
+		<div className="lead-row">
+			<a className="lead-row-link" href={`#/leads/${index}`}>
+				{/* Score leads the row: it ranks by how passive the income is. */}
+				<span className={`score-chip ${scoreTone(lead.score)}`} title="passive score, out of 100">{lead.score || 0}</span>
+				<span className="lead-row-body">
+					<strong title={cleanTitle(lead.title)}>{cleanTitle(lead.title) || 'Untitled lead'}</strong>
+					<p title={lead.reason}>{lead.reason || 'No reason recorded.'}</p>
+				</span>
+				<span className="lead-row-meta">
+					{lead.is_new ? <Pill tone="info">new</Pill> : null}
+					{/* "Free" only when the platform published $0. An unknown
+					    cost renders nothing rather than implying free. */}
+					{lead.cost_usd === 0 ? <Pill tone="good">free</Pill> : null}
+					{typeof lead.cost_usd === 'number' && lead.cost_usd > 0 ? <Pill tone="warn">{formatCost(lead.cost_usd)}</Pill> : null}
+					{/* Only fetched rows have a posting time; curated rows show the feed alone. */}
+					<span className="lead-row-src" title={lead.posted_at ? `Posted ${formatDate(lead.posted_at)}` : undefined}>
+						{sourceName(lead.source)}
+						{lead.posted_at ? ` · ${age.label}` : ''}
+					</span>
+				</span>
+			</a>
+			{/* Playbook rows have no URL, so no button rather than a dead one. */}
+			{lead.url ? (
+				<a
+					className="icon-btn lead-row-source"
+					href={lead.url}
+					target="_blank"
+					rel="noreferrer"
+					title="Open source"
+					aria-label={`Open source: ${cleanTitle(lead.title) || 'lead'}`}
+				>
+					<ExternalLink size={15} />
+				</a>
+			) : null}
+		</div>
+	);
+}
+
 function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; opportunities: CodeTechOpportunity[] }) {
 	const [query, setQuery] = useState('');
 	const [source, setSource] = useState('all');
@@ -108,10 +159,21 @@ function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; oppo
 	// Newest first by default: the complaint that started this rebuild was
 	// that the page showed stale leads.
 	const [sort, setSort] = useState<LeadSort>('newest');
+	const [limit, setLimit] = useState<Record<string, number>>({});
 
 	const stats = useMemo(() => buildOpportunityStats(opportunities), [opportunities]);
-	const sources = useMemo(() => leadSources(opportunities), [opportunities]);
+	// One chip per feed, not per subreddit: a chip for every `reddit:r/...` and
+	// every new feed would make the filter row taller than the list it filters.
+	const families = useMemo(() => {
+		const counts = new Map<string, number>();
+		for (const lead of opportunities) {
+			const key = sourceFamily(lead.source);
+			counts.set(key, (counts.get(key) || 0) + 1);
+		}
+		return [...counts.entries()].map(([key, count]) => ({ key, count })).sort((a, b) => b.count - a.count);
+	}, [opportunities]);
 	const newCount = opportunities.filter((lead) => lead.is_new).length;
+	const dayCount = opportunities.filter((lead) => typeof lead.age_hours === 'number' && lead.age_hours <= 24).length;
 
 	const toggleQuick = (key: QuickFilter) =>
 		setQuick((current) => {
@@ -125,7 +187,7 @@ function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; oppo
 		const needle = query.trim().toLowerCase();
 		const filtered = opportunities.filter((lead) => {
 			if (kind !== 'all' && normalizeKind(lead.kind) !== kind) return false;
-			if (source !== 'all' && (lead.source || 'unknown') !== source) return false;
+			if (source !== 'all' && sourceFamily(lead.source) !== source) return false;
 			// Free means a published $0. An unknown cost is not free.
 			if (quick.has('free') && lead.cost_usd !== 0) return false;
 			if (quick.has('nosetup') && needsSetup(lead)) return false;
@@ -146,50 +208,38 @@ function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; oppo
 		{ title: 'Avoid patterns', hint: 'Disqualifies a lead immediately', items: codeTech.avoid_patterns || [] },
 	].filter((block) => block.items.length);
 
+	const chip = (active: boolean, onClick: () => void, label: string, count?: number, pressed?: boolean) => (
+		<button type="button" className={`leads-chip ${active ? 'active' : ''}`} aria-pressed={pressed} onClick={onClick}>
+			{label}
+			{typeof count === 'number' ? <em>{count}</em> : null}
+		</button>
+	);
+
 	return (
 		<>
 			<SectionHead
 				title="Leads"
 				blurb={
-					`Routes to passive income from a digital product on a zero budget: where it gets paid, and what builds and markets it. Freelance postings are deliberately absent — income per hour of your time is a job, not passive income. Refreshed every ${codeTech.refresh_hours || 6}h — last ${formatDate(codeTech.last_refresh_at)}.` +
+					`Where a digital product gets paid, and the tooling and market evidence to build and sell it. Refreshed every ${codeTech.refresh_hours || 6}h, last ${formatDate(codeTech.last_refresh_at)}.` +
 					// Say so when the queue ranked more than this page carries,
 					// rather than letting the count quietly under-report.
 					(codeTech.ranked_total && codeTech.ranked_total > opportunities.length
-						? ` ${codeTech.ranked_total} ranked this cycle; the top ${opportunities.length} are kept here.`
+						? ` ${codeTech.ranked_total} ranked; the top ${opportunities.length} are kept.`
 						: '')
 				}
 			/>
 
 			{/* No money aggregate here on purpose. See buildOpportunityStats. */}
-			<div className="tile-row compact">
-				<Tile
-					label="Routes tracked"
-					value={String(stats.total)}
-					detail={`${stats.channelCount} channels · ${stats.assetCount} assets`}
-					tone="info"
-				/>
-				<Tile
-					label="Free to start"
-					value={String(stats.freeCount)}
-					detail="no listing fee, cost published by the platform"
-					tone={stats.freeCount ? 'good' : 'neutral'}
-				/>
-				<Tile
-					label="Needs a one-time setup"
-					value={String(stats.needsSetupCount)}
-					detail="owner opens the account before it can earn"
-					tone={stats.needsSetupCount ? 'warn' : 'good'}
-				/>
-				<Tile
-					label="New this refresh"
-					value={String(newCount)}
-					detail="not on the page at the previous refresh"
-					tone={newCount ? 'info' : 'neutral'}
-				/>
+			<div className="leads-stats" aria-label="Lead counts">
+				<div><span>Routes</span><strong>{stats.total}</strong></div>
+				<div><span>Posted in 24h</span><strong>{dayCount}</strong></div>
+				<div><span>New this refresh</span><strong>{newCount}</strong></div>
+				<div><span>Free to start</span><strong>{stats.freeCount}</strong></div>
+				<div><span>Needs setup</span><strong>{stats.needsSetupCount}</strong></div>
 			</div>
 
 			<Card className="card-compact">
-				<div className="filters">
+				<div className="leads-toolbar">
 					<label className="search">
 						<Search size={16} />
 						<input
@@ -200,124 +250,73 @@ function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; oppo
 							aria-label="Search leads"
 						/>
 					</label>
-					<div className="segmented" role="group" aria-label="Filter by lead kind">
-						<button type="button" className={kind === 'all' ? 'active' : ''} onClick={() => setKind('all')}>
-							all <em>{opportunities.length}</em>
-						</button>
-						<button type="button" className={kind === 'channel' ? 'active' : ''} onClick={() => setKind('channel')}>
-							gets paid <em>{stats.channelCount}</em>
-						</button>
-						<button type="button" className={kind === 'asset' ? 'active' : ''} onClick={() => setKind('asset')}>
-							build &amp; market <em>{stats.assetCount}</em>
-						</button>
-					</div>
-					<div className="segmented" role="group" aria-label="Sort leads">
-						<button type="button" className={sort === 'newest' ? 'active' : ''} onClick={() => setSort('newest')}>newest</button>
-						<button type="button" className={sort === 'score' ? 'active' : ''} onClick={() => setSort('score')}>score</button>
-						<button type="button" className={sort === 'cost' ? 'active' : ''} onClick={() => setSort('cost')}>cheapest</button>
+					<div className="leads-chips" role="group" aria-label="Sort leads">
+						{chip(sort === 'newest', () => setSort('newest'), 'newest')}
+						{chip(sort === 'score', () => setSort('score'), 'score')}
+						{chip(sort === 'cost', () => setSort('cost'), 'cheapest')}
 					</div>
 				</div>
 
-				<div className="filters">
-					{/* Toggles that stack: each narrows the list further. */}
-					<div className="segmented" role="group" aria-label="Quick filters">
-						<button type="button" aria-pressed={quick.has('free')} className={quick.has('free') ? 'active' : ''} onClick={() => toggleQuick('free')}>
-							free to start <em>{stats.freeCount}</em>
-						</button>
-						<button type="button" aria-pressed={quick.has('nosetup')} className={quick.has('nosetup') ? 'active' : ''} onClick={() => toggleQuick('nosetup')}>
-							no setup <em>{stats.total - stats.needsSetupCount}</em>
-						</button>
-						<button type="button" aria-pressed={quick.has('new')} className={quick.has('new') ? 'active' : ''} onClick={() => toggleQuick('new')}>
-							new <em>{newCount}</em>
-						</button>
-					</div>
-					<div className="segmented" role="group" aria-label="Filter by source">
-						<button type="button" className={source === 'all' ? 'active' : ''} onClick={() => setSource('all')}>
-							every source
-						</button>
-						{sources.map((entry) => (
-							<button
-								key={entry.key}
-								type="button"
-								className={source === entry.key ? 'active' : ''}
-								onClick={() => setSource(entry.key)}
-							>
-								{sourceLabel(entry.key)} <em>{entry.count}</em>
-							</button>
-						))}
-					</div>
+				<div className="leads-chips" role="group" aria-label="Filter leads">
+					{chip(kind === 'all', () => setKind('all'), 'all', opportunities.length)}
+					{chip(kind === 'channel', () => setKind('channel'), 'gets paid', stats.channelCount)}
+					{chip(kind === 'asset', () => setKind('asset'), 'build & market', stats.assetCount)}
+					<span className="leads-sep" aria-hidden="true" />
+					{chip(quick.has('free'), () => toggleQuick('free'), 'free', stats.freeCount, quick.has('free'))}
+					{chip(quick.has('nosetup'), () => toggleQuick('nosetup'), 'no setup', stats.total - stats.needsSetupCount, quick.has('nosetup'))}
+					{chip(quick.has('new'), () => toggleQuick('new'), 'new', newCount, quick.has('new'))}
+					<span className="leads-sep" aria-hidden="true" />
+					{chip(source === 'all', () => setSource('all'), 'every source')}
+					{families.map((entry) => chip(source === entry.key, () => setSource(entry.key), sourceName(entry.key), entry.count))}
 				</div>
-
-				{visible.length !== opportunities.length ? (
-					<p className="muted">Showing {visible.length} of {opportunities.length}.</p>
-				) : null}
 
 				{visible.length ? (
-					<div className="lead-table">
-						{visible.map((lead) => {
-							const index = opportunities.indexOf(lead);
-							const isChannel = normalizeKind(lead.kind) === 'channel';
-							const age = leadAge(lead.age_hours);
-							return (
-								// A div, not an <a>: the row holds two links (detail and
-								// source), and links cannot nest.
-								<div className="lead-row" key={`${lead.url}-${index}`}>
-									<a className="lead-row-link" href={`#/leads/${index}`}>
-										{/* Score leads the row: it ranks by how passive the income is. */}
-										<span className={`score-chip ${scoreTone(lead.score)}`} title="passive score, out of 100">{lead.score || 0}</span>
-										<span className="lead-row-body">
-											<strong title={cleanTitle(lead.title)}>{cleanTitle(lead.title) || 'Untitled lead'}</strong>
-											<p title={lead.reason}>{lead.reason || 'No reason recorded.'}</p>
-										</span>
-										<span className="lead-row-meta">
-											{lead.is_new ? <Pill tone="info">new</Pill> : null}
-											{/* "Free" only when the platform published $0. An unknown
-											    cost renders nothing rather than implying free. */}
-											{lead.cost_usd === 0 ? <Pill tone="good">free</Pill> : null}
-											{typeof lead.cost_usd === 'number' && lead.cost_usd > 0 ? (
-												<Pill tone="warn">{formatCost(lead.cost_usd)}</Pill>
-											) : null}
-											<Pill tone={isChannel ? 'info' : 'neutral'}>
-												{isChannel ? 'gets paid' : 'build & market'}
-											</Pill>
-											<Pill tone="neutral">{sourceLabel(lead.source)}</Pill>
-											{/* Only fetched rows have a posting time; curated rows show none. */}
-											{lead.posted_at ? <Pill tone={age.tone}>posted {age.label} ago</Pill> : null}
-											{/* When the bot first listed it, for every row. */}
-											<AddedPill at={lead.discovered_at} />
-										</span>
-									</a>
-									{/* Playbook rows have no URL, so no button rather than a dead one. */}
-									{lead.url ? (
-										<a
-											className="icon-btn lead-row-source"
-											href={lead.url}
-											target="_blank"
-											rel="noreferrer"
-											title="Open source"
-											aria-label={`Open source: ${cleanTitle(lead.title) || 'lead'}`}
-										>
-											<ExternalLink size={15} />
-										</a>
-									) : null}
+					KIND_GROUPS.map((group) => {
+						const rows = visible.filter((lead) => normalizeKind(lead.kind) === group.kind);
+						if (!rows.length) return null;
+						const cap = limit[group.kind] || GROUP_PAGE;
+						return (
+							<section className="lead-group" key={group.kind}>
+								<header className="lead-group-head">
+									<strong>{group.title}</strong>
+									<span>{rows.length}</span>
+									<em>{group.hint}</em>
+								</header>
+								<div className="lead-table">
+									{rows.slice(0, cap).map((lead) => (
+										<LeadRow key={`${lead.url}-${opportunities.indexOf(lead)}`} lead={lead} index={opportunities.indexOf(lead)} />
+									))}
 								</div>
-							);
-						})}
-					</div>
+								{rows.length > cap ? (
+									<button
+										type="button"
+										className="btn lead-more"
+										onClick={() => setLimit((current) => ({ ...current, [group.kind]: cap + GROUP_PAGE }))}
+									>
+										Show {Math.min(GROUP_PAGE, rows.length - cap)} more · {rows.length - cap} left
+									</button>
+								) : null}
+							</section>
+						);
+					})
 				) : (
 					<Empty text={opportunities.length ? 'No leads match this filter.' : 'No research leads in the queue yet.'} />
 				)}
 			</Card>
 
-			<div className="grid-2">
+			{/* Everything below is reference, so it starts closed: the summary line
+			    is visible and the detail is one click away. */}
+			<Subhead>Reference</Subhead>
+			<div className="stack tight">
 				{/* Fetched vs ranked vs shown, so a source that silently returns
 				    nothing is visible as one. The HN fetcher returned 0 for its
 				    whole life before this existed. */}
-				<Card className="card-compact" title="Where leads come from" hint="Rows fetched this refresh, how many cleared the score bar, and how many are on this page.">
-					{sourceStats.length ? (
+				{sourceStats.length ? (
+					<Disclosure title="Where leads come from" hint="fetched, ranked and shown per source" count={sourceStats.length}>
 						<KeyValue
+							compact
 							rows={sourceStats.map((row) => [
-								sourceLabel(row.source),
+								sourceName(row.source),
 								row.fetched
 									? `${row.fetched} fetched · ${row.ranked ?? 0} ranked · ${row.shown ?? 0} shown`
 									: row.source === 'reddit'
@@ -325,42 +324,25 @@ function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; oppo
 										: '0 fetched this refresh',
 							])}
 						/>
-					) : (
-						<Empty text="Source counts arrive with the next refresh." />
-					)}
-				</Card>
-
-				<Card className="card-compact" title="Refused routes" hint="Checked and rejected, so they cannot return to this page.">
-					{refused.length ? (
+					</Disclosure>
+				) : null}
+				{refused.length ? (
+					<Disclosure title="Refused routes" hint="checked and rejected, so they cannot return" count={refused.length}>
 						<div className="stack tight">
 							{refused.map((row, index) => (
-								<article className="suggestion" key={`${row.name}-${index}`}>
-									<div className="suggestion-head">
-										<strong>{row.name || 'Unnamed route'}</strong>
-										<Pill tone="warn">refused</Pill>
-									</div>
+								<Fold key={`${row.name}-${index}`} title={row.name || 'Unnamed route'} meta={<Pill tone="warn">refused</Pill>}>
 									<p className="prose">{row.why || 'No reason recorded.'}</p>
-								</article>
+								</Fold>
 							))}
 						</div>
-					) : (
-						<Empty text="No refused routes recorded." />
-					)}
-				</Card>
+					</Disclosure>
+				) : null}
+				{playbook.map((block) => (
+					<Disclosure key={block.title} title={block.title} hint={block.hint} count={block.items.length}>
+						<Bullets items={block.items} />
+					</Disclosure>
+				))}
 			</div>
-
-			{playbook.length ? (
-				<>
-					<Subhead>Product playbook</Subhead>
-					<div className="stack">
-						{playbook.map((block, index) => (
-							<Disclosure key={block.title} title={block.title} hint={block.hint} count={block.items.length} defaultOpen={index === 0}>
-								<Bullets items={block.items} />
-							</Disclosure>
-						))}
-					</div>
-				</>
-			) : null}
 		</>
 	);
 }
@@ -396,7 +378,7 @@ function LeadDetail({ lead, index, opportunities }: { lead: CodeTechOpportunity;
 				action={lead.url ? <a className="btn primary" href={lead.url} target="_blank" rel="noreferrer"><ExternalLink size={15} /> open source</a> : undefined}
 			/>
 
-			<div className="tile-row">
+			<div className="tile-row compact">
 				{/* Never toned 'good' when the cost is unknown -- green beside an
 				    em dash reads as a confirmed free, which is a claim. */}
 				<Tile
@@ -426,18 +408,19 @@ function LeadDetail({ lead, index, opportunities }: { lead: CodeTechOpportunity;
 				/>
 			</div>
 
-			<div className="split">
-				<div className="stack">
-					<Card title="First step" hint="The concrete move that turns this lead into money.">
+			<div className="split even">
+				<div className="stack tight">
+					<Card className="card-compact" title="First step" hint="The concrete move that turns this lead into money.">
 						<p className="prose">{lead.next_step || 'No next step recorded.'}</p>
 					</Card>
 
 					{known.length ? (
 						<Card
+							className="card-compact"
 							title="Why it scores this"
 							hint={`Points per component, out of its weight.${penalty ? ` ${penalty} taken off by penalties.` : ''}`}
 						>
-							<div className="stack">
+							<div className="stack tight">
 								{known.map((part) => {
 									const value = parts[part.key] || 0;
 									return (
@@ -456,50 +439,46 @@ function LeadDetail({ lead, index, opportunities }: { lead: CodeTechOpportunity;
 						</Card>
 					) : null}
 
+					{/* A ~1.3 KB prompt is detail, not summary: one line until opened. */}
 					{lead.codex_prompt ? (
-						<Card
+						<Fold
 							title="Codex prompt"
-							hint="Paste into Codex to build a scoped, verifiable solution."
+							meta="paste into Codex to build it"
 							action={<CopyButton text={lead.codex_prompt} label="copy prompt" />}
 						>
 							<pre className="code-block">{lead.codex_prompt}</pre>
-						</Card>
-					) : (
-						<Card title="Codex prompt">
-							<Empty text="Prompts are generated for the highest-scoring leads only." />
-						</Card>
-					)}
+						</Fold>
+					) : null}
 				</div>
 
-				<div className="stack">
-					<Card title="Lead facts">
-						{/* Cost and its provenance always travel together, so a
-						    figure on this page can always be traced to who published it. */}
+				<div className="stack tight">
+					<Card className="card-compact" title="Lead facts">
+						{/* Cost, score, setup and kind are the tiles above and are not
+						    repeated. Provenance stays beside them, so a figure on this
+						    page can always be traced to who published it. */}
 						<KeyValue
+							compact
 							rows={[
-								['Cost to start', formatCost(lead.cost_usd)],
 								['Owner must do', setup || 'nothing'],
-								['Score', `${lead.score || 0}/100`],
-								['Source', sourceLabel(lead.source)],
+								['Source', sourceName(lead.source)],
 								['Verified', lead.verified_note || 'not recorded'],
 								['Posted', lead.posted_at ? `${formatDate(lead.posted_at)} (${leadAge(lead.age_hours).label} ago)` : 'not applicable'],
 								['First seen by bot', lead.discovered_at ? formatDate(lead.discovered_at) : '—'],
-								['New this refresh', lead.is_new ? 'yes' : 'no'],
 								['Link', lead.url ? <a href={lead.url} target="_blank" rel="noreferrer">open ↗</a> : '—'],
 							]}
 						/>
 					</Card>
 
 					{related.length ? (
-						<Card title={isChannel ? 'Other places to get paid' : 'Other build & market routes'} hint="Same kind, best score first.">
-							<div className="stack">
+						<Card className="card-compact" title={isChannel ? 'Other places to get paid' : 'Other build & market routes'} hint="Same kind, best score first.">
+							<div className="stack tight">
 								{related.map(({ other, otherIndex }) => (
 									<a className="reference" key={`${other.url}-${otherIndex}`} href={`#/leads/${otherIndex}`}>
 										<span className="min-w-0">
 											{/* .reference truncates to one line, and on an inline <strong>
 											    that only forces nowrap -- long lead titles ran off the card. */}
 											<strong className="block whitespace-normal break-words">{cleanTitle(other.title) || 'Untitled lead'}</strong>
-											<p>{other.score || 0}/100 · {formatCost(other.cost_usd)} · {sourceLabel(other.source)}</p>
+											<p>{other.score || 0}/100 · {formatCost(other.cost_usd)} · {sourceName(other.source)}</p>
 										</span>
 									</a>
 								))}
@@ -509,7 +488,6 @@ function LeadDetail({ lead, index, opportunities }: { lead: CodeTechOpportunity;
 				</div>
 			</div>
 
-			<Subhead>Navigate</Subhead>
 			<div className="pager">
 				{index > 0 ? <a className="btn" href={`#/leads/${index - 1}`}><ArrowLeft size={15} /> previous lead</a> : <span />}
 				{index < total - 1 ? <a className="btn" href={`#/leads/${index + 1}`}>next lead →</a> : <span />}

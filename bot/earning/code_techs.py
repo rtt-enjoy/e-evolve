@@ -14,6 +14,8 @@ from urllib.parse import quote_plus
 
 import requests
 
+from . import trending
+from .devto import own_post_urls
 from ._shared import load_config, parse_dt, stamp_first_seen, strip_html, xml_text
 
 log = logging.getLogger(__name__)
@@ -593,7 +595,8 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 	max_items = max(1, int(cfg.get("max_items", 40) or 40))
 	status_max_items = max(1, int(cfg.get("status_max_items", max_items) or max_items))
 	min_score = max(0, int(cfg.get("min_score", 40) or 40))
-	raw = _fetch_online_leads(cfg)
+	own = {_own_key(url) for url in own_post_urls(status)}
+	raw = [lead for lead in _fetch_online_leads(cfg) if _own_key(lead.get("url")) not in own]
 	opportunities = _rank(raw, cfg, max_items=max_items, min_score=min_score)
 	new_count = _mark_new(opportunities, state.get("opportunities") or [])
 
@@ -666,6 +669,10 @@ def run(llm: Any, status: dict[str, Any]) -> list[dict]:
 		"url": str(_REPORT_FILE)
 	}]
 
+def _own_key(url: Any) -> str:
+	"""A URL without query or trailing slash, so a tracking suffix cannot hide a self-post."""
+	return str(url or "").split("?")[0].rstrip("/").lower()
+
 def _config() -> dict[str, Any]:
 	return load_config("code_techs", _DEFAULT_CONFIG)
 
@@ -710,7 +717,25 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 	sent = 0
 	window_start = time.time()
 
-	for query in cfg.get("github_searches", []):
+	# Two kinds of query share one rate limiter. The stable list is best match
+	# (see below). The new-repo list is a topic filter plus a `created:` window,
+	# sorted by stars: it is what makes the page change from day to day, and it
+	# stamps `posted_at` with the repo's birth, not its last push -- a ten-year
+	# awesome-list pushed yesterday is not a new lead.
+	jobs: list[tuple[str, dict[str, Any], str]] = [
+		(str(q), {}, "pushed_at") for q in cfg.get("github_searches", [])
+	]
+	new_topics = _clean_list(cfg.get("github_new_searches", []))
+	if new_topics:
+		born_after = (datetime.now(timezone.utc) - timedelta(
+			days=max(1, int(cfg.get("github_new_days", 14) or 14)))).strftime("%Y-%m-%d")
+		min_stars = max(0, int(cfg.get("github_new_min_stars", 3) or 0))
+		jobs += [
+			(f"{topic} created:>{born_after} stars:>={min_stars}", {"sort": "stars", "order": "desc"}, "created_at")
+			for topic in new_topics
+		]
+
+	for query, extra, stamp_field in jobs:
 		now = time.time()
 		if now - window_start >= 60:
 			window_start = now
@@ -730,7 +755,7 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 				# last -- "awesome-game-security" and a Black Friday deals list
 				# for "awesome browser extensions". Freshness is already
 				# enforced by the `supply_max_age_days` cutoff below.
-				params={"q": str(query), "per_page": 8},
+				params={"q": query, "per_page": 8, **extra},
 				headers=headers,
 				timeout=20
 			)
@@ -743,6 +768,17 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 				stamp = parse_dt(pushed)
 				if stamp and stamp < cutoff:
 					continue
+				if item.get("fork") or item.get("archived"):
+					continue
+				# A brand-new repo with no description is a scaffold, not a lead.
+				if extra and not item.get("description"):
+					continue
+				# Star-farmed repos. `topic:developer-tools` sorted by stars returned
+				# six repos at exactly 300 stars and 0 forks: cracked "full working
+				# installer" software, a trading bot, an Instagram liker. A real repo
+				# a fortnight old with dozens of stars has been forked at least once.
+				if extra and (item.get("stargazers_count") or 0) >= 50 and not item.get("forks_count"):
+					continue
 				stars = item.get("stargazers_count") or 0
 				topics = [str(t) for t in (item.get("topics") or [])]
 				leads.append({
@@ -751,8 +787,8 @@ def _fetch_github_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 					"source": "github",
 					"kind": _ASSET,
 					"body": str(item.get("description") or ""),
-					"labels": topics,
-					"posted_at": pushed,
+					"labels": topics + (["new-repo"] if extra else []),
+					"posted_at": str(item.get(stamp_field) or pushed),
 					"stars": stars,
 					"buyer": "tooling, no buyer",
 				})
@@ -795,8 +831,11 @@ def _fetch_online_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 	# marketed, so a page without them is missing half the answer.
 	leads: list[dict[str, Any]] = list(_PRODUCT_CHANNELS) + list(_LOCAL_LEADS)
 	leads.extend(_fetch_hn_leads(cfg))
+	leads.extend(_fetch_hn_show_leads(cfg))
 	leads.extend(_fetch_reddit_leads(cfg))
 	leads.extend(_fetch_github_leads(cfg))
+	leads.extend(_fetch_devto_leads(cfg))
+	leads.extend(_fetch_medium_leads(cfg))
 	return _dedupe(leads)
 
 # An Ask HN title that is about earning from a product. The query alone is
@@ -871,6 +910,161 @@ def _fetch_hn_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
 				})
 		except Exception as exc:
 			log.warning("[code_techs] HN search failed for %r: %s", query, exc)
+	return leads
+
+# A launch, as opposed to a write-up about earning. A Show HN entry is a product
+# someone just shipped; it rarely says "revenue", so the income screen would drop
+# all of them. This one asks what kind of product it is. (Product Hunt was probed
+# and left out: 0 of its 50 latest taglines named a small-product shape -- it is
+# AI and SaaS launches, not what this page tracks.)
+_PRODUCT_RE = re.compile(
+	r"\b(chrome extension|browser extension|extension|plugin|add-?on|template|boilerplate|starter kit"
+	r"|cli|desktop app|mac ?os app|menu ?bar|self[- ]hosted|open[- ]source|one[- ]time|lifetime"
+	r"|pay once|no subscription|licen[cs]e|downloads?|indie|solo|maker)\b",
+	re.I,
+)
+
+def _http_get(url: str, *, params: dict[str, Any] | None = None, accept: str = "application/json") -> Any:
+	"""One keyless GET for the fetchers below. ``None`` on any failure, never raises.
+
+    A source that is down, throttled or changed shape costs this refresh that
+    source and nothing else: every fetched row is a bonus on top of the curated
+    table, so an exception here must not cost the whole queue.
+    """
+	try:
+		resp = requests.get(
+			url, params=params, timeout=20,
+			headers={"Accept": accept, "User-Agent": "e-evolve-code-techs/1.0 read-only lead research"},
+		)
+		if resp.status_code in (403, 429):
+			log.info("[code_techs] %s answered %s; skipping it this refresh", url.split("?")[0], resp.status_code)
+			return None
+		resp.raise_for_status()
+		return resp
+	except Exception as exc:
+		log.warning("[code_techs] %s failed: %s", url.split("?")[0], exc)
+		return None
+
+def _is_recent(posted_at: Any, max_days: int) -> bool:
+	"""False for an undated row: a fetched lead with no date cannot claim to be fresh."""
+	stamp = parse_dt(posted_at)
+	return bool(stamp) and datetime.now(timezone.utc) - stamp <= timedelta(days=max_days)
+
+def _screened(title: str) -> bool:
+	"""The spam and off-topic screens ``trending`` already runs on the same open feeds."""
+	item = {"title": title}
+	return not (trending.is_spam(item) or trending.is_off_topic(item))
+
+def _recent_and_about_earning(posted_at: Any, title: str, summary: str, max_days: int) -> bool:
+	return (
+		_is_recent(posted_at, max_days)
+		and bool(_HN_INCOME_RE.search(f"{title} {summary[:300]}"))
+		and _screened(title)
+	)
+
+def _community_lead(
+	title: str, url: str, source: str, body: str, posted_at: Any, labels: list[str], buyer: str
+) -> dict[str, Any]:
+	# Market evidence, not a till -- the same reasoning as the HN and Reddit rows.
+	return {
+		"title": title, "url": url, "source": source, "kind": _ASSET, "body": body[:600],
+		"labels": ["community", "market-evidence", *labels], "posted_at": posted_at, "buyer": buyer,
+	}
+
+def _fetch_hn_show_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
+	"""Show HN / Ask HN posts from the last weeks, newest first.
+
+    ``_fetch_hn_leads`` asks Algolia for the best match over two months, so what
+    it returns is mostly whatever collected the most points. This one uses
+    ``search_by_date``: what was posted lately, which is the day-to-day change
+    the page was missing. Show HN is where people launch the small products this
+    page is about, so a launch counts when its title names a product shape, and
+    an Ask HN when its title is about earning.
+    """
+	leads: list[dict[str, Any]] = []
+	max_days = max(1, int(cfg.get("hn_max_age_days", 30) or 30))
+	since = int((datetime.now(timezone.utc) - timedelta(days=max_days)).timestamp())
+	for query in _clean_list(cfg.get("hn_show_searches", [])):
+		resp = _http_get("https://hn.algolia.com/api/v1/search_by_date", params={
+			"query": query, "tags": "(show_hn,ask_hn)", "hitsPerPage": 12,
+			"numericFilters": f"created_at_i>{since},points>=2",
+		})
+		if resp is None:
+			continue
+		try:
+			hits = resp.json().get("hits", [])
+		except ValueError:
+			continue
+		for item in hits:
+			title = str(item.get("title") or "")
+			is_show = title.lower().startswith("show hn")
+			wanted = (is_show and _PRODUCT_RE.search(title)) or (
+				title.lower().startswith("ask hn") and _HN_INCOME_RE.search(title)
+			)
+			story_id = item.get("objectID") or item.get("story_id")
+			if not wanted or not story_id or not _screened(title):
+				continue
+			leads.append(_community_lead(
+				title, f"https://news.ycombinator.com/item?id={story_id}", "hacker-news",
+				strip_html(str(item.get("story_text") or "")), item.get("created_at"),
+				["launch"] if is_show else [], "Hacker News",
+			))
+	return leads
+
+def _fetch_devto_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
+	"""Fresh dev.to posts where makers write up what they shipped and earned.
+
+    ``state=fresh`` is the newest posts under a tag. The tag alone is not enough
+    -- ``saas`` returned auth tutorials -- so a post must also talk about earning
+    (``_HN_INCOME_RE``). This account's own posts come back through the same
+    tags and are dropped in ``run`` by URL, the way ``trending`` does it.
+    """
+	leads: list[dict[str, Any]] = []
+	max_days = max(1, int(cfg.get("devto_max_age_days", 14) or 14))
+	for tag in _clean_list(cfg.get("devto_tags", [])):
+		resp = _http_get("https://dev.to/api/articles", params={"tag": tag, "per_page": 30, "state": "fresh"})
+		if resp is None:
+			continue
+		try:
+			posts = resp.json()
+		except ValueError:
+			continue
+		for post in posts if isinstance(posts, list) else []:
+			title = str(post.get("title") or "").strip()
+			summary = str(post.get("description") or "")
+			if not title or not _recent_and_about_earning(post.get("published_at"), title, summary, max_days):
+				continue
+			leads.append(_community_lead(
+				title, str(post.get("url") or ""), "devto", summary, post.get("published_at"),
+				["devto", tag], "dev.to",
+			))
+	return leads
+
+def _fetch_medium_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
+	"""Medium tag feeds, kept to posts about earning from a small product.
+
+    Medium tags are open submission and mostly listicles, so the same earning
+    screen and the spam screens apply. Read as an RSS feed, never scraped.
+    """
+	leads: list[dict[str, Any]] = []
+	max_days = max(1, int(cfg.get("medium_max_age_days", 14) or 14))
+	for tag in _clean_list(cfg.get("medium_tags", [])):
+		resp = _http_get(f"https://medium.com/feed/tag/{quote_plus(tag)}", accept="application/rss+xml, text/xml")
+		if resp is None:
+			continue
+		try:
+			root = ET.fromstring(resp.text)
+		except ET.ParseError:
+			continue
+		for item in root.iter("item"):
+			title = xml_text(item, "title")
+			summary = strip_html(xml_text(item, "{*}encoded") or xml_text(item, "description"))
+			posted = xml_text(item, "pubDate")
+			if not title or not _recent_and_about_earning(posted, title, summary, max_days):
+				continue
+			# The tracking query string would make one article look like several.
+			url = xml_text(item, "link").split("?")[0]
+			leads.append(_community_lead(title, url, "medium", summary, posted, ["medium", tag], "Medium"))
 	return leads
 
 def _fetch_reddit_leads(cfg: dict[str, Any]) -> list[dict[str, Any]]:
@@ -986,7 +1180,7 @@ def _mark_new(ranked: list[Opportunity], previous: list[dict[str, Any]]) -> int:
 
 # Fetched sources that should appear in the source table even when they
 # returned nothing, because "Reddit: 0" is the finding (it 429s most cycles).
-_FETCHED_SOURCES = ("hacker-news", "reddit", "github")
+_FETCHED_SOURCES = ("hacker-news", "reddit", "github", "devto", "medium")
 
 def _source_stats(
 	raw: list[dict[str, Any]], ranked: list[Opportunity], shown: list[Opportunity]
@@ -1032,10 +1226,16 @@ _PROHIBITED_PATTERNS: dict[str, str] = {
 		r"|(youtube|netflix|spotify|tiktok|instagram|pornhub|onlyfans)[\w -]{0,20}(download|ripper)"
 	),
 	"gambling": r"\bcasinos?\b|gambl(e|ing)|\bbetting\b|sportsbook|\bslots? machine",
+	# Trading is refused in code (Principle 6), so a trading bot is not a lead.
+	"trading": r"trading[- ]bots?|\bmetatrader|\bmt[45]\b|\bforex\b|sniper[- ]bot|copy[- ]trad",
 	"fraud": (
 		r"fake[- ](id|ids|identity|documents?|passports?|reviews?)\b"
 		r"|(driver'?s?|driving)[- ]licen[cs]e[- ]generator|\bcarding\b|\bcvv\b|\bphishing\b"
 		r"|account[- ]generator|\bspam[- ]?bots?\b|\bmass[- ]dm\b|\bbotnet\b|\bddos\b"
+		# Seen on a star-farmed `topic:developer-tools` listing: raiders, likers,
+		# lock bypasses and "full working installer" cracked software.
+		r"|\braiders?\b|\blikers?\b|boosting[- ]tools?|auto[- ]?(follow|like|view)\w*"
+		r"|\b(ios|icloud|frp)[- ]?(unlock\w*|bypass)\b|full working installer"
 	),
 	"malware": (
 		r"\bstealers?\b|\bkeyloggers?\b|\bransomware\b|\baimbot\b|\bwallhack\b"
@@ -1146,16 +1346,51 @@ def _apply_channel_share(
 	share = cfg.get("min_channel_share", cfg.get("min_demand_share", 0.5))
 	share = float(share or 0.0)
 	demand = [op for op in ranked if op.kind == _CHANNEL]
-	if share <= 0 or not demand:
+	fresh_share = float(cfg.get("min_fresh_share", 0.0) or 0.0)
+	per_source = int(cfg.get("per_source_cap", 0) or 0)
+	if (share <= 0 or not demand) and fresh_share <= 0 and per_source <= 0:
 		return ranked[:max_items]
-	reserved = min(len(demand), int(max_items * min(1.0, share)))
+	reserved = min(len(demand), int(max_items * min(1.0, share))) if share > 0 else 0
 	keep = demand[:reserved]
 	kept = {id(op) for op in keep}
+	taken: dict[str, int] = {}
+
+	def take(op: Opportunity) -> bool:
+		"""Add one row unless its source already holds its share of the page."""
+		family = op.source.split(":", 1)[0]
+		# Curated rows are written by hand, so the cap is for fetched feeds only.
+		if per_source and family not in ("local-playbook", "channel-table") and taken.get(family, 0) >= per_source:
+			return False
+		taken[family] = taken.get(family, 0) + 1
+		keep.append(op)
+		kept.add(id(op))
+		return True
+
+	for op in keep:
+		taken[op.source.split(":", 1)[0]] = taken.get(op.source.split(":", 1)[0], 0) + 1
+
+	# Freshness quota. Scoring cannot do this: a fetched asset scores nearly the
+	# same at two hours and at two weeks, so by score alone the stable rows win
+	# every refresh and the page looks the same tomorrow. Newest first, and
+	# `age_hours` is the posting time, never the bot's own first-seen time.
+	if fresh_share > 0:
+		fresh_hours = float(cfg.get("fresh_hours", 72) or 72)
+		fresh = sorted(
+			(op for op in ranked if op.kind != _CHANNEL and op.age_hours is not None and op.age_hours <= fresh_hours),
+			key=lambda op: (op.age_hours, -op.score),
+		)
+		want = int(max_items * min(1.0, fresh_share))
+		for op in fresh:
+			if want <= 0 or len(keep) >= max_items:
+				break
+			if take(op):
+				want -= 1
+
 	for op in ranked:
 		if len(keep) >= max_items:
 			break
 		if id(op) not in kept:
-			keep.append(op)
+			take(op)
 	keep.sort(key=lambda op: op.score, reverse=True)
 	return keep[:max_items]
 
@@ -1737,7 +1972,13 @@ def _reason(
 	if cost is not None and cost > 0:
 		parts.append(f"costs ${cost:,.2f} once, stated rather than hidden")
 	if kind == _ASSET:
-		parts.append("free tooling or reach to build and market the product with")
+		# What the post or repo says, not a sentence every row shares: with fetched
+		# rows now the bulk of the page, one identical reason under every title made
+		# the list unreadable.
+		excerpt = " ".join(str(lead.get("body") or "").split())
+		if len(excerpt) > 140:
+			excerpt = excerpt[:140].rsplit(" ", 1)[0] + "…"
+		parts.append(excerpt or "free tooling or reach to build and market the product with")
 	if any(t in text for t in ("hourly", "/hr", "per client", "retainer")):
 		parts.append("priced per hour of the owner's time, which is a job and not passive income")
 

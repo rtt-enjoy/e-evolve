@@ -1152,7 +1152,7 @@ the `supply_max_age_days` cutoff already enforces freshness.
 **The HN fetcher returned 0 leads for its whole life (fixed 2026-11-03).** It
 sent `tags=story,comment`, which Algolia reads as AND, so no item could match.
 It now runs short `hn_searches` (`revenue`, `side project`, `micro-saas`, ...)
-on `ask_hn` over `hn_max_age_days` (60) with `points>=hn_min_points` (5), and
+on `ask_hn` over `hn_max_age_days` (30, was 60) with `points>=hn_min_points` (5), and
 keeps only titles starting "Ask HN" that `_HN_INCOME_RE` reads as about
 earning. That yields threads like "Ask HN: Do you have side-projects that
 generate >$500 revenue/month?". `status["code_tech_earning"].source_stats`
@@ -1178,17 +1178,69 @@ rebuilding the fabrication inside the field the owner acts on. It also forbids
 opening an account or accepting terms on the owner's behalf. No per-lead LLM
 call.
 
-**Two caps, because `status.json` is committed hourly.** `max_items` (40) sizes
-the markdown report; `status_max_items` (32, raised from 16 on 2026-11-03 when
-the owner asked for more on the Leads page) sizes the committed snapshot; and
+**Two caps, because `status.json` is committed hourly.** `max_items` (90) sizes
+the markdown report; `status_max_items` (64, raised from 16 on 2026-11-03 and from
+32 on 2026-11-05, both times because the owner asked for more on the Leads page)
+sizes the committed snapshot; and
 `prompt_top_n` (6) means only the leads worth acting on carry a ~1.3 KB prompt.
 Both were lowered when realistic fixtures measured **36.7 KB against a 30 KB
 budget** — the old fixtures were job postings, so after the redirect they no
 longer exercised the fields that take up the room, and the budget test was
 passing while the live payload breached it. `TestLeadStatusPayloadStaysBounded`
-now uses the shape the queue actually holds. Its budget is now 45 KB for 32
-rows; the live slice measured 36 KB, since rows past `prompt_top_n` weigh
-~0.8 KB.
+now uses the shape the queue actually holds. Its budget is now 85 KB for 64
+rows (80 KB for the heavy fixtures); the live slice measured 64 KB, since rows
+past `prompt_top_n` weigh ~0.8-1 KB. `status.json` is therefore ~30 KB larger per
+commit than before 2026-11-05: the price of the extra rows, not a leak.
+
+**The page changed little day to day, and the cause was selection, not fetching
+(fixed 2026-11-05; owner: too little is refreshed daily, search deeply, favour
+the newest).** A live refresh had `new_ranked_count: 8` and `new_count: 0`:
+fresh rows were found and then cut at `status_max_items`, because a fetched asset
+scores nearly the same at two hours and at two weeks (recency is 7 of 100), and
+`pushed_at` made `vinta/awesome-python` look "3d old". Adding sources alone would
+have fetched more and shown the same page. What changed, in order of importance:
+
+- **A freshness quota in selection** (`_apply_channel_share`): `min_fresh_share`
+  (0.5) of the page is reserved for non-channel rows posted within `fresh_hours`
+  (72), newest first, then the rest fills by score. `_score` is untouched, so
+  nothing that pins its weights moved. Defaults of 0 reproduce the old behaviour.
+- **A per-source cap** (`per_source_cap`, 14 per feed family; curated rows are
+  exempt) so one feed cannot fill the page.
+- **GitHub new repositories** (`github_new_searches`: topic filters such as
+  `topic:chrome-extension`, plus a `created:>` window of `github_new_days`, sorted
+  by stars). `posted_at` is the repo's `created_at`, never its push time. Two guards
+  came from measurement: `topic:developer-tools` sorted by stars returned six repos
+  at exactly 300 stars and 0 forks (cracked "full working installer" software, a
+  trading bot, an Instagram liker), so a new repo with 50+ stars and no forks is
+  dropped and `trading` joined `_PROHIBITED_PATTERNS`. Forks and archived repos are
+  skipped. Topics that returned nothing in 14 days (`micro-saas`, `indiehackers`,
+  `digital-products`, `license-key`, `crypto-payments`) were left out rather than
+  spending queries on them.
+- **Show HN / Ask HN by date** (`_fetch_hn_show_leads`, `search_by_date`,
+  `hn_show_searches`): a Show HN launch counts when its title names a product shape
+  (`_PRODUCT_RE`), an Ask HN when `_HN_INCOME_RE` reads it as about earning.
+- **dev.to** (`_fetch_devto_leads`, `state=fresh` per tag) and **Medium tag RSS**
+  (`_fetch_medium_leads`): a post must be recent, be about earning
+  (`_HN_INCOME_RE`) and pass `trending.is_spam` / `is_off_topic`. The tag alone is
+  not enough (`saas` returned auth tutorials). The account's own posts come back
+  through the same dev.to tags, so `run` drops every row whose URL is in
+  `devto.own_post_urls()` (query and trailing slash ignored) before ranking.
+- **Product Hunt, Lobsters, itch.io, Hashnode, Mastodon and Hugging Face Spaces
+  were probed and left out.** Product Hunt's feed worked but 0 of its 50 latest
+  taglines named a small-product shape (AI and SaaS launches); Hashnode's GraphQL
+  endpoint redirected; the rest were off target, and the top Hugging Face trending
+  Space was an "uncensored" model. Re-probing them costs a cycle for nothing.
+- Every new fetcher goes through `_rank`, so `_prohibited` applies to it, sends
+  no key, and never raises (`_http_get` returns `None` on any failure or 403/429).
+  `refresh_hours` is 3. `status["code_tech_earning"].source_stats` lists the new
+  families (`devto`, `medium`).
+- Measured on live feeds before and after: rows posted within 72h went from 8 of
+  32 to 37 of 64, within 24h from 3 to 25, new on the page from 0 to 43.
+  `TestLeadsChangeFromDayToDay` pins the quota, the cap, the endpoints and the
+  star-farm guard.
+- The `awesome browser extensions` GitHub query was removed from
+  `github_searches`: it returned `awesome-python`, `awesome-mac` and `YOURLS/awesome`,
+  which are not leads and looked fresh because they are pushed daily.
 
 **`discovered_at` is the first time the page held a lead, and `is_new` marks
 rows the previous snapshot did not.** `_mark_new` carries `discovered_at` over
@@ -1483,9 +1535,11 @@ Tunable by owner or changed here in Codex:
   "attribution":    { "enabled": true, "history_limit": 200 },
   "mrr_ideas":      { "enabled": true, "refresh_hours": 48, "max_ideas": 8,
                       "min_score": 50, "history_limit": 100 },
-  "code_techs":     { "enabled": true, "refresh_hours": 6, "max_items": 40,
-                      "status_max_items": 32, "prompt_top_n": 6, "min_score": 40,
-                      "min_channel_share": 0.5, "supply_max_age_days": 120,
+  "code_techs":     { "enabled": true, "refresh_hours": 3, "max_items": 90,
+                      "status_max_items": 64, "prompt_top_n": 6, "min_score": 40,
+                      "min_channel_share": 0.5, "min_fresh_share": 0.5,
+                      "fresh_hours": 72, "per_source_cap": 14,
+                      "supply_max_age_days": 120,
                       "max_reddit_requests": 3, "auto_pursue": false,
                       "...": "searches, sources, product shapes" },
   "evolution":      { "enabled": true, "branch_prefix": "evolve", "max_changes": 3,

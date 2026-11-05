@@ -161,7 +161,7 @@ function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; oppo
 			/>
 
 			{/* No money aggregate here on purpose. See buildOpportunityStats. */}
-			<div className="tile-row">
+			<div className="tile-row compact">
 				<Tile
 					label="Routes tracked"
 					value={String(stats.total)}
@@ -188,7 +188,7 @@ function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; oppo
 				/>
 			</div>
 
-			<Card>
+			<Card className="card-compact">
 				<div className="filters">
 					<label className="search">
 						<Search size={16} />
@@ -266,8 +266,8 @@ function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; oppo
 										{/* Score leads the row: it ranks by how passive the income is. */}
 										<span className={`score-chip ${scoreTone(lead.score)}`} title="passive score, out of 100">{lead.score || 0}</span>
 										<span className="lead-row-body">
-											<strong>{cleanTitle(lead.title) || 'Untitled lead'}</strong>
-											<p>{lead.reason || 'No reason recorded.'}</p>
+											<strong title={cleanTitle(lead.title)}>{cleanTitle(lead.title) || 'Untitled lead'}</strong>
+											<p title={lead.reason}>{lead.reason || 'No reason recorded.'}</p>
 										</span>
 										<span className="lead-row-meta">
 											{lead.is_new ? <Pill tone="info">new</Pill> : null}
@@ -313,7 +313,7 @@ function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; oppo
 				{/* Fetched vs ranked vs shown, so a source that silently returns
 				    nothing is visible as one. The HN fetcher returned 0 for its
 				    whole life before this existed. */}
-				<Card title="Where leads come from" hint="Rows fetched this refresh, how many cleared the score bar, and how many are on this page.">
+				<Card className="card-compact" title="Where leads come from" hint="Rows fetched this refresh, how many cleared the score bar, and how many are on this page.">
 					{sourceStats.length ? (
 						<KeyValue
 							rows={sourceStats.map((row) => [
@@ -330,9 +330,9 @@ function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; oppo
 					)}
 				</Card>
 
-				<Card title="Refused routes" hint="Checked and rejected, so they cannot return to this page.">
+				<Card className="card-compact" title="Refused routes" hint="Checked and rejected, so they cannot return to this page.">
 					{refused.length ? (
-						<div className="stack">
+						<div className="stack tight">
 							{refused.map((row, index) => (
 								<article className="suggestion" key={`${row.name}-${index}`}>
 									<div className="suggestion-head">

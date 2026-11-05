@@ -219,7 +219,7 @@ Only the masked address (`wallet.address_masked`) is written to tracked files;
 - Charts are single-series bars (`BarList`): one accent hue on a shared zero,
   the value printed beside each bar, and the sample size as `n=` so a mean over
   two posts reads as one. Rows below `_MIN_ARCHETYPE_SAMPLE` are drawn faint.
-- Generous spacing: the owner found Leads and Research cramped (2026-11-03).
+- Generous spacing: the owner found Leads and Research cramped (2026-11-03). Leads was then found too loose and compacted on 2026-11-05 (see below); the rule below still holds for every other page.
   A `.card` is a flex column with `gap-5`, so its children (filters, lists,
   key/value blocks) never touch; don't add `mt-*` to a card's direct child.
   Secondary text is at least 13px with `leading-relaxed`; list rows get `py-4`
@@ -298,3 +298,14 @@ Only the masked address (`wallet.address_masked`) is written to tracked files;
   rewrites `status.json`. The "Configured secrets" card is read from the repo
   and will keep naming `GROQ_API_KEY` / `OPENROUTER_API_KEY` until the owner
   deletes those secrets in GitHub.
+
+## 2026-11-05 changes
+
+- **Leads: compact layout.** The owner found each card needlessly large, and
+  asked for compact but not dense. A lead row is now two lines (title, one-line
+  reason) with the pills in a right-hand column: ~75px a row instead of ~115px.
+  The reason clamps to one line on a desktop and two on a phone, and the full
+  text is the hover `title` and sits on the detail page. The tile row, the list
+  card and the two lower cards use the `compact` / `card-compact` / `stack.tight`
+  modifiers in `styles.css`, scoped to Leads so other pages keep the 2026-11-03
+  spacing. Do not tighten rows past `py-3.5`, and leave `.segmented` padding alone.

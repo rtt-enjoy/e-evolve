@@ -761,17 +761,20 @@ a {
 		@apply flex flex-col;
 	}
 
+	/* Two lines a row (title, reason) with the pills in a right-hand column, so
+	   a row is ~70px instead of ~115px. Do not squeeze it past py-3.5: the
+	   owner asked for compact, not dense (2026-11-05). */
 	.lead-row {
-		@apply flex items-start gap-2 border-t border-line transition first:border-t-0;
+		@apply flex items-center gap-2 border-t border-line transition first:border-t-0;
 		@apply -mx-3 rounded-lg px-3 hover:bg-panel2;
 	}
 
 	.lead-row-link {
-		@apply flex min-w-0 flex-1 flex-wrap items-start gap-x-4 gap-y-3 py-5;
+		@apply flex min-w-0 flex-1 flex-wrap items-center gap-x-4 gap-y-2 py-3.5;
 	}
 
 	.lead-row-source {
-		@apply mt-5 h-8 w-8;
+		@apply h-8 w-8 shrink-0;
 	}
 
 	.lead-row-body {
@@ -782,13 +785,51 @@ a {
 		@apply block text-[14.5px] font-medium leading-6;
 	}
 
+	/* One line on a desktop row, two on a phone where the width is short. The
+	   full reason is a hover title and sits on the detail page. */
 	.lead-row-body p {
-		@apply mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-soft;
+		@apply mt-0.5 line-clamp-2 text-[13px] leading-5 text-soft sm:line-clamp-1;
 	}
 
-	/* On narrow screens the pills drop under the title, aligned with it. */
+	@media (min-width: 640px) {
+		.lead-row-body strong {
+			@apply truncate;
+		}
+	}
+
+	/* On narrow screens the pills drop under the title, aligned with it. On a
+	   desktop they stay in a right column, capped so a long title keeps room. */
 	.lead-row-meta {
-		@apply flex w-full shrink-0 flex-wrap items-center gap-2 pl-14 sm:w-auto sm:pl-0;
+		@apply flex w-full shrink-0 flex-wrap items-center gap-1.5 pl-14 sm:w-auto sm:max-w-[26rem] sm:justify-end sm:pl-0;
+	}
+
+	.lead-row-meta .pill {
+		@apply px-2 py-0 text-[11.5px] leading-5;
+	}
+
+	/* Compact modifiers for the Leads page: smaller padding, same tokens. */
+	.card.card-compact {
+		@apply gap-4 p-4 sm:p-5;
+	}
+
+	.tile-row.compact {
+		@apply gap-3;
+	}
+
+	.tile-row.compact .tile {
+		@apply p-3.5 sm:px-4 sm:py-3.5;
+	}
+
+	.tile-row.compact .tile-value {
+		@apply mt-1 text-[22px] sm:text-[24px];
+	}
+
+	.tile-row.compact .tile-detail {
+		@apply mt-1 text-xs leading-snug sm:text-xs;
+	}
+
+	.stack.tight {
+		@apply gap-3;
 	}
 
 	.pager {

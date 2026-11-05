@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-05T13:50:13.454643+00:00",
-  "total_runs": 2290,
+  "last_run": "2026-11-05T14:50:13.788745+00:00",
+  "total_runs": 2291,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,36 +33,25 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add one concrete before/after example to the title-rewrite prompt that shows both live defects (ALL-CAPS word and colon-subtitle padding) being fixed in a single rewrite, aiming at the 3 weak_title drafts lost in the last 14 days.",
+    "summary": "Have the title-rewrite call return three candidate titles and accept the first one that clears the gate, instead of one candidate whose single failure still loses the draft \u2014 the dominant residual prompt-side reject is weak_title (3 drafts / 14 days; gate findings 'title has ALL-CAPS word' x2, 'colon subtitle' x1), and one-shot rewrites give the model no second chance.",
     "changes_applied": [
       {
         "file": "bot/earning/articles.py",
-        "reason": "PROMPT FOCUS: _revise_title lost the weak_title drafts. Its rule list states the bans but gives the model no worked example of a title that trips both live findings (an ALL-CAPS non-acronym word AND colon-subtitle padding). One concrete before/after covering both defects, distinct from the ~30 prior single-rule proposals, tells the model what a passing rewrite looks like instead of only what fails."
+        "reason": "The rewrite prompt asks for one title, so one bad candidate still loses the draft to weak_title. Ask for three candidates; the gate then picks the first clean one. This uses the existing gate unchanged, only gives the model three tries at it in one call (same cost in calls)."
       }
     ],
-    "suggestions": [
-      {
-        "title": "Put the wallet address in the dev.to profile bio",
-        "description": "Carries the ask on every profile visit permanently; the one cheap deferred channel row that needs no account, processor or policy change",
-        "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: open dev.to/settings and edit the profile Bio",
-          "Step 2: paste [redacted] (TRC-20) with one line of context"
-        ]
-      }
-    ],
-    "direction": "Checklist step 4 / Principle 5 \u2014 reach into the live receive path; PROMPT FOCUS: weak_title=3, gate findings 'title has ALL-CAPS word' x2 and 'title padded with a colon subtitle' x1",
+    "suggestions": [],
+    "direction": "Checklist step 4 \u2014 reach into a live receive path: upgrade the prompt losing the most drafts (PROMPT FOCUS: weak_title, produced by _revise_title), change the instruction not the gate.",
     "evidence": [
-      "article_rejects: drafts lost to prompts last 14 days weak_title=3 (vs fabricated=2)",
-      "article_rejects.last_detail gate findings: 'title has ALL-CAPS word' x2; 'title padded with a colon subtitle; pick the sharper half' x1",
-      "article_rejects.counts total 64 with weak_title=14 lifetime",
-      "binding step is 4 \u2014 reach, and the title is what decides feed clicks (article_stats avg_views=130.8)"
+      "article_rejects.counts: weak_title=14 lifetime, 3 in the last-14-day prompt window \u2014 the largest prompt-fixable bucket (llm_error is engine-side)",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x2; 'title padded with a colon subtitle; pick the sharper half' x1",
+      "bot/earning/articles.py _revise_title(): asks for exactly one title ({\"title\": \"...\"}); a single weak rewrite returns None and _finalize() rejects the whole publishable body as weak_title",
+      "receive path clean: receipt_check 45/45 covered, known_without_footer=0, payout.live=true \u2014 so reach (drafts lost) is the binding work"
     ],
-    "money_path": "reach-only: a title that passes the gate is one more post and one more tip ask published into a verified receive path (payout.live=true, 45/45 covered); no code in the receive path changes",
-    "verify": "Next cycles' evolution brief should show weak_title in the 'drafts lost to a prompt (last 14 days)' window falling from 3 toward 0, and article_rejects.recent gaining no new 'ALL-CAPS word' or 'colon subtitle' details from the rewrite path. Each rescued draft is one published post and one footer ask.",
+    "money_path": "reach-only: each saved weak_title is one more post (and one more tip footer) that ships; no change to the receive path itself.",
+    "verify": "article_rejects recent window: weak_title entries should fall over the next ~14 days (currently 3); per-draft, a log line '[articles] title improved' after a first-candidate failure shows the multi-candidate path firing. gate is untouched \u2014 _title_problems still judges every candidate identically.",
     "error": null,
-    "branch": "evolve/1.41.1-20261105-135053",
+    "branch": "evolve/1.41.1-20261105-145103",
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -83,7 +72,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 41,
+  "last_cycle_seconds": 51,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2752,7 +2741,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-05T13:50:14.331096+00:00",
+    "checked_at": "2026-11-05T14:50:14.370068+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3108,7 +3097,7 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261105-135053",
+  "last_evolution_branch": "evolve/1.41.1-20261105-145103",
   "evolution_pending_review": true,
   "article_stats": {
     "count": 44,
@@ -3401,7 +3390,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-05T13:50:53.841133+00:00",
+    "last_run": "2026-11-05T14:51:03.772168+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3411,30 +3400,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-05T13:50:54.198942+00:00",
+    "last_run": "2026-11-05T14:51:04.188506+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4681657,
-        "at": "2026-11-05T04:41:53.218887+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780783,
-        "at": "2026-11-05T04:41:53.218887+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
-        "at": "2026-11-05T04:41:53.218887+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-11-05T04:41:53.218887+00:00",
-        "ok": true
-      },
       {
         "id": 4602729,
         "at": "2026-11-05T05:41:59.482718+00:00",
@@ -3636,8 +3605,28 @@
         "ok": true
       },
       {
+        "id": 4681657,
+        "at": "2026-11-05T14:51:04.188506+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780783,
+        "at": "2026-11-05T14:51:04.188506+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-11-05T14:51:04.188506+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-11-05T14:51:04.188506+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-05T13:50:54.198942+00:00",
+        "at": "2026-11-05T14:51:04.188506+00:00",
         "ok": true
       }
     ],

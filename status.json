@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-05T10:50:09.645343+00:00",
-  "total_runs": 2287,
+  "last_run": "2026-11-05T11:50:13.668358+00:00",
+  "total_runs": 2288,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,31 +33,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: every plausible prompt fix for the PROMPT FOCUS (weak_title, 3 drafts/14d, findings 'title has ALL-CAPS word' x2 and 'colon subtitle' x1) already exists as an unmerged review branch \u2014 at least 30 distinct prior proposals from 2026-10-31 to 2026-11-05 target exactly these two findings in _SYSTEM and _revise_title, including the identical 'replace the ambiguous no ALL-CAPS in _revise_title' edit from 2026-11-04. Proposing a 31st variation of the same edit repeats a dead end and cannot be reviewed as a change; the binding constraint is that none of them have been merged, so no prompt change can be measured until one lands.",
+    "summary": "No change proposed: the PROMPT FOCUS (weak_title, 3 drafts in 14 days) has already accumulated ~30 open review branches targeting exactly the two gate findings (ALL-CAPS x2, colon-subtitle x1), and status.suggestions itself recommends merging one parked branch before any new title-prompt proposal can be measured; adding a 31st duplicate edit would make attribution impossible and risks the never-merged pattern this brief warns about.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one parked weak_title branch before any new title-prompt proposal is accepted",
-        "description": "Unblocks the prompt-improvement loop: the 14-day weak_title count (3) cannot be attributed to any fix while 30+ candidate fixes sit open simultaneously, and each further cycle re-proposes the same edits. Merging the smallest one lets the next window measure whether ALL-CAPS and colon-subtitle rejects actually fall.",
-        "owner_action": "Review and merge exactly one review branch touching the bot/earning/articles.py title prompts \u2014 the smallest (the 2026-11-05 colon-subtitle rescue) \u2014 then close the superseded title-prompt branches.",
+        "title": "Merge the smallest parked weak_title branch, then measure for two weeks",
+        "description": "Unblocks the prompt-improvement loop the PROMPT FOCUS depends on: with ~30 open branches touching the same two prompt strings, no future cycle can attribute a drop in weak_title rejects to any single edit.",
+        "owner_action": "Merge the 2026-11-05 colon-subtitle rescue branch (smallest, edits-only) and close the superseded title-prompt branches as duplicates.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the review branches dated 2026-10-31 to 2026-11-05 that edit bot/earning/articles.py (_SYSTEM title rules or _revise_title).",
-          "Step 2: Merge the smallest one; the colon-subtitle rescue from 2026-11-05 addresses one finding with a few-line edit and zero rewrite risk (edits only, no file rewrite).",
-          "Step 3: Close the remaining title-prompt branches as superseded, then watch article_rejects.recent and the 14-day prompt-loss window for two weeks before merging or accepting any further title edit."
+          "Step 1: Open the review branches dated 2026-10-31 to 2026-11-05 that edit _SYSTEM title rules or _revise_title in bot/earning/articles.py.",
+          "Step 2: Merge only the 2026-11-05 colon-subtitle rescue; it addresses one gate finding with a few-line edit and no file rewrite.",
+          "Step 3: Close the remaining title-prompt branches as superseded; watch the 14-day prompt-loss window before accepting any further title edit."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach into a live receive path) \u2014 upgrade the prompts that lose drafts, one measured step per cycle; the ledger window cannot measure a step while its branches sit unmerged.",
+    "direction": "Checklist step 4 / PROMPT FOCUS \u2014 weak_title=3; doctrine Principle 3j (measure before steering again)",
     "evidence": [
-      "article_rejects.counts weak_title=14 lifetime; drafts lost to a prompt (14d): weak_title=3, fabricated=2",
-      "gate findings behind focus: 'title has ALL-CAPS word' x2, 'title padded with a colon subtitle; pick the sharper half' x1",
-      "PRIOR PROPOSALS list: 30+ distinct unmerged branches dated 2026-10-31 to 2026-11-05 all editing bot/earning/articles.py title prompts for these same findings",
-      "status.suggestions already names this: 'Merge exactly one of the ~30 parked title-prompt branches instead of letting them accumulate'",
-      "drafts lost to the engine (14d): llm_error=18, empty_draft=1 \u2014 not prompt-fixable"
+      "article_rejects 14-day prompt loss: weak_title=3, fabricated=2",
+      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x2, 'title padded with a colon subtitle' x1",
+      "PRIOR PROPOSALS: ~30 open unmerged branches on bot/earning/articles.py title prompts (2026-10-31 to 2026-11-05), including a same-day colon-subtitle rescue and ALL-CAPS allowlist/clarification variants",
+      "status.suggestions[0].title = 'Merge one parked weak_title branch before any new title-prompt proposal is accepted'",
+      "llm_error=18 of last-14-day losses are engine failures, not prompt-fixable"
     ],
-    "money_path": "reach-only. The receive path is verified (receipt_check.covered 45/45, coverage_complete True, known_without_footer 0); weak_title rejects are posts and tip asks that never ship, so fixing title loss widens reach, not the ask.",
-    "verify": "After the owner merges one parked weak_title branch, read article_rejects.counts.weak_title and the 14-day prompt-loss window over the next two weekly windows: the count should fall or hold while llm_error stays the dominant reject. If it does not fall, a second variant may then be tried.",
+    "money_path": "none this cycle \u2014 the right move is merging an existing branch, not another proposal",
+    "verify": "After the owner merges one existing title-prompt branch, the 14-day prompt-loss window in the next evolution brief should show weak_title falling below 3 and 'title has ALL-CAPS word' / colon-subtitle findings receding in article_rejects.recent",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -68,20 +68,20 @@
   },
   "suggestions": [
     {
-      "title": "Merge one parked weak_title branch before any new title-prompt proposal is accepted",
-      "description": "Unblocks the prompt-improvement loop: the 14-day weak_title count (3) cannot be attributed to any fix while 30+ candidate fixes sit open simultaneously, and each further cycle re-proposes the same edits. Merging the smallest one lets the next window measure whether ALL-CAPS and colon-subtitle rejects actually fall.",
-      "owner_action": "Review and merge exactly one review branch touching the bot/earning/articles.py title prompts \u2014 the smallest (the 2026-11-05 colon-subtitle rescue) \u2014 then close the superseded title-prompt branches.",
+      "title": "Merge the smallest parked weak_title branch, then measure for two weeks",
+      "description": "Unblocks the prompt-improvement loop the PROMPT FOCUS depends on: with ~30 open branches touching the same two prompt strings, no future cycle can attribute a drop in weak_title rejects to any single edit.",
+      "owner_action": "Merge the 2026-11-05 colon-subtitle rescue branch (smallest, edits-only) and close the superseded title-prompt branches as duplicates.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the review branches dated 2026-10-31 to 2026-11-05 that edit bot/earning/articles.py (_SYSTEM title rules or _revise_title).",
-        "Step 2: Merge the smallest one; the colon-subtitle rescue from 2026-11-05 addresses one finding with a few-line edit and zero rewrite risk (edits only, no file rewrite).",
-        "Step 3: Close the remaining title-prompt branches as superseded, then watch article_rejects.recent and the 14-day prompt-loss window for two weeks before merging or accepting any further title edit."
+        "Step 1: Open the review branches dated 2026-10-31 to 2026-11-05 that edit _SYSTEM title rules or _revise_title in bot/earning/articles.py.",
+        "Step 2: Merge only the 2026-11-05 colon-subtitle rescue; it addresses one gate finding with a few-line edit and no file rewrite.",
+        "Step 3: Close the remaining title-prompt branches as superseded; watch the 14-day prompt-loss window before accepting any further title edit."
       ],
-      "discovered_at": "2026-11-05T10:50:37.339160+00:00"
+      "discovered_at": "2026-11-05T11:50:35.593650+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 29,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2756,7 +2756,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-05T10:50:10.092928+00:00",
+    "checked_at": "2026-11-05T11:50:14.065900+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3405,7 +3405,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-05T10:50:37.727404+00:00",
+    "last_run": "2026-11-05T11:50:35.975886+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3415,30 +3415,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-05T10:50:38.017683+00:00",
+    "last_run": "2026-11-05T11:50:36.920207+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4943931,
-        "at": "2026-11-05T01:41:35.114487+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-11-05T01:41:35.114487+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-11-05T01:41:35.114487+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-11-05T01:41:35.114487+00:00",
-        "ok": true
-      },
       {
         "id": 4925166,
         "at": "2026-11-05T02:41:38.528411+00:00",
@@ -3640,8 +3620,28 @@
         "ok": true
       },
       {
+        "id": 4943931,
+        "at": "2026-11-05T11:50:36.920207+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-11-05T11:50:36.920207+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-05T11:50:36.920207+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-11-05T11:50:36.920207+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-05T10:50:38.017683+00:00",
+        "at": "2026-11-05T11:50:36.920207+00:00",
         "ok": true
       }
     ],
@@ -3650,7 +3650,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.2
+    "oldest_check_age_hours": 9.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

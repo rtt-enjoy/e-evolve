@@ -511,7 +511,9 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
 		"technology or failure, no clickbait words, no exclamation marks, no "
 		"ALL-CAPS, no colon-subtitle padding.\n\n"
-		'Respond with ONLY this JSON: {"title": "..."}'
+		"Write THREE different candidate titles. Each must satisfy every rule on "
+		"its own -- do not list variations of one idea.\n\n"
+		'Respond with ONLY this JSON: {"titles": ["<candidate 1>", "<candidate 2>", "<candidate 3>"]}'
 	)
 	try:
 		if hasattr(llm, "complete_json_for_role"):
@@ -522,15 +524,23 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		log.warning("[articles] title revision failed: %s", exc)
 		return None
 
-	candidate = str((out or {}).get("title", "")).strip()
-	if not candidate:
-		return None
-	remaining = _title_problems(candidate)
-	if remaining:
-		log.info("[articles] revised title still weak %s", remaining)
-		return None
-	log.info("[articles] title improved: %r", candidate)
-	return candidate
+	# Three candidates, first one the gate passes wins. One candidate meant a
+	# single weak rewrite still lost a publishable body to weak_title; three
+	# costs no extra LLM call and needs no gate change.
+	candidates = [str(t).strip() for t in ((out or {}).get("titles") or [])]
+	legacy = str((out or {}).get("title", "")).strip()
+	if legacy:
+		candidates.append(legacy)
+	for candidate in candidates:
+		if not candidate:
+			continue
+		remaining = _title_problems(candidate)
+		if remaining:
+			log.info("[articles] candidate title still weak %s", remaining)
+			continue
+		log.info("[articles] title improved: %r", candidate)
+		return candidate
+	return None
 
 
 # What each archetype means as a writing instruction. Kept next to the prompt

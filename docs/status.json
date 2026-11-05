@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-05T14:50:13.788745+00:00",
-  "total_runs": 2291,
+  "last_run": "2026-11-05T15:29:20.058917+00:00",
+  "total_runs": 2292,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,26 +33,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Have the title-rewrite call return three candidate titles and accept the first one that clears the gate, instead of one candidate whose single failure still loses the draft \u2014 the dominant residual prompt-side reject is weak_title (3 drafts / 14 days; gate findings 'title has ALL-CAPS word' x2, 'colon subtitle' x1), and one-shot rewrites give the model no second chance.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The rewrite prompt asks for one title, so one bad candidate still loses the draft to weak_title. Ask for three candidates; the gate then picks the first clean one. This uses the existing gate unchanged, only gives the model three tries at it in one call (same cost in calls)."
-      }
-    ],
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-pro is no longer available to new users. Please update your code to use models/gemini-3.1-pro-preview for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).",
+    "changes_applied": [],
     "suggestions": [],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path: upgrade the prompt losing the most drafts (PROMPT FOCUS: weak_title, produced by _revise_title), change the instruction not the gate.",
-    "evidence": [
-      "article_rejects.counts: weak_title=14 lifetime, 3 in the last-14-day prompt window \u2014 the largest prompt-fixable bucket (llm_error is engine-side)",
-      "Gate findings behind weak_title: 'title has ALL-CAPS word' x2; 'title padded with a colon subtitle; pick the sharper half' x1",
-      "bot/earning/articles.py _revise_title(): asks for exactly one title ({\"title\": \"...\"}); a single weak rewrite returns None and _finalize() rejects the whole publishable body as weak_title",
-      "receive path clean: receipt_check 45/45 covered, known_without_footer=0, payout.live=true \u2014 so reach (drafts lost) is the binding work"
-    ],
-    "money_path": "reach-only: each saved weak_title is one more post (and one more tip footer) that ships; no change to the receive path itself.",
-    "verify": "article_rejects recent window: weak_title entries should fall over the next ~14 days (currently 3); per-draft, a log line '[articles] title improved' after a first-candidate failure shows the multi-candidate path firing. gate is untouched \u2014 _title_problems still judges every candidate identically.",
-    "error": null,
-    "branch": "evolve/1.41.1-20261105-145103",
-    "proposed_version": "1.41.1"
+    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-pro is no longer available to new users. Please update your code to use models/gemini-3.1-pro-preview for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).",
+    "error_type": "json"
   },
   "last_earning": {
     "actions": [],
@@ -71,8 +56,10 @@
       "discovered_at": "2026-11-05T13:50:53.336026+00:00"
     }
   ],
-  "errors": [],
-  "last_cycle_seconds": 51,
+  "errors": [
+    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-pro is no longer available to new users. Please update your code to use models/gemini-3.1-pro-preview for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started)."
+  ],
+  "last_cycle_seconds": 607,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2741,7 +2728,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-05T14:50:14.370068+00:00",
+    "checked_at": "2026-11-05T15:29:20.736714+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3097,8 +3084,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261105-145103",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 44,
     "total_views": 5753,
@@ -3390,7 +3377,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-05T14:51:03.772168+00:00",
+    "last_run": "2026-11-05T15:39:26.745851+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3400,30 +3387,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-05T14:51:04.188506+00:00",
+    "last_run": "2026-11-05T15:39:26.989415+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4602729,
-        "at": "2026-11-05T05:41:59.482718+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-11-05T05:41:59.482718+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-11-05T05:41:59.482718+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-11-05T05:41:59.482718+00:00",
-        "ok": true
-      },
       {
         "id": 4959304,
         "at": "2026-11-05T06:45:00.332808+00:00",
@@ -3625,8 +3592,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-11-05T15:39:26.989415+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-11-05T15:39:26.989415+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-11-05T15:39:26.989415+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-05T15:39:26.989415+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-05T14:51:04.188506+00:00",
+        "at": "2026-11-05T15:39:26.989415+00:00",
         "ok": true
       }
     ],
@@ -3635,7 +3622,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.2
+    "oldest_check_age_hours": 8.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3649,14 +3636,12 @@
     "main_model": "glm-5.3-flash",
     "preferred_model": "glm-5.3-flash",
     "refused": [],
-    "endpoint": "https://api.z.ai/api/coding/paas/v4",
+    "endpoint": null,
     "key_set": true,
-    "live": true,
-    "serving": "glm",
-    "disabled_reason": null,
-    "calls": {
-      "glm": 1
-    },
+    "live": false,
+    "serving": "atria",
+    "disabled_reason": "quota_spent",
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

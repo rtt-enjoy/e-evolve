@@ -52,13 +52,29 @@
 	},
 	"ctf_bounty": {
 		"enabled": true,
-		"refresh_hours": 6,
-		"lookahead_days": 45,
+		"refresh_hours": 3,
+		"lookahead_days": 60,
 		"running_grace_days": 3,
-		"fetch_limit": 100,
-		"status_max_items": 14,
+		"fetch_limit": 200,
+		"status_max_items": 40,
+		"min_fresh_share": 0.4,
+		"fresh_hours": 72,
 		"prize_max_chars": 160,
 		"note_on_config": "Owner-directed research focus (2026-10-29): Capture The Flag competitions that pay a prize, ranked for an entry-level solver. Source is CTFtime's keyless public API, so no new secret and no LLM call. This is research, not earning: a CTF prize is paid per event for the owner's own solving, which is labour per unit (doctrine Principle 2 row 2). It reports estimated_usd 0.0 and never enters the Leads queue as a channel. pays and crypto read the organiser's free-text prize field only; payout and KYC terms are not in the feed, so every row says kyc: not published and the rules page must be read before registering."
+	},
+	"research_feed": {
+		"enabled": true,
+		"refresh_hours": 3,
+		"lookahead_days": 60,
+		"per_category_cap": 16,
+		"min_fresh_share": 0.5,
+		"fresh_hours": 72,
+		"devpost_pages": 3,
+		"challenge_max_age_days": 7,
+		"ledger_days": 45,
+		"ledger_max_entries": 500,
+		"text_max_chars": 110,
+		"note_on_config": "Owner-directed (2026-11-05): widen Research beyond CTF. Keyless public feeds only, so no new secret and no LLM call: Devpost hackathons, Superteam Earn crypto bounties, Immunefi bug bounties (programs that ask for KYC are not listed), DEV challenge announcements. Research, not earning: a prize is paid for the owner's own work, so every action reports estimated_usd 0.0 and nothing is summed. per_category_cap bounds status.json, which is committed hourly; min_fresh_share of each category is reserved for the newest rows ahead of the score cut. Every row passes _shared.prohibited_category."
 	},
 	"mrr_ideas": {
 		"enabled": true,

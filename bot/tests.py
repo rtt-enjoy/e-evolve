@@ -6393,3 +6393,299 @@ class TestLeadsChangeFromDayToDay(unittest.TestCase):
 		self.assertEqual(len(shown), 12)
 		self.assertGreaterEqual(sum(1 for op in shown if op["source"] == "medium"), 6)
 
+
+
+class TestSharedLedgerAndSelection(unittest.TestCase):
+	"""`stamp_from_ledger` and `select_fresh_first`: what makes "added when" true."""
+
+	def setUp(self):
+		from datetime import datetime, timezone
+		self.now = datetime(2026, 11, 5, 12, 0, tzinfo=timezone.utc)
+
+	def _stamp(self, items, ledger=None, **kw):
+		from bot.earning._shared import stamp_from_ledger
+		return stamp_from_ledger(items, ledger, lambda r: str(r.get("id") or ""), self.now, **kw)
+
+	def test_a_row_the_cap_dropped_keeps_its_stamp_when_it_returns(self):
+		# Refresh 1 saw A and B. Refresh 2 showed only A (B was cut). Refresh 3
+		# brings B back: stamp_first_seen, reading only the displayed list,
+		# would call it "just now". The ledger remembers the whole pool.
+		old = "2026-11-01T00:00:00+00:00"
+		rows, ledger = self._stamp([{"id": "A"}, {"id": "B"}], {"A": old, "B": old})
+		self.assertEqual({r["discovered_at"] for r in rows}, {old})
+		rows, ledger = self._stamp([{"id": "B"}], ledger)
+		self.assertEqual(rows[0]["discovered_at"], old)
+
+	def test_unknown_row_is_stamped_now_and_remembered(self):
+		rows, ledger = self._stamp([{"id": "N"}], {})
+		self.assertEqual(rows[0]["discovered_at"], self.now.isoformat(timespec="seconds"))
+		self.assertIn("N", ledger)
+
+	def test_displayed_rows_seed_a_missing_ledger(self):
+		# First deploy: no ledger yet, but the previous snapshot has stamps.
+		seed = [{"id": "A", "discovered_at": "2026-10-30T00:00:00+00:00"}]
+		rows, _ = self._stamp([{"id": "A"}], None, seed=seed)
+		self.assertEqual(rows[0]["discovered_at"], "2026-10-30T00:00:00+00:00")
+
+	def test_ledger_forgets_old_departed_rows_and_stays_bounded(self):
+		ledger = {"gone": "2026-01-01T00:00:00+00:00", "recent": "2026-11-01T00:00:00+00:00"}
+		_, out = self._stamp([{"id": "X"}], ledger, keep_days=45)
+		self.assertNotIn("gone", out)
+		self.assertIn("recent", out)
+		many = {f"k{i}": f"2026-11-0{1 + i % 4}T00:00:00+00:00" for i in range(50)}
+		_, out = self._stamp([], many, max_entries=10)
+		self.assertLessEqual(len(out), 10)
+
+	def test_bad_input_never_raises(self):
+		for items, ledger in ((None, None), ("x", 3), ([None, 5, {"title": "no id"}], [1])):
+			self._stamp(items, ledger)
+
+	def _row(self, ident, score, hours_old):
+		from datetime import timedelta
+		return {"id": ident, "title": ident, "score": score,
+				"discovered_at": (self.now - timedelta(hours=hours_old)).isoformat()}
+
+	def test_newest_rows_get_slots_ahead_of_the_score_cut(self):
+		from bot.earning._shared import select_fresh_first
+		rows = [self._row(f"old{i}", 90 - i, 500) for i in range(6)] + [self._row("new", 5, 1)]
+		plain = select_fresh_first(rows, 4, self.now, fresh_share=0)
+		self.assertNotIn("new", [r["id"] for r in plain])
+		mixed = select_fresh_first(rows, 4, self.now, fresh_share=0.5, fresh_hours=72)
+		self.assertIn("new", [r["id"] for r in mixed])
+		self.assertEqual(len(mixed), 4)
+
+	def test_selection_never_returns_more_than_cap_or_duplicates(self):
+		from bot.earning._shared import select_fresh_first
+		rows = [self._row(f"r{i}", i, 1) for i in range(10)]
+		out = select_fresh_first(rows, 5, self.now, fresh_share=1.0)
+		self.assertEqual(len(out), 5)
+		self.assertEqual(len({r["id"] for r in out}), 5)
+		self.assertEqual(select_fresh_first(rows, 0, self.now), [])
+		self.assertEqual(select_fresh_first([], 5, self.now), [])
+
+
+class TestResearchFeed(unittest.TestCase):
+	"""Prize and bounty feeds beyond CTF: research only, and every row dated."""
+
+	def setUp(self):
+		from datetime import datetime, timezone
+		import bot.earning.research_feed as R
+		self.R = R
+		self.now = datetime(2026, 11, 5, 12, 0, tzinfo=timezone.utc)
+		self.cfg = dict(R._DEFAULTS)
+
+	# --- Devpost
+	def _devpost(self, **over):
+		raw = {
+			"id": 1, "title": "Sample Hack", "url": "https://sample.devpost.com/", "open_state": "open",
+			"displayed_location": {"location": "Online"}, "invite_only": False, "winners_announced": False,
+			"submission_period_dates": "Nov 01 - Dec 01, 2026",
+			"prize_amount": "$<span data-currency-value>1,000</span>", "prizes_counts": {"cash": 1, "other": 0},
+			"themes": [{"name": "Beginner Friendly"}, {"name": "Gaming"}], "organization_name": "Org",
+		}
+		raw.update(over)
+		return raw
+
+	def test_devpost_date_ranges(self):
+		r = self.R._devpost_range
+		start, end = r("Oct 15 - Nov 05, 2026")
+		self.assertEqual((start.month, start.day, end.month, end.day), (10, 15, 11, 5))
+		start, end = r("Nov 04 - 11, 2026")
+		self.assertEqual((start.month, end.month, end.day), (11, 11, 11))
+		start, end = r("Dec 20 - Jan 10, 2027")
+		self.assertEqual((start.year, end.year), (2026, 2027))
+		self.assertEqual(r("whenever"), (None, None))
+		self.assertEqual(r(None), (None, None))
+
+	def test_devpost_prize_reads_cleanly_and_is_the_organisers_claim(self):
+		row = self.R.build_devpost(self._devpost(), self.cfg, self.now)
+		self.assertEqual(row["prize"], "$1,000 in prizes")
+		self.assertTrue(row["pays"])
+		self.assertTrue(row["beginner"])
+		self.assertEqual(row["kyc"], "not published")
+
+	def test_devpost_drops_what_the_owner_cannot_enter(self):
+		for over in (
+			{"displayed_location": {"location": "SVAI Hub"}},
+			{"invite_only": True},
+			{"winners_announced": True},
+			{"submission_period_dates": "Sep 01 - Oct 01, 2026"},
+			{"open_state": "ended"},
+		):
+			self.assertIsNone(self.R.build_devpost(self._devpost(**over), self.cfg, self.now), over)
+
+	def test_devpost_without_a_cash_prize_does_not_claim_one(self):
+		row = self.R.build_devpost(self._devpost(prizes_counts={"cash": 0, "other": 2}, prize_amount="$0"), self.cfg, self.now)
+		self.assertFalse(row["pays"])
+		self.assertEqual(row["prize"], "")
+
+	# --- Superteam
+	def _superteam(self, **over):
+		raw = {"slug": "a-bounty", "title": "A bounty", "rewardAmount": 500, "token": "USDC",
+			   "deadline": "2026-11-20T00:00:00.000Z", "type": "bounty", "compensationType": "fixed",
+			   "isWinnersAnnounced": False, "sponsor": {"name": "Sponsor"}, "_count": {"Submission": 12}}
+		raw.update(over)
+		return raw
+
+	def test_superteam_row(self):
+		row = self.R.build_superteam(self._superteam(), self.cfg, self.now)
+		self.assertEqual(row["prize"], "500 USDC")
+		self.assertTrue(row["crypto"])
+		self.assertEqual(row["url"], "https://superteam.fun/earn/listing/a-bounty")
+		self.assertEqual(row["deadline"][:10], "2026-11-20")
+
+	def test_superteam_drops_gigs_and_finished_listings(self):
+		for over in (
+			{"compensationType": "variable"}, {"deadline": "2026-11-01T00:00:00.000Z"},
+			{"isWinnersAnnounced": True}, {"rewardAmount": 0}, {"slug": ""},
+		):
+			self.assertIsNone(self.R.build_superteam(self._superteam(**over), self.cfg, self.now), over)
+
+	# --- Immunefi
+	def _immunefi(self, **over):
+		raw = {"slug": "proj", "project": "Proj", "maxBounty": 50000, "kyc": False, "isPaused": False,
+			   "inviteOnly": False, "rewardsToken": "USDC", "launchDate": "2026-10-01T00:00:00.000Z",
+			   "productType": ["smart_contract"], "updatedDate": "2026-11-05T01:00:00.000Z"}
+		raw.update(over)
+		return raw
+
+	def test_immunefi_uses_launch_date_never_the_daily_changing_update(self):
+		row = self.R.build_immunefi(self._immunefi(), self.cfg, self.now)
+		self.assertEqual(row["posted_at"][:10], "2026-10-01")
+		self.assertEqual(row["kyc"], "not required")
+		self.assertTrue(row["crypto"])
+
+	def test_immunefi_does_not_list_programs_that_ask_for_kyc(self):
+		self.assertIsNone(self.R.build_immunefi(self._immunefi(kyc=True), self.cfg, self.now))
+		self.assertIsNone(self.R.build_immunefi(self._immunefi(isPaused=True), self.cfg, self.now))
+		self.assertIsNone(self.R.build_immunefi(self._immunefi(inviteOnly=True), self.cfg, self.now))
+		self.assertIsNone(self.R.build_immunefi(self._immunefi(maxBounty=0), self.cfg, self.now))
+
+	# --- DEV challenges
+	def _post(self, title, path="/devteam/x-1", days=1):
+		from datetime import timedelta
+		return {"id": 5, "title": title, "path": path, "url": "https://dev.to" + path, "description": "d",
+				"published_timestamp": (self.now - timedelta(days=days)).isoformat()}
+
+	def test_only_devs_own_invitations_are_challenges(self):
+		ok = self.R.build_challenge(self._post("Join the Presage SDK Challenge: $3,000 in Prizes Across 10 Winners!"), self.cfg, self.now)
+		self.assertEqual(ok["prize"], "$3,000 in prizes")
+		for title, path in (
+			("Congrats to the Sanity Challenge Winners!", "/devteam/x"),
+			("Top 7 Featured DEV Posts of the Week", "/devteam/x"),
+			("Join the Foo Challenge", "/someone/x"),
+		):
+			self.assertIsNone(self.R.build_challenge(self._post(title, path), self.cfg, self.now), title)
+		self.assertIsNone(self.R.build_challenge(self._post("Join the Old Challenge", days=30), self.cfg, self.now))
+
+	# --- Content screen: owner rule, top priority
+	def test_prohibited_and_wagering_rows_never_reach_the_page(self):
+		for title in (
+			"Porn site downloader hackathon", "Casino game jam", "Premier League Predictions content",
+			"Write a thread on $CHIMP Fair Launch", "Crack and keygen contest",
+		):
+			row = self.R._row("s", title, "crypto-bounty", title, "https://x", self.cfg, now=self.now)
+			self.assertNotEqual(self.R.screen(row), "", title)
+		clean = self.R._row("s", 1, "hackathon", "Build an accessible game with a screen reader", "https://x", self.cfg, now=self.now)
+		self.assertEqual(self.R.screen(clean), "")
+
+	def test_collect_screens_before_the_pool(self):
+		raw = {"superteam": [self._superteam(slug="bad", title="Premier League Predictions"), self._superteam(slug="good")]}
+		pool, stats = self.R.collect(raw, self.cfg, self.now)
+		self.assertEqual([r["id"] for r in pool], ["superteam:good"])
+		entry = next(s for s in stats if s["source"] == "superteam")
+		self.assertEqual((entry["fetched"], entry["kept"], entry["screened"]), (2, 1, 1))
+
+	# --- run(): what the orchestrator persists
+	def _build(self, name):
+		def build(raw, cfg, now):
+			return self.R._row(name, raw["id"], "hackathon" if name == "a" else "challenge", raw["title"],
+							   "https://x/" + str(raw["id"]), cfg, prize="$100", pays=True, now=now)
+		return build
+
+	def _fake_sources(self, store):
+		return [(n, n, (lambda cfg, now, n=n: store[n]), self._build(n)) for n in ("a", "b")]
+
+	def _run(self, store, status, cfg=None):
+		cfg = {**self.cfg, "refresh_hours": 1, **(cfg or {})}
+		with mock.patch.object(self.R, "SOURCES", self._fake_sources(store)), mock.patch.object(self.R, "config", return_value=cfg):
+			return self.R.run(None, status)
+
+	def _expire(self, status):
+		status["research_feed"]["last_refresh_at"] = "2000-01-01T00:00:00+00:00"
+
+	def test_every_row_is_dated_and_an_arrival_is_stamped_later_than_what_was_there(self):
+		status, store = {}, {"a": [{"id": 1, "title": "One"}], "b": []}
+		self._run(store, status)
+		self.assertTrue(all(r.get("discovered_at") for r in status["research_feed"]["items"]))
+		# Pretend the first row was listed last week, then a second one arrives.
+		week = "2026-10-29T00:00:00+00:00"
+		status["research_feed"]["first_seen"] = {"a:1": week}
+		self._expire(status)
+		store["a"].append({"id": 2, "title": "Two"})
+		self._run(store, status)
+		stamps = {r["title"]: r["discovered_at"] for r in status["research_feed"]["items"]}
+		self.assertEqual(stamps["One"], week)
+		self.assertGreater(stamps["Two"], week)
+
+	def test_a_row_cut_by_the_cap_and_back_keeps_its_added_time(self):
+		status = {}
+		store = {"a": [{"id": i, "title": f"T{i}"} for i in range(4)], "b": []}
+		self._run(store, status, {"per_category_cap": 2})
+		ledger = dict(status["research_feed"]["first_seen"])
+		self.assertEqual(len(ledger), 4)  # the whole pool is remembered, not what was shown
+		# Pretend the first sighting was last week, shrink the pool, then restore it.
+		week = "2026-10-29T00:00:00+00:00"
+		status["research_feed"]["first_seen"] = {k: week for k in ledger}
+		self._expire(status)
+		self._run({"a": [{"id": 0, "title": "T0"}], "b": []}, status, {"per_category_cap": 2})
+		self._expire(status)
+		self._run(store, status, {"per_category_cap": 2})
+		items = status["research_feed"]["items"]
+		self.assertTrue(items)
+		for row in items:
+			self.assertEqual(row["discovered_at"], week, row["id"])
+
+	def test_an_unreadable_source_keeps_its_last_good_rows(self):
+		status, store = {}, {"a": [{"id": 1, "title": "One"}], "b": [{"id": 9, "title": "Nine"}]}
+		self._run(store, status)
+		self._expire(status)
+		store["b"] = None
+		actions = self._run(store, status)
+		state = status["research_feed"]
+		self.assertTrue(actions[0]["success"])
+		self.assertEqual(state["last_reason"], "partial")
+		self.assertEqual(state["failed_sources"], ["b"])
+		self.assertEqual(sorted(r["title"] for r in state["items"]), ["Nine", "One"])
+
+	def test_every_source_failing_is_not_an_empty_month(self):
+		status, store = {}, {"a": [{"id": 1, "title": "One"}], "b": []}
+		self._run(store, status)
+		self._expire(status)
+		actions = self._run({"a": None, "b": None}, status)
+		self.assertFalse(actions[0]["success"])
+		self.assertEqual(status["research_feed"]["last_reason"], "fetch_failed")
+		self.assertEqual(len(status["research_feed"]["items"]), 1)
+
+	def test_never_reports_money_and_respects_the_interval(self):
+		status, store = {}, {"a": [{"id": 1, "title": "One"}], "b": []}
+		self.assertEqual(self._run(store, status)[0]["estimated_usd"], 0.0)
+		self.assertEqual(self._run({"a": None, "b": None}, status, {"refresh_hours": 24}), [])
+		self.assertEqual(self._run({"a": [], "b": []}, {}, {"enabled": False}), [])
+
+	def test_status_payload_stays_bounded(self):
+		import json
+		status = {}
+		store = {
+			"a": [{"id": i, "title": "A fairly long hackathon title that goes on and on " + str(i)} for i in range(60)],
+			"b": [{"id": i, "title": "A challenge announcement title number " + str(i)} for i in range(60)],
+		}
+		self._run(store, status, {"per_category_cap": 16})
+		size = len(json.dumps(status["research_feed"]))
+		# status.json is committed hourly; two full categories plus the ledger.
+		self.assertLess(size, 45_000, size)
+
+	def test_prohibited_table_is_shared_with_leads(self):
+		from bot.earning import _shared, code_techs
+		self.assertIs(code_techs._PROHIBITED_PATTERNS, _shared.PROHIBITED_PATTERNS)
+		self.assertEqual(code_techs._prohibited({"title": "free keygen"}), "piracy")

@@ -66,7 +66,7 @@ essentials, and detail lives one click away.
 | `#/overview` | Is it earning, is it fresh, what needs attention right now?        |
 | `#/reach`    | What was published, who read it, does every reader see the ask?    |
 | `#/leads`    | Which opportunities exist, worth what, and what is the first step? |
-| `#/research` | Which CTF bounties can I enter now? (older research is collapsed.) |
+| `#/research` | Which prizes and bounties can I enter, and when was each listed? (older research is collapsed.) |
 | `#/engine`   | Which model served each role, and what did evolution propose?      |
 | `#/health`   | Freshness, integration readiness, errors, receive-wallet state.    |
 
@@ -467,6 +467,42 @@ the same commit.
   were rate-limited" note unless `backfill.remaining` is still non-zero, since
   `skipped` keeps stale ids of posts that were later retrofitted. One scoped rule
   added: `.card-compact .bars` (`gap-2`). `Funnel` is now used by Overview only.
+- **Research: rebuilt on the Leads structure, and wider than CTF (owner: "tidy it
+  like Leads, every item must say when it was added, widen the fields, refresh far
+  more per day").** The page was a 14-row CTF card with a 4-tile row and a long
+  collapsed block. Now:
+  - **One stat strip** (`.leads-stats`): open items, listed in 24h, closing in 7d,
+    prize stated, pays crypto. Counts only; a prize is the organiser's claim, so
+    nothing is summed.
+  - **Five groups, one list**: CTF (`ctf_bounty`), Hackathons, Crypto bounties, Bug
+    bounties, Dev challenges (`research_feed`). `utils/research.ts` folds both
+    snapshot keys into one `ResearchRow`, so search, filters and sort work across
+    them. A snapshot with no `research_feed` still renders the CTFs.
+  - **Toolbar**: search, sort (newest / ending soon / score), category chips and
+    quick chips (prize, crypto, no KYC, last 24h). Groups page at 12 with `Show N
+    more`.
+  - **Every row states when it landed on the page** (the Leads rule): a toned
+    `Listed Nov 5, 02:33 PM · 3h ago` (`discovered_at`, the bot's first sighting)
+    over `Source · closes in 4d` / `starts in 3d` / `live since Apr 2021` /
+    `announced 2d ago`, the source's own clock. They are never merged, and both
+    are computed against the viewer's clock (`daysUntil`, `hoursSince`), because
+    `days_until_start` is frozen at the refresh that wrote it. A row with no stamp
+    says `Listed time not recorded`.
+  - **No `new` pill.** On the first day after a deploy every row is "new", and the
+    toned listed time already says it. The `last 24h` chip is the filter.
+  - **Deliberate coupling:** Research reuses the `.lead-row*`, `.leads-stats`,
+    `.leads-chip*` and `.lead-group*` classes rather than copying them, so the two
+    pages stay one visual system. A change to those classes changes both pages.
+    No CSS was added.
+  - **Everything below the list is closed**, under one `Reference` heading: Read
+    before registering, Where rows come from (`research_feed.source_stats`, plus
+    CTFtime), Probed and left out, and Earlier research (free AI services, earning
+    ideas, MRR triage, guardrails, bot suggestions), which moved into
+    `EarlierResearch` unchanged.
+  - Registry: `research_feed` is claimed by Research (an unclaimed key renders
+    nowhere) and the sidebar badge counts rows that state a prize.
+  Backend: `bot/earning/research_feed.py`; `ctf_bounty` now refreshes every 3h with
+  40 rows and the same first-seen ledger. See CLAUDE.md, "Prize and bounty feeds".
 - **Docs repaired.** The IA table listed `#/data` (removed today), Required
   Signals named `atriaState` and Atria as main engine (it is `engineState` and
   GLM), and Visual Rules still demanded `py-4` rows. All three were rewritten.

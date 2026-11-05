@@ -12,7 +12,7 @@ Exceptions are caught by `main.py._module()` — a crashed module does not stop 
 
 ---
 
-Five modules run: `ctf_bounty`, `code_techs` and `mrr_ideas` (research/suggestions only), plus
+Six modules run: `ctf_bounty`, `research_feed`, `code_techs` and `mrr_ideas` (research/suggestions only), plus
 `articles` and `newsletter` (both publish to dev.to when `DEV_TO_API_KEY` is
 set). Social posting, crypto trading, NFT minting, payouts, and external
 comments are blocked by policy — the modules that once implemented them have
@@ -102,7 +102,7 @@ duplicate flood on dev.to.
 secret needed.
 
 The standing research focus. Reads CTFtime's keyless event API every
-`refresh_hours` (6), keeps online, open CTFs that are not over, and ranks them by
+`refresh_hours` (3), keeps online, open CTFs that are not over, and ranks them by
 stated prize, crypto, beginner wording, Jeopardy format and how soon they start.
 Deterministic, no LLM call, and it never registers or submits anything.
 
@@ -110,6 +110,20 @@ It is research, not earning: a CTF prize is paid per event for the owner's own
 solving. Prize text is the organiser's claim, and payout / KYC terms are not
 published in the feed, so read the rules page before registering. State is in
 `status["ctf_bounty"]`.
+
+## Research feeds (`bot/earning/research_feed.py`)
+
+**Activates when:** `research_feed.enabled` is true in `config/strategy.json`. No
+secret needed.
+
+The rest of the Research page's prize and bounty rows, every `refresh_hours` (3):
+Devpost online hackathons, Superteam Earn crypto bounties, Immunefi bug bounties
+(programs that ask for KYC are not listed) and DEV challenge announcements.
+Deterministic, no LLM call, and it never registers or submits anything. Research,
+not earning: every action reports `estimated_usd: 0.0` and nothing is summed.
+Every row carries `discovered_at` (when the bot first listed it, from a first-seen
+ledger over the whole pool) beside the source's own `deadline` / `starts_at` /
+`posted_at`. State is in `status["research_feed"]`.
 
 ## MRR Ideas (`bot/earning/mrr_ideas.py`)
 

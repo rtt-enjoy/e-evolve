@@ -214,6 +214,30 @@ export type MrrIdeas = {
 	llm_used?: boolean;
 };
 
+/** One row from research_feed: a stated prize the owner could enter for. */
+export type ResearchFeedRow = {
+	id: string;
+	category: 'hackathon' | 'crypto-bounty' | 'bug-bounty' | 'challenge';
+	source: string;
+	title?: string;
+	url?: string;
+	/** The organiser's own prize text. A claim, never summed or valued. */
+	prize?: string;
+	detail?: string;
+	pays?: boolean;
+	crypto?: boolean;
+	/** "not required" only when the source says so; otherwise "not published". */
+	kyc?: string;
+	beginner?: boolean;
+	/** When the bot first listed the row (first-seen ledger). */
+	discovered_at?: string;
+	/** The source's own clocks, kept apart from `discovered_at`. */
+	deadline?: string | null;
+	starts_at?: string | null;
+	posted_at?: string | null;
+	score?: number;
+};
+
 export type CtfEvent = {
 	/** When the page first listed this event. */
 	discovered_at?: string;
@@ -465,6 +489,17 @@ export type Status = {
 		crypto?: number;
 		beginner?: number;
 		events?: CtfEvent[];
+	};
+	/** Prize and bounty feeds beyond CTF (bot/earning/research_feed.py). Research, never earnings. */
+	research_feed?: {
+		last_refresh_at?: string;
+		/** ok | partial | fetch_failed | disabled. partial: a failed source keeps its last good rows. */
+		last_reason?: string;
+		failed_sources?: string[];
+		/** Candidates found before the per-category cap. */
+		pool_total?: number;
+		source_stats?: Array<{ source: string; label?: string; fetched?: number; kept?: number; screened?: number; ok?: boolean }>;
+		items?: ResearchFeedRow[];
 	};
 	/** Reach, read back from the dev.to API (devto_stats.summarize). */
 	article_stats?: {

@@ -16,7 +16,7 @@ import requests
 
 from . import trending
 from .devto import own_post_urls
-from ._shared import load_config, parse_dt, stamp_first_seen, strip_html, xml_text
+from ._shared import PROHIBITED_PATTERNS, load_config, parse_dt, prohibited_category, stamp_first_seen, strip_html, xml_text
 
 log = logging.getLogger(__name__)
 
@@ -1212,41 +1212,9 @@ def _source_stats(
 # code, on every row, because a broad repo search did return a porn-site
 # downloader plugin for "chrome extension boilerplate".
 #
-# Each pattern is one category. False positives are accepted on purpose: a
-# legitimate repo that happens to say "keygen" is a lost row, while one
-# prohibited row on the owner's dashboard is the failure this exists to stop.
-# Do not loosen a pattern to rescue a row; add a narrower one only if a
-# category starts emptying the page.
-_PROHIBITED_PATTERNS: dict[str, str] = {
-	"adult": (
-		r"porn|xxx|nsfw|hentai|onlyfans|\bsex(ual|y)?\b|\bnude|\bnudity\b|erotic|\bescorts?\b"
-		r"|adult[- ](content|site|video|cam)s?|\bcamgirls?\b|\bfetish|\bxvideos\b|\bxhamster\b"
-	),
-	"piracy": (
-		r"\bwarez\b|\bkeygens?\b|\bcrack(ed|s|ing)?\b|\bnulled\b|\bpirat(e|ed|es|ing|cy)\b"
-		r"|\btorrents?\b|serial[- ]?keys?|licen[cs]e[- ]?keys?[- ]?(generator|gen)\b"
-		r"|\bactivators?\b|\bkms[- ]?(pico|auto)\b|drm[- ]?(removal|remover|bypass|free)"
-		r"|paywall[- ]?(bypass|remover)|bypass(es|ing)?[- ]paywalls?"
-		r"|(youtube|netflix|spotify|tiktok|instagram|pornhub|onlyfans)[\w -]{0,20}(download|ripper)"
-	),
-	"gambling": r"\bcasinos?\b|gambl(e|ing)|\bbetting\b|sportsbook|\bslots? machine",
-	# Trading is refused in code (Principle 6), so a trading bot is not a lead.
-	"trading": r"trading[- ]bots?|\bmetatrader|\bmt[45]\b|\bforex\b|sniper[- ]bot|copy[- ]trad",
-	"fraud": (
-		r"fake[- ](id|ids|identity|documents?|passports?|reviews?)\b"
-		r"|(driver'?s?|driving)[- ]licen[cs]e[- ]generator|\bcarding\b|\bcvv\b|\bphishing\b"
-		r"|account[- ]generator|\bspam[- ]?bots?\b|\bmass[- ]dm\b|\bbotnet\b|\bddos\b"
-		# Seen on a star-farmed `topic:developer-tools` listing: raiders, likers,
-		# lock bypasses and "full working installer" cracked software.
-		r"|\braiders?\b|\blikers?\b|boosting[- ]tools?|auto[- ]?(follow|like|view)\w*"
-		r"|\b(ios|icloud|frp)[- ]?(unlock\w*|bypass)\b|full working installer"
-	),
-	"malware": (
-		r"\bstealers?\b|\bkeyloggers?\b|\bransomware\b|\baimbot\b|\bwallhack\b"
-		r"|game[- ]cheats?\b|cheat[- ](engine|menu|tool)s?\b"
-	),
-	"drugs_weapons": r"\bcannabis\b|\bmarijuana\b|\bdark ?web market|\bfirearms?\b|\bguns? (shop|store)\b",
-}
+# The table lives in `_shared` so `research_feed` screens with the same patterns.
+# Kept under its old name because tests and callers here still read it.
+_PROHIBITED_PATTERNS = PROHIBITED_PATTERNS
 
 def _prohibited(lead: dict[str, Any]) -> str:
 	"""The prohibited category a lead falls in, or "" when it is allowed.
@@ -1258,10 +1226,7 @@ def _prohibited(lead: dict[str, Any]) -> str:
 		str(lead.get("title", "")), str(lead.get("body", "")),
 		" ".join(str(x) for x in lead.get("labels", []) or []), str(lead.get("url", "")),
 	])
-	for category, pattern in _PROHIBITED_PATTERNS.items():
-		if re.search(pattern, text, re.I):
-			return category
-	return ""
+	return prohibited_category(text)
 
 def _rank(leads: list[dict[str, Any]], cfg: dict[str, Any], max_items: int, min_score: int) -> list[Opportunity]:
 	now = datetime.now(timezone.utc)

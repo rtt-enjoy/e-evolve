@@ -33,7 +33,7 @@ from typing import Any, Optional
 
 import requests
 
-from ._shared import hours_until_due, load_config, parse_dt, stamp_first_seen
+from ._shared import hours_until_due, load_config, parse_dt, select_fresh_first, stamp_from_ledger
 
 log = logging.getLogger(__name__)
 
@@ -43,14 +43,18 @@ _HEADERS = {"User-Agent": "e-evolve-research-bot/1.0 (+https://github.com)"}
 
 _DEFAULTS = {
 	"enabled": True,
-	"refresh_hours": 6,
+	"refresh_hours": 3,
 	# Events starting up to this many days out are considered.
-	"lookahead_days": 45,
+	"lookahead_days": 60,
 	# Events that started up to this many days ago and are still running count.
 	"running_grace_days": 3,
-	"fetch_limit": 100,
+	"fetch_limit": 200,
 	# Rows kept in status.json. It is committed hourly, so this is a size cap.
-	"status_max_items": 14,
+	"status_max_items": 40,
+	# Share of those slots reserved for events first listed recently, newest
+	# first, ahead of the score cut (see `_shared.select_fresh_first`).
+	"min_fresh_share": 0.4,
+	"fresh_hours": 72,
 	"prize_max_chars": 160,
 }
 
@@ -200,6 +204,18 @@ def run(llm: Any = None, status: Optional[dict] = None) -> list[dict]:
 		return [action]
 
 	rows = build_events(raw, cfg, now)
+	# Stamp the whole pool from a first-seen ledger *before* the cap, so an event
+	# the cap drops and a later refresh brings back keeps its "added" time.
+	rows, ledger = stamp_from_ledger(
+		rows, state.get("first_seen"), lambda r: str(r.get("id") or ""), now,
+		seed=state.get("events"), seed_key=lambda r: str(r.get("id") or ""),
+	)
+	shown = select_fresh_first(
+		rows, int(cfg["status_max_items"]), now,
+		fresh_share=float(cfg["min_fresh_share"]), fresh_hours=int(cfg["fresh_hours"]),
+	)
+	# Soonest first within a score, as `build_events` orders them.
+	shown.sort(key=lambda r: (-r["score"], r["start"]))
 	state.update({
 		"source": "ctftime",
 		"last_refresh_at": now.isoformat(),
@@ -209,9 +225,10 @@ def run(llm: Any = None, status: Optional[dict] = None) -> list[dict]:
 		"paying": sum(1 for r in rows if r["pays"]),
 		"crypto": sum(1 for r in rows if r["crypto"]),
 		"beginner": sum(1 for r in rows if r["beginner"]),
-		# `discovered_at` is when the page first listed the event, carried over
-		# from the previous snapshot by CTFtime id.
-		"events": stamp_first_seen(rows[: int(cfg["status_max_items"])], state.get("events"), "id", now),
+		# `discovered_at` is when the bot first saw the event (the ledger),
+		# not when it last made the cut.
+		"first_seen": ledger,
+		"events": shown,
 	})
 	action.update({"success": True, "listed": len(state["events"])})
 	log.info(

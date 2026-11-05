@@ -13,6 +13,7 @@
 import { Activity, Cpu, LayoutDashboard, Lightbulb, Newspaper, Target, type LucideIcon } from 'lucide-react';
 import type { ComponentType } from 'react';
 import type { Status } from '../types/status';
+import { buildResearchRows } from '../utils/research';
 
 export type SectionId =
 	| 'overview'
@@ -72,10 +73,11 @@ export const SECTIONS: SectionDef[] = [
 		id: 'research',
 		label: 'Research',
 		icon: Lightbulb,
-		blurb: 'CTF bounties you can enter now. Other research is kept below.',
-		keys: ['ctf_bounty', 'suggestions', 'mrr_ideas', 'mrr_ideas_history'],
-		// The badge counts what the page leads with: CTFs that state a prize.
-		badge: (status) => status.ctf_bounty?.paying || null,
+		blurb: 'Prizes and bounties you could enter: CTFs, hackathons, crypto and bug bounties.',
+		// `research_feed` is claimed here or it renders nowhere.
+		keys: ['ctf_bounty', 'research_feed', 'suggestions', 'mrr_ideas', 'mrr_ideas_history'],
+		// The badge counts what the page leads with: rows that state a prize.
+		badge: (status) => buildResearchRows(status).filter((row) => row.pays).length || null,
 		load: () => import('./ResearchSection'),
 	},
 	{

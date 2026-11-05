@@ -106,6 +106,7 @@ bot/earning/         ← products own a run(llm, status); support modules do not
   code_techs.py      ← [product] passive product income: channel (gets paid) vs asset (builds/markets)
   mrr_ideas.py       ← [product] recurring-revenue idea triage (research/suggestion only)
   ctf_bounty.py      ← [product] CTF bounty research from CTFtime: the owner's standing research focus
+  research_feed.py   ← [product] hackathons, crypto bounties, bug bounties, DEV challenges (research only)
   _shared.py         ← [support] config loading, cadence, feed parsing — used by all four
   devto.py           ← [support] the dev.to publish call + gates every post passes
   trending.py        ← [support] finds recent tech articles from free public feeds
@@ -133,7 +134,8 @@ Phase 1: Status   — load status.json, detect active features from env secrets
 Phase 2: Commands — read command.txt + GitHub Issues labelled "bot-command"
 Phase 3: Evolution — LLM proposes code changes; applied to a sandbox, verified,
                     then committed to an evolve/* review branch for human merge
-Phase 4: Research — refresh the CTF bounty list (CTFtime), the free-AI earning
+Phase 4: Research — refresh the CTF bounty list (CTFtime), the other prize and
+                    bounty feeds (research_feed), the free-AI earning
                     queue and MRR idea triage,
                     draft + publish one article, then draft + publish the
                     weekly newsletter digest when due, then retrofit the tip
@@ -929,6 +931,9 @@ Newsletter history and cadence live in `status["newsletter_history"]` and
 Owner directive, 2026-10-29: research centres on Capture The Flag competitions
 that pay a prize, aimed at an entry-level solver. The dashboard's Research page
 leads with it and keeps the earlier free-AI / MRR research collapsed below.
+Widened 2026-11-05 beyond CTF: see `research_feed` below. Its list uses the same
+first-seen ledger and fresh-first selection (`_shared.stamp_from_ledger`,
+`_shared.select_fresh_first`), `refresh_hours` is 3 and `status_max_items` 40.
 
 - **Source is CTFtime's public event API** (`ctftime.org/api/v1/events/`):
   keyless, JSON, and the calendar organisers list on. **No new secret, no LLM
@@ -954,10 +959,55 @@ leads with it and keeps the earlier free-AI / MRR research collapsed below.
 - **An unreadable feed is not an empty month.** `fetch_events` returns `None`, the
   last good list is kept, and `last_reason` becomes `fetch_failed` so the page can
   say it is stale.
-- Self-throttles to `ctf_bounty.refresh_hours` (6). State in `status["ctf_bounty"]`
-  (`events`, `enterable`, `paying`, `crypto`, `beginner`, `last_refresh_at`,
-  `last_reason`), capped by `status_max_items` because `status.json` is committed
-  hourly.
+- Self-throttles to `ctf_bounty.refresh_hours` (3). State in `status["ctf_bounty"]`
+  (`events`, `enterable`, `paying`, `crypto`, `beginner`, `first_seen`,
+  `last_refresh_at`, `last_reason`), capped by `status_max_items` because
+  `status.json` is committed hourly.
+
+### Prize and bounty feeds (bot/earning/research_feed.py)
+
+Owner directive, 2026-11-05: Research showed CTF bounties only; widen the field and
+refresh much more per day. Four more keyless JSON feeds, **no new secret and no LLM
+call**, all research and never earning (`estimated_usd: 0.0`, nothing summed, never
+a Leads `channel`):
+
+| Category | Source | What is kept |
+|----------|--------|--------------|
+| `hackathon` | Devpost `api/hackathons` | online, open or upcoming, not invite-only, not over; cash prize read from `prize_amount` (the feed wraps the figure in a `<span>`) |
+| `crypto-bounty` | Superteam Earn `superteam.fun/api/listings` | fixed-reward bounties not yet closed or awarded; `variable` pay is a freelance gig and dropped |
+| `bug-bounty` | Immunefi `public-api/bounties.json` | live programs that **do not ask for KYC** (the feed states it, and an ID check is the gate the owner cannot pass); `posted_at` is `launchDate`, never `updatedDate`, which changes daily on old programs |
+| `challenge` | `dev.to/api/articles?username=devteam` | DEV's own "Join the X Challenge" invitations from the last 7 days; the post carries no deadline, so the page says when it was announced |
+
+- **"When was this added" is the point, and it needs a ledger.** `stamp_first_seen`
+  carries a stamp over from the *previous displayed list*, so a row a size cap
+  dropped and a later refresh brought back was restamped "just now". `stamp_from_ledger`
+  keeps `{source:id -> first seen}` for the **whole pool** in `state["first_seen"]`
+  (45 days after a row leaves it, 500 entries), primed from the displayed rows on
+  the first run after a deploy. `discovered_at` (the bot's clock) is never merged
+  with `posted_at` / `starts_at` / `deadline` (the source's clock).
+- **Daily churn is a selection problem.** `select_fresh_first` reserves
+  `min_fresh_share` (0.5) of each category's `per_category_cap` (16) for rows first
+  listed within `fresh_hours` (72), newest first, *before* the score cut. Without it
+  a new row scores what it will score next week and the cap cuts it.
+- **Content screen, owner rule.** Every row passes `_shared.prohibited_category`
+  (the table moved out of `code_techs`, which keeps `_PROHIBITED_PATTERNS` as an
+  alias) plus a research-only pattern for wagering and token promotion
+  (`Premier League Predictions`, `$CHIMP Fair Launch` were both on Superteam).
+  `source_stats[].screened` counts what it dropped.
+- **An unreadable source is not an empty one.** A fetcher returns `None` on any
+  failure; that source's last good rows are kept and `last_reason` is `partial`
+  (`fetch_failed` when every source failed).
+- **`kyc`** is `"not required"` only where the source states it (Immunefi);
+  otherwise `"not published"`.
+- **Probed and left out** (do not re-probe): Sherlock (finished contests, KYC), the
+  HackerOne `bounty-targets-data` dump (19 MB, undated, ID-gated), GitHub
+  `label:bounty` (bot spam), Devfolio (onsite in India), Algora and DoraHacks (no
+  public JSON), Cantina (no API). Superteam's API ignored `skip`, `take` and `type` when probed
+  (2026-11-05), so it yields its first ten rows; `source_stats` shows it.
+- State in `status["research_feed"]`: `items`, `pool_total`, `source_stats`,
+  `failed_sources`, `first_seen`, `last_refresh_at`, `last_reason`. Payload is
+  bounded by a test (`test_status_payload_stays_bounded`), because `status.json` is
+  committed hourly.
 
 ### MRR idea triage (bot/earning/mrr_ideas.py)
 
@@ -1393,7 +1443,8 @@ Keys prefixed `_` are runtime-only and not persisted.
 
 Earning modules own their own sub-trees alongside the above: `article_daily` /
 `article_history` / `article_stats` / `article_interest` (articles), `newsletter_daily` / `newsletter_history`
-(newsletter), `code_tech_earning` (code_techs), and `mrr_ideas` /
+(newsletter), `code_tech_earning` (code_techs), `ctf_bounty` and `research_feed`
+(CTF and the other prize feeds), and `mrr_ideas` /
 `mrr_ideas_history` (mrr_ideas). Every list stored in these is bounded by the
 module's `history_limit` so `status.json` cannot grow without end.
 
@@ -1537,6 +1588,9 @@ Tunable by owner or changed here in Codex:
   "receipt_check":  { "enabled": true, "max_per_cycle": 5, "stale_after_hours": 168,
                       "history_limit": 50 },
   "attribution":    { "enabled": true, "history_limit": 200 },
+  "research_feed":  { "enabled": true, "refresh_hours": 3, "lookahead_days": 60,
+                      "per_category_cap": 16, "min_fresh_share": 0.5, "fresh_hours": 72,
+                      "devpost_pages": 3, "challenge_max_age_days": 7 },
   "mrr_ideas":      { "enabled": true, "refresh_hours": 48, "max_ideas": 8,
                       "min_score": 50, "history_limit": 100 },
   "code_techs":     { "enabled": true, "refresh_hours": 3, "max_items": 90,

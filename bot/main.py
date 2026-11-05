@@ -176,6 +176,10 @@ def main() -> int:
 	# read, deterministic, no LLM call; self-throttles to ctf_bounty.refresh_hours.
 	actions += _module("ctf_bounty", llm, status, errors)
 
+	# The rest of the prize and bounty research (hackathons, crypto bounties, bug
+	# bounties, DEV challenges). Same rules: keyless, deterministic, research only.
+	actions += _module("research_feed", llm, status, errors)
+
 	# Independent code-tech opportunity queue. This is suggestion-only: it may
 	# search and rank opportunities, but it must not comment, post, trade, mint,
 	# publish, or move funds.

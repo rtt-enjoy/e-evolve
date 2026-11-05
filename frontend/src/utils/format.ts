@@ -95,8 +95,10 @@ export function featureLabel(feature: string): string {
 	return feature
 		.replace(/^llm_/, '')
 		.replace(/_/g, ' ')
-		.replace(/\b\w/g, (char) => char.toUpperCase());
+		.replace(/\b\w+/g, (word) => (ACRONYMS.has(word) ? word.toUpperCase() : word[0].toUpperCase() + word.slice(1)));
 }
+
+const ACRONYMS = new Set(['glm', 'usdt', 'mrr', 'ctf', 'api', 'llm']);
 
 export function clampPercent(value: number): number {
 	return Math.max(0, Math.min(100, Math.round(value)));

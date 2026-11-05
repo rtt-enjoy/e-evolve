@@ -1256,46 +1256,127 @@ a {
 
 	/* ========================================================== modules */
 
-	.module-list {
-		@apply grid gap-2.5 sm:grid-cols-2;
+	/* Health: a secret is one ~36px row and a module one ~32px chip. The old
+	   bordered card per item was ~90px for a name and a count. Scoped modifiers,
+	   so Overview keeps the spacing it has. */
+	.rowlist {
+		@apply m-0 flex list-none flex-col p-0;
 	}
 
-	.module {
-		@apply flex min-w-0 flex-col gap-1 rounded-[var(--radius)] border border-line bg-panel2 p-3.5;
+	.rowlist li {
+		@apply grid min-w-0 grid-cols-[auto_auto_minmax(0,1fr)_auto] items-center gap-x-2.5 border-t border-line py-2 first:border-t-0;
 	}
 
-	.module strong {
-		@apply truncate text-sm font-semibold;
+	.rowlist li strong {
+		@apply truncate text-[13.5px] font-medium;
 	}
 
-	.secret {
-		@apply flex min-w-0 flex-col gap-2 rounded-[var(--radius)] border border-line bg-panel2 p-3.5;
+	.rowlist li code {
+		@apply truncate text-right font-mono text-[11.5px] text-faint line-through decoration-faint;
 	}
 
-	.secret-head {
-		@apply flex flex-wrap items-center justify-between gap-2;
+	.rowlist .dot {
+		animation: none;
 	}
 
-	.secret-head strong {
-		@apply truncate text-sm font-semibold;
+	.rowlist .pill {
+		@apply px-2 py-0 text-[11.5px] leading-5 tabular-nums;
 	}
 
-	.secret code {
-		@apply break-all font-mono text-xs text-soft;
+	.module-grid {
+		@apply grid grid-cols-2 gap-1.5 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3;
 	}
 
-	.secret code.missing {
-		@apply text-faint line-through decoration-faint;
+	.module-chip {
+		@apply flex min-w-0 items-center gap-2 truncate rounded-lg bg-panel2 px-2.5 py-1.5 text-[13px] font-medium;
+		box-shadow: inset 0 0 0 1px rgb(var(--c-border) / .6);
+	}
+
+	.module-chip .dot {
+		animation: none;
+		box-shadow: none;
+	}
+
+	.module-chip.off {
+		@apply text-faint;
+	}
+
+	.card-meta {
+		@apply whitespace-nowrap text-xs tabular-nums text-faint;
+	}
+
+	.card-compact .card-head p {
+		@apply mt-0.5 text-[12.5px] leading-snug;
+	}
+
+	.card-compact .muted {
+		@apply text-[12.5px] leading-snug;
+	}
+
+	.split.even {
+		@apply lg:grid-cols-2;
+	}
+
+	.phase-row.compact {
+		@apply gap-2;
+	}
+
+	.phase-row.compact .phase {
+		@apply grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-2 gap-y-0 px-3 py-2.5;
+	}
+
+	.phase-row.compact .phase > svg {
+		@apply row-span-2 h-4 w-4;
+	}
+
+	.phase-row.compact .phase strong {
+		@apply text-[13px] leading-5;
+	}
+
+	.phase-row.compact .phase p {
+		@apply truncate text-[11.5px] leading-4;
+	}
+
+	.issue-list.compact {
+		@apply gap-1.5;
+	}
+
+	.issue-list.compact .issue {
+		@apply gap-2.5 px-3 py-2.5;
+	}
+
+	.issue-list.compact .issue strong {
+		@apply text-[13.5px];
+	}
+
+	.issue-list.compact .issue p {
+		@apply mt-0.5 text-[12.5px] leading-snug;
+	}
+
+	.issue-list.compact .issue > .pill {
+		@apply mt-0 px-2 py-0 text-[11.5px] leading-5;
+	}
+
+	.keyvalue.compact {
+		@apply text-[13px];
+	}
+
+	.keyvalue.compact > div {
+		@apply gap-3 px-3 py-2;
+	}
+
+	.chips.mono .pill {
+		@apply px-2 py-0 font-mono text-[11.5px] leading-5;
 	}
 
 	/* ============================================================ policy */
 
 	.policy {
-		@apply grid gap-4 sm:grid-cols-2;
+		@apply grid gap-3 sm:grid-cols-2;
 	}
 
 	.policy-label {
-		@apply mb-2 block text-[11px] font-semibold uppercase tracking-[.12em];
+		@apply mb-1.5 block text-[11px] font-semibold uppercase tracking-[.12em];
 	}
 
 	.policy-label.good { @apply text-green; }

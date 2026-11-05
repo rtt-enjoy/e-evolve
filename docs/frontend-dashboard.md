@@ -309,3 +309,15 @@ Only the masked address (`wallet.address_masked`) is written to tracked files;
   card and the two lower cards use the `compact` / `card-compact` / `stack.tight`
   modifiers in `styles.css`, scoped to Leads so other pages keep the 2026-11-03
   spacing. Do not tighten rows past `py-3.5`, and leave `.segmented` padding alone.
+
+- **Health: compact layout.** The owner found the Modules and Secret readiness
+  items needlessly large. A secret is now one ~36px row (dot, name, missing key,
+  `n/m` pill) under a single readiness bar, instead of a bordered ~90px card with
+  its own bar. Modules are a 3-column grid of ~32px chips, the inactive one
+  dimmed; counts sit in the card header (`card-meta`). Phase results are a
+  single-line strip, the Attention queue rows are tighter, Run facts and Receive
+  wallet use `KeyValue compact`, and the two columns are balanced (`split even`)
+  with the wallet status pill moved into its card header. All of it is scoped
+  (`card-compact`, `rowlist`, `module-grid`, `*.compact`), so Overview keeps its
+  spacing. `featureLabel` now upper-cases `GLM`, `USDT`, `MRR`, `CTF`, `API` and
+  `LLM` (it printed `Glm` and `Usdt Wallet`).

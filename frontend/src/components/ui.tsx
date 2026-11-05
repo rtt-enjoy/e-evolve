@@ -248,9 +248,9 @@ export function Bullets({ items, limit }: { items: string[]; limit?: number }) {
 	);
 }
 
-export function KeyValue({ rows }: { rows: Array<[string, ReactNode]> }) {
+export function KeyValue({ rows, compact = false }: { rows: Array<[string, ReactNode]>; compact?: boolean }) {
 	return (
-		<dl className="keyvalue">
+		<dl className={`keyvalue${compact ? ' compact' : ''}`}>
 			{rows.map(([key, value]) => (
 				<div key={key}>
 					<dt>{key}</dt>

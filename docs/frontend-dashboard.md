@@ -129,13 +129,19 @@ consumes, and two behaviours follow:
 
 1. A section whose declared paths are all empty is **hidden from the nav**, so
    routes never lead to a blank page.
-2. Every top-level key claimed by some section is *known*. Keys the bot starts
-   emitting later are **unclaimed**, and the Data section renders them
-   generically through `JsonNode` — with a "N new" badge in the sidebar.
+2. A key no section claims is **not shown anywhere**. The `Data` page, which
+   dumped the whole of `status.json` node by node, was removed 2026-11-05: it
+   served debugging, not the owner's question of whether the system earns, and
+   it laid out internal state (`secret_readiness`, `configured_github_secrets`,
+   `errors`) on a public page. `JsonNode`, `unclaimedKeys` and the "N new"
+   sidebar badge went with it.
 
-**New backend fields therefore appear in the UI with no frontend change.** When
-a new field deserves a first-class view, add its key to the relevant section's
-`keys` array and render it; that removes it from the unclaimed list.
+**A new backend field therefore needs a section before readers can see it.**
+Add its key to the relevant section's `keys` array and render it.
+
+The sidebar still links `status.json` and the earnings log. Those
+files are committed and published whatever the UI does, so removing the page
+hides nothing that `docs/status.json` does not already serve.
 
 ## Required Signals
 

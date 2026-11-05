@@ -1591,7 +1591,8 @@ python -m bot.main
   up to an hour. It polls every minute while visible, refetches on tab focus,
   and announces "Cycle #N landed" with what moved. See
   `docs/frontend-dashboard.md`.
-- **Every top-level `status.json` key should be claimed** by a section in
-  `frontend/src/sections/registry.ts`. Unclaimed keys still render generically
-  under Data with an "N new" badge, which is the signal a new backend field
-  needs a real view.
+- **A `status.json` key readers should see must be claimed** by a section in
+  `frontend/src/sections/registry.ts`. There is no raw-snapshot `Data` page
+  (removed 2026-11-05: it dumped internal state such as secret names and errors
+  on a public page and served debugging, not income), so an unclaimed key is
+  shown nowhere.

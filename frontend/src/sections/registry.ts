@@ -6,11 +6,11 @@
  *
  *   1. A section with no data in the current snapshot is hidden from the nav,
  *      so the shell only ever shows routes that lead somewhere.
- *   2. Every top-level key claimed by some section is "known". Keys the bot
- *      starts emitting later are unclaimed, and the Data section renders them
- *      generically — new backend fields appear without a frontend change.
+ *   2. A key no section claims is not shown anywhere. The dashboard
+ *      deliberately has no raw-snapshot page, so a new backend field needs a
+ *      section of its own before readers can see it.
  */
-import { Activity, Braces, Cpu, LayoutDashboard, Lightbulb, Newspaper, Target, type LucideIcon } from 'lucide-react';
+import { Activity, Cpu, LayoutDashboard, Lightbulb, Newspaper, Target, type LucideIcon } from 'lucide-react';
 import type { ComponentType } from 'react';
 import type { Status } from '../types/status';
 
@@ -20,8 +20,7 @@ export type SectionId =
 	| 'leads'
 	| 'research'
 	| 'engine'
-	| 'health'
-	| 'data';
+	| 'health';
 
 export type SectionDef = {
 	id: SectionId;
@@ -147,36 +146,7 @@ export const SECTIONS: SectionDef[] = [
 		badge: (status) => (status.errors || []).length || null,
 		load: () => import('./HealthSection'),
 	},
-	{
-		id: 'data',
-		label: 'Data',
-		icon: Braces,
-		blurb: 'Every field in the snapshot, including keys no section claims yet.',
-		keys: [],
-		always: true,
-		load: () => import('./DataSection'),
-	},
 ];
-
-/** Top-level status.json keys that at least one section renders explicitly. */
-export const CLAIMED_KEYS: ReadonlySet<string> = new Set(
-	SECTIONS.flatMap((section) => section.keys.map((key) => key.split('.')[0])),
-);
-
-/**
- * Keys present in the snapshot that no section claims — i.e. fields the bot
- * added after this frontend was built.
- */
-export function unclaimedKeys(status: Status): string[] {
-	return Object.keys(status)
-		.filter((key) => !key.startsWith('_'))
-		.filter((key) => !CLAIMED_KEYS.has(key))
-		.filter((key) => !NEVER_UNCLAIMED.has(key))
-		.sort();
-}
-
-/** Plumbing keys that are not interesting as "new bot data". */
-const NEVER_UNCLAIMED: ReadonlySet<string> = new Set(['github_repo']);
 
 function valueAt(status: Status, path: string): unknown {
 	return path.split('.').reduce<unknown>((node, part) => {

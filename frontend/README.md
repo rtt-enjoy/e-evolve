@@ -30,14 +30,13 @@ src/sections/*Section.tsx  ← one lazy-loaded page per route
 src/components/ui.tsx      ← shared primitives (Tile, Card, BarList, Disclosure, …)
 src/components/Funnel.tsx  ← reader → ask → wallet, used by Overview and Reach
 src/utils/sync.ts          ← polling, freshest-copy selection, cycle-landed notices
-src/components/JsonNode.tsx ← generic renderer for unmapped/new bot fields
 src/utils/route.ts         ← hash router (#/leads, #/leads/3)
 ```
 
 Adding a section means adding one entry to `registry.ts` and one component. A
-section is auto-hidden when the keys it declares are empty, and any status.json
-key no section claims is rendered generically in the Data section — so new
-backend fields show up without touching the frontend. See
+section is auto-hidden when the keys it declares are empty. A status.json key
+no section claims is not shown: there is no raw-snapshot page, so a new backend
+field that readers should see needs a section. See
 `../docs/frontend-dashboard.md` for the full contract.
 
 ## Build For GitHub Pages

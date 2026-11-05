@@ -1,11 +1,11 @@
 import { ArrowLeft, ChevronRight, Menu, Monitor, Moon, RefreshCw, Sparkles, Sun, X } from 'lucide-react';
 import { Suspense, lazy, useEffect, useMemo, useState, type ComponentType } from 'react';
 import { Banner, Dot, Empty, Pill } from './ui';
-import { availableSections, sectionById, SECTIONS, unclaimedKeys } from '../sections/registry';
+import { availableSections, sectionById, SECTIONS } from '../sections/registry';
 import { buildHealth, buildIssues, buildReadiness } from '../utils/dashboard';
 import { ageLabel, formatDate } from '../utils/format';
 import { nextCycle, sinceLabel, useNow, useStatusSync } from '../utils/sync';
-import { navigate, useRoute } from '../utils/route';
+import { useRoute } from '../utils/route';
 import type { Status } from '../types/status';
 import { engineState } from '../utils/engine';
 
@@ -66,7 +66,6 @@ export function App() {
 	const issues = useMemo(() => buildIssues(status), [status]);
 	const readiness = useMemo(() => buildReadiness(status), [status]);
 	const health = useMemo(() => buildHealth(status, issues, readiness.percent), [status, issues, readiness.percent]);
-	const newKeys = useMemo(() => unclaimedKeys(status), [status]);
 	const freshness = ageLabel(status.last_run);
 	const next = nextCycle(status.last_run, now);
 	const engine = engineState(status);
@@ -103,7 +102,6 @@ export function App() {
 					{sections.map((section) => {
 						const badge = section.badge?.(status) ?? null;
 						const isActive = active?.id === section.id;
-						const isNewData = section.id === 'data' && newKeys.length > 0;
 						const Icon = section.icon;
 						return (
 							<a
@@ -114,7 +112,7 @@ export function App() {
 							>
 								<Icon className="nav-icon" size={17} strokeWidth={2} />
 								<span>{section.label}</span>
-								{isNewData ? <em className="badge new">{newKeys.length} new</em> : badge ? <em className="badge">{badge}</em> : null}
+								{badge ? <em className="badge">{badge}</em> : null}
 							</a>
 						);
 					})}
@@ -193,9 +191,7 @@ export function App() {
 					)}
 
 					<footer className="foot">
-						<span>Cycle #{status.total_runs || 0} · last run {formatDate(status.last_run)}</span>
-						<button type="button" className="linkish" onClick={() => navigate('data')}>inspect raw snapshot</button>
-					</footer>
+						<span>Cycle #{status.total_runs || 0} · last run {formatDate(status.last_run)}</span>					</footer>
 				</div>
 			</main>
 

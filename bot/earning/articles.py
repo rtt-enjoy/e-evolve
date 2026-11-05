@@ -461,7 +461,7 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 	title_issues = _title_problems(article.get("title", ""))
 	if title_issues:
 		log.info("[articles] title issues %s -- requesting a better title", title_issues)
-		better = _revise_title(llm, article, title_issues)
+		better = _revise_title(llm, article, title_issues) or _rescue_title(article.get("title", ""))
 		if better:
 			article["title"] = better
 		else:
@@ -491,6 +491,26 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 		return _reject("duplicate", dup)
 
 	return article
+
+
+def _rescue_title(title: str) -> Optional[str]:
+	"""Deterministically fix the one title defect with an unambiguous answer.
+
+    When the only problem is colon-subtitle padding, the gate's own finding
+    says what to do: pick the sharper half. Doing that here rescues a draft
+    whose body already passed every other gate, without spending an LLM call
+    and without touching any gate. Tried only when the rewrite failed; any
+    other finding, or a rescued half that still fails _title_problems,
+    returns None and the draft is lost exactly as before.
+    """
+	if _title_problems(title) != ["title padded with a colon subtitle; pick the sharper half"]:
+		return None
+	head, _, tail = str(title).partition(":")
+	best = head.strip() if len(head.split()) >= len(tail.split()) else tail.strip()
+	if not best or _title_problems(best):
+		return None
+	log.info("[articles] title rescued by dropping the colon subtitle: %r", best)
+	return best
 
 
 def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:

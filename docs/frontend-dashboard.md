@@ -451,6 +451,22 @@ the same commit.
   (`.fold*`, `.brief*`, `.prompt-box`, `.proposal-summary`, `.actions-list`,
   `.engine-hero.compact`, `.roles`); `.change` and `.action` were deleted with
   their only user. The rules this followed are **Design Principles** above.
+- **Reach: compact layout, one owner per fact (2026-11-05).** The page was a
+  default-size `.card` stack with a full-width funnel on top and a whole card for
+  "Missing the ask" that read "None." on a healthy account. Now: four
+  `tile-row compact` tiles, then two balanced columns (`split even`,
+  `stack tight`, every card `card-compact`). Left: **What readers engage with**
+  and **Why drafts were held back** (top 5 gates; hidden when none has fired).
+  Right: **Best post**, **Publishing** (today's article, latest digest, next
+  digest) and **Does every reader see the ask?** (re-read coverage, retrofit
+  progress, oldest check, agreement with the self-report). Removed: the funnel
+  card (Overview owns it; the "Carry the ask" tile keeps Reach's own question),
+  the "Missing the ask" card (the posts now appear as a `Fold` inside the ask
+  card, only when there are any, open by default), the "Digest published" and
+  "Sources used" rows (bookkeeping, no reader value) and the "retrofit attempts
+  were rate-limited" note unless `backfill.remaining` is still non-zero, since
+  `skipped` keeps stale ids of posts that were later retrofitted. One scoped rule
+  added: `.card-compact .bars` (`gap-2`). `Funnel` is now used by Overview only.
 - **Docs repaired.** The IA table listed `#/data` (removed today), Required
   Signals named `atriaState` and Atria as main engine (it is `engineState` and
   GLM), and Visual Rules still demanded `py-4` rows. All three were rewritten.

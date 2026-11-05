@@ -1487,6 +1487,10 @@ a {
 		@apply text-[12.5px] leading-snug;
 	}
 
+	.card-compact .bars {
+		@apply gap-2;
+	}
+
 	.split.even {
 		@apply lg:grid-cols-2;
 	}

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-05T12:50:15.489678+00:00",
-  "total_runs": 2289,
+  "last_run": "2026-11-05T13:50:13.454643+00:00",
+  "total_runs": 2290,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,102 +33,57 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the binding step is reach, but the evidence says the reach loss is engine-side (llm_error), not prompt-side, and every prompt-fix candidate for the PROMPT FOCUS is already parked in ~30 unmerged branches touching the same two prompt strings, so another edit is unverifiable and duplicative.",
-    "changes_applied": [],
+    "summary": "Add one concrete before/after example to the title-rewrite prompt that shows both live defects (ALL-CAPS word and colon-subtitle padding) being fixed in a single rewrite, aiming at the 3 weak_title drafts lost in the last 14 days.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "PROMPT FOCUS: _revise_title lost the weak_title drafts. Its rule list states the bans but gives the model no worked example of a title that trips both live findings (an ALL-CAPS non-acronym word AND colon-subtitle padding). One concrete before/after covering both defects, distinct from the ~30 prior single-rule proposals, tells the model what a passing rewrite looks like instead of only what fails."
+      }
+    ],
     "suggestions": [
       {
-        "title": "Merge the smallest parked weak_title branch, then close the duplicates",
-        "description": "Unblocks the prompt-improvement loop the PROMPT FOCUS depends on. With ~30 open branches editing the same two prompt strings, no future cycle can attribute a weak_title drop to any single edit, and every cycle spent re-proposing a variant of them is a wasted run.",
-        "owner_action": "Merge the 2026-11-05 colon-subtitle rescue branch (smallest, edits-only to bot/earning/articles.py) and close the superseded title-prompt branches as duplicates.",
+        "title": "Put the wallet address in the dev.to profile bio",
+        "description": "Carries the ask on every profile visit permanently; the one cheap deferred channel row that needs no account, processor or policy change",
+        "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the review branches dated 2026-10-31 to 2026-11-05 that touch _SYSTEM title rules or _revise_title in bot/earning/articles.py.",
-          "Step 2: Merge only the 2026-11-05 colon-subtitle rescue; it addresses one gate finding with a few-line edit and no file rewrite.",
-          "Step 3: Close the remaining title-prompt branches as superseded, then wait one full 14-day reject window before accepting any further title-prompt edit."
-        ]
-      },
-      {
-        "title": "Check why llm_error dominates article rejects",
-        "description": "llm_error accounts for 36 of 64 lifetime rejects and 18 of the last 14 days' losses \u2014 more than every gate combined. That is engine-side (GLM call failures), not prompt-side, so no prompt edit can recover those drafts. A one-line log of the HTTP status or exception class per failure in the LLM layer would say whether it is throttling, timeouts, or malformed JSON, and whether a model or role change would recover a post a day.",
-        "owner_action": "Review the last week's workflow logs for 'LLM call failed' exceptions in the post role and decide whether glm-5.3-flash stays on the post role or the atria fallback takes it.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: In the GitHub Actions run history, filter post-role log lines containing '[articles] rejected (llm_error)'.",
-          "Step 2: Group by exception text (timeout vs HTTP status vs JSON parse).",
-          "Step 3: If one class dominates, switch llm_roles.post to the atria fallback in the existing config \u2014 no new secret is involved."
+          "Step 1: open dev.to/settings and edit the profile Bio",
+          "Step 2: paste [redacted] (TRC-20) with one line of context"
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompt losing the most drafts, one step per cycle; Principle 3j discipline applied to the evolution loop itself (a change that cannot be attributed to its cause teaches nothing).",
+    "direction": "Checklist step 4 / Principle 5 \u2014 reach into the live receive path; PROMPT FOCUS: weak_title=3, gate findings 'title has ALL-CAPS word' x2 and 'title padded with a colon subtitle' x1",
     "evidence": [
-      "article_rejects.counts total 64: llm_error=36 (56%), weak_title=14, empty_draft=9 \u2014 the engine, not a prompt, loses the most drafts",
-      "Drafts lost to prompts in the last 14 days: weak_title=3, fabricated=2; drafts lost to the engine: llm_error=18, empty_draft=1",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "Prior proposals: ~30 open branches dated 2026-10-31 to 2026-11-05 all editing _SYSTEM title rules or _revise_title, none merged",
-      "status.suggestions already carries the owner action to merge the smallest parked title branch before further title edits",
-      "weak_title gate findings this window: 'title has ALL-CAPS word' x2, 'colon subtitle' x1 \u2014 three drafts across two weeks, all with a parked candidate fix"
+      "article_rejects: drafts lost to prompts last 14 days weak_title=3 (vs fabricated=2)",
+      "article_rejects.last_detail gate findings: 'title has ALL-CAPS word' x2; 'title padded with a colon subtitle; pick the sharper half' x1",
+      "article_rejects.counts total 64 with weak_title=14 lifetime",
+      "binding step is 4 \u2014 reach, and the title is what decides feed clicks (article_stats avg_views=130.8)"
     ],
-    "money_path": "none (maintenance/decision cycle). The receive path is verified (receipt_check.covered 45/45, known_without_footer 0); the lost drafts at issue are upstream of publication, so no money enters or leaves because of this response.",
-    "verify": "No branch to verify this cycle. After the owner merges one parked title branch and closes the duplicates, the verifier is the 14-day prompt-loss window in article_rejects.recent: weak_title rejects attributable to 'ALL-CAPS word' or 'colon subtitle' findings should fall to 0 over the following window, and llm_error should remain the dominant reject (confirming the fix targeted the right class).",
+    "money_path": "reach-only: a title that passes the gate is one more post and one more tip ask published into a verified receive path (payout.live=true, 45/45 covered); no code in the receive path changes",
+    "verify": "Next cycles' evolution brief should show weak_title in the 'drafts lost to a prompt (last 14 days)' window falling from 3 toward 0, and article_rejects.recent gaining no new 'ALL-CAPS word' or 'colon subtitle' details from the rewrite path. Each rescued draft is one published post and one footer ask.",
     "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
+    "branch": "evolve/1.41.1-20261105-135053",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 21
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 41
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 82,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (82 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge the smallest parked weak_title branch, then close the duplicates",
-      "description": "Unblocks the prompt-improvement loop the PROMPT FOCUS depends on. With ~30 open branches editing the same two prompt strings, no future cycle can attribute a weak_title drop to any single edit, and every cycle spent re-proposing a variant of them is a wasted run.",
-      "owner_action": "Merge the 2026-11-05 colon-subtitle rescue branch (smallest, edits-only to bot/earning/articles.py) and close the superseded title-prompt branches as duplicates.",
+      "title": "Put the wallet address in the dev.to profile bio",
+      "description": "Carries the ask on every profile visit permanently; the one cheap deferred channel row that needs no account, processor or policy change",
+      "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the review branches dated 2026-10-31 to 2026-11-05 that touch _SYSTEM title rules or _revise_title in bot/earning/articles.py.",
-        "Step 2: Merge only the 2026-11-05 colon-subtitle rescue; it addresses one gate finding with a few-line edit and no file rewrite.",
-        "Step 3: Close the remaining title-prompt branches as superseded, then wait one full 14-day reject window before accepting any further title-prompt edit."
+        "Step 1: open dev.to/settings and edit the profile Bio",
+        "Step 2: paste [redacted] (TRC-20) with one line of context"
       ],
-      "discovered_at": "2026-11-05T12:50:54.503375+00:00"
-    },
-    {
-      "title": "Check why llm_error dominates article rejects",
-      "description": "llm_error accounts for 36 of 64 lifetime rejects and 18 of the last 14 days' losses \u2014 more than every gate combined. That is engine-side (GLM call failures), not prompt-side, so no prompt edit can recover those drafts. A one-line log of the HTTP status or exception class per failure in the LLM layer would say whether it is throttling, timeouts, or malformed JSON, and whether a model or role change would recover a post a day.",
-      "owner_action": "Review the last week's workflow logs for 'LLM call failed' exceptions in the post role and decide whether glm-5.3-flash stays on the post role or the atria fallback takes it.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: In the GitHub Actions run history, filter post-role log lines containing '[articles] rejected (llm_error)'.",
-        "Step 2: Group by exception text (timeout vs HTTP status vs JSON parse).",
-        "Step 3: If one class dominates, switch llm_roles.post to the atria fallback in the existing config \u2014 no new secret is involved."
-      ],
-      "discovered_at": "2026-11-05T12:50:54.503375+00:00"
+      "discovered_at": "2026-11-05T13:50:53.336026+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 158,
+  "last_cycle_seconds": 41,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2797,7 +2752,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-05T12:50:15.921652+00:00",
+    "checked_at": "2026-11-05T13:50:14.331096+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3153,8 +3108,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261105-135053",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 44,
     "total_views": 5753,
@@ -3446,7 +3401,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-05T12:52:52.506580+00:00",
+    "last_run": "2026-11-05T13:50:53.841133+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3456,30 +3411,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-05T12:52:52.849813+00:00",
+    "last_run": "2026-11-05T13:50:54.198942+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4931682,
-        "at": "2026-11-05T03:44:11.312064+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-11-05T03:44:11.312064+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-11-05T03:44:11.312064+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
-        "at": "2026-11-05T03:44:11.312064+00:00",
-        "ok": true
-      },
       {
         "id": 4681657,
         "at": "2026-11-05T04:41:53.218887+00:00",
@@ -3681,8 +3616,28 @@
         "ok": true
       },
       {
+        "id": 4931682,
+        "at": "2026-11-05T13:50:54.198942+00:00",
+        "ok": true
+      },
+      {
+        "id": 4740283,
+        "at": "2026-11-05T13:50:54.198942+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-05T13:50:54.198942+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-11-05T13:50:54.198942+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-05T12:52:52.849813+00:00",
+        "at": "2026-11-05T13:50:54.198942+00:00",
         "ok": true
       }
     ],
@@ -3691,7 +3646,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.1
+    "oldest_check_age_hours": 9.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3711,7 +3666,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

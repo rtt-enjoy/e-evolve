@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-05T06:41:21.803709+00:00",
-  "total_runs": 2282,
+  "last_run": "2026-11-05T06:49:55.025702+00:00",
+  "total_runs": 2283,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,93 +33,56 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "When a title rewrite fails, rescue the one deterministic defect (colon-subtitle padding) by keeping the sharper half instead of losing the whole otherwise-passing draft.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "A draft whose body already passed fabrication, tone and format gates is currently thrown away entirely when _revise_title's candidate also fails. For the one finding that has an unambiguous deterministic answer (colon-subtitle padding: 'pick the sharper half'), apply that answer instead of losing the draft. No gate is loosened \u2014 the rescued title must pass the unchanged _title_problems with zero issues."
-      }
-    ],
+    "summary": "No change proposed: the PROMPT FOCUS (weak_title) has been the subject of ~30 distinct prior proposals on open branches, every angle exhausted, and the dominant loss is llm_error which no prompt edit can fix \u2014 only the owner's GLM key check, already a pending suggestion.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Put the wallet ask in the dev.to profile bio",
-        "description": "Carries the receive address on every profile visit permanently, at zero cost \u2014 the one cheap row left on the channel table.",
-        "owner_action": "One manual edit of the Bio field at dev.to/settings to include the TRC-20 address [redacted].",
-        "secret_needed": null,
+        "title": "Resolve the GLM key failure before any further prompt work",
+        "description": "18 of the last 14 days' lost drafts died on 'LLM call failed' \u2014 six times the weak_title count and unreachable by prompt edits. Every prompt improvement is multiplied by an engine that only ran twice last cycle.",
+        "owner_action": "Inspect the z.ai console for quota exhaustion, key expiry, or deprecation of glm-5.3-flash; fix or rotate the existing GLM_API_KEY.",
+        "secret_needed": "GLM_API_KEY (verify the existing one; never add a new provider)",
         "how_to": [
-          "Step 1: open dev.to/settings, paste the address into the Bio field, save. No API route can do this (Forem users endpoint is show-only)."
-        ]
-      },
-      {
-        "title": "Investigate the llm_error dominant loss",
-        "description": "18 of the last 14 days' lost drafts died on 'LLM call failed' \u2014 four times the weak_title count. No prompt edit can fix an engine outage; only the owner can inspect GLM_API_KEY quota/billing on the z.ai account.",
-        "owner_action": "Check the z.ai console for quota exhaustion, key expiry, or model deprecation of glm-5.3-flash, since article_rejects.last is llm_error and total rejects are 64 with 36 lifetime llm_error.",
-        "secret_needed": "GLM_API_KEY (already configured; verify it, do not add a new one)",
-        "how_to": [
-          "Step 1: open the z.ai dashboard and confirm the key is active and under quota.",
-          "Step 2: if the key is fine, confirm glm-5.3-flash is still served at the coding endpoint; otherwise update llm_workflows.post."
+          "Step 1: open the z.ai dashboard, confirm the key is active and under quota.",
+          "Step 2: if the key is fine, confirm glm-5.3-flash is still served at https://api.z.ai/api/coding/paas/v4; otherwise update llm_workflows.post.",
+          "Step 3: after it recovers, merge one of the ~30 open weak_title prompt branches rather than letting new ones accumulate."
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS: weak_title lost 3 drafts in 14 days ('title padded with a colon subtitle; pick the sharper half' x1 among the findings). The brief says fix the draft, not the gate; the prompt ledger shows ~30 title-prompt edits already proposed and never merged, so the untried lever is the deterministic draft fix.",
+    "direction": "Step 4 \u2014 reach via prompt upgrades, one step per cycle; refusing to repeat known dead ends",
     "evidence": [
-      "article_rejects.counts.weak_title = 14 lifetime, 3 in the last 14 days",
-      "gate findings behind PROMPT FOCUS: 'title padded with a colon subtitle; pick the sharper half' x1, 'title has ALL-CAPS word' x2",
-      "PROMPT LEDGER shows 30+ open prior proposals all editing the same title prompts \u2014 none merged, so the prompt-edit lane is exhausted",
-      "_revise_title returns None when its own candidate still fails, and _finalize then discards a draft whose body already passed the fabrication and format gates"
+      "article_rejects.last = 'llm_error': 'LLM call failed'",
+      "Drafts lost to the engine (last 14 days): llm_error=18 vs weak_title=3",
+      "PRIOR PROPOSALS lists 29 distinct weak_title/ALL-CAPS/colon-subtitle prompt proposals, all still unmerged",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x2; 'title padded with a colon subtitle' x1 \u2014 the exact two mechanisms every prior proposal already targeted",
+      "llm_engine.calls = {glm: 2} \u2014 the engine is barely invoked before failing",
+      "receipt_check.covered/published_total = 45/45, known_without_footer = 0 \u2014 receive path clean, so reach is the work, but the reach lever (drafts) is dying upstream of the prompts"
     ],
-    "money_path": "reach-only: each rescued draft is one more post and one more tip ask that ships; money still enters only via the existing footer.",
-    "verify": "No new module and no gate change: _title_problems is unchanged, the rescue only accepts a title that passes it with zero problems, and the rescue is only tried for the exact single-finding case (colon-subtitle). Reviewer confirms: (1) the two edited hunks are the only diffs; (2) next cycle's article_rejects recent window no longer shows a draft lost solely to 'title padded with a colon subtitle' after a failed rewrite; weak_title in the 14-day prompt window should fall from 3 toward 0.",
+    "money_path": "none this cycle \u2014 the binding step is reach-only, and the evidence shows a thirtieth title-prompt variant would not clear the bar",
+    "verify": "Next cycle: article_rejects.counts.llm_error growth should stall if the owner resolves the GLM key; weak_title should fall within the 14-day window once one of the ~30 open title branches is merged \u2014 merging existing work, not adding branch 30, is the correct reviewer action",
     "error": null,
-    "branch": "evolve/1.41.1-20261105-064228",
-    "proposed_version": "1.41.1"
+    "branch": null,
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 41
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 82,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (82 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Put the wallet ask in the dev.to profile bio",
-      "description": "Carries the receive address on every profile visit permanently, at zero cost \u2014 the one cheap row left on the channel table.",
-      "owner_action": "One manual edit of the Bio field at dev.to/settings to include the TRC-20 address [redacted].",
-      "secret_needed": null,
+      "title": "Resolve the GLM key failure before any further prompt work",
+      "description": "18 of the last 14 days' lost drafts died on 'LLM call failed' \u2014 six times the weak_title count and unreachable by prompt edits. Every prompt improvement is multiplied by an engine that only ran twice last cycle.",
+      "owner_action": "Inspect the z.ai console for quota exhaustion, key expiry, or deprecation of glm-5.3-flash; fix or rotate the existing GLM_API_KEY.",
+      "secret_needed": "GLM_API_KEY (verify the existing one; never add a new provider)",
       "how_to": [
-        "Step 1: open dev.to/settings, paste the address into the Bio field, save. No API route can do this (Forem users endpoint is show-only)."
+        "Step 1: open the z.ai dashboard, confirm the key is active and under quota.",
+        "Step 2: if the key is fine, confirm glm-5.3-flash is still served at https://api.z.ai/api/coding/paas/v4; otherwise update llm_workflows.post.",
+        "Step 3: after it recovers, merge one of the ~30 open weak_title prompt branches rather than letting new ones accumulate."
       ],
-      "discovered_at": "2026-11-05T06:42:28.615765+00:00"
-    },
-    {
-      "title": "Investigate the llm_error dominant loss",
-      "description": "18 of the last 14 days' lost drafts died on 'LLM call failed' \u2014 four times the weak_title count. No prompt edit can fix an engine outage; only the owner can inspect GLM_API_KEY quota/billing on the z.ai account.",
-      "owner_action": "Check the z.ai console for quota exhaustion, key expiry, or model deprecation of glm-5.3-flash, since article_rejects.last is llm_error and total rejects are 64 with 36 lifetime llm_error.",
-      "secret_needed": "GLM_API_KEY (already configured; verify it, do not add a new one)",
-      "how_to": [
-        "Step 1: open the z.ai dashboard and confirm the key is active and under quota.",
-        "Step 2: if the key is fine, confirm glm-5.3-flash is still served at the coding endpoint; otherwise update llm_workflows.post."
-      ],
-      "discovered_at": "2026-11-05T06:42:28.615765+00:00"
+      "discovered_at": "2026-11-05T06:50:24.564612+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 219,
+  "last_cycle_seconds": 31,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2788,7 +2751,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-05T06:41:22.342384+00:00",
+    "checked_at": "2026-11-05T06:49:55.576133+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3122,8 +3085,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261105-064228",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 44,
     "total_views": 5753,
@@ -3415,7 +3378,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-05T06:44:59.997151+00:00",
+    "last_run": "2026-11-05T06:50:24.945119+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3425,25 +3388,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-05T06:45:00.332808+00:00",
+    "last_run": "2026-11-05T06:50:25.326103+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-11-04T20:20:39.761022+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-11-04T20:20:39.761022+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-04T20:20:39.761022+00:00",
-        "ok": true
-      },
       {
         "id": 4965279,
         "at": "2026-11-04T21:21:32.002115+00:00",
@@ -3451,11 +3399,6 @@
       },
       {
         "id": 4859277,
-        "at": "2026-11-04T21:21:32.002115+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-11-04T21:21:32.002115+00:00",
         "ok": true
       },
@@ -3650,8 +3593,28 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-11-05T06:50:25.326103+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-11-05T06:50:25.326103+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-11-05T06:50:25.326103+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-05T06:50:25.326103+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-05T06:45:00.332808+00:00",
+        "at": "2026-11-05T06:50:25.326103+00:00",
         "ok": true
       }
     ],
@@ -3660,7 +3623,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 10.4
+    "oldest_check_age_hours": 9.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3680,7 +3643,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

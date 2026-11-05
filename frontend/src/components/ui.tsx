@@ -66,6 +66,40 @@ export function Disclosure({
 	);
 }
 
+/**
+ * One click-to-open row: a ~40px summary line that expands to its detail.
+ * `action` sits beside the toggle, not inside it (a button cannot hold a
+ * button), so a row can carry its own copy button.
+ */
+export function Fold({
+	title,
+	meta,
+	action,
+	defaultOpen = false,
+	children,
+}: {
+	title: ReactNode;
+	meta?: ReactNode;
+	action?: ReactNode;
+	defaultOpen?: boolean;
+	children: ReactNode;
+}) {
+	const [open, setOpen] = useState(defaultOpen);
+	return (
+		<div className={`fold ${open ? 'open' : ''}`}>
+			<div className="fold-head">
+				<button type="button" onClick={() => setOpen(!open)} aria-expanded={open}>
+					<ChevronRight className="chevron" size={15} />
+					<strong>{title}</strong>
+					{meta ? <span className="fold-meta">{meta}</span> : null}
+				</button>
+				{action}
+			</div>
+			{open ? <div className="fold-body">{children}</div> : null}
+		</div>
+	);
+}
+
 export function SectionHead({ title, blurb, action }: { title: string; blurb: string; action?: ReactNode }) {
 	return (
 		<header className="section-head">

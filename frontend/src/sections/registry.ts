@@ -117,7 +117,6 @@ export const SECTIONS: SectionDef[] = [
 		blurb: 'Which model served each role, and what the last evolution proposed.',
 		keys: [
 			'llm_provider',
-			'llm_roles',
 			'llm_workflows',
 			'llm_engine',
 			'last_evolution',

@@ -1583,6 +1583,10 @@ python -m bot.main
   without `pnpm build` never reaches the page. On 2026-11-03 that hid the
   Leads per-row source button and the spacing pass, and both looked lost.
   Record every UI change in `docs/frontend-dashboard.md` in the same commit.
+- **Layout rules live in `docs/frontend-dashboard.md` → Design Principles**:
+  compact by default, summary visible and detail one click away (`Fold` /
+  `Disclosure`), hide empty cards, one owner page per fact, modifiers scoped per
+  page. Read it before touching a page's layout.
 - Colours are RGB-triplet tokens in the `:root` block of
   `frontend/src/styles/styles.css`, exposed to Tailwind as `accent`, `green`,
   `red`, etc. Never hardcode hex values.

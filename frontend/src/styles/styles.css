@@ -1116,6 +1116,10 @@ a {
 		@apply flex flex-col gap-5;
 	}
 
+	.engine-hero.compact {
+		@apply gap-3.5;
+	}
+
 	.engine-hero-top {
 		@apply flex flex-wrap items-start justify-between gap-3;
 	}
@@ -1125,25 +1129,25 @@ a {
 	}
 
 	.engine-model {
-		@apply mt-2 flex min-w-0 items-center gap-3;
+		@apply mt-1.5 flex min-w-0 items-center gap-2.5;
 	}
 
 	.engine-model code {
-		@apply font-mono text-[26px] font-semibold leading-tight sm:text-[32px];
+		@apply font-mono text-[19px] font-semibold leading-tight sm:text-[21px];
 		letter-spacing: -0.02em;
 		overflow-wrap: anywhere;
 	}
 
 	.engine-model .dot {
-		@apply h-2.5 w-2.5;
+		@apply h-2 w-2;
 	}
 
 	.engine-detail {
-		@apply mt-1.5 text-sm text-soft;
+		@apply mt-1 text-[13px] text-soft;
 	}
 
 	.engine-note {
-		@apply flex items-start gap-2 rounded-[var(--radius)] border border-yellow/25 bg-yellow/5 px-3.5 py-2.5 text-[13px] leading-relaxed text-yellow;
+		@apply flex items-start gap-2 rounded-[var(--radius)] border border-yellow/25 bg-yellow/5 px-3 py-2 text-[12.5px] leading-snug text-yellow;
 	}
 
 	.engine-note > svg {
@@ -1151,11 +1155,11 @@ a {
 	}
 
 	.chain {
-		@apply m-0 grid list-none gap-2.5 p-0 md:grid-cols-3;
+		@apply m-0 grid list-none gap-2 p-0 sm:grid-cols-2;
 	}
 
 	.chain-step {
-		@apply flex min-w-0 items-center gap-3 rounded-[var(--radius)] border border-line bg-panel2 px-3.5 py-3;
+		@apply flex min-w-0 items-center gap-3 rounded-[var(--radius)] border border-line bg-panel2 px-3 py-2.5;
 		--tone: var(--c-faint);
 	}
 
@@ -1171,7 +1175,7 @@ a {
 	}
 
 	.chain-step strong {
-		@apply block text-sm font-semibold;
+		@apply block text-[13.5px] font-semibold leading-5;
 	}
 
 	.chain-step code {
@@ -1187,71 +1191,155 @@ a {
 		@apply not-italic text-faint;
 	}
 
-	.roles {
+.roles {
 		@apply m-0 list-none p-0;
 	}
 
 	.roles > li {
-		@apply grid items-center gap-x-4 gap-y-2 border-b border-line px-5 py-4 last:border-b-0 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:px-6;
+		@apply grid items-center gap-x-3 gap-y-1 border-t border-line py-2.5 first:border-t-0 sm:grid-cols-[minmax(0,1fr)_auto_auto];
 	}
 
 	.roles strong {
-		@apply text-sm font-semibold;
+		@apply text-[13.5px] font-medium;
 	}
 
 	.roles p {
-		@apply mt-0.5 text-[13px] leading-snug text-soft;
+		@apply mt-0.5 truncate text-[12.5px] leading-snug text-soft;
 	}
 
 	.roles code {
-		@apply font-mono text-xs text-text;
+		@apply truncate font-mono text-xs text-soft;
 	}
 
 	.roles .pill {
-		@apply justify-self-start sm:justify-self-end;
+		@apply justify-self-start px-2 py-0 text-[11.5px] leading-5 sm:justify-self-end;
 	}
 
 	/* ============================================================ actions */
 
-	.change {
-		@apply rounded-[var(--radius)] border border-line bg-panel2 p-4;
+/* Engine: the proposal and prompt text. The card shows a clamped summary;
+	   everything else sits behind a Fold, so the page keeps one height whatever
+	   the length of the engine's reasoning. */
+	.proposal-summary {
+		@apply m-0 text-[13.5px] leading-[1.65] text-text;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
 	}
 
-	.change code {
+	.folds {
+		@apply flex flex-col gap-2;
+	}
+
+	.fold {
+		@apply min-w-0 overflow-hidden rounded-[var(--radius)] border border-line bg-panel2;
+	}
+
+	.fold-head {
+		@apply flex min-w-0 items-center gap-2 pr-2;
+	}
+
+	.fold-head > button {
+		@apply flex min-w-0 flex-1 items-center gap-2.5 px-3 py-2.5 text-left transition hover:bg-panel3;
+	}
+
+	.fold .chevron {
+		@apply shrink-0 text-faint transition-transform duration-200;
+	}
+
+	.fold.open .chevron {
+		@apply rotate-90 text-accent;
+	}
+
+	.fold-head strong {
+		@apply min-w-0 truncate text-[13.5px] font-medium;
+	}
+
+	.fold-meta {
+		@apply ml-auto flex shrink-0 items-center gap-1.5 text-xs tabular-nums text-faint;
+	}
+
+	.fold-meta .pill {
+		@apply px-2 py-0 text-[11.5px] leading-5;
+	}
+
+	.fold-body {
+		@apply border-t border-line bg-panel px-4 py-4;
+		animation: rise .2s var(--ease) both;
+	}
+
+	.brief {
+		@apply flex flex-col gap-4;
+	}
+
+	.brief-part h4 {
+		@apply mb-1 text-[11px] font-semibold uppercase tracking-[.12em] text-faint;
+	}
+
+	.brief-part p {
+		@apply m-0 break-words text-[13px] leading-[1.65] text-soft;
+	}
+
+	.bullets.tight {
+		@apply gap-2 text-[13px] leading-[1.6];
+	}
+
+	.steps {
+		@apply m-0 flex list-decimal flex-col gap-1.5 pl-5 text-[13px] leading-[1.6] text-soft;
+	}
+
+	.steps li::marker {
+		@apply font-medium text-faint;
+	}
+
+	.changes {
+		@apply m-0 flex list-none flex-col gap-2 p-0;
+	}
+
+	.changes li {
+		@apply rounded-lg bg-panel2 px-3 py-2;
+	}
+
+	.changes code {
 		@apply font-mono text-xs text-accent;
 	}
 
-	.change p {
-		@apply mt-2 text-[13px] leading-relaxed text-soft;
+	.changes p {
+		@apply m-0 mt-1 text-[12.5px] leading-snug text-soft;
 	}
 
-	.action {
-		@apply flex flex-col gap-1 rounded-[var(--radius)] border border-line bg-panel2 p-4;
-		@apply border-l-[3px] border-l-green;
+	.prompt-box {
+		@apply flex flex-col items-start gap-2;
 	}
 
-	.action.bad {
-		@apply border-l-red;
+	.prompt-box .code-block {
+		@apply m-0 max-h-56 w-full overflow-y-auto whitespace-pre-wrap break-words p-3 text-[12px];
 	}
 
-	.action.held {
-		@apply border-l-accent;
+	.actions-list {
+		@apply m-0 flex list-none flex-col p-0;
 	}
 
-	.action-platform {
-		@apply inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[.1em] text-soft;
+	.actions-list li {
+		@apply grid min-w-0 grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-x-3 border-t border-line py-2 text-[13px] text-soft first:border-t-0;
+		border-left: 3px solid rgb(var(--c-good));
+		padding-left: .75rem;
 	}
 
-	.action p {
-		@apply text-sm leading-relaxed text-soft;
+	.actions-list li.bad { border-left-color: rgb(var(--c-bad)); }
+	.actions-list li.held { border-left-color: rgb(var(--c-accent)); }
+
+	.actions-list .action-platform {
+		@apply text-[11px] font-semibold uppercase tracking-[.1em] text-faint;
 	}
 
-	.action a {
+	.actions-list a {
 		@apply text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent;
 	}
 
-	.action em {
-		@apply text-xs not-italic text-faint;
+	.actions-list em {
+		@apply text-xs not-italic tabular-nums text-faint;
 	}
 
 	/* ========================================================== modules */

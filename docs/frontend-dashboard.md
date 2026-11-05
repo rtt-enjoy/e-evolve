@@ -69,7 +69,9 @@ essentials, and detail lives one click away.
 | `#/research` | Which CTF bounties can I enter now? (older research is collapsed.) |
 | `#/engine`   | Which model served each role, and what did evolution propose?      |
 | `#/health`   | Freshness, integration readiness, errors, receive-wallet state.    |
-| `#/data`     | Every snapshot field, including keys no section claims yet.        |
+
+There is no raw-data route: `#/data` was removed 2026-11-05 (see Section
+Registry).
 
 `#/leads/<index>` is a detail view carrying the lead's `codex_prompt` with a
 copy button.
@@ -167,21 +169,46 @@ Two states are deliberately **not** shown as failures:
 - An evolution proposal on a review branch is `good`, with a "review diff"
   link; it becomes main only when merged.
 
-And one is shown as a warning although `llm_engine.live` is `true`: **Atria
-answered 0 of the cycle's calls.** `live` only means Atria was not latched off;
-a timeout or empty completion falls through per call without latching, so a
-cycle can end "live" with a fallback having served everything. `atriaState`
-reads `llm_engine.calls` and says "Atria not answering".
+And one is shown as a warning although `llm_engine.live` is `true`: **the main
+engine (GLM) answered 0 of the cycle's calls.** `live` only means the engine was
+not latched off; a timeout or empty completion falls through per call without
+latching, so a cycle can end "live" with a fallback having served everything.
+`engineState()` (`utils/engine.ts`) reads `llm_engine.calls` and says "GLM not
+answering".
 
 ## Engine page
 
-One hero card answers "which model writes for the bot": the model GLM's probe
-settled on (`llm_engine.main_model`), its state, and the fallback order
-GLM → Atria with what each step served last cycle
-(`engineChain`). When `main_model` is not `preferred_model`, a yellow line says
-why, from `llm_engine.refused`; a snapshot without `preferred_model` was written
-before glm-5.3-flash led and says so. Role rows show the model that answered,
-not `llm_workflows.<role>.model`, which is only the preference.
+Top to bottom, each block answers one question and nothing repeats another page:
+
+| Block | Answers | Source |
+|-------|---------|--------|
+| **Hero** (one card) | Which model writes for the bot, is it serving, and what is the fallback order? A ~20px model name, a state pill, one detail line, then the two chain steps side by side (GLM, then Atria, with calls served). A yellow line appears only when `main_model` is not `preferred_model`, with the refusal from `llm_engine.refused`. | `llm_engine`, `engineChain()` |
+| **Roles** and **Engine facts** (balanced pair) | Which model answered each job; is the key set, which host, who is the fallback and why, how many calls each engine answered. Role rows show the model that *answered*, never `llm_workflows.<role>.model`, which is only the preference. | `llm_workflows`, `llm_engine` |
+| **Evolution proposal** | What did the last evolution decide? A 3-line clamped summary and a status pill (`in review` / `no proposal` / `failed`), or the *review diff* link. | `last_evolution` |
+| **Owner actions** | What only the owner can do. One ~40px row per suggestion. | `last_evolution.suggestions` |
+| **Cycle actions** | What the research phase emitted. **Not rendered when empty.** | `last_earning.actions` |
+
+**Proposal and prompt are click-to-open.** Both are long, free-form model text
+(the live proposal summary alone is ~1,000 characters), so they sit behind the
+`Fold` row (`components/ui.tsx`) instead of stretching the page:
+
+- *Proposal details* opens **Summary** (full), **Serves**, **Money path**, **How
+  to verify**, **Evidence** (bullets), **Files changed** (file and reason) and
+  **Branch**, each a small uppercase label over a paragraph. A part with no data
+  is omitted, not shown as a dash. The same fields are written to the review
+  branch's commit body, so the page and the branch tell one story.
+- Each owner action opens **Why**, **You do**, **Steps** (numbered; a leading
+  `Step N:` written by the model is stripped so numbering is not doubled) and
+  **Prompt**: the text `suggestionPrompt()` builds from the fields the bot
+  wrote, in a scrollable `code-block` with a `copy prompt` button. The prompt
+  contains nothing the bot did not write.
+- There is no field for the *evolution engine's own* prompt in `status.json`
+  (`last_evolution` stores only the rationale), so none is shown. Adding one is
+  a backend change and an owner decision, not a UI tweak.
+
+Removed from this page (2026-11-05): the **Raw role map** (it restated Roles;
+`llm_roles` is no longer claimed by the registry) and the Cycle / Last run /
+Duration rows (Health owns run facts).
 
 ## What "Earned" Means
 
@@ -211,25 +238,72 @@ There is no transfer step and no withdrawal code path anywhere in the tree.
 Only the masked address (`wallet.address_masked`) is written to tracked files;
 `sanitize_for_git` redacts the raw value.
 
-## Visual Rules
+## Design Principles
+
+These hold for every page. The 2026-11-03 rule ("generous spacing, `py-4` or
+more") was superseded: Leads, Health and Engine were each found needlessly large
+and were compacted. **Compact is the default; generous spacing is the exception.**
+
+**Look**
 
 - Flat and quiet: no background washes, glows or gradients. Colour carries
   meaning only (status dots, icons, verdict rule), never decoration.
+- Colours are RGB-triplet tokens in the `:root` block of `styles.css`; never a
+  hex value. Both themes come from the same tokens; check light, dark and a
+  390 px phone before shipping.
 - Tile values are in text ink; the tile's tone shows in its icon and detail.
 - Charts are single-series bars (`BarList`): one accent hue on a shared zero,
-  the value printed beside each bar, and the sample size as `n=` so a mean over
-  two posts reads as one. Rows below `_MIN_ARCHETYPE_SAMPLE` are drawn faint.
-- Generous spacing: the owner found Leads and Research cramped (2026-11-03). Leads was then found too loose and compacted on 2026-11-05 (see below); the rule below still holds for every other page.
-  A `.card` is a flex column with `gap-5`, so its children (filters, lists,
-  key/value blocks) never touch; don't add `mt-*` to a card's direct child.
-  Secondary text is at least 13px with `leading-relaxed`; list rows get `py-4`
-  or more, with a gap between a title and its detail line.
-- Filter chips (`.segmented`, e.g. *every source*, *local-playbook*) have
-  `p-1.5` inside the frame and `gap-1` between chips (2026-11-03). At `p-0.5`
-  the active chip sat 2 px from the frame, and a wrapped row had no room at
-  the right and bottom edges. Do not tighten it again.
-- Both themes come from the same tokens; check light and dark, and a 390 px
-  phone width, before shipping.
+  the value printed beside each bar, the sample size as `n=` so a mean over two
+  posts reads as one. Rows below `_MIN_ARCHETYPE_SAMPLE` are drawn faint.
+
+**Size** (what "right-sized" means, measured)
+
+| Element | Size |
+|---------|------|
+| List / secret / role row | ~36-44px, `py-2` to `py-2.5` (Leads rows have two lines, ~75px, never below `py-3.5`) |
+| Module chip | ~32px |
+| Fold summary row | ~40px |
+| Card | `card-compact`: `gap-4`, `p-4 sm:p-5` (default `.card` is `gap-5`, `p-5 sm:p-7`) |
+| Secondary text | 12.5-13.5px, `leading-snug` to `leading-[1.65]` |
+| Hero model name | 19-21px (it was 26-32px; a name is not a headline number) |
+| Pills in rows | `px-2 py-0 text-[11.5px] leading-5` |
+
+**Structure**
+
+1. **Summary visible, detail one click away.** Anything long or free-form (a
+   proposal, a prompt, a lead's reasoning) shows a clamped line or a title and
+   opens on click: `Fold` for a row, `Disclosure` for a whole block. Do not
+   render model prose in a `KeyValue` cell; it makes the card as tall as the text.
+2. **Hide what is empty.** A card with nothing to say is not rendered (Cycle
+   actions, Owner actions). A part of a detail view with no data is omitted.
+   An empty-state card is for a page whose *purpose* is empty, not a sub-block.
+3. **One owner per fact.** Run facts (last run, duration, cycle) live on Health;
+   the funnel on Overview; the model that answered on Engine. A second copy
+   drifts, and a second place to look makes a worse page. If another page needs
+   the fact, link to its owner.
+4. **Balanced columns.** Side-by-side cards use `split even` and should be of
+   comparable height (fill the shorter with content that belongs there, never
+   filler). A chain of two steps uses two columns, not three with a dead slot.
+5. **Show the observation, not the preference.** A label reads what the cycle
+   did (`llm_engine`, `receipt_check`, `wallet`), never what config says should
+   happen. See Staying In Sync and What "Earned" Means.
+6. **Scope every compact modifier to its page.** Add `card-compact`, `rowlist`,
+   `*.compact`, `stack.tight`, `split.even` or a page-named class; never edit a
+   shared class (`.card`, `.suggestion`, `.disclosure`, `.keyvalue`) to tighten
+   one page. `.suggestion` is shared with Research and Leads.
+7. **Dense is not cramped.** Cards keep a gap between header and body; leave
+   `.segmented` at `p-1.5` / `gap-1` (set 2026-11-03 so the active chip is not
+   2 px from the frame).
+8. **One state per colour.** `good` = working, `warn` = degraded but serving,
+   `bad` = broken, `info` = awaiting a human (review branch), `neutral` =
+   unknown or idle. A held-back draft is `info`, never `bad`.
+9. **Names are real.** `featureLabel` upper-cases `GLM`, `USDT`, `MRR`, `CTF`,
+   `API`, `LLM`; do not hand-format an acronym in a component.
+
+**Process rule.** A `frontend/src` change is not live until `pnpm build` has
+rebuilt `docs/` and it is committed with the source. `pnpm build` runs
+`tsc --noEmit` first, so a type error stops it. Record every UI change below in
+the same commit.
 
 ## Implementation Notes
 
@@ -321,3 +395,21 @@ Only the masked address (`wallet.address_masked`) is written to tracked files;
   (`card-compact`, `rowlist`, `module-grid`, `*.compact`), so Overview keeps its
   spacing. `featureLabel` now upper-cases `GLM`, `USDT`, `MRR`, `CTF`, `API` and
   `LLM` (it printed `Glm` and `Usdt Wallet`).
+
+- **Engine: compact layout, proposal and prompt behind a click.** The hero is
+  one card with a ~20px model name and the two-step chain in two columns. Roles
+  are ~44px rows beside an **Engine facts** card (key, host, fallback, calls per
+  engine, bot version), so the pair has equal height. The Evolution proposal
+  card shows a 3-line clamp; Summary, Serves, Money path, How to verify,
+  Evidence, Files changed and Branch open under **Proposal details**. Each owner
+  action is a `Fold` row; opening it shows Why / You do / Steps / **Prompt**
+  (scrollable code block and `copy prompt`). Removed: the Raw role map
+  (`llm_roles` dropped from the Engine registry keys), the Cycle facts card
+  (Health owns it), and the empty Cycle actions card. Cycle actions, when
+  present, are one-line rows. New shared `Fold` in `ui.tsx`; new scoped CSS
+  (`.fold*`, `.brief*`, `.prompt-box`, `.proposal-summary`, `.actions-list`,
+  `.engine-hero.compact`, `.roles`); `.change` and `.action` were deleted with
+  their only user. The rules this followed are **Design Principles** above.
+- **Docs repaired.** The IA table listed `#/data` (removed today), Required
+  Signals named `atriaState` and Atria as main engine (it is `engineState` and
+  GLM), and Visual Rules still demanded `py-4` rows. All three were rewritten.

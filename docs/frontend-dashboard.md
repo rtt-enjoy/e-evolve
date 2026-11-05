@@ -401,8 +401,20 @@ the same commit.
     tiles already show (cost, score, kind, new).
   - Fetched rows show a 140-character excerpt of the post or repository as the
     reason (`_reason`), not one sentence shared by every row.
+  - **Every row states when it landed on the page** (owner: "show exactly when
+    each item was listed, so I can tell if it is current"). The right column of a
+    row is `.lead-row-time`: a toned line `Listed Nov 5, 02:33 PM · 3h ago`
+    (`discovered_at`, green within 24h, accent within 72h, amber after) over a
+    quiet `Feed · posted 2d ago` line (`posted_at`, the source's own clock) or
+    `Feed · curated`. The two are never merged: a repository can be listed today
+    and be ten days old. Ages are computed from the timestamp against the
+    viewer's clock (`hoursSince`), because `age_hours` is frozen at the refresh
+    that wrote it and read "2h" three hours later. A snapshot without the stamp
+    says `Listed time not recorded` instead of implying a time. The detail page's
+    facts read `Listed on this page` and `Posted at the source`. A row without a
+    source URL keeps an empty button slot so the time column lines up.
   Page-scoped classes only: `.leads-*`, `.lead-group*`, `.lead-more`,
-  `.lead-row-src`. `.segmented`, `.card` and `.suggestion` are untouched.
+  `.lead-row-time`. `.segmented`, `.card` and `.suggestion` are untouched.
 
 - **Leads: compact layout.** The owner found each card needlessly large, and
   asked for compact but not dense. A lead row is now two lines (title, one-line

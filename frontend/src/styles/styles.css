@@ -809,9 +809,19 @@ a {
 
 	/* Feed and age as plain text: the pills are kept for what changes a decision
 	   (new, free, a fee), and the kind is the group header, not a pill. */
-	.lead-row-src {
-		@apply whitespace-nowrap text-xs tabular-nums text-faint;
+	.lead-row-time {
+		@apply flex flex-col whitespace-nowrap text-xs tabular-nums text-faint sm:w-[13rem] sm:items-end;
 	}
+
+	/* The listed time is the freshness signal, so it carries the tone; the
+	   source line under it stays quiet. */
+	.lead-row-time b {
+		@apply font-medium text-soft;
+	}
+
+	.lead-row-time b.good { @apply text-green; }
+	.lead-row-time b.info { @apply text-accent; }
+	.lead-row-time b.warn { @apply text-yellow; }
 
 	.lead-row .score-chip {
 		@apply h-7 w-9 text-[12.5px];

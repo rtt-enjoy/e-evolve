@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { CopyButton } from '../components/CopyButton';
 import { Bullets, Card, Disclosure, Empty, Fold, KeyValue, Pill, Progress, SectionHead, Subhead, Tile } from '../components/ui';
 import { buildOpportunityStats, sortLeads, type LeadSort } from '../utils/dashboard';
-import { cleanTitle, formatDate, leadAge, scoreTone, sourceFamily, sourceName } from '../utils/format';
+import { cleanTitle, formatDate, hoursSince, leadAge, scoreTone, sourceFamily, sourceName } from '../utils/format';
 import { useRoute } from '../utils/route';
 import type { CodeTechEarning, CodeTechOpportunity, LeadKind, Status } from '../types/status';
 
@@ -109,7 +109,13 @@ const KIND_GROUPS: Array<{ kind: 'channel' | 'asset'; title: string; hint: strin
 ];
 
 function LeadRow({ lead, index }: { lead: CodeTechOpportunity; index: number }) {
-	const age = leadAge(lead.age_hours);
+	// Two different times, never merged: when the bot put the row on this page
+	// (exact, and the thing that says "is this new to me"), and when the source
+	// published it (a repo can be listed today and be ten days old).
+	const listedHours = hoursSince(lead.discovered_at);
+	const listed = leadAge(listedHours);
+	const postedHours = lead.posted_at ? hoursSince(lead.posted_at) ?? lead.age_hours ?? null : null;
+	const posted = leadAge(postedHours);
 	return (
 		// A div, not an <a>: the row holds two links (detail and source), and
 		// links cannot nest.
@@ -127,10 +133,22 @@ function LeadRow({ lead, index }: { lead: CodeTechOpportunity; index: number }) 
 					    cost renders nothing rather than implying free. */}
 					{lead.cost_usd === 0 ? <Pill tone="good">free</Pill> : null}
 					{typeof lead.cost_usd === 'number' && lead.cost_usd > 0 ? <Pill tone="warn">{formatCost(lead.cost_usd)}</Pill> : null}
-					{/* Only fetched rows have a posting time; curated rows show the feed alone. */}
-					<span className="lead-row-src" title={lead.posted_at ? `Posted ${formatDate(lead.posted_at)}` : undefined}>
-						{sourceName(lead.source)}
-						{lead.posted_at ? ` · ${age.label}` : ''}
+					<span className="lead-row-time">
+						{/* The listed time is the row's freshness. A snapshot from before
+						    the stamp existed says so instead of implying a time. */}
+						<b
+							className={listed.tone}
+							title={lead.discovered_at ? `Listed on this page ${formatDate(lead.discovered_at)}` : undefined}
+						>
+							{lead.discovered_at
+								? `Listed ${formatDate(lead.discovered_at)} · ${listed.label} ago`
+								: 'Listed time not recorded'}
+						</b>
+						{/* Only fetched rows have a posting time; curated rows show the feed alone. */}
+						<span title={lead.posted_at ? `Posted at the source ${formatDate(lead.posted_at)}` : undefined}>
+							{sourceName(lead.source)}
+							{lead.posted_at ? ` · posted ${posted.label} ago` : ' · curated'}
+						</span>
 					</span>
 				</span>
 			</a>
@@ -146,7 +164,10 @@ function LeadRow({ lead, index }: { lead: CodeTechOpportunity; index: number }) 
 				>
 					<ExternalLink size={15} />
 				</a>
-			) : null}
+			) : (
+				// Same footprint, so the time column lines up across rows.
+				<span className="lead-row-source" aria-hidden="true" />
+			)}
 		</div>
 	);
 }
@@ -173,7 +194,10 @@ function LeadList({ codeTech, opportunities }: { codeTech: CodeTechEarning; oppo
 		return [...counts.entries()].map(([key, count]) => ({ key, count })).sort((a, b) => b.count - a.count);
 	}, [opportunities]);
 	const newCount = opportunities.filter((lead) => lead.is_new).length;
-	const dayCount = opportunities.filter((lead) => typeof lead.age_hours === 'number' && lead.age_hours <= 24).length;
+	const dayCount = opportunities.filter((lead) => {
+		const hours = hoursSince(lead.posted_at) ?? lead.age_hours;
+		return typeof hours === 'number' && hours <= 24;
+	}).length;
 
 	const toggleQuick = (key: QuickFilter) =>
 		setQuick((current) => {
@@ -462,8 +486,8 @@ function LeadDetail({ lead, index, opportunities }: { lead: CodeTechOpportunity;
 								['Owner must do', setup || 'nothing'],
 								['Source', sourceName(lead.source)],
 								['Verified', lead.verified_note || 'not recorded'],
-								['Posted', lead.posted_at ? `${formatDate(lead.posted_at)} (${leadAge(lead.age_hours).label} ago)` : 'not applicable'],
-								['First seen by bot', lead.discovered_at ? formatDate(lead.discovered_at) : '—'],
+								['Listed on this page', lead.discovered_at ? `${formatDate(lead.discovered_at)} (${leadAge(hoursSince(lead.discovered_at)).label} ago)` : 'not recorded'],
+								['Posted at the source', lead.posted_at ? `${formatDate(lead.posted_at)} (${leadAge(hoursSince(lead.posted_at) ?? lead.age_hours).label} ago)` : 'not applicable (curated)'],
 								['Link', lead.url ? <a href={lead.url} target="_blank" rel="noreferrer">open ↗</a> : '—'],
 							]}
 						/>

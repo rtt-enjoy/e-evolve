@@ -55,6 +55,21 @@ export function addedAgo(value?: string | null): { label: string; exact: string 
 }
 
 /**
+ * Hours since a timestamp, measured against the viewer's clock.
+ *
+ * `age_hours` in the snapshot is frozen at the refresh that wrote it, so a row
+ * read three hours later still said "2h" -- the opposite of what the page is
+ * for. Null for a missing or unreadable stamp, so nothing claims a time it
+ * does not have.
+ */
+export function hoursSince(value?: string | null): number | null {
+	if (!value) return null;
+	const time = new Date(value).getTime();
+	if (Number.isNaN(time)) return null;
+	return Math.max(0, (Date.now() - time) / 3_600_000);
+}
+
+/**
  * A lead's age, on a scale that suits leads.
  *
  * `ageLabel` above is tuned for cycle freshness -- anything over 75 minutes is

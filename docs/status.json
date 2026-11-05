@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-05T07:49:57.091154+00:00",
-  "total_runs": 2284,
+  "last_run": "2026-11-05T08:50:06.817336+00:00",
+  "total_runs": 2285,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,12 +33,12 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the named prompt focus has 30 open, unmerged prior proposals covering every variant of the ALL-CAPS and colon-subtitle wording, and the dominant loss is the engine, not the prompt \u2014 another wording edit would be the 31st duplicate branch.",
+    "summary": "No change clears the bar this cycle: the PROMPT FOCUS (weak_title, 3 losses) has ~30 open unmerged branches already addressing its two gate findings, and the dominant loss is llm_error (18 of 14 days' drafts), which no prompt edit can reach \u2014 the existing owner suggestion to restore the GLM key stands.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Restore the GLM key before any further prompt work (resubmitted, unchanged)",
-        "description": "18 of the last 14 days' lost drafts died on 'LLM call failed' \u2014 six times the weak_title count and unreachable by prompt edits. The status field that would confirm recovery is llm_engine.calls['glm'] rising and article_rejects.last no longer reading 'llm_error'.",
+        "description": "18 of the last 14 days' lost drafts died on 'LLM call failed' \u2014 six times the weak_title count and unreachable by prompt edits. Each lost draft is one article and one tip ask that never ships, so this is the single highest-leverage reach action available.",
         "owner_action": "Inspect the z.ai console for quota exhaustion, key expiry, or deprecation of glm-5.3-flash; fix or rotate the existing GLM_API_KEY.",
         "secret_needed": "GLM_API_KEY (verify the existing one; never add a new provider)",
         "how_to": [
@@ -46,30 +46,51 @@
           "Step 2: if the key is fine, confirm glm-5.3-flash is still served at https://api.z.ai/api/coding/paas/v4; otherwise update llm_workflows.post.",
           "Step 3: after it recovers, merge one of the ~30 open weak_title prompt branches rather than letting new ones accumulate."
         ]
+      },
+      {
+        "title": "Merge or close the ~30 open weak_title prompt branches",
+        "description": "The weak_title findings (ALL-CAPS words, colon-subtitle padding) each have many near-identical unmerged proposals dating back to 2026-10-31. Until one is merged, every cycle re-proposes the same edit and no count can move; once one lands, weak_title in the 14-day window should fall from 3 toward 0.",
+        "owner_action": "Review the open bot/earning/articles.py title-prompt branches and merge exactly one; reject the rest as superseded.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: pick the branch with the smallest diff (a one- or two-line _revise_title or _SYSTEM title-rule sharpening).",
+          "Step 2: merge it and confirm weak_title in the next 14-day PROMPT LEDGER window drops from 3.",
+          "Step 3: close the remaining duplicate branches so future cycles stop re-proposing them."
+        ]
       }
     ],
-    "direction": "Checklist step 4 (reach), Principle 3j/5 \u2014 but the evidence points away from another prompt edit",
+    "direction": "Checklist step 4 (reach into a live receive path); serving it requires a lever that is not already exhausted or dead",
     "evidence": [
-      "article_rejects.counts: llm_error=36 vs weak_title=14 (total 64)",
-      "Drafts lost last 14 days: engine llm_error=18 + empty_draft=2 vs prompt weak_title=3, fabricated=2",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "llm_engine.calls = {'glm': 1} \u2014 the post engine served one call last cycle",
-      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x2, 'colon subtitle' x1 \u2014 3 drafts total",
-      "PRIOR PROPOSALS: 30 open branches target exactly this prompt (articles.py _SYSTEM / _revise_title), all unmerged"
+      "article_rejects.counts: llm_error=36 vs weak_title=14 (lifetime); last = 'llm_error': 'LLM call failed'",
+      "PROMPT LEDGER: llm_error=18 and empty_draft=2 in the last 14 days are 'lost to the engine, not fixable by a prompt edit'; weak_title=3",
+      "llm_engine.calls = {'glm': 1} \u2014 the serving provider is barely answering",
+      "PRIOR PROPOSALS: ~30 distinct open branches target the exact weak_title findings ('title has ALL-CAPS word' x2, 'colon subtitle' x1) via edits to _SYSTEM and _revise_title; none merged",
+      "receipt_check.covered / published_total = 45 / 45, coverage_complete observed True, known_without_footer = 0 \u2014 receive path fully verified, nothing to fix there",
+      "article_interest: problem-workaround n=10 avg=440.3 dominates; steering already active via preferred_archetypes"
     ],
-    "money_path": "none (maintenance) \u2014 no change proposed, so nothing touches the receive path",
-    "verify": "No diff to verify. If the owner fixes the GLM key, article_rejects.counts.llm_error growth should flatten next cycle and weak_title=3's window count should be the only remaining prompt-side signal to grade.",
+    "money_path": "none \u2014 no change proposed; receive path is verified and complete (45/45 covered), and the binding constraint on reach is the dead LLM engine, not prompt wording",
+    "verify": "Next cycle: article_rejects.counts['llm_error'] stops rising and llm_engine.calls['glm'] rises above 1 once the key is restored; only then does a weak_title prompt edit (from the existing open branches, not a new one) become measurable in the 14-day window",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.0"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
         "platform": "ctf-bounty",
-        "success": false,
+        "success": true,
         "estimated_usd": 0.0,
-        "error": "CTFtime API unreachable"
+        "listed": 21
+      },
+      {
+        "platform": "mrr-ideas",
+        "success": true,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
+        "estimated_usd": 0.0,
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "status.json#mrr_ideas"
       }
     ],
     "total_usd": 0.0
@@ -77,7 +98,7 @@
   "suggestions": [
     {
       "title": "Restore the GLM key before any further prompt work (resubmitted, unchanged)",
-      "description": "18 of the last 14 days' lost drafts died on 'LLM call failed' \u2014 six times the weak_title count and unreachable by prompt edits. The status field that would confirm recovery is llm_engine.calls['glm'] rising and article_rejects.last no longer reading 'llm_error'.",
+      "description": "18 of the last 14 days' lost drafts died on 'LLM call failed' \u2014 six times the weak_title count and unreachable by prompt edits. Each lost draft is one article and one tip ask that never ships, so this is the single highest-leverage reach action available.",
       "owner_action": "Inspect the z.ai console for quota exhaustion, key expiry, or deprecation of glm-5.3-flash; fix or rotate the existing GLM_API_KEY.",
       "secret_needed": "GLM_API_KEY (verify the existing one; never add a new provider)",
       "how_to": [
@@ -86,10 +107,22 @@
         "Step 3: after it recovers, merge one of the ~30 open weak_title prompt branches rather than letting new ones accumulate."
       ],
       "discovered_at": "2026-11-05T07:50:26.872035+00:00"
+    },
+    {
+      "title": "Merge or close the ~30 open weak_title prompt branches",
+      "description": "The weak_title findings (ALL-CAPS words, colon-subtitle padding) each have many near-identical unmerged proposals dating back to 2026-10-31. Until one is merged, every cycle re-proposes the same edit and no count can move; once one lands, weak_title in the 14-day window should fall from 3 toward 0.",
+      "owner_action": "Review the open bot/earning/articles.py title-prompt branches and merge exactly one; reject the rest as superseded.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: pick the branch with the smallest diff (a one- or two-line _revise_title or _SYSTEM title-rule sharpening).",
+        "Step 2: merge it and confirm weak_title in the next 14-day PROMPT LEDGER window drops from 3.",
+        "Step 3: close the remaining duplicate branches so future cycles stop re-proposing them."
+      ],
+      "discovered_at": "2026-11-05T08:51:13.043868+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 51,
+  "last_cycle_seconds": 100,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2758,7 +2791,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-05T07:49:57.575037+00:00",
+    "checked_at": "2026-11-05T08:50:07.073737+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2922,7 +2955,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-11-03T07:51:24.058323+00:00",
+    "last_refresh_at": "2026-11-05T08:51:13.664491+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -2931,41 +2964,43 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The single best angle is a hyper-narrow research digest published as dev.to articles, whose only job is to make the byline credible enough that a paid newsletter or paid template pack has any audience at all. With no outreach channel and no payment processor in the stack, the honest plan is: pick one narrow technical niche the owner can research faster than readers can, publish 8-12 weekly digest articles on dev.to, and treat monetization as a manual owner decision (account opening, ID verification, storefront setup) that only begins after real readers exist. No MRR figure is claimed here; any revenue expectation should be verified independently against what that niche actually pays.",
+    "summary": "The single best angle is a paid, research-heavy newsletter delivered as a weekly deep-dive article series published to dev.to, sold as a Gumroad subscription (or tipped via a published crypto wallet, which needs no account). The niche should be as narrow as the stack itself: GitHub Actions automation patterns for solo developers. The owner's only real capability is hourly research, analysis, and publishing \u2014 so the honest product is 'one rigorously sourced automation write-up per week,' which is exactly what an Actions workflow can produce as a draft and the owner can verify, edit, and publish by hand. No client work, no outreach, no always-on infrastructure; the dev.to byline is the only audience-builder, so every free article should end in a question that invites readers to the paid tier.",
     "ranked_ideas": [
       {
-        "name": "Paid newsletter (research digest)",
-        "why_this_stack_fits": "The whole stack can research, draft, and publish to dev.to on a schedule; a weekly digest is exactly that shape, repeated.",
-        "narrow_niche": "GitHub Actions workflow-breaking-change alerts for one specific ecosystem (e.g. actions-runner deprecations and runner-image monthly breaking changes) \u2014 not 'DevOps' broadly.",
-        "first_proof_artifact": "8-12 weekly free digest articles on dev.to, each ending with a question inviting readers with the problem to say so in comments (inbound-only validation).",
-        "who_pays": "An individual maintainer or small-team engineer who personally manages CI for that ecosystem and reads the free digests already.",
+        "name": "Paid newsletter: weekly GitHub Actions deep-dives",
+        "why_this_stack_fits": "The entire product is research + writing + publishing to dev.to, which is exactly the automation surface available; no server, inbound HTTP, or outreach is needed.",
+        "narrow_niche": "GitHub Actions workflow patterns and cost/pitfall analysis for solo developers and tiny OSS maintainers \u2014 not general CI/CD, not DevOps broadly.",
+        "first_proof_artifact": "Three fully researched free deep-dive articles published to dev.to (e.g., a workflow cost analysis, a security-hardening pattern, a caching strategy), each demonstrating source-backed analysis and ending with a question inviting reader input.",
+        "who_pays": "Solo developers and small OSS maintainers who already run GitHub Actions and want vetted, tested workflow patterns without researching them themselves.",
         "monthly_price_usd": "10",
-        "runway_to_first_dollar": "8-12 weeks (digest-first), then payment setup is a manual gate the owner must clear before a single dollar moves.",
-        "owner_must_do_by_hand": "Open a payment/newsletter account by hand and pass its government-ID verification; no automation in this stack can create the account, verify identity, or move money. Until that is done manually, the newsletter is free and revenue is zero \u2014 any revenue expectation should be verified independently."
+        "runway_to_first_dollar": "4-10 weeks",
+        "owner_must_do_by_hand": "Verify every draft's claims and code before publishing (never auto-publish unverified research); open and ID-verify a payment account (Gumroad, Substack, Polar, or Stripe \u2014 all require government ID, none pays out in crypto) OR publish a personal Tron wallet address for tips, which needs no account;",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
-        "name": "Notion / digital template store",
-        "why_this_stack_fits": "The stack can research what a good template needs and draft the documentation, but it cannot build in Notion's editor \u2014 so this only fits if the owner builds the artifact by hand and the stack writes the launch article and docs.",
-        "narrow_niche": "A Notion engineering-onboarding template for one stack (e.g. a Ruby-on-Rails team's first-week onboarding board), not 'productivity templates'.",
-        "first_proof_artifact": "One complete, genuinely usable Notion template plus a dev.to article showing exactly how it works, published to the byline built by the digests.",
-        "who_pays": "A team lead or solo founder doing Rails (or the chosen stack) onboarding who read the digests and wants the artifact.",
-        "monthly_price_usd": "15",
-        "runway_to_first_dollar": "10-14 weeks; note this model sells once per buyer, so honest recurring revenue requires several templates \u2014 each verified independently for demand before building.",
-        "owner_must_do_by_hand": "Build the Notion template itself in Notion's editor (no automation here can do that), then open and ID-verify a storefront account by hand. No automation in this stack can do either, or collect payment."
+        "name": "Template store: GitHub Actions workflow template packs",
+        "why_this_stack_fits": "The same research loop that drafts articles also produces copy-paste workflow files; the bot drafts, the owner curates and packages.",
+        "narrow_niche": "Pre-hardened Actions workflow templates for one specific job \u2014 e.g., Docker image build-and-push with caching for small Python projects \u2014 not a general 'DevOps templates' library.",
+        "first_proof_artifact": "A pack of 5 tested, documented workflow YAML files with a README explaining each trigger, cache strategy, and failure mode, released free as the lead artifact linked from dev.to articles.",
+        "who_pays": "Python solo devs who ship Docker images and keep rewriting the same deploy workflow.",
+        "monthly_price_usd": "5-15 for a subscription to an expanding pack library, or a one-time price if recurring proves unrealistic without a processor",
+        "runway_to_first_dollar": "6-12 weeks",
+        "owner_must_do_by_hand": "Test every workflow on a real repo before selling it; open and ID-verify the Gumroad account by hand (government ID required, no crypto payout), then create the product listing via Gumroad's API; or fall back to a published wallet address for tips; answer buyer questions manually.",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       }
     ],
     "validation_steps": [
-      "Publish a digest article that ends with a direct question ('What broke in your CI this month? Tell me in the comments') and count substantive replies over 2-3 issues \u2014 inbound only.",
-      "Post a thread by hand (owner action, not automated) in one community the owner already belongs to, linking the digest and asking the same question.",
-      "Treat 10 engaged replies/comments from people describing the problem as the go signal; fewer than 3 means the niche is wrong \u2014 pick a narrower one.",
-      "Only after validation does the owner manually open an ID-verified payment account; until then no money can be collected by this stack at all."
+      "Inbound validation via article-by-question: end each free dev.to article with a specific question (e.g., 'What breaks when your Actions cache expires mid-deploy?') and let comments surface real pain points \u2014 never DM commenters.",
+      "Track which article topics get the most dev.to engagement over 4 weeks; the top-performing topic defines the paid niche, decided by data the owner compiles by hand.",
+      "The owner, inside communities they already belong to (not via new outreach), can note recurring questions about Actions patterns and fold them into the article pipeline \u2014 observation only, no pitching.",
+      "Only after 10+ substantive comments or questions on the topic across articles should the paid tier be announced; verify demand by hand-compiled counts, and verify any revenue claims about niches independently rather than trusting the drafting automation."
     ],
     "owner_actions": [
-      "Choose one narrow ecosystem (e.g. GitHub Actions runner-image breaking changes) and commit to a weekly digest schedule.",
-      "Publish the first 4 digest articles on dev.to by hand-scheduled GitHub Actions runs, each ending in an inbound question.",
-      "Check comments weekly by hand and log every reader who describes the problem; target 10 before any monetization talk.",
-      "After validation, manually open one payment/newsletter account and complete its government-ID verification \u2014 this cannot be automated.",
-      "Verify independently (never trust this plan's numbers) what buyers in the chosen niche actually pay for similar digests or templates before setting a price."
+      "Pick the narrowest niche where your own research habit is strongest (recommended: GitHub Actions patterns for solo Python/Docker devs) and commit to it for 8 weeks.",
+      "Publish 3 free deep-dive articles to dev.to (research drafted by the workflow, every claim verified and every code sample tested by you before publishing), each ending in an inbound-inviting question.",
+      "Keep a hand-maintained log of article views, comments, and question themes; after 4 weeks, rank topics by engagement to pick the paid product.",
+      "By hand, open and ID-verify a payment account (Gumroad recommended \u2014 its API allows product creation after verification) or publish your own Tron address for no-account tips; be honest with readers about which exists.",
+      "Draft the first paid deliverable (pack of 5 tested workflow templates or the first subscriber-only deep-dive), price it at $5-15/mo, and announce it only in a dev.to article, never via outbound messages."
     ],
     "viable": [
       {
@@ -2978,7 +3013,8 @@
           "owner opens a payment account by hand AND passes its ID verification -- Gumroad, Substack, Polar and Stripe all require government ID and none pays out in crypto (verified 2026-09-15). For a crypto payout to the owner's own Tron address with no ID check, see the channel table in code_techs (Getly), or take tips on the published wallet address, which needs no account at all.",
           "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API, once the account exists and its ID verification has passed)",
           "needs an existing audience; the dev.to byline is the only one this stack builds"
-        ]
+        ],
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Notion / digital template store",
@@ -2989,99 +3025,118 @@
         "manual_steps": [
           "owner opens a payment account by hand AND passes its ID verification -- Gumroad, Substack, Polar and Stripe all require government ID and none pays out in crypto (verified 2026-09-15). For a crypto payout to the owner's own Tron address with no ID check, see the channel table in code_techs (Getly), or take tips on the published wallet address, which needs no account at all.",
           "owner opens the storefront or channel by hand (Gumroad products can then be created/updated via its API, once the account exists and its ID verification has passed)"
-        ]
+        ],
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       }
     ],
     "refused": [
       {
         "name": "Micro SaaS",
         "mrr_model": "$15-99/mo subscription",
-        "reason": "needs a server accepting requests; GitHub Actions is outbound-only"
+        "reason": "needs a server accepting requests; GitHub Actions is outbound-only",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Local business AI automation agency",
         "mrr_model": "$300-800/mo retainer per client",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform"
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Online course membership",
         "mrr_model": "$49/mo; ~204 members = $10K MRR",
-        "reason": "fit score 45 is below the 50 threshold for this stack"
+        "reason": "fit score 45 is below the 50 threshold for this stack",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Bookkeeping as a service",
         "mrr_model": "$200-600/mo retainer",
-        "reason": "requires a professional credential the owner does not hold; requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "requires a professional credential the owner does not hold; requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Social media management retainer",
         "mrr_model": "$500-1.5K/mo per client",
-        "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "SEO retainer",
         "mrr_model": "$400-3K/mo per client",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client"
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Podcast production service",
         "mrr_model": "$500-2K/mo retainer",
-        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "White-label SaaS reselling",
         "mrr_model": "platform markup, $1-6K/mo",
-        "reason": "requires a paid third-party platform; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "requires a paid third-party platform; client acquisition needs cold email/DM \u2014 blocked in code",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Email marketing management retainer",
         "mrr_model": "$400-1.2K/mo per client",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client"
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a human performing the service per client",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Paid Discord / Slack community",
         "mrr_model": "$15-50/mo per member",
-        "reason": "delivery requires posting to social platforms \u2014 blocked in code"
+        "reason": "delivery requires posting to social platforms \u2014 blocked in code",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "No-code app dev for one industry",
         "mrr_model": "hosting + maintenance retainer",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform"
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code; requires a paid third-party platform",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "YouTube automation channel",
         "mrr_model": "AdSense + affiliate + memberships",
-        "reason": "delivery requires posting to social platforms \u2014 blocked in code"
+        "reason": "delivery requires posting to social platforms \u2014 blocked in code",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Freelance writing retainer",
         "mrr_model": "4-8 articles/mo, $1.5-8K",
-        "reason": "client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "client acquisition needs cold email/DM \u2014 blocked in code",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Online tutoring / coaching subscription",
         "mrr_model": "$150-500/mo per client",
-        "reason": "requires a human performing the service per client"
+        "reason": "requires a human performing the service per client",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "API or data feed for a niche",
         "mrr_model": "recurring API access fee",
-        "reason": "needs a server accepting requests; GitHub Actions is outbound-only"
+        "reason": "needs a server accepting requests; GitHub Actions is outbound-only",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Virtual assistant agency",
         "mrr_model": "$500-2K/mo per client",
-        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "requires a human performing the service per client; client acquisition needs cold email/DM \u2014 blocked in code",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Niche job board / marketplace",
         "mrr_model": "$99-499 per posting, recruiter memberships",
-        "reason": "needs a server accepting requests; GitHub Actions is outbound-only"
+        "reason": "needs a server accepting requests; GitHub Actions is outbound-only",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       },
       {
         "name": "Content repurposing service",
         "mrr_model": "$500-1.5K/mo retainer",
-        "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code"
+        "reason": "delivery requires posting to social platforms \u2014 blocked in code; client acquisition needs cold email/DM \u2014 blocked in code",
+        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
       }
     ],
     "llm_used": true
@@ -3385,7 +3440,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-05T07:50:47.380929+00:00",
+    "last_run": "2026-11-05T08:51:45.755720+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3395,25 +3450,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-05T07:50:47.710074+00:00",
+    "last_run": "2026-11-05T08:51:46.082594+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4641536,
-        "at": "2026-11-04T22:20:41.013424+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-11-04T22:20:41.013424+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-11-04T22:20:41.013424+00:00",
-        "ok": true
-      },
       {
         "id": 4568987,
         "at": "2026-11-04T23:21:32.358517+00:00",
@@ -3421,11 +3461,6 @@
       },
       {
         "id": 4820684,
-        "at": "2026-11-04T23:21:32.358517+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-11-04T23:21:32.358517+00:00",
         "ok": true
       },
@@ -3620,8 +3655,28 @@
         "ok": true
       },
       {
+        "id": 4641536,
+        "at": "2026-11-05T08:51:46.082594+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-11-05T08:51:46.082594+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-11-05T08:51:46.082594+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-05T08:51:46.082594+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-05T07:50:47.710074+00:00",
+        "at": "2026-11-05T08:51:46.082594+00:00",
         "ok": true
       }
     ],
@@ -3650,7 +3705,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 1
+      "glm": 2
     },
     "fallback": {
       "provider": "atria",
@@ -3662,8 +3717,8 @@
   },
   "ctf_bounty": {
     "source": "ctftime",
-    "last_refresh_at": "2026-11-05T04:41:51.756208+00:00",
-    "last_reason": "fetch_failed",
+    "last_refresh_at": "2026-11-05T08:51:13.046212+00:00",
+    "last_reason": "ok",
     "fetched": 30,
     "enterable": 21,
     "paying": 5,
@@ -3678,10 +3733,10 @@
         "start": "2026-11-06T17:00:00+00:00",
         "finish": "2026-11-07T17:00:00+00:00",
         "live": false,
-        "days_until_start": 1.5,
+        "days_until_start": 1.3,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 87,
+        "participants": 91,
         "prizes": "Open Division: (Online + In-person) 1st - 100$ 2nd - 50$ 3rd - 25$ In-Person: 1st - 100$",
         "pays": true,
         "crypto": false,
@@ -3698,10 +3753,10 @@
         "start": "2026-11-06T12:00:00+00:00",
         "finish": "2026-11-09T12:00:00+00:00",
         "live": false,
-        "days_until_start": 1.3,
+        "days_until_start": 1.1,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 64,
+        "participants": 67,
         "prizes": "1st Place: 25$ + 6 Month Caido License per Member (Worth ~$545) + 4 .xyz Domains 2nd Place: 15$ + 3 Month Caido License per Member (Worth ~$272) + 2 .xyz Domain",
         "pays": true,
         "crypto": false,
@@ -3718,10 +3773,10 @@
         "start": "2026-11-14T15:30:00+00:00",
         "finish": "2026-11-15T15:30:00+00:00",
         "live": false,
-        "days_until_start": 9.5,
+        "days_until_start": 9.3,
         "format": "Jeopardy",
         "weight": 24.23,
-        "participants": 10,
+        "participants": 11,
         "prizes": "The total prize pool for h4ckc0n is \u20b910,000 INR, distributed among the top three teams: 1st Place - \u20b95,000 2nd Place - \u20b93,000 3rd Place - \u20b92,000 (only applicabl",
         "pays": true,
         "crypto": false,
@@ -3738,10 +3793,10 @@
         "start": "2026-11-20T10:00:00+00:00",
         "finish": "2026-11-22T10:00:00+00:00",
         "live": false,
-        "days_until_start": 15.2,
+        "days_until_start": 15.0,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 17,
+        "participants": 18,
         "prizes": "1st: 300 USD + 1 year ExamBoot subscription. (500 USD dedicated for the 1st Cameroonian local on the scoreboard) 3-month BlueYard Pro subscription, 1 Free annua",
         "pays": true,
         "crypto": false,
@@ -3758,7 +3813,7 @@
         "start": "2026-12-19T12:00:00+00:00",
         "finish": "2026-12-20T12:00:00+00:00",
         "live": false,
-        "days_until_start": 44.3,
+        "days_until_start": 44.1,
         "format": "Jeopardy",
         "weight": 77.38,
         "participants": 17,
@@ -3778,10 +3833,10 @@
         "start": "2026-11-06T13:00:00+00:00",
         "finish": "2026-11-08T13:00:00+00:00",
         "live": false,
-        "days_until_start": 1.3,
+        "days_until_start": 1.2,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 87,
+        "participants": 90,
         "prizes": "Three months of PIECE Elite for every verified participant with a positive score, plus certifications, training access, YubiKeys, Ubuntu exam vouchers and prize",
         "pays": false,
         "crypto": false,
@@ -3798,7 +3853,7 @@
         "start": "2026-11-12T17:00:00+00:00",
         "finish": "2026-11-14T05:00:00+00:00",
         "live": false,
-        "days_until_start": 7.5,
+        "days_until_start": 7.3,
         "format": "Jeopardy",
         "weight": 1.0,
         "participants": 20,
@@ -3818,10 +3873,10 @@
         "start": "2026-11-13T17:00:00+00:00",
         "finish": "2026-11-14T11:00:00+00:00",
         "live": false,
-        "days_until_start": 8.5,
+        "days_until_start": 8.3,
         "format": "Jeopardy",
         "weight": 37.0,
-        "participants": 48,
+        "participants": 49,
         "prizes": "See https://platypwnies.de/events/platypwn",
         "pays": false,
         "crypto": false,
@@ -3838,7 +3893,7 @@
         "start": "2026-11-13T23:00:00+00:00",
         "finish": "2026-11-15T23:00:00+00:00",
         "live": false,
-        "days_until_start": 8.8,
+        "days_until_start": 8.6,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 95,
@@ -3858,7 +3913,7 @@
         "start": "2026-11-20T23:00:00+00:00",
         "finish": "2026-11-21T23:00:00+00:00",
         "live": false,
-        "days_until_start": 15.8,
+        "days_until_start": 15.6,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 7,
@@ -3878,10 +3933,10 @@
         "start": "2026-11-21T13:00:00+00:00",
         "finish": "2026-11-21T21:00:00+00:00",
         "live": false,
-        "days_until_start": 16.3,
+        "days_until_start": 16.2,
         "format": "Jeopardy",
         "weight": 37.0,
-        "participants": 27,
+        "participants": 28,
         "prizes": "",
         "pays": false,
         "crypto": false,
@@ -3898,10 +3953,10 @@
         "start": "2026-11-28T04:30:00+00:00",
         "finish": "2026-11-28T16:30:00+00:00",
         "live": false,
-        "days_until_start": 23.0,
+        "days_until_start": 22.8,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 18,
+        "participants": 19,
         "prizes": "To be announced",
         "pays": false,
         "crypto": false,
@@ -3918,10 +3973,10 @@
         "start": "2026-11-06T10:00:00+00:00",
         "finish": "2026-11-07T10:00:00+00:00",
         "live": false,
-        "days_until_start": 1.2,
+        "days_until_start": 1.0,
         "format": "Jeopardy",
         "weight": 10.31,
-        "participants": 127,
+        "participants": 131,
         "prizes": "There are 2 rounds of the competition -> qualifying round and final round. The top 5 teams of international category of the qualifying round will advance to the",
         "pays": false,
         "crypto": false,
@@ -3938,10 +3993,10 @@
         "start": "2026-11-20T18:00:00+00:00",
         "finish": "2026-11-21T18:00:00+00:00",
         "live": false,
-        "days_until_start": 15.6,
+        "days_until_start": 15.4,
         "format": "Jeopardy",
         "weight": 73.17,
-        "participants": 64,
+        "participants": 65,
         "prizes": "TBA",
         "pays": false,
         "crypto": false,
@@ -3958,7 +4013,7 @@
         "start": "2026-11-27T18:00:00+00:00",
         "finish": "2026-11-28T18:00:00+00:00",
         "live": false,
-        "days_until_start": 22.6,
+        "days_until_start": 22.4,
         "format": "Jeopardy",
         "weight": 45.76,
         "participants": 27,
@@ -3978,7 +4033,7 @@
         "start": "2026-12-04T18:00:00+00:00",
         "finish": "2026-12-06T18:00:00+00:00",
         "live": false,
-        "days_until_start": 29.6,
+        "days_until_start": 29.4,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 9,
@@ -3998,7 +4053,7 @@
         "start": "2026-12-05T05:00:00+00:00",
         "finish": "2026-12-06T17:00:00+00:00",
         "live": false,
-        "days_until_start": 30.0,
+        "days_until_start": 29.8,
         "format": "Jeopardy",
         "weight": 79.51,
         "participants": 19,
@@ -4018,7 +4073,7 @@
         "start": "2026-12-11T12:00:00+00:00",
         "finish": "2026-12-13T12:00:00+00:00",
         "live": false,
-        "days_until_start": 36.3,
+        "days_until_start": 36.1,
         "format": "Jeopardy",
         "weight": 59.0,
         "participants": 57,
@@ -4038,7 +4093,7 @@
         "start": "2026-12-17T19:00:00+00:00",
         "finish": "2026-12-19T07:00:00+00:00",
         "live": false,
-        "days_until_start": 42.6,
+        "days_until_start": 42.4,
         "format": "Jeopardy",
         "weight": 22.9,
         "participants": 7,
@@ -4058,7 +4113,7 @@
         "start": "2026-12-27T14:00:00+00:00",
         "finish": "2026-12-28T14:00:00+00:00",
         "live": false,
-        "days_until_start": 52.4,
+        "days_until_start": 52.2,
         "format": "Jeopardy",
         "weight": 99.38,
         "participants": 0,
@@ -4078,7 +4133,7 @@
         "start": "2027-01-02T18:00:00+00:00",
         "finish": "2027-01-03T18:00:00+00:00",
         "live": false,
-        "days_until_start": 58.6,
+        "days_until_start": 58.4,
         "format": "Jeopardy",
         "weight": 25.0,
         "participants": 0,

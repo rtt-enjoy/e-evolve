@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-04T23:41:06.912886+00:00",
-  "total_runs": 2275,
+  "last_run": "2026-11-05T00:41:11.883749+00:00",
+  "total_runs": 2276,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -32,33 +32,33 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: every angle on the PROMPT FOCUS prompt is already parked on an open review branch, and the dominant loss is the engine, not a prompt.",
+    "summary": "No change proposed: the prompt focus (weak_title, 3 drafts) has already been targeted by roughly thirty distinct, still-unmerged proposals covering every remaining edit I would make, and the dominant reject is llm_error (19 of 27 in the window), which is an engine failure no prompt edit can fix \u2014 another title-prompt edit would be the fourth attempt at the same lines.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Flip the post role's primary to atria, or diagnose glm's llm_error failures",
-        "description": "20 of the last 14 days' 27 draft losses are 'LLM call failed' from glm \u2014 7x weak_title. Each is a lost article and a lost tip ask. Recovering them moves reach more than any further title-prompt edit, and the atria fallback is already key-set and live.",
-        "owner_action": "Either grep the Actions logs for '[articles] rejected (llm_error)' to read glm's exception text, or set llm_workflows.post.primary_active to false so Atria-Dawn serves the post role.",
+        "description": "19 of the last 14 days' draft losses are 'LLM call failed' from glm \u2014 6x weak_title and growing (lifetime llm_error=36 of 64). Each is a lost article and a lost tip ask. Recovering them moves reach more than any further title-prompt edit could, and the Atria-Dawn fallback is already key-set and live.",
+        "owner_action": "Either grep the Actions logs for '[articles] rejected (llm_error)' to read glm's exception text, or set config llm_workflows.post.primary_active to false so Atria-Dawn serves the post role.",
         "secret_needed": null,
         "how_to": [
           "Step 1: In GitHub Actions logs, filter for '[articles] rejected (llm_error)' and read the exception text after the message.",
-          "Step 2: If the failures are provider-side, set config llm_workflows.post.primary_active to false \u2014 no new secret; bot/llm.py is protected and cannot be edited by the evolution engine."
+          "Step 2: If the failures are provider-side, set llm_workflows.post.primary_active to false in config/strategy.json \u2014 no new secret; bot/llm.py is protected and cannot be edited by the evolution engine."
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach into a live receive path, via prompt upgrades where they are actually the lever",
+    "direction": "Checklist step 4 (reach via prompt upgrade), read against the dead-end rule that repeated proposals are never merged",
     "evidence": [
-      "article_rejects.counts: llm_error=36 vs weak_title=14 lifetime; last 14 days llm_error=20 vs weak_title=3",
-      "weak_title=3 in the 14-day window while llm_error=20 \u2014 the gate cost ~1 draft per 5 days; the engine cost ~1.4 per day",
-      "PROMPT FOCUS gate findings ('title has ALL-CAPS word' x2; 'colon subtitle' x1) are already addressed by at least 29 open proposals against articles.py (_SYSTEM and _revise_title), including exact-match ones for both findings: 'replacing the ambiguous no ALL-CAPS', 'colon-subtitle instruction to mirror the gate', 'concrete banned ALL-CAPS examples' (multiple)",
-      "llm_workflows.post.primary_active=true and llm_engine.calls={glm: 2} \u2014 the serving provider is the failing one; bot/llm.py is protected so only the owner can reroute",
-      "receipt_check.covered/published_total=45/45, known_without_footer=0 \u2014 the receive path is verified end to end, so lost drafts are the whole remaining reach leak"
+      "article_rejects.counts: llm_error=36 vs weak_title=14 lifetime; last 14 days: llm_error=19, weak_title=3",
+      "Prompt ledger: drafts lost to weak_title=3, to the engine=19 \u2014 the title prompt is not the bottleneck",
+      "PRIOR PROPOSALS lists ~30 open branches on exactly the weak_title prompt: ALL-CAPS examples, colon-subtitle mirroring, 'no ALL-CAPS' replacement in _revise_title, 'Title Case The Important Words' rewording (proposed 3x)",
+      "Gate findings behind weak_title ('ALL-CAPS' x2, colon-subtitle x1) are each already covered by at least one open proposal",
+      "receipt_check coverage complete (45/45), payout.live=true, wallet $0.00 \u2014 receive path clean, remaining work is reach, but reach is lost to llm_error, not to title wording"
     ],
-    "money_path": "none this cycle \u2014 declining to add a 30th duplicate title-prompt proposal; the live lever is the pending owner action on llm_error, which is where ~85% of lost posts (and lost tip asks) are actually going",
-    "verify": "Next cycle: article_rejects window counts. If the owner reroutes the post role, llm_error in the 14-day window should fall sharply; weak_title=3 is below the noise floor for prompt grading (a single gate firing per 5 days cannot show a prompt edit's effect).",
+    "money_path": "none this cycle \u2014 each lost llm_error draft is one article and one tip ask that never ships, but recovering them requires the owner's provider decision, not a prompt edit",
+    "verify": "Next cycle: article_rejects 14-day llm_error count should fall (owner action), and if any weak_title proposal merges, weak_title in the last-14-days window should read 0-1",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -67,12 +67,12 @@
   "suggestions": [
     {
       "title": "Flip the post role's primary to atria, or diagnose glm's llm_error failures",
-      "description": "20 of the last 14 days' 27 draft losses are 'LLM call failed' from glm \u2014 7x weak_title. Each is a lost article and a lost tip ask. Recovering them moves reach more than any further title-prompt edit, and the atria fallback is already key-set and live.",
-      "owner_action": "Either grep the Actions logs for '[articles] rejected (llm_error)' to read glm's exception text, or set llm_workflows.post.primary_active to false so Atria-Dawn serves the post role.",
+      "description": "19 of the last 14 days' draft losses are 'LLM call failed' from glm \u2014 6x weak_title and growing (lifetime llm_error=36 of 64). Each is a lost article and a lost tip ask. Recovering them moves reach more than any further title-prompt edit could, and the Atria-Dawn fallback is already key-set and live.",
+      "owner_action": "Either grep the Actions logs for '[articles] rejected (llm_error)' to read glm's exception text, or set config llm_workflows.post.primary_active to false so Atria-Dawn serves the post role.",
       "secret_needed": null,
       "how_to": [
         "Step 1: In GitHub Actions logs, filter for '[articles] rejected (llm_error)' and read the exception text after the message.",
-        "Step 2: If the failures are provider-side, set config llm_workflows.post.primary_active to false \u2014 no new secret; bot/llm.py is protected and cannot be edited by the evolution engine."
+        "Step 2: If the failures are provider-side, set llm_workflows.post.primary_active to false in config/strategy.json \u2014 no new secret; bot/llm.py is protected and cannot be edited by the evolution engine."
       ],
       "discovered_at": "2026-11-04T23:20:53.660632+00:00"
     }
@@ -1767,7 +1767,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-04T23:41:07.660072+00:00",
+    "checked_at": "2026-11-05T00:41:12.345444+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2394,30 +2394,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-04T23:41:29.119178+00:00",
+    "last_run": "2026-11-05T00:41:34.084421+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 5,
-    "with_footer": 5,
+    "checked": 3,
+    "with_footer": 3,
     "without_footer": 0,
-    "unreachable": 0,
+    "unreachable": 2,
     "missing": [],
-    "last_run": "2026-11-04T23:41:29.576211+00:00",
+    "last_run": "2026-11-05T00:41:34.459604+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4356423,
-        "at": "2026-11-04T07:25:35.911128+00:00",
-        "ok": true
-      },
-      {
-        "id": 4971614,
-        "at": "2026-11-04T07:25:35.911128+00:00",
-        "ok": true
-      },
       {
         "id": 4943931,
         "at": "2026-11-04T08:24:32.752919+00:00",
@@ -2629,8 +2619,18 @@
         "ok": true
       },
       {
+        "id": 4356423,
+        "at": "2026-11-05T00:41:34.459604+00:00",
+        "ok": true
+      },
+      {
+        "id": 4971614,
+        "at": "2026-11-05T00:41:34.459604+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-04T23:41:29.576211+00:00",
+        "at": "2026-11-05T00:41:34.459604+00:00",
         "ok": true
       }
     ],

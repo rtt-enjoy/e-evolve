@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-06T03:28:11.495546+00:00",
-  "total_runs": 2305,
+  "last_run": "2026-11-06T04:28:20.722407+00:00",
+  "total_runs": 2306,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -23,7 +23,8 @@
       "code_techs": 0.0,
       "dev.to": 0.0,
       "mrr-ideas": 0.0,
-      "research-feed": 0.0
+      "research-feed": 0.0,
+      "dev.to-newsletter": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -43,10 +44,11 @@
     "actions": [
       {
         "platform": "dev.to-newsletter",
-        "success": false,
-        "skipped": true,
-        "error": "not enough fresh trending sources or LLM output unusable",
-        "estimated_usd": 0.0
+        "success": true,
+        "title": "Agent-era strain on tooling, plus two security reminders",
+        "url": "https://dev.to/robust_true_try/agent-era-strain-on-tooling-plus-two-security-reminders-4fja",
+        "estimated_usd": 0.0,
+        "item_count": 7
       }
     ],
     "total_usd": 0.0
@@ -67,7 +69,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started)."
   ],
-  "last_cycle_seconds": 619,
+  "last_cycle_seconds": 598,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2751,7 +2753,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-06T03:28:11.881351+00:00",
+    "checked_at": "2026-11-06T04:28:21.920227+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2760,12 +2762,12 @@
   },
   "newsletter_daily": {
     "enabled": true,
-    "date": "2026-10-30",
-    "published_at": "2026-10-30T00:32:06.202433+00:00",
-    "published": 10,
+    "date": "2026-11-06",
+    "published_at": "2026-11-06T04:38:17.140176+00:00",
+    "published": 11,
     "last_item_count": 7,
-    "last_title": "Agents go mainstream while trust becomes the bottleneck",
-    "last_url": "https://dev.to/robust_true_try/agents-go-mainstream-while-trust-becomes-the-bottleneck-p5n"
+    "last_title": "Agent-era strain on tooling, plus two security reminders",
+    "last_url": "https://dev.to/robust_true_try/agent-era-strain-on-tooling-plus-two-security-reminders-4fja"
   },
   "newsletter_history": {
     "source_urls": [
@@ -2838,7 +2840,14 @@
       "martinfowler.com/fragments/2026-10-28.html",
       "go.dev/blog/emudhra-incident",
       "blog.rust-lang.org/2026/10/26/how-to-fund-rust-contributors",
-      "blog.python.org/2026/10/python-3152-31410-31318-31216-31118"
+      "blog.python.org/2026/10/python-3152-31410-31318-31216-31118",
+      "github.com/anthropics/claude-code/issues/107757",
+      "cve.org/cverecord",
+      "github.blog/engineering/architecture-optimization/inside-githubs-new-git-storage-architecture",
+      "github.blog/open-source/maintainers/accessibility-statements-now-have-a-home-on-github",
+      "martinfowler.com/articles/data-product-platform-nav.html",
+      "github.blog/open-source/maintainers/arnis-turns-any-place-on-earth-into-a-minecraft-world",
+      "github.blog/open-source/gaming/game-off-2026-the-theme-is-shift"
     ],
     "source_titles": [
       "nitter xcancel receive cease desist notic",
@@ -2910,7 +2919,14 @@
       "fragment october 28",
       "response emudhra key disclosure incident",
       "fund rust contributor",
-      "python 3 15 2 3 14 10 3 13 18 3 12 16 3 11 18 out"
+      "python 3 15 2 3 14 10 3 13 18 3 12 16 3 11 18 out",
+      "claude code send email addres websit",
+      "ms paint remote code execution vulnerability",
+      "inside github s new git storage architecture",
+      "accessibility statement now have home github",
+      "data product platform navigator",
+      "arni turn any place earth minecraft world",
+      "game off 2026 theme shift"
     ]
   },
   "mrr_ideas": {
@@ -3435,7 +3451,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-06T03:38:29.497151+00:00",
+    "last_run": "2026-11-06T04:38:17.493309+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3445,27 +3461,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-06T03:38:29.808594+00:00",
+    "last_run": "2026-11-06T04:38:18.081384+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4965279,
-        "at": "2026-11-05T18:34:40.547397+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
-        "at": "2026-11-05T18:34:40.547397+00:00",
-        "ok": true
-      },
-      {
         "id": 4977763,
-        "at": "2026-11-05T18:34:40.547397+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
         "at": "2026-11-05T18:34:40.547397+00:00",
         "ok": true
       },
@@ -3670,17 +3671,37 @@
         "ok": true
       },
       {
+        "id": 4965279,
+        "at": "2026-11-06T04:38:18.081384+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-06T04:38:18.081384+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-06T04:38:18.081384+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-06T03:38:29.808594+00:00",
+        "at": "2026-11-06T04:38:18.081384+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-06T04:38:18.081384+00:00",
         "ok": true
       }
     ],
-    "published_total": 45,
-    "covered": 45,
+    "published_total": 46,
+    "covered": 46,
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.1
+    "oldest_check_age_hours": 10.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3723,38 +3744,22 @@
         "endpoint": "https://api.z.ai/api/coding/paas/v4",
         "code": "1310",
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-09 17:56:33"
-      },
-      {
-        "model": "glm-5.3-flash",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-09 17:56:33"
-      },
-      {
-        "model": "glm-5.2",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-09 17:56:33"
-      },
-      {
-        "model": "glm-5.1",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-09 17:56:33"
       }
     ],
-    "endpoint": "https://api.z.ai/api/paas/v4",
+    "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
     "live": true,
     "serving": "glm",
     "disabled_reason": null,
-    "calls": {},
+    "calls": {
+      "atria": 1
+    },
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",
       "key_set": true,
-      "live": false,
-      "disabled_reason": "timeout"
+      "live": true,
+      "disabled_reason": null
     }
   },
   "ctf_bounty": {

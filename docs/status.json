@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-06T02:00:12.024468+00:00",
-  "total_runs": 2303,
+  "last_run": "2026-11-06T02:28:05.310536+00:00",
+  "total_runs": 2304,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -42,28 +42,6 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 21
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 40
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 82,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (82 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
         "platform": "dev.to",
         "success": false,
         "skipped": true,
@@ -97,7 +75,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started)."
   ],
-  "last_cycle_seconds": 1009,
+  "last_cycle_seconds": 943,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2781,7 +2759,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-06T02:00:12.587691+00:00",
+    "checked_at": "2026-11-06T02:28:05.725413+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3214,15 +3192,15 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-11-06T02:16:54.631264+00:00",
+    "last_at": "2026-11-06T02:43:20.371790+00:00",
     "counts": {
       "empty_draft": 10,
       "fabricated": 4,
       "weak_title": 14,
       "revision_fabricated": 1,
-      "llm_error": 41
+      "llm_error": 42
     },
-    "total": 70,
+    "total": 71,
     "recent": [
       {
         "code": "empty_draft",
@@ -3428,6 +3406,11 @@
         "code": "llm_error",
         "at": "2026-11-06T02:16:54.631264+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-11-06T02:43:20.371790+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
       }
     ]
   },
@@ -3460,7 +3443,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-06T02:17:00.230410+00:00",
+    "last_run": "2026-11-06T02:43:47.700088+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3470,30 +3453,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-06T02:17:00.792041+00:00",
+    "last_run": "2026-11-06T02:43:48.045933+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4959304,
-        "at": "2026-11-05T16:39:04.778642+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-11-05T16:39:04.778642+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-11-05T16:39:04.778642+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-05T16:39:04.778642+00:00",
-        "ok": true
-      },
       {
         "id": 4720062,
         "at": "2026-11-05T17:34:36.966949+00:00",
@@ -3695,8 +3658,28 @@
         "ok": true
       },
       {
+        "id": 4959304,
+        "at": "2026-11-06T02:43:48.045933+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-11-06T02:43:48.045933+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-06T02:43:48.045933+00:00",
+        "ok": true
+      },
+      {
+        "id": 4937139,
+        "at": "2026-11-06T02:43:48.045933+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-06T02:17:00.792041+00:00",
+        "at": "2026-11-06T02:43:48.045933+00:00",
         "ok": true
       }
     ],
@@ -3705,7 +3688,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.6
+    "oldest_check_age_hours": 9.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3755,9 +3738,7 @@
     "live": false,
     "serving": "gemini",
     "disabled_reason": "auth_failed",
-    "calls": {
-      "atria": 1
-    },
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

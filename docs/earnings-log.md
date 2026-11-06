@@ -2844,3 +2844,8 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-11-06 00:10 UTC
 
 - [fail] **dev.to**: LLM call failed
+
+### 2026-11-06 01:10 UTC
+
+- [fail] **dev.to**: LLM call failed
+- [fail] **dev.to-newsletter**: not enough fresh trending sources or LLM output unusable

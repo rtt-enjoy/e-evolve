@@ -102,6 +102,16 @@ class LLMResponse:
 
 _EMPTY_RESPONSE_MARKER = "empty_response"
 _ALL_PROVIDERS_FAILED = "LLM failed on all providers"
+# A model that has been retired or closed to this key. Providers word it
+# differently, so match the shapes seen so far; anything this misses is still
+# caught by the generic retry path in complete(), which also walks the chain.
+_MODEL_GONE_RE = re.compile(
+	r"\b404\b|not_found_error|no longer available|is not found|not found for api version",
+	re.IGNORECASE,
+)
+# Parse attempts per provider in complete_json*. Two, not three: Atria can take
+# five minutes an answer and the whole job is capped at 55.
+_JSON_ATTEMPTS_PER_PROVIDER = 2
 
 
 def _require_text(text: str | None, provider: str, model: str) -> str:
@@ -163,10 +173,20 @@ class LLMClient:
 		system: str = "",
 		max_tokens: int = 4096,
 		temperature: float = 0.7,
+		exclude: frozenset[str] = frozenset(),
 	) -> LLMResponse:
-		"""Send a prompt, return LLMResponse. Retries 3x then falls back to next provider."""
-		providers_to_try = self._provider_chain()
+		"""Send a prompt, return LLMResponse.
+
+		A failure never ends the call while a candidate is left: the model chain
+		of the failing provider is walked first, then the next provider's. Only
+		when every candidate has failed does it raise. `exclude` names providers
+		to skip -- `complete_json*` uses it to hand a prompt to the next provider
+		after one answered with unparseable output.
+		"""
+		providers_to_try = [p for p in self._provider_chain() if p not in exclude]
 		last_exc: Exception | None = None
+		if not providers_to_try:
+			raise RuntimeError(f"{_ALL_PROVIDERS_FAILED}: no provider left to try")
 
 		for provider in providers_to_try:
 			p_prompt  = prompt
@@ -230,17 +250,16 @@ class LLMClient:
 					if (
 						"model_not_found" in exc_str
 						or "model not found" in exc_str.lower()
+						or _MODEL_GONE_RE.search(exc_str)
 						or _EMPTY_RESPONSE_MARKER in exc_str
 					):
-						model_list = _model_list_for(provider)
-						if p_model in model_list:
-							idx = model_list.index(p_model)
-							if idx < len(model_list) - 1:
-								p_model = model_list[idx + 1]
-								log.warning("%s model %s unusable (%s) -- advancing to %s",
-											provider, model_list[idx], exc_str[:80], p_model)
-								attempt = 0  # new model gets a fresh retry budget
-								continue
+						nxt = _next_model(provider, p_model)
+						if nxt:
+							log.warning("%s model %s unusable (%s) -- advancing to %s",
+										provider, p_model, exc_str[:80], nxt)
+							p_model = nxt
+							attempt = 0  # new model gets a fresh retry budget
+							continue
 						log.warning("%s model chain exhausted -- skipping to fallback", provider)
 						exhausted = True
 						break
@@ -248,8 +267,19 @@ class LLMClient:
 					log.warning("LLM attempt %d/3 provider=%s failed: %s", attempt, provider, exc)
 					if attempt < 3:
 						time.sleep(2 ** attempt)
-					else:
-						exhausted = True
+						continue
+					# The retry budget on this model is spent. Before giving up on the
+					# provider, try the rest of its chain -- one attempt per model,
+					# since an unclassified error says nothing about the others, and
+					# phrasing differs per provider (Gemini's "no longer available"
+					# once ended the run with flash and flash-lite never asked).
+					nxt = _next_model(provider, p_model)
+					if nxt:
+						log.warning("%s model %s kept failing -- trying %s", provider, p_model, nxt)
+						p_model = nxt
+						attempt = 2  # exactly one attempt on each later model
+						continue
+					exhausted = True
 
 			if exhausted and providers_to_try.index(provider) < len(providers_to_try) - 1:
 				log.warning("LLM provider=%s exhausted -- trying fallback", provider)
@@ -263,6 +293,7 @@ class LLMClient:
 		system: str = "",
 		max_tokens: int = 4096,
 		temperature: float = 0.7,
+		exclude: frozenset[str] = frozenset(),
 	) -> LLMResponse:
 		"""Route to the role's provider (GLM for every role, then Atria, then
         Anthropic/Gemini once those are absent or spent). Falls back to complete()
@@ -274,11 +305,11 @@ class LLMClient:
 			self.provider     = preferred
 			try:
 				return self.complete(prompt, system=system, max_tokens=max_tokens,
-									temperature=temperature)
+									temperature=temperature, exclude=exclude)
 			finally:
 				self.provider     = old_provider
 		return self.complete(prompt, system=system, max_tokens=max_tokens,
-							 temperature=temperature)
+							 temperature=temperature, exclude=exclude)
 
 	def provider_for_role(self, role: str) -> str | None:
 		"""
@@ -306,6 +337,40 @@ class LLMClient:
 			preferred = next((p for p in ("anthropic", "gemini") if key_map[p]), "")
 		return preferred if key_map.get(preferred) else None
 
+	def _parse_json_walk(self, ask, label: str) -> dict[str, Any]:
+		"""
+		Ask until the answer parses, handing the prompt to the next provider
+		when one keeps returning something unparseable.
+
+		`ask(exclude)` returns an LLMResponse. Re-asking the same provider
+		usually returns the same truncated or malformed text, and because that
+		provider "succeeds" at the HTTP level, complete() would never reach the
+		next one -- so after _JSON_ATTEMPTS_PER_PROVIDER bad answers it is
+		excluded. complete() raises when no candidate is left, and that, not a
+		counter, is what ends the walk.
+		"""
+		parse_exc: Exception | None = None
+		bad: dict[str, int] = {}
+		excluded: set[str] = set()
+		while True:
+			try:
+				resp = ask(frozenset(excluded))
+			except RuntimeError as exc:
+				# Every remaining provider failed (or none is left). Keep the parse
+				# error visible: it is why the earlier providers were dropped.
+				detail = f"{parse_exc}; then {exc}" if parse_exc else str(exc)
+				raise ValueError(f"Could not get valid JSON from LLM{label}: {detail}") from exc
+			try:
+				return parse_json(resp.text)
+			except ValueError as exc:
+				parse_exc = exc
+				bad[resp.provider] = bad.get(resp.provider, 0) + 1
+				log.warning("JSON%s: %s answered unparseable text (%d/%d): %s",
+							label, resp.provider, bad[resp.provider], _JSON_ATTEMPTS_PER_PROVIDER, exc)
+				if bad[resp.provider] >= _JSON_ATTEMPTS_PER_PROVIDER:
+					excluded.add(resp.provider)
+				time.sleep(1)
+
 	def complete_json(
 		self,
 		prompt: str,
@@ -315,33 +380,20 @@ class LLMClient:
 		"""
         Like complete() but parses the response as JSON.
         Appends a JSON-only instruction to the system prompt.
-        Raises ValueError if JSON cannot be extracted after retries.
+        Raises ValueError if no provider produces parseable JSON.
         """
 		json_system = (
 			(system + "\n\n" if system else "")
 			+ "IMPORTANT: Respond with ONLY a single valid JSON object. "
 			"No markdown, no code fences, no explanation before or after."
 		)
-		last_exc: Exception | None = None
-		for attempt in range(1, 4):
-			try:
-				resp = self.complete(
-					prompt, system=json_system,
-					max_tokens=max_tokens, temperature=0.2,
-				)
-				return parse_json(resp.text)
-			except (ValueError, RuntimeError) as exc:
-				last_exc = exc
-				log.warning("JSON attempt %d/3 failed: %s", attempt, exc)
-				# Reprompting only helps when a model answered with something
-				# unparseable. If every provider and model is already exhausted
-				# there is nothing left to ask, so two more full chain walks
-				# just spend free-tier requests to reach the same error.
-				if _ALL_PROVIDERS_FAILED in str(exc):
-					break
-				if attempt < 3:
-					time.sleep(1)
-		raise ValueError(f"Could not get valid JSON from LLM: {last_exc}") from last_exc
+		return self._parse_json_walk(
+			lambda exclude: self.complete(
+				prompt, system=json_system, max_tokens=max_tokens,
+				temperature=0.2, exclude=exclude,
+			),
+			"",
+		)
 
 	def complete_json_for_role(
 		self,
@@ -356,22 +408,13 @@ class LLMClient:
 			+ "IMPORTANT: Respond with ONLY a single valid JSON object. "
 			"No markdown, no code fences, no explanation before or after."
 		)
-		last_exc: Exception | None = None
-		for attempt in range(1, 4):
-			try:
-				resp = self.complete_for_role(
-					role, prompt, system=json_system,
-					max_tokens=max_tokens, temperature=0.2,
-				)
-				return parse_json(resp.text)
-			except (ValueError, RuntimeError) as exc:
-				last_exc = exc
-				log.warning("JSON[role=%s] attempt %d/3 failed: %s", role, attempt, exc)
-				if _ALL_PROVIDERS_FAILED in str(exc):
-					break
-				if attempt < 3:
-					time.sleep(1)
-		raise ValueError(f"Could not get valid JSON from LLM (role={role}): {last_exc}") from last_exc
+		return self._parse_json_walk(
+			lambda exclude: self.complete_for_role(
+				role, prompt, system=json_system, max_tokens=max_tokens,
+				temperature=0.2, exclude=exclude,
+			),
+			f" (role={role})",
+		)
 
 	# -- Anthropic -------------------------------------------------------------
 
@@ -536,6 +579,7 @@ class LLMClient:
 		}
 		host_accepted_key = False
 		no_balance = False
+		quota_hit = False
 		for endpoint in _GLM_ENDPOINTS:
 			for model in _GLM_MODELS:
 				try:
@@ -557,13 +601,17 @@ class LLMClient:
 					no_balance = no_balance or code == "1113"
 					self._note_glm_refusal(endpoint, model, code or str(rsp.status_code), msg)
 					continue
-				# Any other 429: usage or plan limit spent on this host.
-				self._latch_glm_off("quota_spent")
-				raise RuntimeError(f"429 quota_exceeded from glm: code {code} {msg}")
+				# Any other 429: a usage or plan limit on this model. It is not a
+				# verdict on the key -- the cheaper and free models further down
+				# may sit outside that limit -- so record it and keep walking.
+				# Latching on the first answer left 27 of 28 candidates unasked.
+				quota_hit = True
+				self._note_glm_refusal(endpoint, model, code or str(rsp.status_code), msg)
+				continue
 		if not host_accepted_key:
 			self._latch_glm_off("auth_failed")
 			raise RuntimeError("401 authentication_error from glm: no endpoint accepted the key")
-		self._latch_glm_off("quota_spent" if no_balance else "model_not_found")
+		self._latch_glm_off("quota_spent" if (no_balance or quota_hit) else "model_not_found")
 		raise RuntimeError(f"{_GLM_SKIP_MARKER}: no model in the chain is available to this key")
 
 	def _call_glm(
@@ -603,21 +651,27 @@ class LLMClient:
 			if rsp.status_code in (401, 403) or code in _GLM_WRONG_HOST_CODES:
 				self._latch_glm_off("auth_failed")
 				raise RuntimeError(f"401 authentication_error from glm: code {code} {msg}")
-			if code in _GLM_NEXT_MODEL_CODES:
-				# Balance or plan no longer covers this model: step down for the
-				# rest of the run, so later calls do not re-hit the same wall.
-				self._note_glm_refusal(self._glm_endpoint, model, code, msg)
-				idx = _GLM_MODELS.index(model)
-				if idx == len(_GLM_MODELS) - 1:
-					self._latch_glm_off("model_not_found")
-				else:
-					self._glm_model = _GLM_MODELS[idx + 1]
-				raise RuntimeError(f"model_not_found on glm: {model} (code {code})")
 			if code in _GLM_TRANSIENT_CODES:
 				raise RuntimeError(f"429 rate_limit_exceeded from glm: code {code}")
-			if rsp.status_code == 429:
-				self._latch_glm_off("quota_spent")
-				raise RuntimeError(f"429 quota_exceeded from glm: code {code} {msg}")
+			spent = rsp.status_code == 429 and code not in _GLM_NEXT_MODEL_CODES
+			if code in _GLM_NEXT_MODEL_CODES or spent:
+				# Balance, plan or usage limit no longer covers this model: step
+				# down for the rest of the run, so later calls do not re-hit the
+				# same wall. A spent limit steps down too -- the free models at the
+				# end of the chain may still answer -- and only the last model
+				# running out turns GLM off. The message avoids "429" on purpose:
+				# complete() reads that as "skip the provider", and this is the
+				# case where the next model is still worth a call.
+				self._note_glm_refusal(self._glm_endpoint, model, code or "429", msg)
+				idx = _GLM_MODELS.index(model)
+				if idx == len(_GLM_MODELS) - 1:
+					self._latch_glm_off("quota_spent" if spent else "model_not_found")
+				else:
+					self._glm_model = _GLM_MODELS[idx + 1]
+				raise RuntimeError(
+					f"model_not_found on glm: {model} (code {code or 'none'}"
+					f"{', usage spent' if spent else ''})"
+				)
 			if rsp.status_code == 400:
 				# Prompt too long, content flagged, bad parameter: this request
 				# fails identically on retry, but another provider may take it.
@@ -766,6 +820,14 @@ class LLMClient:
 			available.remove(self.provider)
 			available.insert(0, self.provider)
 		return available
+
+
+def _next_model(provider: str, model: str) -> str | None:
+	"""The model after `model` in the provider's chain, or None at the end."""
+	chain = _model_list_for(provider)
+	if model in chain and chain.index(model) < len(chain) - 1:
+		return chain[chain.index(model) + 1]
+	return None
 
 
 def _model_list_for(provider: str) -> list[str]:

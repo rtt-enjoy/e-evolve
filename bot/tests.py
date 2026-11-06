@@ -2769,6 +2769,173 @@ class TestModelChainWalking(unittest.TestCase):
 			self.assertTrue(cfg["purpose"], role)
 
 
+class TestFallbackContinuesWhileACandidateRemains(unittest.TestCase):
+	"""A failure is final only when no candidate is left.
+
+	Live snapshot that motivated these: GLM latched `quota_spent`, Atria timed
+	out, and Gemini answered `404 ... gemini-2.5-pro is no longer available to
+	new users`. That wording matched no classifier, so the call was retried on
+	the same model and the run ended with gemini-2.5-flash and -flash-lite
+	never asked.
+	"""
+
+	_KEYS = ("GLM_API_KEY", "ATRIA_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY")
+	GEMINI_404 = (
+		"404 This model models/gemini-2.5-pro is no longer available to new users. "
+		"Please update your code to use models/gemini-3.1-pro-preview for the latest features."
+	)
+
+	def setUp(self):
+		self._saved = {k: os.environ.pop(k, None) for k in self._KEYS}
+		patcher = mock.patch("time.sleep")
+		patcher.start()
+		self.addCleanup(patcher.stop)
+
+	def tearDown(self):
+		for k in self._KEYS:
+			os.environ.pop(k, None)
+		for k, v in self._saved.items():
+			if v is not None:
+				os.environ[k] = v
+
+	@staticmethod
+	def _ok(provider, model, text='{"ok": true}'):
+		return llm_module.LLMResponse(text=text, provider=provider, model=model, latency_s=0.0)
+
+	def _only(self, *providers):
+		for p in providers:
+			os.environ[f"{p.upper()}_API_KEY"] = f"{p}-test"
+		return llm_module.LLMClient()
+
+	def test_gemini_withdrawn_model_walks_to_flash_without_retrying(self):
+		tried: list[str] = []
+
+		def fake(client, prompt, system, max_tokens, temperature, model):
+			tried.append(model)
+			if model == llm_module._GEMINI_MODELS[0]:
+				raise RuntimeError(self.GEMINI_404)
+			return self._ok("gemini", model)
+
+		with mock.patch.object(llm_module.LLMClient, "_call_gemini", fake):
+			resp = self._only("gemini").complete("hi")
+		self.assertEqual(resp.model, llm_module._GEMINI_MODELS[1])
+		# One request on the dead model, not three.
+		self.assertEqual(tried, llm_module._GEMINI_MODELS[:2])
+
+	def test_anthropic_not_found_error_walks_the_chain(self):
+		tried: list[str] = []
+
+		def fake(client, prompt, system, max_tokens, temperature, model):
+			tried.append(model)
+			if model != llm_module._ANTHROPIC_MODELS[-1]:
+				raise RuntimeError(
+					"Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', "
+					f"'message': 'model: {model}'}}}}"
+				)
+			return self._ok("anthropic", model)
+
+		with mock.patch.object(llm_module.LLMClient, "_call_anthropic", fake):
+			resp = self._only("anthropic").complete("hi")
+		self.assertEqual(tried, llm_module._ANTHROPIC_MODELS)
+		self.assertEqual(resp.model, llm_module._ANTHROPIC_MODELS[-1])
+
+	def test_unclassified_error_still_tries_every_model_in_the_chain(self):
+		"""Wording the classifier has never seen must not strand the chain: after
+		the retry budget the provider's next model gets one attempt each."""
+		tried: list[str] = []
+
+		def fake(client, prompt, system, max_tokens, temperature, model):
+			tried.append(model)
+			if model != llm_module._GEMINI_MODELS[-1]:
+				raise RuntimeError("upstream exploded in a way nobody anticipated")
+			return self._ok("gemini", model)
+
+		with mock.patch.object(llm_module.LLMClient, "_call_gemini", fake):
+			resp = self._only("gemini").complete("hi")
+		self.assertEqual(resp.model, llm_module._GEMINI_MODELS[-1])
+		# 3 attempts on the lead model, then exactly one on each later model.
+		self.assertEqual(tried, [llm_module._GEMINI_MODELS[0]] * 3 + llm_module._GEMINI_MODELS[1:])
+
+	def test_it_fails_only_when_every_provider_and_model_failed(self):
+		tried: list[tuple[str, str]] = []
+
+		def anth(client, prompt, system, max_tokens, temperature, model):
+			tried.append(("anthropic", model))
+			raise RuntimeError(f"model_not_found on anthropic: {model}")
+
+		def gem(client, prompt, system, max_tokens, temperature, model):
+			tried.append(("gemini", model))
+			raise RuntimeError(self.GEMINI_404)
+
+		with mock.patch.object(llm_module.LLMClient, "_call_anthropic", anth), \
+				mock.patch.object(llm_module.LLMClient, "_call_gemini", gem):
+			client = self._only("anthropic", "gemini")
+			with self.assertRaises(RuntimeError) as ctx:
+				client.complete("hi")
+		self.assertIn(llm_module._ALL_PROVIDERS_FAILED, str(ctx.exception))
+		self.assertEqual(
+			tried,
+			[("anthropic", m) for m in llm_module._ANTHROPIC_MODELS]
+			+ [("gemini", m) for m in llm_module._GEMINI_MODELS],
+		)
+
+	def test_unparseable_json_is_handed_to_the_next_provider(self):
+		"""A provider that "succeeds" with truncated JSON used to be re-asked
+		three times and the next provider never reached."""
+		calls: list[str] = []
+
+		def anth(client, prompt, system, max_tokens, temperature, model):
+			calls.append("anthropic")
+			return self._ok("anthropic", model, text='{"changes": [{"file": "a.py", "content"')
+
+		def gem(client, prompt, system, max_tokens, temperature, model):
+			calls.append("gemini")
+			return self._ok("gemini", model)
+
+		with mock.patch.object(llm_module.LLMClient, "_call_anthropic", anth), \
+				mock.patch.object(llm_module.LLMClient, "_call_gemini", gem):
+			plan = self._only("anthropic", "gemini").complete_json_for_role("upgrade", "hi")
+		self.assertEqual(plan, {"ok": True})
+		self.assertEqual(calls, ["anthropic"] * llm_module._JSON_ATTEMPTS_PER_PROVIDER + ["gemini"])
+
+	def test_unparseable_everywhere_raises_and_names_the_parse_error(self):
+		calls: list[str] = []
+
+		def make(provider):
+			def fake(client, prompt, system, max_tokens, temperature, model):
+				calls.append(provider)
+				return self._ok(provider, model, text="no json here, only prose")
+			return fake
+
+		with mock.patch.object(llm_module.LLMClient, "_call_anthropic", make("anthropic")), \
+				mock.patch.object(llm_module.LLMClient, "_call_gemini", make("gemini")):
+			client = self._only("anthropic", "gemini")
+			with self.assertRaises(ValueError) as ctx:
+				client.complete_json("hi")
+		self.assertIn("No valid JSON object", str(ctx.exception))
+		self.assertEqual(
+			calls,
+			["anthropic"] * llm_module._JSON_ATTEMPTS_PER_PROVIDER
+			+ ["gemini"] * llm_module._JSON_ATTEMPTS_PER_PROVIDER,
+		)
+
+	def test_a_later_provider_error_keeps_the_earlier_parse_error(self):
+		def anth(client, prompt, system, max_tokens, temperature, model):
+			return self._ok("anthropic", model, text="prose only")
+
+		def gem(client, prompt, system, max_tokens, temperature, model):
+			raise RuntimeError("model_not_found on gemini")
+
+		with mock.patch.object(llm_module.LLMClient, "_call_anthropic", anth), \
+				mock.patch.object(llm_module.LLMClient, "_call_gemini", gem):
+			client = self._only("anthropic", "gemini")
+			with self.assertRaises(ValueError) as ctx:
+				client.complete_json("hi")
+		message = str(ctx.exception)
+		self.assertIn("No valid JSON object", message)
+		self.assertIn(llm_module._ALL_PROVIDERS_FAILED, message)
+
+
 class TestRemovedProvidersStayRemoved(unittest.TestCase):
 	"""Cerebras, Groq and OpenRouter were removed by owner decision (2026-11-04)."""
 
@@ -5782,6 +5949,41 @@ class TestGlmPrimaryThenAtriaThenAnthropic(unittest.TestCase):
 		self.assertEqual((report["live"], report["disabled_reason"]), (False, "auth_failed"))
 		self.assertEqual(report["serving"], "atria")
 		self.assertEqual(client.provider_for_role("upgrade"), "atria")
+
+	def test_probe_quota_429_keeps_walking_to_a_model_that_answers(self):
+		"""Regression: the first probe answered 429 (usage spent) and GLM was
+		latched `quota_spent` with one of 28 candidates asked -- the live
+		snapshot had `endpoint: null, refused: []`. The limit is on that model,
+		so a later one must still get its chance."""
+		client = self._client()
+		fake, calls = self._post(
+			lambda e, m, p: self._resp() if m == "glm-4.7-flash" else self._resp(429, "1310")
+		)
+		with mock.patch("requests.post", side_effect=fake):
+			resp = client.complete_for_role("post", "hi")
+		self.assertEqual((resp.provider, resp.model), ("glm", "glm-4.7-flash"))
+		self.assertEqual(calls["atria"], [])
+		report = client.engine_report()
+		self.assertTrue(report["live"])
+		self.assertEqual(report["main_model"], "glm-4.7-flash")
+		self.assertIn("1310", {r["code"] for r in report["refused"]})
+
+	def test_spent_limit_on_a_real_call_steps_down_before_latching(self):
+		"""A usage-limit 429 on a real call used to latch GLM off at once; the
+		free models at the end of the chain were never asked."""
+		client = self._client()
+
+		def rule(endpoint, model, probe):
+			if probe or model == "glm-4.5-flash":
+				return self._resp()
+			return self._resp(429, "1310")
+
+		fake, calls = self._post(rule)
+		with mock.patch("requests.post", side_effect=fake):
+			resp = client.complete_for_role("post", "hi")
+		self.assertEqual((resp.provider, resp.model), ("glm", "glm-4.5-flash"))
+		self.assertEqual(calls["atria"], [])
+		self.assertTrue(client.engine_report()["live"])
 
 	def test_glm_then_atria_then_anthropic(self):
 		"""The full order: GLM quota spent -> Atria rejects the key -> Anthropic."""

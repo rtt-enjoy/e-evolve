@@ -1380,11 +1380,40 @@ actions. If such keys exist, they are treated as research context only.
   article rejects. Every provider path now raises on empty output. An empty response is treated like a 404 — **step down the
   chain**, not retry the same model, because re-asking a model that just
   returned nothing usually returns nothing again and each wasted call spends quota.
+- **A failure is final only when no candidate is left (owner directive, 2026-11-06).**
+  The first model failing hands the call to the next candidate — the rest of that
+  provider's model chain, then the next provider. Live evidence: GLM latched
+  `quota_spent`, Atria timed out, Gemini answered `404 gemini-2.5-pro is no longer
+  available to new users` and the cycle ended with `gemini-2.5-flash`/`-flash-lite`
+  never asked. Three places were cutting the walk short, all fixed in `bot/llm.py`:
+  - **Model chain.** `_MODEL_GONE_RE` recognises a retired model (404,
+    `not_found_error`, "no longer available") and steps down at once. For wording it
+    does not know, the generic retry path now also steps to the provider's next model
+    after 3 failed attempts, with **one** attempt per later model (a fresh 3 each would
+    multiply wall time against the 55-minute cap). Do not rely on adding phrases to the
+    regex: each provider words it differently.
+  - **GLM probe and real calls.** A usage-limit 429 (not 1302/1305) used to latch GLM
+    `quota_spent` on the first answer, with 1 of 28 probe candidates asked. It is now
+    recorded in `refused`, the walk continues, and GLM latches only when the whole
+    chain failed, because the free Flash models may sit outside the limit. A real call
+    steps `_glm_model` down the same way. Its message omits "429" on purpose, since
+    `complete()` reads that as "skip the provider".
+  - **Unparseable JSON.** `_parse_json_walk` gives each provider
+    `_JSON_ATTEMPTS_PER_PROVIDER` (2) answers, then excludes it (`complete(exclude=…)`)
+    and moves on. A provider returning truncated JSON is an HTTP success, so
+    `complete()` alone never reached the next one. The final `ValueError` keeps the
+    parse error when a later provider also fails. A single-provider setup now gets 2
+    parse attempts, down from 3.
+  Unchanged on purpose: 401/403 auth errors and 429 rate limits still skip the whole
+  provider at once (`test_rate_limit_skips_the_provider_without_retrying`), and Atria's
+  timeout latch stays — both already fall through to the next provider. True failure
+  is `LLM failed on all providers` (or no key at all, which `main.py` still fails fast
+  on). `TestFallbackContinuesWhileACandidateRemains` pins each case.
 - **`complete_json*` stops reprompting once every provider is exhausted.** A
   reprompt only helps when a model returned *something* unparseable. When the
   whole chain is dead there is nothing left to ask, so the old 3 full chain
   walks spent 3x the requests to arrive at the same error (18 calls where 6 will
-  do). Malformed-but-non-empty output still gets all 3 attempts.
+  do). Malformed-but-non-empty output is re-asked per provider, as above.
 - To change the default engine, edit `_GLM_MODELS` (GLM chain) in `bot/llm.py`.
 - Anthropic default model: `claude-sonnet-4-6` (fallback chain)
 - All calls retry 3× with exponential backoff

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-07T07:49:34.006375+00:00",
-  "total_runs": 2335,
+  "last_run": "2026-11-07T08:49:43.749056+00:00",
+  "total_runs": 2336,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -43,26 +43,14 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "ctf-bounty",
+        "platform": "mrr-ideas",
         "success": true,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
         "estimated_usd": 0.0,
-        "listed": 21
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 41
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 80,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (80 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "status.json#mrr_ideas"
       }
     ],
     "total_usd": 0.0
@@ -83,7 +71,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 696,
+  "last_cycle_seconds": 539,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2658,7 +2646,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-07T07:49:34.496955+00:00",
+    "checked_at": "2026-11-07T08:49:44.096723+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2836,7 +2824,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-11-05T08:51:13.664491+00:00",
+    "last_refresh_at": "2026-11-07T08:54:49.054186+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -2845,44 +2833,33 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The single best angle is a paid, research-heavy newsletter delivered as a weekly deep-dive article series published to dev.to, sold as a Gumroad subscription (or tipped via a published crypto wallet, which needs no account). The niche should be as narrow as the stack itself: GitHub Actions automation patterns for solo developers. The owner's only real capability is hourly research, analysis, and publishing \u2014 so the honest product is 'one rigorously sourced automation write-up per week,' which is exactly what an Actions workflow can produce as a draft and the owner can verify, edit, and publish by hand. No client work, no outreach, no always-on infrastructure; the dev.to byline is the only audience-builder, so every free article should end in a question that invites readers to the paid tier.",
+    "summary": "The strongest fit is a narrow, research-heavy paid newsletter for a specific developer pain, because the only working surface here is research, writing, and dev.to publishing. But under the stated constraints this is a validation plan, not a collection mechanism: dev.to proves the problem and hosts proof work, while every paid subscriber or template sale depends on manual setup outside this stack. With no payment processor, no email delivery, and no storefront available here, the honest position is that this plan can create demand and product drafts, not recurring revenue by itself.",
     "ranked_ideas": [
       {
-        "name": "Paid newsletter: weekly GitHub Actions deep-dives",
-        "why_this_stack_fits": "The entire product is research + writing + publishing to dev.to, which is exactly the automation surface available; no server, inbound HTTP, or outreach is needed.",
-        "narrow_niche": "GitHub Actions workflow patterns and cost/pitfall analysis for solo developers and tiny OSS maintainers \u2014 not general CI/CD, not DevOps broadly.",
-        "first_proof_artifact": "Three fully researched free deep-dive articles published to dev.to (e.g., a workflow cost analysis, a security-hardening pattern, a caching strategy), each demonstrating source-backed analysis and ending with a question inviting reader input.",
-        "who_pays": "Solo developers and small OSS maintainers who already run GitHub Actions and want vetted, tested workflow patterns without researching them themselves.",
-        "monthly_price_usd": "10",
-        "runway_to_first_dollar": "4-10 weeks",
-        "owner_must_do_by_hand": "Verify every draft's claims and code before publishing (never auto-publish unverified research); open and ID-verify a payment account (Gumroad, Substack, Polar, or Stripe \u2014 all require government ID, none pays out in crypto) OR publish a personal Tron wallet address for tips, which needs no account;",
-        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
+        "name": "Paid newsletter",
+        "why_this_stack_fits": "It matches the one repeatable skill in this stack: research, synthesize, and publish. dev.to can act as the free proof surface for a paid curated digest.",
+        "narrow_niche": "Solo maintainers of small open-source CLI tools who need a short weekly digest of release-notes patterns, changelog wording, dependency-risk signals, and migration notes for their exact tool category.",
+        "first_proof_artifact": "One free sample issue on dev.to: a heavily researched weekly digest for one CLI ecosystem, with 5-8 annotated links and a one-paragraph takeaway for each.",
+        "who_pays": "A solo developer who maintains one or more CLI tools and spends weekend time figuring out what changed across dependencies, release notes, and migration guides.",
+        "monthly_price_usd": "12",
+        "runway_to_first_dollar": "Not achievable under this stack alone; any paid subscriber requires manual list and payment setup outside this plan.",
+        "owner_must_do_by_hand": "Pick the exact CLI ecosystem, read every source, write every digest, and separately decide whether to manually create an email list and payment account. This stack cannot send email, charge, or manage subscribers.",
+        "discovered_at": "2026-11-07T08:54:49.054186+00:00"
       },
       {
-        "name": "Template store: GitHub Actions workflow template packs",
-        "why_this_stack_fits": "The same research loop that drafts articles also produces copy-paste workflow files; the bot drafts, the owner curates and packages.",
-        "narrow_niche": "Pre-hardened Actions workflow templates for one specific job \u2014 e.g., Docker image build-and-push with caching for small Python projects \u2014 not a general 'DevOps templates' library.",
-        "first_proof_artifact": "A pack of 5 tested, documented workflow YAML files with a README explaining each trigger, cache strategy, and failure mode, released free as the lead artifact linked from dev.to articles.",
-        "who_pays": "Python solo devs who ship Docker images and keep rewriting the same deploy workflow.",
-        "monthly_price_usd": "5-15 for a subscription to an expanding pack library, or a one-time price if recurring proves unrealistic without a processor",
-        "runway_to_first_dollar": "6-12 weeks",
-        "owner_must_do_by_hand": "Test every workflow on a real repo before selling it; open and ID-verify the Gumroad account by hand (government ID required, no crypto payout), then create the product listing via Gumroad's API; or fall back to a published wallet address for tips; answer buyer questions manually.",
-        "discovered_at": "2026-11-05T08:51:13.664491+00:00"
+        "name": "Notion / digital template store",
+        "why_this_stack_fits": "It uses the same research and drafting ability, but fits less well because a template library needs a place to browse, download, and pay, none of which exists in this stack.",
+        "narrow_niche": "Contract developers who run repeated discovery sprints and need a Notion template for tracking client requirements, open questions, assumptions, and evidence from public research.",
+        "first_proof_artifact": "One filled Notion template published as a dev.to walkthrough: a real discovery-sprint research log with sections for question, source, evidence, confidence, and next action.",
+        "who_pays": "A freelance or contract developer who bills for discovery work and wants a repeatable research artifact to show clients.",
+        "monthly_price_usd": "8-14",
+        "runway_to_first_dollar": "Not achievable under this stack alone; any sale requires a manually created storefront and payment account outside this plan.",
+        "owner_must_do_by_hand": "Build the template, fill it with a real example, document it in articles, and separately decide whether to manually open a storefront. This stack cannot host products, process downloads, or charge.",
+        "discovered_at": "2026-11-07T08:54:49.054186+00:00"
       }
     ],
-    "validation_steps": [
-      "Inbound validation via article-by-question: end each free dev.to article with a specific question (e.g., 'What breaks when your Actions cache expires mid-deploy?') and let comments surface real pain points \u2014 never DM commenters.",
-      "Track which article topics get the most dev.to engagement over 4 weeks; the top-performing topic defines the paid niche, decided by data the owner compiles by hand.",
-      "The owner, inside communities they already belong to (not via new outreach), can note recurring questions about Actions patterns and fold them into the article pipeline \u2014 observation only, no pitching.",
-      "Only after 10+ substantive comments or questions on the topic across articles should the paid tier be announced; verify demand by hand-compiled counts, and verify any revenue claims about niches independently rather than trusting the drafting automation."
-    ],
-    "owner_actions": [
-      "Pick the narrowest niche where your own research habit is strongest (recommended: GitHub Actions patterns for solo Python/Docker devs) and commit to it for 8 weeks.",
-      "Publish 3 free deep-dive articles to dev.to (research drafted by the workflow, every claim verified and every code sample tested by you before publishing), each ending in an inbound-inviting question.",
-      "Keep a hand-maintained log of article views, comments, and question themes; after 4 weeks, rank topics by engagement to pick the paid product.",
-      "By hand, open and ID-verify a payment account (Gumroad recommended \u2014 its API allows product creation after verification) or publish your own Tron address for no-account tips; be honest with readers about which exists.",
-      "Draft the first paid deliverable (pack of 5 tested workflow templates or the first subscriber-only deep-dive), price it at $5-15/mo, and announce it only in a dev.to article, never via outbound messages."
-    ],
+    "validation_steps": [],
+    "owner_actions": [],
     "viable": [
       {
         "name": "Paid newsletter",
@@ -3391,7 +3368,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-07T08:01:09.562705+00:00",
+    "last_run": "2026-11-07T08:58:41.478046+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3401,25 +3378,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-07T08:01:09.789225+00:00",
+    "last_run": "2026-11-07T08:58:41.697893+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4925166,
-        "at": "2026-11-06T21:14:17.335893+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-11-06T21:14:17.335893+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
-        "at": "2026-11-06T21:14:17.335893+00:00",
-        "ok": true
-      },
       {
         "id": 4931682,
         "at": "2026-11-06T22:09:29.565916+00:00",
@@ -3432,11 +3394,6 @@
       },
       {
         "id": 4368781,
-        "at": "2026-11-06T22:09:29.565916+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
         "at": "2026-11-06T22:09:29.565916+00:00",
         "ok": true
       },
@@ -3631,8 +3588,28 @@
         "ok": true
       },
       {
+        "id": 4925166,
+        "at": "2026-11-07T08:58:41.697893+00:00",
+        "ok": true
+      },
+      {
+        "id": 4740283,
+        "at": "2026-11-07T08:58:41.697893+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-11-07T08:58:41.697893+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-07T08:58:41.697893+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-07T08:01:09.789225+00:00",
+        "at": "2026-11-07T08:58:41.697893+00:00",
         "ok": true
       }
     ],
@@ -3684,38 +3661,22 @@
         "endpoint": "https://api.z.ai/api/coding/paas/v4",
         "code": "1310",
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-09 17:56:33"
-      },
-      {
-        "model": "glm-5.3-flash",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-09 17:56:33"
-      },
-      {
-        "model": "glm-5.2",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-09 17:56:33"
-      },
-      {
-        "model": "glm-5.1",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-09 17:56:33"
       }
     ],
-    "endpoint": "https://open.bigmodel.cn/api/paas/v4",
+    "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
     "live": false,
-    "serving": "gemini",
+    "serving": "atria",
     "disabled_reason": "auth_failed",
-    "calls": {},
+    "calls": {
+      "atria": 1
+    },
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",
       "key_set": true,
-      "live": false,
-      "disabled_reason": "timeout"
+      "live": true,
+      "disabled_reason": null
     }
   },
   "ctf_bounty": {

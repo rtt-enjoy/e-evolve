@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-07T21:54:04.484286+00:00",
-  "total_runs": 2351,
+  "last_run": "2026-11-07T22:54:00.766969+00:00",
+  "total_runs": 2352,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -46,8 +46,8 @@
         "platform": "dev.to",
         "success": false,
         "skipped": true,
-        "reject_code": "llm_error",
-        "error": "LLM call failed",
+        "reject_code": "empty_draft",
+        "error": "LLM returned no usable title/body",
         "estimated_usd": 0.0
       }
     ],
@@ -69,7 +69,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 804,
+  "last_cycle_seconds": 623,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2748,7 +2748,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-07T21:54:04.942030+00:00",
+    "checked_at": "2026-11-07T22:54:01.179081+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3182,23 +3182,18 @@
     "sample_size": 46
   },
   "article_rejects": {
-    "last_reason": "llm_error",
-    "last_detail": "LLM call failed",
-    "last_at": "2026-11-07T22:07:27.447099+00:00",
+    "last_reason": "empty_draft",
+    "last_detail": "LLM returned no usable title/body",
+    "last_at": "2026-11-07T23:04:22.669898+00:00",
     "counts": {
-      "empty_draft": 10,
+      "empty_draft": 11,
       "fabricated": 4,
       "weak_title": 14,
       "revision_fabricated": 1,
       "llm_error": 51
     },
-    "total": 80,
+    "total": 81,
     "recent": [
-      {
-        "code": "empty_draft",
-        "at": "2026-10-19T16:01:25.898041+00:00",
-        "detail": ""
-      },
       {
         "code": "empty_draft",
         "at": "2026-10-19T21:29:19.192663+00:00",
@@ -3443,6 +3438,11 @@
         "code": "llm_error",
         "at": "2026-11-07T22:07:27.447099+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): No valid JSON object found in LLM response. First 200 chars: '{\\n  \"title\": \"The Missing Headers That Break WASM "
+      },
+      {
+        "code": "empty_draft",
+        "at": "2026-11-07T23:04:22.669898+00:00",
+        "detail": ""
       }
     ]
   },
@@ -3475,7 +3475,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-07T22:07:27.775413+00:00",
+    "last_run": "2026-11-07T23:04:22.966807+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3485,25 +3485,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-07T22:07:28.017154+00:00",
+    "last_run": "2026-11-07T23:04:23.184460+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4959304,
-        "at": "2026-11-07T12:19:26.616062+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-11-07T12:19:26.616062+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-11-07T12:19:26.616062+00:00",
-        "ok": true
-      },
       {
         "id": 4720062,
         "at": "2026-11-07T13:19:39.152154+00:00",
@@ -3511,11 +3496,6 @@
       },
       {
         "id": 4985893,
-        "at": "2026-11-07T13:19:39.152154+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
         "at": "2026-11-07T13:19:39.152154+00:00",
         "ok": true
       },
@@ -3715,8 +3695,28 @@
         "ok": true
       },
       {
+        "id": 4959304,
+        "at": "2026-11-07T23:04:23.184460+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-11-07T23:04:23.184460+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-07T23:04:23.184460+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-07T23:04:23.184460+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-07T22:07:28.017154+00:00",
+        "at": "2026-11-07T23:04:23.184460+00:00",
         "ok": true
       }
     ],
@@ -3725,7 +3725,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.8
+    "oldest_check_age_hours": 9.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3790,9 +3790,9 @@
     ],
     "endpoint": "https://open.bigmodel.cn/api/coding/paas/v4",
     "key_set": true,
-    "live": true,
-    "serving": "glm",
-    "disabled_reason": null,
+    "live": false,
+    "serving": "atria",
+    "disabled_reason": "auth_failed",
     "calls": {
       "atria": 1
     },
@@ -3800,8 +3800,8 @@
       "provider": "atria",
       "model": "Atria-Dawn",
       "key_set": true,
-      "live": false,
-      "disabled_reason": "timeout"
+      "live": true,
+      "disabled_reason": null
     }
   },
   "ctf_bounty": {

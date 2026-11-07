@@ -2982,3 +2982,7 @@ Autonomous earnings generated every hourly cycle.
 ### 2026-11-07 22:07 UTC
 
 - [fail] **dev.to**: LLM call failed
+
+### 2026-11-07 23:04 UTC
+
+- [fail] **dev.to**: LLM returned no usable title/body

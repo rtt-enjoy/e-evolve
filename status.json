@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-07T11:14:19.766537+00:00",
-  "total_runs": 2339,
+  "last_run": "2026-11-07T12:14:19.400363+00:00",
+  "total_runs": 2340,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -41,30 +41,7 @@
     "error_type": "json"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 20
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 41
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 81,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (81 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -83,7 +60,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 692,
+  "last_cycle_seconds": 308,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2658,7 +2635,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-07T11:14:20.606491+00:00",
+    "checked_at": "2026-11-07T12:14:20.047616+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3380,7 +3357,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-07T11:25:49.715451+00:00",
+    "last_run": "2026-11-07T12:19:26.503563+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3390,37 +3367,17 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-07T11:25:49.954060+00:00",
+    "last_run": "2026-11-07T12:19:26.616062+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4959304,
-        "at": "2026-11-07T01:30:48.957961+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-11-07T01:30:48.957961+00:00",
-        "ok": true
-      },
       {
         "id": 4720062,
         "at": "2026-11-07T02:21:05.304253+00:00",
         "ok": true
       },
       {
-        "id": 4562180,
-        "at": "2026-11-07T02:21:05.304253+00:00",
-        "ok": true
-      },
-      {
         "id": 4985893,
-        "at": "2026-11-07T02:21:05.304253+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
         "at": "2026-11-07T02:21:05.304253+00:00",
         "ok": true
       },
@@ -3620,8 +3577,28 @@
         "ok": true
       },
       {
+        "id": 4959304,
+        "at": "2026-11-07T12:19:26.616062+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-11-07T12:19:26.616062+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-07T12:19:26.616062+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-07T12:19:26.616062+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-07T11:25:49.954060+00:00",
+        "at": "2026-11-07T12:19:26.616062+00:00",
         "ok": true
       }
     ],
@@ -3630,7 +3607,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 9.9
+    "oldest_check_age_hours": 10.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3677,16 +3654,16 @@
     ],
     "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
-    "live": true,
-    "serving": "glm",
-    "disabled_reason": null,
+    "live": false,
+    "serving": "atria",
+    "disabled_reason": "auth_failed",
     "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",
       "key_set": true,
-      "live": false,
-      "disabled_reason": "timeout"
+      "live": true,
+      "disabled_reason": null
     }
   },
   "ctf_bounty": {

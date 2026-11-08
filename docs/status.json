@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-08T21:44:01.239653+00:00",
-  "total_runs": 2376,
+  "last_run": "2026-11-08T22:44:02.402100+00:00",
+  "total_runs": 2377,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -69,7 +69,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 620,
+  "last_cycle_seconds": 625,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2650,7 +2650,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-08T21:44:01.589020+00:00",
+    "checked_at": "2026-11-08T22:44:02.907204+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3086,21 +3086,16 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-11-08T21:54:20.288869+00:00",
+    "last_at": "2026-11-08T22:54:25.812710+00:00",
     "counts": {
       "empty_draft": 11,
       "fabricated": 4,
       "weak_title": 14,
       "revision_fabricated": 1,
-      "llm_error": 53
+      "llm_error": 54
     },
-    "total": 83,
+    "total": 84,
     "recent": [
-      {
-        "code": "weak_title",
-        "at": "2026-10-21T05:45:49.932580+00:00",
-        "detail": "title has ALL-CAPS word"
-      },
       {
         "code": "llm_error",
         "at": "2026-10-21T10:28:36.150996+00:00",
@@ -3345,6 +3340,11 @@
         "code": "llm_error",
         "at": "2026-11-08T21:54:20.288869+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-11-08T22:54:25.812710+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
       }
     ]
   },
@@ -3377,7 +3377,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-08T21:54:20.488045+00:00",
+    "last_run": "2026-11-08T22:54:26.035491+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3387,25 +3387,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-08T21:54:20.815879+00:00",
+    "last_run": "2026-11-08T22:54:26.434264+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-11-08T11:28:42.691363+00:00",
-        "ok": true
-      },
-      {
-        "id": 4985893,
-        "at": "2026-11-08T11:28:42.691363+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-11-08T12:28:43.964923+00:00",
-        "ok": true
-      },
       {
         "id": 4996282,
         "at": "2026-11-08T12:28:43.964923+00:00",
@@ -3413,11 +3398,6 @@
       },
       {
         "id": 4568987,
-        "at": "2026-11-08T12:28:43.964923+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
         "at": "2026-11-08T12:28:43.964923+00:00",
         "ok": true
       },
@@ -3622,8 +3602,28 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-11-08T22:54:26.434264+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-08T22:54:26.434264+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-11-08T22:54:26.434264+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-11-08T22:54:26.434264+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-08T21:54:20.815879+00:00",
+        "at": "2026-11-08T22:54:26.434264+00:00",
         "ok": true
       }
     ],
@@ -3695,7 +3695,7 @@
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-09 17:56:33"
       }
     ],
-    "endpoint": "https://open.bigmodel.cn/api/coding/paas/v4",
+    "endpoint": "https://open.bigmodel.cn/api/paas/v4",
     "key_set": true,
     "live": false,
     "serving": "gemini",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-09T18:31:03.493381+00:00",
-  "total_runs": 2398,
+  "last_run": "2026-11-09T19:31:08.241800+00:00",
+  "total_runs": 2399,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -32,30 +32,32 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus losses (weak_title=2 in 14 days, findings 'title has ALL-CAPS word' x1 and 'title padded with a colon subtitle' x1) are already the target of roughly 25 open, unmerged review branches proposing exactly those edits to _SYSTEM and _revise_title, and the dominant draft loss is llm_error=38 \u2014 an engine failure no prompt edit can fix.",
+    "summary": "No change proposed: the prompt-focus edit (title rules in articles.py) is already covered by dozens of open, unmerged review branches proposing exactly these two fixes (ALL-CAPS examples, colon-subtitle sharpening), so another identical proposal would be a duplicate that wastes the cycle; the bottleneck is a merge decision, not a new diff.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge or close the pile of open title-prompt branches",
-        "description": "Roughly 25 open review branches all edit the same two title rules in bot/earning/articles.py. Merging the strongest one unblocks the prompt-upgrade loop; leaving them open means every future cycle re-proposes the same edit and hits the duplicate filter.",
-        "owner_action": "Review and merge one title-prompt branch (e.g. the 2026-11-05 three-candidate rewrite), then close the remaining title branches as superseded.",
+        "title": "Merge one title-prompt branch, close the rest as superseded",
+        "description": "Unblocks the prompt-upgrade loop: 83 open branches proposing overlapping edits to the same two title rules means every cycle re-derives the same diff and hits the duplicate filter instead of stacking improvements on merged code.",
+        "owner_action": "Merge the single strongest title branch (the 2026-11-05 three-candidate rewrite or the 2026-11-04 colon-subtitle/ALL-CAPS clarifications), then close all remaining title-rule branches as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the review branches dated 2026-10-31 onward touching bot/earning/articles.py.",
-          "Step 2: Pick the single branch with the strongest evidence (three-candidate title rewrite, 2026-11-05) and merge it.",
-          "Step 3: Close the rest as duplicates so the ledger stops re-suggesting them."
+          "Step 1: Filter open review branches dated 2026-10-31 through 2026-11-05 touching bot/earning/articles.py.",
+          "Step 2: Merge the one branch with the clearest before/after mapping to the two gate findings (ALL-CAPS word, colon-subtitle padding).",
+          "Step 3: Close the remaining title-rule branches as duplicates so future cycles propose the next step, not the same step again."
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach via prompt upgrades, Principle 3j sample discipline on the steering signal",
+    "direction": "Checklist step 4 \u2014 upgrade prompts one step per cycle; blocked here by the duplicate-filter rule until an existing title branch is merged.",
     "evidence": [
-      "article_rejects.counts (last 14 days): weak_title=2, fabricated=2 vs llm_error=38, empty_draft=2",
-      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x1; 'title padded with a colon subtitle; pick the sharper half' x1",
-      "PRIOR PROPOSALS: ~25 open branches since 2026-10-31 proposing the same ALL-CAPS/colon-subtitle edits to bot/earning/articles.py, none merged",
-      "llm_engine.calls = {'glm': 2} with llm_error as article_rejects.last"
+      "article_rejects.counts total 89 with weak_title=14 lifetime, but only 2 weak_title drafts lost in the last 14 days window",
+      "Prompt focus gate findings: 'title has ALL-CAPS word' x1 and 'title padded with a colon subtitle; pick the sharper half' x1 \u2014 one draft each, both already addressed by open branches (2026-11-04 'no ALL-CAPS' clarification, 2026-11-04 'colon-subtitle mirrors gate' sharpening, 2026-11-05 three-candidate rewrite)",
+      "83 open review branches listed under PRIOR PROPOSALS, nearly all editing the same title rules in bot/earning/articles.py",
+      "status.suggestions already carries the owner action: 'Merge or close the pile of open title-prompt branches'",
+      "llm_error=38 of the last-14-day rejects \u2014 the dominant loss is engine, not prompt, and not fixable by an edit",
+      "receive path clean: receipt_check.covered/published_total = 47/47, known_without_footer = 0, payout.live = true"
     ],
-    "money_path": "none this cycle \u2014 reach-only work; every cheap edit to the two named prompts has already been proposed on an open branch, so another one adds a duplicate branch, not reach",
-    "verify": "No change. If the owner merges one of the existing title-prompt branches, article_rejects.counts.weak_title over the next 14-day window should fall to 0; if llm_error stays dominant, the lever is engine reliability, not prompts.",
+    "money_path": "none this cycle \u2014 reach work is blocked on an owner merge; once merged, the surviving title edit widens reach by recovering the drafts weak_title costs",
+    "verify": "Next cycle after one title branch merges: article_rejects.counts.weak_title should stop growing in the 14-day window; the gate findings 'title has ALL-CAPS word' and 'colon subtitle' should not reappear in article_rejects.recent",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -66,20 +68,20 @@
   },
   "suggestions": [
     {
-      "title": "Merge or close the pile of open title-prompt branches",
-      "description": "Roughly 25 open review branches all edit the same two title rules in bot/earning/articles.py. Merging the strongest one unblocks the prompt-upgrade loop; leaving them open means every future cycle re-proposes the same edit and hits the duplicate filter.",
-      "owner_action": "Review and merge one title-prompt branch (e.g. the 2026-11-05 three-candidate rewrite), then close the remaining title branches as superseded.",
+      "title": "Merge one title-prompt branch, close the rest as superseded",
+      "description": "Unblocks the prompt-upgrade loop: 83 open branches proposing overlapping edits to the same two title rules means every cycle re-derives the same diff and hits the duplicate filter instead of stacking improvements on merged code.",
+      "owner_action": "Merge the single strongest title branch (the 2026-11-05 three-candidate rewrite or the 2026-11-04 colon-subtitle/ALL-CAPS clarifications), then close all remaining title-rule branches as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the review branches dated 2026-10-31 onward touching bot/earning/articles.py.",
-        "Step 2: Pick the single branch with the strongest evidence (three-candidate title rewrite, 2026-11-05) and merge it.",
-        "Step 3: Close the rest as duplicates so the ledger stops re-suggesting them."
+        "Step 1: Filter open review branches dated 2026-10-31 through 2026-11-05 touching bot/earning/articles.py.",
+        "Step 2: Merge the one branch with the clearest before/after mapping to the two gate findings (ALL-CAPS word, colon-subtitle padding).",
+        "Step 3: Close the remaining title-rule branches as duplicates so future cycles propose the next step, not the same step again."
       ],
-      "discovered_at": "2026-11-09T18:31:32.487409+00:00"
+      "discovered_at": "2026-11-09T19:31:27.610333+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 30,
+  "last_cycle_seconds": 21,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2783,7 +2785,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-09T18:31:04.050283+00:00",
+    "checked_at": "2026-11-09T19:31:08.696710+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3487,30 +3489,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-09T18:31:32.697020+00:00",
+    "last_run": "2026-11-09T19:31:27.821400+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 5,
-    "with_footer": 5,
+    "checked": 4,
+    "with_footer": 4,
     "without_footer": 0,
-    "unreachable": 0,
+    "unreachable": 1,
     "missing": [],
-    "last_run": "2026-11-09T18:31:32.802598+00:00",
+    "last_run": "2026-11-09T19:31:28.130503+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4681657,
-        "at": "2026-11-09T06:48:24.599938+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-11-09T06:48:24.599938+00:00",
-        "ok": true
-      },
       {
         "id": 4602729,
         "at": "2026-11-09T07:39:50.398839+00:00",
@@ -3523,11 +3515,6 @@
       },
       {
         "id": 4579420,
-        "at": "2026-11-09T07:39:50.398839+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820684,
         "at": "2026-11-09T07:39:50.398839+00:00",
         "ok": true
       },
@@ -3732,8 +3719,23 @@
         "ok": true
       },
       {
+        "id": 4681657,
+        "at": "2026-11-09T19:31:28.130503+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-11-09T19:31:28.130503+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-11-09T19:31:28.130503+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-09T18:31:32.802598+00:00",
+        "at": "2026-11-09T19:31:28.130503+00:00",
         "ok": true
       }
     ],
@@ -3742,7 +3744,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.7
+    "oldest_check_age_hours": 11.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

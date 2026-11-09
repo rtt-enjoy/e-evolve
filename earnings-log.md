@@ -3048,3 +3048,9 @@ Autonomous earnings generated every hourly cycle.
 - [ok] **research-feed** action recorded
 - [ok] **code_techs**: [Code-tech queue refreshed (82 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
 - [fail] **dev.to**: LLM call failed
+
+## Week 2026-11-02 — $0.0000 (ctf-bounty: $0.0000, code_techs: $0.0000, dev.to: $0.0000, mrr-ideas: $0.0000, research-feed: $0.0000, dev.to-newsletter: $0.0000)
+
+### 2026-11-09 00:26 UTC
+
+- [fail] **dev.to**: LLM call failed

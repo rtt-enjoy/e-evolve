@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-09T00:44:18.701208+00:00",
-  "total_runs": 2380,
+  "last_run": "2026-11-09T01:44:19.431141+00:00",
+  "total_runs": 2381,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -62,7 +62,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 623,
+  "last_cycle_seconds": 618,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2749,7 +2749,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-09T00:44:19.228083+00:00",
+    "checked_at": "2026-11-09T01:44:20.050462+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3112,8 +3112,8 @@
   "evolution_pending_review": false,
   "article_stats": {
     "count": 47,
-    "total_views": 5984,
-    "avg_views": 127.3,
+    "total_views": 5987,
+    "avg_views": 127.4,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 3598,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -3159,8 +3159,8 @@
       {
         "archetype": "surprising-behavior",
         "count": 8,
-        "avg_engagement": 53.0,
-        "avg_views": 37.4,
+        "avg_engagement": 59.6,
+        "avg_views": 37.8,
         "best_title": "Your Kimi K3.1 Pro Responses Truncate Silently"
       },
       {
@@ -3185,21 +3185,16 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-11-09T00:54:41.154827+00:00",
+    "last_at": "2026-11-09T01:54:36.294091+00:00",
     "counts": {
       "empty_draft": 11,
       "fabricated": 4,
       "weak_title": 14,
       "revision_fabricated": 1,
-      "llm_error": 57
+      "llm_error": 58
     },
-    "total": 87,
+    "total": 88,
     "recent": [
-      {
-        "code": "llm_error",
-        "at": "2026-10-22T00:02:00.040358+00:00",
-        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
-      },
       {
         "code": "llm_error",
         "at": "2026-10-22T05:06:37.195020+00:00",
@@ -3444,6 +3439,11 @@
         "code": "llm_error",
         "at": "2026-11-09T00:54:41.154827+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-11-09T01:54:36.294091+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
       }
     ]
   },
@@ -3476,7 +3476,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-09T00:54:41.383672+00:00",
+    "last_run": "2026-11-09T01:54:36.437278+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3486,20 +3486,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-09T00:54:41.598387+00:00",
+    "last_run": "2026-11-09T01:54:36.585333+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4552210,
-        "at": "2026-11-08T15:19:31.343096+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-11-08T15:19:31.343096+00:00",
-        "ok": true
-      },
       {
         "id": 4971614,
         "at": "2026-11-08T16:19:33.201305+00:00",
@@ -3507,16 +3497,6 @@
       },
       {
         "id": 4765372,
-        "at": "2026-11-08T16:19:33.201305+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-11-08T16:19:33.201305+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
         "at": "2026-11-08T16:19:33.201305+00:00",
         "ok": true
       },
@@ -3721,8 +3701,28 @@
         "ok": true
       },
       {
+        "id": 4552210,
+        "at": "2026-11-09T01:54:36.585333+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-09T01:54:36.585333+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-09T01:54:36.585333+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-11-09T01:54:36.585333+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-09T00:54:41.598387+00:00",
+        "at": "2026-11-09T01:54:36.585333+00:00",
         "ok": true
       }
     ],
@@ -3742,7 +3742,7 @@
   },
   "llm_engine": {
     "main_provider": "glm",
-    "main_model": "glm-5.3-flash",
+    "main_model": "glm-4.7-flash",
     "preferred_model": "glm-5.3-flash",
     "refused": [
       {
@@ -3794,11 +3794,11 @@
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-09 17:56:33"
       }
     ],
-    "endpoint": null,
+    "endpoint": "https://api.z.ai/api/paas/v4",
     "key_set": true,
-    "live": false,
-    "serving": "gemini",
-    "disabled_reason": "quota_spent",
+    "live": true,
+    "serving": "glm",
+    "disabled_reason": null,
     "calls": {},
     "fallback": {
       "provider": "atria",

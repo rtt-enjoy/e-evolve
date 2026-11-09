@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-09T22:31:10.316547+00:00",
-  "total_runs": 2402,
+  "last_run": "2026-11-09T23:31:17.783015+00:00",
+  "total_runs": 2403,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,31 +33,41 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt focus (weak_title, 2 drafts lost in 14 days) is already covered by roughly 30 unmerged evolve/* branches targeting exactly these two findings (ALL-CAPS word x1, colon-subtitle x1), and re-proposing a 31st wording variant is a recorded dead end; the dominant loss is llm_error=59 (38 in 14 days), which is engine-side and outside any prompt edit.",
+    "summary": "No change proposed. The only gate losing drafts to a prompt in the last 14 days is weak_title (2 drafts, one ALL-CAPS finding, one colon-subtitle finding) \u2014 and the PRIOR PROPOSALS list already holds ~30 unmerged branches targeting exactly those two defects in articles.py (_SYSTEM TITLE rules and _revise_title), including the deterministic colon-subtitle rescue the standing suggestion names as the one to merge. A 31st variant of the same edit cannot be reviewed differently from the ones already parked, risks diff conflicts against articles.py, and would not ship any faster. The dominant reject cause, llm_error=38 in 14 days, is engine-side and explicitly not fixable by a prompt edit. Receive path is fully verified (receipt_check covered 48/48, known_without_footer 0), so nothing in step 1 or the channel table is open to a bot-side fix either.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge exactly one of the ~30 open title-rewrite branches and close the rest (unchanged from the standing suggestion)",
-        "description": "The two gate findings the prompt focus names already sit on unmerged branches; a merged fix is measurable against the 14-day window, a 31st unmerged variant is not and risks diff conflicts against articles.py.",
-        "owner_action": "Review open evolve/* branches touching bot/earning/articles.py (_SYSTEM TITLE rules / _revise_title), merge the single most convincing one (prefer the deterministic colon-subtitle rescue from 2026-11-05 \u2014 it fixes the defect with no extra LLM call), and close the remaining title-rewrite branches.",
+        "title": "Merge exactly one parked title-rewrite branch and close the other ~29 (reiterated \u2014 the cycle's only lever on weak_title)",
+        "description": "The two gate findings in the prompt focus are already addressed by unmerged branches; merging one makes the fix measurable in the 14-day reject window, while leaving all ~30 open keeps future cycles re-deriving the same proposal.",
+        "owner_action": "Review the evolve/* branches touching bot/earning/articles.py (_SYSTEM TITLE rules / _revise_title), merge the 2026-11-05 deterministic colon-subtitle rescue branch, and close the remaining title branches.",
         "secret_needed": null,
         "how_to": [
           "Step 1: `git branch -r | grep evolve/` and open the diffs touching articles.py.",
-          "Step 2: Merge at most one (the 2026-11-05 deterministic-rescue branch is the most general and costs no LLM call), then close the other title-rewrite branches so future cycles stop re-proposing them.",
-          "Step 3: Watch article_rejects.recent for two weeks; weak_title should fall to 0-1 in the 14-day window while llm_error (engine-side) stays dominant."
+          "Step 2: Merge the single most convincing one (prefer the 2026-11-05 deterministic-rescue branch \u2014 it fixes the defect with no extra LLM call), then close the other title-rewrite branches.",
+          "Step 3: Watch article_rejects.recent for two weeks; weak_title should fall to 0-1 in the 14-day window."
+        ]
+      },
+      {
+        "title": "Investigate the llm_error spike in the post role (38 drafts lost in 14 days)",
+        "description": "llm_error is the dominant reject cause and no prompt edit can touch it; if it is a rate limit or timeout on glm-5.3-flash under the 'post' role, fixing it recovers far more posts than any title work.",
+        "owner_action": "Check GLM_API_KEY usage/rate-limit dashboards for the coding endpoint over 2026-10-27 to 2026-11-09, or confirm whether the fallback to atria fires on post-role failures.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Filter workflow logs for '[articles] rejected (llm_error)' timestamps and correlate with any 429/timeout responses from api.z.ai.",
+          "Step 2: If the primary is failing persistently, confirm whether llm.py's atria fallback is actually invoked for the post role (the status shows serving=glm with calls={glm: 1}, which looks like fallback traffic is not visible)."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompt losing the most drafts, unless evidence points elsewhere; here the evidence points at the unmerged backlog and the engine, not at another prompt edit",
+    "direction": "Checklist step 4 \u2014 upgrade the prompts that write reach, one step per cycle; refusing when a change cannot clear the bar is a correct answer",
     "evidence": [
-      "article_rejects.counts: llm_error=59 vs weak_title=14 lifetime; weak_title=2 in the last 14 days",
-      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x1, 'title padded with a colon subtitle' x1 \u2014 both findings already have open proposals (e.g. 2026-11-05 colon-subtitle rescue, 2026-11-04 ALL-CACS/colon rewrites) that were never merged",
-      "article_rejects.last = 'llm_error': 'LLM call failed' (59 lifetime, 38 in 14 days) \u2014 not addressable by any editable file",
-      "PRIOR PROPOSALS lists ~30 open title/rewrite branches on bot/earning/articles.py, none merged; each new branch risks conflicting diffs",
-      "reach signal is healthy and already steering: article_interest problem-workaround n=10 avg=452.3, preferred_archetypes()=['problem-workaround']"
+      "article_rejects.counts (14-day prompt-lost) weak_title=2, fabricated=2; gate findings 'title has ALL-CAPS word' x1 and 'title padded with a colon subtitle' x1",
+      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=38, empty_draft=2",
+      "PRIOR PROPOSALS: ~30 distinct open branches on bot/earning/articles.py title prompts, 2026-10-31 through 2026-11-05, none merged",
+      "suggestions[0] already instructs the owner to merge exactly one of the open title-rewrite branches and close the rest",
+      "receipt_check.covered / published_total = 48 / 48; known_without_footer = 0 \u2014 receive path step is clean"
     ],
-    "money_path": "none (maintenance of the proposal pipeline itself); a merged title fix would be reach-only \u2014 it ships more posts carrying the footer, but no receive-path code changes",
-    "verify": "Owner merges exactly one existing title-rewrite branch, closes the rest; weak_title in article_rejects (14-day window) should fall to 0-1 over two weeks while llm_error remains dominant. This cycle's verify for 'no change' is that no new conflicting branch appears.",
+    "money_path": "reach-only (and this cycle, no change at all): a merged title fix would raise posts published per window, each carrying the tip footer; nothing here touches the receive path",
+    "verify": "Next cycle: article_rejects.recent over the 14-day window \u2014 weak_title should fall to 0-1 once the owner merges one of the parked title branches; llm_error should remain the dominant code (engine-side, unchanged by any prompt edit)",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -68,20 +78,31 @@
   },
   "suggestions": [
     {
-      "title": "Merge exactly one of the ~30 open title-rewrite branches and close the rest (unchanged from the standing suggestion)",
-      "description": "The two gate findings the prompt focus names already sit on unmerged branches; a merged fix is measurable against the 14-day window, a 31st unmerged variant is not and risks diff conflicts against articles.py.",
-      "owner_action": "Review open evolve/* branches touching bot/earning/articles.py (_SYSTEM TITLE rules / _revise_title), merge the single most convincing one (prefer the deterministic colon-subtitle rescue from 2026-11-05 \u2014 it fixes the defect with no extra LLM call), and close the remaining title-rewrite branches.",
+      "title": "Merge exactly one parked title-rewrite branch and close the other ~29 (reiterated \u2014 the cycle's only lever on weak_title)",
+      "description": "The two gate findings in the prompt focus are already addressed by unmerged branches; merging one makes the fix measurable in the 14-day reject window, while leaving all ~30 open keeps future cycles re-deriving the same proposal.",
+      "owner_action": "Review the evolve/* branches touching bot/earning/articles.py (_SYSTEM TITLE rules / _revise_title), merge the 2026-11-05 deterministic colon-subtitle rescue branch, and close the remaining title branches.",
       "secret_needed": null,
       "how_to": [
         "Step 1: `git branch -r | grep evolve/` and open the diffs touching articles.py.",
-        "Step 2: Merge at most one (the 2026-11-05 deterministic-rescue branch is the most general and costs no LLM call), then close the other title-rewrite branches so future cycles stop re-proposing them.",
-        "Step 3: Watch article_rejects.recent for two weeks; weak_title should fall to 0-1 in the 14-day window while llm_error (engine-side) stays dominant."
+        "Step 2: Merge the single most convincing one (prefer the 2026-11-05 deterministic-rescue branch \u2014 it fixes the defect with no extra LLM call), then close the other title-rewrite branches.",
+        "Step 3: Watch article_rejects.recent for two weeks; weak_title should fall to 0-1 in the 14-day window."
       ],
-      "discovered_at": "2026-11-09T22:31:32.691928+00:00"
+      "discovered_at": "2026-11-09T23:31:43.524836+00:00"
+    },
+    {
+      "title": "Investigate the llm_error spike in the post role (38 drafts lost in 14 days)",
+      "description": "llm_error is the dominant reject cause and no prompt edit can touch it; if it is a rate limit or timeout on glm-5.3-flash under the 'post' role, fixing it recovers far more posts than any title work.",
+      "owner_action": "Check GLM_API_KEY usage/rate-limit dashboards for the coding endpoint over 2026-10-27 to 2026-11-09, or confirm whether the fallback to atria fires on post-role failures.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Filter workflow logs for '[articles] rejected (llm_error)' timestamps and correlate with any 429/timeout responses from api.z.ai.",
+        "Step 2: If the primary is failing persistently, confirm whether llm.py's atria fallback is actually invoked for the post role (the status shows serving=glm with calls={glm: 1}, which looks like fallback traffic is not visible)."
+      ],
+      "discovered_at": "2026-11-09T23:31:43.524836+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 23,
+  "last_cycle_seconds": 27,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2765,7 +2786,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-09T22:31:10.697938+00:00",
+    "checked_at": "2026-11-09T23:31:18.187605+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3469,7 +3490,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-09T22:31:32.930543+00:00",
+    "last_run": "2026-11-09T23:31:43.718447+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3479,25 +3500,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-09T22:31:33.138529+00:00",
+    "last_run": "2026-11-09T23:31:43.947298+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-11-09T10:35:51.690582+00:00",
-        "ok": true
-      },
-      {
-        "id": 4985893,
-        "at": "2026-11-09T10:35:51.690582+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-11-09T10:35:51.690582+00:00",
-        "ok": true
-      },
       {
         "id": 4996282,
         "at": "2026-11-09T11:35:19.063908+00:00",
@@ -3510,11 +3516,6 @@
       },
       {
         "id": 4619528,
-        "at": "2026-11-09T11:35:19.063908+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
         "at": "2026-11-09T11:35:19.063908+00:00",
         "ok": true
       },
@@ -3719,8 +3720,28 @@
         "ok": true
       },
       {
+        "id": 4720062,
+        "at": "2026-11-09T23:31:43.947298+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-09T23:31:43.947298+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-09T23:31:43.947298+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-11-09T23:31:43.947298+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-09T22:31:33.138529+00:00",
+        "at": "2026-11-09T23:31:43.947298+00:00",
         "ok": true
       }
     ],

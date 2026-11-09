@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-09T02:44:22.037276+00:00",
-  "total_runs": 2382,
+  "last_run": "2026-11-09T03:44:23.378357+00:00",
+  "total_runs": 2383,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -38,38 +38,7 @@
     "error_type": "json"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 18
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 39
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 82,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (82 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": false,
-        "skipped": true,
-        "reject_code": "llm_error",
-        "error": "LLM call failed",
-        "estimated_usd": 0.0
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -88,7 +57,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 701,
+  "last_cycle_seconds": 309,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2668,7 +2637,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-09T02:44:22.470316+00:00",
+    "checked_at": "2026-11-09T03:44:24.079962+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3395,30 +3364,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-09T02:56:01.733174+00:00",
+    "last_run": "2026-11-09T03:49:31.244905+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 5,
-    "with_footer": 5,
+    "checked": 4,
+    "with_footer": 4,
     "without_footer": 0,
-    "unreachable": 0,
+    "unreachable": 1,
     "missing": [],
-    "last_run": "2026-11-09T02:56:01.992294+00:00",
+    "last_run": "2026-11-09T03:49:31.465472+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4943931,
-        "at": "2026-11-08T17:26:00.324745+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-11-08T17:26:00.324745+00:00",
-        "ok": true
-      },
       {
         "id": 4925166,
         "at": "2026-11-08T18:19:37.915280+00:00",
@@ -3426,11 +3385,6 @@
       },
       {
         "id": 4740283,
-        "at": "2026-11-08T18:19:37.915280+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
         "at": "2026-11-08T18:19:37.915280+00:00",
         "ok": true
       },
@@ -3640,8 +3594,23 @@
         "ok": true
       },
       {
+        "id": 4943931,
+        "at": "2026-11-09T03:49:31.465472+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-09T03:49:31.465472+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-09T03:49:31.465472+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-09T02:56:01.992294+00:00",
+        "at": "2026-11-09T03:49:31.465472+00:00",
         "ok": true
       }
     ],
@@ -3697,16 +3666,16 @@
     ],
     "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
-    "live": false,
-    "serving": "gemini",
-    "disabled_reason": "auth_failed",
+    "live": true,
+    "serving": "glm",
+    "disabled_reason": null,
     "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",
       "key_set": true,
-      "live": false,
-      "disabled_reason": "timeout"
+      "live": true,
+      "disabled_reason": null
     }
   },
   "ctf_bounty": {

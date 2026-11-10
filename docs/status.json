@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-10T11:52:51.453991+00:00",
-  "total_runs": 2417,
+  "last_run": "2026-11-10T12:52:57.132124+00:00",
+  "total_runs": 2418,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,41 +33,32 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the PROMPT FOCUS losses are 2 weak_title drafts in 14 days against 36 llm_error losses the engine caused, and every plausible prompt edit for the two named gate findings is already covered by ~30 unmerged branches \u2014 a 31st duplicate would fail review again.",
+    "summary": "No change this cycle: the prompt-side loss is 2 weak_title drafts in 14 days, and every plausible fix to that prompt has already been proposed ~30 times without a merge; the dominant loss (llm_error=59 lifetime, 36 in-window, 59 of 89 total rejects) is the LLM engine failing, which a prompt edit cannot touch, so a new title-wording edit would repeat known dead proposals for a near-zero return.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Fix the fallback model that is losing 36 drafts per fortnight",
-        "description": "llm_error=36 of last-14-day draft losses versus weak_title=2: the engine, not the prompts, is where reach is bleeding. The gemini fallback model id (gemini-2.5-flash-lite) now returns 404 'no longer available' on every call, and the atria fallback is auth_failed.",
-        "owner_action": "Update the fallback model id in the llm workflow config (or the Atria API key) so the post role stops failing over to a 404 model.",
-        "secret_needed": "GLM/atria key refresh only \u2014 no new account",
-        "how_to": [
-          "Step 1: In the llm_workflows config for the 'post' role, replace the retired gemini-2.5-flash-lite fallback with a currently served model id (the 404 message names the replacement family).",
-          "Step 2: Re-enable or re-key the atria fallback (disabled_reason=auth_failed).",
-          "Step 3: After one hourly cycle, confirm article_rejects.counts['llm_error'] stops growing and article_daily.published returns to 1/day."
-        ]
-      },
-      {
-        "title": "Merge one title branch and close the other 29",
-        "description": "Both PROMPT FOCUS findings (one ALL-CAPS word, one colon subtitle, one draft each) are already addressed by many open evolve/* branches. Merging any one and closing the rest stops future cycles from re-deriving the same edit and clears the ledger.",
-        "owner_action": "Merge the smallest open title branch touching bot/earning/articles.py; close the remainder as superseded.",
+        "title": "Investigate the glm draft-call failures driving llm_error",
+        "description": "36 of 89 recent draft losses are 'LLM call failed', not gate rejections \u2014 recovering even half of these is more posts (and more tip asks) than any prompt edit could recover. A prompt change cannot fix this; only an owner-level look at the GLM key/quota/endpoint can.",
+        "owner_action": "Check the GLM_API_KEY quota, rate limit and recent error responses at api.z.ai, or confirm whether glm-5.3-flash is being throttled at the observed call volume.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Diff the smallest title branch against articles.py \u2014 confirm it only edits TITLE rules or _revise_title text.",
-          "Step 2: Merge and let one cycle run; weak_title in the 14-day window should stay at or below its baseline of 2.",
-          "Step 3: Close the other title branches so the ledger stops accumulating duplicates."
+          "Step 1: Open the last failed Actions run and read the full 'LLM call failed' exception text logged by articles._generate_article.",
+          "Step 2: Match that error against the GLM dashboard (quota exhausted vs 5xx vs timeout) and raise the quota or confirm the endpoint.",
+          "Step 3: If the model is rate-limited, decide whether fallback_provider atria should serve the 'post' role first for a trial week."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach via better prompts); Principle 5, step 2",
+    "direction": "Checklist step 4 \u2014 upgrade the prompt losing the most drafts, one step per cycle; the ledger itself names weak_title=2, but llm_error=36 in the same window dwarfs it and is explicitly 'not fixable by a prompt edit'",
     "evidence": [
-      "article_rejects.counts (14-day window): weak_title=2 vs llm_error=36 \u2014 prompt-editable losses are 2/36th of the problem",
-      "llm_engine: serving=atria, live=False, disabled_reason=auth_failed; errors this cycle show the gemini fallback returning 404 'no longer available'",
-      "PROMPT FOCUS gate findings ('title has ALL-CAPS word' x1, 'title padded with a colon subtitle' x1) match one draft each \u2014 and the PRIOR PROPOSALS list shows 30 open branches already targeting exactly these two findings",
-      "article_stats.count=47, avg_views=128.0, preferred_archetypes=['problem-workaround'] (n=10) \u2014 the reach signal is healthy; nothing here points to a prompt defect outside titles"
+      "article_rejects.counts total 89: llm_error=59, weak_title=14 (2 in last 14 days)",
+      "Drafts lost to a prompt (last 14 days): weak_title=2, fabricated=2",
+      "Drafts lost to the engine (last 14 days): llm_error=36, empty_draft=2",
+      "article_rejects.last = 'llm_error': 'LLM call failed'",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x1, 'title padded with a colon subtitle' x1 \u2014 one occurrence each",
+      "PRIOR PROPOSALS: ~30 open branches all targeting the ALL-CAPS / colon-subtitle wording in _SYSTEM or _revise_title, none merged"
     ],
-    "money_path": "none (maintenance skipped): the publish path is live (payout.live=true, receipt_check 48/48 covered), so each lost draft costs one post and one ask \u2014 but the fix for the two title losses is a merge, not a new branch",
-    "verify": "No change shipped. If the owner merges one existing title branch, article_rejects.counts['weak_title'] should show 0 new entries over the next 14-day window; the dominant number to watch remains llm_error, which no prompt edit can move.",
+    "money_path": "none (no change proposed; reach-only work would multiply by a serving engine that is currently failing most draft attempts)",
+    "verify": "No change to verify. If the engine stabilises, the weak_title window count (already only 2) should stay at or near 0; if it worsens, the gate findings named above should change before any prompt edit is spent.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -78,32 +69,20 @@
   },
   "suggestions": [
     {
-      "title": "Fix the fallback model that is losing 36 drafts per fortnight",
-      "description": "llm_error=36 of last-14-day draft losses versus weak_title=2: the engine, not the prompts, is where reach is bleeding. The gemini fallback model id (gemini-2.5-flash-lite) now returns 404 'no longer available' on every call, and the atria fallback is auth_failed.",
-      "owner_action": "Update the fallback model id in the llm workflow config (or the Atria API key) so the post role stops failing over to a 404 model.",
-      "secret_needed": "GLM/atria key refresh only \u2014 no new account",
-      "how_to": [
-        "Step 1: In the llm_workflows config for the 'post' role, replace the retired gemini-2.5-flash-lite fallback with a currently served model id (the 404 message names the replacement family).",
-        "Step 2: Re-enable or re-key the atria fallback (disabled_reason=auth_failed).",
-        "Step 3: After one hourly cycle, confirm article_rejects.counts['llm_error'] stops growing and article_daily.published returns to 1/day."
-      ],
-      "discovered_at": "2026-11-10T11:53:19.754650+00:00"
-    },
-    {
-      "title": "Merge one title branch and close the other 29",
-      "description": "Both PROMPT FOCUS findings (one ALL-CAPS word, one colon subtitle, one draft each) are already addressed by many open evolve/* branches. Merging any one and closing the rest stops future cycles from re-deriving the same edit and clears the ledger.",
-      "owner_action": "Merge the smallest open title branch touching bot/earning/articles.py; close the remainder as superseded.",
+      "title": "Investigate the glm draft-call failures driving llm_error",
+      "description": "36 of 89 recent draft losses are 'LLM call failed', not gate rejections \u2014 recovering even half of these is more posts (and more tip asks) than any prompt edit could recover. A prompt change cannot fix this; only an owner-level look at the GLM key/quota/endpoint can.",
+      "owner_action": "Check the GLM_API_KEY quota, rate limit and recent error responses at api.z.ai, or confirm whether glm-5.3-flash is being throttled at the observed call volume.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Diff the smallest title branch against articles.py \u2014 confirm it only edits TITLE rules or _revise_title text.",
-        "Step 2: Merge and let one cycle run; weak_title in the 14-day window should stay at or below its baseline of 2.",
-        "Step 3: Close the other title branches so the ledger stops accumulating duplicates."
+        "Step 1: Open the last failed Actions run and read the full 'LLM call failed' exception text logged by articles._generate_article.",
+        "Step 2: Match that error against the GLM dashboard (quota exhausted vs 5xx vs timeout) and raise the quota or confirm the endpoint.",
+        "Step 3: If the model is rate-limited, decide whether fallback_provider atria should serve the 'post' role first for a trial week."
       ],
-      "discovered_at": "2026-11-10T11:53:19.754650+00:00"
+      "discovered_at": "2026-11-10T12:53:20.736486+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 29,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2725,7 +2704,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-10T11:52:51.741733+00:00",
+    "checked_at": "2026-11-10T12:52:57.697768+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3429,7 +3408,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-10T11:53:20.123652+00:00",
+    "last_run": "2026-11-10T12:53:20.895492+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3439,25 +3418,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-10T11:53:20.363058+00:00",
+    "last_run": "2026-11-10T12:53:21.004530+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4641536,
-        "at": "2026-11-10T01:34:55.650636+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-11-10T01:34:55.650636+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-11-10T01:34:55.650636+00:00",
-        "ok": true
-      },
       {
         "id": 4552210,
         "at": "2026-11-10T02:34:26.750400+00:00",
@@ -3465,11 +3429,6 @@
       },
       {
         "id": 4636715,
-        "at": "2026-11-10T02:34:26.750400+00:00",
-        "ok": true
-      },
-      {
-        "id": 4971614,
         "at": "2026-11-10T02:34:26.750400+00:00",
         "ok": true
       },
@@ -3679,8 +3638,28 @@
         "ok": true
       },
       {
+        "id": 4641536,
+        "at": "2026-11-10T12:53:21.004530+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-11-10T12:53:21.004530+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-11-10T12:53:21.004530+00:00",
+        "ok": true
+      },
+      {
+        "id": 4971614,
+        "at": "2026-11-10T12:53:21.004530+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-10T11:53:20.363058+00:00",
+        "at": "2026-11-10T12:53:21.004530+00:00",
         "ok": true
       }
     ],

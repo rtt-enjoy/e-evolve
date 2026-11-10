@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-10T01:34:29.432749+00:00",
-  "total_runs": 2406,
+  "last_run": "2026-11-10T02:33:27.255603+00:00",
+  "total_runs": 2407,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,42 +33,43 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change clears the bar: weak_title cost only 2 drafts in 14 days and 81 near-identical title-prompt proposals already sit unmerged (the real blocker is owner review backlog, plus llm_error=36 vs weak_title=2, which no prompt edit can fix).",
+    "summary": "No change this cycle: the PROMPT FOCUS (weak_title, 2 drafts in 14 days) has 30 open unmerged branches already addressing it, and the dominant draft loss is llm_error=36, which no prompt edit can fix.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Merge one open title-prompt branch and close the rest as superseded",
-        "description": "Clears the 81-branch backlog so weak_title fixes actually reach production instead of being re-proposed every cycle.",
-        "owner_action": "Review the open evolve/* branches touching the title prompts in bot/earning/articles.py and merge one (e.g. the 2026-11-04 colon-subtitle sharpening or the ALL-CAPS acronym-clarification line); close the remainder as duplicates.",
+        "description": "Unblocks the 30 open title fixes so the next weak_title finding can actually be addressed; without this, every future prompt edit re-enters the same pile.",
+        "owner_action": "Review the open evolve/* branches editing _SYSTEM TITLE rules or _revise_title in bot/earning/articles.py, merge the smallest one matching the recorded gate findings, and close the remainder as duplicates.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Diff the evolve/* branches that edit _SYSTEM TITLE rules or _revise_title; pick the smallest edit matching the gate findings.",
-          "Step 2: Merge it, watch weak_title in the 14-day reject window, close the other branches as superseded."
+          "Step 1: Diff the evolve/* branches dated 2026-10-31 onward that touch _SYSTEM TITLE rules; the 2026-11-04 colon-subtitle sharpening and the ALL-CAPS acronym-clarification line map directly to the two recorded findings.",
+          "Step 2: Merge one, then watch weak_title in the article_rejects 14-day window and close the other branches as superseded so the evolution engine stops re-proposing them."
         ]
       },
       {
         "title": "Diagnose the llm_error bottleneck (36 drafts lost in 14 days)",
-        "description": "Engine failures cost ~18x more posts than every gate combined; fixing them is the real reach lever.",
-        "owner_action": "Inspect GLM API logs/quotas for the failures behind 'LLM call failed' and confirm the atria fallback triggers on those errors.",
+        "description": "Engine failures cost more posts than every quality gate combined; this is the largest single reach lever, and it is outside prompt-editable code.",
+        "owner_action": "Inspect the GLM API logs or quota status behind 'LLM call failed' and confirm the atria fallback actually triggers on post-role errors.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Grep workflow logs for '[articles] rejected (llm_error)' and read the exception text.",
-          "Step 2: If GLM is failing systematically (quota/timeout), verify bot/llm.py's fallback policy routes post-role calls to atria; no new key needed."
+          "Step 1: Grep workflow logs for '[articles] rejected (llm_error)' and read the exception text recorded in article_rejects.recent.",
+          "Step 2: If GLM is failing systematically (quota, timeout), verify bot/llm.py's fallback policy routes post-role calls to atria; no new key is needed \u2014 atria is already configured and live."
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS (weak_title), but refused on evidence: every remedy for the two named gate findings ('title has ALL-CAPS word' x1, 'title padded with a colon subtitle' x1) is already covered by one of the 81 open branches, including exact matches like '2026-11-04 One-line edit replacing ambiguous no ALL-CAPS' and '2026-11-04 Sharpen the colon-subtitle instruction'. Proposing another is the dead-end pattern the brief warns about \u2014 dozens of proposals went unmerged for exactly this.",
+    "direction": "Checklist step 4 \u2014 reach via prompt upgrades, applied with restraint when the lever is already pulled",
     "evidence": [
-      "article_rejects last 14 days: weak_title=2 vs llm_error=36 (engine failures dominate, not prompt failures)",
-      "PRIOR PROPOSALS: 29 title-prompt branches open since 2026-10-31, none merged, including the two exact fixes this cycle's gate findings call for",
-      "suggestions[0] already on record: 'Merge one of the already-open title-prompt branches'",
-      "llm_engine.calls={'glm': 2} with article_rejects.last='llm_error': 'LLM call failed' \u2014 the publishing bottleneck is the engine, which bot/llm.py (protected) and no prompt edit can address"
+      "article_rejects.counts (lifetime): llm_error=59, weak_title=14 \u2014 the engine, not the title prompt, is the dominant loss",
+      "Drafts lost to a prompt (last 14 days): weak_title=2, fabricated=2 \u2014 while drafts lost to the engine: llm_error=36, empty_draft=2",
+      "PRIOR PROPOSALS: ~30 open evolve/* branches target the exact two findings behind weak_title (ALL-CAPS acronym clarification, colon-subtitle sharpening), none merged",
+      "receipt_check.covered / published_total = 48 / 48 and coverage_complete = True \u2014 the receive path is fully verified; nothing to fix there",
+      "article_interest: problem-workaround n=10 avg=452.3 \u2014 steering is working; the remaining reach constraint is drafts shipping at all"
     ],
-    "money_path": "none this cycle; reach work deferred to the owner merging an existing branch, which would immediately ship the already-written title fix into the live receive path",
-    "verify": "After the owner merges one existing title-prompt branch and closes the duplicates: article_rejects.counts.weak_title should stay at or near 0 over the next 14-day window. For llm_error: 14-day window count should fall once the GLM fallback path is verified to trigger.",
+    "money_path": "none this cycle. A 31st title-prompt edit would not reach production (the branch backlog is the blocker, not the prompt), and a prompt edit cannot touch llm_error, which costs 18x more drafts than the gate it targets. Proposing a change here would add to the unmerged-branch pile that the suggestions already name.",
+    "verify": "No change to verify. After the owner merges one of the open title branches: weak_title in the 14-day reject window should fall from 2 to 0. After the llm_error diagnosis: article_rejects.counts.llm_error growth should slow against the daily publish rate.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -77,29 +78,29 @@
   "suggestions": [
     {
       "title": "Merge one open title-prompt branch and close the rest as superseded",
-      "description": "Clears the 81-branch backlog so weak_title fixes actually reach production instead of being re-proposed every cycle.",
-      "owner_action": "Review the open evolve/* branches touching the title prompts in bot/earning/articles.py and merge one (e.g. the 2026-11-04 colon-subtitle sharpening or the ALL-CAPS acronym-clarification line); close the remainder as duplicates.",
+      "description": "Unblocks the 30 open title fixes so the next weak_title finding can actually be addressed; without this, every future prompt edit re-enters the same pile.",
+      "owner_action": "Review the open evolve/* branches editing _SYSTEM TITLE rules or _revise_title in bot/earning/articles.py, merge the smallest one matching the recorded gate findings, and close the remainder as duplicates.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Diff the evolve/* branches that edit _SYSTEM TITLE rules or _revise_title; pick the smallest edit matching the gate findings.",
-        "Step 2: Merge it, watch weak_title in the 14-day reject window, close the other branches as superseded."
+        "Step 1: Diff the evolve/* branches dated 2026-10-31 onward that touch _SYSTEM TITLE rules; the 2026-11-04 colon-subtitle sharpening and the ALL-CAPS acronym-clarification line map directly to the two recorded findings.",
+        "Step 2: Merge one, then watch weak_title in the article_rejects 14-day window and close the other branches as superseded so the evolution engine stops re-proposing them."
       ],
       "discovered_at": "2026-11-10T01:34:55.157745+00:00"
     },
     {
       "title": "Diagnose the llm_error bottleneck (36 drafts lost in 14 days)",
-      "description": "Engine failures cost ~18x more posts than every gate combined; fixing them is the real reach lever.",
-      "owner_action": "Inspect GLM API logs/quotas for the failures behind 'LLM call failed' and confirm the atria fallback triggers on those errors.",
+      "description": "Engine failures cost more posts than every quality gate combined; this is the largest single reach lever, and it is outside prompt-editable code.",
+      "owner_action": "Inspect the GLM API logs or quota status behind 'LLM call failed' and confirm the atria fallback actually triggers on post-role errors.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Grep workflow logs for '[articles] rejected (llm_error)' and read the exception text.",
-        "Step 2: If GLM is failing systematically (quota/timeout), verify bot/llm.py's fallback policy routes post-role calls to atria; no new key needed."
+        "Step 1: Grep workflow logs for '[articles] rejected (llm_error)' and read the exception text recorded in article_rejects.recent.",
+        "Step 2: If GLM is failing systematically (quota, timeout), verify bot/llm.py's fallback policy routes post-role calls to atria; no new key is needed \u2014 atria is already configured and live."
       ],
       "discovered_at": "2026-11-10T01:34:55.157745+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 27,
+  "last_cycle_seconds": 60,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2792,7 +2793,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-10T01:34:29.751018+00:00",
+    "checked_at": "2026-11-10T02:33:27.662046+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3496,7 +3497,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-10T01:34:55.451645+00:00",
+    "last_run": "2026-11-10T02:34:26.533647+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3506,32 +3507,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-10T01:34:55.650636+00:00",
+    "last_run": "2026-11-10T02:34:26.750400+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4552210,
-        "at": "2026-11-09T14:35:18.292080+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-11-09T14:35:18.292080+00:00",
-        "ok": true
-      },
-      {
-        "id": 4971614,
-        "at": "2026-11-09T14:35:18.292080+00:00",
-        "ok": true
-      },
-      {
         "id": 4765372,
-        "at": "2026-11-09T15:35:15.143754+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
         "at": "2026-11-09T15:35:15.143754+00:00",
         "ok": true
       },
@@ -3746,8 +3727,28 @@
         "ok": true
       },
       {
+        "id": 4552210,
+        "at": "2026-11-10T02:34:26.750400+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-10T02:34:26.750400+00:00",
+        "ok": true
+      },
+      {
+        "id": 4971614,
+        "at": "2026-11-10T02:34:26.750400+00:00",
+        "ok": true
+      },
+      {
+        "id": 4937139,
+        "at": "2026-11-10T02:34:26.750400+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-10T01:34:55.650636+00:00",
+        "at": "2026-11-10T02:34:26.750400+00:00",
         "ok": true
       }
     ],

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-10T05:33:32.343322+00:00",
-  "total_runs": 2410,
+  "last_run": "2026-11-10T06:33:38.018002+00:00",
+  "total_runs": 2411,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,33 +33,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the PROMPT FOCUS (weak_title) has already accumulated roughly 30 distinct unmerged prompt-edit proposals in the ledger, including every variant of this edit; a 31st variant does not clear the bar.",
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
     "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Merge one of the ~30 open title-prompt branches instead of waiting for new ones",
-        "description": "The weak_title reject count (2 in 14 days) cannot move while every fix sits unmerged; each open branch targets the same two gate findings (ALL-CAPS, colon-subtitle) in _SYSTEM and _revise_title. Any one of them, merged, unblocks the measurement loop the doctrine requires (does the count fall?).",
-        "owner_action": "Review and merge exactly one of the open evolve/* branches touching bot/earning/articles.py title prompts, then close the rest as superseded.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Pick the smallest branch (a one-line edit to _revise_title or the TITLE rules in _SYSTEM).",
-          "Step 2: Merge, let one hourly cycle run, then compare article_rejects.counts['weak_title'] against the current 2-in-14-days baseline.",
-          "Step 3: Close the remaining ~29 open title branches so future cycles stop re-deriving them."
-        ]
-      }
-    ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompts that write what readers see, one step per cycle",
-    "evidence": [
-      "article_rejects.counts: weak_title=14 lifetime, 2 in the last 14 days",
-      "Gate findings behind it: 'title has ALL-CAPS word' x1, 'title padded with a colon subtitle' x1",
-      "PRIOR PROPOSALS: ~30 open branches since 2026-10-31 target exactly these two findings in the same two prompts (_SYSTEM TITLE rules and _revise_title), none merged",
-      "article_stats.count = 47, avg_views = 128.0 \u2014 publishing continues; the lost drafts are 2 in 14 days, not a systematic leak"
-    ],
-    "money_path": "reach-only (a saved draft is one more post and one more tip ask)",
-    "verify": "n/a \u2014 no change proposed. If the reviewer merges one of the already-open title-prompt branches instead, verify via article_rejects.counts['weak_title'] over the next 14-day window (currently 2) and the two named gate findings falling out of article_rejects.recent.",
-    "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
+    "suggestions": [],
+    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
+    "error_type": "json"
   },
   "last_earning": {
     "actions": [],
@@ -79,8 +57,10 @@
       "discovered_at": "2026-11-10T05:34:08.058207+00:00"
     }
   ],
-  "errors": [],
-  "last_cycle_seconds": 37,
+  "errors": [
+    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
+  ],
+  "last_cycle_seconds": 327,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2757,7 +2737,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-10T05:33:33.602466+00:00",
+    "checked_at": "2026-11-10T06:33:38.554746+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3461,7 +3441,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-10T05:34:08.377821+00:00",
+    "last_run": "2026-11-10T06:39:05.071565+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3471,30 +3451,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-10T05:34:08.593744+00:00",
+    "last_run": "2026-11-10T06:39:05.167592+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4931682,
-        "at": "2026-11-09T18:31:32.802598+00:00",
-        "ok": true
-      },
-      {
-        "id": 4681657,
-        "at": "2026-11-09T19:31:28.130503+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-11-09T19:31:28.130503+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820684,
-        "at": "2026-11-09T19:31:28.130503+00:00",
-        "ok": true
-      },
       {
         "id": 4671278,
         "at": "2026-11-09T20:31:36.750387+00:00",
@@ -3711,8 +3671,28 @@
         "ok": true
       },
       {
+        "id": 4931682,
+        "at": "2026-11-10T06:39:05.167592+00:00",
+        "ok": true
+      },
+      {
+        "id": 4681657,
+        "at": "2026-11-10T06:39:05.167592+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-11-10T06:39:05.167592+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-11-10T06:39:05.167592+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-10T05:34:08.593744+00:00",
+        "at": "2026-11-10T06:39:05.167592+00:00",
         "ok": true
       }
     ],
@@ -3721,7 +3701,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.0
+    "oldest_check_age_hours": 10.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3740,9 +3720,7 @@
     "live": true,
     "serving": "glm",
     "disabled_reason": null,
-    "calls": {
-      "glm": 1
-    },
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

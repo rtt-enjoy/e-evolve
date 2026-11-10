@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-10T22:52:18.142902+00:00",
-  "total_runs": 2428,
+  "last_run": "2026-11-10T23:24:24.839129+00:00",
+  "total_runs": 2429,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,31 +33,42 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt focus (weak_title, 2 drafts in 14 days) has accumulated ~30 unmerged proposals targeting the same two gate findings, and the dominant loss is llm_error (36 of 38 recent rejects), which no prompt edit can fix.",
+    "summary": "No change this cycle: the prompt focus (weak_title, 2 drafts/14 days) is already the subject of ~30 open, unmerged proposals that all propose the same class of edit to articles.py title rules, so another variation would repeat a dead end \u2014 while the dominant draft loss (llm_error=36 of 38 in-window, 59 of 89 lifetime) is engine-side and not fixable by any prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Stabilize the 'post' LLM role so drafts stop dying before the gates",
-        "description": "llm_error killed 36 of 38 drafts in the last 14 days (59 of 89 lifetime). Recovering even a third of those is a post and an ask per day recovered \u2014 far more reach than the 2 drafts/fortnight the title prompt loses.",
-        "owner_action": "Review the GLM (glm-5.3-flash, api.z.ai) quota and error logs, or nominate one approved replacement provider; Cerebras, Groq and OpenRouter stay removed per your 2026-11-04 decision.",
+        "description": "llm_error killed 36 of 38 drafts in the last 14 days (59 of 89 lifetime). Recovering even a third of those is a post and an ask per day recovered \u2014 far more reach than any title-prompt edit, which addresses ~2 drafts/fortnight.",
+        "owner_action": "Review the GLM (glm-5.3-flash, api.z.ai) quota and error logs for the 'post' role, or nominate one approved replacement provider; Cerebras, Groq and OpenRouter stay removed per your 2026-11-04 decision.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Check the GLM console for rate-limit/error events over the last 14 days against the 'post' role volume.",
+          "Step 1: Check the GLM console for rate-limit/error events over the last 14 days against 'post' role volume.",
           "Step 2: Raise the quota or pin a stable model name if endpoint errors dominate.",
-          "Step 3: Confirm the atria fallback actually serves when glm fails \u2014 llm_engine.calls shows glm=4 with no fallback calls this cycle."
+          "Step 3: Confirm the atria fallback actually serves when glm fails \u2014 llm_engine.calls shows glm=1 with no fallback calls this cycle."
+        ]
+      },
+      {
+        "title": "Decide on the 30 stacked title-prompt proposals or replace them with one",
+        "description": "The open review branches for articles.py title rules all patch the same two gate findings ('ALL-CAPS word', 'colon-subtitle padding') that now cost only 2 drafts per fortnight. Merging any one obsoletes the rest; leaving all open keeps re-proposing the same edit every cycle.",
+        "owner_action": "Either merge the 2026-11-10 title-rewrite proposal (the most recent) and close the other 29, or close all 30 and leave the title prompts untouched \u2014 weak_title is no longer the dominant loss.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open the review branches listed in PRIOR PROPOSALS dated 2026-10-31 to 2026-11-10 touching bot/earning/articles.py.",
+          "Step 2: Merge at most one (the 2026-11-10 concrete-repair-action proposal is the most targeted) and close the rest as superseded.",
+          "Step 3: Next cycles should steer on the refreshed numbers: if weak_title stays under ~1/week, prompt work moves elsewhere or stops."
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach via prompt upgrades, graded against the evidence",
+    "direction": "Checklist step 4 (reach via prompt upgrades), constrained by the dead-end rule against repeating PRIOR PROPOSALS",
     "evidence": [
-      "article_rejects.counts total 89: llm_error=59, weak_title=14 \u2014 and per window: llm_error=36 vs weak_title=2, fabricated=2, empty_draft=2 in the last 14 days",
-      "PROMPT FOCUS gate findings are 'title has ALL-CAPS word' x1 and 'title padded with a colon subtitle' x1 \u2014 two lost drafts in a fortnight",
-      "PRIOR PROPOSALS lists ~30 open branches since 2026-10-31 editing the ALL-CAPS and colon-subtitle rules in _SYSTEM / _revise_title, none merged \u2014 repeating one is a known dead-end pattern",
-      "article_rejects.last = 'llm_error': 'LLM call failed' \u2014 the engine, not the prompt, is what kills most drafts and the reach they carry",
-      "llm_engine.calls = {'glm': 4} with fallback atria live \u2014 fallback exercises rarely, matching the already-open owner suggestion"
+      "article_rejects.counts: llm_error=59, weak_title=14 lifetime; last 14 days: weak_title=2, fabricated=2, llm_error=36, empty_draft=2",
+      "article_rejects.last = 'llm_error': 'LLM call failed'",
+      "llm_engine.calls = {'glm': 1} with no fallback calls this cycle despite fallback live=true",
+      "PRIOR PROPOSALS contains 30 entries targeting articles.py title rules/_revise_title (2026-10-31 through 2026-11-10), none merged",
+      "wallet.received_total_usd = 0.0; article_stats avg 126 views; article_interest problem-workaround n=10 avg=453.3 is the proven shape"
     ],
-    "money_path": "none this cycle \u2014 a title edit would be reach-only, and the honest reach lever this cycle is the LLM stability issue already recorded as an owner suggestion, which the bot cannot fix itself",
-    "verify": "Next cycles: article_rejects window counts for llm_error should fall if the owner stabilizes the GLM endpoint; weak_title is already down to 2/14d and does not justify a 31st attempt at the same two prompt lines.",
+    "money_path": "none (maintenance/no-op). One recovered post is worth far more than one recovered title: even a perfect title-prompt edit recovers at most ~2 drafts/fortnight, while llm_error loses 36 in the same window \u2014 every one of those is a post and a tip ask that never shipped.",
+    "verify": "No code change to verify. If the owner stabilizes the 'post' LLM role, article_rejects.counts.llm_error should stop growing and article_daily.published should hold at 1 per day without llm_error gaps.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -69,19 +80,31 @@
   "suggestions": [
     {
       "title": "Stabilize the 'post' LLM role so drafts stop dying before the gates",
-      "description": "llm_error killed 36 of 38 drafts in the last 14 days (59 of 89 lifetime). Recovering even a third of those is a post and an ask per day recovered \u2014 far more reach than the 2 drafts/fortnight the title prompt loses.",
-      "owner_action": "Review the GLM (glm-5.3-flash, api.z.ai) quota and error logs, or nominate one approved replacement provider; Cerebras, Groq and OpenRouter stay removed per your 2026-11-04 decision.",
+      "description": "llm_error killed 36 of 38 drafts in the last 14 days (59 of 89 lifetime). Recovering even a third of those is a post and an ask per day recovered \u2014 far more reach than any title-prompt edit, which addresses ~2 drafts/fortnight.",
+      "owner_action": "Review the GLM (glm-5.3-flash, api.z.ai) quota and error logs for the 'post' role, or nominate one approved replacement provider; Cerebras, Groq and OpenRouter stay removed per your 2026-11-04 decision.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Check the GLM console for rate-limit/error events over the last 14 days against the 'post' role volume.",
+        "Step 1: Check the GLM console for rate-limit/error events over the last 14 days against 'post' role volume.",
         "Step 2: Raise the quota or pin a stable model name if endpoint errors dominate.",
-        "Step 3: Confirm the atria fallback actually serves when glm fails \u2014 llm_engine.calls shows glm=4 with no fallback calls this cycle."
+        "Step 3: Confirm the atria fallback actually serves when glm fails \u2014 llm_engine.calls shows glm=1 with no fallback calls this cycle."
       ],
       "discovered_at": "2026-11-10T21:52:46.324583+00:00"
+    },
+    {
+      "title": "Decide on the 30 stacked title-prompt proposals or replace them with one",
+      "description": "The open review branches for articles.py title rules all patch the same two gate findings ('ALL-CAPS word', 'colon-subtitle padding') that now cost only 2 drafts per fortnight. Merging any one obsoletes the rest; leaving all open keeps re-proposing the same edit every cycle.",
+      "owner_action": "Either merge the 2026-11-10 title-rewrite proposal (the most recent) and close the other 29, or close all 30 and leave the title prompts untouched \u2014 weak_title is no longer the dominant loss.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Open the review branches listed in PRIOR PROPOSALS dated 2026-10-31 to 2026-11-10 touching bot/earning/articles.py.",
+        "Step 2: Merge at most one (the 2026-11-10 concrete-repair-action proposal is the most targeted) and close the rest as superseded.",
+        "Step 3: Next cycles should steer on the refreshed numbers: if weak_title stays under ~1/week, prompt work moves elsewhere or stops."
+      ],
+      "discovered_at": "2026-11-10T23:24:47.450662+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 21,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2725,7 +2748,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-10T22:52:18.553424+00:00",
+    "checked_at": "2026-11-10T23:24:25.352872+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3429,7 +3452,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-10T22:52:38.407376+00:00",
+    "last_run": "2026-11-10T23:24:47.723135+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3439,30 +3462,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-10T22:52:38.612977+00:00",
+    "last_run": "2026-11-10T23:24:47.916646+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4965279,
-        "at": "2026-11-10T11:53:20.363058+00:00",
-        "ok": true
-      },
-      {
-        "id": 4977763,
-        "at": "2026-11-10T11:53:20.363058+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-11-10T11:53:20.363058+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
-        "at": "2026-11-10T11:53:20.363058+00:00",
-        "ok": true
-      },
       {
         "id": 4641536,
         "at": "2026-11-10T12:53:21.004530+00:00",
@@ -3684,8 +3687,28 @@
         "ok": true
       },
       {
+        "id": 4965279,
+        "at": "2026-11-10T23:24:47.916646+00:00",
+        "ok": true
+      },
+      {
+        "id": 4977763,
+        "at": "2026-11-10T23:24:47.916646+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-10T23:24:47.916646+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-10T23:24:47.916646+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-10T22:52:38.612977+00:00",
+        "at": "2026-11-10T23:24:47.916646+00:00",
         "ok": true
       }
     ],
@@ -3694,7 +3717,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.0
+    "oldest_check_age_hours": 10.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

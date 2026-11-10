@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-10T21:52:17.435389+00:00",
-  "total_runs": 2427,
+  "last_run": "2026-11-10T22:52:18.142902+00:00",
+  "total_runs": 2428,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,86 +33,55 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: prompt-fixable losses are too small and already fully covered, while the dominant reject cause is engine-side and not addressable by a prompt edit.",
+    "summary": "No change proposed: the prompt focus (weak_title, 2 drafts in 14 days) has accumulated ~30 unmerged proposals targeting the same two gate findings, and the dominant loss is llm_error (36 of 38 recent rejects), which no prompt edit can fix.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Stabilize the 'post' LLM role so drafts stop dying before the gates",
-        "description": "llm_error is 66% of lifetime lost drafts (59 of 89) and 36 of the last 14 days' rejects. Even a perfect title prompt recovers at most 2 drafts a fortnight; recovering a fraction of the 36 engine failures would multiply publishing and reach more than any prompt edit can.",
-        "owner_action": "Review GLM API stability/rate limits for the glm-5.3-flash endpoint (api.z.ai coding paas) and either raise the quota, confirm the key's plan, or nominate one approved replacement provider (Cerebras, Groq and OpenRouter were removed by owner decision 2026-11-04 and must not be re-added).",
+        "description": "llm_error killed 36 of 38 drafts in the last 14 days (59 of 89 lifetime). Recovering even a third of those is a post and an ask per day recovered \u2014 far more reach than the 2 drafts/fortnight the title prompt loses.",
+        "owner_action": "Review the GLM (glm-5.3-flash, api.z.ai) quota and error logs, or nominate one approved replacement provider; Cerebras, Groq and OpenRouter stay removed per your 2026-11-04 decision.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Check the GLM console for error logs / rate-limit events over the last 14 days.",
-          "Step 2: If quota-limited, upgrade the plan or reduce concurrent post-role calls; if endpoint errors, note the model name to pin in llm config.",
-          "Step 3: Confirm the fallback provider (atria) actually serves when glm fails \u2014 llm_engine.calls shows glm=1 this cycle, suggesting fallbacks are rarely exercised."
+          "Step 1: Check the GLM console for rate-limit/error events over the last 14 days against the 'post' role volume.",
+          "Step 2: Raise the quota or pin a stable model name if endpoint errors dominate.",
+          "Step 3: Confirm the atria fallback actually serves when glm fails \u2014 llm_engine.calls shows glm=4 with no fallback calls this cycle."
         ]
       }
     ],
-    "direction": "Step 4 (reach via prompt upgrades), evaluated and declined on the evidence",
+    "direction": "Step 4 \u2014 reach via prompt upgrades, graded against the evidence",
     "evidence": [
-      "article_rejects.counts (lifetime): llm_error=59 of 89 total, i.e. 66% of all lost drafts are engine failures, not prompt failures",
-      "Drafts lost to the engine in the last 14 days: llm_error=36, empty_draft=2, versus prompt-fixable weak_title=2 and fabricated=2",
-      "All 30 open prior proposals target exactly the weak_title path (article draft TITLE rules / _revise_title), covering both current gate findings ('title has ALL-CAPS word', 'colon-subtitle padding'); another variant would repeat an unmerged branch",
-      "wallet.received_total_usd = 0.0 and receive path fully verified (receipt_check.covered/published_total = 48/48, known_without_footer = 0), so the binding constraint is volume of publishable drafts, which the engine, not the prompts, is limiting"
+      "article_rejects.counts total 89: llm_error=59, weak_title=14 \u2014 and per window: llm_error=36 vs weak_title=2, fabricated=2, empty_draft=2 in the last 14 days",
+      "PROMPT FOCUS gate findings are 'title has ALL-CAPS word' x1 and 'title padded with a colon subtitle' x1 \u2014 two lost drafts in a fortnight",
+      "PRIOR PROPOSALS lists ~30 open branches since 2026-10-31 editing the ALL-CAPS and colon-subtitle rules in _SYSTEM / _revise_title, none merged \u2014 repeating one is a known dead-end pattern",
+      "article_rejects.last = 'llm_error': 'LLM call failed' \u2014 the engine, not the prompt, is what kills most drafts and the reach they carry",
+      "llm_engine.calls = {'glm': 4} with fallback atria live \u2014 fallback exercises rarely, matching the already-open owner suggestion"
     ],
-    "money_path": "none this cycle \u2014 no edit clears the bar; the receive path is verified and the loss is upstream of the prompts",
-    "verify": "Next cycle: article_rejects.counts.llm_error should stop climbing faster than weak_title; if a prompt edit were warranted, the named reject count in the 14-day window would be the field to watch.",
+    "money_path": "none this cycle \u2014 a title edit would be reach-only, and the honest reach lever this cycle is the LLM stability issue already recorded as an owner suggestion, which the bot cannot fix itself",
+    "verify": "Next cycles: article_rejects window counts for llm_error should fall if the owner stabilizes the GLM endpoint; weak_title is already down to 2/14d and does not justify a 31st attempt at the same two prompt lines.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 41
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 63,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (63 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "AI Code Feels Done Until You Refactor It",
-        "url": "https://dev.to/robust_true_try/ai-code-feels-done-until-you-refactor-it-565d",
-        "estimated_usd": 0.0,
-        "source_url": "https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/",
-        "source_title": "AI usage generates a fragile codebase"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Stabilize the 'post' LLM role so drafts stop dying before the gates",
-      "description": "llm_error is 66% of lifetime lost drafts (59 of 89) and 36 of the last 14 days' rejects. Even a perfect title prompt recovers at most 2 drafts a fortnight; recovering a fraction of the 36 engine failures would multiply publishing and reach more than any prompt edit can.",
-      "owner_action": "Review GLM API stability/rate limits for the glm-5.3-flash endpoint (api.z.ai coding paas) and either raise the quota, confirm the key's plan, or nominate one approved replacement provider (Cerebras, Groq and OpenRouter were removed by owner decision 2026-11-04 and must not be re-added).",
+      "description": "llm_error killed 36 of 38 drafts in the last 14 days (59 of 89 lifetime). Recovering even a third of those is a post and an ask per day recovered \u2014 far more reach than the 2 drafts/fortnight the title prompt loses.",
+      "owner_action": "Review the GLM (glm-5.3-flash, api.z.ai) quota and error logs, or nominate one approved replacement provider; Cerebras, Groq and OpenRouter stay removed per your 2026-11-04 decision.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Check the GLM console for error logs / rate-limit events over the last 14 days.",
-        "Step 2: If quota-limited, upgrade the plan or reduce concurrent post-role calls; if endpoint errors, note the model name to pin in llm config.",
-        "Step 3: Confirm the fallback provider (atria) actually serves when glm fails \u2014 llm_engine.calls shows glm=1 this cycle, suggesting fallbacks are rarely exercised."
+        "Step 1: Check the GLM console for rate-limit/error events over the last 14 days against the 'post' role volume.",
+        "Step 2: Raise the quota or pin a stable model name if endpoint errors dominate.",
+        "Step 3: Confirm the atria fallback actually serves when glm fails \u2014 llm_engine.calls shows glm=4 with no fallback calls this cycle."
       ],
       "discovered_at": "2026-11-10T21:52:46.324583+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 188,
+  "last_cycle_seconds": 21,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2756,7 +2725,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-10T21:52:18.030592+00:00",
+    "checked_at": "2026-11-10T22:52:18.553424+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3460,7 +3429,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-10T21:55:24.224214+00:00",
+    "last_run": "2026-11-10T22:52:38.407376+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3470,30 +3439,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-10T21:55:24.422020+00:00",
+    "last_run": "2026-11-10T22:52:38.612977+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4996282,
-        "at": "2026-11-10T11:02:18.680243+00:00",
-        "ok": true
-      },
-      {
-        "id": 4568987,
-        "at": "2026-11-10T11:02:18.680243+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-11-10T11:02:18.680243+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
-        "at": "2026-11-10T11:02:18.680243+00:00",
-        "ok": true
-      },
       {
         "id": 4965279,
         "at": "2026-11-10T11:53:20.363058+00:00",
@@ -3710,13 +3659,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 5012890,
         "at": "2026-11-10T21:55:24.422020+00:00",
         "ok": true
       },
       {
-        "id": 5012890,
-        "at": "2026-11-10T21:55:24.422020+00:00",
+        "id": 4996282,
+        "at": "2026-11-10T22:52:38.612977+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-11-10T22:52:38.612977+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-11-10T22:52:38.612977+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-11-10T22:52:38.612977+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-10T22:52:38.612977+00:00",
         "ok": true
       }
     ],
@@ -3725,7 +3694,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 10.9
+    "oldest_check_age_hours": 11.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3745,7 +3714,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 4
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

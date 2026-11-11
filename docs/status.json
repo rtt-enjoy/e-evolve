@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-11T01:24:25.119793+00:00",
-  "total_runs": 2431,
+  "last_run": "2026-11-11T02:24:30.000936+00:00",
+  "total_runs": 2432,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,78 +33,52 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed. The prompt-focus lane (weak_title, 2 drafts in 14 days, from one ALL-CAPS hit and one colon-subtitle hit) has been worked by roughly 28 distinct unmerged proposals, including every variant of the two repairs the current gate findings suggest; another one is a known dead end. The dominant loss is the engine, not a prompt: article_rejects shows llm_error=59 lifetime / 36 in the window and empty_draft=11, both outside prompt reach, and last cycle's reject was again 'llm_error: LLM call failed' with llm_engine.calls {'glm': 1} showing a single call spent. Reach instead already improved on the measured signal: article_daily published 1 in today's window, the account steers on problem-workaround (n=10, avg 453.3 vs other n=16 avg 67.6) via _audience_guidance and _prefer_proven_archetypes, which are live and need no edit. Proposing a fourth rewrite of a title rule over live evidence would be motion, not improvement.",
+    "summary": "No change proposed: the prompt-named losses are tiny and already saturated with unmerged proposals, while the dominant draft loss is engine-side and unfixable by a prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Check why the post-role LLM call failed before any more prompt work",
-        "description": "llm_error is 59 lifetime and 36 in the last 14 days \u2014 the single largest loss of posts and tip asks, larger than every gate combined. A prompt edit cannot fix an engine that returns nothing; recovering even one call per day restores more publishing than all 28 title proposals together.",
-        "owner_action": "Review the workflow logs for the failing GLM post-role calls (error bodies around 'LLM call failed') and confirm the GLM_API_KEY quota/endpoint state; llm_engine reports live=True with key_set=true, so the failure is not visible from status.json.",
+        "description": "llm_error is 59 lifetime and 34 in the last 14 days \u2014 larger than every gate combined. Each lost call is one post and one tip ask that never ship; no prompt edit can recover them.",
+        "owner_action": "Review the workflow logs for the failing GLM post-role calls and confirm the GLM_API_KEY quota/endpoint state; llm_engine reports live=True with key_set=true, so the failure is not visible from status.json.",
         "secret_needed": null,
         "how_to": [
           "Step 1: Open the latest Actions run logs and grep for '[articles] rejected (llm_error)' to read the underlying exception text.",
-          "Step 2: If it is quota or 5xx on glm-5.3-flash, the fallback (atria / Atria-Dawn) is already configured in llm_workflows; confirm it actually engaged for the post role rather than only for upgrade/research."
+          "Step 2: If it is quota or 5xx on glm-5.3-flash, confirm the atria fallback actually engaged for the post role, not only for upgrade/research."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path; PROMPT FOCUS examined and deliberately not repeated",
+    "direction": "Step 4 \u2014 reach via prompt upgrades, one step per cycle; no step clears the bar this cycle",
     "evidence": [
-      "article_rejects.counts: llm_error=59, weak_title=14 (lifetime), window weak_title=2 vs llm_error=36",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "llm_engine.calls = {'glm': 1} \u2014 one post-role call made last cycle, which failed",
-      "PRIOR PROPOSALS: ~28 open branches, all _revise_title / _SYSTEM title-rule edits, none merged",
-      "gate findings behind weak_title: 'title has ALL-CAPS word' x1; 'colon subtitle' x1 \u2014 exactly what proposals 2026-11-01..11-11 each already target",
-      "article_interest: problem-workaround n=10 avg_engagement=453.3; steering (preferred_archetypes) already active in articles.py",
-      "receipt_check coverage 49/49, known_without_footer=0 \u2014 receive path clean, step 1 satisfied"
+      "article_rejects.counts: llm_error=59 vs weak_title=14 lifetime; last 14 days llm_error=34 vs weak_title=2 and fabricated=2",
+      "PROMPT LEDGER / PRIOR PROPOSALS: 30 distinct unmerged proposals already target the exact weak_title prompts (_SYSTEM TITLE rules and _revise_title), including colon-subtitle and ALL-CAPS clarifications matching this cycle's gate findings",
+      "article_interest: problem-workaround n=10 avg=453.3 and the steering prompts (_audience_guidance, _prefer_proven_archetypes) are already wired to it with no reject cost",
+      "receipt_check.covered/published_total = 49/49, known_without_footer = 0: the receive path needs no work"
     ],
-    "money_path": "none this cycle (reach work examined; no change clears the evidence bar)",
-    "verify": "No change to verify. Next cycle: if llm_error falls (engine recovered) and weak_title recurs, the case for a title-prompt edit would be fresh \u2014 but it must be a repair not already sitting in an open branch.",
+    "money_path": "none this cycle \u2014 a fourth title-prompt edit risks the established failure mode (30 open branches, none merged) without evidence it would outperform its 29 predecessors; recovering llm_error drafts is the actual reach lever and needs owner-side log inspection",
+    "verify": "Next cycle: article_rejects.counts.llm_error should stop climbing if the owner acts on the suggestion; weak_title window count is already at 2/14d, too small to justify another branch",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 41
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 64,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (64 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Check why the post-role LLM call failed before any more prompt work",
-      "description": "llm_error is 59 lifetime and 36 in the last 14 days \u2014 the single largest loss of posts and tip asks, larger than every gate combined. A prompt edit cannot fix an engine that returns nothing; recovering even one call per day restores more publishing than all 28 title proposals together.",
-      "owner_action": "Review the workflow logs for the failing GLM post-role calls (error bodies around 'LLM call failed') and confirm the GLM_API_KEY quota/endpoint state; llm_engine reports live=True with key_set=true, so the failure is not visible from status.json.",
+      "description": "llm_error is 59 lifetime and 34 in the last 14 days \u2014 larger than every gate combined. Each lost call is one post and one tip ask that never ship; no prompt edit can recover them.",
+      "owner_action": "Review the workflow logs for the failing GLM post-role calls and confirm the GLM_API_KEY quota/endpoint state; llm_engine reports live=True with key_set=true, so the failure is not visible from status.json.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Open the latest Actions run logs and grep for '[articles] rejected (llm_error)' to read the underlying exception text.",
-        "Step 2: If it is quota or 5xx on glm-5.3-flash, the fallback (atria / Atria-Dawn) is already configured in llm_workflows; confirm it actually engaged for the post role rather than only for upgrade/research."
+        "Step 2: If it is quota or 5xx on glm-5.3-flash, confirm the atria fallback actually engaged for the post role, not only for upgrade/research."
       ],
       "discovered_at": "2026-11-11T01:24:51.032843+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 156,
+  "last_cycle_seconds": 56,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2801,7 +2775,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-11T01:24:25.576486+00:00",
+    "checked_at": "2026-11-11T02:24:30.276476+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3505,7 +3479,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-11T01:27:00.078283+00:00",
+    "last_run": "2026-11-11T02:25:25.297829+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3515,30 +3489,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-11T01:27:00.228716+00:00",
+    "last_run": "2026-11-11T02:25:25.497617+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4765372,
-        "at": "2026-11-10T14:55:33.332478+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-11-10T14:55:33.332478+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-11-10T14:55:33.332478+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-10T14:55:33.332478+00:00",
-        "ok": true
-      },
       {
         "id": 4943931,
         "at": "2026-11-10T15:53:38.509263+00:00",
@@ -3760,8 +3714,28 @@
         "ok": true
       },
       {
+        "id": 4765372,
+        "at": "2026-11-11T02:25:25.497617+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-11T02:25:25.497617+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-11T02:25:25.497617+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-11-11T02:25:25.497617+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-11T01:27:00.228716+00:00",
+        "at": "2026-11-11T02:25:25.497617+00:00",
         "ok": true
       }
     ],
@@ -3790,7 +3764,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

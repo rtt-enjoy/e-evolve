@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-11T02:24:30.000936+00:00",
-  "total_runs": 2432,
+  "last_run": "2026-11-11T03:24:46.101518+00:00",
+  "total_runs": 2433,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,7 +33,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-named losses are tiny and already saturated with unmerged proposals, while the dominant draft loss is engine-side and unfixable by a prompt edit.",
+    "summary": "No change proposed: the PROMPT FOCUS lane (weak_title title-prompt edits) has 30 unmerged review branches covering every reasonable variant, the 14-day loss it targets is only 2 drafts, and the dominant loss is llm_error=34 drafts in 14 days \u2014 an engine failure no prompt edit can fix.",
     "changes_applied": [],
     "suggestions": [
       {
@@ -45,17 +45,28 @@
           "Step 1: Open the latest Actions run logs and grep for '[articles] rejected (llm_error)' to read the underlying exception text.",
           "Step 2: If it is quota or 5xx on glm-5.3-flash, confirm the atria fallback actually engaged for the post role, not only for upgrade/research."
         ]
+      },
+      {
+        "title": "Merge or close the ~30 open title-prompt review branches",
+        "description": "Thirty unmerged branches all target the same two weak_title findings; keeping them open invites every future cycle to re-propose the same edit. Merging one and closing the rest frees the prompt lane for a different step next cycle.",
+        "owner_action": "Pick one title-prompt branch (any of the concrete-example variants), merge it, and close the other title-prompt branches as superseded.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Review the open evolve/* branches touching bot/earning/articles.py.",
+          "Step 2: Merge one, close the rest, and record the decision in docs/evolution.md so future cycles stop re-deriving them."
+        ]
       }
     ],
-    "direction": "Step 4 \u2014 reach via prompt upgrades, one step per cycle; no step clears the bar this cycle",
+    "direction": "Step 4 reach work / prompt-upgrade discipline, and the known-dead-ends rule",
     "evidence": [
-      "article_rejects.counts: llm_error=59 vs weak_title=14 lifetime; last 14 days llm_error=34 vs weak_title=2 and fabricated=2",
-      "PROMPT LEDGER / PRIOR PROPOSALS: 30 distinct unmerged proposals already target the exact weak_title prompts (_SYSTEM TITLE rules and _revise_title), including colon-subtitle and ALL-CAPS clarifications matching this cycle's gate findings",
-      "article_interest: problem-workaround n=10 avg=453.3 and the steering prompts (_audience_guidance, _prefer_proven_archetypes) are already wired to it with no reject cost",
-      "receipt_check.covered/published_total = 49/49, known_without_footer = 0: the receive path needs no work"
+      "article_rejects.counts: llm_error=59 lifetime vs weak_title=14 lifetime (engine loss dwarfs gate loss)",
+      "Drafts lost to a prompt (last 14 days): weak_title=2 \u2014 one 'ALL-CAPS word', one 'colon-subtitle' finding, one occurrence each",
+      "Drafts lost to the engine (last 14 days): llm_error=34, empty_draft=2",
+      "PRIOR PROPOSALS lists ~30 open branches on bot/earning/articles.py title-prompt edits (_SYSTEM TITLE rules and _revise_title), including every sharpening, example, rescue and allowlist variant for these exact two findings",
+      "llm_engine: serving=glm, live=True, key_set=true \u2014 the failure is invisible from status.json, matching the owner suggestion already queued"
     ],
-    "money_path": "none this cycle \u2014 a fourth title-prompt edit risks the established failure mode (30 open branches, none merged) without evidence it would outperform its 29 predecessors; recovering llm_error drafts is the actual reach lever and needs owner-side log inspection",
-    "verify": "Next cycle: article_rejects.counts.llm_error should stop climbing if the owner acts on the suggestion; weak_title window count is already at 2/14d, too small to justify another branch",
+    "money_path": "none \u2014 declining to change is the maintenance answer; a merged prompt edit would have been reach-only (more drafts shipped, more tip asks) and the evidence does not support another attempt",
+    "verify": "No branch to verify. Next cycle, read article_rejects.counts: if the owner fixes the GLM post-role call per the standing suggestion, llm_error stops climbing; weak_title should stay near 0-1 per 14 days without further prompt edits",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -75,10 +86,21 @@
         "Step 2: If it is quota or 5xx on glm-5.3-flash, confirm the atria fallback actually engaged for the post role, not only for upgrade/research."
       ],
       "discovered_at": "2026-11-11T01:24:51.032843+00:00"
+    },
+    {
+      "title": "Merge or close the ~30 open title-prompt review branches",
+      "description": "Thirty unmerged branches all target the same two weak_title findings; keeping them open invites every future cycle to re-propose the same edit. Merging one and closing the rest frees the prompt lane for a different step next cycle.",
+      "owner_action": "Pick one title-prompt branch (any of the concrete-example variants), merge it, and close the other title-prompt branches as superseded.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Review the open evolve/* branches touching bot/earning/articles.py.",
+        "Step 2: Merge one, close the rest, and record the decision in docs/evolution.md so future cycles stop re-deriving them."
+      ],
+      "discovered_at": "2026-11-11T03:26:03.842508+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 56,
+  "last_cycle_seconds": 79,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2775,7 +2797,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-11T02:24:30.276476+00:00",
+    "checked_at": "2026-11-11T03:24:46.577028+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3479,7 +3501,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-11T02:25:25.297829+00:00",
+    "last_run": "2026-11-11T03:26:04.114393+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3489,30 +3511,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-11T02:25:25.497617+00:00",
+    "last_run": "2026-11-11T03:26:04.371690+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4943931,
-        "at": "2026-11-10T15:53:38.509263+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-11-10T15:53:38.509263+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
-        "at": "2026-11-10T15:53:38.509263+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-11-10T15:53:38.509263+00:00",
-        "ok": true
-      },
       {
         "id": 4925166,
         "at": "2026-11-10T16:53:51.041836+00:00",
@@ -3734,8 +3736,28 @@
         "ok": true
       },
       {
+        "id": 4943931,
+        "at": "2026-11-11T03:26:04.371690+00:00",
+        "ok": true
+      },
+      {
+        "id": 4740283,
+        "at": "2026-11-11T03:26:04.371690+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-11T03:26:04.371690+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-11T03:26:04.371690+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-11T02:25:25.497617+00:00",
+        "at": "2026-11-11T03:26:04.371690+00:00",
         "ok": true
       }
     ],

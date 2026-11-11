@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-11T15:14:44.625045+00:00",
-  "total_runs": 2446,
+  "last_run": "2026-11-11T16:14:46.518950+00:00",
+  "total_runs": 2447,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,40 +33,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt-fixable loss (weak_title, 2 drafts in 14 days) already has ~25 open, unmerged review branches targeting the exact same two instructions in articles.py (_revise_title and the TITLE rules of _SYSTEM), so a 69th variant of the same edit adds review noise, not reach; the dominant loss (llm_error=34, empty_draft=2) is the LLM engine, which no prompt edit can fix.",
+    "summary": "No change proposed: the prompt-focus lane (weak_title) is already saturated \u2014 the _SYSTEM and _revise_title prompts already state both failing rules verbatim, ~30 prior proposals against them were never merged, and the drafts actually being lost in the window are lost to the LLM engine (llm_error=34 of 38), which no prompt edit and no editable file can fix.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the 25 open title-prompt branches instead of reviewing new ones",
-        "description": "weak_title cost 2 drafts in 14 days and every proposed fix already exists on a parked branch; picking one (e.g. the 2026-11-11 one-rule sharpening of _revise_title) and merging it unblocks the only prompt-fixable leak without another review cycle",
-        "owner_action": "Review and merge (or close) the open evolve/* branches touching bot/earning/articles.py title rules, starting with the most recent (2026-11-11)",
+        "title": "Reduce llm_error draft losses (34 in 14 days) at the provider level",
+        "description": "llm_error is 75% of window rejects (34 of 38) versus weak_title's 2; every one is a post and a tip ask that never ships. No prompt edit can fix an engine failure, and bot/llm.py is outside the evolution write scope.",
+        "owner_action": "Check the GLM API key's quota/billing and the glm-5.3-flash error rate for the Actions runner IP; if the free tier is throttling, consider raising the limit or rotating the model.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the evolve/* branches dated 2026-10-31 to 2026-11-11 in the PR list.",
-          "Step 2: Merge the one that most closely mirrors the gate (acronyms allowed, colon-subtitle \u2192 pick the sharper half); close the rest so future cycles stop re-deriving them."
-        ]
-      },
-      {
-        "title": "Investigate the LLM engine error rate, which dwarfs gate losses",
-        "description": "llm_error=34 and empty_draft=2 in 14 days vs weak_title=2: roughly 8 in 10 lost drafts die before a gate ever sees them, so prompt work cannot move publish throughput materially until this falls",
-        "owner_action": "Check GLM API stability/quota for the 'post' role over the last two weeks, or confirm the fallback (atria) is being tried on complete_json_for_role failures",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: In workflow logs, grep 'articles] rejected (llm_error)' and read the exception strings recorded in article_rejects.recent.",
-          "Step 2: If the errors are quota/429-shaped, raise the GLM plan or verify bot/llm.py falls back to atria on post-role failures."
+          "Step 1: Open the GitHub Actions logs for recent cycles and grep 'LLM call failed' to capture the underlying HTTP status per failure.",
+          "Step 2: Log into the z.ai console and check the GLM_API_KEY's rate-limit/quota panel against that status.",
+          "Step 3: If quota-bound, raise the tier or update llm_workflows.post.model to a stable variant \u2014 no new secret required."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompt losing the most drafts \u2014 plus the standing rule that one small, evidenced change is worth more than speculative ones",
+    "direction": "Checklist step 4 / PROMPT FOCUS, evaluated and declined on evidence",
     "evidence": [
-      "article_rejects window: weak_title=2, fabricated=2 vs llm_error=34, empty_draft=2 (drafts lost to the engine, 'not fixable by a prompt edit')",
-      "PRIOR PROPOSALS lists 25+ open branches dated 2026-10-31..2026-11-11 all editing the title rules in bot/earning/articles.py (_revise_title / _SYSTEM TITLE), none merged",
-      "gate findings behind weak_title: 'title has ALL-CAPS word' x1 and 'title padded with a colon subtitle' x1 \u2014 both rules already stated verbatim in _revise_title and _SYSTEM",
-      "article_interest confirms the steering signal is healthy: preferred_archetypes() = ['problem-workaround'] with count=10 (>= 3, no Principle 3j thin-row risk)",
-      "receipt_check.covered/published_total = 49/49, coverage_complete = True, known_without_footer = 0 \u2014 receive path fully verified, no maintenance gap"
+      "article_rejects.counts: llm_error=59 vs weak_title=14 lifetime; window: llm_error=34, empty_draft=2 vs weak_title=2, fabricated=2",
+      "gate findings behind the 2 window weak_title losses: 'title has ALL-CAPS word' x1 and 'title padded with a colon subtitle' x1 \u2014 both rules are already written in _SYSTEM ('BANNED in titles: ... any ALL-CAPS word', 'No colon-subtitle padding') and repeated in _revise_title ('no ALL-CAPS, no colon-subtitle padding')",
+      "PRIOR PROPOSALS: ~30 open branches target exactly these title prompts (ALL-CAPS examples, colon-subtitle rules, _revise_title sharpening, 2026-10-31 through 2026-11-11); none merged",
+      "llm_engine: serving=glm, live=True, calls={'glm': 1} \u2014 engine is up this cycle; bot/llm.py is protected and the dead-end list forbids retry/backoff for 429s",
+      "reach is otherwise healthy: receipt_check 49/49 covered, known_without_footer=0, coverage_complete=True, backfill.remaining=0, payout.live=true, article_daily published=1"
     ],
-    "money_path": "none this cycle \u2014 reach work only, and even that is withheld: every prompt-side title fix worth making is already sitting on an unmerged branch, so the binding constraint is the human merging, not the proposal queue",
-    "verify": "No diff to verify. If a title-prompt branch is merged, article_rejects windowed weak_title should fall from 2 toward 0 over the next 14 days; if the owner instead wants throughput, the lever is the LLM engine (llm_error=34), which needs an owner-side look at GLM stability, not a prompt edit.",
+    "money_path": "none \u2014 no change shipped; the receive path is fully covered and the dominant draft loss (llm_error) is outside the code this proposal may edit",
+    "verify": "If the reviewer disagrees, the falsifiable prediction for another title-prompt edit is: article_rejects.counts.weak_title stays ~2 per 14 days (it is already near the noise floor), and the binding constraint remains article_rejects.counts.llm_error, which only engine stability or an owner-side provider decision can move",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -77,30 +68,20 @@
   },
   "suggestions": [
     {
-      "title": "Merge one of the 25 open title-prompt branches instead of reviewing new ones",
-      "description": "weak_title cost 2 drafts in 14 days and every proposed fix already exists on a parked branch; picking one (e.g. the 2026-11-11 one-rule sharpening of _revise_title) and merging it unblocks the only prompt-fixable leak without another review cycle",
-      "owner_action": "Review and merge (or close) the open evolve/* branches touching bot/earning/articles.py title rules, starting with the most recent (2026-11-11)",
+      "title": "Reduce llm_error draft losses (34 in 14 days) at the provider level",
+      "description": "llm_error is 75% of window rejects (34 of 38) versus weak_title's 2; every one is a post and a tip ask that never ships. No prompt edit can fix an engine failure, and bot/llm.py is outside the evolution write scope.",
+      "owner_action": "Check the GLM API key's quota/billing and the glm-5.3-flash error rate for the Actions runner IP; if the free tier is throttling, consider raising the limit or rotating the model.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the evolve/* branches dated 2026-10-31 to 2026-11-11 in the PR list.",
-        "Step 2: Merge the one that most closely mirrors the gate (acronyms allowed, colon-subtitle \u2192 pick the sharper half); close the rest so future cycles stop re-deriving them."
+        "Step 1: Open the GitHub Actions logs for recent cycles and grep 'LLM call failed' to capture the underlying HTTP status per failure.",
+        "Step 2: Log into the z.ai console and check the GLM_API_KEY's rate-limit/quota panel against that status.",
+        "Step 3: If quota-bound, raise the tier or update llm_workflows.post.model to a stable variant \u2014 no new secret required."
       ],
-      "discovered_at": "2026-11-11T15:15:19.334300+00:00"
-    },
-    {
-      "title": "Investigate the LLM engine error rate, which dwarfs gate losses",
-      "description": "llm_error=34 and empty_draft=2 in 14 days vs weak_title=2: roughly 8 in 10 lost drafts die before a gate ever sees them, so prompt work cannot move publish throughput materially until this falls",
-      "owner_action": "Check GLM API stability/quota for the 'post' role over the last two weeks, or confirm the fallback (atria) is being tried on complete_json_for_role failures",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: In workflow logs, grep 'articles] rejected (llm_error)' and read the exception strings recorded in article_rejects.recent.",
-        "Step 2: If the errors are quota/429-shaped, raise the GLM plan or verify bot/llm.py falls back to atria on post-role failures."
-      ],
-      "discovered_at": "2026-11-11T15:15:19.334300+00:00"
+      "discovered_at": "2026-11-11T16:15:16.124911+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 36,
+  "last_cycle_seconds": 31,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2766,7 +2747,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-11T15:14:44.940678+00:00",
+    "checked_at": "2026-11-11T16:14:47.086903+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3504,42 +3485,22 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-11T15:15:19.548921+00:00",
+    "last_run": "2026-11-11T16:15:16.372681+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-11T15:15:19.733281+00:00",
+    "last_run": "2026-11-11T16:15:16.644262+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4925166,
-        "at": "2026-11-11T04:27:46.207400+00:00",
-        "ok": true
-      },
-      {
-        "id": 4931682,
-        "at": "2026-11-11T05:25:31.102674+00:00",
-        "ok": true
-      },
-      {
         "id": 4681657,
-        "at": "2026-11-11T05:25:31.102674+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-11-11T05:25:31.102674+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
         "at": "2026-11-11T05:25:31.102674+00:00",
         "ok": true
       },
@@ -3759,8 +3720,28 @@
         "ok": true
       },
       {
+        "id": 4925166,
+        "at": "2026-11-11T16:15:16.644262+00:00",
+        "ok": true
+      },
+      {
+        "id": 4931682,
+        "at": "2026-11-11T16:15:16.644262+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-11-11T16:15:16.644262+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-11-11T16:15:16.644262+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-11T15:15:19.733281+00:00",
+        "at": "2026-11-11T16:15:16.644262+00:00",
         "ok": true
       }
     ],

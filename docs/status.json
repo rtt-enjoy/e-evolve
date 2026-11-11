@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-11T12:26:17.292359+00:00",
-  "total_runs": 2443,
+  "last_run": "2026-11-11T13:26:19.886724+00:00",
+  "total_runs": 2444,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,11 +33,44 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
+    "summary": "No change this cycle: the prompt focus (weak_title) already has ~30 near-identical open proposals covering both gate findings, weak_title costs only 2 drafts in 14 days, and the dominant loss is llm_error (34 in 14 days, engine-side auth/rate failures) which no prompt edit can fix \u2014 so a 31st title proposal would repeat a dead end and an engine change would touch a protected file.",
     "changes_applied": [],
-    "suggestions": [],
-    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
-    "error_type": "json"
+    "suggestions": [
+      {
+        "title": "Merge exactly one of the 30 open title-prompt branches and close the rest",
+        "description": "weak_title findings (ALL-CAPS word, colon-subtitle padding) each have a dozen duplicate proposals pending; none merged means the tally is unmeasurable and every future cycle risks re-proposing the same edit. Merging one makes weak_title a live measurement; closing the rest clears the ledger.",
+        "owner_action": "Diff the evolve/* branches touching bot/earning/articles.py title rules; merge the single one that mirrors both gate finding texts, close the other 29.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: List branches: git branch -r | grep evolve/, and diff each against the TITLE block in articles.py _SYSTEM and _revise_title().",
+          "Step 2: Merge the one proposal whose edit mirrors both finding texts ('title has ALL-CAPS word', 'title padded with a colon subtitle; pick the sharper half').",
+          "Step 3: Close the remaining branches so the prompt ledger stops counting them as pending."
+        ]
+      },
+      {
+        "title": "Update or retire the dead gemini-2.5-flash-lite fallback model reference",
+        "description": "34 drafts in 14 days die on llm_error before any gate sees them \u2014 the largest single loss of posts and tip asks. The error names a retired model; the GLM primary is also hitting a 5-hour usage cap, so when the primary is capped the cycle falls through to a fallback chain that ends in a 404.",
+        "owner_action": "Check the fallback model list in the LLM configuration and replace the retired gemini-2.5-flash-lite entry (the error text suggests the newer model name), or confirm Atria-Dawn alone is the intended fallback.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open the LLM provider/model config (bot/llm.py is protected, so this is a config-level or workflow-level setting you own).",
+          "Step 2: Remove or update the gemini-2.5-flash-lite entry per the provider's message; keep Cerebras/Groq/OpenRouter out per the 2026-11-04 removal.",
+          "Step 3: Next cycle, confirm llm_engine.disabled_reason clears and article_rejects.counts['llm_error'] stops growing."
+        ]
+      }
+    ],
+    "direction": "Step 4 \u2014 reach into a live receive path, via the prompt ledger; declined because every admissible edit in that lane is already pending review",
+    "evidence": [
+      "article_rejects.counts (lifetime, total 89): llm_error=59 dominates; weak_title=14, of which only 2 in the last 14 days",
+      "PROMPT FOCUS gate findings 'title has ALL-CAPS word' x1 and 'title padded with a colon subtitle' x1 \u2014 both findings are covered verbatim by open branches dated 2026-10-31 through 2026-11-11 in PRIOR PROPOSALS (e.g. 'Sharpen the title-rewrite prompt with one concrete before/after', 'Replace the ambiguous no ALL-CAPS rule', 'Revise the colon-subtitle rule to mirror the gate')",
+      "llm_engine: serving=atria, live=False, disabled_reason=auth_failed \u2014 the engine loss (llm_error=34/14d) is not prompt-addressable and bot/llm.py is protected",
+      "weak_title=2 in 14 days vs llm_error=34 in 14 days: fixing weak_title entirely recovers at most ~5% of lost drafts this window"
+    ],
+    "money_path": "none this cycle \u2014 the proposed prompt-lane fix is already parked on open review branches; publishing more is blocked first by engine availability, not by prompt quality",
+    "verify": "Next cycles: article_rejects.counts['llm_error'] and the 14-day llm_error window should fall once the GLM usage window resets (2026-11-11 21:26 UTC) or the owner updates the dead Gemini model reference; weak_title stays <3/14d either way. If the owner merges one of the 30 open title branches, the weak_title count is the metric it moves.",
+    "error": null,
+    "branch": null,
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -45,22 +78,32 @@
   },
   "suggestions": [
     {
-      "title": "Merge one title-prompt branch and close the other 29",
-      "description": "Every future weak_title fix is unverifiable while 30 near-identical proposals sit open; merging one and closing the rest turns the reject tally into a real measurement.",
-      "owner_action": "Review the 30 open evolve/* branches touching bot/earning/articles.py title rules, merge the single proposal that most closely mirrors the gate finding text (colon-subtitle 'pick the sharper half' + ALL-CAPS acronym allowlist), and close the remaining 29.",
+      "title": "Merge exactly one of the 30 open title-prompt branches and close the rest",
+      "description": "weak_title findings (ALL-CAPS word, colon-subtitle padding) each have a dozen duplicate proposals pending; none merged means the tally is unmeasurable and every future cycle risks re-proposing the same edit. Merging one makes weak_title a live measurement; closing the rest clears the ledger.",
+      "owner_action": "Diff the evolve/* branches touching bot/earning/articles.py title rules; merge the single one that mirrors both gate finding texts, close the other 29.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the listed evolve/* branches and diff each against the TITLE rules in articles.py _SYSTEM and _revise_title().",
-        "Step 2: Merge the one proposal whose edit mirrors both gate findings ('title has ALL-CAPS word', 'title padded with a colon subtitle; pick the sharper half').",
-        "Step 3: Close the rest so the prompt ledger stops counting duplicate proposals as pending."
+        "Step 1: List branches: git branch -r | grep evolve/, and diff each against the TITLE block in articles.py _SYSTEM and _revise_title().",
+        "Step 2: Merge the one proposal whose edit mirrors both finding texts ('title has ALL-CAPS word', 'title padded with a colon subtitle; pick the sharper half').",
+        "Step 3: Close the remaining branches so the prompt ledger stops counting them as pending."
       ],
-      "discovered_at": "2026-11-11T11:27:06.522306+00:00"
+      "discovered_at": "2026-11-11T13:26:46.535783+00:00"
+    },
+    {
+      "title": "Update or retire the dead gemini-2.5-flash-lite fallback model reference",
+      "description": "34 drafts in 14 days die on llm_error before any gate sees them \u2014 the largest single loss of posts and tip asks. The error names a retired model; the GLM primary is also hitting a 5-hour usage cap, so when the primary is capped the cycle falls through to a fallback chain that ends in a 404.",
+      "owner_action": "Check the fallback model list in the LLM configuration and replace the retired gemini-2.5-flash-lite entry (the error text suggests the newer model name), or confirm Atria-Dawn alone is the intended fallback.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Open the LLM provider/model config (bot/llm.py is protected, so this is a config-level or workflow-level setting you own).",
+        "Step 2: Remove or update the gemini-2.5-flash-lite entry per the provider's message; keep Cerebras/Groq/OpenRouter out per the 2026-11-04 removal.",
+        "Step 3: Next cycle, confirm llm_engine.disabled_reason clears and article_rejects.counts['llm_error'] stops growing."
+      ],
+      "discovered_at": "2026-11-11T13:26:46.535783+00:00"
     }
   ],
-  "errors": [
-    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
-  ],
-  "last_cycle_seconds": 308,
+  "errors": [],
+  "last_cycle_seconds": 28,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2727,7 +2770,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-11T12:26:17.749005+00:00",
+    "checked_at": "2026-11-11T13:26:20.403124+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3465,7 +3508,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-11T12:31:24.130623+00:00",
+    "last_run": "2026-11-11T13:26:46.721188+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3475,30 +3518,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-11T12:31:24.379034+00:00",
+    "last_run": "2026-11-11T13:26:46.901169+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4765372,
-        "at": "2026-11-11T02:25:25.497617+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-11-11T02:25:25.497617+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-11-11T02:25:25.497617+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-11T02:25:25.497617+00:00",
-        "ok": true
-      },
       {
         "id": 4943931,
         "at": "2026-11-11T03:26:04.371690+00:00",
@@ -3720,8 +3743,28 @@
         "ok": true
       },
       {
+        "id": 4765372,
+        "at": "2026-11-11T13:26:46.901169+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-11T13:26:46.901169+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-11T13:26:46.901169+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-11-11T13:26:46.901169+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-11T12:31:24.379034+00:00",
+        "at": "2026-11-11T13:26:46.901169+00:00",
         "ok": true
       }
     ],
@@ -3730,7 +3773,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 10.1
+    "oldest_check_age_hours": 10.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3741,46 +3784,17 @@
   },
   "llm_engine": {
     "main_provider": "glm",
-    "main_model": "glm-4.7-flash",
+    "main_model": "glm-5.3-flash",
     "preferred_model": "glm-5.3-flash",
-    "refused": [
-      {
-        "model": "glm-5.3-flash",
-        "endpoint": "https://api.z.ai/api/coding/paas/v4",
-        "code": "1308",
-        "message": "Usage limit reached for 5 hour. Your limit will reset at 2026-11-11 21:26:13"
-      },
-      {
-        "model": "glm-5.2",
-        "endpoint": "https://api.z.ai/api/coding/paas/v4",
-        "code": "1308",
-        "message": "Usage limit reached for 5 hour. Your limit will reset at 2026-11-11 21:26:13"
-      },
-      {
-        "model": "glm-5.1",
-        "endpoint": "https://api.z.ai/api/coding/paas/v4",
-        "code": "1308",
-        "message": "Usage limit reached for 5 hour. Your limit will reset at 2026-11-11 21:26:13"
-      },
-      {
-        "model": "glm-5",
-        "endpoint": "https://api.z.ai/api/coding/paas/v4",
-        "code": "1308",
-        "message": "Usage limit reached for 5 hour. Your limit will reset at 2026-11-11 21:26:13"
-      },
-      {
-        "model": "glm-4.7",
-        "endpoint": "https://api.z.ai/api/coding/paas/v4",
-        "code": "1308",
-        "message": "Usage limit reached for 5 hour. Your limit will reset at 2026-11-11 21:26:13"
-      }
-    ],
+    "refused": [],
     "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
-    "live": false,
-    "serving": "atria",
-    "disabled_reason": "auth_failed",
-    "calls": {},
+    "live": true,
+    "serving": "glm",
+    "disabled_reason": null,
+    "calls": {
+      "glm": 1
+    },
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

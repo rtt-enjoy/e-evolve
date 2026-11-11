@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-11T05:24:33.484241+00:00",
-  "total_runs": 2435,
+  "last_run": "2026-11-11T06:24:34.578962+00:00",
+  "total_runs": 2436,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,33 +33,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-ledger focus (weak_title, 2 drafts in 14 days) is already the subject of ~30 open, unmerged proposals in PRIOR PROPOSALS, and the evidence shows the real throttle on the binding reach step is the engine (llm_error=59 lifetime, 34 in the last 14 days), which a prompt edit cannot fix.",
+    "summary": "No change proposed: the PROMPT FOCUS (weak_title, 2 drafts in 14 days) has already absorbed ~30 unmerged prompt-edit proposals on exactly these two gate findings, while 34 of 36 lost drafts in the same window died on llm_error in the protected bot/llm.py \u2014 editing the title prompt again is neither novel nor where the reach loss is.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Diagnose the post-role GLM failures throttling article publishing (carried from 2026-11-11)",
-        "description": "36 of 40 lost drafts in 14 days died on llm_error or empty_draft before any gate ran. The binding reach step (publish more into problem-workaround, the proven archetype at avg 453.3 views vs 67.6 for 'other') is engine-bound, not prompt-bound. Fixing this roughly tenfolds the drafts that ever reach the title gate.",
-        "owner_action": "Read one full llm_error exception from a cycle's workflow log (status truncates to 160 chars) and confirm whether the post-role GLM key hits a rate ceiling or quota; if so, decide between a raised quota, a second key for the post role, or accepting ~1-attempt publishing. If the cause is malformed JSON from the model, say so in review \u2014 that would be a bot/llm.py fix and the bot may not edit it.",
-        "secret_needed": "possibly a second post-role key equivalent to GLM_API_KEY, only if quota is confirmed as the cause; no removed provider (Cerebras/Groq/OpenRouter) is to be restored",
+        "title": "Diagnose the post-role GLM failures throttling article publishing (carried, still binding)",
+        "description": "34 of 36 drafts lost in 14 days died on llm_error before any gate ran. The reach step is engine-bound; fixing it roughly tenfolds the drafts that ever reach a gate or a reader.",
+        "owner_action": "Read the full llm_error exception from the cycle matching article_rejects.last_at in the workflow log; if it is 429/quota, raise the quota or add a post-role key; if malformed JSON, request a bot/llm.py fix.",
+        "secret_needed": "only if quota is confirmed: a second post-role key equivalent to GLM_API_KEY; no removed provider (Cerebras/Groq/OpenRouter) is to be restored",
         "how_to": [
           "Step 1: Open the workflow log of the cycle matching article_rejects.last_at and read the full exception text.",
-          "Step 2: If it is 429/quota, provision the quota change or key; if it is malformed JSON, note it for a bot/llm.py fix the owner can request.",
+          "Step 2: If 429/quota, provision quota or a second post-role key; if malformed JSON, note it for a bot/llm.py fix the owner can request.",
           "Step 3: Re-read article_rejects.counts.llm_error next cycle; a merged fix should stop the count growing."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 improve reach via prompt upgrades, one step per cycle, without repeating dead ends.",
+    "direction": "Checklist step 4 \u2014 improve reach via prompts, one gradual step per cycle",
     "evidence": [
-      "article_rejects.counts total 89: llm_error=59, empty_draft=11, weak_title=14 lifetime",
-      "Drafts lost to prompts in the last 14 days: weak_title=2, fabricated=2 (4 total)",
-      "Drafts lost to the engine in the last 14 days: llm_error=34, empty_draft=2 (36 total)",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "Gate findings behind weak_title: 'title has ALL-CAPS word' x1; 'title padded with a colon subtitle' x1 \u2014 one occurrence each",
-      "PRIOR PROPOSALS lists ~30 open branches since 2026-10-31, all editing the same TITLE rules in _SYSTEM or _revise_title, none merged",
-      "llm_workflows.post: single GLM key, no quota headroom visible; suggestions[0] already asks the owner to check the post-role rate ceiling"
+      "article_rejects.counts (14-day prompt losses): weak_title=2, fabricated=2",
+      "article_rejects.counts (14-day engine losses): llm_error=34, empty_draft=2",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x1, 'title padded with a colon subtitle' x1 \u2014 one occurrence each",
+      "PRIOR PROPOSALS: ~30 open branches already target _revise_title/_SYSTEM title rules for these same findings; none merged",
+      "suggestions[0] (carried from 2026-11-11): owner diagnosis of the post-role GLM llm_error failures is already pending"
     ],
-    "money_path": "none (maintenance): proposing nothing this cycle; the largest measured loss of posts-and-asks (36 of 40 in the window) dies before any gate sees a draft, so the highest-value fix is the engine/quota question already raised as an owner suggestion.",
-    "verify": "Next cycle: article_rejects window counts. If the engine issue is resolved by the owner, weak_title remains at ~2/14d and prompt work resumes; re-tally then. A 31st title-prompt variant would not move weak_title below 2 in the window because its two gate findings are single, non-recurring events.",
+    "money_path": "none this cycle \u2014 the binding reach step is engine-bound, not prompt-bound; the title prompt loses 2 drafts per fortnight against 34 lost to llm_error",
+    "verify": "Next cycle: article_rejects.counts.llm_error should stop growing once the owner's diagnosis lands; weak_title stays at 2 without any new edit, so a further prompt change has nothing measurable to move.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -70,20 +68,20 @@
   },
   "suggestions": [
     {
-      "title": "Diagnose the post-role GLM failures throttling article publishing (carried from 2026-11-11)",
-      "description": "36 of 40 lost drafts in 14 days died on llm_error or empty_draft before any gate ran. The binding reach step (publish more into problem-workaround, the proven archetype at avg 453.3 views vs 67.6 for 'other') is engine-bound, not prompt-bound. Fixing this roughly tenfolds the drafts that ever reach the title gate.",
-      "owner_action": "Read one full llm_error exception from a cycle's workflow log (status truncates to 160 chars) and confirm whether the post-role GLM key hits a rate ceiling or quota; if so, decide between a raised quota, a second key for the post role, or accepting ~1-attempt publishing. If the cause is malformed JSON from the model, say so in review \u2014 that would be a bot/llm.py fix and the bot may not edit it.",
-      "secret_needed": "possibly a second post-role key equivalent to GLM_API_KEY, only if quota is confirmed as the cause; no removed provider (Cerebras/Groq/OpenRouter) is to be restored",
+      "title": "Diagnose the post-role GLM failures throttling article publishing (carried, still binding)",
+      "description": "34 of 36 drafts lost in 14 days died on llm_error before any gate ran. The reach step is engine-bound; fixing it roughly tenfolds the drafts that ever reach a gate or a reader.",
+      "owner_action": "Read the full llm_error exception from the cycle matching article_rejects.last_at in the workflow log; if it is 429/quota, raise the quota or add a post-role key; if malformed JSON, request a bot/llm.py fix.",
+      "secret_needed": "only if quota is confirmed: a second post-role key equivalent to GLM_API_KEY; no removed provider (Cerebras/Groq/OpenRouter) is to be restored",
       "how_to": [
         "Step 1: Open the workflow log of the cycle matching article_rejects.last_at and read the full exception text.",
-        "Step 2: If it is 429/quota, provision the quota change or key; if it is malformed JSON, note it for a bot/llm.py fix the owner can request.",
+        "Step 2: If 429/quota, provision quota or a second post-role key; if malformed JSON, note it for a bot/llm.py fix the owner can request.",
         "Step 3: Re-read article_rejects.counts.llm_error next cycle; a merged fix should stop the count growing."
       ],
-      "discovered_at": "2026-11-11T05:25:30.606891+00:00"
+      "discovered_at": "2026-11-11T06:25:22.046071+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 58,
+  "last_cycle_seconds": 49,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2759,7 +2757,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-11T05:24:34.110484+00:00",
+    "checked_at": "2026-11-11T06:24:34.940196+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3463,7 +3461,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-11T05:25:30.897969+00:00",
+    "last_run": "2026-11-11T06:25:22.299647+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3473,30 +3471,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-11T05:25:31.102674+00:00",
+    "last_run": "2026-11-11T06:25:22.705414+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4671278,
-        "at": "2026-11-10T18:54:32.631926+00:00",
-        "ok": true
-      },
-      {
-        "id": 4908316,
-        "at": "2026-11-10T18:54:32.631926+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-11-10T18:54:32.631926+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
-        "at": "2026-11-10T18:54:32.631926+00:00",
-        "ok": true
-      },
       {
         "id": 4602729,
         "at": "2026-11-10T19:52:32.945491+00:00",
@@ -3718,8 +3696,28 @@
         "ok": true
       },
       {
+        "id": 4671278,
+        "at": "2026-11-11T06:25:22.705414+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-11-11T06:25:22.705414+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-11-11T06:25:22.705414+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-11-11T06:25:22.705414+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-11T05:25:31.102674+00:00",
+        "at": "2026-11-11T06:25:22.705414+00:00",
         "ok": true
       }
     ],

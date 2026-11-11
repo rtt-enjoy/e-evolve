@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-11T19:14:50.617977+00:00",
-  "total_runs": 2450,
+  "last_run": "2026-11-11T20:14:57.246164+00:00",
+  "total_runs": 2451,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,30 +33,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus area (weak_title) is saturated with unmerged one-line proposals, the measured loss there is only 2 drafts in 14 days, and the dominant real loss (llm_error=34) is an engine failure no prompt edit can fix.",
+    "summary": "No change proposed: the prompt-focus target (weak_title) has absorbed roughly thirty unmerged prompt edits already, its 14-day loss is only 2 drafts against 34 lost to llm_error, and a 31st variant of the same ALL-CAPS/colon-subtitle rule would repeat rejected work rather than serve step 4.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Confirm the glm 'post' role call failure mode before any further prompt work",
-        "description": "llm_error is 34 of the 40 drafts lost in the last 14 days and 59 of 89 lifetime \u2014 six times the weak_title loss every prompt proposal targets. If the glm endpoint is timing out or returning malformed JSON on long (6000-token) article calls, fixing that recovers an order of magnitude more posts than any title rule.",
-        "owner_action": "Check the workflow logs for the actual exception text behind 'LLM call failed' on the post role over the last 14 days, and confirm whether the atria fallback was ever attempted.",
+        "title": "Diagnose the glm 'post' role failure before any further prompt work",
+        "description": "llm_error is 34 of 40 drafts lost in 14 days and 59 of 89 lifetime \u2014 seventeen times the weak_title loss every prior proposal targets. One prompt edit recovers at most 2 drafts per fortnight; fixing or routing around the failing engine call recovers ~2 posts per day.",
+        "owner_action": "Read the workflow logs for the exception behind '[articles] rejected (llm_error)' on the post role and confirm whether the atria fallback ever fired; then either fix the glm call or switch llm_roles.post to atria.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the recent GitHub Actions runs and grep for '[articles] rejected (llm_error)' to see the exception detail passed as _LAST_DETAIL.",
-          "Step 2: If it is a timeout or JSON-parse failure on glm-5.3-flash at max_tokens=6000, decide whether the post role should default to atria or whether the token budget should be reduced."
+          "Step 1: Open recent GitHub Actions runs and grep for 'rejected (llm_error)' to see the exception detail recorded in _LAST_DETAIL.",
+          "Step 2: If it is a timeout or JSON-parse failure on glm-5.3-flash at max_tokens=6000, test whether atria completes the same call, then set llm_roles.post to atria (or shorten the token budget) \u2014 one config change, no code."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach via prompt upgrades, one step per cycle; and the standing rule that a proposal must not duplicate PRIOR PROPOSALS or rework where the project has decided not to go.",
+    "direction": "Checklist step 4 \u2014 reach; Principle 3j discipline applied to the prompt ledger (steer on what the evidence actually supports)",
     "evidence": [
-      "article_rejects window: weak_title=2, fabricated=2, llm_error=34, empty_draft=2 (last 14 days)",
-      "article_rejects.counts lifetime: llm_error=59 of total 89 (66%)",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "PRIOR PROPOSALS: 30+ open branches already target _SYSTEM TITLE rules and _revise_title, covering every variant of the ALL-CAPS and colon-subtitle findings (acronym allowlists, concrete banned-word examples, deterministic colon rescue, three-candidate rewrite)",
-      "article_interest: problem-workaround n=10 avg=453.3 vs security-privacy n=6 avg=36.7 \u2014 steering already working, not the bottleneck"
+      "article_rejects last 14 days: llm_error=34, empty_draft=2, weak_title=2, fabricated=2",
+      "article_rejects.counts lifetime: llm_error=59 of 89 total (66%)",
+      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x1 and 'title padded with a colon subtitle' x1 \u2014 one draft each",
+      "article_rejects.last = 'llm_error': 'LLM call failed'; llm_engine serving=glm, calls={'glm': 1}",
+      "PRIOR PROPOSALS: 30 distinct unmerged branches, all editing _SYSTEM title rules or _revise_title for weak_title",
+      "preferred_archetypes() = ['problem-workaround'] with n=10, a healthy sample; prompt steering is already working"
     ],
-    "money_path": "none this cycle \u2014 declining to spend the cycle on a change that would not ship or measurably improve reach",
-    "verify": "N/A for no change. Next cycle should read article_rejects: if llm_error keeps dominating the 14-day window (34 of 40), the bottleneck is the LLM engine path (glm call reliability/fallback to atria on the 'post' role), not any prompt; a prompt edit cannot move that count.",
+    "money_path": "none this cycle \u2014 declining to spend it on a change that repeats rejected work preserves the review budget for the fix that recovers an order of magnitude more posts",
+    "verify": "If the owner diagnoses the glm 'post' role failure, next cycle's article_rejects should show llm_error falling from 34 toward 0 in the 14-day window; weak_title at 2/14 days is within noise and should not be expected to move",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -67,19 +68,19 @@
   },
   "suggestions": [
     {
-      "title": "Confirm the glm 'post' role call failure mode before any further prompt work",
-      "description": "llm_error is 34 of the 40 drafts lost in the last 14 days and 59 of 89 lifetime \u2014 six times the weak_title loss every prompt proposal targets. If the glm endpoint is timing out or returning malformed JSON on long (6000-token) article calls, fixing that recovers an order of magnitude more posts than any title rule.",
-      "owner_action": "Check the workflow logs for the actual exception text behind 'LLM call failed' on the post role over the last 14 days, and confirm whether the atria fallback was ever attempted.",
+      "title": "Diagnose the glm 'post' role failure before any further prompt work",
+      "description": "llm_error is 34 of 40 drafts lost in 14 days and 59 of 89 lifetime \u2014 seventeen times the weak_title loss every prior proposal targets. One prompt edit recovers at most 2 drafts per fortnight; fixing or routing around the failing engine call recovers ~2 posts per day.",
+      "owner_action": "Read the workflow logs for the exception behind '[articles] rejected (llm_error)' on the post role and confirm whether the atria fallback ever fired; then either fix the glm call or switch llm_roles.post to atria.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the recent GitHub Actions runs and grep for '[articles] rejected (llm_error)' to see the exception detail passed as _LAST_DETAIL.",
-        "Step 2: If it is a timeout or JSON-parse failure on glm-5.3-flash at max_tokens=6000, decide whether the post role should default to atria or whether the token budget should be reduced."
+        "Step 1: Open recent GitHub Actions runs and grep for 'rejected (llm_error)' to see the exception detail recorded in _LAST_DETAIL.",
+        "Step 2: If it is a timeout or JSON-parse failure on glm-5.3-flash at max_tokens=6000, test whether atria completes the same call, then set llm_roles.post to atria (or shorten the token budget) \u2014 one config change, no code."
       ],
-      "discovered_at": "2026-11-11T19:15:21.090441+00:00"
+      "discovered_at": "2026-11-11T20:15:17.877372+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 32,
+  "last_cycle_seconds": 22,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2745,7 +2746,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-11T19:14:51.281041+00:00",
+    "checked_at": "2026-11-11T20:14:57.868841+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3483,7 +3484,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-11T19:15:21.333255+00:00",
+    "last_run": "2026-11-11T20:15:18.128482+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3493,30 +3494,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-11T19:15:21.553161+00:00",
+    "last_run": "2026-11-11T20:15:18.308543+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4748037,
-        "at": "2026-11-11T07:28:51.971888+00:00",
-        "ok": true
-      },
-      {
-        "id": 4720062,
-        "at": "2026-11-11T08:26:41.561895+00:00",
-        "ok": true
-      },
-      {
-        "id": 4985893,
-        "at": "2026-11-11T08:26:41.561895+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-11-11T08:26:41.561895+00:00",
-        "ok": true
-      },
       {
         "id": 5012890,
         "at": "2026-11-11T08:26:41.561895+00:00",
@@ -3738,8 +3719,28 @@
         "ok": true
       },
       {
+        "id": 4748037,
+        "at": "2026-11-11T20:15:18.308543+00:00",
+        "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-11-11T20:15:18.308543+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-11T20:15:18.308543+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-11T20:15:18.308543+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-11T19:15:21.553161+00:00",
+        "at": "2026-11-11T20:15:18.308543+00:00",
         "ok": true
       }
     ],

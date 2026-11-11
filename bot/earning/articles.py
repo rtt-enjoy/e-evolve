@@ -509,8 +509,10 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		f"Article opening for context:\n{opening}\n\n"
 		"Follow the TITLE rules in the system prompt exactly: "
 		f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
-		"technology or failure, no clickbait words, no exclamation marks, no "
-		"ALL-CAPS, no colon-subtitle padding.\n\n"
+		"technology or failure, no clickbait words, no exclamation marks.\n\n"
+		"Repair the listed problems directly: if a word is shouted in ALL-CAPS and "
+		"is not an acronym like JSON or API, rewrite it in Title Case; if the title "
+		"pads with a colon subtitle, keep only the sharper half and drop the other.\n\n"
 		'Respond with ONLY this JSON: {"title": "..."}'
 	)
 	try:

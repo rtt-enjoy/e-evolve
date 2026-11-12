@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-12T03:00:00.850357+00:00",
-  "total_runs": 2458,
+  "last_run": "2026-11-12T03:01:08.129046+00:00",
+  "total_runs": 2459,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,31 +33,32 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed this cycle: the prompt the ledger names has 30+ unmerged proposals already targeting its exact two defects, and the dominant reject cause is engine-side, not prompt-fixable.",
+    "summary": "No change proposed: the binding step is reach, but the prompt the ledger names (title rules) has 30+ open, unmerged proposals for exactly the two findings now cited, each occurring once in 14 days; another edit would stack a 31st variant of work the owner has never merged, and no other evidence clears the bar.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge or close the stacked title-prompt branches",
-        "description": "Thirty open proposals all edit the same two title rules for findings now occurring once each in 14 days. Merging the best one and closing the rest ends the loop where every future cycle re-derives the same edit and nothing is ever verified.",
-        "owner_action": "Review the 2026-11-05 'deterministic colon-subtitle rescue' and 2026-11-04 'exact banned-words clarification' branches, merge at most one, and close the remainder so the ledger stops naming weak_title as the focus on a count of 1-2.",
+        "title": "Merge or close the 30+ stacked title-prompt branches",
+        "description": "Every title-prompt improvement ever proposed is parked unmerged, so each new cycle re-derives the same edit against a stale file and nothing is ever verified against live reject counts. Merging one and closing the rest unblocks all future prompt work.",
+        "owner_action": "Review the open review branches touching bot/earning/articles.py dated 2026-10-31 to 2026-11-11, merge the single smallest one (the 2026-11-05 deterministic colon-subtitle rescue is the only variant that cannot fail a rewrite), and close the remainder.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the review branches dated 2026-11-01 to 2026-11-11 touching bot/earning/articles.py.",
-          "Step 2: Pick the single smallest edit (the deterministic colon-subtitle rescue is the only one that cannot fail a rewrite), merge it, and close the other ~29 branches."
+          "Step 1: List the open evolve/* branches touching bot/earning/articles.py.",
+          "Step 2: Merge at most one; prefer the deterministic rescue since it needs no LLM call to succeed.",
+          "Step 3: Close the other branches so the ledger stops re-nominating weak_title on a count of 1-2 per 14 days."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach), via the PROMPT FOCUS discipline \u2014 applied by declining to duplicate prior proposals",
+    "direction": "Checklist step 4 (reach) via the PROMPT FOCUS, declined honestly; also the owner suggestion already on status.json about closing the stacked title branches.",
     "evidence": [
-      "article_rejects window (14d): weak_title=2, fabricated=2, llm_error=32, empty_draft=2",
-      "article_rejects.counts lifetime: llm_error=59 of 89 total",
-      "Gate findings behind weak_title: 'title has ALL-CAPS word' x1; 'title padded with a colon subtitle' x1 \u2014 one occurrence each",
-      "PRIOR PROPOSALS: 30+ open branches already edit _SYSTEM TITLE rules / _revise_title for exactly these two findings (2026-11-01 through 2026-11-11)",
-      "operations.llm_engine.serving='glm', live=True \u2014 the engine is healthy per-call; the 32 llm_error losses are transient provider failures the next hourly cycle already retries",
-      "article_interest: problem-workaround n=10 avg_engagement=459.3, the only archetype preferred_archetypes() returns and above the n=3 floor"
+      "article_rejects.counts: weak_title=14 lifetime but only 2 in the last 14 days",
+      "Gate findings behind focus: 'title has ALL-CAPS word' x1 and 'title padded with a colon subtitle; pick the sharper half' x1",
+      "PRIOR PROPOSALS: 30+ open branches dated 2026-10-31 to 2026-11-11, all editing the same title rules in bot/earning/articles.py, none merged",
+      "article_interest: problem-workaround n=10 avg=459.3 is already the preferred archetype and the current prompt already steers toward it via _audience_guidance",
+      "llm_error=32 drafts lost in 14 days vs weak_title=2 -- drafts are lost to the engine, not to any prompt edit",
+      "receipt_check coverage complete, payout.live=true, wallet.received_total_usd=0.0: receive path verified, no step-1 work outstanding"
     ],
-    "money_path": "none this cycle \u2014 refusing a duplicate edit preserves review bandwidth for the change that actually moves reach",
-    "verify": "Next cycle's 14-day weak_title window in the prompt ledger: if a fresh draft is lost to ALL-CAPS or colon-subtitle and none of the open title branches merged, the finding will repeat at count 1-2 \u2014 confirming the loss rate is already at noise level and no prompt edit is warranted; if one of the open branches merges, its named count should fall",
+    "money_path": "none (maintenance/decision). One saved draft per ~2 weeks of weak_title rejects is marginal reach; publishing continues unchanged this cycle.",
+    "verify": "No code change, so nothing to verify. If the owner merges one of the existing title branches and closes the rest, the check is: article_rejects.counts.weak_title stops growing across the next 14-day window, and the evolution ledger stops naming weak_title as PROMPT FOCUS.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -68,19 +69,20 @@
   },
   "suggestions": [
     {
-      "title": "Merge or close the stacked title-prompt branches",
-      "description": "Thirty open proposals all edit the same two title rules for findings now occurring once each in 14 days. Merging the best one and closing the rest ends the loop where every future cycle re-derives the same edit and nothing is ever verified.",
-      "owner_action": "Review the 2026-11-05 'deterministic colon-subtitle rescue' and 2026-11-04 'exact banned-words clarification' branches, merge at most one, and close the remainder so the ledger stops naming weak_title as the focus on a count of 1-2.",
+      "title": "Merge or close the 30+ stacked title-prompt branches",
+      "description": "Every title-prompt improvement ever proposed is parked unmerged, so each new cycle re-derives the same edit against a stale file and nothing is ever verified against live reject counts. Merging one and closing the rest unblocks all future prompt work.",
+      "owner_action": "Review the open review branches touching bot/earning/articles.py dated 2026-10-31 to 2026-11-11, merge the single smallest one (the 2026-11-05 deterministic colon-subtitle rescue is the only variant that cannot fail a rewrite), and close the remainder.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the review branches dated 2026-11-01 to 2026-11-11 touching bot/earning/articles.py.",
-        "Step 2: Pick the single smallest edit (the deterministic colon-subtitle rescue is the only one that cannot fail a rewrite), merge it, and close the other ~29 branches."
+        "Step 1: List the open evolve/* branches touching bot/earning/articles.py.",
+        "Step 2: Merge at most one; prefer the deterministic rescue since it needs no LLM call to succeed.",
+        "Step 3: Close the other branches so the ledger stops re-nominating weak_title on a count of 1-2 per 14 days."
       ],
-      "discovered_at": "2026-11-12T03:00:42.105272+00:00"
+      "discovered_at": "2026-11-12T03:01:32.008547+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 42,
+  "last_cycle_seconds": 25,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2742,7 +2744,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-12T03:00:01.531489+00:00",
+    "checked_at": "2026-11-12T03:01:08.768205+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3480,30 +3482,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-12T03:00:42.297519+00:00",
+    "last_run": "2026-11-12T03:01:32.271540+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 3,
-    "with_footer": 3,
+    "checked": 4,
+    "with_footer": 4,
     "without_footer": 0,
-    "unreachable": 2,
+    "unreachable": 1,
     "missing": [],
-    "last_run": "2026-11-12T03:00:42.421243+00:00",
+    "last_run": "2026-11-12T03:01:32.505590+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4780785,
-        "at": "2026-11-11T13:26:46.901169+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-11T13:26:46.901169+00:00",
-        "ok": true
-      },
       {
         "id": 4943931,
         "at": "2026-11-11T14:28:51.835760+00:00",
@@ -3511,11 +3503,6 @@
       },
       {
         "id": 4740283,
-        "at": "2026-11-11T14:28:51.835760+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
         "at": "2026-11-11T14:28:51.835760+00:00",
         "ok": true
       },
@@ -3735,8 +3722,23 @@
         "ok": true
       },
       {
+        "id": 4780785,
+        "at": "2026-11-12T03:01:32.505590+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-11-12T03:01:32.505590+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-12T03:01:32.505590+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-12T03:00:42.421243+00:00",
+        "at": "2026-11-12T03:01:32.505590+00:00",
         "ok": true
       }
     ],
@@ -3745,7 +3747,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 13.6
+    "oldest_check_age_hours": 12.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

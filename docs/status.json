@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-12T01:59:59.724662+00:00",
-  "total_runs": 2457,
+  "last_run": "2026-11-12T03:00:00.850357+00:00",
+  "total_runs": 2458,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,43 +33,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt focus (weak_title) lost only 2 drafts in 14 days, and 31 open review branches already propose exactly that edit; the binding constraint is unmerged review state and the glm llm_error count, neither fixable by a prompt edit under my write rules.",
+    "summary": "No change proposed this cycle: the prompt the ledger names has 30+ unmerged proposals already targeting its exact two defects, and the dominant reject cause is engine-side, not prompt-fixable.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge exactly one open title-prompt branch and close the other 30",
-        "description": "Captures the full weak_title gain (2 drafts per fortnight) that 31 duplicate branches each partially claim, and clears the review queue so future cycles stop re-proposing it.",
-        "owner_action": "Review and merge one of the open evolve/* branches touching bot/earning/articles.py title rules (any of the ALL-CAPS or colon-subtitle variants), then close the rest.",
+        "title": "Merge or close the stacked title-prompt branches",
+        "description": "Thirty open proposals all edit the same two title rules for findings now occurring once each in 14 days. Merging the best one and closing the rest ends the loop where every future cycle re-derives the same edit and nothing is ever verified.",
+        "owner_action": "Review the 2026-11-05 'deterministic colon-subtitle rescue' and 2026-11-04 'exact banned-words clarification' branches, merge at most one, and close the remainder so the ledger stops naming weak_title as the focus on a count of 1-2.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: open the evolve/* branches touching bot/earning/articles.py; each diff is a few lines in _SYSTEM or _revise_title.",
-          "Step 2: merge one (the colon-subtitle sharpening is the more specific of the two gate findings), close the remaining duplicates.",
-          "Step 3: confirm in next cycle's status that article_rejects.recent shows no new weak_title entries."
-        ]
-      },
-      {
-        "title": "Diagnose the llm_error count before touching any prompt",
-        "description": "llm_error=32 dwarfs every prompt-side loss (weak_title=2, fabricated=2). Recovering even part of it returns more posts \u2014 and more tip asks \u2014 than any prompt edit can.",
-        "owner_action": "Read article_rejects.last_detail / recent Actions logs for the exception string behind 'LLM call failed'; if glm is timing out or truncating at max_tokens=6000, set llm_roles.post to atria in config/strategy.json (config-only, no new secret).",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: grep recent Actions logs for '[articles] rejected (llm_error)' and read the stored detail.",
-          "Step 2: if the fault is a glm timeout or truncation, change llm_roles.post from glm to atria in config/strategy.json; the fallback is already key_set and live.",
-          "Step 3: watch llm_error's 14-day count fall next cycle."
+          "Step 1: Open the review branches dated 2026-11-01 to 2026-11-11 touching bot/earning/articles.py.",
+          "Step 2: Pick the single smallest edit (the deterministic colon-subtitle rescue is the only one that cannot fail a rewrite), merge it, and close the other ~29 branches."
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS \u2014 reach, but the ledger shows this lever is exhausted, not underused",
+    "direction": "Checklist step 4 (reach), via the PROMPT FOCUS discipline \u2014 applied by declining to duplicate prior proposals",
     "evidence": [
-      "article_rejects.counts: weak_title=14 lifetime but only weak_title=2 in the last 14 days",
-      "Drafts lost to a prompt (last 14 days): weak_title=2, fabricated=2",
-      "Drafts lost to the engine (last 14 days): llm_error=32 \u2014 16x the prompt-side count",
-      "PRIOR PROPOSALS: ~31 distinct open branches editing the article draft / _revise_title title rules (ALL-CAPS clarification and colon-subtitle sharpening each proposed many times)",
-      "Gate findings behind the focus: 'title has ALL-CAPS word' x1; 'title padded with a colon subtitle' x1 \u2014 one draft each, both already covered by an open branch",
-      "llm_engine serving=glm, calls={'glm': 2}; article_rejects.last = 'llm_error': 'LLM call failed'"
+      "article_rejects window (14d): weak_title=2, fabricated=2, llm_error=32, empty_draft=2",
+      "article_rejects.counts lifetime: llm_error=59 of 89 total",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x1; 'title padded with a colon subtitle' x1 \u2014 one occurrence each",
+      "PRIOR PROPOSALS: 30+ open branches already edit _SYSTEM TITLE rules / _revise_title for exactly these two findings (2026-11-01 through 2026-11-11)",
+      "operations.llm_engine.serving='glm', live=True \u2014 the engine is healthy per-call; the 32 llm_error losses are transient provider failures the next hourly cycle already retries",
+      "article_interest: problem-workaround n=10 avg_engagement=459.3, the only archetype preferred_archetypes() returns and above the n=3 floor"
     ],
-    "money_path": "none (no change proposed). A 32nd duplicate title-prompt branch would add reach potential of at most 2 drafts per fortnight while the review queue already holds 31 unmerged variants of the same edit \u2014 merging one of those is the same gain with zero new code.",
-    "verify": "No change to verify. If the owner merges one open title branch and reroutes llm_roles.post off glm, article_rejects.counts.llm_error should stop growing and weak_title should stay near 0 over the next 14-day window.",
+    "money_path": "none this cycle \u2014 refusing a duplicate edit preserves review bandwidth for the change that actually moves reach",
+    "verify": "Next cycle's 14-day weak_title window in the prompt ledger: if a fresh draft is lost to ALL-CAPS or colon-subtitle and none of the open title branches merged, the finding will repeat at count 1-2 \u2014 confirming the loss rate is already at noise level and no prompt edit is warranted; if one of the open branches merges, its named count should fall",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -80,32 +68,19 @@
   },
   "suggestions": [
     {
-      "title": "Merge exactly one open title-prompt branch and close the other 30",
-      "description": "Captures the full weak_title gain (2 drafts per fortnight) that 31 duplicate branches each partially claim, and clears the review queue so future cycles stop re-proposing it.",
-      "owner_action": "Review and merge one of the open evolve/* branches touching bot/earning/articles.py title rules (any of the ALL-CAPS or colon-subtitle variants), then close the rest.",
+      "title": "Merge or close the stacked title-prompt branches",
+      "description": "Thirty open proposals all edit the same two title rules for findings now occurring once each in 14 days. Merging the best one and closing the rest ends the loop where every future cycle re-derives the same edit and nothing is ever verified.",
+      "owner_action": "Review the 2026-11-05 'deterministic colon-subtitle rescue' and 2026-11-04 'exact banned-words clarification' branches, merge at most one, and close the remainder so the ledger stops naming weak_title as the focus on a count of 1-2.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: open the evolve/* branches touching bot/earning/articles.py; each diff is a few lines in _SYSTEM or _revise_title.",
-        "Step 2: merge one (the colon-subtitle sharpening is the more specific of the two gate findings), close the remaining duplicates.",
-        "Step 3: confirm in next cycle's status that article_rejects.recent shows no new weak_title entries."
+        "Step 1: Open the review branches dated 2026-11-01 to 2026-11-11 touching bot/earning/articles.py.",
+        "Step 2: Pick the single smallest edit (the deterministic colon-subtitle rescue is the only one that cannot fail a rewrite), merge it, and close the other ~29 branches."
       ],
-      "discovered_at": "2026-11-12T02:00:28.707617+00:00"
-    },
-    {
-      "title": "Diagnose the llm_error count before touching any prompt",
-      "description": "llm_error=32 dwarfs every prompt-side loss (weak_title=2, fabricated=2). Recovering even part of it returns more posts \u2014 and more tip asks \u2014 than any prompt edit can.",
-      "owner_action": "Read article_rejects.last_detail / recent Actions logs for the exception string behind 'LLM call failed'; if glm is timing out or truncating at max_tokens=6000, set llm_roles.post to atria in config/strategy.json (config-only, no new secret).",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: grep recent Actions logs for '[articles] rejected (llm_error)' and read the stored detail.",
-        "Step 2: if the fault is a glm timeout or truncation, change llm_roles.post from glm to atria in config/strategy.json; the fallback is already key_set and live.",
-        "Step 3: watch llm_error's 14-day count fall next cycle."
-      ],
-      "discovered_at": "2026-11-12T02:00:28.707617+00:00"
+      "discovered_at": "2026-11-12T03:00:42.105272+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 30,
+  "last_cycle_seconds": 42,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2767,7 +2742,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-12T02:00:00.487727+00:00",
+    "checked_at": "2026-11-12T03:00:01.531489+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3505,7 +3480,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-12T02:00:28.906387+00:00",
+    "last_run": "2026-11-12T03:00:42.297519+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3515,22 +3490,12 @@
     "without_footer": 0,
     "unreachable": 2,
     "missing": [],
-    "last_run": "2026-11-12T02:00:29.216561+00:00",
+    "last_run": "2026-11-12T03:00:42.421243+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4765372,
-        "at": "2026-11-11T13:26:46.901169+00:00",
-        "ok": true
-      },
-      {
         "id": 4780785,
-        "at": "2026-11-11T13:26:46.901169+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
         "at": "2026-11-11T13:26:46.901169+00:00",
         "ok": true
       },
@@ -3760,8 +3725,18 @@
         "ok": true
       },
       {
+        "id": 4765372,
+        "at": "2026-11-12T03:00:42.421243+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-12T03:00:42.421243+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-12T02:00:29.216561+00:00",
+        "at": "2026-11-12T03:00:42.421243+00:00",
         "ok": true
       }
     ],
@@ -3770,7 +3745,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 12.6
+    "oldest_check_age_hours": 13.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

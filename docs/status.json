@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-12T07:01:15.840371+00:00",
-  "total_runs": 2463,
+  "last_run": "2026-11-12T08:01:21.218020+00:00",
+  "total_runs": 2464,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,61 +33,25 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus lane (weak_title) lost only 2 drafts in 14 days while llm_error lost 32, and every plausible weak_title prompt edit already sits on one of 59 unmerged branches \u2014 a 30th variant is a repeat, not a fix.",
+    "summary": "No change proposed. The prompt lane's measured loss is 2 weak_title drafts in 14 days, but every angle on those prompts (ALL-CAPS examples, colon-subtitle rules, before/after examples, multi-candidate rewrites, acronym allowlists) is already represented by one or more of the ~30 open proposals in PRIOR PROPOSALS targeting _SYSTEM and _revise_title \u2014 another edit would be an unmergeable repeat. The dominant cost is not a prompt at all: article_rejects.counts shows llm_error=59 of 89 lifetime rejects, 32 in the last 14 days, which a prompt edit cannot touch.",
     "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Fix or bypass the glm post-role failure before any more prompt tuning",
-        "description": "32 of 34 drafts lost in 14 days died to 'LLM call failed' on the post role (glm-5.3-flash at max_tokens=6000). That is roughly a month of articles and tip asks that never ships \u2014 16x the weak_title losses the prompt lane has been iterating on.",
-        "owner_action": "Review GLM_API_KEY quotas/health for glm-5.3-flash at long generations, or point llm_roles.post at the atria fallback already configured \u2014 no new secret needed.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Check Actions logs for '[articles] rejected (llm_error)' and record the underlying exception text.",
-          "Step 2: Compare with z.ai status/quota pages for glm-5.3-flash at max_tokens=6000.",
-          "Step 3: If flaky, set llm_roles.post to atria (already key_set and live) and confirm next cycle's llm_error count falls."
-        ]
-      }
-    ],
-    "direction": "Step 4 \u2014 reach into a live receive path; PROMPT FOCUS discipline (upgrade the prompt losing the most drafts)",
+    "suggestions": [],
+    "direction": "Checklist step 4 (reach via better prompts), gated by the dead-end rule against repeating prior proposals",
     "evidence": [
-      "article_rejects.counts total = 89: llm_error=59 vs weak_title=14 (lifetime)",
-      "Last 14 days: drafts lost to prompts weak_title=2, fabricated=2; drafts lost to the engine llm_error=32, empty_draft=2",
-      "Gate findings behind weak_title: 'title has ALL-CAPS word' x1; 'title padded with a colon subtitle' x1 \u2014 one occurrence each is noise",
-      "PRIOR PROPOSALS: ~30 distinct open branches already target the article-draft TITLE rules and _revise_title with ALL-CAPS/colon-subtitle sharpenings; none merged",
-      "suggestions already carries an owner action for the glm post-role failure rate (32/34 drafts lost)",
-      "reach signal is healthy: problem-workaround n=10 avg=459.3; receipt_check coverage complete; payout.live=true"
+      "article_rejects.counts: llm_error=59, weak_title=14 lifetime; last 14 days weak_title=2, fabricated=2, llm_error=32",
+      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x1, 'title padded with a colon subtitle' x1 \u2014 one occurrence each, on prompts with ~30 open unmerged proposals",
+      "article_rejects.last = 'llm_error': 'LLM call failed'",
+      "status.suggestions already carries the owner action for the llm_error failure (point llm_roles.post at the atria fallback)",
+      "article_interest shows problem-workaround n=10 avg=459.3 as the clear preferred archetype, and _audience_guidance/_prefer_proven_archetypes already steer on it"
     ],
-    "money_path": "none \u2014 no change proposed; the receive path is verified and the current bottleneck is the LLM engine, which a prompt edit cannot reach",
-    "verify": "No change. If the owner fixes the post-role LLM flakiness (existing suggestion), article_rejects.counts.llm_error growth should drop sharply in the next window; weak_title at 2/14d is already below the bar where a prompt edit is provable.",
+    "money_path": "none this cycle \u2014 the only money-path-relevant losses are engine failures (llm_error), which are not fixable by a prompt edit and are already surfaced to the owner",
+    "verify": "No change to verify. If the owner acts on the existing suggestion, article_rejects.counts.llm_error's 14-day growth should fall next cycle; if any of the open title-prompt branches merges, weak_title in the 14-day window is the count to watch (currently 2).",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 40
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 63,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (63 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -105,7 +69,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 180,
+  "last_cycle_seconds": 27,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2767,7 +2731,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-12T07:01:16.251607+00:00",
+    "checked_at": "2026-11-12T08:01:21.815298+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3505,25 +3469,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-12T07:04:14.355333+00:00",
+    "last_run": "2026-11-12T08:01:47.867514+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 3,
+    "with_footer": 3,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 2,
     "missing": [],
-    "last_run": "2026-11-12T07:04:14.581384+00:00",
+    "last_run": "2026-11-12T08:01:48.030811+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4931682,
-        "at": "2026-11-11T16:15:16.644262+00:00",
-        "ok": true
-      },
       {
         "id": 4681657,
         "at": "2026-11-11T17:15:18.076024+00:00",
@@ -3536,11 +3495,6 @@
       },
       {
         "id": 4908316,
-        "at": "2026-11-11T17:15:18.076024+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
         "at": "2026-11-11T17:15:18.076024+00:00",
         "ok": true
       },
@@ -3760,8 +3714,18 @@
         "ok": true
       },
       {
+        "id": 4931682,
+        "at": "2026-11-12T08:01:48.030811+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-11-12T08:01:48.030811+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-12T07:04:14.581384+00:00",
+        "at": "2026-11-12T08:01:48.030811+00:00",
         "ok": true
       }
     ],
@@ -3790,7 +3754,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

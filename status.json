@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-12T11:15:52.737379+00:00",
-  "total_runs": 2468,
+  "last_run": "2026-11-12T12:16:02.202076+00:00",
+  "total_runs": 2469,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,41 +33,40 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the weak_title window (2 drafts) is fully explained by findings already addressed by ~30 open, unmerged title-prompt branches, so another variant would add to the pile rather than move reach.",
+    "summary": "No change proposed: the prompt lever is frozen behind 30+ unmerged near-duplicate title-prompt branches, and the dominant reject cause (llm_error, 32 of 49) is not fixable by any prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge exactly one title-prompt branch, close the rest",
-        "description": "Unblocks the weak_title fix: 30 open near-duplicate branches make every future cycle's window measure a pile instead of a change, so the prompt lever is stuck until the stack collapses to one.",
-        "owner_action": "Pick the most recent _revise_title branch (2026-11-11) and merge it; close the other open title-prompt branches.",
+        "title": "Merge exactly one title-prompt branch, close the rest (repeat \u2014 still binding)",
+        "description": "The weak_title PROMPT FOCUS cannot be improved or measured while ~30 unmerged branches all touch the same prompt; merging one makes the next cycle's window read a single change.",
+        "owner_action": "Merge the most recent _revise_title branch (2026-11-11) and close the other open title-prompt branches.",
         "secret_needed": null,
         "how_to": [
           "Step 1: Open the evolve/* branches dated 2026-10-31 to 2026-11-11 touching bot/earning/articles.py title prompts.",
-          "Step 2: Merge the most recent one, close the remainder, so next cycle's weak_title count measures a single change."
+          "Step 2: Merge the 2026-11-11 one, close the remainder."
         ]
       },
       {
-        "title": "Investigate the llm_error wave (32 of 49 rejects in 14 days)",
-        "description": "Lost drafts to LLM failures cost ~6x more posts than all title gates combined and no prompt edit can fix them; they are the actual ceiling on daily reach.",
-        "owner_action": "Check GLM_API_KEY quota/health and whether glm-5.3-flash rate limits are being hit during the publish window.",
+        "title": "Fix the GLM quota/rate-limit that lost 32 drafts in 14 days",
+        "description": "llm_error is 6x every prompt gate combined and is the actual ceiling on daily reach; no prompt edit can recover those posts.",
+        "owner_action": "Check GLM_API_KEY quota and glm-5.3-flash rate limits during the publish window, and confirm the atria fallback is reachable for the 'post' role.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Read article_rejects.recent in status.json for llm_error detail strings.",
-          "Step 2: Verify the GLM key quota in the provider console, or confirm the fallback provider (atria) is reachable for the post role."
+          "Step 1: Read article_rejects.recent in status.json for the llm_error detail strings.",
+          "Step 2: Verify the GLM key quota in the provider console and test the atria fallback path for the post role."
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS (weak_title), but withheld: the prompt-lever space at this finding is exhausted and the binding fix is the owner merging one branch.",
+    "direction": "Checklist step 4 \u2014 upgrade prompts one step per cycle; Principle 3j-adjacent sample discipline: a measurement window must reflect one change, not a pile",
     "evidence": [
-      "article_rejects window (last 14 days): weak_title=2, fabricated=2 \u2014 the smallest losing prompt in the ledger",
-      "Gate findings: 'title has ALL-CAPS word' x1, 'title padded with a colon subtitle; pick the sharper half' x1",
-      "PRIOR PROPOSALS list ~30 distinct open edits to articles.py title prompts dated 2026-10-31 to 2026-11-11, none merged, all targeting these exact findings",
-      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=32, empty_draft=2 \u2014 the dominant loss is outside prompt reach",
-      "preferred_archetypes() = ['problem-workaround'], count=10 \u2014 steering signal is healthy and already served by _ARCHETYPE_ANGLES",
-      "payout.live=true, receipt_check.covered/published_total = 49/49, known_without_footer=0 \u2014 receive path verified, so step 4 is indeed reach"
+      "article_rejects.counts total 89: llm_error=59 lifetime, 32 in last 14 days \u2014 6x more lost drafts than weak_title (2) and fabricated (2) combined in the window",
+      "Drafts lost to a prompt (last 14 days): weak_title=2, fabricated=2 \u2014 the prompt-attributable loss is 4 drafts",
+      "PRIOR PROPOSALS lists ~30 open branches all editing the same TITLE rules / _revise_title prompts, none merged",
+      "llm_engine.calls = {'glm': 1} with serving=glm, live=True \u2014 engine answered only once this cycle while the window lost 32 drafts to llm_error",
+      "weak_title=2 in the window is the PROMPT FOCUS, but no prior title branch was merged, so any new title edit stacks branch #31 onto an unmeasurable pile"
     ],
-    "money_path": "none this cycle. The proposed change is the owner action below: merging one of the open title-prompt branches, which unblocks future title improvements that put each published post (and its tip ask) in front of more readers.",
-    "verify": "After the owner merges or closes the title-prompt stack, next cycle's article_rejects window should show weak_title trending to 0 and a single prompt lineage \u2014 or, if a merged branch is defective, the same gate findings recur against exactly one prompt, making it diagnosable. Also expect llm_error (32 in window) to remain the dominant reject code, confirming prompts were never the bottleneck.",
+    "money_path": "none \u2014 this cycle proposes no change; reach work is blocked on branch collapse, and the actual post-loss is engine-side",
+    "verify": "Owner merges exactly one title-prompt branch (see suggestions); next cycle's weak_title count in the 14-day window then measures a single change. Separately, if the GLM quota issue clears, article_daily.published should hold at 1 on more cycles with article_rejects.last_reason no longer 'llm_error'.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -78,30 +77,30 @@
   },
   "suggestions": [
     {
-      "title": "Merge exactly one title-prompt branch, close the rest",
-      "description": "Unblocks the weak_title fix: 30 open near-duplicate branches make every future cycle's window measure a pile instead of a change, so the prompt lever is stuck until the stack collapses to one.",
-      "owner_action": "Pick the most recent _revise_title branch (2026-11-11) and merge it; close the other open title-prompt branches.",
+      "title": "Merge exactly one title-prompt branch, close the rest (repeat \u2014 still binding)",
+      "description": "The weak_title PROMPT FOCUS cannot be improved or measured while ~30 unmerged branches all touch the same prompt; merging one makes the next cycle's window read a single change.",
+      "owner_action": "Merge the most recent _revise_title branch (2026-11-11) and close the other open title-prompt branches.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Open the evolve/* branches dated 2026-10-31 to 2026-11-11 touching bot/earning/articles.py title prompts.",
-        "Step 2: Merge the most recent one, close the remainder, so next cycle's weak_title count measures a single change."
+        "Step 2: Merge the 2026-11-11 one, close the remainder."
       ],
-      "discovered_at": "2026-11-12T11:16:18.127527+00:00"
+      "discovered_at": "2026-11-12T12:16:29.571815+00:00"
     },
     {
-      "title": "Investigate the llm_error wave (32 of 49 rejects in 14 days)",
-      "description": "Lost drafts to LLM failures cost ~6x more posts than all title gates combined and no prompt edit can fix them; they are the actual ceiling on daily reach.",
-      "owner_action": "Check GLM_API_KEY quota/health and whether glm-5.3-flash rate limits are being hit during the publish window.",
+      "title": "Fix the GLM quota/rate-limit that lost 32 drafts in 14 days",
+      "description": "llm_error is 6x every prompt gate combined and is the actual ceiling on daily reach; no prompt edit can recover those posts.",
+      "owner_action": "Check GLM_API_KEY quota and glm-5.3-flash rate limits during the publish window, and confirm the atria fallback is reachable for the 'post' role.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Read article_rejects.recent in status.json for llm_error detail strings.",
-        "Step 2: Verify the GLM key quota in the provider console, or confirm the fallback provider (atria) is reachable for the post role."
+        "Step 1: Read article_rejects.recent in status.json for the llm_error detail strings.",
+        "Step 2: Verify the GLM key quota in the provider console and test the atria fallback path for the post role."
       ],
-      "discovered_at": "2026-11-12T11:16:18.127527+00:00"
+      "discovered_at": "2026-11-12T12:16:29.571815+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 26,
+  "last_cycle_seconds": 28,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2763,7 +2762,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-12T11:15:53.249625+00:00",
+    "checked_at": "2026-11-12T12:16:02.526112+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3501,25 +3500,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-12T11:16:18.303019+00:00",
+    "last_run": "2026-11-12T12:16:29.780969+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 5,
-    "with_footer": 5,
+    "checked": 3,
+    "with_footer": 3,
     "without_footer": 0,
-    "unreachable": 0,
+    "unreachable": 2,
     "missing": [],
-    "last_run": "2026-11-12T11:16:18.527917+00:00",
+    "last_run": "2026-11-12T12:16:30.016549+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4748037,
-        "at": "2026-11-11T20:15:18.308543+00:00",
-        "ok": true
-      },
       {
         "id": 4720062,
         "at": "2026-11-11T20:15:18.308543+00:00",
@@ -3527,11 +3521,6 @@
       },
       {
         "id": 4985893,
-        "at": "2026-11-11T20:15:18.308543+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
         "at": "2026-11-11T20:15:18.308543+00:00",
         "ok": true
       },
@@ -3756,8 +3745,18 @@
         "ok": true
       },
       {
+        "id": 4748037,
+        "at": "2026-11-12T12:16:30.016549+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-12T12:16:30.016549+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-12T11:16:18.527917+00:00",
+        "at": "2026-11-12T12:16:30.016549+00:00",
         "ok": true
       }
     ],
@@ -3766,7 +3765,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 15.0
+    "oldest_check_age_hours": 16.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

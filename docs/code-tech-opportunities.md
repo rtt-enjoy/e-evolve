@@ -1,6 +1,6 @@
 # Passive Product Income Queue
 
-Refreshed: 2026-11-12T13:16:32.786393+00:00
+Refreshed: 2026-11-12T16:16:53.610379+00:00
 
 Routes to passive income from a digital product on a zero budget: where it can
 be listed and paid for (channels) and what can build or market it (assets).
@@ -24,53 +24,52 @@ balance, and a listing is not a receipt.
 
 ## Current Best Angle
 
-The cheapest passive route is to build the product once as a client-side tool or downloadable asset, ship it free for discovery, and monetize through a wallet ask plus a paid upgrade. The validated Tron (TRC-20) USDT receive address already appended to dev.to articles should be reused on the product page, README, --help output, and GitHub FUNDING.yml, so payment needs no platform, no KYC, and no owner action. Getly is the one storefront found that settles USDT on Tron directly to the seller's wallet with no monthly fee and no KYC for crypto payout (verify current terms before relying on it). GitHub Releases hosts the artifact free; the Chrome Web Store is the only non-zero cost (one-time $5) if the product is an extension. Real revenue is whatever lands on-chain.
+The best zero-budget route is to ship a small client-side product (browser extension, CLI utility, or asset pack) free on GitHub Releases, sell the paid upgrade or licence through a storefront that settles stablecoin directly to the owner's own Tron wallet (Getly is the one current option on the table with TRC-20 USDT payouts), and back that up with the validated receive address printed in the README, the product page, --help output, and the dev.to article footers that are already live. Every sale is delivered by the platform or by the artifact itself, so the owner never touches a transaction. The only cash cost anywhere in the plan is Chrome Web Store's one-time $5 developer registration, needed only if the product is a browser extension and only if organic store discovery is wanted.
 
 ## Sales Channels
 
 | Channel | What it lists | Cost | Crypto payout | Owner setup | Why passive |
 | --- | --- | --- | --- | --- | --- |
-| Published receive address (wallet ask) | Direct USDT payments on Tron to the owner's own wallet, no intermediary | Zero; already validated and appended to dev.to articles | USDT TRC-20 directly to the owner's wallet, non-custodial, no KYC | Paste the address into product page, README, FUNDING.yml, release notes, and the tool's about/--help output (one-time) | A sale is just a user sending USDT; the owner reads the on-chain balance and ships nothing per transaction |
-| Getly | Digital-goods storefront with card and crypto checkout, stablecoin payouts | No monthly fee per available listing; minimum payout ~$15 on Tron (~$5 on BNB Chain) and network fee — verify current terms | USDT/USDC to the seller's own wallet, TRC-20 supported, no KYC for crypto settlement — verify current terms | One-time manual signup, product listing, and payout-address configuration | Storefront handles checkout and license delivery automatically; no owner action per sale |
-| GitHub Releases + FUNDING.yml + README | Free hosting for binaries/archives and a Sponsor button rendered from the repo itself | Zero; uses the existing GitHub account | None from GitHub itself — payments arrive via the published TRC-20 USDT address in FUNDING.yml custom field, README, and release notes | Add .github/FUNDING.yml with the custom wallet URL, upload the artifact to a Release, paste the address into README once | Downloads are automated by GitHub; any payment is a direct on-chain transfer, nothing to fulfil |
-| Chrome Web Store | Distribution and organic search for browser extensions | One-time $5 developer registration fee; no annual renewal, covers up to 20 extensions, no cut on free extensions | None — the store distributes free; monetization is the wallet ask in the extension or a paid upgrade sold via Getly/wallet address | One-time $5 payment (needs a card), packaging and submission of the extension | Store handles installs and updates; income arrives via the wallet ask or upgrade, not per-sale work |
-| itch.io | Storefront listing tools and digital assets, free upload, pay-what-you-want | Free to upload; seller chooses revenue share (default ~10%); one-time $3 tax-identity fee — verify current terms | None — fiat payout only, and it requires a completed tax interview with a TIN; disqualified if the owner wants KYC-free crypto settlement | One-time upload plus tax interview if pursued | Storefront delivers downloads automatically; listed only as a reach multiplier if KYC is acceptable |
-| dev.to article footer (already live) | Content marketing running on existing publishing infrastructure | Zero | USDT TRC-20 to the already-published receive address | None beyond writing; bot already publishes daily | Back-catalogue articles keep converting readers long after publication |
+| Getly (getly.store) | Digital-goods storefront with direct-to-wallet stablecoin payouts | No monthly fee; standard transaction fee — verify current terms | USDT/USDC direct to the seller's own wallet; TRC-20 USDT supported — same network as the existing receive address. Minimum payout $15 on Tron ($5 on BNB Smart Chain) | One-time signup, add the product listing and payout wallet address, verify current payout terms | Storefront handles delivery and payment per sale; owner never touches a transaction |
+| GitHub Releases + FUNDING.yml + README wallet ask | Free hosting of downloadable binaries/archives plus an on-repo payment path | Free — same account already hosting code | TRC-20 USDT direct to the validated receive address; no platform holds funds | Push the release, add .github/FUNDING.yml with the address in the custom field, paste the address into README and release notes — all one-time | GitHub serves every download; the ask is printed in the artifact itself so payment needs no owner action and nothing can be frozen or seized |
+| Wallet ask in the artifact and on dev.to (already live) | Receive address carried by README, --help, docs footer, and every published article | Free; infrastructure already running (bot/earning/payout.py) | TRC-20 USDT to own wallet | Paste the address into the tool's about/--help output and one dev.to article where the product is the fix — the article pipeline already appends it | The address travels with every copy and fork; payment is fully self-serve |
+| Chrome Web Store | Official distribution with organic discovery for browser extensions | One-time $5 developer registration covering up to 20 extensions; no platform cut on free extensions | None directly — monetise via the in-extension wallet ask or a Getly-listed upgrade | Pay the one-time $5, package and submit the extension, wait for review | Store handles updates, reviews and discovery; free tier is a permanent funnel to the paid upgrade |
+| itch.io (fallback) | Free listing for tools, assets and downloadable software, pay-what-you-want supported | Free to publish; seller chooses platform cut (default ~10%); one-time $3 tax-identity fee on payout — verify current terms | None — fiat payout requires a completed tax interview with a TIN, so it conflicts with the no-KYC preference | Upload, set price, complete tax interview before any payout | Storefront delivers each sale automatically; use only if fiat-only payout is acceptable |
 
 ## Product Ideas
 
-1. **One-annoyance browser extension with paid unlock**
-   - Who buys: Users searching the Chrome Web Store for a fix to one specific irritation (e.g., a site quirk, tab clutter, a broken workflow)
-   - Deliverable: Free extension install; a licence/upgrade (extra features, no limits) unlocked after USDT payment to the published address
-   - Pricing model: Free tier plus one-time paid upgrade
-   - Cost per extra user: Zero per user; the extension runs client-side
-   - Free stack: Chrome Web Store listing ($5 one-time), GitHub for source and issues, wallet address in the extension's about page
-2. **Single-purpose CLI utility distributed via GitHub Releases**
-   - Who buys: Developers and power users hitting a repetitive task the tool automates
-   - Deliverable: Downloadable binary/archive from GitHub Releases; paid tier adds extra commands or output formats
-   - Pricing model: Free core, paid pro commands via wallet ask in README and --help
-   - Cost per extra user: Zero; buyers run it on their own machines
-   - Free stack: GitHub Releases hosting, GitHub Actions for CI builds, FUNDING.yml + README wallet address
-3. **Asset pack / template bundle for a popular tool**
-   - Who buys: Users of an existing tool (theme, preset, snippet, config pack) who want a curated starting point
-   - Deliverable: A zip download of the pack, listed on Getly and GitHub Releases
-   - Pricing model: One-time licence or pay-what-you-want
-   - Cost per extra user: Zero; built once, downloaded many times
-   - Free stack: GitHub Releases for hosting, Getly for card buyers, wallet address for direct USDT
+1. **Single-purpose browser extension (one specific annoyance fixed)**
+   - Who buys: Users hitting the same annoyance daily — e.g. tab clutter, an ugly UI on a popular site, a missing keyboard shortcut
+   - Deliverable: Free extension on Chrome Web Store / GitHub Releases; paid tier (Pro settings, sync, batch actions) unlocked via licence from Getly or payment to the README address
+   - Pricing model: Free tier plus paid upgrade (honour-code licence: address in the about panel)
+   - Cost per extra user: Zero — client-side only, no server
+   - Free stack: Chrome Web Store listing + GitHub Releases; static update files on GitHub Pages
+2. **Single-purpose CLI utility shipped as a static binary**
+   - Who buys: Developers and sysadmins who need one repetitive task automated
+   - Deliverable: Signed binary/archive on GitHub Releases; the ask printed in --help, README, and every release body
+   - Pricing model: Free tool with an unenforced wallet ask; optional paid preset/config pack on Getly
+   - Cost per extra user: Zero — no server, releases served by GitHub
+   - Free stack: GitHub Releases + GitHub Actions builds + wallet address in the repo
+3. **Preset / template / asset pack for a tool people already use**
+   - Who buys: Users of a popular editor, theme engine, or dev tool who want a finished starting point
+   - Deliverable: A zip download, delivered automatically by Getly or fetched from a GitHub Release after payment
+   - Pricing model: One-time licence via Getly; wallet ask as fallback
+   - Cost per extra user: Zero — built once, downloaded many times
+   - Free stack: Getly listing + GitHub Releases mirror + one dev.to article showing the before/after
 4. **Static client-side web tool**
-   - Who buys: Anyone Googling for the specific conversion/calculation/formatting job it does
-   - Deliverable: Free public tool on GitHub Pages; paid offline/licence-free copy or pro features via USDT payment
-   - Pricing model: Free web version, one-time paid download of the pro version
-   - Cost per extra user: Zero; GitHub Pages free tier, no server
-   - Free stack: GitHub Pages, GitHub Actions if any build step, wallet address in the footer
+   - Who buys: Anyone with a one-off conversion, formatting, or lookup need
+   - Deliverable: Free page on GitHub Pages; paid version (offline pack, CLI variant, extra formats) as a Getly-listed download
+   - Pricing model: Freemium — free web tier, paid offline/CLI upgrade
+   - Cost per extra user: Zero — everything runs in the browser
+   - Free stack: GitHub Pages (free tier) + README/release wallet ask
 
 ## Next Actions
 
-- Pick one product shape (extension, CLI, or asset pack), build it fully client-side so marginal cost is zero, and host the artifact on GitHub Releases of the existing account.
-- Paste the validated TRC-20 USDT receive address into the README, .github/FUNDING.yml custom field, release notes, and the tool's own about/--help output so every copy carries the ask.
-- Create a Getly listing for the paid tier or asset pack, configure USDT TRC-20 payout to the same wallet, and verify current payout minimums and terms before launch.
-- If the product is a browser extension, pay the one-time $5 Chrome Web Store registration to get organic discovery, and put the wallet ask inside the extension's about panel.
-- Write a dev.to article about the problem the product solves, with the product link and the existing wallet footer, so the already-running publishing pipeline does the marketing.
+- Pick one product shape and build it fully client-side or as a static artifact so each user costs nothing to serve
+- Add the validated TRC-20 receive address to .github/FUNDING.yml (custom field), the README, release notes, and the tool's --help/about output — no new accounts needed
+- Create a Getly account, add the product listing with the same Tron wallet as payout, and verify current fees and payout minimums before going live
+- Publish one dev.to article framed as the problem-workaround the product answers, so the existing pipeline carries the ask to readers
+- If the product is a browser extension, pay the one-time $5 Chrome Web Store registration and submit for organic discovery
 
 ## Monetization Patterns
 
@@ -341,440 +340,320 @@ platform cannot climb back onto this page.
    - Why: pays in stablecoin, so the receive path is on-chain and verifiable; sells the product while nobody is working; the signup is one-time
    - Next: List the product once and set the price. Owner does this by hand: Owner creates an account, completes the tax interview with a TIN/SSN, pays the one-time $3 identity fee, and adds fiat payout details.
    - Verified: Tax interview, TIN requirement and the one-time $3.00 identity fee confirmed on itch.io/docs/creators/payments 2026-09-15. The earlier row said 'free to publish, no approval queue' and recorded cost_u
-10. [cashapp/licensee](https://github.com/cashapp/licensee)
-   - Kind: asset
-   - Score: 58/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: Gradle plugin which validates the licenses of your dependency graph match what you expect
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-11T20:15:56+00:00 (17h ago)
-11. [Show HN: Perch by mxRaven, a self-hosted mailbox and CLI in 1 file](https://news.ycombinator.com/item?id=50454221)
+10. [Show HN: Perch by mxRaven, a self-hosted mailbox and CLI in 1 file](https://news.ycombinator.com/item?id=50454221)
    - Kind: asset
    - Score: 58/100
    - Cost: not published
    - Owner must do: nothing
    - Why: Hi HN, I have been working on mxRaven: https://mxraven.com for the past couple of months, and it has been hard to explain the idea without…
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-11T14:57:04+00:00 (22h ago)
-12. [A license-key server on Cloudflare Workers + KV, with signed keys and activation limits](https://dev.to/kitebyte/a-license-key-server-on-cloudflare-workers-kv-with-signed-keys-and-activation-limits-ja4)
+   - Posted: 2026-11-11T14:57:04+00:00 (25h ago)
+11. [A license-key server on Cloudflare Workers + KV, with signed keys and activation limits](https://dev.to/kitebyte/a-license-key-server-on-cloudflare-workers-kv-with-signed-keys-and-activation-limits-ja4)
    - Kind: asset
    - Score: 58/100
    - Cost: not published
    - Owner must do: nothing
    - Why: If you sell a desktop app, CLI, plugin or template, you eventually need license keys: one per sale,...
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-10T20:27:55+00:00 (41h ago)
-13. [Ask HN: Show your micro-SaaS (November 2026)](https://news.ycombinator.com/item?id=50329077)
+   - Posted: 2026-11-10T20:27:55+00:00 (44h ago)
+12. [Ask HN: Show your micro-SaaS (November 2026)](https://news.ycombinator.com/item?id=50329077)
    - Kind: asset
    - Score: 57/100
    - Cost: not published
    - Owner must do: nothing
    - Why: HN is a fantastic founder community. We, the people, love transparency, numbers, and analyzing bootstrapped business models. What is your…
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-01T19:50:56+00:00 (257h ago)
-14. [cedar-v/license-manager](https://github.com/cedar-v/license-manager)
-   - Kind: asset
-   - Score: 54/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: License Manager is an independent software licensing platform that provides license code generation, distribution, validation, and…
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-09-01T15:21:55+00:00 (1726h ago)
-15. One product, listed on every free channel at once
+   - Posted: 2026-11-01T19:50:56+00:00 (260h ago)
+13. One product, listed on every free channel at once
    - Kind: channel
    - Score: 53/100
    - Cost: not published
    - Owner must do: nothing
    - Why: sells the product while nobody is working; the signup is one-time
    - Next: List the product once and set the price. Owner does this by hand: open the account
-16. [Okay, I QUITEEEE: My Final Micro-SaaS Ideas List for 2026](https://pantpallavi13.medium.com/okay-i-quiteeee-my-final-micro-saas-ideas-list-for-2026-9cd68d20e3da)
+14. [Okay, I QUITEEEE: My Final Micro-SaaS Ideas List for 2026](https://pantpallavi13.medium.com/okay-i-quiteeee-my-final-micro-saas-ideas-list-for-2026-9cd68d20e3da)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: Not recycled, not your typical ChatGPT recommendations — just 18 fresh Micro-SaaS ideas 2026 that are worth exploring.
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-12T13:16:01+00:00 (0h ago)
-17. [codelitdev/courselit](https://github.com/codelitdev/courselit)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: Create/Sell courses and digital downloads and publish blogs on your own branded website. An open source alternative to Teachable,…
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-12T11:35:44+00:00 (2h ago)
-18. [unopim/unopim](https://github.com/unopim/unopim)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: Open source Product Information Management (PIM) and Digital Asset Management (DAM) platform built on Laravel — manage, enrich, and scale…
-   - Next: Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.
-   - Posted: 2026-11-12T11:36:51+00:00 (2h ago)
-19. [People Are Making Money Selling Digital Products. Here's How You Can Too.](https://medium.com/@abdullahalmamun_76919/people-are-making-money-selling-digital-products-heres-how-you-can-too-28dcab38cb60)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: You've probably seen people selling ebooks, templates, online courses, Notion dashboards, planners, and other digital products online.
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-12T11:21:27+00:00 (2h ago)
-20. [Building a Multi-Tenant AI Stack for 6 Businesses: Load Bearing Empire's VAPI + Asterisk + Supabase Architecture](https://dev.to/domoniqueluchin/building-a-multi-tenant-ai-stack-for-6-businesses-load-bearing-empires-vapi-asterisk-supabase-35jp)
+   - Posted: 2026-11-12T13:16:01+00:00 (3h ago)
+15. [Building a Multi-Tenant AI Stack for 6 Businesses: Load Bearing Empire's VAPI + Asterisk + Supabase Architecture](https://dev.to/domoniqueluchin/building-a-multi-tenant-ai-stack-for-6-businesses-load-bearing-empires-vapi-asterisk-supabase-35jp)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: Building a vertically integrated business empire on bootstrapped capital means every infrastructure...
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-12T10:00:10+00:00 (3h ago)
-21. [The Digital Product Revolution: How to Turn Your Knowledge and Creativity Into Online Income](https://medium.com/@mewasi74/the-digital-product-revolution-how-to-turn-your-knowledge-and-creativity-into-online-income-6ee841214831)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: Discover how digital products are changing the way people create, share knowledge, and build online businesses.
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-12T09:51:22+00:00 (3h ago)
-22. [The “Boring Directory” Model: How a Simple Micro-Asset Generates $4,500/Month](https://medium.com/@rahhaat.uppaal/the-boring-directory-model-how-a-simple-micro-asset-generates-4-500-month-e9fab960fd27)
+   - Posted: 2026-11-12T10:00:10+00:00 (6h ago)
+16. [The “Boring Directory” Model: How a Simple Micro-Asset Generates $4,500/Month](https://medium.com/@rahhaat.uppaal/the-boring-directory-model-how-a-simple-micro-asset-generates-4-500-month-e9fab960fd27)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: No complex SaaS code, no VC funding, and no audience required. Here is the operational blueprint behind the web’s quietest cash-flowing…
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-12T08:56:13+00:00 (4h ago)
-23. [15 Digital Products Developers Can Build and Sell Without a Team](https://medium.com/@heshan.imedha/15-digital-products-developers-can-build-and-sell-without-a-team-07bd80d10025)
+   - Posted: 2026-11-12T08:56:13+00:00 (7h ago)
+17. [15 Digital Products Developers Can Build and Sell Without a Team](https://medium.com/@heshan.imedha/15-digital-products-developers-can-build-and-sell-without-a-team-07bd80d10025)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: What if you could build something once and sell it to hundreds or even thousands of customers?
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-12T07:43:38+00:00 (6h ago)
-24. [Before You Sell a $29 Digital Product, Calculate What You Actually Keep](https://medium.com/@nextgrowai/before-you-sell-a-29-digital-product-calculate-what-you-actually-keep-aaacc4f7a519)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: Before copying the product, work out what remains after delivery, support, and finding customers.
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-12T06:32:06+00:00 (7h ago)
-25. [$0 in sales, 5 channels live: what I fixed when my $9 prompt pack wouldn't sell](https://dev.to/speedupagi/0-in-sales-5-channels-live-what-i-fixed-when-my-9-prompt-pack-wouldnt-sell-4233)
+   - Posted: 2026-11-12T07:43:38+00:00 (9h ago)
+18. [$0 in sales, 5 channels live: what I fixed when my $9 prompt pack wouldn't sell](https://dev.to/speedupagi/0-in-sales-5-channels-live-what-i-fixed-when-my-9-prompt-pack-wouldnt-sell-4233)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: Three days ago I published my first Dev.to article here — a full tutorial on running a 177B open...
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-12T03:41:22+00:00 (10h ago)
-26. [We timed 34 customer service lines to see how long it takes to reach a person](https://dev.to/greatworkco/we-timed-34-customer-service-lines-to-see-how-long-it-takes-to-reach-a-person-3cfk)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: The median was 3:38, the longest was USPS at 23:04, and 9 lines never connected us at all. The dataset is free to reuse.
-   - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-12T03:30:38+00:00 (10h ago)
-27. [A Simple Way to Earn Extra Income With Digital Products](https://medium.com/@rahulrajanand7/a-simple-way-to-earn-extra-income-with-digital-products-7f5bfb1397d9)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: You don’t need a brilliant idea to start selling digital products. You need something useful that someone is willing to pay for.
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-12T01:31:01+00:00 (12h ago)
-28. [Digital Product Ideas When You Have No Skills (and No Idea What to Sell)](https://medium.com/@brainvaults/digital-product-ideas-when-you-have-no-skills-and-no-idea-what-to-sell-13f0be7c94b8)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: “I don’t know anything worth selling” is the most common reason people never start. The truth is that most successful digital products are…
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-11T22:58:40+00:00 (14h ago)
-29. [beimohai/AniLink-Obsidian](https://github.com/beimohai/AniLink-Obsidian)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: Obsidian 一站式追番管理：RSS 订阅管理、番剧自动下载、番库信息、一键跳转播放、B站弹幕抓取与偏移校准、 Bangumi 进度评价同步。
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-11T15:40:55+00:00 (22h ago)
-30. [50 Micro SaaS Business Ideas You Can Build Without Coding in 2026](https://medium.com/@fazak22344/50-micro-saas-business-ideas-you-can-build-without-coding-in-2026-f6cdad482e71)
+   - Posted: 2026-11-12T03:41:22+00:00 (13h ago)
+19. [50 Micro SaaS Business Ideas You Can Build Without Coding in 2026](https://medium.com/@fazak22344/50-micro-saas-business-ideas-you-can-build-without-coding-in-2026-f6cdad482e71)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: Have you ever wanted to start an online business but felt that you needed coding skills, technical knowledge, or a big budget?
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-11T06:41:28+00:00 (31h ago)
-31. [How to Launch a Side Project in One Week: A Realistic Plan](https://medium.com/@kanisshka12/how-to-launch-a-side-project-in-one-week-a-realistic-plan-26f34f8b04fa)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: Seven days, no budget, and a clear goal: get your first real visitors and feedback
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-11T03:31:01+00:00 (34h ago)
-32. [PersiOnOff/tenlith](https://github.com/PersiOnOff/tenlith)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: Open-source .NET + React SaaS starter with multi-tenancy, authentication, teams, Stripe billing and Docker.
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-10T19:06:58+00:00 (42h ago)
-33. [A weekend launch checklist for a side project with no audience](https://dev.to/ship_stack/a-weekend-launch-checklist-for-a-side-project-with-no-audience-1ndm)
+   - Posted: 2026-11-11T06:41:28+00:00 (34h ago)
+20. [A weekend launch checklist for a side project with no audience](https://dev.to/ship_stack/a-weekend-launch-checklist-for-a-side-project-with-no-audience-1ndm)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: Most first launches fail for a boring reason: the product is ready on Friday night, and Saturday is...
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-10T08:47:23+00:00 (52h ago)
-34. [Selling Has No Error Message](https://dev.to/priyanshudotsol/selling-has-no-error-message-1hmi)
+   - Posted: 2026-11-10T08:47:23+00:00 (56h ago)
+21. [Selling Has No Error Message](https://dev.to/priyanshudotsol/selling-has-no-error-message-1hmi)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: ~/actuity ❯ npm run build ✓ compiled in 1.24s ~/actuity ❯ npm run deploy ✓ live at...
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-10T07:10:31+00:00 (54h ago)
-35. [15 Micro SaaS Ideas to Build and Validate in 2027](https://medium.com/@dev_16949/15-micro-saas-ideas-to-build-and-validate-in-2027-956b5fe7f604)
+   - Posted: 2026-11-10T07:10:31+00:00 (57h ago)
+22. [15 Micro SaaS Ideas to Build and Validate in 2027](https://medium.com/@dev_16949/15-micro-saas-ideas-to-build-and-validate-in-2027-956b5fe7f604)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: A micro SaaS is a small software product that does one job well for a specific group of people, usually built and run by one person or a…
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-10T02:31:29+00:00 (59h ago)
-36. [HolyArrs/HolyArrs](https://github.com/HolyArrs/HolyArrs)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: One self-hosted app for your shows, movies and music.
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-09T23:53:25+00:00 (61h ago)
-37. [22 free places to launch a side project (and what each one asks in return)](https://dev.to/theavgdev_cd728e501377f9f/22-free-places-to-launch-a-side-project-and-what-each-one-asks-in-return-n42)
+   - Posted: 2026-11-10T02:31:29+00:00 (62h ago)
+23. [22 free places to launch a side project (and what each one asks in return)](https://dev.to/theavgdev_cd728e501377f9f/22-free-places-to-launch-a-side-project-and-what-each-one-asks-in-return-n42)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: I kept finishing small projects and then staring at a list of "100+ places to launch your startup"...
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-09T22:08:47+00:00 (63h ago)
-38. [AgriciDaniel/obsidian-herdr](https://github.com/AgriciDaniel/obsidian-herdr)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: Run Claude Code, Codex, Antigravity and OpenCode in persistent Herdr terminals inside Obsidian, with Mission Control and a safe, undoable…
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-09T18:37:49+00:00 (67h ago)
-39. [Five TikTok Formats, One Ceiling: What 2.5 Seconds Told Me](https://dev.to/marcoblch/five-tiktok-formats-one-ceiling-what-25-seconds-told-me-2532)
+   - Posted: 2026-11-09T22:08:47+00:00 (66h ago)
+24. [Five TikTok Formats, One Ceiling: What 2.5 Seconds Told Me](https://dev.to/marcoblch/five-tiktok-formats-one-ceiling-what-25-seconds-told-me-2532)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: I tested five short-video formats for OutfitMaker in two weeks. Same audience, same ceiling at about 2.5 seconds, and every customer I…
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-09T18:22:31+00:00 (67h ago)
-40. [Three sales from 27 views, and three paid pages beside it that sold nothing](https://dev.to/bananafestdestiny/three-sales-from-27-views-and-three-paid-pages-beside-it-that-sold-nothing-5801)
+   - Posted: 2026-11-09T18:22:31+00:00 (70h ago)
+25. [Three sales from 27 views, and three paid pages beside it that sold nothing](https://dev.to/bananafestdestiny/three-sales-from-27-views-and-three-paid-pages-beside-it-that-sold-nothing-5801)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: Four paid pages by the same maker, on the same storefront, in the same weeks. One of them has sold three copies at $6. The other three have…
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-09T18:16:51+00:00 (67h ago)
-41. [agamm/awesome-developer-first](https://github.com/agamm/awesome-developer-first)
+   - Posted: 2026-11-09T18:16:51+00:00 (70h ago)
+26. [Build, Secure & Monetize Your First ChatGPT Plugin](https://dev.to/leojulieta/build-secure-monetize-your-first-chatgpt-plugin-4155)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
-   - Why: A curated list of awesome developer-first tools products.
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-09T17:05:35+00:00 (68h ago)
-42. [Show HN: DBDelve – Open-Source DB Client Made with Rust and GPUI](https://news.ycombinator.com/item?id=50427934)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: Hi HN, I’m Shayan and a few months ago I started building a DB Client DBDelve with a focus on performance and just making something that…
-   - Next: Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.
-   - Posted: 2026-11-09T16:36:38+00:00 (69h ago)
-43. [ParanoaiDev/obsidian-flora](https://github.com/ParanoaiDev/obsidian-flora)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: A new look for all of Obsidian, and a graph of your notes that feels alive. Glass UI, WebGL2 neural graphs, living canvases, a daily…
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-09T15:53:24+00:00 (69h ago)
-44. [serveroshq/panel](https://github.com/serveroshq/panel)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: The open source ServerOS panel: one place to run the Linux servers you already own.
-   - Next: Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.
-   - Posted: 2026-11-09T00:47:33+00:00 (84h ago)
-45. [Victor-Go/VictorLoad](https://github.com/Victor-Go/VictorLoad)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: Chrome/Edge extension to download videos and images from YouTube, X and Bilibili in a side panel
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-07T20:44:57+00:00 (112h ago)
-46. [Sell software through your own Paddle or Lemon Squeezy account—with licensing connected](https://dev.to/permitcore/sell-software-through-your-own-paddle-or-lemon-squeezy-account-with-licensing-connected-1jbn)
+   - Why: Build, Secure, and Monetize Your First ChatGPT Plugin (June 2026 Launch) ...
+   - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
+   - Posted: 2026-11-08T20:10:53+00:00 (92h ago)
+27. [Sell software through your own Paddle or Lemon Squeezy account—with licensing connected](https://dev.to/permitcore/sell-software-through-your-own-paddle-or-lemon-squeezy-account-with-licensing-connected-1jbn)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: You want to sell your app, not spend every release maintaining a second product made of checkout...
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-07T19:31:56+00:00 (114h ago)
-47. [visualrecall/tracecards](https://github.com/visualrecall/tracecards)
-   - Kind: asset
-   - Score: 52/100
-   - Cost: not published
-   - Owner must do: nothing
-   - Why: Instantly recall ideas: visual cards with covers in your Obsidian vault, grouped into decks and stored as plain Markdown.
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-07T17:19:35+00:00 (116h ago)
-48. [What “scheduled” means on IndieNeed before a product goes live](https://dev.to/indieneed/what-scheduled-means-on-indieneed-before-a-product-goes-live-heh)
+   - Posted: 2026-11-07T19:31:56+00:00 (117h ago)
+28. [What “scheduled” means on IndieNeed before a product goes live](https://dev.to/indieneed/what-scheduled-means-on-indieneed-before-a-product-goes-live-heh)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: IndieNeed is a small launch site for indie makers. A launch is tied to a specific day: the product is...
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-07T15:12:48+00:00 (118h ago)
-49. [How to protect your plugin or app from piracy, step by step](https://dev.to/ka0/how-to-protect-your-plugin-or-app-from-piracy-step-by-step-fk3)
+   - Posted: 2026-11-07T15:12:48+00:00 (121h ago)
+29. [I Compared 5 SaaS Growth Benchmark Reports. The Most Counterintuitive Finding Wasn’t About Growth](https://nicheaitool.medium.com/i-compared-5-saas-growth-benchmark-reports-the-most-counterintuitive-finding-wasnt-about-growth-46e0d614ed24)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
-   - Why: A practical anti-piracy plan for indie developers selling plugins, scripts, bots and apps, layer by layer, without punishing the people who…
-   - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-06T20:31:29+00:00 (137h ago)
-50. [Show HN: Staxless – Open-source microservice SaaS boilerplate](https://news.ycombinator.com/item?id=50309010)
+   - Why: I’ve been tracking SaaS growth benchmarks for 18 months. Every quarter, I pull the latest reports from Aleph, High Alpha, SaaS Capital…
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-11-05T15:05:08+00:00 (169h ago)
+30. [6 Things Every Small SaaS Should Have Built In (2026)](https://medium.com/@antoine.valton/6-things-every-small-saas-should-have-built-in-2026-2edaeab04e10)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: Open the inbox for a SaaS you’ve been running for a few months.
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-11-05T14:56:01+00:00 (169h ago)
+31. [Adam Robinson: A Legacy of Bootstrapping and Digital Innovation](https://medium.com/@couponfolloz/adam-robinson-a-legacy-of-bootstrapping-and-digital-innovation-cfafe360a9ad)
+   - Kind: asset
+   - Score: 52/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: The entrepreneur behind Retention.com and RB2B brought attention to building software businesses with lean teams and a clear commercial…
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-11-03T16:49:13+00:00 (216h ago)
+32. [Show HN: Staxless – Open-source microservice SaaS boilerplate](https://news.ycombinator.com/item?id=50309010)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.
-   - Posted: 2026-10-30T19:28:55+00:00 (306h ago)
-51. [Show HN: DistractFree-Chrome extension and web app to stop doomscrolling](https://news.ycombinator.com/item?id=50299880)
+   - Posted: 2026-10-30T19:28:55+00:00 (309h ago)
+33. [Show HN: DistractFree-Chrome extension and web app to stop doomscrolling](https://news.ycombinator.com/item?id=50299880)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: free tooling or reach to build and market the product with
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-30T04:31:31+00:00 (321h ago)
-52. [Ask HN: Do you have side-projects that generate >$500 revenue/month?](https://news.ycombinator.com/item?id=50293459)
+   - Posted: 2026-10-30T04:31:31+00:00 (324h ago)
+34. [Ask HN: Do you have side-projects that generate >$500 revenue/month?](https://news.ycombinator.com/item?id=50293459)
    - Kind: asset
    - Score: 52/100
    - Cost: not published
    - Owner must do: nothing
    - Why: What inspired you to build that project and how long did it take?
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-29T18:12:17+00:00 (331h ago)
-53. Free-tier stack so the product costs nothing to run
+   - Posted: 2026-10-29T18:12:17+00:00 (334h ago)
+35. Free-tier stack so the product costs nothing to run
    - Kind: asset
    - Score: 48/100
    - Cost: not published
    - Owner must do: nothing
    - Why: A product that costs nothing per user can stay free at the top of the funnel forever. Client-side work needs no server at all; GitHub Pages…
    - Next: Confirm the free tier's real limits and terms, then keep the product's per-user cost at zero so the free tier can stay free indefinitely.
-54. [How to Sell Desktop App Licenses With Lemon Squeezy](https://medium.com/@nookeshkarri7/how-to-sell-desktop-app-licenses-with-lemon-squeezy-2e0097b3698c)
+36. [How to Sell Desktop App Licenses With Lemon Squeezy](https://medium.com/@nookeshkarri7/how-to-sell-desktop-app-licenses-with-lemon-squeezy-2e0097b3698c)
    - Kind: asset
    - Score: 46/100
    - Cost: not published
    - Owner must do: nothing
    - Why: The license key setup I use in three Windows apps: activation limits, offline checks, variants and testing on a live product.
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-12T03:45:02+00:00 (10h ago)
-55. [Show HN: Yogurt – Free, private, open-source alternative to Granola](https://news.ycombinator.com/item?id=50454625)
+   - Posted: 2026-11-12T03:45:02+00:00 (13h ago)
+37. [Show HN: Yogurt – Free, private, open-source alternative to Granola](https://news.ycombinator.com/item?id=50454625)
    - Kind: asset
    - Score: 46/100
    - Cost: not published
    - Owner must do: nothing
    - Why: Hey HN, I’m Eric and I want to share an OSS project that I’ve been building in my free time. Yogurt is a free, MIT licensed desktop app…
    - Next: Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.
-   - Posted: 2026-11-11T15:33:06+00:00 (22h ago)
-56. [johackim/awesome-indiehackers](https://github.com/johackim/awesome-indiehackers)
+   - Posted: 2026-11-11T15:33:06+00:00 (25h ago)
+38. [7 Tools That Replace Expensive SaaS Marketing Subscriptions (2026)](https://medium.com/@antoine.valton/7-tools-that-replace-expensive-saas-marketing-subscriptions-2026-268a1c92932c)
    - Kind: asset
-   - Score: 44/100
+   - Score: 46/100
    - Cost: not published
    - Owner must do: nothing
-   - Why: Awesome list about indie hackers
+   - Why: Add up the marketing tools a small SaaS can end up paying for.
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-11T13:35:11+00:00 (24h ago)
-57. Write the article that the product is the answer to
+   - Posted: 2026-11-04T14:21:01+00:00 (194h ago)
+39. Write the article that the product is the answer to
    - Kind: asset
    - Score: 44/100
    - Cost: not published
    - Owner must do: nothing
    - Why: This bot already publishes to dev.to daily and measures which shapes earn engagement -- problem-workaround outperforms build-tutorial by…
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-58. [I built an iOS app that turns forgotten screenshots into useful actions — Activae is finally live! 🚀](https://dev.to/srsstyle/i-built-an-ios-app-that-turns-forgotten-screenshots-into-useful-actions-activae-is-finally-live-1a89)
+40. [Are Low-Content Books on Amazon KDP Still Profitable? The Real Math Behind Puzzle Books](https://medium.com/@atu02378/are-low-content-books-on-amazon-kdp-still-profitable-the-real-math-behind-puzzle-books-a5f12be0f4ef)
+   - Kind: asset
+   - Score: 40/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: Most beginners who want to build a publishing income on Amazon Kindle Direct Publishing (KDP) spend months writing an eighty-thousand-word…
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-11-12T14:58:16+00:00 (1h ago)
+41. [How to Sell Digital Products on Etsy for Beginners (2026)](https://medium.com/@nagesh_kharbanda/how-to-sell-digital-products-on-etsy-for-beginners-2026-c0b8268f54d6)
+   - Kind: asset
+   - Score: 40/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: A step-by-step guide to selling digital downloads on Etsy: product ideas, real 2026 fees, listing SEO, and how to get your first sales.
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-11-12T14:31:24+00:00 (2h ago)
+42. [5 SaaS Founders to Follow on X if You’re Building Your First Product](https://rangaharish.medium.com/5-saas-founders-to-follow-on-x-if-youre-building-your-first-product-60fde220902a)
+   - Kind: asset
+   - Score: 40/100
+   - Cost: not published
+   - Owner must do: nothing
+   - Why: Starting a SaaS business can feel confusing.
+   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
+   - Posted: 2026-11-12T14:14:25+00:00 (2h ago)
+43. [I built an iOS app that turns forgotten screenshots into useful actions — Activae is finally live! 🚀](https://dev.to/srsstyle/i-built-an-ios-app-that-turns-forgotten-screenshots-into-useful-actions-activae-is-finally-live-1a89)
    - Kind: asset
    - Score: 40/100
    - Cost: not published
    - Owner must do: nothing
    - Why: Hey everyone! 👋 I'm an indie iOS developer, and after months of development, testing, and plenty of...
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-12T07:59:17+00:00 (5h ago)
-59. [Show HN: Lynx – open-source fully-customizable AI workspace](https://news.ycombinator.com/item?id=50461775)
+   - Posted: 2026-11-12T07:59:17+00:00 (8h ago)
+44. [Show HN: Lynx – open-source fully-customizable AI workspace](https://news.ycombinator.com/item?id=50461775)
    - Kind: asset
    - Score: 40/100
    - Cost: not published
    - Owner must do: nothing
    - Why: I was finding that managing multiple agent threads with walls of text was getting tiring and inefficient for me and that I wanted a more…
    - Next: Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.
-   - Posted: 2026-11-12T01:26:11+00:00 (12h ago)
-60. [Instagram Comment-to-DM Funnel: How “Comment a Keyword” Turns Views into Sales](https://medium.com/@brainvaults/instagram-comment-to-dm-funnel-how-comment-a-keyword-turns-views-into-sales-8e4dab1ef5d7)
+   - Posted: 2026-11-12T01:26:11+00:00 (15h ago)
+45. [Chess Platform Facing Private Equity Backlash Over Monetization and Reduced Community Reinvestment](https://dev.to/miraslave/chess-platform-facing-private-equity-backlash-over-monetization-and-reduced-community-reinvestment-75h)
    - Kind: asset
    - Score: 40/100
    - Cost: not published
    - Owner must do: nothing
-   - Why: You have seen it everywhere: “Comment BRAIN and I’ll send you the guide.” It works because a comment is a tiny commitment, it boosts the…
-   - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-11T23:00:39+00:00 (14h ago)
-61. [My customer got 11 clients in a month by renting keywords from directories](https://dev.to/submitmap/my-customer-got-11-clients-in-a-month-by-renting-keywords-from-directories-2921)
+   - Why: The Golden Age vs. The Private Equity Shift To understand why modern commercial chess...
+   - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
+   - Posted: 2026-11-11T14:19:06+00:00 (26h ago)
+46. [My customer got 11 clients in a month by renting keywords from directories](https://dev.to/submitmap/my-customer-got-11-clients-in-a-month-by-renting-keywords-from-directories-2921)
    - Kind: asset
    - Score: 40/100
    - Cost: not published
    - Owner must do: nothing
    - Why: A customer of mine got 11 paying clients in their first month from search, and their own site still...
    - Next: Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.
-   - Posted: 2026-11-10T22:51:21+00:00 (38h ago)
-62. [Show HN: Monoprint – Beautiful code images, GPUI desktop app, CLI, Rust library](https://news.ycombinator.com/item?id=50440754)
+   - Posted: 2026-11-10T22:51:21+00:00 (41h ago)
+47. [Show HN: Monoprint – Beautiful code images, GPUI desktop app, CLI, Rust library](https://news.ycombinator.com/item?id=50440754)
    - Kind: asset
    - Score: 40/100
    - Cost: not published
    - Owner must do: nothing
    - Why: I built Monoprint in Rust as a CLI tool for generating code screenshots for an in-house programming language. I liked it so much that I…
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-10T14:19:18+00:00 (47h ago)
-63. [7 Truly Free Chrome Extensions That Replace Paid Software (No Premium Plan, No Catch)](https://medium.com/inbox-growth/7-truly-free-chrome-extensions-that-replace-paid-software-no-premium-plan-no-catch-be2e68331df0)
+   - Posted: 2026-11-10T14:19:18+00:00 (50h ago)
+48. [7 Truly Free Chrome Extensions That Replace Paid Software (No Premium Plan, No Catch)](https://medium.com/inbox-growth/7-truly-free-chrome-extensions-that-replace-paid-software-no-premium-plan-no-catch-be2e68331df0)
    - Kind: asset
    - Score: 40/100
    - Cost: not published
    - Owner must do: nothing
    - Why: Many “free” extensions hide a paid upgrade. These don’t. They’re open-source or fully free, and each one saves you from paying for……
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-11-10T10:16:50+00:00 (51h ago)
-64. [Ask HN: Advise on monetization model for my freemium app wanted](https://news.ycombinator.com/item?id=50280505)
+   - Posted: 2026-11-10T10:16:50+00:00 (54h ago)
+49. [Ask HN: Advise on monetization model for my freemium app wanted](https://news.ycombinator.com/item?id=50280505)
    - Kind: asset
    - Score: 40/100
    - Cost: not published
    - Owner must do: nothing
    - Why: I'm an indie app dev and looking for some conceptual help with one of my freemium apps. I'm thinking about completely restructuring the…
    - Next: Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.
-   - Posted: 2026-10-28T20:34:28+00:00 (353h ago)
+   - Posted: 2026-10-28T20:34:28+00:00 (356h ago)

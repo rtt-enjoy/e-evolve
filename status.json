@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-12T04:01:11.116435+00:00",
-  "total_runs": 2460,
+  "last_run": "2026-11-12T05:01:18.193120+00:00",
+  "total_runs": 2461,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,7 +33,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the PROMPT FOCUS (weak_title, 2 drafts in 14 days) names a prompt with 30+ prior title-edit proposals parked unmerged, so another variant would be an unverifiable duplicate against a stale file; the honest move is to ask for one merge before any new prompt edit.",
+    "summary": "No change proposed: the prompt focus (weak_title) cost only 2 drafts in the last 14 days while llm_error cost 32, and 30 title-prompt proposals already sit unmerged, so a 31st variant cannot be evidenced, verified against live counts, or differentiated from what is already on review.",
     "changes_applied": [],
     "suggestions": [
       {
@@ -46,47 +46,35 @@
           "Step 2: Merge one; prefer the deterministic rescue since it needs no LLM call to succeed.",
           "Step 3: Close the remainder so future cycles stop re-nominating a prompt that is already fully proposed."
         ]
+      },
+      {
+        "title": "Investigate the llm_error spike before any prompt work",
+        "description": "llm_error accounts for 32 of the 34 drafts lost in the last 14 days and 59 lifetime \u2014 far more than every gate combined. Each llm_error is a whole day with no article and no tip ask, so fixing the engine failure moves reach more than any title polish.",
+        "owner_action": "Check GLM_API_KEY quota/plan limits and the glm-5.3-flash endpoint status for the dates in article_rejects.recent with code llm_error; consider whether the Atria fallback is actually being attempted on 'post' role failures.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open the Actions logs for cycles where article_rejects.last_reason was llm_error and read the underlying exception text.",
+          "Step 2: Verify the key's rate limit or credit state at api.z.ai on those dates.",
+          "Step 3: Confirm bot/llm.py's fallback path is reachable for the 'post' role (it is protected, so only the owner can change it)."
+        ]
       }
     ],
-    "direction": "Checklist step 4 (reach via prompt upgrades) and Principle 3j discipline \u2014 don't stack more steering onto an unmerged surface",
+    "direction": "Step 4 \u2014 reach into a live receive path, via prompt upgrades one step per cycle; declined this cycle on the evidence",
     "evidence": [
-      "article_rejects.counts: weak_title=14 lifetime, but drafts lost to it in the last 14 days = 2 (1 ALL-CAPS finding, 1 colon-subtitle finding)",
-      "PRIOR PROPOSALS: 30+ open branches dated 2026-10-31 to 2026-11-11, all editing bot/earning/articles.py title prompts (_SYSTEM title rules, _revise_title), none merged",
-      "suggestions[0] already names this: 'Merge or close the 30+ stacked title-prompt branches'",
-      "llm_error=32 in the last 14 days dwarfs weak_title=2 \u2014 the bigger reject cause is engine-side, not prompt-fixable",
-      "receipt_check coverage complete, payout.live=true \u2014 no receive-path problem to fix"
+      "article_rejects.counts: llm_error=59 vs weak_title=14 (lifetime); last 14 days llm_error=32, empty_draft=2, weak_title=2, fabricated=2",
+      "article_rejects.last = 'llm_error': 'LLM call failed' \u2014 the dominant loss is the engine, which no prompt edit can fix",
+      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x1, 'title padded with a colon subtitle' x1 \u2014 the two exact defects already covered by at least 30 open proposals in PRIOR PROPOSALS (2026-10-31 through 2026-11-11), none merged",
+      "last_evolution_branch = null and evolution_pending_review = false: no title branch has landed, so any new edit targets a file whose live reject counts cannot move until one merges",
+      "receive path clean: payout.live=true, receipt_check 49/49 covered, known_without_footer=0 \u2014 step 1 and 2 hold; the only bottleneck is draft loss, and 94% of it is llm_error"
     ],
-    "money_path": "none this cycle \u2014 reach work is blocked on a human merge, not on a prompt edit a cycle can make",
-    "verify": "After the owner merges one title branch and closes the rest, next cycle re-reads article_rejects.recent (14-day window) for weak_title; a further prompt edit only then has a clean surface and a count it can actually be judged against",
+    "money_path": "none (maintenance/no-change): a fix for weak_title would widen the publish funnel marginally, but with 2 affected drafts per fortnight versus 32 engine failures, and every prior fix stranded unmerged, a new proposal cannot reach money",
+    "verify": "Not applicable \u2014 no change. If the owner merges exactly one open title-prompt branch, article_rejects.counts.weak_title should stop growing in the following 14-day window; that is the count to read, not a new branch.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 40
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 63,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (63 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -101,10 +89,22 @@
         "Step 3: Close the remainder so future cycles stop re-nominating a prompt that is already fully proposed."
       ],
       "discovered_at": "2026-11-12T04:01:37.170356+00:00"
+    },
+    {
+      "title": "Investigate the llm_error spike before any prompt work",
+      "description": "llm_error accounts for 32 of the 34 drafts lost in the last 14 days and 59 lifetime \u2014 far more than every gate combined. Each llm_error is a whole day with no article and no tip ask, so fixing the engine failure moves reach more than any title polish.",
+      "owner_action": "Check GLM_API_KEY quota/plan limits and the glm-5.3-flash endpoint status for the dates in article_rejects.recent with code llm_error; consider whether the Atria fallback is actually being attempted on 'post' role failures.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Open the Actions logs for cycles where article_rejects.last_reason was llm_error and read the underlying exception text.",
+        "Step 2: Verify the key's rate limit or credit state at api.z.ai on those dates.",
+        "Step 3: Confirm bot/llm.py's fallback path is reachable for the 'post' role (it is protected, so only the owner can change it)."
+      ],
+      "discovered_at": "2026-11-12T05:02:48.626290+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 169,
+  "last_cycle_seconds": 92,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2780,7 +2780,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-12T04:01:11.650368+00:00",
+    "checked_at": "2026-11-12T05:01:18.861581+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3518,7 +3518,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-12T04:03:58.791040+00:00",
+    "last_run": "2026-11-12T05:02:48.854127+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3528,22 +3528,12 @@
     "without_footer": 0,
     "unreachable": 2,
     "missing": [],
-    "last_run": "2026-11-12T04:03:59.004871+00:00",
+    "last_run": "2026-11-12T05:02:49.085092+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
       {
-        "id": 4740283,
-        "at": "2026-11-11T14:28:51.835760+00:00",
-        "ok": true
-      },
-      {
         "id": 4780783,
-        "at": "2026-11-11T15:15:19.733281+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
         "at": "2026-11-11T15:15:19.733281+00:00",
         "ok": true
       },
@@ -3773,8 +3763,18 @@
         "ok": true
       },
       {
+        "id": 4740283,
+        "at": "2026-11-12T05:02:49.085092+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-12T05:02:49.085092+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-12T04:03:59.004871+00:00",
+        "at": "2026-11-12T05:02:49.085092+00:00",
         "ok": true
       }
     ],
@@ -3783,7 +3783,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 13.6
+    "oldest_check_age_hours": 13.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3803,7 +3803,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

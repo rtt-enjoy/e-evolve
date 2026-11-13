@@ -3287,3 +3287,7 @@ Autonomous earnings generated every hourly cycle.
 - [ok] **ctf-bounty** action recorded
 - [ok] **research-feed** action recorded
 - [ok] **code_techs**: [Code-tech queue refreshed (64 leads, 0 pursued)](docs/code-tech-opportunities.md) (est. $0.00)
+
+### 2026-11-13 21:28 UTC
+
+- [fail] **dev.to**: title too weak to earn a click, and the rewrite failed

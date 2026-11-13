@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-13T13:00:30.597401+00:00",
-  "total_runs": 2495,
+  "last_run": "2026-11-13T14:00:35.993388+00:00",
+  "total_runs": 2496,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,101 +34,91 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed. The PROMPT FOCUS (weak_title, 2 drafts lost in 14 days) has been the target of roughly 30 open, unmerged review branches covering both of this window's exact findings ('title has ALL-CAPS word' and 'colon-subtitle padding') \u2014 every angle from concrete banned-word examples to deterministic rescue to three-candidate rewrites is already parked on an open branch awaiting the owner's merge decision. Another edit to the same two rules would duplicate one of them and bury the fix under unreviewed variants. The draft losses that actually dominate are llm_error=59 and empty_draft=11 (vs weak_title=14 lifetime, 2 in-window), which the brief itself classifies as engine failures, not fixable by a prompt edit. Reach is otherwise on its measured path: 1 article published in this morning's window, follow-up and problem-workaround steering live.",
+    "summary": "No change this cycle: the PROMPT FOCUS area (weak_title, 2 drafts in 14 days) has 30 open unmerged proposals covering every reasonable edit to the same two prompts, and the dominant reject cause is llm_error=32 (engine-side), which no prompt edit can fix.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the ~30 open title-prompt branches",
-        "description": "Unblocks the cheapest reach lever: every merged weak_title fix rescues drafts that currently cost one post and one tip ask each. Until one lands, further cycles should keep off this prompt \u2014 the ledger is saturated.",
-        "owner_action": "Review and merge (or close) the open evolve/* branches touching bot/earning/articles.py title prompts, starting with the smallest diff.",
+        "title": "Address the llm_error spike, which costs 32 drafts in 14 days",
+        "description": "llm_error (59 lifetime, 32 last-window) is by far the largest reject cause \u2014 each one is a post and a tip ask that never shipped. No prompt edit can fix it; it sits in the protected LLM layer.",
+        "owner_action": "Review the GLM endpoint stability / rate limits for role 'post' (bot/llm.py, GLM_API_KEY), or confirm the atria fallback actually engages on these failures.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: List open branches matching evolve/* with changes to bot/earning/articles.py.",
-          "Step 2: Merge the single smallest one; close the rest so future cycles stop treating that prompt as unfixed.",
-          "Step 3: Watch weak_title in the 14-day window next cycle to confirm the gate rejects are falling."
+          "Step 1: grep the workflow logs for '[articles] rejected (llm_error)' entries and the underlying provider error text.",
+          "Step 2: decide whether the fallback_provider (atria) is being attempted on complete_json_for_role failures; if not, that is a bot/llm.py fix only you can authorize (the file is protected for me)."
         ]
       },
       {
-        "title": "Add the dev.to profile-bio tip ask (owner-only, two minutes)",
-        "description": "The one deferred channel row that needs no account, no processor and no policy change; it carries the wallet ask on every profile visit permanently and covers readers who arrive at the profile rather than a post.",
-        "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once.",
+        "title": "Merge or close the 30 pending title-prompt branches",
+        "description": "Thirty open review branches propose near-identical one-line sharpenings of the same two prompts. They cannot be evaluated incrementally while all stay open; one merged edit would let the weak_title count be measured against a real baseline.",
+        "owner_action": "Pick one (e.g. the 2026-11-11 _revise_title sharpening), merge it, and close the rest as duplicates.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open dev.to/settings and edit the Bio field.",
-          "Step 2: Add the existing published address [redacted] (TRC-20) in one short line.",
-          "Step 3: Save; no bot change is needed and the API cannot do this (Forem users endpoint is show-only)."
+          "Step 1: open the 2026-11-11 branch, review the single _revise_title edit.",
+          "Step 2: merge or close all 30 title-prompt branches; next cycle's article_rejects window then measures one change."
+        ]
+      },
+      {
+        "title": "dev.to profile bio: paste the receive address once",
+        "description": "The doctrine's channel table names this the one cheap owner-only row left: a single Bio edit at dev.to/settings carries the ask on every profile visit permanently, with no account, processor or policy change.",
+        "owner_action": "Add the TRC-20 address (TFTNsf\u20269KbY, full address in payout_public) to the bio at dev.to/settings.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: open https://dev.to/settings, paste the full address and 'USDT/USDC/USDD on Tron' into the bio, save."
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach into a live receive path, via prompt upgrades; standing down where the upgrade is already proposed and unmerged",
+    "direction": "Checklist step 4 \u2014 upgrade the prompts one step per cycle; withheld because no untried, non-duplicate step remains in the focused area.",
     "evidence": [
-      "article_rejects.counts (window): weak_title=2 in last 14 days; llm_error=32, empty_draft=2 in same window",
-      "PRIOR PROPOSALS: ~30 open branches all targeting bot/earning/articles.py title prompts, 2026-10-31 through 2026-11-11, none merged",
-      "gate findings behind focus: 'title has ALL-CAPS word' x1; 'title padded with a colon subtitle' x1 \u2014 both findings already addressed by one or more open proposals",
-      "article_daily.published = 1 (2026-11-13): publishing is flowing; the reach lever is not blocked",
-      "payout.live = true and receipt_check.covered/published_total = 50/51: receive path verified, so step 1 is clean"
+      "article_rejects.counts: weak_title=2 in the last 14 days vs llm_error=32 (engine, not prompt-fixable) and total 89 lifetime with llm_error=59",
+      "PRIOR PROPOSALS: 30 distinct open branches target bot/earning/articles.py title prompts (_SYSTEM TITLE rules and _revise_title), including every angle on the two current gate findings ('title has ALL-CAPS word' x1, 'colon-subtitle' x1) and on 'Title Case The Important Words' (proposed 2x)",
+      "article_interest: problem-workaround n=10 avg=460.3 already steers prompts and the steering path shows no gate losses"
     ],
-    "money_path": "none this cycle \u2014 no change shipped. When a weak_title fix lands from the open branches, each rescued draft is one more article and one more tip ask on dev.to.",
-    "verify": "Next cycle after one of the open title-prompt branches is merged: article_rejects recent-window weak_title count should stay at or near 0, and article_daily.published should stay 1 with no weak_title reject reason.",
+    "money_path": "none this cycle (reach-only work; the receive path is live and coverage-complete per receipt_check 50/51)",
+    "verify": "If the owner instead merges one of the pending title-prompt branches, article_rejects.counts.weak_title should stay flat or fall over the next 14-day window; the number worth watching is llm_error, which is an LLM-engine matter, not a prompt one.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.0"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 43
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 63,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (63 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one of the ~30 open title-prompt branches",
-      "description": "Unblocks the cheapest reach lever: every merged weak_title fix rescues drafts that currently cost one post and one tip ask each. Until one lands, further cycles should keep off this prompt \u2014 the ledger is saturated.",
-      "owner_action": "Review and merge (or close) the open evolve/* branches touching bot/earning/articles.py title prompts, starting with the smallest diff.",
+      "title": "Address the llm_error spike, which costs 32 drafts in 14 days",
+      "description": "llm_error (59 lifetime, 32 last-window) is by far the largest reject cause \u2014 each one is a post and a tip ask that never shipped. No prompt edit can fix it; it sits in the protected LLM layer.",
+      "owner_action": "Review the GLM endpoint stability / rate limits for role 'post' (bot/llm.py, GLM_API_KEY), or confirm the atria fallback actually engages on these failures.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List open branches matching evolve/* with changes to bot/earning/articles.py.",
-        "Step 2: Merge the single smallest one; close the rest so future cycles stop treating that prompt as unfixed.",
-        "Step 3: Watch weak_title in the 14-day window next cycle to confirm the gate rejects are falling."
+        "Step 1: grep the workflow logs for '[articles] rejected (llm_error)' entries and the underlying provider error text.",
+        "Step 2: decide whether the fallback_provider (atria) is being attempted on complete_json_for_role failures; if not, that is a bot/llm.py fix only you can authorize (the file is protected for me)."
       ],
-      "discovered_at": "2026-11-13T13:01:21.339650+00:00"
+      "discovered_at": "2026-11-13T14:01:05.741397+00:00"
     },
     {
-      "title": "Add the dev.to profile-bio tip ask (owner-only, two minutes)",
-      "description": "The one deferred channel row that needs no account, no processor and no policy change; it carries the wallet ask on every profile visit permanently and covers readers who arrive at the profile rather than a post.",
-      "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once.",
+      "title": "Merge or close the 30 pending title-prompt branches",
+      "description": "Thirty open review branches propose near-identical one-line sharpenings of the same two prompts. They cannot be evaluated incrementally while all stay open; one merged edit would let the weak_title count be measured against a real baseline.",
+      "owner_action": "Pick one (e.g. the 2026-11-11 _revise_title sharpening), merge it, and close the rest as duplicates.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open dev.to/settings and edit the Bio field.",
-        "Step 2: Add the existing published address [redacted] (TRC-20) in one short line.",
-        "Step 3: Save; no bot change is needed and the API cannot do this (Forem users endpoint is show-only)."
+        "Step 1: open the 2026-11-11 branch, review the single _revise_title edit.",
+        "Step 2: merge or close all 30 title-prompt branches; next cycle's article_rejects window then measures one change."
       ],
-      "discovered_at": "2026-11-13T13:01:21.339650+00:00"
+      "discovered_at": "2026-11-13T14:01:05.741397+00:00"
+    },
+    {
+      "title": "dev.to profile bio: paste the receive address once",
+      "description": "The doctrine's channel table names this the one cheap owner-only row left: a single Bio edit at dev.to/settings carries the ask on every profile visit permanently, with no account, processor or policy change.",
+      "owner_action": "Add the TRC-20 address (TFTNsf\u20269KbY, full address in payout_public) to the bio at dev.to/settings.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: open https://dev.to/settings, paste the full address and 'USDT/USDC/USDD on Tron' into the bio, save."
+      ],
+      "discovered_at": "2026-11-13T14:01:05.741397+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 274,
+  "last_cycle_seconds": 31,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2794,7 +2784,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-13T13:00:31.065105+00:00",
+    "checked_at": "2026-11-13T14:00:36.364203+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3536,7 +3526,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-13T13:05:04.463010+00:00",
+    "last_run": "2026-11-13T14:01:05.942539+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3546,32 +3536,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-13T13:05:04.662039+00:00",
+    "last_run": "2026-11-13T14:01:06.186913+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
       {
-        "id": 4748037,
-        "at": "2026-11-13T01:27:38.915089+00:00",
-        "ok": true
-      },
-      {
-        "id": 4720062,
-        "at": "2026-11-13T02:27:53.209655+00:00",
-        "ok": true
-      },
-      {
         "id": 4985893,
-        "at": "2026-11-13T02:27:53.209655+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-11-13T02:27:53.209655+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
         "at": "2026-11-13T02:27:53.209655+00:00",
         "ok": true
       },
@@ -3791,13 +3761,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4633220,
         "at": "2026-11-13T13:05:04.662039+00:00",
         "ok": true
       },
       {
-        "id": 4633220,
-        "at": "2026-11-13T13:05:04.662039+00:00",
+        "id": 4748037,
+        "at": "2026-11-13T14:01:06.186913+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-11-13T14:01:06.186913+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-13T14:01:06.186913+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-13T14:01:06.186913+00:00",
+        "ok": true
+      },
+      {
+        "id": 4602729,
+        "at": "2026-11-13T14:01:06.186913+00:00",
         "ok": true
       }
     ],
@@ -3826,7 +3816,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

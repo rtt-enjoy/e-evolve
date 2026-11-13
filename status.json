@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-13T14:00:35.993388+00:00",
-  "total_runs": 2496,
+  "last_run": "2026-11-13T15:00:41.773710+00:00",
+  "total_runs": 2497,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,50 +34,33 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the PROMPT FOCUS area (weak_title, 2 drafts in 14 days) has 30 open unmerged proposals covering every reasonable edit to the same two prompts, and the dominant reject cause is llm_error=32 (engine-side), which no prompt edit can fix.",
+    "summary": "No change proposed: the prompt-focused losses are 2 drafts in 14 days (weak_title=2), against 30 already-open unmerged branches proposing near-identical title-prompt edits, so a 31st variant adds no information; the dominant loss is llm_error=32, which the evidence itself marks as engine-side and not fixable by a prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Address the llm_error spike, which costs 32 drafts in 14 days",
-        "description": "llm_error (59 lifetime, 32 last-window) is by far the largest reject cause \u2014 each one is a post and a tip ask that never shipped. No prompt edit can fix it; it sits in the protected LLM layer.",
-        "owner_action": "Review the GLM endpoint stability / rate limits for role 'post' (bot/llm.py, GLM_API_KEY), or confirm the atria fallback actually engages on these failures.",
+        "title": "Retry llm_error drafts on the fallback provider within the same cycle",
+        "description": "llm_error is the largest single reject bucket (59 lifetime, 32 in 14 days) and currently costs a whole day's article and its tip ask; glm's fallback (atria) is already configured and live in llm_workflows, so a single retry could recover most of those lost posts.",
+        "owner_action": "Confirm that a one-retry fallback for the 'post' role inside the article path is desired, since bot/llm.py is protected and only the owner can authorize touching the protected LLM layer (or delegate the retry to an editable module).",
         "secret_needed": null,
         "how_to": [
-          "Step 1: grep the workflow logs for '[articles] rejected (llm_error)' entries and the underlying provider error text.",
-          "Step 2: decide whether the fallback_provider (atria) is being attempted on complete_json_for_role failures; if not, that is a bot/llm.py fix only you can authorize (the file is protected for me)."
-        ]
-      },
-      {
-        "title": "Merge or close the 30 pending title-prompt branches",
-        "description": "Thirty open review branches propose near-identical one-line sharpenings of the same two prompts. They cannot be evaluated incrementally while all stay open; one merged edit would let the weak_title count be measured against a real baseline.",
-        "owner_action": "Pick one (e.g. the 2026-11-11 _revise_title sharpening), merge it, and close the rest as duplicates.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: open the 2026-11-11 branch, review the single _revise_title edit.",
-          "Step 2: merge or close all 30 title-prompt branches; next cycle's article_rejects window then measures one change."
-        ]
-      },
-      {
-        "title": "dev.to profile bio: paste the receive address once",
-        "description": "The doctrine's channel table names this the one cheap owner-only row left: a single Bio edit at dev.to/settings carries the ask on every profile visit permanently, with no account, processor or policy change.",
-        "owner_action": "Add the TRC-20 address (TFTNsf\u20269KbY, full address in payout_public) to the bio at dev.to/settings.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: open https://dev.to/settings, paste the full address and 'USDT/USDC/USDD on Tron' into the bio, save."
+          "Step 1: Verify ATRIA_API_KEY is set on the runner (llm_workflows shows fallback key_set=true already).",
+          "Step 2: Decide the retry seam (a retry inside bot/llm.py's post role, which is owner-protected, vs. an article-side retry via an editable module) and authorize which path is allowed.",
+          "Step 3: Merge whichever retry lands; watch article_rejects.counts.llm_error \u2014 it should fall from ~59 lifetime pace toward near zero."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompts one step per cycle; withheld because no untried, non-duplicate step remains in the focused area.",
+    "direction": "Checklist step 4 \u2014 upgrade the prompt losing the most drafts \u2014 but only when that loss is large enough to act on; here it is not.",
     "evidence": [
-      "article_rejects.counts: weak_title=2 in the last 14 days vs llm_error=32 (engine, not prompt-fixable) and total 89 lifetime with llm_error=59",
-      "PRIOR PROPOSALS: 30 distinct open branches target bot/earning/articles.py title prompts (_SYSTEM TITLE rules and _revise_title), including every angle on the two current gate findings ('title has ALL-CAPS word' x1, 'colon-subtitle' x1) and on 'Title Case The Important Words' (proposed 2x)",
-      "article_interest: problem-workaround n=10 avg=460.3 already steers prompts and the steering path shows no gate losses"
+      "article_rejects.counts total 89, of which llm_error=59 lifetime and 32 in the last 14 days (engine failures, explicitly not prompt-fixable)",
+      "Drafts lost to prompts (last 14 days): weak_title=2, fabricated=2 \u2014 one defect each ('title has ALL-CAPS word' x1; 'colon-subtitle' x1)",
+      "PRIOR PROPOSALS lists ~30 open, never-merged branches targeting the same weak_title/ALL-CAPS/colon-subtitle prompts in bot/earning/articles.py",
+      "reach is not currently prompt-limited: article_daily.published=1 and the binding constraint is archetype fit (problem-workaround n=10 avg 460.3), not title-gate rejects"
     ],
-    "money_path": "none this cycle (reach-only work; the receive path is live and coverage-complete per receipt_check 50/51)",
-    "verify": "If the owner instead merges one of the pending title-prompt branches, article_rejects.counts.weak_title should stay flat or fall over the next 14-day window; the number worth watching is llm_error, which is an LLM-engine matter, not a prompt one.",
+    "money_path": "none (maintenance/no-change) \u2014 the receive path is verified (coverage 50/51, known_without_footer=0), so the marginal money here would come from more published posts, but losing 2 drafts per fortnight to the title gate is not the bottleneck losing them",
+    "verify": "Next cycles: article_rejects recent window should continue to show weak_title at ~0-1 per 14 days; if weak_title rises above ~4 in a window, revisit with a concrete example edit distinct from the 30 open branches",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -85,40 +68,20 @@
   },
   "suggestions": [
     {
-      "title": "Address the llm_error spike, which costs 32 drafts in 14 days",
-      "description": "llm_error (59 lifetime, 32 last-window) is by far the largest reject cause \u2014 each one is a post and a tip ask that never shipped. No prompt edit can fix it; it sits in the protected LLM layer.",
-      "owner_action": "Review the GLM endpoint stability / rate limits for role 'post' (bot/llm.py, GLM_API_KEY), or confirm the atria fallback actually engages on these failures.",
+      "title": "Retry llm_error drafts on the fallback provider within the same cycle",
+      "description": "llm_error is the largest single reject bucket (59 lifetime, 32 in 14 days) and currently costs a whole day's article and its tip ask; glm's fallback (atria) is already configured and live in llm_workflows, so a single retry could recover most of those lost posts.",
+      "owner_action": "Confirm that a one-retry fallback for the 'post' role inside the article path is desired, since bot/llm.py is protected and only the owner can authorize touching the protected LLM layer (or delegate the retry to an editable module).",
       "secret_needed": null,
       "how_to": [
-        "Step 1: grep the workflow logs for '[articles] rejected (llm_error)' entries and the underlying provider error text.",
-        "Step 2: decide whether the fallback_provider (atria) is being attempted on complete_json_for_role failures; if not, that is a bot/llm.py fix only you can authorize (the file is protected for me)."
+        "Step 1: Verify ATRIA_API_KEY is set on the runner (llm_workflows shows fallback key_set=true already).",
+        "Step 2: Decide the retry seam (a retry inside bot/llm.py's post role, which is owner-protected, vs. an article-side retry via an editable module) and authorize which path is allowed.",
+        "Step 3: Merge whichever retry lands; watch article_rejects.counts.llm_error \u2014 it should fall from ~59 lifetime pace toward near zero."
       ],
-      "discovered_at": "2026-11-13T14:01:05.741397+00:00"
-    },
-    {
-      "title": "Merge or close the 30 pending title-prompt branches",
-      "description": "Thirty open review branches propose near-identical one-line sharpenings of the same two prompts. They cannot be evaluated incrementally while all stay open; one merged edit would let the weak_title count be measured against a real baseline.",
-      "owner_action": "Pick one (e.g. the 2026-11-11 _revise_title sharpening), merge it, and close the rest as duplicates.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: open the 2026-11-11 branch, review the single _revise_title edit.",
-        "Step 2: merge or close all 30 title-prompt branches; next cycle's article_rejects window then measures one change."
-      ],
-      "discovered_at": "2026-11-13T14:01:05.741397+00:00"
-    },
-    {
-      "title": "dev.to profile bio: paste the receive address once",
-      "description": "The doctrine's channel table names this the one cheap owner-only row left: a single Bio edit at dev.to/settings carries the ask on every profile visit permanently, with no account, processor or policy change.",
-      "owner_action": "Add the TRC-20 address (TFTNsf\u20269KbY, full address in payout_public) to the bio at dev.to/settings.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: open https://dev.to/settings, paste the full address and 'USDT/USDC/USDD on Tron' into the bio, save."
-      ],
-      "discovered_at": "2026-11-13T14:01:05.741397+00:00"
+      "discovered_at": "2026-11-13T15:01:23.446534+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 31,
+  "last_cycle_seconds": 43,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2784,7 +2747,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-13T14:00:36.364203+00:00",
+    "checked_at": "2026-11-13T15:00:42.179817+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3526,7 +3489,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-13T14:01:05.942539+00:00",
+    "last_run": "2026-11-13T15:01:23.810934+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3536,32 +3499,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-13T14:01:06.186913+00:00",
+    "last_run": "2026-11-13T15:01:23.980892+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
       {
-        "id": 4985893,
-        "at": "2026-11-13T02:27:53.209655+00:00",
-        "ok": true
-      },
-      {
-        "id": 5012890,
-        "at": "2026-11-13T03:30:04.080759+00:00",
-        "ok": true
-      },
-      {
         "id": 5019261,
-        "at": "2026-11-13T03:30:04.080759+00:00",
-        "ok": true
-      },
-      {
-        "id": 4996282,
-        "at": "2026-11-13T03:30:04.080759+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
         "at": "2026-11-13T03:30:04.080759+00:00",
         "ok": true
       },
@@ -3781,13 +3724,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4602729,
         "at": "2026-11-13T14:01:06.186913+00:00",
         "ok": true
       },
       {
-        "id": 4602729,
-        "at": "2026-11-13T14:01:06.186913+00:00",
+        "id": 4985893,
+        "at": "2026-11-13T15:01:23.980892+00:00",
+        "ok": true
+      },
+      {
+        "id": 4996282,
+        "at": "2026-11-13T15:01:23.980892+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-13T15:01:23.980892+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-13T15:01:23.980892+00:00",
+        "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-11-13T15:01:23.980892+00:00",
         "ok": true
       }
     ],
@@ -3796,7 +3759,7 @@
     "unverified": 1,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.6
+    "oldest_check_age_hours": 11.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

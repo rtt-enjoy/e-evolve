@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-13T16:27:00.850334+00:00",
-  "total_runs": 2499,
+  "last_run": "2026-11-13T17:27:07.400944+00:00",
+  "total_runs": 2500,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,78 +34,55 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus target (weak_title, 2 drafts lost in 14 days) is already covered by roughly 30 open review branches on the same two prompts and the same two gate findings, and the dominant reject is llm_error (59 of 89 lifetime, 32 in the window), which the brief itself classifies as engine-side and not fixable by any prompt edit.",
+    "summary": "No change proposed: the prompt-fixable draft losses are trivially small (weak_title=2, fabricated=2 in 14 days) while llm_error dominates (32 of the last 14 days' losses), and the PROMPT FOCUS targets \u2014 title rewrite and _SYSTEM title rules \u2014 have already accumulated 31 unmerged review branches covering exactly these two findings (ALL-CAPS words and colon-subtitle padding), so a 32nd near-identical edit is a repeat, not a step.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Two-minute profile bio edit carries the ask on every profile visit",
-        "description": "Permanently places the receive address on the one dev.to surface every article reader can reach that the footer pipeline does not cover; covers every profile visitor forever with no per-post work",
-        "owner_action": "Add the TRC-20 address [redacted] to the Bio field at dev.to/settings",
+        "title": "Check GLM provider stability; llm_error is 59 of 89 lifetime draft losses",
+        "description": "Two thirds of all lost drafts (and one post and one tip ask per loss) die before any gate sees them, in the LLM call itself \u2014 fixing that recovers far more posts than any prompt edit",
+        "owner_action": "Review GLM_API_KEY quota/rate limits on the z.ai dashboard, or confirm the atria fallback is actually being exercised when glm-5.3-flash fails",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open https://dev.to/settings/profile while signed in as robust_true_try",
-          "Step 2: Paste the address into the Bio field (plain text; the API cannot write it \u2014 users is show-only in Forem's routes, confirmed and recorded in the doctrine)",
-          "Step 3: Save; next cycle's receipt_check and profile visits observe it with no code change"
+          "Step 1: Open the z.ai console and check recent 4xx/5xx rates and quota on the GLM_API_KEY used by the 'post' role",
+          "Step 2: If quota is the cause, raise it or confirm bot/llm.py's fallback path to atria fires on these errors (llm_engine.calls currently shows glm: 2, suggesting few successful calls per cycle)",
+          "Step 3: No code change needed; article_rejects.counts.llm_error is the field to watch next cycles"
         ]
       }
     ],
-    "direction": "Step 4 (reach) via the PROMPT FOCUS, read with the dead-end rule against repeating PRIOR PROPOSALS",
+    "direction": "Checklist step 4 \u2014 reach via prompt upgrades, one step per cycle, only where the evidence says the prompt is the bottleneck",
     "evidence": [
-      "article_rejects.counts: llm_error=59 of total 89 (66%); weak_title=14 lifetime but only 2 in the last 14 days",
-      "article_rejects.last = 'llm_error': 'LLM call failed' \u2014 the engine, not a prompt",
-      "PROMPT FOCUS gate findings ('title has ALL-CAPS word' x1; 'colon subtitle' x1) are each one draft in the window",
-      "PRIOR PROPOSALS: 30 distinct open branches already target _revise_title/_SYSTEM title rules (ALL-CAPS, colon-subtitle, examples, deterministic rescue) \u2014 a 31st variant is the recorded failure mode",
-      "reach signal is healthy and already steered: preferred_archetypes() = ['problem-workaround'] with n=10 (above the 3-post sample floor), steering via _ARCHETYPE_BONUS and _audience_guidance is already in place"
+      "article_rejects last-14-day prompt losses: weak_title=2, fabricated=2",
+      "article_rejects last-14-day engine losses: llm_error=32, empty_draft=2 (not fixable by any prompt edit)",
+      "article_rejects.counts lifetime total=89 with llm_error=59 (66%)",
+      "PROMPT FOCUS gate findings 'title has ALL-CAPS word' x1 and 'title padded with a colon subtitle' x1 \u2014 both findings already addressed by at least 8 open unmerged proposals each",
+      "PRIOR PROPOSALS: 31 of 43 open branches are title-prompt edits to articles.py, none merged"
     ],
-    "money_path": "none (no change proposed; nothing touches the receive path)",
-    "verify": "Next cycle's article_rejects window: if weak_title rises above its current 2-per-14-days once one of the 30 open title branches is merged, the gate findings will name which fix worked; llm_error should be read as engine availability, not prompt quality.",
+    "money_path": "none this cycle \u2014 no change clears the bar; the receive path is live and coverage-checked (covered 50/51), so reach edits only pay off when the writing prompts, not the LLM engine, are the loss stage",
+    "verify": "Next cycle's article_rejects window: if llm_error falls toward 0 and prompt losses rise above ~2 per fortnight, a single prompt step becomes the right lever again; weak_title should stay at or below 2 either way",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 44
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 63,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (63 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Two-minute profile bio edit carries the ask on every profile visit",
-      "description": "Permanently places the receive address on the one dev.to surface every article reader can reach that the footer pipeline does not cover; covers every profile visitor forever with no per-post work",
-      "owner_action": "Add the TRC-20 address [redacted] to the Bio field at dev.to/settings",
+      "title": "Check GLM provider stability; llm_error is 59 of 89 lifetime draft losses",
+      "description": "Two thirds of all lost drafts (and one post and one tip ask per loss) die before any gate sees them, in the LLM call itself \u2014 fixing that recovers far more posts than any prompt edit",
+      "owner_action": "Review GLM_API_KEY quota/rate limits on the z.ai dashboard, or confirm the atria fallback is actually being exercised when glm-5.3-flash fails",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open https://dev.to/settings/profile while signed in as robust_true_try",
-        "Step 2: Paste the address into the Bio field (plain text; the API cannot write it \u2014 users is show-only in Forem's routes, confirmed and recorded in the doctrine)",
-        "Step 3: Save; next cycle's receipt_check and profile visits observe it with no code change"
+        "Step 1: Open the z.ai console and check recent 4xx/5xx rates and quota on the GLM_API_KEY used by the 'post' role",
+        "Step 2: If quota is the cause, raise it or confirm bot/llm.py's fallback path to atria fires on these errors (llm_engine.calls currently shows glm: 2, suggesting few successful calls per cycle)",
+        "Step 3: No code change needed; article_rejects.counts.llm_error is the field to watch next cycles"
       ],
-      "discovered_at": "2026-11-13T16:27:26.404639+00:00"
+      "discovered_at": "2026-11-13T17:27:32.723735+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 138,
+  "last_cycle_seconds": 26,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2771,7 +2748,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-13T16:27:01.327628+00:00",
+    "checked_at": "2026-11-13T17:27:07.706085+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3513,7 +3490,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-13T16:29:17.799689+00:00",
+    "last_run": "2026-11-13T17:27:32.950876+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3523,30 +3500,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-13T16:29:18.036808+00:00",
+    "last_run": "2026-11-13T17:27:33.116830+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 5027243,
-        "at": "2026-11-13T05:28:32.402833+00:00",
-        "ok": true
-      },
-      {
-        "id": 4641536,
-        "at": "2026-11-13T06:30:44.798000+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-11-13T06:30:44.798000+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-11-13T06:30:44.798000+00:00",
-        "ok": true
-      },
       {
         "id": 4977763,
         "at": "2026-11-13T06:30:44.798000+00:00",
@@ -3768,13 +3725,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4568987,
         "at": "2026-11-13T16:29:18.036808+00:00",
         "ok": true
       },
       {
-        "id": 4568987,
-        "at": "2026-11-13T16:29:18.036808+00:00",
+        "id": 5027243,
+        "at": "2026-11-13T17:27:33.116830+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-13T17:27:33.116830+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-13T17:27:33.116830+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-13T17:27:33.116830+00:00",
+        "ok": true
+      },
+      {
+        "id": 4965279,
+        "at": "2026-11-13T17:27:33.116830+00:00",
         "ok": true
       }
     ],
@@ -3783,7 +3760,7 @@
     "unverified": 1,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.0
+    "oldest_check_age_hours": 10.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3803,7 +3780,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

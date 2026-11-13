@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-13T00:27:19.902557+00:00",
-  "total_runs": 2482,
+  "last_run": "2026-11-13T01:27:20.327098+00:00",
+  "total_runs": 2483,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,13 +33,13 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the title-prompt area named by PROMPT FOCUS already has 51 open unmerged review branches covering both measured findings (ALL-CAPS and colon-subtitle), so a 52nd duplicate edit cannot be verified and buries the rule that matters; meanwhile llm_error (59 lifetime, 32 in the last 14 days) dwarfs weak_title (2) and is engine-side, not fixable by any prompt edit.",
+    "summary": "No change proposed: the prompt-focus losses (weak_title=2 in 14 days) are a rounding error beside llm_error=32, and both weak_title gate findings are already covered by dozens of existing unmerged branches \u2014 a 52nd duplicate prompt edit cannot move reach.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Merge exactly one open title-prompt branch and close the other 50",
-        "description": "weak_title cost 2 drafts in 14 days and both findings (ALL-CAPS word, colon-subtitle) are already covered by existing unmerged branches; 51 duplicates make the ledger unattributable and block future prompt work. The reach loss that actually matters is llm_error (32 drafts/14d), which is engine-side.",
-        "owner_action": "Merge the single most complete open evolve/* branch touching bot/earning/articles.py (one covering both ALL-CAPS clarification and a colon-subtitle before/after example), close the rest as superseded, and review the LLM engine failure rate after one 14-day window.",
+        "description": "weak_title cost 2 drafts in 14 days and both findings (ALL-CAPS word, colon-subtitle) are already covered by existing unmerged branches; 51 open duplicates make the ledger unattributable and block future prompt work. The reach loss that actually matters is llm_error (32 drafts/14d), which is engine-side.",
+        "owner_action": "Merge the single most complete open evolve/* branch touching bot/earning/articles.py (one covering both the ALL-CAPS clarification and a colon-subtitle before/after example), close the rest as superseded, and review the LLM engine failure rate after one 14-day window.",
         "secret_needed": null,
         "how_to": [
           "Step 1: List open evolve/* branches touching bot/earning/articles.py dated 2026-10-31..2026-11-11.",
@@ -48,17 +48,16 @@
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompts one step per cycle \u2014 but only where the ledger can attribute the result; Principle 3j discipline applied to the steering signal itself.",
+    "direction": "Step 4 \u2014 reach into a live receive path, upgrade prompts one step per cycle; Principle 5",
     "evidence": [
-      "article_rejects.counts (lifetime, total 89): llm_error=59, weak_title=14, empty_draft=11",
-      "Drafts lost in last 14 days: weak_title=2, fabricated=2 vs llm_error=32",
+      "article_rejects.counts (14d window): llm_error=32, weak_title=2, empty_draft=2",
       "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "PRIOR PROPOSALS: 51 open branches, all in bot/earning/articles.py title-prompt area (2026-10-31..2026-11-11)",
-      "article_rejects gate findings: 'title has ALL-CAPS word' x1; 'title padded with a colon subtitle' x1 \u2014 both already addressed by multiple open branches",
-      "payout.live = true, receipt_check coverage 50/50, wallet.received_total_usd = 0.0 \u2014 receive path verified, so reach is the work, but the reach loss is dominated by the engine, not the prompts"
+      "gate findings behind weak_title: 'title has ALL-CAPS word' x1; 'title padded with a colon subtitle' x1",
+      "PRIOR PROPOSALS: 51 distinct open branches, ~30 of them editing the same _revise_title/_SYSTEM title rules for these exact findings",
+      "preferred_archetypes() = ['problem-workaround'] with n=10 \u2014 the reach steering signal is already active and healthy"
     ],
-    "money_path": "none (no change); the dominant draft loss (llm_error=32/14d) sits in the LLM engine, and every further prompt edit in the saturated title area is unverifiable until the 51 open branches are resolved.",
-    "verify": "Owner merges one existing title-prompt branch (per the suggestion already in status.suggestions) and closes the rest; after a 14-day window, article_rejects.counts.weak_title should stay near zero and llm_error should be the only material line \u2014 at which point the next lever is engine reliability, not prompts.",
+    "money_path": "reach-only (and no change this cycle): publishing one more post per draft lost is the funnel, but the dominant draft loss is engine-side (llm_error, 32/14d), which no prompt edit can fix.",
+    "verify": "If the owner merges one existing title-prompt branch (see suggestions), article_rejects.counts.weak_title should stay near 0 over the next 14-day window; if llm_error still dominates after that window, the fix is engine reliability (glm call failures), not any prompt.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -70,8 +69,8 @@
   "suggestions": [
     {
       "title": "Merge exactly one open title-prompt branch and close the other 50",
-      "description": "weak_title cost 2 drafts in 14 days and both findings (ALL-CAPS word, colon-subtitle) are already covered by existing unmerged branches; 51 duplicates make the ledger unattributable and block future prompt work. The reach loss that actually matters is llm_error (32 drafts/14d), which is engine-side.",
-      "owner_action": "Merge the single most complete open evolve/* branch touching bot/earning/articles.py (one covering both ALL-CAPS clarification and a colon-subtitle before/after example), close the rest as superseded, and review the LLM engine failure rate after one 14-day window.",
+      "description": "weak_title cost 2 drafts in 14 days and both findings (ALL-CAPS word, colon-subtitle) are already covered by existing unmerged branches; 51 open duplicates make the ledger unattributable and block future prompt work. The reach loss that actually matters is llm_error (32 drafts/14d), which is engine-side.",
+      "owner_action": "Merge the single most complete open evolve/* branch touching bot/earning/articles.py (one covering both the ALL-CAPS clarification and a colon-subtitle before/after example), close the rest as superseded, and review the LLM engine failure rate after one 14-day window.",
       "secret_needed": null,
       "how_to": [
         "Step 1: List open evolve/* branches touching bot/earning/articles.py dated 2026-10-31..2026-11-11.",
@@ -82,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 21,
+  "last_cycle_seconds": 19,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2335,7 +2334,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-13T00:27:20.536953+00:00",
+    "checked_at": "2026-11-13T01:27:20.768143+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3073,7 +3072,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-13T00:27:40.163537+00:00",
+    "last_run": "2026-11-13T01:27:38.624426+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3083,25 +3082,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-13T00:27:40.324341+00:00",
+    "last_run": "2026-11-13T01:27:38.915089+00:00",
     "last_reason": "all_verified",
     "agrees_with_backfill": true,
     "verified_ids": [
-      {
-        "id": 4602729,
-        "at": "2026-11-12T11:16:18.527917+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-11-12T12:16:30.016549+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-11-12T12:16:30.016549+00:00",
-        "ok": true
-      },
       {
         "id": 4720062,
         "at": "2026-11-12T13:18:29.761945+00:00",
@@ -3114,11 +3098,6 @@
       },
       {
         "id": 4619528,
-        "at": "2026-11-12T13:18:29.761945+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
         "at": "2026-11-12T13:18:29.761945+00:00",
         "ok": true
       },
@@ -3333,8 +3312,28 @@
         "ok": true
       },
       {
+        "id": 4602729,
+        "at": "2026-11-13T01:27:38.915089+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-11-13T01:27:38.915089+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-13T01:27:38.915089+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-11-13T01:27:38.915089+00:00",
+        "ok": true
+      },
+      {
         "id": 4489474,
-        "at": "2026-11-13T00:27:40.324341+00:00",
+        "at": "2026-11-13T01:27:38.915089+00:00",
         "ok": true
       }
     ],
@@ -3343,7 +3342,7 @@
     "unverified": 0,
     "coverage_complete": true,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 13.2
+    "oldest_check_age_hours": 12.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -403,7 +403,11 @@ def _generate_article(llm: Any, status: dict) -> Optional[dict]:
 		f"SOURCE SUMMARY: {source.get('summary', '') or '(no summary provided; rely on the title)'}\n\n"
 		"Pick a specific practitioner angle on this subject. Add working code, "
 		"tradeoffs, and failure modes the source does not cover. Do not reword the "
-		"source. Your title must differ from the source title. Follow every "
+		"source. Your title must differ from the source title. Before answering, "
+		"check your title against the TITLE rules: no ALL-CAPS word that is not an "
+		"acronym (TRON and KUBERNETES are written in normal case), and no colon "
+		"splitting two full clauses -- those two defects are the ones most often "
+		"found here. Follow every "
 		"formatting and source-handling rule in the system prompt, including the "
 		"TITLE and TAGS rules. JSON only."
 		+ _audience_guidance(status)

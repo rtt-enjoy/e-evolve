@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-13T10:00:27.678588+00:00",
-  "total_runs": 2492,
+  "last_run": "2026-11-13T11:00:29.708204+00:00",
+  "total_runs": 2493,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,31 +34,42 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle. The PROMPT FOCUS lane (weak_title, 2 drafts in 14 days) is already covered by 30+ open review branches targeting the exact two gate findings ('ALL-CAPS word', colon-subtitle) from every angle \u2014 rule sharpening, concrete examples, deterministic rescue, multi-candidate rewrite \u2014 and none merged. A 31st variant of the same two lines adds review load, not reach. The dominant real loss is llm_error=59 lifetime / 32 in-window, which the brief itself marks as engine-side, not fixable by a prompt edit, and retry loops are on the dead-end list.",
+    "summary": "No change this cycle: the PROMPT FOCUS (weak_title, 2 drafts in 14 days) is already the subject of 30+ unmerged title-prompt branches in PRIOR PROPOSALS covering every variant of the ALL-CAPS and colon-subtitle fix, so another edit would duplicate an open proposal and muddy the window; the dominant loss is engine-side (llm_error=32), which no prompt edit can fix.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Review and merge (or close) the backlog of title-prompt branches",
-        "description": "30+ open evolution branches all edit the same two title rules in bot/earning/articles.py (_SYSTEM TITLE rules and _revise_title). Whichever variant the owner prefers, merging one stops the evolution loop from re-proposing the same fix every cycle and lets the next weak_title window measure a real change.",
-        "owner_action": "Pick one of the open title-prompt branches (a small edit to _SYSTEM or _revise_title), merge it, and close the rest as superseded.",
+        "title": "Merge exactly one title-prompt branch and close the rest",
+        "description": "Lets the weak_title window measure one real change instead of thirty competing ones; stops the evolution loop from re-proposing the same two-rule fix every cycle.",
+        "owner_action": "Pick the smallest open title-prompt branch diff, merge it, and close the other title branches as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: List open branches prefixed evolve/.",
-          "Step 2: Choose the smallest diff that sharpens the ALL-CAPS and colon-subtitle rules (e.g. the 2026-11-04 one-line sharpening).",
-          "Step 3: Merge it and close the other title-prompt branches; weak_title rejects over the next 14 days then measure one change, not thirty."
+          "Step 1: List open branches prefixed evolve/ and filter to those touching bot/earning/articles.py TITLE rules or _revise_title.",
+          "Step 2: Merge the smallest one that mirrors the two gate findings ('ALL-CAPS word', 'colon-subtitle padding').",
+          "Step 3: Close the remaining title-prompt branches; the next 14-day weak_title count then grades a single change."
+        ]
+      },
+      {
+        "title": "Investigate the llm_error spike before any further prompt work",
+        "description": "32 drafts lost to 'LLM call failed' in 14 days versus 2 to weak_title \u2014 the engine, not the prompts, is where the publishing volume is going.",
+        "owner_action": "Check GLM API key quota/billing and consider switching llm_roles['post'] to the atria fallback for one cycle to compare failure rates.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Read the workflow logs for the article step on a cycle where article_rejects.last_reason was llm_error.",
+          "Step 2: If it is 401/402/429 from the GLM endpoint, fix quota or set config llm_roles.post fallback to atria (already key_set=true, live=true).",
+          "Step 3: Compare llm_error counts over the next 7 days."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path; prompt upgrades one step per cycle",
+    "direction": "Checklist step 4 (upgrade prompts one step per cycle) \u2014 served here by declining to stack a 31st variant of an already-proposed edit onto unmerged branches.",
     "evidence": [
-      "article_rejects.counts: weak_title=14 lifetime but only 2 in the last 14 days",
-      "article_rejects.counts: llm_error=59 lifetime, 32 in last 14 days (engine, not prompt)",
-      "Drafts lost to a prompt (last 14 days): weak_title=2, fabricated=2",
-      "PRIOR PROPOSALS: ~30 open branches on bot/earning/articles.py title prompts, none merged",
-      "gate findings behind focus: 'title has ALL-CAPS word' x1; 'title padded with a colon subtitle' x1 \u2014 both already addressed by open proposals"
+      "article_rejects.counts: weak_title=14 lifetime but only weak_title=2 in the last-14-day prompt window",
+      "gate findings behind the window: 'title has ALL-CAPS word' x1, 'title padded with a colon subtitle' x1 \u2014 exactly the two rules every 2026-10-31..2026-11-11 prior proposal targets",
+      "llm_error=32 in the last 14 days vs weak_title=2: drafts are lost to the engine, not to the prompt",
+      "PRIOR PROPOSALS: 47 open branches, ~30 of them edit _SYSTEM TITLE rules and/or _revise_title; none merged",
+      "status.suggestions already carries the owner action to merge one title branch and close the rest"
     ],
-    "money_path": "none this cycle \u2014 declining to add a redundant diff is itself protection for the receive path's review bandwidth; the reach work (problem-workaround steering, avg 460.3) is already in place from prior merged changes",
-    "verify": "Next cycle's PROMPT FOCUS window: if one of the open title-prompt branches merges, weak_title in-window count should fall to 0; if llm_error keeps dominating, the engine, not the prompts, is the constraint and the owner should look at glm availability (llm_engine.calls={'glm': 1}, last reject 'llm_error': 'LLM call failed').",
+    "money_path": "none this cycle \u2014 a change here would be reach-only, and even that is blocked while the title-prompt branches sit unmerged: weak_title costs 2 drafts per fortnight, llm_error costs 32, and no prompt edit touches either until the owner merges or the engine stabilises.",
+    "verify": "Next cycle's article_rejects 14-day window: if the owner merges one title branch, weak_title should fall to at most 1 per 14 days and the ALL-CAPS/colon-subtitle findings should stop recurring; if the engine issue persists, llm_error should be investigated instead (GLM calls=2 this cycle with serving=glm, live=true).",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -66,46 +77,46 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "ctf-bounty",
+        "platform": "mrr-ideas",
         "success": true,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
         "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 43
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 64,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (64 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "status.json#mrr_ideas"
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Review and merge (or close) the backlog of title-prompt branches",
-      "description": "30+ open evolution branches all edit the same two title rules in bot/earning/articles.py (_SYSTEM TITLE rules and _revise_title). Whichever variant the owner prefers, merging one stops the evolution loop from re-proposing the same fix every cycle and lets the next weak_title window measure a real change.",
-      "owner_action": "Pick one of the open title-prompt branches (a small edit to _SYSTEM or _revise_title), merge it, and close the rest as superseded.",
+      "title": "Merge exactly one title-prompt branch and close the rest",
+      "description": "Lets the weak_title window measure one real change instead of thirty competing ones; stops the evolution loop from re-proposing the same two-rule fix every cycle.",
+      "owner_action": "Pick the smallest open title-prompt branch diff, merge it, and close the other title branches as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List open branches prefixed evolve/.",
-        "Step 2: Choose the smallest diff that sharpens the ALL-CAPS and colon-subtitle rules (e.g. the 2026-11-04 one-line sharpening).",
-        "Step 3: Merge it and close the other title-prompt branches; weak_title rejects over the next 14 days then measure one change, not thirty."
+        "Step 1: List open branches prefixed evolve/ and filter to those touching bot/earning/articles.py TITLE rules or _revise_title.",
+        "Step 2: Merge the smallest one that mirrors the two gate findings ('ALL-CAPS word', 'colon-subtitle padding').",
+        "Step 3: Close the remaining title-prompt branches; the next 14-day weak_title count then grades a single change."
       ],
-      "discovered_at": "2026-11-13T10:01:10.766295+00:00"
+      "discovered_at": "2026-11-13T11:00:55.397932+00:00"
+    },
+    {
+      "title": "Investigate the llm_error spike before any further prompt work",
+      "description": "32 drafts lost to 'LLM call failed' in 14 days versus 2 to weak_title \u2014 the engine, not the prompts, is where the publishing volume is going.",
+      "owner_action": "Check GLM API key quota/billing and consider switching llm_roles['post'] to the atria fallback for one cycle to compare failure rates.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Read the workflow logs for the article step on a cycle where article_rejects.last_reason was llm_error.",
+        "Step 2: If it is 401/402/429 from the GLM endpoint, fix quota or set config llm_roles.post fallback to atria (already key_set=true, live=true).",
+        "Step 3: Compare llm_error counts over the next 7 days."
+      ],
+      "discovered_at": "2026-11-13T11:00:55.397932+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 241,
+  "last_cycle_seconds": 52,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2795,7 +2806,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-13T10:00:28.123458+00:00",
+    "checked_at": "2026-11-13T11:00:30.197759+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2987,7 +2998,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-11-11T10:29:18.738663+00:00",
+    "last_refresh_at": "2026-11-13T11:00:55.405495+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -2996,43 +3007,33 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The only honest recurring-revenue angle on this stack is a narrowly-niche, research-driven technical newsletter that is published free on dev.to (which is the entire distribution surface), with recurring support collected voluntarily as tips to the owner's own Tron wallet address published in each article's footer. No payment processor, no account, no ID verification is possible or needed under the constraints: the owner cannot open Gumroad/Substack/Stripe as a step in any plan proposed here, since those require accepting payment infrastructure this stack forbids. That means recurring revenue is voluntary and small until the owner later, entirely by hand and outside this plan, chooses to open and ID-verify a payment account. The niche must be narrow enough that a solo researcher/writer can become the visibly best free source on it within weeks.",
+    "summary": "The only honest recurring-revenue angle for a stack that can only research and publish to dev.to is a paid newsletter with an entirely free front end: publish a tightly-niched weekly article series on dev.to (the dev.to byline is the only audience this stack builds), use each article's ending question and the owner's own hand-posted threads to find and talk to readers, and only after there is demonstrated demand and trust does the owner open a payment account by hand (Gumroad/Substack/Polar/Stripe all require government ID verification and none pays crypto, verified 2026-09-15) or simply publish a Tron wallet address for tips, which needs no account at all. Until then there is no recurring revenue, and anyone who says otherwise is selling passive-income fantasy: no payment processor, no outbound channel, and no inbound HTTP means the first months are pure audience-building work.",
     "ranked_ideas": [
       {
-        "name": "Free niche dev newsletter with wallet-tip recurring support",
-        "why_this_stack_fits": "GitHub Actions can research, analyse, and draft on an hourly schedule, and dev.to is the only publish surface \u2014 a writing-first product needs nothing else.",
-        "narrow_niche": "GitHub Actions workflow debugging and cost/pattern patterns for solo maintainers of open-source Python projects (verify independently how contested this niche is before committing).",
-        "first_proof_artifact": "Ten deeply-researched articles, each dissecting one real public GitHub Actions workflow failure and its fix, published under a consistent dev.to series name with a tip address in the footer.",
-        "who_pays": "Solo open-source maintainers who fight CI flakiness weekly and voluntarily tip to keep the series going.",
-        "monthly_price_usd": "0",
-        "runway_to_first_dollar": "8-12 weeks (voluntary tips are unpredictable \u2014 verify independently whether any trickle materializes)",
-        "owner_must_do_by_hand": "Everything that touches money or audience: maintain the Tron wallet and address, check tips received, read comments and reply, choose the weekly topic from research candidates, hit the final publish button after human review, and \u2014 if tips ever justify it \u2014 personally open and ID-verify a real payme",
-        "discovered_at": "2026-11-11T10:29:18.738663+00:00"
-      },
-      {
-        "name": "Paid deep-dive edition, prepared now, sold later",
-        "why_this_stack_fits": "The same research/draft pipeline can produce a premium long-form artifact that sits ready until the owner, by hand, has a storefront to sell it through.",
-        "narrow_niche": "Migration playbooks for teams moving legacy CI from self-hosted Jenkins to GitHub Actions in regulated (finance/healthcare) environments.",
-        "first_proof_artifact": "One complete, specific migration playbook (real workflow YAML, rollback plan, compliance checklist) drafted and polished but unpublished until a sales channel exists.",
-        "who_pays": "Engineering leads at small regulated companies planning a Jenkins-to-Actions migration.",
-        "monthly_price_usd": "15-25 (per subscriber, once a real storefront exists)",
-        "runway_to_first_dollar": "Cannot be stated honestly \u2014 zero dollars until the owner by hand opens and ID-verifies a payment account; the playbook work is 6-10 weeks of preparation before any revenue is even possible.",
-        "owner_must_do_by_hand": "Open a storefront, pass government-ID verification, create the product listing, set the price, handle refunds and customer questions, and do any marketing. No automation in this stack can open accounts, verify identity, or take payment.",
-        "discovered_at": "2026-11-11T10:29:18.738663+00:00"
+        "name": "Paid newsletter (dev.to free series as the funnel)",
+        "why_this_stack_fits": "The bot can research and publish articles hourly via GitHub Actions, which is exactly the production rhythm a niche technical newsletter needs; everything after publishing (payment, subscribers, refunds) is human work.",
+        "narrow_niche": "Not 'AI/DevOps' broadly \u2014 pick one verifiable, recurring pain: e.g. 'GitHub Actions cost and flakiness engineering for small teams running CI on the free tier', or 'open-source library dependency-update triage for solo maintainers of 1-3 star repos'.",
+        "first_proof_artifact": "Four consecutive weekly deep-dive articles on the exact niche, each ending with a specific question to readers, plus one genuinely useful research artifact (e.g. a hand-audited table of real flaky-CI patterns the owner collected by reading public workflow files) published as a fifth article.",
+        "who_pays": "Solo developers and two-to-five-person teams who already hit recurring CI/dependency pain and follow the series; no one is contacted \u2014 they self-select by responding to article questions or the owner's own threads.",
+        "monthly_price_usd": "10",
+        "runway_to_first_dollar": "8-16 weeks",
+        "owner_must_do_by_hand": "Open and ID-verify the payment account personally (Gumroad/Substack/Polar/Stripe all require government ID, none pays crypto); reply by hand to every reader who answers an article question; post threads by hand; write or heavily edit the articles; if avoiding ID checks entirely, publish the owner's ",
+        "discovered_at": "2026-11-13T11:00:55.405495+00:00"
       }
     ],
     "validation_steps": [
-      "Write and publish a dev.to article that dissects one common GitHub Actions failure and ends with a direct question asking readers how they handle it; watch comments and reactions over 2 weeks.",
-      "By hand, in communities the owner already belongs to (not cold outreach), start a discussion thread sharing one finding from the research pipeline and asking what CI pain people would pay to have solved.",
-      "Mine public data the bot can fetch on an hourly schedule: the most-starred repos with failing or flaky Actions workflows, and the most-upvoted github-community issues \u2014 recurring themes there are demand signals.",
-      "After 10 published articles, tally: comments asking follow-ups, follower growth on the series, and any tips received. If none of the three move, kill the niche and pick a narrower one."
+      "Publish 4-6 weekly articles on the one niche, each ending with a concrete question ('What breaks first in your CI \u2014 flaky tests or runner minutes? Reply below') and read every reply by hand.",
+      "The owner personally posts one discussion thread per article in communities they already belong to (their own dev.to followers, existing Discords/subreddits they are a member of \u2014 not new cold channels), and counts how many strangers describe the same problem unprompted.",
+      "Track a hand-kept counter: number of distinct people who reply substantively across articles. If it is fewer than 10 distinct people after six articles, kill or re-niche the idea \u2014 do not open a payment account yet.",
+      "When 10+ people exist, ask them publicly in an article or thread: 'Would you pay $10/mo for this weekly? Tell me why not.' Read the objections by hand before charging anything.",
+      "Verify independently that the chosen niche has real recurring cost/pain (e.g. runner-minute pricing, dependency-CVE frequency) \u2014 the bot can draft this comparison, but the owner must confirm current prices from primary sources before publishing any claim."
     ],
     "owner_actions": [
-      "Create a Tron wallet by hand, write the address down securely, and decide the footer text for every article.",
-      "Pick the niche by hand after the owner personally reads the top dev.to posts and GitHub community issues in two candidate niches; commit to one for 10 articles.",
-      "Configure the GitHub Actions pipeline to hourly research (failing workflows, community issues) and draft one article per week for owner review.",
-      "Publish article #1 by hand with the series name, footer, and closing question; reply to every comment by hand for the first month.",
-      "Keep a simple by-hand log of comments, followers, and tips weekly; after 10 articles, decide continue/kill based on that log \u2014 not on hope."
+      "Pick ONE narrow niche this week based on pain the owner can verify from primary sources; write down the exact buyer in one sentence.",
+      "Draft and publish article #1 in the series with the ending question; the bot drafts, the owner edits and presses publish.",
+      "Post article #1 by hand in one community the owner already belongs to, and reply personally to every comment within 24 hours.",
+      "Keep a running hand-written log of every distinct reader who replies and what problem they describe \u2014 this is the only validation data that exists.",
+      "Do not open any payment account until 10+ distinct engaged readers exist; when that bar is met, open Gumroad (or publish a Tron tip address for a no-ID tip-only model) and pass ID verification personally, then wire products via its API."
     ],
     "viable": [
       {
@@ -3547,7 +3548,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-13T10:04:28.185834+00:00",
+    "last_run": "2026-11-13T11:01:21.496775+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3557,32 +3558,12 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-13T10:04:28.404844+00:00",
+    "last_run": "2026-11-13T11:01:21.690934+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
       {
-        "id": 4931682,
-        "at": "2026-11-12T22:59:19.658337+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-11-13T00:01:11.078979+00:00",
-        "ok": true
-      },
-      {
         "id": 4681657,
-        "at": "2026-11-13T00:01:11.078979+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-11-13T00:01:11.078979+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
         "at": "2026-11-13T00:01:11.078979+00:00",
         "ok": true
       },
@@ -3802,13 +3783,33 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4780783,
         "at": "2026-11-13T10:04:28.404844+00:00",
         "ok": true
       },
       {
-        "id": 4780783,
-        "at": "2026-11-13T10:04:28.404844+00:00",
+        "id": 4931682,
+        "at": "2026-11-13T11:01:21.690934+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-11-13T11:01:21.690934+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-11-13T11:01:21.690934+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-13T11:01:21.690934+00:00",
+        "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-11-13T11:01:21.690934+00:00",
         "ok": true
       }
     ],
@@ -3817,7 +3818,7 @@
     "unverified": 1,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.1
+    "oldest_check_age_hours": 11.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

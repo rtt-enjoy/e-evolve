@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-14T08:18:25.489923+00:00",
-  "total_runs": 2516,
+  "last_run": "2026-11-14T09:18:26.201264+00:00",
+  "total_runs": 2517,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,80 +34,53 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "One small edit to the title-rewrite prompt (_revise_title) telling the model it may keep either half of a colon-padded title, aimed at the two weak_title drafts lost in the last 14 days without repeating any of the thirty prior title-prompt proposals.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The rewrite prompt already repeats the TITLE rules but never tells the model the specific escape for the measured defect: the gate finding 'pick the sharper half' means either half of the current title is acceptable alone. The model has been returning fresh titles that re-introduce the same pad instead of cutting the existing one. Adding one concrete repair instruction to _revise_title is a few-line edit, does not stack beside existing rules (it replaces the bare 'no colon-subtitle padding' clause with the instruction that also shows the fix), and does not touch any gate."
-      }
-    ],
+    "summary": "No change proposed this cycle: the prompt the focus names already carries 30 open, unmerged review branches covering every plausible edit (colon-subtitle sharpening, ALL-CAPS clarification, concrete examples, deterministic rescue, multi-candidate rewrite), the last-14-day loss it targets is 2 drafts, and the dominant loss is llm_error=27, which no prompt edit can fix.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Put the wallet address in the dev.to profile bio",
-        "description": "Carries the ask on every profile visit permanently, covering readers who arrive via the author page rather than a post. The only deferred channel row needing no account, processor or policy change.",
-        "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once.",
+        "title": "Merge or close the 30 open title-prompt branches",
+        "description": "Every plausible weak_title fix is already written and parked on review branches; the gate findings (colon subtitle x1, ALL-CAPS x1) are each addressed by at least one of them. A 31st duplicate proposal cannot improve reach \u2014 only a merge decision can.",
+        "owner_action": "Review and merge (or close) one of the existing evolve/* branches touching bot/earning/articles.py title prompts, then let two cycles of article_rejects data confirm weak_title drops.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open dev.to/settings and edit the Bio field.",
-          "Step 2: Paste the address from status.payout_public and save; no API or code change is involved."
+          "Step 1: Open the review branch list; the two most on-point are the 2026-11-05 deterministic colon-subtitle rescue and the 2026-11-04 ALL-CAPS wording replacement.",
+          "Step 2: Merge one, watch article_rejects.recent for two cycles, and close the rest of the title branches as superseded so future cycles stop re-proposing them."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path: upgrade the prompts that write what readers see, one step per cycle (PROMPT FOCUS: weak_title).",
+    "direction": "Checklist step 4 (reach via prompt upgrades), qualified by the dead-end rule against repeating PRIOR PROPOSALS",
     "evidence": [
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "Drafts lost to a prompt (last 14 days): weak_title=2, fabricated=2",
-      "Gate findings behind it: 'title padded with a colon subtitle; pick the sharper half' x1; 'title has ALL-CAPS word' x1",
-      "receive path verified: payout.live = true, receipt_check.known_without_footer = 0, so reach is the binding work"
+      "article_rejects.counts: weak_title=15 lifetime but only weak_title=2 in the last 14 days",
+      "llm_error=27 in the last 14 days (engine-side, unfixable by a prompt edit) vs empty_draft=2",
+      "PRIOR PROPOSALS: 30 distinct open branches all target articles.py title prompts (_revise_title / _SYSTEM), including colon-subtitle (2026-11-11, 2026-11-04), ALL-CAPS wording (2026-11-04, 2026-11-03), concrete examples (2026-11-05, 2026-11-03), and deterministic rescue (2026-11-05)",
+      "article_interest: problem-workaround n=11 avg=430.8 already leads; preferred_archetypes steering is live and unblocked",
+      "receipt_check coverage 50/52, known_without_footer=0 \u2014 receive path clean, nothing else binds"
     ],
-    "money_path": "Indirect: a title that passes the weak_title gate is one more published article carrying the tip footer, so one more ask reaches readers. The receive path itself is untouched.",
-    "verify": "Add a fast parse/imports check is unnecessary; the reviewer should watch article_rejects.counts.weak_title over the next 14-day window: it should fall from 2 toward 0, and drafts rescued by the rewrite should show as published articles in article_daily. The prior proposals already covered the _SYSTEM title rules and deterministic rescue; this targets the rewrite call itself, which the gate findings say is the stage that currently fails second ('and the rewrite failed').",
+    "money_path": "none (maintenance decision \u2014 no change shipped)",
+    "verify": "Next cycle: article_rejects recent window should show no new weak_title entries of the two measured kinds, and any proposed title edit should show weak_title falling below 2 per 14 days once one of the open branches merges",
     "error": null,
-    "branch": "evolve/1.41.1-20261114-081902",
-    "proposed_version": "1.41.1"
+    "branch": null,
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 16
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 44
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 64,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (64 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Put the wallet address in the dev.to profile bio",
-      "description": "Carries the ask on every profile visit permanently, covering readers who arrive via the author page rather than a post. The only deferred channel row needing no account, processor or policy change.",
-      "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once.",
+      "title": "Merge or close the 30 open title-prompt branches",
+      "description": "Every plausible weak_title fix is already written and parked on review branches; the gate findings (colon subtitle x1, ALL-CAPS x1) are each addressed by at least one of them. A 31st duplicate proposal cannot improve reach \u2014 only a merge decision can.",
+      "owner_action": "Review and merge (or close) one of the existing evolve/* branches touching bot/earning/articles.py title prompts, then let two cycles of article_rejects data confirm weak_title drops.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open dev.to/settings and edit the Bio field.",
-        "Step 2: Paste the address from status.payout_public and save; no API or code change is involved."
+        "Step 1: Open the review branch list; the two most on-point are the 2026-11-05 deterministic colon-subtitle rescue and the 2026-11-04 ALL-CAPS wording replacement.",
+        "Step 2: Merge one, watch article_rejects.recent for two cycles, and close the rest of the title branches as superseded so future cycles stop re-proposing them."
       ],
-      "discovered_at": "2026-11-14T08:19:02.131278+00:00"
+      "discovered_at": "2026-11-14T09:18:55.308542+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 147,
+  "last_cycle_seconds": 30,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2800,7 +2773,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-14T08:18:25.935399+00:00",
+    "checked_at": "2026-11-14T09:18:26.559157+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3174,8 +3147,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261114-081902",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 51,
     "total_views": 6325,
@@ -3542,35 +3515,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-14T08:20:51.779027+00:00",
+    "last_run": "2026-11-14T09:18:55.542137+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 3,
-    "with_footer": 3,
+    "checked": 4,
+    "with_footer": 4,
     "without_footer": 0,
-    "unreachable": 2,
+    "unreachable": 1,
     "missing": [],
-    "last_run": "2026-11-14T08:20:51.928118+00:00",
+    "last_run": "2026-11-14T09:18:55.787149+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4943931,
-        "at": "2026-11-13T20:27:39.105170+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
-        "at": "2026-11-13T20:27:39.105170+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-11-13T21:28:30.454145+00:00",
-        "ok": true
-      },
       {
         "id": 4430049,
         "at": "2026-11-13T21:28:30.454145+00:00",
@@ -3792,11 +3750,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-14T08:20:51.928118+00:00",
-        "ok": true
-      },
-      {
         "id": 4820684,
         "at": "2026-11-14T08:20:51.928118+00:00",
         "ok": true
@@ -3805,6 +3758,26 @@
         "id": 4765372,
         "at": "2026-11-14T08:20:51.928118+00:00",
         "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-14T09:18:55.787149+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-14T09:18:55.787149+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-11-14T09:18:55.787149+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-14T09:18:55.787149+00:00",
+        "ok": true
       }
     ],
     "published_total": 52,
@@ -3812,7 +3785,7 @@
     "unverified": 2,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.9
+    "oldest_check_age_hours": 11.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3832,7 +3805,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

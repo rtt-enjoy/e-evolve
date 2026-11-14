@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-14T22:05:12.772942+00:00",
-  "total_runs": 2531,
+  "last_run": "2026-11-14T22:26:27.267436+00:00",
+  "total_runs": 2532,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,45 +34,33 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus lane (weak_title, 2 drafts lost in 14 days) is the single most-proposed and never-merged area of the project \u2014 34 open branches already cover every variation of the ALL-CAPS and colon-subtitle fixes in _SYSTEM and _revise_title \u2014 so a 35th edit to the same two rules cannot clear the evidence bar, and the dominant loss (llm_error=26 in 14 days) is engine-side and not fixable by a prompt edit.",
+    "summary": "No change proposed: the prompt-ledger focus (weak_title, 2 drafts lost in 14 days) has been targeted by 33 unmerged proposals all editing the same title rules, while the dominant reject cause is llm_error (59 lifetime, 26 in-window) which no prompt edit can fix \u2014 proposing a 34th title-rule edit would not clear the bar.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one title-prompt branch instead of letting a 35th be proposed",
-        "description": "Two drafts in 14 days are being lost to a lane where 30+ fixes already sit written and unreviewed; merging one branch and observing the window closes the loop a new proposal cannot.",
-        "owner_action": "Review and merge (or close) the parked evolve/* branches touching articles.py title prompts, starting with the most recent (2026-11-14 _revise_title edit).",
+        "title": "Investigate the glm engine's llm_error rate",
+        "description": "26 of the last 14 days' rejected drafts died in LLM calls, not at any gate \u2014 this is the largest single loss of posts-and-asks in the window and no prompt edit can recover them.",
+        "owner_action": "Check GLM_API_KEY quota/health over several cycles; consider whether the atria fallback is actually engaging on post-role failures.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the open evolve/* branches and diff them against articles.py.",
-          "Step 2: Merge one; watch article_rejects.counts.weak_title over the next 14 days.",
-          "Step 3: Close the rest of the same-lane branches so the ledger stops accumulating duplicates."
-        ]
-      },
-      {
-        "title": "Two-minute profile bio edit carrying the tip address permanently",
-        "description": "Every profile visitor sees the receive address forever, on a surface no cycle of reach work can touch; the doctrine's channel table names this as the one cheap owner-only row.",
-        "owner_action": "Open dev.to/settings, paste the TRC-20 address (TFTNsf...9KbY) with the network into the Bio field, and save once.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Sign in to dev.to and go to Settings -> Profile -> Bio.",
-          "Step 2: Add one line: 'Support this work \u2014 USDT (TRC-20): [address]' and save.",
-          "Step 3: Verify by opening the public profile page logged out."
+          "Step 1: Review workflow logs for llm_error details in bot/earning/articles.py rejects.",
+          "Step 2: Confirm whether complete_json_for_role('post', ...) falls through to the atria fallback or fails outright."
         ]
       }
     ],
-    "direction": "Checklist step 4 / Principle 5 step 2 \u2014 reach via better prompts; declined because every prompt edit in the measured failure lane is already parked unmerged on an open review branch.",
+    "direction": "Checklist step 4 \u2014 reach into a live receive path \u2014 read honestly: the reach loss this window is engine availability, not title wording.",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime but 2 in the last 14 days",
-      "Drafts lost to a prompt (14d): weak_title=2 \u2014 gate findings: 'title padded with a colon subtitle' x1, 'title has ALL-CAPS word' x1",
-      "Drafts lost to the engine (14d): llm_error=26, empty_draft=2 \u2014 not addressable by prompt edits",
-      "PRIOR PROPOSALS: 34 distinct open branches, ~30 of them title-prompt edits to articles.py, none merged",
-      "receipt_check.coverage_complete = False (unknown), wallet.received_total_usd = 0.0 \u2014 receive path verified live, work is reach"
+      "article_rejects.counts: llm_error=59 vs weak_title=15 (lifetime), and the 14-day window shows weak_title=2 vs llm_error=26",
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed' \u2014 but only 2 drafts were lost to it in the window",
+      "PROMPT LEDGER lists 33 open prior proposals, every one an edit to the title rules in _SYSTEM/_revise_title, none merged",
+      "gate findings behind weak_title: colon-subtitle x1, ALL-CAPS x1 \u2014 both already addressed by multiple standing prompt rules and by prior proposal attempts",
+      "payout.live = true, receipt_check.known_without_footer = 0, wallet.received_total_usd = 0.0 \u2014 receive path is live and covered; the constraint is engine-side drafts and audience size, both outside a prompt edit"
     ],
-    "money_path": "reach-only (declined): the proposed lane would only affect click-through on dev.to posts carrying the tip footer; no change shipped this cycle.",
-    "verify": "N/A \u2014 no change. If the owner merges any one of the 34 parked title-prompt branches, verify by article_rejects.counts.weak_title staying at 2 in the next 14-day window and 'title padded with a colon subtitle' / 'title has ALL-CAPS word' not recurring in article_rejects.recent.",
+    "money_path": "none (maintenance/no-op): no change touches the receive path or reach this cycle",
+    "verify": "Next cycle: article_rejects window counts \u2014 weak_title should stay at or near 0-2 and the cycle should publish if the engine serves; if llm_error dominates again, the fix is engine/availability work only the owner can enable, not a prompt edit.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -80,32 +68,19 @@
   },
   "suggestions": [
     {
-      "title": "Merge one title-prompt branch instead of letting a 35th be proposed",
-      "description": "Two drafts in 14 days are being lost to a lane where 30+ fixes already sit written and unreviewed; merging one branch and observing the window closes the loop a new proposal cannot.",
-      "owner_action": "Review and merge (or close) the parked evolve/* branches touching articles.py title prompts, starting with the most recent (2026-11-14 _revise_title edit).",
+      "title": "Investigate the glm engine's llm_error rate",
+      "description": "26 of the last 14 days' rejected drafts died in LLM calls, not at any gate \u2014 this is the largest single loss of posts-and-asks in the window and no prompt edit can recover them.",
+      "owner_action": "Check GLM_API_KEY quota/health over several cycles; consider whether the atria fallback is actually engaging on post-role failures.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the open evolve/* branches and diff them against articles.py.",
-        "Step 2: Merge one; watch article_rejects.counts.weak_title over the next 14 days.",
-        "Step 3: Close the rest of the same-lane branches so the ledger stops accumulating duplicates."
+        "Step 1: Review workflow logs for llm_error details in bot/earning/articles.py rejects.",
+        "Step 2: Confirm whether complete_json_for_role('post', ...) falls through to the atria fallback or fails outright."
       ],
-      "discovered_at": "2026-11-14T22:05:40.910441+00:00"
-    },
-    {
-      "title": "Two-minute profile bio edit carrying the tip address permanently",
-      "description": "Every profile visitor sees the receive address forever, on a surface no cycle of reach work can touch; the doctrine's channel table names this as the one cheap owner-only row.",
-      "owner_action": "Open dev.to/settings, paste the TRC-20 address (TFTNsf...9KbY) with the network into the Bio field, and save once.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: Sign in to dev.to and go to Settings -> Profile -> Bio.",
-        "Step 2: Add one line: 'Support this work \u2014 USDT (TRC-20): [address]' and save.",
-        "Step 3: Verify by opening the public profile page logged out."
-      ],
-      "discovered_at": "2026-11-14T21:05:23.541212+00:00"
+      "discovered_at": "2026-11-14T22:26:45.818286+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 29,
+  "last_cycle_seconds": 20,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2758,7 +2733,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-14T22:05:13.260157+00:00",
+    "checked_at": "2026-11-14T22:26:27.553352+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3500,7 +3475,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-14T22:05:41.155809+00:00",
+    "last_run": "2026-11-14T22:26:46.075001+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3510,30 +3485,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-14T22:05:41.339006+00:00",
+    "last_run": "2026-11-14T22:26:46.328081+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4641536,
-        "at": "2026-11-14T06:18:54.584667+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-14T06:18:54.584667+00:00",
-        "ok": true
-      },
-      {
-        "id": 4977763,
-        "at": "2026-11-14T06:18:54.584667+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
-        "at": "2026-11-14T07:18:58.936400+00:00",
-        "ok": true
-      },
       {
         "id": 4552210,
         "at": "2026-11-14T07:18:58.936400+00:00",
@@ -3745,11 +3700,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-14T22:05:41.339006+00:00",
-        "ok": true
-      },
-      {
         "id": 4729472,
         "at": "2026-11-14T22:05:41.339006+00:00",
         "ok": true
@@ -3763,6 +3713,31 @@
         "id": 5037720,
         "at": "2026-11-14T22:05:41.339006+00:00",
         "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-11-14T22:26:46.328081+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-14T22:26:46.328081+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-14T22:26:46.328081+00:00",
+        "ok": true
+      },
+      {
+        "id": 5027243,
+        "at": "2026-11-14T22:26:46.328081+00:00",
+        "ok": true
+      },
+      {
+        "id": 4965279,
+        "at": "2026-11-14T22:26:46.328081+00:00",
+        "ok": true
       }
     ],
     "published_total": 53,
@@ -3770,7 +3745,7 @@
     "unverified": 3,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 15.8
+    "oldest_check_age_hours": 15.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

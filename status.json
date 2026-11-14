@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-14T01:39:24.617014+00:00",
-  "total_runs": 2509,
+  "last_run": "2026-11-14T02:39:25.609429+00:00",
+  "total_runs": 2510,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,76 +34,53 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus lane (weak_title, 2 drafts lost in 14 days) has been the subject of ~30 unmerged proposals targeting the same two rules (ALL-CAPS and colon-subtitle) in _SYSTEM and _revise_title, so another title-prompt edit repeats a saturated dead end; the dominant loss is llm_error=59 lifetime (28 in the window), which is engine-side and explicitly not fixable by a prompt edit.",
+    "summary": "No change proposed: the prompt lane named by PROMPT FOCUS is saturated with 30 open, unmerged title-prompt proposals covering exactly the two observed gate findings (colon-subtitle padding and ALL-CAPS), so another wording edit there is near-certain to join them; the dominant loss is llm_error (27 of the last 14 days' lost drafts), which no prompt edit can recover.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Address the llm_error loss rate, not the title prompt",
-        "description": "28 of the last 14 days' lost drafts died on LLM call failures and 11 on empty drafts \u2014 roughly 30x the weak_title loss the prompt lane keeps targeting. No prompt edit can recover drafts the engine never returned.",
-        "owner_action": "Check GLM_API_KEY quota/error logs over a failing cycle and decide whether the post-role needs a more reliable primary model (atria is already configured as fallback); this is the one lever only the owner holds.",
+        "description": "27 of the last 14 days' lost drafts died on LLM call failures \u2014 roughly 13x the weak_title loss the prompt lane keeps targeting, and 59 lifetime rejects against 15. No prompt edit can recover drafts the engine never returned; each one is a post and a tip ask that never shipped.",
+        "owner_action": "Check GLM_API_KEY quota/error logs over one failing cycle and decide whether the post-role needs a more reliable primary model (atria is already configured as fallback); both are config the owner controls and no new secret.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open one failed cycle's Actions log and read the [articles] rejected (llm_error) lines for the underlying provider error.",
-          "Step 2: If it is rate-limit or quota on glm-5.3-flash, either raise the quota or swap the post role's primary to atria; both are config the owner controls and no new secret."
+          "Step 1: Open one failed cycle's Actions log and read the '[articles] rejected (llm_error)' lines for the underlying provider error.",
+          "Step 2: If it is rate-limit or quota on glm-5.3-flash, raise the quota or swap the post role's primary to atria in llm_workflows config; no new secret required."
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach into a live receive path, via prompt upgrades one step per cycle (PROMPT FOCUS)",
+    "direction": "Step 4 \u2014 reach into a live receive path; checked and honestly passed on this cycle",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime but only 2 in the last 14 days",
-      "article_rejects.counts: llm_error=59 lifetime, 28 in the last 14 days \u2014 the largest loss by far",
-      "gate findings behind weak_title: colon-subtitle x1, ALL-CAPS x1 \u2014 both already covered by ~30 open proposals",
-      "PRIOR PROPOSALS lists 30+ distinct unmerged edits to _SYSTEM title rules and _revise_title, all never merged",
-      "payout.live = true, receipt_check known_without_footer = 0 \u2014 receive path is clean, so the only lever is reach, and the reach bottleneck measured is the engine, not the title prompt"
+      "article_rejects.counts: llm_error=59 vs weak_title=15; drafts lost last 14 days: llm_error=27, empty_draft=2 vs weak_title=2, fabricated=2",
+      "PROMPT FOCUS gate findings are 'title padded with a colon subtitle; pick the sharper half' x1 and 'title has ALL-CAPS word' x1 \u2014 both already addressed by rules present verbatim in _SYSTEM ('No colon-subtitle padding... Pick the sharper half and stop.') and in _revise_title ('no ALL-CAPS, no colon-subtitle padding')",
+      "PRIOR PROPOSALS contains 30 open branches against bot/earning/articles.py title prompts, including concrete-example variants, acronym-allowlist variants, and a deterministic colon rescue \u2014 every distinguishable edit for these two findings already exists unmerged",
+      "receive path is clean: payout.live=true, receipt_check.known_without_footer=0, backfill.remaining=0, coverage 50/52",
+      "preferred_archetypes()=['problem-workaround'] with n=11 (above the Principle 3j noise floor), avg_engagement 430.8 vs worst 38.3 \u2014 the archetype steering in _audience_guidance and _prefer_proven_archetypes is already pointed at the winning shape"
     ],
-    "money_path": "none this cycle (maintenance of judgment, no code change): refusing a repeat proposal preserves the review bandwidth that a real reach change needs; reach itself is currently gated by llm_error, not by prompt wording",
-    "verify": "No branch to review. Next cycles should watch article_rejects.counts llm_error in the 14-day window; if it keeps dominating, the correct escalation is an owner action (LLM capacity/reliability), listed below.",
+    "money_path": "none (maintenance decision): the receive path is verified live and covered; the binding work is reach, and the reach funnel's actual bottleneck this window is LLM call failures, not any prompt the ledger names",
+    "verify": "No diff to verify. The count that should fall if the owner acts on the suggestion below is article_rejects.counts[llm_error] in the 14-day window (currently 27); weak_title (currently 2 per window) is within noise of the saturated title lane and cannot distinguish a 31st wording edit from no edit.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 44
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 64,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (64 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Address the llm_error loss rate, not the title prompt",
-      "description": "28 of the last 14 days' lost drafts died on LLM call failures and 11 on empty drafts \u2014 roughly 30x the weak_title loss the prompt lane keeps targeting. No prompt edit can recover drafts the engine never returned.",
-      "owner_action": "Check GLM_API_KEY quota/error logs over a failing cycle and decide whether the post-role needs a more reliable primary model (atria is already configured as fallback); this is the one lever only the owner holds.",
+      "description": "27 of the last 14 days' lost drafts died on LLM call failures \u2014 roughly 13x the weak_title loss the prompt lane keeps targeting, and 59 lifetime rejects against 15. No prompt edit can recover drafts the engine never returned; each one is a post and a tip ask that never shipped.",
+      "owner_action": "Check GLM_API_KEY quota/error logs over one failing cycle and decide whether the post-role needs a more reliable primary model (atria is already configured as fallback); both are config the owner controls and no new secret.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open one failed cycle's Actions log and read the [articles] rejected (llm_error) lines for the underlying provider error.",
-        "Step 2: If it is rate-limit or quota on glm-5.3-flash, either raise the quota or swap the post role's primary to atria; both are config the owner controls and no new secret."
+        "Step 1: Open one failed cycle's Actions log and read the '[articles] rejected (llm_error)' lines for the underlying provider error.",
+        "Step 2: If it is rate-limit or quota on glm-5.3-flash, raise the quota or swap the post role's primary to atria in llm_workflows config; no new secret required."
       ],
       "discovered_at": "2026-11-14T01:39:44.958113+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 132,
+  "last_cycle_seconds": 37,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2804,7 +2781,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-14T01:39:24.988664+00:00",
+    "checked_at": "2026-11-14T02:39:26.095145+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3546,7 +3523,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-14T01:41:35.549332+00:00",
+    "last_run": "2026-11-14T02:40:02.256826+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3556,30 +3533,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-14T01:41:35.749983+00:00",
+    "last_run": "2026-11-14T02:40:02.481106+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-11-13T15:01:23.980892+00:00",
-        "ok": true
-      },
-      {
-        "id": 5019261,
-        "at": "2026-11-13T16:01:15.097762+00:00",
-        "ok": true
-      },
-      {
-        "id": 4971614,
-        "at": "2026-11-13T16:01:15.097762+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-11-13T16:01:15.097762+00:00",
-        "ok": true
-      },
       {
         "id": 5012890,
         "at": "2026-11-13T16:01:15.097762+00:00",
@@ -3796,11 +3753,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-14T01:41:35.749983+00:00",
-        "ok": true
-      },
-      {
         "id": 4619528,
         "at": "2026-11-14T01:41:35.749983+00:00",
         "ok": true
@@ -3809,6 +3761,31 @@
         "id": 4748037,
         "at": "2026-11-14T01:41:35.749983+00:00",
         "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-11-14T02:40:02.481106+00:00",
+        "ok": true
+      },
+      {
+        "id": 4971614,
+        "at": "2026-11-14T02:40:02.481106+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-14T02:40:02.481106+00:00",
+        "ok": true
+      },
+      {
+        "id": 4996282,
+        "at": "2026-11-14T02:40:02.481106+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-14T02:40:02.481106+00:00",
+        "ok": true
       }
     ],
     "published_total": 52,
@@ -3816,7 +3793,7 @@
     "unverified": 2,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 10.7
+    "oldest_check_age_hours": 10.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3836,7 +3813,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

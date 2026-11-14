@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-14T21:04:59.803506+00:00",
-  "total_runs": 2530,
+  "last_run": "2026-11-14T22:05:12.772942+00:00",
+  "total_runs": 2531,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,88 +34,78 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed. The PROMPT FOCUS (weak_title, 2 drafts in 14 days) has already absorbed ~30 distinct unmerged proposals targeting the exact same two findings (colon-subtitle padding, ALL-CAPS words), and both rules already exist verbatim in _SYSTEM and _revise_title; the dominant draft loss is llm_error=59 lifetime / 27 in window, which the brief itself classes as engine-side, not prompt-fixable.",
+    "summary": "No change proposed: the prompt-focus lane (weak_title, 2 drafts lost in 14 days) is the single most-proposed and never-merged area of the project \u2014 34 open branches already cover every variation of the ALL-CAPS and colon-subtitle fixes in _SYSTEM and _revise_title \u2014 so a 35th edit to the same two rules cannot clear the evidence bar, and the dominant loss (llm_error=26 in 14 days) is engine-side and not fixable by a prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Two-minute profile bio edit carrying the tip address permanently",
-        "description": "Every profile visitor sees the receive address forever, on a surface no cycle of work can reach; the doctrine's channel table names this as the one cheap owner-only row",
-        "owner_action": "Open dev.to/settings, paste the TRC-20 address (TFTNsf...9KbY) with the network into the Bio field, and save once",
+        "title": "Merge one title-prompt branch instead of letting a 35th be proposed",
+        "description": "Two drafts in 14 days are being lost to a lane where 30+ fixes already sit written and unreviewed; merging one branch and observing the window closes the loop a new proposal cannot.",
+        "owner_action": "Review and merge (or close) the parked evolve/* branches touching articles.py title prompts, starting with the most recent (2026-11-14 _revise_title edit).",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Sign in to dev.to and go to Settings -> Profile -> Bio",
-          "Step 2: Add one line: 'Support this work \u2014 USDT (TRC-20): [redacted]' and save",
-          "Step 3: Verify by opening the public profile page logged out"
+          "Step 1: Open the open evolve/* branches and diff them against articles.py.",
+          "Step 2: Merge one; watch article_rejects.counts.weak_title over the next 14 days.",
+          "Step 3: Close the rest of the same-lane branches so the ledger stops accumulating duplicates."
+        ]
+      },
+      {
+        "title": "Two-minute profile bio edit carrying the tip address permanently",
+        "description": "Every profile visitor sees the receive address forever, on a surface no cycle of reach work can touch; the doctrine's channel table names this as the one cheap owner-only row.",
+        "owner_action": "Open dev.to/settings, paste the TRC-20 address (TFTNsf...9KbY) with the network into the Bio field, and save once.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Sign in to dev.to and go to Settings -> Profile -> Bio.",
+          "Step 2: Add one line: 'Support this work \u2014 USDT (TRC-20): [address]' and save.",
+          "Step 3: Verify by opening the public profile page logged out."
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach via prompt upgrades, but only when evidence names a prompt defect that no prior rule already covers",
+    "direction": "Checklist step 4 / Principle 5 step 2 \u2014 reach via better prompts; declined because every prompt edit in the measured failure lane is already parked unmerged on an open review branch.",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime but only weak_title=2 in the 14-day window",
-      "gate findings: 'title padded with a colon subtitle' x1, 'title has ALL-CAPS word' x1 \u2014 both findings already have explicit matching rules in _SYSTEM ('No colon-subtitle padding...', 'any ALL-CAPS word' banned) and in _revise_title ('no ALL-CAPS, no colon-subtitle padding')",
-      "article_rejects.last: weak_title \u2014 'title too weak to earn a click, and the rewrite failed'",
-      "PROMPT LEDGER: llm_error=59 lifetime, llm_error=27 last 14 days \u2014 the largest loss, explicitly not fixable by a prompt edit",
-      "PRIOR PROPOSALS: 30+ distinct open branches all edit the title prompts (colon rule, ALL-CAPS examples, rewrite strategy), none merged \u2014 this is a recorded dead-end pattern"
+      "article_rejects.counts: weak_title=15 lifetime but 2 in the last 14 days",
+      "Drafts lost to a prompt (14d): weak_title=2 \u2014 gate findings: 'title padded with a colon subtitle' x1, 'title has ALL-CAPS word' x1",
+      "Drafts lost to the engine (14d): llm_error=26, empty_draft=2 \u2014 not addressable by prompt edits",
+      "PRIOR PROPOSALS: 34 distinct open branches, ~30 of them title-prompt edits to articles.py, none merged",
+      "receipt_check.coverage_complete = False (unknown), wallet.received_total_usd = 0.0 \u2014 receive path verified live, work is reach"
     ],
-    "money_path": "none (maintenance decision: no change this cycle)",
-    "verify": "Next cycle's window counts in the prompt ledger: if weak_title stays at 2 with the same two gate findings, it confirms the rules are already in place and the residual is engine noise, not a prompt defect; watch llm_error in the window instead.",
+    "money_path": "reach-only (declined): the proposed lane would only affect click-through on dev.to posts carrying the tip footer; no change shipped this cycle.",
+    "verify": "N/A \u2014 no change. If the owner merges any one of the 34 parked title-prompt branches, verify by article_rejects.counts.weak_title staying at 2 in the next 14-day window and 'title padded with a colon subtitle' / 'title has ALL-CAPS word' not recurring in article_rejects.recent.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.0"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 15
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 44
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 62,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (62 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "The Drift Problem That Breaks GitOps at Scale",
-        "url": "https://dev.to/robust_true_try/the-drift-problem-that-breaks-gitops-at-scale-i99",
-        "estimated_usd": 0.0,
-        "source_url": "https://dev.to/robust_true_try/why-linkedin-outgrew-argo-cd-and-what-it-means-for-your-gitops-1nj1",
-        "source_title": "Why LinkedIn Outgrew Argo CD and What It Means for Your GitOps",
-        "followup_of": "Why LinkedIn Outgrew Argo CD and What It Means for Your GitOps"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Two-minute profile bio edit carrying the tip address permanently",
-      "description": "Every profile visitor sees the receive address forever, on a surface no cycle of work can reach; the doctrine's channel table names this as the one cheap owner-only row",
-      "owner_action": "Open dev.to/settings, paste the TRC-20 address (TFTNsf...9KbY) with the network into the Bio field, and save once",
+      "title": "Merge one title-prompt branch instead of letting a 35th be proposed",
+      "description": "Two drafts in 14 days are being lost to a lane where 30+ fixes already sit written and unreviewed; merging one branch and observing the window closes the loop a new proposal cannot.",
+      "owner_action": "Review and merge (or close) the parked evolve/* branches touching articles.py title prompts, starting with the most recent (2026-11-14 _revise_title edit).",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Sign in to dev.to and go to Settings -> Profile -> Bio",
-        "Step 2: Add one line: 'Support this work \u2014 USDT (TRC-20): [redacted]' and save",
-        "Step 3: Verify by opening the public profile page logged out"
+        "Step 1: Open the open evolve/* branches and diff them against articles.py.",
+        "Step 2: Merge one; watch article_rejects.counts.weak_title over the next 14 days.",
+        "Step 3: Close the rest of the same-lane branches so the ledger stops accumulating duplicates."
+      ],
+      "discovered_at": "2026-11-14T22:05:40.910441+00:00"
+    },
+    {
+      "title": "Two-minute profile bio edit carrying the tip address permanently",
+      "description": "Every profile visitor sees the receive address forever, on a surface no cycle of reach work can touch; the doctrine's channel table names this as the one cheap owner-only row.",
+      "owner_action": "Open dev.to/settings, paste the TRC-20 address (TFTNsf...9KbY) with the network into the Bio field, and save once.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Sign in to dev.to and go to Settings -> Profile -> Bio.",
+        "Step 2: Add one line: 'Support this work \u2014 USDT (TRC-20): [address]' and save.",
+        "Step 3: Verify by opening the public profile page logged out."
       ],
       "discovered_at": "2026-11-14T21:05:23.541212+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 184,
+  "last_cycle_seconds": 29,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2768,7 +2758,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-14T21:05:00.336136+00:00",
+    "checked_at": "2026-11-14T22:05:13.260157+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3510,40 +3500,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-14T21:08:03.002596+00:00",
+    "last_run": "2026-11-14T22:05:41.155809+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-14T21:08:03.133217+00:00",
+    "last_run": "2026-11-14T22:05:41.339006+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4965279,
-        "at": "2026-11-14T05:20:27.645206+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-11-14T05:20:27.645206+00:00",
-        "ok": true
-      },
-      {
-        "id": 5027243,
-        "at": "2026-11-14T05:20:27.645206+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-11-14T06:18:54.584667+00:00",
-        "ok": true
-      },
       {
         "id": 4641536,
         "at": "2026-11-14T06:18:54.584667+00:00",
@@ -3760,11 +3730,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-14T21:08:03.133217+00:00",
-        "ok": true
-      },
-      {
         "id": 4368781,
         "at": "2026-11-14T21:08:03.133217+00:00",
         "ok": true
@@ -3772,6 +3737,31 @@
       {
         "id": 4568987,
         "at": "2026-11-14T21:08:03.133217+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-14T22:05:41.339006+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-14T22:05:41.339006+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-14T22:05:41.339006+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-11-14T22:05:41.339006+00:00",
+        "ok": true
+      },
+      {
+        "id": 5037720,
+        "at": "2026-11-14T22:05:41.339006+00:00",
         "ok": true
       }
     ],
@@ -3800,7 +3790,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 4
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

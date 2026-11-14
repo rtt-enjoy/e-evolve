@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-14T09:18:26.201264+00:00",
-  "total_runs": 2517,
+  "last_run": "2026-11-14T10:18:32.856520+00:00",
+  "total_runs": 2518,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,7 +34,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed this cycle: the prompt the focus names already carries 30 open, unmerged review branches covering every plausible edit (colon-subtitle sharpening, ALL-CAPS clarification, concrete examples, deterministic rescue, multi-candidate rewrite), the last-14-day loss it targets is 2 drafts, and the dominant loss is llm_error=27, which no prompt edit can fix.",
+    "summary": "No change proposed: the PROMPT FOCUS (weak_title, 2 drafts in 14 days) is already covered by dozens of open title-prompt branches, and a 31st duplicate proposal cannot move reach \u2014 only a merge decision can.",
     "changes_applied": [],
     "suggestions": [
       {
@@ -48,16 +48,15 @@
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach via prompt upgrades), qualified by the dead-end rule against repeating PRIOR PROPOSALS",
+    "direction": "Step 4 \u2014 reach into a live receive path; prompt upgrades one step per cycle, without duplicating parked work",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime but only weak_title=2 in the last 14 days",
-      "llm_error=27 in the last 14 days (engine-side, unfixable by a prompt edit) vs empty_draft=2",
-      "PRIOR PROPOSALS: 30 distinct open branches all target articles.py title prompts (_revise_title / _SYSTEM), including colon-subtitle (2026-11-11, 2026-11-04), ALL-CAPS wording (2026-11-04, 2026-11-03), concrete examples (2026-11-05, 2026-11-03), and deterministic rescue (2026-11-05)",
-      "article_interest: problem-workaround n=11 avg=430.8 already leads; preferred_archetypes steering is live and unblocked",
-      "receipt_check coverage 50/52, known_without_footer=0 \u2014 receive path clean, nothing else binds"
+      "article_rejects last 14 days: weak_title=2, fabricated=2 (prompt-fixable) vs llm_error=27, empty_draft=2 (engine-side)",
+      "PRIOR PROPOSALS lists 31 distinct open branches on bot/earning/articles.py title prompts, every plausible weak_title fix among them",
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed' \u2014 but both gate findings (colon subtitle x1, ALL-CAPS x1) are each addressed by at least one parked branch",
+      "receipt_check.covered / published_total = 50 / 52; receive path verified, so the work is reach, not gating or receive-path code"
     ],
-    "money_path": "none (maintenance decision \u2014 no change shipped)",
-    "verify": "Next cycle: article_rejects recent window should show no new weak_title entries of the two measured kinds, and any proposed title edit should show weak_title falling below 2 per 14 days once one of the open branches merges",
+    "money_path": "none this cycle \u2014 publishing a 31st near-identical title-prompt branch costs a review cycle and changes no draft that a merged branch would not already fix; the reach gain is gated on the owner merging one of the parked branches",
+    "verify": "After the owner merges one title-prompt branch: article_rejects weak_title count should stay at or near 0 over the next two cycles' 14-day window, and article_daily.published should hold at 1/day.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -80,7 +79,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 30,
+  "last_cycle_seconds": 19,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2773,7 +2772,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-14T09:18:26.559157+00:00",
+    "checked_at": "2026-11-14T10:18:33.229217+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3515,7 +3514,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-14T09:18:55.542137+00:00",
+    "last_run": "2026-11-14T10:18:51.377408+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3525,25 +3524,10 @@
     "without_footer": 0,
     "unreachable": 1,
     "missing": [],
-    "last_run": "2026-11-14T09:18:55.787149+00:00",
+    "last_run": "2026-11-14T10:18:51.569708+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4430049,
-        "at": "2026-11-13T21:28:30.454145+00:00",
-        "ok": true
-      },
-      {
-        "id": 4908316,
-        "at": "2026-11-13T21:28:30.454145+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-11-13T21:28:30.454145+00:00",
-        "ok": true
-      },
       {
         "id": 4780783,
         "at": "2026-11-13T22:30:53.534948+00:00",
@@ -3765,11 +3749,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-14T09:18:55.787149+00:00",
-        "ok": true
-      },
-      {
         "id": 4579420,
         "at": "2026-11-14T09:18:55.787149+00:00",
         "ok": true
@@ -3777,6 +3756,26 @@
       {
         "id": 4780785,
         "at": "2026-11-14T09:18:55.787149+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-11-14T10:18:51.569708+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-14T10:18:51.569708+00:00",
+        "ok": true
+      },
+      {
+        "id": 4943931,
+        "at": "2026-11-14T10:18:51.569708+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-11-14T10:18:51.569708+00:00",
         "ok": true
       }
     ],

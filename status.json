@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-14T19:04:55.711236+00:00",
-  "total_runs": 2528,
+  "last_run": "2026-11-14T20:05:01.161486+00:00",
+  "total_runs": 2529,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,29 +34,41 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt focus (weak_title, 2 drafts in 14 days) is already addressed by 30 open review branches editing the exact same two prompts, and the measured dominant loss (llm_error, 27 drafts in 14 days) is an engine failure no prompt edit can touch.",
+    "summary": "No change proposed: the prompt-focus loss (weak_title, 2 drafts in 14 days) is already covered by rules present in the current prompt and by 30 open, mutually redundant title-prompt branches that were never merged; the dominant loss (llm_error, 27 drafts) is engine-side, not prompt-fixable, so another title edit would add a 31st duplicate branch for near-zero recovered reach.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge or close the 30 open title-prompt branches, then investigate the GLM post-role failures",
-        "description": "weak_title lost only 2 drafts in 14 days and the current prompts already contain the exact rules the gate findings name; the open branches are mutually redundant. The real loss is llm_error (27 drafts in 14 days = 27 unpublished posts and tip asks) from intermittent GLM post-role call failures.",
-        "owner_action": "Pick one of the open title-prompt branches to merge (any is a marginal improvement) and review the GLM API error bodies in the articles workflow logs to decide whether the post role should move to the atria fallback.",
+        "title": "Merge or close the 30 open title-prompt branches, then fix the GLM post-role failure mode",
+        "description": "weak_title costs ~2 drafts per 14 days and the prompts already contain the exact rules each gate finding names; the 30 open branches are redundant variations. The real reach loss is llm_error: 27 drafts (27 posts and 27 tip asks) unpublished in 14 days from GLM post-role call failures.",
+        "owner_action": "Pick one open title branch to merge (any is marginal), then read the GLM API error bodies in the articles workflow logs to decide whether the post role should move to the atria fallback \u2014 a config change only, no new secret.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Grep recent Actions logs for '[articles] rejected (llm_error)' \u2014 the exception text names whether it is rate limits, timeouts on max_tokens=6000, or malformed JSON.",
-          "Step 2: If timeouts dominate, decide between splitting the article call or switching the post role's primary to atria (config change only, no new secret)."
+          "Step 1: Grep recent Actions logs for '[articles] rejected (llm_error)' \u2014 the exception text names whether the failures are rate limits, timeouts at max_tokens=6000, or malformed JSON from glm-5.3-flash.",
+          "Step 2: If timeouts dominate, either split the article call or switch llm_roles.post's primary to atria (config/strategy.json or the role map, no new secret)."
+        ]
+      },
+      {
+        "title": "Two-minute dev.to profile bio edit (already researched, still undone)",
+        "description": "Carries the receive address on every profile visit permanently \u2014 the one zero-cost channel row on the candidate table that needs only the owner.",
+        "owner_action": "Paste the Tron address into the Bio field at dev.to/settings once.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open dev.to/settings, edit Bio.",
+          "Step 2: Paste the address already public in status['payout_public']['address'] (TFTNsf\u20269KbY) with a one-line note."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade prompts one step per cycle; the discipline includes not stacking a fourth redundant edit on a prompt where the fix is already pending review.",
+    "direction": "Checklist step 4 (reach into a live receive path) via the PROMPT FOCUS, evaluated and declined on evidence",
     "evidence": [
-      "article_rejects.counts (last 14 days): weak_title=2 vs llm_error=27 and empty_draft=2",
-      "Gate findings behind weak_title: 'title padded with a colon subtitle' x1, 'title has ALL-CAPS word' x1 \u2014 both rules already stated in _SYSTEM and in _revise_title's instruction (\"no ALL-CAPS, no colon-subtitle padding\")",
-      "PRIOR PROPOSALS: 30 distinct open branches already edit _SYSTEM title rules and _revise_title for exactly these two findings; none merged",
-      "llm_engine.calls = {'glm': 1} with two calls succeeding intermittently \u2014 the post-role GLM failures are the largest single loss of posts and tip asks"
+      "article_rejects.counts (14-day prompt-attributable window): weak_title=2, fabricated=2 \u2014 the entire prompt-fixable loss is four drafts in two weeks",
+      "Drafts lost to the engine (last 14 days): llm_error=27, empty_draft=2 \u2014 85%+ of lost drafts cannot be fixed by any prompt edit",
+      "Gate findings behind weak_title: 'title padded with a colon subtitle; pick the sharper half' x1; 'title has ALL-CAPS word' x1 \u2014 both rules already exist verbatim in _SYSTEM and _revise_title",
+      "PRIOR PROPOSALS: 30 distinct open title-prompt branches (2026-11-01 through 2026-11-14), none merged \u2014 the marginal-value path is exhausted",
+      "receive path verified: payout.live=true, receipt_check.known_without_footer=0, coverage 50/52",
+      "wallet.received_total_usd = 0.0 with other_assets empty \u2014 the remaining work is reach volume, and the reach volume is throttled by llm_error, not by title wording"
     ],
-    "money_path": "none \u2014 no change this cycle; reach work already pending in review branches",
-    "verify": "Next cycle: article_rejects 14-day weak_title count should stay at or near 0 if any of the 30 open title-prompt branches merges; the actionable number for the owner is llm_error, which needs the workflow-log investigation already filed in status.suggestions, not a prompt edit.",
+    "money_path": "none (maintenance/decision only). No change ships, so nothing touches the receive path this cycle.",
+    "verify": "Nothing to verify this cycle. If the owner resolves the GLM post-role failures (see suggestions), the count that should fall is article_rejects.counts.llm_error in the next 14-day window; if any open title branch is merged, weak_title should fall from 2 toward 0 in the same window.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -67,19 +79,30 @@
   },
   "suggestions": [
     {
-      "title": "Merge or close the 30 open title-prompt branches, then investigate the GLM post-role failures",
-      "description": "weak_title lost only 2 drafts in 14 days and the current prompts already contain the exact rules the gate findings name; the open branches are mutually redundant. The real loss is llm_error (27 drafts in 14 days = 27 unpublished posts and tip asks) from intermittent GLM post-role call failures.",
-      "owner_action": "Pick one of the open title-prompt branches to merge (any is a marginal improvement) and review the GLM API error bodies in the articles workflow logs to decide whether the post role should move to the atria fallback.",
+      "title": "Merge or close the 30 open title-prompt branches, then fix the GLM post-role failure mode",
+      "description": "weak_title costs ~2 drafts per 14 days and the prompts already contain the exact rules each gate finding names; the 30 open branches are redundant variations. The real reach loss is llm_error: 27 drafts (27 posts and 27 tip asks) unpublished in 14 days from GLM post-role call failures.",
+      "owner_action": "Pick one open title branch to merge (any is marginal), then read the GLM API error bodies in the articles workflow logs to decide whether the post role should move to the atria fallback \u2014 a config change only, no new secret.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Grep recent Actions logs for '[articles] rejected (llm_error)' \u2014 the exception text names whether it is rate limits, timeouts on max_tokens=6000, or malformed JSON.",
-        "Step 2: If timeouts dominate, decide between splitting the article call or switching the post role's primary to atria (config change only, no new secret)."
+        "Step 1: Grep recent Actions logs for '[articles] rejected (llm_error)' \u2014 the exception text names whether the failures are rate limits, timeouts at max_tokens=6000, or malformed JSON from glm-5.3-flash.",
+        "Step 2: If timeouts dominate, either split the article call or switch llm_roles.post's primary to atria (config/strategy.json or the role map, no new secret)."
       ],
-      "discovered_at": "2026-11-14T19:05:15.229665+00:00"
+      "discovered_at": "2026-11-14T20:05:21.171229+00:00"
+    },
+    {
+      "title": "Two-minute dev.to profile bio edit (already researched, still undone)",
+      "description": "Carries the receive address on every profile visit permanently \u2014 the one zero-cost channel row on the candidate table that needs only the owner.",
+      "owner_action": "Paste the Tron address into the Bio field at dev.to/settings once.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Open dev.to/settings, edit Bio.",
+        "Step 2: Paste the address already public in status['payout_public']['address'] (TFTNsf\u20269KbY) with a one-line note."
+      ],
+      "discovered_at": "2026-11-14T20:05:21.171229+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 20,
+  "last_cycle_seconds": 21,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2749,7 +2772,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-14T19:04:56.420391+00:00",
+    "checked_at": "2026-11-14T20:05:01.777635+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3491,7 +3514,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-14T19:05:15.402038+00:00",
+    "last_run": "2026-11-14T20:05:21.378469+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3501,25 +3524,10 @@
     "without_footer": 0,
     "unreachable": 1,
     "missing": [],
-    "last_run": "2026-11-14T19:05:15.532246+00:00",
+    "last_run": "2026-11-14T20:05:21.511521+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4368781,
-        "at": "2026-11-14T03:18:45.337666+00:00",
-        "ok": true
-      },
-      {
-        "id": 5019261,
-        "at": "2026-11-14T03:18:45.337666+00:00",
-        "ok": true
-      },
-      {
-        "id": 4568987,
-        "at": "2026-11-14T04:18:46.210882+00:00",
-        "ok": true
-      },
       {
         "id": 4937139,
         "at": "2026-11-14T04:18:46.210882+00:00",
@@ -3741,11 +3749,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-14T19:05:15.532246+00:00",
-        "ok": true
-      },
-      {
         "id": 4971614,
         "at": "2026-11-14T19:05:15.532246+00:00",
         "ok": true
@@ -3753,6 +3756,26 @@
       {
         "id": 4996282,
         "at": "2026-11-14T19:05:15.532246+00:00",
+        "ok": true
+      },
+      {
+        "id": 5019261,
+        "at": "2026-11-14T20:05:21.511521+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-14T20:05:21.511521+00:00",
+        "ok": true
+      },
+      {
+        "id": 5012890,
+        "at": "2026-11-14T20:05:21.511521+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-14T20:05:21.511521+00:00",
         "ok": true
       }
     ],

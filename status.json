@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-14T11:29:40.258679+00:00",
-  "total_runs": 2520,
+  "last_run": "2026-11-14T12:29:46.816594+00:00",
+  "total_runs": 2521,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,76 +34,56 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt focus (weak_title, 2 drafts in 14 days) is already addressed by at least 30 open unmerged review branches covering both measured gate findings, so a new edit would be a duplicate that adds review noise without moving reach.",
+    "summary": "No change proposed: the prompt focus (weak_title, 2 drafts lost in 14 days) is already addressed by 30+ open, unmerged review branches covering both measured gate findings (colon-subtitle, ALL-CAPS), so another title-prompt edit would be the duplicate that has never once merged; the binding constraint is human review, not another branch.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one title-prompt branch and close the rest as superseded",
-        "description": "The two measured weak_title findings (colon-subtitle, ALL-CAPS) are each addressed by open branches from 2026-11-01 through 2026-11-14. Merging one and closing the rest stops every future cycle from re-proposing the same edit, which is what 30+ duplicate branches are doing right now.",
-        "owner_action": "Open the evolve/* branch list, merge the 2026-11-05 deterministic colon-subtitle rescue or the 2026-11-04 ALL-CAPS wording replacement, then close all other title-branches as superseded.",
+        "title": "Merge one title-prompt branch and close the remaining 30 as superseded",
+        "description": "Both measured weak_title findings are already addressed by open branches; merging one and closing the rest stops every future cycle from re-proposing the same edit, which is what the 31 duplicate branches are doing. This is the single action that converts the prompt focus into reach.",
+        "owner_action": "Open the evolve/* branch list, merge one title-prompt branch (the deterministic colon-subtitle rescue or the ALL-CAPS wording replacement), and close the others as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Filter review branches to those touching bot/earning/articles.py title prompts.",
-          "Step 2: Merge one, watch article_rejects.recent for two cycles for weak_title entries, close the remainder."
+          "Step 1: Filter open review branches to those touching the TITLE rules or _revise_title in bot/earning/articles.py.",
+          "Step 2: Merge the 2026-11-05 deterministic colon-subtitle rescue or the 2026-11-04 ALL-CAPS wording replacement; both target the two gate findings verbatim.",
+          "Step 3: Watch article_rejects.recent for two cycles; if no weak_title entries citing those findings appear, close all remaining title branches as superseded so future cycles stop re-proposing them."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompts that write reach, one step per cycle; but only when the step is not already parked on a review branch.",
+    "direction": "Step 4 \u2014 reach into a live receive path; prompt-upgrade discipline (one step per cycle), and the dead-end rule against repeating PRIOR PROPOSALS",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime but only weak_title=2 in the last-14-day prompt window",
-      "PROMPT FOCUS gate findings: 'title padded with a colon subtitle' x1 and 'title has ALL-CAPS word' x1 \u2014 each is already covered by at least one open branch (2026-11-05 colon-subtitle deterministic rescue; 2026-11-04 ALL-CAPS wording replacement)",
-      "status.suggestions already names this exact situation: 'Merge or close the open title-prompt branches' (discovered_at 2026-11-14)",
-      "llm_error=27 drafts lost to the engine in 14 days vs weak_title=2 to the prompt \u2014 the dominant loss is not prompt-fixable",
-      "reach is live and healthy: article_daily.published=1 today, newsletter 12 issues, receipt_check.covered=50/52"
+      "article_rejects.counts: weak_title=15 lifetime but drafts lost to it in last 14 days = 2",
+      "Gate findings: 'title padded with a colon subtitle; pick the sharper half' x1 and 'title has ALL-CAPS word' x1",
+      "PRIOR PROPOSALS: 31 open branches, every one an edit to the article draft TITLE rules or _revise_title for exactly these two findings (2026-11-01 through 2026-11-14)",
+      "Drafts lost to the engine, not fixable by a prompt edit (14 days): llm_error=27, empty_draft=2 \u2014 the dominant loss is outside any prompt's reach",
+      "receipt_check.coverage_complete = False, known_without_footer = 0 \u2014 receive path verified, so no step-1 work is open",
+      "wallet.received_total_usd = 0.0 with other_assets empty \u2014 the work is reach, and the reach lever here is already branched, not missing"
     ],
-    "money_path": "none \u2014 no change proposed; reach work would be reach-only in any case",
-    "verify": "No change to verify. After the owner merges one title branch, article_rejects.counts.weak_title growth in the last-14-day window should fall to 0 over the next two cycles; that count is the named measure, and it is computed in code, not asserted.",
+    "money_path": "none this cycle \u2014 the title prompts already have merge-candidate fixes parked; publishing one more duplicate branch cannot widen the receive path, and the verified path (50/52 covered, 0 without footer) needs no code",
+    "verify": "No diff to verify. After the owner merges one title branch: article_rejects.recent should show no new weak_title entries with details matching 'colon subtitle' or 'ALL-CAPS' over the next two cycles (last 14-day window count should fall from 2 toward 0).",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 15
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 44
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 64,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (64 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one title-prompt branch and close the rest as superseded",
-      "description": "The two measured weak_title findings (colon-subtitle, ALL-CAPS) are each addressed by open branches from 2026-11-01 through 2026-11-14. Merging one and closing the rest stops every future cycle from re-proposing the same edit, which is what 30+ duplicate branches are doing right now.",
-      "owner_action": "Open the evolve/* branch list, merge the 2026-11-05 deterministic colon-subtitle rescue or the 2026-11-04 ALL-CAPS wording replacement, then close all other title-branches as superseded.",
+      "title": "Merge one title-prompt branch and close the remaining 30 as superseded",
+      "description": "Both measured weak_title findings are already addressed by open branches; merging one and closing the rest stops every future cycle from re-proposing the same edit, which is what the 31 duplicate branches are doing. This is the single action that converts the prompt focus into reach.",
+      "owner_action": "Open the evolve/* branch list, merge one title-prompt branch (the deterministic colon-subtitle rescue or the ALL-CAPS wording replacement), and close the others as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Filter review branches to those touching bot/earning/articles.py title prompts.",
-        "Step 2: Merge one, watch article_rejects.recent for two cycles for weak_title entries, close the remainder."
+        "Step 1: Filter open review branches to those touching the TITLE rules or _revise_title in bot/earning/articles.py.",
+        "Step 2: Merge the 2026-11-05 deterministic colon-subtitle rescue or the 2026-11-04 ALL-CAPS wording replacement; both target the two gate findings verbatim.",
+        "Step 3: Watch article_rejects.recent for two cycles; if no weak_title entries citing those findings appear, close all remaining title branches as superseded so future cycles stop re-proposing them."
       ],
-      "discovered_at": "2026-11-14T11:30:01.407248+00:00"
+      "discovered_at": "2026-11-14T12:30:19.886208+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 178,
+  "last_cycle_seconds": 34,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2803,7 +2783,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-14T11:29:40.806371+00:00",
+    "checked_at": "2026-11-14T12:29:47.109148+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3545,30 +3525,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-14T11:32:37.856757+00:00",
+    "last_run": "2026-11-14T12:30:20.134852+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 3,
+    "with_footer": 3,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 2,
     "missing": [],
-    "last_run": "2026-11-14T11:32:38.042936+00:00",
+    "last_run": "2026-11-14T12:30:20.323865+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4662663,
-        "at": "2026-11-13T22:39:37.538271+00:00",
-        "ok": true
-      },
-      {
-        "id": 4931682,
-        "at": "2026-11-13T22:39:37.538271+00:00",
-        "ok": true
-      },
       {
         "id": 4671278,
         "at": "2026-11-13T23:39:39.026956+00:00",
@@ -3795,11 +3765,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-14T11:32:38.042936+00:00",
-        "ok": true
-      },
-      {
         "id": 4421693,
         "at": "2026-11-14T11:32:38.042936+00:00",
         "ok": true
@@ -3808,6 +3773,21 @@
         "id": 4780783,
         "at": "2026-11-14T11:32:38.042936+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-14T12:30:20.323865+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-11-14T12:30:20.323865+00:00",
+        "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-11-14T12:30:20.323865+00:00",
+        "ok": true
       }
     ],
     "published_total": 52,
@@ -3815,7 +3795,7 @@
     "unverified": 2,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 12.9
+    "oldest_check_age_hours": 12.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3835,7 +3815,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

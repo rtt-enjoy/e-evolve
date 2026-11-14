@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-13T23:39:16.204457+00:00",
-  "total_runs": 2507,
+  "last_run": "2026-11-14T00:39:20.760366+00:00",
+  "total_runs": 2508,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,45 +34,44 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the named PROMPT FOCUS (weak_title, 3 drafts in 14 days) has already absorbed 43 distinct unmerged proposals covering every angle of the ALL-CAPS and colon-subtitle findings, and the far larger loss (llm_error=30, empty_draft=2) is engine-side and not addressable by a prompt edit.",
+    "summary": "No change proposed: the prompt the ledger focuses (title rewrite) already has 43 unmerged near-duplicate proposals on open branches, and weak_title costs only 2 drafts in 14 days versus 29 lost to llm_error \u2014 a further title-prompt edit would be the 44th variant of a change no one has ever merged, and cannot clear the bar.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Add the wallet ask to the dev.to profile bio",
-        "description": "Carries the receive address on every profile visit permanently \u2014 the one deferred channel needing no account, no processor and no policy change (doctrine channel-table row, Principle 3h).",
-        "owner_action": "Paste the TRC-20 address (TFTNsf\u20269KbY) into the Bio field at dev.to/settings once.",
+        "title": "Merge or close the 43 open title-prompt branches before any new title edit",
+        "description": "Unblocks the one prompt lane that is actually cheap to improve: 30+ near-duplicate _revise_title / _SYSTEM title edits sit unmerged, so every new proposal competes with its own ancestors and none is ever judged.",
+        "owner_action": "Review evolve/* branches and merge one title-prompt edit (or close all of them), then let the next cycle measure weak_title against that baseline.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open https://dev.to/settings, edit the profile Bio.",
-          "Step 2: Add one line with the full address [redacted] (TRC-20).",
-          "Step 3: Save; every visitor to the profile now sees the ask with no further work."
+          "Step 1: Open the repo branch list filtered to evolve/*.",
+          "Step 2: Pick the smallest single-rule edit (e.g. the colon-subtitle sharpening) and merge it; close the rest as superseded.",
+          "Step 3: Leave weak_title unaddressed if none seems better \u2014 2 drafts per fortnight is a low-priority loss next to llm_error at 29."
         ]
       },
       {
-        "title": "Merge or close the 43 open title-prompt branches",
-        "description": "The review queue is saturated with near-duplicate title-prompt edits (weak_title costs only 3 drafts/14 days). Deciding them clears the channel so future proposals are judged on merit instead of competing with 43 prior variants of the same idea.",
-        "owner_action": "Review and merge or close the existing evolve/* branches before the next prompt-cycle proposal.",
+        "title": "Investigate llm_error, not titles \u2014 it loses 14x more drafts",
+        "description": "llm_error=59 lifetime (29 in 14 days) is the dominant loss of posts and tip asks; no prompt edit can fix it because it is the engine failing, not the writing.",
+        "owner_action": "Confirm whether the glm-5.3-flash free-tier quota or endpoint stability is the cause, and whether the atria fallback is being attempted on post-role failures.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the repo's branch list, filter to evolve/*.",
-          "Step 2: Reject or merge each; the diffs are small and mutually overlapping.",
-          "Step 3: If none is merged, the ledger stays as-is \u2014 weak_title at 3 per fortnight is a low-priority loss and that is a legitimate outcome."
+          "Step 1: Open a recent workflow log and read one article_rejects.last_detail for llm_error.",
+          "Step 2: If it is rate limiting, the hourly cadence is already the retry \u2014 no code change; if it is malformed JSON, note it for a targeted (non-prompt) fix proposal."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompt losing the most drafts, one step per cycle; declined honestly this cycle",
+    "direction": "Checklist step 4 \u2014 upgrade prompts one step per cycle; the ledger itself says weak_title at 2 per fortnight is a legitimate low-priority loss until the review queue is cleared.",
     "evidence": [
-      "article_rejects.counts total=90 with llm_error=59 lifetime, 30 in the last 14 days (engine, not prompt-fixable)",
-      "PROMPT FOCUS weak_title lost 3 drafts in 14 days; gate findings 'title has ALL-CAPS word' x2, 'title padded with a colon subtitle' x1",
-      "PRIOR PROPOSALS lists 43 open branches, every one of which edits _SYSTEM title rules or _revise_title \u2014 including ALL-CAPS examples, colon-subtitle rules, acronym allowlists, candidate-title returns, and deterministic rescue; each was never merged",
-      "article_stats = 51 posts, avg 124.0 views; problem-workaround n=11 avg=430.8 is the proven shape and publishing is already at 1/day",
-      "receipt_check.covered / published_total = 50 / 52 and coverage_complete = False, but that is observation cadence, not a code defect; backfill.remaining = 0 and payout.live = true"
+      "article_rejects.counts = {llm_error: 59, weak_title: 15, empty_draft: 11, ...}; drafts lost to a prompt last 14 days: weak_title=2, fabricated=2",
+      "drafts lost to the engine last 14 days: llm_error=29, empty_draft=2 \u2014 14x the prompt-fixable weak_title loss",
+      "PRIOR PROPOSALS: 43 open branches, ~30 of them title-prompt edits to bot/earning/articles.py, none merged",
+      "status.suggestions already carries 'Merge or close the 43 open title-prompt branches' as the owner action",
+      "receive path verified (payout.live=true, known_without_footer=0, wallet real $0.00), so the binding step is reach \u2014 but reach is better served by not burning a cycle on a duplicate proposal"
     ],
-    "money_path": "none \u2014 reach-only by nature, and even that is not served by a 44th variant of a title prompt the owner has repeatedly declined to merge",
-    "verify": "No change to verify. Next cycle should watch whether the owner merges or rejects one of the 43 open title-prompt branches before any further title instruction work is justified; article_rejects.counts.weak_title in the 14-day window should stay near 0 regardless, since the title gate is only costing 3 drafts per fortnight.",
+    "money_path": "none (maintenance \u2014 no change proposed)",
+    "verify": "Next cycle: article_rejects.counts.weak_title should stay near its current ~2/14-day rate; if the owner merges or closes the queue, the next title edit can be judged on merit instead of joining 43 competitors.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.0"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [],
@@ -80,32 +79,31 @@
   },
   "suggestions": [
     {
-      "title": "Add the wallet ask to the dev.to profile bio",
-      "description": "Carries the receive address on every profile visit permanently \u2014 the one deferred channel needing no account, no processor and no policy change (doctrine channel-table row, Principle 3h).",
-      "owner_action": "Paste the TRC-20 address (TFTNsf\u20269KbY) into the Bio field at dev.to/settings once.",
+      "title": "Merge or close the 43 open title-prompt branches before any new title edit",
+      "description": "Unblocks the one prompt lane that is actually cheap to improve: 30+ near-duplicate _revise_title / _SYSTEM title edits sit unmerged, so every new proposal competes with its own ancestors and none is ever judged.",
+      "owner_action": "Review evolve/* branches and merge one title-prompt edit (or close all of them), then let the next cycle measure weak_title against that baseline.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open https://dev.to/settings, edit the profile Bio.",
-        "Step 2: Add one line with the full address [redacted] (TRC-20).",
-        "Step 3: Save; every visitor to the profile now sees the ask with no further work."
+        "Step 1: Open the repo branch list filtered to evolve/*.",
+        "Step 2: Pick the smallest single-rule edit (e.g. the colon-subtitle sharpening) and merge it; close the rest as superseded.",
+        "Step 3: Leave weak_title unaddressed if none seems better \u2014 2 drafts per fortnight is a low-priority loss next to llm_error at 29."
       ],
-      "discovered_at": "2026-11-13T23:39:38.598285+00:00"
+      "discovered_at": "2026-11-14T00:39:41.984906+00:00"
     },
     {
-      "title": "Merge or close the 43 open title-prompt branches",
-      "description": "The review queue is saturated with near-duplicate title-prompt edits (weak_title costs only 3 drafts/14 days). Deciding them clears the channel so future proposals are judged on merit instead of competing with 43 prior variants of the same idea.",
-      "owner_action": "Review and merge or close the existing evolve/* branches before the next prompt-cycle proposal.",
+      "title": "Investigate llm_error, not titles \u2014 it loses 14x more drafts",
+      "description": "llm_error=59 lifetime (29 in 14 days) is the dominant loss of posts and tip asks; no prompt edit can fix it because it is the engine failing, not the writing.",
+      "owner_action": "Confirm whether the glm-5.3-flash free-tier quota or endpoint stability is the cause, and whether the atria fallback is being attempted on post-role failures.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the repo's branch list, filter to evolve/*.",
-        "Step 2: Reject or merge each; the diffs are small and mutually overlapping.",
-        "Step 3: If none is merged, the ledger stays as-is \u2014 weak_title at 3 per fortnight is a low-priority loss and that is a legitimate outcome."
+        "Step 1: Open a recent workflow log and read one article_rejects.last_detail for llm_error.",
+        "Step 2: If it is rate limiting, the hourly cadence is already the retry \u2014 no code change; if it is malformed JSON, note it for a targeted (non-prompt) fix proposal."
       ],
-      "discovered_at": "2026-11-13T23:39:38.598285+00:00"
+      "discovered_at": "2026-11-14T00:39:41.984906+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 23,
+  "last_cycle_seconds": 22,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2802,7 +2800,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-13T23:39:16.685389+00:00",
+    "checked_at": "2026-11-14T00:39:21.347817+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3544,7 +3542,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-13T23:39:38.833493+00:00",
+    "last_run": "2026-11-14T00:39:42.251563+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3554,30 +3552,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-13T23:39:39.026956+00:00",
+    "last_run": "2026-11-14T00:39:42.534287+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4633220,
-        "at": "2026-11-13T13:05:04.662039+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-11-13T14:01:06.186913+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-11-13T14:01:06.186913+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
-        "at": "2026-11-13T14:01:06.186913+00:00",
-        "ok": true
-      },
       {
         "id": 4602729,
         "at": "2026-11-13T14:01:06.186913+00:00",
@@ -3794,11 +3772,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-13T23:39:39.026956+00:00",
-        "ok": true
-      },
-      {
         "id": 4800078,
         "at": "2026-11-13T23:39:39.026956+00:00",
         "ok": true
@@ -3806,6 +3779,31 @@
       {
         "id": 4681657,
         "at": "2026-11-13T23:39:39.026956+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-11-14T00:39:42.534287+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-14T00:39:42.534287+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-14T00:39:42.534287+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-14T00:39:42.534287+00:00",
+        "ok": true
+      },
+      {
+        "id": 4959304,
+        "at": "2026-11-14T00:39:42.534287+00:00",
         "ok": true
       }
     ],

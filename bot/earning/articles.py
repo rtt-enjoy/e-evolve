@@ -510,7 +510,10 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		"Follow the TITLE rules in the system prompt exactly: "
 		f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
 		"technology or failure, no clickbait words, no exclamation marks, no "
-		"ALL-CAPS, no colon-subtitle padding.\n\n"
+		"ALL-CAPS. If the current title has a colon, the fix is usually to keep "
+		"only the sharper half as a single clause -- 'Retries: A Practical Guide "
+		"to Backoff in Python' becomes 'Why Your Retry Loop Lies to You'. Never "
+		"return a title that still contains a colon-subtitle pad.\n\n"
 		'Respond with ONLY this JSON: {"title": "..."}'
 	)
 	try:

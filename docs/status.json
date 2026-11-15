@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-15T20:43:51.905974+00:00",
-  "total_runs": 2556,
+  "last_run": "2026-11-15T21:43:46.979811+00:00",
+  "total_runs": 2557,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,29 +34,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt focus is one weak_title reject in 14 days caused by 'title has ALL-CAPS word', and 24 open review branches already address exactly that defect from every angle the ledger lists \u2014 another edit would be a repeat, and the dominant reject (llm_error=24) is an engine problem no prompt edit can fix.",
+    "summary": "No change proposed: the prompt-focused gate lost only 1 draft in 14 days while the LLM engine lost 24, and 23 unmerged branches already target the exact ALL-CAPS title defect \u2014 a 24th prompt edit cannot clear the bar.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the 24 open title-quality branches",
-        "description": "The ALL-CAPS reject keeps recurring partly because every fix is still parked unmerged; the prompt and gate cannot improve while all proposals sit open.",
-        "owner_action": "Review and merge (or close) the open evolve/* branches from 2026-11-01 onward touching bot/earning/articles.py title rules.",
+        "title": "Merge one small title branch before any new prompt edit is accepted",
+        "description": "The weak_title signal (1 draft in 14 days) is already answered by at least 23 parked branches. Each new unmerged proposal makes the prompt lineage unmeasurable: one merged one-line fix followed by one cycle of counts would settle the ALL-CAPS question permanently.",
+        "owner_action": "Merge (or close) the smallest open evolve/* branch touching the title rules \u2014 e.g. the 2026-11-15 deterministic ALL-CAPS rescue \u2014 and let one cycle measure it.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: List open branches matching evolve/*.",
-          "Step 2: Pick the smallest (e.g. the 2026-11-04 one-line _revise_title edit), merge it, and let one cycle's weak_title count measure it before adding another."
+          "Step 1: List open branches matching evolve/* from 2026-11-01 onward.",
+          "Step 2: Merge the smallest single-file bot/earning/articles.py change.",
+          "Step 3: Compare article_rejects counts weak_title over the following 7 days before reviewing any further title proposal."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach via prompt upgrades, one step per cycle",
+    "direction": "Checklist step 4 (reach via prompts), Principle 3j sampling discipline: act on a signal only when the sample says it is one",
     "evidence": [
-      "article_rejects.counts total 90: llm_error=59, weak_title=15, empty_draft=11",
-      "Drafts lost to a prompt (last 14 days): weak_title=1, gate finding 'title has ALL-CAPS word' x1",
-      "Drafts lost to the engine (last 14 days): llm_error=24, empty_draft=2",
-      "PRIOR PROPOSALS contains 24 distinct open branches on title quality: _SYSTEM rules, _revise_title rewrites, acronym allowlists, deterministic un-shout rescue, candidate titles, named offending words"
+      "article_rejects.counts: weak_title=15 lifetime but drafts lost to weak_title in the last 14 days = 1",
+      "gate finding behind it: 'title has ALL-CAPS word' x1 \u2014 a single occurrence in the window",
+      "drafts lost to the engine in the same window: llm_error=24, empty_draft=2 \u2014 96% of the loss is not prompt-reachable",
+      "PRIOR PROPOSALS: 23 distinct open branches target bot/earning/articles.py title rules, incl. 2026-11-15 deterministic ALL-CAPS rescue and multiple _revise_title edits, none merged",
+      "status.suggestions already carries: 'Merge one of the 24 open title-quality branches' (2026-11-15)"
     ],
-    "money_path": "none this cycle \u2014 reach-only step declined because no untried prompt edit clears the bar",
-    "verify": "No change to verify. Next cycle, read article_rejects.recent: a weak_title reject with a new ALL-CAPS detail would warrant re-examining whether the owner merged any of the 24 open title branches first.",
+    "money_path": "none (maintenance/reach decision) \u2014 no change touches the receive path, which is verified live",
+    "verify": "No code change to verify. If the owner merges the parked title branches, next cycle's article_rejects counts should show weak_title staying at or near 0 in the 14-day window; until then, no proposal can be measured because every prior fix is still parked.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -64,45 +66,33 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "ctf-bounty",
+        "platform": "dev.to",
         "success": true,
+        "title": "Your AI-Generated Code Has No License",
+        "url": "https://dev.to/robust_true_try/your-ai-generated-code-has-no-license-2edl",
         "estimated_usd": 0.0,
-        "listed": 18
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 43
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 62,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (62 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "source_url": "https://jakub.jankiewicz.org/blog/ai-code-open-source/",
+        "source_title": "All AI-generated code should be Open Source"
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one of the 24 open title-quality branches",
-      "description": "The ALL-CAPS reject keeps recurring partly because every fix is still parked unmerged; the prompt and gate cannot improve while all proposals sit open.",
-      "owner_action": "Review and merge (or close) the open evolve/* branches from 2026-11-01 onward touching bot/earning/articles.py title rules.",
+      "title": "Merge one small title branch before any new prompt edit is accepted",
+      "description": "The weak_title signal (1 draft in 14 days) is already answered by at least 23 parked branches. Each new unmerged proposal makes the prompt lineage unmeasurable: one merged one-line fix followed by one cycle of counts would settle the ALL-CAPS question permanently.",
+      "owner_action": "Merge (or close) the smallest open evolve/* branch touching the title rules \u2014 e.g. the 2026-11-15 deterministic ALL-CAPS rescue \u2014 and let one cycle measure it.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List open branches matching evolve/*.",
-        "Step 2: Pick the smallest (e.g. the 2026-11-04 one-line _revise_title edit), merge it, and let one cycle's weak_title count measure it before adding another."
+        "Step 1: List open branches matching evolve/* from 2026-11-01 onward.",
+        "Step 2: Merge the smallest single-file bot/earning/articles.py change.",
+        "Step 3: Compare article_rejects counts weak_title over the following 7 days before reviewing any further title proposal."
       ],
-      "discovered_at": "2026-11-15T20:44:08.819564+00:00"
+      "discovered_at": "2026-11-15T21:44:05.531057+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 138,
+  "last_cycle_seconds": 71,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -192,7 +182,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-11-15",
+    "date": "2026-11-16",
     "published": 1,
     "window": "06:00-12:00 UTC+9"
   },
@@ -2500,7 +2490,8 @@
       "pietromiotti.com/latest/maya-site",
       "infoq.com/news/2026/11/kubernetes-argocd-linkedin",
       "github.blog/news-insights/company-news/github-availability-report-october-2026",
-      "dev.to/robust_true_try/why-linkedin-outgrew-argo-cd-and-what-it-means-for-your-gitops-1nj1"
+      "dev.to/robust_true_try/why-linkedin-outgrew-argo-cd-and-what-it-means-for-your-gitops-1nj1",
+      "jakub.jankiewicz.org/blog/ai-code-open-source"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -2596,7 +2587,8 @@
       "google swe point 48 ai agent nasa lidar find unmapped maya pyramid 72h",
       "linkedin replac argo cd custom gitop engine kubernet deployment",
       "github availability report october 2026",
-      "linkedin outgrew argo cd mean gitop"
+      "linkedin outgrew argo cd mean gitop",
+      "all ai generated code open source"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -2692,13 +2684,15 @@
       "ai agent pipeline wast token wrong til",
       "linkedin outgrew argo cd mean gitop",
       "github goes down ci shouldn t go",
-      "drift problem break gitop scale"
+      "drift problem break gitop scale",
+      "ai generated code has license"
     ],
     "followed_up_ids": [
       4489474,
       5025764
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/the-drift-problem-that-breaks-gitops-at-scale-i99",
       "https://dev.to/robust_true_try/when-github-goes-down-your-ci-shouldnt-go-with-it-2mm1",
       "https://dev.to/robust_true_try/this-week-git-security-fixes-agent-skills-and-running-ai-at-scale-2g0j",
       "https://dev.to/robust_true_try/why-linkedin-outgrew-argo-cd-and-what-it-means-for-your-gitops-1nj1",
@@ -2761,7 +2755,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-15T20:43:52.226534+00:00",
+    "checked_at": "2026-11-15T21:43:47.331859+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3148,11 +3142,11 @@
   "last_evolution_branch": null,
   "evolution_pending_review": false,
   "article_stats": {
-    "count": 52,
-    "total_views": 6389,
-    "avg_views": 122.9,
+    "count": 53,
+    "total_views": 6439,
+    "avg_views": 121.5,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 3658,
+    "best_views": 3678,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -3160,7 +3154,7 @@
       "privacy",
       "computervision",
       "python",
-      "linux"
+      "kubernetes"
     ]
   },
   "article_interest": {
@@ -3168,15 +3162,15 @@
       {
         "archetype": "problem-workaround",
         "count": 11,
-        "avg_engagement": 432.6,
-        "avg_views": 414.5,
+        "avg_engagement": 435.4,
+        "avg_views": 417.2,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
         "archetype": "build-tutorial",
         "count": 3,
-        "avg_engagement": 86.0,
-        "avg_views": 86.0,
+        "avg_engagement": 89.3,
+        "avg_views": 89.3,
         "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
       },
       {
@@ -3188,9 +3182,9 @@
       },
       {
         "archetype": "other",
-        "count": 17,
-        "avg_engagement": 67.5,
-        "avg_views": 36.6,
+        "count": 18,
+        "avg_engagement": 63.7,
+        "avg_views": 34.6,
         "best_title": "Your AI Agent Can't See What It Clicks"
       },
       {
@@ -3203,8 +3197,8 @@
       {
         "archetype": "surprising-behavior",
         "count": 9,
-        "avg_engagement": 58.8,
-        "avg_views": 39.3,
+        "avg_engagement": 59.9,
+        "avg_views": 40.4,
         "best_title": "Your Kimi K3.1 Pro Responses Truncate Silently"
       },
       {
@@ -3217,7 +3211,7 @@
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "security-privacy",
-    "sample_size": 52
+    "sample_size": 53
   },
   "article_rejects": {
     "last_reason": "weak_title",
@@ -3513,7 +3507,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-15T20:46:08.838600+00:00",
+    "last_run": "2026-11-15T21:44:57.461758+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3523,30 +3517,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-15T20:46:08.990784+00:00",
+    "last_run": "2026-11-15T21:44:57.652528+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4356423,
-        "at": "2026-11-15T09:41:50.243569+00:00",
-        "ok": true
-      },
-      {
-        "id": 4965279,
-        "at": "2026-11-15T10:43:49.152127+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-11-15T10:43:49.152127+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-15T10:43:49.152127+00:00",
-        "ok": true
-      },
       {
         "id": 5027243,
         "at": "2026-11-15T10:43:49.152127+00:00",
@@ -3758,11 +3732,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-15T20:46:08.990784+00:00",
-        "ok": true
-      },
-      {
         "id": 4937139,
         "at": "2026-11-15T20:46:08.990784+00:00",
         "ok": true
@@ -3776,14 +3745,39 @@
         "id": 4568987,
         "at": "2026-11-15T20:46:08.990784+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-15T21:44:57.652528+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-15T21:44:57.652528+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-15T21:44:57.652528+00:00",
+        "ok": true
+      },
+      {
+        "id": 5043579,
+        "at": "2026-11-15T21:44:57.652528+00:00",
+        "ok": true
+      },
+      {
+        "id": 5037720,
+        "at": "2026-11-15T21:44:57.652528+00:00",
+        "ok": true
       }
     ],
-    "published_total": 53,
+    "published_total": 54,
     "covered": 50,
-    "unverified": 3,
+    "unverified": 4,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.1
+    "oldest_check_age_hours": 11.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3803,7 +3797,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 3
     },
     "fallback": {
       "provider": "atria",

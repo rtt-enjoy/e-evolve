@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-15T18:43:46.194964+00:00",
-  "total_runs": 2554,
+  "last_run": "2026-11-15T19:43:49.846796+00:00",
+  "total_runs": 2555,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,42 +34,42 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt focus (weak_title) lost only 1 draft in 14 days and is the subject of ~25 already-open, unmerged proposals on the same ALL-CAPS rule \u2014 the marginal prompt edit there is saturated, while the dominant loss (llm_error=24) is an engine failure no prompt edit can fix.",
+    "summary": "No change proposed: the prompt-focus defect (weak_title, ALL-CAPS) cost exactly 1 draft in 14 days and 25 unmerged proposals already target that same prompt line, while the dominant loss (llm_error=24 of 27) is an engine failure no prompt edit can reach.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge or close the 25 open title-prompt branches",
-        "description": "Roughly two dozen near-identical edits to the article TITLE rules and _revise_title are parked unmerged. None can show effect while all remain open, and each new cycle risks re-proposing the same thing. Consolidating them is the owner's one action that unblocks this lever.",
-        "owner_action": "Review the open evolve/* branches, merge the best one title-rule edit (or close them all), so future cycles have a clean baseline to measure weak_title against",
+        "title": "Stabilize the post-role LLM calls that are costing 24 drafts in 14 days",
+        "description": "llm_error is the largest publication loss by far (59 lifetime rejects vs 15 weak_title). Every unmerged prompt proposal tries to win back 1 draft; fixing the engine wins back ~2 per week.",
+        "owner_action": "Check the GLM API account/plan (api.z.ai coding endpoint) for quota, rate-limit, or model-deprecation notices affecting glm-5.3-flash on the 'post' role, or confirm the fallback path (Atria-Dawn) is being invoked on post-role failures.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: List open branches matching evolve/1.4* on the repo",
-          "Step 2: Pick at most one weak_title prompt edit (the _revise_title sharpening is the most recent), merge it",
-          "Step 3: Close the rest as superseded so article_rejects.counts.weak_title becomes a clean signal again"
+          "Step 1: Open one recent Actions run log and read the [articles] rejected (llm_error) lines for the underlying exception text.",
+          "Step 2: Verify the GLM key's quota/plan at api.z.ai and that glm-5.3-flash is still a served model.",
+          "Step 3: If GLM is quota-bound, temporarily set llm_roles.post to the fallback provider so articles publish while GLM recovers."
         ]
       },
       {
-        "title": "Check the glm llm_error spike with the provider",
-        "description": "llm_error accounts for 59 lifetime and 24-of-26 recent draft losses \u2014 the largest single leak of posts-and-asks. This is an engine/uptime problem, not a prompt problem; only the owner can inspect the GLM key/quota.",
-        "owner_action": "Verify the GLM_API_KEY quota and account status at api.z.ai; if quota-limited, confirm the atria fallback is receiving traffic",
+        "title": "Merge or close the 25 stalled title-prompt branches",
+        "description": "The same ALL-CAPS title fix has been proposed 25 times without a decision. Each open branch re-fights the review; picking one (ideally the 2026-11-15 deterministic un-shout rescue, which fixes the defect in code and cannot regress the gate) either recovers the draft or frees the ledger.",
+        "owner_action": "Review the 2026-11-15 deterministic un-shout proposal and merge it or reject the whole title-prompt line once, so future cycles stop re-proposing it.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the GLM dashboard and check recent request volume and error responses",
-          "Step 2: If the key is rate-limited or expired, rotate it in repo secrets \u2014 no new secret needed, same name"
+          "Step 1: List open evolve/* branches sorted by date.",
+          "Step 2: Diff the 2026-11-15 deterministic-rescue branch \u2014 it is code, not prompt text, so it is testable and cannot soften the gate.",
+          "Step 3: Merge that one and close the remaining title-prompt branches as duplicates."
         ]
       }
     ],
-    "direction": "Step 4 \u2014 upgrade the prompt losing the most drafts; the evidence shows that prompt is not the one losing drafts",
+    "direction": "Checklist step 4 (reach via prompt upgrades) \u2014 but its own ledger says this focus is already saturated.",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime but only weak_title=1 in the last 14 days",
-      "Drafts lost to the engine, last 14 days: llm_error=24, empty_draft=2 \u2014 24x the weak_title count",
-      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x1 (a single occurrence)",
-      "PRIOR PROPOSALS: 25 open branches, ~22 of them edits to the same title prompts (_SYSTEM / _revise_title)",
-      "reach: 1 article/day, avg_views=122.9, preferred archetype problem-workaround n=11 avg=432.6 \u2014 reach moves by publishing at all, and one lost draft is within noise",
-      "receipt_check.coverage_complete = False and wallet.received_total_usd = 0.0: no receipts to steer on yet (Principle 3j)"
+      "article_rejects (last 14 days): weak_title=1 vs llm_error=24 and empty_draft=2",
+      "article_rejects.counts lifetime: llm_error=59 of total 90 (65%)",
+      "PRIOR PROPOSALS: 25 open branches, all edits to the title prompt (_SYSTEM TITLE rules / _revise_title) for the same ALL-CAPS finding, none merged",
+      "Gate finding behind focus: 'title has ALL-CAPS word' x1",
+      "wallet.received_total_usd = 0.0, reach is the work, but a 1-draft/14-day prompt loss is not where reach is being lost \u2014 24 llm_error cycles published nothing at all"
     ],
-    "money_path": "none (maintenance) \u2014 publishing is the receive path multiplier, but no change clears the bar this cycle",
-    "verify": "Next cycle's article_rejects.recent window: if weak_title losses recur above noise (>1 per 14 days) with a NEW gate finding not covered by prior proposals, edit the prompt then; otherwise hold.",
+    "money_path": "none this cycle \u2014 the only unblocked prompt lever is already covered by 25 open branches, and the actual publication bottleneck (llm_error) is in the protected LLM engine layer.",
+    "verify": "No change to verify. If the owner acts on the suggestion below, watch article_rejects.counts.llm_error: it should stop climbing cycle over cycle.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -80,31 +80,32 @@
   },
   "suggestions": [
     {
-      "title": "Merge or close the 25 open title-prompt branches",
-      "description": "Roughly two dozen near-identical edits to the article TITLE rules and _revise_title are parked unmerged. None can show effect while all remain open, and each new cycle risks re-proposing the same thing. Consolidating them is the owner's one action that unblocks this lever.",
-      "owner_action": "Review the open evolve/* branches, merge the best one title-rule edit (or close them all), so future cycles have a clean baseline to measure weak_title against",
+      "title": "Stabilize the post-role LLM calls that are costing 24 drafts in 14 days",
+      "description": "llm_error is the largest publication loss by far (59 lifetime rejects vs 15 weak_title). Every unmerged prompt proposal tries to win back 1 draft; fixing the engine wins back ~2 per week.",
+      "owner_action": "Check the GLM API account/plan (api.z.ai coding endpoint) for quota, rate-limit, or model-deprecation notices affecting glm-5.3-flash on the 'post' role, or confirm the fallback path (Atria-Dawn) is being invoked on post-role failures.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List open branches matching evolve/1.4* on the repo",
-        "Step 2: Pick at most one weak_title prompt edit (the _revise_title sharpening is the most recent), merge it",
-        "Step 3: Close the rest as superseded so article_rejects.counts.weak_title becomes a clean signal again"
+        "Step 1: Open one recent Actions run log and read the [articles] rejected (llm_error) lines for the underlying exception text.",
+        "Step 2: Verify the GLM key's quota/plan at api.z.ai and that glm-5.3-flash is still a served model.",
+        "Step 3: If GLM is quota-bound, temporarily set llm_roles.post to the fallback provider so articles publish while GLM recovers."
       ],
-      "discovered_at": "2026-11-15T18:44:06.959582+00:00"
+      "discovered_at": "2026-11-15T19:44:11.499321+00:00"
     },
     {
-      "title": "Check the glm llm_error spike with the provider",
-      "description": "llm_error accounts for 59 lifetime and 24-of-26 recent draft losses \u2014 the largest single leak of posts-and-asks. This is an engine/uptime problem, not a prompt problem; only the owner can inspect the GLM key/quota.",
-      "owner_action": "Verify the GLM_API_KEY quota and account status at api.z.ai; if quota-limited, confirm the atria fallback is receiving traffic",
+      "title": "Merge or close the 25 stalled title-prompt branches",
+      "description": "The same ALL-CAPS title fix has been proposed 25 times without a decision. Each open branch re-fights the review; picking one (ideally the 2026-11-15 deterministic un-shout rescue, which fixes the defect in code and cannot regress the gate) either recovers the draft or frees the ledger.",
+      "owner_action": "Review the 2026-11-15 deterministic un-shout proposal and merge it or reject the whole title-prompt line once, so future cycles stop re-proposing it.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the GLM dashboard and check recent request volume and error responses",
-        "Step 2: If the key is rate-limited or expired, rotate it in repo secrets \u2014 no new secret needed, same name"
+        "Step 1: List open evolve/* branches sorted by date.",
+        "Step 2: Diff the 2026-11-15 deterministic-rescue branch \u2014 it is code, not prompt text, so it is testable and cannot soften the gate.",
+        "Step 3: Merge that one and close the remaining title-prompt branches as duplicates."
       ],
-      "discovered_at": "2026-11-15T18:44:06.959582+00:00"
+      "discovered_at": "2026-11-15T19:44:11.499321+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 22,
+  "last_cycle_seconds": 23,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2749,7 +2750,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-15T18:43:46.589237+00:00",
+    "checked_at": "2026-11-15T19:43:50.419901+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3501,7 +3502,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-15T18:44:07.251318+00:00",
+    "last_run": "2026-11-15T19:44:11.781920+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3511,30 +3512,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-15T18:44:07.516582+00:00",
+    "last_run": "2026-11-15T19:44:12.016936+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 5019261,
-        "at": "2026-11-15T07:41:42.810160+00:00",
-        "ok": true
-      },
-      {
-        "id": 4568987,
-        "at": "2026-11-15T08:41:46.330176+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-15T08:41:46.330176+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-11-15T08:41:46.330176+00:00",
-        "ok": true
-      },
       {
         "id": 4985893,
         "at": "2026-11-15T08:41:46.330176+00:00",
@@ -3746,11 +3727,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-15T18:44:07.516582+00:00",
-        "ok": true
-      },
-      {
         "id": 4971614,
         "at": "2026-11-15T18:44:07.516582+00:00",
         "ok": true
@@ -3763,6 +3739,31 @@
       {
         "id": 4720062,
         "at": "2026-11-15T18:44:07.516582+00:00",
+        "ok": true
+      },
+      {
+        "id": 5019261,
+        "at": "2026-11-15T19:44:12.016936+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-15T19:44:12.016936+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-15T19:44:12.016936+00:00",
+        "ok": true
+      },
+      {
+        "id": 4996282,
+        "at": "2026-11-15T19:44:12.016936+00:00",
+        "ok": true
+      },
+      {
+        "id": 5012890,
+        "at": "2026-11-15T19:44:12.016936+00:00",
         "ok": true
       }
     ],

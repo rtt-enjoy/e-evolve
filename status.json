@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-15T13:57:03.356672+00:00",
-  "total_runs": 2549,
+  "last_run": "2026-11-15T14:57:07.760600+00:00",
+  "total_runs": 2550,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,77 +34,53 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-leader (weak_title) lost only 1 draft in 14 days, the gate finding behind it (ALL-CAPS) has already absorbed 26 unmerged proposals targeting _revise_title and _SYSTEM, and the dominant loss (llm_error=24, plus empty_draft=2) is engine-side and explicitly not fixable by a prompt edit.",
+    "summary": "No change clears the bar: the prompt the ledger names lost exactly one draft in 14 days, and that specific defect has already drawn 26 unmerged proposals \u2014 the evidence points away from another title-prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Put the receive address in the dev.to profile bio",
-        "description": "Carries the tip ask on every profile visit permanently \u2014 the one channel-table row that needs no account, no processor, and no policy change, and it has been deferred on the owner's side since 2026-09.",
-        "owner_action": "Edit the Bio field once at dev.to/settings to include the published TRC-20 address.",
+        "title": "Revisit the 26 open title-prompt branches and merge one, or close them all",
+        "description": "The evolution loop keeps re-deriving title-prompt edits because none of the earlier ones were ever merged or rejected; the branch queue itself is now the loop's main source of thrash on this topic.",
+        "owner_action": "Review the open evolve/* branches touching bot/earning/articles.py title prompts, merge the best one, and close the rest so future cycles stop re-proposing them.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open dev.to/settings and paste the address (TFTNsf\u20269KbY) with a one-line 'support this work' note into the Bio field.",
-          "Step 2: Save; receipt_check needs no change \u2014 the bio is a static surface, and profile visits are covered by the existing dashboard reporting."
+          "Step 1: List open branches matching evolve/* and filter to those editing _SYSTEM TITLE rules or _revise_title in bot/earning/articles.py.",
+          "Step 2: Merge the smallest single-rule edit and reject the remaining 25; the ledger will then show a real measured effect for the merged one instead of none for all."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompts that write reach, one step per cycle; and the brief's own bar that a change must be small, evidenced, and not a repeat.",
+    "direction": "Checklist step 4 (reach into a live receive path) via the PROMPT FOCUS, declined on evidence.",
     "evidence": [
-      "article_rejects last 14 days: weak_title=1 (the prompt-ledger focus)",
-      "llm_error=24, empty_draft=2 in the same window \u2014 losses the ledger itself marks 'not fixable by a prompt edit'",
-      "gate finding behind weak_title: 'title has ALL-CAPS word' x1 \u2014 a single occurrence",
-      "PRIOR PROPOSALS: 26 distinct unmerged proposals, every one aimed at the ALL-CAPS/colon-subtitle title rules or _revise_title; none merged",
-      "article_interest: problem-workaround n=11 avg_engagement=432.6, above the n>=3 noise floor and already the preferred_archetypes() output steering sourcing and the writing prompt",
-      "article_daily published=1 on 2026-11-15 \u2014 the daily path is working; no gate is systematically blocking publication"
+      "article_rejects.counts: weak_title=15 lifetime but 'Drafts lost to a prompt (last 14 days): weak_title=1'",
+      "Gate finding behind it: 'title has ALL-CAPS word' x1 \u2014 a single occurrence",
+      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=24, empty_draft=2 \u2014 26 of 27 losses are outside any prompt's control",
+      "PRIOR PROPOSALS: 26 distinct open branches, all targeting the title draft prompt / _revise_title ALL-CAPS and colon-subtitle rules; none merged, so another one repeats a refused direction",
+      "preferred_archetypes() = ['problem-workaround'] with n=11 avg=432.6 \u2014 the steering signal is healthy and well-sampled, so no archetype correction is due either"
     ],
-    "money_path": "none this cycle \u2014 declining to repeat 26 unmerged prompt edits on a gate that cost 1 draft in 14 days preserves the hourly budget for changes that clear the bar.",
-    "verify": "Next cycle's PROMPT FOCUS window: weak_title should stay at or near 0-1, and if a genuinely new (non-title-rule) prompt loss appears it will be the evidence for a fresh, untried edit. No branch to review this cycle.",
+    "money_path": "none \u2014 no change proposed; the one draft lost to weak_title in the window is within noise, and the dominant loss (llm_error=24) is engine-side and explicitly not prompt-fixable.",
+    "verify": "Next cycle: article_rejects.counts.weak_title in the 14-day window should stay at ~1 or fall; if it rises again with a new repeated gate finding, that finding \u2014 not ALL-CAPS, which is already covered by 26 open proposals \u2014 is the one to aim at.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.0"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 19
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 43
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 61,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (61 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Put the receive address in the dev.to profile bio",
-      "description": "Carries the tip ask on every profile visit permanently \u2014 the one channel-table row that needs no account, no processor, and no policy change, and it has been deferred on the owner's side since 2026-09.",
-      "owner_action": "Edit the Bio field once at dev.to/settings to include the published TRC-20 address.",
+      "title": "Revisit the 26 open title-prompt branches and merge one, or close them all",
+      "description": "The evolution loop keeps re-deriving title-prompt edits because none of the earlier ones were ever merged or rejected; the branch queue itself is now the loop's main source of thrash on this topic.",
+      "owner_action": "Review the open evolve/* branches touching bot/earning/articles.py title prompts, merge the best one, and close the rest so future cycles stop re-proposing them.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open dev.to/settings and paste the address (TFTNsf\u20269KbY) with a one-line 'support this work' note into the Bio field.",
-        "Step 2: Save; receipt_check needs no change \u2014 the bio is a static surface, and profile visits are covered by the existing dashboard reporting."
+        "Step 1: List open branches matching evolve/* and filter to those editing _SYSTEM TITLE rules or _revise_title in bot/earning/articles.py.",
+        "Step 2: Merge the smallest single-rule edit and reject the remaining 25; the ledger will then show a real measured effect for the merged one instead of none for all."
       ],
-      "discovered_at": "2026-11-15T13:57:23.656797+00:00"
+      "discovered_at": "2026-11-15T14:57:31.950751+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 137,
+  "last_cycle_seconds": 25,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2719,7 +2695,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-15T13:57:03.890875+00:00",
+    "checked_at": "2026-11-15T14:57:08.309581+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3471,7 +3447,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-15T13:59:19.564241+00:00",
+    "last_run": "2026-11-15T14:57:32.222581+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3481,30 +3457,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-15T13:59:19.811550+00:00",
+    "last_run": "2026-11-15T14:57:32.454064+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 5032226,
-        "at": "2026-11-15T02:41:37.165407+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
-        "at": "2026-11-15T03:43:28.458393+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-11-15T03:43:28.458393+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-11-15T03:43:28.458393+00:00",
-        "ok": true
-      },
       {
         "id": 4931682,
         "at": "2026-11-15T03:43:28.458393+00:00",
@@ -3716,11 +3672,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-15T13:59:19.811550+00:00",
-        "ok": true
-      },
-      {
         "id": 4421693,
         "at": "2026-11-15T13:59:19.811550+00:00",
         "ok": true
@@ -3734,6 +3685,31 @@
         "id": 5025764,
         "at": "2026-11-15T13:59:19.811550+00:00",
         "ok": true
+      },
+      {
+        "id": 5032226,
+        "at": "2026-11-15T14:57:32.454064+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-15T14:57:32.454064+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-11-15T14:57:32.454064+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780783,
+        "at": "2026-11-15T14:57:32.454064+00:00",
+        "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-11-15T14:57:32.454064+00:00",
+        "ok": true
       }
     ],
     "published_total": 53,
@@ -3741,7 +3717,7 @@
     "unverified": 3,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.3
+    "oldest_check_age_hours": 11.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3761,7 +3737,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

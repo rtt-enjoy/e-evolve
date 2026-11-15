@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-15T14:57:07.760600+00:00",
-  "total_runs": 2550,
+  "last_run": "2026-11-15T15:57:03.840735+00:00",
+  "total_runs": 2551,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,33 +34,44 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change clears the bar: the prompt the ledger names lost exactly one draft in 14 days, and that specific defect has already drawn 26 unmerged proposals \u2014 the evidence points away from another title-prompt edit.",
+    "summary": "No change proposed: the prompt the ledger names is saturated with 26 unmerged variants of the exact same edit, and the measured loss it targets is 1 draft in 14 days, so another cycle on it is a known dead end, not reach work.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Revisit the 26 open title-prompt branches and merge one, or close them all",
-        "description": "The evolution loop keeps re-deriving title-prompt edits because none of the earlier ones were ever merged or rejected; the branch queue itself is now the loop's main source of thrash on this topic.",
-        "owner_action": "Review the open evolve/* branches touching bot/earning/articles.py title prompts, merge the best one, and close the rest so future cycles stop re-proposing them.",
+        "title": "Merge exactly one of the 26 open title-prompt branches and close the rest",
+        "description": "Unblocks the only prompt-side reject that still costs drafts (weak_title, 1 in 14 days) and lets future cycles measure a real effect instead of re-deriving the same edit against 26 dead branches.",
+        "owner_action": "Review the open evolve/* branches touching _SYSTEM TITLE rules or _revise_title in bot/earning/articles.py, merge the smallest one, and close the remaining 25.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: List open branches matching evolve/* and filter to those editing _SYSTEM TITLE rules or _revise_title in bot/earning/articles.py.",
-          "Step 2: Merge the smallest single-rule edit and reject the remaining 25; the ledger will then show a real measured effect for the merged one instead of none for all."
+          "Step 1: List open branches matching evolve/* and filter to those editing bot/earning/articles.py title prompts.",
+          "Step 2: Merge the single smallest edit; close the rest unmerged. The prompt ledger will then report a measurable weak_title count for one merged change instead of none for all."
+        ]
+      },
+      {
+        "title": "Investigate the llm_error rate on the post role (59 lifetime, 24 in 14 days)",
+        "description": "LLM failures, not gate rejections, are the largest single source of lost posts and lost tip asks; no prompt edit can touch them, so only an owner-side look at GLM API stability or a role fallback can recover them.",
+        "owner_action": "Check the GLM API key quota/health for the 'post' role over the last 14 days; if the errors are provider-side, confirm whether switching llm_roles.post to the atria fallback is acceptable.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: In the Actions logs, grep 'articles] rejected (llm_error' for the last two weeks and note whether failures cluster at a time of day (quota reset) or are uniform (instability).",
+          "Step 2: If uniform, decide whether to flip llm_roles.post primary to atria; no new secret is needed, the fallback key is already set."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach into a live receive path) via the PROMPT FOCUS, declined on evidence.",
+    "direction": "Checklist step 4 (reach via prompt upgrade), tempered by the dead-end list and Principle 3j discipline about acting on thin signals",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime but 'Drafts lost to a prompt (last 14 days): weak_title=1'",
+      "article_rejects.last = 'weak_title': 1 draft lost to a title prompt in the last 14 days",
       "Gate finding behind it: 'title has ALL-CAPS word' x1 \u2014 a single occurrence",
-      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=24, empty_draft=2 \u2014 26 of 27 losses are outside any prompt's control",
-      "PRIOR PROPOSALS: 26 distinct open branches, all targeting the title draft prompt / _revise_title ALL-CAPS and colon-subtitle rules; none merged, so another one repeats a refused direction",
-      "preferred_archetypes() = ['problem-workaround'] with n=11 avg=432.6 \u2014 the steering signal is healthy and well-sampled, so no archetype correction is due either"
+      "PRIOR PROPOSALS lists 26 open branches, every one of them an edit to _SYSTEM TITLE rules or _revise_title for exactly this gate finding",
+      "The dominant reject is engine-side, not prompt-side: llm_error=59 lifetime / 24 in 14 days, empty_draft=2 \u2014 explicitly out of scope for a prompt edit",
+      "problem-workaround n=11 avg=432.6 is already preferred_archetypes() and already steers sourcing and the draft prompt; the steering signal is healthy",
+      "wallet.received_total_usd = 0.0 with payout.live = true and receipt_check coverage 50/53: the receive path is verified, so only real reach gains justify a change"
     ],
-    "money_path": "none \u2014 no change proposed; the one draft lost to weak_title in the window is within noise, and the dominant loss (llm_error=24) is engine-side and explicitly not prompt-fixable.",
-    "verify": "Next cycle: article_rejects.counts.weak_title in the 14-day window should stay at ~1 or fall; if it rises again with a new repeated gate finding, that finding \u2014 not ALL-CAPS, which is already covered by 26 open proposals \u2014 is the one to aim at.",
+    "money_path": "none (maintenance/no-op). A 26th unmerged title-prompt variant reaches no reader and adds no ask.",
+    "verify": "Nothing to verify this cycle. If the owner merges exactly one of the 26 open title branches and closes the rest, next cycles can measure whether weak_title in the 14-day window moves; that measurement is impossible while all 26 branches stay open and ungraded.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -68,19 +79,30 @@
   },
   "suggestions": [
     {
-      "title": "Revisit the 26 open title-prompt branches and merge one, or close them all",
-      "description": "The evolution loop keeps re-deriving title-prompt edits because none of the earlier ones were ever merged or rejected; the branch queue itself is now the loop's main source of thrash on this topic.",
-      "owner_action": "Review the open evolve/* branches touching bot/earning/articles.py title prompts, merge the best one, and close the rest so future cycles stop re-proposing them.",
+      "title": "Merge exactly one of the 26 open title-prompt branches and close the rest",
+      "description": "Unblocks the only prompt-side reject that still costs drafts (weak_title, 1 in 14 days) and lets future cycles measure a real effect instead of re-deriving the same edit against 26 dead branches.",
+      "owner_action": "Review the open evolve/* branches touching _SYSTEM TITLE rules or _revise_title in bot/earning/articles.py, merge the smallest one, and close the remaining 25.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List open branches matching evolve/* and filter to those editing _SYSTEM TITLE rules or _revise_title in bot/earning/articles.py.",
-        "Step 2: Merge the smallest single-rule edit and reject the remaining 25; the ledger will then show a real measured effect for the merged one instead of none for all."
+        "Step 1: List open branches matching evolve/* and filter to those editing bot/earning/articles.py title prompts.",
+        "Step 2: Merge the single smallest edit; close the rest unmerged. The prompt ledger will then report a measurable weak_title count for one merged change instead of none for all."
       ],
-      "discovered_at": "2026-11-15T14:57:31.950751+00:00"
+      "discovered_at": "2026-11-15T15:57:26.680177+00:00"
+    },
+    {
+      "title": "Investigate the llm_error rate on the post role (59 lifetime, 24 in 14 days)",
+      "description": "LLM failures, not gate rejections, are the largest single source of lost posts and lost tip asks; no prompt edit can touch them, so only an owner-side look at GLM API stability or a role fallback can recover them.",
+      "owner_action": "Check the GLM API key quota/health for the 'post' role over the last 14 days; if the errors are provider-side, confirm whether switching llm_roles.post to the atria fallback is acceptable.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: In the Actions logs, grep 'articles] rejected (llm_error' for the last two weeks and note whether failures cluster at a time of day (quota reset) or are uniform (instability).",
+        "Step 2: If uniform, decide whether to flip llm_roles.post primary to atria; no new secret is needed, the fallback key is already set."
+      ],
+      "discovered_at": "2026-11-15T15:57:26.680177+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 25,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2695,7 +2717,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-15T14:57:08.309581+00:00",
+    "checked_at": "2026-11-15T15:57:04.235106+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3447,7 +3469,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-15T14:57:32.222581+00:00",
+    "last_run": "2026-11-15T15:57:26.946360+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3457,30 +3479,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-15T14:57:32.454064+00:00",
+    "last_run": "2026-11-15T15:57:27.150067+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4931682,
-        "at": "2026-11-15T03:43:28.458393+00:00",
-        "ok": true
-      },
-      {
-        "id": 4681657,
-        "at": "2026-11-15T04:41:41.628058+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-11-15T04:41:41.628058+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-11-15T04:41:41.628058+00:00",
-        "ok": true
-      },
       {
         "id": 4633220,
         "at": "2026-11-15T04:41:41.628058+00:00",
@@ -3692,11 +3694,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-15T14:57:32.454064+00:00",
-        "ok": true
-      },
-      {
         "id": 4853251,
         "at": "2026-11-15T14:57:32.454064+00:00",
         "ok": true
@@ -3710,6 +3707,31 @@
         "id": 4925166,
         "at": "2026-11-15T14:57:32.454064+00:00",
         "ok": true
+      },
+      {
+        "id": 4931682,
+        "at": "2026-11-15T15:57:27.150067+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-15T15:57:27.150067+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-11-15T15:57:27.150067+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-11-15T15:57:27.150067+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-11-15T15:57:27.150067+00:00",
+        "ok": true
       }
     ],
     "published_total": 53,
@@ -3717,7 +3739,7 @@
     "unverified": 3,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.2
+    "oldest_check_age_hours": 11.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

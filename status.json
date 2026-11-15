@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-15T06:41:21.846980+00:00",
-  "total_runs": 2541,
+  "last_run": "2026-11-15T07:41:19.986808+00:00",
+  "total_runs": 2542,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,119 +34,55 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-side loss is one weak_title draft in 14 days, and 29 open review branches already propose the exact same few-line edit (clarify the ALL-CAPS/acronym rule in _SYSTEM and _revise_title); a 30th duplicate wastes a review slot, and the real losses (llm_error=24, empty_draft=2 in 14 days) are engine-side, not fixable by a prompt edit.",
+    "summary": "No change proposed: the only prompt-attributable draft loss in the last 14 days is a single weak_title (1 draft, gate finding 'title has ALL-CAPS word' x1), and 29 open review branches already propose edits to exactly the two prompts behind it (_SYSTEM title rules and _revise_title); another variant would be a repeat that is unlikely to be merged.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge exactly one open title-prompt branch and close the other 28 as duplicates",
-        "description": "Unblocks the only prompt-side reach loss (weak_title, 1 draft/14 days) without a 30th duplicate proposal. Twenty-nine near-identical branches proposing the same ALL-CAPS/acronym clarification cannot all be reviewed; merging one ends the loop and closing the rest keeps the queue honest.",
-        "owner_action": "Review the open bot/earning/articles.py title-prompt branches dated 2026-11-01 onward, merge the single clearest few-line edit, close the rest as duplicates.",
+        "title": "Merge or close one of the 29 open title-prompt branches",
+        "description": "Every cycle is grading a ledger whose fix already sits on an unmerged branch, so none of the measured effect of those edits has ever been observed. Merging one branch lets the next cycles measure whether weak_title rejects actually fall, instead of accumulating 30 near-identical proposals.",
+        "owner_action": "Review and merge (or close) the oldest open title-prompt branch, then let 3-4 cycles run before any new proposal on that prompt.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the review branches touching bot/earning/articles.py from 2026-11-01 onward.",
-          "Step 2: Merge the one clearest few-line edit (clarify that the ALL-CAPS ban excludes recognised acronyms, in both _SYSTEM and _revise_title) and close the remaining branches as duplicates of it.",
-          "Step 3: Watch article_rejects.counts.weak_title over the next two weeks; it should stay at or near 0."
-        ]
-      },
-      {
-        "title": "Address the engine-side draft losses (llm_error), the actual bottleneck",
-        "description": "24 of 26 rejects in the last 14 days were llm_error from the GLM 'post' role \u2014 six times more lost posts than all gates combined. No prompt edit can fix this; it is availability or rate-limiting of glm-5.3-flash during the morning publish window.",
-        "owner_action": "Check whether the GLM API key hit quota/rate limits during the 06:00-12:00 UTC+9 window, or raise the fallback threshold so the atria fallback takes over post-role calls sooner.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Check the GLM account's quota and rate-limit dashboard for 2026-11-08 to 2026-11-15.",
-          "Step 2: If quota-limited, reduce post-role usage in the window or confirm the existing atria fallback is firing correctly (llm.fallback is configured but calls show only {'glm': 1})."
-        ]
-      },
-      {
-        "title": "Add the wallet address to the dev.to profile bio (two minutes, one time)",
-        "description": "Carries the ask on every profile visit permanently \u2014 the one cheap owner-action row the channel table already researched as not automatable via the API (users is only:show in Forem routes).",
-        "owner_action": "Edit the Bio field at dev.to/settings to include the published TRC-20 address.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open dev.to/settings and paste the address [redacted] (TRC-20) into the Bio field.",
-          "Step 2: Save. Every future profile visitor sees the ask with no further bot or owner work."
+          "Step 1: Open the evolve/* branch dated 2026-11-01 (the earliest title-prompt proposal) and read its diff against articles.py.",
+          "Step 2: Merge it if the edit is sound, or close it and the redundant siblings in one pass.",
+          "Step 3: Compare article_rejects.counts.weak_title over the following 14 days against the current baseline of 1."
         ]
       }
     ],
-    "direction": "Checklist step 4 / Principle 5 step 2 \u2014 publish more articles in shapes readers prefer; and the known dead-end list ('anything already in PRIOR PROPOSALS').",
+    "direction": "Checklist step 4 / Principle 5 \u2014 reach into a live receive path, via prompt upgrades; declined this cycle because no unaddressed prompt loss exists",
     "evidence": [
-      "Drafts lost to a prompt (last 14 days): weak_title=1 \u2014 one post per fortnight; the title prompts are not the bottleneck",
-      "Drafts lost to the engine (last 14 days): llm_error=24, empty_draft=2 \u2014 92% of rejects are engine-side, untouchable from a prompt",
-      "article_rejects.last = 'weak_title': gate finding 'title has ALL-CAPS word' x1 \u2014 already covered by the 29 open branches, including 'Clarify that ALL-CAPS words are banned only if not recognized acronyms' and 'One-line edit to the _revise_title prompt replacing the ambiguous no ALL-CAPS phrase'",
-      "PRIOR PROPOSALS lists 29 open branches on bot/earning/articles.py title prompts dated 2026-11-01 to 2026-11-15, none merged \u2014 the review queue is saturated, not the prompt"
+      "article_rejects.counts (14d prompt-attributable) = weak_title: 1",
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "PROMPT LEDGER: drafts lost to a prompt (last 14 days) = weak_title=1",
+      "article_rejects.counts lifetime: llm_error=59, empty_draft=11 \u2014 engine-side, not fixable by a prompt edit",
+      "PRIOR PROPOSALS: 29 open branches, every one an edit to the title-rewrite prompt or the _SYSTEM title rules for this same gate"
     ],
-    "money_path": "reach-only \u2014 one extra post per fortnight at most; the receive path is live and verified (payout.live=true, known_without_footer=0, coverage 50/53 building).",
-    "verify": "No code change, so nothing to verify in code. The owner-side action is verifiable by watching article_rejects.counts.weak_title stay at or near 0 over the next two weeks after merging one branch and closing the rest.",
+    "money_path": "none this cycle (reach work declined; the receive path itself is verified: payout.live=true, receipt_check known_without_footer=0)",
+    "verify": "Next cycle's PROMPT FOCUS window: if the single weak_title was an outlier rather than a trend (e.g. ALL-CAPS rejects reappear at \u22653 in a 14-day window) it justifies revisiting the prompt once the earliest open branch is merged or closed; llm_error count should be watched as the engine-side lever, not the prompts.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 19
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 43
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 61,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (61 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge exactly one open title-prompt branch and close the other 28 as duplicates",
-      "description": "Unblocks the only prompt-side reach loss (weak_title, 1 draft/14 days) without a 30th duplicate proposal. Twenty-nine near-identical branches proposing the same ALL-CAPS/acronym clarification cannot all be reviewed; merging one ends the loop and closing the rest keeps the queue honest.",
-      "owner_action": "Review the open bot/earning/articles.py title-prompt branches dated 2026-11-01 onward, merge the single clearest few-line edit, close the rest as duplicates.",
+      "title": "Merge or close one of the 29 open title-prompt branches",
+      "description": "Every cycle is grading a ledger whose fix already sits on an unmerged branch, so none of the measured effect of those edits has ever been observed. Merging one branch lets the next cycles measure whether weak_title rejects actually fall, instead of accumulating 30 near-identical proposals.",
+      "owner_action": "Review and merge (or close) the oldest open title-prompt branch, then let 3-4 cycles run before any new proposal on that prompt.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the review branches touching bot/earning/articles.py from 2026-11-01 onward.",
-        "Step 2: Merge the one clearest few-line edit (clarify that the ALL-CAPS ban excludes recognised acronyms, in both _SYSTEM and _revise_title) and close the remaining branches as duplicates of it.",
-        "Step 3: Watch article_rejects.counts.weak_title over the next two weeks; it should stay at or near 0."
+        "Step 1: Open the evolve/* branch dated 2026-11-01 (the earliest title-prompt proposal) and read its diff against articles.py.",
+        "Step 2: Merge it if the edit is sound, or close it and the redundant siblings in one pass.",
+        "Step 3: Compare article_rejects.counts.weak_title over the following 14 days against the current baseline of 1."
       ],
-      "discovered_at": "2026-11-15T05:41:39.809192+00:00"
-    },
-    {
-      "title": "Address the engine-side draft losses (llm_error), the actual bottleneck",
-      "description": "24 of 26 rejects in the last 14 days were llm_error from the GLM 'post' role \u2014 six times more lost posts than all gates combined. No prompt edit can fix this; it is availability or rate-limiting of glm-5.3-flash during the morning publish window.",
-      "owner_action": "Check whether the GLM API key hit quota/rate limits during the 06:00-12:00 UTC+9 window, or raise the fallback threshold so the atria fallback takes over post-role calls sooner.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: Check the GLM account's quota and rate-limit dashboard for 2026-11-08 to 2026-11-15.",
-        "Step 2: If quota-limited, reduce post-role usage in the window or confirm the existing atria fallback is firing correctly (llm.fallback is configured but calls show only {'glm': 1})."
-      ],
-      "discovered_at": "2026-11-15T06:41:56.244608+00:00"
-    },
-    {
-      "title": "Add the wallet address to the dev.to profile bio (two minutes, one time)",
-      "description": "Carries the ask on every profile visit permanently \u2014 the one cheap owner-action row the channel table already researched as not automatable via the API (users is only:show in Forem routes).",
-      "owner_action": "Edit the Bio field at dev.to/settings to include the published TRC-20 address.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: Open dev.to/settings and paste the address [redacted] (TRC-20) into the Bio field.",
-        "Step 2: Save. Every future profile visitor sees the ask with no further bot or owner work."
-      ],
-      "discovered_at": "2026-11-15T06:41:56.244608+00:00"
+      "discovered_at": "2026-11-15T07:41:42.450886+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 147,
+  "last_cycle_seconds": 23,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2763,7 +2699,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-15T06:41:22.246036+00:00",
+    "checked_at": "2026-11-15T07:41:20.567195+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3505,7 +3441,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-15T06:43:47.962912+00:00",
+    "last_run": "2026-11-15T07:41:42.666427+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3515,30 +3451,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-15T06:43:48.272129+00:00",
+    "last_run": "2026-11-15T07:41:42.810160+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 5012890,
-        "at": "2026-11-14T20:05:21.511521+00:00",
-        "ok": true
-      },
-      {
-        "id": 4985893,
-        "at": "2026-11-14T20:05:21.511521+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-14T21:08:03.133217+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-11-14T21:08:03.133217+00:00",
-        "ok": true
-      },
       {
         "id": 4568987,
         "at": "2026-11-14T21:08:03.133217+00:00",
@@ -3750,11 +3666,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-15T06:43:48.272129+00:00",
-        "ok": true
-      },
-      {
         "id": 4748037,
         "at": "2026-11-15T06:43:48.272129+00:00",
         "ok": true
@@ -3767,6 +3678,31 @@
       {
         "id": 4602729,
         "at": "2026-11-15T06:43:48.272129+00:00",
+        "ok": true
+      },
+      {
+        "id": 5012890,
+        "at": "2026-11-15T07:41:42.810160+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-15T07:41:42.810160+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-15T07:41:42.810160+00:00",
+        "ok": true
+      },
+      {
+        "id": 4996282,
+        "at": "2026-11-15T07:41:42.810160+00:00",
+        "ok": true
+      },
+      {
+        "id": 5019261,
+        "at": "2026-11-15T07:41:42.810160+00:00",
         "ok": true
       }
     ],
@@ -3795,7 +3731,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

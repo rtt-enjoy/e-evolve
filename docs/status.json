@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-15T02:26:37.858767+00:00",
-  "total_runs": 2536,
+  "last_run": "2026-11-15T02:41:06.832964+00:00",
+  "total_runs": 2537,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,45 +34,47 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the only prompt-losing gate (weak_title, 2 drafts in 14 days) has already accumulated 31 distinct unmerged proposals targeting exactly that prompt's two observed defects, so a 32nd edit to the same lines would be noise; the dominant loss (llm_error, 59 lifetime / 24 in-window) is engine-side and not fixable by any prompt edit.",
+    "summary": "No change proposed: the prompt-focus lane (title ALL-CAPS rejects) is already covered by 31 distinct open proposals on the same two prompts, and this cycle's evidence does not clear the bar for a 32nd edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Reduce llm_error losses, the dominant reject cause",
-        "description": "llm_error is 59 lifetime (24 in the last 14 days) versus weak_title's 2-in-window \u2014 the biggest source of lost posts and lost tip asks is engine failures, not title quality. Only the owner can change the model, endpoint or fallback for the 'post' role.",
-        "owner_action": "Review the glm-5.3-flash endpoint stability for the 'post' role; consider pinning the atria fallback more aggressively or checking GLM_API_KEY quota, then merge one of the 31 parked title-rewrite branches if title rejects persist.",
+        "title": "Add the wallet address to the dev.to profile bio",
+        "description": "The one unbuilt channel needing no secret and no policy change; it carries the ask on every profile visit permanently and covers readers who arrive at the profile rather than a post.",
+        "owner_action": "Paste the published TRC-20 address (payout_public.address) into the Bio field at dev.to/settings \u2014 one two-minute edit.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: check the workflow logs for the 24 recent llm_error entries to see whether they are timeouts, quota or malformed JSON from glm.",
-          "Step 2: if quota/timeouts, raise the glm plan or swap the 'post' role to atria in llm_workflows config.",
-          "Step 3: review and merge one of the parked weak_title prompt branches on the next weak_title occurrence, since each is a one-line edit."
+          "Step 1: open https://dev.to/settings/profile",
+          "Step 2: append a line like 'Tips (USDT/TRC-20): [redacted]' to the Bio and save",
+          "Step 3: no bot change needed \u2014 receipt_check and the dashboard already observe published surfaces"
         ]
       },
       {
-        "title": "Put the wallet address in the dev.to profile bio",
-        "description": "Carries the ask on every profile visit permanently \u2014 the one deferred channel needing no account, no processor and no policy change; the bot cannot do it (Forem exposes no writer endpoint).",
-        "owner_action": "Add the TRC-20 receive address to the Bio field at dev.to/settings once.",
+        "title": "Review the 31 open title-prompt branches and merge at most one",
+        "description": "The title lane is saturated with near-duplicate proposals; merging one decisive edit (the acronym-aware ALL-CAPS clarification) and closing the rest ends the churn and gives the next cycle a clean signal in weak_title.",
+        "owner_action": "Pick one title-prompt branch to merge this week and close the remaining 30 without review.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: open dev.to/settings and paste the address (same one as payout_public) into the Bio field.",
-          "Step 2: save; no code change needed, receipt_check already observes published surfaces."
+          "Step 1: open the review branches sorted oldest first",
+          "Step 2: merge the 2026-11-04 'clarify ALL-CAPS ban applies only to non-acronyms' proposal \u2014 it is the closest to the gate's actual finding",
+          "Step 3: close the other branches in the same batch so future cycles stop re-proposing the same edit"
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path via prompt upgrades, one step per cycle; no step this cycle meets the bar.",
+    "direction": "Checklist step 4 \u2014 upgrade the prompts that write what readers see, one step per cycle; Principle 3j sample discipline on the steering signal",
     "evidence": [
-      "article_rejects.counts: llm_error=59 vs weak_title=15 (lifetime); last 14 days llm_error=24, weak_title=2",
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "gate findings behind weak_title: 'title padded with a colon subtitle' x1, 'title has ALL-CAPS word' x1",
-      "PRIOR PROPOSALS: 31 open branches, every one an edit to the same title prompts (_SYSTEM TITLE rules / _revise_title) covering colon-subtitles and ALL-CAPS words",
-      "article_daily.published = 1 (the daily article is shipping; rejects are not currently starving reach)",
-      "receipt_check.covered / published_total = 50 / 53; wallet.received_total_usd = 0.0 \u2014 receive path live, work is reach"
+      "article_rejects.counts: weak_title=15 lifetime, but only 1 in the last 14 days",
+      "article_rejects.last = weak_title, detail 'title has ALL-CAPS word' x1",
+      "Drafts lost to a prompt (last 14 days): weak_title=1 \u2014 a single lost draft in the window",
+      "Drafts lost to the engine (last 14 days): llm_error=24, empty_draft=2 \u2014 not addressable by any prompt edit without adding keys, which the owner removed on 2026-11-04",
+      "PRIOR PROPOSALS: 31 distinct open branches, nearly all editing _SYSTEM TITLE rules or _revise_title for the same ALL-CAPS/colon-subtitle defects",
+      "receipt_check.coverage_complete = False and coverage 50/53 \u2014 a status-observation state, not a code defect this cycle can fix with an edit",
+      "wallet.received_total_usd = 0.0 with other_assets empty \u2014 the live receive path simply has not converted yet; reach work is correct, but no prompt change in the focus lane beats waiting on the 31 already-proposed ones"
     ],
-    "money_path": "none (maintenance/no-change). The daily article path is publishing (article_daily.published = 1) and the footer is attached after gates in devto.publish; nothing here touches the receive path.",
-    "verify": "Next cycle: confirm article_rejects window counts \u2014 weak_title should stay near 0-2; the field to watch is llm_error, which is the actual dominant loss and would need an owner-side engine decision (model/fallback), not a prompt edit. No status field moves from a no-change cycle.",
+    "money_path": "none this cycle \u2014 reach is the binding work, but the highest-leverage edit in the named lane is already parked on open review branches; a duplicate proposal would only add review load",
+    "verify": "Next cycle: article_rejects window for weak_title should stay near 0 if any of the open title proposals merge; article_daily.published should stay 1 when no change merges.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -80,31 +82,32 @@
   },
   "suggestions": [
     {
-      "title": "Reduce llm_error losses, the dominant reject cause",
-      "description": "llm_error is 59 lifetime (24 in the last 14 days) versus weak_title's 2-in-window \u2014 the biggest source of lost posts and lost tip asks is engine failures, not title quality. Only the owner can change the model, endpoint or fallback for the 'post' role.",
-      "owner_action": "Review the glm-5.3-flash endpoint stability for the 'post' role; consider pinning the atria fallback more aggressively or checking GLM_API_KEY quota, then merge one of the 31 parked title-rewrite branches if title rejects persist.",
+      "title": "Add the wallet address to the dev.to profile bio",
+      "description": "The one unbuilt channel needing no secret and no policy change; it carries the ask on every profile visit permanently and covers readers who arrive at the profile rather than a post.",
+      "owner_action": "Paste the published TRC-20 address (payout_public.address) into the Bio field at dev.to/settings \u2014 one two-minute edit.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: check the workflow logs for the 24 recent llm_error entries to see whether they are timeouts, quota or malformed JSON from glm.",
-        "Step 2: if quota/timeouts, raise the glm plan or swap the 'post' role to atria in llm_workflows config.",
-        "Step 3: review and merge one of the parked weak_title prompt branches on the next weak_title occurrence, since each is a one-line edit."
+        "Step 1: open https://dev.to/settings/profile",
+        "Step 2: append a line like 'Tips (USDT/TRC-20): [redacted]' to the Bio and save",
+        "Step 3: no bot change needed \u2014 receipt_check and the dashboard already observe published surfaces"
       ],
-      "discovered_at": "2026-11-15T02:26:59.246208+00:00"
+      "discovered_at": "2026-11-15T02:41:36.654437+00:00"
     },
     {
-      "title": "Put the wallet address in the dev.to profile bio",
-      "description": "Carries the ask on every profile visit permanently \u2014 the one deferred channel needing no account, no processor and no policy change; the bot cannot do it (Forem exposes no writer endpoint).",
-      "owner_action": "Add the TRC-20 receive address to the Bio field at dev.to/settings once.",
+      "title": "Review the 31 open title-prompt branches and merge at most one",
+      "description": "The title lane is saturated with near-duplicate proposals; merging one decisive edit (the acronym-aware ALL-CAPS clarification) and closing the rest ends the churn and gives the next cycle a clean signal in weak_title.",
+      "owner_action": "Pick one title-prompt branch to merge this week and close the remaining 30 without review.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: open dev.to/settings and paste the address (same one as payout_public) into the Bio field.",
-        "Step 2: save; no code change needed, receipt_check already observes published surfaces."
+        "Step 1: open the review branches sorted oldest first",
+        "Step 2: merge the 2026-11-04 'clarify ALL-CAPS ban applies only to non-acronyms' proposal \u2014 it is the closest to the gate's actual finding",
+        "Step 3: close the other branches in the same batch so future cycles stop re-proposing the same edit"
       ],
-      "discovered_at": "2026-11-15T00:26:51.469584+00:00"
+      "discovered_at": "2026-11-15T02:41:36.654437+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 22,
+  "last_cycle_seconds": 31,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2755,7 +2758,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-15T02:26:38.264336+00:00",
+    "checked_at": "2026-11-15T02:41:07.442577+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3497,7 +3500,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-15T02:26:59.456636+00:00",
+    "last_run": "2026-11-15T02:41:36.906242+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3507,30 +3510,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-15T02:26:59.636884+00:00",
+    "last_run": "2026-11-15T02:41:37.165407+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4925166,
-        "at": "2026-11-14T12:30:20.323865+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-11-14T13:30:10.389014+00:00",
-        "ok": true
-      },
-      {
-        "id": 4931682,
-        "at": "2026-11-14T13:30:10.389014+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-11-14T14:32:16.826988+00:00",
-        "ok": true
-      },
       {
         "id": 4848276,
         "at": "2026-11-14T14:32:16.826988+00:00",
@@ -3742,11 +3725,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-15T02:26:59.636884+00:00",
-        "ok": true
-      },
-      {
         "id": 4430049,
         "at": "2026-11-15T02:26:59.636884+00:00",
         "ok": true
@@ -3760,6 +3738,31 @@
         "id": 4740283,
         "at": "2026-11-15T02:26:59.636884+00:00",
         "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-11-15T02:41:37.165407+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-15T02:41:37.165407+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-11-15T02:41:37.165407+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780783,
+        "at": "2026-11-15T02:41:37.165407+00:00",
+        "ok": true
+      },
+      {
+        "id": 5032226,
+        "at": "2026-11-15T02:41:37.165407+00:00",
+        "ok": true
       }
     ],
     "published_total": 53,
@@ -3767,7 +3770,7 @@
     "unverified": 3,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 13.9
+    "oldest_check_age_hours": 12.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

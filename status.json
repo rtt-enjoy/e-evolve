@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-15T01:26:39.531929+00:00",
-  "total_runs": 2535,
+  "last_run": "2026-11-15T02:26:37.858767+00:00",
+  "total_runs": 2536,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,19 +34,42 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed this cycle: the prompt focus (weak_title, 2 drafts lost in 14 days) is already the subject of all 32 open, unmerged review branches, every one of which proposes a small edit to exactly the two prompts the ledger names (_SYSTEM and _revise_title); stacking a 33rd variation on top of unreviewed edits to the same lines risks conflicting diffs on merge, and the dominant loss is engine-side (llm_error=25 in 14 days), which no prompt edit can fix.",
+    "summary": "No change this cycle: the only prompt-losing gate (weak_title, 2 drafts in 14 days) has already accumulated 31 distinct unmerged proposals targeting exactly that prompt's two observed defects, so a 32nd edit to the same lines would be noise; the dominant loss (llm_error, 59 lifetime / 24 in-window) is engine-side and not fixable by any prompt edit.",
     "changes_applied": [],
-    "suggestions": [],
-    "direction": "Checklist step 4 \u2014 upgrade the prompts that write reach, one step per cycle; exercised honestly here by declining a saturated step",
-    "evidence": [
-      "article_rejects.counts: weak_title=2 in the last 14 days vs llm_error=25 in the same window",
-      "PROMPT FOCUS names article draft (_SYSTEM + _generate_article user prompt) and title rewrite (_revise_title)",
-      "PRIOR PROPOSALS: 32 distinct open branches, every one an edit to _revise_title or _SYSTEM (colon-subtitle, ALL-CAPS, before/after examples, self-check in the draft user prompt)",
-      "article_interest: problem-workaround n=11 avg=432.6 is already the steering input via preferred_archetypes()=_ARCHETYPE_BONUS in _prefer_proven_archetypes and _audience_guidance; the steering instruction already exists and fires",
-      "receipt_check coverage 50/53 and backfill.remaining=0 mean the receive path is verified; the binding constraint is reach throughput, not prompt wording"
+    "suggestions": [
+      {
+        "title": "Reduce llm_error losses, the dominant reject cause",
+        "description": "llm_error is 59 lifetime (24 in the last 14 days) versus weak_title's 2-in-window \u2014 the biggest source of lost posts and lost tip asks is engine failures, not title quality. Only the owner can change the model, endpoint or fallback for the 'post' role.",
+        "owner_action": "Review the glm-5.3-flash endpoint stability for the 'post' role; consider pinning the atria fallback more aggressively or checking GLM_API_KEY quota, then merge one of the 31 parked title-rewrite branches if title rejects persist.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: check the workflow logs for the 24 recent llm_error entries to see whether they are timeouts, quota or malformed JSON from glm.",
+          "Step 2: if quota/timeouts, raise the glm plan or swap the 'post' role to atria in llm_workflows config.",
+          "Step 3: review and merge one of the parked weak_title prompt branches on the next weak_title occurrence, since each is a one-line edit."
+        ]
+      },
+      {
+        "title": "Put the wallet address in the dev.to profile bio",
+        "description": "Carries the ask on every profile visit permanently \u2014 the one deferred channel needing no account, no processor and no policy change; the bot cannot do it (Forem exposes no writer endpoint).",
+        "owner_action": "Add the TRC-20 receive address to the Bio field at dev.to/settings once.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: open dev.to/settings and paste the address (same one as payout_public) into the Bio field.",
+          "Step 2: save; no code change needed, receipt_check already observes published surfaces."
+        ]
+      }
     ],
-    "money_path": "none this cycle \u2014 declining to change keeps the receive path untouched; reach work resumes once the open title-prompt branches are merged or closed",
-    "verify": "Next cycle: if an open title-prompt branch is merged, weak_title in the 14-day window should fall toward 0; llm_error=25 is not addressable by any editable file (bot/llm.py is protected), so its count is out of scope for prompt work",
+    "direction": "Checklist step 4 \u2014 reach into a live receive path via prompt upgrades, one step per cycle; no step this cycle meets the bar.",
+    "evidence": [
+      "article_rejects.counts: llm_error=59 vs weak_title=15 (lifetime); last 14 days llm_error=24, weak_title=2",
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "gate findings behind weak_title: 'title padded with a colon subtitle' x1, 'title has ALL-CAPS word' x1",
+      "PRIOR PROPOSALS: 31 open branches, every one an edit to the same title prompts (_SYSTEM TITLE rules / _revise_title) covering colon-subtitles and ALL-CAPS words",
+      "article_daily.published = 1 (the daily article is shipping; rejects are not currently starving reach)",
+      "receipt_check.covered / published_total = 50 / 53; wallet.received_total_usd = 0.0 \u2014 receive path live, work is reach"
+    ],
+    "money_path": "none (maintenance/no-change). The daily article path is publishing (article_daily.published = 1) and the footer is attached after gates in devto.publish; nothing here touches the receive path.",
+    "verify": "Next cycle: confirm article_rejects window counts \u2014 weak_title should stay near 0-2; the field to watch is llm_error, which is the actual dominant loss and would need an owner-side engine decision (model/fallback), not a prompt edit. No status field moves from a no-change cycle.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.1"
@@ -56,6 +79,18 @@
     "total_usd": 0.0
   },
   "suggestions": [
+    {
+      "title": "Reduce llm_error losses, the dominant reject cause",
+      "description": "llm_error is 59 lifetime (24 in the last 14 days) versus weak_title's 2-in-window \u2014 the biggest source of lost posts and lost tip asks is engine failures, not title quality. Only the owner can change the model, endpoint or fallback for the 'post' role.",
+      "owner_action": "Review the glm-5.3-flash endpoint stability for the 'post' role; consider pinning the atria fallback more aggressively or checking GLM_API_KEY quota, then merge one of the 31 parked title-rewrite branches if title rejects persist.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: check the workflow logs for the 24 recent llm_error entries to see whether they are timeouts, quota or malformed JSON from glm.",
+        "Step 2: if quota/timeouts, raise the glm plan or swap the 'post' role to atria in llm_workflows config.",
+        "Step 3: review and merge one of the parked weak_title prompt branches on the next weak_title occurrence, since each is a one-line edit."
+      ],
+      "discovered_at": "2026-11-15T02:26:59.246208+00:00"
+    },
     {
       "title": "Put the wallet address in the dev.to profile bio",
       "description": "Carries the ask on every profile visit permanently \u2014 the one deferred channel needing no account, no processor and no policy change; the bot cannot do it (Forem exposes no writer endpoint).",
@@ -69,7 +104,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 38,
+  "last_cycle_seconds": 22,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2720,7 +2755,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-15T01:26:40.130799+00:00",
+    "checked_at": "2026-11-15T02:26:38.264336+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3462,7 +3497,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-15T01:27:17.542108+00:00",
+    "last_run": "2026-11-15T02:26:59.456636+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3472,30 +3507,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-15T01:27:17.644722+00:00",
+    "last_run": "2026-11-15T02:26:59.636884+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 5032226,
-        "at": "2026-11-14T11:32:38.042936+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-11-14T11:32:38.042936+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780783,
-        "at": "2026-11-14T11:32:38.042936+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
-        "at": "2026-11-14T12:30:20.323865+00:00",
-        "ok": true
-      },
       {
         "id": 4925166,
         "at": "2026-11-14T12:30:20.323865+00:00",
@@ -3707,11 +3722,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-15T01:27:17.644722+00:00",
-        "ok": true
-      },
-      {
         "id": 4908316,
         "at": "2026-11-15T01:27:17.644722+00:00",
         "ok": true
@@ -3724,6 +3734,31 @@
       {
         "id": 4943931,
         "at": "2026-11-15T01:27:17.644722+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-11-15T02:26:59.636884+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-15T02:26:59.636884+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-11-15T02:26:59.636884+00:00",
+        "ok": true
+      },
+      {
+        "id": 5025764,
+        "at": "2026-11-15T02:26:59.636884+00:00",
+        "ok": true
+      },
+      {
+        "id": 4740283,
+        "at": "2026-11-15T02:26:59.636884+00:00",
         "ok": true
       }
     ],

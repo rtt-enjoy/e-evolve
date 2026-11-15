@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-15T04:41:15.555824+00:00",
-  "total_runs": 2539,
+  "last_run": "2026-11-15T05:41:19.735223+00:00",
+  "total_runs": 2540,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,31 +34,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt-adjacent loss this cycle (weak_title, 1 draft in 14 days, finding 'title has ALL-CAPS word' x1) has already been addressed by 29 open, near-identical proposals touching _SYSTEM and _revise_title; adding a 30th duplicate would bury the fix it asks for. All other reject volume is llm_error=59 and empty_draft=11, which the ledger classifies as engine failures not fixable by a prompt edit, and the doctrine forbids loosening the title gate.",
+    "summary": "No change clears the bar this cycle: the only prompt losing drafts (weak_title, 1 in 14 days, finding 'title has ALL-CAPS word') is already the subject of 29 open unmerged branches proposing every angle of the same few-line fix, and proposing a 30th would repeat them; the dominant reject (llm_error=59, 24 in 14 days) is engine-side, not prompt-fixable.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge exactly one of the open title-prompt branches and close the rest as duplicates",
-        "description": "weak_title cost 1 draft in 14 days with finding 'title has ALL-CAPS word'. Every angle (concrete examples, acronym allowlist, colon-subtitle mirror) is already proposed across 29 open branches; merging one ends the loop, closing the rest keeps the review queue honest.",
-        "owner_action": "Review the 2026-11-15 _revise_title edit, merge that single branch, and close the other 28 as duplicates of it.",
+        "title": "Merge exactly one open title-prompt branch and close the other 28 as duplicates",
+        "description": "Unblocks the only prompt-side reach loss (weak_title, 1 draft/14 days). Twenty-nine near-identical branches proposing the same few-line ALL-CAPS/colon clarification cannot all be reviewed; merging one ends the loop and closing the rest keeps the queue honest and stops future cycles from re-proposing it.",
+        "owner_action": "Review the bot/earning/articles.py title-rewrite branches dated 2026-11-01 onward, merge the single clearest few-line edit, close the rest as duplicates.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the review branches dated 2026-11-01 onward that touch bot/earning/articles.py.",
-          "Step 2: Merge the single clearest few-line edit and close the rest as duplicates.",
+          "Step 1: Open the review branches touching bot/earning/articles.py from 2026-11-01 onward.",
+          "Step 2: Merge the one clearest few-line edit (a before/after example plus the acronym clarification) and close the other branches as duplicates of it.",
           "Step 3: Watch article_rejects.counts.weak_title over the next two weeks; it should stay at or near 0."
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach into a live receive path; upgrade the prompts that write it, one step per cycle",
+    "direction": "Checklist step 4 \u2014 reach into a live receive path, via the PROMPT FOCUS; refused because the focus prompt is saturated with open proposals awaiting a merge decision, not with new evidence.",
     "evidence": [
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "Drafts lost to a prompt (last 14 days): weak_title=1",
-      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=24, empty_draft=2",
-      "PRIOR PROPOSALS contains 29 open branches, all edits to bot/earning/articles.py title rules, none merged",
-      "suggestions[0] = 'Merge one of the 30 open title-prompt proposals instead of generating a 31st'"
+      "article_rejects.counts: weak_title=15 lifetime but drafts lost to a prompt in the last 14 days = weak_title=1 (one draft)",
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed' with gate finding 'title has ALL-CAPS word' x1",
+      "PRIOR PROPOSALS: 29 distinct open branches, every one an edit to the article draft TITLE rules or _revise_title ALL-CAPS/colon handling, none merged",
+      "Drafts lost to the engine in 14 days: llm_error=24, empty_draft=2 \u2014 not addressable by any prompt edit",
+      "suggestions already carries: 'Merge exactly one of the open title-prompt branches and close the rest as duplicates'"
     ],
-    "money_path": "none (maintenance) \u2014 no change is proposed; reach work is already steered by the live problem-workaround guidance and the receive path is verified (payout.live=true, known_without_footer=0)",
-    "verify": "No change to verify. Next cycle: article_rejects.counts.weak_title should stay near zero, and the reviewer resolving the duplicate title-prompt branches ends the loop. If weak_title rises again after a branch is merged, name the count that should fall in that window.",
+    "money_path": "none (no change this cycle); reach is currently blocked on the review queue, not on prompt quality \u2014 one post in two weeks was lost to the title gate",
+    "verify": "No diff to verify. After the owner merges one title-prompt branch and closes the rest, article_rejects.counts.weak_title should stay at or near 0 over the next two weeks; if a new ALL-CAPS or weak_title reject appears, that is evidence for exactly one new few-line edit, proposed fresh.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -69,20 +69,20 @@
   },
   "suggestions": [
     {
-      "title": "Merge exactly one of the open title-prompt branches and close the rest as duplicates",
-      "description": "weak_title cost 1 draft in 14 days with finding 'title has ALL-CAPS word'. Every angle (concrete examples, acronym allowlist, colon-subtitle mirror) is already proposed across 29 open branches; merging one ends the loop, closing the rest keeps the review queue honest.",
-      "owner_action": "Review the 2026-11-15 _revise_title edit, merge that single branch, and close the other 28 as duplicates of it.",
+      "title": "Merge exactly one open title-prompt branch and close the other 28 as duplicates",
+      "description": "Unblocks the only prompt-side reach loss (weak_title, 1 draft/14 days). Twenty-nine near-identical branches proposing the same few-line ALL-CAPS/colon clarification cannot all be reviewed; merging one ends the loop and closing the rest keeps the queue honest and stops future cycles from re-proposing it.",
+      "owner_action": "Review the bot/earning/articles.py title-rewrite branches dated 2026-11-01 onward, merge the single clearest few-line edit, close the rest as duplicates.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the review branches dated 2026-11-01 onward that touch bot/earning/articles.py.",
-        "Step 2: Merge the single clearest few-line edit and close the rest as duplicates.",
+        "Step 1: Open the review branches touching bot/earning/articles.py from 2026-11-01 onward.",
+        "Step 2: Merge the one clearest few-line edit (a before/after example plus the acronym clarification) and close the other branches as duplicates of it.",
         "Step 3: Watch article_rejects.counts.weak_title over the next two weeks; it should stay at or near 0."
       ],
-      "discovered_at": "2026-11-15T04:41:36.261156+00:00"
+      "discovered_at": "2026-11-15T05:41:39.809192+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 27,
+  "last_cycle_seconds": 21,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2703,7 +2703,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-15T04:41:15.935692+00:00",
+    "checked_at": "2026-11-15T05:41:20.265465+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3445,7 +3445,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-15T04:41:41.366532+00:00",
+    "last_run": "2026-11-15T05:41:40.013946+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3455,30 +3455,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-15T04:41:41.628058+00:00",
+    "last_run": "2026-11-15T05:41:40.159649+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4619528,
-        "at": "2026-11-14T17:32:44.259371+00:00",
-        "ok": true
-      },
-      {
-        "id": 4602729,
-        "at": "2026-11-14T17:32:44.259371+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-11-14T18:05:17.825911+00:00",
-        "ok": true
-      },
-      {
-        "id": 4720062,
-        "at": "2026-11-14T18:05:17.825911+00:00",
-        "ok": true
-      },
       {
         "id": 4545446,
         "at": "2026-11-14T19:05:15.532246+00:00",
@@ -3690,11 +3670,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-15T04:41:41.628058+00:00",
-        "ok": true
-      },
-      {
         "id": 4503417,
         "at": "2026-11-15T04:41:41.628058+00:00",
         "ok": true
@@ -3708,6 +3683,31 @@
         "id": 4633220,
         "at": "2026-11-15T04:41:41.628058+00:00",
         "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-11-15T05:41:40.159649+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-15T05:41:40.159649+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-15T05:41:40.159649+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-15T05:41:40.159649+00:00",
+        "ok": true
+      },
+      {
+        "id": 4959304,
+        "at": "2026-11-15T05:41:40.159649+00:00",
+        "ok": true
       }
     ],
     "published_total": 53,
@@ -3715,7 +3715,7 @@
     "unverified": 3,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.1
+    "oldest_check_age_hours": 10.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

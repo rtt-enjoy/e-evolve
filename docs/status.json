@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-15T07:41:19.986808+00:00",
-  "total_runs": 2542,
+  "last_run": "2026-11-15T08:41:21.926459+00:00",
+  "total_runs": 2543,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,31 +34,42 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt-attributable draft loss in the last 14 days is a single weak_title (1 draft, gate finding 'title has ALL-CAPS word' x1), and 29 open review branches already propose edits to exactly the two prompts behind it (_SYSTEM title rules and _revise_title); another variant would be a repeat that is unlikely to be merged.",
+    "summary": "No change proposed: the binding reach work (prompt upgrade for weak_title) is already covered by 28 open, unmerged review branches on the exact same prompt and defect, so another near-identical edit would add one more unmeasured variant to a ledger nobody has observed the effect of.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge or close one of the 29 open title-prompt branches",
-        "description": "Every cycle is grading a ledger whose fix already sits on an unmerged branch, so none of the measured effect of those edits has ever been observed. Merging one branch lets the next cycles measure whether weak_title rejects actually fall, instead of accumulating 30 near-identical proposals.",
-        "owner_action": "Review and merge (or close) the oldest open title-prompt branch, then let 3-4 cycles run before any new proposal on that prompt.",
+        "title": "Merge or close one of the 28 open title-prompt branches before any new title edit",
+        "description": "Unblocks the measured path to fewer weak_title rejects: the fix already exists on a branch; what is missing is an observation of its effect.",
+        "owner_action": "Review and merge (or close) the oldest open title-prompt branch (2026-11-01, _revise_title ALL-CAPS clarification), then let 3-4 cycles run before approving any new title-prompt proposal.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the evolve/* branch dated 2026-11-01 (the earliest title-prompt proposal) and read its diff against articles.py.",
-          "Step 2: Merge it if the edit is sound, or close it and the redundant siblings in one pass.",
-          "Step 3: Compare article_rejects.counts.weak_title over the following 14 days against the current baseline of 1."
+          "Step 1: Open the evolve/* branch dated 2026-11-01 and read its articles.py diff against main.",
+          "Step 2: Merge it if sound, or close it and the redundant siblings in one pass.",
+          "Step 3: After 3-4 cycles, compare the 14-day article_rejects.counts.weak_title window against the current baseline of 1 to decide whether any further prompt edit is warranted."
+        ]
+      },
+      {
+        "title": "Add the wallet address to the dev.to profile bio",
+        "description": "The one unbuilt zero-cost receive surface: covers every profile visitor permanently, with no account, processor or policy change (doctrine channel table's 'cheap exception').",
+        "owner_action": "Paste the published TRC-20 address into the Bio field at dev.to/settings once (~2 minutes). The API cannot do this ('users' is show-only in Forem's routes).",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Sign in at dev.to and open Settings > Profile > Bio.",
+          "Step 2: Append the receive address ([redacted], TRC-20) with a one-line ask.",
+          "Step 3: Save; receipt_check and the wallet meter already cover verification with no code change."
         ]
       }
     ],
-    "direction": "Checklist step 4 / Principle 5 \u2014 reach into a live receive path, via prompt upgrades; declined this cycle because no unaddressed prompt loss exists",
+    "direction": "Checklist step 4 / Principle 5 step 2 \u2014 reach into a live receive path via prompt upgrades, one step per cycle",
     "evidence": [
-      "article_rejects.counts (14d prompt-attributable) = weak_title: 1",
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "PROMPT LEDGER: drafts lost to a prompt (last 14 days) = weak_title=1",
-      "article_rejects.counts lifetime: llm_error=59, empty_draft=11 \u2014 engine-side, not fixable by a prompt edit",
-      "PRIOR PROPOSALS: 29 open branches, every one an edit to the title-rewrite prompt or the _SYSTEM title rules for this same gate"
+      "article_rejects.counts.weak_title = 15 lifetime but only 1 in the last 14 days (already at a low baseline)",
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed', gate finding 'title has ALL-CAPS word' x1",
+      "PRIOR PROPOSALS lists 28 distinct open branches, every one targeting articles.py title prompts (_SYSTEM / _revise_title) for the same ALL-CAPS / colon-subtitle defects",
+      "status.suggestions[0] = 'Merge or close one of the 29 open title-prompt branches ... none of the measured effect of those edits has ever been observed'",
+      "receipt_check.covered / published_total = 50 / 53, known_without_footer = 0, payout.live = true \u2014 the receive path is verified; only reach remains"
     ],
-    "money_path": "none this cycle (reach work declined; the receive path itself is verified: payout.live=true, receipt_check known_without_footer=0)",
-    "verify": "Next cycle's PROMPT FOCUS window: if the single weak_title was an outlier rather than a trend (e.g. ALL-CAPS rejects reappear at \u22653 in a 14-day window) it justifies revisiting the prompt once the earliest open branch is merged or closed; llm_error count should be watched as the engine-side lever, not the prompts.",
+    "money_path": "reach-only. The receive path is live and verified; the only blocker to tips is readers, and that bottleneck now sits in unmerged review state, not in the prompt text.",
+    "verify": "Owner merges (or closes) the oldest open title-prompt branch; then article_rejects.counts.weak_title over the next 14 days is compared against the current baseline of 1. Proposing a 29th variant now would make that comparison impossible to attribute.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -69,20 +80,32 @@
   },
   "suggestions": [
     {
-      "title": "Merge or close one of the 29 open title-prompt branches",
-      "description": "Every cycle is grading a ledger whose fix already sits on an unmerged branch, so none of the measured effect of those edits has ever been observed. Merging one branch lets the next cycles measure whether weak_title rejects actually fall, instead of accumulating 30 near-identical proposals.",
-      "owner_action": "Review and merge (or close) the oldest open title-prompt branch, then let 3-4 cycles run before any new proposal on that prompt.",
+      "title": "Merge or close one of the 28 open title-prompt branches before any new title edit",
+      "description": "Unblocks the measured path to fewer weak_title rejects: the fix already exists on a branch; what is missing is an observation of its effect.",
+      "owner_action": "Review and merge (or close) the oldest open title-prompt branch (2026-11-01, _revise_title ALL-CAPS clarification), then let 3-4 cycles run before approving any new title-prompt proposal.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the evolve/* branch dated 2026-11-01 (the earliest title-prompt proposal) and read its diff against articles.py.",
-        "Step 2: Merge it if the edit is sound, or close it and the redundant siblings in one pass.",
-        "Step 3: Compare article_rejects.counts.weak_title over the following 14 days against the current baseline of 1."
+        "Step 1: Open the evolve/* branch dated 2026-11-01 and read its articles.py diff against main.",
+        "Step 2: Merge it if sound, or close it and the redundant siblings in one pass.",
+        "Step 3: After 3-4 cycles, compare the 14-day article_rejects.counts.weak_title window against the current baseline of 1 to decide whether any further prompt edit is warranted."
       ],
-      "discovered_at": "2026-11-15T07:41:42.450886+00:00"
+      "discovered_at": "2026-11-15T08:41:45.858354+00:00"
+    },
+    {
+      "title": "Add the wallet address to the dev.to profile bio",
+      "description": "The one unbuilt zero-cost receive surface: covers every profile visitor permanently, with no account, processor or policy change (doctrine channel table's 'cheap exception').",
+      "owner_action": "Paste the published TRC-20 address into the Bio field at dev.to/settings once (~2 minutes). The API cannot do this ('users' is show-only in Forem's routes).",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Sign in at dev.to and open Settings > Profile > Bio.",
+        "Step 2: Append the receive address ([redacted], TRC-20) with a one-line ask.",
+        "Step 3: Save; receipt_check and the wallet meter already cover verification with no code change."
+      ],
+      "discovered_at": "2026-11-15T08:41:45.858354+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 23,
+  "last_cycle_seconds": 25,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2699,7 +2722,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-15T07:41:20.567195+00:00",
+    "checked_at": "2026-11-15T08:41:22.466058+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3441,7 +3464,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-15T07:41:42.666427+00:00",
+    "last_run": "2026-11-15T08:41:46.126250+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3451,30 +3474,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-15T07:41:42.810160+00:00",
+    "last_run": "2026-11-15T08:41:46.330176+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4568987,
-        "at": "2026-11-14T21:08:03.133217+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-11-14T22:05:41.339006+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-11-14T22:05:41.339006+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-11-14T22:05:41.339006+00:00",
-        "ok": true
-      },
       {
         "id": 5037720,
         "at": "2026-11-14T22:05:41.339006+00:00",
@@ -3686,11 +3689,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-15T07:41:42.810160+00:00",
-        "ok": true
-      },
-      {
         "id": 4545446,
         "at": "2026-11-15T07:41:42.810160+00:00",
         "ok": true
@@ -3703,6 +3701,31 @@
       {
         "id": 5019261,
         "at": "2026-11-15T07:41:42.810160+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-11-15T08:41:46.330176+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-15T08:41:46.330176+00:00",
+        "ok": true
+      },
+      {
+        "id": 4937139,
+        "at": "2026-11-15T08:41:46.330176+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-11-15T08:41:46.330176+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-15T08:41:46.330176+00:00",
         "ok": true
       }
     ],

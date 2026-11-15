@@ -459,6 +459,17 @@ def _finalize(llm: Any, data: dict, source: dict, status: dict) -> Optional[dict
 	# The title decides whether the body is ever read, so a weak one is worth a
 	# retry of its own. Retitling is one cheap call and does not touch the body.
 	title_issues = _title_problems(article.get("title", ""))
+	# ALL-CAPS shouting is a deterministic defect: title-casing the shouted
+	# words is the repair _revise_title would come back with anyway, and when
+	# that rewrite fails the whole draft dies as weak_title. Fix it here
+	# first, then re-check against the same gate -- the gate is untouched,
+	# the draft just stops arriving at it broken. Saves the retry call too.
+	if any("ALL-CAPS word" in p for p in title_issues):
+		fixed = _unshout(article.get("title", ""))
+		if fixed and not _title_problems(fixed):
+			log.info("[articles] title shouting fixed deterministically: %r", fixed)
+			article["title"] = fixed
+			title_issues = []
 	if title_issues:
 		log.info("[articles] title issues %s -- requesting a better title", title_issues)
 		better = _revise_title(llm, article, title_issues)
@@ -1010,6 +1021,22 @@ def _shouted_words(text: str) -> list[str]:
 		word for word in re.findall(r"\b[A-Z]{2,}\b", text)
 		if word.upper() not in _KNOWN_ACRONYMS
 	]
+
+
+def _unshout(title: str) -> str:
+	"""Title-case the shouted (non-acronym ALL-CAPS) words in a title.
+
+	Deterministic, no LLM call. Returns the title unchanged when it contains
+	no shouted words, so the caller can distinguish 'nothing to fix' from a
+	repair and the gate still decides whether the result is good enough.
+	"""
+	shouted = set(_shouted_words(title))
+	if not shouted:
+		return title
+	def fix(m: re.Match) -> str:
+		word = m.group(0)
+		return word.capitalize() if word in shouted else word
+	return re.sub(r"\b[A-Z]{2,}\b", fix, str(title or ""))
 
 
 def _title_problems(title: str, cfg: dict | None = None) -> list[str]:

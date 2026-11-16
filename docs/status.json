@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-16T22:04:59.852543+00:00",
-  "total_runs": 2583,
+  "last_run": "2026-11-16T23:05:04.616871+00:00",
+  "total_runs": 2584,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -32,36 +32,32 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Add one concrete acronym-vs-shouting example to the TITLE banned rule in the article draft system prompt, so the draft itself stops producing the ALL-CAPS titles that cost one weak_title reject and a rewrite call this window.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The BANNED rule says 'any ALL-CAPS word' but never shows the boundary, so the model drafts shouted words and the gate (which exempts known acronyms) then rejects what the prompt itself invited \u2014 one draft lost this window, and a rewrite LLM call spent fixing it. A one-line example in the draft prompt aligns the model with the gate's actual rule. Distinct from the 14 open branches: those edit _revise_title, the rescue path, or the gate allowlist; this edits the draft prompt's banned-word rule."
-      }
-    ],
+    "summary": "No change clears the bar: the prompt focus (weak_title) cost exactly 1 draft in 14 days, and 15 open unmerged proposals already cover that exact lane \u2014 the ALL-CAPS title defect is addressed from five different angles already parked on review branches.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Put the wallet address in the dev.to profile bio",
-        "description": "Carries the ask on every profile visit permanently \u2014 the one deferred channel needing no account, processor or policy change.",
-        "owner_action": "One manual edit of the Bio field at dev.to/settings to include the published TRC-20 address.",
+        "title": "Merge exactly one of the nine open title-fix branches and close the rest",
+        "description": "Nine unmerged proposals all attack the same 1-draft-in-14-days ALL-CAPS title defect. Merging one lets the next evolution measure it; leaving all open means every future cycle re-derives the same edit.",
+        "owner_action": "Pick the smallest one (e.g. the 2026-11-16 concrete-example edit to the TITLE banned rule) and merge it; close the other eight title branches as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: open dev.to/settings and paste the receive address into the Bio field.",
-          "Step 2: save; no bot change needed \u2014 receipt_check already observes published surfaces."
+          "Step 1: review the open evolve/* branches from 2026-11-03 onward that touch bot/earning/articles.py title rules.",
+          "Step 2: merge one, delete the rest, and let the weak_title count over the next window say whether it worked."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompts that write reach, one step per cycle; PROMPT FOCUS weak_title (1 draft lost, gate finding 'title has ALL-CAPS word' x1)",
+    "direction": "Checklist step 4 \u2014 reach into a live receive path; PROMPT FOCUS on weak_title",
     "evidence": [
-      "article_rejects.counts (lifetime): weak_title=15; last window: weak_title=1",
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "gate finding behind it: 'title has ALL-CAPS word' x1",
-      "llm_engine.calls glm=3 \u2014 every LLM call is budget; a title rewrite spent on a defect the draft prompt should prevent is a wasted call"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed' (1 draft in the 14-day window)",
+      "Gate finding behind it: 'title has ALL-CAPS word' x1",
+      "PRIOR PROPOSALS: 15 open branches, of which at least 9 target the same title-defect lane (_revise_title prompt edits, ALL-CACS rescue, acronym allowlist, three-candidate rewrite, deterministic rescue)",
+      "Drafts lost to the engine last 14 days: llm_error=23 \u2014 an order of magnitude larger loss, and the brief states it is not fixable by a prompt edit",
+      "article_stats.count = 53, avg_views = 123.0, best_archetype = 'problem-workahead' (n=11) \u2014 publishing continues; one lost title draft is not the binding constraint"
     ],
-    "money_path": "reach-only. A refused draft is one post and one tip ask that never ship; fixing the draft prompt raises publish rate into the live footer, but no receive-path code changes.",
-    "verify": "article_rejects recent window: weak_title with detail 'title has ALL-CAPS word' should fall to 0 over the next cycles; no rise in _revise_title calls. A unit test can assert _SYSTEM contains the acronym-vs-shouting example and that _title_problems('Stop Wasting Your API Keys') still flags shouting while 'Why Your JSON Parser Lies' does not (tests already cover the gate itself, so the prompt text presence check suffices).",
+    "money_path": "none (a one-draft title loss over 14 days is not a measurable reach constraint, and a 16th near-duplicate proposal would not change that)",
+    "verify": "If the owner merges any one of the already-open title proposals, the metric to watch is article_rejects.counts.weak_title staying flat over the next 14-day window; no new branch is needed from this cycle.",
     "error": null,
-    "branch": "evolve/1.41.1-20261116-220527",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
@@ -70,19 +66,19 @@
   },
   "suggestions": [
     {
-      "title": "Put the wallet address in the dev.to profile bio",
-      "description": "Carries the ask on every profile visit permanently \u2014 the one deferred channel needing no account, processor or policy change.",
-      "owner_action": "One manual edit of the Bio field at dev.to/settings to include the published TRC-20 address.",
+      "title": "Merge exactly one of the nine open title-fix branches and close the rest",
+      "description": "Nine unmerged proposals all attack the same 1-draft-in-14-days ALL-CAPS title defect. Merging one lets the next evolution measure it; leaving all open means every future cycle re-derives the same edit.",
+      "owner_action": "Pick the smallest one (e.g. the 2026-11-16 concrete-example edit to the TITLE banned rule) and merge it; close the other eight title branches as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: open dev.to/settings and paste the receive address into the Bio field.",
-        "Step 2: save; no bot change needed \u2014 receipt_check already observes published surfaces."
+        "Step 1: review the open evolve/* branches from 2026-11-03 onward that touch bot/earning/articles.py title rules.",
+        "Step 2: merge one, delete the rest, and let the weak_title count over the next window say whether it worked."
       ],
-      "discovered_at": "2026-11-16T22:05:27.501724+00:00"
+      "discovered_at": "2026-11-16T23:05:26.360608+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 29,
+  "last_cycle_seconds": 22,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2773,7 +2769,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-16T22:05:00.328907+00:00",
+    "checked_at": "2026-11-16T23:05:05.153299+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3157,8 +3153,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261116-220527",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 53,
     "total_views": 6519,
@@ -3525,40 +3521,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-16T22:05:27.822767+00:00",
+    "last_run": "2026-11-16T23:05:26.582479+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-16T22:05:28.051127+00:00",
+    "last_run": "2026-11-16T23:05:26.781314+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4780785,
-        "at": "2026-11-16T02:50:08.611581+00:00",
-        "ok": true
-      },
-      {
-        "id": 4943931,
-        "at": "2026-11-16T02:50:08.611581+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-11-16T03:53:27.026987+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-11-16T03:53:27.026987+00:00",
-        "ok": true
-      },
       {
         "id": 4430049,
         "at": "2026-11-16T04:50:13.402921+00:00",
@@ -3770,11 +3746,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-16T22:05:28.051127+00:00",
-        "ok": true
-      },
-      {
         "id": 4820684,
         "at": "2026-11-16T22:05:28.051127+00:00",
         "ok": true
@@ -3788,6 +3759,31 @@
         "id": 5050733,
         "at": "2026-11-16T22:05:28.051127+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-16T23:05:26.781314+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-11-16T23:05:26.781314+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-16T23:05:26.781314+00:00",
+        "ok": true
+      },
+      {
+        "id": 4765372,
+        "at": "2026-11-16T23:05:26.781314+00:00",
+        "ok": true
+      },
+      {
+        "id": 4977763,
+        "at": "2026-11-16T23:05:26.781314+00:00",
+        "ok": true
       }
     ],
     "published_total": 54,
@@ -3795,7 +3791,7 @@
     "unverified": 4,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 19.3
+    "oldest_check_age_hours": 18.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

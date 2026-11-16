@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-16T07:45:13.870803+00:00",
-  "total_runs": 2568,
+  "last_run": "2026-11-16T08:45:18.625216+00:00",
+  "total_runs": 2569,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -31,11 +31,46 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
+    "summary": "No change proposed: the prompt focus (weak_title, 1 draft lost in 14 days, gate finding 'title has ALL-CAPS word' x1) is already covered by 17 open review branches all editing the same title prompts \u2014 a new proposal would be the 18th duplicate of an unmerged edit \u2014 and the dominant draft loss (llm_error=23 in 14 days) is LLM provider failure, which no prompt edit fixes.",
     "changes_applied": [],
-    "suggestions": [],
-    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
-    "error_type": "json"
+    "suggestions": [
+      {
+        "title": "Merge one of the 17 open title-prompt branches (or close them all)",
+        "description": "Seventeen near-identical weak_title fixes are parked unmerged, so the bot cannot tell whether the fix works \u2014 each new cycle risks proposing the 18th. One merge unblocks the measurement loop; one bulk-close clears the ledger.",
+        "owner_action": "Review and merge (or reject-and-close) the open evolve/* branches touching bot/earning/articles.py title prompts.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: List the 17 evolve/* branches from 2026-11-02 to 2026-11-15.",
+          "Step 2: Pick the smallest one (e.g. the 2026-11-15 deterministic ALL-CAPS rescue), run bot/tests.py, merge it.",
+          "Step 3: Close the remaining duplicates so future cycles stop re-deriving the same edit."
+        ]
+      },
+      {
+        "title": "Add the wallet address to the dev.to profile bio",
+        "description": "The doctrine's channel table names this the one cheap remaining channel row: one manual edit covers every profile visitor permanently, with no account, processor, or policy change.",
+        "owner_action": "Edit the Bio field at dev.to/settings to include the published TRC-20 address ([redacted]).",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Log in at dev.to/settings.",
+          "Step 2: Paste a one-line bio containing the address, e.g. the payout_public note plus the address.",
+          "Step 3: Save \u2014 no code change and no bot involvement needed."
+        ]
+      }
+    ],
+    "direction": "Doctrine step 4 / Principle 5 step 2 \u2014 reach into the live receive path by publishing in the shapes readers prefer; the specific prompt edit that step names is blocked on review, not on a missing proposal",
+    "evidence": [
+      "article_rejects last 14 days: weak_title=1, llm_error=23, empty_draft=2 \u2014 the title gate is no longer the measured bottleneck",
+      "article_rejects.last = 'weak_title' with gate finding 'title has ALL-CAPS word' x1 \u2014 a single occurrence, and every plausible prompt response to it is already an open branch",
+      "PRIOR PROPOSALS: 17 distinct open branches, every one touching bot/earning/articles.py title prompts (ALL-CAPS rescue x2, _revise_title sharpening x6, acronym allowlist, colon-subtitle x3, three-candidate titles, before/after examples x2, self-check instruction)",
+      "errors this cycle: 'LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available' \u2014 provider-side failure on role=upgrade, not a prompt defect",
+      "llm_engine.serving=glm, live=True, disabled_reason=None \u2014 the engine is up, so the 23 llm_error rejects are provider throttling/404s, which the brief itself labels 'not fixable by a prompt edit'",
+      "article_interest: problem-workaround n=11 avg=435.4 vs next-best build-tutorial n=3 avg=89.3 \u2014 the reach steering (_prefer_proven_archetypes +12 bonus, _audience_guidance) is already built and pointing at the winning shape"
+    ],
+    "money_path": "none (maintenance) \u2014 no code change proposed; the receive path is live (payout.live=true, receipt_check.covered=50 of 53 published posts), so reach is the remaining lever, and it is blocked on the owner merging one of the open title-prompt branches rather than on any prompt edit this cycle could add",
+    "verify": "No change to verify. Next cycle read article_rejects.recent and the 14-day window: if the owner merges one open title branch, weak_title should fall from 1 toward 0 with no new proposal; if llm_error remains the dominant loss, the bottleneck is the LLM provider, not any prompt. A 21st title-prompt branch appearing would be the failure mode to watch for.",
+    "error": null,
+    "branch": null,
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -43,20 +78,20 @@
   },
   "suggestions": [
     {
-      "title": "Merge one of the 20 open title-prompt branches (or close them all)",
-      "description": "Twenty near-identical weak_title fixes are parked unmerged, so the bot cannot tell whether the fix works \u2014 each new cycle risks proposing the 21st. One merge unblocks the measurement loop; one bulk-close clears the ledger.",
+      "title": "Merge one of the 17 open title-prompt branches (or close them all)",
+      "description": "Seventeen near-identical weak_title fixes are parked unmerged, so the bot cannot tell whether the fix works \u2014 each new cycle risks proposing the 18th. One merge unblocks the measurement loop; one bulk-close clears the ledger.",
       "owner_action": "Review and merge (or reject-and-close) the open evolve/* branches touching bot/earning/articles.py title prompts.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the 20 evolve/* branches from 2026-11-02 to 2026-11-15.",
-        "Step 2: Pick the smallest one (e.g. the 2026-11-15 deterministic ALL-CAPS rescue), verify bot/tests.py passes, merge it.",
+        "Step 1: List the 17 evolve/* branches from 2026-11-02 to 2026-11-15.",
+        "Step 2: Pick the smallest one (e.g. the 2026-11-15 deterministic ALL-CAPS rescue), run bot/tests.py, merge it.",
         "Step 3: Close the remaining duplicates so future cycles stop re-deriving the same edit."
       ],
-      "discovered_at": "2026-11-16T00:50:53.283208+00:00"
+      "discovered_at": "2026-11-16T08:48:30.945546+00:00"
     },
     {
       "title": "Add the wallet address to the dev.to profile bio",
-      "description": "The doctrine's channel table names this the one cheap remaining row: one manual edit covers every profile visitor permanently, with no account, processor, or policy change.",
+      "description": "The doctrine's channel table names this the one cheap remaining channel row: one manual edit covers every profile visitor permanently, with no account, processor, or policy change.",
       "owner_action": "Edit the Bio field at dev.to/settings to include the published TRC-20 address ([redacted]).",
       "secret_needed": null,
       "how_to": [
@@ -67,10 +102,8 @@
       "discovered_at": "2026-11-16T00:50:53.283208+00:00"
     }
   ],
-  "errors": [
-    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
-  ],
-  "last_cycle_seconds": 308,
+  "errors": [],
+  "last_cycle_seconds": 194,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2664,7 +2697,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-16T07:45:14.332657+00:00",
+    "checked_at": "2026-11-16T08:45:18.939932+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3416,35 +3449,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-16T07:50:20.582060+00:00",
+    "last_run": "2026-11-16T08:48:31.180067+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 3,
-    "with_footer": 3,
+    "checked": 4,
+    "with_footer": 4,
     "without_footer": 0,
-    "unreachable": 2,
+    "unreachable": 1,
     "missing": [],
-    "last_run": "2026-11-16T07:50:20.798920+00:00",
+    "last_run": "2026-11-16T08:48:31.525650+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4633220,
-        "at": "2026-11-15T16:59:26.416419+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-11-15T16:59:26.416419+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-11-15T16:59:26.416419+00:00",
-        "ok": true
-      },
       {
         "id": 4681657,
         "at": "2026-11-15T16:59:26.416419+00:00",
@@ -3666,11 +3684,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-16T07:50:20.798920+00:00",
-        "ok": true
-      },
-      {
         "id": 4800078,
         "at": "2026-11-16T07:50:20.798920+00:00",
         "ok": true
@@ -3679,6 +3692,26 @@
         "id": 4931682,
         "at": "2026-11-16T07:50:20.798920+00:00",
         "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-16T08:48:31.525650+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-16T08:48:31.525650+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-11-16T08:48:31.525650+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-11-16T08:48:31.525650+00:00",
+        "ok": true
       }
     ],
     "published_total": 53,
@@ -3686,7 +3719,7 @@
     "unverified": 3,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 14.8
+    "oldest_check_age_hours": 15.8
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3736,7 +3769,9 @@
     "live": true,
     "serving": "glm",
     "disabled_reason": null,
-    "calls": {},
+    "calls": {
+      "atria": 1
+    },
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

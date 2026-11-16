@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-16T12:23:00.115692+00:00",
-  "total_runs": 2573,
+  "last_run": "2026-11-16T13:23:10.649430+00:00",
+  "total_runs": 2574,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -31,33 +31,34 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the one defect the prompt focus names (weak_title, 1 draft lost in 14 days, finding 'title has ALL-CAPS word' x1) is already covered by numerous open, unmerged review branches spanning every angle of the title rules and the _revise_title prompt, and the dominant reject cause (llm_error=59 lifetime, 23 in the last 14 days) is engine-side, not fixable by a prompt edit.",
+    "summary": "No change: the only prompt-focused defect this cycle (weak_title, 1 draft lost in 14 days, gate finding 'title has ALL-CAPS word' x1) is already covered by 15 open unmerged branches touching the exact same two prompt surfaces, and the far larger loss (llm_error=23, empty_draft=2) is engine-side and not prompt-fixable, so another title edit would duplicate an open branch and move nothing.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Review and merge one of the 15 open title-prompt branches",
-        "description": "Fifteen branches editing the same three prompt surfaces (_SYSTEM TITLE rules, _revise_title, the ALL-CAPS handling) are stacked unmerged. Merging the best one unblocks the normal one-step-per-cycle cadence; until then every new title proposal duplicates an open branch.",
-        "owner_action": "Pick one of the open evolve/* branches touching bot/earning/articles.py title handling, merge or close it, and note the verdict so future cycles stop re-deriving it.",
+        "title": "Merge one of the 15 open title-prompt branches and close the rest",
+        "description": "Unblocks the one-step-per-cycle prompt cadence the PROMPT FOCUS depends on. Until one merges, every future cycle either duplicates an open branch or idles, as this one does. The smallest branch that adds a concrete rule or example is the right pick; the rest are superseded the moment it lands.",
+        "owner_action": "Diff the 15 evolve/* branches touching bot/earning/articles.py title handling against each other, merge the smallest one that sharpens or replaces a rule with a concrete example, and close the remaining 14 as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the 15 listed evolve/* branches and diff them against each other \u2014 they are variants of the same few edits.",
-          "Step 2: Merge the smallest one that adds a concrete example or replaces an ambiguous rule, and close the rest as superseded."
+          "Step 1: List branches: git branch --list 'evolve/*' and diff the ones touching articles.py title code \u2014 they are variants of the same few edits to _SYSTEM TITLE rules and _revise_title.",
+          "Step 2: Merge the smallest one that does not soften a gate and adds or replaces a concrete rule (e.g. a specific ALL-CAPS example), then close the others referencing it as superseded so future cycles stop re-deriving."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompts that write reach, one step per cycle; the corollary is that a defect already awaiting human review must not get a duplicate proposal.",
+    "direction": "Checklist step 4 / PROMPT FOCUS \u2014 reach via better prompts, one step per cycle; deferred this cycle because the step is already staged for owner review, not because reach is done.",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime, but 'Drafts lost to a prompt (last 14 days): weak_title=1' \u2014 a single draft",
-      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x1 \u2014 a one-off, not a pattern",
-      "'Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=23, empty_draft=2' \u2014 92% of recent rejects are engine-side",
-      "PRIOR PROPOSALS: 15 open branches, all 15 editing articles.py title rules / _revise_title / the ALL-CAPS gate, none merged \u2014 another title-prompt edit would be a duplicate",
-      "article_interest.preferred_archetypes = ['problem-workaround'] with count=11 \u2014 the audience steering the doctrine asks for is already wired into _audience_guidance and _prefer_proven_archetypes and is functioning"
+      "article_rejects.counts: weak_title=15 lifetime, only 1 in the last 14 days; gate finding 'title has ALL-CAPS word' x1",
+      "PRIOR PROPOSALS: 15 distinct open evolve/* branches all editing articles.py title handling (_SYSTEM TITLE rules, _revise_title, ALL-CAPS) \u2014 none merged",
+      "status.suggestions already names this: 'Review and merge one of the 15 open title-prompt branches'",
+      "Drafts lost to the engine last 14 days: llm_error=23, empty_draft=2 \u2014 an order of magnitude larger than the prompt-fixable loss, and instructions cannot fix a failed LLM call",
+      "preferred_archetypes() = ['problem-workaround'] with problem-workaround n=11 avg=435.4 \u2014 steering itself is working; the bottleneck is merge latency, not draft quality",
+      "payout.live = true, receipt_check.known_without_footer = 0 \u2014 receive path is verified, so the multiplier is already live"
     ],
-    "money_path": "none (maintenance) \u2014 the proposed answer is to make no change this cycle",
-    "verify": "Next cycle: article_rejects 14-day weak_title count should stay at or near 0 regardless; if the ALL-CAPS finding recurs (2+ in the window) and the open branches remain unmerged, a fresh prompt edit justified by the new count would then clear the bar.",
+    "money_path": "none this cycle (maintenance): reach into the live receive path is the goal, but the marginal title edit is already written 15 times on open branches; proposing a 16th variant adds no reader and no tip path beyond what merging one already adds.",
+    "verify": "Next cycle's brief: weak_title in the 14-day window stays at or near 0 once one title branch merges; the count that should fall is article_rejects.recent entries with code 'weak_title'. Nothing falls from this cycle's no-op.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.0"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [],
@@ -65,19 +66,19 @@
   },
   "suggestions": [
     {
-      "title": "Review and merge one of the 15 open title-prompt branches",
-      "description": "Fifteen branches editing the same three prompt surfaces (_SYSTEM TITLE rules, _revise_title, the ALL-CAPS handling) are stacked unmerged. Merging the best one unblocks the normal one-step-per-cycle cadence; until then every new title proposal duplicates an open branch.",
-      "owner_action": "Pick one of the open evolve/* branches touching bot/earning/articles.py title handling, merge or close it, and note the verdict so future cycles stop re-deriving it.",
+      "title": "Merge one of the 15 open title-prompt branches and close the rest",
+      "description": "Unblocks the one-step-per-cycle prompt cadence the PROMPT FOCUS depends on. Until one merges, every future cycle either duplicates an open branch or idles, as this one does. The smallest branch that adds a concrete rule or example is the right pick; the rest are superseded the moment it lands.",
+      "owner_action": "Diff the 15 evolve/* branches touching bot/earning/articles.py title handling against each other, merge the smallest one that sharpens or replaces a rule with a concrete example, and close the remaining 14 as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the 15 listed evolve/* branches and diff them against each other \u2014 they are variants of the same few edits.",
-        "Step 2: Merge the smallest one that adds a concrete example or replaces an ambiguous rule, and close the rest as superseded."
+        "Step 1: List branches: git branch --list 'evolve/*' and diff the ones touching articles.py title code \u2014 they are variants of the same few edits to _SYSTEM TITLE rules and _revise_title.",
+        "Step 2: Merge the smallest one that does not soften a gate and adds or replaces a concrete rule (e.g. a specific ALL-CAPS example), then close the others referencing it as superseded so future cycles stop re-deriving."
       ],
-      "discovered_at": "2026-11-16T12:23:37.382497+00:00"
+      "discovered_at": "2026-11-16T13:23:35.565276+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 38,
+  "last_cycle_seconds": 25,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2770,7 +2771,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-16T12:23:00.585487+00:00",
+    "checked_at": "2026-11-16T13:23:11.419141+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3522,30 +3523,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-16T12:23:37.602974+00:00",
+    "last_run": "2026-11-16T13:23:35.724437+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 3,
+    "with_footer": 3,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 2,
     "missing": [],
-    "last_run": "2026-11-16T12:23:37.776674+00:00",
+    "last_run": "2026-11-16T13:23:35.823569+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 5019261,
-        "at": "2026-11-15T19:44:12.016936+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
-        "at": "2026-11-15T19:44:12.016936+00:00",
-        "ok": true
-      },
       {
         "id": 4996282,
         "at": "2026-11-15T19:44:12.016936+00:00",
@@ -3767,11 +3758,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-16T12:23:37.776674+00:00",
-        "ok": true
-      },
-      {
         "id": 4619528,
         "at": "2026-11-16T12:23:37.776674+00:00",
         "ok": true
@@ -3785,6 +3771,21 @@
         "id": 5032226,
         "at": "2026-11-16T12:23:37.776674+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-16T13:23:35.823569+00:00",
+        "ok": true
+      },
+      {
+        "id": 4971614,
+        "at": "2026-11-16T13:23:35.823569+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-11-16T13:23:35.823569+00:00",
+        "ok": true
       }
     ],
     "published_total": 53,
@@ -3792,7 +3793,7 @@
     "unverified": 3,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 16.7
+    "oldest_check_age_hours": 17.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -1,4 +1,8 @@
 requests>=2.32.0
+# HTML parser only (lxml underneath). Not the [fetchers] extra: its browser engines
+# need `scrapling install` on the runner, and its HTTP client lost to requests.
+# Imported lazily by bot/earning/scraping.py, which has a regex fallback.
+scrapling>=0.5.1
 python-dotenv>=1.0.0
 # LLM providers, selected at runtime by bot/llm.py (all imported lazily).
 anthropic>=0.39.0

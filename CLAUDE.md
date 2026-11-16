@@ -110,6 +110,7 @@ bot/earning/         ← products own a run(llm, status); support modules do not
   _shared.py         ← [support] config loading, cadence, feed parsing — used by all four
   devto.py           ← [support] the dev.to publish call + gates every post passes
   trending.py        ← [support] finds recent tech articles from free public feeds
+  scraping.py        ← [support] readable text from a page (Scrapling parser, regex fallback)
   devto_stats.py     ← [support] reads own dev.to view counts (the reach feedback loop)
   payout.py          ← [support] the reader→wallet path: validated USDT address in every post
   attribution.py     ← [support] what was live when on-chain money arrived (correlated, never proof)
@@ -370,6 +371,39 @@ identical posts on dev.to. Each article starts from a real trending piece:
    full text once via the public `freedium-mirror.cfd` mirror. If the mirror is
    down or returns nothing useful, that candidate is skipped and the next one is
    tried — the mirror is never required for a cycle to succeed.
+
+   **Open sources get the same read (2026-11-16, reach work, not earning).** Most
+   feeds carry a headline and a clause: a live pull found **29 of 40 candidates
+   under 300 characters** (Hacker News 0, Lobsters 8), and the draft prompt then
+   says "rely on the title" — a model writing from a headline invents the detail,
+   which is what the `fabricated` gate exists to catch. So for the one candidate
+   `_pick_source` returns, `trending.needs_body()` (open host, summary under
+   `_MIN_SUMMARY_CHARS`) routes to `trending.fetch_source_text()`: one GET of the
+   publisher's own page, text from `scraping.extract_text()`, capped at 6000
+   characters. Measured live: the thin top pick went from 0 to 1,937 characters,
+   and 15 of 16 thin open candidates were enriched.
+   - **A failed read changes nothing.** Non-200, non-HTML, over 2 MB, a
+     JS-rendered shell (a page that yields less than the feed already gave) or a
+     network error all return the feed summary, and the source stays eligible. Do
+     **not** add a skip condition: an empty pool is worse than a thin source.
+   - **`scraping.py` is the one place that parses HTML.** Scrapling's `Selector`
+     (lxml) reads the paragraphs of the densest content container and skips
+     anything inside `nav`/`header`/`footer`/`aside`/`form`, link-heavy lists and
+     `<style>` bodies; code blocks are capped at 600 characters. The three-regex
+     extractor it replaced stopped at the first `</article>`. It is imported
+     lazily, and a missing wheel or a parse failure falls back to that regex
+     extractor, so the dependency can degrade quality but never the cycle.
+   - **Parser only, HTTP stays on `requests`.** `scrapling>=0.5.1` without the
+     `[fetchers]` extra. Its `Fetcher` (browser TLS impersonation) was measured
+     against `requests` on 40 live source pages and lost: **25 of 40 answered
+     200 against 40 of 40**, every Medium page refused 403. The browser engines
+     (`StealthyFetcher`, `DynamicFetcher`) need `scrapling install` on the runner,
+     which means editing `evolve.yml`; JS-only pages are therefore an owner
+     decision, not something a cycle widens.
+   - **Newsletter is untouched.** It skips page reads on purpose (~7 extra
+     fetches per issue). Page text is untrusted input to the draft prompt, like a
+     feed summary, and the same gates run on what the model writes.
+   - This does nothing for `llm_error`, the largest reject cause (59 of 90).
 6. The LLM writes an *improved, original* article on that subject. The system
    prompt forbids rewording and requires added value (working code, tradeoffs,
    failure modes) plus a `## Source` attribution section. It also fixes the

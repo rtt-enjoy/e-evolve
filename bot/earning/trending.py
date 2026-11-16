@@ -19,6 +19,7 @@ from urllib.parse import quote_plus, urlparse
 
 import requests
 
+from . import scraping
 from ._shared import parse_dt as _parse_dt, strip_html as _strip_html, xml_text as _xml_text
 
 log = logging.getLogger(__name__)
@@ -128,6 +129,11 @@ _FREEDIUM_MIRROR = "https://freedium-mirror.cfd/"
 
 # Below this many characters the summary is too thin to write a real article from.
 _MIN_SUMMARY_CHARS = 400
+
+# A source page is read once, for the one candidate being written from. A page
+# larger than this is not an article, and the cap keeps one bad link from
+# stalling the cycle.
+_MAX_PAGE_BYTES = 2_000_000
 
 
 def fetch_candidates(
@@ -515,21 +521,93 @@ def unlock_summary(item: dict[str, Any], max_chars: int = 6000) -> str:
 	return text[:max_chars]
 
 
+def needs_body(item: dict[str, Any]) -> bool:
+	"""True when an open (not paywalled) source arrived with too little text.
+
+	Most feeds carry a headline and a clause: Hacker News and Lobsters send none
+	at all. The draft prompt then says to "rely on the title", and a model writing
+	from a title invents the detail. Paywalled hosts are not this function's job;
+	``needs_unlock`` and the mirror handle those.
+	"""
+	url = str(item.get("url", "")).strip()
+	return (
+		url.startswith(("http://", "https://"))
+		and not is_paywalled(url)
+		and len(str(item.get("summary", ""))) < _MIN_SUMMARY_CHARS
+	)
+
+
+def fetch_source_text(item: dict[str, Any], max_chars: int = 6000) -> str:
+	"""Read the source article's own text, for a candidate whose feed gave none.
+
+	Returns the existing summary unchanged on any failure. A page that will not
+	load, is not HTML, is rendered by JavaScript, or holds less than the feed
+	already gave must degrade the draft's research depth and nothing else: it
+	never skips a source and never breaks the cycle. Read-only, one request.
+
+	HTTP stays on ``requests``. Scrapling's ``Fetcher`` (browser TLS
+	impersonation) was measured against it on 40 live source pages and lost:
+	25 of 40 answered 200 against 40 of 40, with every Medium page refused 403.
+	"""
+	url = str(item.get("url", "")).strip()
+	current = str(item.get("summary", ""))
+	if not url.startswith(("http://", "https://")):
+		return current
+
+	try:
+		resp = requests.get(
+			url,
+			headers={"User-Agent": _UA, "Accept": "text/html,application/xhtml+xml"},
+			timeout=(10, 25),
+			stream=True,
+		)
+		try:
+			if resp.status_code != 200:
+				log.info("[trending] source page skipped (%s) for %s", resp.status_code, url)
+				return current
+			kind = str(resp.headers.get("Content-Type", "")).lower()
+			if kind and "html" not in kind:
+				log.info("[trending] source page is not HTML (%s): %s", kind, url)
+				return current
+			raw = b""
+			for chunk in resp.iter_content(65536):
+				raw += chunk
+				if len(raw) > _MAX_PAGE_BYTES:
+					log.info("[trending] source page over %d bytes: %s", _MAX_PAGE_BYTES, url)
+					return current
+			text = scraping.extract_text(_decode(raw, resp), max_chars=max_chars)
+		finally:
+			resp.close()
+	except Exception as exc:
+		log.info("[trending] source page read failed: %s", exc)
+		return current
+
+	# Same bar as the mirror path: only accept text richer than what we had.
+	if len(text) <= max(len(current), _MIN_SUMMARY_CHARS):
+		log.info("[trending] source page gave no usable body for %s", url)
+		return current
+	log.info("[trending] read %d chars from the source page %s", len(text), url)
+	return text
+
+
+def _decode(raw: bytes, resp: Any) -> str:
+	"""Decode a page body. UTF-8 first, because that is what the web serves.
+
+	``requests`` falls back to ISO-8859-1 for a text page with no charset in its
+	header, which turns every curly quote on a UTF-8 page into mojibake that the
+	model then reads as part of the source.
+	"""
+	if "charset=" in str(resp.headers.get("Content-Type", "")).lower():
+		return raw.decode(resp.encoding or "utf-8", errors="replace")
+	try:
+		return raw.decode("utf-8")
+	except UnicodeDecodeError:
+		return raw.decode(getattr(resp, "apparent_encoding", None) or "latin-1", errors="replace")
+
+
 def _extract_article_text(html: str) -> str:
-	"""Pull readable prose out of a Freedium page without a parser dependency."""
-	# Drop non-content elements entirely before stripping tags.
-	for tag in ("script", "style", "nav", "header", "footer", "aside", "noscript"):
-		html = re.sub(rf"<{tag}\b.*?</{tag}>", " ", html, flags=re.DOTALL | re.IGNORECASE)
-	body = re.search(r"<(?:article|main)\b.*?>(.*?)</(?:article|main)>",
-					 html, flags=re.DOTALL | re.IGNORECASE)
-	if body:
-		html = body.group(1)
-	# Keep paragraph boundaries so the LLM sees structure, not one long run-on.
-	# A sentinel survives _strip_html's whitespace collapsing; a raw \n would not.
-	html = re.sub(r"</(p|h[1-6]|li|pre|blockquote)>", " ¶ ", html, flags=re.IGNORECASE)
-	text = _strip_html(html)
-	text = re.sub(r"(\s*¶\s*)+", "\n\n", text)
-	return text.strip()
+	"""Readable prose from a page. The parsing lives in ``scraping``."""
+	return scraping.extract_text(html, max_chars=0)
 
 
 def _dedupe(items: list[dict[str, Any]]) -> list[dict[str, Any]]:

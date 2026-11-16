@@ -820,6 +820,12 @@ def _pick_source(status: dict) -> Optional[dict]:
 					item.get("title", "")[:60],
 				)
 				continue
+		elif trending.needs_body(item):
+			# An open source with no text: Hacker News sends none, Lobsters eight
+			# characters. Read the page rather than have the model write from a
+			# headline. A failed read keeps the feed summary, so the source stays
+			# eligible exactly as it was.
+			item["summary"] = trending.fetch_source_text(item)
 		return item
 	return None
 

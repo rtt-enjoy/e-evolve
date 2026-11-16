@@ -50,6 +50,7 @@ from bot.earning.devto import (
 )
 import bot.earning.articles as articles_module
 import bot.earning.trending as trending_module
+import bot.earning.scraping as scraping_module
 import bot.earning.devto_stats as devto_stats
 import bot.earning.mrr_ideas as mrr_module
 import bot.evolution as evolution_module
@@ -949,6 +950,188 @@ class TestFreediumUnlock(unittest.TestCase):
 			self.assertEqual(unlock_summary(item), "Teaser.")
 		finally:
 			trending_module.requests.get = original
+
+
+def _scrapling_present() -> bool:
+	try:
+		import scrapling.parser  # noqa: F401
+		return True
+	except Exception:
+		return False
+
+
+class TestScrapingExtraction(unittest.TestCase):
+	"""``scraping.extract_text`` replaced three regexes with a real HTML parser."""
+
+	@unittest.skipUnless(_scrapling_present(), "scrapling not installed")
+	def test_repeated_article_elements_are_all_read(self):
+		# The old lazy ``<article>(.*?)</article>`` stopped at the first close.
+		html = "<main><article><p>One.</p></article><article><p>Two.</p></article></main>"
+		text = scraping_module.extract_text(html)
+		self.assertIn("One.", text)
+		self.assertIn("Two.", text)
+
+	@unittest.skipUnless(_scrapling_present(), "scrapling not installed")
+	def test_page_chrome_and_styles_are_not_prose(self):
+		html = (
+			"<body><nav><p>Home About Pricing</p></nav>"
+			"<article><style>.x{color:red}</style><h2>Heading</h2><p>Real prose here.</p>"
+			"<aside><p>Subscribe to our newsletter</p></aside>"
+			"<footer><p>Copyright</p></footer></article></body>"
+		)
+		text = scraping_module.extract_text(html)
+		self.assertIn("Real prose here.", text)
+		self.assertIn("Heading", text)
+		for junk in ("color:red", "Home About", "Subscribe", "Copyright"):
+			self.assertNotIn(junk, text)
+
+	@unittest.skipUnless(_scrapling_present(), "scrapling not installed")
+	def test_link_lists_are_not_prose(self):
+		links = "".join(f'<li><a href="/{i}">A related post number {i} about something</a></li>' for i in range(3))
+		html = f"<article><p>The point of the post.</p><ul>{links}</ul></article>"
+		text = scraping_module.extract_text(html)
+		self.assertIn("The point of the post.", text)
+		self.assertNotIn("related post", text)
+
+	@unittest.skipUnless(_scrapling_present(), "scrapling not installed")
+	def test_nested_blocks_are_not_emitted_twice(self):
+		html = "<article><blockquote><p>Quoted once.</p></blockquote><ul><li><p>Item once, and this entry is long enough to keep.</p></li></ul></article>"
+		text = scraping_module.extract_text(html)
+		self.assertEqual(text.count("Quoted once."), 1)
+		self.assertEqual(text.count("Item once"), 1)
+
+	@unittest.skipUnless(_scrapling_present(), "scrapling not installed")
+	def test_long_code_block_is_capped(self):
+		html = "<article><p>Intro.</p><pre>" + "x = 1\n" * 500 + "</pre></article>"
+		self.assertLess(len(scraping_module.extract_text(html)), 800)
+
+	def test_output_is_clipped_at_a_paragraph(self):
+		paras = ["Paragraph %02d. " % i + "word " * 20 for i in range(30)]
+		html = "<article>" + "".join(f"<p>{p}</p>" for p in paras) + "</article>"
+		text = scraping_module.extract_text(html, max_chars=1000)
+		self.assertLessEqual(len(text), 1000)
+		self.assertTrue(text.rstrip().endswith("word"))
+
+	def test_empty_and_non_string_input_return_empty(self):
+		self.assertEqual(scraping_module.extract_text(""), "")
+		self.assertEqual(scraping_module.extract_text(None), "")
+
+	def test_missing_scrapling_falls_back_to_the_regex_extractor(self):
+		html = "<article><p>First para.</p><p>Second para.</p></article>"
+		# A None entry makes ``import scrapling.parser`` raise ImportError.
+		with mock.patch.dict("sys.modules", {"scrapling": None, "scrapling.parser": None}):
+			self.assertEqual(scraping_module.extract_text(html), "First para.\n\nSecond para.")
+
+	def test_a_parser_failure_falls_back_to_the_regex_extractor(self):
+		html = "<article><p>First para.</p></article>"
+		with mock.patch.object(scraping_module, "_scrapling_extract", side_effect=RuntimeError("boom")):
+			self.assertEqual(scraping_module.extract_text(html), "First para.")
+
+
+class _FakePage:
+	"""A streamed ``requests`` response, as ``fetch_source_text`` reads it."""
+
+	def __init__(self, body: bytes, status: int = 200, content_type: str = "text/html; charset=utf-8"):
+		self.status_code = status
+		self.headers = {"Content-Type": content_type}
+		self.encoding = "utf-8"
+		self.apparent_encoding = "utf-8"
+		self._body = body
+
+	def iter_content(self, size):
+		for i in range(0, len(self._body), size):
+			yield self._body[i:i + size]
+
+	def close(self):
+		pass
+
+
+def _page(paragraphs: int = 12) -> bytes:
+	body = "".join(f"<p>Sentence number {i} explains the mechanism in some real detail.</p>" for i in range(paragraphs))
+	return f"<html><body><article>{body}</article></body></html>".encode()
+
+
+class TestSourceTextEnrichment(unittest.TestCase):
+	"""An open source with no feed text is read, instead of written from its title."""
+
+	ITEM = {"url": "https://example.org/post", "summary": "", "title": "A fresh engineering post"}
+
+	def test_open_thin_source_needs_a_body(self):
+		self.assertTrue(trending_module.needs_body(self.ITEM))
+		self.assertTrue(trending_module.needs_body({**self.ITEM, "summary": "Comments"}))
+
+	def test_rich_paywalled_and_non_http_sources_do_not(self):
+		self.assertFalse(trending_module.needs_body({**self.ITEM, "summary": "x" * 900}))
+		self.assertFalse(trending_module.needs_body({**self.ITEM, "url": "https://medium.com/x"}))
+		self.assertFalse(trending_module.needs_body({**self.ITEM, "url": "ftp://example.org/x"}))
+		self.assertFalse(trending_module.needs_body({**self.ITEM, "url": ""}))
+
+	def _fetch(self, page, item=None):
+		with mock.patch.object(trending_module.requests, "get", return_value=page):
+			return trending_module.fetch_source_text(item or dict(self.ITEM))
+
+	def test_reads_the_page_text(self):
+		text = self._fetch(_FakePage(_page()))
+		self.assertIn("Sentence number 0", text)
+		self.assertGreater(len(text), 400)
+
+	def test_result_is_capped(self):
+		with mock.patch.object(trending_module.requests, "get", return_value=_FakePage(_page(200))):
+			text = trending_module.fetch_source_text(dict(self.ITEM), max_chars=1500)
+		self.assertLessEqual(len(text), 1500)
+
+	def test_failures_keep_the_feed_summary(self):
+		item = {**self.ITEM, "summary": "Feed blurb."}
+		for page in (
+			_FakePage(_page(), status=403),
+			_FakePage(_page(), status=429),
+			_FakePage(b"%PDF-1.7", content_type="application/pdf"),
+			_FakePage(b"<html><body><div id=app></div></body></html>"),  # JS-rendered shell
+			_FakePage(b"x" * (trending_module._MAX_PAGE_BYTES + 1)),
+		):
+			self.assertEqual(self._fetch(page, dict(item)), "Feed blurb.")
+
+	def test_network_error_keeps_the_feed_summary(self):
+		with mock.patch.object(trending_module.requests, "get", side_effect=RuntimeError("down")):
+			self.assertEqual(trending_module.fetch_source_text({**self.ITEM, "summary": "Blurb."}), "Blurb.")
+
+	def test_a_page_thinner_than_the_summary_is_not_accepted(self):
+		item = {**self.ITEM, "summary": "y" * 380}
+		self.assertEqual(self._fetch(_FakePage(b"<article><p>tiny</p></article>"), item), "y" * 380)
+
+	def test_utf8_page_without_a_charset_is_not_mojibake(self):
+		body = "<article>" + "".join(
+			f"<p>It’s a “quoted” mechanism number {i} with enough words to count here.</p>" for i in range(12)
+		) + "</article>"
+		page = _FakePage(body.encode("utf-8"), content_type="text/html")
+		page.encoding = "ISO-8859-1"  # what requests reports when the header names none
+		text = self._fetch(page)
+		self.assertIn("It’s", text)
+		self.assertNotIn("â", text)
+
+	def test_pick_source_enriches_a_thin_open_source(self):
+		item = {"url": "https://example.org/post", "title": "A fresh engineering post", "summary": "", "source": "hacker-news", "score": 100}
+		with mock.patch.object(trending_module, "fetch_candidates", return_value=[dict(item)]), \
+				mock.patch.object(trending_module, "fetch_source_text", return_value="Full text. " * 60) as read:
+			picked = _pick_source({})
+		read.assert_called_once()
+		self.assertEqual(picked["summary"], "Full text. " * 60)
+
+	def test_pick_source_keeps_a_source_whose_page_will_not_load(self):
+		# No new skip condition: an empty pool is worse than a thin source.
+		item = {"url": "https://example.org/post", "title": "A fresh engineering post", "summary": "", "source": "hacker-news", "score": 100}
+		with mock.patch.object(trending_module, "fetch_candidates", return_value=[dict(item)]), \
+				mock.patch.object(trending_module.requests, "get", side_effect=RuntimeError("down")):
+			picked = _pick_source({})
+		self.assertIsNotNone(picked)
+		self.assertEqual(picked["summary"], "")
+
+	def test_pick_source_does_not_fetch_for_a_rich_source(self):
+		item = {"url": "https://example.org/post", "title": "A fresh engineering post", "summary": "z" * 900, "source": "infoq", "score": 63}
+		with mock.patch.object(trending_module, "fetch_candidates", return_value=[dict(item)]), \
+				mock.patch.object(trending_module, "fetch_source_text") as read:
+			_pick_source({})
+		read.assert_not_called()
 
 
 class TestArticlePublishing(unittest.TestCase):

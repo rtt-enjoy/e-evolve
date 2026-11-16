@@ -138,6 +138,17 @@ _(none open)_
 
 ## Resolved
 
+- **Drafts were written from headlines** - fixed 2026-11-16 with Scrapling. 29 of
+  40 live candidates carried under 300 characters of feed summary (Hacker News 0,
+  Lobsters 8) and the prompt said "rely on the title". `_pick_source` now reads the
+  chosen open source's own page (`trending.fetch_source_text`, text from the new
+  `bot/earning/scraping.py`), keeping the feed summary on any failure. Reach and
+  draft-quality work aimed at `fabricated`/`revision_fabricated`; it adds no place
+  money enters and does not touch `llm_error`. Scrapling is the parser only: its
+  `Fetcher` got 200 on 25 of 40 pages against `requests`' 40 of 40. JS-rendered
+  pages (one of 16 thin candidates) stay thin; fixing that needs a browser engine
+  on the runner, which means editing `evolve.yml` - an owner decision. 20 tests.
+
 - **The evolution engine evolved blind** - fixed 2026-10-19 in
   `bot/evolution.py`. None of 65 proposals over three weeks was merged. The
   prompt was a ~97 KB raw status dump plus `bot/**/*.py`: no doctrine, no

@@ -21,6 +21,10 @@ export type ResearchRow = {
 	crypto: boolean;
 	kyc: string;
 	beginner: boolean;
+	/** AI access rows only (see ResearchFeedRow). */
+	card?: ResearchFeedRow['card'];
+	tier?: ResearchFeedRow['tier'];
+	eligibility?: ResearchFeedRow['eligibility'];
 	/** When the bot first listed it. The one clock that answers "is this new to me". */
 	discovered_at?: string;
 	/** The source's own clocks. */
@@ -37,7 +41,12 @@ export const CATEGORIES: Array<{ key: ResearchCategory; title: string; hint: str
 	{ key: 'crypto-bounty', title: 'Crypto bounties', hint: 'paid in a stablecoin on Superteam Earn' },
 	{ key: 'bug-bounty', title: 'Bug bounties', hint: 'web3 programs that do not ask for KYC' },
 	{ key: 'challenge', title: 'Dev challenges', hint: 'announced by the DEV team' },
+	{ key: 'ai-startup', title: 'AI credits for startups', hint: 'credit and discount programmes for AI models and compute; open ones rank first' },
+	{ key: 'ai-free', title: 'Free AI APIs', hint: 'model APIs with a free tier, no card ones first' },
 ];
+
+/** The two groups that are access to AI models, not a prize. */
+export const AI_CATEGORIES: ResearchCategory[] = ['ai-startup', 'ai-free'];
 
 const SOURCE_NAMES: Record<string, string> = {
 	ctftime: 'CTFtime',
@@ -45,6 +54,13 @@ const SOURCE_NAMES: Record<string, string> = {
 	superteam: 'Superteam',
 	immunefi: 'Immunefi',
 	devto: 'DEV',
+	bootstrapped: 'Bootstrapped credits',
+	builders: 'Builder programs',
+	'startup-credits': 'Startup credits list',
+	sourcey: 'Sourcey',
+	'freellm-dir': 'Free-LLM directory',
+	'freellm-net': 'FreeLLM',
+	mnfst: 'Awesome free LLM APIs',
 };
 
 export function researchSourceName(source = ''): string {
@@ -84,6 +100,9 @@ function fromFeed(row: ResearchFeedRow): ResearchRow {
 		crypto: !!row.crypto,
 		kyc: row.kyc || 'not published',
 		beginner: !!row.beginner,
+		card: row.card,
+		tier: row.tier,
+		eligibility: row.eligibility,
 		discovered_at: row.discovered_at,
 		deadline: row.deadline,
 		starts_at: row.starts_at,
@@ -128,6 +147,13 @@ function span(days: number): string {
  * `days_until_start` is frozen at the refresh that wrote it).
  */
 export function timing(row: ResearchRow): string {
+	// An AI access row has no deadline; what matters is how long the access lasts.
+	if (AI_CATEGORIES.includes(row.category) && !row.deadline) {
+		if (row.tier === 'permanent') return 'free tier does not expire';
+		if (row.tier === 'renewable') return 'credits renew';
+		if (row.tier === 'trial') return 'one-time credits';
+		return 'check the programme page';
+	}
 	const toDeadline = daysUntil(row.deadline);
 	const toStart = daysUntil(row.starts_at);
 	if (toDeadline !== null && toDeadline < 0) return 'closed';

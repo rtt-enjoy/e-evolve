@@ -7074,3 +7074,231 @@ class TestResearchFeed(unittest.TestCase):
 		from bot.earning import _shared, code_techs
 		self.assertIs(code_techs._PROHIBITED_PATTERNS, _shared.PROHIBITED_PATTERNS)
 		self.assertEqual(code_techs._prohibited({"title": "free keygen"}), "piracy")
+
+
+class TestAiAccessFeeds(unittest.TestCase):
+	"""Free AI APIs and startup credit programmes: access rows, never prizes or money."""
+
+	def setUp(self):
+		import bot.earning.research_feed as R
+		self.R = R
+		self.now = datetime(2026, 11, 16, 12, 0, tzinfo=timezone.utc)
+		self.cfg = dict(R._DEFAULTS)
+
+	DIRECTORY = (
+		"# Free-LLM\n\n```python\n# Not a heading: a comment in a code fence\n```\n\n"
+		"### Permanent Free Tiers\n\n"
+		"| Provider | Credit Card? | Rate Limit | Key Models |\n|:---|:---:|:---|:---|\n"
+		"| [Groq](https://console.groq.com/) | No | 30 RPM | GPT-OSS 120B |\n"
+		"| [NVIDIA NIM](https://build.nvidia.com/) | Phone verification | 40 RPM | Nemotron |\n"
+		"| [Paid Thing](https://paid.example/) | Card required | 5 RPM | Foo |\n\n"
+		"### One-Time Trial Credits\n\n"
+		"| Provider | Credit Card? | Credit Amount | Expiry | Key Models |\n|---|---|---|---|---|\n"
+		"| [Trial Co](https://trial.example/) | Registration | $5 | 30 days | Bar |\n\n"
+		"### Local / Self-Hosted\n\n| Tool | Type | Highlights |\n|---|---|---|\n| Ollama | local | runs offline |\n\n"
+		"## Quick Reference\n\n| Provider | Base URL | Get API Key |\n|---|---|---|\n| Groq | `https://x` | [k](https://k) |\n"
+	)
+
+	def _directory_rows(self):
+		with mock.patch.object(self.R, "_get_text", return_value=self.DIRECTORY):
+			raw = self.R.fetch_freellm_directory(self.cfg, self.now)
+		return {r["title"]: r for r in (self.R.build_freellm_directory(x, self.cfg, self.now) for x in raw)}
+
+	# --- parsing
+	def test_directory_reads_the_tier_from_the_section_and_skips_what_is_not_an_api(self):
+		rows = self._directory_rows()
+		self.assertEqual(set(rows), {"Groq", "NVIDIA NIM", "Paid Thing", "Trial Co"})  # no Ollama, no base-URL table
+		self.assertEqual((rows["Groq"]["tier"], rows["Groq"]["card"]), ("permanent", "none"))
+		self.assertEqual(rows["NVIDIA NIM"]["card"], "phone")
+		self.assertEqual(rows["Paid Thing"]["card"], "card")
+		self.assertEqual((rows["Trial Co"]["tier"], rows["Trial Co"]["card"], rows["Trial Co"]["prize"]), ("trial", "signup", "$5 trial credits"))
+		self.assertEqual(rows["Groq"]["category"], "ai-free")
+		self.assertEqual(rows["Groq"]["url"], "https://console.groq.com/")
+
+	def test_a_row_is_access_never_money(self):
+		for row in self._directory_rows().values():
+			self.assertFalse(row["pays"])
+			self.assertFalse(row["crypto"])
+
+	def test_a_layout_change_is_an_unreadable_source_not_an_empty_one(self):
+		with mock.patch.object(self.R, "_get_text", return_value="# Free-LLM\n\nNo tables any more.\n"):
+			self.assertIsNone(self.R.fetch_freellm_directory(self.cfg, self.now))
+			self.assertIsNone(self.R.fetch_freellm_net(self.cfg, self.now))
+			self.assertIsNone(self.R.fetch_mnfst(self.cfg, self.now))
+		with mock.patch.object(self.R, "_get_text", return_value=None):
+			self.assertIsNone(self.R.fetch_bootstrapped(self.cfg, self.now))
+			self.assertIsNone(self.R.fetch_builders(self.cfg, self.now))
+		with mock.patch.object(self.R, "_get", return_value=None):
+			self.assertIsNone(self.R.fetch_sourcey(self.cfg, self.now))
+
+	def test_freellm_net_takes_the_key_link_from_an_anchor_and_marks_renewable(self):
+		text = (
+			"| Provider | Free Models | Credit Card? | Max Context | Modalities | Get API Key |\n|---|---|---|---|---|---|\n"
+			"| Cloudflare Workers AI | 41 | No | 262K | Multimodal | <a href=\"https://dash.cloudflare.com/k\" target=\"_blank\">→</a> |\n\n"
+			"| Provider | Free Models | Credit Model | Max Context | Modalities | Get API Key |\n|---|---|---|---|---|---|\n"
+			"| OpenRouter | 21 | Free tier + $10 topup → 1K RPD | 1M | Multimodal | <a href=\"https://openrouter.ai/k\">→</a> |\n"
+		)
+		with mock.patch.object(self.R, "_get_text", return_value=text):
+			raw = self.R.fetch_freellm_net(self.cfg, self.now)
+		rows = {r["title"]: r for r in (self.R.build_freellm_net(x, self.cfg, self.now) for x in raw)}
+		self.assertEqual(rows["Cloudflare Workers AI"]["url"], "https://dash.cloudflare.com/k")
+		self.assertEqual(rows["Cloudflare Workers AI"]["prize"], "41 free models")
+		self.assertEqual(rows["OpenRouter"]["tier"], "renewable")
+
+	def test_mnfst_headings_become_rows_with_the_first_sentence(self):
+		text = (
+			"### [Aion Labs](https://www.aionlabs.ai/keys) 🇮🇱\n\nPermanent free tier, no credit card required. 15 RPM.\n\n"
+			"Base URL: `https://api.aionlabs.ai/v1`\n\n| Model Name | Context |\n|---|---|\n| a | 1 |\n\n"
+			"### [Promo Co](https://promo.example/) 🇺🇸\n\nSign-up credits that expire in 30 days. Card needed.\n"
+		)
+		with mock.patch.object(self.R, "_get_text", return_value=text):
+			raw = self.R.fetch_mnfst(self.cfg, self.now)
+		rows = {r["title"]: r for r in (self.R.build_mnfst(x, self.cfg, self.now) for x in raw)}
+		self.assertEqual((rows["Aion Labs"]["card"], rows["Aion Labs"]["tier"]), ("none", "permanent"))
+		self.assertEqual((rows["Promo Co"]["card"], rows["Promo Co"]["tier"]), ("card", "trial"))
+		self.assertIn("15 RPM", rows["Aion Labs"]["detail"])
+
+	# --- startups
+	def test_eligibility_ranks_open_above_conditions_above_gated(self):
+		e = self.R._eligibility
+		self.assertEqual(e("$1K open to all; higher tiers require VC affiliation"), "open")
+		self.assertEqual(e("Backed by Anthropic's VC partners"), "gated")
+		self.assertEqual(e("The startup is venture-backed and at Series B or earlier"), "gated")
+		self.assertEqual(e("Funded startups"), "gated")
+		# A ceiling a small company passes is a condition, not a gate.
+		self.assertEqual(e("Company has raised less than $10,000,000; pre-Series B"), "conditions")
+		self.assertEqual(e(""), "unstated")
+
+	def test_bootstrapped_rows_carry_the_model_columns_and_are_open_to_a_solo_company(self):
+		text = (
+			"## Credits for AI models\n\n"
+			"| Program | Bootstrapped gets | Expires | Claude | GPT | Open models | We got | Checked |\n|---|---|---|---|---|---|---|---|\n"
+			"| [OpenRouter Startup Program](https://openrouter.ai/startups) | up to $3,000 | 6 months | yes | yes | yes | - | 2026-11-14 |\n\n"
+			"## Free tiers, no application\n\n"
+			"| Program | What you get | Expires | Catch | Checked |\n|---|---|---|---|---|\n"
+			"| [NVIDIA Inception](https://www.nvidia.com/startups) | free | none | Under 10 years old | 2026-11-09 |\n"
+		)
+		with mock.patch.object(self.R, "_get_text", return_value=text):
+			raw = self.R.fetch_bootstrapped(self.cfg, self.now)
+		rows = {r["title"]: r for r in (self.R.build_bootstrapped(x, self.cfg, self.now) for x in raw)}
+		router = rows["OpenRouter Startup Program"]
+		self.assertEqual(router["category"], "ai-startup")
+		self.assertIn("Claude: yes", router["detail"])
+		self.assertEqual(router["eligibility"], "conditions")
+		self.assertEqual(rows["NVIDIA Inception"]["eligibility"], "open")
+		self.assertFalse(router["pays"])
+
+	def _sourcey_offer(self, **over):
+		offer = {
+			"offer_id": "off_1", "slug": "s", "title": "Up to $10,000 in credits", "summary": "Credits for AI startups.",
+			"lifecycle": "active", "access": {"availability": "public", "url": "https://v.example/startups"},
+			"economics": {"benefits": [{"kind": "credit"}]}, "effective_from": "2026-11-10T00:00:00Z",
+			"eligibility": {"rule": {"kind": "all", "rules": [
+				{"kind": "predicate", "statement": "Company is under 3 years old."},
+				{"kind": "manual", "statement": "Open to all early-stage teams."},
+			]}},
+		}
+		offer.update(over)
+		return offer
+
+	def _sourcey(self, offer, *, category="ai-ml", name="Vendor"):
+		entity = {"name": name, "website": "https://v.example", "offers": [offer], "programs": []}
+		with mock.patch.object(self.R, "_get", side_effect=lambda url, params=None, timeout=None: {"data": [entity]} if params["category"] == category else {"data": []}):
+			raw = self.R.fetch_sourcey(self.cfg, self.now)
+		return [self.R.build_sourcey(x, self.cfg, self.now) for x in raw]
+
+	def test_sourcey_reads_nested_eligibility_and_keeps_only_live_public_offers(self):
+		row = self._sourcey(self._sourcey_offer())[0]
+		self.assertEqual(row["title"], "Vendor")
+		self.assertEqual(row["prize"], "Up to $10,000 in credits")
+		self.assertEqual(row["eligibility"], "open")
+		self.assertIn("under 3 years", row["detail"])
+		self.assertTrue(row["posted_at"].startswith("2026-11-10"))
+		self.assertEqual(self._sourcey(self._sourcey_offer(lifecycle="paused")), [None])
+		self.assertEqual(self._sourcey(self._sourcey_offer(access={"availability": "invite", "url": "https://x"})), [None])
+
+	def test_sourcey_hosting_is_kept_only_when_it_is_about_ai(self):
+		generic = self._sourcey(self._sourcey_offer(title="$5,000 hosting credits", summary="Servers and storage."), category="hosting-infra", name="Hostly")
+		self.assertEqual(generic, [None])
+		gpu = self._sourcey(self._sourcey_offer(title="$5,000 GPU credits", summary="Inference for AI teams."), category="hosting-infra", name="GpuCo")
+		self.assertEqual(gpu[0]["title"], "GpuCo")
+
+	# --- ranking
+	def test_scores_follow_card_then_permanence_then_how_open_a_programme_is(self):
+		s = self.R._ai_score
+		free = lambda card, tier: s(category="ai-free", card=card, tier=tier, eligibility="unstated", size_usd=0)
+		self.assertGreater(free("none", "permanent"), free("signup", "permanent"))
+		self.assertGreater(free("signup", "permanent"), free("phone", "permanent"))
+		self.assertGreater(free("phone", "permanent"), free("card", "permanent"))
+		self.assertGreater(free("none", "permanent"), free("none", "renewable"))
+		self.assertGreater(free("none", "renewable"), free("none", "trial"))
+		startup = lambda elig, size: s(category="ai-startup", card="unstated", tier="", eligibility=elig, size_usd=size, kind="credit")
+		self.assertGreater(startup("open", 1000), startup("gated", 1000))
+		# An open $1k programme outranks a gated $100k one: the owner can actually apply.
+		self.assertGreater(startup("open", 1000), startup("gated", 100_000))
+
+	# --- the owner's content rule
+	def test_reverse_engineered_and_leaked_key_endpoints_never_reach_the_page(self):
+		for title, detail in (
+			("Free GPT proxy", "reverse-engineered ChatGPT web API"),
+			("免费接口", "LLM 逆向工程接口"),
+			("gpt4free mirror", "free access"),
+			("Key share", "leaked API keys pool"),
+			("Free Claude", "jailbreak prompts included"),
+			("Open endpoint", "uncensored models, no filter"),
+		):
+			row = self.R._ai_row("s", 1, "ai-free", title, "https://x.example", self.cfg, prize="free", detail=detail, now=self.now)
+			self.assertEqual(self.R.screen(row), "ai_access_abuse", (title, detail))
+		clean = self.R._ai_row("s", 2, "ai-free", "Groq", "https://console.groq.com", self.cfg, prize="free tier", detail="Fast open models", now=self.now)
+		self.assertEqual(self.R.screen(clean), "")
+		porn = self.R._ai_row("s", 3, "ai-free", "NSFW porn chat API", "https://x.example", self.cfg, prize="free", detail="", now=self.now)
+		self.assertNotEqual(self.R.screen(porn), "")
+
+	# --- merging one offer listed by several sources
+	def test_one_free_api_listed_twice_keeps_the_first_source_and_counts_the_duplicate(self):
+		def build(name):
+			return lambda raw, cfg, now: self.R._ai_row(name, raw["id"], "ai-free", raw["title"], raw["url"], cfg, prize="free", detail="", now=now)
+		sources = [("one", "One", None, build("one")), ("two", "Two", None, build("two"))]
+		raw = {
+			"one": [{"id": 1, "title": "Google AI Studio", "url": "https://aistudio.google.com/app/apikey"}],
+			"two": [
+				{"id": 1, "title": "Google Gemini API", "url": "https://ai.google.dev/gemini-api"},
+				{"id": 2, "title": "Groq", "url": "https://console.groq.com/keys"},
+			],
+		}
+		with mock.patch.object(self.R, "SOURCES", sources):
+			pool, stats = self.R.collect(raw, self.cfg, self.now)
+		self.assertEqual(sorted(r["id"] for r in pool), ["one:1", "two:2"])
+		self.assertEqual([s["duplicates"] for s in stats], [0, 1])
+
+	def test_two_startup_programmes_on_one_host_are_different_offers(self):
+		def build(name, url):
+			return lambda raw, cfg, now: self.R._ai_row(name, raw["id"], "ai-startup", raw["title"], url, cfg, prize="credits", detail="", now=now)
+		sources = [("a", "A", None, build("a", "https://cloud.google.com/startup")), ("b", "B", None, build("b", "https://one.google.com/ai-student"))]
+		raw = {"a": [{"id": 1, "title": "Google for Startups Cloud Program"}], "b": [{"id": 1, "title": "Google AI Pro for Students"}]}
+		with mock.patch.object(self.R, "SOURCES", sources):
+			pool, _ = self.R.collect(raw, self.cfg, self.now)
+		self.assertEqual(len(pool), 2)
+
+	# --- what status.json carries
+	def test_each_ai_category_is_capped_wider_than_a_prize_category_and_stays_bounded(self):
+		def build(category):
+			return lambda raw, cfg, now: self.R._ai_row(
+				category, raw["id"], category, f"Provider number {raw['id']} with a long descriptive name", f"https://p{raw['id']}.example/start", cfg,
+				prize="Up to $10,000 in compute credits for twelve months", detail="for: a registered company with a live website · notes about the programme go here and run long",
+				card="none", tier="permanent", eligibility="conditions", now=now)
+		sources = [
+			("s", "S", lambda cfg, now: [{"id": i} for i in range(80)], build("ai-startup")),
+			("f", "F", lambda cfg, now: [{"id": i} for i in range(80)], build("ai-free")),
+		]
+		status = {}
+		cfg = {**self.cfg, "refresh_hours": 1}
+		with mock.patch.object(self.R, "SOURCES", sources), mock.patch.object(self.R, "config", return_value=cfg):
+			actions = self.R.run(None, status)
+		items = status["research_feed"]["items"]
+		self.assertEqual(sum(r["category"] == "ai-startup" for r in items), 40)
+		self.assertEqual(sum(r["category"] == "ai-free" for r in items), 40)
+		self.assertEqual(actions[0]["estimated_usd"], 0.0)
+		size = len(json.dumps(status["research_feed"]))
+		# Committed hourly: the two AI categories plus a 160-row ledger.
+		self.assertLess(size, 70_000, size)

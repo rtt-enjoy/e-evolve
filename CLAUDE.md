@@ -106,7 +106,7 @@ bot/earning/         ← products own a run(llm, status); support modules do not
   code_techs.py      ← [product] passive product income: channel (gets paid) vs asset (builds/markets)
   mrr_ideas.py       ← [product] recurring-revenue idea triage (research/suggestion only)
   ctf_bounty.py      ← [product] CTF bounty research from CTFtime: the owner's standing research focus
-  research_feed.py   ← [product] hackathons, crypto bounties, bug bounties, DEV challenges (research only)
+  research_feed.py   ← [product] hackathons, crypto bounties, bug bounties, DEV challenges, free AI APIs, AI startup credits (research only)
   _shared.py         ← [support] config loading, cadence, feed parsing — used by all four
   devto.py           ← [support] the dev.to publish call + gates every post passes
   trending.py        ← [support] finds recent tech articles from free public feeds
@@ -1042,6 +1042,50 @@ a Leads `channel`):
   `failed_sources`, `first_seen`, `last_refresh_at`, `last_reason`. Payload is
   bounded by a test (`test_status_payload_stays_bounded`), because `status.json` is
   committed hourly.
+
+**AI access: free APIs and startup credits (owner directive, 2026-11-16: find as
+many cheap or free AI model services as possible, startups first).** Two more
+categories on the same page, from seven keyless sources, still **no new secret and
+no LLM call**. They are **access, not prizes**: a row is a place to get model calls
+cheaply, `pays` and `crypto` are always false, and nothing here is money.
+
+| Category | Sources (all read once per refresh) | What a row is |
+|----------|-------------------------------------|---------------|
+| `ai-startup` | `aidenixai/bootstrapped-credits`, `doanbactam/awesome-builder-programs`, `avinash201199/awesome-startup-credits` (markdown tables on `raw.githubusercontent.com`) and the Sourcey JSON API `api.sourcey.com/v1/entities` (`ai-ml` plus AI-relevant `hosting-infra`) | a credit, discount or free-service programme for AI models and compute; `eligibility` is `open` / `conditions` / `gated` / `unstated` and the eligibility text is printed on the row |
+| `ai-free` | `nejib1/Free-LLM` (permanent / renewable / trial tables with a card column), `open-free-llm-api/awesome-freellm-apis`, `mnfst/awesome-free-llm-apis` | a model API with a free tier; `card` is `none` / `signup` / `phone` / `card` / `unstated`, `tier` is `permanent` / `renewable` / `trial` |
+
+- **Ranked by access, not prize.** `_ai_score`: no card > plain signup > phone check >
+  card; permanent > renewable > trial. A startup programme ranks on how open it is
+  to a solo company first, then credit or free service over discount, then size, so
+  an open $1k programme outranks a gated $100k one. Rate limits are display only.
+- **Gated programmes are listed and ranked down, not dropped.** That differs from
+  Immunefi KYC rows, which are dropped, because the owner asked to see startup
+  programmes and the eligibility is on the row. "raised under $10M" and "pre-Series B"
+  are ceilings a small company passes, so they are *not* gate words (`_GATED`).
+- **Parsers pin to what the lists publish and fail loudly.** A table layout that stops
+  parsing yields no rows, so the fetcher returns `None` (unreadable, last good rows
+  kept), never `[]`. Markdown comes from `raw.githubusercontent.com`, **not**
+  `api.github.com`, whose anonymous 60/hour quota the Leads page already spends.
+- **Content screen beyond the shared table.** `_AI_SCREEN` drops reverse-engineered
+  or ToS-evading endpoints, leaked or shared key pools, jailbreak and "uncensored"
+  access (`reverse-engineered`, `逆向`, `gpt4free`, ...). A 900-star free-LLM entry was
+  literally a reverse-engineered ChatGPT proxy. False positives cost a row.
+- **One offer, several lists.** `collect` merges a row listed by two sources: free APIs
+  by normalised name or registrable host (`aistudio.google.com` and `ai.google.dev`
+  are one free tier), startup programmes **by name only**, because Google's startup
+  and student programmes share a host and are different offers. The earlier source
+  in `SOURCES` keeps the row; `source_stats[].duplicates` counts the rest.
+- **Wider cap, bigger ledger.** `ai_per_category_cap` is 40 (prize categories keep 16; the pool holds ~140 startup and ~80 free-API rows)
+  and `ledger_max_entries` went 500 -> 900, because the pool grew from ~150 to ~450 and
+  a ledger smaller than the pool restamps trimmed rows "just now".
+  `TestAiAccessFeeds` pins the payload (< 70 KB for both categories).
+- **Probed and left out:** GitHub repository search (shares the Leads quota), Sourcey's
+  4.9 MB full dataset (the paged API is read instead), `dakshshah96/awesome-startup-credits`
+  (last updated 2024-08), `freellm.net/api/providers` (404), and the RockChinQ
+  `free-one-api` family (reverse-engineered, screened). Not built: tagging "AI startups
+  that offer free access" as a separate flag, because none of the lists carries a
+  startup field and inferring one would be a guess; the first-seen ledger already puts
+  newly listed providers on top.
 
 ### MRR idea triage (bot/earning/mrr_ideas.py)
 

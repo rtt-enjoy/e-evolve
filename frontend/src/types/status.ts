@@ -217,10 +217,14 @@ export type MrrIdeas = {
 /** One row from research_feed: a stated prize the owner could enter for. */
 export type ResearchFeedRow = {
 	id: string;
-	category: 'hackathon' | 'crypto-bounty' | 'bug-bounty' | 'challenge';
+	category: 'hackathon' | 'crypto-bounty' | 'bug-bounty' | 'challenge' | 'ai-startup' | 'ai-free';
 	source: string;
 	title?: string;
 	url?: string;
+	/** AI access rows only: card needed, how long it lasts, how open the programme is. */
+	card?: 'none' | 'signup' | 'phone' | 'card' | 'unstated';
+	tier?: 'permanent' | 'renewable' | 'trial' | '';
+	eligibility?: 'open' | 'conditions' | 'gated' | 'unstated';
 	/** The organiser's own prize text. A claim, never summed or valued. */
 	prize?: string;
 	detail?: string;
@@ -498,7 +502,7 @@ export type Status = {
 		failed_sources?: string[];
 		/** Candidates found before the per-category cap. */
 		pool_total?: number;
-		source_stats?: Array<{ source: string; label?: string; fetched?: number; kept?: number; screened?: number; ok?: boolean }>;
+		source_stats?: Array<{ source: string; label?: string; fetched?: number; kept?: number; screened?: number; duplicates?: number; ok?: boolean }>;
 		items?: ResearchFeedRow[];
 	};
 	/** Reach, read back from the dev.to API (devto_stats.summarize). */

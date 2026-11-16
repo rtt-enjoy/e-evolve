@@ -506,3 +506,23 @@ the same commit.
 - **Docs repaired.** The IA table listed `#/data` (removed today), Required
   Signals named `atriaState` and Atria as main engine (it is `engineState` and
   GLM), and Visual Rules still demanded `py-4` rows. All three were rewritten.
+
+## 2026-11-16 changes
+
+- **Research now lists AI access, startups first** (owner directive: find as many
+  cheap or free AI model services as possible). Two new groups in `CATEGORIES`
+  (`utils/research.ts`): **AI credits for startups** (`ai-startup`) and **Free AI
+  APIs** (`ai-free`), both from `research_feed` (see CLAUDE.md, "AI access").
+  - These rows are access, not prizes, so the row meta shows what it takes to
+    start instead of crypto/KYC: `no card` / `signup only` / `phone check` /
+    `card needed`, and for startups `open to apply` / `needs VC / partner`. The
+    timing line says `free tier does not expire`, `credits renew` or `one-time
+    credits` because an access row has no deadline.
+  - Two quick chips, `no card` and `open to apply`, appear once a snapshot holds a
+    row they match. The Prize and crypto chips still read only prize rows.
+  - `Where rows come from` prints `N listed elsewhere too` per source (the
+    `duplicates` count), and `Probed and left out` gained three entries.
+  - A snapshot written before this change has no `card` / `tier` / `eligibility`
+    and renders as before; the two new groups are simply absent.
+  - Rebuilt into `docs/` in the same commit, because a `frontend/src` commit alone
+    never reaches the page.

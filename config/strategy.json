@@ -72,9 +72,11 @@
 		"devpost_pages": 3,
 		"challenge_max_age_days": 7,
 		"ledger_days": 45,
-		"ledger_max_entries": 500,
+		"ledger_max_entries": 900,
 		"text_max_chars": 110,
-		"note_on_config": "Owner-directed (2026-11-05): widen Research beyond CTF. Keyless public feeds only, so no new secret and no LLM call: Devpost hackathons, Superteam Earn crypto bounties, Immunefi bug bounties (programs that ask for KYC are not listed), DEV challenge announcements. Research, not earning: a prize is paid for the owner's own work, so every action reports estimated_usd 0.0 and nothing is summed. per_category_cap bounds status.json, which is committed hourly; min_fresh_share of each category is reserved for the newest rows ahead of the score cut. Every row passes _shared.prohibited_category."
+		"ai_per_category_cap": 40,
+		"ai_detail_chars": 170,
+		"note_on_config": "Owner-directed (2026-11-05): widen Research beyond CTF. Keyless public feeds only, so no new secret and no LLM call: Devpost hackathons, Superteam Earn crypto bounties, Immunefi bug bounties (programs that ask for KYC are not listed), DEV challenge announcements. Research, not earning: a prize is paid for the owner's own work, so every action reports estimated_usd 0.0 and nothing is summed. per_category_cap bounds status.json, which is committed hourly; min_fresh_share of each category is reserved for the newest rows ahead of the score cut. Every row passes _shared.prohibited_category. Owner-directed (2026-11-16): two more categories, ai-startup (AI credit programmes for startups, ranked by how open they are to a solo company) and ai-free (model APIs with a free tier, ranked by card needed and permanence), read from seven keyless sources and capped by ai_per_category_cap. Access, not prizes: a row is a place to get model calls cheaply, never money. ledger_max_entries is 900 because the pool is now ~450 candidates; a smaller ledger restamps trimmed rows as new."
 	},
 	"mrr_ideas": {
 		"enabled": true,

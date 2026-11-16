@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { AddedPill, Banner, Bullets, Card, Disclosure, Empty, KeyValue, Pill, SectionHead, Subhead } from '../components/ui';
 import { formatDate, hoursSince, leadAge } from '../utils/format';
 import {
+	AI_CATEGORIES,
 	CATEGORIES,
 	buildResearchRows,
 	closesSoon,
@@ -20,7 +21,7 @@ import type { Status } from '../types/status';
 /** Rows a group shows before "show more", so 80 rows do not become a 6,000px page. */
 const GROUP_PAGE = 12;
 
-type QuickFilter = 'prize' | 'crypto' | 'nokyc' | 'fresh';
+type QuickFilter = 'prize' | 'crypto' | 'nokyc' | 'nocard' | 'open' | 'fresh';
 
 /**
  * Same list as Leads on purpose: this page reuses the `.lead-row*`,
@@ -32,7 +33,8 @@ function ResearchListRow({ row }: { row: ResearchRow }) {
 	// thing that says "is this new to me"), and the source's own timing.
 	const listedHours = hoursSince(row.discovered_at);
 	const listed = leadAge(listedHours);
-	const reason = [row.prize || 'no prize stated', row.detail].filter(Boolean).join(' · ');
+	const isAi = AI_CATEGORIES.includes(row.category);
+	const reason = [row.prize || (isAi ? 'terms not stated' : 'no prize stated'), row.detail].filter(Boolean).join(' · ');
 	return (
 		<div className="lead-row">
 			<a className="lead-row-link" href={row.url || undefined} target="_blank" rel="noreferrer">
@@ -47,6 +49,13 @@ function ResearchListRow({ row }: { row: ResearchRow }) {
 					{row.crypto ? <Pill tone="good">crypto</Pill> : null}
 					{row.kyc === 'not required' ? <Pill tone="good">no KYC</Pill> : null}
 					{row.beginner ? <Pill tone="neutral">beginner</Pill> : null}
+					{/* AI access rows: what it takes to start, and who may apply. */}
+					{isAi && row.card === 'none' ? <Pill tone="good">no card</Pill> : null}
+					{isAi && row.card === 'signup' ? <Pill tone="neutral">signup only</Pill> : null}
+					{isAi && row.card === 'phone' ? <Pill tone="warn">phone check</Pill> : null}
+					{isAi && row.card === 'card' ? <Pill tone="warn">card needed</Pill> : null}
+					{isAi && row.eligibility === 'open' ? <Pill tone="good">open to apply</Pill> : null}
+					{isAi && row.eligibility === 'gated' ? <Pill tone="warn">needs VC / partner</Pill> : null}
 					<span className="lead-row-time">
 						{/* The listed time is the row's freshness. A snapshot from before
 						    the stamp existed says so instead of implying a time. */}
@@ -92,6 +101,8 @@ export default function ResearchSection({ status }: { status: Status }) {
 			prize: rows.filter((row) => row.pays).length,
 			crypto: rows.filter((row) => row.crypto).length,
 			nokyc: rows.filter((row) => row.kyc === 'not required').length,
+			nocard: rows.filter((row) => row.card === 'none').length,
+			open: rows.filter((row) => row.eligibility === 'open').length,
 		};
 	}, [rows]);
 
@@ -110,6 +121,8 @@ export default function ResearchSection({ status }: { status: Status }) {
 			if (quick.has('prize') && !row.pays) return false;
 			if (quick.has('crypto') && !row.crypto) return false;
 			if (quick.has('nokyc') && row.kyc !== 'not required') return false;
+			if (quick.has('nocard') && row.card !== 'none') return false;
+			if (quick.has('open') && row.eligibility !== 'open') return false;
 			if (quick.has('fresh') && !isFresh(row)) return false;
 			if (!needle) return true;
 			return [row.title, row.prize, row.detail, row.source].some((field) => (field || '').toLowerCase().includes(needle));
@@ -133,7 +146,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 		<>
 			<SectionHead
 				title="Research"
-				blurb={`Prizes and bounties you could enter, from CTFs to hackathons and crypto bounty boards. Refreshed every 3h, last ${formatDate(lastRefresh)}.`}
+				blurb={`Prizes and bounties you could enter, plus free and startup-credit access to AI models. Refreshed every 3h, last ${formatDate(lastRefresh)}.`}
 			/>
 
 			{/* Counts only: a prize is the organiser's claim, so nothing is summed. */}
@@ -155,7 +168,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 						<Search size={16} />
 						<input
 							type="search"
-							placeholder="Search prizes and bounties…"
+							placeholder="Search prizes, bounties and AI access…"
 							value={query}
 							onChange={(event) => setQuery(event.target.value)}
 							aria-label="Search research"
@@ -177,6 +190,8 @@ export default function ResearchSection({ status }: { status: Status }) {
 					{chip(quick.has('prize'), () => toggleQuick('prize'), 'prize', counts.prize, quick.has('prize'))}
 					{chip(quick.has('crypto'), () => toggleQuick('crypto'), 'crypto', counts.crypto, quick.has('crypto'))}
 					{chip(quick.has('nokyc'), () => toggleQuick('nokyc'), 'no KYC', counts.nokyc, quick.has('nokyc'))}
+					{counts.nocard ? chip(quick.has('nocard'), () => toggleQuick('nocard'), 'no card', counts.nocard, quick.has('nocard')) : null}
+					{counts.open ? chip(quick.has('open'), () => toggleQuick('open'), 'open to apply', counts.open, quick.has('open')) : null}
 					{chip(quick.has('fresh'), () => toggleQuick('fresh'), 'last 24h', counts.fresh, quick.has('fresh'))}
 				</div>
 
@@ -218,13 +233,15 @@ export default function ResearchSection({ status }: { status: Status }) {
 			    is visible and the detail is one click away. */}
 			<Subhead>Reference</Subhead>
 			<div className="stack tight">
-				<Disclosure title="Read before registering" hint="what a listed prize does and does not mean" count={4}>
+				<Disclosure title="Read before registering" hint="what a listed prize does and does not mean" count={6}>
 					<Bullets
 						items={[
 							'A prize is the organiser’s own claim. Payout and identity checks are not published for CTFs, hackathons or Superteam, so open the rules page first.',
 							'Immunefi states whether a program asks for KYC. Programs that do are not listed here, because the identity check is the one gate you cannot pass.',
 							'Winning pays once, for your own work. It is not passive income and never counts as earnings on this dashboard.',
 							'The bot only lists. It never registers, submits, or contacts anyone.',
+							'AI access rows are claims from community-maintained lists and a programme directory. Open the provider’s own page for the current limits, card and eligibility before relying on one.',
+							'Startup programmes usually want a registered company with a website; “needs VC / partner” rows want an investor or accelerator and are ranked down, not hidden.',
 						]}
 					/>
 				</Disclosure>
@@ -238,7 +255,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 								entry.label || researchSourceName(entry.source),
 								entry.ok === false
 									? 'unreachable last refresh · showing the last good rows'
-									: `${entry.fetched ?? 0} fetched · ${entry.kept ?? 0} usable${entry.screened ? ` · ${entry.screened} screened out` : ''}`,
+									: `${entry.fetched ?? 0} fetched · ${entry.kept ?? 0} usable${entry.duplicates ? ` · ${entry.duplicates} listed elsewhere too` : ''}${entry.screened ? ` · ${entry.screened} screened out` : ''}`,
 							]),
 						]}
 					/>
@@ -247,7 +264,7 @@ export default function ResearchSection({ status }: { status: Status }) {
 					</p>
 				</Disclosure>
 
-				<Disclosure title="Probed and left out" hint="checked, so they are not re-checked" count={6}>
+				<Disclosure title="Probed and left out" hint="checked, so they are not re-checked" count={9}>
 					<Bullets
 						items={[
 							'Sherlock: the live list is finished contests, and its payouts require KYC.',
@@ -256,6 +273,9 @@ export default function ResearchSection({ status }: { status: Status }) {
 							'Devfolio: hackathons are onsite in India.',
 							'Algora and DoraHacks: no public JSON (HTML or a bot challenge).',
 							'Cantina: no public API.',
+							'GitHub repository search for AI lists: shares the 60-an-hour anonymous quota with Leads, so lists are read from raw.githubusercontent.com instead.',
+							'Sourcey full dataset (4.9 MB): the paged API is read for the AI and hosting categories instead.',
+							'dakshshah96/awesome-startup-credits: last updated August 2024, so its terms are out of date.',
 						]}
 					/>
 				</Disclosure>

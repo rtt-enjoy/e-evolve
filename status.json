@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-16T14:23:08.726438+00:00",
-  "total_runs": 2575,
+  "last_run": "2026-11-16T15:23:07.993002+00:00",
+  "total_runs": 2576,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -31,99 +31,56 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt losing drafts (weak_title, 1 in 14 days, gate finding 'title has ALL-CAPS word') is already the subject of 15 open, unmerged review branches covering every angle of this exact edit; a 16th duplicate branch wastes the cycle.",
+    "summary": "No change proposed: the prompt-focus defect cost exactly 1 draft in 14 days, and 15 prior proposals targeting the same title prompt remain unmerged; the dominant loss (llm_error=23 in the window) is engine-side and not prompt-fixable.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the 15 open title-prompt branches and close the rest",
-        "description": "Unblocks the one-step-per-cycle prompt cadence. Until one merges, every future cycle either duplicates an open branch or idles, as this one does.",
-        "owner_action": "Diff the 15 evolve/* branches touching bot/earning/articles.py title handling, merge the smallest one that sharpens or replaces a rule with a concrete example, and close the remaining 14 as superseded.",
+        "title": "Give the post LLM role a second provider with independent rate limits",
+        "description": "llm_error=59 lifetime (23 in the last 14 days) is the largest single cause of lost posts and therefore lost tip asks. Atria is already configured as fallback in llm_workflows, so this may be a config/activation issue rather than a new key.",
+        "owner_action": "Confirm whether the 'post' role actually fails over to Atria on GLM errors in production, or whether fallback is declared in status but not firing; if it is not firing, enabling it is an owner-level change to llm.py/llm config, which the bot cannot edit.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: git branch --list 'evolve/*' and diff the branches touching articles.py title code; they are variants of a few edits to _SYSTEM TITLE rules and _revise_title.",
-          "Step 2: Merge the smallest one that does not soften a gate (e.g. a concrete ALL-CAPS example), then close the others referencing it as superseded."
-        ]
-      },
-      {
-        "title": "Put the receive address in the dev.to profile bio",
-        "description": "One manual edit carries the ask on every profile visit permanently \u2014 the only deferred channel needing no account, processor, or policy change.",
-        "owner_action": "Paste the Tron address into the Bio field at dev.to/settings once.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open https://dev.to/settings, edit the Bio field to include the TRC-20 address from payout_public.address.",
-          "Step 2: Save; the API cannot write this field (users is show-only in Forem routes), which is why it stays an owner action."
+          "Step 1: Read bot/llm.py's fallback path for complete_json_for_role('post', ...) and confirm it triggers on GLM exceptions.",
+          "Step 2: If it triggers, check why 23 GLM failures in 14 days produced no successful Atria drafts (atria key_set=true, live=true).",
+          "Step 3: If it does not trigger, wire the fallback for the post role \u2014 the keys already exist; no new secret."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach into a live receive path) via PROMPT FOCUS, gated by the known dead-end 'anything already in PRIOR PROPOSALS'",
+    "direction": "Checklist step 4 (reach), with Principle 2 discipline \u2014 spend the cycle's change where the measured loss actually is",
     "evidence": [
-      "article_rejects.counts weak_title=15 lifetime but only 1 in the last-14-day window",
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "Gate finding behind PROMPT FOCUS: 'title has ALL-CAPS word' x1",
-      "PRIOR PROPOSALS: 15 open branches, every one an edit to bot/earning/articles.py title handling (_SYSTEM TITLE rules or _revise_title), none merged",
-      "status.suggestions already asks the owner to 'Merge one of the 15 open title-prompt branches and close the rest'",
-      "llm_error=59 is engine-side (23 in 14 days), not fixable by a prompt edit",
-      "wallet.received_total_usd = 0.0, payout.live = true, backfill.remaining = 0"
+      "article_rejects: weak_title lost 1 draft in the last 14 days, against llm_error=23 and empty_draft=2 in the same window",
+      "gate findings: 'title has ALL-CAPS word' x1 \u2014 a single occurrence",
+      "article_rejects.counts (lifetime, total 90): llm_error=59, weak_title=15, empty_draft=11 \u2014 the engine, not the prompts, loses most drafts",
+      "PRIOR PROPOSALS: 15 distinct open branches, 14 of which edit the same _SYSTEM/_revise_title title path; none merged",
+      "operations: llm_engine serving=glm, calls={'glm': 2} \u2014 one failure mode here is rate/capacity, not instruction quality",
+      "receive path clean: payout.live=true, known_without_footer=0, coverage 50/53 building normally; nothing blocks publishing except draft loss"
     ],
-    "money_path": "none this cycle \u2014 the receive path is live and verified (receipt_check known_without_footer=0), so the only remaining work is reach, and the one evidenced prompt defect is already covered by open branches",
-    "verify": "No branch to verify. Once the owner merges one of the 15 open title branches, weak_title rejects in the 14-day window should fall to 0; article_rejects.recent details would stop showing 'title has ALL-CAPS word'",
+    "money_path": "none (no change proposed). For context: the receive path is verified and live; the marginal post lost to weak_title last window is one tip ask out of ~53, while the engine failures cost ~25 \u2014 and the dead-end list forbids the retry/backoff fix for those.",
+    "verify": "If the owner disagrees: the one count that should move is article_rejects.counts.weak_title in the 14-day window. But a 16th proposal on a prompt costing 1 draft per fortnight, stacked on 15 unmerged branches, fails the 'one small, evidenced change' bar worse than proposing nothing does. The llm_error count is the number to watch, and it is not prompt-reachable.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 18
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 122
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 63,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (63 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one of the 15 open title-prompt branches and close the rest",
-      "description": "Unblocks the one-step-per-cycle prompt cadence. Until one merges, every future cycle either duplicates an open branch or idles, as this one does.",
-      "owner_action": "Diff the 15 evolve/* branches touching bot/earning/articles.py title handling, merge the smallest one that sharpens or replaces a rule with a concrete example, and close the remaining 14 as superseded.",
+      "title": "Give the post LLM role a second provider with independent rate limits",
+      "description": "llm_error=59 lifetime (23 in the last 14 days) is the largest single cause of lost posts and therefore lost tip asks. Atria is already configured as fallback in llm_workflows, so this may be a config/activation issue rather than a new key.",
+      "owner_action": "Confirm whether the 'post' role actually fails over to Atria on GLM errors in production, or whether fallback is declared in status but not firing; if it is not firing, enabling it is an owner-level change to llm.py/llm config, which the bot cannot edit.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: git branch --list 'evolve/*' and diff the branches touching articles.py title code; they are variants of a few edits to _SYSTEM TITLE rules and _revise_title.",
-        "Step 2: Merge the smallest one that does not soften a gate (e.g. a concrete ALL-CAPS example), then close the others referencing it as superseded."
+        "Step 1: Read bot/llm.py's fallback path for complete_json_for_role('post', ...) and confirm it triggers on GLM exceptions.",
+        "Step 2: If it triggers, check why 23 GLM failures in 14 days produced no successful Atria drafts (atria key_set=true, live=true).",
+        "Step 3: If it does not trigger, wire the fallback for the post role \u2014 the keys already exist; no new secret."
       ],
-      "discovered_at": "2026-11-16T13:23:35.565276+00:00"
-    },
-    {
-      "title": "Put the receive address in the dev.to profile bio",
-      "description": "One manual edit carries the ask on every profile visit permanently \u2014 the only deferred channel needing no account, processor, or policy change.",
-      "owner_action": "Paste the Tron address into the Bio field at dev.to/settings once.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: Open https://dev.to/settings, edit the Bio field to include the TRC-20 address from payout_public.address.",
-        "Step 2: Save; the API cannot write this field (users is show-only in Forem routes), which is why it stays an owner action."
-      ],
-      "discovered_at": "2026-11-16T14:23:32.008744+00:00"
+      "discovered_at": "2026-11-16T15:23:43.541478+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 143,
+  "last_cycle_seconds": 36,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2802,7 +2759,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-16T14:23:09.575969+00:00",
+    "checked_at": "2026-11-16T15:23:08.599560+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3554,7 +3511,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-16T14:25:30.817291+00:00",
+    "last_run": "2026-11-16T15:23:43.695711+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3564,25 +3521,10 @@
     "without_footer": 0,
     "unreachable": 1,
     "missing": [],
-    "last_run": "2026-11-16T14:25:31.015252+00:00",
+    "last_run": "2026-11-16T15:23:43.811316+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4937139,
-        "at": "2026-11-15T20:46:08.990784+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-11-15T20:46:08.990784+00:00",
-        "ok": true
-      },
-      {
-        "id": 4568987,
-        "at": "2026-11-15T20:46:08.990784+00:00",
-        "ok": true
-      },
       {
         "id": 4729472,
         "at": "2026-11-15T21:44:57.652528+00:00",
@@ -3804,11 +3746,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-16T14:25:31.015252+00:00",
-        "ok": true
-      },
-      {
         "id": 4545446,
         "at": "2026-11-16T14:25:31.015252+00:00",
         "ok": true
@@ -3817,6 +3754,26 @@
         "id": 4720062,
         "at": "2026-11-16T14:25:31.015252+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-16T15:23:43.811316+00:00",
+        "ok": true
+      },
+      {
+        "id": 5012890,
+        "at": "2026-11-16T15:23:43.811316+00:00",
+        "ok": true
+      },
+      {
+        "id": 5019261,
+        "at": "2026-11-16T15:23:43.811316+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-16T15:23:43.811316+00:00",
+        "ok": true
       }
     ],
     "published_total": 53,
@@ -3824,7 +3781,7 @@
     "unverified": 3,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 17.7
+    "oldest_check_age_hours": 17.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3844,7 +3801,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

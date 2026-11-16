@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-16T10:45:20.683657+00:00",
-  "total_runs": 2571,
+  "last_run": "2026-11-16T11:23:01.839979+00:00",
+  "total_runs": 2572,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -31,101 +31,78 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the one weak_title draft lost in the last 14 days is already the subject of 16 distinct open, unmerged review branches (including a 2026-11-15 deterministic ALL-CAPS rescue and two _revise_title prompt edits covering the exact gate finding 'title has ALL-CAPS word' x1); a 17th near-identical proposal cannot clear the bar and only re-derives what is parked for review.",
+    "summary": "No change this cycle: the one weak_title defect (an ALL-CAPS word, x1 in 14 days) is already answered by a dozen-plus parked branches touching exactly those prompts; a 17th duplicate edit cannot be graded and risks the rewrite-the-file failure mode, so the correct move is for the owner to merge one of the existing branches and close the rest.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one title-prompt branch, close the rest",
-        "description": "Unblocks the measurement loop for weak_title: 16 near-identical fixes are parked, so each new cycle risks re-proposing the same edit and none can be graded.",
-        "owner_action": "Review the smallest open evolve/* branch touching bot/earning/articles.py title prompts, run bot/tests.py, merge it; reject-and-close the remaining duplicates.",
+        "title": "Merge one title-prompt branch, reject-and-close the other duplicates",
+        "description": "Unblocks the weak_title measurement loop: 16 near-identical fixes to articles.py are parked, so every cycle risks re-proposing the same edit and none can be graded against article_rejects.",
+        "owner_action": "Pick the smallest open evolve/* branch touching bot/earning/articles.py title prompts, run bot/tests.py, merge it; reject-and-close the remaining duplicates.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: List open evolve/* branches from 2026-11-02 to 2026-11-15 that touch bot/earning/articles.py.",
-          "Step 2: Pick the smallest one (e.g. the 2026-11-15 deterministic ALL-CAPS rescue), run python bot/tests.py, merge.",
-          "Step 3: Close the others so future cycles stop re-deriving the same weak_title edit."
+          "Step 1: git branch --list 'evolve/*' and check which ones diff bot/earning/articles.py between 2026-11-02 and 2026-11-15.",
+          "Step 2: Choose the smallest diff (e.g. the 2026-11-15 deterministic ALL-CAPS rescue), run python bot/tests.py, merge it into main.",
+          "Step 3: Close the other evolve/* branches touching the same prompts so future cycles stop re-deriving the same edit."
         ]
       },
       {
         "title": "Add the wallet address to the dev.to profile bio",
-        "description": "The doctrine's channel table names this the one cheap unbuilt receive surface: one manual edit carries the ask on every profile visit permanently.",
+        "description": "The doctrine's channel table names this the one cheap unbuilt receive surface: one manual edit carries the ask on every profile visit permanently, with no code change.",
         "owner_action": "Edit the Bio field at dev.to/settings to include the published TRC-20 address.",
         "secret_needed": null,
         "how_to": [
           "Step 1: Log in at dev.to/settings.",
-          "Step 2: Paste a one-line bio containing the address.",
-          "Step 3: Save \u2014 no code change or bot involvement needed."
+          "Step 2: Paste a one-line bio containing the TRC-20 address from status.payout_public.address.",
+          "Step 3: Save \u2014 no bot involvement needed."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach via prompt upgrades), Principle 3j discipline \u2014 a fix whose measurement loop is blocked by 16 unmerged branches cannot be validated, so the binding action is owner review, not another edit.",
+    "direction": "Checklist step 4 / PROMPT FOCUS (weak_title), gated by the doctrine's rule that one small evidenced change beats three speculative ones \u2014 and the evidence here says the change already exists, unmerged",
     "evidence": [
-      "article_rejects: weak_title lost 1 draft in last 14 days; gate finding 'title has ALL-CAPS word' x1",
-      "PROMPT LEDGER: 16 prior proposals touch bot/earning/articles.py title prompts (2026-11-02 through 2026-11-15), none merged",
-      "status.suggestions[0]: 'Merge one of the 17 open title-prompt branches (or close them all)' \u2014 the bot cannot tell whether any fix works until one merges",
-      "prompt focus already served by parked branches: deterministic ALL-CAPS rescue (2026-11-15), _revise_title explicit repair (2026-11-15, 2026-11-14, 2026-11-11)",
-      "reach otherwise healthy: article_daily published=1 today; preferred archetype problem-workaround n=11 avg=435.4 (well above the n=3 noise floor)"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "Gate finding behind PROMPT FOCUS: 'title has ALL-CAPS word' x1 (only 1 draft lost in 14 days)",
+      "article_rejects.counts total 90: llm_error=59, weak_title=15 \u2014 weak_title is no longer the dominant loss, llm_error is, and llm_error is engine-side, not prompt-fixable",
+      "PROMPT LEDGER: 16 open evolve/* branches all touch the same two prompts (article draft TITLE rules, _revise_title), none merged",
+      "status.suggestions[0] itself names the blocker: merge one, close the rest"
     ],
-    "money_path": "none this cycle \u2014 reach-only work is already in flight on parked branches; the blocked step is human review, which no code change can substitute for.",
-    "verify": "After the owner merges (or bulk-closes) the open evolve/* title branches, the count that should fall is article_rejects.counts.weak_title over the next 14-day window (currently 1 draft lost, gate finding 'title has ALL-CAPS word' x1). If a merged fix does not move that count, the next evolution cycle has a clean signal to try the next prompt step.",
+    "money_path": "none this cycle (reach-only step 4; the proposed unlock is owner-side, not a code change)",
+    "verify": "No status field moves from this proposal. After the owner merges one parked title branch: article_rejects.counts.weak_title should stop rising and the 14-day 'drafts lost to a prompt: weak_title' window should read 0.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 18
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 122
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 63,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (63 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one title-prompt branch, close the rest",
-      "description": "Unblocks the measurement loop for weak_title: 16 near-identical fixes are parked, so each new cycle risks re-proposing the same edit and none can be graded.",
-      "owner_action": "Review the smallest open evolve/* branch touching bot/earning/articles.py title prompts, run bot/tests.py, merge it; reject-and-close the remaining duplicates.",
+      "title": "Merge one title-prompt branch, reject-and-close the other duplicates",
+      "description": "Unblocks the weak_title measurement loop: 16 near-identical fixes to articles.py are parked, so every cycle risks re-proposing the same edit and none can be graded against article_rejects.",
+      "owner_action": "Pick the smallest open evolve/* branch touching bot/earning/articles.py title prompts, run bot/tests.py, merge it; reject-and-close the remaining duplicates.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List open evolve/* branches from 2026-11-02 to 2026-11-15 that touch bot/earning/articles.py.",
-        "Step 2: Pick the smallest one (e.g. the 2026-11-15 deterministic ALL-CAPS rescue), run python bot/tests.py, merge.",
-        "Step 3: Close the others so future cycles stop re-deriving the same weak_title edit."
+        "Step 1: git branch --list 'evolve/*' and check which ones diff bot/earning/articles.py between 2026-11-02 and 2026-11-15.",
+        "Step 2: Choose the smallest diff (e.g. the 2026-11-15 deterministic ALL-CAPS rescue), run python bot/tests.py, merge it into main.",
+        "Step 3: Close the other evolve/* branches touching the same prompts so future cycles stop re-deriving the same edit."
       ],
-      "discovered_at": "2026-11-16T10:45:44.163447+00:00"
+      "discovered_at": "2026-11-16T11:23:23.866260+00:00"
     },
     {
       "title": "Add the wallet address to the dev.to profile bio",
-      "description": "The doctrine's channel table names this the one cheap unbuilt receive surface: one manual edit carries the ask on every profile visit permanently.",
+      "description": "The doctrine's channel table names this the one cheap unbuilt receive surface: one manual edit carries the ask on every profile visit permanently, with no code change.",
       "owner_action": "Edit the Bio field at dev.to/settings to include the published TRC-20 address.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Log in at dev.to/settings.",
-        "Step 2: Paste a one-line bio containing the address.",
-        "Step 3: Save \u2014 no code change or bot involvement needed."
+        "Step 2: Paste a one-line bio containing the TRC-20 address from status.payout_public.address.",
+        "Step 3: Save \u2014 no bot involvement needed."
       ],
       "discovered_at": "2026-11-16T00:50:53.283208+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 153,
+  "last_cycle_seconds": 23,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2818,7 +2795,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-16T10:45:21.248080+00:00",
+    "checked_at": "2026-11-16T11:23:02.390419+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3570,7 +3547,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-16T10:47:53.417417+00:00",
+    "last_run": "2026-11-16T11:23:24.084954+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3580,20 +3557,10 @@
     "without_footer": 0,
     "unreachable": 2,
     "missing": [],
-    "last_run": "2026-11-16T10:47:53.573735+00:00",
+    "last_run": "2026-11-16T11:23:24.295063+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4619528,
-        "at": "2026-11-15T17:44:30.318988+00:00",
-        "ok": true
-      },
-      {
-        "id": 4602729,
-        "at": "2026-11-15T18:44:07.516582+00:00",
-        "ok": true
-      },
       {
         "id": 4971614,
         "at": "2026-11-15T18:44:07.516582+00:00",
@@ -3820,11 +3787,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-16T10:47:53.573735+00:00",
-        "ok": true
-      },
-      {
         "id": 4959304,
         "at": "2026-11-16T10:47:53.573735+00:00",
         "ok": true
@@ -3833,6 +3795,21 @@
         "id": 4681657,
         "at": "2026-11-16T10:47:53.573735+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-16T11:23:24.295063+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-16T11:23:24.295063+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-16T11:23:24.295063+00:00",
+        "ok": true
       }
     ],
     "published_total": 53,
@@ -3840,7 +3817,7 @@
     "unverified": 3,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 17.1
+    "oldest_check_age_hours": 16.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3860,7 +3837,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

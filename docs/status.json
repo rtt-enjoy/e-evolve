@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-16T00:50:27.251373+00:00",
-  "total_runs": 2561,
+  "last_run": "2026-11-16T01:50:20.991073+00:00",
+  "total_runs": 2562,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -27,45 +27,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the named prompt focus (weak_title) lost only 1 draft in the last 14 days, the single gate finding ('title has ALL-CAPS word' x1) is already the target of every one of the 20 open prior proposals, and the dominant loss (llm_error=59 lifetime, 23 in-window) is engine-side and explicitly not fixable by a prompt edit \u2014 so any edit this cycle would be either a repeat or a shot at a non-problem.",
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
     "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Merge one of the 20 open title-prompt branches (or close them all)",
-        "description": "Twenty near-identical weak_title fixes are parked unmerged, so the bot cannot tell whether the fix works \u2014 each new cycle risks proposing the 21st. One merge unblocks the measurement loop; one bulk-close clears the ledger.",
-        "owner_action": "Review and merge (or reject-and-close) the open evolve/* branches touching bot/earning/articles.py title prompts.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open the 20 evolve/* branches from 2026-11-02 to 2026-11-15.",
-          "Step 2: Pick the smallest one (e.g. the 2026-11-15 deterministic ALL-CAPS rescue), verify bot/tests.py passes, merge it.",
-          "Step 3: Close the remaining duplicates so future cycles stop re-deriving the same edit."
-        ]
-      },
-      {
-        "title": "Add the wallet address to the dev.to profile bio",
-        "description": "The doctrine's channel table names this the one cheap remaining row: one manual edit covers every profile visitor permanently, with no account, processor, or policy change.",
-        "owner_action": "Edit the Bio field at dev.to/settings to include the published TRC-20 address ([redacted]).",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Log in at dev.to/settings.",
-          "Step 2: Paste a one-line bio containing the address, e.g. the payout_public note plus the address.",
-          "Step 3: Save \u2014 no code change and no bot involvement needed."
-        ]
-      }
-    ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompt losing the most drafts, one step per cycle; Principle 3j discipline on reading the signal before steering on it.",
-    "evidence": [
-      "article_rejects.counts: llm_error=59, weak_title=15 (lifetime), weak_title=1 in the last 14 days",
-      "article_rejects.last = 'weak_title': gate finding 'title has ALL-CAPS word' x1",
-      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=23, empty_draft=2",
-      "PRIOR PROPOSALS: 20 open branches, all incremental edits to the article-draft TITLE rules or _revise_title, none merged",
-      "wallet.received_total_usd = 0.0, receive path verified (payout.live = true, receipt_check.known_without_footer = 0)"
-    ],
-    "money_path": "none (maintenance) \u2014 reach is the binding work, but no proposal this cycle clears the bar of being new, evidence-backed, and not already sitting on an open review branch.",
-    "verify": "Next cycle: if a merged title-prompt change ever lands from the open branches, weak_title in the 14-day window should fall to 0 and 'title has ALL-CAPS word' should stop appearing in article_rejects.recent details. Until one merges, no count can move, which is itself the reason to hold.",
-    "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
+    "suggestions": [],
+    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
+    "error_type": "json"
   },
   "last_earning": {
     "actions": [],
@@ -97,8 +63,10 @@
       "discovered_at": "2026-11-16T00:50:53.283208+00:00"
     }
   ],
-  "errors": [],
-  "last_cycle_seconds": 27,
+  "errors": [
+    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
+  ],
+  "last_cycle_seconds": 309,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2755,7 +2723,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-16T00:50:27.558609+00:00",
+    "checked_at": "2026-11-16T01:50:21.580192+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3507,7 +3475,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-16T00:50:53.722818+00:00",
+    "last_run": "2026-11-16T01:55:29.013052+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3517,15 +3485,10 @@
     "without_footer": 0,
     "unreachable": 3,
     "missing": [],
-    "last_run": "2026-11-16T00:50:54.042451+00:00",
+    "last_run": "2026-11-16T01:55:29.330544+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4820198,
-        "at": "2026-11-15T12:57:31.183067+00:00",
-        "ok": true
-      },
       {
         "id": 4740283,
         "at": "2026-11-15T13:59:19.811550+00:00",
@@ -3762,13 +3725,18 @@
         "ok": true
       },
       {
-        "id": 4489474,
+        "id": 4908316,
         "at": "2026-11-16T00:50:54.042451+00:00",
         "ok": true
       },
       {
-        "id": 4908316,
-        "at": "2026-11-16T00:50:54.042451+00:00",
+        "id": 4489474,
+        "at": "2026-11-16T01:55:29.330544+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-16T01:55:29.330544+00:00",
         "ok": true
       }
     ],
@@ -3788,17 +3756,46 @@
   },
   "llm_engine": {
     "main_provider": "glm",
-    "main_model": "glm-5.3-flash",
+    "main_model": "glm-4.7-flash",
     "preferred_model": "glm-5.3-flash",
-    "refused": [],
+    "refused": [
+      {
+        "model": "glm-5.3-flash",
+        "endpoint": "https://api.z.ai/api/coding/paas/v4",
+        "code": "1310",
+        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-16 17:56:33"
+      },
+      {
+        "model": "glm-5.2",
+        "endpoint": "https://api.z.ai/api/coding/paas/v4",
+        "code": "1310",
+        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-16 17:56:33"
+      },
+      {
+        "model": "glm-5.1",
+        "endpoint": "https://api.z.ai/api/coding/paas/v4",
+        "code": "1310",
+        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-16 17:56:33"
+      },
+      {
+        "model": "glm-5",
+        "endpoint": "https://api.z.ai/api/coding/paas/v4",
+        "code": "1310",
+        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-16 17:56:33"
+      },
+      {
+        "model": "glm-4.7",
+        "endpoint": "https://api.z.ai/api/coding/paas/v4",
+        "code": "1310",
+        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-16 17:56:33"
+      }
+    ],
     "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
     "live": true,
     "serving": "glm",
     "disabled_reason": null,
-    "calls": {
-      "glm": 1
-    },
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

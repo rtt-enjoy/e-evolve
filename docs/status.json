@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-16T19:23:27.590647+00:00",
-  "total_runs": 2580,
+  "last_run": "2026-11-16T20:23:27.363518+00:00",
+  "total_runs": 2581,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -31,55 +31,62 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt-graded cost is weak_title at 1 draft in 14 days (gate finding 'title has ALL-CAPS word' x1), and 15 open review branches already target exactly that defect across _SYSTEM and _revise_title \u2014 a sixteenth variant is the documented repeat-failure pattern; the dominant cost is llm_error (23 in 14 days), which is an engine/key problem no prompt edit can reach.",
+    "summary": "No change proposed: the prompt the brief names loses 1 draft per 14 days while 14 unmerged branches already propose every reasonable version of that exact edit, and the real draft loss (llm_error=23) is engine-side and explicitly not fixable by a prompt edit \u2014 so a fifteenth title-prompt proposal would repeat a known dead end rather than serve reach.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge or close the 15 open title-prompt branches so the loop stops re-proposing them",
-        "description": "The weak_title defect has been fixed-in-flight fifteen times without a merge; each open branch blocks a fresh evidence-based proposal and the loop keeps rediscovering the same edit.",
-        "owner_action": "Review the open evolve/* branches from 2026-11-02 to 2026-11-15 and merge the best one (or reject them all) so the PROMPT FOCUS can move on.",
+        "title": "Merge or close the 14 open title-prompt branches",
+        "description": "Unblocks the loop: weak_title is fixed-in-flight fourteen times over without a merge, so every cycle re-derives the same edit instead of moving the PROMPT FOCUS to the dominant loss (llm_error) or to reach work.",
+        "owner_action": "Review the open evolve/* branches and merge exactly one title-prompt edit (the smallest diff against _revise_title), then close the remaining 13.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: list open branches matching evolve/*.",
-          "Step 2: pick the smallest diff against bot/earning/articles.py _revise_title, run bot/tests.py, merge.",
-          "Step 3: close the rest; next cycle will grade weak_title against the merged prompt."
+          "Step 1: list open branches matching evolve/* from 2026-11-03 to 2026-11-15.",
+          "Step 2: pick the one with the smallest diff to bot/earning/articles.py, run bot/tests.py, merge it.",
+          "Step 3: close the other 13 branches; the next cycle grades weak_title against the merged prompt and can redirect effort."
         ]
       }
     ],
-    "direction": "Step 4 (reach into a live receive path) via the PROMPT FOCUS, but only when the evidence names an unaddressed prompt defect \u2014 it does not this cycle",
+    "direction": "Checklist step 4 (reach via better prompts), applied with the standing instruction that a re-proposal of an open branch is not a change",
     "evidence": [
-      "article_rejects.counts total=90 with weak_title=15 lifetime but only 1 in the last 14 days (PROMPT LEDGER window)",
-      "article_rejects.last = 'weak_title': gate finding 'title has ALL-CAPS word' x1",
-      "PROMPT FOCUS targets are articles.py _SYSTEM and _revise_title; PRIOR PROPOSALS list 15 distinct unmerged proposals, nearly all editing these same two prompts for ALL-CAPS/colon-subtitle defects",
-      "llm_error=23 in 14 days (59 lifetime) \u2014 drafts lost to the engine, explicitly not fixable by a prompt edit; an owner suggestion to investigate GLM key health is already filed in status.suggestions",
-      "receipt_check.covered/published_total = 50/53, coverage_complete=False, known_without_footer=0 \u2014 receive path verified live, so the remaining work is reach, and the reach leak is the engine, not the prompts"
+      "article_rejects.counts: weak_title=15 lifetime but only weak_title=1 in the last 14 days, gate finding 'title has ALL-CAPS word' x1",
+      "drafts lost to the engine, last 14 days: llm_error=23, empty_draft=2 \u2014 25x the prompt loss, and the brief classifies llm_error as not fixable by a prompt edit",
+      "PRIOR PROPOSALS lists 14 open branches, 13 of which are edits to _revise_title or the TITLE rules in _SYSTEM, covering: the ALL-CACS/casing fix, concrete examples, three-candidate rewrites, deterministic colon-subtitle rescue, acronym allowlist widening, and self-check instructions",
+      "status.suggestions already carries the owner action this needs: review and merge-or-close the 15 open title-prompt branches",
+      "reach signal is intact and working: preferred_archetypes = ['problem-workaround'] with n=11, avg 435.4 \u2014 steering and audience guidance need no change"
     ],
-    "money_path": "none \u2014 no change proposed; the receive path is live and the actual reach bottleneck (llm_error) needs owner action on the GLM key, not a code change",
-    "verify": "Next cycle: article_rejects counts window \u2014 weak_title in last-14-days should stay at or near 1 (it was already failing only once), and a declining llm_error count following the owner's key check is the signal to watch; if weak_title rises again, prefer merging one of the already-open title-rewrite branches rather than writing a new one",
+    "money_path": "none this cycle \u2014 proposing no change; the receive path is live and verified (payout.live=true, receipt_check.covered 50/53), so reach work would only help once a title fix actually merges",
+    "verify": "No diff to verify. After the owner merges one open title branch or closes them all, next cycle's PROMPT FOCUS should move off weak_title; the count to watch is article_rejects.weak_title in the 14-day window staying at or near 0 and llm_error remaining the dominant loss.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "ctf-bounty",
+        "success": true,
+        "estimated_usd": 0.0,
+        "listed": 18
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge or close the 15 open title-prompt branches so the loop stops re-proposing them",
-      "description": "The weak_title defect has been fixed-in-flight fifteen times without a merge; each open branch blocks a fresh evidence-based proposal and the loop keeps rediscovering the same edit.",
-      "owner_action": "Review the open evolve/* branches from 2026-11-02 to 2026-11-15 and merge the best one (or reject them all) so the PROMPT FOCUS can move on.",
+      "title": "Merge or close the 14 open title-prompt branches",
+      "description": "Unblocks the loop: weak_title is fixed-in-flight fourteen times over without a merge, so every cycle re-derives the same edit instead of moving the PROMPT FOCUS to the dominant loss (llm_error) or to reach work.",
+      "owner_action": "Review the open evolve/* branches and merge exactly one title-prompt edit (the smallest diff against _revise_title), then close the remaining 13.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: list open branches matching evolve/*.",
-        "Step 2: pick the smallest diff against bot/earning/articles.py _revise_title, run bot/tests.py, merge.",
-        "Step 3: close the rest; next cycle will grade weak_title against the merged prompt."
+        "Step 1: list open branches matching evolve/* from 2026-11-03 to 2026-11-15.",
+        "Step 2: pick the one with the smallest diff to bot/earning/articles.py, run bot/tests.py, merge it.",
+        "Step 3: close the other 13 branches; the next cycle grades weak_title against the merged prompt and can redirect effort."
       ],
-      "discovered_at": "2026-11-16T19:23:46.011890+00:00"
+      "discovered_at": "2026-11-16T20:23:50.001659+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 20,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2759,7 +2766,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-16T19:23:27.945689+00:00",
+    "checked_at": "2026-11-16T20:23:27.980040+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3511,30 +3518,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-16T19:23:46.246427+00:00",
+    "last_run": "2026-11-16T20:23:50.822763+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 3,
+    "with_footer": 3,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 2,
     "missing": [],
-    "last_run": "2026-11-16T19:23:46.443302+00:00",
+    "last_run": "2026-11-16T20:23:50.940894+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4977763,
-        "at": "2026-11-15T22:50:37.063579+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-11-15T23:52:33.728524+00:00",
-        "ok": true
-      },
       {
         "id": 4820684,
         "at": "2026-11-15T23:52:33.728524+00:00",
@@ -3761,11 +3758,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-16T19:23:46.443302+00:00",
-        "ok": true
-      },
-      {
         "id": 4568987,
         "at": "2026-11-16T19:23:46.443302+00:00",
         "ok": true
@@ -3774,6 +3766,21 @@
         "id": 4356423,
         "at": "2026-11-16T19:23:46.443302+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-16T20:23:50.940894+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-11-16T20:23:50.940894+00:00",
+        "ok": true
+      },
+      {
+        "id": 5027243,
+        "at": "2026-11-16T20:23:50.940894+00:00",
+        "ok": true
       }
     ],
     "published_total": 53,
@@ -3781,7 +3788,7 @@
     "unverified": 3,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 20.6
+    "oldest_check_age_hours": 20.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3813,7 +3820,7 @@
   },
   "ctf_bounty": {
     "source": "ctftime",
-    "last_refresh_at": "2026-11-16T17:23:43.993858+00:00",
+    "last_refresh_at": "2026-11-16T20:23:50.005038+00:00",
     "last_reason": "ok",
     "fetched": 27,
     "enterable": 18,
@@ -3829,10 +3836,10 @@
         "start": "2026-11-20T10:00:00+00:00",
         "finish": "2026-11-22T10:00:00+00:00",
         "live": false,
-        "days_until_start": 3.7,
+        "days_until_start": 3.6,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 58,
+        "participants": 61,
         "prizes": "1st: 300 USD + 1 year ExamBoot subscription. (500 USD dedicated for the 1st Cameroonian local on the scoreboard) 3-month BlueYard Pro subscription, 1 Free annua",
         "pays": true,
         "crypto": false,
@@ -3849,7 +3856,7 @@
         "start": "2026-12-19T12:00:00+00:00",
         "finish": "2026-12-20T12:00:00+00:00",
         "live": false,
-        "days_until_start": 32.8,
+        "days_until_start": 32.7,
         "format": "Jeopardy",
         "weight": 77.38,
         "participants": 36,
@@ -3869,10 +3876,10 @@
         "start": "2026-11-20T23:00:00+00:00",
         "finish": "2026-11-21T23:00:00+00:00",
         "live": false,
-        "days_until_start": 4.2,
+        "days_until_start": 4.1,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 26,
+        "participants": 27,
         "prizes": "1st 6 month Premium Try Hack Me for every team member 12 months of free SkillBit Labs access for every team member. Four .xyz domains, one for each team member.",
         "pays": false,
         "crypto": false,
@@ -3889,10 +3896,10 @@
         "start": "2026-11-20T23:00:00+00:00",
         "finish": "2026-11-22T23:00:00+00:00",
         "live": false,
-        "days_until_start": 4.2,
+        "days_until_start": 4.1,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 198,
+        "participants": 203,
         "prizes": "To be announced!",
         "pays": false,
         "crypto": false,
@@ -3909,10 +3916,10 @@
         "start": "2026-11-21T13:00:00+00:00",
         "finish": "2026-11-21T21:00:00+00:00",
         "live": false,
-        "days_until_start": 4.8,
+        "days_until_start": 4.7,
         "format": "Jeopardy",
         "weight": 37.0,
-        "participants": 52,
+        "participants": 53,
         "prizes": "",
         "pays": false,
         "crypto": false,
@@ -3929,10 +3936,10 @@
         "start": "2026-11-28T04:30:00+00:00",
         "finish": "2026-11-28T16:30:00+00:00",
         "live": false,
-        "days_until_start": 11.5,
+        "days_until_start": 11.3,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 34,
+        "participants": 35,
         "prizes": "To be announced",
         "pays": false,
         "crypto": false,
@@ -3949,10 +3956,10 @@
         "start": "2026-11-28T14:00:00+00:00",
         "finish": "2026-11-29T14:00:00+00:00",
         "live": false,
-        "days_until_start": 11.9,
+        "days_until_start": 11.7,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 9,
+        "participants": 10,
         "prizes": "9 Black Hat India 2027 Briefings passes in total, worth \u20b97,65,000 (\u20b985,000 each) 1st place team: 3 Briefings passes (worth \u20b92,55,000) 2nd place team: 3 Briefing",
         "pays": false,
         "crypto": false,
@@ -3969,10 +3976,10 @@
         "start": "2026-11-20T18:00:00+00:00",
         "finish": "2026-11-21T18:00:00+00:00",
         "live": false,
-        "days_until_start": 4.0,
+        "days_until_start": 3.9,
         "format": "Jeopardy",
         "weight": 73.17,
-        "participants": 139,
+        "participants": 142,
         "prizes": "TBA",
         "pays": false,
         "crypto": false,
@@ -3989,7 +3996,7 @@
         "start": "2026-11-27T11:00:00+00:00",
         "finish": "2026-11-27T19:00:00+00:00",
         "live": false,
-        "days_until_start": 10.7,
+        "days_until_start": 10.6,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 7,
@@ -4009,7 +4016,7 @@
         "start": "2026-11-27T18:00:00+00:00",
         "finish": "2026-11-28T18:00:00+00:00",
         "live": false,
-        "days_until_start": 11.0,
+        "days_until_start": 10.9,
         "format": "Jeopardy",
         "weight": 45.76,
         "participants": 51,
@@ -4029,10 +4036,10 @@
         "start": "2026-12-04T18:00:00+00:00",
         "finish": "2026-12-06T18:00:00+00:00",
         "live": false,
-        "days_until_start": 18.0,
+        "days_until_start": 17.9,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 23,
+        "participants": 24,
         "prizes": "TBA but they will be cute",
         "pays": false,
         "crypto": false,
@@ -4049,7 +4056,7 @@
         "start": "2026-12-05T05:00:00+00:00",
         "finish": "2026-12-06T17:00:00+00:00",
         "live": false,
-        "days_until_start": 18.5,
+        "days_until_start": 18.4,
         "format": "Jeopardy",
         "weight": 79.51,
         "participants": 37,
@@ -4069,7 +4076,7 @@
         "start": "2026-12-11T12:00:00+00:00",
         "finish": "2026-12-13T12:00:00+00:00",
         "live": false,
-        "days_until_start": 24.8,
+        "days_until_start": 24.7,
         "format": "Jeopardy",
         "weight": 59.0,
         "participants": 72,
@@ -4089,7 +4096,7 @@
         "start": "2026-12-17T19:00:00+00:00",
         "finish": "2026-12-19T07:00:00+00:00",
         "live": false,
-        "days_until_start": 31.1,
+        "days_until_start": 30.9,
         "format": "Jeopardy",
         "weight": 22.9,
         "participants": 10,
@@ -4109,7 +4116,7 @@
         "start": "2026-12-27T14:00:00+00:00",
         "finish": "2026-12-28T14:00:00+00:00",
         "live": false,
-        "days_until_start": 40.9,
+        "days_until_start": 40.7,
         "format": "Jeopardy",
         "weight": 99.38,
         "participants": 0,
@@ -4129,10 +4136,10 @@
         "start": "2026-12-29T12:00:00+00:00",
         "finish": "2026-12-31T12:00:00+00:00",
         "live": false,
-        "days_until_start": 42.8,
+        "days_until_start": 42.7,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 6,
+        "participants": 8,
         "prizes": "To be announced",
         "pays": false,
         "crypto": false,
@@ -4149,7 +4156,7 @@
         "start": "2027-01-02T18:00:00+00:00",
         "finish": "2027-01-03T18:00:00+00:00",
         "live": false,
-        "days_until_start": 47.0,
+        "days_until_start": 46.9,
         "format": "Jeopardy",
         "weight": 25.0,
         "participants": 1,
@@ -4169,7 +4176,7 @@
         "start": "2027-01-09T00:00:00+00:00",
         "finish": "2027-01-11T00:00:00+00:00",
         "live": false,
-        "days_until_start": 53.3,
+        "days_until_start": 53.2,
         "format": "Jeopardy",
         "weight": 50.0,
         "participants": 0,

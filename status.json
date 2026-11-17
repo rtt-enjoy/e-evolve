@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-17T18:27:26.647130+00:00",
-  "total_runs": 2604,
+  "last_run": "2026-11-17T19:27:34.044941+00:00",
+  "total_runs": 2605,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,7 +33,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the PROMPT FOCUS (weak_title) lost exactly 1 draft in 14 days and already has 15 unmerged proposals against the same two prompts, while the real loss (llm_error, 23 drafts/14 days) lives in the protected bot/llm.py and cannot be fixed here \u2014 so any new edit only adds a 16th competing branch to the pile the owner is asked to prune.",
+    "summary": "No change proposed: the only prompt losing drafts (weak_title, 1 draft in 14 days, gate finding 'title has ALL-CAPS word' x1) already has fourteen open, unmerged proposals covering exactly this edit, and the 90-reject total is dominated by llm_error=59 / 23-in-14-days, which is engine failover in protected bot/llm.py \u2014 outside what a cycle may edit. A fifteenth variant would add redundant rules to a prompt the owner has not yet merged once.",
     "changes_applied": [],
     "suggestions": [
       {
@@ -48,17 +48,18 @@
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompt losing the most drafts; Principle 5, reach into a live receive path",
+    "direction": "Binding step 4 \u2014 reach into a live receive path; PROMPT FOCUS weak_title, but the step's own evidence rules say the measured gain there is exhausted",
     "evidence": [
+      "article_rejects.counts: weak_title=15 lifetime but 'Drafts lost to a prompt (last 14 days): weak_title=1'",
       "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "Drafts lost to a prompt (last 14 days): weak_title=1 \u2014 the total prompt-attributable loss for the window",
-      "Drafts lost to the engine (last 14 days): llm_error=23, empty_draft=2 \u2014 92% of lost drafts are engine failures, not prompt failures",
-      "PRIOR PROPOSALS: 15 distinct open branches, every one targeting articles.py title prompts (_SYSTEM or _revise_title), none merged",
-      "gate finding behind the focus: 'title has ALL-CAPS word' x1 \u2014 a single occurrence, the exact defect the 2026-11-15 and 2026-11-16 proposals already address",
-      "payout.live = true, receipt_check.known_without_footer = 0 \u2014 the receive path is verified, so step 1 is clean and step 4 is the only lever"
+      "Gate findings behind it: 'title has ALL-CAPS word' x1",
+      "'Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=23, empty_draft=2'",
+      "article_rejects.counts (total 90): llm_error=59",
+      "PRIOR PROPOSALS: 14 open branches, all editing the title prompt in articles.py, none merged",
+      "status.suggestions already names: 'Merge exactly one title-prompt branch and close the other fourteen'"
     ],
-    "money_path": "reach-only (a title edit would only marginally affect click-through; nothing touches the receive path)",
-    "verify": "Not applicable (no change proposed). If the owner instead merges one title branch per the suggestion below, verify by article_rejects.counts.weak_title staying at or near 0 per 14-day window and weak_title dropping out of the PROMPT FOCUS next cycle.",
+    "money_path": "none this cycle \u2014 a 15th duplicate title-prompt edit would not move reach until the owner merges one of the fourteen existing branches; the larger lever (llm_error failover, ~25 posts per fortnight) is in protected bot/llm.py",
+    "verify": "No change shipped. After the owner merges one title branch and closes the rest, weak_title in the 14-day window should fall to 0; the next PROMPT FOCUS should move off the title prompt entirely. The recurring llm_error count (23/14d) is the field that shows what is actually costing posts.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -82,7 +83,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 25,
+  "last_cycle_seconds": 28,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2803,7 +2804,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-17T18:27:27.421868+00:00",
+    "checked_at": "2026-11-17T19:27:34.444382+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3555,40 +3556,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-17T18:27:50.622540+00:00",
+    "last_run": "2026-11-17T19:28:01.028629+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-17T18:27:50.909009+00:00",
+    "last_run": "2026-11-17T19:28:01.276198+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-11-17T06:30:42.379102+00:00",
-        "ok": true
-      },
-      {
-        "id": 5012890,
-        "at": "2026-11-17T06:30:42.379102+00:00",
-        "ok": true
-      },
-      {
-        "id": 5019261,
-        "at": "2026-11-17T06:30:42.379102+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-17T07:32:46.244227+00:00",
-        "ok": true
-      },
       {
         "id": 4368781,
         "at": "2026-11-17T07:32:46.244227+00:00",
@@ -3800,11 +3781,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-17T18:27:50.909009+00:00",
-        "ok": true
-      },
-      {
         "id": 4971614,
         "at": "2026-11-17T18:27:50.909009+00:00",
         "ok": true
@@ -3818,6 +3794,31 @@
         "id": 4602729,
         "at": "2026-11-17T18:27:50.909009+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-17T19:28:01.276198+00:00",
+        "ok": true
+      },
+      {
+        "id": 4996282,
+        "at": "2026-11-17T19:28:01.276198+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-17T19:28:01.276198+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-11-17T19:28:01.276198+00:00",
+        "ok": true
+      },
+      {
+        "id": 5032226,
+        "at": "2026-11-17T19:28:01.276198+00:00",
+        "ok": true
       }
     ],
     "published_total": 54,
@@ -3825,7 +3826,7 @@
     "unverified": 4,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 12.0
+    "oldest_check_age_hours": 11.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

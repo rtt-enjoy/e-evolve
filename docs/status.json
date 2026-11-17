@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-17T21:27:25.974418+00:00",
-  "total_runs": 2607,
+  "last_run": "2026-11-17T22:27:29.936931+00:00",
+  "total_runs": 2608,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,64 +33,76 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt focus (weak_title) costs 1 draft per 14 days against 23 lost to llm_error, and fifteen unmerged title-prompt branches already exist \u2014 a sixteenth would add nothing measurable and is exactly what this cycle's own suggestion asks the owner to prevent.",
+    "summary": "No change proposed: the one prompt-measured defect (weak_title, 1 draft in 14 days, finding 'title has ALL-CAPS word') is already covered by fifteen unmerged branches, and the dominant draft loss (llm_error=59, 23 in 14 days) lives in bot/llm.py which is protected \u2014 adding a sixteenth title variant would repeat a known dead end.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge exactly one title-prompt branch and close the other fourteen",
-        "description": "weak_title costs ~1 draft per 14 days. Fifteen variants of the same one-line edit are parked unmerged; this cycle refuses to add a sixteenth.",
-        "owner_action": "Pick the smallest branch containing a concrete ALL-CAPS/acronym example, merge it, and close the rest citing it.",
+        "title": "Merge exactly one title-prompt branch, close the other fourteen",
+        "description": "Unblocks the only measured prompt defect without a sixteenth variant; frees future cycles to look at fresh evidence instead of the title gate.",
+        "owner_action": "Pick the smallest open branch containing a concrete ALL-CAPS/acronym example, merge it, close the rest citing it.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Diff the fifteen evolve/* title branches; identify which one edits _SYSTEM (not _revise_title) and includes a concrete before/after example of an acronym vs. a shouted word.",
-          "Step 2: Merge that one; close the other fourteen with a pointer, so the next cycle's PROMPT FOCUS moves off the title prompt entirely.",
-          "Step 3: Separately decide the llm_error policy: glm-5.3-flash lost 23 post drafts in 14 days while the atria fallback is configured and live \u2014 tightening failover in bot/llm.py (owner-only, protected) is the one change that recovers roughly 25 posts per fortnight, each carrying the tip footer."
+          "Step 1: Diff the fifteen evolve/* title branches; prefer the deterministic one (2026-11-15, 'un-shout rescue') since it fixes the defect without an LLM call.",
+          "Step 2: Merge that one; close the other fourteen with a pointer so the ledger records why.",
+          "Step 3: Separately decide the llm_error failover policy: glm-5.3-flash lost 23 post drafts in 14 days while the atria fallback is configured and live \u2014 tightening failover in bot/llm.py (owner-only) recovers roughly 25 posts per fortnight, each carrying the tip footer."
+        ]
+      },
+      {
+        "title": "Complete receive-path coverage so reach steering stands on verified ground",
+        "description": "coverage_complete is False with 5 posts unobserved; until it is true, article_interest steering optimizes reach the checklist still calls provisional.",
+        "owner_action": "None required beyond letting cycles run \u2014 but confirm the next 1-2 cycles show receipt_check.covered reaching 55 and coverage_complete=true rather than the rotation stalling on 429s.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Check next cycle's receipt_check.covered \u2014 it should rise above 50; if it stalls at 50, the dev.to 429 throttling (visible in backfill.skipped) is starving the verifier too.",
+          "Step 2: If stalled for 3+ cycles, consider lowering receipt_check max_per_cycle in config so each cycle samples fewer posts and completes coverage despite the IP throttle."
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach into a live receive path, via the prompt with the highest measured cost",
+    "direction": "Step 4 \u2014 reach via prompt upgrades, one step per cycle; but every step the PROMPT FOCUS names is already parked unmerged, and doctrine 'Replace a rule, don't stack' forbids another variant of the same edit.",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime, llm_error=59; last 14 days weak_title=1 vs llm_error=23",
-      "article_rejects.last = 'weak_title': gate finding 'title has ALL-CAPS word' x1",
-      "suggestions[0] already tells the owner: 'a sixteenth from this cycle would add nothing measurable and risks stacking redundant rules if several land'"
+      "article_rejects.counts: weak_title=15 lifetime but 1 in the last 14 days \u2014 the prompt-focus signal is nearly exhausted",
+      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x1 \u2014 a deterministic rescue already exists as the open branch 2026-11-15 'deterministic un-shout rescue'",
+      "article_rejects.counts: llm_error=59 (23 in 14 days) \u2014 the real cost, owned by bot/llm.py (protected) and its fallback config, not by any prompt in the ledger",
+      " Fifteen open branches already propose the identical class of edit to _SYSTEM/_revise_title; the last cycle's own suggestion said 'this cycle refuses to add a sixteenth'",
+      "receipt_check.covered/published_total = 50/55, coverage_complete=False \u2014 receive-path verification is still incomplete, so reach steering is provisional"
     ],
-    "money_path": "none (maintenance) \u2014 reach-only work, and this cycle the reach cost is dominated by the engine, not a prompt",
-    "verify": "If the owner instead merges one existing title branch: article_rejects.counts.weak_title should stop incrementing over the next window. The 23 llm_error losses need a bot/llm.py failover change, which is owner-only (protected file) and cannot be proposed from here.",
+    "money_path": "none this cycle \u2014 merging any one of the fifteen parked branches would ship the change; a new sixteenth variant would not.",
+    "verify": "No change to verify. After the owner merges one title branch and closes the rest, weak_title in the 14-day window should fall to 0 and the PROMPT FOCUS should move off the title prompt.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Cached Row Heights Lie: Stale ResizeObserver Measurements",
-        "url": "https://dev.to/robust_true_try/cached-row-heights-lie-stale-resizeobserver-measurements-5ha2",
-        "estimated_usd": 0.0,
-        "source_url": "https://dev.to/robust_true_try/your-per-item-resizeobserver-is-a-layout-feedback-loop-29n1",
-        "source_title": "Your Per-Item ResizeObserver Is a Layout Feedback Loop",
-        "followup_of": "Your Per-Item ResizeObserver Is a Layout Feedback Loop"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge exactly one title-prompt branch and close the other fourteen",
-      "description": "weak_title costs ~1 draft per 14 days. Fifteen variants of the same one-line edit are parked unmerged; this cycle refuses to add a sixteenth.",
-      "owner_action": "Pick the smallest branch containing a concrete ALL-CAPS/acronym example, merge it, and close the rest citing it.",
+      "title": "Merge exactly one title-prompt branch, close the other fourteen",
+      "description": "Unblocks the only measured prompt defect without a sixteenth variant; frees future cycles to look at fresh evidence instead of the title gate.",
+      "owner_action": "Pick the smallest open branch containing a concrete ALL-CAPS/acronym example, merge it, close the rest citing it.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Diff the fifteen evolve/* title branches; identify which one edits _SYSTEM (not _revise_title) and includes a concrete before/after example of an acronym vs. a shouted word.",
-        "Step 2: Merge that one; close the other fourteen with a pointer, so the next cycle's PROMPT FOCUS moves off the title prompt entirely.",
-        "Step 3: Separately decide the llm_error policy: glm-5.3-flash lost 23 post drafts in 14 days while the atria fallback is configured and live \u2014 tightening failover in bot/llm.py (owner-only, protected) is the one change that recovers roughly 25 posts per fortnight, each carrying the tip footer."
+        "Step 1: Diff the fifteen evolve/* title branches; prefer the deterministic one (2026-11-15, 'un-shout rescue') since it fixes the defect without an LLM call.",
+        "Step 2: Merge that one; close the other fourteen with a pointer so the ledger records why.",
+        "Step 3: Separately decide the llm_error failover policy: glm-5.3-flash lost 23 post drafts in 14 days while the atria fallback is configured and live \u2014 tightening failover in bot/llm.py (owner-only) recovers roughly 25 posts per fortnight, each carrying the tip footer."
       ],
-      "discovered_at": "2026-11-17T18:27:50.299966+00:00"
+      "discovered_at": "2026-11-17T22:27:57.742718+00:00"
+    },
+    {
+      "title": "Complete receive-path coverage so reach steering stands on verified ground",
+      "description": "coverage_complete is False with 5 posts unobserved; until it is true, article_interest steering optimizes reach the checklist still calls provisional.",
+      "owner_action": "None required beyond letting cycles run \u2014 but confirm the next 1-2 cycles show receipt_check.covered reaching 55 and coverage_complete=true rather than the rotation stalling on 429s.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Check next cycle's receipt_check.covered \u2014 it should rise above 50; if it stalls at 50, the dev.to 429 throttling (visible in backfill.skipped) is starving the verifier too.",
+        "Step 2: If stalled for 3+ cycles, consider lowering receipt_check max_per_cycle in config so each cycle samples fewer posts and completes coverage despite the IP throttle."
+      ],
+      "discovered_at": "2026-11-17T22:27:57.742718+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 43,
+  "last_cycle_seconds": 28,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2808,7 +2820,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-17T21:27:26.527822+00:00",
+    "checked_at": "2026-11-17T22:27:30.533780+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3560,7 +3572,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-17T21:28:08.578050+00:00",
+    "last_run": "2026-11-17T22:27:57.913293+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3570,30 +3582,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-17T21:28:08.726907+00:00",
+    "last_run": "2026-11-17T22:27:58.046793+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4568987,
-        "at": "2026-11-17T09:30:27.249129+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-11-17T09:30:27.249129+00:00",
-        "ok": true
-      },
-      {
-        "id": 5027243,
-        "at": "2026-11-17T09:30:27.249129+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-11-17T10:32:45.675643+00:00",
-        "ok": true
-      },
       {
         "id": 4820684,
         "at": "2026-11-17T10:32:45.675643+00:00",
@@ -3800,11 +3792,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-17T21:28:08.726907+00:00",
-        "ok": true
-      },
-      {
         "id": 4562180,
         "at": "2026-11-17T21:28:08.726907+00:00",
         "ok": true
@@ -3823,6 +3810,31 @@
         "id": 5043579,
         "at": "2026-11-17T21:28:08.726907+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-17T22:27:58.046793+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-17T22:27:58.046793+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-17T22:27:58.046793+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-11-17T22:27:58.046793+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-11-17T22:27:58.046793+00:00",
+        "ok": true
       }
     ],
     "published_total": 55,
@@ -3830,7 +3842,7 @@
     "unverified": 5,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 12.0
+    "oldest_check_age_hours": 11.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3850,7 +3862,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 3
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

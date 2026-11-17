@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-17T20:27:21.914000+00:00",
-  "total_runs": 2606,
+  "last_run": "2026-11-17T21:27:25.974418+00:00",
+  "total_runs": 2607,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,12 +33,12 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt-graded defect (weak_title) costs 1 draft per 14 days, the gate finding behind it ('title has ALL-CAPS word') already has fifteen parked unmerged branches covering exactly this edit, and the dominant loss (llm_error=23 in 14 days) lives in the protected bot/llm.py where I may not edit.",
+    "summary": "No change proposed: the prompt focus (weak_title) costs 1 draft per 14 days against 23 lost to llm_error, and fifteen unmerged title-prompt branches already exist \u2014 a sixteenth would add nothing measurable and is exactly what this cycle's own suggestion asks the owner to prevent.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Merge exactly one title-prompt branch and close the other fourteen",
-        "description": "weak_title costs ~1 draft per 14 days. Fifteen variants of the same one-line edit are parked unmerged; a sixteenth from this cycle would add nothing measurable and risks stacking redundant rules if several land.",
+        "description": "weak_title costs ~1 draft per 14 days. Fifteen variants of the same one-line edit are parked unmerged; this cycle refuses to add a sixteenth.",
         "owner_action": "Pick the smallest branch containing a concrete ALL-CAPS/acronym example, merge it, and close the rest citing it.",
         "secret_needed": null,
         "how_to": [
@@ -48,17 +48,14 @@
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach into a live receive path; PROMPT FOCUS discipline: upgrade prompts gradually, one step per cycle, and not where the measured gain is already gone",
+    "direction": "Step 4 \u2014 reach into a live receive path, via the prompt with the highest measured cost",
     "evidence": [
-      "article_rejects.counts: llm_error=59, weak_title=15 lifetime; drafts lost to a prompt in the last 14 days = weak_title=1 only",
+      "article_rejects.counts: weak_title=15 lifetime, llm_error=59; last 14 days weak_title=1 vs llm_error=23",
       "article_rejects.last = 'weak_title': gate finding 'title has ALL-CAPS word' x1",
-      "PROMPT LEDGER: drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=23, empty_draft=2",
-      "suggestions already on record: 'Merge exactly one title-prompt branch and close the other fourteen' \u2014 owner_action pending",
-      "PRIOR PROPOSALS: 14 open branches, every one an edit to the article-draft TITLE rules or _revise_title, none merged",
-      "receipt_check.coverage_complete = False; backfill.skipped shows five 429s \u2014 the reach loop is throttle-bound this cycle, not prompt-bound"
+      "suggestions[0] already tells the owner: 'a sixteenth from this cycle would add nothing measurable and risks stacking redundant rules if several land'"
     ],
-    "money_path": "none (maintenance/no change). The one weak_title loss per fortnight is negligible against the ~25 drafts per fortnight lost to llm_error, which only the owner can fix in bot/llm.py (protected, failover to the already-configured atria fallback).",
-    "verify": "Next cycle: weak_title in the 14-day prompt-loss window should stay at or near 0 regardless; the meaningful number is llm_error falling if the owner merges the llm failover change named in the existing suggestion.",
+    "money_path": "none (maintenance) \u2014 reach-only work, and this cycle the reach cost is dominated by the engine, not a prompt",
+    "verify": "If the owner instead merges one existing title branch: article_rejects.counts.weak_title should stop incrementing over the next window. The 23 llm_error losses need a bot/llm.py failover change, which is owner-only (protected file) and cannot be proposed from here.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -66,26 +63,14 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "ctf-bounty",
+        "platform": "dev.to",
         "success": true,
+        "title": "Cached Row Heights Lie: Stale ResizeObserver Measurements",
+        "url": "https://dev.to/robust_true_try/cached-row-heights-lie-stale-resizeobserver-measurements-5ha2",
         "estimated_usd": 0.0,
-        "listed": 20
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 65,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (65 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "source_url": "https://dev.to/robust_true_try/your-per-item-resizeobserver-is-a-layout-feedback-loop-29n1",
+        "source_title": "Your Per-Item ResizeObserver Is a Layout Feedback Loop",
+        "followup_of": "Your Per-Item ResizeObserver Is a Layout Feedback Loop"
       }
     ],
     "total_usd": 0.0
@@ -93,7 +78,7 @@
   "suggestions": [
     {
       "title": "Merge exactly one title-prompt branch and close the other fourteen",
-      "description": "weak_title costs ~1 draft per 14 days. Fifteen variants of the same one-line edit are parked unmerged; a sixteenth from this cycle would add nothing measurable and risks stacking redundant rules if several land.",
+      "description": "weak_title costs ~1 draft per 14 days. Fifteen variants of the same one-line edit are parked unmerged; this cycle refuses to add a sixteenth.",
       "owner_action": "Pick the smallest branch containing a concrete ALL-CAPS/acronym example, merge it, and close the rest citing it.",
       "secret_needed": null,
       "how_to": [
@@ -105,7 +90,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 138,
+  "last_cycle_seconds": 43,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -195,7 +180,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-11-17",
+    "date": "2026-11-18",
     "published": 1,
     "window": "06:00-12:00 UTC+9"
   },
@@ -2552,7 +2537,8 @@
       "github.blog/news-insights/company-news/github-availability-report-october-2026",
       "dev.to/robust_true_try/why-linkedin-outgrew-argo-cd-and-what-it-means-for-your-gitops-1nj1",
       "jakub.jankiewicz.org/blog/ai-code-open-source",
-      "infoq.com/news/2026/11/github-pull-requests-rebuild"
+      "infoq.com/news/2026/11/github-pull-requests-rebuild",
+      "dev.to/robust_true_try/your-per-item-resizeobserver-is-a-layout-feedback-loop-29n1"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -2650,7 +2636,8 @@
       "github availability report october 2026",
       "linkedin outgrew argo cd mean gitop",
       "all ai generated code open source",
-      "github rebuild copilot app s diff surface open million line pull request jank"
+      "github rebuild copilot app s diff surface open million line pull request jank",
+      "per item resizeobserver layout feedback loop"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -2748,13 +2735,16 @@
       "github goes down ci shouldn t go",
       "drift problem break gitop scale",
       "ai generated code has license",
-      "per item resizeobserver layout feedback loop"
+      "per item resizeobserver layout feedback loop",
+      "cached row height lie stale resizeobserver measurement"
     ],
     "followed_up_ids": [
       4489474,
-      5025764
+      5025764,
+      5050733
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/your-per-item-resizeobserver-is-a-layout-feedback-loop-29n1",
       "https://dev.to/robust_true_try/your-ai-generated-code-has-no-license-2edl",
       "https://dev.to/robust_true_try/when-github-goes-down-your-ci-shouldnt-go-with-it-2mm1",
       "https://dev.to/robust_true_try/this-week-git-security-fixes-agent-skills-and-running-ai-at-scale-2g0j",
@@ -2818,7 +2808,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-17T20:27:22.592591+00:00",
+    "checked_at": "2026-11-17T21:27:26.527822+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3205,11 +3195,11 @@
   "last_evolution_branch": null,
   "evolution_pending_review": false,
   "article_stats": {
-    "count": 53,
-    "total_views": 6519,
-    "avg_views": 123.0,
+    "count": 54,
+    "total_views": 6611,
+    "avg_views": 122.4,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 3688,
+    "best_views": 3708,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -3225,8 +3215,8 @@
       {
         "archetype": "problem-workaround",
         "count": 11,
-        "avg_engagement": 438.1,
-        "avg_views": 419.9,
+        "avg_engagement": 439.9,
+        "avg_views": 421.7,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -3245,10 +3235,17 @@
       },
       {
         "archetype": "other",
-        "count": 18,
-        "avg_engagement": 65.4,
-        "avg_views": 36.2,
+        "count": 19,
+        "avg_engagement": 64.7,
+        "avg_views": 37.1,
         "best_title": "Your AI Agent Can't See What It Clicks"
+      },
+      {
+        "archetype": "surprising-behavior",
+        "count": 9,
+        "avg_engagement": 62.1,
+        "avg_views": 42.7,
+        "best_title": "Your Kimi K3.1 Pro Responses Truncate Silently"
       },
       {
         "archetype": "engineering-culture",
@@ -3258,23 +3255,16 @@
         "best_title": "AI Code Feels Done Until You Refactor It"
       },
       {
-        "archetype": "surprising-behavior",
-        "count": 9,
-        "avg_engagement": 61.0,
-        "avg_views": 41.6,
-        "best_title": "Your Kimi K3.1 Pro Responses Truncate Silently"
-      },
-      {
         "archetype": "security-privacy",
         "count": 6,
-        "avg_engagement": 41.7,
-        "avg_views": 41.7,
+        "avg_engagement": 43.3,
+        "avg_views": 43.3,
         "best_title": "Your macOS Git Still Trusts Compromised Certificates"
       }
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "security-privacy",
-    "sample_size": 53
+    "sample_size": 54
   },
   "article_rejects": {
     "last_reason": "weak_title",
@@ -3570,7 +3560,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-17T20:29:39.431700+00:00",
+    "last_run": "2026-11-17T21:28:08.578050+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3580,30 +3570,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-17T20:29:39.559610+00:00",
+    "last_run": "2026-11-17T21:28:08.726907+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4727685,
-        "at": "2026-11-17T08:30:29.440090+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-11-17T08:30:29.440090+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-17T08:30:29.440090+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-11-17T09:30:27.249129+00:00",
-        "ok": true
-      },
       {
         "id": 4568987,
         "at": "2026-11-17T09:30:27.249129+00:00",
@@ -3810,11 +3780,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-17T20:29:39.559610+00:00",
-        "ok": true
-      },
-      {
         "id": 4937139,
         "at": "2026-11-17T20:29:39.559610+00:00",
         "ok": true
@@ -3833,11 +3798,36 @@
         "id": 5019261,
         "at": "2026-11-17T20:29:39.559610+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-17T21:28:08.726907+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-17T21:28:08.726907+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-11-17T21:28:08.726907+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-17T21:28:08.726907+00:00",
+        "ok": true
+      },
+      {
+        "id": 5043579,
+        "at": "2026-11-17T21:28:08.726907+00:00",
+        "ok": true
       }
     ],
-    "published_total": 54,
+    "published_total": 55,
     "covered": 50,
-    "unverified": 4,
+    "unverified": 5,
     "coverage_complete": false,
     "known_without_footer": 0,
     "oldest_check_age_hours": 12.0
@@ -3860,7 +3850,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 3
     },
     "fallback": {
       "provider": "atria",

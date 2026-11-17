@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-17T07:29:59.656015+00:00",
-  "total_runs": 2593,
+  "last_run": "2026-11-17T08:30:08.005947+00:00",
+  "total_runs": 2594,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -32,78 +32,55 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt focus (weak_title) cost exactly 1 draft in 14 days, and that defect is already covered by 15 open prior proposals on the same two prompts; merging none of them means a 16th variant would add nothing measurable, while the real cost (llm_error=23, empty_draft=2 in the window) is engine-side and prompt edits cannot touch it.",
+    "summary": "No change proposed: the only measured prompt defect (weak_title, ALL-CAPS, 1 draft in 14 days) already has 15 open, unmerged review branches covering exactly this fix, so another title edit would be a duplicate dead end; the larger reject counts (llm_error=23, empty_draft=2 in window) are engine failures the ledger says a prompt edit cannot fix.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the 15 open title-prompt branches",
-        "description": "The ALL-CAPS weak_title defect has a stack of small, reviewed fixes already written and parked; any one of them (the 2026-11-15 deterministic un-shout rescue is the most targeted, since it fixes the one measured defect without an LLM call) closes the finding. Leaving all of them open means the same single-draft defect keeps being re-proposed from scratch each cycle.",
-        "owner_action": "Review and merge one of the open evolve/* branches \u2014 the deterministic un-shout rescue (2026-11-15) is the narrowest: it fixes the measured defect in code, costs no LLM call, and leaves every gate unchanged.",
+        "title": "Merge one of the 15 open title-prompt branches and close the rest",
+        "description": "Closes the one measured prompt defect without this engine re-proposing it each cycle; the deterministic un-shout rescue fixes the ALL-CAPS finding in code at zero LLM cost and leaves every gate unchanged.",
+        "owner_action": "Review and merge the 2026-11-15 'deterministic un-shout rescue' branch against bot/earning/articles.py, then close the other 14 title branches as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the 2026-11-15 branch 'deterministic un-shout rescue' and read its diff against bot/earning/articles.py.",
-          "Step 2: If acceptable, merge it and close the other 14 title-prompt branches as superseded, so future cycles stop re-proposing the same fix.",
-          "Step 3: Confirm in the next 14-day prompt window that weak_title stays at or near 0."
+          "Step 1: Open the 2026-11-15 evolve/* branch and read its diff against bot/earning/articles.py.",
+          "Step 2: If acceptable, merge it and mark the other 14 title-prompt branches superseded.",
+          "Step 3: Confirm over the next 14-day window that weak_title stays at or near 0."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade prompts one step per cycle, aimed at the prompt focus; stepping aside when the evidence no longer supports an edit",
+    "direction": "Checklist step 4 \u2014 reach via prompt upgrades; superseded by the dead-end rule against repeating PRIOR PROPOSALS",
     "evidence": [
-      "article_rejects.counts: weak_title=1 in the last 14 days ('title has ALL-CAPS word' x1)",
-      "Drafts lost to the engine in the same window: llm_error=23, empty_draft=2 \u2014 not fixable by a prompt edit",
-      "All 15 prior proposals (2026-11-03 through 2026-11-16) already target exactly this defect across _SYSTEM, _revise_title, and deterministic rescue; none merged",
-      "article_interest confirms the steering signal is healthy: problem-workaround n=11 avg=438.1, and preferred_archetypes() returns it \u2014 the reach loop is publishing into the shape readers prefer",
-      "receipt_check.covered/published_total = 50/54, known_without_footer = 0 \u2014 receive path coverage is building on its own schedule, no code fix needed"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "Gate finding: 'title has ALL-CAPS word' x1 (only prompt-attributable reject in the 14-day window)",
+      "weak_title lost 1 draft(s) in 14 days; llm_error=23, empty_draft=2 are engine-side",
+      "PRIOR PROPOSALS: 15 distinct open branches on bot/earning/articles.py title prompts, including a 2026-11-15 deterministic un-shout rescue and multiple _revise_title and _SYSTEM title-rule edits",
+      "status.suggestions already names merging the 2026-11-15 un-shout branch as the owner action that closes this finding"
     ],
-    "money_path": "none (maintenance) \u2014 declining to edit the prompt this cycle; the reach path (article into preferred archetype with footer) is running unimpaired",
-    "verify": "Next cycle's prompt-ledger window: if weak_title rises above ~1-2 in 14 days and the ALL-CAPS finding repeats, the accumulated examples across the open proposals give the reviewer a ready-made merged fix; otherwise confirm article_daily.published stays 1 per morning",
+    "money_path": "none (no change this cycle)",
+    "verify": "After the owner merges one of the open title branches (the 2026-11-15 deterministic un-shout rescue is the narrowest), article_rejects.counts.weak_title should stop growing and the 'title has ALL-CAPS word' finding should not recur in the next 14-day window.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 18
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 122
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 66,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (66 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one of the 15 open title-prompt branches",
-      "description": "The ALL-CAPS weak_title defect has a stack of small, reviewed fixes already written and parked; any one of them (the 2026-11-15 deterministic un-shout rescue is the most targeted, since it fixes the one measured defect without an LLM call) closes the finding. Leaving all of them open means the same single-draft defect keeps being re-proposed from scratch each cycle.",
-      "owner_action": "Review and merge one of the open evolve/* branches \u2014 the deterministic un-shout rescue (2026-11-15) is the narrowest: it fixes the measured defect in code, costs no LLM call, and leaves every gate unchanged.",
+      "title": "Merge one of the 15 open title-prompt branches and close the rest",
+      "description": "Closes the one measured prompt defect without this engine re-proposing it each cycle; the deterministic un-shout rescue fixes the ALL-CAPS finding in code at zero LLM cost and leaves every gate unchanged.",
+      "owner_action": "Review and merge the 2026-11-15 'deterministic un-shout rescue' branch against bot/earning/articles.py, then close the other 14 title branches as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the 2026-11-15 branch 'deterministic un-shout rescue' and read its diff against bot/earning/articles.py.",
-        "Step 2: If acceptable, merge it and close the other 14 title-prompt branches as superseded, so future cycles stop re-proposing the same fix.",
-        "Step 3: Confirm in the next 14-day prompt window that weak_title stays at or near 0."
+        "Step 1: Open the 2026-11-15 evolve/* branch and read its diff against bot/earning/articles.py.",
+        "Step 2: If acceptable, merge it and mark the other 14 title-prompt branches superseded.",
+        "Step 3: Confirm over the next 14-day window that weak_title stays at or near 0."
       ],
-      "discovered_at": "2026-11-17T07:30:26.998352+00:00"
+      "discovered_at": "2026-11-17T08:30:28.804886+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 167,
+  "last_cycle_seconds": 22,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2816,7 +2793,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-17T07:30:00.160312+00:00",
+    "checked_at": "2026-11-17T08:30:08.696926+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3568,7 +3545,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-17T07:32:46.033756+00:00",
+    "last_run": "2026-11-17T08:30:29.050604+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3578,30 +3555,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-17T07:32:46.244227+00:00",
+    "last_run": "2026-11-17T08:30:29.440090+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4568987,
-        "at": "2026-11-16T19:23:46.443302+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-11-16T19:23:46.443302+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-11-16T20:23:50.940894+00:00",
-        "ok": true
-      },
-      {
-        "id": 5027243,
-        "at": "2026-11-16T20:23:50.940894+00:00",
-        "ok": true
-      },
       {
         "id": 4579420,
         "at": "2026-11-16T21:26:38.961147+00:00",
@@ -3808,11 +3765,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-17T07:32:46.244227+00:00",
-        "ok": true
-      },
-      {
         "id": 4937139,
         "at": "2026-11-17T07:32:46.244227+00:00",
         "ok": true
@@ -3831,6 +3783,31 @@
         "id": 5043579,
         "at": "2026-11-17T07:32:46.244227+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-17T08:30:29.440090+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-17T08:30:29.440090+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-17T08:30:29.440090+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-17T08:30:29.440090+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-11-17T08:30:29.440090+00:00",
+        "ok": true
       }
     ],
     "published_total": 54,
@@ -3838,7 +3815,7 @@
     "unverified": 4,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 12.1
+    "oldest_check_age_hours": 11.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3858,7 +3835,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

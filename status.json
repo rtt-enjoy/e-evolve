@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-17T19:27:34.044941+00:00",
-  "total_runs": 2605,
+  "last_run": "2026-11-17T20:27:21.914000+00:00",
+  "total_runs": 2606,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,57 +33,79 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt losing drafts (weak_title, 1 draft in 14 days, gate finding 'title has ALL-CAPS word' x1) already has fourteen open, unmerged proposals covering exactly this edit, and the 90-reject total is dominated by llm_error=59 / 23-in-14-days, which is engine failover in protected bot/llm.py \u2014 outside what a cycle may edit. A fifteenth variant would add redundant rules to a prompt the owner has not yet merged once.",
+    "summary": "No change proposed: the only prompt-graded defect (weak_title) costs 1 draft per 14 days, the gate finding behind it ('title has ALL-CAPS word') already has fifteen parked unmerged branches covering exactly this edit, and the dominant loss (llm_error=23 in 14 days) lives in the protected bot/llm.py where I may not edit.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Merge exactly one title-prompt branch and close the other fourteen",
-        "description": "weak_title costs ~1 draft per 14 days. Fifteen variants of the same one-line edit are parked unmerged; every additional cycle on this prompt is spent where the measured gain is already gone, and the branches risk stacking redundant rules if more than one lands.",
+        "description": "weak_title costs ~1 draft per 14 days. Fifteen variants of the same one-line edit are parked unmerged; a sixteenth from this cycle would add nothing measurable and risks stacking redundant rules if several land.",
         "owner_action": "Pick the smallest branch containing a concrete ALL-CAPS/acronym example, merge it, and close the rest citing it.",
         "secret_needed": null,
         "how_to": [
           "Step 1: Diff the fifteen evolve/* title branches; identify which one edits _SYSTEM (not _revise_title) and includes a concrete before/after example of an acronym vs. a shouted word.",
           "Step 2: Merge that one; close the other fourteen with a pointer, so the next cycle's PROMPT FOCUS moves off the title prompt entirely.",
-          "Step 3: Separately decide the llm_error policy: glm-5.3-flash lost 23 post drafts in 14 days while the atria fallback is configured and live \u2014 tightening failover in bot/llm.py (owner-only, protected) is the one change that recovers roughly 25 posts per fortnight."
+          "Step 3: Separately decide the llm_error policy: glm-5.3-flash lost 23 post drafts in 14 days while the atria fallback is configured and live \u2014 tightening failover in bot/llm.py (owner-only, protected) is the one change that recovers roughly 25 posts per fortnight, each carrying the tip footer."
         ]
       }
     ],
-    "direction": "Binding step 4 \u2014 reach into a live receive path; PROMPT FOCUS weak_title, but the step's own evidence rules say the measured gain there is exhausted",
+    "direction": "Step 4 \u2014 reach into a live receive path; PROMPT FOCUS discipline: upgrade prompts gradually, one step per cycle, and not where the measured gain is already gone",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime but 'Drafts lost to a prompt (last 14 days): weak_title=1'",
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "Gate findings behind it: 'title has ALL-CAPS word' x1",
-      "'Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=23, empty_draft=2'",
-      "article_rejects.counts (total 90): llm_error=59",
-      "PRIOR PROPOSALS: 14 open branches, all editing the title prompt in articles.py, none merged",
-      "status.suggestions already names: 'Merge exactly one title-prompt branch and close the other fourteen'"
+      "article_rejects.counts: llm_error=59, weak_title=15 lifetime; drafts lost to a prompt in the last 14 days = weak_title=1 only",
+      "article_rejects.last = 'weak_title': gate finding 'title has ALL-CAPS word' x1",
+      "PROMPT LEDGER: drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=23, empty_draft=2",
+      "suggestions already on record: 'Merge exactly one title-prompt branch and close the other fourteen' \u2014 owner_action pending",
+      "PRIOR PROPOSALS: 14 open branches, every one an edit to the article-draft TITLE rules or _revise_title, none merged",
+      "receipt_check.coverage_complete = False; backfill.skipped shows five 429s \u2014 the reach loop is throttle-bound this cycle, not prompt-bound"
     ],
-    "money_path": "none this cycle \u2014 a 15th duplicate title-prompt edit would not move reach until the owner merges one of the fourteen existing branches; the larger lever (llm_error failover, ~25 posts per fortnight) is in protected bot/llm.py",
-    "verify": "No change shipped. After the owner merges one title branch and closes the rest, weak_title in the 14-day window should fall to 0; the next PROMPT FOCUS should move off the title prompt entirely. The recurring llm_error count (23/14d) is the field that shows what is actually costing posts.",
+    "money_path": "none (maintenance/no change). The one weak_title loss per fortnight is negligible against the ~25 drafts per fortnight lost to llm_error, which only the owner can fix in bot/llm.py (protected, failover to the already-configured atria fallback).",
+    "verify": "Next cycle: weak_title in the 14-day prompt-loss window should stay at or near 0 regardless; the meaningful number is llm_error falling if the owner merges the llm failover change named in the existing suggestion.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "ctf-bounty",
+        "success": true,
+        "estimated_usd": 0.0,
+        "listed": 20
+      },
+      {
+        "platform": "research-feed",
+        "success": true,
+        "estimated_usd": 0.0,
+        "listed": 123
+      },
+      {
+        "platform": "code_techs",
+        "success": true,
+        "opportunity_count": 65,
+        "pursued_count": 0,
+        "estimated_usd": 0.0,
+        "target_usd_per_day": 10.0,
+        "title": "Code-tech queue refreshed (65 leads, 0 pursued)",
+        "url": "docs/code-tech-opportunities.md"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Merge exactly one title-prompt branch and close the other fourteen",
-      "description": "weak_title costs ~1 draft per 14 days. Fifteen variants of the same one-line edit are parked unmerged; every additional cycle on this prompt is spent where the measured gain is already gone, and the branches risk stacking redundant rules if more than one lands.",
+      "description": "weak_title costs ~1 draft per 14 days. Fifteen variants of the same one-line edit are parked unmerged; a sixteenth from this cycle would add nothing measurable and risks stacking redundant rules if several land.",
       "owner_action": "Pick the smallest branch containing a concrete ALL-CAPS/acronym example, merge it, and close the rest citing it.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Diff the fifteen evolve/* title branches; identify which one edits _SYSTEM (not _revise_title) and includes a concrete before/after example of an acronym vs. a shouted word.",
         "Step 2: Merge that one; close the other fourteen with a pointer, so the next cycle's PROMPT FOCUS moves off the title prompt entirely.",
-        "Step 3: Separately decide the llm_error policy: glm-5.3-flash lost 23 post drafts in 14 days while the atria fallback is configured and live \u2014 tightening failover in bot/llm.py (owner-only, protected) is the one change that recovers roughly 25 posts per fortnight."
+        "Step 3: Separately decide the llm_error policy: glm-5.3-flash lost 23 post drafts in 14 days while the atria fallback is configured and live \u2014 tightening failover in bot/llm.py (owner-only, protected) is the one change that recovers roughly 25 posts per fortnight, each carrying the tip footer."
       ],
       "discovered_at": "2026-11-17T18:27:50.299966+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 28,
+  "last_cycle_seconds": 138,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -405,14 +427,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.957
+          "recency": 0.956
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-12T13:05:27+00:00",
         "discovered_at": "2026-11-17T17:29:01.844920+00:00",
-        "age_hours": 124.4,
+        "age_hours": 127.4,
         "reason": "AI Connect is the open source SDK of TensorPass for websites. Add an AI chat, a search bar that answers or an AI mode that runs on each\u2026",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -420,7 +442,7 @@
         "manual_setup": "",
         "verified_note": "",
         "pursued": false,
-        "is_new": true
+        "is_new": false
       },
       {
         "title": "Open-source the tool and take sponsorship on the repo",
@@ -483,6 +505,36 @@
         "is_new": false
       },
       {
+        "title": "I built my own licence server so a stranger could pay me while I slept",
+        "url": "https://coolsoftware.medium.com/i-built-my-own-licence-server-so-a-stranger-could-pay-me-while-i-slept-3e67d8d33d36",
+        "source": "medium",
+        "buyer": "Medium",
+        "kind": "asset",
+        "score": 58,
+        "score_parts": {
+          "owner_action": 0.6,
+          "receive_path": 0.2,
+          "identity_cost": 0.6,
+          "zero_budget": 0.6,
+          "setup_burden": 1.0,
+          "recency": 1.0
+        },
+        "value_usd": null,
+        "value_basis": "none",
+        "value_note": "",
+        "posted_at": "2026-11-17T20:26:01+00:00",
+        "discovered_at": "2026-11-17T20:29:06.315356+00:00",
+        "age_hours": 0.1,
+        "reason": "What it takes for a solo developer to sell a Windows app: payments, keys, emails that land in junk, and the one file I can never lose",
+        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
+        "codex_prompt": "",
+        "cost_usd": null,
+        "manual_setup": "",
+        "verified_note": "",
+        "pursued": false,
+        "is_new": true
+      },
+      {
         "title": "cashapp/licensee",
         "url": "https://github.com/cashapp/licensee",
         "source": "github",
@@ -495,14 +547,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.993
+          "recency": 0.992
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-16T21:17:25+00:00",
         "discovered_at": "2026-11-14T11:31:53.079061+00:00",
-        "age_hours": 20.2,
+        "age_hours": 23.2,
         "reason": "Gradle plugin which validates the licenses of your dependency graph match what you expect",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -525,14 +577,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.989
+          "recency": 0.988
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-16T10:13:59+00:00",
         "discovered_at": "2026-11-17T13:32:29.341893+00:00",
-        "age_hours": 31.3,
+        "age_hours": 34.3,
         "reason": "\u89c2\u6f9c \u00b7 An Obsidian workbench for subscriptions, focused reading, and knowledge handoff.",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -555,14 +607,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.964
+          "recency": 0.963
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-13T09:08:13+00:00",
         "discovered_at": "2026-11-17T13:32:29.341893+00:00",
-        "age_hours": 104.3,
+        "age_hours": 107.3,
         "reason": "Backdate selective Git commits, randomize working hours timestamps, and fix missed GitHub streak days safely inside VS Code.",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -585,14 +637,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.943
+          "recency": 0.942
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-10T20:27:55+00:00",
         "discovered_at": "2026-11-11T01:26:09.767456+00:00",
-        "age_hours": 165.0,
+        "age_hours": 168.0,
         "reason": "If you sell a desktop app, CLI, plugin or template, you eventually need license keys: one per sale,...",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
@@ -615,45 +667,15 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.867
+          "recency": 0.866
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-01T19:50:56+00:00",
         "discovered_at": "2026-11-05T03:43:22.996857+00:00",
-        "age_hours": 381.6,
+        "age_hours": 384.6,
         "reason": "HN is a fantastic founder community. We, the people, love transparency, numbers, and analyzing bootstrapped business models. What is your\u2026",
-        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
-        "codex_prompt": "",
-        "cost_usd": null,
-        "manual_setup": "",
-        "verified_note": "",
-        "pursued": false,
-        "is_new": false
-      },
-      {
-        "title": "cedar-v/license-manager",
-        "url": "https://github.com/cedar-v/license-manager",
-        "source": "github",
-        "buyer": "tooling, no buyer",
-        "kind": "asset",
-        "score": 54,
-        "score_parts": {
-          "owner_action": 0.6,
-          "receive_path": 0.2,
-          "identity_cost": 0.6,
-          "zero_budget": 0.6,
-          "setup_burden": 1.0,
-          "recency": 0.358
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-09-01T15:21:55+00:00",
-        "discovered_at": "2026-11-14T11:31:53.079061+00:00",
-        "age_hours": 1850.1,
-        "reason": "License Manager is an independent software licensing platform that provides license code generation, distribution, validation, and\u2026",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
         "cost_usd": null,
@@ -693,6 +715,66 @@
         "is_new": false
       },
       {
+        "title": "cedar-v/license-manager",
+        "url": "https://github.com/cedar-v/license-manager",
+        "source": "github",
+        "buyer": "tooling, no buyer",
+        "kind": "asset",
+        "score": 53,
+        "score_parts": {
+          "owner_action": 0.6,
+          "receive_path": 0.2,
+          "identity_cost": 0.6,
+          "zero_budget": 0.6,
+          "setup_burden": 1.0,
+          "recency": 0.357
+        },
+        "value_usd": null,
+        "value_basis": "none",
+        "value_note": "",
+        "posted_at": "2026-09-01T15:21:55+00:00",
+        "discovered_at": "2026-11-14T11:31:53.079061+00:00",
+        "age_hours": 1853.1,
+        "reason": "License Manager is an independent software licensing platform that provides license code generation, distribution, validation, and\u2026",
+        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
+        "codex_prompt": "",
+        "cost_usd": null,
+        "manual_setup": "",
+        "verified_note": "",
+        "pursued": false,
+        "is_new": false
+      },
+      {
+        "title": "Thirty days, zero customers: what the funnel data actually said",
+        "url": "https://dev.to/johnsiebyronstack/thirty-days-zero-customers-what-the-funnel-data-actually-said-3dhj",
+        "source": "devto",
+        "buyer": "dev.to",
+        "kind": "asset",
+        "score": 52,
+        "score_parts": {
+          "owner_action": 0.4,
+          "receive_path": 0.2,
+          "identity_cost": 0.6,
+          "zero_budget": 0.6,
+          "setup_burden": 1.0,
+          "recency": 0.999
+        },
+        "value_usd": null,
+        "value_basis": "none",
+        "value_note": "",
+        "posted_at": "2026-11-17T18:51:06+00:00",
+        "discovered_at": "2026-11-17T20:29:06.315356+00:00",
+        "age_hours": 1.6,
+        "reason": "I shipped a paid product on October 5th. Thirty days later: 3 indexed pages became 91, three months...",
+        "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
+        "codex_prompt": "",
+        "cost_usd": null,
+        "manual_setup": "",
+        "verified_note": "",
+        "pursued": false,
+        "is_new": true
+      },
+      {
         "title": "I Measured 62 Gumroad Products. 13 Look Like $5K a Month",
         "url": "https://medium.com/@e2larsen/i-measured-62-gumroad-products-13-look-like-5k-a-month-5c96d96c20d8",
         "source": "medium",
@@ -705,14 +787,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 1.0
+          "recency": 0.999
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T17:01:03+00:00",
         "discovered_at": "2026-11-17T17:29:01.844920+00:00",
-        "age_hours": 0.5,
+        "age_hours": 3.5,
         "reason": "What the products that sell have in common, from sales counts I could read, and where my own store lands.",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -720,7 +802,7 @@
         "manual_setup": "",
         "verified_note": "",
         "pursued": false,
-        "is_new": true
+        "is_new": false
       },
       {
         "title": "How to Sell Digital Products and Make Your First $500 in Your First Month (Beginner Guide)",
@@ -735,14 +817,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 1.0
+          "recency": 0.999
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T16:18:03+00:00",
         "discovered_at": "2026-11-17T17:29:01.844920+00:00",
-        "age_hours": 1.2,
+        "age_hours": 4.2,
         "reason": "No audience, no ads, no email list. Just the math, the product, and the plan \u2014 and an honest word about what \u201cfirst month\u201d really means.",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -750,7 +832,7 @@
         "manual_setup": "",
         "verified_note": "",
         "pursued": false,
-        "is_new": true
+        "is_new": false
       },
       {
         "title": "App Competitor Analysis for Indie Developers | AppOrient",
@@ -765,14 +847,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.999
+          "recency": 0.998
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T15:50:43+00:00",
         "discovered_at": "2026-11-17T17:29:01.844920+00:00",
-        "age_hours": 1.6,
+        "age_hours": 4.6,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -780,7 +862,7 @@
         "manual_setup": "",
         "verified_note": "",
         "pursued": false,
-        "is_new": true
+        "is_new": false
       },
       {
         "title": "I Tried 5 AI Side Hustles That Could Build a \u20b91 Lakh Digital Product Business",
@@ -795,16 +877,46 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.999
+          "recency": 0.998
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T15:41:13+00:00",
         "discovered_at": "2026-11-17T17:29:01.844920+00:00",
-        "age_hours": 1.8,
+        "age_hours": 4.8,
         "reason": "Five practical AI-powered digital product ideas you can create over a weekend, package for specific professional audiences, and sell\u2026",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
+        "codex_prompt": "",
+        "cost_usd": null,
+        "manual_setup": "",
+        "verified_note": "",
+        "pursued": false,
+        "is_new": false
+      },
+      {
+        "title": "I got tired of rebuilding XP and badges for every project, so I made an open-source engine for it",
+        "url": "https://dev.to/ronak0020/i-got-tired-of-rebuilding-xp-and-badges-for-every-project-so-i-made-an-open-source-engine-for-it-1o15",
+        "source": "devto",
+        "buyer": "dev.to",
+        "kind": "asset",
+        "score": 52,
+        "score_parts": {
+          "owner_action": 0.4,
+          "receive_path": 0.2,
+          "identity_cost": 0.6,
+          "zero_budget": 0.6,
+          "setup_burden": 1.0,
+          "recency": 0.998
+        },
+        "value_usd": null,
+        "value_basis": "none",
+        "value_note": "",
+        "posted_at": "2026-11-17T15:14:30+00:00",
+        "discovered_at": "2026-11-17T20:29:06.315356+00:00",
+        "age_hours": 5.2,
+        "reason": "So this started from a very simple problem. I work on a few side projects of my own, and almost...",
+        "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
         "cost_usd": null,
         "manual_setup": "",
@@ -825,14 +937,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.999
+          "recency": 0.998
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T14:56:59+00:00",
         "discovered_at": "2026-11-14T11:31:53.079061+00:00",
-        "age_hours": 2.5,
+        "age_hours": 5.5,
         "reason": "Open source Product Information Management (PIM) and Digital Asset Management (DAM) platform built on Laravel \u2014 manage, enrich, and scale\u2026",
         "next_step": "Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.",
         "codex_prompt": "",
@@ -855,14 +967,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.998
+          "recency": 0.997
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T13:01:05+00:00",
         "discovered_at": "2026-11-17T13:32:29.341893+00:00",
-        "age_hours": 4.5,
+        "age_hours": 7.5,
         "reason": "\u201cTemplate\u201d fits a thousand products. Gumroad\u2019s own advice is to tag the way customers search, and Claude can pull those words from your\u2026",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -885,14 +997,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.998
+          "recency": 0.997
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T12:44:24+00:00",
         "discovered_at": "2026-11-17T13:32:29.341893+00:00",
-        "age_hours": 4.7,
+        "age_hours": 7.7,
         "reason": "My first product sat live for 41 days without a single sale.",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -915,14 +1027,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.998
+          "recency": 0.997
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T12:32:38+00:00",
         "discovered_at": "2026-11-17T13:32:29.341893+00:00",
-        "age_hours": 4.9,
+        "age_hours": 7.9,
         "reason": "We've spent the week running small, honest AI-visibility checks on real small businesses: UK kitchen...",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
@@ -945,14 +1057,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.997
+          "recency": 0.996
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T10:00:59+00:00",
         "discovered_at": "2026-11-17T10:32:05.376699+00:00",
-        "age_hours": 7.5,
+        "age_hours": 10.5,
         "reason": "A practical guide for ebook, printable and template sellers weighing up where to sell next",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -975,14 +1087,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.997
+          "recency": 0.996
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T07:45:46+00:00",
         "discovered_at": "2026-11-13T03:29:15.834883+00:00",
-        "age_hours": 9.7,
+        "age_hours": 12.7,
         "reason": "Create/Sell courses and digital downloads and publish blogs on your own branded website. An open source alternative to Teachable,\u2026",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1005,14 +1117,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.996
+          "recency": 0.995
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T06:13:40+00:00",
         "discovered_at": "2026-11-17T07:32:00.792328+00:00",
-        "age_hours": 11.3,
+        "age_hours": 14.3,
         "reason": "From managing daily tasks to researching competitors, saving online information, and handling business operations, these Chrome extensions\u2026",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1035,14 +1147,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.996
+          "recency": 0.995
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T05:57:08+00:00",
         "discovered_at": "2026-11-17T07:32:00.792328+00:00",
-        "age_hours": 11.5,
+        "age_hours": 14.5,
         "reason": "I sell a few n8n workflow packs on Gumroad. I don't check the dashboard every day, and when I do, I...",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
@@ -1065,14 +1177,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.996
+          "recency": 0.995
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T05:01:01+00:00",
         "discovered_at": "2026-11-17T07:32:00.792328+00:00",
-        "age_hours": 12.5,
+        "age_hours": 15.5,
         "reason": "I run a handful of launch boards for indie products. Every morning I used to open analytics and look...",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
@@ -1095,14 +1207,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.996
+          "recency": 0.995
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T04:59:36+00:00",
         "discovered_at": "2026-11-17T07:32:00.792328+00:00",
-        "age_hours": 12.5,
+        "age_hours": 15.5,
         "reason": "When I first started building my SaaS, I barely knew anything about how to build a proper product.",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1125,14 +1237,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.995
+          "recency": 0.994
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T04:18:59+00:00",
         "discovered_at": "2026-11-17T07:32:00.792328+00:00",
-        "age_hours": 13.2,
+        "age_hours": 16.2,
         "reason": "I'm an AI agent. I run this sales experiment on behalf of the founder of a small dev studio \u2014 he sets...",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
@@ -1155,14 +1267,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.994
+          "recency": 0.993
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T01:21:51+00:00",
         "discovered_at": "2026-11-17T04:07:13.571206+00:00",
-        "age_hours": 16.1,
+        "age_hours": 19.1,
         "reason": "I just finished my PhD and am trying to get some funding to start off. I found that opportunities are scattered and it is a pain to find\u2026",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1185,14 +1297,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.993
+          "recency": 0.992
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-16T22:39:03+00:00",
         "discovered_at": "2026-11-17T13:32:29.341893+00:00",
-        "age_hours": 18.8,
+        "age_hours": 21.8,
         "reason": "Incremental XeLaTeX and pdfLaTeX preview for VS Code with bidirectional source navigation",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1215,14 +1327,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.993
+          "recency": 0.992
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-16T21:14:39+00:00",
         "discovered_at": "2026-11-17T01:07:06.419586+00:00",
-        "age_hours": 20.2,
+        "age_hours": 23.2,
         "reason": "I type \"forklift\" on a live warehouse camera, and tamserve finds and tracks both forklifts, including the one driving in. Then I add\u2026",
         "next_step": "Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.",
         "codex_prompt": "",
@@ -1245,14 +1357,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.992
+          "recency": 0.991
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-16T17:14:39+00:00",
         "discovered_at": "2026-11-17T01:07:06.419586+00:00",
-        "age_hours": 24.2,
+        "age_hours": 27.2,
         "reason": "Claim a free your-project.is-an.ai subdomain for your AI SaaS. Register via web, the new CLI, or Claude Code and OpenClaw plugins. Signups\u2026",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
@@ -1275,14 +1387,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.992
+          "recency": 0.991
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-16T17:09:48+00:00",
         "discovered_at": "2026-11-16T17:25:14.893405+00:00",
-        "age_hours": 24.3,
+        "age_hours": 27.3,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1305,14 +1417,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.991
+          "recency": 0.99
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-16T15:07:10+00:00",
         "discovered_at": "2026-11-16T17:25:14.893405+00:00",
-        "age_hours": 26.4,
+        "age_hours": 29.4,
         "reason": "Scale is the digital design system for Telekom products and experiences.",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1335,14 +1447,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.988
+          "recency": 0.987
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-16T06:51:20+00:00",
         "discovered_at": "2026-11-17T13:32:29.341893+00:00",
-        "age_hours": 34.6,
+        "age_hours": 37.6,
         "reason": "Turn Obsidian canvases into a whiteboard: sticky notes, shapes, a freehand marker, frames, layers, a minimap and a context menu.",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1365,14 +1477,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.985
+          "recency": 0.984
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-15T22:26:42+00:00",
         "discovered_at": "2026-11-16T06:51:55.340016+00:00",
-        "age_hours": 43.0,
+        "age_hours": 46.0,
         "reason": "In November 2026 we listed two small web products on about 40 launch sites and directories, using...",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
@@ -1395,14 +1507,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.982
+          "recency": 0.981
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-15T14:44:43+00:00",
         "discovered_at": "2026-11-16T03:51:32.996149+00:00",
-        "age_hours": 50.7,
+        "age_hours": 53.7,
         "reason": "Hey HN, I'm Bal\u00e1zs, and I wanted to share my passion project that I've been building in my free time. It is free, it is open-source, and\u2026",
         "next_step": "Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.",
         "codex_prompt": "",
@@ -1425,14 +1537,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.976
+          "recency": 0.975
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-14T19:27:12+00:00",
         "discovered_at": "2026-11-14T21:06:42.647744+00:00",
-        "age_hours": 70.0,
+        "age_hours": 73.0,
         "reason": "Every indie hacker knows \"Stripe takes ~3%.\" But when I broke down a real $10 sale, the number was...",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
@@ -1455,14 +1567,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.974
+          "recency": 0.973
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-14T14:06:05+00:00",
         "discovered_at": "2026-11-14T21:06:42.647744+00:00",
-        "age_hours": 75.4,
+        "age_hours": 78.4,
         "reason": "Open-source browser extension that flags AI-generated images and video as you browse. Runs entirely on your device. Chrome, Edge and\u2026",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1485,14 +1597,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.97
+          "recency": 0.969
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-14T03:59:22+00:00",
         "discovered_at": "2026-11-17T10:32:05.376699+00:00",
-        "age_hours": 85.5,
+        "age_hours": 88.5,
         "reason": "\u9ea6\u7530\uff1a\u81ea\u5a92\u4f53\u591a\u5e73\u53f0\u53d1\u5e03\u4e2d\u63a7\u4e0e\u6570\u636e\u76d1\u63a7\uff08B\u7ad9/\u6296\u97f3/\u5c0f\u7ea2\u4e66/\u89c6\u9891\u53f7/YouTube/X\uff09\uff0c\u98de\u4e66\u5361\u7247\u901a\u77e5 + \u6570\u636e\u5927\u5c4f",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1515,14 +1627,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.966
+          "recency": 0.965
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-13T15:10:20+00:00",
         "discovered_at": "2026-11-13T16:28:45.367609+00:00",
-        "age_hours": 98.3,
+        "age_hours": 101.3,
         "reason": "Hi HN, this is Max, Marc and Clemens, co-founders of Langfuse, the open source tool for agent & observability & evals (\u2026",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1531,6 +1643,36 @@
         "verified_note": "",
         "pursued": false,
         "is_new": false
+      },
+      {
+        "title": "oxnr/awesome-analytics",
+        "url": "https://github.com/oxnr/awesome-analytics",
+        "source": "github",
+        "buyer": "tooling, no buyer",
+        "kind": "asset",
+        "score": 52,
+        "score_parts": {
+          "owner_action": 0.4,
+          "receive_path": 0.2,
+          "identity_cost": 0.6,
+          "zero_budget": 0.6,
+          "setup_burden": 1.0,
+          "recency": 0.965
+        },
+        "value_usd": null,
+        "value_basis": "none",
+        "value_note": "",
+        "posted_at": "2026-11-13T15:10:07+00:00",
+        "discovered_at": "2026-11-17T20:29:06.315356+00:00",
+        "age_hours": 101.3,
+        "reason": "A curated list of analytics frameworks, software and other tools.",
+        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
+        "codex_prompt": "",
+        "cost_usd": null,
+        "manual_setup": "",
+        "verified_note": "",
+        "pursued": false,
+        "is_new": true
       },
       {
         "title": "Instagram comment-to-DM for coaches: one keyword, one private link",
@@ -1545,14 +1687,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.959
+          "recency": 0.958
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-12T20:04:47+00:00",
         "discovered_at": "2026-11-17T10:32:05.376699+00:00",
-        "age_hours": 117.4,
+        "age_hours": 120.4,
         "reason": "Coaches sell in DMs. Reels get comments like \"LINK\" or \"PRICE\" \u2014 but Instagram comments are not...",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
@@ -1575,14 +1717,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.939
+          "recency": 0.938
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-10T08:47:23+00:00",
         "discovered_at": "2026-11-17T13:32:29.341893+00:00",
-        "age_hours": 176.7,
+        "age_hours": 179.7,
         "reason": "Most first launches fail for a boring reason: the product is ready on Friday night, and Saturday is...",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
@@ -1605,75 +1747,15 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.926
+          "recency": 0.925
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-08T20:10:53+00:00",
         "discovered_at": "2026-11-17T13:32:29.341893+00:00",
-        "age_hours": 213.3,
+        "age_hours": 216.3,
         "reason": "Build, Secure, and Monetize Your First ChatGPT Plugin (June 2026 Launch) ...",
-        "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
-        "codex_prompt": "",
-        "cost_usd": null,
-        "manual_setup": "",
-        "verified_note": "",
-        "pursued": false,
-        "is_new": false
-      },
-      {
-        "title": "Reddit Tests Search Ads, Expanding Its Monetization",
-        "url": "https://dev.to/luckytaorem/reddit-tests-search-ads-expanding-its-monetization-41e8",
-        "source": "devto",
-        "buyer": "dev.to",
-        "kind": "asset",
-        "score": 52,
-        "score_parts": {
-          "owner_action": 0.4,
-          "receive_path": 0.2,
-          "identity_cost": 0.6,
-          "zero_budget": 0.6,
-          "setup_burden": 1.0,
-          "recency": 0.906
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-11-06T11:40:11+00:00",
-        "discovered_at": "2026-11-17T13:32:29.341893+00:00",
-        "age_hours": 269.8,
-        "reason": "Why Reddit Is Adding Ads to Search Reddit\u2019s core value proposition has always been...",
-        "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
-        "codex_prompt": "",
-        "cost_usd": null,
-        "manual_setup": "",
-        "verified_note": "",
-        "pursued": false,
-        "is_new": false
-      },
-      {
-        "title": "What Most Teams Get Wrong About In-App Purchases",
-        "url": "https://dev.to/wizcodes/what-most-teams-get-wrong-about-in-app-purchases-218a",
-        "source": "devto",
-        "buyer": "dev.to",
-        "kind": "asset",
-        "score": 52,
-        "score_parts": {
-          "owner_action": 0.4,
-          "receive_path": 0.2,
-          "identity_cost": 0.6,
-          "zero_budget": 0.6,
-          "setup_burden": 1.0,
-          "recency": 0.9
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-11-05T16:30:13+00:00",
-        "discovered_at": "2026-11-17T13:32:29.341893+00:00",
-        "age_hours": 289.0,
-        "reason": "Most teams pick a monetization model before they understand how players want to play. Then they...",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
         "cost_usd": null,
@@ -1695,14 +1777,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.851
+          "recency": 0.85
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-10-30T19:28:55+00:00",
         "discovered_at": "2026-11-10T14:54:52.313349+00:00",
-        "age_hours": 430.0,
+        "age_hours": 433.0,
         "reason": "free tooling or reach to build and market the product with",
         "next_step": "Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.",
         "codex_prompt": "",
@@ -1725,14 +1807,14 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.842
+          "recency": 0.841
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-10-29T18:12:17+00:00",
         "discovered_at": "2026-11-10T21:54:06.299371+00:00",
-        "age_hours": 455.3,
+        "age_hours": 458.3,
         "reason": "What inspired you to build that project and how long did it take?",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1785,14 +1867,14 @@
           "identity_cost": 0.0,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.983
+          "recency": 0.982
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-15T15:37:52+00:00",
         "discovered_at": "2026-11-15T16:58:52.746919+00:00",
-        "age_hours": 49.9,
+        "age_hours": 52.9,
         "reason": "Hi, I made a tiny app that lets you turn off the MacBook screen when you work on external monitors. It does NOT just dim the brightness to\u2026",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1845,7 +1927,7 @@
           "identity_cost": 0.6,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 1.0,
+          "recency": 0.999,
           "penalty": -10.0
         },
         "value_usd": null,
@@ -1853,7 +1935,7 @@
         "value_note": "",
         "posted_at": "2026-11-17T16:10:46+00:00",
         "discovered_at": "2026-11-17T17:29:01.844920+00:00",
-        "age_hours": 1.3,
+        "age_hours": 4.3,
         "reason": "When I launched my first product, my Instagram following was about 40 people, and half of them were relatives",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1861,7 +1943,7 @@
         "manual_setup": "",
         "verified_note": "",
         "pursued": false,
-        "is_new": true
+        "is_new": false
       },
       {
         "title": "I Built 3 JavaScript Side Projects That Now Pay My Rent",
@@ -1876,14 +1958,14 @@
           "identity_cost": 0.0,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 1.0
+          "recency": 0.999
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T16:47:19+00:00",
         "discovered_at": "2026-11-17T17:29:01.844920+00:00",
-        "age_hours": 0.7,
+        "age_hours": 3.7,
         "reason": "Here\u2019s exactly how a few nights of coding turned into a steady monthly income stream \u2014 and the automation tricks that made it possible\u2026",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1891,7 +1973,7 @@
         "manual_setup": "",
         "verified_note": "",
         "pursued": false,
-        "is_new": true
+        "is_new": false
       },
       {
         "title": "4 App Founders Who Hit Real Revenue Inside a Year, and What AI Actually Did for Them",
@@ -1906,14 +1988,14 @@
           "identity_cost": 0.0,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.996
+          "recency": 0.995
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-17T05:39:06+00:00",
         "discovered_at": "2026-11-17T07:32:00.792328+00:00",
-        "age_hours": 11.8,
+        "age_hours": 14.8,
         "reason": "This story was written with the assistance of an AI writing program.",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -1922,36 +2004,6 @@
         "verified_note": "",
         "pursued": false,
         "is_new": false
-      },
-      {
-        "title": "The median company spends $12 to $15 a month per employee on AI, and that is the buyer a small SaaS\u2026",
-        "url": "https://medium.datadriveninvestor.com/the-median-company-spends-12-to-15-a-month-per-employee-on-ai-and-that-is-the-buyer-a-small-saas-6a04a0696b00",
-        "source": "medium",
-        "buyer": "Medium",
-        "kind": "asset",
-        "score": 40,
-        "score_parts": {
-          "owner_action": 0.4,
-          "receive_path": 0.2,
-          "identity_cost": 0.0,
-          "zero_budget": 0.6,
-          "setup_burden": 1.0,
-          "recency": 0.994
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-11-17T01:21:20+00:00",
-        "discovered_at": "2026-11-17T17:29:01.844920+00:00",
-        "age_hours": 16.1,
-        "reason": "On November 6, TechCrunch ran Ramp\u2019s latest numbers on what companies spend on AI, and the figure I keep coming back to is the smallest\u2026\u2026",
-        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
-        "codex_prompt": "",
-        "cost_usd": null,
-        "manual_setup": "",
-        "verified_note": "",
-        "pursued": false,
-        "is_new": true
       },
       {
         "title": "Show HN: Coral \u2013 Open-source gateway where agents write their own tools",
@@ -1966,14 +2018,14 @@
           "identity_cost": 0.0,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.991
+          "recency": 0.99
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-16T14:14:51+00:00",
         "discovered_at": "2026-11-16T14:24:53.470338+00:00",
-        "age_hours": 27.2,
+        "age_hours": 30.2,
         "reason": "Hi HN, I'm James, one of the co-founders of Coral. Coral is an open-source, self-hosted gateway that sits between your agents and the\u2026",
         "next_step": "Publish the repository with the receive address in the README, so discovery and the ask live in the same artifact.",
         "codex_prompt": "",
@@ -1996,14 +2048,14 @@
           "identity_cost": 0.0,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.99
+          "recency": 0.989
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-16T13:31:12+00:00",
         "discovered_at": "2026-11-16T21:25:30.574054+00:00",
-        "age_hours": 28.0,
+        "age_hours": 31.0,
         "reason": "I've been working on Claktor ever since I got frustrated with some 'code smells' AI Agents have been producing while writing Rust. Claktor\u2026",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
@@ -2026,14 +2078,14 @@
           "identity_cost": 0.0,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.989
+          "recency": 0.988
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-16T08:40:02+00:00",
         "discovered_at": "2026-11-16T10:47:06.091741+00:00",
-        "age_hours": 32.8,
+        "age_hours": 35.8,
         "reason": "Everyone talks about GEO (Generative Engine Optimization)\u2014getting cited inside ChatGPT Search,...",
         "next_step": "Write the problem-shaped article this product answers and let the existing footer carry the ask -- no new channel, and the publishing path already runs.",
         "codex_prompt": "",
@@ -2056,45 +2108,15 @@
           "identity_cost": 0.0,
           "zero_budget": 0.6,
           "setup_burden": 1.0,
-          "recency": 0.985
+          "recency": 0.984
         },
         "value_usd": null,
         "value_basis": "none",
         "value_note": "",
         "posted_at": "2026-11-15T22:51:08+00:00",
         "discovered_at": "2026-11-17T10:32:05.376699+00:00",
-        "age_hours": 42.6,
+        "age_hours": 45.6,
         "reason": "6 Micro-SaaS Ideas Worth Testing Continue reading on ILLUMINATION \u00bb",
-        "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
-        "codex_prompt": "",
-        "cost_usd": null,
-        "manual_setup": "",
-        "verified_note": "",
-        "pursued": false,
-        "is_new": false
-      },
-      {
-        "title": "otnc/UshiroE",
-        "url": "https://github.com/otnc/UshiroE",
-        "source": "github",
-        "buyer": "tooling, no buyer",
-        "kind": "asset",
-        "score": 40,
-        "score_parts": {
-          "owner_action": 0.4,
-          "receive_path": 0.2,
-          "identity_cost": 0.0,
-          "zero_budget": 0.6,
-          "setup_burden": 1.0,
-          "recency": 0.981
-        },
-        "value_usd": null,
-        "value_basis": "none",
-        "value_note": "",
-        "posted_at": "2026-11-15T09:52:44+00:00",
-        "discovered_at": "2026-11-17T13:32:29.341893+00:00",
-        "age_hours": 55.6,
-        "reason": "Background custom images manager for VS Code",
         "next_step": "Check the free tier's real limits, then use it to build or promote the product without adding a per-user cost.",
         "codex_prompt": "",
         "cost_usd": null,
@@ -2165,123 +2187,115 @@
       "micro-SaaS setup, migration, and operations help"
     ],
     "online_ai_brief": {
-      "summary": "The strongest zero-budget, crypto-native route is: build a single-purpose product whose marginal cost per user is zero (a static web tool, a self-hostable script, or a browser extension), ship it free from surfaces the project already controls (GitHub repo, GitHub Releases, GitHub Pages, dev.to articles), and collect payment through the already-validated Tron TRC-20 USDT receive address placed in the README, FUNDING.yml, product page, --help output and release notes. One storefront with native crypto settlement to the seller's own wallet (Getly, with a free-to-list tier) adds a proper buy button and licence delivery; the Chrome Web Store (one-time $5) is the only paid item and only if the product is an extension. Nothing in this stack holds the money for the owner or requires per-sale work, so each sale lands in the wallet automatically.",
+      "summary": "The best route is a self-contained digital artifact \u2014 client-side tool, extension, or asset pack \u2014 that costs nothing per user, shipped free on GitHub Releases/Chrome Web Store for discovery, with the already-validated Tron (TRC-20) USDT receive address printed in the README, product page, and the tool's own --help/about output. Getly is the one known storefront that settles USDT on Tron directly to a wallet with no KYC and no monthly fee, so it can carry a paid tier or licence alongside the free wallet-ask path. No per-sale action is required anywhere: downloads are delivered by the platform, and payments arrive on-chain.",
       "market_themes": [
         {
-          "theme": "Crypto-settled storefronts that pay sellers directly in stablecoin to their own wallet, bypassing custodians and KYC",
-          "evidence": "Getly's crypto-sell page: card or crypto payment in, USDT/USDC payout to the seller's own address, TRC-20 supported, no KYC for crypto settlement, no monthly fee (verify current terms on minimums/fees). Contrast: itch.io is free to publish but requires a tax interview and TIN to be paid at all.",
-          "offer": "List the paid tier or licence of the product on Getly, settling TRC-20 USDT to the address already published.",
-          "discovered_at": "2026-11-17T17:27:47.189846+00:00"
+          "theme": "Sell once, deliver automatically: the storefront handles fulfilment so no sale touches the owner",
+          "evidence": "Getly (digital-goods storefront with direct USDT payout); GitHub Releases (free hosting of binaries with the ask in the release notes)",
+          "offer": "A one-time licence or paid version of a utility, listed on Getly and hosted as a downloadable on GitHub Releases, paid to the existing Tron address",
+          "discovered_at": "2026-11-17T20:27:52.230978+00:00"
         },
         {
-          "theme": "The wallet ask attached to the artifact itself beats a paywall at zero cost and with no platform",
-          "evidence": "The local playbook's wallet channels: the validated Tron address already appends to every dev.to article; FUNDING.yml renders a sponsor button with arbitrary URLs; the ask in --help/about output travels with every copy and fork, reaching users who never visit a listing.",
-          "offer": "Ship the tool free and publish the receive address in the README, .github/FUNDING.yml custom field, each GitHub Release body, --help output and docs footer.",
-          "discovered_at": "2026-11-17T17:27:47.189846+00:00"
+          "theme": "Free tier buys discovery, paid upgrade is the price \u2014 the freemium pattern",
+          "evidence": "'Ship free, sell the upgrade' playbook; Chrome Web Store ($5 one-time) provides organic discovery for extensions that take no store cut",
+          "offer": "A browser extension free on the Chrome Web Store, with a paid Pro unlock sold via Getly or paid by wallet ask on the product page",
+          "discovered_at": "2026-11-17T20:27:52.230978+00:00"
         },
         {
-          "theme": "Freemium: the free tier does the discovery the owner cannot buy, the upgrade is the price",
-          "evidence": "Local playbook's free-tier stack and 'ship free, sell the upgrade' patterns; Chrome Web Store gives real organic discovery for a $5 one-time fee covering up to 20 extensions, taking no cut of a free extension.",
-          "offer": "A browser extension or client-side tool where the core is free in a public repo and the pro tier (extra features, licence key or paid download) is sold via Getly with the wallet ask as fallback.",
-          "discovered_at": "2026-11-17T17:27:47.189846+00:00"
+          "theme": "The wallet ask embedded in the artifact itself converts readers who never visit a storefront",
+          "evidence": "'Ask in the artifact' playbook (README, --help, docs footer travel with every copy); FUNDING.yml custom field renders a pay button with no enrolment",
+          "offer": "The validated Tron receive address placed in .github/FUNDING.yml, README, release bodies, and the tool's about output",
+          "discovered_at": "2026-11-17T20:27:52.230978+00:00"
         },
         {
-          "theme": "One artifact, many free channels: distribution multiplies without multiplying work",
-          "evidence": "'One product, listed on every free channel at once' pattern; dev.to publishing is already running and problem-workaround articles outperform build-tutorials ~25x on this account, making an article about the problem free marketing for the product.",
-          "offer": "List the same download on Getly, GitHub Releases, itch.io (only if willing to complete a tax interview), and link it from a dev.to problem article whose footer carries the ask.",
-          "discovered_at": "2026-11-17T17:27:47.189846+00:00"
+          "theme": "List the same built artifact on every zero-cost channel \u2014 reuse multiplies reach at no marginal cost",
+          "evidence": "'One product, listed on every free channel at once' playbook; the free-tier stack note (GitHub Pages, Actions already paid for)",
+          "offer": "The identical product on GitHub Releases, Chrome Web Store (if an extension), Getly, and itch.io if a tax interview is acceptable, each with the wallet ask",
+          "discovered_at": "2026-11-17T20:27:52.230978+00:00"
         }
       ],
       "sales_channels": [
         {
-          "name": "Validated Tron TRC-20 receive address (already live)",
-          "what_it_does": "Direct wallet payment with no account, no processor, no platform",
-          "cost": "Zero. Network fee is paid by the payer on Tron",
-          "crypto_payout": "USDT (TRC-20) directly to the owner's own wallet; no custodian, no KYC",
-          "owner_setup": "Paste the address into the README, .github/FUNDING.yml custom field, each GitHub Release body, product page, --help output and docs footer",
-          "why_passive": "Payment is self-serve and self-verifiable on-chain; nothing can be seized, geo-blocked, or require owner action per sale"
+          "name": "Existing Tron (TRC-20) receive address",
+          "what_it_does": "Direct on-chain payment from buyer to owner's wallet, no platform",
+          "cost": "Zero. Network fee paid by sender (~$1 on Tron, verify current terms)",
+          "crypto_payout": "USDT on Tron, direct to the owner's already-validated wallet \u2014 no custodian, no KYC",
+          "owner_setup": "None; the address is already appended to every dev.to article. One-time work: paste it into README, product page, FUNDING.yml, and the tool's help/about output",
+          "why_passive": "Payment arrives on-chain with no owner action per unit; the address travels with every copy and fork of the artifact"
         },
         {
           "name": "Getly",
-          "what_it_does": "Digital-goods storefront with native stablecoin settlement",
-          "cost": "No monthly fee; platform/revenue cut and payout minimums: verify current terms (lead sample cites $15 Tron / $5 BNB Chain minimum payout and ~$0.50-1 Tron network fee)",
-          "crypto_payout": "USDT/USDC to the seller's own wallet; TRC-20 supported; no KYC for crypto settlement",
-          "owner_setup": "One manual signup, product listing with the paid download, wallet address entered once",
-          "why_passive": "The storefront handles the buy button, delivery and crypto payout automatically; each sale lands in the wallet with no owner action"
+          "what_it_does": "Digital-goods storefront with card and crypto checkout, automatic file delivery",
+          "cost": "No monthly fee; minimum payout $15 on Tron ($5 on BNB Smart Chain), network fee ~$0.50\u20131 on Tron \u2014 verify current terms and revenue cut",
+          "crypto_payout": "USDT/USDC directly to the seller's own wallet; Tron (TRC-20) supported \u2014 same address already in use; no KYC for crypto settlement",
+          "owner_setup": "Manual signup, product listing with download file and price, paste wallet address for payouts \u2014 done once",
+          "why_passive": "Buyers pay by card or crypto and the storefront delivers the file and settles to the wallet automatically"
         },
         {
-          "name": "GitHub (Releases + FUNDING.yml + README + Pages)",
-          "what_it_does": "Free hosting of code, binaries, product page and a rendered sponsor/payment button",
-          "cost": "Zero on the account already in use; GitHub Pages and Releases are on the free tier",
-          "crypto_payout": "None directly; the arbitrary-URL custom field in FUNDING.yml carries the Tron address, so payment still lands on-chain",
-          "owner_setup": "One-time: publish the repo, attach the download to a Release, add FUNDING.yml and README payment section; optionally a static product page on GitHub Pages",
-          "why_passive": "Files are served indefinitely with no approval queue, no identity check, and no per-sale work; forks carry the ask onward"
+          "name": "GitHub Releases + FUNDING.yml",
+          "what_it_does": "Free hosting of the downloadable binary/archive with a rendered pay button",
+          "cost": "Zero; on the account already hosting the code",
+          "crypto_payout": "None from GitHub itself; the FUNDING.yml custom: field and release bodies carry the Tron address, paying direct to wallet",
+          "owner_setup": "One-time: add .github/FUNDING.yml with the address as a custom URL, tag a release with the built artifact, put the ask in the README",
+          "why_passive": "Downloads and the pay button serve unlimited users with no approval queue and nothing that can freeze or seize a payout"
         },
         {
           "name": "Chrome Web Store",
           "what_it_does": "Distribution with real organic discovery for browser extensions",
-          "cost": "One-time $5 developer registration per account, covers up to 20 extensions, no renewal, no cut on free extensions; verify current terms",
-          "crypto_payout": "None; the store distributes free, monetisation is the in-store wallet ask or a paid upgrade sold via Getly",
-          "owner_setup": "One-time $5 registration (the only non-zero cost in this stack) and one-time extension submission/review",
-          "why_passive": "Store listing drives installs organically forever; the pro-tier sale happens through Getly or the wallet ask"
+          "cost": "One-time $5 developer registration per account, covers up to 20 extensions, no renewal, no cut of free extensions \u2014 the only non-zero cost here",
+          "crypto_payout": "None from the store; the extension's own page/README/about output carries the Tron address, and paid unlocks are sold via Getly",
+          "owner_setup": "One-time $5 payment, packaging the extension, and store listing \u2014 verify current review requirements",
+          "why_passive": "The store serves installs indefinitely; monetisation is the wallet ask or an automatic paid-upgrade link"
         },
         {
           "name": "itch.io",
-          "what_it_does": "Free listing for tools and downloadable assets, pay-what-you-want supported",
-          "cost": "Free to publish; open revenue share (default ~10%, seller-adjustable); payout requires a tax interview with a TIN and a one-time $3 identity-verification fee - verify current terms",
-          "crypto_payout": "Fiat only; no crypto settlement",
-          "owner_setup": "One-time upload plus a tax interview; only worth it if the owner will complete identity verification",
-          "why_passive": "Downloads are fulfilled by the store automatically; included for reach, but it fails the no-KYC preference"
-        },
-        {
-          "name": "dev.to articles (already running)",
-          "what_it_does": "Daily publishing infrastructure that doubles as product marketing",
-          "cost": "Zero; already operating",
-          "crypto_payout": "The TRC-20 address is already appended to every article",
-          "owner_setup": "No new setup; write the article about the problem the product solves (problem-workaround shape, not a build tutorial)",
-          "why_passive": "The back catalogue keeps funneling readers to the product and the ask after publication, with no owner action per reader"
+          "what_it_does": "Storefront listing tools and downloadable assets, pay-what-you-want supported",
+          "cost": "Free to upload; seller chooses the platform cut (default ~10%); $3.00 one-time tax identity fee plus a tax interview with a TIN required before payout \u2014 verify current terms",
+          "crypto_payout": "Fiat only (PayPal/Stripe) \u2014 no stablecoin settlement; payout is custodial and identity-gated",
+          "owner_setup": "Manual upload and listing; tax interview once. Only worth it if the owner accepts KYC for the extra reach",
+          "why_passive": "Storefront delivers files automatically after setup; flagged as lower priority because payout is not KYC-free"
         }
       ],
       "product_ideas": [
         {
-          "idea": "One-annoyance browser extension with a pro tier",
-          "who_buys": "Users of a popular site annoyed by one specific friction (cluttered UI, forced sorting, nagging prompts)",
-          "deliverable": "Free core extension in the Chrome Web Store and on GitHub; pro tier unlocks extra settings or profiles via a licence/download sold through Getly",
-          "pricing_model": "Free tier plus paid one-time upgrade",
-          "marginal_cost": "Zero - the extension runs client-side on the user's machine",
-          "free_stack": "Chrome Web Store listing, GitHub repo for updates and issues"
+          "idea": "Single-purpose browser extension (one specific annoyance, e.g. a tab/firewall/reading-mode fix)",
+          "who_buys": "Chrome users searching the Web Store for exactly that annoyance",
+          "deliverable": "Free extension install; paid tier unlocks advanced options via licence code delivered by Getly",
+          "pricing_model": "Free tier plus paid upgrade (one-time licence)",
+          "marginal_cost": "Zero \u2014 client-side, no server",
+          "free_stack": "Chrome Web Store listing, GitHub repo for issues, static landing page on GitHub Pages"
         },
         {
-          "idea": "Self-hostable CLI utility",
-          "who_buys": "Developers who hit the problem the utility solves and search GitHub/dev.to for it",
-          "deliverable": "Binary or script downloadable from GitHub Releases; the paid tier (via Getly) adds a config pack, presets or bonus scripts",
-          "pricing_model": "Free core with pay-what-you-want wallet ask plus a paid bonus pack",
-          "marginal_cost": "Zero - the buyer runs it on their own machine",
-          "free_stack": "GitHub Releases hosting, README/FUNDING.yml payment ask, dev.to problem article"
+          "idea": "Self-hostable CLI utility solving one developer workflow pain",
+          "who_buys": "Developers finding it via the README, dev.to articles, and search",
+          "deliverable": "Free binary on GitHub Releases; paid version or convenience bundle via Getly, plus the wallet ask in --help",
+          "pricing_model": "Free tier plus paid upgrade; wallet ask on everything",
+          "marginal_cost": "Zero \u2014 runs on the buyer's own machine",
+          "free_stack": "GitHub Releases hosting, GitHub Actions builds, dev.to article as the marketing asset"
         },
         {
-          "idea": "Template/preset/asset pack download",
-          "who_buys": "Users of an existing tool (editor, framework, game, app) who want a working starting point",
-          "deliverable": "A zip/tarball of templates or presets, delivered automatically by Getly or attached to a GitHub Release with the wallet ask in the notes",
-          "pricing_model": "One-time licence, pay-what-you-want fallback",
-          "marginal_cost": "Zero - compiled once, downloaded many times",
-          "free_stack": "GitHub Releases or Getly free listing, dev.to showcase article"
+          "idea": "Template/preset/asset pack for a tool people already use",
+          "who_buys": "Users of that tool who want a working configuration instead of building one",
+          "deliverable": "Downloadable file (pack/zip) delivered by Getly or GitHub Releases",
+          "pricing_model": "One-time licence or pay-what-you-want",
+          "marginal_cost": "Zero \u2014 built once, downloaded many times",
+          "free_stack": "GitHub Releases hosting, dev.to article demonstrating the pack, wallet ask in the pack's own README"
         },
         {
-          "idea": "Static web tool that runs entirely client-side",
-          "who_buys": "Anyone searching for a one-click fix (converter, formatter, validator) with no signup",
-          "deliverable": "The free tool on GitHub Pages; a downloadable enhanced/offline version is the paid product",
-          "pricing_model": "Free hosted tool plus paid downloadable version",
-          "marginal_cost": "Zero - static hosting, no server, no database",
-          "free_stack": "GitHub Pages, repo README wallet ask, article footer ask"
+          "idea": "Static client-side web tool",
+          "who_buys": "Anyone with the problem it solves, found via the accompanying article",
+          "deliverable": "Free web tool on GitHub Pages; paid export/save feature unlocked by licence sold on Getly",
+          "pricing_model": "Free tier plus paid upgrade",
+          "marginal_cost": "Zero \u2014 GitHub Pages free tier, no backend",
+          "free_stack": "GitHub Pages, GitHub Actions, existing Tron address on the page footer"
         }
       ],
       "owner_actions": [
-        "Pick the cheapest-to-run shape (client-side tool or self-hostable utility) and paste the validated TRC-20 address into the README, .github/FUNDING.yml custom field, --help/about output, docs footer and each GitHub Release body - all one-time edits, no new account.",
-        "Build the free core and publish it on the surfaces already running: public GitHub repo, GitHub Release with the downloadable artifact attached, and (if static) a GitHub Pages product page.",
-        "Sign up once on Getly, list the paid tier or bonus pack, set payout to USDT TRC-20 to the same wallet, and confirm the current minimum payout, fees and any listing limits before publishing the listing.",
-        "Write one dev.to problem-workaround article where the product is the fix and the footer is the existing ask, matching the ~25x outperforming article shape.",
-        "Only if the product is a browser extension: pay the one-time $5 Chrome Web Store registration (the single non-zero cost) and submit the free extension for organic discovery; if considering itch.io, first confirm willingness to complete the tax interview and pay the $3 identity fee."
+        "Paste the validated Tron receive address into the product's README, product page, .github/FUNDING.yml custom field, release notes, and the tool's --help/about output",
+        "Publish the product free as a GitHub Release (and on the Chrome Web Store, paying the one-time $5, if it is an extension) so discovery works with no ad spend",
+        "Create a Getly account, list the paid tier/licence as a digital download, set payout to the same Tron wallet, and verify current fees, minimums, and revenue cut before going live",
+        "Write one dev.to article about the problem the product solves (problem-workaround shape) with the product link and wallet ask in the footer \u2014 marketing on infrastructure already running",
+        "Check the on-chain balance weekly as the only revenue metric; if a sale channel shows zero after a fair trial, swap products, not platforms"
       ]
     },
     "free_ai_focus": [
@@ -2306,7 +2320,7 @@
     "supply_count": 55,
     "priced_count": 0,
     "ranked_total": 65,
-    "last_refresh_at": "2026-11-17T17:27:47.189846+00:00",
+    "last_refresh_at": "2026-11-17T20:27:52.230978+00:00",
     "channel_count": 9,
     "asset_count": 55,
     "needs_setup_count": 3,
@@ -2369,8 +2383,8 @@
       "self-hostable script the buyer runs on their own machine",
       "data set or reference compiled once and sold as a download"
     ],
-    "new_count": 8,
-    "new_ranked_count": 8,
+    "new_count": 4,
+    "new_ranked_count": 4,
     "source_stats": [
       {
         "source": "medium",
@@ -2380,7 +2394,7 @@
       },
       {
         "source": "devto",
-        "fetched": 17,
+        "fetched": 19,
         "ranked": 14,
         "shown": 14
       },
@@ -2804,7 +2818,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-17T19:27:34.444382+00:00",
+    "checked_at": "2026-11-17T20:27:22.592591+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3556,7 +3570,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-17T19:28:01.028629+00:00",
+    "last_run": "2026-11-17T20:29:39.431700+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3566,30 +3580,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-17T19:28:01.276198+00:00",
+    "last_run": "2026-11-17T20:29:39.559610+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4368781,
-        "at": "2026-11-17T07:32:46.244227+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-11-17T07:32:46.244227+00:00",
-        "ok": true
-      },
-      {
-        "id": 5043579,
-        "at": "2026-11-17T07:32:46.244227+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-11-17T08:30:29.440090+00:00",
-        "ok": true
-      },
       {
         "id": 4727685,
         "at": "2026-11-17T08:30:29.440090+00:00",
@@ -3796,11 +3790,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-17T19:28:01.276198+00:00",
-        "ok": true
-      },
-      {
         "id": 4996282,
         "at": "2026-11-17T19:28:01.276198+00:00",
         "ok": true
@@ -3819,6 +3808,31 @@
         "id": 5032226,
         "at": "2026-11-17T19:28:01.276198+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-17T20:29:39.559610+00:00",
+        "ok": true
+      },
+      {
+        "id": 4937139,
+        "at": "2026-11-17T20:29:39.559610+00:00",
+        "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-11-17T20:29:39.559610+00:00",
+        "ok": true
+      },
+      {
+        "id": 5012890,
+        "at": "2026-11-17T20:29:39.559610+00:00",
+        "ok": true
+      },
+      {
+        "id": 5019261,
+        "at": "2026-11-17T20:29:39.559610+00:00",
+        "ok": true
       }
     ],
     "published_total": 54,
@@ -3826,7 +3840,7 @@
     "unverified": 4,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.9
+    "oldest_check_age_hours": 12.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3846,7 +3860,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 1
+      "glm": 2
     },
     "fallback": {
       "provider": "atria",
@@ -3858,7 +3872,7 @@
   },
   "ctf_bounty": {
     "source": "ctftime",
-    "last_refresh_at": "2026-11-17T17:27:38.689545+00:00",
+    "last_refresh_at": "2026-11-17T20:27:42.356743+00:00",
     "last_reason": "ok",
     "fetched": 27,
     "enterable": 20,
@@ -3874,10 +3888,10 @@
         "start": "2026-11-20T10:00:00+00:00",
         "finish": "2026-11-22T10:00:00+00:00",
         "live": false,
-        "days_until_start": 2.7,
+        "days_until_start": 2.6,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 68,
+        "participants": 69,
         "prizes": "1st: 300 USD + 1 year ExamBoot subscription. (500 USD dedicated for the 1st Cameroonian local on the scoreboard) 3-month BlueYard Pro subscription, 1 Free annua",
         "pays": true,
         "crypto": false,
@@ -3894,7 +3908,7 @@
         "start": "2026-12-19T12:00:00+00:00",
         "finish": "2026-12-20T12:00:00+00:00",
         "live": false,
-        "days_until_start": 31.8,
+        "days_until_start": 31.6,
         "format": "Jeopardy",
         "weight": 77.38,
         "participants": 38,
@@ -3914,7 +3928,7 @@
         "start": "2026-11-20T23:00:00+00:00",
         "finish": "2026-11-21T23:00:00+00:00",
         "live": false,
-        "days_until_start": 3.2,
+        "days_until_start": 3.1,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 30,
@@ -3934,7 +3948,7 @@
         "start": "2026-11-20T23:00:00+00:00",
         "finish": "2026-11-22T23:00:00+00:00",
         "live": false,
-        "days_until_start": 3.2,
+        "days_until_start": 3.1,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 209,
@@ -3954,10 +3968,10 @@
         "start": "2026-11-21T13:00:00+00:00",
         "finish": "2026-11-21T21:00:00+00:00",
         "live": false,
-        "days_until_start": 3.8,
+        "days_until_start": 3.7,
         "format": "Jeopardy",
         "weight": 37.0,
-        "participants": 65,
+        "participants": 66,
         "prizes": "",
         "pays": false,
         "crypto": false,
@@ -3974,7 +3988,7 @@
         "start": "2026-11-27T17:00:00+00:00",
         "finish": "2026-11-28T17:00:00+00:00",
         "live": false,
-        "days_until_start": 10.0,
+        "days_until_start": 9.9,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 0,
@@ -3994,7 +4008,7 @@
         "start": "2026-11-28T04:30:00+00:00",
         "finish": "2026-11-28T16:30:00+00:00",
         "live": false,
-        "days_until_start": 10.5,
+        "days_until_start": 10.3,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 36,
@@ -4014,7 +4028,7 @@
         "start": "2026-11-28T14:00:00+00:00",
         "finish": "2026-11-29T14:00:00+00:00",
         "live": false,
-        "days_until_start": 10.9,
+        "days_until_start": 10.7,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 10,
@@ -4034,10 +4048,10 @@
         "start": "2026-11-20T18:00:00+00:00",
         "finish": "2026-11-21T18:00:00+00:00",
         "live": false,
-        "days_until_start": 3.0,
+        "days_until_start": 2.9,
         "format": "Jeopardy",
         "weight": 73.17,
-        "participants": 168,
+        "participants": 169,
         "prizes": "TBA",
         "pays": false,
         "crypto": false,
@@ -4054,7 +4068,7 @@
         "start": "2026-11-27T11:00:00+00:00",
         "finish": "2026-11-27T19:00:00+00:00",
         "live": false,
-        "days_until_start": 9.7,
+        "days_until_start": 9.6,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 8,
@@ -4074,7 +4088,7 @@
         "start": "2026-11-27T18:00:00+00:00",
         "finish": "2026-11-28T18:00:00+00:00",
         "live": false,
-        "days_until_start": 10.0,
+        "days_until_start": 9.9,
         "format": "Jeopardy",
         "weight": 45.76,
         "participants": 55,
@@ -4094,7 +4108,7 @@
         "start": "2026-12-04T18:00:00+00:00",
         "finish": "2026-12-06T18:00:00+00:00",
         "live": false,
-        "days_until_start": 17.0,
+        "days_until_start": 16.9,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 25,
@@ -4114,7 +4128,7 @@
         "start": "2026-12-05T05:00:00+00:00",
         "finish": "2026-12-06T17:00:00+00:00",
         "live": false,
-        "days_until_start": 17.5,
+        "days_until_start": 17.4,
         "format": "Jeopardy",
         "weight": 79.51,
         "participants": 38,
@@ -4134,7 +4148,7 @@
         "start": "2026-12-11T12:00:00+00:00",
         "finish": "2026-12-13T12:00:00+00:00",
         "live": false,
-        "days_until_start": 23.8,
+        "days_until_start": 23.6,
         "format": "Jeopardy",
         "weight": 59.0,
         "participants": 73,
@@ -4154,7 +4168,7 @@
         "start": "2026-12-17T19:00:00+00:00",
         "finish": "2026-12-19T07:00:00+00:00",
         "live": false,
-        "days_until_start": 30.1,
+        "days_until_start": 29.9,
         "format": "Jeopardy",
         "weight": 22.9,
         "participants": 11,
@@ -4174,7 +4188,7 @@
         "start": "2026-12-26T01:00:00+00:00",
         "finish": "2026-12-28T04:59:59+00:00",
         "live": false,
-        "days_until_start": 38.3,
+        "days_until_start": 38.2,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 1,
@@ -4194,7 +4208,7 @@
         "start": "2026-12-27T14:00:00+00:00",
         "finish": "2026-12-28T14:00:00+00:00",
         "live": false,
-        "days_until_start": 39.9,
+        "days_until_start": 39.7,
         "format": "Jeopardy",
         "weight": 99.38,
         "participants": 0,
@@ -4214,7 +4228,7 @@
         "start": "2026-12-29T12:00:00+00:00",
         "finish": "2026-12-31T12:00:00+00:00",
         "live": false,
-        "days_until_start": 41.8,
+        "days_until_start": 41.6,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 9,
@@ -4234,7 +4248,7 @@
         "start": "2027-01-02T18:00:00+00:00",
         "finish": "2027-01-03T18:00:00+00:00",
         "live": false,
-        "days_until_start": 46.0,
+        "days_until_start": 45.9,
         "format": "Jeopardy",
         "weight": 25.0,
         "participants": 1,
@@ -4254,7 +4268,7 @@
         "start": "2027-01-09T00:00:00+00:00",
         "finish": "2027-01-11T00:00:00+00:00",
         "live": false,
-        "days_until_start": 52.3,
+        "days_until_start": 52.1,
         "format": "Jeopardy",
         "weight": 50.0,
         "participants": 0,
@@ -4298,16 +4312,16 @@
     }
   },
   "research_feed": {
-    "last_refresh_at": "2026-11-17T17:27:39.569647+00:00",
+    "last_refresh_at": "2026-11-17T20:27:43.926074+00:00",
     "last_reason": "ok",
     "failed_sources": [],
-    "pool_total": 363,
+    "pool_total": 365,
     "source_stats": [
       {
         "source": "devpost",
         "label": "Devpost",
-        "fetched": 83,
-        "kept": 66,
+        "fetched": 85,
+        "kept": 68,
         "screened": 0,
         "duplicates": 0,
         "ok": true
@@ -4404,11 +4418,13 @@
       }
     ],
     "first_seen": {
+      "devpost:32158": "2026-11-17T20:27:43+00:00",
+      "devpost:31571": "2026-11-17T20:27:43+00:00",
       "devpost:32141": "2026-11-15T23:50:44+00:00",
       "devpost:31905": "2026-11-15T06:41:56+00:00",
+      "devpost:32024": "2026-11-11T18:15:33+00:00",
       "devpost:31644": "2026-11-11T18:15:33+00:00",
       "devpost:32026": "2026-11-12T07:01:42+00:00",
-      "devpost:32024": "2026-11-11T18:15:33+00:00",
       "devpost:32072": "2026-11-10T10:58:07+00:00",
       "devpost:32079": "2026-11-10T18:52:33+00:00",
       "devpost:31973": "2026-11-10T14:53:33+00:00",
@@ -4417,11 +4433,11 @@
       "devpost:32044": "2026-11-07T07:54:49+00:00",
       "devpost:32017": "2026-11-05T09:50:29+00:00",
       "devpost:31974": "2026-11-05T03:42:02+00:00",
-      "devpost:31993": "2026-11-05T03:42:02+00:00",
       "devpost:31794": "2026-11-05T03:42:02+00:00",
-      "devpost:32009": "2026-11-05T03:42:02+00:00",
-      "devpost:31972": "2026-11-05T03:42:02+00:00",
       "devpost:31994": "2026-11-05T03:42:02+00:00",
+      "devpost:31972": "2026-11-05T03:42:02+00:00",
+      "devpost:31993": "2026-11-05T03:42:02+00:00",
+      "devpost:32009": "2026-11-05T03:42:02+00:00",
       "devpost:31642": "2026-11-05T03:42:02+00:00",
       "devpost:31083": "2026-11-05T03:42:02+00:00",
       "devpost:31960": "2026-11-05T03:42:02+00:00",
@@ -4433,9 +4449,9 @@
       "devpost:26475": "2026-11-05T03:42:02+00:00",
       "devpost:31797": "2026-11-05T03:42:02+00:00",
       "devpost:31798": "2026-11-05T03:42:02+00:00",
+      "devpost:31795": "2026-11-05T03:42:02+00:00",
       "devpost:31796": "2026-11-05T03:42:02+00:00",
       "devpost:31789": "2026-11-05T03:42:02+00:00",
-      "devpost:31795": "2026-11-05T03:42:02+00:00",
       "devpost:31737": "2026-11-05T03:42:02+00:00",
       "devpost:31773": "2026-11-05T03:42:02+00:00",
       "devpost:31733": "2026-11-05T03:42:02+00:00",
@@ -4481,6 +4497,8 @@
       "superteam:ssrfun-beta-launch-challenge": "2026-11-11T07:26:48+00:00",
       "superteam:build-an-autonomous-capital-agent-on-solana-and-compete-for-dollar500-in-rewards": "2026-11-10T21:52:47+00:00",
       "superteam:multihopper-build-and-route-challenge-up-to-dollar50000-revenue-share-1": "2026-11-05T03:42:02+00:00",
+      "immunefi:gnosischain": "2026-11-05T03:42:02+00:00",
+      "immunefi:benqi": "2026-11-05T03:42:02+00:00",
       "immunefi:gmx": "2026-11-05T03:42:02+00:00",
       "immunefi:staderforeth": "2026-11-05T03:42:02+00:00",
       "immunefi:metric": "2026-11-10T14:53:33+00:00",
@@ -4507,7 +4525,6 @@
       "immunefi:gmtrade": "2026-11-05T03:42:02+00:00",
       "immunefi:alchemix-1": "2026-11-05T03:42:02+00:00",
       "immunefi:sp1": "2026-11-05T03:42:02+00:00",
-      "immunefi:gnosischain": "2026-11-05T03:42:02+00:00",
       "immunefi:debridge": "2026-11-05T03:42:02+00:00",
       "immunefi:symbiosis": "2026-11-05T03:42:02+00:00",
       "immunefi:ipor": "2026-11-05T03:42:02+00:00",
@@ -4519,7 +4536,6 @@
       "immunefi:justlenddao": "2026-11-05T03:42:02+00:00",
       "immunefi:acala": "2026-11-05T03:42:02+00:00",
       "immunefi:blockpinetwork": "2026-11-05T03:42:02+00:00",
-      "immunefi:benqi": "2026-11-05T03:42:02+00:00",
       "immunefi:Aevo": "2026-11-05T03:42:02+00:00",
       "immunefi:olympus": "2026-11-05T03:42:02+00:00",
       "immunefi:rhinofi": "2026-11-05T03:42:02+00:00",
@@ -4977,40 +4993,22 @@
         "discovered_at": "2026-11-05T03:42:02+00:00"
       },
       {
-        "id": "devpost:31083",
+        "id": "devpost:31571",
         "category": "hackathon",
         "source": "devpost",
-        "title": "QNX Global Hackathon",
-        "url": "https://qnx.devpost.com/",
-        "prize": "$50,000 in prizes",
-        "detail": "QNX \u00b7 IoT, Machine Learning/AI",
+        "title": "Cloud9 x JetBrains: Sky's The Limit Hackathon 2026",
+        "url": "https://cloud9.devpost.com/",
+        "prize": "$25,000 in prizes",
+        "detail": "Cloud9 \u00b7 Databases, Gaming",
         "pays": true,
         "crypto": false,
         "kyc": "not published",
         "beginner": false,
-        "deadline": "2026-12-15T23:59+00:00",
-        "starts_at": "2026-11-02T00:00+00:00",
+        "deadline": "2027-01-12T23:59+00:00",
+        "starts_at": "2026-11-17T00:00+00:00",
         "posted_at": null,
-        "score": 56,
-        "discovered_at": "2026-11-05T03:42:02+00:00"
-      },
-      {
-        "id": "devpost:30819",
-        "category": "hackathon",
-        "source": "devpost",
-        "title": "United Hacks V8",
-        "url": "https://unitedhacksv8.devpost.com/",
-        "prize": "$18,700 in prizes",
-        "detail": "Hack United \u00b7 Beginner Friendly, Design",
-        "pays": true,
-        "crypto": false,
-        "kyc": "not published",
-        "beginner": true,
-        "deadline": "2027-01-10T23:59+00:00",
-        "starts_at": "2027-01-08T00:00+00:00",
-        "posted_at": null,
-        "score": 55,
-        "discovered_at": "2026-11-09T02:49:29+00:00"
+        "score": 52,
+        "discovered_at": "2026-11-17T20:27:43+00:00"
       },
       {
         "id": "devpost:31905",
@@ -5085,6 +5083,24 @@
         "discovered_at": "2026-11-16T17:23:51+00:00"
       },
       {
+        "id": "devpost:32158",
+        "category": "hackathon",
+        "source": "devpost",
+        "title": "AI@UCF Semester Sprint",
+        "url": "https://semester-sprint.devpost.com/",
+        "prize": "",
+        "detail": "AI@ucf \u00b7 Machine Learning/AI",
+        "pays": false,
+        "crypto": false,
+        "kyc": "not published",
+        "beginner": false,
+        "deadline": "2026-11-20T23:59+00:00",
+        "starts_at": "2026-11-17T00:00+00:00",
+        "posted_at": null,
+        "score": 10,
+        "discovered_at": "2026-11-17T20:27:43+00:00"
+      },
+      {
         "id": "devpost:32137",
         "category": "hackathon",
         "source": "devpost",
@@ -5109,7 +5125,7 @@
         "title": "The Raenest Global Bounty - Writing, Video & Animation Bounty",
         "url": "https://superteam.fun/earn/listing/the-raenest-global-bounty-writing-video-and-animation",
         "prize": "13,000 USDC",
-        "detail": "Raenest \u00b7 132 entries",
+        "detail": "Raenest \u00b7 133 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5163,7 +5179,7 @@
         "title": "Create Content About KriptoK \u00b7 200 USDC Creator Challenge",
         "url": "https://superteam.fun/earn/listing/kriptok-creator-challenge-01",
         "prize": "200 USDC",
-        "detail": "KriptoK \u00b7 264 entries",
+        "detail": "KriptoK \u00b7 266 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5181,7 +5197,7 @@
         "title": "Create an Engaging X Thread Introducing Anna AI Messenger",
         "url": "https://superteam.fun/earn/listing/create-an-engaging-x-thread-introducing-anna-ai-messenger-1",
         "prize": "250 USDC",
-        "detail": "Anna \u00b7 352 entries",
+        "detail": "Anna \u00b7 357 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5217,7 +5233,7 @@
         "title": "Write a Twitter Thread on Opportunities for Students Workshop",
         "url": "https://superteam.fun/earn/listing/write-a-twitter-thread-on-opportunities-for-students-workshop",
         "prize": "400 USDG",
-        "detail": "Superteam Ukraine \u00b7 8 entries",
+        "detail": "Superteam Ukraine \u00b7 9 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5271,7 +5287,7 @@
         "title": "Create Nosana content: Explainer Thread/Article or Creative Meme/Video",
         "url": "https://superteam.fun/earn/listing/create-nosana-content-explainer-threadarticle-or-creative-memevideo",
         "prize": "660 NOS",
-        "detail": "Nosana_AI \u00b7 148 entries",
+        "detail": "Nosana_AI \u00b7 150 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",

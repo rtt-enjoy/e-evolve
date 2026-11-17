@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-17T14:27:08.990478+00:00",
-  "total_runs": 2600,
+  "last_run": "2026-11-17T15:27:16.953173+00:00",
+  "total_runs": 2601,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,34 +33,33 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt-driven loss (weak_title, 1 draft in 14 days, gate finding 'title has ALL-CAPS word') is exactly what 15 unmerged prior proposals already address, and the dominant loss (llm_error=59 lifetime, 23 in 14 days) is engine-side and explicitly not fixable by a prompt edit.",
+    "summary": "No change proposed: the only prompt-addressable loss (weak_title, 1 draft in 14 days) is already covered by 15 open title-prompt branches that were never merged, and the remaining losses (llm_error=23, empty_draft=2) are engine failures a prompt edit cannot fix.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Merge or close the 15 open title-prompt branches",
-        "description": "The review queue has accumulated 15 near-identical proposals against _revise_title / _SYSTEM TITLE rules. Reviewing them one at a time costs more than deciding once; merging the strongest single one (e.g. the 2026-11-16 concrete-example edit) and closing the rest frees the evolution loop to aim at the next signal instead of re-deriving the same edit each cycle.",
-        "owner_action": "Pick one of the 15 open title-prompt branches to merge and close the remainder; weak_title cost only 1 draft in 14 days, so a single edit is enough.",
+        "description": "weak_title cost exactly 1 draft in 14 days ('title has ALL-CAPS word' x1). Fifteen near-identical proposals against _revise_title / _SYSTEM are parked unmerged; re-proposing a sixteenth would repeat what they already say. Deciding once unblocks the evolution loop to aim at the real signal (llm_error, 23 drafts).",
+        "owner_action": "Merge the strongest single title-prompt branch (the 2026-11-16 concrete-example edit) and close the other 14, then decide whether the llm_error cluster needs an engine-side fix (retry, model switch, or fallback role) that only an owner-level change can address.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the 15 evolve/* branches and diff them against each other \u2014 most overlap heavily.",
-          "Step 2: Merge the smallest one that adds a concrete example (2026-11-16 is the most recent and most specific).",
-          "Step 3: Close the rest with a note pointing at the merged branch, so future cycles stop re-proposing it."
+          "Step 1: Diff the 15 evolve/* branches against each other; most are variants of the same one-line edit.",
+          "Step 2: Merge the smallest one with a concrete before/after example, close the rest with a pointer to it.",
+          "Step 3: Review the llm_error=23 cluster separately \u2014 that is the gate actually costing posts now, and it needs an engine decision, not a prompt edit."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path via prompt upgrades, one step per cycle; skipped because no step clears the bar this cycle.",
+    "direction": "Checklist step 4 (reach), but the evidence does not support another prompt edit this cycle",
     "evidence": [
-      "article_rejects.counts (last 14 days): weak_title=1, llm_error=23, empty_draft=2 \u2014 the prompt-reachable share is a single draft",
-      "article_rejects.last = 'weak_title': gate finding 'title has ALL-CAPS word' x1",
-      "PRIOR PROPOSALS: 15 open branches, all targeting the same ALL-CAPS / title-rewrite prompt surface (2026-11-03 through 2026-11-16), none merged",
-      "llm_engine: serving=glm, live=True, calls={'glm': 2} \u2014 engine healthy this cycle; the llm_error pile is transient upstream failures",
-      "receipt_check.covered / published_total = 50 / 54, known_without_footer = 0 \u2014 receive path verified, so reach work would be the lever, but its prompt signal is already being worked on open branches"
+      "article_rejects.counts (last 14 days): weak_title=1, llm_error=23, empty_draft=2",
+      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x1 \u2014 one occurrence, one draft",
+      "PRIOR PROPOSALS: 15 distinct open branches already target _revise_title / _SYSTEM TITLE rules, none merged",
+      "llm_engine.calls = {'glm': 1} and llm_error=23 dominate rejects \u2014 engine-side, not prompt-side"
     ],
-    "money_path": "none (maintenance decision only \u2014 no diff this cycle)",
-    "verify": "Next cycle: if a weak_title reject appears with a NEW gate finding (not 'ALL-CAPS word'), one small edit to the exact prompt named in the PROMPT FOCUS is warranted; if weak_title stays 0, nothing to fix. If llm_error grows while serving stays glm/live, the lever is engine stability, not prompts.",
+    "money_path": "none this cycle \u2014 no change proposed",
+    "verify": "Next cycle: article_rejects weak_title should stay near 0 once one of the 15 open title branches is merged; llm_error is the count to watch and is not prompt-fixable.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -69,19 +68,19 @@
   "suggestions": [
     {
       "title": "Merge or close the 15 open title-prompt branches",
-      "description": "The review queue has accumulated 15 near-identical proposals against _revise_title / _SYSTEM TITLE rules. Reviewing them one at a time costs more than deciding once; merging the strongest single one (e.g. the 2026-11-16 concrete-example edit) and closing the rest frees the evolution loop to aim at the next signal instead of re-deriving the same edit each cycle.",
-      "owner_action": "Pick one of the 15 open title-prompt branches to merge and close the remainder; weak_title cost only 1 draft in 14 days, so a single edit is enough.",
+      "description": "weak_title cost exactly 1 draft in 14 days ('title has ALL-CAPS word' x1). Fifteen near-identical proposals against _revise_title / _SYSTEM are parked unmerged; re-proposing a sixteenth would repeat what they already say. Deciding once unblocks the evolution loop to aim at the real signal (llm_error, 23 drafts).",
+      "owner_action": "Merge the strongest single title-prompt branch (the 2026-11-16 concrete-example edit) and close the other 14, then decide whether the llm_error cluster needs an engine-side fix (retry, model switch, or fallback role) that only an owner-level change can address.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the 15 evolve/* branches and diff them against each other \u2014 most overlap heavily.",
-        "Step 2: Merge the smallest one that adds a concrete example (2026-11-16 is the most recent and most specific).",
-        "Step 3: Close the rest with a note pointing at the merged branch, so future cycles stop re-proposing it."
+        "Step 1: Diff the 15 evolve/* branches against each other; most are variants of the same one-line edit.",
+        "Step 2: Merge the smallest one with a concrete before/after example, close the rest with a pointer to it.",
+        "Step 3: Review the llm_error=23 cluster separately \u2014 that is the gate actually costing posts now, and it needs an engine decision, not a prompt edit."
       ],
       "discovered_at": "2026-11-17T14:27:38.082715+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 30,
+  "last_cycle_seconds": 20,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2807,7 +2806,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-17T14:27:09.428557+00:00",
+    "checked_at": "2026-11-17T15:27:17.635657+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3559,7 +3558,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-17T14:27:38.289598+00:00",
+    "last_run": "2026-11-17T15:27:36.820297+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3569,30 +3568,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-17T14:27:38.495907+00:00",
+    "last_run": "2026-11-17T15:27:36.946816+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4503417,
-        "at": "2026-11-17T03:05:42.376405+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-11-17T03:05:42.376405+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
-        "at": "2026-11-17T04:07:54.027004+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-11-17T04:07:54.027004+00:00",
-        "ok": true
-      },
       {
         "id": 4959304,
         "at": "2026-11-17T04:07:54.027004+00:00",
@@ -3799,11 +3778,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-17T14:27:38.495907+00:00",
-        "ok": true
-      },
-      {
         "id": 4800078,
         "at": "2026-11-17T14:27:38.495907+00:00",
         "ok": true
@@ -3822,6 +3796,31 @@
         "id": 4740283,
         "at": "2026-11-17T14:27:38.495907+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-17T15:27:36.946816+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-11-17T15:27:36.946816+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-11-17T15:27:36.946816+00:00",
+        "ok": true
+      },
+      {
+        "id": 4931682,
+        "at": "2026-11-17T15:27:36.946816+00:00",
+        "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-11-17T15:27:36.946816+00:00",
+        "ok": true
       }
     ],
     "published_total": 54,
@@ -3829,7 +3828,7 @@
     "unverified": 4,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.4
+    "oldest_check_age_hours": 11.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

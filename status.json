@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-16T23:05:04.616871+00:00",
-  "total_runs": 2584,
+  "last_run": "2026-11-17T00:05:20.823302+00:00",
+  "total_runs": 2585,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -32,53 +32,84 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change clears the bar: the prompt focus (weak_title) cost exactly 1 draft in 14 days, and 15 open unmerged proposals already cover that exact lane \u2014 the ALL-CAPS title defect is addressed from five different angles already parked on review branches.",
+    "summary": "No change this cycle: the only prompt-fixable defect (weak_title, 1 draft in 14 days, ALL-CAPS word) is already covered by fifteen open unmerged branches attacking it from every angle \u2014 adding a sixteenth would repeat a known dead end \u2014 and the dominant loss (llm_error=23) is engine-side, not prompt-side.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge exactly one of the nine open title-fix branches and close the rest",
-        "description": "Nine unmerged proposals all attack the same 1-draft-in-14-days ALL-CAPS title defect. Merging one lets the next evolution measure it; leaving all open means every future cycle re-derives the same edit.",
-        "owner_action": "Pick the smallest one (e.g. the 2026-11-16 concrete-example edit to the TITLE banned rule) and merge it; close the other eight title branches as superseded.",
+        "title": "Merge exactly one of the fifteen open title-fix branches and close the rest",
+        "description": "Fifteen unmerged proposals all attack the same 1-draft-per-14-days ALL-CAPS title defect from different angles (prompt rule, rewrite prompt, deterministic rescue, acronym allowlist). Leaving them all open means every future cycle re-derives the same edit instead of measuring one.",
+        "owner_action": "Pick the smallest one (e.g. the 2026-11-16 concrete-example edit to the TITLE banned rule) and merge it; close the other fourteen branches as superseded, then let the weak_title window count measure it.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: review the open evolve/* branches from 2026-11-03 onward that touch bot/earning/articles.py title rules.",
-          "Step 2: merge one, delete the rest, and let the weak_title count over the next window say whether it worked."
+          "Step 1: list the open evolve/* branches from 2026-11-03 onward that touch bot/earning/articles.py title rules or _revise_title.",
+          "Step 2: merge one, delete the rest as superseded.",
+          "Step 3: read article_rejects.counts.weak_title and the 14-day window count after a few cycles; if the ALL-CAPS finding recurs, the next evolution has fresh evidence."
+        ]
+      },
+      {
+        "title": "Investigate the llm_error spike if it persists",
+        "description": "llm_error=23 in the last 14 days versus weak_title=1: the engine, not the prompts, is losing 23x more drafts. If it continues, prompt work is polishing the wrong stage.",
+        "owner_action": "If next week's window still shows llm_error in double digits, check GLM_API_KEY quota/health and whether the atria fallback actually engages on those failures.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: read article_rejects.recent entries with code llm_error for the error strings.",
+          "Step 2: if they are rate limits, the hourly cycle already spaces retries (no backoff loop per doctrine); if they are quota/auth, that is an owner-side key issue."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path; PROMPT FOCUS on weak_title",
+    "direction": "Checklist step 4 / PROMPT FOCUS on weak_title \u2014 served by consolidation, not a new edit",
     "evidence": [
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed' (1 draft in the 14-day window)",
-      "Gate finding behind it: 'title has ALL-CAPS word' x1",
-      "PRIOR PROPOSALS: 15 open branches, of which at least 9 target the same title-defect lane (_revise_title prompt edits, ALL-CACS rescue, acronym allowlist, three-candidate rewrite, deterministic rescue)",
-      "Drafts lost to the engine last 14 days: llm_error=23 \u2014 an order of magnitude larger loss, and the brief states it is not fixable by a prompt edit",
-      "article_stats.count = 53, avg_views = 123.0, best_archetype = 'problem-workahead' (n=11) \u2014 publishing continues; one lost title draft is not the binding constraint"
+      "article_rejects.counts (lifetime): weak_title=15, llm_error=59, empty_draft=11",
+      "Drafts lost to a prompt (last 14 days): weak_title=1 \u2014 a single draft",
+      "Gate finding: 'title has ALL-CAPS word' x1 \u2014 exactly the defect all fifteen open branches target",
+      "Drafts lost to the engine (last 14 days): llm_error=23 \u2014 23x the prompt-fixable loss, and explicitly not fixable by a prompt edit",
+      "PRIOR PROPOSALS: 15 distinct open branches, every one an edit to articles.py title rules or _revise_title (2026-11-03 through 2026-11-16)",
+      "status.suggestions already carries the owner action: merge one title-fix branch, close the rest"
     ],
-    "money_path": "none (a one-draft title loss over 14 days is not a measurable reach constraint, and a 16th near-duplicate proposal would not change that)",
-    "verify": "If the owner merges any one of the already-open title proposals, the metric to watch is article_rejects.counts.weak_title staying flat over the next 14-day window; no new branch is needed from this cycle.",
+    "money_path": "reach-only, and no change proposed: one lost draft per 14 days is not a measurable reach cost, and the existing fix is already parked on a review branch awaiting a human decision",
+    "verify": "No diff to verify. After the owner merges any one of the fifteen title branches: article_rejects.counts.weak_title should not rise, and the 14-day weak_title window count should stay at 0; if it rises again with detail 'ALL-CAPS word', the next edit has evidence to work from. Separately, the llm_error=23 count in the same window is the number worth watching \u2014 if it persists, that is an engine/availability issue, not a writing issue.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "ctf-bounty",
+        "success": true,
+        "estimated_usd": 0.0,
+        "listed": 18
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge exactly one of the nine open title-fix branches and close the rest",
-      "description": "Nine unmerged proposals all attack the same 1-draft-in-14-days ALL-CAPS title defect. Merging one lets the next evolution measure it; leaving all open means every future cycle re-derives the same edit.",
-      "owner_action": "Pick the smallest one (e.g. the 2026-11-16 concrete-example edit to the TITLE banned rule) and merge it; close the other eight title branches as superseded.",
+      "title": "Merge exactly one of the fifteen open title-fix branches and close the rest",
+      "description": "Fifteen unmerged proposals all attack the same 1-draft-per-14-days ALL-CAPS title defect from different angles (prompt rule, rewrite prompt, deterministic rescue, acronym allowlist). Leaving them all open means every future cycle re-derives the same edit instead of measuring one.",
+      "owner_action": "Pick the smallest one (e.g. the 2026-11-16 concrete-example edit to the TITLE banned rule) and merge it; close the other fourteen branches as superseded, then let the weak_title window count measure it.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: review the open evolve/* branches from 2026-11-03 onward that touch bot/earning/articles.py title rules.",
-        "Step 2: merge one, delete the rest, and let the weak_title count over the next window say whether it worked."
+        "Step 1: list the open evolve/* branches from 2026-11-03 onward that touch bot/earning/articles.py title rules or _revise_title.",
+        "Step 2: merge one, delete the rest as superseded.",
+        "Step 3: read article_rejects.counts.weak_title and the 14-day window count after a few cycles; if the ALL-CAPS finding recurs, the next evolution has fresh evidence."
       ],
-      "discovered_at": "2026-11-16T23:05:26.360608+00:00"
+      "discovered_at": "2026-11-17T00:05:45.277045+00:00"
+    },
+    {
+      "title": "Investigate the llm_error spike if it persists",
+      "description": "llm_error=23 in the last 14 days versus weak_title=1: the engine, not the prompts, is losing 23x more drafts. If it continues, prompt work is polishing the wrong stage.",
+      "owner_action": "If next week's window still shows llm_error in double digits, check GLM_API_KEY quota/health and whether the atria fallback actually engages on those failures.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: read article_rejects.recent entries with code llm_error for the error strings.",
+        "Step 2: if they are rate limits, the hourly cycle already spaces retries (no backoff loop per doctrine); if they are quota/auth, that is an owner-side key issue."
+      ],
+      "discovered_at": "2026-11-17T00:05:45.277045+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 22,
+  "last_cycle_seconds": 26,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2769,7 +2800,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-16T23:05:05.153299+00:00",
+    "checked_at": "2026-11-17T00:05:21.339397+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3521,7 +3552,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-16T23:05:26.582479+00:00",
+    "last_run": "2026-11-17T00:05:46.102426+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3531,30 +3562,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-16T23:05:26.781314+00:00",
+    "last_run": "2026-11-17T00:05:46.460426+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4430049,
-        "at": "2026-11-16T04:50:13.402921+00:00",
-        "ok": true
-      },
-      {
-        "id": 5025764,
-        "at": "2026-11-16T04:50:13.402921+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
-        "at": "2026-11-16T05:50:27.192956+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-11-16T05:50:27.192956+00:00",
-        "ok": true
-      },
       {
         "id": 4780783,
         "at": "2026-11-16T06:54:06.433330+00:00",
@@ -3761,11 +3772,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-16T23:05:26.781314+00:00",
-        "ok": true
-      },
-      {
         "id": 4908316,
         "at": "2026-11-16T23:05:26.781314+00:00",
         "ok": true
@@ -3784,6 +3790,31 @@
         "id": 4977763,
         "at": "2026-11-16T23:05:26.781314+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-17T00:05:46.460426+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-11-17T00:05:46.460426+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-17T00:05:46.460426+00:00",
+        "ok": true
+      },
+      {
+        "id": 4943931,
+        "at": "2026-11-17T00:05:46.460426+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-11-17T00:05:46.460426+00:00",
+        "ok": true
       }
     ],
     "published_total": 54,
@@ -3791,7 +3822,7 @@
     "unverified": 4,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 18.3
+    "oldest_check_age_hours": 17.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3823,7 +3854,7 @@
   },
   "ctf_bounty": {
     "source": "ctftime",
-    "last_refresh_at": "2026-11-16T20:23:50.005038+00:00",
+    "last_refresh_at": "2026-11-17T00:05:45.279546+00:00",
     "last_reason": "ok",
     "fetched": 27,
     "enterable": 18,
@@ -3839,7 +3870,7 @@
         "start": "2026-11-20T10:00:00+00:00",
         "finish": "2026-11-22T10:00:00+00:00",
         "live": false,
-        "days_until_start": 3.6,
+        "days_until_start": 3.4,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 61,
@@ -3859,7 +3890,7 @@
         "start": "2026-12-19T12:00:00+00:00",
         "finish": "2026-12-20T12:00:00+00:00",
         "live": false,
-        "days_until_start": 32.7,
+        "days_until_start": 32.5,
         "format": "Jeopardy",
         "weight": 77.38,
         "participants": 36,
@@ -3879,10 +3910,10 @@
         "start": "2026-11-20T23:00:00+00:00",
         "finish": "2026-11-21T23:00:00+00:00",
         "live": false,
-        "days_until_start": 4.1,
+        "days_until_start": 4.0,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 27,
+        "participants": 28,
         "prizes": "1st 6 month Premium Try Hack Me for every team member 12 months of free SkillBit Labs access for every team member. Four .xyz domains, one for each team member.",
         "pays": false,
         "crypto": false,
@@ -3899,10 +3930,10 @@
         "start": "2026-11-20T23:00:00+00:00",
         "finish": "2026-11-22T23:00:00+00:00",
         "live": false,
-        "days_until_start": 4.1,
+        "days_until_start": 4.0,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 203,
+        "participants": 204,
         "prizes": "To be announced!",
         "pays": false,
         "crypto": false,
@@ -3919,10 +3950,10 @@
         "start": "2026-11-21T13:00:00+00:00",
         "finish": "2026-11-21T21:00:00+00:00",
         "live": false,
-        "days_until_start": 4.7,
+        "days_until_start": 4.5,
         "format": "Jeopardy",
         "weight": 37.0,
-        "participants": 53,
+        "participants": 54,
         "prizes": "",
         "pays": false,
         "crypto": false,
@@ -3939,7 +3970,7 @@
         "start": "2026-11-28T04:30:00+00:00",
         "finish": "2026-11-28T16:30:00+00:00",
         "live": false,
-        "days_until_start": 11.3,
+        "days_until_start": 11.2,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 35,
@@ -3959,7 +3990,7 @@
         "start": "2026-11-28T14:00:00+00:00",
         "finish": "2026-11-29T14:00:00+00:00",
         "live": false,
-        "days_until_start": 11.7,
+        "days_until_start": 11.6,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 10,
@@ -3979,10 +4010,10 @@
         "start": "2026-11-20T18:00:00+00:00",
         "finish": "2026-11-21T18:00:00+00:00",
         "live": false,
-        "days_until_start": 3.9,
+        "days_until_start": 3.7,
         "format": "Jeopardy",
         "weight": 73.17,
-        "participants": 142,
+        "participants": 145,
         "prizes": "TBA",
         "pays": false,
         "crypto": false,
@@ -3999,7 +4030,7 @@
         "start": "2026-11-27T11:00:00+00:00",
         "finish": "2026-11-27T19:00:00+00:00",
         "live": false,
-        "days_until_start": 10.6,
+        "days_until_start": 10.5,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 7,
@@ -4019,7 +4050,7 @@
         "start": "2026-11-27T18:00:00+00:00",
         "finish": "2026-11-28T18:00:00+00:00",
         "live": false,
-        "days_until_start": 10.9,
+        "days_until_start": 10.7,
         "format": "Jeopardy",
         "weight": 45.76,
         "participants": 51,
@@ -4039,7 +4070,7 @@
         "start": "2026-12-04T18:00:00+00:00",
         "finish": "2026-12-06T18:00:00+00:00",
         "live": false,
-        "days_until_start": 17.9,
+        "days_until_start": 17.7,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 24,
@@ -4059,7 +4090,7 @@
         "start": "2026-12-05T05:00:00+00:00",
         "finish": "2026-12-06T17:00:00+00:00",
         "live": false,
-        "days_until_start": 18.4,
+        "days_until_start": 18.2,
         "format": "Jeopardy",
         "weight": 79.51,
         "participants": 37,
@@ -4079,7 +4110,7 @@
         "start": "2026-12-11T12:00:00+00:00",
         "finish": "2026-12-13T12:00:00+00:00",
         "live": false,
-        "days_until_start": 24.7,
+        "days_until_start": 24.5,
         "format": "Jeopardy",
         "weight": 59.0,
         "participants": 72,
@@ -4099,7 +4130,7 @@
         "start": "2026-12-17T19:00:00+00:00",
         "finish": "2026-12-19T07:00:00+00:00",
         "live": false,
-        "days_until_start": 30.9,
+        "days_until_start": 30.8,
         "format": "Jeopardy",
         "weight": 22.9,
         "participants": 10,
@@ -4119,7 +4150,7 @@
         "start": "2026-12-27T14:00:00+00:00",
         "finish": "2026-12-28T14:00:00+00:00",
         "live": false,
-        "days_until_start": 40.7,
+        "days_until_start": 40.6,
         "format": "Jeopardy",
         "weight": 99.38,
         "participants": 0,
@@ -4139,7 +4170,7 @@
         "start": "2026-12-29T12:00:00+00:00",
         "finish": "2026-12-31T12:00:00+00:00",
         "live": false,
-        "days_until_start": 42.7,
+        "days_until_start": 42.5,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 8,
@@ -4159,7 +4190,7 @@
         "start": "2027-01-02T18:00:00+00:00",
         "finish": "2027-01-03T18:00:00+00:00",
         "live": false,
-        "days_until_start": 46.9,
+        "days_until_start": 46.7,
         "format": "Jeopardy",
         "weight": 25.0,
         "participants": 1,
@@ -4179,7 +4210,7 @@
         "start": "2027-01-09T00:00:00+00:00",
         "finish": "2027-01-11T00:00:00+00:00",
         "live": false,
-        "days_until_start": 53.2,
+        "days_until_start": 53.0,
         "format": "Jeopardy",
         "weight": 50.0,
         "participants": 0,

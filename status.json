@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-17T22:27:29.936931+00:00",
-  "total_runs": 2608,
+  "last_run": "2026-11-17T22:53:52.601535+00:00",
+  "total_runs": 2609,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,41 +33,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the one prompt-measured defect (weak_title, 1 draft in 14 days, finding 'title has ALL-CAPS word') is already covered by fifteen unmerged branches, and the dominant draft loss (llm_error=59, 23 in 14 days) lives in bot/llm.py which is protected \u2014 adding a sixteenth title variant would repeat a known dead end.",
+    "summary": "No change proposed: the prompt-focus gate (weak_title) lost only 1 draft in the last 14 days, and 13 open review branches already propose every distinct fix for it \u2014 a 14th title-rewrite variant would duplicate work already awaiting the owner's decision, while the real reject cost (llm_error=23 in-window) is an engine failure no prompt edit can fix.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge exactly one title-prompt branch, close the other fourteen",
-        "description": "Unblocks the only measured prompt defect without a sixteenth variant; frees future cycles to look at fresh evidence instead of the title gate.",
-        "owner_action": "Pick the smallest open branch containing a concrete ALL-CAPS/acronym example, merge it, close the rest citing it.",
+        "title": "Merge one of the 13 open title-prompt branches instead of generating a 14th",
+        "description": "All open proposals target the same measured defect (the ALL-CAPS title reject). Merging any one of them clears the weak_title lane for a cycle; leaving all 13 open means every future cycle re-derives the same proposal.",
+        "owner_action": "Review and merge (or close) the open evolve/* branches touching bot/earning/articles.py TITLE rules / _revise_title, starting with the 2026-11-16 acronym-vs-shouting example, which directly matches this cycle's gate finding.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Diff the fifteen evolve/* title branches; prefer the deterministic one (2026-11-15, 'un-shout rescue') since it fixes the defect without an LLM call.",
-          "Step 2: Merge that one; close the other fourteen with a pointer so the ledger records why.",
-          "Step 3: Separately decide the llm_error failover policy: glm-5.3-flash lost 23 post drafts in 14 days while the atria fallback is configured and live \u2014 tightening failover in bot/llm.py (owner-only) recovers roughly 25 posts per fortnight, each carrying the tip footer."
-        ]
-      },
-      {
-        "title": "Complete receive-path coverage so reach steering stands on verified ground",
-        "description": "coverage_complete is False with 5 posts unobserved; until it is true, article_interest steering optimizes reach the checklist still calls provisional.",
-        "owner_action": "None required beyond letting cycles run \u2014 but confirm the next 1-2 cycles show receipt_check.covered reaching 55 and coverage_complete=true rather than the rotation stalling on 429s.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Check next cycle's receipt_check.covered \u2014 it should rise above 50; if it stalls at 50, the dev.to 429 throttling (visible in backfill.skipped) is starving the verifier too.",
-          "Step 2: If stalled for 3+ cycles, consider lowering receipt_check max_per_cycle in config so each cycle samples fewer posts and completes coverage despite the IP throttle."
+          "Step 1: Open the 13 listed evolve/* branches in the GitHub PR list.",
+          "Step 2: Merge the most recent one (2026-11-16) and close the overlapping 2026-11-04/05/10/11/14/15 branches as superseded."
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach via prompt upgrades, one step per cycle; but every step the PROMPT FOCUS names is already parked unmerged, and doctrine 'Replace a rule, don't stack' forbids another variant of the same edit.",
+    "direction": "Step 4 \u2014 reach into a live receive path; prompt-focus discipline (upgrade prompts one step per cycle, but never stack duplicate work)",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime but 1 in the last 14 days \u2014 the prompt-focus signal is nearly exhausted",
-      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x1 \u2014 a deterministic rescue already exists as the open branch 2026-11-15 'deterministic un-shout rescue'",
-      "article_rejects.counts: llm_error=59 (23 in 14 days) \u2014 the real cost, owned by bot/llm.py (protected) and its fallback config, not by any prompt in the ledger",
-      " Fifteen open branches already propose the identical class of edit to _SYSTEM/_revise_title; the last cycle's own suggestion said 'this cycle refuses to add a sixteenth'",
-      "receipt_check.covered/published_total = 50/55, coverage_complete=False \u2014 receive-path verification is still incomplete, so reach steering is provisional"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "Drafts lost to a prompt (last 14 days): weak_title=1 \u2014 one lost draft in two weeks",
+      "Gate findings behind it: 'title has ALL-CAPS word' x1 \u2014 a single deterministic defect, once",
+      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=23, empty_draft=2 \u2014 92% of prompt-side losses are engine failures",
+      "PRIOR PROPOSALS: 13 open branches, all targeting _SYSTEM TITLE rules or _revise_title, including the acronym-vs-shouting example and ALL-CAPS rescue angles that match this cycle's gate finding",
+      "payout.live = true, receipt_check.known_without_footer = 0 \u2014 the receive path is clean, so reach work is the right lane, but the named prompt is not where the reach is being lost"
     ],
-    "money_path": "none this cycle \u2014 merging any one of the fifteen parked branches would ship the change; a new sixteenth variant would not.",
-    "verify": "No change to verify. After the owner merges one title branch and closes the rest, weak_title in the 14-day window should fall to 0 and the PROMPT FOCUS should move off the title prompt.",
+    "money_path": "reach-only. The receive path is live and verified (payout.live=true, known_without_footer=0); the marginal post this would have saved is one article and one tip ask, and 13 proposals to save exactly that class of draft are already parked on review branches.",
+    "verify": "Next cycle's evolution brief should show weak_title at 0 in the 14-day window (the single ALL-CAPS reject ages out or is fixed by whichever of the 13 open title proposals the owner merges), and article_daily.published staying at 1 per day despite the gate.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -78,31 +68,19 @@
   },
   "suggestions": [
     {
-      "title": "Merge exactly one title-prompt branch, close the other fourteen",
-      "description": "Unblocks the only measured prompt defect without a sixteenth variant; frees future cycles to look at fresh evidence instead of the title gate.",
-      "owner_action": "Pick the smallest open branch containing a concrete ALL-CAPS/acronym example, merge it, close the rest citing it.",
+      "title": "Merge one of the 13 open title-prompt branches instead of generating a 14th",
+      "description": "All open proposals target the same measured defect (the ALL-CAPS title reject). Merging any one of them clears the weak_title lane for a cycle; leaving all 13 open means every future cycle re-derives the same proposal.",
+      "owner_action": "Review and merge (or close) the open evolve/* branches touching bot/earning/articles.py TITLE rules / _revise_title, starting with the 2026-11-16 acronym-vs-shouting example, which directly matches this cycle's gate finding.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Diff the fifteen evolve/* title branches; prefer the deterministic one (2026-11-15, 'un-shout rescue') since it fixes the defect without an LLM call.",
-        "Step 2: Merge that one; close the other fourteen with a pointer so the ledger records why.",
-        "Step 3: Separately decide the llm_error failover policy: glm-5.3-flash lost 23 post drafts in 14 days while the atria fallback is configured and live \u2014 tightening failover in bot/llm.py (owner-only) recovers roughly 25 posts per fortnight, each carrying the tip footer."
+        "Step 1: Open the 13 listed evolve/* branches in the GitHub PR list.",
+        "Step 2: Merge the most recent one (2026-11-16) and close the overlapping 2026-11-04/05/10/11/14/15 branches as superseded."
       ],
-      "discovered_at": "2026-11-17T22:27:57.742718+00:00"
-    },
-    {
-      "title": "Complete receive-path coverage so reach steering stands on verified ground",
-      "description": "coverage_complete is False with 5 posts unobserved; until it is true, article_interest steering optimizes reach the checklist still calls provisional.",
-      "owner_action": "None required beyond letting cycles run \u2014 but confirm the next 1-2 cycles show receipt_check.covered reaching 55 and coverage_complete=true rather than the rotation stalling on 429s.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: Check next cycle's receipt_check.covered \u2014 it should rise above 50; if it stalls at 50, the dev.to 429 throttling (visible in backfill.skipped) is starving the verifier too.",
-        "Step 2: If stalled for 3+ cycles, consider lowering receipt_check max_per_cycle in config so each cycle samples fewer posts and completes coverage despite the IP throttle."
-      ],
-      "discovered_at": "2026-11-17T22:27:57.742718+00:00"
+      "discovered_at": "2026-11-17T22:54:14.559606+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 28,
+  "last_cycle_seconds": 23,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2820,7 +2798,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-17T22:27:30.533780+00:00",
+    "checked_at": "2026-11-17T22:53:53.098792+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3572,7 +3550,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-17T22:27:57.913293+00:00",
+    "last_run": "2026-11-17T22:54:14.822037+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3582,30 +3560,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-17T22:27:58.046793+00:00",
+    "last_run": "2026-11-17T22:54:15.017984+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4820684,
-        "at": "2026-11-17T10:32:45.675643+00:00",
-        "ok": true
-      },
-      {
-        "id": 4641536,
-        "at": "2026-11-17T10:32:45.675643+00:00",
-        "ok": true
-      },
-      {
-        "id": 4965279,
-        "at": "2026-11-17T10:32:45.675643+00:00",
-        "ok": true
-      },
-      {
-        "id": 4908316,
-        "at": "2026-11-17T11:30:33.112627+00:00",
-        "ok": true
-      },
       {
         "id": 4859277,
         "at": "2026-11-17T11:30:33.112627+00:00",
@@ -3812,11 +3770,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-17T22:27:58.046793+00:00",
-        "ok": true
-      },
-      {
         "id": 4727685,
         "at": "2026-11-17T22:27:58.046793+00:00",
         "ok": true
@@ -3835,6 +3788,31 @@
         "id": 4552210,
         "at": "2026-11-17T22:27:58.046793+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-17T22:54:15.017984+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-11-17T22:54:15.017984+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-11-17T22:54:15.017984+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-11-17T22:54:15.017984+00:00",
+        "ok": true
+      },
+      {
+        "id": 5027243,
+        "at": "2026-11-17T22:54:15.017984+00:00",
+        "ok": true
       }
     ],
     "published_total": 55,
@@ -3842,7 +3820,7 @@
     "unverified": 5,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.9
+    "oldest_check_age_hours": 11.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

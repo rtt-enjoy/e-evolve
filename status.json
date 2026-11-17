@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-17T05:30:00.624079+00:00",
-  "total_runs": 2591,
+  "last_run": "2026-11-17T06:30:10.136782+00:00",
+  "total_runs": 2592,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -32,30 +32,41 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus gate lost only 1 draft in 14 days (weak_title, one ALL-CAPS finding), which is within noise, while llm_error lost 23 drafts \u2014 an engine-side failure no prompt edit can fix; and 15 prior prompt-edit proposals on this exact prompt remain unmerged, so another one has no evidentiary basis.",
+    "summary": "No change proposed: the prompt focus lost only 1 draft to weak_title in 14 days (gate finding 'title has ALL-CAPS word' x1), and every plausible instruction-side fix for that exact defect already sits on one of the 15 open unmerged review branches (examples for the ALL-CAPS rule, _revise_title sharpenings, deterministic rescues). Proposing a sixteenth variant of the same edit would not add information for the reviewer.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Add the wallet ask to the dev.to profile bio",
-        "description": "Carries the tip address on every profile visit permanently, covering readers who arrive via the author page rather than a post \u2014 the one cheap unmet surface on the channel table.",
-        "owner_action": "Paste the published Tron address into the Bio field at dev.to/settings once.",
+        "title": "Review and merge or close the 15 open title-prompt branches",
+        "description": "The title lane has accumulated one small proposal per cycle, all unmerged; they now contradict each other (several edit _revise_title differently). Deciding them once unblocks future prompt work instead of re-deriving the same edit each cycle.",
+        "owner_action": "Read the 15 open evolve/* branches, merge at most one title-prompt edit, and close the rest so the ledger stops re-proposing it.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: open https://dev.to/settings and edit the Bio field.",
-          "Step 2: paste the TRC-20 address already in payout_public.address and save.",
-          "Step 3: confirm receipt_check next cycle still shows known_without_footer = 0 (bio is outside its scope but the address becomes visible on the profile)."
+          "Step 1: list open branches matching evolve/* touching bot/earning/articles.py.",
+          "Step 2: merge the single strongest one (the 2026-11-16 concrete ALL-CAPS example is the one matching the last gate finding).",
+          "Step 3: close the remainder with a note so future cycles stop regenerating them."
+        ]
+      },
+      {
+        "title": "Add the wallet ask to the dev.to profile bio",
+        "description": "Still the one cheap unmet receive surface: carries the tip address on every profile visit permanently. Re-stated because it costs two minutes and nothing else on the channel table is left that needs no account.",
+        "owner_action": "Paste payout_public.address into the Bio field at dev.to/settings once and save.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: open https://dev.to/settings.",
+          "Step 2: paste the TRC-20 address [redacted] into the Bio field and save.",
+          "Step 3: confirm next cycle's receipt_check still shows known_without_footer = 0."
         ]
       }
     ],
-    "direction": "Step 4 (reach) via the PROMPT LEDGER discipline: grade prompts on the 14-day reject window and change only what the window actually shows losing drafts.",
+    "direction": "Checklist step 4 \u2014 reach into a live receive path, via prompt upgrades one step per cycle; Principle 3j discipline on thin signals",
     "evidence": [
-      "article_rejects: weak_title = 1 in the last 14 days (the ledger's own threshold grade)",
-      "article_rejects: llm_error = 23 in the last 14 days, empty_draft = 2 \u2014 engine-side, explicitly marked 'not fixable by a prompt edit'",
-      "PROMPT FOCUS gate finding behind weak_title: 'title has ALL-CAPS word' x1 \u2014 a single deterministic finding, not a recurring pattern",
-      "PRIOR PROPOSALS: 15 distinct unmerged proposals already target _revise_title / the TITLE rules for this exact defect, 2026-11-03 through 2026-11-16"
+      "article_rejects.counts total 90, of which llm_error=59 and 23 of those in the last 14 days \u2014 engine failures, not fixable by a prompt edit",
+      "weak_title=15 lifetime but only weak_title=1 in the last 14 days; last finding 'title has ALL-CAPS word' x1",
+      "15 prior open proposals already target the article-draft TITLE rules and _revise_title, including the exact ALL-CAPS example edit (2026-11-16) and multiple _revise_title sharpenings",
+      "article_interest problem-workaround n=11 avg=438.1 already steers sourcing and _audience_guidance through the existing preferred_archetypes path; no prompt change is needed for the steering to act"
     ],
-    "money_path": "none (no change proposed; the reach work this cycle is the daily article that already published, article_daily.published = 1)",
-    "verify": "Nothing to verify this cycle. If weak_title climbs above ~2-3 in a 14-day window, or a non-acronym ALL-CAPS pattern recurs, the next cycle should re-grade and pick the least-overlapping of the unmerged title fixes.",
+    "money_path": "reach-only (nothing proposed)",
+    "verify": "Next cycle's PROMPT LEDGER window: if a weak_title reject recurs with a new finding not covered by an open branch, propose against that finding then; also confirm article_daily.published stays 1 and the merged title branches reduce weak_title in the 14-day window",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -66,20 +77,32 @@
   },
   "suggestions": [
     {
-      "title": "Add the wallet ask to the dev.to profile bio",
-      "description": "Carries the tip address on every profile visit permanently, covering readers who arrive via the author page rather than a post \u2014 the one cheap unmet surface on the channel table.",
-      "owner_action": "Paste the published Tron address into the Bio field at dev.to/settings once.",
+      "title": "Review and merge or close the 15 open title-prompt branches",
+      "description": "The title lane has accumulated one small proposal per cycle, all unmerged; they now contradict each other (several edit _revise_title differently). Deciding them once unblocks future prompt work instead of re-deriving the same edit each cycle.",
+      "owner_action": "Read the 15 open evolve/* branches, merge at most one title-prompt edit, and close the rest so the ledger stops re-proposing it.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: open https://dev.to/settings and edit the Bio field.",
-        "Step 2: paste the TRC-20 address already in payout_public.address and save.",
-        "Step 3: confirm receipt_check next cycle still shows known_without_footer = 0 (bio is outside its scope but the address becomes visible on the profile)."
+        "Step 1: list open branches matching evolve/* touching bot/earning/articles.py.",
+        "Step 2: merge the single strongest one (the 2026-11-16 concrete ALL-CAPS example is the one matching the last gate finding).",
+        "Step 3: close the remainder with a note so future cycles stop regenerating them."
+      ],
+      "discovered_at": "2026-11-17T06:30:41.924948+00:00"
+    },
+    {
+      "title": "Add the wallet ask to the dev.to profile bio",
+      "description": "Still the one cheap unmet receive surface: carries the tip address on every profile visit permanently. Re-stated because it costs two minutes and nothing else on the channel table is left that needs no account.",
+      "owner_action": "Paste payout_public.address into the Bio field at dev.to/settings once and save.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: open https://dev.to/settings.",
+        "Step 2: paste the TRC-20 address [redacted] into the Bio field and save.",
+        "Step 3: confirm next cycle's receipt_check still shows known_without_footer = 0."
       ],
       "discovered_at": "2026-11-17T05:30:26.033081+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 26,
+  "last_cycle_seconds": 33,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2792,7 +2815,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-17T05:30:01.274318+00:00",
+    "checked_at": "2026-11-17T06:30:10.702261+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3544,7 +3567,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-17T05:30:26.156764+00:00",
+    "last_run": "2026-11-17T06:30:42.142185+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3554,30 +3577,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-17T05:30:26.434353+00:00",
+    "last_run": "2026-11-17T06:30:42.379102+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4937139,
-        "at": "2026-11-16T16:23:47.099229+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-11-16T16:23:47.099229+00:00",
-        "ok": true
-      },
-      {
-        "id": 5043579,
-        "at": "2026-11-16T17:25:49.401933+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-11-16T17:25:49.401933+00:00",
-        "ok": true
-      },
       {
         "id": 4636715,
         "at": "2026-11-16T17:25:49.401933+00:00",
@@ -3784,11 +3787,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-17T05:30:26.434353+00:00",
-        "ok": true
-      },
-      {
         "id": 4971614,
         "at": "2026-11-17T05:30:26.434353+00:00",
         "ok": true
@@ -3806,6 +3804,31 @@
       {
         "id": 4748037,
         "at": "2026-11-17T05:30:26.434353+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-17T06:30:42.379102+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-17T06:30:42.379102+00:00",
+        "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-11-17T06:30:42.379102+00:00",
+        "ok": true
+      },
+      {
+        "id": 5012890,
+        "at": "2026-11-17T06:30:42.379102+00:00",
+        "ok": true
+      },
+      {
+        "id": 5019261,
+        "at": "2026-11-17T06:30:42.379102+00:00",
         "ok": true
       }
     ],

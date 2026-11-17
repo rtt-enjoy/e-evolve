@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-17T15:27:16.953173+00:00",
-  "total_runs": 2601,
+  "last_run": "2026-11-17T16:27:17.741699+00:00",
+  "total_runs": 2602,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,30 +33,32 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt-addressable loss (weak_title, 1 draft in 14 days) is already covered by 15 open title-prompt branches that were never merged, and the remaining losses (llm_error=23, empty_draft=2) are engine failures a prompt edit cannot fix.",
+    "summary": "No change proposed: the only prompt-graded defect (weak_title, 1 draft in 14 days) already has 15 unmerged proposals saying near-identical things, so a sixteenth would repeat them; the gate actually costing posts (llm_error=23) lives in protected bot/llm.py and needs an owner-level engine decision, not a prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge or close the 15 open title-prompt branches",
-        "description": "weak_title cost exactly 1 draft in 14 days ('title has ALL-CAPS word' x1). Fifteen near-identical proposals against _revise_title / _SYSTEM are parked unmerged; re-proposing a sixteenth would repeat what they already say. Deciding once unblocks the evolution loop to aim at the real signal (llm_error, 23 drafts).",
-        "owner_action": "Merge the strongest single title-prompt branch (the 2026-11-16 concrete-example edit) and close the other 14, then decide whether the llm_error cluster needs an engine-side fix (retry, model switch, or fallback role) that only an owner-level change can address.",
+        "title": "Merge or close the 15 open title-prompt branches, then aim at llm_error",
+        "description": "Unblocks the evolution loop: weak_title cost exactly 1 draft in 14 days and is already covered 15 times over, while llm_error=23 is the real cost of lost posts and needs an engine-side decision (retry, model switch, or fallback role) that only an owner-level change to the protected llm layer can make.",
+        "owner_action": "Merge the strongest single title-prompt branch (the 2026-11-16 concrete-example edit to the TITLE banned rule) and close the other 14 with a pointer to it; then decide the llm_error/empty_draft policy for the 'post' role.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Diff the 15 evolve/* branches against each other; most are variants of the same one-line edit.",
-          "Step 2: Merge the smallest one with a concrete before/after example, close the rest with a pointer to it.",
-          "Step 3: Review the llm_error=23 cluster separately \u2014 that is the gate actually costing posts now, and it needs an engine decision, not a prompt edit."
+          "Step 1: Diff the 15 evolve/* branches against each other; most are variants of the same one-line edit to _revise_title or _SYSTEM's TITLE rules.",
+          "Step 2: Merge the smallest one containing a concrete before/after example; close the rest, citing it.",
+          "Step 3: Review the llm_error=23 cluster separately: glm-5.3-flash failed 23 times in 14 days while atria is configured and live as fallback \u2014 an owner decision on whether the post role should fail over more aggressively is not reachable from an evolution branch."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach), but the evidence does not support another prompt edit this cycle",
+    "direction": "Checklist step 4 (reach) and the PROMPT FOCUS discipline: aim at the prompt losing the most drafts \u2014 but only when a prompt edit is the right lever.",
     "evidence": [
-      "article_rejects.counts (last 14 days): weak_title=1, llm_error=23, empty_draft=2",
-      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x1 \u2014 one occurrence, one draft",
-      "PRIOR PROPOSALS: 15 distinct open branches already target _revise_title / _SYSTEM TITLE rules, none merged",
-      "llm_engine.calls = {'glm': 1} and llm_error=23 dominate rejects \u2014 engine-side, not prompt-side"
+      "article_rejects.counts (14d window): weak_title=1 vs llm_error=23, empty_draft=2 \u2014 the prompt-fixable loss is a rounding error",
+      "Gate finding behind it: 'title has ALL-CAPS word' x1",
+      "Drafts lost to the engine, not fixable by a prompt edit: llm_error=23, empty_draft=2",
+      "Prior proposals: 15 open branches (2026-11-03 through 2026-11-16) all editing _revise_title or the TITLE rules; none merged",
+      "suggestions[0] already records this exact recommendation for the owner",
+      "bot/llm.py is on the protected list \u2014 the llm_error cluster cannot be fixed from an evolution branch"
     ],
-    "money_path": "none this cycle \u2014 no change proposed",
-    "verify": "Next cycle: article_rejects weak_title should stay near 0 once one of the 15 open title branches is merged; llm_error is the count to watch and is not prompt-fixable.",
+    "money_path": "none (maintenance/observation) \u2014 no change this cycle, so no receive-path or reach movement attributable to it",
+    "verify": "Next cycle: the weak_title 14-day window should stay at 0-1 regardless (the existing proposals already address it); if the owner merges one of the 15 branches, weak_title should fall to 0 and the llm_error=23 cluster becomes the next visible PROMPT FOCUS. No new branch to verify.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -67,20 +69,20 @@
   },
   "suggestions": [
     {
-      "title": "Merge or close the 15 open title-prompt branches",
-      "description": "weak_title cost exactly 1 draft in 14 days ('title has ALL-CAPS word' x1). Fifteen near-identical proposals against _revise_title / _SYSTEM are parked unmerged; re-proposing a sixteenth would repeat what they already say. Deciding once unblocks the evolution loop to aim at the real signal (llm_error, 23 drafts).",
-      "owner_action": "Merge the strongest single title-prompt branch (the 2026-11-16 concrete-example edit) and close the other 14, then decide whether the llm_error cluster needs an engine-side fix (retry, model switch, or fallback role) that only an owner-level change can address.",
+      "title": "Merge or close the 15 open title-prompt branches, then aim at llm_error",
+      "description": "Unblocks the evolution loop: weak_title cost exactly 1 draft in 14 days and is already covered 15 times over, while llm_error=23 is the real cost of lost posts and needs an engine-side decision (retry, model switch, or fallback role) that only an owner-level change to the protected llm layer can make.",
+      "owner_action": "Merge the strongest single title-prompt branch (the 2026-11-16 concrete-example edit to the TITLE banned rule) and close the other 14 with a pointer to it; then decide the llm_error/empty_draft policy for the 'post' role.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Diff the 15 evolve/* branches against each other; most are variants of the same one-line edit.",
-        "Step 2: Merge the smallest one with a concrete before/after example, close the rest with a pointer to it.",
-        "Step 3: Review the llm_error=23 cluster separately \u2014 that is the gate actually costing posts now, and it needs an engine decision, not a prompt edit."
+        "Step 1: Diff the 15 evolve/* branches against each other; most are variants of the same one-line edit to _revise_title or _SYSTEM's TITLE rules.",
+        "Step 2: Merge the smallest one containing a concrete before/after example; close the rest, citing it.",
+        "Step 3: Review the llm_error=23 cluster separately: glm-5.3-flash failed 23 times in 14 days while atria is configured and live as fallback \u2014 an owner decision on whether the post role should fail over more aggressively is not reachable from an evolution branch."
       ],
-      "discovered_at": "2026-11-17T14:27:38.082715+00:00"
+      "discovered_at": "2026-11-17T16:27:40.905474+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 20,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2806,7 +2808,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-17T15:27:17.635657+00:00",
+    "checked_at": "2026-11-17T16:27:18.095558+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3558,7 +3560,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-17T15:27:36.820297+00:00",
+    "last_run": "2026-11-17T16:27:41.127972+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3568,30 +3570,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-17T15:27:36.946816+00:00",
+    "last_run": "2026-11-17T16:27:41.347865+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4959304,
-        "at": "2026-11-17T04:07:54.027004+00:00",
-        "ok": true
-      },
-      {
-        "id": 4681657,
-        "at": "2026-11-17T04:07:54.027004+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-11-17T04:30:21.356691+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-11-17T04:30:21.356691+00:00",
-        "ok": true
-      },
       {
         "id": 4602729,
         "at": "2026-11-17T04:30:21.356691+00:00",
@@ -3798,11 +3780,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-17T15:27:36.946816+00:00",
-        "ok": true
-      },
-      {
         "id": 4848276,
         "at": "2026-11-17T15:27:36.946816+00:00",
         "ok": true
@@ -3821,6 +3798,31 @@
         "id": 4925166,
         "at": "2026-11-17T15:27:36.946816+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-17T16:27:41.347865+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-17T16:27:41.347865+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-17T16:27:41.347865+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-11-17T16:27:41.347865+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-11-17T16:27:41.347865+00:00",
+        "ok": true
       }
     ],
     "published_total": 54,
@@ -3828,7 +3830,7 @@
     "unverified": 4,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.3
+    "oldest_check_age_hours": 12.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

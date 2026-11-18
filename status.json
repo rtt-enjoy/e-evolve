@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-18T04:23:19.269743+00:00",
-  "total_runs": 2615,
+  "last_run": "2026-11-18T05:23:22.424050+00:00",
+  "total_runs": 2616,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,32 +33,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed this cycle: the only prompt-targeted loss is one weak_title in 14 days, that exact prompt has 13 unmerged proposals already on review branches, and the dominant reject (llm_error, 23 in window) is an engine problem no prompt edit can fix.",
+    "summary": "No change proposed: the only prompt-fixable loss this window is 1 weak_title draft, and every angle on that prompt (the TITLE rule and _revise_title) is already covered by 13 open, unmerged review branches, while the dominant reject (llm_error=23) is an engine failure a prompt edit cannot fix.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Add the wallet ask to the dev.to profile bio",
-        "description": "Carries the receive path on every profile visit permanently \u2014 the one deferred channel in the doctrine table that needs no account, processor, or policy change. The bot cannot do it: the users endpoint is show-only in Forem's API.",
-        "owner_action": "One edit of the Bio field at dev.to/settings to include the TRC-20 address [redacted]",
+        "description": "Carries the receive path on every profile visit permanently \u2014 the one deferred channel in the doctrine table needing no account, processor, or policy change. The bot cannot do it: the users endpoint is show-only in Forem's API.",
+        "owner_action": "One edit of the Bio field at dev.to/settings to include the TRC-20 address",
         "secret_needed": null,
         "how_to": [
           "Step 1: Sign in at dev.to and open https://dev.to/settings/profile",
-          "Step 2: Paste a one-line bio including the address (e.g. 'I write practical engineering write-ups. If one saved you time: USDT TRC-20 [redacted]') and save",
+          "Step 2: Paste a one-line bio including the address and save",
           "Step 3: Open the public profile and confirm the address renders; every future profile visitor then sees the ask with no further work"
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach into a live receive path) and the PROMPT FOCUS discipline: upgrade prompts one step per cycle only when the evidence names them",
+    "direction": "Checklist step 4 \u2014 reach via prompt upgrades; declined because no unclaimed prompt change clears the evidence bar",
     "evidence": [
-      "article_rejects last 14 days: weak_title=1, llm_error=23, empty_draft=2 \u2014 the prompt-fixable slice is one draft",
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed' with gate finding 'title has ALL-CAPS word' x1 \u2014 the exact defect prior proposals 2026-11-16 and 2026-11-18 already target",
-      "PRIOR PROPOSALS: 13 open review branches, all editing articles.py title prompts (_SYSTEM TITLE rule and _revise_title), none merged \u2014 proposing a 14th variant of the same edit repeats an unmerged decision",
-      "receive path clean: payout.live = true, receipt_check.known_without_footer = 0, backfill.remaining = 0 \u2014 step 1 has nothing to fix",
-      "preferred_archetypes() = ['problem-workaround'] with n=11 avg=439.9, above the n=3 sample floor (Principle 3j satisfied) \u2014 steering is already correctly aimed and needs no edit",
-      "wallet.received_total_usd = 0.0, wallet.other_assets = {} \u2014 no receipt signal to act on"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "Gate findings behind PROMPT FOCUS: 'title has ALL-CAPS word' x1 (one draft, 14 days)",
+      "Drafts lost to the engine, not fixable by a prompt edit (14 days): llm_error=23, empty_draft=2",
+      "PRIOR PROPOSALS: 13 distinct open branches, all targeting articles.py title prompts (2026-11-04 through 2026-11-18)",
+      "preferred_archetypes() = ['problem-workaround'] with n=11 \u2014 already steered via _ARCHETYPE_BONUS and _audience_guidance(); no row under n=3 is being promoted (Principle 3j clean)"
     ],
-    "money_path": "none (maintenance). The live receive path is verified; this cycle declines to spend the one allowed change on a prompt edit already covered by an open branch.",
-    "verify": "No diff to verify. Next cycle, read the 14-day weak_title count and the engine-side llm_error count: if weak_title recurs after a title-prompt branch is merged, the merged edit is the one to grade; if llm_error stays above ~15 per window, the lever is LLM reliability, not prompts.",
+    "money_path": "none this cycle (reach step declined)",
+    "verify": "Next cycle: article_rejects.recent should show no new weak_title entries attributable to an unaddressed prompt defect; llm_error count is engine-side and unaffected either way",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -70,19 +69,19 @@
   "suggestions": [
     {
       "title": "Add the wallet ask to the dev.to profile bio",
-      "description": "Carries the receive path on every profile visit permanently \u2014 the one deferred channel in the doctrine table that needs no account, processor, or policy change. The bot cannot do it: the users endpoint is show-only in Forem's API.",
-      "owner_action": "One edit of the Bio field at dev.to/settings to include the TRC-20 address [redacted]",
+      "description": "Carries the receive path on every profile visit permanently \u2014 the one deferred channel in the doctrine table needing no account, processor, or policy change. The bot cannot do it: the users endpoint is show-only in Forem's API.",
+      "owner_action": "One edit of the Bio field at dev.to/settings to include the TRC-20 address",
       "secret_needed": null,
       "how_to": [
         "Step 1: Sign in at dev.to and open https://dev.to/settings/profile",
-        "Step 2: Paste a one-line bio including the address (e.g. 'I write practical engineering write-ups. If one saved you time: USDT TRC-20 [redacted]') and save",
+        "Step 2: Paste a one-line bio including the address and save",
         "Step 3: Open the public profile and confirm the address renders; every future profile visitor then sees the ask with no further work"
       ],
       "discovered_at": "2026-11-18T04:23:52.172926+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 34,
+  "last_cycle_seconds": 23,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2800,7 +2799,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-18T04:23:19.599806+00:00",
+    "checked_at": "2026-11-18T05:23:22.739908+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3552,7 +3551,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-18T04:23:52.454133+00:00",
+    "last_run": "2026-11-18T05:23:44.478569+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3562,30 +3561,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-18T04:23:52.667668+00:00",
+    "last_run": "2026-11-18T05:23:44.753793+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4619528,
-        "at": "2026-11-17T17:29:43.519016+00:00",
-        "ok": true
-      },
-      {
-        "id": 4959304,
-        "at": "2026-11-17T17:29:43.519016+00:00",
-        "ok": true
-      },
-      {
-        "id": 4681657,
-        "at": "2026-11-17T17:29:43.519016+00:00",
-        "ok": true
-      },
-      {
-        "id": 4971614,
-        "at": "2026-11-17T18:27:50.909009+00:00",
-        "ok": true
-      },
       {
         "id": 4545446,
         "at": "2026-11-17T18:27:50.909009+00:00",
@@ -3792,11 +3771,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-18T04:23:52.667668+00:00",
-        "ok": true
-      },
-      {
         "id": 4391849,
         "at": "2026-11-18T04:23:52.667668+00:00",
         "ok": true
@@ -3814,6 +3788,31 @@
       {
         "id": 4925166,
         "at": "2026-11-18T04:23:52.667668+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-18T05:23:44.753793+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-18T05:23:44.753793+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-18T05:23:44.753793+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-11-18T05:23:44.753793+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-11-18T05:23:44.753793+00:00",
         "ok": true
       }
     ],

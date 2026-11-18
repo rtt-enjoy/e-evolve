@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-17T23:53:47.928369+00:00",
-  "total_runs": 2610,
+  "last_run": "2026-11-18T00:53:42.932877+00:00",
+  "total_runs": 2611,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,76 +33,54 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change: the prompt focus (weak_title, 1 draft lost in 14 days) already has 13 open unmerged proposals targeting the identical defect \u2014 the ALL-CAPS title reject, including one from 2026-11-16 matching this cycle's gate finding ('title has ALL-CAPS word' x1) exactly. A 14th duplicate prompt edit would repeat the documented failure mode of prior cycles, and the ledger shows the dominant loss is llm_error=23, which no prompt edit can fix.",
+    "summary": "No change proposed: the weak_title lane the PROMPT FOCUS names is already the target of 13 open, unmerged review branches (2026-11-04 through 2026-11-16, all editing the same TITLE rules in articles.py or _revise_title), and this cycle's gate finding ('title has ALL-CAPS word' x1) is exactly the defect the 2026-11-16 branch's acronym-vs-shouting example addresses; a 14th overlapping branch only buries the fix.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the 13 open title-prompt branches instead of generating a 14th",
-        "description": "All open proposals target the same measured defect (the ALL-CAPS title reject). Merging any one of them clears the weak_title lane for a cycle; leaving all 13 open means every future cycle re-derives the same proposal.",
-        "owner_action": "Review and merge (or close) the open evolve/* branches touching bot/earning/articles.py TITLE rules / _revise_title, starting with the 2026-11-16 acronym-vs-shouting example, which directly matches this cycle's gate finding.",
+        "title": "Merge one of the 13 open title-prompt branches and close the rest as superseded",
+        "description": "All open proposals target the same measured defect (ALL-CAPS title reject) with overlapping small edits; merging one clears the weak_title lane immediately, while leaving 13 open guarantees every future cycle re-derives the same proposal and none of the fixes ships.",
+        "owner_action": "Review the evolve/* branches touching bot/earning/articles.py, merge the 2026-11-16 acronym-vs-shouting example (it matches this cycle's gate finding exactly), and close the 2026-11-04/05/10/11/14/15 branches as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the 13 listed evolve/* branches in the GitHub PR list.",
-          "Step 2: Merge the most recent one (2026-11-16) and close the overlapping 2026-11-04/05/10/11/14/15 branches as superseded."
+          "Step 1: Open the PR list and locate the 13 evolve/* branches named in PRIOR PROPOSALS.",
+          "Step 2: Merge the 2026-11-16 branch; its edit matches the exact gate finding recorded this cycle ('title has ALL-CAPS word' x1).",
+          "Step 3: Close the remaining 12 as superseded so future cycles stop re-deriving the same proposal."
         ]
       }
     ],
-    "direction": "Doctrine step 4 / PROMPT FOCUS discipline \u2014 one prompt edit per cycle, only when no existing proposal already serves it",
+    "direction": "Checklist step 4 (reach via prompts), constrained by the dead-end rule against repeating PRIOR PROPOSALS",
     "evidence": [
       "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "drafts lost to a prompt (last 14 days): weak_title=1; gate finding 'title has ALL-CAPS word' x1",
-      "PRIOR PROPOSALS: 13 open branches, all targeting bot/earning/articles.py TITLE rules / _revise_title for the same defect",
-      "drafts lost to the engine (last 14 days): llm_error=23, empty_draft=2 \u2014 not fixable by a prompt edit",
-      "payout.live = true, backfill.remaining = 0, wallet.received_total_usd = 0.0 \u2014 receive path verified, work is reach"
+      "Gate finding behind PROMPT FOCUS: 'title has ALL-CAPS word' x1, drafts lost last 14 days: weak_title=1",
+      "PRIOR PROPOSALS lists 13 distinct open branches targeting bot/earning/articles.py TITLE rules / _revise_title, 2026-11-04..2026-11-16",
+      "status.suggestions already carries the owner action: merge one of the 13 open branches, starting with the 2026-11-16 acronym-vs-shouting example"
     ],
-    "money_path": "none this cycle (maintenance); reach is blocked from improving by review-pipeline congestion, not by a missing prompt rule",
-    "verify": "After the owner merges one of the 13 open evolve/* branches (starting with the 2026-11-16 acronym-vs-shouting example), article_rejects.counts.weak_title should not increment further in the next cycle's last-14-day window; the merge itself is the verification step.",
+    "money_path": "none this cycle (maintenance decision); the receive path is live and coverage 50/55 \u2014 the loss is one post's reach, already addressed by an existing proposal",
+    "verify": "After the owner merges any one of the 13 open branches, article_rejects.counts.weak_title should stop growing in the next 14-day window and no 'title has ALL-CAPS word' finding should recur",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 20
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 64,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (64 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one of the 13 open title-prompt branches instead of generating a 14th",
-      "description": "All open proposals target the same measured defect (the ALL-CAPS title reject). Merging any one of them clears the weak_title lane for a cycle; leaving all 13 open means every future cycle re-derives the same proposal.",
-      "owner_action": "Review and merge (or close) the open evolve/* branches touching bot/earning/articles.py TITLE rules / _revise_title, starting with the 2026-11-16 acronym-vs-shouting example, which directly matches this cycle's gate finding.",
+      "title": "Merge one of the 13 open title-prompt branches and close the rest as superseded",
+      "description": "All open proposals target the same measured defect (ALL-CAPS title reject) with overlapping small edits; merging one clears the weak_title lane immediately, while leaving 13 open guarantees every future cycle re-derives the same proposal and none of the fixes ships.",
+      "owner_action": "Review the evolve/* branches touching bot/earning/articles.py, merge the 2026-11-16 acronym-vs-shouting example (it matches this cycle's gate finding exactly), and close the 2026-11-04/05/10/11/14/15 branches as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the 13 listed evolve/* branches in the GitHub PR list.",
-        "Step 2: Merge the most recent one (2026-11-16) and close the overlapping 2026-11-04/05/10/11/14/15 branches as superseded."
+        "Step 1: Open the PR list and locate the 13 evolve/* branches named in PRIOR PROPOSALS.",
+        "Step 2: Merge the 2026-11-16 branch; its edit matches the exact gate finding recorded this cycle ('title has ALL-CAPS word' x1).",
+        "Step 3: Close the remaining 12 as superseded so future cycles stop re-deriving the same proposal."
       ],
-      "discovered_at": "2026-11-17T22:54:14.559606+00:00"
+      "discovered_at": "2026-11-18T00:53:59.790933+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 127,
+  "last_cycle_seconds": 18,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2828,7 +2806,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-17T23:53:48.628514+00:00",
+    "checked_at": "2026-11-18T00:53:43.496284+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3580,7 +3558,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-17T23:55:54.626962+00:00",
+    "last_run": "2026-11-18T00:54:00.070797+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3590,30 +3568,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-17T23:55:55.091291+00:00",
+    "last_run": "2026-11-18T00:54:00.332665+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4765372,
-        "at": "2026-11-17T12:31:21.146108+00:00",
-        "ok": true
-      },
-      {
-        "id": 4977763,
-        "at": "2026-11-17T12:31:21.146108+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
-        "at": "2026-11-17T13:33:13.127450+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
-        "at": "2026-11-17T13:33:13.127450+00:00",
-        "ok": true
-      },
       {
         "id": 4943931,
         "at": "2026-11-17T13:33:13.127450+00:00",
@@ -3820,11 +3778,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-17T23:55:55.091291+00:00",
-        "ok": true
-      },
-      {
         "id": 4908316,
         "at": "2026-11-17T23:55:55.091291+00:00",
         "ok": true
@@ -3843,6 +3796,31 @@
         "id": 4965279,
         "at": "2026-11-17T23:55:55.091291+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-18T00:54:00.332665+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-11-18T00:54:00.332665+00:00",
+        "ok": true
+      },
+      {
+        "id": 5050733,
+        "at": "2026-11-18T00:54:00.332665+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-18T00:54:00.332665+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-18T00:54:00.332665+00:00",
+        "ok": true
       }
     ],
     "published_total": 55,
@@ -3850,7 +3828,7 @@
     "unverified": 5,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.4
+    "oldest_check_age_hours": 11.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3870,7 +3848,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

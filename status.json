@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-18T21:01:12.942523+00:00",
-  "total_runs": 2632,
+  "last_run": "2026-11-18T21:58:25.463855+00:00",
+  "total_runs": 2633,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,62 +33,54 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus defect (weak_title) lost exactly 1 draft in 14 days and all 14 title-fix branches addressing it are already open and unmerged, so a fifteenth near-identical proposal adds nothing the ledger cannot already see \u2014 the binding lever this cycle is the owner merging one of them.",
+    "summary": "No change this cycle: the prompt focus (weak_title, 1 draft lost in 14 days via the ALL-CAPS rule) is already the subject of 14 unmerged open branches, and the real draft loss is llm_error=59 (23 in 14 days), which no prompt edit can touch.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the 14 open title-fix branches and close the rest",
-        "description": "The weak_title defect cannot improve while every proposed fix sits unmerged; each new cycle re-derives the same proposal because none was applied. Merging the smallest one resolves the prompt focus and lets the next cycles measure a real change instead of stacking duplicate branches.",
-        "owner_action": "Review the open evolve/* branches touching bot/earning/articles.py, merge exactly one (preferring the smallest one-line edit matching the 'ALL-CAPS word' finding), and close the other 13 as superseded.",
+        "title": "Merge one of the 14 open title-fix branches (unchanged from last cycle, still unactioned)",
+        "description": "The ALL-CAPS title defect has one occurrence in 14 days and fourteen proposed fixes already sitting on review branches. A fifteenth variant from this cycle would add noise without evidence; merging the smallest existing one measures a real change instead.",
+        "owner_action": "Review evolve/* branches touching bot/earning/articles.py, merge exactly one small title edit answering the 'title has ALL-CAPS word' finding, and close the other 13 as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: git branch -r | grep evolve/ and read each diff against bot/earning/articles.py",
-          "Step 2: Merge the smallest one that answers the gate finding ('title has ALL-CAPS word'), then close the rest as superseded so future cycles stop re-proposing them"
+          "Step 1: git branch -r | grep evolve/ and diff each against bot/earning/articles.py",
+          "Step 2: Merge the smallest edit matching the gate finding; close the rest as superseded so cycles stop re-deriving them"
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach into a live receive path) via the PROMPT FOCUS; doctrine Principle 5.",
+    "direction": "Step 4 \u2014 reach into a live receive path; prompt upgrade only where the evidence names an unaddressed defect.",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime but only weak_title=1 in the last 14 days",
-      "gate finding behind it: 'title has ALL-CAPS word' x1",
-      "PRIOR PROPOSALS: 14 distinct open branches, every one touching bot/earning/articles.py title logic (_SYSTEM TITLE rule or _revise_title)",
-      "Drafts lost to a prompt (14 days): weak_title=1, versus drafts lost to the engine: llm_error=23 \u2014 prompt-editing is not where the drafts are actually dying"
+      "article_rejects.counts: llm_error=59 vs weak_title=15 lifetime",
+      "Drafts lost to a prompt (last 14 days): weak_title=1",
+      "Drafts lost to the engine (last 14 days): llm_error=23, empty_draft=2",
+      "Gate finding behind prompt focus: 'title has ALL-CAPS word' x1 \u2014 a single occurrence",
+      "PRIOR PROPOSALS: 14 open branches already target articles.py title/rewrite prompts, none merged",
+      "suggestions: an open owner action ('Merge one of the 14 open title-fix branches and close the rest') from 2026-11-18, unactioned"
     ],
-    "money_path": "none (maintenance): one draft per fortnight is the total addressable loss on this defect, and the fix already exists on a review branch awaiting a human decision.",
-    "verify": "No branch to verify. If the owner merges one of the open title branches, article_rejects.counts.weak_title should stop growing in the following 14-day window and no new 'title has ALL-CAPS word' finding should appear in the gate findings.",
+    "money_path": "none \u2014 no change proposed; publishing throughput is currently limited by llm_error, not by any prompt the ledger can improve",
+    "verify": "Not applicable (no change). Next cycle: weak_title stays 0 in the 14-day window once one title-fix branch is merged, and llm_error in the engine window is the field to watch.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "dev.to",
-        "success": true,
-        "title": "Check Your NGINX HTTP/2 Config Before Attackers Do",
-        "url": "https://dev.to/robust_true_try/check-your-nginx-http2-config-before-attackers-do-2e5k",
-        "estimated_usd": 0.0,
-        "source_url": "https://www.wiz.io/blog/nginx-http2-rce-vulnerabilities",
-        "source_title": "Unauthenticated remote code execution in Nginx"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one of the 14 open title-fix branches and close the rest",
-      "description": "The weak_title defect cannot improve while every proposed fix sits unmerged; each new cycle re-derives the same proposal because none was applied. Merging the smallest one resolves the prompt focus and lets the next cycles measure a real change instead of stacking duplicate branches.",
-      "owner_action": "Review the open evolve/* branches touching bot/earning/articles.py, merge exactly one (preferring the smallest one-line edit matching the 'ALL-CAPS word' finding), and close the other 13 as superseded.",
+      "title": "Merge one of the 14 open title-fix branches (unchanged from last cycle, still unactioned)",
+      "description": "The ALL-CAPS title defect has one occurrence in 14 days and fourteen proposed fixes already sitting on review branches. A fifteenth variant from this cycle would add noise without evidence; merging the smallest existing one measures a real change instead.",
+      "owner_action": "Review evolve/* branches touching bot/earning/articles.py, merge exactly one small title edit answering the 'title has ALL-CAPS word' finding, and close the other 13 as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: git branch -r | grep evolve/ and read each diff against bot/earning/articles.py",
-        "Step 2: Merge the smallest one that answers the gate finding ('title has ALL-CAPS word'), then close the rest as superseded so future cycles stop re-proposing them"
+        "Step 1: git branch -r | grep evolve/ and diff each against bot/earning/articles.py",
+        "Step 2: Merge the smallest edit matching the gate finding; close the rest as superseded so cycles stop re-deriving them"
       ],
-      "discovered_at": "2026-11-18T21:01:34.796333+00:00"
+      "discovered_at": "2026-11-18T21:58:42.100035+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 89,
+  "last_cycle_seconds": 17,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2818,7 +2810,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-18T21:01:13.519150+00:00",
+    "checked_at": "2026-11-18T21:58:26.601565+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3570,7 +3562,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-18T21:02:41.401383+00:00",
+    "last_run": "2026-11-18T21:58:42.269009+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3580,30 +3572,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-18T21:02:41.635402+00:00",
+    "last_run": "2026-11-18T21:58:42.399561+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4562180,
-        "at": "2026-11-18T09:26:01.474251+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-11-18T09:26:01.474251+00:00",
-        "ok": true
-      },
-      {
-        "id": 5012890,
-        "at": "2026-11-18T09:26:01.474251+00:00",
-        "ok": true
-      },
-      {
-        "id": 5019261,
-        "at": "2026-11-18T09:26:01.474251+00:00",
-        "ok": true
-      },
       {
         "id": 4727685,
         "at": "2026-11-18T10:23:54.348180+00:00",
@@ -3810,11 +3782,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-18T21:02:41.635402+00:00",
-        "ok": true
-      },
-      {
         "id": 4545446,
         "at": "2026-11-18T21:02:41.635402+00:00",
         "ok": true
@@ -3832,6 +3799,31 @@
       {
         "id": 4602729,
         "at": "2026-11-18T21:02:41.635402+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-18T21:58:42.399561+00:00",
+        "ok": true
+      },
+      {
+        "id": 4937139,
+        "at": "2026-11-18T21:58:42.399561+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-11-18T21:58:42.399561+00:00",
+        "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-11-18T21:58:42.399561+00:00",
+        "ok": true
+      },
+      {
+        "id": 4681657,
+        "at": "2026-11-18T21:58:42.399561+00:00",
         "ok": true
       }
     ],
@@ -3860,7 +3852,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 3
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

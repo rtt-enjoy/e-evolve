@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-18T06:23:23.169064+00:00",
-  "total_runs": 2617,
+  "last_run": "2026-11-18T07:23:24.134613+00:00",
+  "total_runs": 2618,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,78 +33,54 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt focus (weak_title) lost only 1 draft in 14 days, its single gate finding (ALL-CAPS word) is already covered by twelve open review branches on exactly this defect, and the dominant reject causes (llm_error=59, empty_draft=11) are engine failures no prompt edit can fix.",
+    "summary": "No change proposed: the single weak_title draft lost in the last 14 days ('title has ALL-CAPS word' x1) is already covered by twelve open, near-duplicate proposals against the same prompt paths \u2014 a thirteenth would re-derive one of them, and the highest-value action is the owner merging the simplest existing branch and closing the rest.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge or close the twelve open weak_title branches",
-        "description": "Twelve near-duplicate proposals against the same one-draft-per-fortnight defect are stacked on review branches. Merging one (the simplest: the _revise_title wording sharpen) and closing the rest frees the review loop and stops each future cycle re-deriving the same fix.",
-        "owner_action": "Review the oldest open branch (2026-11-04 title-rewrite sharpening), merge if sound, and close the remaining eleven as superseded",
+        "title": "Merge the oldest title-rewrite branch and close the other eleven as superseded",
+        "description": "Frees the review loop and stops every future cycle re-deriving a near-duplicate ALL-CAPS/title fix; the one measured defect (one draft lost in 14 days) gets its fix shipped instead of accumulating twelfth copies on review.",
+        "owner_action": "Review the oldest open branch (2026-11-04 title-rewrite sharpening), merge if sound, close the remaining eleven as superseded",
         "secret_needed": null,
         "how_to": [
           "Step 1: Open the twelve evolve/* branches listed as prior proposals",
-          "Step 2: Merge one; the others differ only in wording around the same ALL-CAPS rule and can be closed",
+          "Step 2: Merge one (the simplest is the _revise_title wording sharpen); close the rest, since they differ only in wording around the same ALL-CAPS rule",
           "Step 3: Confirm article_rejects.counts.weak_title stays flat over the next week"
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade prompts one step per cycle; Principle 3j discipline on sample size",
+    "direction": "Checklist step 4 / PROMPT FOCUS \u2014 but only by consolidation, not by stacking another title-prompt edit",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime but drafts lost to weak_title in the last 14 days = 1",
-      "gate finding behind focus: 'title has ALL-CAPS word' x1",
-      "drafts lost to the engine, last 14 days: llm_error=23, empty_draft=2 (lifetime llm_error=59, empty_draft=11)",
-      "PRIOR PROPOSALS: 12 open branches, every one targeting the same weak_title/ALL-CAPS defect in articles.py",
-      "article_interest confirms problem-workaround n=11 avg=439.9 is the shape to steer, and _audience_guidance already injects it"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "Drafts lost to a prompt (last 14 days): weak_title=1, gate finding 'title has ALL-CAPS word' x1",
+      "PRIOR PROPOSALS: 12 open branches, all against articles.py TITLE/_revise_title, none merged",
+      "status.suggestions already names 'Merge or close the twelve open weak_title branches'"
     ],
-    "money_path": "none this cycle (reach-only in intent); proposing no change costs nothing \u2014 the receive path is live and coverage is the maintained state, not this edit",
-    "verify": "Next cycle's prompt ledger: weak_title in the 14-day window should stay at or near 0; article_rejects.counts.weak_title should not increment from ALL-CAPS findings while the twelve open branches sit unmerged",
+    "money_path": "none (maintenance) \u2014 no code change this cycle; reach benefit arrives only when one existing branch is merged",
+    "verify": "After the owner merges one branch and closes the other eleven: article_rejects.counts.weak_title stays flat over the next week, and the evolve/* branch list stops regenerating the same proposal each cycle.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 20
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 64,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (64 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge or close the twelve open weak_title branches",
-      "description": "Twelve near-duplicate proposals against the same one-draft-per-fortnight defect are stacked on review branches. Merging one (the simplest: the _revise_title wording sharpen) and closing the rest frees the review loop and stops each future cycle re-deriving the same fix.",
-      "owner_action": "Review the oldest open branch (2026-11-04 title-rewrite sharpening), merge if sound, and close the remaining eleven as superseded",
+      "title": "Merge the oldest title-rewrite branch and close the other eleven as superseded",
+      "description": "Frees the review loop and stops every future cycle re-deriving a near-duplicate ALL-CAPS/title fix; the one measured defect (one draft lost in 14 days) gets its fix shipped instead of accumulating twelfth copies on review.",
+      "owner_action": "Review the oldest open branch (2026-11-04 title-rewrite sharpening), merge if sound, close the remaining eleven as superseded",
       "secret_needed": null,
       "how_to": [
         "Step 1: Open the twelve evolve/* branches listed as prior proposals",
-        "Step 2: Merge one; the others differ only in wording around the same ALL-CAPS rule and can be closed",
+        "Step 2: Merge one (the simplest is the _revise_title wording sharpen); close the rest, since they differ only in wording around the same ALL-CAPS rule",
         "Step 3: Confirm article_rejects.counts.weak_title stays flat over the next week"
       ],
-      "discovered_at": "2026-11-18T06:23:51.534634+00:00"
+      "discovered_at": "2026-11-18T07:23:45.224653+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 153,
+  "last_cycle_seconds": 22,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2822,7 +2798,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-18T06:23:23.609602+00:00",
+    "checked_at": "2026-11-18T07:23:24.647036+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3574,7 +3550,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-18T06:25:55.488002+00:00",
+    "last_run": "2026-11-18T07:23:45.408338+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3584,30 +3560,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-18T06:25:55.738089+00:00",
+    "last_run": "2026-11-18T07:23:45.720785+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4748037,
-        "at": "2026-11-17T19:28:01.276198+00:00",
-        "ok": true
-      },
-      {
-        "id": 5032226,
-        "at": "2026-11-17T19:28:01.276198+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-17T20:29:39.559610+00:00",
-        "ok": true
-      },
-      {
-        "id": 4720062,
-        "at": "2026-11-17T20:29:39.559610+00:00",
-        "ok": true
-      },
       {
         "id": 5012890,
         "at": "2026-11-17T20:29:39.559610+00:00",
@@ -3814,11 +3770,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-18T06:25:55.738089+00:00",
-        "ok": true
-      },
-      {
         "id": 4971614,
         "at": "2026-11-18T06:25:55.738089+00:00",
         "ok": true
@@ -3837,6 +3788,31 @@
         "id": 4681657,
         "at": "2026-11-18T06:25:55.738089+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-18T07:23:45.720785+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-18T07:23:45.720785+00:00",
+        "ok": true
+      },
+      {
+        "id": 4996282,
+        "at": "2026-11-18T07:23:45.720785+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-18T07:23:45.720785+00:00",
+        "ok": true
+      },
+      {
+        "id": 4602729,
+        "at": "2026-11-18T07:23:45.720785+00:00",
+        "ok": true
       }
     ],
     "published_total": 55,
@@ -3844,7 +3820,7 @@
     "unverified": 5,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.0
+    "oldest_check_age_hours": 10.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3864,7 +3840,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

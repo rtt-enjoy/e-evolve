@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-18T02:53:48.179029+00:00",
-  "total_runs": 2613,
+  "last_run": "2026-11-18T03:53:55.715398+00:00",
+  "total_runs": 2614,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,83 +33,74 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "One-line sharpening of the article draft TITLE rule in articles.py _SYSTEM so the model knows real acronyms are exempt from the ALL-CAPS ban \u2014 the only prompt in the ledger losing weak_title drafts that no open proposal already covers.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The TITLE banned rule in _SYSTEM forbids 'any ALL-CAPS word' without stating the acronym exemption the gate actually enforces (_shouted_words skips _KNOWN_ACRONYMS). A draft titled with a correctly-cased acronym can be refused by weak_title and the rewrite can fail the same way, costing one post and one tip ask. One sentence aligns the instruction with the gate \u2014 instruction change, not a gate change."
-      }
-    ],
+    "summary": "No change proposed: the only prompt-attributable loss in the window is 1 weak_title draft, all 13 open unmerged proposals already target exactly that prompt, and the dominant loss (llm_error=23 of 26 rejects in 14 days) is engine-side and explicitly not prompt-fixable.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Add the receive address to the dev.to profile bio",
-        "description": "Carries the tip ask on every profile visit permanently; the cheapest unbuilt receive surface on the channel table, needing no account, no processor and no policy change.",
-        "owner_action": "Paste the TRC-20 address ([redacted]) into the Bio field at dev.to/settings once, by hand.",
+        "title": "Reduce the llm_error rate, which is the real publishing bottleneck",
+        "description": "59 lifetime and 23 last-14-days drafts died at the LLM call (glm-5.3-flash), dwarfing the 1 prompt-attributable loss. Even perfect titles cannot recover drafts the engine never returns.",
+        "owner_action": "Confirm whether glm-5.3-flash's free tier is rate-limiting or truncating at max_tokens=6000, and whether the atria fallback is actually being exercised on failures.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open https://dev.to/settings and edit the profile Bio.",
-          "Step 2: Paste the TRC-20 address already published in payout_public and save.",
-          "Step 3: No further action \u2014 receipt_check's next cycles observe posts, so confirm the bio renders by visiting the profile once."
+          "Step 1: Read the workflow logs for a recent llm_error cycle and record the raw exception (timeout vs 429 vs truncation).",
+          "Step 2: Decide whether to raise the fallback trigger threshold or accept the hourly-cycle retry as the doctrine already prescribes."
+        ]
+      },
+      {
+        "title": "Merge one of the 13 open title-prompt branches instead of stacking more",
+        "description": "Every title-related proposal since 2026-11-04 targets the same two prompt sites and none is merged, so the measured ALL-CAPS defect (1 draft) remains unaddressed by any of them and each new cycle adds a competing branch.",
+        "owner_action": "Review and merge (or close) the earliest open title-prompt branch so the prompt ledger reflects a decided state.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open the evolve/1.41.1-20261118-025427 branch and the earlier ones in date order.",
+          "Step 2: Merge the smallest one that answers the 'title has ALL-CAPS word' gate finding, close the rest as superseded."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach into a live receive path) via the PROMPT FOCUS: weak_title lost drafts; the gate finding is 'title has ALL-CAPS word'.",
+    "direction": "Step 4 \u2014 reach into a live receive path; PROMPT FOCUS on weak_title",
     "evidence": [
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "Gate findings behind PROMPT FOCUS: 'title has ALL-CAPS word' x1",
       "Drafts lost to a prompt (last 14 days): weak_title=1",
-      "The gate itself (_shouted_words + _KNOWN_ACRONYMS) already exempts acronyms like PDF and JSON, but the draft prompt's banned list says 'any ALL-CAPS word' with no exemption, so the model can produce a title the gate rejects for writing an acronym correctly",
-      "All 12 open prior proposals target _revise_title or the draft user prompt; none edits the TITLE section of _SYSTEM, so this is not a repeat"
+      "Drafts lost to the engine (last 14 days): llm_error=23, empty_draft=2",
+      "article_rejects.counts lifetime: llm_error=59 of total 90; weak_title=15",
+      "PRIOR PROPOSALS: 13 distinct open branches, every one an edit to the article-draft TITLE rule or _revise_title()",
+      "article_interest: problem-workaround n=11 avg=439.9 \u2014 preferred_archetypes() is already populated well above the n=3 sample floor and steering is working"
     ],
-    "money_path": "reach-only: one more draft clears the weak_title gate, so one more article and one more footer ask ships; no change to the receive path itself.",
-    "verify": "A test added inline cannot be attached without touching bot/tests.py this cycle, so verify from status next cycle: article_rejects.counts.weak_title should not gain a new entry with detail 'title has ALL-CAPS word' caused by an acronym, and the 'title has ALL-CAPS word' gate finding should not reappear in the next PROMPT FOCUS window. llm_error=59 dominates and is engine-side, not prompt-side, so no other prompt count is expected to move.",
+    "money_path": "none \u2014 this cycle proposes no change; the receive path is verified (payout.live=true, known_without_footer=0) and the work is reach",
+    "verify": "No change to verify. Next cycle's prompt-ledger window should still show weak_title near 1-2/14d; if it climbs above the title-prompt proposals already on file can address, take the strongest unmerged one rather than adding a fourteenth.",
     "error": null,
-    "branch": "evolve/1.41.1-20261118-025427",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 20
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 64,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (64 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add the receive address to the dev.to profile bio",
-      "description": "Carries the tip ask on every profile visit permanently; the cheapest unbuilt receive surface on the channel table, needing no account, no processor and no policy change.",
-      "owner_action": "Paste the TRC-20 address ([redacted]) into the Bio field at dev.to/settings once, by hand.",
+      "title": "Reduce the llm_error rate, which is the real publishing bottleneck",
+      "description": "59 lifetime and 23 last-14-days drafts died at the LLM call (glm-5.3-flash), dwarfing the 1 prompt-attributable loss. Even perfect titles cannot recover drafts the engine never returns.",
+      "owner_action": "Confirm whether glm-5.3-flash's free tier is rate-limiting or truncating at max_tokens=6000, and whether the atria fallback is actually being exercised on failures.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open https://dev.to/settings and edit the profile Bio.",
-        "Step 2: Paste the TRC-20 address already published in payout_public and save.",
-        "Step 3: No further action \u2014 receipt_check's next cycles observe posts, so confirm the bio renders by visiting the profile once."
+        "Step 1: Read the workflow logs for a recent llm_error cycle and record the raw exception (timeout vs 429 vs truncation).",
+        "Step 2: Decide whether to raise the fallback trigger threshold or accept the hourly-cycle retry as the doctrine already prescribes."
       ],
-      "discovered_at": "2026-11-18T02:54:27.739450+00:00"
+      "discovered_at": "2026-11-18T03:54:25.207319+00:00"
+    },
+    {
+      "title": "Merge one of the 13 open title-prompt branches instead of stacking more",
+      "description": "Every title-related proposal since 2026-11-04 targets the same two prompt sites and none is merged, so the measured ALL-CAPS defect (1 draft) remains unaddressed by any of them and each new cycle adds a competing branch.",
+      "owner_action": "Review and merge (or close) the earliest open title-prompt branch so the prompt ledger reflects a decided state.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Open the evolve/1.41.1-20261118-025427 branch and the earlier ones in date order.",
+        "Step 2: Merge the smallest one that answers the 'title has ALL-CAPS word' gate finding, close the rest as superseded."
+      ],
+      "discovered_at": "2026-11-18T03:54:25.207319+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 167,
+  "last_cycle_seconds": 31,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2827,7 +2818,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-18T02:53:48.634688+00:00",
+    "checked_at": "2026-11-18T03:53:56.210598+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3211,8 +3202,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261118-025427",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 54,
     "total_views": 6611,
@@ -3579,40 +3570,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-18T02:56:34.004802+00:00",
+    "last_run": "2026-11-18T03:54:25.431189+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-18T02:56:34.523415+00:00",
+    "last_run": "2026-11-18T03:54:25.696236+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4662663,
-        "at": "2026-11-17T15:27:36.946816+00:00",
-        "ok": true
-      },
-      {
-        "id": 4931682,
-        "at": "2026-11-17T15:27:36.946816+00:00",
-        "ok": true
-      },
-      {
-        "id": 4925166,
-        "at": "2026-11-17T15:27:36.946816+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
-        "at": "2026-11-17T16:27:41.347865+00:00",
-        "ok": true
-      },
       {
         "id": 4503417,
         "at": "2026-11-17T16:27:41.347865+00:00",
@@ -3824,11 +3795,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-18T02:56:34.523415+00:00",
-        "ok": true
-      },
-      {
         "id": 4800078,
         "at": "2026-11-18T02:56:34.523415+00:00",
         "ok": true
@@ -3842,6 +3808,31 @@
         "id": 4820198,
         "at": "2026-11-18T02:56:34.523415+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-18T03:54:25.696236+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-11-18T03:54:25.696236+00:00",
+        "ok": true
+      },
+      {
+        "id": 4943931,
+        "at": "2026-11-18T03:54:25.696236+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780783,
+        "at": "2026-11-18T03:54:25.696236+00:00",
+        "ok": true
+      },
+      {
+        "id": 4740283,
+        "at": "2026-11-18T03:54:25.696236+00:00",
+        "ok": true
       }
     ],
     "published_total": 55,
@@ -3849,7 +3840,7 @@
     "unverified": 5,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.5
+    "oldest_check_age_hours": 11.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3869,7 +3860,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

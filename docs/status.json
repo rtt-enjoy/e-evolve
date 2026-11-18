@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-18T10:23:32.176059+00:00",
-  "total_runs": 2621,
+  "last_run": "2026-11-18T11:23:36.835094+00:00",
+  "total_runs": 2622,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,33 +33,43 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only gate-attributable prompt defect this window (weak_title, 1 draft in 14 days, finding 'title has ALL-CAPS word') is already targeted by twelve open, unmerged review branches in PRIOR PROPOSALS, and a thirteenth near-identical diff adds review cost without adding value.",
+    "summary": "No change proposed: the one prompt-fixable defect (ALL-CAPS title, 1 draft in 14 days) is already covered by twelve open, unmerged proposals targeting the exact same rule, and the dominant loss (llm_error=23) is an engine problem no prompt edit can fix.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one title-rewrite branch and close the other eleven as superseded",
-        "description": "Twelve near-identical open proposals all target the same single measured defect (ALL-CAPS in titles, 1 draft in 14 days). Merging the simplest ships the fix; the pile makes review cost exceed value and risks a wording conflict when one finally lands.",
-        "owner_action": "Review the smallest open evolve/* branch touching the articles.py TITLE rule / _revise_title, merge it, and close the remaining eleven as superseded",
+        "title": "Merge the simplest of the twelve open title branches and close the rest",
+        "description": "The one measured prompt defect already has twelve competing fixes parked unmerged; merging the smallest ships it and clears the review pile. This is a repeat of the suggestion recorded in status.suggestions because the pile has since grown to twelve.",
+        "owner_action": "Review the smallest open evolve/* branch touching the articles.py TITLE rule or _revise_title, merge it, and close the remaining eleven as superseded",
         "secret_needed": null,
         "how_to": [
-          "Step 1: List the twelve open evolve/* branches from the prior-proposal section of the evolution brief",
-          "Step 2: Pick the smallest diff, read it against bot/earning/articles.py, and merge",
-          "Step 3: Close the remaining eleven branches as superseded without review",
-          "Step 4: Confirm article_rejects.counts.weak_title stays flat and 'title has ALL-CAPS word' does not recur over the next week"
+          "Step 1: List the twelve open evolve/* branches from the prior-proposal section",
+          "Step 2: Pick the smallest diff against bot/earning/articles.py and merge it",
+          "Step 3: Close the other eleven branches as superseded without review",
+          "Step 4: Over the next week confirm article_rejects.counts.weak_title stays flat and no 'title has ALL-CAPS word' gate finding recurs"
+        ]
+      },
+      {
+        "title": "Investigate the llm_error losses (23 drafts in 14 days) at the engine level",
+        "description": "llm_error is 59 lifetime / 23 in-window \u2014 roughly 25x the prompt-fixable title losses. Every fix lives in bot/llm.py, which is owner-protected, so no bot branch can address it; this is where the real post volume is being lost.",
+        "owner_action": "Review the last 14 days of llm_error details in article_rejects.recent and decide whether glm-5.3-flash on the 'post' role needs a fallback change or a longer max_tokens budget in bot/llm.py",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Read article_rejects.recent entries with code llm_error in status.json",
+          "Step 2: Check whether failures are timeouts, JSON parse failures, or truncation at max_tokens=6000",
+          "Step 3: If truncation dominates, raise the post-role max_tokens or switch the post-role fallback order in bot/llm.py"
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach via prompt upgrades \u2014 evaluated and declined; the existing suggestion to merge one branch and close eleven supersedes a new proposal",
+    "direction": "Checklist step 4 / PROMPT FOCUS \u2014 weak_title \u2014 examined and declined as superseded",
     "evidence": [
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "Drafts lost to a prompt (last 14 days): weak_title=1 \u2014 a single draft, the smallest actionable signal on the ledger",
-      "PRIOR PROPOSALS lists 12 open branches, every one of which edits the article-draft TITLE rule or _revise_title for this same ALL-CAPS defect",
-      "status.suggestions[0] already tells the owner: merge one branch, close the other eleven as superseded",
-      "preferred_archetypes() = ['problem-workaround'] with n=11 (above the n>=3 sample floor) \u2014 the archetype steering the prompt already serves is sound and needs no edit",
-      "llm_error=23 and empty_draft=2 dominate prompt-fixable losses in the window and are explicitly engine-side, not fixable by a prompt edit"
+      "article_rejects.counts: weak_title=15 lifetime but drafts lost to a prompt (last 14 days): weak_title=1",
+      "Gate finding behind it: 'title has ALL-CAPS word' x1 \u2014 a single occurrence",
+      "PRIOR PROPOSALS lists 12 open branches, all touching articles.py TITLE rule or _revise_title (2026-11-04 through 2026-11-18)",
+      "article_rejects.counts llm_error=59 lifetime; drafts lost to the engine last 14 days: llm_error=23 \u2014 not addressable by a prompt edit or by any editable module (llm.py is protected)",
+      "status.suggestions already carries the owner-facing recommendation to merge one title branch and close the other eleven"
     ],
-    "money_path": "none (no change proposed; a merged title-rewrite branch would be reach-only)",
-    "verify": "No diff to verify. After the owner merges one of the twelve open title branches: article_rejects.counts.weak_title stays flat and the gate finding 'title has ALL-CAPS word' does not recur over the next week.",
+    "money_path": "none this cycle \u2014 a 13th near-identical title-branch would add review cost without adding reach, and the engine-side losses are outside the prompt layer",
+    "verify": "Next cycle: article_rejects.counts.weak_title stays flat and 'title has ALL-CAPS word' does not recur once the owner merges one of the twelve open branches; llm_error is the count to watch for any improvement, and it needs an engine-side fix, not this branch",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -70,21 +80,33 @@
   },
   "suggestions": [
     {
-      "title": "Merge one title-rewrite branch and close the other eleven as superseded",
-      "description": "Twelve near-identical open proposals all target the same single measured defect (ALL-CAPS in titles, 1 draft in 14 days). Merging the simplest ships the fix; the pile makes review cost exceed value and risks a wording conflict when one finally lands.",
-      "owner_action": "Review the smallest open evolve/* branch touching the articles.py TITLE rule / _revise_title, merge it, and close the remaining eleven as superseded",
+      "title": "Merge the simplest of the twelve open title branches and close the rest",
+      "description": "The one measured prompt defect already has twelve competing fixes parked unmerged; merging the smallest ships it and clears the review pile. This is a repeat of the suggestion recorded in status.suggestions because the pile has since grown to twelve.",
+      "owner_action": "Review the smallest open evolve/* branch touching the articles.py TITLE rule or _revise_title, merge it, and close the remaining eleven as superseded",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List the twelve open evolve/* branches from the prior-proposal section of the evolution brief",
-        "Step 2: Pick the smallest diff, read it against bot/earning/articles.py, and merge",
-        "Step 3: Close the remaining eleven branches as superseded without review",
-        "Step 4: Confirm article_rejects.counts.weak_title stays flat and 'title has ALL-CAPS word' does not recur over the next week"
+        "Step 1: List the twelve open evolve/* branches from the prior-proposal section",
+        "Step 2: Pick the smallest diff against bot/earning/articles.py and merge it",
+        "Step 3: Close the other eleven branches as superseded without review",
+        "Step 4: Over the next week confirm article_rejects.counts.weak_title stays flat and no 'title has ALL-CAPS word' gate finding recurs"
       ],
-      "discovered_at": "2026-11-18T09:24:01.627635+00:00"
+      "discovered_at": "2026-11-18T11:23:59.800976+00:00"
+    },
+    {
+      "title": "Investigate the llm_error losses (23 drafts in 14 days) at the engine level",
+      "description": "llm_error is 59 lifetime / 23 in-window \u2014 roughly 25x the prompt-fixable title losses. Every fix lives in bot/llm.py, which is owner-protected, so no bot branch can address it; this is where the real post volume is being lost.",
+      "owner_action": "Review the last 14 days of llm_error details in article_rejects.recent and decide whether glm-5.3-flash on the 'post' role needs a fallback change or a longer max_tokens budget in bot/llm.py",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Read article_rejects.recent entries with code llm_error in status.json",
+        "Step 2: Check whether failures are timeouts, JSON parse failures, or truncation at max_tokens=6000",
+        "Step 3: If truncation dominates, raise the post-role max_tokens or switch the post-role fallback order in bot/llm.py"
+      ],
+      "discovered_at": "2026-11-18T11:23:59.800976+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 23,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2794,7 +2816,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-18T10:23:32.755850+00:00",
+    "checked_at": "2026-11-18T11:23:37.463736+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3546,7 +3568,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-18T10:23:54.155864+00:00",
+    "last_run": "2026-11-18T11:24:00.054690+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3556,30 +3578,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-18T10:23:54.348180+00:00",
+    "last_run": "2026-11-18T11:24:00.264401+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4356423,
-        "at": "2026-11-17T22:54:15.017984+00:00",
-        "ok": true
-      },
-      {
-        "id": 5027243,
-        "at": "2026-11-17T22:54:15.017984+00:00",
-        "ok": true
-      },
-      {
-        "id": 4908316,
-        "at": "2026-11-17T23:55:55.091291+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820684,
-        "at": "2026-11-17T23:55:55.091291+00:00",
-        "ok": true
-      },
       {
         "id": 4641536,
         "at": "2026-11-17T23:55:55.091291+00:00",
@@ -3786,11 +3788,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-18T10:23:54.348180+00:00",
-        "ok": true
-      },
-      {
         "id": 4727685,
         "at": "2026-11-18T10:23:54.348180+00:00",
         "ok": true
@@ -3808,6 +3805,31 @@
       {
         "id": 5043579,
         "at": "2026-11-18T10:23:54.348180+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-18T11:24:00.264401+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-11-18T11:24:00.264401+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-11-18T11:24:00.264401+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-11-18T11:24:00.264401+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-11-18T11:24:00.264401+00:00",
         "ok": true
       }
     ],

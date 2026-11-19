@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-19T16:12:10.790054+00:00",
-  "total_runs": 2652,
+  "last_run": "2026-11-19T17:12:10.403814+00:00",
+  "total_runs": 2653,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,80 +33,56 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the single prompt-focus defect (one weak_title reject, gate finding 'title has ALL-CAPS word' x1) is already addressed by an open unmerged branch from 2026-11-15, and ten prior proposals for the same title prompts sit unmerged, so any new edit would be a superseded duplicate; the binding step (reach) is best served by the owner merging the existing fix, which this cycle cannot do.",
+    "summary": "No change proposed: the only prompt losing drafts is the title prompt, but ten distinct title-prompt proposals already sit unmerged on open review branches \u2014 an eleventh would be an automatic superseded duplicate \u2014 and the rest of the reject load (llm_error 59 of 90) is engine-side, which no prompt edit can fix.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one title-prompt branch, close the other nine-plus as duplicates",
-        "description": "Restores the ability to ship any future weak_title improvement: with ten unmerged duplicates open, every new title-prompt edit is automatically a superseded duplicate. The one recorded gate finding in the last 14 days is exactly the defect the 2026-11-15 branch fixes.",
-        "owner_action": "Review and merge the 2026-11-15 deterministic un-shout rescue branch (evolve/* targeting bot/earning/articles.py title prompts), then close the remaining evolve/* title branches as superseded duplicates.",
+        "title": "Merge one title-prompt branch, close the rest as superseded",
+        "description": "Unblocks all future title work: with ten unmerged duplicates open, every new title-prompt edit is automatically a superseded duplicate, so the weak_title gate finding ('title has ALL-CAPS word', x1 in 14 days) can never be fixed.",
+        "owner_action": "Review and merge the 2026-11-15 deterministic un-shout rescue branch (evolve/* touching bot/earning/articles.py title prompts), then close the remaining nine title branches as superseded duplicates.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: List open evolve/* branches touching bot/earning/articles.py title prompts (_SYSTEM TITLE rule, _revise_title).",
-          "Step 2: Merge the 2026-11-15 deterministic un-shout rescue branch \u2014 it addresses the single recorded gate finding ('title has ALL-CAPS word') with no new LLM call and no gate loosening.",
-          "Step 3: Close the other title-prompt branches as superseded so the next evolution cycle can propose genuinely new prompt work."
+          "Step 1: List open evolve/* branches touching the _SYSTEM TITLE rule and _revise_title in bot/earning/articles.py.",
+          "Step 2: Merge the 2026-11-15 branch \u2014 it addresses the one recorded gate finding with no new LLM call and no gate loosening.",
+          "Step 3: Close the other branches as superseded so the next cycle can propose genuinely new prompt work."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path, via the PROMPT FOCUS (weak_title, articles.py title prompts)",
+    "direction": "Checklist step 4 (reach via better prompts), Principle 3j/5; gated by the dead-end rule against repeating prior proposals",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime but only 1 in the last 14 days",
+      "article_rejects.counts total 90: llm_error=59, weak_title=15 (lifetime), only weak_title=1 in the last 14 days",
       "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "Gate finding behind PROMPT FOCUS: 'title has ALL-CAPS word' x1 \u2014 identical to the finding the 2026-11-15 open branch addresses",
-      "last_evolution_branch = null and evolution_pending_review = false: no proposal has been merged",
-      "PRIOR PROPOSALS lists 10 distinct open branches, all targeting bot/earning/articles.py title prompts",
-      "llm_error=59 of 90 lifetime rejects (23 in 14 days): the dominant draft loss is the engine, which no prompt edit can fix",
-      "suggestions[0] already recommends merging the 2026-11-15 un-shout rescue branch and closing the eleven duplicates"
+      "Gate finding behind it: 'title has ALL-CAPS word' x1 \u2014 exactly the defect addressed by the 2026-11-15 deterministic un-shout branch",
+      "PRIOR PROPOSALS lists 10 open evolve/* branches, every one editing the title prompts in bot/earning/articles.py (_SYSTEM TITLE rule or _revise_title)",
+      "Drafts lost to the engine, last 14 days: llm_error=23, empty_draft=2 \u2014 not fixable by a prompt edit",
+      "payout.live=true, receipt_check.known_without_footer=0, wallet.received_total_usd=0.0: receive path verified, work is reach"
     ],
-    "money_path": "none this cycle \u2014 merging the existing branch is what reopens the prompt channel so future title upgrades can ship; a new duplicate edit would touch the receive path not at all and would be discarded on review",
-    "verify": "Next cycle after the owner merges the 2026-11-15 branch: article_rejects.recent should show no new 'title has ALL-CAPS word' findings, and weak_title in the 14-day window should stay at or fall from 1; weak_title lifetime counts stay flat for merged-prompt reasons only.",
+    "money_path": "none this cycle. Publishing one more post per lost draft is reach into the live footer receive path, but the only prompt-level lever available is already covered by an unmerged branch; shipping nothing avoids a superseded duplicate.",
+    "verify": "Next cycle after the owner merges one title branch: article_rejects.counts.weak_title should stop growing from ALL-CAPS findings; the 'title has ALL-CAPS word' finding should not reappear in article_rejects.recent.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.0"
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 20
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 66,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (66 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one title-prompt branch, close the other nine-plus as duplicates",
-      "description": "Restores the ability to ship any future weak_title improvement: with ten unmerged duplicates open, every new title-prompt edit is automatically a superseded duplicate. The one recorded gate finding in the last 14 days is exactly the defect the 2026-11-15 branch fixes.",
-      "owner_action": "Review and merge the 2026-11-15 deterministic un-shout rescue branch (evolve/* targeting bot/earning/articles.py title prompts), then close the remaining evolve/* title branches as superseded duplicates.",
+      "title": "Merge one title-prompt branch, close the rest as superseded",
+      "description": "Unblocks all future title work: with ten unmerged duplicates open, every new title-prompt edit is automatically a superseded duplicate, so the weak_title gate finding ('title has ALL-CAPS word', x1 in 14 days) can never be fixed.",
+      "owner_action": "Review and merge the 2026-11-15 deterministic un-shout rescue branch (evolve/* touching bot/earning/articles.py title prompts), then close the remaining nine title branches as superseded duplicates.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: List open evolve/* branches touching bot/earning/articles.py title prompts (_SYSTEM TITLE rule, _revise_title).",
-        "Step 2: Merge the 2026-11-15 deterministic un-shout rescue branch \u2014 it addresses the single recorded gate finding ('title has ALL-CAPS word') with no new LLM call and no gate loosening.",
-        "Step 3: Close the other title-prompt branches as superseded so the next evolution cycle can propose genuinely new prompt work."
+        "Step 1: List open evolve/* branches touching the _SYSTEM TITLE rule and _revise_title in bot/earning/articles.py.",
+        "Step 2: Merge the 2026-11-15 branch \u2014 it addresses the one recorded gate finding with no new LLM call and no gate loosening.",
+        "Step 3: Close the other branches as superseded so the next cycle can propose genuinely new prompt work."
       ],
-      "discovered_at": "2026-11-19T16:12:32.803544+00:00"
+      "discovered_at": "2026-11-19T17:12:31.741887+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 147,
+  "last_cycle_seconds": 22,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2827,7 +2803,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-19T16:12:11.242503+00:00",
+    "checked_at": "2026-11-19T17:12:10.945041+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3579,7 +3555,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-19T16:14:36.860963+00:00",
+    "last_run": "2026-11-19T17:12:32.025258+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3589,20 +3565,10 @@
     "without_footer": 0,
     "unreachable": 2,
     "missing": [],
-    "last_run": "2026-11-19T16:14:37.090574+00:00",
+    "last_run": "2026-11-19T17:12:32.145063+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4800078,
-        "at": "2026-11-19T04:36:36.457749+00:00",
-        "ok": true
-      },
-      {
-        "id": 5025764,
-        "at": "2026-11-19T04:36:36.457749+00:00",
-        "ok": true
-      },
       {
         "id": 4765372,
         "at": "2026-11-19T04:36:36.457749+00:00",
@@ -3829,11 +3795,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-19T16:14:37.090574+00:00",
-        "ok": true
-      },
-      {
         "id": 4430049,
         "at": "2026-11-19T16:14:37.090574+00:00",
         "ok": true
@@ -3842,6 +3803,21 @@
         "id": 4853251,
         "at": "2026-11-19T16:14:37.090574+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-19T17:12:32.145063+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-19T17:12:32.145063+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-19T17:12:32.145063+00:00",
+        "ok": true
       }
     ],
     "published_total": 56,
@@ -3849,7 +3825,7 @@
     "unverified": 6,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.6
+    "oldest_check_age_hours": 12.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3869,7 +3845,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

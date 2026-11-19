@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-19T11:31:11.148066+00:00",
-  "total_runs": 2647,
+  "last_run": "2026-11-19T12:31:15.727522+00:00",
+  "total_runs": 2648,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,55 +33,66 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the only prompt-focus defect (weak_title, 1 draft in 14 days) is the exact subject of twelve already-open review branches, so a thirteenth title-prompt edit would be an unmergeable duplicate; the blocker is human review, not the prompt.",
+    "summary": "No change proposed: the one measured title defect (ALL-CAPS word, 1 draft lost in 14 days) already has twelve open review branches targeting exactly the prompts the ledger names, including the deterministic un-shout rescue; a thirteenth edit would duplicate an unmerged branch and is the documented reason earlier proposals were never merged.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Merge one title-prompt branch, close the other eleven",
-        "description": "Re-opens the prompt channel: today every evolution cycle that tries to fix weak_title produces a duplicate of an already-open branch and is never merged, so the one measured title defect (ALL-CAPS, 1 draft/fortnight) stays unfixable. Merging the deterministic un-shout rescue fixes it with no extra LLM call and lets future cycles propose fresh, non-duplicate reach work.",
+        "description": "Unblocks the prompt channel: today every evolution cycle that tries to fix weak_title produces a duplicate of an already-open branch and is never merged, so the one measured title defect stays unfixable and fresh reach work cannot be proposed.",
         "owner_action": "Merge the 2026-11-15 deterministic un-shout rescue branch (evolve/* targeting articles.py title prompts) and close the remaining eleven evolve/* title branches as superseded.",
         "secret_needed": null,
         "how_to": [
           "Step 1: List the open evolve/* branches targeting bot/earning/articles.py title prompts.",
           "Step 2: Review and merge the 2026-11-15 branch (deterministic un-shout rescue for ALL-CAPS titles) \u2014 it addresses the one gate finding with no new LLM dependency.",
-          "Step 3: Close the other eleven branches as superseded so the ledger stops pointing at them and the next evolution can propose new work."
+          "Step 3: Close the other eleven branches as superseded so the next evolution can propose new, non-duplicate work."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach into a live receive path) via the prompt-ledger discipline: do not stack edits where the ledger already shows the lever frozen; Principle 5, measure the funnel not the last stage.",
+    "direction": "Step 4 \u2014 reach into a live receive path; PROMPT FOCUS weak_title (reject count 1 in last 14 days, gate finding 'title has ALL-CAPS word' x1)",
     "evidence": [
-      "article_rejects.counts (14-day window): weak_title=1, while llm_error=23 and empty_draft=2 \u2014 prompt-fixable losses are the smallest bucket",
-      "Gate finding behind weak_title: 'title has ALL-CAPS word' x1 \u2014 a single occurrence",
-      "PRIOR PROPOSALS lists twelve distinct open branches, all editing bot/earning/articles.py title prompts (_SYSTEM TITLE rule and _revise_title), including 2026-11-15 'deterministic un-shout rescue for ALL-CAPS titles' which fixes exactly this finding",
-      "status.suggestions[0] = 'Merge or close the twelve title-prompt branches, then unblock this lever' \u2014 the recorded next step is owner review, not another edit",
-      "payout.live = true, backfill.remaining = 0, receipt_check.known_without_footer = 0 \u2014 the receive path is clean; the work is reach, and reach is not degraded by 1 lost title per fortnight"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "drafts lost to a prompt (last 14 days): weak_title=1",
+      "Gate findings behind it: 'title has ALL-CAPS word' x1",
+      "PRIOR PROPOSALS: 12 distinct open branches, all targeting bot/earning/articles.py title prompts (draft TITLE rule, _revise_title, deterministic un-shout rescue)",
+      "Drafts lost to the engine (llm_error=23, empty_draft=2) are not fixable by any prompt edit"
     ],
-    "money_path": "none (maintenance/no-op): no change proposed, so nothing enters the receive path this cycle. Publishing continues from the existing prompts at the current 55-post reach baseline.",
-    "verify": "Nothing to verify from a no-op. If the owner instead merges the 2026-11-15 un-shout branch: article_rejects recent entries should stop showing code='weak_title' with detail containing 'ALL-CAPS' over the next 14-day window, and weak_title in the window tally should stay at 0.",
+    "money_path": "none this cycle \u2014 the only prompt-attributable loss in the window is one draft, and a fix already sits unmerged on an open branch; publishing another proposal would not move reach",
+    "verify": "After the owner merges the 2026-11-15 branch: article_rejects.counts.weak_title should not increase in the next 14-day window, and the 'title has ALL-CAPS word' gate finding should not recur.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "mrr-ideas",
+        "success": true,
+        "idea_count": 2,
+        "refused_count": 18,
+        "llm": true,
+        "estimated_usd": 0.0,
+        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
+        "url": "status.json#mrr_ideas"
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Merge one title-prompt branch, close the other eleven",
-      "description": "Re-opens the prompt channel: today every evolution cycle that tries to fix weak_title produces a duplicate of an already-open branch and is never merged, so the one measured title defect (ALL-CAPS, 1 draft/fortnight) stays unfixable. Merging the deterministic un-shout rescue fixes it with no extra LLM call and lets future cycles propose fresh, non-duplicate reach work.",
+      "description": "Unblocks the prompt channel: today every evolution cycle that tries to fix weak_title produces a duplicate of an already-open branch and is never merged, so the one measured title defect stays unfixable and fresh reach work cannot be proposed.",
       "owner_action": "Merge the 2026-11-15 deterministic un-shout rescue branch (evolve/* targeting articles.py title prompts) and close the remaining eleven evolve/* title branches as superseded.",
       "secret_needed": null,
       "how_to": [
         "Step 1: List the open evolve/* branches targeting bot/earning/articles.py title prompts.",
         "Step 2: Review and merge the 2026-11-15 branch (deterministic un-shout rescue for ALL-CAPS titles) \u2014 it addresses the one gate finding with no new LLM dependency.",
-        "Step 3: Close the other eleven branches as superseded so the ledger stops pointing at them and the next evolution can propose new work."
+        "Step 3: Close the other eleven branches as superseded so the next evolution can propose new, non-duplicate work."
       ],
       "discovered_at": "2026-11-19T11:31:32.779602+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 22,
+  "last_cycle_seconds": 49,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2803,7 +2814,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-19T11:31:11.645269+00:00",
+    "checked_at": "2026-11-19T12:31:16.263682+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -2995,7 +3006,7 @@
   },
   "mrr_ideas": {
     "enabled": true,
-    "last_refresh_at": "2026-11-17T12:30:48.622885+00:00",
+    "last_refresh_at": "2026-11-19T12:31:33.838277+00:00",
     "refresh_hours": 48,
     "constraints": [
       "Runs on GitHub Actions free tier: hourly, outbound-only, no always-on server.",
@@ -3004,43 +3015,43 @@
       "No outreach. Cold email, DMs, and social posting are refused in code.",
       "Can research, analyse, draft, and publish articles to dev.to. That is the whole surface."
     ],
-    "summary": "The single best recurring-revenue angle is a paid newsletter run as a hand-operated storefront on top of a research pipeline: the owner picks one narrow dev niche (GitHub Actions failures on free-tier CI), publishes deep, well-researched articles to dev.to weekly as the free tier, and turns the best of them into a subscriber-only deep-dive series sold as a simple monthly membership. The owner must open and ID-verify a payment account (Gumroad, Polar, Substack, or Stripe) entirely by hand, or accept tips at a published wallet address, because nothing in this stack can take a payment or collect a subscriber. The owner's byline on dev.to is the only audience channel that exists, so growth is slow and entirely earned by article quality \u2014 no passive income, no autopilot.",
+    "summary": "The single best angle is a deeply niched paid newsletter for a developer sub-niche the owner can genuinely research \u2014 for example, GitHub Actions cost and reliability engineering \u2014 where every issue is drafted by the automation, edited and published by the owner to dev.to as free previews that build the byline audience. Because the stack has no payment processor and no outreach, money can only arrive passively-but-honestly: the owner publishes a personal wallet address (Tron) for voluntary subscriptions/tips, which needs no account, no ID check, and no storefront, and later \u2014 only if the audience justifies it \u2014 opens a Gumroad account by hand and passes its ID verification to sell subscriptions at a fixed price. Nothing here is autopilot: the owner must hand-write the buyer-facing parts, answer comments, and keep the wallet address visible on every article.",
     "ranked_ideas": [
       {
-        "name": "Paid newsletter: deep-dive teardown series",
-        "why_this_stack_fits": "The stack's entire surface is research \u2192 draft \u2192 publish to dev.to, and a newsletter is exactly that loop with a paywall bolted on by hand.",
-        "narrow_niche": "Debugging recurring GitHub Actions / free-tier CI failures for solo developers and small open-source maintainers (cache misses, flaky builds, minutes-budget overruns).",
-        "first_proof_artifact": "Three published dev.to articles, each a full teardown of one real workflow failure pattern with a fixed config shown, plus one longer subscriber-sample deep dive clearly visible so a buyer can judge the paid tier before paying.",
-        "who_pays": "Solo developers and open-source maintainers whose CI minutes budget keeps running out and who cannot afford a DevOps hire.",
+        "name": "Paid newsletter (GitHub Actions cost & reliability digest)",
+        "why_this_stack_fits": "The stack's entire surface \u2014 research, analyse, draft, publish to dev.to \u2014 is exactly what a written digest needs; no server, no inbound HTTP, and hourly GitHub Actions runs fit the workflow.",
+        "narrow_niche": "Teams and solo maintainers whose GitHub Actions bills are climbing \u2014 specifically digest of Actions workflow cost traps, flaky-cache issues, and runner misconfigurations, with a worked fix per issue.",
+        "first_proof_artifact": "A 3-part free series on dev.to: 'Auditing your GitHub Actions bill by hand' \u2014 one issue per week, each ending with an invitation to subscribe via the published wallet address, plus the raw checklist as the first paid deliverable.",
+        "who_pays": "Maintainers of mid-size open-source repos and indie devs self-hosting CI who are personally responsible for the Actions bill.",
         "monthly_price_usd": "10",
-        "runway_to_first_dollar": "8-12 weeks (3-5 free articles must exist first, because the dev.to byline is the only distribution)",
-        "owner_must_do_by_hand": "Open a payment account and pass its government-ID verification by hand; open the storefront by hand; paste new posts into the newsletter tool and mark who has paid; answer every subscriber reply; keep a manual subscriber ledger because no inbound webhook or form can collect signups in this stack. Al",
-        "discovered_at": "2026-11-17T12:30:48.622885+00:00"
+        "runway_to_first_dollar": "6-12 weeks (byline audience must exist first; verify independently any income expectation)",
+        "owner_must_do_by_hand": "Publish each issue to dev.to themselves (no auto-posting trust built yet), reply to comments, keep the wallet address in the byline/footer, and manually record who paid via wallet transfers \u2014 no automated subscriber management exists in this stack. Later, if volume justifies it: open Gumroad by hand",
+        "discovered_at": "2026-11-19T12:31:33.838277+00:00"
       },
       {
-        "name": "Notion / digital template store: CI-debugging checklist packs",
-        "why_this_stack_fits": "The research loop that produces teardown articles also produces reusable artifacts (checklists, config templates), and Gumroad products can be created/updated via API once the owner has opened the storefront by hand.",
-        "narrow_niche": "GitHub Actions config templates and failure-mode checklists for solo maintainers of small Node and Python open-source projects on free-tier runners.",
-        "first_proof_artifact": "One free, genuinely useful artifact (e.g. a pinned-actions security and cache checklist) given away inside a dev.to article as the proof of quality, before any paid pack exists.",
-        "who_pays": "The same solo maintainers \u2014 the subset who want the fixed answer now rather than reading a series.",
-        "monthly_price_usd": "verify independently \u2014 this is realistically a one-time $5-15 purchase, not monthly; treat monthly-recurring as secondary (an updated-pack add-on if buyers ask for it)",
-        "runway_to_first_dollar": "6-10 weeks",
-        "owner_must_do_by_hand": "Open and ID-verify the payment account by hand; open the Gumroad storefront by hand; maintain the product listing and answer buyer questions; reconcile tips if using the published wallet address instead of an account.",
-        "discovered_at": "2026-11-17T12:30:48.622885+00:00"
+        "name": "Notion / digital template store (Actions-cost audit template)",
+        "why_this_stack_fits": "The draft capability can produce the template's content and its dev.to launch article; the store itself is one static product, not a service, so no inbound HTTP is needed after setup.",
+        "narrow_niche": "A single Notion template: 'GitHub Actions spend-audit workbook' \u2014 per-workflow cost worksheet, redundancy checklist, and a monthly re-audit ritual.",
+        "first_proof_artifact": "The free checklist from the newsletter series turned into the actual Notion workbook, plus a dev.to article walking through one real (anonymised) audit using it.",
+        "who_pays": "The same reader as the newsletter: a repo maintainer doing their first spend audit who wants the structure done for them.",
+        "monthly_price_usd": "15",
+        "runway_to_first_dollar": "8-16 weeks (requires the newsletter articles to have built readership first; verify independently)",
+        "owner_must_do_by_hand": "Build the Notion workbook manually, open a Gumroad account by hand and pass its ID verification before any fixed-price sale, or publish the wallet address and honour tips manually. Fulfilment (sending the template link) is done by hand per buyer.",
+        "discovered_at": "2026-11-19T12:31:33.838277+00:00"
       }
     ],
     "validation_steps": [
-      "Publish a dev.to article on one specific, painful CI failure pattern and end it with a direct question asking readers how they handle it; count and read the comments \u2014 that is inbound signal, not outreach.",
-      "Start a discussion thread by hand in a community the owner already belongs to (e.g. a Discord or subreddit they are an existing member of) sharing one free checklist and asking what people struggle with; reply to every answer personally.",
-      "Watch dev.to reactions and follows on the first three articles over 4 weeks: if a niche article does not draw meaningful engagement relative to the owner's baseline, narrow the niche further before building anything paid.",
-      "Add a visible line under each article: 'I write a deep-dive series on this \u2014 reply or comment if you'd pay $10/mo for it.' Tally the yeses by hand; that count, not any benchmark, is the validation."
+      "Write a dev.to article that audits a real-looking Actions bill step by step and ends with a direct question: 'What does your monthly Actions bill look like, and which workflow scares you? Reply in the comments.' \u2014 comments are inbound, permitted, and tell you who has the problem.",
+      "Manually check dev.to comment threads, Reddit CI threads, and GitHub community discussions for people complaining about Actions costs; note who they are and what they ask \u2014 this is research, not outreach. Log 10 distinct people-with-the-problem observed, verify independently.",
+      "Ask, in a hand-posted comment or reply inside communities the owner already participates in, whether a $10/mo digest plus a $15 template would be worth it \u2014 framed as a question about their needs, not a pitch.",
+      "Watch wallet tips and dev.to follower growth for 4 weeks: if nobody tips or engages after 8+ published articles, the niche or price is wrong \u2014 iterate before building the Gumroad store."
     ],
     "owner_actions": [
-      "Pick the exact niche (commit to it in writing): GitHub Actions failure teardowns for solo maintainers on free-tier CI.",
-      "Research and publish the first teardown article to dev.to this week \u2014 one real failure pattern, root cause, fixed YAML.",
-      "Publish articles 2 and 3 over the next four weeks; end each with the validation question and log every comment reply by hand.",
-      "Open and ID-verify a payment account by hand (or publish a Tron tip address) only after the third article shows real engagement \u2014 do not pay for tooling before proof.",
-      "Once buyers exist, draft the first subscriber-only deep dive, price it at $10/mo, and keep the subscriber ledger manually in a spreadsheet."
+      "Pick the niche and publish the first free audit article to dev.to this week, ending with the engagement question; include the owner's wallet address in the byline.",
+      "Draft, by hand, the 3-issue free series and the paid-issue template so the format is fixed before any money is mentioned.",
+      "Publish issue 2 and 3 on a fixed weekly schedule, manually, replying to every comment to learn reader problems (this replaces all market research calls).",
+      "Track tips received at the wallet address by hand and record them; do not promise subscriptions until at least one unsolicited tip arrives \u2014 verify independently.",
+      "Only after 8+ articles and visible engagement: open Gumroad by hand, complete ID verification, and list the template at $15/mo library access via its API."
     ],
     "viable": [
       {
@@ -3555,40 +3566,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-19T11:31:33.077281+00:00",
+    "last_run": "2026-11-19T12:32:04.703457+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-19T11:31:33.216771+00:00",
+    "last_run": "2026-11-19T12:32:04.846464+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4636715,
-        "at": "2026-11-19T00:01:15.255711+00:00",
-        "ok": true
-      },
-      {
-        "id": 5043579,
-        "at": "2026-11-19T00:01:15.255711+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-11-19T00:58:57.140764+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-19T00:58:57.140764+00:00",
-        "ok": true
-      },
       {
         "id": 4552210,
         "at": "2026-11-19T00:58:57.140764+00:00",
@@ -3800,11 +3791,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-19T11:31:33.216771+00:00",
-        "ok": true
-      },
-      {
         "id": 4562180,
         "at": "2026-11-19T11:31:33.216771+00:00",
         "ok": true
@@ -3818,6 +3804,31 @@
         "id": 5060054,
         "at": "2026-11-19T11:31:33.216771+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-19T12:32:04.846464+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-19T12:32:04.846464+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-19T12:32:04.846464+00:00",
+        "ok": true
+      },
+      {
+        "id": 5012890,
+        "at": "2026-11-19T12:32:04.846464+00:00",
+        "ok": true
+      },
+      {
+        "id": 5019261,
+        "at": "2026-11-19T12:32:04.846464+00:00",
+        "ok": true
       }
     ],
     "published_total": 56,
@@ -3825,7 +3836,7 @@
     "unverified": 6,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.5
+    "oldest_check_age_hours": 11.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3845,7 +3856,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 1
+      "glm": 2
     },
     "fallback": {
       "provider": "atria",

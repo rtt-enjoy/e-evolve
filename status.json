@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-19T22:36:48.257287+00:00",
-  "total_runs": 2659,
+  "last_run": "2026-11-19T23:36:56.114661+00:00",
+  "total_runs": 2660,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -42,28 +42,6 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 20
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 65,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (65 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
         "platform": "dev.to",
         "success": false,
         "skipped": true,
@@ -91,7 +69,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 871,
+  "last_cycle_seconds": 905,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2742,7 +2720,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-19T22:36:48.874080+00:00",
+    "checked_at": "2026-11-19T23:36:56.426178+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3203,21 +3181,16 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-11-19T22:51:17.826253+00:00",
+    "last_at": "2026-11-19T23:51:59.954449+00:00",
     "counts": {
       "empty_draft": 11,
       "fabricated": 4,
       "weak_title": 15,
       "revision_fabricated": 1,
-      "llm_error": 62
+      "llm_error": 63
     },
-    "total": 93,
+    "total": 94,
     "recent": [
-      {
-        "code": "llm_error",
-        "at": "2026-10-23T05:22:44.497744+00:00",
-        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
-      },
       {
         "code": "weak_title",
         "at": "2026-10-23T10:47:01.754095+00:00",
@@ -3462,6 +3435,11 @@
         "code": "llm_error",
         "at": "2026-11-19T22:51:17.826253+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-11-19T23:51:59.954449+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
       }
     ]
   },
@@ -3494,7 +3472,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-19T22:51:18.061296+00:00",
+    "last_run": "2026-11-19T23:52:00.185754+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3504,30 +3482,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-19T22:51:18.249296+00:00",
+    "last_run": "2026-11-19T23:52:00.404647+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4748037,
-        "at": "2026-11-19T10:31:31.677747+00:00",
-        "ok": true
-      },
-      {
-        "id": 4720062,
-        "at": "2026-11-19T10:31:31.677747+00:00",
-        "ok": true
-      },
-      {
-        "id": 4602729,
-        "at": "2026-11-19T10:31:31.677747+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-11-19T11:31:33.216771+00:00",
-        "ok": true
-      },
       {
         "id": 4368781,
         "at": "2026-11-19T11:31:33.216771+00:00",
@@ -3734,11 +3692,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-19T22:51:18.249296+00:00",
-        "ok": true
-      },
-      {
         "id": 4545446,
         "at": "2026-11-19T22:51:18.249296+00:00",
         "ok": true
@@ -3756,6 +3709,31 @@
       {
         "id": 4633220,
         "at": "2026-11-19T22:51:18.249296+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-19T23:52:00.404647+00:00",
+        "ok": true
+      },
+      {
+        "id": 4937139,
+        "at": "2026-11-19T23:52:00.404647+00:00",
+        "ok": true
+      },
+      {
+        "id": 4996282,
+        "at": "2026-11-19T23:52:00.404647+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-19T23:52:00.404647+00:00",
+        "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-11-19T23:52:00.404647+00:00",
         "ok": true
       }
     ],
@@ -3832,9 +3810,7 @@
     "live": false,
     "serving": "gemini",
     "disabled_reason": "quota_spent",
-    "calls": {
-      "atria": 1
-    },
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-19T02:58:40.764857+00:00",
-  "total_runs": 2638,
+  "last_run": "2026-11-19T03:30:55.964242+00:00",
+  "total_runs": 2639,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,13 +33,13 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt-attributable loss in the window is weak_title (1 draft, ALL-CAPS finding), and 13 unmerged review branches already propose that exact fix; llm_error (59 lifetime, 23 in-window) dominates rejects and is not prompt-fixable.",
+    "summary": "No change proposed: the only prompt-attributable draft loss (weak_title=1 in 14 days) is already covered by 13 unmerged title-prompt branches plus the owner's own standing suggestion to merge one and wait, and the dominant reject (llm_error=59) is engine-side and explicitly not fixable by a prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the 13 open title-prompt branches",
+        "title": "Merge the 2026-11-18 draft TITLE-rule alignment branch",
         "description": "Unblocks the weak_title measurement loop: a merged fix lets the next cycles show whether ALL-CAPS weak_title rejects actually fall, instead of accumulating near-identical unmerged branches",
-        "owner_action": "Review and merge one title-prompt proposal (the 2026-11-18 draft TITLE-rule alignment covers both the draft and rewrite paths), then leave the weak_title count alone for two weeks",
+        "owner_action": "Review and merge the 2026-11-18 draft TITLE-rule alignment proposal (covers both the draft and _revise_title paths), then leave weak_title alone for two weeks",
         "secret_needed": null,
         "how_to": [
           "Step 1: Open the review branches from 2026-11-18 listed in the evolution brief",
@@ -48,63 +48,40 @@
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade prompts one step per cycle; also the prior cycle's own suggestion to leave weak_title alone until a fresh window of data accumulates.",
+    "direction": "Checklist step 4 \u2014 upgrade prompts one step per cycle, but only when the evidence names a prompt defect not already covered by an open branch; the standing suggestion says to decline further title-flavored proposals until weak_title moves.",
     "evidence": [
-      "article_rejects.counts total 90: llm_error=59 vs weak_title=15 \u2014 the engine, not a prompt, loses most drafts",
-      "Drafts lost to a prompt (last 14 days): weak_title=1 \u2014 a single sample, too thin to grade a fix against",
-      "Gate findings behind it: 'title has ALL-CAPS word' x1 \u2014 the exact defect 13 open proposals (2026-11-05 through 2026-11-18, all in articles.py TITLE rules / _revise_title) already claim to fix",
-      "PRIOR PROPOSALS lists 13 distinct title-flavored branches, none merged \u2014 a 14th near-identical edit cannot be reviewed against the others",
-      "status.suggestions[0] already advises: 'Skip the next few title-flavoured evolution proposals until article_rejects shows a fresh window of data'"
+      "article_rejects.counts: weak_title=1 in the last 14 days (lifetime 15), gate finding 'title has ALL-CAPS word' x1",
+      "article_rejects.counts total 90: llm_error=59, empty_draft=11 \u2014 78% of losses are the engine, not a prompt",
+      "PROMPT LEDGER: 'Drafts lost to a prompt (last 14 days): weak_title=1'",
+      "status.suggestions[0]: owner action is to merge the 2026-11-18 title-prompt alignment and 'Decline further title-flavored proposals until article_rejects.counts.weak_title moves'",
+      "PRIOR PROPOSALS: 13 distinct open branches already target exactly this defect, none merged"
     ],
-    "money_path": "none \u2014 no change proposed; reach work is deferred until the owner merges one of the parked title-prompt branches so the effect becomes measurable",
-    "verify": "No change to verify. After the owner merges one 2026-11-18 branch, article_rejects.counts.weak_title and recent detail 'title has ALL-CAPS word' should stop growing over the next 14-day window.",
+    "money_path": "reach-only (the change would have been), and this cycle it is none \u2014 no diff proposed",
+    "verify": "After the owner merges one of the 13 open title branches, article_rejects.counts.weak_title and the 14-day 'drafts lost to a prompt' window should stay flat or fall; a new proposal now would sit unmerged beside them and change nothing measurable",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 20
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 66,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (66 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one of the 13 open title-prompt branches",
+      "title": "Merge the 2026-11-18 draft TITLE-rule alignment branch",
       "description": "Unblocks the weak_title measurement loop: a merged fix lets the next cycles show whether ALL-CAPS weak_title rejects actually fall, instead of accumulating near-identical unmerged branches",
-      "owner_action": "Review and merge one title-prompt proposal (the 2026-11-18 draft TITLE-rule alignment covers both the draft and rewrite paths), then leave the weak_title count alone for two weeks",
+      "owner_action": "Review and merge the 2026-11-18 draft TITLE-rule alignment proposal (covers both the draft and _revise_title paths), then leave weak_title alone for two weeks",
       "secret_needed": null,
       "how_to": [
         "Step 1: Open the review branches from 2026-11-18 listed in the evolution brief",
         "Step 2: Merge the draft TITLE-rule alignment (it covers the draft and _revise_title paths in one edit)",
         "Step 3: Decline further title-flavored proposals until article_rejects.counts.weak_title moves or the 14-day window shows the fix idle"
       ],
-      "discovered_at": "2026-11-19T01:59:04.589930+00:00"
+      "discovered_at": "2026-11-19T03:31:46.532356+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 162,
+  "last_cycle_seconds": 51,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2834,7 +2811,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-19T02:58:41.355455+00:00",
+    "checked_at": "2026-11-19T03:30:56.648596+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3586,7 +3563,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-19T03:01:22.306780+00:00",
+    "last_run": "2026-11-19T03:31:46.694013+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3596,30 +3573,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-19T03:01:22.496272+00:00",
+    "last_run": "2026-11-19T03:31:46.824454+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4800078,
-        "at": "2026-11-18T15:01:18.317197+00:00",
-        "ok": true
-      },
-      {
-        "id": 5025764,
-        "at": "2026-11-18T15:01:18.317197+00:00",
-        "ok": true
-      },
-      {
-        "id": 4765372,
-        "at": "2026-11-18T15:01:18.317197+00:00",
-        "ok": true
-      },
-      {
-        "id": 4977763,
-        "at": "2026-11-18T15:01:18.317197+00:00",
-        "ok": true
-      },
       {
         "id": 4848276,
         "at": "2026-11-18T16:01:27.658895+00:00",
@@ -3826,11 +3783,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-19T03:01:22.496272+00:00",
-        "ok": true
-      },
-      {
         "id": 4421693,
         "at": "2026-11-19T03:01:22.496272+00:00",
         "ok": true
@@ -3849,6 +3801,31 @@
         "id": 4965279,
         "at": "2026-11-19T03:01:22.496272+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-19T03:31:46.824454+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-11-19T03:31:46.824454+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-11-19T03:31:46.824454+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-19T03:31:46.824454+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-19T03:31:46.824454+00:00",
+        "ok": true
       }
     ],
     "published_total": 56,
@@ -3856,7 +3833,7 @@
     "unverified": 6,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 12.0
+    "oldest_check_age_hours": 11.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3876,7 +3853,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

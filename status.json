@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-20T00:37:02.368385+00:00",
-  "total_runs": 2661,
+  "last_run": "2026-11-20T01:36:53.196486+00:00",
+  "total_runs": 2662,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -69,7 +69,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 621,
+  "last_cycle_seconds": 617,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2720,7 +2720,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-20T00:37:03.127845+00:00",
+    "checked_at": "2026-11-20T01:36:53.612186+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3181,21 +3181,16 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-11-20T00:47:22.837092+00:00",
+    "last_at": "2026-11-20T01:47:08.805028+00:00",
     "counts": {
       "empty_draft": 11,
       "fabricated": 4,
       "weak_title": 15,
       "revision_fabricated": 1,
-      "llm_error": 64
+      "llm_error": 65
     },
-    "total": 95,
+    "total": 96,
     "recent": [
-      {
-        "code": "llm_error",
-        "at": "2026-10-27T00:23:29.993253+00:00",
-        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
-      },
       {
         "code": "llm_error",
         "at": "2026-10-27T01:19:01.754177+00:00",
@@ -3440,6 +3435,11 @@
         "code": "llm_error",
         "at": "2026-11-20T00:47:22.837092+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-11-20T01:47:08.805028+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
       }
     ]
   },
@@ -3472,7 +3472,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-20T00:47:22.933265+00:00",
+    "last_run": "2026-11-20T01:47:09.018449+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3482,30 +3482,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-20T00:47:23.028095+00:00",
+    "last_run": "2026-11-20T01:47:09.260517+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 5012890,
-        "at": "2026-11-19T12:32:04.846464+00:00",
-        "ok": true
-      },
-      {
-        "id": 5019261,
-        "at": "2026-11-19T12:32:04.846464+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-11-19T13:14:24.315969+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-11-19T13:14:24.315969+00:00",
-        "ok": true
-      },
       {
         "id": 4826008,
         "at": "2026-11-19T13:14:24.315969+00:00",
@@ -3712,11 +3692,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-20T00:47:23.028095+00:00",
-        "ok": true
-      },
-      {
         "id": 4562180,
         "at": "2026-11-20T00:47:23.028095+00:00",
         "ok": true
@@ -3735,6 +3710,31 @@
         "id": 4602729,
         "at": "2026-11-20T00:47:23.028095+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-20T01:47:09.260517+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-20T01:47:09.260517+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-11-20T01:47:09.260517+00:00",
+        "ok": true
+      },
+      {
+        "id": 4729472,
+        "at": "2026-11-20T01:47:09.260517+00:00",
+        "ok": true
+      },
+      {
+        "id": 5060054,
+        "at": "2026-11-20T01:47:09.260517+00:00",
+        "ok": true
       }
     ],
     "published_total": 56,
@@ -3742,7 +3742,7 @@
     "unverified": 6,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 12.3
+    "oldest_check_age_hours": 12.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3753,7 +3753,7 @@
   },
   "llm_engine": {
     "main_provider": "glm",
-    "main_model": "glm-5.3-flash",
+    "main_model": "glm-4.7-flash",
     "preferred_model": "glm-5.3-flash",
     "refused": [
       {
@@ -3785,31 +3785,13 @@
         "endpoint": "https://api.z.ai/api/coding/paas/v4",
         "code": "1310",
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
-      },
-      {
-        "model": "glm-5.3-flash",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
-      },
-      {
-        "model": "glm-5.2",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
-      },
-      {
-        "model": "glm-5.1",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
       }
     ],
-    "endpoint": null,
+    "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
     "live": false,
     "serving": "gemini",
-    "disabled_reason": "quota_spent",
+    "disabled_reason": "auth_failed",
     "calls": {},
     "fallback": {
       "provider": "atria",

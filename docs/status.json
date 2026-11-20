@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-20T10:18:50.957780+00:00",
-  "total_runs": 2671,
+  "last_run": "2026-11-20T11:18:57.450735+00:00",
+  "total_runs": 2672,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -2738,7 +2738,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-20T10:18:51.480009+00:00",
+    "checked_at": "2026-11-20T11:18:57.842387+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3504,7 +3504,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-20T10:23:57.762291+00:00",
+    "last_run": "2026-11-20T11:24:04.636954+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3514,30 +3514,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-20T10:23:57.977213+00:00",
+    "last_run": "2026-11-20T11:24:04.844205+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4633220,
-        "at": "2026-11-19T22:51:18.249296+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-19T23:52:00.404647+00:00",
-        "ok": true
-      },
-      {
-        "id": 4996282,
-        "at": "2026-11-19T23:52:00.404647+00:00",
-        "ok": true
-      },
-      {
-        "id": 4985893,
-        "at": "2026-11-19T23:52:00.404647+00:00",
-        "ok": true
-      },
       {
         "id": 4925166,
         "at": "2026-11-19T23:52:00.404647+00:00",
@@ -3744,11 +3724,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-20T10:23:57.977213+00:00",
-        "ok": true
-      },
-      {
         "id": 4840835,
         "at": "2026-11-20T10:23:57.977213+00:00",
         "ok": true
@@ -3766,6 +3741,31 @@
       {
         "id": 4931682,
         "at": "2026-11-20T10:23:57.977213+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-20T11:24:04.844205+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-20T11:24:04.844205+00:00",
+        "ok": true
+      },
+      {
+        "id": 5068353,
+        "at": "2026-11-20T11:24:04.844205+00:00",
+        "ok": true
+      },
+      {
+        "id": 4959304,
+        "at": "2026-11-20T11:24:04.844205+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-11-20T11:24:04.844205+00:00",
         "ok": true
       }
     ],
@@ -3821,9 +3821,9 @@
     ],
     "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
-    "live": true,
-    "serving": "glm",
-    "disabled_reason": null,
+    "live": false,
+    "serving": "atria",
+    "disabled_reason": "auth_failed",
     "calls": {},
     "fallback": {
       "provider": "atria",

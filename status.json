@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-20T15:55:59.512255+00:00",
-  "total_runs": 2677,
+  "last_run": "2026-11-20T16:55:58.904574+00:00",
+  "total_runs": 2678,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -41,30 +41,7 @@
     "error_type": "json"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 21
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 66,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (66 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -84,7 +61,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 671,
+  "last_cycle_seconds": 309,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2834,7 +2811,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-20T15:56:00.166373+00:00",
+    "checked_at": "2026-11-20T16:55:59.344881+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3600,7 +3577,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-20T16:07:10.489800+00:00",
+    "last_run": "2026-11-20T17:01:06.964432+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3610,30 +3587,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-20T16:07:10.715427+00:00",
+    "last_run": "2026-11-20T17:01:07.140446+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4568987,
-        "at": "2026-11-20T04:23:52.413855+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
-        "at": "2026-11-20T05:23:58.761184+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
-        "at": "2026-11-20T05:23:58.761184+00:00",
-        "ok": true
-      },
-      {
-        "id": 5027243,
-        "at": "2026-11-20T05:23:58.761184+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-11-20T05:23:58.761184+00:00",
@@ -3840,11 +3797,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-20T16:07:10.715427+00:00",
-        "ok": true
-      },
-      {
         "id": 4908316,
         "at": "2026-11-20T16:07:10.715427+00:00",
         "ok": true
@@ -3863,6 +3815,31 @@
         "id": 5019261,
         "at": "2026-11-20T16:07:10.715427+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-20T17:01:07.140446+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-11-20T17:01:07.140446+00:00",
+        "ok": true
+      },
+      {
+        "id": 5050733,
+        "at": "2026-11-20T17:01:07.140446+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-11-20T17:01:07.140446+00:00",
+        "ok": true
+      },
+      {
+        "id": 5043579,
+        "at": "2026-11-20T17:01:07.140446+00:00",
+        "ok": true
       }
     ],
     "published_total": 57,
@@ -3870,7 +3847,7 @@
     "unverified": 7,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.7
+    "oldest_check_age_hours": 11.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3917,12 +3894,10 @@
     ],
     "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
-    "live": false,
-    "serving": "atria",
-    "disabled_reason": "auth_failed",
-    "calls": {
-      "atria": 1
-    },
+    "live": true,
+    "serving": "glm",
+    "disabled_reason": null,
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

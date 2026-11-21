@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-21T09:17:40.930215+00:00",
-  "total_runs": 2696,
+  "last_run": "2026-11-21T10:17:39.999592+00:00",
+  "total_runs": 2697,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -41,30 +41,7 @@
     "error_type": "json"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 21
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 65,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (65 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -84,7 +61,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 693,
+  "last_cycle_seconds": 308,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2803,7 +2780,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-21T09:17:41.455290+00:00",
+    "checked_at": "2026-11-21T10:17:40.525317+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3569,7 +3546,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-21T09:29:12.810294+00:00",
+    "last_run": "2026-11-21T10:22:46.934376+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3579,25 +3556,10 @@
     "without_footer": 0,
     "unreachable": 1,
     "missing": [],
-    "last_run": "2026-11-21T09:29:13.044818+00:00",
+    "last_run": "2026-11-21T10:22:47.146736+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4503417,
-        "at": "2026-11-20T22:28:35.773201+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-11-20T22:28:35.773201+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-11-20T22:28:35.773201+00:00",
-        "ok": true
-      },
       {
         "id": 5068353,
         "at": "2026-11-20T23:20:34.719495+00:00",
@@ -3814,11 +3776,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-21T09:29:13.044818+00:00",
-        "ok": true
-      },
-      {
         "id": 4971614,
         "at": "2026-11-21T09:29:13.044818+00:00",
         "ok": true
@@ -3831,6 +3788,26 @@
       {
         "id": 4965279,
         "at": "2026-11-21T09:29:13.044818+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-21T10:22:47.146736+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-21T10:22:47.146736+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-11-21T10:22:47.146736+00:00",
+        "ok": true
+      },
+      {
+        "id": 4765372,
+        "at": "2026-11-21T10:22:47.146736+00:00",
         "ok": true
       }
     ],
@@ -3882,34 +3859,14 @@
         "endpoint": "https://api.z.ai/api/coding/paas/v4",
         "code": "1310",
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
-      },
-      {
-        "model": "glm-5.3-flash",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
-      },
-      {
-        "model": "glm-5.2",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
-      },
-      {
-        "model": "glm-5.1",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
       }
     ],
-    "endpoint": "https://open.bigmodel.cn/api/paas/v4",
+    "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
-    "live": false,
-    "serving": "atria",
-    "disabled_reason": "auth_failed",
-    "calls": {
-      "atria": 2
-    },
+    "live": true,
+    "serving": "glm",
+    "disabled_reason": null,
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

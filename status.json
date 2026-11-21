@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-21T18:58:40.470533+00:00",
-  "total_runs": 2706,
+  "last_run": "2026-11-21T19:58:43.294000+00:00",
+  "total_runs": 2707,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,13 +34,13 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the PROMPT FOCUS (weak_title) lost exactly 1 draft in 14 days to a single ALL-CAPS finding, the article draft TITLE rule already bans ALL-CAPS words with explicit acronym casing guidance, and ten open review branches already target this same prompt \u2014 another tweak would repeat an unmerged proposal against noise-level evidence, while the real draft-killer (llm_error, 22 in 14 days) is an engine auth failure no prompt edit can fix.",
+    "summary": "No change: the PROMPT FOCUS (weak_title) lost exactly 1 draft in 14 days against a TITLE rule that already bans ALL-CAPS, all 10 open prior proposals already target that same prompt and none merged, and the dominant draft losses (llm_error=22, empty_draft=4) are engine failures the brief explicitly marks not fixable by a prompt edit \u2014 nothing clears the bar.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Put the receive address in the dev.to profile bio",
-        "description": "The one deferred channel that needs no account, no processor and no policy change \u2014 a single edit to the Bio field at dev.to/settings carries the ask on every profile visit permanently. The API research confirming the bot cannot do it (users is only: %i[show], the only writer is super-admin gated) is already recorded in the doctrine's channel table, so this does not re-derive it.",
-        "owner_action": "Edit the Bio field at dev.to/settings once, adding the TRC-20 address [redacted] and a one-line ask in the same tone as the article footer.",
+        "description": "The one deferred channel that needs no account, no processor and no policy change. Every article footer carries the ask, but every profile visitor still sees no way to pay \u2014 a single edit closes that gap permanently. Already recorded in status.suggestions and still pending.",
+        "owner_action": "Edit the Bio field at dev.to/settings once, adding the TRC-20 address and a one-line ask in the same tone as the article footer.",
         "secret_needed": null,
         "how_to": [
           "Step 1: Sign in at dev.to and open dev.to/settings",
@@ -48,17 +48,16 @@
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach into a live receive path, Principle 5 step 2) \u2014 read, but not actionable through the named prompt this cycle.",
+    "direction": "Checklist step 4 (reach into a live receive path) \u2014 read, and answered honestly with 'no' rather than by adding an eleventh refused title-prompt edit",
     "evidence": [
-      "article_rejects.counts: weak_title=15 lifetime, but 'Drafts lost to a prompt (last 14 days): weak_title=1' \u2014 one draft in the whole grading window",
-      "Gate findings behind weak_title: 'title has ALL-CAPS word' x1 \u2014 a single occurrence, and _SYSTEM already bans 'any ALL-CAPS word' while instructing 'Keep acronyms and product names in their real casing (\"PDF\", \"JSON\", \"GitHub\")'",
-      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=22, empty_draft=4 \u2014 llm_error outweighs weak_title 22:1",
-      "llm_engine: serving=atria, live=False, disabled_reason=auth_failed; every GLM model refused with code 1310 'Weekly/Monthly Limit Exhausted' until 2026-11-23 \u2014 the dominant reject cause is engine availability, not prompt quality",
-      "PRIOR PROPOSALS: 10 distinct open branches, all bot/earning/articles.py, at least 6 of them title-prompt edits on this exact rule (acronym-vs-shouting example, un-shout rescue, TITLE rule alignment) \u2014 none merged",
-      "article_interest: problem-workaround n=12 avg=409.9 is the preferred archetype with a real sample (n>=3), and _audience_guidance + _prefer_proven_archetypes already steer on it \u2014 the reach steering signal is healthy"
+      "article_rejects last 14 days: weak_title=1 \u2014 the ONLY gate loss in the window; llm_error=22 and empty_draft=4 are engine failures, and the brief states 'Drafts lost to the engine, not fixable by a prompt edit'",
+      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x1 \u2014 a single occurrence, against a _SYSTEM TITLE rule that already bans 'any ALL-CAPS word', a _revise_title prompt that already says 'no ALL-CAPS', and a _KNOWN_ACRONYMS allowlist of 90+ entries",
+      "PRIOR PROPOSALS: 10 distinct open branches, every one targeting the article draft TITLE rule or _revise_title() \u2014 the exact prompts the focus names; none merged, so the project has already declined this edit repeatedly",
+      "article_interest: problem-workaround avg=409.9 (n=12) vs next-best build-tutorial 89.3 (n=3) \u2014 the reach steering is already wired into the draft prompt via _audience_guidance() + _ARCHETYPE_ANGLES and into source ranking via _prefer_proven_archetypes(), so no prompt gap remains unaddressed there",
+      "wallet.received_total_usd = 0.0, wallet.other_assets = {} \u2014 receive path is live and verified (receipt_check.covered 50/57), so the remaining work is genuinely reach, but the measured reach signal does not name an untried prompt change"
     ],
-    "money_path": "reach-only (no change proposed this cycle; the receive path is live and verified, wallet.received_total_usd = 0.0, so reach remains the work \u2014 but the named prompt lever has no evidenced defect worth a change)",
-    "verify": "No test added and no status field expected to move because of this proposal. To confirm the judgement next cycle: article_rejects.recent should show weak_title staying at 0-1 per 14 days (its current noise level), and llm_error should fall once GLM limits reset at 2026-11-23 17:56:33 \u2014 that drop, not a title-prompt edit, is what should move published count.",
+    "money_path": "none (maintenance) \u2014 no code change proposed, so no new path for money to enter; the one remaining owner-side receive-path gap is the profile bio in suggestions",
+    "verify": "Nothing to verify in code. Next cycle, read article_rejects.recent: weak_title should remain at 0-1 in the 14-day window (the TITLE rule and acronym allowlist already cover the single ALL-CAPS finding). If weak_title rises to 3+ drafts in the window, the signal strengthens enough to justify a title-prompt edit \u2014 and it should be one not already covered by the 10 open branches (deterministic un-shout rescue, acronym example, rule alignment, rewrite sharpening are all still unmerged).",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -70,8 +69,8 @@
   "suggestions": [
     {
       "title": "Put the receive address in the dev.to profile bio",
-      "description": "The one deferred channel that needs no account, no processor and no policy change \u2014 a single edit to the Bio field at dev.to/settings carries the ask on every profile visit permanently. The API research confirming the bot cannot do it (users is only: %i[show], the only writer is super-admin gated) is already recorded in the doctrine's channel table, so this does not re-derive it.",
-      "owner_action": "Edit the Bio field at dev.to/settings once, adding the TRC-20 address [redacted] and a one-line ask in the same tone as the article footer.",
+      "description": "The one deferred channel that needs no account, no processor and no policy change. Every article footer carries the ask, but every profile visitor still sees no way to pay \u2014 a single edit closes that gap permanently. Already recorded in status.suggestions and still pending.",
+      "owner_action": "Edit the Bio field at dev.to/settings once, adding the TRC-20 address and a one-line ask in the same tone as the article footer.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Sign in at dev.to and open dev.to/settings",
@@ -81,7 +80,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 132,
+  "last_cycle_seconds": 292,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2806,7 +2805,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-21T18:58:40.998877+00:00",
+    "checked_at": "2026-11-21T19:58:43.784146+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3571,7 +3570,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-21T19:00:52.249036+00:00",
+    "last_run": "2026-11-21T20:03:35.382867+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3581,30 +3580,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-21T19:00:52.415776+00:00",
+    "last_run": "2026-11-21T20:03:35.546735+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4859277,
-        "at": "2026-11-21T07:22:42.559262+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-11-21T07:22:42.559262+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-11-21T07:22:42.559262+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
-        "at": "2026-11-21T08:22:46.974751+00:00",
-        "ok": true
-      },
       {
         "id": 4943931,
         "at": "2026-11-21T08:22:46.974751+00:00",
@@ -3811,11 +3790,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-21T19:00:52.415776+00:00",
-        "ok": true
-      },
-      {
         "id": 4853251,
         "at": "2026-11-21T19:00:52.415776+00:00",
         "ok": true
@@ -3834,6 +3808,31 @@
         "id": 5043579,
         "at": "2026-11-21T19:00:52.415776+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-21T20:03:35.546735+00:00",
+        "ok": true
+      },
+      {
+        "id": 5025764,
+        "at": "2026-11-21T20:03:35.546735+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-11-21T20:03:35.546735+00:00",
+        "ok": true
+      },
+      {
+        "id": 5027243,
+        "at": "2026-11-21T20:03:35.546735+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-11-21T20:03:35.546735+00:00",
+        "ok": true
       }
     ],
     "published_total": 57,
@@ -3841,7 +3840,7 @@
     "unverified": 7,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.6
+    "oldest_check_age_hours": 11.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3852,7 +3851,7 @@
   },
   "llm_engine": {
     "main_provider": "glm",
-    "main_model": "glm-4.7-flash",
+    "main_model": "glm-5.3-flash",
     "preferred_model": "glm-5.3-flash",
     "refused": [
       {
@@ -3904,11 +3903,11 @@
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
       }
     ],
-    "endpoint": "https://api.z.ai/api/paas/v4",
+    "endpoint": null,
     "key_set": true,
-    "live": true,
-    "serving": "glm",
-    "disabled_reason": null,
+    "live": false,
+    "serving": "atria",
+    "disabled_reason": "quota_spent",
     "calls": {
       "atria": 1
     },

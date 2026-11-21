@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-21T00:06:57.476864+00:00",
-  "total_runs": 2686,
+  "last_run": "2026-11-21T01:07:01.274058+00:00",
+  "total_runs": 2687,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -70,7 +70,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 617,
+  "last_cycle_seconds": 1017,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2722,7 +2722,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-21T00:06:58.012994+00:00",
+    "checked_at": "2026-11-21T01:07:01.766332+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3124,8 +3124,8 @@
   "evolution_pending_review": false,
   "article_stats": {
     "count": 57,
-    "total_views": 6924,
-    "avg_views": 121.5,
+    "total_views": 6934,
+    "avg_views": 121.6,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 3728,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -3162,18 +3162,18 @@
         "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       },
       {
+        "archetype": "security-privacy",
+        "count": 7,
+        "avg_engagement": 65.7,
+        "avg_views": 65.7,
+        "best_title": "Check Your NGINX HTTP/2 Config Before Attackers Do"
+      },
+      {
         "archetype": "other",
         "count": 20,
         "avg_engagement": 65.6,
         "avg_views": 36.9,
         "best_title": "Your AI Agent Can't See What It Clicks"
-      },
-      {
-        "archetype": "security-privacy",
-        "count": 7,
-        "avg_engagement": 64.3,
-        "avg_views": 64.3,
-        "best_title": "Check Your NGINX HTTP/2 Config Before Attackers Do"
       },
       {
         "archetype": "surprising-behavior",
@@ -3197,21 +3197,16 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-11-21T00:17:13.893722+00:00",
+    "last_at": "2026-11-21T01:23:56.979031+00:00",
     "counts": {
       "empty_draft": 12,
       "fabricated": 4,
       "weak_title": 15,
       "revision_fabricated": 1,
-      "llm_error": 70
+      "llm_error": 71
     },
-    "total": 102,
+    "total": 103,
     "recent": [
-      {
-        "code": "llm_error",
-        "at": "2026-10-30T22:47:21.969189+00:00",
-        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
-      },
       {
         "code": "weak_title",
         "at": "2026-10-30T23:41:10.377608+00:00",
@@ -3456,6 +3451,11 @@
         "code": "llm_error",
         "at": "2026-11-21T00:17:13.893722+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-11-21T01:23:56.979031+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
       }
     ]
   },
@@ -3488,40 +3488,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-21T00:17:14.080235+00:00",
+    "last_run": "2026-11-21T01:23:57.247117+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 4,
-    "with_footer": 4,
+    "checked": 5,
+    "with_footer": 5,
     "without_footer": 0,
-    "unreachable": 1,
+    "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-21T00:17:14.229065+00:00",
+    "last_run": "2026-11-21T01:23:57.444370+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-11-20T13:01:03.792915+00:00",
-        "ok": true
-      },
-      {
-        "id": 4925166,
-        "at": "2026-11-20T13:01:03.792915+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
-        "at": "2026-11-20T14:01:13.369183+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-11-20T14:01:13.369183+00:00",
-        "ok": true
-      },
       {
         "id": 4729472,
         "at": "2026-11-20T14:01:13.369183+00:00",
@@ -3733,11 +3713,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-21T00:17:14.229065+00:00",
-        "ok": true
-      },
-      {
         "id": 4937139,
         "at": "2026-11-21T00:17:14.229065+00:00",
         "ok": true
@@ -3751,6 +3726,31 @@
         "id": 4996282,
         "at": "2026-11-21T00:17:14.229065+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-21T01:23:57.444370+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-21T01:23:57.444370+00:00",
+        "ok": true
+      },
+      {
+        "id": 4633220,
+        "at": "2026-11-21T01:23:57.444370+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-21T01:23:57.444370+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-11-21T01:23:57.444370+00:00",
+        "ok": true
       }
     ],
     "published_total": 57,
@@ -3758,7 +3758,7 @@
     "unverified": 7,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.3
+    "oldest_check_age_hours": 11.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

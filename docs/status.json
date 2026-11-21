@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-21T02:25:03.515751+00:00",
-  "total_runs": 2689,
+  "last_run": "2026-11-21T03:17:33.087247+00:00",
+  "total_runs": 2690,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -41,16 +41,7 @@
     "error_type": "json"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "dev.to",
-        "success": false,
-        "skipped": true,
-        "reject_code": "empty_draft",
-        "error": "LLM returned no usable title/body",
-        "estimated_usd": 0.0
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -70,7 +61,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 528,
+  "last_cycle_seconds": 313,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2803,7 +2794,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-21T02:25:04.195622+00:00",
+    "checked_at": "2026-11-21T03:17:33.709401+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3569,7 +3560,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-21T02:33:50.479014+00:00",
+    "last_run": "2026-11-21T03:22:46.121759+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3579,30 +3570,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-21T02:33:50.718830+00:00",
+    "last_run": "2026-11-21T03:22:46.283862+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4826008,
-        "at": "2026-11-20T16:07:10.715427+00:00",
-        "ok": true
-      },
-      {
-        "id": 5019261,
-        "at": "2026-11-20T16:07:10.715427+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-11-20T17:01:07.140446+00:00",
-        "ok": true
-      },
-      {
-        "id": 5050733,
-        "at": "2026-11-20T17:01:07.140446+00:00",
-        "ok": true
-      },
       {
         "id": 4552210,
         "at": "2026-11-20T17:01:07.140446+00:00",
@@ -3809,11 +3780,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-21T02:33:50.718830+00:00",
-        "ok": true
-      },
-      {
         "id": 4579420,
         "at": "2026-11-21T02:33:50.718830+00:00",
         "ok": true
@@ -3831,6 +3797,31 @@
       {
         "id": 4602729,
         "at": "2026-11-21T02:33:50.718830+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-21T03:22:46.283862+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-11-21T03:22:46.283862+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-11-21T03:22:46.283862+00:00",
+        "ok": true
+      },
+      {
+        "id": 5012890,
+        "at": "2026-11-21T03:22:46.283862+00:00",
+        "ok": true
+      },
+      {
+        "id": 5060054,
+        "at": "2026-11-21T03:22:46.283862+00:00",
         "ok": true
       }
     ],
@@ -3850,7 +3841,7 @@
   },
   "llm_engine": {
     "main_provider": "glm",
-    "main_model": "glm-4.7-flash",
+    "main_model": "glm-5.3-flash",
     "preferred_model": "glm-5.3-flash",
     "refused": [
       {
@@ -3902,14 +3893,12 @@
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
       }
     ],
-    "endpoint": "https://open.bigmodel.cn/api/paas/v4",
+    "endpoint": null,
     "key_set": true,
     "live": false,
     "serving": "atria",
-    "disabled_reason": "auth_failed",
-    "calls": {
-      "atria": 1
-    },
+    "disabled_reason": "quota_spent",
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

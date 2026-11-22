@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-22T06:19:18.046294+00:00",
-  "total_runs": 2718,
+  "last_run": "2026-11-22T06:52:04.657896+00:00",
+  "total_runs": 2719,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -41,30 +41,7 @@
     "error_type": "json"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 18
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 122
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 64,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (64 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -83,7 +60,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 547,
+  "last_cycle_seconds": 308,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2752,7 +2729,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-22T06:19:18.459321+00:00",
+    "checked_at": "2026-11-22T06:52:05.330421+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3517,7 +3494,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-22T06:28:24.144599+00:00",
+    "last_run": "2026-11-22T06:57:11.925940+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3527,30 +3504,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-22T06:28:24.318731+00:00",
+    "last_run": "2026-11-22T06:57:12.098448+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 5043579,
-        "at": "2026-11-21T19:00:52.415776+00:00",
-        "ok": true
-      },
-      {
-        "id": 5025764,
-        "at": "2026-11-21T20:03:35.546735+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
-        "at": "2026-11-21T20:03:35.546735+00:00",
-        "ok": true
-      },
-      {
-        "id": 5027243,
-        "at": "2026-11-21T20:03:35.546735+00:00",
-        "ok": true
-      },
       {
         "id": 4568987,
         "at": "2026-11-21T20:03:35.546735+00:00",
@@ -3757,11 +3714,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-22T06:28:24.318731+00:00",
-        "ok": true
-      },
-      {
         "id": 4430049,
         "at": "2026-11-22T06:28:24.318731+00:00",
         "ok": true
@@ -3780,6 +3732,31 @@
         "id": 5012890,
         "at": "2026-11-22T06:28:24.318731+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-22T06:57:12.098448+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-11-22T06:57:12.098448+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-11-22T06:57:12.098448+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-11-22T06:57:12.098448+00:00",
+        "ok": true
+      },
+      {
+        "id": 5019261,
+        "at": "2026-11-22T06:57:12.098448+00:00",
+        "ok": true
       }
     ],
     "published_total": 57,
@@ -3787,7 +3764,7 @@
     "unverified": 7,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.5
+    "oldest_check_age_hours": 10.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3830,34 +3807,14 @@
         "endpoint": "https://api.z.ai/api/coding/paas/v4",
         "code": "1310",
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
-      },
-      {
-        "model": "glm-5.3-flash",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
-      },
-      {
-        "model": "glm-5.2",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
-      },
-      {
-        "model": "glm-5.1",
-        "endpoint": "https://api.z.ai/api/paas/v4",
-        "code": "1310",
-        "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
       }
     ],
-    "endpoint": "https://api.z.ai/api/paas/v4",
+    "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
     "live": true,
     "serving": "glm",
     "disabled_reason": null,
-    "calls": {
-      "atria": 1
-    },
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-22T13:52:18.267220+00:00",
-  "total_runs": 2726,
+  "last_run": "2026-11-22T14:52:13.785324+00:00",
+  "total_runs": 2727,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,44 +34,11 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change: the prompt focus (weak_title \u2014 1 draft in 14 days, one ALL-CAPS word) is already covered by ten open prior proposals and by both the _SYSTEM TITLE rule and the deterministic _shouted_words gate, while the actual reach blocker is engine failure (llm_error=24 in 14 days, nothing published since 2026-11-19), which no prompt edit fixes.",
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
     "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Restore the post-role LLM (the real reach blocker)",
-        "description": "Nothing has published since 2026-11-19 because article_rejects.last = llm_error 'LLM call failed' (24 drafts lost in 14 days). The receive path is live and the prompts are graded clean \u2014 the engine is the only thing between this account and its one article per day. The observed 404 also names a deprecated model ID that is blocking the evolution role itself, which is the loop that produces these proposals.",
-        "owner_action": "Verify the GLM_API_KEY in GitHub Actions secrets is valid and within quota, and update the deprecated gemini-2.5-flash-lite model reference to gemini-3.5-flash-lite wherever the provider chain names it (per Google's own deprecation message).",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open the repository Actions secrets and confirm GLM_API_KEY is present, unexpired, and within the free-tier quota; check a recent workflow log for which provider the post role actually reached.",
-          "Step 2: Find every config or secret that still names gemini-2.5-flash-lite and update it to gemini-3.5-flash-lite, then trigger one hourly run and confirm article_daily.date advances."
-        ]
-      },
-      {
-        "title": "Put the receive address in the dev.to profile bio",
-        "description": "The one deferred channel that needs no account, no processor and no policy change. Every article footer carries the ask, but every profile visitor still sees no way to pay \u2014 a single edit closes that gap permanently. Still pending since 2026-11-21.",
-        "owner_action": "Edit the Bio field at dev.to/settings once, adding the TRC-20 address and a one-line ask in the same tone as the article footer.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Sign in at dev.to and open dev.to/settings.",
-          "Step 2: Paste the address ([redacted]) and a short ask into the Bio field and save \u2014 every future profile visitor then sees a way to pay."
-        ]
-      }
-    ],
-    "direction": "Checklist step 4 / Principle 5 \u2014 reach into the live receive path; assessed this cycle, and the evidence says the lever is the LLM engine, not the writing prompts.",
-    "evidence": [
-      "article_rejects 14-day window (PROMPT LEDGER): weak_title=1, while llm_error=24 and empty_draft=5 \u2014 the named gate is not the bottleneck; the ledger itself files llm_error/empty_draft under 'not fixable by a prompt edit'",
-      "Gate findings behind weak_title: 'title has ALL-CAPS word' x1 \u2014 the _SYSTEM TITLE rule already bans 'any ALL-CAPS word' and _shouted_words() already rejects it deterministically with a _KNOWN_ACRONYMS whitelist",
-      "PRIOR PROPOSALS: 10 distinct open branches (2026-11-10 to 2026-11-18), every one a title-prompt edit to articles.py \u2014 including two that target ALL-CAPS specifically (acronym-vs-shouting example; deterministic un-shout rescue), so any title edit here repeats an unmerged branch",
-      "article_daily.date = '2026-11-19' against last_run '2026-11-22T13:52:18 UTC' \u2014 no article published for three days, and article_rejects.last = 'llm_error': 'LLM call failed', so reach is being lost to the engine, not to a weak title",
-      "errors this cycle: 'LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available' \u2014 a deprecated model ID in the provider chain, which lives in protected bot/llm.py and in owner-held config/secrets",
-      "article_interest: problem-workaround n=12 avg=414.1 vs every other archetype under 90 \u2014 and steering toward it is already live via _audience_guidance() (appended to every fresh draft) and _prefer_proven_archetypes() (source re-rank), so adding another rule would stack a duplicate beside working ones"
-    ],
-    "money_path": "reach-only (maintenance): no code change, so no new money path; the live receive path (payout.live=true, backfill.remaining=0, receipt_check.covered=50/57) is untouched and remains the sole channel",
-    "verify": "No code to test. The reviewer confirms the assessment next cycle: article_rejects.recent should still show llm_error dominating and weak_title at <=1 over the next 14 days (proving the title prompts were never the constraint), and once the owner restores the post-role LLM, article_daily.date should advance daily again inside the 06:00-12:00 UTC+9 window.",
-    "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
+    "suggestions": [],
+    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
+    "error_type": "json"
   },
   "last_earning": {
     "actions": [],
@@ -101,8 +68,10 @@
       "discovered_at": "2026-11-21T19:00:51.955493+00:00"
     }
   ],
-  "errors": [],
-  "last_cycle_seconds": 261,
+  "errors": [
+    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
+  ],
+  "last_cycle_seconds": 308,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2733,7 +2702,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-22T13:52:18.614715+00:00",
+    "checked_at": "2026-11-22T14:52:14.211168+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3498,7 +3467,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-22T13:56:38.413008+00:00",
+    "last_run": "2026-11-22T14:57:20.767895+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3508,30 +3477,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-22T13:56:38.646338+00:00",
+    "last_run": "2026-11-22T14:57:20.984466+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4633220,
-        "at": "2026-11-22T02:29:30.250670+00:00",
-        "ok": true
-      },
-      {
-        "id": 4996282,
-        "at": "2026-11-22T02:29:30.250670+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-11-22T03:31:43.241875+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-11-22T03:31:43.241875+00:00",
-        "ok": true
-      },
       {
         "id": 4748037,
         "at": "2026-11-22T03:31:43.241875+00:00",
@@ -3738,11 +3687,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-22T13:56:38.646338+00:00",
-        "ok": true
-      },
-      {
         "id": 4562180,
         "at": "2026-11-22T13:56:38.646338+00:00",
         "ok": true
@@ -3761,6 +3705,31 @@
         "id": 4740283,
         "at": "2026-11-22T13:56:38.646338+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-22T14:57:20.984466+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-22T14:57:20.984466+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-22T14:57:20.984466+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-11-22T14:57:20.984466+00:00",
+        "ok": true
+      },
+      {
+        "id": 4931682,
+        "at": "2026-11-22T14:57:20.984466+00:00",
+        "ok": true
       }
     ],
     "published_total": 57,
@@ -3768,7 +3737,7 @@
     "unverified": 7,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.5
+    "oldest_check_age_hours": 11.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3815,12 +3784,10 @@
     ],
     "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
-    "live": false,
-    "serving": "atria",
-    "disabled_reason": "auth_failed",
-    "calls": {
-      "atria": 1
-    },
+    "live": true,
+    "serving": "glm",
+    "disabled_reason": null,
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

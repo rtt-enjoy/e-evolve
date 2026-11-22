@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-22T21:19:50.495722+00:00",
-  "total_runs": 2734,
+  "last_run": "2026-11-22T21:47:12.674632+00:00",
+  "total_runs": 2735,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -70,7 +70,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 1007,
+  "last_cycle_seconds": 973,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2664,7 +2664,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-22T21:19:51.022247+00:00",
+    "checked_at": "2026-11-22T21:47:13.169219+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3138,21 +3138,16 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-11-22T21:36:36.283997+00:00",
+    "last_at": "2026-11-22T22:03:24.401597+00:00",
     "counts": {
       "empty_draft": 16,
       "fabricated": 4,
       "weak_title": 15,
       "revision_fabricated": 1,
-      "llm_error": 77
+      "llm_error": 78
     },
-    "total": 113,
+    "total": 114,
     "recent": [
-      {
-        "code": "llm_error",
-        "at": "2026-11-01T22:17:43.602917+00:00",
-        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: Error code: 400 - {'error': {'message': 'The model `llama-3.1-70b-versatile` has bee"
-      },
       {
         "code": "llm_error",
         "at": "2026-11-05T21:49:42.570210+00:00",
@@ -3397,6 +3392,11 @@
         "code": "llm_error",
         "at": "2026-11-22T21:36:36.283997+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-11-22T22:03:24.401597+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
       }
     ]
   },
@@ -3429,7 +3429,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-22T21:36:36.549170+00:00",
+    "last_run": "2026-11-22T22:03:24.748027+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3439,30 +3439,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-22T21:36:36.778522+00:00",
+    "last_run": "2026-11-22T22:03:25.028975+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4356423,
-        "at": "2026-11-22T10:00:32.827177+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-11-22T10:57:21.444442+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-11-22T10:57:21.444442+00:00",
-        "ok": true
-      },
-      {
-        "id": 4943931,
-        "at": "2026-11-22T10:57:21.444442+00:00",
-        "ok": true
-      },
       {
         "id": 4641536,
         "at": "2026-11-22T10:57:21.444442+00:00",
@@ -3669,11 +3649,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-22T21:36:36.778522+00:00",
-        "ok": true
-      },
-      {
         "id": 4391849,
         "at": "2026-11-22T21:36:36.778522+00:00",
         "ok": true
@@ -3692,6 +3667,31 @@
         "id": 5043579,
         "at": "2026-11-22T21:36:36.778522+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-22T22:03:25.028975+00:00",
+        "ok": true
+      },
+      {
+        "id": 4971614,
+        "at": "2026-11-22T22:03:25.028975+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-22T22:03:25.028975+00:00",
+        "ok": true
+      },
+      {
+        "id": 5079541,
+        "at": "2026-11-22T22:03:25.028975+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-11-22T22:03:25.028975+00:00",
+        "ok": true
       }
     ],
     "published_total": 57,
@@ -3699,7 +3699,7 @@
     "unverified": 7,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.6
+    "oldest_check_age_hours": 11.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

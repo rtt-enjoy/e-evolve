@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-22T10:52:10.541283+00:00",
-  "total_runs": 2723,
+  "last_run": "2026-11-22T11:52:17.626180+00:00",
+  "total_runs": 2724,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,11 +34,33 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
+    "summary": "No change: the prompt focus (weak_title) cost exactly 1 draft in 14 days and all ten open prior proposals already target that same prompt and gate, while the larger draft losses are engine failures (deprecated gemini-2.5-flash-lite) that no prompt edit can touch \u2014 nothing clears the bar this cycle.",
     "changes_applied": [],
-    "suggestions": [],
-    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
-    "error_type": "json"
+    "suggestions": [
+      {
+        "title": "Put the receive address in the dev.to profile bio",
+        "description": "The one deferred channel that needs no account, no processor and no policy change. Every article footer carries the ask, but every profile visitor still sees no way to pay \u2014 a single edit closes that gap permanently. Already recorded in status.suggestions and still pending since 2026-11-21.",
+        "owner_action": "Edit the Bio field at dev.to/settings once, adding the TRC-20 address and a one-line ask in the same tone as the article footer.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Sign in at dev.to and open dev.to/settings",
+          "Step 2: Paste the address and a short ask into the Bio field and save \u2014 every future profile visitor then sees a way to pay"
+        ]
+      }
+    ],
+    "direction": "Checklist step 4 / Principle 5 (reach into the live receive path) \u2014 read, and no prompt edit is evidenced enough to serve it this cycle",
+    "evidence": [
+      "Drafts lost to a prompt (last 14 days): weak_title=1 \u2014 the only gate-caused loss in the window; one draft per fortnight is the gate working at low frequency, not a prompt defect with a fixable cause",
+      "Gate findings behind it: 'title has ALL-CAPS word' x1 \u2014 _SYSTEM already bans 'any ALL-CAPS word' and tells the model to keep acronyms in real casing, and _title_problems/_shouted_words enforce it deterministically; the miss is an acronym the gate's allowlist does not know, and the rules forbid changing the gate to fix it",
+      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=24, empty_draft=5 \u2014 errors this cycle show 'models/gemini-2.5-flash-lite is no longer available', which lives in protected bot/llm.py",
+      "PRIOR PROPOSALS: all 10 open branches (2026-11-10 to 2026-11-18) edit this same articles.py title prompt / _revise_title for weak_title and ALL-CAPS; repeating any of them is a named dead end",
+      "article_interest: preferred_archetypes() = ['problem-workaround'] with n=12 (above the n=3 noise floor), and _audience_guidance + _prefer_proven_archetypes already steer both the prompt and source ranking toward it \u2014 no thin-row steering bug remains to fix"
+    ],
+    "money_path": "none (maintenance) \u2014 no code change proposed; the only receive-path widening available this cycle is the owner action below",
+    "verify": "Next cycle, read article_rejects.recent and article_rejects.counts: weak_title should stay at its current trickle (1 per 14 days) because nothing changed, and llm_error is the count that actually gates publication \u2014 it cannot move from a prompt edit. If the reviewer wants reach to move, the profile-bio action is the one step that adds a new receive surface this week.",
+    "error": null,
+    "branch": null,
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -47,7 +69,7 @@
   "suggestions": [
     {
       "title": "Put the receive address in the dev.to profile bio",
-      "description": "The one deferred channel that needs no account, no processor and no policy change. Every article footer carries the ask, but every profile visitor still sees no way to pay \u2014 a single edit closes that gap permanently. Already recorded in status.suggestions and still pending.",
+      "description": "The one deferred channel that needs no account, no processor and no policy change. Every article footer carries the ask, but every profile visitor still sees no way to pay \u2014 a single edit closes that gap permanently. Already recorded in status.suggestions and still pending since 2026-11-21.",
       "owner_action": "Edit the Bio field at dev.to/settings once, adding the TRC-20 address and a one-line ask in the same tone as the article footer.",
       "secret_needed": null,
       "how_to": [
@@ -57,10 +79,8 @@
       "discovered_at": "2026-11-21T19:00:51.955493+00:00"
     }
   ],
-  "errors": [
-    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
-  ],
-  "last_cycle_seconds": 311,
+  "errors": [],
+  "last_cycle_seconds": 233,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2632,7 +2652,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-22T10:52:11.144411+00:00",
+    "checked_at": "2026-11-22T11:52:18.376316+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3397,7 +3417,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-22T10:57:21.329299+00:00",
+    "last_run": "2026-11-22T11:56:10.069850+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3407,30 +3427,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-22T10:57:21.444442+00:00",
+    "last_run": "2026-11-22T11:56:10.243064+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4780783,
-        "at": "2026-11-21T23:33:43.327498+00:00",
-        "ok": true
-      },
-      {
-        "id": 4765372,
-        "at": "2026-11-21T23:33:43.327498+00:00",
-        "ok": true
-      },
-      {
-        "id": 5068353,
-        "at": "2026-11-22T00:41:57.314551+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
-        "at": "2026-11-22T00:41:57.314551+00:00",
-        "ok": true
-      },
       {
         "id": 4959304,
         "at": "2026-11-22T00:41:57.314551+00:00",
@@ -3637,11 +3637,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-22T10:57:21.444442+00:00",
-        "ok": true
-      },
-      {
         "id": 4840835,
         "at": "2026-11-22T10:57:21.444442+00:00",
         "ok": true
@@ -3660,6 +3655,31 @@
         "id": 4641536,
         "at": "2026-11-22T10:57:21.444442+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-22T11:56:10.243064+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-22T11:56:10.243064+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-11-22T11:56:10.243064+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-11-22T11:56:10.243064+00:00",
+        "ok": true
+      },
+      {
+        "id": 4965279,
+        "at": "2026-11-22T11:56:10.243064+00:00",
+        "ok": true
       }
     ],
     "published_total": 57,
@@ -3667,7 +3687,7 @@
     "unverified": 7,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.4
+    "oldest_check_age_hours": 11.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3678,7 +3698,7 @@
   },
   "llm_engine": {
     "main_provider": "glm",
-    "main_model": "glm-4.7-flash",
+    "main_model": "glm-5.3-flash",
     "preferred_model": "glm-5.3-flash",
     "refused": [
       {
@@ -3730,12 +3750,14 @@
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
       }
     ],
-    "endpoint": "https://api.z.ai/api/paas/v4",
+    "endpoint": null,
     "key_set": true,
-    "live": true,
-    "serving": "glm",
-    "disabled_reason": null,
-    "calls": {},
+    "live": false,
+    "serving": "atria",
+    "disabled_reason": "quota_spent",
+    "calls": {
+      "atria": 1
+    },
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

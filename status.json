@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-22T17:19:42.607851+00:00",
-  "total_runs": 2730,
+  "last_run": "2026-11-22T18:19:46.615993+00:00",
+  "total_runs": 2731,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,11 +34,33 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
+    "summary": "No change proposed: the only prompt-fixable draft loss in the 14-day window is weak_title=1 (a single 'title has ALL-CAPS word' finding), which is below the n>=3 sample discipline this project applies to its own signals and is already covered by two open prior proposals, while the real draft killer (llm_error=24) is an engine/model-deprecation failure that no prompt edit can touch.",
     "changes_applied": [],
-    "suggestions": [],
-    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
-    "error_type": "json"
+    "suggestions": [
+      {
+        "title": "Put the receive address in the dev.to profile bio",
+        "description": "The one deferred channel that needs no new account, no processor and no policy change. Reach is the binding work and every new post already carries the ask, but a profile visit still shows no way to pay; one Bio edit covers every future visitor permanently. Forem exposes users as show-only for non-admin keys, so this is recorded as an owner action and remains pending while wallet.received_total_usd is still 0.00.",
+        "owner_action": "Edit the Bio field at dev.to/settings to include the TRC-20 USDT address already published in the article footers and on the public dashboard.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Sign in at dev.to/settings",
+          "Step 2: Paste the address (TFTNsf\u20269KbY, TRC-20) into the Bio field",
+          "Step 3: Save \u2014 every future profile visitor sees the ask with no further work"
+        ]
+      }
+    ],
+    "direction": "Checklist step 4 (reach into the live receive path) read through Principle 3j \u2014 a signal under n=3 is noise, so the reach work this cycle is to not steer on a single observation",
+    "evidence": [
+      "article_rejects recent window (last 14 days): weak_title=1 draft, with the single gate finding 'title has ALL-CAPS word' x1 \u2014 one observation, and the brief's own sample rule says 'a row under n=3 is noise'",
+      "same window: llm_error=24, empty_draft=5, which the brief itself files as 'Drafts lost to the engine, not fixable by a prompt edit' \u2014 the failing chain is '404 ... models/gemini-2.5-flash-lite is no longer available', configured in protected bot/llm.py",
+      "PRIOR PROPOSALS holds 10 open branches, all on bot/earning/articles.py title prompts; 2026-11-15 ('deterministic un-shout rescue for the one measured title defect (ALL-CAPS)') and 2026-11-16 ('acronym-vs-shouting example to the TITLE banned rule') both target today's exact finding and remain unmerged",
+      "wallet.received_total_usd = 0.0 with payout.live = true and receipt_check.known_without_footer = 0 \u2014 the receive path is live and clean, so reach is correctly the binding work, but its measured constraint this window is engine availability (GLM limit resets 2026-11-23 17:56:33 per llm_engine.refused), not title wording"
+    ],
+    "money_path": "none (maintenance) \u2014 nothing is changed, so nothing new enters; the footer devto.publish attaches to every post remains the only receive surface",
+    "verify": "Reviewer confirms the judgment next cycle from status.json: article_rejects recent window should still show weak_title as a 1-2 draft edge case rather than a trend, and llm_error should fall once the GLM weekly limit resets (2026-11-23 17:56:33) and daily publishing resumes; if weak_title accumulates 3+ findings in the next window, the signal clears the project's own n>=3 bar and the open 2026-11-15/2026-11-16 branches should be re-reviewed before any new title-prompt edit",
+    "error": null,
+    "branch": null,
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
     "actions": [],
@@ -47,7 +69,7 @@
   "suggestions": [
     {
       "title": "Put the receive address in the dev.to profile bio",
-      "description": "The one deferred channel that needs no new account, no processor and no policy change: a single Bio edit carries the ask on every profile visit permanently. The bot cannot do it \u2014 Forem exposes users as show-only for non-admin keys \u2014 which is why it is recorded as an owner action in the doctrine's channel table. It remains pending (wallet.received_total_usd is still 0.00), and while reach is the binding work this is the one surface that adds a receive path rather than another post.",
+      "description": "The one deferred channel that needs no new account, no processor and no policy change. Reach is the binding work and every new post already carries the ask, but a profile visit still shows no way to pay; one Bio edit covers every future visitor permanently. Forem exposes users as show-only for non-admin keys, so this is recorded as an owner action and remains pending while wallet.received_total_usd is still 0.00.",
       "owner_action": "Edit the Bio field at dev.to/settings to include the TRC-20 USDT address already published in the article footers and on the public dashboard.",
       "secret_needed": null,
       "how_to": [
@@ -58,10 +80,8 @@
       "discovered_at": "2026-11-21T19:00:51.955493+00:00"
     }
   ],
-  "errors": [
-    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
-  ],
-  "last_cycle_seconds": 307,
+  "errors": [],
+  "last_cycle_seconds": 302,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2677,7 +2697,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-22T17:19:43.166494+00:00",
+    "checked_at": "2026-11-22T18:19:46.994081+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3442,7 +3462,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-22T17:24:49.013224+00:00",
+    "last_run": "2026-11-22T18:24:47.491815+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3452,30 +3472,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-22T17:24:49.144091+00:00",
+    "last_run": "2026-11-22T18:24:47.666969+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4826008,
-        "at": "2026-11-22T06:28:24.318731+00:00",
-        "ok": true
-      },
-      {
-        "id": 5012890,
-        "at": "2026-11-22T06:28:24.318731+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
-        "at": "2026-11-22T06:57:12.098448+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-11-22T06:57:12.098448+00:00",
-        "ok": true
-      },
       {
         "id": 4552210,
         "at": "2026-11-22T06:57:12.098448+00:00",
@@ -3682,11 +3682,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-22T17:24:49.144091+00:00",
-        "ok": true
-      },
-      {
         "id": 4421693,
         "at": "2026-11-22T17:24:49.144091+00:00",
         "ok": true
@@ -3705,6 +3700,31 @@
         "id": 4925166,
         "at": "2026-11-22T17:24:49.144091+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-22T18:24:47.666969+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-11-22T18:24:47.666969+00:00",
+        "ok": true
+      },
+      {
+        "id": 5050733,
+        "at": "2026-11-22T18:24:47.666969+00:00",
+        "ok": true
+      },
+      {
+        "id": 5060054,
+        "at": "2026-11-22T18:24:47.666969+00:00",
+        "ok": true
+      },
+      {
+        "id": 4977763,
+        "at": "2026-11-22T18:24:47.666969+00:00",
+        "ok": true
       }
     ],
     "published_total": 57,
@@ -3712,7 +3732,7 @@
     "unverified": 7,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 10.9
+    "oldest_check_age_hours": 11.5
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3759,10 +3779,12 @@
     ],
     "endpoint": "https://api.z.ai/api/coding/paas/v4",
     "key_set": true,
-    "live": false,
-    "serving": "atria",
-    "disabled_reason": "auth_failed",
-    "calls": {},
+    "live": true,
+    "serving": "glm",
+    "disabled_reason": null,
+    "calls": {
+      "atria": 1
+    },
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

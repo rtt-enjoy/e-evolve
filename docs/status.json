@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-22T20:19:51.388405+00:00",
-  "total_runs": 2733,
+  "last_run": "2026-11-22T21:19:50.495722+00:00",
+  "total_runs": 2734,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -43,26 +43,12 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 122
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 61,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (61 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "llm_error",
+        "error": "LLM call failed",
+        "estimated_usd": 0.0
       }
     ],
     "total_usd": 0.0
@@ -84,7 +70,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 518,
+  "last_cycle_seconds": 1007,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2678,7 +2664,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-22T20:19:51.976576+00:00",
+    "checked_at": "2026-11-22T21:19:51.022247+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3079,10 +3065,10 @@
   "evolution_pending_review": false,
   "article_stats": {
     "count": 57,
-    "total_views": 7054,
-    "avg_views": 123.8,
+    "total_views": 7124,
+    "avg_views": 125.0,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
-    "best_views": 3748,
+    "best_views": 3778,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
     "winning_tags": [
       "twitter",
@@ -3098,8 +3084,8 @@
       {
         "archetype": "problem-workaround",
         "count": 12,
-        "avg_engagement": 414.1,
-        "avg_views": 397.4,
+        "avg_engagement": 418.2,
+        "avg_views": 401.6,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
       },
       {
@@ -3112,8 +3098,8 @@
       {
         "archetype": "security-privacy",
         "count": 7,
-        "avg_engagement": 72.9,
-        "avg_views": 72.9,
+        "avg_engagement": 74.3,
+        "avg_views": 74.3,
         "best_title": "Check Your NGINX HTTP/2 Config Before Attackers Do"
       },
       {
@@ -3126,8 +3112,8 @@
       {
         "archetype": "other",
         "count": 20,
-        "avg_engagement": 66.1,
-        "avg_views": 37.4,
+        "avg_engagement": 66.6,
+        "avg_views": 37.9,
         "best_title": "Your AI Agent Can't See What It Clicks"
       },
       {
@@ -3152,21 +3138,16 @@
   "article_rejects": {
     "last_reason": "llm_error",
     "last_detail": "LLM call failed",
-    "last_at": "2026-11-22T02:29:29.827085+00:00",
+    "last_at": "2026-11-22T21:36:36.283997+00:00",
     "counts": {
       "empty_draft": 16,
       "fabricated": 4,
       "weak_title": 15,
       "revision_fabricated": 1,
-      "llm_error": 76
+      "llm_error": 77
     },
-    "total": 112,
+    "total": 113,
     "recent": [
-      {
-        "code": "weak_title",
-        "at": "2026-11-01T02:35:10.132996+00:00",
-        "detail": "title padded with a colon subtitle; pick the sharper half"
-      },
       {
         "code": "llm_error",
         "at": "2026-11-01T22:17:43.602917+00:00",
@@ -3411,6 +3392,11 @@
         "code": "llm_error",
         "at": "2026-11-22T02:29:29.827085+00:00",
         "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-11-22T21:36:36.283997+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
       }
     ]
   },
@@ -3443,7 +3429,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-22T20:28:28.792994+00:00",
+    "last_run": "2026-11-22T21:36:36.549170+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3453,30 +3439,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-22T20:28:28.989211+00:00",
+    "last_run": "2026-11-22T21:36:36.778522+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4568987,
-        "at": "2026-11-22T08:57:17.431010+00:00",
-        "ok": true
-      },
-      {
-        "id": 4971614,
-        "at": "2026-11-22T10:00:32.827177+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-11-22T10:00:32.827177+00:00",
-        "ok": true
-      },
-      {
-        "id": 5079541,
-        "at": "2026-11-22T10:00:32.827177+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-11-22T10:00:32.827177+00:00",
@@ -3683,11 +3649,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-22T20:28:28.989211+00:00",
-        "ok": true
-      },
-      {
         "id": 5025764,
         "at": "2026-11-22T20:28:28.989211+00:00",
         "ok": true
@@ -3706,6 +3667,31 @@
         "id": 5019261,
         "at": "2026-11-22T20:28:28.989211+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-22T21:36:36.778522+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-22T21:36:36.778522+00:00",
+        "ok": true
+      },
+      {
+        "id": 5027243,
+        "at": "2026-11-22T21:36:36.778522+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-22T21:36:36.778522+00:00",
+        "ok": true
+      },
+      {
+        "id": 5043579,
+        "at": "2026-11-22T21:36:36.778522+00:00",
+        "ok": true
       }
     ],
     "published_total": 57,
@@ -3713,7 +3699,7 @@
     "unverified": 7,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.5
+    "oldest_check_age_hours": 11.6
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3724,7 +3710,7 @@
   },
   "llm_engine": {
     "main_provider": "glm",
-    "main_model": "glm-4.7-flash",
+    "main_model": "glm-5.3-flash",
     "preferred_model": "glm-5.3-flash",
     "refused": [
       {
@@ -3776,14 +3762,12 @@
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
       }
     ],
-    "endpoint": "https://open.bigmodel.cn/api/coding/paas/v4",
+    "endpoint": null,
     "key_set": true,
     "live": false,
     "serving": "atria",
-    "disabled_reason": "auth_failed",
-    "calls": {
-      "atria": 1
-    },
+    "disabled_reason": "quota_spent",
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-23T10:47:16.768883+00:00",
-  "total_runs": 2748,
+  "last_run": "2026-11-23T11:47:07.772145+00:00",
+  "total_runs": 2749,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -31,53 +31,29 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt-attributable loss in the window is one weak_title draft (gate finding 'title has ALL-CAPS word' x1), and ten distinct fixes for exactly that title-prompt defect are already parked on open review branches awaiting the owner's merge decision \u2014 an eleventh variant adds review noise, not reach. The real losses are engine-side (llm_error=20, empty_draft=8 in 14 days), which no prompt edit can fix.",
+    "summary": "No change this cycle: the prompt focus (weak_title) is losing 1 draft in 14 days and every angle on it is already an open, unmerged review branch, while the rejects that actually cost posts (llm_error=79, empty_draft=19) are engine failures no prompt edit can fix.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the ten pending title-prompt branches instead of accruing more",
-        "description": "The title defect ('title has ALL-CAPS word') has ten open fix proposals; merging any one stops the ~1 draft/14d leak and unblocks clear review of future cycles.",
-        "owner_action": "Review the 10 open title-prompt branches and merge the one that best aligns the TITLE rule with what the gate actually rejects (acronym-exempt ALL-CAPS check), then reject the rest.",
+        "title": "Put the USDT receive address in the dev.to profile bio",
+        "description": "Covers every profile visit permanently with the ask, at no cost and no ongoing owner work \u2014 the one deferred channel row the doctrine itself flags as worth two minutes.",
+        "owner_action": "Edit the Bio field once at dev.to/settings to include the TRC-20 address [redacted]",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the review branches dated 2026-11-10 through 2026-11-18 touching bot/earning/articles.py.",
-          "Step 2: Pick the branch whose edit makes the prompt's ALL-CAPS ban mirror _shouted_words() (acronyms exempt) and merge it.",
-          "Step 3: Close the remaining nine so future cycles stop re-deriving this fix."
-        ]
-      },
-      {
-        "title": "Fix the dead LLM model that is losing 20+ drafts per 14 days",
-        "description": "llm_error=20 and empty_draft=8 dominate the rejects; the engine is 404-ing on a retired model (gemini-2.5-flash-lite), so most cycles publish nothing regardless of prompt quality.",
-        "owner_action": "Update the fallback model name in the LLM workflow configuration from the retired gemini-2.5-flash-lite to a currently served model.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Check llm_workflows in status.json for the fallback_model values.",
-          "Step 2: Replace any reference to gemini-2.5-flash-lite with the model the 404 message itself recommends.",
-          "Step 3: Confirm next cycle that llm_error in the 14-day window drops."
-        ]
-      },
-      {
-        "title": "Add the wallet address to the dev.to profile bio",
-        "description": "Carries the ask on every profile visit permanently; the only cheap channel left that the bot cannot do itself.",
-        "owner_action": "Paste the TRC-20 receive address into the Bio field at dev.to/settings once.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Open https://dev.to/settings.",
-          "Step 2: Append the address [redacted] (TRC-20) to the profile Bio and save.",
-          "Step 3: Verify it renders on the public profile page."
+          "Step 1: Open dev.to/settings and paste the address into the Bio text field.",
+          "Step 2: Save; the address then appears on every profile page the bot's articles link to."
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS \u2014 but the evidence no longer supports another title-prompt edit this cycle.",
+    "direction": "Checklist step 4 / PROMPT FOCUS \u2014 but the focus itself fails the evidence bar this cycle",
     "evidence": [
-      "article_rejects (last 14 days): weak_title=1, llm_error=20, empty_draft=8 \u2014 the prompt-fixable share is 1/29",
-      "article_rejects.last = 'llm_error': 'LLM call failed' \u2014 the dominant loss is the LLM engine, not a prompt",
-      "PROMPT LEDGER: all 10 prior proposals target the same two prompts (_SYSTEM TITLE rule, _revise_title) and none is merged yet",
-      "errors this cycle: '[EVOLUTION] Could not get valid JSON from LLM (role=upgrade)... gemini-2.5-flash-lite is no longer available' \u2014 the engine itself is failing on a dead model",
-      "payout.live = true, receipt_check.known_without_footer = 0 \u2014 the receive path is clean, so the binding step is correctly reach, but the reach losses are engine-side"
+      "article_rejects: weak_title lost 1 draft in the last 14 days ('title has ALL-CAPS word' x1)",
+      "article_rejects.counts lifetime: llm_error=79, empty_draft=19 vs weak_title=15 (and only 1 in-window)",
+      "PRIOR PROPOSALS: 10 open branches, every one targeting the article-draft TITLE rule or _revise_title()",
+      "llm_engine.calls = {'glm': 1} \u2014 the engine is failing far more often than the gate is"
     ],
-    "money_path": "none (maintenance): no change this cycle. The receive path is verified live; the constraint on revenue is the post volume lost to llm_error, which only an engine/model fix unlocks.",
-    "verify": "Next cycle: article_rejects window counts. If weak_title fires again only after a prior title-prompt branch is merged, the merged proposal's verify step covers it. If llm_error keeps dominating, the fix is the model configuration, not the prompt ledger.",
+    "money_path": "none this cycle \u2014 reach-only was the candidate lever, and the lever's measured cost is one draft per fortnight",
+    "verify": "Nothing to verify; next cycle should re-read article_rejects window counts. If weak_title rises above ~2 per 14 days with a new, distinct gate finding, a single _revise_title sharpening not already covered by the open branches would clear the bar.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -88,44 +64,19 @@
   },
   "suggestions": [
     {
-      "title": "Merge one of the ten pending title-prompt branches instead of accruing more",
-      "description": "The title defect ('title has ALL-CAPS word') has ten open fix proposals; merging any one stops the ~1 draft/14d leak and unblocks clear review of future cycles.",
-      "owner_action": "Review the 10 open title-prompt branches and merge the one that best aligns the TITLE rule with what the gate actually rejects (acronym-exempt ALL-CAPS check), then reject the rest.",
+      "title": "Put the USDT receive address in the dev.to profile bio",
+      "description": "Covers every profile visit permanently with the ask, at no cost and no ongoing owner work \u2014 the one deferred channel row the doctrine itself flags as worth two minutes.",
+      "owner_action": "Edit the Bio field once at dev.to/settings to include the TRC-20 address [redacted]",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the review branches dated 2026-11-10 through 2026-11-18 touching bot/earning/articles.py.",
-        "Step 2: Pick the branch whose edit makes the prompt's ALL-CAPS ban mirror _shouted_words() (acronyms exempt) and merge it.",
-        "Step 3: Close the remaining nine so future cycles stop re-deriving this fix."
+        "Step 1: Open dev.to/settings and paste the address into the Bio text field.",
+        "Step 2: Save; the address then appears on every profile page the bot's articles link to."
       ],
-      "discovered_at": "2026-11-23T10:47:48.271028+00:00"
-    },
-    {
-      "title": "Fix the dead LLM model that is losing 20+ drafts per 14 days",
-      "description": "llm_error=20 and empty_draft=8 dominate the rejects; the engine is 404-ing on a retired model (gemini-2.5-flash-lite), so most cycles publish nothing regardless of prompt quality.",
-      "owner_action": "Update the fallback model name in the LLM workflow configuration from the retired gemini-2.5-flash-lite to a currently served model.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: Check llm_workflows in status.json for the fallback_model values.",
-        "Step 2: Replace any reference to gemini-2.5-flash-lite with the model the 404 message itself recommends.",
-        "Step 3: Confirm next cycle that llm_error in the 14-day window drops."
-      ],
-      "discovered_at": "2026-11-23T10:47:48.271028+00:00"
-    },
-    {
-      "title": "Add the wallet address to the dev.to profile bio",
-      "description": "Carries the ask on every profile visit permanently; the only cheap channel left that the bot cannot do itself.",
-      "owner_action": "Paste the TRC-20 receive address into the Bio field at dev.to/settings once.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: Open https://dev.to/settings.",
-        "Step 2: Append the address [redacted] (TRC-20) to the profile Bio and save.",
-        "Step 3: Verify it renders on the public profile page."
-      ],
-      "discovered_at": "2026-11-23T10:47:48.271028+00:00"
+      "discovered_at": "2026-11-23T11:47:32.207912+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 33,
+  "last_cycle_seconds": 26,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2793,7 +2744,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-23T10:47:17.336996+00:00",
+    "checked_at": "2026-11-23T11:47:08.153145+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3558,7 +3509,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-23T10:47:48.589738+00:00",
+    "last_run": "2026-11-23T11:47:32.564817+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3568,30 +3519,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-23T10:47:48.777084+00:00",
+    "last_run": "2026-11-23T11:47:32.767148+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4356423,
-        "at": "2026-11-22T23:02:38.928007+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-11-23T00:06:55.763755+00:00",
-        "ok": true
-      },
-      {
-        "id": 4619528,
-        "at": "2026-11-23T00:06:55.763755+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-11-23T00:06:55.763755+00:00",
-        "ok": true
-      },
       {
         "id": 4641536,
         "at": "2026-11-23T00:06:55.763755+00:00",
@@ -3798,11 +3729,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-23T10:47:48.777084+00:00",
-        "ok": true
-      },
-      {
         "id": 4971614,
         "at": "2026-11-23T10:47:48.777084+00:00",
         "ok": true
@@ -3821,6 +3747,31 @@
         "id": 5043579,
         "at": "2026-11-23T10:47:48.777084+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-23T11:47:32.767148+00:00",
+        "ok": true
+      },
+      {
+        "id": 4840835,
+        "at": "2026-11-23T11:47:32.767148+00:00",
+        "ok": true
+      },
+      {
+        "id": 4662663,
+        "at": "2026-11-23T11:47:32.767148+00:00",
+        "ok": true
+      },
+      {
+        "id": 4943931,
+        "at": "2026-11-23T11:47:32.767148+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-11-23T11:47:32.767148+00:00",
+        "ok": true
       }
     ],
     "published_total": 57,
@@ -3828,7 +3779,7 @@
     "unverified": 7,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.8
+    "oldest_check_age_hours": 11.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

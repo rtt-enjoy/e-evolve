@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-23T12:47:11.700158+00:00",
-  "total_runs": 2750,
+  "last_run": "2026-11-23T12:48:26.276330+00:00",
+  "total_runs": 2751,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -31,67 +31,57 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus loss is one draft in 14 days, ten open review branches already target exactly those title prompts, and the dominant draft loss is engine-side and unreachable by a prompt edit.",
+    "summary": "No change this cycle: the only prompt-side loss the gate names (weak_title, 1 draft in 14 days, 'title has ALL-CAPS word' x1) is already covered by ten open, unmerged proposals on bot/earning/articles.py \u2014 an eleventh variant of the same one-line fix adds review noise without being gradeable, and the dominant reject cause (llm_error=79 of 118, plus empty_draft=19) is engine-side and explicitly not fixable by a prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Review and merge or close the ten open title-prompt branches",
-        "description": "Every remaining prompt-side draft loss on the title gate is already covered by an open branch; ten unmerged variants of the same one-line fix are review noise and block the loop from grading whether any of them worked.",
-        "owner_action": "Pick one of the ten open title-prompt branches (prefer the smallest diff), merge it, and close the other nine so future cycles grade a single prompt rather than re-deriving the same edit.",
+        "title": "Merge one title-prompt branch and close the other nine so the fix can be graded",
+        "description": "The measured title defect (one ALL-CAPS rejection in 14 days) has ten competing unmerged fixes. No future cycle can tell whether any of them worked while all ten stay open, and each new cycle risks an eleventh duplicate. One merged branch makes the 14-day reject window a real measurement.",
+        "owner_action": "Open the ten evolve/* branches touching bot/earning/articles.py TITLE rules or _revise_title(), merge the smallest diff, close the rest as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the ten evolve/* branches touching bot/earning/articles.py TITLE rules or _revise_title().",
-          "Step 2: Merge one; close the rest as superseded.",
-          "Step 3: Next 14-day window, read article_rejects recent details for 'ALL-CAPS' to confirm the fix."
+          "Step 1: List open branches matching evolve/* on bot/earning/articles.py.",
+          "Step 2: Review the smallest one (fewest edited lines, no dropped rules) and merge it.",
+          "Step 3: Close the other nine as superseded, referencing the merged branch.",
+          "Step 4: After the next 14-day window, check article_rejects.recent for 'ALL-CAPS' details to confirm or refute the fix."
         ]
       }
     ],
-    "direction": "Step 4 \u2014 reach via prompt upgrades; PROMPT FOCUS check",
+    "direction": "Checklist step 4 \u2014 upgrade the prompts that write reach, one step per cycle; but grading requires merged proposals, not open ones",
     "evidence": [
-      "article_rejects: weak_title lost 1 draft in the last 14 days, gate finding 'title has ALL-CAPS word' x1",
-      "article_rejects.counts lifetime: llm_error=79, empty_draft=19, weak_title=15, fabricated=4",
-      "PROMPT LEDGER window: llm_error=20, empty_draft=8 vs weak_title=1 in the last 14 days",
-      "PRIOR PROPOSALS: 10 open branches, all edits to articles.py TITLE rules or _revise_title()"
+      "article_rejects.counts total 118: llm_error=79, empty_draft=19, weak_title=15 (lifetime), weak_title in last 14 days = 1",
+      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x1",
+      "PRIOR PROPOSALS: 10 distinct open branches, all touching articles.py TITLE rules or _revise_title(), none merged",
+      "status.suggestions[0]: 'Review and merge or close the ten open title-prompt branches' (2026-11-23)",
+      "Drafts lost to the engine, not fixable by a prompt edit (14 days): llm_error=20, empty_draft=8"
     ],
-    "money_path": "none (maintenance \u2014 no change proposed)",
-    "verify": "If a title prompt were changed: weak_title count in the next 14-day window falls to 0. As proposed, no field moves; the reviewer should instead review the ten open title-prompt branches, of which at most one should merge.",
+    "money_path": "reach-only (would be \u2014 no change proposed); publishing is blocked from grading, not from publishing, and the article path itself stays reach-only against a $0.00 wallet",
+    "verify": "No diff to verify. After the owner merges one of the ten open branches and closes nine, the 14-day article_rejects.recent window should show zero 'ALL-CAPS' weak_title entries; if the fix is graded and fails, a new single proposal is justified next cycle.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Review and merge or close the ten open title-prompt branches",
-      "description": "Every remaining prompt-side draft loss on the title gate is already covered by an open branch; ten unmerged variants of the same one-line fix are review noise and block the loop from grading whether any of them worked.",
-      "owner_action": "Pick one of the ten open title-prompt branches (prefer the smallest diff), merge it, and close the other nine so future cycles grade a single prompt rather than re-deriving the same edit.",
+      "title": "Merge one title-prompt branch and close the other nine so the fix can be graded",
+      "description": "The measured title defect (one ALL-CAPS rejection in 14 days) has ten competing unmerged fixes. No future cycle can tell whether any of them worked while all ten stay open, and each new cycle risks an eleventh duplicate. One merged branch makes the 14-day reject window a real measurement.",
+      "owner_action": "Open the ten evolve/* branches touching bot/earning/articles.py TITLE rules or _revise_title(), merge the smallest diff, close the rest as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the ten evolve/* branches touching bot/earning/articles.py TITLE rules or _revise_title().",
-        "Step 2: Merge one; close the rest as superseded.",
-        "Step 3: Next 14-day window, read article_rejects recent details for 'ALL-CAPS' to confirm the fix."
+        "Step 1: List open branches matching evolve/* on bot/earning/articles.py.",
+        "Step 2: Review the smallest one (fewest edited lines, no dropped rules) and merge it.",
+        "Step 3: Close the other nine as superseded, referencing the merged branch.",
+        "Step 4: After the next 14-day window, check article_rejects.recent for 'ALL-CAPS' details to confirm or refute the fix."
       ],
-      "discovered_at": "2026-11-23T12:47:33.514466+00:00"
+      "discovered_at": "2026-11-23T12:48:47.565079+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 32,
+  "last_cycle_seconds": 22,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2759,7 +2749,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-23T12:47:12.099740+00:00",
+    "checked_at": "2026-11-23T12:48:26.522266+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3524,7 +3514,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-23T12:47:42.567097+00:00",
+    "last_run": "2026-11-23T12:48:47.782031+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3534,30 +3524,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-23T12:47:42.750059+00:00",
+    "last_run": "2026-11-23T12:48:47.976149+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4965279,
-        "at": "2026-11-23T00:59:25.430368+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-11-23T01:57:45.821733+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-23T01:57:45.821733+00:00",
-        "ok": true
-      },
-      {
-        "id": 4959304,
-        "at": "2026-11-23T01:57:45.821733+00:00",
-        "ok": true
-      },
       {
         "id": 4765372,
         "at": "2026-11-23T01:57:45.821733+00:00",
@@ -3764,11 +3734,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-23T12:47:42.750059+00:00",
-        "ok": true
-      },
-      {
         "id": 4503417,
         "at": "2026-11-23T12:47:42.750059+00:00",
         "ok": true
@@ -3787,6 +3752,31 @@
         "id": 4356423,
         "at": "2026-11-23T12:47:42.750059+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-23T12:48:47.976149+00:00",
+        "ok": true
+      },
+      {
+        "id": 5068353,
+        "at": "2026-11-23T12:48:47.976149+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-23T12:48:47.976149+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780783,
+        "at": "2026-11-23T12:48:47.976149+00:00",
+        "ok": true
+      },
+      {
+        "id": 4641536,
+        "at": "2026-11-23T12:48:47.976149+00:00",
+        "ok": true
       }
     ],
     "published_total": 57,
@@ -3794,7 +3784,7 @@
     "unverified": 7,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.8
+    "oldest_check_age_hours": 10.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

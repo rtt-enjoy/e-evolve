@@ -510,7 +510,10 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		"Follow the TITLE rules in the system prompt exactly: "
 		f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
 		"technology or failure, no clickbait words, no exclamation marks, no "
-		"ALL-CAPS, no colon-subtitle padding.\n\n"
+		"colon-subtitle padding.\n"
+		"An ALL-CAPS word is only allowed if it is a real acronym (JSON, LLM, API). "
+		"Any other fully-capitalised word must be rewritten in Title Case: "
+		"'THE POSTGRES INDEX TRICK' becomes 'The Postgres Index Trick'.\n\n"
 		'Respond with ONLY this JSON: {"title": "..."}'
 	)
 	try:

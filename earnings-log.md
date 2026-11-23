@@ -3869,3 +3869,7 @@ Autonomous earnings generated every hourly cycle.
 - [ok] **ctf-bounty** action recorded
 - [ok] **research-feed** action recorded
 - [fail] **dev.to**: title too weak to earn a click, and the rewrite failed
+
+### 2026-11-23 22:50 UTC
+
+- [ok] **dev.to**: [Why Most Internet Archive Videos Break in Your Player](https://dev.to/robust_true_try/why-most-internet-archive-videos-break-in-your-player-3bjp) (est. $0.00)

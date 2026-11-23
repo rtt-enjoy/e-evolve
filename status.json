@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-23T21:48:41.153846+00:00",
-  "total_runs": 2760,
+  "last_run": "2026-11-23T22:48:51.416219+00:00",
+  "total_runs": 2761,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -22,7 +22,8 @@
       "ctf-bounty": 0.0,
       "research-feed": 0.0,
       "code_techs": 0.0,
-      "mrr-ideas": 0.0
+      "mrr-ideas": 0.0,
+      "dev.to": 0.0
     },
     "history": [],
     "confirmed_usd": 0.0,
@@ -32,78 +33,61 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Sharpen the title-rewrite prompt in _revise_title so its inline rule summary stops contradicting the gate on ALL-CAPS: the gate exempts real acronyms, but the rewrite prompt says flatly 'no ALL-CAPS', so a rewrite that keeps an acronym like SQL is still fed back as broken and the draft is lost.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The inline rule summary in _revise_title's prompt says 'no ALL-CAPS' with no acronym exception, while _title_problems exempts known acronyms. A rewrite returning a perfectly valid 'SQL' or 'API' is scored as still weak and discarded, losing the whole draft after two LLM calls. Aligning the summary with the gate gives the rewrite the exact pass condition."
-      }
-    ],
+    "summary": "Fix the one remaining measured defect in the title path: _revise_title's own instruction says 'no ALL-CAPS' while the gate it feeds (devto/articles._shouted_words) deliberately allows real acronyms, so the rewrite is told to obey a rule stricter than the one that judges it \u2014 and the two drafts lost to weak_title in 14 days both died with 'title has ALL-CAPS word' after the rewrite already ran.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Fix the GLM post-role failures first \u2014 they lose 6x more drafts than any title gate",
-        "description": "llm_error=79 of 118 lifetime rejects (20 in the last 14 days) plus empty_draft=8 means roughly two articles a week are lost to the engine before any prompt rule matters; each is one post and one tip ask that never ships",
-        "owner_action": "Open the most recent failed cycle's Actions log and read the full exception behind 'LLM call failed'; raise the post-role max_tokens/timeout if it is truncation, or confirm the Atria fallback actually runs on mid-call failures (not just connect errors)",
+        "title": "Fix the GLM post-role failures \u2014 still the biggest draft loss",
+        "description": "llm_error=79 of 119 lifetime rejects (20 in the last 14 days) plus empty_draft=8 loses far more posts and tip asks than every title gate combined; each failure is one article that never ships into the receive path",
+        "owner_action": "Open the latest failed cycle's Actions log and read the exception behind 'LLM call failed' on the post role; raise its max_tokens/timeout if it is truncation, or confirm the Atria fallback triggers on mid-call failures for the post role",
         "secret_needed": null,
         "how_to": [
-          "Step 1: In the Actions run for the latest failed publish, find the '[articles] rejected (llm_error)' log line and the traceback above it.",
-          "Step 2: If the error is a timeout or truncation on the 6000-token post call, raise the post role's limits; if it is provider instability, verify llm.py's fallback to Atria-Dawn triggers on request failures for the post role, not only on initial connect."
+          "Step 1: In the Actions run for the most recent '[articles] rejected (llm_error)' log line, read the traceback above it.",
+          "Step 2: If the 6000-token post call is timing out or truncating, raise the post role's limits in the workflow config; if it is provider instability, verify llm.py's fallback to Atria-Dawn fires on request failures for the post role, not only on initial connect."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompt that loses the most drafts to a gate (PROMPT FOCUS: weak_title, gate finding 'title has ALL-CAPS word' x1); change the instruction, never the gate.",
+    "direction": "Checklist step 4 / PROMPT FOCUS: weak_title lost 2 drafts; gate findings 'title has ALL-CAPS word' x2; fix the instruction, never the gate",
     "evidence": [
-      "article_rejects.last = 'llm_error' but weak_title=15 lifetime with 'title has ALL-CAPS word' x1 in the last 14 days",
-      "Drafts lost to a prompt (last 14 days): weak_title=1, all via _revise_title per the prompt ledger",
-      "PROMPT FOCUS names article draft and title rewrite as the prompts that produce it",
-      "preferred_archetypes() = ['problem-workaround'] confirms the steering signal is already healthy; the title gate is the measured leak"
+      "article_rejects.counts.weak_title = 16 lifetime, 2 in the last 14 days",
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x2 \u2014 the gate's _KNOWN_ACRONYMS whitelist means only non-acronym caps are rejected, but _revise_title's prompt flatly bans 'ALL-CAPS' with no exception, so its output is graded by a different rule than the one it was written under"
     ],
-    "money_path": "reach-only: each rejected draft is one post and one tip ask that never ships; no change to the receive path itself",
-    "verify": "article_rejects window: weak_title in the last-14-days tally should fall to 0 (gate finding 'title has ALL-CAPS word' not recurring); _revise_title's own success log line 'title improved' should appear if it fires again",
+    "money_path": "reach-only: a title that survives the gate is one more post and one more tip ask that actually ships into problem-workaround, the archetype readers measurably prefer (avg 419.1 vs 65-89 elsewhere)",
+    "verify": "article_rejects: over the next 14-day window, weak_title rejects with detail 'title has ALL-CAPS word' should fall to 0, and no revised title should fail _title_problems for shouting; status.article_rejects.counts.weak_title stops growing on that detail",
     "error": null,
-    "branch": "evolve/1.41.1-20261123-214907",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      },
-      {
         "platform": "dev.to",
-        "success": false,
-        "skipped": true,
-        "reject_code": "weak_title",
-        "error": "title too weak to earn a click, and the rewrite failed",
-        "estimated_usd": 0.0
+        "success": true,
+        "title": "Why Most Internet Archive Videos Break in Your Player",
+        "url": "https://dev.to/robust_true_try/why-most-internet-archive-videos-break-in-your-player-3bjp",
+        "estimated_usd": 0.0,
+        "source_url": "https://spelunkr.tv",
+        "source_title": "Free alternative TV network built from the Internet Archive's forgotten videos"
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Fix the GLM post-role failures first \u2014 they lose 6x more drafts than any title gate",
-      "description": "llm_error=79 of 118 lifetime rejects (20 in the last 14 days) plus empty_draft=8 means roughly two articles a week are lost to the engine before any prompt rule matters; each is one post and one tip ask that never ships",
-      "owner_action": "Open the most recent failed cycle's Actions log and read the full exception behind 'LLM call failed'; raise the post-role max_tokens/timeout if it is truncation, or confirm the Atria fallback actually runs on mid-call failures (not just connect errors)",
+      "title": "Fix the GLM post-role failures \u2014 still the biggest draft loss",
+      "description": "llm_error=79 of 119 lifetime rejects (20 in the last 14 days) plus empty_draft=8 loses far more posts and tip asks than every title gate combined; each failure is one article that never ships into the receive path",
+      "owner_action": "Open the latest failed cycle's Actions log and read the exception behind 'LLM call failed' on the post role; raise its max_tokens/timeout if it is truncation, or confirm the Atria fallback triggers on mid-call failures for the post role",
       "secret_needed": null,
       "how_to": [
-        "Step 1: In the Actions run for the latest failed publish, find the '[articles] rejected (llm_error)' log line and the traceback above it.",
-        "Step 2: If the error is a timeout or truncation on the 6000-token post call, raise the post role's limits; if it is provider instability, verify llm.py's fallback to Atria-Dawn triggers on request failures for the post role, not only on initial connect."
+        "Step 1: In the Actions run for the most recent '[articles] rejected (llm_error)' log line, read the traceback above it.",
+        "Step 2: If the 6000-token post call is timing out or truncating, raise the post role's limits in the workflow config; if it is provider instability, verify llm.py's fallback to Atria-Dawn fires on request failures for the post role, not only on initial connect."
       ],
-      "discovered_at": "2026-11-23T21:49:07.897102+00:00"
+      "discovered_at": "2026-11-23T22:49:28.605379+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 101,
+  "last_cycle_seconds": 79,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -193,7 +177,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-11-19",
+    "date": "2026-11-24",
     "published": 1,
     "window": "06:00-12:00 UTC+9"
   },
@@ -2515,7 +2499,8 @@
       "jakub.jankiewicz.org/blog/ai-code-open-source",
       "infoq.com/news/2026/11/github-pull-requests-rebuild",
       "dev.to/robust_true_try/your-per-item-resizeobserver-is-a-layout-feedback-loop-29n1",
-      "wiz.io/blog/nginx-http2-rce-vulnerabilities"
+      "wiz.io/blog/nginx-http2-rce-vulnerabilities",
+      "spelunkr.tv"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -2615,7 +2600,8 @@
       "all ai generated code open source",
       "github rebuild copilot app s diff surface open million line pull request jank",
       "per item resizeobserver layout feedback loop",
-      "unauthenticated remote code execution nginx"
+      "unauthenticated remote code execution nginx",
+      "free alternative tv network built internet archive s forgotten video"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -2715,7 +2701,8 @@
       "ai generated code has license",
       "per item resizeobserver layout feedback loop",
       "cached row height lie stale resizeobserver measurement",
-      "check nginx http 2 config attacker"
+      "check nginx http 2 config attacker",
+      "most internet archive video break player"
     ],
     "followed_up_ids": [
       4489474,
@@ -2790,7 +2777,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-23T21:48:41.507389+00:00",
+    "checked_at": "2026-11-23T22:48:51.636774+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3188,12 +3175,12 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261123-214907",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 57,
-    "total_views": 7264,
-    "avg_views": 127.4,
+    "total_views": 7274,
+    "avg_views": 127.6,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 3788,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -3225,8 +3212,8 @@
       {
         "archetype": "security-privacy",
         "count": 7,
-        "avg_engagement": 87.1,
-        "avg_views": 87.1,
+        "avg_engagement": 88.6,
+        "avg_views": 88.6,
         "best_title": "Check Your NGINX HTTP/2 Config Before Attackers Do"
       },
       {
@@ -3556,7 +3543,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-23T21:50:20.864107+00:00",
+    "last_run": "2026-11-23T22:50:10.234331+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3566,30 +3553,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-23T21:50:21.113677+00:00",
+    "last_run": "2026-11-23T22:50:10.429008+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 5043579,
-        "at": "2026-11-23T10:47:48.777084+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-11-23T11:47:32.767148+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-11-23T11:47:32.767148+00:00",
-        "ok": true
-      },
-      {
-        "id": 4943931,
-        "at": "2026-11-23T11:47:32.767148+00:00",
-        "ok": true
-      },
       {
         "id": 4568987,
         "at": "2026-11-23T11:47:32.767148+00:00",
@@ -3796,11 +3763,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-23T21:50:21.113677+00:00",
-        "ok": true
-      },
-      {
         "id": 4391849,
         "at": "2026-11-23T21:50:21.113677+00:00",
         "ok": true
@@ -3819,11 +3781,36 @@
         "id": 5012890,
         "at": "2026-11-23T21:50:21.113677+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-23T22:50:10.429008+00:00",
+        "ok": true
+      },
+      {
+        "id": 4971614,
+        "at": "2026-11-23T22:50:10.429008+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-23T22:50:10.429008+00:00",
+        "ok": true
+      },
+      {
+        "id": 5079541,
+        "at": "2026-11-23T22:50:10.429008+00:00",
+        "ok": true
+      },
+      {
+        "id": 5019261,
+        "at": "2026-11-23T22:50:10.429008+00:00",
+        "ok": true
       }
     ],
-    "published_total": 57,
+    "published_total": 58,
     "covered": 50,
-    "unverified": 7,
+    "unverified": 8,
     "coverage_complete": false,
     "known_without_footer": 0,
     "oldest_check_age_hours": 11.0
@@ -3846,7 +3833,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 4
+      "glm": 2
     },
     "fallback": {
       "provider": "atria",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-23T04:46:56.124843+00:00",
-  "total_runs": 2742,
+  "last_run": "2026-11-23T05:46:57.648574+00:00",
+  "total_runs": 2743,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -38,7 +38,20 @@
     "error_type": "json"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "ctf-bounty",
+        "success": true,
+        "estimated_usd": 0.0,
+        "listed": 17
+      },
+      {
+        "platform": "research-feed",
+        "success": true,
+        "estimated_usd": 0.0,
+        "listed": 123
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -70,7 +83,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 316,
+  "last_cycle_seconds": 314,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2734,7 +2747,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-23T04:46:56.594760+00:00",
+    "checked_at": "2026-11-23T05:46:58.255816+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3499,7 +3512,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-23T04:52:11.556492+00:00",
+    "last_run": "2026-11-23T05:52:11.236906+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3509,30 +3522,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-23T04:52:11.723667+00:00",
+    "last_run": "2026-11-23T05:52:11.347470+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4925166,
-        "at": "2026-11-22T17:24:49.144091+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
-        "at": "2026-11-22T18:24:47.666969+00:00",
-        "ok": true
-      },
-      {
-        "id": 5050733,
-        "at": "2026-11-22T18:24:47.666969+00:00",
-        "ok": true
-      },
-      {
-        "id": 5060054,
-        "at": "2026-11-22T18:24:47.666969+00:00",
-        "ok": true
-      },
       {
         "id": 4977763,
         "at": "2026-11-22T18:24:47.666969+00:00",
@@ -3739,11 +3732,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-23T04:52:11.723667+00:00",
-        "ok": true
-      },
-      {
         "id": 4908316,
         "at": "2026-11-23T04:52:11.723667+00:00",
         "ok": true
@@ -3761,6 +3749,31 @@
       {
         "id": 4748037,
         "at": "2026-11-23T04:52:11.723667+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-23T05:52:11.347470+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-11-23T05:52:11.347470+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-11-23T05:52:11.347470+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-23T05:52:11.347470+00:00",
+        "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-11-23T05:52:11.347470+00:00",
         "ok": true
       }
     ],
@@ -3780,7 +3793,7 @@
   },
   "llm_engine": {
     "main_provider": "glm",
-    "main_model": "glm-5.3-flash",
+    "main_model": "glm-4.7-flash",
     "preferred_model": "glm-5.3-flash",
     "refused": [
       {
@@ -3832,11 +3845,11 @@
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-23 17:56:33"
       }
     ],
-    "endpoint": null,
+    "endpoint": "https://api.z.ai/api/paas/v4",
     "key_set": true,
     "live": false,
     "serving": "atria",
-    "disabled_reason": "quota_spent",
+    "disabled_reason": "auth_failed",
     "calls": {},
     "fallback": {
       "provider": "atria",
@@ -3848,7 +3861,7 @@
   },
   "ctf_bounty": {
     "source": "ctftime",
-    "last_refresh_at": "2026-11-23T02:52:04.667051+00:00",
+    "last_refresh_at": "2026-11-23T05:52:06.604092+00:00",
     "last_reason": "ok",
     "fetched": 30,
     "enterable": 17,
@@ -3864,7 +3877,7 @@
         "start": "2026-12-19T12:00:00+00:00",
         "finish": "2026-12-20T12:00:00+00:00",
         "live": false,
-        "days_until_start": 26.4,
+        "days_until_start": 26.3,
         "format": "Jeopardy",
         "weight": 77.38,
         "participants": 44,
@@ -3884,10 +3897,10 @@
         "start": "2026-11-27T17:00:00+00:00",
         "finish": "2026-11-28T17:00:00+00:00",
         "live": false,
-        "days_until_start": 4.6,
+        "days_until_start": 4.5,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 19,
+        "participants": 21,
         "prizes": "Prize details, if applicable, will be announced later.",
         "pays": false,
         "crypto": false,
@@ -3904,7 +3917,7 @@
         "start": "2026-11-28T04:30:00+00:00",
         "finish": "2026-11-28T16:30:00+00:00",
         "live": false,
-        "days_until_start": 5.1,
+        "days_until_start": 4.9,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 66,
@@ -3924,7 +3937,7 @@
         "start": "2026-11-28T14:00:00+00:00",
         "finish": "2026-11-29T14:00:00+00:00",
         "live": false,
-        "days_until_start": 5.5,
+        "days_until_start": 5.3,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 24,
@@ -3944,10 +3957,10 @@
         "start": "2026-11-27T11:00:00+00:00",
         "finish": "2026-11-27T19:00:00+00:00",
         "live": false,
-        "days_until_start": 4.3,
+        "days_until_start": 4.2,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 37,
+        "participants": 39,
         "prizes": "TBD",
         "pays": false,
         "crypto": false,
@@ -3964,7 +3977,7 @@
         "start": "2026-11-27T18:00:00+00:00",
         "finish": "2026-11-28T18:00:00+00:00",
         "live": false,
-        "days_until_start": 4.6,
+        "days_until_start": 4.5,
         "format": "Jeopardy",
         "weight": 45.76,
         "participants": 80,
@@ -3984,7 +3997,7 @@
         "start": "2026-12-04T10:00:00+00:00",
         "finish": "2026-12-06T18:00:00+00:00",
         "live": false,
-        "days_until_start": 11.3,
+        "days_until_start": 11.2,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 3,
@@ -4004,7 +4017,7 @@
         "start": "2026-12-04T18:00:00+00:00",
         "finish": "2026-12-06T18:00:00+00:00",
         "live": false,
-        "days_until_start": 11.6,
+        "days_until_start": 11.5,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 27,
@@ -4024,7 +4037,7 @@
         "start": "2026-12-05T05:00:00+00:00",
         "finish": "2026-12-06T17:00:00+00:00",
         "live": false,
-        "days_until_start": 12.1,
+        "days_until_start": 12.0,
         "format": "Jeopardy",
         "weight": 79.51,
         "participants": 45,
@@ -4044,10 +4057,10 @@
         "start": "2026-12-11T12:00:00+00:00",
         "finish": "2026-12-13T12:00:00+00:00",
         "live": false,
-        "days_until_start": 18.4,
+        "days_until_start": 18.3,
         "format": "Jeopardy",
         "weight": 59.0,
-        "participants": 82,
+        "participants": 83,
         "prizes": "TBA",
         "pays": false,
         "crypto": false,
@@ -4064,7 +4077,7 @@
         "start": "2026-12-17T19:00:00+00:00",
         "finish": "2026-12-19T07:00:00+00:00",
         "live": false,
-        "days_until_start": 24.7,
+        "days_until_start": 24.5,
         "format": "Jeopardy",
         "weight": 22.9,
         "participants": 18,
@@ -4084,7 +4097,7 @@
         "start": "2026-12-26T01:00:00+00:00",
         "finish": "2026-12-28T04:59:59+00:00",
         "live": false,
-        "days_until_start": 32.9,
+        "days_until_start": 32.8,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 3,
@@ -4104,7 +4117,7 @@
         "start": "2026-12-27T14:00:00+00:00",
         "finish": "2026-12-28T14:00:00+00:00",
         "live": false,
-        "days_until_start": 34.5,
+        "days_until_start": 34.3,
         "format": "Jeopardy",
         "weight": 99.38,
         "participants": 0,
@@ -4124,7 +4137,7 @@
         "start": "2026-12-27T20:00:00+00:00",
         "finish": "2026-12-29T20:00:00+00:00",
         "live": false,
-        "days_until_start": 34.7,
+        "days_until_start": 34.6,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 0,
@@ -4144,7 +4157,7 @@
         "start": "2026-12-29T12:00:00+00:00",
         "finish": "2026-12-31T12:00:00+00:00",
         "live": false,
-        "days_until_start": 36.4,
+        "days_until_start": 36.3,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 12,
@@ -4164,7 +4177,7 @@
         "start": "2027-01-02T18:00:00+00:00",
         "finish": "2027-01-03T18:00:00+00:00",
         "live": false,
-        "days_until_start": 40.6,
+        "days_until_start": 40.5,
         "format": "Jeopardy",
         "weight": 25.0,
         "participants": 2,
@@ -4184,7 +4197,7 @@
         "start": "2027-01-09T00:00:00+00:00",
         "finish": "2027-01-11T00:00:00+00:00",
         "live": false,
-        "days_until_start": 46.9,
+        "days_until_start": 46.8,
         "format": "Jeopardy",
         "weight": 50.0,
         "participants": 0,
@@ -4230,18 +4243,18 @@
     }
   },
   "research_feed": {
-    "last_refresh_at": "2026-11-23T02:52:05.197070+00:00",
+    "last_refresh_at": "2026-11-23T05:52:07.216100+00:00",
     "last_reason": "partial",
     "failed_sources": [
       "freellm-dir"
     ],
-    "pool_total": 329,
+    "pool_total": 331,
     "source_stats": [
       {
         "source": "devpost",
         "label": "Devpost",
-        "fetched": 88,
-        "kept": 71,
+        "fetched": 89,
+        "kept": 72,
         "screened": 0,
         "duplicates": 0,
         "ok": true
@@ -4249,8 +4262,8 @@
       {
         "source": "superteam",
         "label": "Superteam Earn",
-        "fetched": 11,
-        "kept": 10,
+        "fetched": 12,
+        "kept": 11,
         "screened": 1,
         "duplicates": 0,
         "ok": true
@@ -4338,7 +4351,9 @@
       }
     ],
     "first_seen": {
+      "devpost:32218": "2026-11-22T20:25:04+00:00",
       "devpost:32210": "2026-11-21T21:04:00+00:00",
+      "devpost:32215": "2026-11-22T03:24:21+00:00",
       "devpost:32211": "2026-11-21T21:04:00+00:00",
       "devpost:32133": "2026-11-19T09:31:47+00:00",
       "devpost:31886": "2026-11-18T06:23:51+00:00",
@@ -4346,9 +4361,9 @@
       "devpost:31571": "2026-11-17T20:27:43+00:00",
       "devpost:32141": "2026-11-15T23:50:44+00:00",
       "devpost:31905": "2026-11-15T06:41:56+00:00",
+      "devpost:31644": "2026-11-11T18:15:33+00:00",
       "devpost:32026": "2026-11-12T07:01:42+00:00",
       "devpost:32024": "2026-11-11T18:15:33+00:00",
-      "devpost:31644": "2026-11-11T18:15:33+00:00",
       "devpost:32072": "2026-11-10T10:58:07+00:00",
       "devpost:32079": "2026-11-10T18:52:33+00:00",
       "devpost:31973": "2026-11-10T14:53:33+00:00",
@@ -4356,11 +4371,11 @@
       "devpost:32060": "2026-11-09T02:49:29+00:00",
       "devpost:32017": "2026-11-05T09:50:29+00:00",
       "devpost:31974": "2026-11-05T03:42:02+00:00",
-      "devpost:31994": "2026-11-05T03:42:02+00:00",
       "devpost:31993": "2026-11-05T03:42:02+00:00",
+      "devpost:32009": "2026-11-05T03:42:02+00:00",
       "devpost:31794": "2026-11-05T03:42:02+00:00",
       "devpost:31972": "2026-11-05T03:42:02+00:00",
-      "devpost:32009": "2026-11-05T03:42:02+00:00",
+      "devpost:31994": "2026-11-05T03:42:02+00:00",
       "devpost:31642": "2026-11-05T03:42:02+00:00",
       "devpost:31083": "2026-11-05T03:42:02+00:00",
       "devpost:31960": "2026-11-05T03:42:02+00:00",
@@ -4374,8 +4389,8 @@
       "devpost:31797": "2026-11-05T03:42:02+00:00",
       "devpost:31798": "2026-11-05T03:42:02+00:00",
       "devpost:31795": "2026-11-05T03:42:02+00:00",
-      "devpost:31796": "2026-11-05T03:42:02+00:00",
       "devpost:31789": "2026-11-05T03:42:02+00:00",
+      "devpost:31796": "2026-11-05T03:42:02+00:00",
       "devpost:31737": "2026-11-05T03:42:02+00:00",
       "devpost:31773": "2026-11-05T03:42:02+00:00",
       "devpost:31733": "2026-11-05T03:42:02+00:00",
@@ -4388,13 +4403,12 @@
       "devpost:30789": "2026-11-05T03:42:02+00:00",
       "devpost:30764": "2026-11-05T03:42:02+00:00",
       "devpost:30740": "2026-11-05T03:42:02+00:00",
+      "devpost:32220": "2026-11-23T05:52:07+00:00",
       "devpost:32209": "2026-11-22T20:25:04+00:00",
-      "devpost:32218": "2026-11-22T20:25:04+00:00",
       "devpost:31134": "2026-11-22T23:51:43+00:00",
       "devpost:32208": "2026-11-21T21:04:00+00:00",
-      "devpost:32215": "2026-11-22T03:24:21+00:00",
-      "devpost:32161": "2026-11-21T05:22:50+00:00",
       "devpost:32188": "2026-11-20T09:24:03+00:00",
+      "devpost:32161": "2026-11-21T05:22:50+00:00",
       "devpost:32062": "2026-11-19T16:12:33+00:00",
       "devpost:32132": "2026-11-16T17:23:51+00:00",
       "devpost:31882": "2026-11-12T10:02:06+00:00",
@@ -4417,6 +4431,7 @@
       "superteam:create-an-engaging-x-thread-introducing-anna-ai-messenger-1": "2026-11-09T21:31:50+00:00",
       "superteam:ssrfun-beta-launch-challenge": "2026-11-11T07:26:48+00:00",
       "superteam:kriptok-creator-challenge-01": "2026-11-05T03:42:02+00:00",
+      "superteam:publish-capsgame-review-for-solana-audience-video-or-x-thread": "2026-11-23T05:52:07+00:00",
       "superteam:build-an-autonomous-capital-agent-on-solana-and-compete-for-dollar500-in-rewards": "2026-11-10T21:52:47+00:00",
       "superteam:multihopper-build-and-route-challenge-up-to-dollar50000-revenue-share-1": "2026-11-05T03:42:02+00:00",
       "immunefi:blockpinetwork": "2026-11-05T03:42:02+00:00",
@@ -4923,22 +4938,22 @@
         "discovered_at": "2026-11-05T03:42:02+00:00"
       },
       {
-        "id": "devpost:32161",
+        "id": "devpost:32220",
         "category": "hackathon",
         "source": "devpost",
-        "title": "Hackstead: Winterfest",
-        "url": "https://hackstead.devpost.com/",
-        "prize": "$430 in prizes",
-        "detail": "Hackstead \u00b7 Beginner Friendly, Web",
+        "title": "Zero-G Hacks",
+        "url": "https://zero-g-hacks.devpost.com/",
+        "prize": "$120 in prizes",
+        "detail": "Zero-G CAD \u00b7 Beginner Friendly, Design",
         "pays": true,
         "crypto": false,
         "kyc": "not published",
         "beginner": true,
-        "deadline": "2026-12-20T23:59+00:00",
-        "starts_at": "2026-12-06T00:00+00:00",
+        "deadline": "2026-11-30T23:59+00:00",
+        "starts_at": "2026-11-27T00:00+00:00",
         "posted_at": null,
         "score": 52,
-        "discovered_at": "2026-11-21T05:22:50+00:00"
+        "discovered_at": "2026-11-23T05:52:07+00:00"
       },
       {
         "id": "devpost:32215",
@@ -5073,7 +5088,7 @@
         "title": "The Raenest Global Bounty - Writing, Video & Animation Bounty",
         "url": "https://superteam.fun/earn/listing/the-raenest-global-bounty-writing-video-and-animation",
         "prize": "13,000 USDC",
-        "detail": "Raenest \u00b7 564 entries",
+        "detail": "Raenest \u00b7 565 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5109,7 +5124,7 @@
         "title": "Build an Autonomous Capital Agent on Solana & Compete for $500 in Rewards",
         "url": "https://superteam.fun/earn/listing/build-an-autonomous-capital-agent-on-solana-and-compete-for-dollar500-in-rewards",
         "prize": "500 USDC",
-        "detail": "OOBE Protocol \u00b7 522 entries",
+        "detail": "OOBE Protocol \u00b7 562 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5127,7 +5142,7 @@
         "title": "Create Content About KriptoK \u00b7 200 USDC Creator Challenge",
         "url": "https://superteam.fun/earn/listing/kriptok-creator-challenge-01",
         "prize": "200 USDC",
-        "detail": "KriptoK \u00b7 314 entries",
+        "detail": "KriptoK \u00b7 316 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5145,7 +5160,7 @@
         "title": "Create an Engaging X Thread Introducing Anna AI Messenger",
         "url": "https://superteam.fun/earn/listing/create-an-engaging-x-thread-introducing-anna-ai-messenger-1",
         "prize": "250 USDC",
-        "detail": "Anna \u00b7 510 entries",
+        "detail": "Anna \u00b7 513 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5157,13 +5172,31 @@
         "discovered_at": "2026-11-09T21:31:50+00:00"
       },
       {
+        "id": "superteam:publish-capsgame-review-for-solana-audience-video-or-x-thread",
+        "category": "crypto-bounty",
+        "source": "superteam",
+        "title": "Publish CapsGame Review for Solana Audience (Video or X Thread)",
+        "url": "https://superteam.fun/earn/listing/publish-capsgame-review-for-solana-audience-video-or-x-thread",
+        "prize": "500 USDC",
+        "detail": "CapsGame \u00b7 1 entries",
+        "pays": true,
+        "crypto": true,
+        "kyc": "not published",
+        "beginner": false,
+        "deadline": "2026-12-07T16:59+00:00",
+        "starts_at": null,
+        "posted_at": null,
+        "score": 59,
+        "discovered_at": "2026-11-23T05:52:07+00:00"
+      },
+      {
         "id": "superteam:ssrfun-beta-launch-challenge",
         "category": "crypto-bounty",
         "source": "superteam",
         "title": "SSR.FUN Beta Launch Challenge",
         "url": "https://superteam.fun/earn/listing/ssrfun-beta-launch-challenge",
         "prize": "300 USDC",
-        "detail": "Strategic Super Reserve \u00b7 592 entries",
+        "detail": "Strategic Super Reserve \u00b7 631 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5199,7 +5232,7 @@
         "title": "Create Nosana content: Explainer Thread/Article or Creative Meme/Video",
         "url": "https://superteam.fun/earn/listing/create-nosana-content-explainer-threadarticle-or-creative-memevideo",
         "prize": "660 NOS",
-        "detail": "Nosana_AI \u00b7 330 entries",
+        "detail": "Nosana_AI \u00b7 334 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5217,7 +5250,7 @@
         "title": "Provide Feedback on our new Support Assistant Nosa",
         "url": "https://superteam.fun/earn/listing/provide-feedback-on-our-new-support-assistant-nosa",
         "prize": "300 NOS",
-        "detail": "Nosana_AI \u00b7 201 entries",
+        "detail": "Nosana_AI \u00b7 203 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",

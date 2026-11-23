@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-23T18:48:30.335850+00:00",
-  "total_runs": 2757,
+  "last_run": "2026-11-23T19:48:45.377491+00:00",
+  "total_runs": 2758,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -32,88 +32,52 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the PROMPT FOCUS defect (ALL-CAPS title, 1 draft lost in 14 days) is already covered by ten open unmerged branches, and the dominant reject (llm_error=79) is engine-side, not prompt-fixable \u2014 so any prompt edit would be an eleventh duplicate that loses the review-queue problem worse.",
+    "summary": "No change proposed: the only prompt-attributable defect (weak_title, 1 draft in 14 days) is already covered by ten open unmerged proposals on the same gate finding, and every other loss (llm_error=79, empty_draft=19) is engine-attributed and not fixable by a prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one title-rule branch and close the other nine",
-        "description": "Clears the review queue and stops future cycles re-proposing the same one-line title edit \u2014 the same recommendation status.suggestions already carries, still unresolved.",
-        "owner_action": "Merge the newest 2026-11-18 branch touching bot/earning/articles.py and close the 2026-11-10 to 2026-11-16 branches as superseded.",
+        "title": "Add the receive address to the dev.to profile bio",
+        "description": "Carries the ask on every profile visit permanently \u2014 the doctrine's named cheap exception; no account, processor or policy change",
+        "owner_action": "One edit to the Bio field at dev.to/settings",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the evolve/* branches dated 2026-11-10 to 2026-11-18 that edit the TITLE rule or _revise_title in bot/earning/articles.py.",
-          "Step 2: Merge the newest; reject the other nine as duplicates so the ledger stops re-deriving them."
-        ]
-      },
-      {
-        "title": "Check why glm llm_error is the dominant reject and no article has published since 2026-11-19",
-        "description": "79 of 118 lifetime rejects are 'LLM call failed' and article_daily last shows a publish on 2026-11-19 against last_run 2026-11-23: the engine, not any prompt, is what is blocking posts and therefore reach.",
-        "owner_action": "Verify the GLM_API_KEY quota/billing state and confirm the post role's fallback to Atria is actually firing on failure.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Check the GLM API console for quota exhaustion or key invalidity around 2026-11-19.",
-          "Step 2: Confirm llm_workflows.post fallback_provider atria is live and that complete_json_for_role falls back rather than raising."
+          "Step 1: Open https://dev.to/settings, paste the TRON address [redacted] into the profile Bio field.",
+          "Step 2: Save. receipt_check and the dashboard continue to verify only the articles; the bio ask needs no code."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach via prompt upgrades, one step per cycle; Principle 3j sample discipline applied to whether a prompt change is warranted at all",
+    "direction": "Binding step 4 \u2014 reach; PROMPT FOCUS weak_title / gate finding 'title has ALL-CAPS word' x1",
     "evidence": [
-      "article_rejects.counts total 118 with llm_error=79, empty_draft=19, weak_title=15 (lifetime); prompt-attributable losses in the last 14 days: weak_title=1",
-      "article_rejects.last = 'llm_error': 'LLM call failed'",
-      "PRIOR PROPOSALS lists 10 open branches, all targeting articles.py title rules between 2026-11-10 and 2026-11-18, none merged",
-      "PROMPT FOCUS gate finding: 'title has ALL-CAPS word' x1 \u2014 a single occurrence, and _shouted_words/_KNOWN_ACRONYMS already handle acronyms correctly",
-      "preferred_archetypes() = ['problem-workaround'] with n=12 \u2014 the only preferred row clears the n>=3 sample threshold, so no thin-row steering bug (Principle 3j clean)",
-      "backfill.skipped shows 5 posts stopped on 429 \u2014 next cycle is the retry; known dead end"
+      "article_rejects.total = 118, of which llm_error = 79 and empty_draft = 19 (engine, not prompt)",
+      "Drafts lost to a prompt in the last 14 days: weak_title = 1, gate finding 'title has ALL-CAPS word' x1",
+      "PRIOR PROPOSALS: ten open review branches (2026-11-10 through 2026-11-18) all target this exact defect across articles.py _SYSTEM and _revise_title",
+      "article_interest problem-workaround n=12 avg_engagement=418.2 vs other rows under 90 \u2014 steering already in place and working"
     ],
-    "money_path": "none (maintenance): nothing clears the bar this cycle; reach is served by not adding an eleventh duplicate branch",
-    "verify": "No code change. Next cycle: article_rejects recent window should show whether the engine recovered from llm_error (the field actually gating publishing); article_daily.published should move once it does. weak_title=1 in the 14-day window is within noise and needs no fix.",
+    "money_path": "none (no change proposed this cycle)",
+    "verify": "N/A \u2014 no change. Next cycle, if a merged title prompt lands, article_rejects.counts.weak_title should stay flat while llm_error and empty_draft are the counts to watch; neither responds to prompt edits.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one title-rule branch and close the other nine",
-      "description": "Clears the review queue and stops future cycles re-proposing the same one-line title edit \u2014 the same recommendation status.suggestions already carries, still unresolved.",
-      "owner_action": "Merge the newest 2026-11-18 branch touching bot/earning/articles.py and close the 2026-11-10 to 2026-11-16 branches as superseded.",
+      "title": "Add the receive address to the dev.to profile bio",
+      "description": "Carries the ask on every profile visit permanently \u2014 the doctrine's named cheap exception; no account, processor or policy change",
+      "owner_action": "One edit to the Bio field at dev.to/settings",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the evolve/* branches dated 2026-11-10 to 2026-11-18 that edit the TITLE rule or _revise_title in bot/earning/articles.py.",
-        "Step 2: Merge the newest; reject the other nine as duplicates so the ledger stops re-deriving them."
+        "Step 1: Open https://dev.to/settings, paste the TRON address [redacted] into the profile Bio field.",
+        "Step 2: Save. receipt_check and the dashboard continue to verify only the articles; the bio ask needs no code."
       ],
-      "discovered_at": "2026-11-23T18:48:54.127583+00:00"
-    },
-    {
-      "title": "Check why glm llm_error is the dominant reject and no article has published since 2026-11-19",
-      "description": "79 of 118 lifetime rejects are 'LLM call failed' and article_daily last shows a publish on 2026-11-19 against last_run 2026-11-23: the engine, not any prompt, is what is blocking posts and therefore reach.",
-      "owner_action": "Verify the GLM_API_KEY quota/billing state and confirm the post role's fallback to Atria is actually firing on failure.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: Check the GLM API console for quota exhaustion or key invalidity around 2026-11-19.",
-        "Step 2: Confirm llm_workflows.post fallback_provider atria is live and that complete_json_for_role falls back rather than raising."
-      ],
-      "discovered_at": "2026-11-23T18:48:54.127583+00:00"
+      "discovered_at": "2026-11-23T19:49:08.340694+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 33,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2830,7 +2794,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-23T18:48:30.876158+00:00",
+    "checked_at": "2026-11-23T19:48:45.681381+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3596,7 +3560,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-23T18:49:03.117196+00:00",
+    "last_run": "2026-11-23T19:49:08.577169+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3606,30 +3570,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-23T18:49:03.283395+00:00",
+    "last_run": "2026-11-23T19:49:08.773498+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4977763,
-        "at": "2026-11-23T07:52:08.057442+00:00",
-        "ok": true
-      },
-      {
-        "id": 5025764,
-        "at": "2026-11-23T08:52:23.000716+00:00",
-        "ok": true
-      },
-      {
-        "id": 4848276,
-        "at": "2026-11-23T08:52:23.000716+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-11-23T08:52:23.000716+00:00",
-        "ok": true
-      },
       {
         "id": 5012890,
         "at": "2026-11-23T08:52:23.000716+00:00",
@@ -3836,11 +3780,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-23T18:49:03.283395+00:00",
-        "ok": true
-      },
-      {
         "id": 4430049,
         "at": "2026-11-23T18:49:03.283395+00:00",
         "ok": true
@@ -3858,6 +3797,31 @@
       {
         "id": 4720062,
         "at": "2026-11-23T18:49:03.283395+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-23T19:49:08.773498+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-11-23T19:49:08.773498+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-11-23T19:49:08.773498+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-11-23T19:49:08.773498+00:00",
+        "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-11-23T19:49:08.773498+00:00",
         "ok": true
       }
     ],

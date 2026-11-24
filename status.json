@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-24T13:57:17.764430+00:00",
-  "total_runs": 2778,
+  "last_run": "2026-11-24T14:57:26.477160+00:00",
+  "total_runs": 2779,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,68 +33,55 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the exact title-prompt edit the PROMPT FOCUS names already exists as 13 unmerged review branches (2026-11-10 through 2026-11-24), so a fourteenth duplicate cannot improve reach until the owner merges one; the remaining reject volume (llm_error=79) is engine-side, not prompt-fixable, and the dead-end list forbids touching it.",
+    "summary": "No change proposed: the PROMPT FOCUS (weak_title, 'title has ALL-CAPS word' x2) has 13 distinct open review branches against the exact prompts named \u2014 articles.py _SYSTEM TITLE rule and _revise_title \u2014 every one never merged, so a 14th identical proposal is a repeat, not a fix.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the 13 open title-prompt branches",
-        "description": "Unblocks the weak_title workstream. Every unmerged branch is a few-line edit to _revise_title or the _SYSTEM TITLE rule aimed at the same two ALL-CAPS rejects; without a merge, each future cycle re-derives the same proposal and the 14-day weak_title count never moves.",
-        "owner_action": "Review and merge (or close) the open evolve/* branches dated 2026-11-24 and 2026-11-23 touching bot/earning/articles.py _revise_title.",
+        "title": "Merge (or close) the 13 open title-prompt branches before any new proposal",
+        "description": "Unblocks the only prompt work the evidence names. Until one branch lands, every future cycle re-derives the same ALL-CAPS edit and the weak_title count cannot move; after it lands, the 2 drafts lost per 14 days ship as posts with tip asks.",
+        "owner_action": "Review and merge the most recent evolve/* branch dated 2026-11-24 (the one-line _revise_title edit naming the ALL-CAPS rule), then close the remaining 12 duplicate branches so the ledger stops re-proposing them.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the 13 open review branches listed in the evolution brief.",
-          "Step 2: Pick the most recent (2026-11-24, one edit to _revise_title adding the concrete ALL-CAPS rule), diff it against articles.py, merge if it only tightens the rewrite instruction.",
-          "Step 3: Close the remaining duplicate branches so future cycles stop re-proposing them."
+          "Step 1: Open the 13 open evolve/* branches listed in the evolution brief (2026-11-10 through 2026-11-24).",
+          "Step 2: Pick the newest (2026-11-24), diff bot/earning/articles.py against main, and merge if it only tightens the title-rewrite instruction without touching any gate.",
+          "Step 3: Close the other 12 branches as duplicates, so evolution grades the merged prompt on the next 14-day weak_title count instead of generating a 14th variant."
         ]
       }
     ],
-    "direction": "Step 4 \u2014 upgrade the prompts that write reach, one step per cycle; but the step is already proposed and parked on an open branch, so re-proposing it spends a cycle on nothing.",
+    "direction": "Checklist step 4 \u2014 upgrade the prompts losing the most drafts, one step per cycle; Principle 6 (constraints to design within)",
     "evidence": [
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "PROMPT FOCUS: weak_title lost 2 draft(s) in 14 days; gate findings 'title has ALL-CAPS word' x2",
-      "PRIOR PROPOSALS: 13 distinct open branches all editing articles.py _revise_title / _SYSTEM TITLE for the same ALL-CAPS rejects (2026-11-10 to 2026-11-24)",
-      "article_rejects.counts: llm_error=79 and empty_draft=19 dominate weak_title=16; the 14-day window shows llm_error=20, empty_draft=8 \u2014 engine failures, unreachable by a prompt edit and off-limits by the dead-end rules",
-      "article_interest: problem-workaround n=12 avg=419.1 \u2014 steering is working; the reach bottleneck is draft survival, which is blocked on the merge, not on a new instruction"
+      "article_rejects.counts weak_title = 16 lifetime, weak_title = 2 in the last 14 days",
+      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x2",
+      "PRIOR PROPOSALS lists 13 open branches, all touching bot/earning/articles.py _revise_title or the _SYSTEM TITLE rule, dated 2026-11-10 through 2026-11-24, none merged",
+      "article_rejects.counts llm_error = 79 and empty_draft = 19: 98 of 119 rejects are engine failures a prompt edit cannot fix (20 llm_error + 8 empty_draft in the last 14 days vs 2 weak_title)",
+      "status.suggestions already carries an owner action to merge the open title-prompt branches"
     ],
-    "money_path": "none this cycle (maintenance of the review pipeline). The unlock is reach into the live receive path once one title branch merges: weak_title cost 2 drafts in 14 days, each a post plus a tip ask that never shipped.",
-    "verify": "After the owner merges one title branch: article_rejects.counts.weak_title and the 14-day weak_title window fall toward 0, and the 'title has ALL-CAPS word' gate finding stops appearing; then next cycle can propose the next distinct prompt step (e.g. the empty_draft path) instead of re-deriving this one.",
+    "money_path": "none this cycle (maintenance of the review queue); the weak_title fix itself is reach-only \u2014 a draft that clears the gate ships one more post and one more tip ask",
+    "verify": "After the owner merges (or closes) the existing title-prompt branches, next cycles should show article_rejects recent entries with code 'weak_title' and detail 'title has ALL-CAPS word' falling to 0 within the 14-day window; weak_title in 'Drafts lost to a prompt (last 14 days)' should drop from 2 to 0.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one of the 13 open title-prompt branches",
-      "description": "Unblocks the weak_title workstream. Every unmerged branch is a few-line edit to _revise_title or the _SYSTEM TITLE rule aimed at the same two ALL-CAPS rejects; without a merge, each future cycle re-derives the same proposal and the 14-day weak_title count never moves.",
-      "owner_action": "Review and merge (or close) the open evolve/* branches dated 2026-11-24 and 2026-11-23 touching bot/earning/articles.py _revise_title.",
+      "title": "Merge (or close) the 13 open title-prompt branches before any new proposal",
+      "description": "Unblocks the only prompt work the evidence names. Until one branch lands, every future cycle re-derives the same ALL-CAPS edit and the weak_title count cannot move; after it lands, the 2 drafts lost per 14 days ship as posts with tip asks.",
+      "owner_action": "Review and merge the most recent evolve/* branch dated 2026-11-24 (the one-line _revise_title edit naming the ALL-CAPS rule), then close the remaining 12 duplicate branches so the ledger stops re-proposing them.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the 13 open review branches listed in the evolution brief.",
-        "Step 2: Pick the most recent (2026-11-24, one edit to _revise_title adding the concrete ALL-CAPS rule), diff it against articles.py, merge if it only tightens the rewrite instruction.",
-        "Step 3: Close the remaining duplicate branches so future cycles stop re-proposing them."
+        "Step 1: Open the 13 open evolve/* branches listed in the evolution brief (2026-11-10 through 2026-11-24).",
+        "Step 2: Pick the newest (2026-11-24), diff bot/earning/articles.py against main, and merge if it only tightens the title-rewrite instruction without touching any gate.",
+        "Step 3: Close the other 12 branches as duplicates, so evolution grades the merged prompt on the next 14-day weak_title count instead of generating a 14th variant."
       ],
-      "discovered_at": "2026-11-24T12:57:35.540647+00:00"
+      "discovered_at": "2026-11-24T14:57:45.079598+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 27,
+  "last_cycle_seconds": 19,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2822,7 +2809,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-24T13:57:18.352531+00:00",
+    "checked_at": "2026-11-24T14:57:26.769589+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3588,7 +3575,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-24T13:57:44.473604+00:00",
+    "last_run": "2026-11-24T14:57:45.314510+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3598,30 +3585,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-24T13:57:44.641334+00:00",
+    "last_run": "2026-11-24T14:57:45.509141+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4965279,
-        "at": "2026-11-24T02:56:00.123762+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-11-24T03:54:19.264822+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-11-24T03:54:19.264822+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-11-24T03:54:19.264822+00:00",
-        "ok": true
-      },
       {
         "id": 4765372,
         "at": "2026-11-24T03:54:19.264822+00:00",
@@ -3828,11 +3795,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-24T13:57:44.641334+00:00",
-        "ok": true
-      },
-      {
         "id": 4562180,
         "at": "2026-11-24T13:57:44.641334+00:00",
         "ok": true
@@ -3851,6 +3813,31 @@
         "id": 4356423,
         "at": "2026-11-24T13:57:44.641334+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-24T14:57:45.509141+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-24T14:57:45.509141+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-24T14:57:45.509141+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-11-24T14:57:45.509141+00:00",
+        "ok": true
+      },
+      {
+        "id": 4641536,
+        "at": "2026-11-24T14:57:45.509141+00:00",
+        "ok": true
       }
     ],
     "published_total": 58,
@@ -3858,7 +3845,7 @@
     "unverified": 8,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.0
+    "oldest_check_age_hours": 11.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

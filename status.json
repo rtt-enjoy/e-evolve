@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-24T16:57:23.864805+00:00",
-  "total_runs": 2781,
+  "last_run": "2026-11-24T17:57:28.889306+00:00",
+  "total_runs": 2782,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,69 +33,78 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt focus (weak_title, 2 drafts lost in 14 days, 'title has ALL-CAPS word' x2) is already the subject of 13 open, unmerged review branches that edit the same two prompts for the same finding; a 14th variant cannot be graded against any of them and duplicates a known dead end, so the binding action is owner-side, not another prompt edit.",
+    "summary": "No change proposed: weak_title is already the target of 12 unmerged proposals, all editing the same two prompt sites for the same ALL-CAPS finding, so a 14th variant cannot be graded and adds noise, not reach.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Merge the newest title-prompt branch, close the other 12",
-        "description": "Unblocks the only prompt work the evidence names. All 13 open branches edit the same two prompts for the same ALL-CAPS finding; none can be graded until one lands, and weak_title cannot fall while the ledger keeps re-proposing variants.",
-        "owner_action": "Merge the 2026-11-24 evolve/* branch (the one-line _revise_title edit) and close the remaining 12 open branches as duplicates.",
+        "description": "Unblocks the only prompt work the evidence names. All 13 open branches edit the same two prompt sites for the same ALL-CAPS gate finding; weak_title cannot fall while the ledger keeps proposing variants no one merges.",
+        "owner_action": "Merge the 2026-11-24 evolve/* branch (the one-line _revise_title edit) and close the remaining 12 as duplicates.",
         "secret_needed": null,
         "how_to": [
           "Step 1: Open the 13 evolve/* branches dated 2026-11-10 through 2026-11-24.",
-          "Step 2: Pick the newest (2026-11-24); diff bot/earning/articles.py against main and confirm it only tightens the title-rewrite instruction without touching any gate.",
+          "Step 2: Pick the newest (2026-11-24); diff bot/earning/articles.py against main and confirm it only sharpens the title instruction without touching any gate.",
           "Step 3: Merge it, close the other 12 as duplicates, and grade on the next 14-day weak_title count instead of generating a 14th variant."
+        ]
+      },
+      {
+        "title": "Add the wallet address to the dev.to profile bio",
+        "description": "Carries the ask on every profile visit permanently \u2014 the one deferred channel needing no account, processor or policy change.",
+        "owner_action": "Edit the Bio field once at dev.to/settings to include the TRC-20 address from payout_public.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Open dev.to/settings and locate the Bio field.",
+          "Step 2: Paste the published address [redacted] with a one-line note.",
+          "Step 3: Save; every future profile visitor now sees the receive path with no further work."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade prompts one step per cycle; Principle 3j sample discipline (n=2 is near noise) and the standing rule against re-proposing PRIOR PROPOSALS",
+    "direction": "Checklist step 4 (reach via prompt upgrades) \u2014 but the step's own discipline is one graded change per cycle, and grading is blocked upstream",
     "evidence": [
-      "article_rejects.last = 'weak_title'",
-      "Drafts lost to a prompt (last 14 days): weak_title=2",
-      "Gate findings behind it: 'title has ALL-CAPS word' x2",
-      "PRIOR PROPOSALS: 13 open branches, 2026-11-10 through 2026-11-24, all editing bot/earning/articles.py _revise_title/_SYSTEM title rules",
-      "suggestions[0].owner_action names merging the newest branch and closing the other 12 as duplicates",
-      "weak_title row n=2 in the window \u2014 a small sample, and the fix cannot be graded while all candidate fixes sit unmerged"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "PROMPT FOCUS: weak_title lost 2 draft(s) in 14 days; gate findings 'title has ALL-CAPS word' x2",
+      "PRIOR PROPOSALS: 12 distinct open branches, every one editing articles.py _revise_title / _SYSTEM TITLE rules for this same finding (2026-11-11 through 2026-11-24)",
+      "suggestions[0] = 'Merge the newest title-prompt branch, close the other 12': none of the 13 branches can be graded until one lands",
+      "article_stats.count = 57, avg_views = 127.6, preferred_archetypes() = ['problem-workaround'] \u2014 reach work is otherwise healthy and publishing continues daily"
     ],
-    "money_path": "none this cycle \u2014 the change that would move it (fewer drafts lost to weak_title, so one more post and one more tip ask shipping) is blocked on a merge decision, not on new code",
-    "verify": "After the owner merges one title-prompt branch and closes the rest: article_rejects.counts.weak_title and the 14-day weak_title window in the prompt ledger should stop growing, and 'title has ALL-CAPS word' should disappear from gate findings within the next two weeks of cycles.",
+    "money_path": "reach-only (indirectly receive-path: every refused draft is one post and one tip ask that never ships)",
+    "verify": "No diff to verify. Once the owner merges one of the 13 open branches and closes the rest, verification is the next 14-day window's article_rejects.counts.weak_title falling below 2 and no more 'title has ALL-CAPS word' gate findings.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
       "title": "Merge the newest title-prompt branch, close the other 12",
-      "description": "Unblocks the only prompt work the evidence names. All 13 open branches edit the same two prompts for the same ALL-CAPS finding; none can be graded until one lands, and weak_title cannot fall while the ledger keeps re-proposing variants.",
-      "owner_action": "Merge the 2026-11-24 evolve/* branch (the one-line _revise_title edit) and close the remaining 12 open branches as duplicates.",
+      "description": "Unblocks the only prompt work the evidence names. All 13 open branches edit the same two prompt sites for the same ALL-CAPS gate finding; weak_title cannot fall while the ledger keeps proposing variants no one merges.",
+      "owner_action": "Merge the 2026-11-24 evolve/* branch (the one-line _revise_title edit) and close the remaining 12 as duplicates.",
       "secret_needed": null,
       "how_to": [
         "Step 1: Open the 13 evolve/* branches dated 2026-11-10 through 2026-11-24.",
-        "Step 2: Pick the newest (2026-11-24); diff bot/earning/articles.py against main and confirm it only tightens the title-rewrite instruction without touching any gate.",
+        "Step 2: Pick the newest (2026-11-24); diff bot/earning/articles.py against main and confirm it only sharpens the title instruction without touching any gate.",
         "Step 3: Merge it, close the other 12 as duplicates, and grade on the next 14-day weak_title count instead of generating a 14th variant."
       ],
       "discovered_at": "2026-11-24T15:57:40.329155+00:00"
+    },
+    {
+      "title": "Add the wallet address to the dev.to profile bio",
+      "description": "Carries the ask on every profile visit permanently \u2014 the one deferred channel needing no account, processor or policy change.",
+      "owner_action": "Edit the Bio field once at dev.to/settings to include the TRC-20 address from payout_public.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Open dev.to/settings and locate the Bio field.",
+        "Step 2: Paste the published address [redacted] with a one-line note.",
+        "Step 3: Save; every future profile visitor now sees the receive path with no further work."
+      ],
+      "discovered_at": "2026-11-24T17:57:50.242156+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 26,
+  "last_cycle_seconds": 22,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2815,7 +2824,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-24T16:57:24.418559+00:00",
+    "checked_at": "2026-11-24T17:57:29.378161+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3581,7 +3590,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-24T16:57:49.502209+00:00",
+    "last_run": "2026-11-24T17:57:50.425272+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3591,30 +3600,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-24T16:57:49.628201+00:00",
+    "last_run": "2026-11-24T17:57:50.538033+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4931682,
-        "at": "2026-11-24T05:53:34.276592+00:00",
-        "ok": true
-      },
-      {
-        "id": 4430049,
-        "at": "2026-11-24T06:55:41.756124+00:00",
-        "ok": true
-      },
-      {
-        "id": 5050733,
-        "at": "2026-11-24T06:55:41.756124+00:00",
-        "ok": true
-      },
-      {
-        "id": 5060054,
-        "at": "2026-11-24T06:55:41.756124+00:00",
-        "ok": true
-      },
       {
         "id": 4748037,
         "at": "2026-11-24T06:55:41.756124+00:00",
@@ -3821,11 +3810,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-24T16:57:49.628201+00:00",
-        "ok": true
-      },
-      {
         "id": 4908316,
         "at": "2026-11-24T16:57:49.628201+00:00",
         "ok": true
@@ -3844,6 +3828,31 @@
         "id": 4765372,
         "at": "2026-11-24T16:57:49.628201+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-24T17:57:50.538033+00:00",
+        "ok": true
+      },
+      {
+        "id": 4421693,
+        "at": "2026-11-24T17:57:50.538033+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-11-24T17:57:50.538033+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-24T17:57:50.538033+00:00",
+        "ok": true
+      },
+      {
+        "id": 4740283,
+        "at": "2026-11-24T17:57:50.538033+00:00",
+        "ok": true
       }
     ],
     "published_total": 58,
@@ -3851,7 +3860,7 @@
     "unverified": 8,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.1
+    "oldest_check_age_hours": 11.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

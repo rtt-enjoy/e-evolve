@@ -511,6 +511,9 @@ def _revise_title(llm: Any, data: dict, problems: list[str]) -> Optional[str]:
 		f"{cfg['title_min_chars']}-{cfg['title_max_chars']} characters, concrete, names a real "
 		"technology or failure, no clickbait words, no exclamation marks, no "
 		"ALL-CAPS, no colon-subtitle padding.\n\n"
+		"Before answering, scan your title word by word: if any word is written "
+		"in all capitals and is not a standard acronym (JSON, API, HTTP, SQL), "
+		"rewrite that word in Title Case -- 'Your', never 'YOUR'.\n\n"
 		'Respond with ONLY this JSON: {"title": "..."}'
 	)
 	try:

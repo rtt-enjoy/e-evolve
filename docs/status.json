@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-24T00:48:48.210811+00:00",
-  "total_runs": 2763,
+  "last_run": "2026-11-24T00:53:08.119572+00:00",
+  "total_runs": 2764,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,65 +33,52 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed this cycle: the PROMPT FOCUS (weak_title, 2 drafts lost in 14 days, both 'title has ALL-CAPS word') has twelve open, unmerged review branches already covering every distinct fix angle \u2014 draft TITLE rule sharpening, _revise_title inline rule summaries, acronym examples, and a deterministic un-shout rescue \u2014 so a thirteenth edit to the same two prompt sites would duplicate an open branch and risk a merge conflict; meanwhile the real dominant loss (llm_error=20 of 28 prompt-fixable-window rejects in the last 14 days, 79 lifetime) is explicitly engine-side per the ledger, not fixable by a prompt edit.",
+    "summary": "No change proposed: the prompt-focus defect (weak_title, 2 drafts lost in 14 days, both 'title has ALL-CAPS word') has already had twelve near-identical prompt-edit proposals parked on open review branches that were never merged; a thirteenth variant of the same edit is the known failure mode of this engine, and the draft loss is small enough that repeating it costs more than it can save.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Diagnose the GLM post-role failures \u2014 3x every title-gate loss combined",
-        "description": "llm_error=20 plus empty_draft=8 in the last 14 days loses ~28 posts and tip asks per fortnight versus weak_title's 2; each is one article that never reaches the live receive path",
-        "owner_action": "Open the latest failed cycle's Actions log and read the exception behind the 'LLM call failed' reject on the post role; confirm whether the Atria fallback fires on mid-call failures for the post role, and raise its max_tokens/timeout if it is truncation",
+        "title": "Two-minute dev.to profile-bio edit: put the receive address where every profile visitor sees it",
+        "description": "The doctrine's channel table names this the one cheap owner-action exception: one manual edit carries the tip ask on every profile visit permanently, extending the live receive path to readers who arrive via the profile rather than a post footer. Needs no account, no processor, no policy change.",
+        "owner_action": "At dev.to/settings, add one line to the Bio field: the TRC-20 USDT address [redacted] with a short 'if a post saved you time, a tip keeps them coming' note.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: In the most recent Actions run containing '[articles] rejected (llm_error)', read the traceback above that line.",
-          "Step 2: If the 6000-token post call truncates or times out, raise the post role's limits; if it is provider instability, verify bot/llm.py's fallback to Atria-Dawn triggers on request failures, not only on initial connect."
+          "Step 1: Open https://dev.to/settings, edit the Bio field, paste the address and one-line ask.",
+          "Step 2: Save; the address is then visible on the profile page with no further bot or owner work."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompt losing the most drafts, one step per cycle; doctrine Principle 5 (reach into a live receive path)",
+    "direction": "Checklist step 4 / PROMPT FOCUS (weak_title), evaluated and honestly declined; doctrine Principle 6 \u2014 boundaries are constraints to design within",
     "evidence": [
-      "article_rejects.counts total = 119, of which llm_error = 79 (66%) \u2014 engine-side, named in the ledger as 'not fixable by a prompt edit'",
-      "weak_title last-14-days = 2, gate findings 'title has ALL-CAPS word' x2",
-      "PRIOR PROPOSALS: 12 open branches, all targeting bot/earning/articles.py _revise_title() or the _SYSTEM TITLE rule for exactly this ALL-CAPS failure",
-      "reach is otherwise healthy: article_daily published=1 (2026-11-24), payout.live=true, receipt_check.known_without_footer=0"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "PROMPT FOCUS: weak_title lost 2 draft(s); gate findings 'title has ALL-CAPS word' x2",
+      "PRIOR PROPOSALS: 12 distinct open branches since 2026-11-10 all edit the same two prompts (_SYSTEM TITLE rule / _revise_title) for this same finding, none merged",
+      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=20, empty_draft=8 \u2014 an order of magnitude larger than weak_title's 2"
     ],
-    "money_path": "none this cycle \u2014 reach-only work was the intent, but every candidate edit duplicates an open branch, so no diff is proposed",
-    "verify": "No change to verify. If the owner merges one of the twelve open title-prompt branches, the confirmable signal is article_rejects.counts.weak_title staying at 0 for new drafts in the window and 'title has ALL-CAPS word' disappearing from article_rejects.recent details.",
+    "money_path": "none (maintenance): no change this cycle; the reach work continues unchanged through the existing publish path",
+    "verify": "No change to verify. If the owner merges one of the twelve open title-prompt branches, the check is article_rejects.counts.weak_title and the 14-day weak_title window falling to 0 over the next fortnight; 'title has ALL-CAPS word' findings in article_rejects.recent should stop appearing.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Diagnose the GLM post-role failures \u2014 3x every title-gate loss combined",
-      "description": "llm_error=20 plus empty_draft=8 in the last 14 days loses ~28 posts and tip asks per fortnight versus weak_title's 2; each is one article that never reaches the live receive path",
-      "owner_action": "Open the latest failed cycle's Actions log and read the exception behind the 'LLM call failed' reject on the post role; confirm whether the Atria fallback fires on mid-call failures for the post role, and raise its max_tokens/timeout if it is truncation",
+      "title": "Two-minute dev.to profile-bio edit: put the receive address where every profile visitor sees it",
+      "description": "The doctrine's channel table names this the one cheap owner-action exception: one manual edit carries the tip ask on every profile visit permanently, extending the live receive path to readers who arrive via the profile rather than a post footer. Needs no account, no processor, no policy change.",
+      "owner_action": "At dev.to/settings, add one line to the Bio field: the TRC-20 USDT address [redacted] with a short 'if a post saved you time, a tip keeps them coming' note.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: In the most recent Actions run containing '[articles] rejected (llm_error)', read the traceback above that line.",
-        "Step 2: If the 6000-token post call truncates or times out, raise the post role's limits; if it is provider instability, verify bot/llm.py's fallback to Atria-Dawn triggers on request failures, not only on initial connect."
+        "Step 1: Open https://dev.to/settings, edit the Bio field, paste the address and one-line ask.",
+        "Step 2: Save; the address is then visible on the profile page with no further bot or owner work."
       ],
-      "discovered_at": "2026-11-24T00:49:15.921586+00:00"
+      "discovered_at": "2026-11-24T00:53:39.778397+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 38,
+  "last_cycle_seconds": 32,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2817,7 +2804,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-24T00:48:48.522152+00:00",
+    "checked_at": "2026-11-24T00:53:08.591672+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3583,7 +3570,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-24T00:49:25.595867+00:00",
+    "last_run": "2026-11-24T00:53:39.962312+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3593,30 +3580,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-24T00:49:25.785316+00:00",
+    "last_run": "2026-11-24T00:53:40.078683+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4641536,
-        "at": "2026-11-23T12:48:47.976149+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-11-23T13:51:12.458208+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-23T13:51:12.458208+00:00",
-        "ok": true
-      },
-      {
-        "id": 4959304,
-        "at": "2026-11-23T13:51:12.458208+00:00",
-        "ok": true
-      },
       {
         "id": 4965279,
         "at": "2026-11-23T13:51:12.458208+00:00",
@@ -3823,11 +3790,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-24T00:49:25.785316+00:00",
-        "ok": true
-      },
-      {
         "id": 4503417,
         "at": "2026-11-24T00:49:25.785316+00:00",
         "ok": true
@@ -3846,6 +3808,31 @@
         "id": 4568987,
         "at": "2026-11-24T00:49:25.785316+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-24T00:53:40.078683+00:00",
+        "ok": true
+      },
+      {
+        "id": 5068353,
+        "at": "2026-11-24T00:53:40.078683+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-24T00:53:40.078683+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780783,
+        "at": "2026-11-24T00:53:40.078683+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-11-24T00:53:40.078683+00:00",
+        "ok": true
       }
     ],
     "published_total": 58,
@@ -3853,7 +3840,7 @@
     "unverified": 8,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 12.0
+    "oldest_check_age_hours": 11.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

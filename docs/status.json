@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-24T00:53:08.119572+00:00",
-  "total_runs": 2764,
+  "last_run": "2026-11-24T01:53:11.917511+00:00",
+  "total_runs": 2765,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,29 +33,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus defect (weak_title, 2 drafts lost in 14 days, both 'title has ALL-CAPS word') has already had twelve near-identical prompt-edit proposals parked on open review branches that were never merged; a thirteenth variant of the same edit is the known failure mode of this engine, and the draft loss is small enough that repeating it costs more than it can save.",
+    "summary": "No change this cycle: the only prompt losing drafts (weak_title, 2 in 14 days) is already the subject of 12 open, unmerged review branches covering every angle of the same ALL-CAPS fix, and the dominant loss (llm_error=79, 20 in 14 days) is engine-side, not prompt-fixable \u2014 a 13th variant of the same edit adds nothing a reviewer can distinguish from the ones already parked.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Two-minute dev.to profile-bio edit: put the receive address where every profile visitor sees it",
-        "description": "The doctrine's channel table names this the one cheap owner-action exception: one manual edit carries the tip ask on every profile visit permanently, extending the live receive path to readers who arrive via the profile rather than a post footer. Needs no account, no processor, no policy change.",
-        "owner_action": "At dev.to/settings, add one line to the Bio field: the TRC-20 USDT address [redacted] with a short 'if a post saved you time, a tip keeps them coming' note.",
+        "title": "Merge one of the twelve open weak_title prompt branches instead of letting them queue",
+        "description": "Twelve distinct, small edits to the same two prompts (_SYSTEM TITLE rules and _revise_title) are parked unmerged while the gate keeps rejecting the same ALL-CAPS titles. One merge unblocks the funnel; the other eleven then become obsolete rather than competing.",
+        "owner_action": "Review and merge exactly one of the open evolve/* branches touching bot/earning/articles.py, then close the rest as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open https://dev.to/settings, edit the Bio field, paste the address and one-line ask.",
-          "Step 2: Save; the address is then visible on the profile page with no further bot or owner work."
+          "Step 1: Pick the branch whose diff is smallest and names the ALL-CAPS rule explicitly.",
+          "Step 2: Merge it; next cycle's weak_title count in article_rejects (14-day window) is the verdict.",
+          "Step 3: Close the remaining eleven weak_title branches as duplicates."
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS (weak_title), evaluated and honestly declined; doctrine Principle 6 \u2014 boundaries are constraints to design within",
+    "direction": "Checklist step 4 \u2014 upgrade the prompts that write reader-facing output, one step per cycle; Principle 5 (measure the funnel)",
     "evidence": [
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "PROMPT FOCUS: weak_title lost 2 draft(s); gate findings 'title has ALL-CAPS word' x2",
-      "PRIOR PROPOSALS: 12 distinct open branches since 2026-11-10 all edit the same two prompts (_SYSTEM TITLE rule / _revise_title) for this same finding, none merged",
-      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=20, empty_draft=8 \u2014 an order of magnitude larger than weak_title's 2"
+      "article_rejects.counts = {llm_error: 79, empty_draft: 19, weak_title: 16, fabricated: 4, revision_fabricated: 1}",
+      "Drafts lost to a prompt (last 14 days): weak_title = 2, gate findings 'title has ALL-CAPS word' x2",
+      "Drafts lost to the engine (last 14 days): llm_error = 20, empty_draft = 8 \u2014 not addressable by a prompt edit",
+      "PRIOR PROPOSALS: 12 open branches, all targeting bot/earning/articles.py _SYSTEM / _revise_title for this exact weak_title/ALL-CAPS finding",
+      "article_interest.preferred_archetypes = ['problem-workaround'] with n=12 \u2014 already steered via _ARCHETYPE_ANGLES; no thin-row problem (all listed rows n>=2, only engineering-culture at n=2 is below the n=3 floor)"
     ],
-    "money_path": "none (maintenance): no change this cycle; the reach work continues unchanged through the existing publish path",
-    "verify": "No change to verify. If the owner merges one of the twelve open title-prompt branches, the check is article_rejects.counts.weak_title and the 14-day weak_title window falling to 0 over the next fortnight; 'title has ALL-CAPS word' findings in article_rejects.recent should stop appearing.",
+    "money_path": "none this cycle \u2014 declining to add a duplicate proposal; reach work resumes when a branch merges or the reject pattern changes",
+    "verify": "If a weak_title branch merges, article_rejects.counts.weak_title should stop rising and the 14-day window count should fall to 0; until then, no verifiable movement is expected from this cycle",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -66,19 +68,20 @@
   },
   "suggestions": [
     {
-      "title": "Two-minute dev.to profile-bio edit: put the receive address where every profile visitor sees it",
-      "description": "The doctrine's channel table names this the one cheap owner-action exception: one manual edit carries the tip ask on every profile visit permanently, extending the live receive path to readers who arrive via the profile rather than a post footer. Needs no account, no processor, no policy change.",
-      "owner_action": "At dev.to/settings, add one line to the Bio field: the TRC-20 USDT address [redacted] with a short 'if a post saved you time, a tip keeps them coming' note.",
+      "title": "Merge one of the twelve open weak_title prompt branches instead of letting them queue",
+      "description": "Twelve distinct, small edits to the same two prompts (_SYSTEM TITLE rules and _revise_title) are parked unmerged while the gate keeps rejecting the same ALL-CAPS titles. One merge unblocks the funnel; the other eleven then become obsolete rather than competing.",
+      "owner_action": "Review and merge exactly one of the open evolve/* branches touching bot/earning/articles.py, then close the rest as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open https://dev.to/settings, edit the Bio field, paste the address and one-line ask.",
-        "Step 2: Save; the address is then visible on the profile page with no further bot or owner work."
+        "Step 1: Pick the branch whose diff is smallest and names the ALL-CAPS rule explicitly.",
+        "Step 2: Merge it; next cycle's weak_title count in article_rejects (14-day window) is the verdict.",
+        "Step 3: Close the remaining eleven weak_title branches as duplicates."
       ],
-      "discovered_at": "2026-11-24T00:53:39.778397+00:00"
+      "discovered_at": "2026-11-24T01:54:22.626971+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 32,
+  "last_cycle_seconds": 71,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2804,7 +2807,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-24T00:53:08.591672+00:00",
+    "checked_at": "2026-11-24T01:53:12.456202+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3570,7 +3573,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-24T00:53:39.962312+00:00",
+    "last_run": "2026-11-24T01:54:22.900553+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3580,30 +3583,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-24T00:53:40.078683+00:00",
+    "last_run": "2026-11-24T01:54:23.006356+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4965279,
-        "at": "2026-11-23T13:51:12.458208+00:00",
-        "ok": true
-      },
-      {
-        "id": 4727685,
-        "at": "2026-11-23T14:48:47.065841+00:00",
-        "ok": true
-      },
-      {
-        "id": 4985893,
-        "at": "2026-11-23T14:48:47.065841+00:00",
-        "ok": true
-      },
-      {
-        "id": 4671278,
-        "at": "2026-11-23T14:48:47.065841+00:00",
-        "ok": true
-      },
       {
         "id": 4765372,
         "at": "2026-11-23T14:48:47.065841+00:00",
@@ -3810,11 +3793,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-24T00:53:40.078683+00:00",
-        "ok": true
-      },
-      {
         "id": 5068353,
         "at": "2026-11-24T00:53:40.078683+00:00",
         "ok": true
@@ -3833,6 +3811,31 @@
         "id": 4356423,
         "at": "2026-11-24T00:53:40.078683+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-24T01:54:23.006356+00:00",
+        "ok": true
+      },
+      {
+        "id": 4562180,
+        "at": "2026-11-24T01:54:23.006356+00:00",
+        "ok": true
+      },
+      {
+        "id": 4937139,
+        "at": "2026-11-24T01:54:23.006356+00:00",
+        "ok": true
+      },
+      {
+        "id": 4959304,
+        "at": "2026-11-24T01:54:23.006356+00:00",
+        "ok": true
+      },
+      {
+        "id": 4641536,
+        "at": "2026-11-24T01:54:23.006356+00:00",
+        "ok": true
       }
     ],
     "published_total": 58,
@@ -3840,7 +3843,7 @@
     "unverified": 8,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.0
+    "oldest_check_age_hours": 11.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3860,7 +3863,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 1
+      "glm": 2
     },
     "fallback": {
       "provider": "atria",

@@ -3936,3 +3936,7 @@ Autonomous earnings generated every hourly cycle.
 
 - [ok] **ctf-bounty** action recorded
 - [ok] **research-feed** action recorded
+
+### 2026-11-24 21:14 UTC
+
+- [ok] **dev.to**: [Your LLM Agent Has a Loyalty Problem You Can't Patch](https://dev.to/robust_true_try/your-llm-agent-has-a-loyalty-problem-you-cant-patch-p9g) (est. $0.00)

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-24T19:57:41.575164+00:00",
-  "total_runs": 2784,
+  "last_run": "2026-11-24T20:57:32.434438+00:00",
+  "total_runs": 2785,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,69 +33,55 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No new change clears the bar: the weak_title defect (2 drafts in 14 days, gate finding 'title has ALL-CAPS word' x2) is already targeted by twelve open, unmerged review branches on the same two prompts \u2014 articles.py _SYSTEM's TITLE rule and _revise_title(). Adding a thirteenth near-identical edit to the same lines would deepen the exact bottleneck the evidence names, and the 2026-11-15 deterministic un-shout rescue (a prior proposal) already exists on a branch and does not depend on model behaviour. Merging any one of the twelve is strictly better than another proposal; the receive path is verified (payout.live=true, known_without_footer=0), and the remaining reject volume (llm_error=79) is engine-side, not fixable by a prompt edit.",
+    "summary": "No change this cycle: the measured defect (weak_title, ALL-CAPS x2) has twelve open unmerged proposals against it \u2014 every honest fix is already parked on a review branch, and a thirteenth variant of the same prompt edit would be the repeated dead end the rules forbid.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the twelve open title-prompt branches; prefer the deterministic rescue",
-        "description": "Unblocks the weak_title=2 defect without another prompt rewrite. The stack itself is now the bottleneck: each cycle adds a branch instead of shipping the fix, and prompt rewordings have not stopped the ALL-CAPS rejects while a deterministic fix exists that does not depend on model behaviour.",
-        "owner_action": "Review and merge (or close) the twelve open evolve/* branches touching the title prompts in bot/earning/articles.py, preferring the 2026-11-15 deterministic un-shout rescue.",
+        "title": "Merge one title branch, close the other eleven",
+        "description": "Unblocks the weak_title=2 defect. Twelve parallel prompt-edit branches have not stopped the ALL-CAPS rejects; the stack itself is now the bottleneck, and the 2026-11-15 deterministic un-shout rescue fixes the defect in code so it does not depend on model behaviour at all.",
+        "owner_action": "Review the twelve open evolve/* branches touching the title prompts in bot/earning/articles.py and merge the 2026-11-15 deterministic rescue, closing the eleven prompt-rewording branches as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the twelve open branches touching bot/earning/articles.py.",
-          "Step 2: Pick the 2026-11-15 deterministic rescue proposal \u2014 it fixes the ALL-CAPS rejects in code, not by re-instructing the model.",
-          "Step 3: Merge it, close the other eleven as superseded, and check weak_title in the article_rejects 14-day window next cycle."
+          "Step 1: Open the branches touching bot/earning/articles.py (2026-11-11 through 2026-11-24).",
+          "Step 2: Review the 2026-11-15 deterministic un-shout rescue \u2014 it fixes the ALL-CAPS rejects in code rather than re-instructing the model, which twelve prompt edits have failed to do.",
+          "Step 3: Merge it, close the rest, and next cycle read article_rejects counts.weak_title over the 14-day window; expect 0."
         ]
       }
     ],
-    "direction": "Checklist step 4 / Principle 5 step 2 \u2014 upgrade the prompts that write what readers see, one step per cycle; blocked here by a review queue, not by a missing idea",
+    "direction": "Checklist step 4 \u2014 reach via better titles; PROMPT FOCUS weak_title, gate findings 'title has ALL-CAPS word' x2",
     "evidence": [
-      "article_rejects.counts: weak_title=16 lifetime, 2 in the last 14 days",
-      "Gate findings behind PROMPT FOCUS: 'title has ALL-CAPS word' x2",
-      "PRIOR PROPOSALS: 12 distinct open branches already edit the title prompts of bot/earning/articles.py",
-      "suggestions already names the merge-or-close of those branches as the one owner action",
-      "receipt_check.known_without_footer = 0, payout.live = true \u2014 receive path verified, so this is purely reach",
-      "article_daily.published = 1 \u2014 publishing continues; the title fix ships via an existing branch"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "Drafts lost to a prompt (last 14 days): weak_title=2",
+      "Gate findings behind it: 'title has ALL-CAPS word' x2",
+      "PRIOR PROPOSALS: 12 distinct open branches, all touching bot/earning/articles.py title prompts, none merged (2026-11-11 through 2026-11-24)",
+      "status.suggestions[0] = 'Merge one of the twelve open title-prompt branches; prefer the deterministic rescue'"
     ],
-    "money_path": "reach-only \u2014 a title that earns a click is one more reader arriving at a post that already carries a verified footer",
-    "verify": "After the owner merges one branch (prefer the 2026-11-15 deterministic rescue) and closes the rest as superseded, weak_title in the article_rejects 14-day window should fall to 0 next cycle; the gate finding 'title has ALL-CAPS word' should stop appearing in article_rejects.recent details.",
+    "money_path": "reach-only \u2014 a rescued title is one more post and one more tip ask that ships; no code in the receive path is touched",
+    "verify": "No change to verify. After the owner merges (or closes) the open branches, the count that should fall next cycle is weak_title in article_rejects over the 14-day window; it should go to 0, and article_daily.published should stay at 1 on days a draft would previously have been discarded",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one of the twelve open title-prompt branches; prefer the deterministic rescue",
-      "description": "Unblocks the weak_title=2 defect without another prompt rewrite. The stack itself is now the bottleneck: each cycle adds a branch instead of shipping the fix, and prompt rewordings have not stopped the ALL-CAPS rejects while a deterministic fix exists that does not depend on model behaviour.",
-      "owner_action": "Review and merge (or close) the twelve open evolve/* branches touching the title prompts in bot/earning/articles.py, preferring the 2026-11-15 deterministic un-shout rescue.",
+      "title": "Merge one title branch, close the other eleven",
+      "description": "Unblocks the weak_title=2 defect. Twelve parallel prompt-edit branches have not stopped the ALL-CAPS rejects; the stack itself is now the bottleneck, and the 2026-11-15 deterministic un-shout rescue fixes the defect in code so it does not depend on model behaviour at all.",
+      "owner_action": "Review the twelve open evolve/* branches touching the title prompts in bot/earning/articles.py and merge the 2026-11-15 deterministic rescue, closing the eleven prompt-rewording branches as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the twelve open branches touching bot/earning/articles.py.",
-        "Step 2: Pick the 2026-11-15 deterministic rescue proposal \u2014 it fixes the ALL-CAPS rejects in code, not by re-instructing the model.",
-        "Step 3: Merge it, close the other eleven as superseded, and check weak_title in the article_rejects 14-day window next cycle."
+        "Step 1: Open the branches touching bot/earning/articles.py (2026-11-11 through 2026-11-24).",
+        "Step 2: Review the 2026-11-15 deterministic un-shout rescue \u2014 it fixes the ALL-CAPS rejects in code rather than re-instructing the model, which twelve prompt edits have failed to do.",
+        "Step 3: Merge it, close the rest, and next cycle read article_rejects counts.weak_title over the 14-day window; expect 0."
       ],
-      "discovered_at": "2026-11-24T19:58:02.994261+00:00"
+      "discovered_at": "2026-11-24T20:57:55.861129+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 31,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2611,7 +2597,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-24T19:57:41.922832+00:00",
+    "checked_at": "2026-11-24T20:57:32.925198+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3377,7 +3363,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-24T19:58:11.832798+00:00",
+    "last_run": "2026-11-24T20:57:56.127341+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3387,30 +3373,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-24T19:58:12.046640+00:00",
+    "last_run": "2026-11-24T20:57:56.329486+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4925166,
-        "at": "2026-11-24T08:53:55.902026+00:00",
-        "ok": true
-      },
-      {
-        "id": 4391849,
-        "at": "2026-11-24T09:55:55.418606+00:00",
-        "ok": true
-      },
-      {
-        "id": 5027243,
-        "at": "2026-11-24T09:55:55.418606+00:00",
-        "ok": true
-      },
-      {
-        "id": 4859277,
-        "at": "2026-11-24T09:55:55.418606+00:00",
-        "ok": true
-      },
       {
         "id": 4977763,
         "at": "2026-11-24T09:55:55.418606+00:00",
@@ -3617,11 +3583,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-24T19:58:12.046640+00:00",
-        "ok": true
-      },
-      {
         "id": 4853251,
         "at": "2026-11-24T19:58:12.046640+00:00",
         "ok": true
@@ -3640,6 +3601,31 @@
         "id": 4748037,
         "at": "2026-11-24T19:58:12.046640+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-24T20:57:56.329486+00:00",
+        "ok": true
+      },
+      {
+        "id": 5025764,
+        "at": "2026-11-24T20:57:56.329486+00:00",
+        "ok": true
+      },
+      {
+        "id": 4848276,
+        "at": "2026-11-24T20:57:56.329486+00:00",
+        "ok": true
+      },
+      {
+        "id": 4552210,
+        "at": "2026-11-24T20:57:56.329486+00:00",
+        "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-11-24T20:57:56.329486+00:00",
+        "ok": true
       }
     ],
     "published_total": 58,
@@ -3647,7 +3633,7 @@
     "unverified": 8,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.1
+    "oldest_check_age_hours": 11.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

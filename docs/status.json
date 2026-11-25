@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-25T12:14:47.727050+00:00",
-  "total_runs": 2802,
+  "last_run": "2026-11-25T13:14:49.125991+00:00",
+  "total_runs": 2803,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,72 +33,53 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "Align the title-rewrite prompt in _revise_title with what the gate actually accepts: the gate exempts known acronyms from its ALL-CAPS rule, but the rewrite prompt bans ALL-CAPS flatly, so a correct rewrite naming API or JSON can still fail and cost the draft.",
-    "changes_applied": [
-      {
-        "file": "bot/earning/articles.py",
-        "reason": "The rewrite prompt in _revise_title summarises the gate's rules as 'no ALL-CAPS' with no exception, while the gate it feeds (_shouted_words/_KNOWN_ACRONYMS) deliberately allows acronyms and product names like API, JSON and GitHub. The model, told flatly 'no ALL-CAPS', either avoids acronyms and produces a vaguer title, or keeps one and the rewrite is refused \u2014 which is exactly the measured 'title has ALL-CAPS word' x2 failure behind the current weak_title rejects. One clarifying clause names the exemption the gate already implements."
-      }
-    ],
+    "summary": "No change proposed: the prompt focus (weak_title, ALL-CAPS titles) is already covered by 13 open, unmerged proposals on exactly these two prompts \u2014 a 14th edit to _revise_title or the _SYSTEM TITLE rule would repeat them and bury the reviewer further, while the 14-day ledger shows weak_title lost only 2 drafts versus 20 llm_error and 8 empty_draft that no prompt edit can fix.",
+    "changes_applied": [],
     "suggestions": [
       {
-        "title": "Add the wallet address to the dev.to profile bio",
-        "description": "Carries the receive ask on every profile visit permanently, covering readers who arrive at the byline rather than a single post; doctrine already records it as the one cheap owner-action channel.",
-        "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once.",
+        "title": "Merge one of the 13 open title-prompt branches instead of reviewing more",
+        "description": "The weak_title finding is covered 13 times over on open branches; each cycle the reviewer re-reads near-duplicates instead of one merged fix that would stop the 2-drafts-per-fortnight loss and shrink the review queue.",
+        "owner_action": "Review and merge (or close) the 2026-11-15 deterministic un-shout rescue branch \u2014 it fixes the ALL-CAPS defect without an LLM call and makes the other 12 proposals redundant.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: open dev.to/settings, edit the Bio field.",
-          "Step 2: include the address [redacted] (TRC-20) so profile visitors see the ask.",
-          "Step 3: save; no code or secret changes needed."
+          "Step 1: open branch evolve/1.41.x-20261115 (deterministic un-shout rescue) and diff it against current articles.py.",
+          "Step 2: merge it, or close it and the other 12 title branches, so the next evolution cycle has a clean ledger to act on."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompt the PROMPT FOCUS names, one step; reach into the live receive path by publishing more drafts that clear the title gate",
+    "direction": "Checklist step 4 / Principle 5 \u2014 reach into a live receive path via the prompt ledger; but the ledger step is saturated this cycle",
     "evidence": [
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "PROMPT FOCUS: weak_title lost 2 draft(s) in 14 days; gate findings behind it: 'title has ALL-CAPS word' x2",
-      "article_rejects.counts weak_title=16 lifetime, and every lost draft is one post and one tip ask that never ships",
-      "devto gate (_KNOWN_ACRONYMS in articles.py) exempts acronyms; the _revise_title prompt text says only 'no ALL-CAPS' with no exemption, so the rewrite instruction is stricter than the gate it feeds"
+      "article_rejects.counts lifetime: weak_title=16, llm_error=79, empty_draft=19",
+      "Drafts lost to a prompt (last 14 days): weak_title=2",
+      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=20, empty_draft=8",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x2",
+      "PRIOR PROPOSALS: 13 open branches, every one targeting the title prompts (_revise_title / _SYSTEM TITLE rule), including a deterministic un-shout rescue (2026-11-15) and exact-rule namings (2026-11-13/14/15/16/18/23/25)"
     ],
-    "money_path": "Indirect: a draft that clears the weak_title gate publishes with the tip footer attached, so a saved draft is one more ask in front of readers. No change to the receive path itself.",
-    "verify": "article_rejects.counts.weak_title in the next 14-day window should stay at or below its current 2, and the 'title has ALL-CAPS word' gate finding should stop appearing as the reason a rewrite was refused; no test added (bot/tests.py is outside this proposal's budget), so the count is the check.",
+    "money_path": "none this cycle \u2014 weak_title costs 2 drafts in 14 days and every prompt-side fix for it already sits on an unmerged branch; merging one of those is the correct next move, not a competing edit",
+    "verify": "If no change merges, nothing to verify. When one of the 13 open title-prompt branches merges, article_rejects.counts.weak_title should stop growing and the 14-day weak_title count should fall to 0 in the next window.",
     "error": null,
-    "branch": "evolve/1.41.1-20261125-121529",
+    "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 124
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Add the wallet address to the dev.to profile bio",
-      "description": "Carries the receive ask on every profile visit permanently, covering readers who arrive at the byline rather than a single post; doctrine already records it as the one cheap owner-action channel.",
-      "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once.",
+      "title": "Merge one of the 13 open title-prompt branches instead of reviewing more",
+      "description": "The weak_title finding is covered 13 times over on open branches; each cycle the reviewer re-reads near-duplicates instead of one merged fix that would stop the 2-drafts-per-fortnight loss and shrink the review queue.",
+      "owner_action": "Review and merge (or close) the 2026-11-15 deterministic un-shout rescue branch \u2014 it fixes the ALL-CAPS defect without an LLM call and makes the other 12 proposals redundant.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: open dev.to/settings, edit the Bio field.",
-        "Step 2: include the address [redacted] (TRC-20) so profile visitors see the ask.",
-        "Step 3: save; no code or secret changes needed."
+        "Step 1: open branch evolve/1.41.x-20261115 (deterministic un-shout rescue) and diff it against current articles.py.",
+        "Step 2: merge it, or close it and the other 12 title branches, so the next evolution cycle has a clean ledger to act on."
       ],
-      "discovered_at": "2026-11-25T12:15:29.627018+00:00"
+      "discovered_at": "2026-11-25T13:15:15.068135+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 52,
+  "last_cycle_seconds": 27,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2842,7 +2823,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-25T12:14:48.293648+00:00",
+    "checked_at": "2026-11-25T13:14:49.455756+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3240,8 +3221,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": "evolve/1.41.1-20261125-121529",
-  "evolution_pending_review": true,
+  "last_evolution_branch": null,
+  "evolution_pending_review": false,
   "article_stats": {
     "count": 58,
     "total_views": 7296,
@@ -3608,7 +3589,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-25T12:15:38.539664+00:00",
+    "last_run": "2026-11-25T13:15:15.280647+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3618,30 +3599,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-25T12:15:38.780467+00:00",
+    "last_run": "2026-11-25T13:15:15.481250+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4780783,
-        "at": "2026-11-25T01:15:19.528083+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-11-25T02:13:51.861015+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-25T02:13:51.861015+00:00",
-        "ok": true
-      },
-      {
-        "id": 4959304,
-        "at": "2026-11-25T02:13:51.861015+00:00",
-        "ok": true
-      },
       {
         "id": 4568987,
         "at": "2026-11-25T02:13:51.861015+00:00",
@@ -3848,11 +3809,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-25T12:15:38.780467+00:00",
-        "ok": true
-      },
-      {
         "id": 4503417,
         "at": "2026-11-25T12:15:38.780467+00:00",
         "ok": true
@@ -3870,6 +3826,31 @@
       {
         "id": 5012890,
         "at": "2026-11-25T12:15:38.780467+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-25T13:15:15.481250+00:00",
+        "ok": true
+      },
+      {
+        "id": 5068353,
+        "at": "2026-11-25T13:15:15.481250+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-25T13:15:15.481250+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820198,
+        "at": "2026-11-25T13:15:15.481250+00:00",
+        "ok": true
+      },
+      {
+        "id": 5019261,
+        "at": "2026-11-25T13:15:15.481250+00:00",
         "ok": true
       }
     ],

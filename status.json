@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-25T14:14:49.037624+00:00",
-  "total_runs": 2804,
+  "last_run": "2026-11-25T14:30:11.090304+00:00",
+  "total_runs": 2805,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,95 +33,74 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the prompt the PROMPT FOCUS names is already covered by 13 open, unmerged review branches all editing the same _revise_title ALL-CAPS rule, so a 14th near-duplicate would add review load without adding a fix; the bottleneck is now review throughput, not proposal quality.",
+    "summary": "No change this cycle: the prompt focus (weak_title, 2 drafts lost in 14 days from the ALL-CAPS rule) points at a lane with 13 open, unmerged prior proposals targeting the same two prompts, so repeating it would be exactly the failure mode the brief warns about \u2014 and the dominant losses (llm_error=79, empty_draft=19 lifetime; llm_error=20, empty_draft=8 in the 14-day window) are engine-side and explicitly not fixable by a prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one of the 13 open title-prompt branches instead of reviewing more",
-        "description": "The weak_title finding is covered 13 times over on open branches; each cycle the reviewer re-reads near-duplicates instead of one merged fix that would stop the 2-drafts-per-fortnight loss and shrink the review queue.",
-        "owner_action": "Review and merge (or close) the 2026-11-15 deterministic un-shout rescue branch \u2014 it fixes the ALL-CAPS defect without an LLM call and makes the other 12 proposals redundant.",
+        "title": "Merge one of the two 2026-11-25 title-rewrite branches instead of opening a fourteenth",
+        "description": "The ALL-CAPS title finding has 12 open proposals; a single merged small edit beats another identical branch. Once merged, weak_title should fall to 0 in the next 14-day window.",
+        "owner_action": "Review and merge the 2026-11-25 'Align the title-rewrite prompt in _revise_title' branch (or its sibling), and close the remaining duplicate title-prompt branches.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: open branch evolve/1.41.x-20261115 (deterministic un-shout rescue) and diff it against current articles.py.",
-          "Step 2: merge it, or close it and the other 12 title branches, so the next evolution cycle has a clean ledger to act on."
+          "Step 1: Open the two 2026-11-25 evolve/* branches touching bot/earning/articles.py.",
+          "Step 2: Merge the smaller one; reject/close the rest so future cycles stop re-deriving this edit."
         ]
       },
       {
-        "title": "Add the wallet address to the dev.to profile bio",
-        "description": "Carries the ask on every profile visit permanently \u2014 the one deferred channel needing no account, processor or policy change; already researched and recorded in the channel table.",
-        "owner_action": "One manual edit at dev.to/settings: paste the TRC-20 address ([redacted]) into the Bio field.",
+        "title": "Put the receive address in the dev.to profile bio (already researched, two minutes)",
+        "description": "Carries the tip ask on every profile visit permanently \u2014 the one deferred channel row needing no account, processor or policy change; reaches readers who arrive at the byline rather than a post.",
+        "owner_action": "Paste the TRC-20 address ([redacted]) into the Bio field at dev.to/settings once.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: open dev.to/settings while signed in as robust_true_try.",
-          "Step 2: append a one-line ask with the address to the Bio field and save; no API or code change is possible (Forem users endpoint is show-only)."
+          "Step 1: Sign in at dev.to and open dev.to/settings.",
+          "Step 2: Add a one-line ask naming USDT on TRC-20 plus the address, and save. No API or bot change needed."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach into a live receive path), Principle 5 \u2014 but the doctrine's own evidence rule stops a change: the defect already has a proposed fix, it has simply never been merged.",
+    "direction": "Checklist step 4 (reach into a live receive path), via the PROMPT FOCUS discipline \u2014 declined this cycle because the named lane is already occupied by open branches",
     "evidence": [
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "Gate findings behind PROMPT FOCUS: 'title has ALL-CAPS word' x2",
-      "weak_title lost 2 drafts in the last 14 days \u2014 a one-draft-per-week loss",
-      "PRIOR PROPOSALS: 13 distinct open branches, of which 2026-11-15, 11-13, 11-14, 11-15, 11-16, 11-18 (x3), 11-23 (x2), 11-24, 11-25 (x2) all target _revise_title or the draft TITLE rule for this same finding",
-      "status.suggestions[0] itself names branch evolve/1.41.x-20261115 as the deterministic fix that makes the other 12 redundant"
+      "article_rejects.counts: weak_title=16 lifetime but only weak_title=2 in the last 14 days",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x2",
+      "article_rejects.counts: llm_error=79, empty_draft=19 (100 of 119 total rejects are engine-side)",
+      "Drafts lost to the engine last 14 days: llm_error=20, empty_draft=8 \u2014 the ledger itself marks these 'not fixable by a prompt edit'",
+      "PRIOR PROPOSALS: 13 open branches, of which 12 target _SYSTEM TITLE rule or _revise_title for this exact finding, none merged"
     ],
-    "money_path": "none this cycle (reach-only work that did not clear the bar); a merged title fix would restore 1-2 posts per fortnight, each carrying the tip footer on the live receive path",
-    "verify": "After the owner merges the 2026-11-15 deterministic un-shout branch (or one of the equivalent prompt branches), article_rejects.counts.weak_title should stop growing and the 14-day weak_title window in the next evolution brief should read 0; no new branch is created to verify.",
+    "money_path": "none \u2014 no change proposed; the receive path (payout.live=true, backfill remaining=0) is untouched and intact",
+    "verify": "Next cycle: if one of the open title-prompt branches is merged, article_rejects.recent should show no new weak_title entries with 'title has ALL-CAPS word' details over the following 14-day window; otherwise confirm no regression \u2014 weak_title stays \u22642 per 14 days and llm_error/empty_draft continue to dominate, keeping the engine (GLM serving) the owner's real lever.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.1"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 66,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (66 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      },
-      {
-        "platform": "mrr-ideas",
-        "success": true,
-        "idea_count": 2,
-        "refused_count": 18,
-        "llm": true,
-        "estimated_usd": 0.0,
-        "title": "MRR idea triage refreshed (2 viable, 18 refused)",
-        "url": "status.json#mrr_ideas"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one of the 13 open title-prompt branches instead of reviewing more",
-      "description": "The weak_title finding is covered 13 times over on open branches; each cycle the reviewer re-reads near-duplicates instead of one merged fix that would stop the 2-drafts-per-fortnight loss and shrink the review queue.",
-      "owner_action": "Review and merge (or close) the 2026-11-15 deterministic un-shout rescue branch \u2014 it fixes the ALL-CAPS defect without an LLM call and makes the other 12 proposals redundant.",
+      "title": "Merge one of the two 2026-11-25 title-rewrite branches instead of opening a fourteenth",
+      "description": "The ALL-CAPS title finding has 12 open proposals; a single merged small edit beats another identical branch. Once merged, weak_title should fall to 0 in the next 14-day window.",
+      "owner_action": "Review and merge the 2026-11-25 'Align the title-rewrite prompt in _revise_title' branch (or its sibling), and close the remaining duplicate title-prompt branches.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: open branch evolve/1.41.x-20261115 (deterministic un-shout rescue) and diff it against current articles.py.",
-        "Step 2: merge it, or close it and the other 12 title branches, so the next evolution cycle has a clean ledger to act on."
+        "Step 1: Open the two 2026-11-25 evolve/* branches touching bot/earning/articles.py.",
+        "Step 2: Merge the smaller one; reject/close the rest so future cycles stop re-deriving this edit."
       ],
-      "discovered_at": "2026-11-25T13:15:15.068135+00:00"
+      "discovered_at": "2026-11-25T14:30:50.129558+00:00"
     },
     {
-      "title": "Add the wallet address to the dev.to profile bio",
-      "description": "Carries the ask on every profile visit permanently \u2014 the one deferred channel needing no account, processor or policy change; already researched and recorded in the channel table.",
-      "owner_action": "One manual edit at dev.to/settings: paste the TRC-20 address ([redacted]) into the Bio field.",
+      "title": "Put the receive address in the dev.to profile bio (already researched, two minutes)",
+      "description": "Carries the tip ask on every profile visit permanently \u2014 the one deferred channel row needing no account, processor or policy change; reaches readers who arrive at the byline rather than a post.",
+      "owner_action": "Paste the TRC-20 address ([redacted]) into the Bio field at dev.to/settings once.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: open dev.to/settings while signed in as robust_true_try.",
-        "Step 2: append a one-line ask with the address to the Bio field and save; no API or code change is possible (Forem users endpoint is show-only)."
+        "Step 1: Sign in at dev.to and open dev.to/settings.",
+        "Step 2: Add a one-line ask naming USDT on TRC-20 plus the address, and save. No API or bot change needed."
       ],
-      "discovered_at": "2026-11-25T14:15:11.532118+00:00"
+      "discovered_at": "2026-11-25T14:30:50.129558+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 164,
+  "last_cycle_seconds": 40,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2857,7 +2836,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-25T14:14:49.460286+00:00",
+    "checked_at": "2026-11-25T14:30:11.551879+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3623,7 +3602,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-25T14:17:32.242056+00:00",
+    "last_run": "2026-11-25T14:30:50.402150+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3633,30 +3612,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-25T14:17:32.469856+00:00",
+    "last_run": "2026-11-25T14:30:50.624498+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4356423,
-        "at": "2026-11-25T03:13:41.437564+00:00",
-        "ok": true
-      },
-      {
-        "id": 4579420,
-        "at": "2026-11-25T04:15:33.556061+00:00",
-        "ok": true
-      },
-      {
-        "id": 4368781,
-        "at": "2026-11-25T04:15:33.556061+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-11-25T04:15:33.556061+00:00",
-        "ok": true
-      },
       {
         "id": 4641536,
         "at": "2026-11-25T04:15:33.556061+00:00",
@@ -3863,11 +3822,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-25T14:17:32.469856+00:00",
-        "ok": true
-      },
-      {
         "id": 4562180,
         "at": "2026-11-25T14:17:32.469856+00:00",
         "ok": true
@@ -3886,6 +3840,31 @@
         "id": 4780783,
         "at": "2026-11-25T14:17:32.469856+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-25T14:30:50.624498+00:00",
+        "ok": true
+      },
+      {
+        "id": 4727685,
+        "at": "2026-11-25T14:30:50.624498+00:00",
+        "ok": true
+      },
+      {
+        "id": 4985893,
+        "at": "2026-11-25T14:30:50.624498+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-11-25T14:30:50.624498+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-11-25T14:30:50.624498+00:00",
+        "ok": true
       }
     ],
     "published_total": 59,
@@ -3893,7 +3872,7 @@
     "unverified": 9,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.1
+    "oldest_check_age_hours": 10.3
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3913,7 +3892,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 3
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

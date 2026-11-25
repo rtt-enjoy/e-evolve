@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-25T08:14:44.689764+00:00",
-  "total_runs": 2798,
+  "last_run": "2026-11-25T09:14:36.643316+00:00",
+  "total_runs": 2799,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,68 +33,55 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt the PROMPT FOCUS names is already covered by twelve unmerged review branches, and no other evidence this cycle clears the bar.",
+    "summary": "No change proposed: the prompt-focus defect (weak_title, ALL-CAPS x2) already has twelve open unmerged proposals covering every angle of that exact edit, it cost only 2 drafts in 14 days, and the dominant loss (llm_error=79 lifetime, 20 in 14 days) is engine-side and not prompt-fixable; re-deriving a thirteenth title-prompt branch would waste the cycle on an edit the owner has repeatedly declined to merge.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge or close the twelve open title-prompt branches",
-        "description": "Every draft the weak_title gate loses is one post and one tip ask that never ships. The fix is already written twelve times over; each additional hourly cycle re-deriving it is wasted evolution budget.",
-        "owner_action": "Review evolve/1.41.1-20261125-071507 and the eleven earlier evolve/* branches: merge the strongest one (the deterministic ALL-CAPS fix is the most verifiable) and close the rest so future cycles stop targeting the same edit.",
+        "title": "Merge one title-prompt branch and close the other eleven",
+        "description": "Unblocks the only prompt-fixable draft loss (weak_title, 2 drafts/14d, ALL-CAPS) and stops every future hourly cycle from re-deriving the same edit.",
+        "owner_action": "Merge evolve/1.41.1-20261125-071507 or the deterministic ALL-CAPS fix (2026-11-15), then close the remaining eleven evolve/* title branches.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the evolve/* branches listed in PRIOR PROPOSALS.",
-          "Step 2: Merge the one that fixes ALL-CAPS titles deterministically (proposal dated 2026-11-15); close the remaining branches.",
+          "Step 1: Review the twelve evolve/* branches; the deterministic un-shout rescue (2026-11-15) is the most verifiable because it is testable in bot/tests.py without an LLM call.",
+          "Step 2: Merge exactly one; close the rest so the prompt ledger stops pointing at the same edit.",
           "Step 3: Watch article_rejects.counts.weak_title over the next 14 days to confirm it stops growing."
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS (weak_title)",
+    "direction": "Checklist step 4 \u2014 reach via prompt upgrades \u2014 read honestly: the lever is already written twelve times over; the bottleneck is the owner's merge decision, not the instruction text.",
     "evidence": [
-      "article_rejects window (last 14 days): weak_title=2, gate finding 'title has ALL-CAPS word' x2",
-      "PRIOR PROPOSALS: 12 open branches, every one an edit to the article-draft TITLE rule or _revise_title for this exact defect (2026-11-13 through 2026-11-25)",
-      "article_rejects.counts: llm_error=79 of 119 total \u2014 engine failures, explicitly not fixable by a prompt edit",
-      "weak_title lifetime=16 vs llm_error=79: the title gate is not the dominant draft loss",
-      "wallet.received_total_usd = 0.0, receipt_check.covered/published_total = 50/59, coverage_complete = False"
+      "article_rejects.counts = weak_title 16 lifetime, but drafts lost to weak_title last 14 days = 2",
+      "gate findings behind it: 'title has ALL-CAPS word' x2 \u2014 identical to PRIOR PROPOSALS 2026-11-13 through 2026-11-25",
+      "drafts lost to the engine last 14 days: llm_error=20, empty_draft=8 (28 vs 2 prompt-fixable)",
+      "suggestions[0] already names the deterministic ALL-CAPS fix (proposal 2026-11-15) as the one to merge",
+      "PRIOR PROPOSALS lists 12 open evolve/* branches, all bot/earning/articles.py title prompts, none merged"
     ],
-    "money_path": "none \u2014 a weak_title prompt edit would be reach-only, and the exact edit is already sitting on an open review branch awaiting the owner's merge decision",
-    "verify": "Next cycle: if a title branch is merged, article_rejects.counts.weak_title should stop growing and 'title has ALL-CAPS word' should disappear from recent findings in the 14-day window. If none merges, a 13th variant of the same edit adds no information.",
+    "money_path": "reach-only if a proposal merged (each refused draft is one post and one tip ask that never ships); this cycle's output is no change, so none.",
+    "verify": "No new field to move. After the owner merges one title branch and closes the rest, article_rejects.counts.weak_title should stop growing and the 14-day weak_title window should stay at 0; the 'title has ALL-CAPS word' finding should stop appearing in article_rejects.recent.",
     "error": null,
     "branch": null,
-    "proposed_version": "1.41.1"
+    "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge or close the twelve open title-prompt branches",
-      "description": "Every draft the weak_title gate loses is one post and one tip ask that never ships. The fix is already written twelve times over; each additional hourly cycle re-deriving it is wasted evolution budget.",
-      "owner_action": "Review evolve/1.41.1-20261125-071507 and the eleven earlier evolve/* branches: merge the strongest one (the deterministic ALL-CAPS fix is the most verifiable) and close the rest so future cycles stop targeting the same edit.",
+      "title": "Merge one title-prompt branch and close the other eleven",
+      "description": "Unblocks the only prompt-fixable draft loss (weak_title, 2 drafts/14d, ALL-CAPS) and stops every future hourly cycle from re-deriving the same edit.",
+      "owner_action": "Merge evolve/1.41.1-20261125-071507 or the deterministic ALL-CAPS fix (2026-11-15), then close the remaining eleven evolve/* title branches.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the evolve/* branches listed in PRIOR PROPOSALS.",
-        "Step 2: Merge the one that fixes ALL-CAPS titles deterministically (proposal dated 2026-11-15); close the remaining branches.",
+        "Step 1: Review the twelve evolve/* branches; the deterministic un-shout rescue (2026-11-15) is the most verifiable because it is testable in bot/tests.py without an LLM call.",
+        "Step 2: Merge exactly one; close the rest so the prompt ledger stops pointing at the same edit.",
         "Step 3: Watch article_rejects.counts.weak_title over the next 14 days to confirm it stops growing."
       ],
-      "discovered_at": "2026-11-25T08:15:07.755019+00:00"
+      "discovered_at": "2026-11-25T09:15:04.244822+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 32,
+  "last_cycle_seconds": 29,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2832,7 +2819,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-25T08:14:44.990193+00:00",
+    "checked_at": "2026-11-25T09:14:37.071923+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3598,7 +3585,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-25T08:15:15.995437+00:00",
+    "last_run": "2026-11-25T09:15:04.665593+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3608,30 +3595,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-25T08:15:16.394177+00:00",
+    "last_run": "2026-11-25T09:15:04.836418+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4925166,
-        "at": "2026-11-24T21:14:51.517986+00:00",
-        "ok": true
-      },
-      {
-        "id": 4971614,
-        "at": "2026-11-24T22:15:03.452750+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-11-24T22:15:03.452750+00:00",
-        "ok": true
-      },
-      {
-        "id": 5079541,
-        "at": "2026-11-24T22:15:03.452750+00:00",
-        "ok": true
-      },
       {
         "id": 4977763,
         "at": "2026-11-24T22:15:03.452750+00:00",
@@ -3838,11 +3805,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-25T08:15:16.394177+00:00",
-        "ok": true
-      },
-      {
         "id": 5025764,
         "at": "2026-11-25T08:15:16.394177+00:00",
         "ok": true
@@ -3860,6 +3822,31 @@
       {
         "id": 4748037,
         "at": "2026-11-25T08:15:16.394177+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-25T09:15:04.836418+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-25T09:15:04.836418+00:00",
+        "ok": true
+      },
+      {
+        "id": 5027243,
+        "at": "2026-11-25T09:15:04.836418+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-25T09:15:04.836418+00:00",
+        "ok": true
+      },
+      {
+        "id": 4720062,
+        "at": "2026-11-25T09:15:04.836418+00:00",
         "ok": true
       }
     ],

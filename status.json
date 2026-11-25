@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-25T20:30:23.033203+00:00",
-  "total_runs": 2811,
+  "last_run": "2026-11-25T21:30:30.987449+00:00",
+  "total_runs": 2812,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,12 +33,12 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed this cycle: the only prompt losing drafts (weak_title, ALL-CAPS gate findings x2) has had that exact fix proposed thirteen times without a merge, so a fourteenth duplicate fails the dead-end rule; the remaining rejects (llm_error=79, empty_draft=19) are engine failures the prompt ledger says are not fixable by a prompt edit.",
+    "summary": "No change proposed: the only prompt-level defect (weak_title, 2 drafts in 14 days, both from the ALL-CAPS rule) already has thirteen distinct unmerged proposals on review branches touching the exact same prompt lines in bot/earning/articles.py; a fourteenth duplicate would add noise rather than fix anything.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Merge one 2026-11 title-prompt branch; close the other twelve",
-        "description": "The only measured prompt defect has thirteen duplicate unmerged proposals. Reviewing the smallest one unblocks it; a fourteenth from this cycle would add noise.",
+        "description": "The only measured prompt defect has thirteen duplicate unmerged proposals. Reviewing the smallest one unblocks the weak_title fix; proposing a fourteenth from this cycle would add noise, so no change is filed.",
         "owner_action": "Review the evolve/* branches dated 2026-11-13 through 2026-11-25 touching bot/earning/articles.py, merge the smallest one (a few-line edit to _revise_title / the TITLE rule naming the ALL-CAPS gate rule and that acronyms keep their real casing), and close the remaining twelve.",
         "secret_needed": null,
         "how_to": [
@@ -48,16 +48,17 @@
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach into a live receive path), gated by the dead-end list: do not repeat open proposals.",
+    "direction": "Checklist step 4 (reach into a live receive path) via the PROMPT FOCUS discipline: upgrade prompts one step per cycle, but never duplicate what is already pending review.",
     "evidence": [
-      "article_rejects.counts: weak_title=16 lifetime but only 2 in the last 14 days; gate finding 'title has ALL-CAPS word' x2",
-      "PRIOR PROPOSALS: 13 distinct open branches (2026-11-13 through 2026-11-25) all edit bot/earning/articles.py for the ALL-CAPS title rule; none merged",
-      "status.suggestions already carries the owner action listing all thirteen branches and asking the owner to merge one and close twelve",
-      "article_rejects.counts: llm_error=79 and empty_draft=19 \u2014 the PROMPT LEDGER classifies these as 'drafts lost to the engine, not fixable by a prompt edit'",
-      "reach signal is intact: preferred_archetypes = ['problem-workaround'] (n=12, avg 420.1) and _audience_guidance already steers both the angle and the title toward it"
+      "article_rejects.counts.weak_title = 16 lifetime, but drafts lost to weak_title in the last 14 days = 2",
+      "Gate findings behind PROMPT FOCUS: 'title has ALL-CAPS word' x2 (acronym-vs-shouting distinction)",
+      "PRIOR PROPOSALS lists 13 open branches, all editing bot/earning/articles.py title prompts (_revise_title / _SYSTEM TITLE rule), none merged, dating 2026-11-13 to 2026-11-25",
+      "Drafts lost to the engine in the last 14 days: llm_error=20, empty_draft=8 \u2014 an order of magnitude larger than weak_title=2 and not fixable by a prompt edit",
+      "receipt_check.covered/published_total = 50/59, known_without_footer = 0, payout.live = true \u2014 the receive path is verified and covered, so step 1 is clean",
+      "preferred_archetypes() = ['problem-workaround'] (n=12, avg 420.1) with the _ARCHETYPE_ANGLES bonus and _audience_guidance already steering toward it"
     ],
-    "money_path": "none this cycle (maintenance of proposal discipline); the receive path is live (payout.live=true) and receipt_check shows known_without_footer=0, so the binding constraint is the owner's unmerged review queue, not a prompt defect.",
-    "verify": "No diff to verify. After the owner merges one of the thirteen title-prompt branches and closes the rest, the 14-day weak_title count in article_rejects should read 0 across subsequent cycles before any further title-prompt change is proposed.",
+    "money_path": "none (no change this cycle). The receive path is live and verified (payout.live = true, known_without_footer = 0); the marginal reach work is blocked on prompt-branch review, not on new code.",
+    "verify": "After the owner merges the smallest existing title-prompt branch and closes the other twelve: the 14-day weak_title count in status.json should read 0, and llm_error/empty_draft (20 and 8 per 14 days) remain the dominant loss \u2014 neither is addressable by a prompt edit without changing the gate, which is refused.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -65,14 +66,13 @@
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "dev.to",
         "success": true,
-        "opportunity_count": 64,
-        "pursued_count": 0,
+        "title": "A Stolen GitHub Token Reached Production in Minutes",
+        "url": "https://dev.to/robust_true_try/a-stolen-github-token-reached-production-in-minutes-1g1h",
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (64 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "source_url": "https://1password.com/blog/update-on-nov-2026-security-incident",
+        "source_title": "1Password Security Incident"
       }
     ],
     "total_usd": 0.0
@@ -80,7 +80,7 @@
   "suggestions": [
     {
       "title": "Merge one 2026-11 title-prompt branch; close the other twelve",
-      "description": "The only measured prompt defect has thirteen duplicate unmerged proposals. Reviewing the smallest one unblocks it; a fourteenth from this cycle would add noise.",
+      "description": "The only measured prompt defect has thirteen duplicate unmerged proposals. Reviewing the smallest one unblocks the weak_title fix; proposing a fourteenth from this cycle would add noise, so no change is filed.",
       "owner_action": "Review the evolve/* branches dated 2026-11-13 through 2026-11-25 touching bot/earning/articles.py, merge the smallest one (a few-line edit to _revise_title / the TITLE rule naming the ALL-CAPS gate rule and that acronyms keep their real casing), and close the remaining twelve.",
       "secret_needed": null,
       "how_to": [
@@ -92,7 +92,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 139,
+  "last_cycle_seconds": 71,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -182,7 +182,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-11-25",
+    "date": "2026-11-26",
     "published": 1,
     "window": "06:00-12:00 UTC+9"
   },
@@ -2556,7 +2556,8 @@
       "dev.to/robust_true_try/your-per-item-resizeobserver-is-a-layout-feedback-loop-29n1",
       "wiz.io/blog/nginx-http2-rce-vulnerabilities",
       "spelunkr.tv",
-      "michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you"
+      "michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you",
+      "1password.com/blog/update-on-nov-2026-security-incident"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -2658,7 +2659,8 @@
       "per item resizeobserver layout feedback loop",
       "unauthenticated remote code execution nginx",
       "free alternative tv network built internet archive s forgotten video",
-      "llm agent work parent company"
+      "llm agent work parent company",
+      "1password security incident"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -2760,7 +2762,8 @@
       "cached row height lie stale resizeobserver measurement",
       "check nginx http 2 config attacker",
       "most internet archive video break player",
-      "llm agent has loyalty problem t patch"
+      "llm agent has loyalty problem t patch",
+      "stolen github token reached production minut"
     ],
     "followed_up_ids": [
       4489474,
@@ -2768,6 +2771,7 @@
       5050733
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/your-llm-agent-has-a-loyalty-problem-you-cant-patch-p9g",
       "https://dev.to/robust_true_try/why-most-internet-archive-videos-break-in-your-player-3bjp",
       "https://dev.to/robust_true_try/encryption-orders-ai-fixes-and-reproducible-systems-40fm",
       "https://dev.to/robust_true_try/check-your-nginx-http2-config-before-attackers-do-2e5k",
@@ -2836,7 +2840,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-25T20:30:23.497629+00:00",
+    "checked_at": "2026-11-25T21:30:31.346264+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3237,9 +3241,9 @@
   "last_evolution_branch": null,
   "evolution_pending_review": false,
   "article_stats": {
-    "count": 58,
-    "total_views": 7296,
-    "avg_views": 125.8,
+    "count": 59,
+    "total_views": 7336,
+    "avg_views": 124.3,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 3788,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -3257,9 +3261,16 @@
       {
         "archetype": "problem-workaround",
         "count": 12,
-        "avg_engagement": 420.1,
-        "avg_views": 403.4,
+        "avg_engagement": 421.8,
+        "avg_views": 405.1,
         "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024"
+      },
+      {
+        "archetype": "build-tutorial",
+        "count": 3,
+        "avg_engagement": 92.7,
+        "avg_views": 92.7,
+        "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
       },
       {
         "archetype": "security-privacy",
@@ -3267,13 +3278,6 @@
         "avg_engagement": 90.0,
         "avg_views": 90.0,
         "best_title": "Check Your NGINX HTTP/2 Config Before Attackers Do"
-      },
-      {
-        "archetype": "build-tutorial",
-        "count": 3,
-        "avg_engagement": 89.3,
-        "avg_views": 89.3,
-        "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
       },
       {
         "archetype": "myth-correction",
@@ -3284,9 +3288,9 @@
       },
       {
         "archetype": "other",
-        "count": 20,
-        "avg_engagement": 68.1,
-        "avg_views": 39.4,
+        "count": 21,
+        "avg_engagement": 65.3,
+        "avg_views": 38.0,
         "best_title": "Your AI Agent Can't See What It Clicks"
       },
       {
@@ -3306,7 +3310,7 @@
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "surprising-behavior",
-    "sample_size": 58
+    "sample_size": 59
   },
   "article_rejects": {
     "last_reason": "weak_title",
@@ -3602,7 +3606,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-25T20:32:40.801472+00:00",
+    "last_run": "2026-11-25T21:31:41.600036+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3612,30 +3616,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-25T20:32:41.135320+00:00",
+    "last_run": "2026-11-25T21:31:41.792867+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4720062,
-        "at": "2026-11-25T09:15:04.836418+00:00",
-        "ok": true
-      },
-      {
-        "id": 4971614,
-        "at": "2026-11-25T10:15:01.519515+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-11-25T10:15:01.519515+00:00",
-        "ok": true
-      },
-      {
-        "id": 5079541,
-        "at": "2026-11-25T10:15:01.519515+00:00",
-        "ok": true
-      },
       {
         "id": 4925166,
         "at": "2026-11-25T10:15:01.519515+00:00",
@@ -3842,11 +3826,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-25T20:32:41.135320+00:00",
-        "ok": true
-      },
-      {
         "id": 5025764,
         "at": "2026-11-25T20:32:41.135320+00:00",
         "ok": true
@@ -3865,11 +3844,36 @@
         "id": 4931682,
         "at": "2026-11-25T20:32:41.135320+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-25T21:31:41.792867+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-25T21:31:41.792867+00:00",
+        "ok": true
+      },
+      {
+        "id": 5027243,
+        "at": "2026-11-25T21:31:41.792867+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-25T21:31:41.792867+00:00",
+        "ok": true
+      },
+      {
+        "id": 4748037,
+        "at": "2026-11-25T21:31:41.792867+00:00",
+        "ok": true
       }
     ],
-    "published_total": 59,
+    "published_total": 60,
     "covered": 50,
-    "unverified": 9,
+    "unverified": 10,
     "coverage_complete": false,
     "known_without_footer": 0,
     "oldest_check_age_hours": 11.3
@@ -3892,7 +3896,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 4
     },
     "fallback": {
       "provider": "atria",

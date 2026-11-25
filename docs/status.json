@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-25T05:14:37.907914+00:00",
-  "total_runs": 2795,
+  "last_run": "2026-11-25T06:14:25.387341+00:00",
+  "total_runs": 2796,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,68 +33,79 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt the PROMPT FOCUS names (title draft + _revise_title) is already saturated by eleven open unmerged branches plus a proposed deterministic rescue, so a twelfth prompt edit repeats dead work; the remaining reject volume (llm_error=79, empty_draft=19) is engine-side and unreachable by prompt edits or by retry loops, which are a listed dead end.",
+    "summary": "No change proposed: the only prompt-fixable defect named by the focus (ALL-CAPS titles, 2 drafts in 14 days) already has eleven open unmerged branches covering every angle, while the dominant losses (llm_error=20, empty_draft=8) are engine failures no prompt edit can fix, so a twelfth title branch would be duplicate work the owner must first review and merge.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge the deterministic title rescue; close the eleven title-prompt branches",
-        "description": "Ends the only remaining prompt-fixable title defect (ALL-CAPS words) deterministically, independent of model behaviour, and clears the review backlog that keeps re-proposing the same edit.",
-        "owner_action": "Review the 2026-11-15 deterministic un-shout rescue branch for bot/earning/articles.py, merge it, and close the eleven other title-prompt branches dated 2026-11-13 through 2026-11-24 as superseded.",
+        "title": "Merge one title fix, close the other eleven (unchanged, still pending)",
+        "description": "The single bottleneck on this defect is review backlog, not ideas: eleven branches propose overlapping fixes to the same two prompt sites plus one deterministic rescue. Merging any one eliminates the finding; the rest become redundant.",
+        "owner_action": "Review the 2026-11-15 deterministic un-shout rescue branch (it fixes the defect regardless of model output, so it also survives the llm that produced the ALL-CAPS words), merge it, and close the ten other title branches dated 2026-11-13 to 2026-11-24 as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the evolve/* branches touching bot/earning/articles.py title prompts in that date range.",
-          "Step 2: Review the 2026-11-15 rescue \u2014 it normalises ALL-CAPS titles before _title_problems runs, so the gate finding cannot recur regardless of model output.",
-          "Step 3: Merge it, close the rest, and read the weak_title count next cycle; expect 0 over the window."
+          "Step 1: Open the evolve/* branches touching bot/earning/articles.py from 2026-11-13 through 2026-11-24.",
+          "Step 2: Prefer the 2026-11-15 deterministic rescue: it normalises titles before _title_problems runs, so 'title has ALL-CAPS word' cannot recur regardless of prompt wording \u2014 prompt-only variants depend on the model obeying them.",
+          "Step 3: Merge, close the rest, and check weak_title in the 14-day reject window next cycle; expect 0."
+        ]
+      },
+      {
+        "title": "Investigate the engine losses that dominate the reject tally",
+        "description": "llm_error (20 in 14 days) and empty_draft (8) cost far more posts than every gate combined; they are provider failures on the serving glm role that no prompt work touches. A short log of the raw exception texts would say whether these are rate limits, malformed JSON, or truncation at max_tokens.",
+        "owner_action": "Confirm it is acceptable to persist the last llm_error exception text into status.article_rejects.recent detail (it already stores str(exc)[:160] \u2014 verify the field is reaching the snapshot and read it).",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: Read article_rejects.recent entries with code=llm_error in docs/status.json after the next failed cycle.",
+          "Step 2: If the details cluster on one provider error, consider whether the atria fallback for the 'post' role is being attempted at all.",
+          "Step 3: No code change from me this cycle until that evidence exists."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach into a live receive path, via the PROMPT LEDGER's weakest-title prompt; declined because every actionable lever on it is already parked on an open review branch.",
+    "direction": "Checklist step 4 (reach via better prompts) \u2014 answered with an honest no, per the rule that a prompt that has been edited eleven times without merge is not the next lever.",
     "evidence": [
-      "article_rejects.counts: weak_title=16 lifetime but only 2 in the last 14 days",
-      "gate findings behind PROMPT FOCUS: 'title has ALL-CAPS word' x2",
-      "PRIOR PROPOSALS: 11 distinct open branches, all editing bot/earning/articles.py title prompts or the deterministic un-shout rescue (2026-11-15), none merged",
-      "article_rejects.counts: llm_error=79, empty_draft=19 \u2014 flagged as engine losses, not prompt-fixable",
-      "suggestions[0] already names the one code fix: merge the deterministic title rescue and close the eleven superseded branches"
+      "article_rejects.counts (lifetime): llm_error=79, empty_draft=19, weak_title=16 \u2014 weak_title is a distant third among reject causes",
+      "Drafts lost to a prompt (last 14 days): weak_title=2 \u2014 the smallest window count in the focus report",
+      "Drafts lost to the engine (last 14 days): llm_error=20, empty_draft=8 \u2014 28 vs 2, a 14x gap the ledger itself says is 'not fixable by a prompt edit'",
+      "PRIOR PROPOSALS: 11 distinct open branches dated 2026-11-13 through 2026-11-24, all editing the article-draft TITLE rule or _revise_title for this same finding",
+      "status.suggestions already carries a pending owner action: review and merge the 2026-11-15 deterministic un-shout rescue, then close the eleven superseded branches",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x2 \u2014 deterministic, and the 2026-11-15 rescue branch normalises it before _title_problems runs"
     ],
-    "money_path": "none this cycle \u2014 reach work, and the only measured title defect is already covered by open proposals",
-    "verify": "After the owner merges the 2026-11-15 deterministic rescue branch, article_rejects.counts.weak_title should stop rising and the 14-day weak_title window should read 0; nothing to verify for this cycle since no code changed.",
+    "money_path": "none this cycle \u2014 no change ships, so no path is touched; the merged rescue would restore 1-2 posts (and their tip asks) per 14-day window",
+    "verify": "Next cycle: article_rejects window counts \u2014 weak_title should read 0 once the owner merges one of the existing branches; nothing moves without that merge, which is exactly why no new branch is opened.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge the deterministic title rescue; close the eleven title-prompt branches",
-      "description": "Ends the only remaining prompt-fixable title defect (ALL-CAPS words) deterministically, independent of model behaviour, and clears the review backlog that keeps re-proposing the same edit.",
-      "owner_action": "Review the 2026-11-15 deterministic un-shout rescue branch for bot/earning/articles.py, merge it, and close the eleven other title-prompt branches dated 2026-11-13 through 2026-11-24 as superseded.",
+      "title": "Merge one title fix, close the other eleven (unchanged, still pending)",
+      "description": "The single bottleneck on this defect is review backlog, not ideas: eleven branches propose overlapping fixes to the same two prompt sites plus one deterministic rescue. Merging any one eliminates the finding; the rest become redundant.",
+      "owner_action": "Review the 2026-11-15 deterministic un-shout rescue branch (it fixes the defect regardless of model output, so it also survives the llm that produced the ALL-CAPS words), merge it, and close the ten other title branches dated 2026-11-13 to 2026-11-24 as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the evolve/* branches touching bot/earning/articles.py title prompts in that date range.",
-        "Step 2: Review the 2026-11-15 rescue \u2014 it normalises ALL-CAPS titles before _title_problems runs, so the gate finding cannot recur regardless of model output.",
-        "Step 3: Merge it, close the rest, and read the weak_title count next cycle; expect 0 over the window."
+        "Step 1: Open the evolve/* branches touching bot/earning/articles.py from 2026-11-13 through 2026-11-24.",
+        "Step 2: Prefer the 2026-11-15 deterministic rescue: it normalises titles before _title_problems runs, so 'title has ALL-CAPS word' cannot recur regardless of prompt wording \u2014 prompt-only variants depend on the model obeying them.",
+        "Step 3: Merge, close the rest, and check weak_title in the 14-day reject window next cycle; expect 0."
       ],
-      "discovered_at": "2026-11-25T05:15:00.844307+00:00"
+      "discovered_at": "2026-11-25T06:14:56.646710+00:00"
+    },
+    {
+      "title": "Investigate the engine losses that dominate the reject tally",
+      "description": "llm_error (20 in 14 days) and empty_draft (8) cost far more posts than every gate combined; they are provider failures on the serving glm role that no prompt work touches. A short log of the raw exception texts would say whether these are rate limits, malformed JSON, or truncation at max_tokens.",
+      "owner_action": "Confirm it is acceptable to persist the last llm_error exception text into status.article_rejects.recent detail (it already stores str(exc)[:160] \u2014 verify the field is reaching the snapshot and read it).",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: Read article_rejects.recent entries with code=llm_error in docs/status.json after the next failed cycle.",
+        "Step 2: If the details cluster on one provider error, consider whether the atria fallback for the 'post' role is being attempted at all.",
+        "Step 3: No code change from me this cycle until that evidence exists."
+      ],
+      "discovered_at": "2026-11-25T06:14:56.646710+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 33,
+  "last_cycle_seconds": 32,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2824,7 +2835,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-25T05:14:38.273605+00:00",
+    "checked_at": "2026-11-25T06:14:25.784832+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3590,7 +3601,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-25T05:15:10.435855+00:00",
+    "last_run": "2026-11-25T06:14:56.885255+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3600,30 +3611,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-25T05:15:10.643688+00:00",
+    "last_run": "2026-11-25T06:14:57.117294+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4931682,
-        "at": "2026-11-24T18:59:37.831899+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
-        "at": "2026-11-24T19:58:12.046640+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-11-24T19:58:12.046640+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-24T19:58:12.046640+00:00",
-        "ok": true
-      },
       {
         "id": 4748037,
         "at": "2026-11-24T19:58:12.046640+00:00",
@@ -3830,11 +3821,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-25T05:15:10.643688+00:00",
-        "ok": true
-      },
-      {
         "id": 4421693,
         "at": "2026-11-25T05:15:10.643688+00:00",
         "ok": true
@@ -3852,6 +3838,31 @@
       {
         "id": 4765372,
         "at": "2026-11-25T05:15:10.643688+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-25T06:14:57.117294+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-11-25T06:14:57.117294+00:00",
+        "ok": true
+      },
+      {
+        "id": 5050733,
+        "at": "2026-11-25T06:14:57.117294+00:00",
+        "ok": true
+      },
+      {
+        "id": 5060054,
+        "at": "2026-11-25T06:14:57.117294+00:00",
+        "ok": true
+      },
+      {
+        "id": 4740283,
+        "at": "2026-11-25T06:14:57.117294+00:00",
         "ok": true
       }
     ],

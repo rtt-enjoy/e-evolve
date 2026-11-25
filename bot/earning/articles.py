@@ -1039,8 +1039,13 @@ def _title_problems(title: str, cfg: dict | None = None) -> list[str]:
 
 	for pattern, label in _TITLE_BANNED:
 		if pattern == "__SHOUTING__":
-			if _shouted_words(text):
-				problems.append(f"title has {label}")
+			shouted = _shouted_words(text)
+			if shouted:
+				# Name the word, not just the rule. The rewrite prompt in
+				# _revise_title receives this list verbatim; "title has ALL-CAPS
+				# word" gave the model nothing to act on, and the two drafts it
+				# lost in the last 14 days were exactly this finding repeated.
+				problems.append(f"title has {label}(s): {', '.join(shouted)}")
 			continue
 		if re.search(pattern, text, re.IGNORECASE):
 			problems.append(f"title has {label}")

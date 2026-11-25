@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-25T11:14:42.093788+00:00",
-  "total_runs": 2801,
+  "last_run": "2026-11-25T12:14:47.727050+00:00",
+  "total_runs": 2802,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,88 +33,72 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed this cycle: the binding step is reach and the prompt focus is weak_title (2 drafts/14d, ALL-CAPS x2), but all twelve open review branches already target exactly that edit, and the dominant loss (llm_error=20, empty_draft=8 in 14d) is engine-side and explicitly not fixable by a prompt edit.",
-    "changes_applied": [],
+    "summary": "Align the title-rewrite prompt in _revise_title with what the gate actually accepts: the gate exempts known acronyms from its ALL-CAPS rule, but the rewrite prompt bans ALL-CAPS flatly, so a correct rewrite naming API or JSON can still fail and cost the draft.",
+    "changes_applied": [
+      {
+        "file": "bot/earning/articles.py",
+        "reason": "The rewrite prompt in _revise_title summarises the gate's rules as 'no ALL-CAPS' with no exception, while the gate it feeds (_shouted_words/_KNOWN_ACRONYMS) deliberately allows acronyms and product names like API, JSON and GitHub. The model, told flatly 'no ALL-CAPS', either avoids acronyms and produces a vaguer title, or keeps one and the rewrite is refused \u2014 which is exactly the measured 'title has ALL-CAPS word' x2 failure behind the current weak_title rejects. One clarifying clause names the exemption the gate already implements."
+      }
+    ],
     "suggestions": [
       {
-        "title": "Merge one title-prompt branch and close the other eleven",
-        "description": "Unblocks the only prompt-fixable draft loss (weak_title, ALL-CAPS) and stops every future hourly cycle from re-deriving the same edit \u2014 this is the thirteenth cycle the same fix has been proposed.",
-        "owner_action": "Merge exactly one of the twelve evolve/* title branches, preferably the 2026-11-15 deterministic un-shout rescue (testable in bot/tests.py with no LLM call), then close the remaining eleven.",
+        "title": "Add the wallet address to the dev.to profile bio",
+        "description": "Carries the receive ask on every profile visit permanently, covering readers who arrive at the byline rather than a single post; doctrine already records it as the one cheap owner-action channel.",
+        "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Review the twelve evolve/* branches; prefer the 2026-11-15 deterministic rescue since it verifies without an LLM call.",
-          "Step 2: Merge exactly one; close the rest so the prompt ledger stops pointing at the same edit.",
-          "Step 3: Watch article_rejects.counts.weak_title over the next 14 days to confirm it stops growing."
-        ]
-      },
-      {
-        "title": "Investigate the llm_error streak on glm-5.3-flash",
-        "description": "llm_error accounts for 79 lifetime and 20 of the last 14 days' lost drafts \u2014 nearly ten times weak_title. Each one is a post and a tip ask that never shipped, lost before any gate sees it. No prompt edit can recover these.",
-        "owner_action": "Check the GLM/z.ai console for the exact error behind the 20 recent llm_error rejects (rate limit, quota, or model deprecation on glm-5.3-flash) and either raise the quota or confirm the fallback path (atria) is actually engaging.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Read article_rejects.recent in status.json for the llm_error detail strings to see whether failures are 429s, timeouts, or JSON parse failures.",
-          "Step 2: Confirm in the z.ai console that glm-5.3-flash quota matches an hourly schedule's call volume.",
-          "Step 3: If the primary is quota-bound, verify llm_workflows.fallback (atria) takes over rather than the draft being lost."
+          "Step 1: open dev.to/settings, edit the Bio field.",
+          "Step 2: include the address [redacted] (TRC-20) so profile visitors see the ask.",
+          "Step 3: save; no code or secret changes needed."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 improve reach by upgrading the prompt losing the most drafts, one step per cycle",
+    "direction": "Checklist step 4 \u2014 upgrade the prompt the PROMPT FOCUS names, one step; reach into the live receive path by publishing more drafts that clear the title gate",
     "evidence": [
-      "article_rejects.counts = {llm_error: 79, empty_draft: 19, weak_title: 16, fabricated: 4} \u2014 weak_title is the only prompt-fixable gate, and only 2 of its rejects fall in the last 14 days",
-      "Drafts lost to the engine (last 14 days): llm_error=20, empty_draft=8 \u2014 dwarfs weak_title=2 and is not addressable in articles.py prompts",
-      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x2 \u2014 every angle on this (deterministic rescue, rewrite-prompt naming, draft-rule sharpening, acronym examples) already sits on one of twelve unmerged evolve/* branches",
-      "PRIOR PROPOSALS: 12 distinct open branches, 11 of them title-prompt edits to bot/earning/articles.py"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "PROMPT FOCUS: weak_title lost 2 draft(s) in 14 days; gate findings behind it: 'title has ALL-CAPS word' x2",
+      "article_rejects.counts weak_title=16 lifetime, and every lost draft is one post and one tip ask that never ships",
+      "devto gate (_KNOWN_ACRONYMS in articles.py) exempts acronyms; the _revise_title prompt text says only 'no ALL-CAPS' with no exemption, so the rewrite instruction is stricter than the gate it feeds"
     ],
-    "money_path": "none \u2014 reach-only work was indicated, but no unclaimed edit clears the bar this cycle",
-    "verify": "The existing suggestion stands: owner merges exactly one title branch (the 2026-11-15 deterministic rescue is verifiable without an LLM call), closes the rest, then article_rejects.counts.weak_title should stop growing over the next 14 days.",
+    "money_path": "Indirect: a draft that clears the weak_title gate publishes with the tip footer attached, so a saved draft is one more ask in front of readers. No change to the receive path itself.",
+    "verify": "article_rejects.counts.weak_title in the next 14-day window should stay at or below its current 2, and the 'title has ALL-CAPS word' gate finding should stop appearing as the reason a rewrite was refused; no test added (bot/tests.py is outside this proposal's budget), so the count is the check.",
     "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
+    "branch": "evolve/1.41.1-20261125-121529",
+    "proposed_version": "1.41.1"
   },
   "last_earning": {
     "actions": [
       {
-        "platform": "code_techs",
+        "platform": "ctf-bounty",
         "success": true,
-        "opportunity_count": 64,
-        "pursued_count": 0,
         "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (64 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
+        "listed": 17
+      },
+      {
+        "platform": "research-feed",
+        "success": true,
+        "estimated_usd": 0.0,
+        "listed": 124
       }
     ],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one title-prompt branch and close the other eleven",
-      "description": "Unblocks the only prompt-fixable draft loss (weak_title, ALL-CAPS) and stops every future hourly cycle from re-deriving the same edit \u2014 this is the thirteenth cycle the same fix has been proposed.",
-      "owner_action": "Merge exactly one of the twelve evolve/* title branches, preferably the 2026-11-15 deterministic un-shout rescue (testable in bot/tests.py with no LLM call), then close the remaining eleven.",
+      "title": "Add the wallet address to the dev.to profile bio",
+      "description": "Carries the receive ask on every profile visit permanently, covering readers who arrive at the byline rather than a single post; doctrine already records it as the one cheap owner-action channel.",
+      "owner_action": "Paste the TRC-20 address into the Bio field at dev.to/settings once.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Review the twelve evolve/* branches; prefer the 2026-11-15 deterministic rescue since it verifies without an LLM call.",
-        "Step 2: Merge exactly one; close the rest so the prompt ledger stops pointing at the same edit.",
-        "Step 3: Watch article_rejects.counts.weak_title over the next 14 days to confirm it stops growing."
+        "Step 1: open dev.to/settings, edit the Bio field.",
+        "Step 2: include the address [redacted] (TRC-20) so profile visitors see the ask.",
+        "Step 3: save; no code or secret changes needed."
       ],
-      "discovered_at": "2026-11-25T09:15:04.244822+00:00"
-    },
-    {
-      "title": "Investigate the llm_error streak on glm-5.3-flash",
-      "description": "llm_error accounts for 79 lifetime and 20 of the last 14 days' lost drafts \u2014 nearly ten times weak_title. Each one is a post and a tip ask that never shipped, lost before any gate sees it. No prompt edit can recover these.",
-      "owner_action": "Check the GLM/z.ai console for the exact error behind the 20 recent llm_error rejects (rate limit, quota, or model deprecation on glm-5.3-flash) and either raise the quota or confirm the fallback path (atria) is actually engaging.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: Read article_rejects.recent in status.json for the llm_error detail strings to see whether failures are 429s, timeouts, or JSON parse failures.",
-        "Step 2: Confirm in the z.ai console that glm-5.3-flash quota matches an hourly schedule's call volume.",
-        "Step 3: If the primary is quota-bound, verify llm_workflows.fallback (atria) takes over rather than the draft being lost."
-      ],
-      "discovered_at": "2026-11-25T11:15:06.034879+00:00"
+      "discovered_at": "2026-11-25T12:15:29.627018+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 141,
+  "last_cycle_seconds": 52,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2858,7 +2842,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-25T11:14:42.581495+00:00",
+    "checked_at": "2026-11-25T12:14:48.293648+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3256,8 +3240,8 @@
       "Notion / digital template store"
     ]
   },
-  "last_evolution_branch": null,
-  "evolution_pending_review": false,
+  "last_evolution_branch": "evolve/1.41.1-20261125-121529",
+  "evolution_pending_review": true,
   "article_stats": {
     "count": 58,
     "total_views": 7296,
@@ -3624,7 +3608,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-25T11:17:02.524006+00:00",
+    "last_run": "2026-11-25T12:15:38.539664+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3634,30 +3618,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-25T11:17:02.727869+00:00",
+    "last_run": "2026-11-25T12:15:38.780467+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 5019261,
-        "at": "2026-11-25T00:13:46.598281+00:00",
-        "ok": true
-      },
-      {
-        "id": 5068353,
-        "at": "2026-11-25T01:15:19.528083+00:00",
-        "ok": true
-      },
-      {
-        "id": 4545446,
-        "at": "2026-11-25T01:15:19.528083+00:00",
-        "ok": true
-      },
-      {
-        "id": 4820198,
-        "at": "2026-11-25T01:15:19.528083+00:00",
-        "ok": true
-      },
       {
         "id": 4780783,
         "at": "2026-11-25T01:15:19.528083+00:00",
@@ -3864,11 +3828,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-25T11:17:02.727869+00:00",
-        "ok": true
-      },
-      {
         "id": 4840835,
         "at": "2026-11-25T11:17:02.727869+00:00",
         "ok": true
@@ -3887,6 +3846,31 @@
         "id": 4977763,
         "at": "2026-11-25T11:17:02.727869+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-25T12:15:38.780467+00:00",
+        "ok": true
+      },
+      {
+        "id": 4503417,
+        "at": "2026-11-25T12:15:38.780467+00:00",
+        "ok": true
+      },
+      {
+        "id": 4619528,
+        "at": "2026-11-25T12:15:38.780467+00:00",
+        "ok": true
+      },
+      {
+        "id": 4943931,
+        "at": "2026-11-25T12:15:38.780467+00:00",
+        "ok": true
+      },
+      {
+        "id": 5012890,
+        "at": "2026-11-25T12:15:38.780467+00:00",
+        "ok": true
       }
     ],
     "published_total": 59,
@@ -3894,7 +3878,7 @@
     "unverified": 9,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.1
+    "oldest_check_age_hours": 11.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3914,7 +3898,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",
@@ -3926,7 +3910,7 @@
   },
   "ctf_bounty": {
     "source": "ctftime",
-    "last_refresh_at": "2026-11-25T08:15:07.757367+00:00",
+    "last_refresh_at": "2026-11-25T12:15:29.630417+00:00",
     "last_reason": "ok",
     "fetched": 23,
     "enterable": 17,
@@ -3942,10 +3926,10 @@
         "start": "2026-12-19T12:00:00+00:00",
         "finish": "2026-12-20T12:00:00+00:00",
         "live": false,
-        "days_until_start": 24.2,
+        "days_until_start": 24.0,
         "format": "Jeopardy",
         "weight": 77.38,
-        "participants": 48,
+        "participants": 49,
         "prizes": "The prize pool for BackdoorCTF 2026 will be announced soon. Stay tuned for the complete prize details and special awards!",
         "pays": true,
         "crypto": false,
@@ -3962,10 +3946,10 @@
         "start": "2026-11-27T17:00:00+00:00",
         "finish": "2026-11-28T17:00:00+00:00",
         "live": false,
-        "days_until_start": 2.4,
+        "days_until_start": 2.2,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 53,
+        "participants": 54,
         "prizes": "Sponsored by TryHackMe (https://tryhackme.com): - 1st Place: 2x 6-Month TryHackMe Premium Vouchers + Official Winner Certificates - 2nd Place: 2x 3-Month TryHac",
         "pays": false,
         "crypto": false,
@@ -3982,10 +3966,10 @@
         "start": "2026-11-28T04:30:00+00:00",
         "finish": "2026-11-28T16:30:00+00:00",
         "live": false,
-        "days_until_start": 2.8,
+        "days_until_start": 2.7,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 93,
+        "participants": 95,
         "prizes": "No prizes for the Qualifiers round. Top ~75-85 teams will be invited for the on-site finals to be held at Amrita Vishwa Vidyapeetham, Coimbatore campus on Decem",
         "pays": false,
         "crypto": false,
@@ -4002,7 +3986,7 @@
         "start": "2026-11-28T14:00:00+00:00",
         "finish": "2026-11-29T14:00:00+00:00",
         "live": false,
-        "days_until_start": 3.2,
+        "days_until_start": 3.1,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 44,
@@ -4022,10 +4006,10 @@
         "start": "2026-11-27T11:00:00+00:00",
         "finish": "2026-11-27T19:00:00+00:00",
         "live": false,
-        "days_until_start": 2.1,
+        "days_until_start": 1.9,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 78,
+        "participants": 83,
         "prizes": "TBD",
         "pays": false,
         "crypto": false,
@@ -4042,10 +4026,10 @@
         "start": "2026-11-27T18:00:00+00:00",
         "finish": "2026-11-28T18:00:00+00:00",
         "live": false,
-        "days_until_start": 2.4,
+        "days_until_start": 2.2,
         "format": "Jeopardy",
         "weight": 45.76,
-        "participants": 97,
+        "participants": 101,
         "prizes": "Academic bracket Top 10 academic: invited to LakeCTF finals with lodging paid no insomnihack this year :< (they are figuring out their own noAI stuff)",
         "pays": false,
         "crypto": false,
@@ -4062,7 +4046,7 @@
         "start": "2026-12-04T10:00:00+00:00",
         "finish": "2026-12-06T18:00:00+00:00",
         "live": false,
-        "days_until_start": 9.1,
+        "days_until_start": 8.9,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 7,
@@ -4082,10 +4066,10 @@
         "start": "2026-12-04T18:00:00+00:00",
         "finish": "2026-12-06T18:00:00+00:00",
         "live": false,
-        "days_until_start": 9.4,
+        "days_until_start": 9.2,
         "format": "Jeopardy",
         "weight": 0.0,
-        "participants": 29,
+        "participants": 30,
         "prizes": "TBA but they will be cute",
         "pays": false,
         "crypto": false,
@@ -4102,7 +4086,7 @@
         "start": "2026-12-05T05:00:00+00:00",
         "finish": "2026-12-06T17:00:00+00:00",
         "live": false,
-        "days_until_start": 9.9,
+        "days_until_start": 9.7,
         "format": "Jeopardy",
         "weight": 79.51,
         "participants": 56,
@@ -4122,7 +4106,7 @@
         "start": "2026-12-11T12:00:00+00:00",
         "finish": "2026-12-13T12:00:00+00:00",
         "live": false,
-        "days_until_start": 16.2,
+        "days_until_start": 16.0,
         "format": "Jeopardy",
         "weight": 59.0,
         "participants": 91,
@@ -4142,7 +4126,7 @@
         "start": "2026-12-17T19:00:00+00:00",
         "finish": "2026-12-19T07:00:00+00:00",
         "live": false,
-        "days_until_start": 22.4,
+        "days_until_start": 22.3,
         "format": "Jeopardy",
         "weight": 22.9,
         "participants": 19,
@@ -4162,7 +4146,7 @@
         "start": "2026-12-26T01:00:00+00:00",
         "finish": "2026-12-28T04:59:59+00:00",
         "live": false,
-        "days_until_start": 30.7,
+        "days_until_start": 30.5,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 3,
@@ -4182,7 +4166,7 @@
         "start": "2026-12-27T14:00:00+00:00",
         "finish": "2026-12-28T14:00:00+00:00",
         "live": false,
-        "days_until_start": 32.2,
+        "days_until_start": 32.1,
         "format": "Jeopardy",
         "weight": 99.38,
         "participants": 0,
@@ -4202,7 +4186,7 @@
         "start": "2026-12-27T20:00:00+00:00",
         "finish": "2026-12-29T20:00:00+00:00",
         "live": false,
-        "days_until_start": 32.5,
+        "days_until_start": 32.3,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 0,
@@ -4222,7 +4206,7 @@
         "start": "2026-12-29T12:00:00+00:00",
         "finish": "2026-12-31T12:00:00+00:00",
         "live": false,
-        "days_until_start": 34.2,
+        "days_until_start": 34.0,
         "format": "Jeopardy",
         "weight": 0.0,
         "participants": 12,
@@ -4242,7 +4226,7 @@
         "start": "2027-01-02T18:00:00+00:00",
         "finish": "2027-01-03T18:00:00+00:00",
         "live": false,
-        "days_until_start": 38.4,
+        "days_until_start": 38.2,
         "format": "Jeopardy",
         "weight": 25.0,
         "participants": 2,
@@ -4262,7 +4246,7 @@
         "start": "2027-01-09T00:00:00+00:00",
         "finish": "2027-01-11T00:00:00+00:00",
         "live": false,
-        "days_until_start": 44.7,
+        "days_until_start": 44.5,
         "format": "Jeopardy",
         "weight": 50.0,
         "participants": 0,
@@ -4308,12 +4292,12 @@
     }
   },
   "research_feed": {
-    "last_refresh_at": "2026-11-25T08:15:08.123358+00:00",
+    "last_refresh_at": "2026-11-25T12:15:30.154822+00:00",
     "last_reason": "partial",
     "failed_sources": [
       "freellm-dir"
     ],
-    "pool_total": 333,
+    "pool_total": 334,
     "source_stats": [
       {
         "source": "devpost",
@@ -4327,8 +4311,8 @@
       {
         "source": "superteam",
         "label": "Superteam Earn",
-        "fetched": 11,
-        "kept": 11,
+        "fetched": 12,
+        "kept": 12,
         "screened": 0,
         "duplicates": 0,
         "ok": true
@@ -4421,25 +4405,25 @@
       "devpost:32188": "2026-11-20T09:24:03+00:00",
       "devpost:32133": "2026-11-19T09:31:47+00:00",
       "devpost:31886": "2026-11-18T06:23:51+00:00",
-      "devpost:32155": "2026-11-17T10:30:37+00:00",
       "devpost:31571": "2026-11-17T20:27:43+00:00",
+      "devpost:32155": "2026-11-17T10:30:37+00:00",
       "devpost:32141": "2026-11-15T23:50:44+00:00",
       "devpost:31905": "2026-11-15T06:41:56+00:00",
-      "devpost:32026": "2026-11-12T07:01:42+00:00",
-      "devpost:31644": "2026-11-11T18:15:33+00:00",
       "devpost:32024": "2026-11-11T18:15:33+00:00",
+      "devpost:31644": "2026-11-11T18:15:33+00:00",
+      "devpost:32026": "2026-11-12T07:01:42+00:00",
       "devpost:32079": "2026-11-10T18:52:33+00:00",
-      "devpost:31973": "2026-11-10T14:53:33+00:00",
       "devpost:32072": "2026-11-10T10:58:07+00:00",
+      "devpost:31973": "2026-11-10T14:53:33+00:00",
       "devpost:32061": "2026-11-09T02:49:29+00:00",
       "devpost:32060": "2026-11-09T02:49:29+00:00",
       "devpost:32017": "2026-11-05T09:50:29+00:00",
       "devpost:31974": "2026-11-05T03:42:02+00:00",
       "devpost:31993": "2026-11-05T03:42:02+00:00",
-      "devpost:31994": "2026-11-05T03:42:02+00:00",
-      "devpost:31794": "2026-11-05T03:42:02+00:00",
       "devpost:32009": "2026-11-05T03:42:02+00:00",
       "devpost:31972": "2026-11-05T03:42:02+00:00",
+      "devpost:31994": "2026-11-05T03:42:02+00:00",
+      "devpost:31794": "2026-11-05T03:42:02+00:00",
       "devpost:31642": "2026-11-05T03:42:02+00:00",
       "devpost:31083": "2026-11-05T03:42:02+00:00",
       "devpost:31960": "2026-11-05T03:42:02+00:00",
@@ -4451,14 +4435,14 @@
       "devpost:31775": "2026-11-05T03:42:02+00:00",
       "devpost:31826": "2026-11-05T03:42:02+00:00",
       "devpost:31797": "2026-11-05T03:42:02+00:00",
-      "devpost:31798": "2026-11-05T03:42:02+00:00",
       "devpost:31795": "2026-11-05T03:42:02+00:00",
-      "devpost:31789": "2026-11-05T03:42:02+00:00",
+      "devpost:31798": "2026-11-05T03:42:02+00:00",
       "devpost:31796": "2026-11-05T03:42:02+00:00",
+      "devpost:31789": "2026-11-05T03:42:02+00:00",
       "devpost:31773": "2026-11-05T03:42:02+00:00",
       "devpost:31737": "2026-11-05T03:42:02+00:00",
-      "devpost:31682": "2026-11-05T03:42:02+00:00",
       "devpost:31733": "2026-11-05T03:42:02+00:00",
+      "devpost:31682": "2026-11-05T03:42:02+00:00",
       "devpost:31667": "2026-11-05T03:42:02+00:00",
       "devpost:31683": "2026-11-05T03:42:02+00:00",
       "devpost:31504": "2026-11-05T03:42:02+00:00",
@@ -4468,12 +4452,12 @@
       "devpost:30764": "2026-11-05T03:42:02+00:00",
       "devpost:30740": "2026-11-05T03:42:02+00:00",
       "devpost:32236": "2026-11-24T23:13:31+00:00",
-      "devpost:32230": "2026-11-24T10:54:10+00:00",
       "devpost:32231": "2026-11-24T16:57:41+00:00",
+      "devpost:32230": "2026-11-24T10:54:10+00:00",
       "devpost:32031": "2026-11-24T03:54:14+00:00",
       "devpost:32220": "2026-11-23T05:52:07+00:00",
-      "devpost:31134": "2026-11-22T23:51:43+00:00",
       "devpost:32209": "2026-11-22T20:25:04+00:00",
+      "devpost:31134": "2026-11-22T23:51:43+00:00",
       "devpost:32208": "2026-11-21T21:04:00+00:00",
       "devpost:32161": "2026-11-21T05:22:50+00:00",
       "devpost:32062": "2026-11-19T16:12:33+00:00",
@@ -4498,6 +4482,7 @@
       "superteam:create-an-engaging-x-thread-introducing-anna-ai-messenger-1": "2026-11-09T21:31:50+00:00",
       "superteam:ssrfun-beta-launch-challenge": "2026-11-11T07:26:48+00:00",
       "superteam:kriptok-creator-challenge-01": "2026-11-05T03:42:02+00:00",
+      "superteam:create-and-earn-explore-tokenpockets-transfer-features": "2026-11-25T12:15:30+00:00",
       "superteam:publish-capsgame-review-for-solana-audience-video-or-x-thread": "2026-11-23T05:52:07+00:00",
       "superteam:multihopper-build-and-route-challenge-up-to-dollar50000-revenue-share-1": "2026-11-05T03:42:02+00:00",
       "superteam:build-an-autonomous-capital-agent-on-solana-and-compete-for-dollar500-in-rewards": "2026-11-10T21:52:47+00:00",
@@ -5159,7 +5144,7 @@
         "title": "The Raenest Global Bounty - Writing, Video & Animation Bounty",
         "url": "https://superteam.fun/earn/listing/the-raenest-global-bounty-writing-video-and-animation",
         "prize": "13,000 USDC",
-        "detail": "Raenest \u00b7 1349 entries",
+        "detail": "Raenest \u00b7 1361 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5177,7 +5162,7 @@
         "title": "MultiHopper Build & Route Challenge | Up to $50,000 + Revenue Share",
         "url": "https://superteam.fun/earn/listing/multihopper-build-and-route-challenge-up-to-dollar50000-revenue-share-1",
         "prize": "5,000 USDC",
-        "detail": "MultiHopper \u00b7 291 entries",
+        "detail": "MultiHopper \u00b7 307 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5207,6 +5192,24 @@
         "discovered_at": "2026-11-10T21:52:47+00:00"
       },
       {
+        "id": "superteam:create-and-earn-explore-tokenpockets-transfer-features",
+        "category": "crypto-bounty",
+        "source": "superteam",
+        "title": "Create & Earn: Explore TokenPocket\u2019s Transfer Features",
+        "url": "https://superteam.fun/earn/listing/create-and-earn-explore-tokenpockets-transfer-features",
+        "prize": "500 USDC",
+        "detail": "TokenPocket_TP \u00b7 10 entries",
+        "pays": true,
+        "crypto": true,
+        "kyc": "not published",
+        "beginner": false,
+        "deadline": "2026-12-07T02:30+00:00",
+        "starts_at": null,
+        "posted_at": null,
+        "score": 59,
+        "discovered_at": "2026-11-25T12:15:30+00:00"
+      },
+      {
         "id": "superteam:kriptok-creator-challenge-01",
         "category": "crypto-bounty",
         "source": "superteam",
@@ -5231,7 +5234,7 @@
         "title": "Create an Engaging X Thread Introducing Anna AI Messenger",
         "url": "https://superteam.fun/earn/listing/create-an-engaging-x-thread-introducing-anna-ai-messenger-1",
         "prize": "250 USDC",
-        "detail": "Anna \u00b7 600 entries",
+        "detail": "Anna \u00b7 607 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5249,7 +5252,7 @@
         "title": "Publish CapsGame Review for Solana Audience (Video or X Thread)",
         "url": "https://superteam.fun/earn/listing/publish-capsgame-review-for-solana-audience-video-or-x-thread",
         "prize": "500 USDC",
-        "detail": "CapsGame \u00b7 356 entries",
+        "detail": "CapsGame \u00b7 393 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5267,7 +5270,7 @@
         "title": "SSR.FUN Beta Launch Challenge",
         "url": "https://superteam.fun/earn/listing/ssrfun-beta-launch-challenge",
         "prize": "300 USDC",
-        "detail": "Strategic Super Reserve \u00b7 1226 entries",
+        "detail": "Strategic Super Reserve \u00b7 1230 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5285,7 +5288,7 @@
         "title": "Provide Feedback on our new Support Assistant Nosa",
         "url": "https://superteam.fun/earn/listing/provide-feedback-on-our-new-support-assistant-nosa",
         "prize": "300 NOS",
-        "detail": "Nosana_AI \u00b7 251 entries",
+        "detail": "Nosana_AI \u00b7 256 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",
@@ -5339,7 +5342,7 @@
         "title": "Create Nosana content: Explainer Thread/Article or Creative Meme/Video",
         "url": "https://superteam.fun/earn/listing/create-nosana-content-explainer-threadarticle-or-creative-memevideo",
         "prize": "660 NOS",
-        "detail": "Nosana_AI \u00b7 900 entries",
+        "detail": "Nosana_AI \u00b7 903 entries",
         "pays": true,
         "crypto": true,
         "kyc": "not published",

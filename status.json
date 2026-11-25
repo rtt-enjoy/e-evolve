@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-25T09:14:36.643316+00:00",
-  "total_runs": 2799,
+  "last_run": "2026-11-25T10:14:42.241349+00:00",
+  "total_runs": 2800,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,31 +33,31 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the prompt-focus defect (weak_title, ALL-CAPS x2) already has twelve open unmerged proposals covering every angle of that exact edit, it cost only 2 drafts in 14 days, and the dominant loss (llm_error=79 lifetime, 20 in 14 days) is engine-side and not prompt-fixable; re-deriving a thirteenth title-prompt branch would waste the cycle on an edit the owner has repeatedly declined to merge.",
+    "summary": "No change proposed: the weak_title/ALL-CAPS defect named by the PROMPT FOCUS already has twelve open, unmerged review branches proposing exactly this edit (deterministic un-shout rescue 2026-11-15, plus eleven prompt sharpenings of _revise_title and the TITLE rule), so a thirteenth copy of the same diff would add another branch to the pile the owner must already review, and repeating anything in PRIOR PROPOSALS is a listed dead end.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Merge one title-prompt branch and close the other eleven",
         "description": "Unblocks the only prompt-fixable draft loss (weak_title, 2 drafts/14d, ALL-CAPS) and stops every future hourly cycle from re-deriving the same edit.",
-        "owner_action": "Merge evolve/1.41.1-20261125-071507 or the deterministic ALL-CAPS fix (2026-11-15), then close the remaining eleven evolve/* title branches.",
+        "owner_action": "Merge exactly one of the twelve evolve/* title branches \u2014 the deterministic un-shout rescue (2026-11-15) is the most verifiable because it is testable in bot/tests.py without an LLM call \u2014 then close the rest.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Review the twelve evolve/* branches; the deterministic un-shout rescue (2026-11-15) is the most verifiable because it is testable in bot/tests.py without an LLM call.",
-          "Step 2: Merge exactly one; close the rest so the prompt ledger stops pointing at the same edit.",
+          "Step 1: Review the twelve evolve/* branches; prefer the 2026-11-15 deterministic rescue since it needs no LLM to verify.",
+          "Step 2: Merge exactly one and close the remaining eleven so the prompt ledger stops pointing at the same edit.",
           "Step 3: Watch article_rejects.counts.weak_title over the next 14 days to confirm it stops growing."
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach via prompt upgrades \u2014 read honestly: the lever is already written twelve times over; the bottleneck is the owner's merge decision, not the instruction text.",
+    "direction": "Step 4 \u2014 reach into a live receive path, via the PROMPT FOCUS (weak_title, 2 drafts/14d, 'title has ALL-CAPS word' x2)",
     "evidence": [
-      "article_rejects.counts = weak_title 16 lifetime, but drafts lost to weak_title last 14 days = 2",
-      "gate findings behind it: 'title has ALL-CAPS word' x2 \u2014 identical to PRIOR PROPOSALS 2026-11-13 through 2026-11-25",
-      "drafts lost to the engine last 14 days: llm_error=20, empty_draft=8 (28 vs 2 prompt-fixable)",
-      "suggestions[0] already names the deterministic ALL-CAPS fix (proposal 2026-11-15) as the one to merge",
-      "PRIOR PROPOSALS lists 12 open evolve/* branches, all bot/earning/articles.py title prompts, none merged"
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "PROMPT FOCUS: weak_title lost 2 drafts; gate findings: 'title has ALL-CAPS word' x2",
+      "PRIOR PROPOSALS: 12 open branches, all targeting the same edit (bot/earning/articles.py)",
+      "article_rejects.counts: weak_title=16 lifetime vs llm_error=79 (engine-bound, not prompt-fixable)",
+      "money_path unchanged this cycle: wallet.received_total_usd = 0.0, payout.live = true"
     ],
-    "money_path": "reach-only if a proposal merged (each refused draft is one post and one tip ask that never ships); this cycle's output is no change, so none.",
-    "verify": "No new field to move. After the owner merges one title branch and closes the rest, article_rejects.counts.weak_title should stop growing and the 14-day weak_title window should stay at 0; the 'title has ALL-CAPS word' finding should stop appearing in article_rejects.recent.",
+    "money_path": "none this cycle \u2014 the fix is already parked unmerged; merging it is what lets future cycles publish the post and the tip ask the gate currently eats",
+    "verify": "After the owner merges one of the existing branches: article_rejects.counts.weak_title stops growing over the next 14 days, and 'title has ALL-CAPS word' stops appearing in article_rejects.recent details.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -70,18 +70,18 @@
     {
       "title": "Merge one title-prompt branch and close the other eleven",
       "description": "Unblocks the only prompt-fixable draft loss (weak_title, 2 drafts/14d, ALL-CAPS) and stops every future hourly cycle from re-deriving the same edit.",
-      "owner_action": "Merge evolve/1.41.1-20261125-071507 or the deterministic ALL-CAPS fix (2026-11-15), then close the remaining eleven evolve/* title branches.",
+      "owner_action": "Merge exactly one of the twelve evolve/* title branches \u2014 the deterministic un-shout rescue (2026-11-15) is the most verifiable because it is testable in bot/tests.py without an LLM call \u2014 then close the rest.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Review the twelve evolve/* branches; the deterministic un-shout rescue (2026-11-15) is the most verifiable because it is testable in bot/tests.py without an LLM call.",
-        "Step 2: Merge exactly one; close the rest so the prompt ledger stops pointing at the same edit.",
+        "Step 1: Review the twelve evolve/* branches; prefer the 2026-11-15 deterministic rescue since it needs no LLM to verify.",
+        "Step 2: Merge exactly one and close the remaining eleven so the prompt ledger stops pointing at the same edit.",
         "Step 3: Watch article_rejects.counts.weak_title over the next 14 days to confirm it stops growing."
       ],
       "discovered_at": "2026-11-25T09:15:04.244822+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 29,
+  "last_cycle_seconds": 20,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2819,7 +2819,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-25T09:14:37.071923+00:00",
+    "checked_at": "2026-11-25T10:14:42.574193+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3585,7 +3585,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-25T09:15:04.665593+00:00",
+    "last_run": "2026-11-25T10:15:01.289587+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3595,30 +3595,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-25T09:15:04.836418+00:00",
+    "last_run": "2026-11-25T10:15:01.519515+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4977763,
-        "at": "2026-11-24T22:15:03.452750+00:00",
-        "ok": true
-      },
-      {
-        "id": 4840835,
-        "at": "2026-11-24T23:13:42.114664+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-11-24T23:13:42.114664+00:00",
-        "ok": true
-      },
-      {
-        "id": 5043579,
-        "at": "2026-11-24T23:13:42.114664+00:00",
-        "ok": true
-      },
       {
         "id": 5012890,
         "at": "2026-11-24T23:13:42.114664+00:00",
@@ -3825,11 +3805,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-25T09:15:04.836418+00:00",
-        "ok": true
-      },
-      {
         "id": 4391849,
         "at": "2026-11-25T09:15:04.836418+00:00",
         "ok": true
@@ -3847,6 +3822,31 @@
       {
         "id": 4720062,
         "at": "2026-11-25T09:15:04.836418+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-25T10:15:01.519515+00:00",
+        "ok": true
+      },
+      {
+        "id": 4971614,
+        "at": "2026-11-25T10:15:01.519515+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-25T10:15:01.519515+00:00",
+        "ok": true
+      },
+      {
+        "id": 5079541,
+        "at": "2026-11-25T10:15:01.519515+00:00",
+        "ok": true
+      },
+      {
+        "id": 4925166,
+        "at": "2026-11-25T10:15:01.519515+00:00",
         "ok": true
       }
     ],

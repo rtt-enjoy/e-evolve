@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-26T02:38:32.427156+00:00",
-  "total_runs": 2818,
+  "last_run": "2026-11-26T03:38:36.756020+00:00",
+  "total_runs": 2819,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,66 +33,57 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: weak_title lost only 2 drafts in 14 days to the ALL-CAPS rule, and thirteen near-duplicate prompt fixes for exactly this defect already sit unmerged on open review branches \u2014 a fourteenth would repeat a proven dead end while the actual blocker is human review.",
+    "summary": "No change proposed: the only prompt-fixable defect (weak_title, 2 drafts/14 days, both 'title has ALL-CAPS word') already has 13 unmerged review branches covering exactly this edit, so a 14th proposal buries the signal instead of moving it.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one 2026-11 title-prompt branch this week; close the other twelve",
-        "description": "The only measured prompt defect (ALL-CAPS titles, 2 drafts in 14 days) has had thirteen proposed fixes queued since 2026-11-13 and none merged, so every cycle re-observes the same two losses with no way to tell whether the fix works. Merging the smallest correct one and closing the rest unblocks the signal.",
-        "owner_action": "Review the evolve/* branches dated 2026-11-13 through 2026-11-25 touching bot/earning/articles.py, merge the smallest one whose edit matches the gate's real ALL-CAPS semantics (_shouted_words skips _KNOWN_ACRONYMS), and close the remaining twelve.",
+        "title": "Merge one title-prompt branch; close the other twelve (unchanged from yesterday \u2014 still the binding action)",
+        "description": "The only measured prompt defect has had thirteen proposed fixes queued since 2026-11-13 and none merged. Until one is merged, no cycle can tell whether the fix works, and every new proposal on the same defect makes the review queue worse, not better.",
+        "owner_action": "Review the evolve/* branches dated 2026-11-13 through 2026-11-25 touching bot/earning/articles.py; merge the smallest one whose edit matches the gate's real ALL-CAPS semantics (_shouted_words already skips _KNOWN_ACRONYMS, so the prompt must teach the model that only non-acronym ALL-CAPS counts); close the remaining twelve.",
         "secret_needed": null,
         "how_to": [
           "Step 1: List evolve/* branches dated 2026-11-13 to 2026-11-25 modifying bot/earning/articles.py.",
-          "Step 2: Diff each; merge the smallest whose edit targets _revise_title or the TITLE rule in _SYSTEM and matches the gate's actual rule (acronyms like PDF/JSON keep casing; only non-acronym ALL-CAPS counts as shouting).",
-          "Step 3: Close the other twelve branches, then confirm the 14-day weak_title count reads 0 over the next two weekly checks before accepting any further title-prompt change."
+          "Step 2: Diff each; merge the smallest whose edit targets _revise_title or the TITLE rule in _SYSTEM and matches the gate's actual rule (acronyms like PDF/JSON keep casing; only non-acronym ALL-CAPS is shouting).",
+          "Step 3: Close the other twelve branches, then confirm the 14-day weak_title count reads 0 over two weekly checks before accepting any further title-prompt change."
         ]
       }
     ],
-    "direction": "Checklist step 4 (reach into a live receive path) via the PROMPT FOCUS on weak_title; doctrine Principle 3j \u2014 do not act on a thin signal when the fix already exists elsewhere",
+    "direction": "Checklist step 4 / PROMPT FOCUS (weak_title), overridden by evidence on the proposal channel itself",
     "evidence": [
-      "article_rejects.counts: weak_title=16 lifetime but only 2 in the last 14 days, gate finding 'title has ALL-CAPS word' x2",
       "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "suggestions[0] (2026-11-25) already names the owner action: merge the smallest correct title-prompt branch and close the other twelve",
-      "PRIOR PROPOSALS lists 13 distinct open branches all touching the title prompt (2026-11-13 through 2026-11-25)",
-      "Drafts lost to the engine last 14 days dwarf the prompt defect: llm_error=20, empty_draft=8 \u2014 not addressable by any prompt edit"
+      "gate findings behind PROMPT FOCUS: 'title has ALL-CAPS word' x2",
+      "Drafts lost to a prompt (last 14 days): weak_title=2 \u2014 small, but 13 prior proposals target it",
+      "PRIOR PROPOSALS lists 13 open branches, all touching bot/earning/articles.py title prompts (_SYSTEM TITLE rule, _revise_title), dated 2026-11-13 through 2026-11-25",
+      "suggestions[0] = 'Merge one 2026-11 title-prompt branch this week; close the other twelve' \u2014 the owner-side action already queued",
+      "Drafts lost to the engine (not prompt-fixable): llm_error=20, empty_draft=8 last 14 days; lifetime llm_error=79 \u2014 outside what a prompt edit can change",
+      "wallet.received_total_usd = 0.0, payout.live = true, backfill.remaining = 0 \u2014 receive path is fine; the gap is reach, and the reach lever is already instrumented"
     ],
-    "money_path": "reach-only; no change shipped this cycle, so none",
-    "verify": "After the owner merges one title-prompt branch and closes the rest, the 14-day weak_title count in article_rejects.recent should read 0 across the next two weekly checks; until then, no status field should be expected to move",
+    "money_path": "none (maintenance of the proposal process itself \u2014 merging an existing branch is what unblocks the one prompt fix that measurably costs posts)",
+    "verify": "After the owner merges one title-prompt branch and closes the rest, the 14-day weak_title count in article_rejects should read 0 at the next two weekly checks. This cycle adds nothing to verify because it changes no code.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 63,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (63 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Merge one 2026-11 title-prompt branch this week; close the other twelve",
-      "description": "The only measured prompt defect (ALL-CAPS titles, 2 drafts in 14 days) has had thirteen proposed fixes queued since 2026-11-13 and none merged, so every cycle re-observes the same two losses with no way to tell whether the fix works. Merging the smallest correct one and closing the rest unblocks the signal.",
-      "owner_action": "Review the evolve/* branches dated 2026-11-13 through 2026-11-25 touching bot/earning/articles.py, merge the smallest one whose edit matches the gate's real ALL-CAPS semantics (_shouted_words skips _KNOWN_ACRONYMS), and close the remaining twelve.",
+      "title": "Merge one title-prompt branch; close the other twelve (unchanged from yesterday \u2014 still the binding action)",
+      "description": "The only measured prompt defect has had thirteen proposed fixes queued since 2026-11-13 and none merged. Until one is merged, no cycle can tell whether the fix works, and every new proposal on the same defect makes the review queue worse, not better.",
+      "owner_action": "Review the evolve/* branches dated 2026-11-13 through 2026-11-25 touching bot/earning/articles.py; merge the smallest one whose edit matches the gate's real ALL-CAPS semantics (_shouted_words already skips _KNOWN_ACRONYMS, so the prompt must teach the model that only non-acronym ALL-CAPS counts); close the remaining twelve.",
       "secret_needed": null,
       "how_to": [
         "Step 1: List evolve/* branches dated 2026-11-13 to 2026-11-25 modifying bot/earning/articles.py.",
-        "Step 2: Diff each; merge the smallest whose edit targets _revise_title or the TITLE rule in _SYSTEM and matches the gate's actual rule (acronyms like PDF/JSON keep casing; only non-acronym ALL-CAPS counts as shouting).",
-        "Step 3: Close the other twelve branches, then confirm the 14-day weak_title count reads 0 over the next two weekly checks before accepting any further title-prompt change."
+        "Step 2: Diff each; merge the smallest whose edit targets _revise_title or the TITLE rule in _SYSTEM and matches the gate's actual rule (acronyms like PDF/JSON keep casing; only non-acronym ALL-CAPS is shouting).",
+        "Step 3: Close the other twelve branches, then confirm the 14-day weak_title count reads 0 over two weekly checks before accepting any further title-prompt change."
       ],
-      "discovered_at": "2026-11-25T23:38:50.071571+00:00"
+      "discovered_at": "2026-11-26T03:38:58.953721+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 152,
+  "last_cycle_seconds": 23,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2804,7 +2795,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-26T02:38:32.874315+00:00",
+    "checked_at": "2026-11-26T03:38:37.212151+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3570,7 +3561,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-26T02:41:03.894851+00:00",
+    "last_run": "2026-11-26T03:38:59.181504+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3580,30 +3571,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-26T02:41:04.161097+00:00",
+    "last_run": "2026-11-26T03:38:59.362195+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4633220,
-        "at": "2026-11-25T15:30:35.788696+00:00",
-        "ok": true
-      },
-      {
-        "id": 4356423,
-        "at": "2026-11-25T15:30:35.788696+00:00",
-        "ok": true
-      },
-      {
-        "id": 4908316,
-        "at": "2026-11-25T16:30:40.505117+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-11-25T16:30:40.505117+00:00",
-        "ok": true
-      },
       {
         "id": 4996282,
         "at": "2026-11-25T16:30:40.505117+00:00",
@@ -3810,11 +3781,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-26T02:41:04.161097+00:00",
-        "ok": true
-      },
-      {
         "id": 4727685,
         "at": "2026-11-26T02:41:04.161097+00:00",
         "ok": true
@@ -3833,6 +3799,31 @@
         "id": 4780783,
         "at": "2026-11-26T02:41:04.161097+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-26T03:38:59.362195+00:00",
+        "ok": true
+      },
+      {
+        "id": 4579420,
+        "at": "2026-11-26T03:38:59.362195+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-11-26T03:38:59.362195+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-11-26T03:38:59.362195+00:00",
+        "ok": true
+      },
+      {
+        "id": 4568987,
+        "at": "2026-11-26T03:38:59.362195+00:00",
+        "ok": true
       }
     ],
     "published_total": 60,
@@ -3840,7 +3831,7 @@
     "unverified": 10,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.2
+    "oldest_check_age_hours": 11.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3860,7 +3851,7 @@
     "serving": "glm",
     "disabled_reason": null,
     "calls": {
-      "glm": 2
+      "glm": 1
     },
     "fallback": {
       "provider": "atria",

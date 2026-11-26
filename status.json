@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-26T18:22:24.466629+00:00",
-  "total_runs": 2834,
+  "last_run": "2026-11-26T19:01:39.401350+00:00",
+  "total_runs": 2835,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,7 +33,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change this cycle: the PROMPT FOCUS (weak_title, ALL-CAPS x2 in the last 14 days) is exactly what 14 already-open review branches address; a fifteenth proposal against the same lines would duplicate them, and the largest loss driver (llm_error=79 lifetime, 20 in-window) is engine-side, not fixable by a prompt edit.",
+    "summary": "No change proposed: the only prompt the PROMPT FOCUS names (weak_title / ALL-CAPS) already has 14 open unmerged proposals of exactly this edit, and the dominant draft loss (llm_error=79 lifetime, 20 in 14 days; empty_draft=19) is engine-side and not fixable by a prompt edit. A 15th identical branch adds nothing until one merges.",
     "changes_applied": [],
     "suggestions": [
       {
@@ -45,37 +45,35 @@
           "Step 1: Open the evolve/ branches dated 2026-11-13 through 2026-11-26 and pick one weak_title fix; the 2026-11-15 deterministic rescue is the safest since it adds code, not another prompt rule.",
           "Step 2: Merge it, close the remaining 13, and read article_rejects.counts and the 14-day prompt-loss figure two cycles later \u2014 weak_title should read 0."
         ]
+      },
+      {
+        "title": "Give the post LLM role one more reliable provider slot",
+        "description": "llm_error accounts for 79 lifetime and 20 recent lost drafts \u2014 two-thirds of all rejected articles and the largest single reach loss. Each lost draft is a lost post and a lost tip ask. The fallback (atria) already exists but status shows calls={'glm': 1}, so the failure mode worth investigating is in the glm post call itself, not the prompt.",
+        "owner_action": "Pull the workflow logs for cycles that recorded llm_error and confirm whether glm is rate-limiting or erroring on the post role specifically; if so, consider whether atria should serve the post role primary for a week so the two can be compared on drafts lost.",
+        "secret_needed": null,
+        "how_to": [
+          "Step 1: In the Actions logs, search '[articles] rejected (llm_error)' for the last two weeks and note the underlying exception text.",
+          "Step 2: If glm-5.3-flash is returning rate-limit or truncation errors on the 6000-token post calls, flip llm_roles.post to atria in the workflow configuration \u2014 no new secret, atria's key is already set (llm_engine.fallback.key_set=true).",
+          "Step 3: Two cycles later, read article_rejects.counts.llm_error; it should stop growing at ~1-2/week if the provider was the cause."
+        ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 upgrade the prompts that write reach, one step per cycle; the doctrine's own anti-duplication rule (do not repeat PRIOR PROPOSALS) outranks proposing again",
+    "direction": "Checklist step 4 / PROMPT FOCUS (weak_title), applied honestly: upgrading the prompt one step per cycle is right, but that step is the owner's merge, not another branch.",
     "evidence": [
-      "article_rejects.counts: weak_title=16 lifetime, last='weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "PROMPT FOCUS: weak_title lost 2 draft(s) in the last 14 days; gate findings 'title has ALL-CAPS word' x2",
-      "PRIOR PROPOSALS lists 14 distinct open branches, all targeting weak_title in articles.py (_revise_title / _SYSTEM TITLE rule), dated 2026-11-13 to 2026-11-26",
-      "Drafts lost to the engine, not fixable by a prompt edit: llm_error=20, empty_draft=8 in the last 14 days (against 2 prompt-fixable weak_title losses)",
-      "llm_engine.calls: {'glm': 2} with llm_error the dominant reject count \u2014 drafts are dying before a gate ever sees them"
+      "article_rejects.counts: llm_error=79, empty_draft=19, weak_title=16, fabricated=4 (total 119)",
+      "Drafts lost to the engine, last 14 days: llm_error=20, empty_draft=8; weak_title=2",
+      "PRIOR PROPOSALS: 14 distinct weak_title/ALL-CAPS branches, 2026-11-13 to 2026-11-26, none merged",
+      "receipt_check.covered / published_total = 50 / 60, coverage_complete = False (receive path verified; reach is the work)",
+      "preferred_archetypes() = ['problem-workaround'] with n=12 avg=421.8 (healthy control input)"
     ],
-    "money_path": "none this cycle \u2014 refusing a duplicate proposal protects the merge bandwidth that the one weak_title fix needs to actually publish more articles into problem-workaround, the preferred archetype (n=12, avg 421.8)",
-    "verify": "The reviewer merges exactly one of the 14 open weak_title branches (prefer the 2026-11-15 deterministic un-shout rescue, which needs no LLM call) and closes the rest; next cycles should show weak_title at 0 in the 14-day prompt-loss window and no new 'title has ALL-CAPS word' gate findings.",
+    "money_path": "none this cycle \u2014 the change that would move reach (one merged weak_title fix) sits in the owner's review queue, not in code this proposal can add.",
+    "verify": "Owner merges exactly one of the 14 weak_title branches (the 2026-11-15 deterministic un-shout rescue is safest \u2014 it adds code, not another prompt rule), closes the other 13, and reads article_rejects.last='weak_title' occurrences plus the 14-day prompt-loss figure two cycles later: weak_title should read 0.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -89,10 +87,22 @@
         "Step 2: Merge it, close the remaining 13, and read article_rejects.counts and the 14-day prompt-loss figure two cycles later \u2014 weak_title should read 0."
       ],
       "discovered_at": "2026-11-26T18:22:41.950330+00:00"
+    },
+    {
+      "title": "Give the post LLM role one more reliable provider slot",
+      "description": "llm_error accounts for 79 lifetime and 20 recent lost drafts \u2014 two-thirds of all rejected articles and the largest single reach loss. Each lost draft is a lost post and a lost tip ask. The fallback (atria) already exists but status shows calls={'glm': 1}, so the failure mode worth investigating is in the glm post call itself, not the prompt.",
+      "owner_action": "Pull the workflow logs for cycles that recorded llm_error and confirm whether glm is rate-limiting or erroring on the post role specifically; if so, consider whether atria should serve the post role primary for a week so the two can be compared on drafts lost.",
+      "secret_needed": null,
+      "how_to": [
+        "Step 1: In the Actions logs, search '[articles] rejected (llm_error)' for the last two weeks and note the underlying exception text.",
+        "Step 2: If glm-5.3-flash is returning rate-limit or truncation errors on the 6000-token post calls, flip llm_roles.post to atria in the workflow configuration \u2014 no new secret, atria's key is already set (llm_engine.fallback.key_set=true).",
+        "Step 3: Two cycles later, read article_rejects.counts.llm_error; it should stop growing at ~1-2/week if the provider was the cause."
+      ],
+      "discovered_at": "2026-11-26T19:02:02.074161+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 26,
+  "last_cycle_seconds": 24,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2736,7 +2746,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-26T18:22:24.847034+00:00",
+    "checked_at": "2026-11-26T19:01:39.763988+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3502,7 +3512,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-26T18:22:50.166451+00:00",
+    "last_run": "2026-11-26T19:02:02.527294+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3512,30 +3522,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-26T18:22:50.361843+00:00",
+    "last_run": "2026-11-26T19:02:02.685477+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 5050733,
-        "at": "2026-11-26T06:40:55.387465+00:00",
-        "ok": true
-      },
-      {
-        "id": 4636715,
-        "at": "2026-11-26T06:40:55.387465+00:00",
-        "ok": true
-      },
-      {
-        "id": 4965279,
-        "at": "2026-11-26T06:40:55.387465+00:00",
-        "ok": true
-      },
-      {
-        "id": 4853251,
-        "at": "2026-11-26T07:39:10.963177+00:00",
-        "ok": true
-      },
       {
         "id": 4800078,
         "at": "2026-11-26T07:39:10.963177+00:00",
@@ -3742,11 +3732,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-26T18:22:50.361843+00:00",
-        "ok": true
-      },
-      {
         "id": 4421693,
         "at": "2026-11-26T18:22:50.361843+00:00",
         "ok": true
@@ -3765,6 +3750,31 @@
         "id": 4356423,
         "at": "2026-11-26T18:22:50.361843+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-26T19:02:02.685477+00:00",
+        "ok": true
+      },
+      {
+        "id": 4430049,
+        "at": "2026-11-26T19:02:02.685477+00:00",
+        "ok": true
+      },
+      {
+        "id": 4820684,
+        "at": "2026-11-26T19:02:02.685477+00:00",
+        "ok": true
+      },
+      {
+        "id": 4996282,
+        "at": "2026-11-26T19:02:02.685477+00:00",
+        "ok": true
+      },
+      {
+        "id": 4641536,
+        "at": "2026-11-26T19:02:02.685477+00:00",
+        "ok": true
       }
     ],
     "published_total": 60,
@@ -3772,7 +3782,7 @@
     "unverified": 10,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.7
+    "oldest_check_age_hours": 11.4
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

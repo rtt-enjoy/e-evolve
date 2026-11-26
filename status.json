@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-26T22:01:46.784440+00:00",
-  "total_runs": 2838,
+  "last_run": "2026-11-26T23:01:53.001309+00:00",
+  "total_runs": 2839,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,65 +33,56 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the PROMPT FOCUS (weak_title, ALL-CAPS x2 in the last 14 days) has already drawn 14 unmerged proposals touching exactly these prompts, and the reject evidence says the title gate is not the binding loss.",
+    "summary": "No change proposed: the prompt-achievable loss (weak_title, 2 drafts/14d) is already covered by 14 open unmerged branches on exactly this edit, and the dominant losses (llm_error=20, empty_draft=8) are engine-side, not fixable by any prompt edit.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Give the post-role model a stability note, or accept the ALL-CAPS flake rate",
-        "description": "weak_title loses 2 drafts per fortnight because glm-5.3-flash intermittently shouts a word and the rewrite inherits the same habit. 14 prompt edits have not removed it, which points at model behaviour, not wording. At 2 drafts/week the cost is ~100 views per fortnight at this account's averages \u2014 real but small. The recurring ALL-CAPS failures also land on the rewrite call, which sends the same system prompt that produced the shouting title in the first place; a future merged proposal could give _revise_title a shorter, title-only system prompt instead of _SYSTEM, which no prior branch tried.",
-        "owner_action": "Decide whether 2 lost drafts/week is worth a reviewer approving one of the open _revise_title branches (the shortest, 2026-11-26), or whether it should be left alone while llm_error (20/14d) dominates.",
+        "title": "Decide the pending _revise_title question instead of accumulating a 15th branch",
+        "description": "weak_title loses 2 drafts/fortnight from intermittent ALL-CAPS titles that the rewrite inherits from the same system prompt. 14 unmerged branches already target this; the marginal value of another is zero. The one variant no branch tried is giving _revise_title a short title-only system prompt instead of the full _SYSTEM it currently re-sends \u2014 the rewrite call inherits the very rules that produced the shouting title.",
+        "owner_action": "Merge the narrowest open _revise_title branch (2026-11-26) or approve the title-only-system-prompt variant; either way, close the other 13 branches.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Review the 2026-11-26 open branch (sharpen the ALL-CAPS line in _revise_title) \u2014 it is the narrowest of the 14.",
-          "Step 2: If merged, check article_rejects.counts.weak_title next cycle; if unchanged after two cycles, close the remaining title-prompt branches as a settled dead end."
+          "Step 1: Review the 2026-11-26 branch; it is a few-line sharpening of the ALL-CAPS line in _revise_title.",
+          "Step 2: After merge, read article_rejects.counts.weak_title for two cycles; if the ALL-CAPS finding persists, the fix is a shorter system prompt on the rewrite call or accepting the flake rate, not more wording edits.",
+          "Step 3: Separately, consider why llm_error (20/14d) dominates \u2014 that is an engine/keys question, not a prompt one."
         ]
       }
     ],
-    "direction": "Step 4 (reach via better drafts), PROMPT FOCUS on weak_title",
+    "direction": "Checklist step 4 \u2014 upgrade the prompts that write reach, one step per cycle; Principle 5 (measure the funnel)",
     "evidence": [
-      "article_rejects.counts: llm_error=79 vs weak_title=16 lifetime, and weak_title=2 in the last 14 days",
-      "last 14 days: llm_error=20, empty_draft=8 vs weak_title=2 \u2014 the engine, not the title prompt, loses ~14x more drafts",
-      "gate findings behind weak_title: 'title has ALL-CAPS word' x2",
-      "PRIOR PROPOSALS: 14 open branches, all editing _revise_title / _SYSTEM TITLE rules for this same finding (2026-11-13 through 2026-11-26), none merged"
+      "article_rejects.counts (lifetime 119): llm_error=79, empty_draft=19, weak_title=16, fabricated=4",
+      "Drafts lost to a prompt (last 14 days): weak_title=2 \u2014 roughly one draft per week, ~123 avg views per lost post",
+      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=20, empty_draft=8 \u2014 14x the prompt-attributable loss",
+      "PRIOR PROPOSALS: 14 distinct open branches, every one of them a _revise_title / TITLE-rule edit, none merged (including a deterministic un-shout rescue, proposed 2026-11-15)",
+      "Gate findings behind weak_title: 'title has ALL-CAPS word' x2 \u2014 the identical finding all 14 branches address",
+      "status.suggestions already carries the owner's own verdict: model behaviour, not wording, and a decision is pending on the open branches"
     ],
-    "money_path": "none this cycle \u2014 refusing to burn a cycle on a 15th variant of an edit class the reviewer has repeatedly declined",
-    "verify": "No change to verify. If weak_title stays at 2 or fewer in the next 14-day window while llm_error falls, the constraint was never the title prompt.",
+    "money_path": "none this cycle. weak_title costs ~2 drafts/fortnight (~250 views) while llm_error+empty_draft cost 28; no prompt edit the ledger does not already have pending can move either number, and a 15th branch on the same line only adds review noise.",
+    "verify": "No change shipped. If the owner merges one of the open _revise_title branches, article_rejects.counts.weak_title over the next 14-day window is the counter to watch; if unchanged after two cycles, close the remaining title branches as a settled dead end (as the pending suggestion already proposes).",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 123
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
     {
-      "title": "Give the post-role model a stability note, or accept the ALL-CAPS flake rate",
-      "description": "weak_title loses 2 drafts per fortnight because glm-5.3-flash intermittently shouts a word and the rewrite inherits the same habit. 14 prompt edits have not removed it, which points at model behaviour, not wording. At 2 drafts/week the cost is ~100 views per fortnight at this account's averages \u2014 real but small. The recurring ALL-CAPS failures also land on the rewrite call, which sends the same system prompt that produced the shouting title in the first place; a future merged proposal could give _revise_title a shorter, title-only system prompt instead of _SYSTEM, which no prior branch tried.",
-      "owner_action": "Decide whether 2 lost drafts/week is worth a reviewer approving one of the open _revise_title branches (the shortest, 2026-11-26), or whether it should be left alone while llm_error (20/14d) dominates.",
+      "title": "Decide the pending _revise_title question instead of accumulating a 15th branch",
+      "description": "weak_title loses 2 drafts/fortnight from intermittent ALL-CAPS titles that the rewrite inherits from the same system prompt. 14 unmerged branches already target this; the marginal value of another is zero. The one variant no branch tried is giving _revise_title a short title-only system prompt instead of the full _SYSTEM it currently re-sends \u2014 the rewrite call inherits the very rules that produced the shouting title.",
+      "owner_action": "Merge the narrowest open _revise_title branch (2026-11-26) or approve the title-only-system-prompt variant; either way, close the other 13 branches.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Review the 2026-11-26 open branch (sharpen the ALL-CAPS line in _revise_title) \u2014 it is the narrowest of the 14.",
-        "Step 2: If merged, check article_rejects.counts.weak_title next cycle; if unchanged after two cycles, close the remaining title-prompt branches as a settled dead end."
+        "Step 1: Review the 2026-11-26 branch; it is a few-line sharpening of the ALL-CAPS line in _revise_title.",
+        "Step 2: After merge, read article_rejects.counts.weak_title for two cycles; if the ALL-CAPS finding persists, the fix is a shorter system prompt on the rewrite call or accepting the flake rate, not more wording edits.",
+        "Step 3: Separately, consider why llm_error (20/14d) dominates \u2014 that is an engine/keys question, not a prompt one."
       ],
-      "discovered_at": "2026-11-26T22:02:13.410733+00:00"
+      "discovered_at": "2026-11-26T23:02:12.789333+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 31,
+  "last_cycle_seconds": 21,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2649,7 +2640,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-26T22:01:47.276540+00:00",
+    "checked_at": "2026-11-26T23:01:53.483752+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3415,7 +3406,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-26T22:02:17.847122+00:00",
+    "last_run": "2026-11-26T23:02:13.002231+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3425,30 +3416,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-26T22:02:17.961235+00:00",
+    "last_run": "2026-11-26T23:02:13.240737+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4748037,
-        "at": "2026-11-26T10:24:10.827782+00:00",
-        "ok": true
-      },
-      {
-        "id": 4971614,
-        "at": "2026-11-26T11:22:45.721640+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-11-26T11:22:45.721640+00:00",
-        "ok": true
-      },
-      {
-        "id": 5079541,
-        "at": "2026-11-26T11:22:45.721640+00:00",
-        "ok": true
-      },
       {
         "id": 4720062,
         "at": "2026-11-26T11:22:45.721640+00:00",
@@ -3655,11 +3626,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-26T22:02:17.961235+00:00",
-        "ok": true
-      },
-      {
         "id": 5025764,
         "at": "2026-11-26T22:02:17.961235+00:00",
         "ok": true
@@ -3678,6 +3644,31 @@
         "id": 4765372,
         "at": "2026-11-26T22:02:17.961235+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-26T23:02:13.240737+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-26T23:02:13.240737+00:00",
+        "ok": true
+      },
+      {
+        "id": 5027243,
+        "at": "2026-11-26T23:02:13.240737+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-26T23:02:13.240737+00:00",
+        "ok": true
+      },
+      {
+        "id": 4931682,
+        "at": "2026-11-26T23:02:13.240737+00:00",
+        "ok": true
       }
     ],
     "published_total": 61,
@@ -3685,7 +3676,7 @@
     "unverified": 11,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.6
+    "oldest_check_age_hours": 11.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

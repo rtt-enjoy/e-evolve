@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-25T23:38:26.164163+00:00",
-  "total_runs": 2815,
+  "last_run": "2026-11-26T00:38:30.130840+00:00",
+  "total_runs": 2816,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,12 +33,12 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed this cycle: the only prompt-measured defect (weak_title, 2 drafts in 14 days, gate finding 'title has ALL-CAPS word' x2) already has 13 unmerged review branches covering exactly this fix, plus an open owner suggestion to merge one; a 14th near-identical branch would not move reach, and the dominant loss (llm_error=79 of 119, 20 in the 14-day window) is engine-side and not prompt-fixable.",
+    "summary": "No change proposed this cycle: the prompt defect the PROMPT FOCUS names (weak_title, 2 drafts lost in 14 days, both from 'title has ALL-CAPS word') is already covered by 13 unmerged review branches targeting the same two prompts, and proposing a fourteenth near-duplicate edit only adds review burden without new evidence.",
     "changes_applied": [],
     "suggestions": [
       {
         "title": "Merge one 2026-11 title-prompt branch this week; close the other twelve",
-        "description": "Unblocks the only measured prompt defect. The branches are near-duplicates of one fix; merging the smallest correct one and closing the rest is cheaper than another review cycle of 13 stale diffs, and lets the next weak_title reading be conclusive.",
+        "description": "Unblocks the only measured prompt defect. The 13 open branches are near-duplicates of one fix; merging the smallest correct one and closing the rest is cheaper than another review cycle of stale diffs, and lets the next weak_title reading be conclusive.",
         "owner_action": "Review the evolve/* branches dated 2026-11-13 through 2026-11-25 touching bot/earning/articles.py, merge the smallest one whose edit matches the gate's real semantics (_shouted_words skips _KNOWN_ACRONYMS; non-acronym ALL-CAPS is shouting, PDF/JSON keep casing), and close the remaining twelve.",
         "secret_needed": null,
         "how_to": [
@@ -48,16 +48,16 @@
         ]
       }
     ],
-    "direction": "Checklist step 4 \u2014 reach via prompt upgrades, one step per cycle; withheld because the step is already proposed and awaiting a merge decision, not because reach work is done",
+    "direction": "Checklist step 4 \u2014 reach into a live receive path; Principle 5 \u2014 measure the funnel, not the last stage",
     "evidence": [
-      "article_rejects.counts: weak_title=16 lifetime, 2 in the last-14-day prompt window",
-      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
-      "gate findings behind PROMPT FOCUS: 'title has ALL-CAPS word' x2 \u2014 identical to what the 13 open branches target",
-      "llm_error=79 and empty_draft=19 dominate lifetime rejects; llm_error=20, empty_draft=8 in 14 days \u2014 outside prompt scope",
-      "PRIOR PROPOSALS: 13 distinct branches (2026-11-13 through 2026-11-25) all editing the article draft TITLE rule or _revise_title, none merged"
+      "article_rejects.counts: weak_title=16 lifetime but drafts lost to weak_title in the last 14 days = 2, gate finding 'title has ALL-CAPS word' x2",
+      "PRIOR PROPOSALS: 13 open branches since 2026-11-13 all targeting _revise_title / the TITLE rule in _SYSTEM, none merged",
+      "drafts lost to the engine in 14 days: llm_error=20, empty_draft=8 \u2014 not fixable by a prompt edit",
+      "receipt_check.covered / published_total = 50 / 60; coverage_complete = False; known_without_footer = 0; payout.live = true",
+      "wallet.received_total_usd = 0.0; article_interest: problem-workaround n=12 avg=421.8 is the measured leader"
     ],
-    "money_path": "reach-only: a merged title fix saves drafts, and each saved draft is one more post carrying the tip footer \u2014 but nothing here touches the receive path itself",
-    "verify": "After the owner merges one existing branch (not a new one): the 14-day weak_title count in the prompt ledger falls to 0 over the next two weekly checks; if it does, remaining losses are confirmed engine-side and no further title-prompt edit is warranted",
+    "money_path": "none (maintenance) \u2014 no change proposed; the existing prompts already publish into the receive path daily",
+    "verify": "The existing open branches should be resolved first. After the owner merges one smallest correct title-prompt branch (see suggestions), the 14-day weak_title count in article_rejects should read 0 over the next two weekly checks before any further title edit is considered.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -69,7 +69,7 @@
   "suggestions": [
     {
       "title": "Merge one 2026-11 title-prompt branch this week; close the other twelve",
-      "description": "Unblocks the only measured prompt defect. The branches are near-duplicates of one fix; merging the smallest correct one and closing the rest is cheaper than another review cycle of 13 stale diffs, and lets the next weak_title reading be conclusive.",
+      "description": "Unblocks the only measured prompt defect. The 13 open branches are near-duplicates of one fix; merging the smallest correct one and closing the rest is cheaper than another review cycle of stale diffs, and lets the next weak_title reading be conclusive.",
       "owner_action": "Review the evolve/* branches dated 2026-11-13 through 2026-11-25 touching bot/earning/articles.py, merge the smallest one whose edit matches the gate's real semantics (_shouted_words skips _KNOWN_ACRONYMS; non-acronym ALL-CAPS is shouting, PDF/JSON keep casing), and close the remaining twelve.",
       "secret_needed": null,
       "how_to": [
@@ -81,7 +81,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 25,
+  "last_cycle_seconds": 19,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2823,7 +2823,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-25T23:38:26.459215+00:00",
+    "checked_at": "2026-11-26T00:38:30.547660+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3589,7 +3589,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-25T23:38:50.286164+00:00",
+    "last_run": "2026-11-26T00:38:48.343064+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3599,30 +3599,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-25T23:38:50.541913+00:00",
+    "last_run": "2026-11-26T00:38:48.506907+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4820198,
-        "at": "2026-11-25T13:15:15.481250+00:00",
-        "ok": true
-      },
-      {
-        "id": 5019261,
-        "at": "2026-11-25T13:15:15.481250+00:00",
-        "ok": true
-      },
-      {
-        "id": 4562180,
-        "at": "2026-11-25T14:17:32.469856+00:00",
-        "ok": true
-      },
-      {
-        "id": 4937139,
-        "at": "2026-11-25T14:17:32.469856+00:00",
-        "ok": true
-      },
       {
         "id": 4959304,
         "at": "2026-11-25T14:17:32.469856+00:00",
@@ -3829,11 +3809,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-25T23:38:50.541913+00:00",
-        "ok": true
-      },
-      {
         "id": 4503417,
         "at": "2026-11-25T23:38:50.541913+00:00",
         "ok": true
@@ -3851,6 +3826,31 @@
       {
         "id": 4977763,
         "at": "2026-11-25T23:38:50.541913+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-26T00:38:48.506907+00:00",
+        "ok": true
+      },
+      {
+        "id": 5068353,
+        "at": "2026-11-26T00:38:48.506907+00:00",
+        "ok": true
+      },
+      {
+        "id": 4545446,
+        "at": "2026-11-26T00:38:48.506907+00:00",
+        "ok": true
+      },
+      {
+        "id": 4943931,
+        "at": "2026-11-26T00:38:48.506907+00:00",
+        "ok": true
+      },
+      {
+        "id": 5012890,
+        "at": "2026-11-26T00:38:48.506907+00:00",
         "ok": true
       }
     ],

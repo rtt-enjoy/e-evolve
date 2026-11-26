@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-26T19:01:39.401350+00:00",
-  "total_runs": 2835,
+  "last_run": "2026-11-26T20:01:46.234168+00:00",
+  "total_runs": 2836,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,41 +33,30 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: the only prompt the PROMPT FOCUS names (weak_title / ALL-CAPS) already has 14 open unmerged proposals of exactly this edit, and the dominant draft loss (llm_error=79 lifetime, 20 in 14 days; empty_draft=19) is engine-side and not fixable by a prompt edit. A 15th identical branch adds nothing until one merges.",
+    "summary": "No change proposed: the prompt-focus target (weak_title, 2 drafts in 14 days, both 'title has ALL-CAPS word') is already saturated by 14 open review branches covering exactly this edit, and the losses that actually block reach (llm_error=79, empty_draft=19) are engine failures a prompt edit cannot fix.",
     "changes_applied": [],
     "suggestions": [
       {
-        "title": "Merge one weak_title fix and close the other 13 branches",
-        "description": "The ALL-CAPS finding has been re-proposed 14 times without a merge; each unmerged branch is a lost cycle of prompt improvement on the one gate losing drafts. Merging one (the deterministic rescue cannot fail the way the LLM rewrite does) clears the binding reach constraint in a single owner action.",
-        "owner_action": "Review the evolve/* branches dated 2026-11-13 to 2026-11-26, merge exactly one weak_title fix (prefer the 2026-11-15 deterministic un-shout rescue), close the other 13.",
+        "title": "Merge one of the fourteen open title-rewrite branches, or close them all",
+        "description": "weak_title rejects (2 in 14 days, both ALL-CAPS) have a dozen near-identical fixes parked on review branches. Until one merges, every cycle either re-proposes the same edit or stands down; merging the newest (2026-11-26) and closing the rest resolves the PROMPT FOCUS permanently.",
+        "owner_action": "Review and merge the 2026-11-26 evolve/* branch, then close the other thirteen title-prompt branches as superseded.",
         "secret_needed": null,
         "how_to": [
-          "Step 1: Open the evolve/ branches dated 2026-11-13 through 2026-11-26 and pick one weak_title fix; the 2026-11-15 deterministic rescue is the safest since it adds code, not another prompt rule.",
-          "Step 2: Merge it, close the remaining 13, and read article_rejects.counts and the 14-day prompt-loss figure two cycles later \u2014 weak_title should read 0."
-        ]
-      },
-      {
-        "title": "Give the post LLM role one more reliable provider slot",
-        "description": "llm_error accounts for 79 lifetime and 20 recent lost drafts \u2014 two-thirds of all rejected articles and the largest single reach loss. Each lost draft is a lost post and a lost tip ask. The fallback (atria) already exists but status shows calls={'glm': 1}, so the failure mode worth investigating is in the glm post call itself, not the prompt.",
-        "owner_action": "Pull the workflow logs for cycles that recorded llm_error and confirm whether glm is rate-limiting or erroring on the post role specifically; if so, consider whether atria should serve the post role primary for a week so the two can be compared on drafts lost.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: In the Actions logs, search '[articles] rejected (llm_error)' for the last two weeks and note the underlying exception text.",
-          "Step 2: If glm-5.3-flash is returning rate-limit or truncation errors on the 6000-token post calls, flip llm_roles.post to atria in the workflow configuration \u2014 no new secret, atria's key is already set (llm_engine.fallback.key_set=true).",
-          "Step 3: Two cycles later, read article_rejects.counts.llm_error; it should stop growing at ~1-2/week if the provider was the cause."
+          "Step 1: Open the 2026-11-26 branch and diff bot/earning/articles.py \u2014 it is a few-line edit to _revise_title.",
+          "Step 2: Merge if the diff is sound; close the remaining title-prompt branches.",
+          "Step 3: Confirm via article_rejects.counts that weak_title stays at or near 0 over the next 14-day window."
         ]
       }
     ],
-    "direction": "Checklist step 4 / PROMPT FOCUS (weak_title), applied honestly: upgrading the prompt one step per cycle is right, but that step is the owner's merge, not another branch.",
+    "direction": "Checklist step 4 \u2014 reach into a live receive path; prompt upgrades one step per cycle",
     "evidence": [
-      "article_rejects.counts: llm_error=79, empty_draft=19, weak_title=16, fabricated=4 (total 119)",
-      "Drafts lost to the engine, last 14 days: llm_error=20, empty_draft=8; weak_title=2",
-      "PRIOR PROPOSALS: 14 distinct weak_title/ALL-CAPS branches, 2026-11-13 to 2026-11-26, none merged",
-      "receipt_check.covered / published_total = 50 / 60, coverage_complete = False (receive path verified; reach is the work)",
-      "preferred_archetypes() = ['problem-workaround'] with n=12 avg=421.8 (healthy control input)"
+      "article_rejects.counts (14d window): weak_title=2 vs llm_error=79 and empty_draft=19 (engine, not prompt-fixable)",
+      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x2 \u2014 but every remedy for this exact finding already sits on an open branch (2026-11-13 through 2026-11-26, fourteen distinct _revise_title/_SYSTEM edits, including deterministic un-shout rescue and exact-rule rewording)",
+      "llm_engine.calls = {'glm': 1} with llm_error=79 lifetime \u2014 the dominant draft loss is the serving engine, out of scope for articles.py",
+      "preferred_archetypes() = ['problem-workaround'] with n=12, avg=421.8 \u2014 the steering prompt (_audience_guidance + _ARCHETYPE_ANGLES) is already correctly pointed at the one archetype with a sample above noise, so steering needs no edit"
     ],
-    "money_path": "none this cycle \u2014 the change that would move reach (one merged weak_title fix) sits in the owner's review queue, not in code this proposal can add.",
-    "verify": "Owner merges exactly one of the 14 weak_title branches (the 2026-11-15 deterministic un-shout rescue is safest \u2014 it adds code, not another prompt rule), closes the other 13, and reads article_rejects.last='weak_title' occurrences plus the 14-day prompt-loss figure two cycles later: weak_title should read 0.",
+    "money_path": "none this cycle \u2014 reach is currently blocked more by engine failures (79 llm_error) than by prompt quality (2 weak_title), and the prompt-fix surface is fully occupied by unmerged prior branches",
+    "verify": "Re-read article_rejects.counts next cycle: if weak_title grows again while the fourteen title branches stay unmerged, the correct fix is for the owner to merge one of them, not to add a fifteenth variant. If llm_error keeps dominating, the lever is the serving engine, not any file this engine may edit.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
@@ -78,31 +67,20 @@
   },
   "suggestions": [
     {
-      "title": "Merge one weak_title fix and close the other 13 branches",
-      "description": "The ALL-CAPS finding has been re-proposed 14 times without a merge; each unmerged branch is a lost cycle of prompt improvement on the one gate losing drafts. Merging one (the deterministic rescue cannot fail the way the LLM rewrite does) clears the binding reach constraint in a single owner action.",
-      "owner_action": "Review the evolve/* branches dated 2026-11-13 to 2026-11-26, merge exactly one weak_title fix (prefer the 2026-11-15 deterministic un-shout rescue), close the other 13.",
+      "title": "Merge one of the fourteen open title-rewrite branches, or close them all",
+      "description": "weak_title rejects (2 in 14 days, both ALL-CAPS) have a dozen near-identical fixes parked on review branches. Until one merges, every cycle either re-proposes the same edit or stands down; merging the newest (2026-11-26) and closing the rest resolves the PROMPT FOCUS permanently.",
+      "owner_action": "Review and merge the 2026-11-26 evolve/* branch, then close the other thirteen title-prompt branches as superseded.",
       "secret_needed": null,
       "how_to": [
-        "Step 1: Open the evolve/ branches dated 2026-11-13 through 2026-11-26 and pick one weak_title fix; the 2026-11-15 deterministic rescue is the safest since it adds code, not another prompt rule.",
-        "Step 2: Merge it, close the remaining 13, and read article_rejects.counts and the 14-day prompt-loss figure two cycles later \u2014 weak_title should read 0."
+        "Step 1: Open the 2026-11-26 branch and diff bot/earning/articles.py \u2014 it is a few-line edit to _revise_title.",
+        "Step 2: Merge if the diff is sound; close the remaining title-prompt branches.",
+        "Step 3: Confirm via article_rejects.counts that weak_title stays at or near 0 over the next 14-day window."
       ],
-      "discovered_at": "2026-11-26T18:22:41.950330+00:00"
-    },
-    {
-      "title": "Give the post LLM role one more reliable provider slot",
-      "description": "llm_error accounts for 79 lifetime and 20 recent lost drafts \u2014 two-thirds of all rejected articles and the largest single reach loss. Each lost draft is a lost post and a lost tip ask. The fallback (atria) already exists but status shows calls={'glm': 1}, so the failure mode worth investigating is in the glm post call itself, not the prompt.",
-      "owner_action": "Pull the workflow logs for cycles that recorded llm_error and confirm whether glm is rate-limiting or erroring on the post role specifically; if so, consider whether atria should serve the post role primary for a week so the two can be compared on drafts lost.",
-      "secret_needed": null,
-      "how_to": [
-        "Step 1: In the Actions logs, search '[articles] rejected (llm_error)' for the last two weeks and note the underlying exception text.",
-        "Step 2: If glm-5.3-flash is returning rate-limit or truncation errors on the 6000-token post calls, flip llm_roles.post to atria in the workflow configuration \u2014 no new secret, atria's key is already set (llm_engine.fallback.key_set=true).",
-        "Step 3: Two cycles later, read article_rejects.counts.llm_error; it should stop growing at ~1-2/week if the provider was the cause."
-      ],
-      "discovered_at": "2026-11-26T19:02:02.074161+00:00"
+      "discovered_at": "2026-11-26T20:02:17.292638+00:00"
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 24,
+  "last_cycle_seconds": 32,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2746,7 +2724,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-26T19:01:39.763988+00:00",
+    "checked_at": "2026-11-26T20:01:46.696149+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3512,7 +3490,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-26T19:02:02.527294+00:00",
+    "last_run": "2026-11-26T20:02:17.541723+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3522,30 +3500,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-26T19:02:02.685477+00:00",
+    "last_run": "2026-11-26T20:02:17.761707+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4800078,
-        "at": "2026-11-26T07:39:10.963177+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-26T08:22:23.291306+00:00",
-        "ok": true
-      },
-      {
-        "id": 5060054,
-        "at": "2026-11-26T08:22:23.291306+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-11-26T08:22:23.291306+00:00",
-        "ok": true
-      },
       {
         "id": 4765372,
         "at": "2026-11-26T08:22:23.291306+00:00",
@@ -3752,11 +3710,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-26T19:02:02.685477+00:00",
-        "ok": true
-      },
-      {
         "id": 4430049,
         "at": "2026-11-26T19:02:02.685477+00:00",
         "ok": true
@@ -3775,6 +3728,31 @@
         "id": 4641536,
         "at": "2026-11-26T19:02:02.685477+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-26T20:02:17.761707+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-11-26T20:02:17.761707+00:00",
+        "ok": true
+      },
+      {
+        "id": 5050733,
+        "at": "2026-11-26T20:02:17.761707+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-26T20:02:17.761707+00:00",
+        "ok": true
+      },
+      {
+        "id": 4965279,
+        "at": "2026-11-26T20:02:17.761707+00:00",
+        "ok": true
       }
     ],
     "published_total": 60,
@@ -3782,7 +3760,7 @@
     "unverified": 10,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.4
+    "oldest_check_age_hours": 11.7
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-27T20:04:33.094556+00:00",
-  "total_runs": 2862,
+  "last_run": "2026-11-27T20:58:30.264603+00:00",
+  "total_runs": 2863,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -41,7 +41,16 @@
     "error_type": "json"
   },
   "last_earning": {
-    "actions": [],
+    "actions": [
+      {
+        "platform": "dev.to",
+        "success": false,
+        "skipped": true,
+        "reject_code": "llm_error",
+        "error": "LLM call failed",
+        "estimated_usd": 0.0
+      }
+    ],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -60,7 +69,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 315,
+  "last_cycle_seconds": 623,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2708,6 +2717,8 @@
       5050733
     ],
     "own_urls": [
+      "https://dev.to/robust_true_try/this-week-in-dev-ai-tooling-a-1password-incident-and-the-case-for-clean-code-54b2",
+      "https://dev.to/robust_true_try/how-to-audit-a-lean-proof-artifact-before-you-trust-it-1io7",
       "https://dev.to/robust_true_try/a-stolen-github-token-reached-production-in-minutes-1g1h",
       "https://dev.to/robust_true_try/your-llm-agent-has-a-loyalty-problem-you-cant-patch-p9g",
       "https://dev.to/robust_true_try/why-most-internet-archive-videos-break-in-your-player-3bjp",
@@ -2778,7 +2789,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-27T20:04:33.546112+00:00",
+    "checked_at": "2026-11-27T20:58:30.700758+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3193,9 +3204,9 @@
   "last_evolution_branch": null,
   "evolution_pending_review": false,
   "article_stats": {
-    "count": 60,
-    "total_views": 7396,
-    "avg_views": 123.3,
+    "count": 62,
+    "total_views": 7436,
+    "avg_views": 119.9,
     "best_title": "Reading Twitter Without X: A Practical Guide to Nitter Alternatives in 2024",
     "best_views": 3798,
     "best_url": "https://dev.to/robust_true_try/reading-twitter-without-x-a-practical-guide-to-nitter-alternatives-in-2024-1gig",
@@ -3220,16 +3231,9 @@
       {
         "archetype": "security-privacy",
         "count": 7,
-        "avg_engagement": 92.9,
-        "avg_views": 92.9,
+        "avg_engagement": 95.7,
+        "avg_views": 95.7,
         "best_title": "Check Your NGINX HTTP/2 Config Before Attackers Do"
-      },
-      {
-        "archetype": "build-tutorial",
-        "count": 3,
-        "avg_engagement": 92.7,
-        "avg_views": 92.7,
-        "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
       },
       {
         "archetype": "myth-correction",
@@ -3239,11 +3243,11 @@
         "best_title": "Running Local LLMs on Mac Mini: What Actually Breaks"
       },
       {
-        "archetype": "other",
-        "count": 22,
-        "avg_engagement": 63.7,
-        "avg_views": 37.6,
-        "best_title": "Your AI Agent Can't See What It Clicks"
+        "archetype": "build-tutorial",
+        "count": 4,
+        "avg_engagement": 69.5,
+        "avg_views": 69.5,
+        "best_title": "Build a Fast, Local LLM Inference Pipeline with DeepSeek Harness"
       },
       {
         "archetype": "engineering-culture",
@@ -3253,35 +3257,37 @@
         "best_title": "AI Code Feels Done Until You Refactor It"
       },
       {
+        "archetype": "other",
+        "count": 23,
+        "avg_engagement": 61.4,
+        "avg_views": 36.4,
+        "best_title": "Your AI Agent Can't See What It Clicks"
+      },
+      {
         "archetype": "surprising-behavior",
         "count": 10,
-        "avg_engagement": 58.9,
-        "avg_views": 41.4,
+        "avg_engagement": 59.9,
+        "avg_views": 42.4,
         "best_title": "Your Kimi K3.1 Pro Responses Truncate Silently"
       }
     ],
     "best_archetype": "problem-workaround",
     "worst_archetype": "surprising-behavior",
-    "sample_size": 60
+    "sample_size": 62
   },
   "article_rejects": {
-    "last_reason": "weak_title",
-    "last_detail": "title too weak to earn a click, and the rewrite failed",
-    "last_at": "2026-11-23T21:50:20.670261+00:00",
+    "last_reason": "llm_error",
+    "last_detail": "LLM call failed",
+    "last_at": "2026-11-27T21:08:52.725611+00:00",
     "counts": {
       "empty_draft": 19,
       "fabricated": 4,
       "weak_title": 16,
       "revision_fabricated": 1,
-      "llm_error": 79
+      "llm_error": 80
     },
-    "total": 119,
+    "total": 120,
     "recent": [
-      {
-        "code": "llm_error",
-        "at": "2026-11-06T02:16:54.631264+00:00",
-        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
-      },
       {
         "code": "llm_error",
         "at": "2026-11-06T02:43:20.371790+00:00",
@@ -3526,6 +3532,11 @@
         "code": "weak_title",
         "at": "2026-11-23T21:50:20.670261+00:00",
         "detail": "title has ALL-CAPS word"
+      },
+      {
+        "code": "llm_error",
+        "at": "2026-11-27T21:08:52.725611+00:00",
+        "detail": "Could not get valid JSON from LLM (role=post): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
       }
     ]
   },
@@ -3558,7 +3569,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-27T20:09:47.052088+00:00",
+    "last_run": "2026-11-27T21:08:52.940638+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3568,25 +3579,10 @@
     "without_footer": 0,
     "unreachable": 1,
     "missing": [],
-    "last_run": "2026-11-27T20:09:47.255613+00:00",
+    "last_run": "2026-11-27T21:08:53.120494+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 5060054,
-        "at": "2026-11-27T09:12:30.438913+00:00",
-        "ok": true
-      },
-      {
-        "id": 4965279,
-        "at": "2026-11-27T09:12:30.438913+00:00",
-        "ok": true
-      },
-      {
-        "id": 5025764,
-        "at": "2026-11-27T10:13:58.439650+00:00",
-        "ok": true
-      },
       {
         "id": 4848276,
         "at": "2026-11-27T10:13:58.439650+00:00",
@@ -3803,11 +3799,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-27T20:09:47.255613+00:00",
-        "ok": true
-      },
-      {
         "id": 4853251,
         "at": "2026-11-27T20:09:47.255613+00:00",
         "ok": true
@@ -3821,6 +3812,26 @@
         "id": 4636715,
         "at": "2026-11-27T20:09:47.255613+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-27T21:08:53.120494+00:00",
+        "ok": true
+      },
+      {
+        "id": 4800078,
+        "at": "2026-11-27T21:08:53.120494+00:00",
+        "ok": true
+      },
+      {
+        "id": 4826008,
+        "at": "2026-11-27T21:08:53.120494+00:00",
+        "ok": true
+      },
+      {
+        "id": 4356423,
+        "at": "2026-11-27T21:08:53.120494+00:00",
+        "ok": true
       }
     ],
     "published_total": 62,
@@ -3828,7 +3839,7 @@
     "unverified": 12,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.0
+    "oldest_check_age_hours": 10.9
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3894,15 +3905,15 @@
     "endpoint": null,
     "key_set": true,
     "live": false,
-    "serving": "atria",
+    "serving": "gemini",
     "disabled_reason": "quota_spent",
     "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",
       "key_set": true,
-      "live": true,
-      "disabled_reason": null
+      "live": false,
+      "disabled_reason": "timeout"
     }
   },
   "ctf_bounty": {

@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-27T19:54:08.102160+00:00",
-  "total_runs": 2861,
+  "last_run": "2026-11-27T20:04:33.094556+00:00",
+  "total_runs": 2862,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -41,30 +41,7 @@
     "error_type": "json"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 16
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 122
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 64,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (64 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -83,7 +60,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 606,
+  "last_cycle_seconds": 315,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2801,7 +2778,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-27T19:54:08.566996+00:00",
+    "checked_at": "2026-11-27T20:04:33.546112+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3581,35 +3558,20 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-27T20:04:13.278179+00:00",
+    "last_run": "2026-11-27T20:09:47.052088+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
   "receipt_check": {
-    "checked": 5,
-    "with_footer": 5,
+    "checked": 4,
+    "with_footer": 4,
     "without_footer": 0,
-    "unreachable": 0,
+    "unreachable": 1,
     "missing": [],
-    "last_run": "2026-11-27T20:04:13.489398+00:00",
+    "last_run": "2026-11-27T20:09:47.255613+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4641536,
-        "at": "2026-11-27T08:12:33.672272+00:00",
-        "ok": true
-      },
-      {
-        "id": 4800078,
-        "at": "2026-11-27T09:12:30.438913+00:00",
-        "ok": true
-      },
-      {
-        "id": 4826008,
-        "at": "2026-11-27T09:12:30.438913+00:00",
-        "ok": true
-      },
       {
         "id": 5060054,
         "at": "2026-11-27T09:12:30.438913+00:00",
@@ -3821,11 +3783,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-27T20:04:13.489398+00:00",
-        "ok": true
-      },
-      {
         "id": 4430049,
         "at": "2026-11-27T20:04:13.489398+00:00",
         "ok": true
@@ -3844,6 +3801,26 @@
         "id": 4568987,
         "at": "2026-11-27T20:04:13.489398+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-27T20:09:47.255613+00:00",
+        "ok": true
+      },
+      {
+        "id": 4853251,
+        "at": "2026-11-27T20:09:47.255613+00:00",
+        "ok": true
+      },
+      {
+        "id": 5050733,
+        "at": "2026-11-27T20:09:47.255613+00:00",
+        "ok": true
+      },
+      {
+        "id": 4636715,
+        "at": "2026-11-27T20:09:47.255613+00:00",
+        "ok": true
       }
     ],
     "published_total": 62,
@@ -3851,7 +3828,7 @@
     "unverified": 12,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.9
+    "oldest_check_age_hours": 11.0
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3919,9 +3896,7 @@
     "live": false,
     "serving": "atria",
     "disabled_reason": "quota_spent",
-    "calls": {
-      "atria": 1
-    },
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

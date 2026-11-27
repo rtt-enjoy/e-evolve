@@ -1006,7 +1006,8 @@ _KNOWN_ACRONYMS = {
 	"GCP", "SQLITE", "POSTGRES", "MYSQL", "REDIS", "NGINX", "LLM", "LLMS", "RAG",
 	"GPT", "AI", "ML", "ETL", "CI", "CD", "TDD", "DDD", "MVC", "ORM", "UUID",
 	"ASCII", "UTF", "REGEX", "WASM", "PDF", "OCR", "NPM", "PIP", "GIT", "AST",
-	"IO", "FIFO", "LIFO", "RPC", "SSR", "SPA", "PWA", "DOM", "SEO", "MRR", "IDE",
+	"IO", "FIFO", "LIFO", "RPC", "SSR", "SSG", "SPA", "PWA", "DOM", "SEO", "MRR",
+	"IDE", "UX", "UE", "SSO", "SAML", "XSS", "CSRF", "SSE", "K8S", "POSIX", "UTM",
 }
 
 

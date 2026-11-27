@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-27T04:11:58.864527+00:00",
-  "total_runs": 2845,
+  "last_run": "2026-11-27T05:11:58.020792+00:00",
+  "total_runs": 2846,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -33,7 +33,7 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change proposed: weak_title costs 2 drafts per fortnight while 14 near-identical title-prompt branches sit unmerged, so a fifteenth wording variant of the ALL-CAPS rule would add nothing measurable; llm_error (20) and empty_draft (8) in the same window cost ten times more and are engine problems a prompt edit cannot touch.",
+    "summary": "No change proposed: the only prompt-graded defect (weak_title, ALL-CAPS x2) is already the subject of 14 unmerged open branches, so a 15th would be unreviewable and unmeasurable, and the remaining reject mass (llm_error=20, empty_draft=8 per 14 days) is engine availability, which a prompt edit cannot fix.",
     "changes_applied": [],
     "suggestions": [
       {
@@ -48,36 +48,23 @@
         ]
       }
     ],
-    "direction": "Checklist step 4 / prompt-ledger discipline \u2014 but serving it means not stacking a fifteenth variant of an unmerged prompt.",
+    "direction": "Checklist step 4 \u2014 reach into a live receive path; PROMPT FOCUS on weak_title",
     "evidence": [
-      "article_rejects.counts: weak_title=16 lifetime, but 'Drafts lost to a prompt (last 14 days): weak_title=2' \u2014 two drafts per fortnight",
-      "Drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=20, empty_draft=8 \u2014 14x the prompt loss",
-      "PRIOR PROPOSALS: 14 distinct open branches, all edits to the same TITLE rule in _revise_title/_SYSTEM, none merged",
-      "suggestions[0] (written last cycle): 'a fifteenth proposal would be indistinguishable from the rest'",
-      "Gate findings behind weak_title: 'title has ALL-CAPS word' x2 \u2014 one finding, twice, in a fortnight",
-      "payout.live = true, backfill.remaining = 0, receipt_check.known_without_footer = 0 \u2014 receive path is verified, so no earning-side work is blocking"
+      "article_rejects.counts total=119, weak_title=16 lifetime but only 2 in the last 14 days",
+      "article_rejects.last = 'weak_title': 'title too weak to earn a click, and the rewrite failed'",
+      "Gate findings behind PROMPT FOCUS: 'title has ALL-CAPS word' x2",
+      "14 distinct open review branches (2026-11-13 through 2026-11-26) already propose title-prompt edits, none merged",
+      "llm_error=79 lifetime / 20 in 14 days and empty_draft=19 / 8 in 14 days are engine-side (llm_engine serving=glm, calls={'glm': 1})",
+      "suggestions already carries a standing owner action to close the 14 open title branches before any further prompt work"
     ],
-    "money_path": "none (maintenance): with payout live and coverage at 50/61, the marginal gain from rescuing 2 drafts per fortnight through an unmergeable fifteenth prompt variant is not worth an open branch that repeats 14 already-open ones.",
-    "verify": "No branch opened. If the owner merges or rejects the 14 open title branches, the next cycle can measure whether 'title has ALL-CAPS word' findings in article_rejects.recent fall within a 14-day window \u2014 right now that measurement is impossible because every fix is stranded on an open branch.",
+    "money_path": "none this cycle \u2014 no change lands, so nothing moves; the receive path itself is verified (payout.live=true, known_without_footer=0)",
+    "verify": "No new code. Next signal: the owner closing the branch pile, then article_rejects.recent over two cycles \u2014 if 'title has ALL-CAPS word' still appears, the surviving branch can be measured; if llm_error/empty_draft dominate, the fix is key/engine availability, not prompts.",
     "error": null,
     "branch": null,
     "proposed_version": "1.41.0"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 17
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 122
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -95,7 +82,7 @@
     }
   ],
   "errors": [],
-  "last_cycle_seconds": 24,
+  "last_cycle_seconds": 18,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2768,7 +2755,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-27T04:11:59.350676+00:00",
+    "checked_at": "2026-11-27T05:11:58.620833+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3534,7 +3521,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-27T04:12:22.750591+00:00",
+    "last_run": "2026-11-27T05:12:15.930922+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3544,30 +3531,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-27T04:12:22.902319+00:00",
+    "last_run": "2026-11-27T05:12:16.114682+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4568987,
-        "at": "2026-11-26T17:24:10.796052+00:00",
-        "ok": true
-      },
-      {
-        "id": 4421693,
-        "at": "2026-11-26T18:22:50.361843+00:00",
-        "ok": true
-      },
-      {
-        "id": 4729472,
-        "at": "2026-11-26T18:22:50.361843+00:00",
-        "ok": true
-      },
-      {
-        "id": 4633220,
-        "at": "2026-11-26T18:22:50.361843+00:00",
-        "ok": true
-      },
       {
         "id": 4356423,
         "at": "2026-11-26T18:22:50.361843+00:00",
@@ -3774,11 +3741,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-27T04:12:22.902319+00:00",
-        "ok": true
-      },
-      {
         "id": 4579420,
         "at": "2026-11-27T04:12:22.902319+00:00",
         "ok": true
@@ -3796,6 +3758,31 @@
       {
         "id": 5019261,
         "at": "2026-11-27T04:12:22.902319+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-27T05:12:16.114682+00:00",
+        "ok": true
+      },
+      {
+        "id": 4908316,
+        "at": "2026-11-27T05:12:16.114682+00:00",
+        "ok": true
+      },
+      {
+        "id": 4368781,
+        "at": "2026-11-27T05:12:16.114682+00:00",
+        "ok": true
+      },
+      {
+        "id": 4671278,
+        "at": "2026-11-27T05:12:16.114682+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780783,
+        "at": "2026-11-27T05:12:16.114682+00:00",
         "ok": true
       }
     ],

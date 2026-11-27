@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-27T20:58:30.264603+00:00",
-  "total_runs": 2863,
+  "last_run": "2026-11-27T21:58:33.884846+00:00",
+  "total_runs": 2864,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -44,11 +44,12 @@
     "actions": [
       {
         "platform": "dev.to",
-        "success": false,
-        "skipped": true,
-        "reject_code": "llm_error",
-        "error": "LLM call failed",
-        "estimated_usd": 0.0
+        "success": true,
+        "title": "The Gossip Prompt Doesn't Read Your Memory",
+        "url": "https://dev.to/robust_true_try/the-gossip-prompt-doesnt-read-your-memory-2lme",
+        "estimated_usd": 0.0,
+        "source_url": "https://construct22.com/",
+        "source_title": "Group chat where your AI talks behind your back"
       }
     ],
     "total_usd": 0.0
@@ -69,7 +70,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 623,
+  "last_cycle_seconds": 481,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -159,7 +160,7 @@
     }
   },
   "article_daily": {
-    "date": "2026-11-27",
+    "date": "2026-11-28",
     "published": 1,
     "window": "06:00-12:00 UTC+9"
   },
@@ -2501,7 +2502,8 @@
       "spelunkr.tv",
       "michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you",
       "1password.com/blog/update-on-nov-2026-security-incident",
-      "github.com/lsernau/grh-lean"
+      "github.com/lsernau/grh-lean",
+      "construct22.com"
     ],
     "source_titles": [
       "born hobby programming community llm usage",
@@ -2605,7 +2607,8 @@
       "free alternative tv network built internet archive s forgotten video",
       "llm agent work parent company",
       "1password security incident",
-      "much shorter version grh lean verification anthropic"
+      "much shorter version grh lean verification anthropic",
+      "group chat where ai talk behind back"
     ],
     "titles": [
       "keeping hobby project human practical adding llms losing community trust",
@@ -2709,7 +2712,8 @@
       "most internet archive video break player",
       "llm agent has loyalty problem t patch",
       "stolen github token reached production minut",
-      "audit lean proof artifact trust"
+      "audit lean proof artifact trust",
+      "gossip prompt doesn t read memory"
     ],
     "followed_up_ids": [
       4489474,
@@ -2789,7 +2793,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-27T20:58:30.700758+00:00",
+    "checked_at": "2026-11-27T21:58:34.276989+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3569,7 +3573,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-27T21:08:52.940638+00:00",
+    "last_run": "2026-11-27T22:06:33.647743+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3579,25 +3583,10 @@
     "without_footer": 0,
     "unreachable": 1,
     "missing": [],
-    "last_run": "2026-11-27T21:08:53.120494+00:00",
+    "last_run": "2026-11-27T22:06:33.872423+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4848276,
-        "at": "2026-11-27T10:13:58.439650+00:00",
-        "ok": true
-      },
-      {
-        "id": 4552210,
-        "at": "2026-11-27T10:13:58.439650+00:00",
-        "ok": true
-      },
-      {
-        "id": 4740283,
-        "at": "2026-11-27T10:13:58.439650+00:00",
-        "ok": true
-      },
       {
         "id": 4391849,
         "at": "2026-11-27T10:54:10.613982+00:00",
@@ -3814,11 +3803,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-27T21:08:53.120494+00:00",
-        "ok": true
-      },
-      {
         "id": 4800078,
         "at": "2026-11-27T21:08:53.120494+00:00",
         "ok": true
@@ -3832,14 +3816,34 @@
         "id": 4356423,
         "at": "2026-11-27T21:08:53.120494+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-27T22:06:33.872423+00:00",
+        "ok": true
+      },
+      {
+        "id": 5025764,
+        "at": "2026-11-27T22:06:33.872423+00:00",
+        "ok": true
+      },
+      {
+        "id": 5060054,
+        "at": "2026-11-27T22:06:33.872423+00:00",
+        "ok": true
+      },
+      {
+        "id": 4641536,
+        "at": "2026-11-27T22:06:33.872423+00:00",
+        "ok": true
       }
     ],
-    "published_total": 62,
+    "published_total": 63,
     "covered": 50,
-    "unverified": 12,
+    "unverified": 13,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 10.9
+    "oldest_check_age_hours": 11.2
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
@@ -3850,7 +3854,7 @@
   },
   "llm_engine": {
     "main_provider": "glm",
-    "main_model": "glm-5.3-flash",
+    "main_model": "glm-4.7-flash",
     "preferred_model": "glm-5.3-flash",
     "refused": [
       {
@@ -3902,18 +3906,20 @@
         "message": "Weekly/Monthly Limit Exhausted. Your limit will reset at 2026-11-30 17:56:33"
       }
     ],
-    "endpoint": null,
+    "endpoint": "https://open.bigmodel.cn/api/coding/paas/v4",
     "key_set": true,
     "live": false,
-    "serving": "gemini",
-    "disabled_reason": "quota_spent",
-    "calls": {},
+    "serving": "atria",
+    "disabled_reason": "auth_failed",
+    "calls": {
+      "atria": 1
+    },
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",
       "key_set": true,
-      "live": false,
-      "disabled_reason": "timeout"
+      "live": true,
+      "disabled_reason": null
     }
   },
   "ctf_bounty": {

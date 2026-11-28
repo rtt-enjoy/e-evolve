@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-27T22:58:41.982592+00:00",
-  "total_runs": 2865,
+  "last_run": "2026-11-27T23:58:43.386675+00:00",
+  "total_runs": 2866,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -34,69 +34,14 @@
   },
   "last_evolution": {
     "version_bumped_to": "1.41.0",
-    "summary": "No change is proposed: the prompt focus (weak_title, 1 draft lost in 14 days) is not the reach bottleneck \u2014 llm_error=21 and empty_draft=8 in the same window are engine failures no prompt edit can fix, 16 open unmerged proposals already target that exact gate finding, and the project's own carried guidance says to propose nothing on the prompt side while llm_error still dominates.",
+    "summary": "Evolution skipped [json]: Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
     "changes_applied": [],
-    "suggestions": [
-      {
-        "title": "Fix the post-role provider chain (carried, now with the deprecation evidence)",
-        "description": "llm_error=21 plus empty_draft=8 in the last 14 days kill an order of magnitude more drafts than every gate combined, so no prompt edit can move reach until this is checked. This cycle's error names the specific fault: a Gemini model in the fallback chain returns 404 because it is deprecated, and the atria fallback is down with auth_failed.",
-        "owner_action": "Inspect the LLM provider configuration for the post role (glm-5.3-flash primary, atria fallback) and the workflow config that assigns it; update or replace the deprecated Gemini model and restore atria auth. No new key and no signup are needed \u2014 this is configuration of providers already in place.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Read the provider chain for the post role and confirm which entry still serves models/gemini-2.5-flash-lite (the 404 names it) and why atria reports auth_failed.",
-          "Step 2: After two cycles, read article_rejects.counts for the last 14 days: if llm_error no longer dominates, prompt-focus work becomes the correct next reach lever."
-        ]
-      },
-      {
-        "title": "Put the receive address in the dev.to profile bio",
-        "description": "The one deferred channel that needs no account, no processor and no policy change: a single edit to the Bio field carries the ask on every profile visit permanently, extending the live receive path to a surface the article footers do not reach.",
-        "owner_action": "Edit the Bio field at dev.to/settings to include the published TRC-20 address and a one-line support ask, matching the footer wording already live on every post.",
-        "secret_needed": null,
-        "how_to": [
-          "Step 1: Copy the address and network from status payout_public (TRC-20, TFTNsf...9KbY).",
-          "Step 2: Paste a one-line support ask into the Bio field at dev.to/settings and save \u2014 Forem's API is read-only for users, so this one manual edit is the only route."
-        ]
-      }
-    ],
-    "direction": "Checklist step 4 (reach into a live receive path) \u2014 specifically its unstated precondition: a working drafting engine must exist to carry any prompt improvement into a published post, which is the stop condition the carried suggestion already names.",
-    "evidence": [
-      "Drafts lost to a prompt (last 14 days): weak_title=1; drafts lost to the engine, not fixable by a prompt edit (last 14 days): llm_error=21, empty_draft=8 \u2014 the engine kills 29 drafts where the title gate kills 1",
-      "PROMPT FOCUS gate findings: 'title has ALL-CAPS word' x1 \u2014 one draft in a fortnight, and all 16 distinct PRIOR PROPOSALS target bot/earning/articles.py title/ALL-CAPS rules and remain open and unmerged",
-      "errors this cycle: 'LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users' \u2014 a deprecated model inside the provider chain, which no prompt edit can route around",
-      "llm_engine: serving=atria, live=False, disabled_reason=auth_failed \u2014 the fallback that would absorb post-role failures is itself down",
-      "carried suggestion in status.json: 'if llm_error still dominates, no prompt edit can improve reach and evolution should keep proposing nothing on the prompt side' \u2014 llm_error still dominates (21 of 30 lost drafts in the window)"
-    ],
-    "money_path": "none (maintenance) \u2014 no change proposed; the receive path is already live on new posts and the back catalogue (payout.live=true, backfill.remaining=0, receipt_check.known_without_footer=0), and this cycle's honest work is diagnosing why the drafting engine stops posts before any prompt can matter",
-    "verify": "No code to verify. The reviewer confirms the diagnosis by watching article_rejects.counts over the next cycles: if llm_error falls after the owner checks the post-role provider chain, the weak_title prompt focus becomes actionable again and a gradual title-prompt edit would then clear the bar; until then it cannot move reach.",
-    "error": null,
-    "branch": null,
-    "proposed_version": "1.41.0"
+    "suggestions": [],
+    "error": "Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).",
+    "error_type": "json"
   },
   "last_earning": {
-    "actions": [
-      {
-        "platform": "ctf-bounty",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 16
-      },
-      {
-        "platform": "research-feed",
-        "success": true,
-        "estimated_usd": 0.0,
-        "listed": 122
-      },
-      {
-        "platform": "code_techs",
-        "success": true,
-        "opportunity_count": 60,
-        "pursued_count": 0,
-        "estimated_usd": 0.0,
-        "target_usd_per_day": 10.0,
-        "title": "Code-tech queue refreshed (60 leads, 0 pursued)",
-        "url": "docs/code-tech-opportunities.md"
-      }
-    ],
+    "actions": [],
     "total_usd": 0.0
   },
   "suggestions": [
@@ -123,8 +68,10 @@
       "discovered_at": "2026-11-27T23:03:02.891488+00:00"
     }
   ],
-  "errors": [],
-  "last_cycle_seconds": 493,
+  "errors": [
+    "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
+  ],
+  "last_cycle_seconds": 313,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2670,7 +2617,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-27T22:58:42.561888+00:00",
+    "checked_at": "2026-11-27T23:58:43.767713+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3450,7 +3397,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-27T23:06:54.290519+00:00",
+    "last_run": "2026-11-28T00:03:56.000903+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3460,30 +3407,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-27T23:06:54.379433+00:00",
+    "last_run": "2026-11-28T00:03:56.223135+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4971614,
-        "at": "2026-11-27T11:54:22.695281+00:00",
-        "ok": true
-      },
-      {
-        "id": 4931682,
-        "at": "2026-11-27T11:54:22.695281+00:00",
-        "ok": true
-      },
-      {
-        "id": 4780785,
-        "at": "2026-11-27T11:54:22.695281+00:00",
-        "ok": true
-      },
-      {
-        "id": 5079541,
-        "at": "2026-11-27T11:54:22.695281+00:00",
-        "ok": true
-      },
       {
         "id": 4840835,
         "at": "2026-11-27T12:54:04.344922+00:00",
@@ -3690,11 +3617,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-27T23:06:54.379433+00:00",
-        "ok": true
-      },
-      {
         "id": 4848276,
         "at": "2026-11-27T23:06:54.379433+00:00",
         "ok": true
@@ -3712,6 +3634,31 @@
       {
         "id": 4965279,
         "at": "2026-11-27T23:06:54.379433+00:00",
+        "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-28T00:03:56.223135+00:00",
+        "ok": true
+      },
+      {
+        "id": 4391849,
+        "at": "2026-11-28T00:03:56.223135+00:00",
+        "ok": true
+      },
+      {
+        "id": 5027243,
+        "at": "2026-11-28T00:03:56.223135+00:00",
+        "ok": true
+      },
+      {
+        "id": 4859277,
+        "at": "2026-11-28T00:03:56.223135+00:00",
+        "ok": true
+      },
+      {
+        "id": 4765372,
+        "at": "2026-11-28T00:03:56.223135+00:00",
         "ok": true
       }
     ],
@@ -3788,9 +3735,7 @@
     "live": false,
     "serving": "atria",
     "disabled_reason": "quota_spent",
-    "calls": {
-      "atria": 2
-    },
+    "calls": {},
     "fallback": {
       "provider": "atria",
       "model": "Atria-Dawn",

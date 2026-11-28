@@ -1,7 +1,7 @@
 {
   "version": "1.41.0",
-  "last_run": "2026-11-27T23:58:43.386675+00:00",
-  "total_runs": 2866,
+  "last_run": "2026-11-28T00:58:45.076817+00:00",
+  "total_runs": 2867,
   "active_features": [
     "llm_glm",
     "llm_atria",
@@ -71,7 +71,7 @@
   "errors": [
     "[EVOLUTION] Could not get valid JSON from LLM (role=upgrade): LLM failed on all providers: 404 This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started)."
   ],
-  "last_cycle_seconds": 313,
+  "last_cycle_seconds": 312,
   "llm_roles": {
     "upgrade": "glm",
     "research": "glm",
@@ -2617,7 +2617,7 @@
     "received_total_usd": 0.0,
     "last_received_usd": 0.0,
     "last_received_at": null,
-    "checked_at": "2026-11-27T23:58:43.767713+00:00",
+    "checked_at": "2026-11-28T00:58:45.339197+00:00",
     "stale": false,
     "error": null,
     "balance_high_water_usd": 0.0,
@@ -3397,7 +3397,7 @@
       "4562180": "429 Client Error: Too Many Requests for url: https://dev.to/api/articles/4562180"
     },
     "updated_total": 11,
-    "last_run": "2026-11-28T00:03:56.000903+00:00",
+    "last_run": "2026-11-28T01:03:56.215579+00:00",
     "last_reason": "nothing_to_do",
     "remaining": 0
   },
@@ -3407,30 +3407,10 @@
     "without_footer": 0,
     "unreachable": 0,
     "missing": [],
-    "last_run": "2026-11-28T00:03:56.223135+00:00",
+    "last_run": "2026-11-28T01:03:56.534744+00:00",
     "last_reason": "partially_verified",
     "agrees_with_backfill": null,
     "verified_ids": [
-      {
-        "id": 4840835,
-        "at": "2026-11-27T12:54:04.344922+00:00",
-        "ok": true
-      },
-      {
-        "id": 4662663,
-        "at": "2026-11-27T12:54:04.344922+00:00",
-        "ok": true
-      },
-      {
-        "id": 4503417,
-        "at": "2026-11-27T12:54:04.344922+00:00",
-        "ok": true
-      },
-      {
-        "id": 4748037,
-        "at": "2026-11-27T12:54:04.344922+00:00",
-        "ok": true
-      },
       {
         "id": 5068353,
         "at": "2026-11-27T13:55:56.647270+00:00",
@@ -3637,11 +3617,6 @@
         "ok": true
       },
       {
-        "id": 4489474,
-        "at": "2026-11-28T00:03:56.223135+00:00",
-        "ok": true
-      },
-      {
         "id": 4391849,
         "at": "2026-11-28T00:03:56.223135+00:00",
         "ok": true
@@ -3660,6 +3635,31 @@
         "id": 4765372,
         "at": "2026-11-28T00:03:56.223135+00:00",
         "ok": true
+      },
+      {
+        "id": 4489474,
+        "at": "2026-11-28T01:03:56.534744+00:00",
+        "ok": true
+      },
+      {
+        "id": 4971614,
+        "at": "2026-11-28T01:03:56.534744+00:00",
+        "ok": true
+      },
+      {
+        "id": 4931682,
+        "at": "2026-11-28T01:03:56.534744+00:00",
+        "ok": true
+      },
+      {
+        "id": 4780785,
+        "at": "2026-11-28T01:03:56.534744+00:00",
+        "ok": true
+      },
+      {
+        "id": 5079541,
+        "at": "2026-11-28T01:03:56.534744+00:00",
+        "ok": true
       }
     ],
     "published_total": 63,
@@ -3667,7 +3667,7 @@
     "unverified": 13,
     "coverage_complete": false,
     "known_without_footer": 0,
-    "oldest_check_age_hours": 11.2
+    "oldest_check_age_hours": 11.1
   },
   "payout_public": {
     "address": "TFTNsfyomKrnUutRjBTGVULp19ByW29KbY",
